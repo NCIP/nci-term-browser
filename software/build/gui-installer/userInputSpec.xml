@@ -1,0 +1,665 @@
+<userInput>
+	<panel order="0">
+		<field type="title" txt="Install or Upgrade software" bold="true" size="1" />
+		<field type="staticText" align="left" txt="Choose Install if you haven't installed caGWAS on this machine before. Choose Upgrade if caGWAS has previously been installed. WARNING: When choosing Install, the installer will remove any previously installed application servers (using caBIG installers) or databases installed based on the information you provide, so be sure to backup your application server and database instance if they exist. For detailed descriptions on each of the properties in this installer, see http://someurl"/>
+		<field type="divider" align="top"/>
+		<field type="radio" variable="setup.type">
+			<description align="left" txt="Choose a new Install or Upgrade an existing installation"
+			id="installation.radio"/>
+			<spec>
+				<choice txt="Install" id="setup.type.install" value="install" set="true" />
+				<choice txt="Upgrade" id="setup.type.upgrade" value="upgrade" /> 
+			</spec>
+		</field>
+	</panel>
+
+	<panel order="1">
+		<field type="title" txt="Choose the type of installation" bold="true" size="1" />
+		<field type="staticText" align="left" txt="A Typical install requires you to enter an essential minimum number of values to successfully install the software. A Typical install configures ports and other required values. A Custom install allows you to modify all of the configurable values such as port numbers."/>
+		<field type="divider" align="top"/>
+		<field type="radio" variable="setup.options.type">
+			<description align="left" txt="Choose a Typical or Custom install"
+			id="install.options.radio"/>
+			<spec>
+				<choice txt="Typical" id="setup.options.type.typical" value="typical" set="true" />
+				<choice txt="Custom" id="setup.options.type.custom" value="custom" />
+			</spec>
+		</field>
+	</panel>
+
+	<panel order="2">
+		<field type="title" txt="Create a JBoss Web Console Password" bold="true" size="1" />
+		<field type="staticText" align="left" txt="The password you enter below is the password used to access the JBoss web console. This is a password you are creating, so you must keep track of this password for future use."/>
+		<field type="divider" align="top"/>
+		<field type="text" variable="jboss.web.user">
+			<spec txt="JBoss Web Console User:" id="text.label" size="15" set="admin"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt="JBoss web user is a required field" />
+		</field>
+		<field type="password" align="left" variable="jboss.web.password">
+			<spec>
+				<pwd txt="JBoss Web Console Password:" size="25" set=""/>
+				<pwd txt="Confirm JBoss Web Console Password:" size="25" set=""/>
+			</spec>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt="JBoss Web Console Passwords are required fields" />
+			<validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Passwords do not match. Please re-enter your JBoss Web Console passwords." id="key for the error text"/>
+		</field>
+		<variable name="authentication.type" value="db"/>
+		<!--
+		<variable name="grid.external.host" value=""/>
+		<variable name="grid.external.port" value=""/>
+		-->
+		<variable name="grid.index.url" value="http://training03.cagrid.org:6080/wsrf/services/DefaultIndexService"/>
+		<variable name="jboss.cobraorb.port" value="13728"/>
+		<variable name="jboss.ejbinvoker.port" value="19273"/>
+		<variable name="jboss.hajndi.port" value="11300"/>
+		<variable name="jboss.hajrmi.port" value="11301"/>
+		<variable name="jboss.jms.port" value="18293"/>
+		<variable name="jboss.jmx-rmi.port" value="29201"/>
+		<variable name="jboss.messaging.port" value="19257"/>
+		<variable name="jboss.pooledha.port" value="19246"/>
+		<variable name="jboss.remoting.port" value="18284"/>
+		<variable name="jboss.server.bind.port" value="0"/>
+		<variable name="jboss.server.hostname" value="$HOST_NAME"/>
+		<variable name="jboss.server.jndi.port" value="11299"/>
+		<variable name="jboss.server.name" value="default"/>
+		<variable name="jboss.server.port" value="19280"/>
+		<variable name="jboss.server.redirect.port" value="11298"/>
+		<variable name="jboss.server.rmi.port" value="14644"/>
+		<variable name="jboss.service.rmiobject.port" value="14645"/>
+		<variable name="jboss.snmp.port" value="11361"/>
+		<variable name="jboss.snmp-trapd.port" value="11362"/>
+		<variable name="jboss.web.service.port" value="18283"/>
+		<variable name="ldap.basedn" value=""/>
+		<variable name="ldap.url" value=""/>
+		<variable name="mail.smtp.server" value="localhost"/>
+		<variable name="tomcat.hostname" value="$HOST_NAME"/>
+		<variable name="tomcat.port.ajp" value="21009"/> 
+		<variable name="tomcat.port.http" value="21080"/> 
+		<variable name="tomcat.port.shutdown" value="21005"/> 
+		<variable name="tomcat.port.ssl" value="21443"/> 
+		<variable name="tomcat.relative.path" value="${tomcat.binaries.relative.dir}"/>
+		<variable name="jboss.ssl.enable" value="false"/>
+		<variable name="jboss.ssl.keystore.location" value=""/>
+		<variable name="jboss.ssl.keystore.pass" value=""/>
+		<variable name="jboss.ssl.keystore.alias" value=""/>
+		<variable name="jboss.ssl.fullyqualified.hostname" value=""/>
+		<variable name="jboss.external.ssl.host" value=""/>
+		<variable name="jboss.external.ssl.port" value=""/>
+		<variable name="jboss.external.http.host" value=""/>
+		<variable name="jboss.external.http.port" value=""/>
+		<variable name="tomcat.ssl.enable" value="false"/>
+		<variable name="tomcat.ssl.keystore.location" value=""/>
+		<variable name="tomcat.ssl.keystore.pass" value=""/>
+		<variable name="tomcat.ssl.keystore.alias" value=""/>
+		<variable name="tomcat.ssl.fullyqualified.hostname" value=""/>
+		<variable name="tomcat.external.ssl.host" value=""/>
+		<variable name="tomcat.external.ssl.port" value=""/>
+		<variable name="tomcat.external.http.host" value=""/>
+		<variable name="tomcat.external.http.port" value=""/>
+		<variable name="grid.secure.enable" value="false"/>
+		<variable name="grid.secure.cert.location" value=""/>
+		<variable name="grid.secure.key.location" value=""/>
+		<variable name="grid.external.secure.host" value=""/>
+		<variable name="grid.external.secure.port" value=""/>
+		<variable name="log4j.maxFileSize" value="100MB"/>
+		<variable name="log4j.maxDays" value="7"/>
+		<variable name="log4j.level" value="WARN"/>
+		<variable name="jboss.java.opts" value="-server -Xms256m -Xmx512m -XX:ThreadStackSize=128 -XX:SurvivorRatio=10 -XX:PermSize=128m -XX:MaxPermSize=128m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Djava.awt.headless=true"/>
+
+	</panel>
+	<panel order="3">
+		<field type="title" txt="Configure your JBoss application server" bold="true" size="1" />
+		<field type="divider" align="top"/>
+		<field type="staticText" align="left" txt="As part of this installation, JBoss will be installed in ${UserPathPanelVariable}/${jboss.binaries.relative.dir}.  It will be configured based on the values you enter below.  NOTE: The Hostname below (and on other panels of this installer) is the host name accesible from this machine and others on the local network. To access this JBoss application server from the Internet, you may need to provide the JBoss HTTP Port to your Network administrator to allow access through the firewall."/>
+		<field type="space"/>
+		<field type="text" align="left" variable="jboss.server.hostname">
+			<spec txt="Hostname of this Server:" size="25" set="$HOST_NAME"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Hostname of this Server is a required field" />
+			<validator class="com.izforge.izpack.util.HostNameValidator" txt="Enter a valid JBoss Host name or the Host is not reachable" id="jbosshostname.label"/>
+		</field>
+		<field type="text" variable="jboss.server.name">
+			<spec txt="JBoss Server Name (JBoss_HOME/server/JBoss_SERVER_NAME):" id="text.label" size="15" set="default"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" JBoss Server Name (JBoss_HOME/server/JBoss_SERVER_NAME) is a required field" />
+		</field>
+		<field type="text" variable="jboss.web.user">
+			<spec txt="JBoss Web Console User:" id="text.label" size="15" set="admin"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt="JBoss web user is a required field" />
+		</field>
+		<field type="password" align="left" variable="jboss.web.password">
+			<spec>
+				<pwd txt="JBoss Web Console Password:" size="25" set=""/>
+				<pwd txt="Confirm JBoss Web Console Password:" size="25" set=""/>
+			</spec>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt="JBoss Web Console Passwords are required fields" />
+			<validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Passwords do not match. Please re-enter your JBoss Web Console passwords" id="key for the error text"/>
+		</field>
+		<field type="text" variable="jboss.java.opts">
+			<spec txt="JBoss Server JAVA_OPTS:" id="text.label" size="135" set="-server -Xms256m -Xmx512m -XX:ThreadStackSize=128 -XX:SurvivorRatio=10 -XX:PermSize=128m -XX:MaxPermSize=128m -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Djava.awt.headless=true"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt="JBoss Server JAVA_OPTS is a required field" />
+		</field>
+
+
+		<field type="text" variable="jboss.server.port">
+			<spec txt="JBoss HTTP Port:" id="text.label" size="5" set="19280"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The HTTP port number is already in use" id="error.label"/>
+		</field>
+		<field type="text" variable="jboss.server.jndi.port">
+			<spec txt="JBoss JNDI Port:" id="text.label" size="5" set="11299"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JNDI port number is already in use" id="error.label"/>
+		</field>
+		<field type="text" variable="jboss.server.rmi.port">
+			<spec txt="JBoss RMI Port:" id="text.label" size="5" set="14644"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss RMI port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.ejbinvoker.port">
+			<spec txt="JBoss EJBInvoker Port:" id="text.label" size="5" set="19273"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The ejbinvoker port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.cobraorb.port">
+			<spec txt="JBoss CORBAORG port:" id="text.label" size="5" set="13728"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The cobraorb port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.hajndi.port">
+			<spec txt="JBoss hajndi port:" id="text.label" size="5" set="11300"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The hajndi port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.hajrmi.port">
+			<spec txt="JBoss hajrmi port:" id="text.label" size="5" set="11301"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The hajrmi port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.jms.port">
+			<spec txt="JBoss JMS port:" id="text.label" size="5" set="18293"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss JMS port number is already in use" id="error.label"/>
+		</field>
+		<!-- Not sure we ant to prompt for these, this page is so big already --> 
+		<variable name="log4j.maxFileSize" value="100MB"/>
+		<variable name="log4j.maxDays" value="7"/>
+		<variable name="log4j.level" value="WARN"/>
+
+	</panel>
+
+
+	<panel order="4">
+		<field type="title" txt="Additional JBoss installation options" bold="true" size="1" />
+		<field type="divider" align="top"/>
+
+		<field type="text" variable="jboss.jmx-rmi.port">
+			<spec txt="JBoss jmx-rmi port:" id="text.label" size="5" set="29201"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss jmx-rmi port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.messaging.port">
+			<spec txt="JBoss messaging port:" id="text.label" size="5" set="19257"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss messaging port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.pooledha.port">
+			<spec txt="JBoss pooledha port:" id="text.label" size="5" set="19246"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss pooledha port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.remoting.port">
+			<spec txt="JBoss remoting port:" id="text.label" size="5" set="18284"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss remoting port number is already in use" id="error.label"/>
+		</field>
+
+
+		<field type="text" variable="jboss.server.bind.port">
+			<spec txt="JBoss bind port:" id="text.label" size="5" set="0"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss bind port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.server.redirect.port">
+			<spec txt="JBoss redirect port:" id="text.label" size="5" set="11298"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss redirect port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.service.rmiobject.port">
+			<spec txt="JBoss rmiobject port:" id="text.label" size="5" set="14645"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss rmiobject port number is already in use" id="error.label"/>
+		</field>
+
+
+		<field type="text" variable="jboss.snmp-trapd.port">
+			<spec txt="JBoss snmp-trapd port:" id="text.label" size="5" set="11362"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss snmp-trapd port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.snmp.port">
+			<spec txt="JBoss SNMP port:" id="text.label" size="5" set="11361"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss SNMP port number is already in use" id="error.label"/>
+		</field>
+
+		<field type="text" variable="jboss.web.service.port">
+			<spec txt="JBoss web service port:" id="text.label" size="5" set="18283"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss web service port number is already in use" id="error.label"/>
+		</field>
+	</panel>
+	<!--
+		<field type="text" variable="">
+			<spec txt=""  size="" set=""/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="" id="error.label"/>
+		</field>
+	-->
+
+	<panel order="5">
+		<field type="title" txt="Configuring JBoss SSL and External Hostnames" bold="true" size="1" />
+		<field type="staticText" align="left" txt="For JBoss SSL configuration details see https://wiki.nci.nih.gov/x/7xWy"/>
+		<field type="divider" align="top"/>
+
+		<field type="radio" variable="jboss.ssl.enable">
+			<description align="left" txt="Enable JBoss SSL Port (note requires SSL Certificate Keystore and Internet facing DNS) "/>
+			<spec>
+				<choice txt="True"  value="true" />
+				<choice txt="False" value="false" set="true"/>
+			</spec>
+		</field>
+		<field type="text" variable="jboss.ssl.keystore.location">
+			<spec txt="Keystore file location: "  size="75" set=""/>
+		</field>
+		<field type="password" align="left" variable="jboss.ssl.keystore.pass">
+			<spec>
+				<pwd txt="Keystore file password:" size="25" set=""/>
+				<pwd txt="Confirm keystore file password:" size="25" set=""/>
+			</spec>
+			<validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Passwords do not match. Please re-enter your passwords."/>
+		</field>
+		<field type="text" variable="jboss.ssl.keystore.alias">
+			<spec txt="Keystore alias name: "  size="25" set=""/>
+		</field>
+		<field type="text" variable="jboss.ssl.fullyqualified.hostname">
+			<spec txt="Fully Qualified Host Name (FQHN) (ie, www.mydomain.com): "  size="50" set=""/>
+		</field>
+
+		<field type="divider" align="top"/>
+		<field type="staticText" align="left" txt="For JBoss External Hostname configurations see https://wiki.nci.nih.gov/x/8hWy, values not required if not externally accessible"/>
+		<field type="text" variable="jboss.external.ssl.host">
+			<spec txt="External Host Name for ssl port (generally same as FQHN): "  size="50" set=""/>
+		</field>
+		<field type="text" variable="jboss.external.ssl.port">
+			<spec txt="External Port for ssl port"  size="5" set=""/>
+		</field>
+		<field type="text" variable="jboss.external.http.host">
+			<spec txt="External Host Name for http port (generally same as FQHN): "  size="50" set=""/>
+		</field>
+		<field type="text" variable="jboss.external.http.port">
+			<spec txt="External Port for http port"  size="5" set=""/>
+		</field>
+
+	</panel>
+	<panel order="6">
+		<field type="title" txt="Configure your existing Application Server" bold="true" size="1" />
+		<field type="divider" align="top"/>
+
+		<field type="dir" align="left" variable="existing.jboss.home">
+			<spec txt="Existing JBoss Home:" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Existing JBoss Home is a required field" />
+		</field>
+		<field type="text" align="left" variable="jboss.server.hostname">
+			<spec txt="Hostname of this Server:" size="25" set="$HOST_NAME"/>
+			<validator class="com.izforge.izpack.util.HostNameValidator" txt="Unable to reach a host based on the name entered. Please reenter a valid hostname." id="jbosshostname.label"/>
+		</field>
+		<field type="text" align="left" variable="jboss.server.name">
+			<spec txt="JBoss Server Name (JBoss_HOME/server/JBoss_SERVER_NAME):" size="15" set="default"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" JBoss Server Name (JBoss_HOME/server/JBoss_SERVER_NAME) is a required field" />
+		</field>
+		<field type="text" variable="jboss.server.port">
+			<spec txt="JBoss HTTP Port:" id="text.label" size="5" set="19280"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss HTTP port number is already in use" id="error.label"/>
+		</field>
+		<field type="text" variable="jboss.server.jndi.port">
+			<spec txt="JBoss JNDI Port:" id="text.label" size="5" set="11299"/>
+			<validator class="com.izforge.izpack.util.PortValidator" txt="The JBoss JNDI port number is already in use" id="error.label"/>
+		</field>
+		<!-- if using tomcat
+		<field type="dir" align="left" variable="existing.tomcat.home">
+			<spec txt="Existing MIRC Tomcat Home:" size="25" set="${UserPathPanelVariable}/{tomcat.binaries.relative.dir}"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt="Enter a value for Existing MIRC Tomcat Home" />
+		</field>  
+		-->
+		<variable name="log4j.maxFileSize" value="100MB"/>
+		<variable name="log4j.maxDays" value="7"/>
+		<variable name="log4j.level" value="WARN"/>
+	</panel>
+	<panel order="7">
+		<field type="title" txt="Authentication Type" bold="true" size="1" />
+		<field type="staticText" align="left" txt="There are two types of ways to authenticate users: against database or using an LDAP server. To connect to LDAP, you must have an LDAP server available in your network."/>
+		<field type="divider" align="top"/>
+		<field type="radio" variable="authentication.type">
+			<description align="left" txt="Which kind of authentication do you want to use?"
+			id="ldap.radio"/>
+			<spec>
+				<choice txt="Database" id="ldap.install" value="db" set="true" />
+				<choice txt="LDAP" id="ldap.install" value="ldap"/>
+			</spec>
+		</field>
+		<variable name="ldap.basedn" value=""/>
+		<variable name="ldap.url" value=""/>
+	</panel>
+
+	<panel order="8">
+			<field type="title" txt="LDAP Configuration" bold="true" size="1" />
+			<field type="staticText" align="left" txt="Choose the URL for the LDAP server and the Base DN for authenticating users."/>
+			<field type="divider" align="top"/>
+			<field type="text" variable="ldap.url">
+				<spec txt="LDAP URL:" id="text.label" size="25" set="ldaps://localhost:636"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" LDAP URL is a required field" />
+			</field>
+			<field type="text" variable="ldap.basedn">
+				<spec txt="LDAP Search Base DN:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" LDAP Search Base DN is a required field" />
+			</field>
+	</panel>
+
+	<panel order="9">
+		<field type="title" txt="Configuring your MySQL database connection" bold="true" size="1" />
+		<field type="staticText" align="left" txt="The information you enter below will connect you to an existing MySQL database. It's highly recommended that 'Database Host Name' NOT be the machine from which you are currently installing. The 'Database User' must have full access to 'Database Name'. It's highly recommended you contact your database administrator to obtain this information. NOTE: All database objects for 'Database Name' will be dropped and recreated during the installation process. For detailed descriptions on each of the properties below, see the Database Settings section at http://someurl"/>
+		<field type="divider" align="top"/>
+
+		<variable name="install.path" value="$INSTALL_PATH"/>
+		<variable name="baseDir" value="$INSTALL_PATH"/>
+
+		<field type="text" variable="database.server">
+			<spec txt="Database Host Name:" id="dbhostname.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.HostNameValidator" txt="Enter a valid Host name or the Host is not reachable" id="dbhostname.label"/>
+		</field>
+		<field type="text" variable="database.port">
+			<spec txt="Database Port:" id="dbport.label" size="25" set="3306"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Database Port is a required field" />
+		</field>
+		<field type="text" variable="database.name">
+			<spec txt="Database Name:" id="text.label" size="25" set="bda"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Database Name is a required field" />
+		</field>
+		<field type="text" variable="database.user">
+			<spec txt="Database Application User:" id="text.label" size="25" set="bdauser"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Database Application User is a required field" />
+		</field>
+		<field type="password" allign="left" variable="database.password">
+			<spec>
+				 <pwd txt="Database Application User Password:" id="pwd.label" size="25" set=""/>
+			</spec>
+			<validator class="com.izforge.izpack.util.DBConnectionValidator" txt="Unable to connect to this database with the Database Application User and Password you have entered." id="error.label"/>
+		</field>
+	</panel>
+
+	<panel order="10">
+
+		<field type="title" txt="Configure Global Settings" bold="true" size="1" />
+		<field type="divider" align="top"/>
+		<field type="text" variable="mail.smtp.server">
+			<spec txt="SMTP Relay Host:" id="text.label" size="25" set="localhost"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" SMTP Relay Host is a required field" />
+		</field>
+	</panel>
+
+	<panel order="11">
+
+		<field type="title" txt="Configure global information for Grid configuration. [NEED MORE INFORMATION]" bold="true" size="1" />
+		<field type="divider" align="top"/>
+		<field type="text" variable="grid.index.url">
+			<spec txt="Grid Index Url:" id="text.label" size="35" set="http://training03.cagrid.org:6080/wsrf/services/DefaultIndexService"/>
+			<validator class="com.izforge.izpack.util.URLCheckValidator" txt="Please enter a valid Index URL" id="indexurl.label"/>
+		</field>
+	</panel>
+
+	<panel order="12">
+		<field type="title" txt="Configure research center contact information for Grid configuration." bold="true" size="1" />
+		<field type="divider" align="top"/>
+		<field type="text" variable="grid.poc.tech.researchCenter.displayname">
+			<spec txt="Research Center Display Name:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Research Center Display Name is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.researchCenter.shortname">
+			<spec txt="Research Center Short Name:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Research Center Short Name is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.addr.street1">
+			<spec txt="Street Address line 1:" id="text.label" size="35" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Street Address line 1 is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.addr.street2">
+			<spec txt="Street Address line 2:" id="text.label" size="35" set=""/>
+		</field>
+		<field type="text" variable="grid.poc.tech.addr.locality">
+			<spec txt="Locality:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Locality is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.addr.stateProvince">
+			<spec txt="State:" id="text.label" size="2" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" State is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.addr.postalCode">
+			<spec txt="Zip code:" id="text.label" size="10" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Zip code is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.addr.country">
+			<spec txt="Country:" id="text.label" size="25" set="USA"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Country is a required field" />
+		</field>
+	</panel>
+	<panel order="13">
+
+		<field type="title" txt="Configure technical contact information for Grid configuration" bold="true" size="1" />
+		<field type="divider" align="top"/>
+
+		<field type="text" variable="grid.poc.tech.affiliation">
+			<spec txt="Tech Contact Affiliation:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Tech Contact Affiliation is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.name.last">
+			<spec txt="Last name:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Last name is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.name.first">
+			<spec txt="First name:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" First name is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.phone">
+			<spec txt="Phone Number:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Phone Number is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.email">
+			<spec txt="Email Address:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Email Address is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.tech.role">
+			<spec txt="Role:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Role is a required field" />
+		</field>
+	</panel>
+
+	<panel order="14">
+		<field type="title" txt="Configure science contact information for Grid configuration" bold="true" size="1" />
+		<field type="divider" align="top"/>
+		<field type="text" variable="grid.poc.science.affiliation">
+			<spec txt="Science Contact Affiliation :" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Science Contact Affiliation  is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.science.name.last">
+			<spec txt="Last name:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Last name is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.science.name.first">
+			<spec txt="First name:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" First name is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.science.phone">
+			<spec txt="Phone Number:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Phone Number is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.science.email">
+			<spec txt="Email Address:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Email Address is a required field" />
+		</field>
+		<field type="text" variable="grid.poc.science.role">
+			<spec txt="Role:" id="text.label" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Role is a required field" />
+		</field>
+	</panel>
+	<panel order="15">
+		<field type="title" txt="Deploy a secure grid" bold="true" size="1" />
+		<field type="staticText" align="left" txt="For secure grid inforation see https://wiki.nci.nih.gov/x/8BWy"/> 
+		<field type="divider" align="top"/>
+
+		<field type="radio" variable="grid.secure.enable">
+			<description align="left" txt="Enable secure Grid"/>
+			<spec>
+				<choice txt="True"  value="true" />
+				<choice txt="False" value="false" set="true"/>
+			</spec>
+		</field>
+		<field type="text" variable="grid.secure.cert.location">
+			<spec txt="caGrid certificate file location: "  size="75" set=""/>
+		</field>
+		<field type="text" variable="grid.secure.key.location">
+			<spec txt="caGrid private key file location: "  size="75" set=""/>
+		</field>
+		<field type="text" variable="grid.external.secure.host">
+			<spec txt="Grid External Hostname:" id="text.label" size="25" set=""/>
+		</field>
+
+		<field type="text" variable="grid.external.secure.port">
+			<spec txt="Grid External Port Number:" id="text.label" size="5" set=""/>
+		</field>
+	</panel>
+
+	<panel order="16">
+		<field type="title" txt="Tomcat Configuration" bold="true" size="1" />
+		<field type="staticText" align="left" txt="For detailed descriptions on each of the properties below, see the Application Settings section at http://someurl"/>
+		<field type="divider" align="top"/>
+		<field type="text" align="left" variable="tomcat.relative.path">
+			<spec txt="Relative Directory for Tomcat (relative from ${UserPathPanelVariable}):" size="25" set="${tomcat.binaries.relative.dir}"/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt="Enter a value for Relative Directory for Tomcat (relative from ${UserPathPanelVariable})" />
+		</field>
+		<field type="text" align="left" variable="tomcat.hostname">
+			<spec txt="Hostname of this Server:" size="20" set="$HOST_NAME"/>
+			<validator
+				class="com.izforge.izpack.util.HostNameValidator" txt="Enter a valid Host name or the Host is not reachable" id="jbosshostname.label">
+			</validator>
+		</field>
+		<field type="text" variable="tomcat.port.http">
+			<spec txt="Tomcat HTTP port:" id="text.label" size="5" set="21080"/>
+			<validator
+				class="com.izforge.izpack.util.PortValidator" txt="The http port number is already in use" id="error.label">
+			</validator>
+		</field>
+		<field type="text" variable="tomcat.port.ajp">
+			<spec txt="Tomcat AJP port:" id="text.label" size="5" set="21009"/>
+			<validator
+				class="com.izforge.izpack.util.PortValidator" txt="The port number is already in use" id="error.label">
+			</validator>
+		</field>
+		<field type="text" variable="tomcat.port.ssl">
+			<spec txt="Tomcat Re-direct port:" id="text.label" size="5" set="21443"/>
+			<validator
+				class="com.izforge.izpack.util.PortValidator" txt="The http port number is already in use" id="error.label">
+			</validator>
+		</field>
+		<field type="text" variable="tomcat.port.shutdown">
+			<spec txt="Tomcat Shutdown port:" id="text.label" size="5" set="21005"/>
+			<validator
+				class="com.izforge.izpack.util.PortValidator" txt="The http port number is already in use" id="error.label">
+			</validator>
+		</field>
+	</panel>
+	<panel order="17">
+		<field type="title" txt="Tomcat Configuration" bold="true" size="1" />
+		<field type="staticText" align="left" txt="For detailed descriptions on each of the properties below, see the Application Settings section at http://someurl"/>
+		<field type="divider" align="top"/>
+
+		<field type="dir" align="left" variable="existing.tomcat.home">
+			<spec txt="Existing Tomcat Home:" size="25" set=""/>
+			<validator class="com.izforge.izpack.util.NotEmptyValidator" txt=" Existing JBoss Home is a required field" />
+		</field>
+		<field type="text" align="left" variable="tomcat.hostname">
+			<spec txt="Hostname of this Server:" size="20" set="$HOST_NAME"/>
+			<validator
+				class="com.izforge.izpack.util.HostNameValidator" txt="Enter a valid Host name or the Host is not reachable" id="jbosshostname.label">
+			</validator>
+		</field>
+		<field type="text" variable="tomcat.port.http">
+			<spec txt="Tomcat HTTP port:" id="text.label" size="5" set="21080"/>
+			<validator
+				class="com.izforge.izpack.util.PortValidator" txt="The http port number is already in use" id="error.label">
+			</validator>
+		</field>
+		<field type="text" variable="tomcat.port.ssl">
+			<spec txt="Tomcat Re-direct port:" id="text.label" size="5" set="21443"/>
+			<validator
+				class="com.izforge.izpack.util.PortValidator" txt="The http port number is already in use" id="error.label">
+			</validator>
+		</field>
+	</panel>
+	<panel order="18">
+		<field type="title" txt="Configuring Tomcat SSL and External Hostnames" bold="true" size="1" />
+		<field type="staticText" align="left" txt="For Tomcat SSL configuration details see https://wiki.nci.nih.gov/x/7xWy"/>
+		<field type="divider" align="top"/>
+
+		<field type="radio" variable="tomcat.ssl.enable">
+			<description align="left" txt="Enable Tomcat SSL Port (note requires SSL Certificate Keystore and Internet facing DNS "/>
+			<spec>
+				<choice txt="True"  value="true" />
+				<choice txt="False" value="false" set="true"/>
+			</spec>
+		</field>
+		<field type="text" variable="tomcat.ssl.keystore.location">
+			<spec txt="Keystore file location: "  size="75" set=""/>
+		</field>
+		<field type="password" align="left" variable="tomcat.ssl.keystore.pass">
+			<spec>
+				<pwd txt="Keystore file password:" size="25" set=""/>
+				<pwd txt="Confirm keystore file password:" size="25" set=""/>
+			</spec>
+			<validator class="com.izforge.izpack.util.PasswordEqualityValidator" txt="Passwords do not match. Please re-enter your passwords."/>
+		</field>
+		<field type="text" variable="tomcat.ssl.keystore.alias">
+			<spec txt="Keystore alias name: "  size="25" set=""/>
+		</field>
+		<field type="text" variable="tomcat.ssl.fullyqualified.hostname">
+			<spec txt="Fully Qualified Host Name (FQHN) (ie, www.mydomain.com): "  size="50" set=""/>
+		</field>
+
+		<field type="divider" align="top"/>
+		<field type="staticText" align="left" txt="For Tomcat External Hostname configurations see https://wiki.nci.nih.gov/x/8hWy, values not required if not externally accessible"/>
+		<field type="text" variable="tomcat.external.ssl.host">
+			<spec txt="External Host Name for ssl port(generally same as FQHN): "  size="50" set=""/>
+		</field>
+		<field type="text" variable="tomcat.external.ssl.port">
+			<spec txt="External Port for ssl port"  size="5" set=""/>
+		</field>
+		<field type="text" variable="tomcat.external.http.host">
+			<spec txt="External Host Name for http port (generally same as FQHN): "  size="50" set=""/>
+		</field>
+		<field type="text" variable="tomcat.external.http.port">
+			<spec txt="External Port for http port"  size="5" set=""/>
+		</field>
+
+	</panel>
+	<panel order="19">
+		<field type="title" txt="Installation Summary" bold="true" size="1" />
+		<field type="staticText" align="left" txt="Below are "/>
+		<field type="divider" align="top"/>
+
+		<field type="staticText" align="left" txt="JBoss Home [${UserPathPanelVariable}/${jboss.binaries.relative.dir}] - This is where JBoss is installed."/>
+		<field type="space"/>
+		<field type="staticText" align="left" txt="JBoss Server Name [${jboss.server.hostname}] - This is the hostname where jboss is running.  If you want to make this Application avaliable from the internet you may need to provide this to your network administrator."/>
+		<field type="space"/>
+		<field type="staticText" align="left" txt="JBoss Server Port [${jboss.server.port}] - This is the HTTP port for JBoss.  If you want to make this Application avaliable from the internet you may need to provide this to your network administrator."/>
+		<field type="space"/>
+		<field type="staticText" align="left" txt="JBoss URL [http://${jboss.server.hostname}:${jboss.server.port}/bda-blueprints-webapp] - This will be the url to reach your application when the install is finished."/>
+		<field type="space"/>
+		<field type="staticText" align="left" txt="JBoss Log Dir [${UserPathPanelVariable}/${jboss.binaries.relative.path}/server/${jboss.server.name}] - This is where the logs can be found."/>
+
+		<field type="space"/>
+		<field type="staticText" align="left" txt="Database URL [jdbc:mysql://${database.server}:${database.port}/${database.name}] "/>
+		<field type="space"/>
+		<field type="staticText" align="left" txt="Database User [${database.user}] "/>
+	</panel>
+
+</userInput>
