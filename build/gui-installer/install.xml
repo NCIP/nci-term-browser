@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!--
+    A sample installation file.
+    Use it as a base for your own installers :-)
+
+    To compile it :
+    - go in the bin directory where you installed IzPack
+    - call "compile ../sample/install.xml -b ../sample"
+-->
+<project name="bda-blueprints-webapp-gui-installer" default="build:installer" basedir=".">
+
+	<property name="this.dir" value="${basedir}" />
+	<property file="../project.properties" />
+	<property name="software.location" value="${this.dir}/../.." />
+	<property name="target.location" value="${software.location}/target" />
+	<property name="dist.location" value="${target.location}/dist" />
+	<property name="bda-utils.dir" value="${target.location}/bda-utils" />
+	<property name="custom.resource.dir" value="${target.location}/izpack-custom/resources"/>
+	<property name="project.name" value="bda-blueprints"/>
+	<property name="installer.dir" value=".installer-${project.name}"/>
+	<property name="gui-installer.dist.base.name" value="bda-blueprints-webapp_gui_distribution_${bda-blueprints-webapp.version}.jar"/>
+	<property name="install.zip.file" value="${bda-blueprints-webapp.install.zip.file}"/>
+	<property name="upgrade.zip.file" value="${bda-blueprints-webapp.upgrade.zip.file}"/>
+
+<echo message="compile.jar.dir ::: ${compile.jar.dir}"/>
+<echo message="this.dir ::: ${this.dir}"/>
+
+	<taskdef name="IzPack" classpath="${compile.jar.dir}/lib/compiler.jar" classname="com.izforge.izpack.ant.IzPackTask"/>
+
+	<target name="prepare:installer">
+		<replaceregexp file="${this.dir}/build.xml" byline="true"
+			match="^(.*property name=.*application_installer_zip.*value=&quot;)[^&quot;]+(&quot;.*)"
+			replace="\1${install.zip.file}\2"/>
+		<replaceregexp file="${this.dir}/build.xml" byline="true"
+			match="^(.*property name=.*application_upgrader_.*value=&quot;)[^&quot;]+(&quot;.*)"
+			replace="\1${upgrade.zip.file}\2"/>
+	</target>
+
+	<target name="build:installer" depends="prepare:installer">
+		<delete>
+			<fileset dir="${dist.location}">
+				<include name="${gui-installer.dist.base.name}*.jar"/>
+			</fileset>
+		</delete>
+		<tstamp>
+			<format property="build.time" pattern="yyyyMMddHHmm" />
+		</tstamp>
+
+		<IzPack output="${dist.location}/${gui-installer.dist.base.name}-${build.time}.jar"
+			installerType="standard"
+			basedir="."
+			IzPackDir="${compile.jar.dir}/">
+			<config><![CDATA[
+			<installation version="1.0">
+
+				<!--
+				The info section.
+				The meaning of the tags should be natural ...
+				-->
+				<info>
+					<appname>bda-blueprints-webapp</appname>
+					<appversion>@{bda-blueprints-webapp.version}</appversion>
+					<authors>
+					    <author name="NCI" email=""/>
+					</authors>
+					<url>http://www.cancer.org/</url>
+					<javaversion>1.5</javaversion>
+				</info>
+
+				<!--
+				The gui preferences indication.
+				Sets the installer window to 640x480. It will not be able to change the size.
+				-->
+				<guiprefs width="1024" height="768" resizable="yes">
+					<modifier key="useButtonIcons" value="no"/>
+					<modifier key="useLabelIcons" value="no"/>
+					<modifier key="allYGap" value="3"/>
+					<modifier key="layoutAnchor" value="NORTHWEST"/>
+					<modifier key="useHeadingPanel" value="yes"/>
+					<modifier key="headingLineCount" value="1"/>
+					<modifier key="headingFontSize" value="1.5"/>
+					<modifier key="headingBackgroundColor" value="0x00ffffff"/>
+					<modifier key="headingPanelCounter" value="text"/>
+					<modifier key="headingPanelCounterPos" value="inHeading"/>
+				</guiprefs>
+
+				<!-- Need to define ant properties we want to use during install as variables -->
+				<variables>
+
+					<variable name="app.name" value="@{app.name}"/>
+					<variable name="installer.dir" value="@{installer.dir}"/>
+					<variable name="tomcat.binaries.relative.dir" value="@{tomcat.binaries.relative.dir}"/>
+					<variable name="jboss.binaries.relative.dir" value="@{jboss.binaries.relative.dir}"/>
+				</variables>
+
+				<!--
+				The locale section.
+				Asks here to include the English and French langpacks.
+				-->
+				<locale>
+					<langpack iso3="eng">
+					    <str id="AntAction.core" txt="Proceeding of ANT-activities"/>
+					    <str id="AntAction.install" txt="Revision of archives"/>
+					</langpack>
+				</locale>
+
+				<conditions>
+					<condition type="variable" id="install">
+						<name>setup.type</name>
+						<value>install</value>
+					</condition>
+					<condition type="variable" id="upgrade">
+						<name>setup.type</name>
+						<value>upgrade</value>
+					</condition>
+					<condition type="java" id="installonwindows">
+						<java>
+							<class>com.izforge.izpack.util.OsVersion</class>
+							<field>IS_WINDOWS</field>
+						</java>
+						<returnvalue type="boolean">true</returnvalue>
+					</condition>
+					<condition type="java" id="installonlinux">
+						<java>
+							<class>com.izforge.izpack.util.OsVersion</class>
+							<field>IS_LINUX</field>
+						</java>
+						<returnvalue type="boolean">true</returnvalue>
+					</condition>
+					<condition type="and" id="install.onwindows">
+						<condition type="ref" refid="install"/>
+						<condition type="ref" refid="installonwindows" />
+					</condition>
+					<condition type="and" id="upgrade.onwindows">
+						<condition type="ref" refid="upgrade"/>
+						<condition type="ref" refid="installonwindows" />
+					</condition>
+					<condition type="variable" id="ldap.setup">
+						<name>authentication.type</name>
+						<value>ldap</value>
+					</condition>
+					<!-- Custom/typical conditional vars -->
+					<condition type="variable" id="options.custom">
+						<name>setup.options.type</name>
+						<value>custom</value>
+					</condition>
+					<condition type="variable" id="options.typical">
+						<name>setup.options.type</name>
+						<value>typical</value>
+					</condition>
+
+					<condition type="and" id="install.custom">
+						<condition type="ref" refid="install"/>
+						<condition type="ref" refid="options.custom" />
+					</condition>
+					<condition type="and" id="install.typical">
+						<condition type="ref" refid="install"/>
+						<condition type="ref" refid="options.typical" />
+					</condition>
+				</conditions>
+
+				<!--
+				The resources section.
+				The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+				-->
+				<resources>
+					<res id="Installer.image"  src="@{this.dir}/logotype.png"/>
+					<res id="AntActionsSpec.xml" src="@{this.dir}/antActionSpec.xml" />
+					<res id="HTMLLicencePanel.licence" src="@{custom.resource.dir}/Licence.html"/>
+					<res id="InfoPanel.info" src="@{this.dir}/Readme.txt"/>
+					<res id="userInputSpec.xml" src="@{this.dir}/userInputSpec.xml" />
+					<res id="CustomActionsLang.xml_eng" src="@{this.dir}/custom_eng.xml"/>
+					<res id="UserPathPanel.dir.windows" src="@{this.dir}/windir.txt"/>
+					<res id="UserPathPanel.dir.linux" src="@{this.dir}/linuxdir.txt" />
+				</resources>
+
+				<!--
+				The panels section.
+				We indicate here which panels we want to use. The order will be respected.
+				<panel classname="PacksPanel" id="myuserinput" condition="pack2selected" />
+				-->
+				<panels>
+					<panel classname="HelloPanel"/>
+					<panel classname="InfoPanel"/>
+					<panel classname="HTMLLicencePanel"/>
+					<panel classname="UserInputPanel"  id="UserInputPanel.0" />
+					<!-- Typical or Custom -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.1" condition="install"/>
+					<panel classname="UserPathPanel" id="UserPathPanelInstallation" condition="install"/>
+					<!-- Typical Install passwords and set -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.2" condition="install.typical"/>
+					<!-- Jboss Configuration -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.3" condition="install.custom"/>
+					<!-- Jboss Continued -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.4" condition="install.custom"/>
+					<!-- Jboss SSL 0.9.0 -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.5" condition="install.custom"/>
+					<!-- Upgrade Related properties -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.6" condition="upgrade"/>
+					<!-- Authentication Type -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.7" condition="install.custom"/>
+					<!-- Ldap data entry -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.8" condition="ldap.setup"/>
+					<!-- Database Properties -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.9" condition="install"/>
+					<!-- Global Configuraiton Options -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.10" condition="install|upgrade"/>
+					<!-- Grid Global Configuration -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.11" condition="install|upgrade"/>
+					<!-- Grid Research Center -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.12" condition="install|upgrade" />
+					<!-- Grid Tech Contact -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.13" condition="install|upgrade" />
+					<!-- Grid Science Contact -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.14" condition="install|upgrade" />
+					<!-- Secure Grid Configuration 0.9.0 -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.15" condition="install|upgrade" />
+					<!-- Application Specific Properties -->
+					<!-- Tomcat Base Config 0.9.0 -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.16" condition="install.custom"/>
+					<!-- Tomcat Upgrade 0.9.0-->
+					<panel classname="UserInputPanel"  id="UserInputPanel.17" condition="upgrade"/>
+					<!-- Tomcat SSL 0.9.0 -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.18" condition="install.custom"/>
+					<!-- Installation Summary -->
+					<panel classname="UserInputPanel"  id="UserInputPanel.19" />
+					<panel classname="InstallationGroupPanel"/>
+					<panel classname="ExtendedInstallPanel"/>
+					<panel classname="FinishPanel"/>
+				</panels>
+
+				<listeners>
+					<listener installer="SummaryLoggerInstallerListener">
+						<os family="windows"/>
+					</listener>
+
+					<listener installer="ProgressBarInstallerListener"/>
+
+					<listener installer="AntActionInstallerListener" uninstaller="AntActionUninstallerListener" />
+				</listeners>
+
+
+
+
+				<!--
+				The packs section.
+				We specify here our packs.
+				-->
+				<packs>
+					<pack name="download_install" id="download_install" installGroups="bda-blueprints-webapp" required="no">
+					    <description>The base files</description>
+					    <file src="@{dist.location}/@{install.zip.file}" targetdir="$SYSTEM_user_home/@{installer.dir}"/>
+					    <file src="@{this.dir}/build.xml" targetdir="$SYSTEM_user_home/@{installer.dir}"/>
+					    <file src="@{this.dir}/property-template" ="yes" targetdir="$SYSTEM_user_home/@{installer.dir}">
+						<excludes>**/.svn/**</excludes>
+					    </file>
+					</pack>
+
+					<pack name="parse-install" required="no" preselected="no" condition="install">
+					    <description>parse the input values</description>
+					    <parsable targetfile="$SYSTEM_user_home/@{installer.dir}/bda-blueprints_installer/install.properties" type="javaprop" />
+					</pack>
+
+					<pack name="parse-upgrade" required="no" preselected="no" condition="upgrade">
+					    <description>parse the input values</description>
+					    <parsable targetfile="$SYSTEM_user_home/@{installer.dir}/bda-blueprints_installer/upgrade.properties" type="javaprop" />
+					</pack>
+
+					<pack name="convert-install-path" required="no" preselected="no" condition="install">
+					    <description>installation base path</description>
+					</pack>
+
+					<pack name="convert-upgrade-path" required="no" preselected="no" condition="upgrade">
+					    <description>Upgrade base path</description>
+					</pack>
+
+					<pack name="install-application" required="no" preselected="no" condition="install">
+					    <description>install the application</description>
+					</pack>
+
+				</packs>
+				<jar src="@{bda-utils.dir}/ant-1.7.0.jar" stage="both" />
+				<jar src="@{bda-utils.dir}/ant-launcher-1.7.0.jar" stage="both"/>
+				<jar src="@{bda-utils.dir}/ant-nodeps-1.7.0.jar" stage="both"/>
+				<jar src="@{bda-utils.dir}/mysql-connector-java-5.0.5.jar" stage="both"/>
+			</installation>
+		]]></config>
+		</IzPack>
+	</target>
+</project>
