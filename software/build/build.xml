@@ -274,15 +274,10 @@
 		</if>
 	</target>
 	<target name="validate:pre:build"
-		depends="
-		build:retrieve:cacore-sdk,
-		build:extract:cacore-sdk
-		">
-		<validate-pre-build
-			/>
+		depends="">
+		<validate-pre-build/>
 	</target>
 	<target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
-		validate:pre:build,
  		clean,
  		init,
  		build:ncitbrowser-webapp
