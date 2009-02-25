@@ -3,7 +3,7 @@
 # bda-build-templates version 0.10.0-beta
 #
 # This properties file template for all .properties to adhere (The "interface")
-# 
+#
 ##############################################################
 ##############################
 ###  APPLICATION SETTINGS  ###
@@ -13,24 +13,6 @@ application.base.path.linux=The base path where all files are stored for this ap
 application.base.path.windows=The base path where all files are stored for this application on windows. Example: c:/apps/ncitbrowser-webapp
 authentication.type=Used for setting up the login-config.xml. Acceptable values are ldap|db.
 application.url=The URL to access the application. Example: http://${jboss.server.hostname}:${jboss.server.port}/ncitbrowser-webapp
-###########################
-###  DATABASE SETTINGS  ###
-###########################
-# Required for local installs
-# Require for all installs
-database.type=Type of database current database types supported by BDA Templates are Oracle, MySQL or PostgreSQL. Acceptable values are oracle|mysql|postgresql.
-database.server=The hostname where the database resides. Example: ncidbhostname.nci.nih.gov.
-database.port=The port the database listens on. Example: 3306.
-database.name=The database name on the database server. Example: cagwasdb.
-database.user=The user the application uses to connect to the database. cagwasuser.
-database.password=The password for the above user. Example: cAgwASpaSS.
-database.url=The JDBC url for that user above, value referes to other properties and should not be changed. Example: jdbc:mysql://${database.server}:${database.port}/${database.name}
-# Only one of the two properties below can be set at a time.
-#database.drop-schema=This property will drop all the objects under the database.name
-#database.re-create=This property when set will drop and recreate the database.user and database.name
-#database.system.user=If you set database.re-create you need to have a privileged user who can drop and create users and databases.
-#database.system.password=The above user's password.
-#database.system.url=The JDBC connection url for the system user. Example: jdbc:mysql://${database.server}:${database.port}/
 ########################
 ###  JBOSS SETTINGS  ###
 ########################
@@ -39,7 +21,7 @@ jboss.relative.path=This is the part of the path after application.base.path whi
 jboss.server.hostname=The server name where jboss will be running. Example: localhost
 jboss.server.name=The jboss server instance name, $JBOSS_HOME/server/${jboss.server.name}. Example: default
 jboss.web.user=The account name to log into the JBoss web consoles.  Example: admin
-jboss.web.password=The password to the access the jboss web console and jmx console. Example: blueprint123!. The user is admin. 
+jboss.web.password=The password to the access the jboss web console and jmx console. Example: blueprint123!. The user is admin.
 #jboss.port.config=This is the NCICB port configuration scheme used by this application server.  If this is set the other ports except for jboss.server.port and jboss.server.jndi.port are igored (those are used by the install process). Having this set also causes pre and post installation validation to not check ports.
 # Ports used by JBoss. Must not conflict with other LSD applications. Check with BDA or Systems teams.
 #jboss.cobraorb.port=
