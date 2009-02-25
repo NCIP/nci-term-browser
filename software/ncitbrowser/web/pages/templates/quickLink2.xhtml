@@ -1,0 +1,28 @@
+
+<table width="100%" height="1" border="0" cellspacing="0" cellpadding="0" bgcolor="#AAAAAB" >
+
+	    <tr>
+		<td align="right">
+		     <form action="<%= request.getContextPath() %>/dispatchServlet?">
+		     <!--
+			<h:selectOneMenu id="quickLink" value="" valueChangeListener="#{userSessionBean.quickLinkChanged}" onchange="submit()">
+			     <f:selectItems value="#{userSessionBean.quickLinkList}" />
+			</h:selectOneMenu>
+		      -->
+
+<SELECT NAME="quickLink">
+	<option value="Quick Links" selected>Quick Links</option>
+	<option value="NCI Terminology Browser">NCI Terminology Browser</option>
+	<option value="NCI MetaThesaurus Browser">NCI MetaThesaurus</option>
+	<option value="EVS Home">EVS Home</option>
+	<option value="NCI Terminology Resources">NCI Terminology Resources</option>
+</SELECT>
+
+<input type="submit" value="Go">	
+
+		     </form>	
+		</td>
+	
+            </tr>
+</table>
+	  
