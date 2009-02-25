@@ -11,15 +11,22 @@ Pre-installation requirements
 -----------------------
 Build the application
 -----------------------
-1. Checkout source files from SVN at the following URL:
-   https://gforge.nci.nih.gov/svnroot/ncit/trunk
+Checkout source files from SVN at the following URL:
+https://gforge.nci.nih.gov/svnroot/ncit/trunk
 
-2. Compile the application
-   a) cd C:\SVN-Projects\reportwriter
+1. Compile the application
+   cd C:\SVN-Projects\ncit\build
+   ant build:all
+
+
+
    b) C:\SVN-Projects\reportwriter>ant clean war
 
+-----------------------
+Other build commands
+-----------------------
 
-
+Clean: C:\SVN-Projects\ncit\build>ant clean
 
 --------------------------------------
 Location of files
