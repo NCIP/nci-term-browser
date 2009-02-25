@@ -23,6 +23,8 @@ https://gforge.nci.nih.gov/svnroot/ncit/trunk
 Step #2 will deploy a new JBoss container and start it at the following URL
 http://localhost:19280/ncitbrowser/
 
+The JBoss instance will be located in c:\Apps\ncitbrowser-webapp\jboss-4.0.5.GA
+
 -----------------------
 Other build commands
 -----------------------
