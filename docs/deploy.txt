@@ -17,10 +17,11 @@ https://gforge.nci.nih.gov/svnroot/ncit/trunk
 1. Compile the application
    cd C:\SVN-Projects\ncit\build
    ant build:all
+2. Deploy the application
+   ant deploy:local:install
 
-
-
-   b) C:\SVN-Projects\reportwriter>ant clean war
+Step #2 will deploy a new JBoss container and start it at the following URL
+http://localhost:19280/ncitbrowser/
 
 -----------------------
 Other build commands
