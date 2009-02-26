@@ -1,13 +1,5 @@
-package gov.nih.nci.evs.browser.utils;
+package gov.nih.nci.evs.browser.bean;
 
-import gov.nih.nci.system.applicationservice.EVSApplicationService;
-import gov.nih.nci.system.client.ApplicationServiceProvider;
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
-import java.util.Hashtable;
-import java.util.Properties;
-
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -40,51 +32,91 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
   *
  */
 
-public class RemoteServerUtil {
-	private static String _serviceInfo = "EvsServiceInfo";
-	private Properties systemProperties = null;
+public class DisplayItem {
 
-    //public static EVSApplicationService  appService = null;
-    //public static LexBIGService lbSvc;
-    //private static String serviceUrl = null;
+	private String propertyName;
+	private String itemLabel;
+	private String url;
+	private String hyperlinkText;
+	private boolean isExternalCode;
 
-    public RemoteServerUtil() {
+	public DisplayItem(){
 
-    }
+	}
 
-
-	public static LexBIGService createLexBIGService()
-    {
-		// default URL (to be read from a property file)
-		String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
-		NCItBrowserProperties properties = null;
-		try {
-			properties = NCItBrowserProperties.getInstance();
-			url = properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-	    } catch (Exception ex) {
-
-		}
-		return createLexBIGService(url);
+	public DisplayItem(String propertyName, String itemLabel, String url, String hyperlinkText) {
+		this.propertyName = propertyName;
+		this.itemLabel = itemLabel;
+		this.url  = url;
+		this.hyperlinkText = hyperlinkText;
+		this.isExternalCode = false;
 	}
 
 
-	public static LexBIGService createLexBIGService(String serviceUrl)
-    {
-		try{
-			//System.out.println("RemoteServerUtil serviceUrl: " + serviceUrl);
-			if (serviceUrl == null || serviceUrl.compareTo("") == 0)
-			{
-				LexBIGService lbSvc = new LexBIGServiceImpl();
-				return lbSvc;
-			}
-		    EVSApplicationService appService = (EVSApplicationService) ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, _serviceInfo);
-           return (LexBIGService) appService;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
+	public DisplayItem(String propertyName, String itemLabel, String url, String hyperlinkText, boolean isExternalCode) {
+		this.propertyName = propertyName;
+		this.itemLabel = itemLabel;
+		this.url  = url;
+		this.hyperlinkText = hyperlinkText;
+		this.isExternalCode = isExternalCode;
 	}
 
+	public String getPropertyName() {
+		return this.propertyName;
+	}
+
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
+	}
+
+	public String getItemLabel() {
+		return this.itemLabel;
+	}
+
+	public void setItemLabel(String itemLabel) {
+		this.itemLabel = itemLabel;
+	}
+
+	public String getUrl() {
+		return this.url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getHyperlinkText() {
+		return this.hyperlinkText;
+	}
+
+	public void setHyperlinkText(String hyperlinkText) {
+		this.hyperlinkText = hyperlinkText;
+	}
+
+	public boolean getIsExternalCode() {
+		return this.isExternalCode;
+	}
+
+	public void setIsExternalCode(String isExternalCode) {
+		this.hyperlinkText = isExternalCode;
+	}
+
+
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("DisplayItem ");
+		sb.append("\n");
+		sb.append("\tpropertyName: " + getPropertyName());
+		sb.append("\n");
+		sb.append("\titemLabel: " + getItemLabel());
+		sb.append("\n");
+		sb.append("\turl: " + getUrl());
+		sb.append("\n");
+		sb.append("\thyperlinkText: " + getHyperlinkText());
+		sb.append("\n");
+		sb.append("\tisExternalCode: " + getIsExternalCode());
+		sb.append("\n");
+
+		return sb.toString();
+	}
 }

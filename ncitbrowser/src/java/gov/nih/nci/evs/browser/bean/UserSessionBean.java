@@ -28,6 +28,7 @@ import java.util.Collection;
 
 import org.LexGrid.concepts.Concept;
 
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 /**
   * <!-- LICENSE_TEXT_START -->
@@ -63,8 +64,7 @@ import org.LexGrid.concepts.Concept;
 
 public class UserSessionBean extends Object
 {
-	  private static Logger KLO_log = Logger.getLogger("UserSessionBean KLO");
-
+	private static Logger KLO_log = Logger.getLogger("UserSessionBean KLO");
 
 	private String selectedQuickLink = null;
 	private List quickLinkList = null;
@@ -74,7 +74,6 @@ public class UserSessionBean extends Object
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		request.getSession().setAttribute("selectedQuickLink", selectedQuickLink);
 	}
-
 
 	public String getSelectedQuickLink() {
 		return this.selectedQuickLink;
@@ -126,9 +125,16 @@ public class UserSessionBean extends Object
 		setSelectedAlgorithm(matchAlgorithm);
 
 		String scheme = "NCI Thesaurus";
-		String version = null;//"08.11d";
-		int maxToReturn = 1000;
+		String version = null;
 
+		String max_str = null;
+		int maxToReturn = 1000;
+		try {
+			max_str = NCItBrowserProperties.getInstance().getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
+			maxToReturn = Integer.parseInt(max_str);
+		} catch (Exception ex) {
+
+		}
 		request.getSession().setAttribute("vocabulary", scheme);
 
         long ms = System.currentTimeMillis();
@@ -147,7 +153,6 @@ public class UserSessionBean extends Object
 
 		String message = "No match found.";
 		request.getSession().setAttribute("message", message);
-
 		return "message";
 
 	}
@@ -189,20 +194,6 @@ public class UserSessionBean extends Object
 		System.out.println("resultsPerPageChanged; " + newValue);
         setSelectedResultsPerPage(newValue);
 
-/*
-		HttpServletResponse response = (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
-
-	    String targetURL = null;//"http://nciterms.nci.nih.gov/";
-	    if (selectedQuickLink.compareTo("NCI Terminology Browser") == 0) {
-		   targetURL = "http://nciterms.nci.nih.gov/";
-	    }
-	    try {
-	    	response.sendRedirect(response.encodeRedirectURL(targetURL));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			// send error message
-		}
-*/
 	}
 
 

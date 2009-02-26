@@ -166,7 +166,7 @@ public final class AjaxServlet extends HttpServlet {
     String ontology_display_name = request.getParameter("ontology_display_name");//DataConstants.ONTOLOGY_DISPLAY_NAME);
    // String ontology_source = request.getParameter(DataConstants.ONTOLOGY_SOURCE);
 
-    if (action.equals("expand_tree")) {//DataConstants.ACTION_EXPAND_TREE)) {
+    if (action.equals("expand_tree")) {
 
       if (node_id != null && ontology_display_name != null) {
         response.setContentType("text/html");
@@ -221,40 +221,11 @@ public final class AjaxServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
         JSONObject json = new JSONObject();
 
-        // The JSONArray nodesArray will contain an array of JSONObject
-        // Each JSONObject in nodesArray will be a HashMap, which maps
-        //      "path" to path to roots (a vector of nodes - from root to focused concept)
-        //      "subconcepts" to a HashMap (node in path to subconcepts)
-
         try {
-          SearchUtils util = new SearchUtils();
-          Vector subconcept_vec = util.getSubconcepts(ontology_display_name, null, node_id);
-          JSONArray nodesArray = new JSONArray();
-          for (int i=0; i<subconcept_vec.size(); i++)
-          {
-			  Concept node = (Concept) subconcept_vec.elementAt(i);
-			  JSONObject nodeObject = new JSONObject();
+			//To be implemented
 
-				  nodeObject.put(ONTOLOGY_NODE_ID, node.getId());
-				  // to be implemented
-				  //nodeObject.put(ONTOLOGY_NODE_NAME, node.getName());
 
-				  //Concept concept = getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
-				  //String pt = getPreferredName(concept);
 
-				  String name = node.getEntityDescription().getContent();
-
-				  //nodeObject.put(ONTOLOGY_NODE_NAME, pt);
-				  nodeObject.put(ONTOLOGY_NODE_NAME, name);
-
-                  // to be modified
-				  Vector sub_vec = util.getSubconcepts(ontology_display_name, null, node.getId());
-
-				  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, sub_vec.size());
-				  nodesArray.put(nodeObject);
-
-          }
-          json.put("nodes", nodesArray);
         }
         catch (Exception e) {
           //LogUtils.log(logger, Level.ERROR, e);
@@ -281,9 +252,9 @@ public final class AjaxServlet extends HttpServlet {
         try {
 				//Collection collection = searchService.getTopLevelNodes(ontology_display_name, ontology_source);
 				String hierarchyID = null;//"hasSubtpe";
+				DataUtils util = new DataUtils();
 				CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
-				csvt.setVersion("08.11d");
-				list = getHierarchyRoots(ontology_display_name, csvt, hierarchyID);
+				list = util.getHierarchyRoots(ontology_display_name, csvt, hierarchyID);
 
 				if (list != null)
 				{
@@ -291,7 +262,7 @@ public final class AjaxServlet extends HttpServlet {
 					  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
 
 					  //int childCount = node.getChildrenCount();
-					  // to be modified
+					  // to be modified, use cache
 					  int childCount = 1;
 
 					  JSONObject nodeObject = new JSONObject();
@@ -299,8 +270,7 @@ public final class AjaxServlet extends HttpServlet {
 					  // to be implemented
 					  //nodeObject.put(ONTOLOGY_NODE_NAME, node.getName());
 
-					  Concept concept = getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
-					  //String pt = getPreferredName(concept);
+					  Concept concept = util.getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
 
 					  String name = concept.getEntityDescription().getContent();
 
@@ -320,214 +290,10 @@ public final class AjaxServlet extends HttpServlet {
 		  e.printStackTrace();
 		}
 	  }
-
-
-
     }
-    /*
-    if (action.equals(DataConstants.ACTION_RESET_TREE)) {
-      if (node_id != null && ontology_display_name != null) {
-        response.setContentType("text/html");
-        response.setHeader("Cache-Control", "no-cache");
-        JSONObject json = new JSONObject();
 
-        try {
-          //InitialContext ctx = new InitialContext();
-          //SearchSessionBean searchService = (SearchSessionBean)ctx.lookup(ServiceLocatorBean.SEARCH_SERVICE_BEAN);
-          NodeBean node = searchService.getNode(ontology_display_name, node_id);
-          if (node != null) {
-            JSONObject nodeObject = new JSONObject();
-            nodeObject.put(DataConstants.ONTOLOGY_NODE_ID, node.getId());
-            nodeObject.put(DataConstants.ONTOLOGY_NODE_NAME, node.getName());
-            int childCount = node.getChildrenCount();
-            nodeObject.put(DataConstants.ONTOLOGY_NODE_CHILD_COUNT, childCount);
-            json.put("root_node", nodeObject);
-            HashMap assocs = searchService.getChildNodes(ontology_display_name, node_id, ontology_source);
-            Iterator assocIterator = assocs.keySet().iterator();
-            JSONArray nodesArray = new JSONArray();
-            while(assocIterator.hasNext()){
-              AssociationInfo assoc = (AssociationInfo)assocIterator.next();
-              if (assoc != null) {
-                String assoc_name = assoc.getAssociationName();
-                List nodes = (List)assocs.get(assoc);
-                if (nodes != null) {
-                  Iterator nodesIterator = nodes.iterator();
-                  while (nodesIterator.hasNext()) {
-                    node = (NodeBean)nodesIterator.next();
-                    childCount = node.getChildrenCount();
-                    nodeObject = new JSONObject();
-                    nodeObject.put(DataConstants.ONTOLOGY_NODE_ID, node.getId());
-                    nodeObject.put(DataConstants.ONTOLOGY_NODE_NAME, node.getName());
-                    nodeObject.put(DataConstants.ONTOLOGY_NODE_PARENT_ASSOC, assoc_name);
-                    nodeObject.put(DataConstants.ONTOLOGY_NODE_CHILD_COUNT, childCount);
-                    nodesArray.put(nodeObject);
-                  }
-                }
-              }
-            }
-            json.put("child_nodes", nodesArray);
-          }
-        }
-        catch (Exception e) {
-          LogUtils.log(logger, Level.ERROR, e);
-        }
-        response.getWriter().write(json.toString());
-        return;
-      }
-
-    }
-    */
   }
 
-
-	public List getHierarchyRoots(
-		String scheme,
-		CodingSchemeVersionOrTag csvt) throws LBException
-	{
-		return getHierarchyRoots(scheme, csvt, null);
-    }
-
-
-	public List getHierarchyRoots(
-		String scheme,
-		CodingSchemeVersionOrTag csvt,
-		String hierarchyID) throws LBException
-	{
-        int maxDepth = 1;
-		//EVSApplicationService lbSvc = new RemoteServerUtil().createLexBIGService();
-		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-		LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
-		//EVSApplicationService lbSvc = new RemoteServerUtil().createLexBIGService();
-		lbscm.setLexBIGService(lbSvc);
-/*
-		// Validate the ID, if specified ...
-		if (hierarchyID != null) {
-			String[] supportedIDs = lbscm.getHierarchyIDs(scheme, csvt);
-			Arrays.sort(supportedIDs);
-			if (Arrays.binarySearch(supportedIDs, hierarchyID) < 0) {
-				Util.displayMessage(
-					"The specified hierarchy identifier is not supported by the selected code system.");
-				Util.displayMessage("Supported values: ");
-				for (String id: supportedIDs)
-					Util.displayMessage("    " + id);
-				//return;
-			}
-		}
-*/
-
-		// Print all branches from root ...
-		ResolvedConceptReferenceList roots = lbscm.getHierarchyRoots(scheme, csvt, hierarchyID);
-		//ArrayList list = new ArrayList();
-		List list = ResolvedConceptReferenceList2List(roots);
-
-		SortUtils.quickSort(list);
-
-		for (int i=0; i<list.size(); i++)
-		{
-			ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
-			org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
-			System.out.println(ce.getId() + " " + ce.getEntityDescription().getContent());
-
-		}
-
-		return list;
-
-	}
-
-
-    public List ResolvedConceptReferenceList2List(ResolvedConceptReferenceList rcrl)
-    {
-		ArrayList list = new ArrayList();
-		for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++)
-		{
-			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
-			list.add(rcr);
-		}
-		return list;
-	}
-
-
-	public static ConceptReferenceList createConceptReferenceList(String[] codes, String codingSchemeName)
-	{
-		if (codes == null)
-		{
-			return null;
-		}
-		ConceptReferenceList list = new ConceptReferenceList();
-		for (int i = 0; i < codes.length; i++)
-		{
-			ConceptReference cr = new ConceptReference();
-			cr.setCodingScheme(codingSchemeName);
-			cr.setConceptCode(codes[i]);
-			list.addConceptReference(cr);
-		}
-		return list;
-	}
-
-	public static Concept getConceptByCode(String codingSchemeName, String vers, String ltag, String code)
-	{
-        try {
-			//EVSApplicationService lbSvc = new RemoteServerUtil().createLexBIGService();
-			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
-			if (lbSvc == null)
-			{
-				System.out.println("lbSvc == null???");
-				return null;
-			}
-
-			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-			versionOrTag.setVersion(vers);
-
-			ConceptReferenceList crefs =
-				createConceptReferenceList(
-					new String[] {code}, codingSchemeName);
-
-			CodedNodeSet cns = null;
-
-			try {
-				cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
-		    } catch (Exception e1) {
-				e1.printStackTrace();
-			}
-
-			cns = cns.restrictToCodes(crefs);
-			ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
-
-			if (matches == null)
-			{
-				System.out.println("Concep not found.");
-				return null;
-			}
-
-			// Analyze the result ...
-			if (matches.getResolvedConceptReferenceCount() > 0) {
-				ResolvedConceptReference ref =
-					(ResolvedConceptReference) matches.enumerateResolvedConceptReference().nextElement();
-
-				Concept entry = ref.getReferencedEntry();
-				return entry;
-			}
-		 } catch (Exception e) {
-			 e.printStackTrace();
-			 return null;
-		 }
-		 return null;
-	}
-
-
-    public String getPreferredName(Concept c) {
-
-		Presentation[] presentations = c.getPresentation();
-		for (int i=0; i<presentations.length; i++)
-		{
-			Presentation p = presentations[i];
-			if (p.getPropertyName().compareTo("Preferred_Name") == 0)
-			{
-				return p.getText().getContent();
-			}
-		}
-		return null;
-	}
 
 
 }
