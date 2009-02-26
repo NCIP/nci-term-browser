@@ -263,13 +263,8 @@
         </if>
     </target>
 
-    <target name="validate:pre:build"
-        depends="
-        build:retrieve:cacore-sdk,
-        build:extract:cacore-sdk
-        ">
-        <validate-pre-build
-            />
+    <target name="validate:pre:build">
+        <validate-pre-build/>
     </target>
 
     <target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
@@ -280,17 +275,7 @@
         " >
     </target>
 
-    <target name="build:ncitbrowser-api" depends="init" description="Call api sub-projects build target to produce artifiacts">
-        <!--
-        <ant inheritAll="false" inheritRefs="false" antfile="${ncitbrowser-api.build.file}"
-            target="${ncitbrowser-api.build.target}"
-            dir="${ncitbrowser-api.base.dir}" >
-            <property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
-        </ant>
-        -->
-    </target>
-
-    <target name="build:ncitbrowser-webapp" depends="init, build:ncitbrowser-api" description="Call webapp sub-projects build target to produce artifiacts">
+    <target name="build:ncitbrowser-webapp" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
         <!-- setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
         <ant inheritAll="false" inheritRefs="false" antfile="${ncitbrowser-webapp.build.file}" target="${ncitbrowser-webapp.build.target}" dir="${ncitbrowser-webapp.base.dir}">
             <property name="dist.dir" value="${ncitbrowser-webapp.dist.dir}" />
