@@ -31,14 +31,10 @@
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
 
-
-    
+   
     
   </navigation-rule>
-    
-
-  
-  
+ 
   <navigation-rule>
     <from-view-id>/pages/search_results.jsp</from-view-id>
     <navigation-case> 
@@ -47,7 +43,15 @@
     </navigation-case>
   </navigation-rule>
   
-
+  <navigation-rule>
+    <from-view-id>/pages/concept_details.jsp</from-view-id>
+    <navigation-case> 
+       <description>search_results</description>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+  
 <managed-bean>
   <managed-bean-name>DataUtils</managed-bean-name>
   <managed-bean-class>gov.nih.nci.evs.browser.bean.DataUtils</managed-bean-class>

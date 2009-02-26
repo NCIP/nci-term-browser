@@ -1,32 +1,22 @@
-							<FORM NAME="searchTerm" METHOD="POST" STYLE="padding:0px;margin:0px" >
+<FORM NAME="searchTerm" METHOD="POST" STYLE="padding:0px;margin:0px" >
 
-					           
-					                <table cellspacing=0 cellpadding=0 height="42">
-				                    
-					                    
-					                    <tr bgcolor="#2D2D7F">
-						                 <td align=right  style="padding-right: 6px; padding-top: 0px valign=top padding:0px; margin:0px" >
- 
-									<SPAN class="StandardFont"><FONT COLOR="white"></font></SPAN>
-									
+<table cellspacing=0 cellpadding=0 height="42">
+    <tr bgcolor="#2D2D7F">
+	 <td align=right  style="padding-right: 6px; padding-top: 0px valign=top padding:0px; margin:0px" >
+		<SPAN class="StandardFont"><FONT COLOR="white"></font></SPAN>
 <%
 String match_text = (String) request.getSession().getAttribute("matchText");
 if (match_text == null)
 {
 %>									
 <input CLASS="SearchField" size="22" name="matchText" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)"> 
-									
 <%
 }
 else
 {
 %>
-
- 
 <input CLASS="SearchField" size="22" name="matchText" value="<%=match_text%>" 
- onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)"> 
- 
- 
+    onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)"> 
 <%
 }
 %>
@@ -38,19 +28,13 @@ else
 	action="#{userSessionBean.searchAction}" >
 </h:commandButton>			
 
-								</td> 
-							     </tr>
-							     <tr bgcolor="#2D2D7F">
-								  <td align=right  style="padding-right: 6px" >
+	</td> 
+     </tr>
+     <tr bgcolor="#2D2D7F">
+	  <td align=right  style="padding-right: 6px" >
 
-									     <font COLOR="white" size="1" face="arial,helvetica">
+		     <font COLOR="white" size="1" face="arial,helvetica">
 
-<!--
-<h:selectOneRadio id="algorithm"
-	value="#{userSessionBean.selectedAlgorithm}" valueChangeListener="#{userSessionBean.algorithmChanged}">
-	<f:selectItems value="#{userSessionBean.algorithmList}"/>
-</h:selectOneRadio>
--->
 
 <%
 String algorithm = (String) request.getSession().getAttribute("selectedAlgorithm");
@@ -80,10 +64,10 @@ else
 }
 %>
 										
-									     </font> 
-								  </td>
-							     </tr>
-                     
-                     					</table>
-                     					
-                     					</FORM>
+		     </font> 
+	  </td>
+     </tr>
+
+</table>
+
+</FORM>

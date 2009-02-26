@@ -1,13 +1,12 @@
 package gov.nih.nci.evs.browser.utils;
 
-import gov.nih.nci.system.applicationservice.EVSApplicationService;
-import gov.nih.nci.system.client.ApplicationServiceProvider;
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
-import java.util.Hashtable;
-import java.util.Properties;
+import org.apache.jcs.JCS;
+import org.apache.jcs.engine.behavior.IElementAttributes;
 
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -40,51 +39,95 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
   *
  */
 
-public class RemoteServerUtil {
-	private static String _serviceInfo = "EvsServiceInfo";
-	private Properties systemProperties = null;
+public class CacheManager
+{
+    private static CacheManager instance;
+    private static int checkedOut = 0;
+    private static JCS treeCache;
 
-    //public static EVSApplicationService  appService = null;
-    //public static LexBIGService lbSvc;
-    //private static String serviceUrl = null;
-
-    public RemoteServerUtil() {
-
+    private CacheManager()
+    {
+        try
+        {
+            treeCache = JCS.getInstance("treeCache");
+        }
+        catch (Exception e)
+        {
+			e.printStackTrace();
+        }
     }
 
 
-	public static LexBIGService createLexBIGService()
+    public static CacheManager getInstance()
     {
-		// default URL (to be read from a property file)
-		String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
-		NCItBrowserProperties properties = null;
-		try {
-			properties = NCItBrowserProperties.getInstance();
-			url = properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-	    } catch (Exception ex) {
+        synchronized (CacheManager.class)
+        {
+            if (instance == null)
+            {
+                instance = new CacheManager();
+            }
+        }
 
-		}
-		return createLexBIGService(url);
+        synchronized (instance)
+        {
+            instance.checkedOut++;
+        }
+
+        return instance;
+    }
+
+
+
+    public HashMap getSubconcepts(String scheme, String version, String code)
+    {
+		return getSubconcepts(scheme, version, code, true);
 	}
 
 
-	public static LexBIGService createLexBIGService(String serviceUrl)
+    public HashMap getSubconcepts(String scheme, String version, String code, boolean fromCache)
     {
-		try{
-			//System.out.println("RemoteServerUtil serviceUrl: " + serviceUrl);
-			if (serviceUrl == null || serviceUrl.compareTo("") == 0)
-			{
-				LexBIGService lbSvc = new LexBIGServiceImpl();
-				return lbSvc;
+		HashMap map = null;
+		String key = scheme + "$" + version + "$" + code;
+        if (fromCache)
+        {
+            map = (HashMap) treeCache.get(key);
+        }
+        if (map == null)
+        {
+            map = new TreeUtils().getSubconcepts(scheme, version, code);
+            try {
+	            treeCache.put(key, map);
+			} catch (Exception ex) {
+
 			}
-		    EVSApplicationService appService = (EVSApplicationService) ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, _serviceInfo);
-           return (LexBIGService) appService;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
+        }
+        return  map;
+    }
+
+
+    public List getRootConcepts(String scheme, String version)
+    {
+		return getRootConcepts(scheme, version, true);
 	}
 
+
+    public List getRootConcepts(String scheme, String version, boolean fromCache)
+    {
+		List list = new ArrayList();
+		String key = scheme + "$" + version + "$root";
+        if (fromCache)
+        {
+            list = (List) treeCache.get(key);
+        }
+        if (list == null)
+        {
+            try {
+				list = new DataUtils().getHierarchyRoots(scheme, version, null);
+	            treeCache.put(key, list);
+			} catch (Exception ex) {
+
+			}
+        }
+        return list;
+    }
 }

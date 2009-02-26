@@ -1,13 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %> 
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
-
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
-
-
 <html>
 <head>
 <title>NCI Thesaurus Browser Home</title>
@@ -89,6 +84,16 @@
 %>
 
 <table>
+
+   <tr><td allign="left">
+      <b>Result for: <%=matchText%></b>
+   </td></tr>
+
+   <tr>
+	<td>
+	     <hr></hr>
+	</td>
+   </tr>
 
    <tr>
       <td>
