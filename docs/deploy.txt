@@ -28,8 +28,10 @@ The JBoss instance will be located in c:\Apps\ncitbrowser-webapp\jboss-4.0.5.GA
 -----------------------
 Other build commands
 -----------------------
+cd C:\SVN-Projects\ncit\software\build>
 
-Clean: C:\SVN-Projects\ncit\build>ant clean
+Clean:		ant clean
+Redeploy:	ant deploy:hot
 
 --------------------------------------
 Location of files
