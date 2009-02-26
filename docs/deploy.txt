@@ -15,7 +15,7 @@ Checkout source files from SVN at the following URL:
 https://gforge.nci.nih.gov/svnroot/ncit/trunk
 
 1. Compile the application
-   cd C:\SVN-Projects\ncit\build
+   cd C:\SVN-Projects\ncit\software\build
    ant build:all
 2. Deploy the application
    ant deploy:local:install
