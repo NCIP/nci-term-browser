@@ -222,9 +222,6 @@
     </target>
     <target name="install:jboss:ncitbrowser-webapp:configure" description="Configure ncitbrowser-webapp application, copies over externalized properties or configurations that are not part of the jboss configuration" unless="exclude.jboss">
         <!-- copy over any other files you may need to configure your application -->
-
-        <!-- copy datasource file -->
-        <copy file="${jboss-conf.dir.dest}/${ncitbrowser-webapp.ds.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
         <!-- copy JBoss-web.xml file -->
         <!--
         <copy file="${jboss-conf.dir.dest}/${jboss.web.xml.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
