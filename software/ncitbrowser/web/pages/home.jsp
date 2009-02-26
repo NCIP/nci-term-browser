@@ -1,18 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %> 
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
-
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
-
-
 <html>
 <head>
 <title>NCI Thesaurus Browser Home</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
 <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/dhtmlcombo.css" />

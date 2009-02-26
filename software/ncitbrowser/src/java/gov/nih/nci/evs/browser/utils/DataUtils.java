@@ -226,7 +226,7 @@ public class DataUtils {
 
     public DataUtils()
     {
-        setCodingSchemeMap();
+        //setCodingSchemeMap();
 	}
 
 
@@ -1932,5 +1932,48 @@ System.out.println("return map: ");
 		return link;
 	}
 
+	public List getHierarchyRoots(
+		String scheme,
+		String version,
+		String hierarchyID) throws LBException
+	{
+		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		if (version != null) csvt.setVersion(version);
+		return getHierarchyRoots(scheme, csvt, hierarchyID);
+	}
 
+
+
+	public List getHierarchyRoots(
+		String scheme,
+		CodingSchemeVersionOrTag csvt,
+		String hierarchyID) throws LBException
+	{
+        int maxDepth = 1;
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
+		lbscm.setLexBIGService(lbSvc);
+		ResolvedConceptReferenceList roots = lbscm.getHierarchyRoots(scheme, csvt, hierarchyID);
+		List list = ResolvedConceptReferenceList2List(roots);
+
+		SortUtils.quickSort(list);
+		for (int i=0; i<list.size(); i++)
+		{
+			ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
+			org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
+			System.out.println(ce.getId() + " " + ce.getEntityDescription().getContent());
+		}
+		return list;
+	}
+
+    public List ResolvedConceptReferenceList2List(ResolvedConceptReferenceList rcrl)
+    {
+		ArrayList list = new ArrayList();
+		for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++)
+		{
+			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+			list.add(rcr);
+		}
+		return list;
+	}
 }
