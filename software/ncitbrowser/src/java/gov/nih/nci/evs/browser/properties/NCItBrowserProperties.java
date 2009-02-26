@@ -107,30 +107,12 @@ public class NCItBrowserProperties {
 	    private static void loadProperties() throws Exception {
 			String propertyFile = System.getProperty("gov.nih.nci.evs.browser.NCItBrowserProperties");
 
-			log.info("NCItBrowserProperties FileLocation= "+ propertyFile);
+			log.info("NCItBrowserProperties File Location= "+ propertyFile);
 
 			PropertyFileParser parser = new PropertyFileParser(propertyFile);
 			parser.run();
 
 			displayItemList = parser.getDisplayItemList();
 			configurableItemMap = parser.getConfigurableItemMap();
-
-/*
-			if(propertyFile != null && propertyFile.length() > 0){
-				FileInputStream fis = new FileInputStream(new File(propertyFile));
-				properties.load(fis);
-			}
-			else System.out.println("propertyFile is null");
-
-			for(Iterator i = properties.keySet().iterator(); i.hasNext();){
-				String key = (String)i.next();
-				String value  = properties.getProperty(key);
-
-				System.out.println("key: " + key);
-				System.out.println("value: " + value);
-
-	            log.debug("KEY: "+ key +"\t - "+value);
-			}
-*/
 		}
 	}
