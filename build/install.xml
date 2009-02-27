@@ -22,6 +22,7 @@
     </description>
 
     <!-- Properties file related properties and tasks -->
+
     <property environment="env" />
     <property file="local.properties"/>
     <property file="project.properties"/>
@@ -61,6 +62,7 @@
     <property name="log.dir" value="${basedir}/logs" />
     <property name="working.dir" value="${basedir}/working" />
     <property name="temp.dir" value="${working.dir}/temp" />
+
     <!-- Install Time properties -->
     <!-- Source and target directories -->
     <property name="bda-utils.dir" value="bda-utils" />
@@ -69,13 +71,17 @@
     <property name="common.dir.dest" value="${working.dir}/${common.dist.relative.dir}" />
     <property name="jboss-conf.dir.src" value="${basedir}/${jboss-conf.dist.relative.dir}" />
     <property name="jboss-conf.dir.dest" value="${working.dir}/${jboss-conf.dist.relative.dir}" />
+
     <!-- Jboss binding configurtion related properties -->
+
     <property name="jboss.binding.template.location" value="${bda-utils.dir}/resource/${jboss.template.relative.dir}/bindings.xml"/>
     <property name="jboss.service.template.location" value="${bda-utils.dir}/resource/${jboss.template.relative.dir}/jboss-service.xml"/>
-    <!-- *-ds.xml and WAR -->
+
+    <!-- WAR -->
     <property name="ncitbrowser-webapp.dir.dist" value="${basedir}/${ncitbrowser-webapp.dist.relative.dir}" />
-    <property name="ncitbrowser-webapp.ds.file" value="ncitbrowser-ds.xml" />
     <property name="ncitbrowser-webapp.war.file" value="ncitbrowser.war" />
+    <property name="ncitbrowser-webapp.prop.file" value="NCItBrowserProperties.xml" />
+
     <!-- Grid related properties -->
     <!-- Default to false, properties can override -->
     <property name="jboss.ssl.enable" value="false"/>
@@ -85,7 +91,9 @@
             <include name="**/*.jar" />
         </fileset>
     </path>
+
     <!-- Task definitions -->
+
     <taskdef uri="antlib:org.apache.ant.antunit" resource="org/apache/ant/antunit/antlib.xml">
         <classpath>
             <pathelement location="${bda-utils.dir}/antunit-1.0.jar" />
@@ -112,16 +120,6 @@
     <available file="${jboss.home}/server/${jboss.server.name}/conf/jboss-service.xml" property="jboss.exists"/>
     <!-- Includes-->
     <import file="${bda-utils.dir}/bda-build-utils-${bda.version}.xml" />
-    <!-- Read db configs from existing ds.xml if it exists for use in upgrade installs, if already set in properties file values from properties file will be used -->
-    <available file="${jboss.home}/server/${jboss.server.name}/deploy/${ncitbrowser-webapp.ds.file}" property="ds.exists"/>
-    <if>
-        <isset property="ds.exists"/>
-        <then>
-        </then>
-        <else>
-            <echo message="Warning- could not find ${jboss.home}/server/${jboss.server.name}/deploy/${ncitbrowser-webapp.ds.file}"/>
-        </else>
-    </if>
     <!-- figure out whether to use install-properties.template or upgrade-proprties.template based on the name of the properties file -->
     <propertyregex property="properties.file.type"
         input="${properties.file}"
@@ -150,14 +148,18 @@
         <format property="install.time" pattern="yyyy-MM-dd-HH-mm" />
     </tstamp>
     <record name="${install-logs.dir}/install-${install.time}.log" action="start"/>
-    <!-- Installer section -->
+
+    <!-- ****************************** Installer section ********************************** -->
+
     <target name="diag">
         <echoproperties/>
     </target>
+
     <target name="install:clean" description="Removes all files from the local filesystem" depends="
         install:clean:jboss
         ">
     </target>
+
     <target name="install:clean:jboss" unless="exclude.jboss">
         <sleep seconds="5" />
         <property name="backup.count" value="5"/>
@@ -182,6 +184,7 @@
         </if>
         <delete dir="${jboss.home}"/>
     </target>
+
     <target name="install:init" description="Does directory management to initialize install">
         <math result="jboss.ssl.port" operand1="${jboss.server.port}" operation="+" operand2="363" datatype="int"/>
         <filterset id="embedded.filterset">
@@ -206,10 +209,12 @@
             </filterset>
         </copy>
     </target>
+
     <target name="install:jboss:binaries" description="Install JBoss binaries" unless="exclude.jboss">
         <jboss-install-binaries
             />
     </target>
+
     <target name="install:jboss:ncitbrowser-webapp" description="Deploy ncitbrowser-webapp and common libraries to jboss installation" unless="exclude.jboss">
         <!-- added to ensure working.dirs are fresh for our install -->
         <delete dir="${jboss.home}/server/${jboss.server.name}/tmp"/>
@@ -220,13 +225,33 @@
         <copy file="${bda-utils.dir}/clm-3.2.jar" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" />
         -->
     </target>
+
     <target name="install:jboss:ncitbrowser-webapp:configure" description="Configure ncitbrowser-webapp application, copies over externalized properties or configurations that are not part of the jboss configuration" unless="exclude.jboss">
         <!-- copy over any other files you may need to configure your application -->
+        <!-- copy over NCItBrowserProperties.xml -->
+
+
+
+
+
+
+        <copy file="${jboss-conf.dir.dest}/${ncitbrowser-webapp.prop.file}"
+              todir="${jboss.home}/server/${jboss.server.name}/data" overwrite="true"
+        />
+
+
+
+
+
+
+
+
         <!-- copy JBoss-web.xml file -->
         <!--
         <copy file="${jboss-conf.dir.dest}/${jboss.web.xml.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
         -->
     </target>
+
     <target name="install:jboss:configure:log4j" description="Configure custom entries in system wide log4j" unless="exclude.jboss"
         depends="-install:jboss:remove:jsf">
         <echo message="Configuring Log4J"/>
@@ -505,11 +530,7 @@
         ">
     </target>
     <target name="upgrade:init">
-        <jboss-read-dbconfig
-            jboss.ds-xml.file="${ncitbrowser-webapp.ds.file}"
-            />
-        <jboss-read-ldapconfig
-            />
+        <!-- Do nothing here for this app -->
     </target>
     <target name="install:post" depends="
         install:post:jboss

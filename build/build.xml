@@ -233,36 +233,6 @@
         -->
     </target>
 
-    <target name="build:retrieve:cacore-sdk">
-        <mkdir dir="${download.dir}"/>
-        <if>
-            <and>
-                <equals arg1="${cacore-sdk.required}" arg2="true"/>
-                <not>
-                    <available file="${download.dir}/${cacore-sdk.binaries.file}"/>
-                </not>
-            </and>
-            <then>
-                <get src="${cacore-sdk.src.url}" dest="${download.dir}/${cacore-sdk.binaries.file}" />
-            </then>
-        </if>
-    </target>
-
-    <target name="build:extract:cacore-sdk">
-        <mkdir dir="${target.dir}"/>
-        <if>
-            <and>
-                <equals arg1="${cacore-sdk.required}" arg2="true"/>
-                <not>
-                    <available file="${cacore-sdk.dir}"/>
-                </not>
-            </and>
-            <then>
-                <unzip src="${download.dir}/${cacore-sdk.binaries.file}" dest="${target.dir}"/>
-            </then>
-        </if>
-    </target>
-
     <target name="validate:pre:build">
         <validate-pre-build/>
     </target>
