@@ -19,17 +19,18 @@
     </listener>
 
     <servlet>
-        <servlet-name>conceptServlet</servlet-name>
-        <servlet-class>gov.nih.nci.evs.browser.servlet.ConceptServlet</servlet-class>
+        <servlet-name>ajax</servlet-name>
+        <servlet-class>gov.nih.nci.evs.browser.servlet.AjaxServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    
 
     <servlet-mapping>
-        <servlet-name>conceptServlet</servlet-name>
-        <url-pattern>/conceptServlet</url-pattern>
+         <servlet-name>ajax</servlet-name>
+         <url-pattern>/ajax</url-pattern>
     </servlet-mapping>  
    
-   
+
     <servlet>
         <servlet-name>dispatchServlet</servlet-name>
         <servlet-class>gov.nih.nci.evs.browser.servlet.DispatchServlet</servlet-class>

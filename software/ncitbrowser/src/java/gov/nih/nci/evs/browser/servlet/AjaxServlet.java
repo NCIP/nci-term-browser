@@ -1,8 +1,42 @@
-
 package gov.nih.nci.evs.browser.servlet;
+
+/**
+  * <!-- LICENSE_TEXT_START -->
+* Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
+* and so to the extent government employees are co-authors, any rights in such works shall be subject to Title 17 of the United States Code, section 105.
+* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+* 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the disclaimer of Article 3, below. Redistributions
+* in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other
+* materials provided with the distribution.
+* 2. The end-user documentation included with the redistribution, if any, must include the following acknowledgment:
+* "This product includes software developed by NGIT and the National Cancer Institute."
+* If no such end-user documentation is to be included, this acknowledgment shall appear in the software itself,
+* wherever such third-party acknowledgments normally appear.
+* 3. The names "The National Cancer Institute", "NCI" and "NGIT" must not be used to endorse or promote products derived from this software.
+* 4. This license does not authorize the incorporation of this software into any third party proprietary programs. This license does not authorize
+* the recipient to use any trademarks owned by either NCI or NGIT
+* 5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
+* NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+* PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * <!-- LICENSE_TEXT_END -->
+  */
+
+/**
+  * @author EVS Team
+  * @version 1.0
+  *
+  * Modification history
+  *     Initial implementation kim.ong@ngc.com
+  *
+ */
 
 import org.json.*;
 import gov.nih.nci.evs.browser.utils.*;
+
+import gov.nih.nci.evs.browser.utils.TreeUtils.TreeItem;
+import gov.nih.nci.evs.browser.utils.CacheManager;
 
 import java.io.IOException;
 
@@ -11,6 +45,10 @@ import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.Set;
+import java.util.Collections;
+import java.util.Map;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -166,52 +204,51 @@ public final class AjaxServlet extends HttpServlet {
     String ontology_display_name = request.getParameter("ontology_display_name");//DataConstants.ONTOLOGY_DISPLAY_NAME);
    // String ontology_source = request.getParameter(DataConstants.ONTOLOGY_SOURCE);
 
+	long ms = System.currentTimeMillis();
+
     if (action.equals("expand_tree")) {
+        if (node_id != null && ontology_display_name != null) {
+			response.setContentType("text/html");
+			response.setHeader("Cache-Control", "no-cache");
+			JSONObject json = new JSONObject();
+			JSONArray nodesArray = null;
+			try {
+				HashMap hmap = CacheManager.getInstance().getSubconcepts(ontology_display_name, null, node_id);
+				nodesArray = new JSONArray();
+				Set keyset = hmap.keySet();
+				Object[] objs = keyset.toArray();
+				String code = (String) objs[0];
+				TreeItem ti = (TreeItem) hmap.get(code);
+				for (String association : ti.assocToChildMap.keySet()) {
+					List<TreeItem> children = ti.assocToChildMap.get(association);
+					Collections.sort(children);
+					for (TreeItem childItem : children) {
+						//printTree(childItem, focusCode, depth + 1);
+						JSONObject nodeObject = new JSONObject();
+						nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
+						nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+						int knt = 0;
+						if (childItem.expandable)
+						{
+							knt = 1;
+						}
+						nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
+						nodesArray.put(nodeObject);
+					}
+				}
 
-      if (node_id != null && ontology_display_name != null) {
-        response.setContentType("text/html");
-        response.setHeader("Cache-Control", "no-cache");
-        JSONObject json = new JSONObject();
+				//nodesArray = CacheManager.getInstance().getSubconcepts(ontology_display_name, null, node_id);
+				if (nodesArray != null)
+				{
+					json.put("nodes", nodesArray);
+				}
 
-        try {
-          SearchUtils util = new SearchUtils();
-          Vector subconcept_vec = util.getSubconcepts(ontology_display_name, null, node_id);
-          JSONArray nodesArray = new JSONArray();
-          for (int i=0; i<subconcept_vec.size(); i++)
-          {
-			  Concept node = (Concept) subconcept_vec.elementAt(i);
-			  JSONObject nodeObject = new JSONObject();
-
-				  nodeObject.put(ONTOLOGY_NODE_ID, node.getId());
-				  // to be implemented
-				  //nodeObject.put(ONTOLOGY_NODE_NAME, node.getName());
-
-				  //Concept concept = getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
-				  //String pt = getPreferredName(concept);
-
-				  String name = node.getEntityDescription().getContent();
-
-				  //nodeObject.put(ONTOLOGY_NODE_NAME, pt);
-				  nodeObject.put(ONTOLOGY_NODE_NAME, name);
-
-                  // to be modified
-				  Vector sub_vec = util.getSubconcepts(ontology_display_name, null, node.getId());
-
-				  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, sub_vec.size());
-				  nodesArray.put(nodeObject);
-
-          }
-          json.put("nodes", nodesArray);
-        }
-        catch (Exception e) {
-          //LogUtils.log(logger, Level.ERROR, e);
-        }
-        response.getWriter().write(json.toString());
-        return;
-      }
-
+			} catch (Exception e) {
+			}
+			response.getWriter().write(json.toString());
+			System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
+	    }
     }
-
 
 
     if (action.equals("search_tree")) {//DataConstants.ACTION_SEARCH_TREE)) {
@@ -237,63 +274,69 @@ public final class AjaxServlet extends HttpServlet {
     }
 
 
-
+/*
     if (action.equals("build_tree")) {//DataConstants.ACTION_BUILD_TREE)) {
-
-	  if (ontology_display_name == null) ontology_display_name = "NCI Thesaurus";
-
-      if (ontology_display_name != null) {
+	    if (ontology_display_name == null) ontology_display_name = "NCI Thesaurus";
         response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
         JSONObject json = new JSONObject();
-        JSONArray nodesArray = new JSONArray();
-
-        List list = null;
+        JSONArray nodesArray = null;
         try {
-				//Collection collection = searchService.getTopLevelNodes(ontology_display_name, ontology_source);
-				String hierarchyID = null;//"hasSubtpe";
-				DataUtils util = new DataUtils();
-				CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
-				list = util.getHierarchyRoots(ontology_display_name, csvt, hierarchyID);
-
-				if (list != null)
-				{
-					for (int i=0; i<list.size(); i++) {
-					  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
-
-					  //int childCount = node.getChildrenCount();
-					  // to be modified, use cache
-					  int childCount = 1;
-
-					  JSONObject nodeObject = new JSONObject();
-					  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
-					  // to be implemented
-					  //nodeObject.put(ONTOLOGY_NODE_NAME, node.getName());
-
-					  Concept concept = util.getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
-
-					  String name = concept.getEntityDescription().getContent();
-
-					  //nodeObject.put(ONTOLOGY_NODE_NAME, pt);
-					  nodeObject.put(ONTOLOGY_NODE_NAME, name);
-
-					  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
-					  nodesArray.put(nodeObject);
-					}
-					json.put("root_nodes", nodesArray);
-					response.getWriter().write(json.toString());
-					return;
-			    }
-
+			nodesArray = CacheManager.getInstance().getRootConcepts(ontology_display_name, null);
+			if (nodesArray != null)
+			{
+				json.put("root_nodes", nodesArray);
 			}
-		catch (Exception e) {
+	    } catch (Exception e) {
 		  e.printStackTrace();
 		}
-	  }
-    }
 
-  }
+		response.getWriter().write(json.toString());
+		System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
+        return;
+      }
+*/
 
+    if (action.equals("build_tree")) {
+	    if (ontology_display_name == null) ontology_display_name = "NCI Thesaurus";
+        response.setContentType("text/html");
+        response.setHeader("Cache-Control", "no-cache");
+        JSONObject json = new JSONObject();
+        JSONArray nodesArray = null;//new JSONArray();
+        try {
+			List list = CacheManager.getInstance().getRootConcepts(ontology_display_name, null);
+			if (list != null)
+			{
+				nodesArray = new JSONArray();
+				for (int i=0; i<list.size(); i++) {
+				  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+				  Concept concept = node.getReferencedEntry();
+				  int childCount = 1; // assumption
 
+				  JSONObject nodeObject = new JSONObject();
+				  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
+
+				  //String pt = getPreferredName(concept);
+
+				  String name = concept.getEntityDescription().getContent();
+				  nodeObject.put(ONTOLOGY_NODE_NAME, name);
+				  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+				  nodesArray.put(nodeObject);
+				}
+			}
+			if (nodesArray != null)
+			{
+				json.put("root_nodes", nodesArray);
+			}
+	    } catch (Exception e) {
+		  e.printStackTrace();
+		}
+
+		response.getWriter().write(json.toString());
+		System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
+        return;
+
+      }
+   }
 
 }
