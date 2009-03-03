@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %> 
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
@@ -52,26 +52,26 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 
-	<tr> 
-		<td height="1%" VALIGN="TOP"> 	
-			<%@ include file="/pages/templates/nciHeader.html" %>
-		        <%@ include file="/pages/templates/header.xhtml" %>
-		</td> 
+    <tr>
+        <td height="1%" VALIGN="TOP">
+            <%@ include file="/pages/templates/nciHeader.html" %>
+                <%@ include file="/pages/templates/header.xhtml" %>
+        </td>
         </tr>
 
-	<tr>
-		<td height="1%">
+    <tr>
+        <td height="1%">
                       <%@ include file="/pages/templates/quickLink.xhtml" %>
                 </td>
-        </tr>     
-       
-       
+        </tr>
 
-<% 
+
+
+<%
     String dictionary = (String) request.getParameter("dictionary");
     String code = (String) request.getParameter("code");
     String type = (String) request.getParameter("type");
-    
+
     if (type == null)
     {
         type = "properties";
@@ -79,53 +79,53 @@
     request.getSession().setAttribute("dictionary", dictionary);
     request.getSession().setAttribute("code", code);
     request.getSession().setAttribute("type", type);
-    
+
     String vers = null;
     String ltag = null;
     Concept c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-    
+
     request.getSession().setAttribute("concept", c);
-    
+
     String name = c.getEntityDescription().getContent();
-    
+
 %>
 
-	   <tr>
-	      <td>&nbsp;</td>
-	   </tr>
+       <tr>
+          <td>&nbsp;</td>
+       </tr>
 
-	   <tr>   
-	      <td class="standardText2">
-		  <b><%=name%></b>
-	      </td>
-	   </tr>
-			   
-	
-	<tr>
-		<td height="1%" >
-		     <%@ include file="/pages/templates/typeLinks.xhtml" %>
-		</td>
-	</tr>
-
-	<tr>
-		<td height="1%" >
-		     <%@ include file="/pages/templates/property.xhtml" %>
-		</td>
-	</tr>
+       <tr>
+          <td class="standardText2">
+          <b><%=name%></b>
+          </td>
+       </tr>
 
 
-	
-	<tr>
-		<td height="20" width="100%" class="footerMenu">
-		     <%@ include file="/pages/templates/applicationFooter.html" %>
-		</td>
-	</tr>
+    <tr>
+        <td height="1%" >
+             <%@ include file="/pages/templates/typeLinks.xhtml" %>
+        </td>
+    </tr>
 
-	<tr>
-		<td>
-		     <%@ include file="/pages/templates/nciFooter.html" %>
-		</td>
-	</tr>
+    <tr>
+        <td height="1%" >
+             <%@ include file="/pages/templates/property.xhtml" %>
+        </td>
+    </tr>
+
+
+
+    <tr>
+        <td height="20" width="100%" class="footerMenu">
+             <%@ include file="/pages/templates/applicationFooter.html" %>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+             <%@ include file="/pages/templates/nciFooter.html" %>
+        </td>
+    </tr>
 
 
 </table>
