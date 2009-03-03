@@ -8,7 +8,7 @@
     }
     
 		
-if (type.compareTo("properties") == 0 && displayItemList != null)
+if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) && displayItemList != null)
 {
 Vector propertytypes = new Vector();
 propertytypes.add("PRESENTATION");
@@ -47,9 +47,14 @@ propertyvalues = new Vector();
 String concept_id = curr_concept.getId();
 propertyvalues.add(concept_id);
 hmap.put("Code", propertyvalues);
+
+
+
 Vector displayed_properties = new Vector();
 Vector properties_to_display = new Vector();
 Vector properties_to_display_label = new Vector();
+Vector properties_to_display_url = new Vector();
+Vector properties_to_display_linktext = new Vector();
 
 for (int i=0; i<displayItemList.size(); i++) {
     DisplayItem displayItem = (DisplayItem) displayItemList.get(i);	
@@ -57,6 +62,8 @@ for (int i=0; i<displayItemList.size(); i++) {
     {
          properties_to_display.add(displayItem.getPropertyName());
          properties_to_display_label.add(displayItem.getItemLabel());
+         properties_to_display_url.add(displayItem.getUrl());
+         properties_to_display_linktext.add(displayItem.getHyperlinkText());
     }
 }
 
@@ -77,41 +84,91 @@ for (int i=0; i<displayItemList.size(); i++) {
 }
 
 %>
-			<tr><td class="standardText"><b>Term and Properties</b></td></tr>
+                        <tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td class="standardText3"><b>Term and Properties</b></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
+			
 			<tr><td class="standardText"><b>Concept Status:&nbsp;</b><i><%=isActive%></i></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
+			
 			<%
 			for (int i=0; i<properties_to_display.size(); i++) {
 			
 				String propName = (String) properties_to_display.elementAt(i);
 				String propName_label = (String) properties_to_display_label.elementAt(i);
+				String propName_label2 = propName_label;
+				String url = (String) properties_to_display_url.elementAt(i);
+				String linktext = (String) properties_to_display_linktext.elementAt(i);
+	
+				if (url != null)
+				{
+				      displayed_properties.add(propName);
+				      Vector value_vec = (Vector) hmap.get(propName);
+				      if (value_vec != null && value_vec.size() > 0) {
+				          String value = (String) value_vec.elementAt(0);
+				          String value_wo_qualifier = value;
+				          
+				          int n = value.indexOf("|");
+				          if (n != -1 && propName_label.compareToIgnoreCase("Definition") == 0)
+				          {
+				              value_wo_qualifier = value.substring(0, n);
+				              String qualifier = value.substring(n+1, value.length());
+				              if (qualifier.compareTo("NCI") != 0) 
+				              {
+                                                  propName_label2 = qualifier + " " + propName_label2;
+                                              }
+				          }
+				      
+				%>
+				<tr><td class="standardText"><b><%=propName_label2%>:&nbsp;</b><%=value_wo_qualifier%>
+				   <a href="<%= url %><%=url%>">&nbsp;( <%= linktext %> )</a>
+				</td></tr>
+				<%     
+				     }
+				}
 				
-				if (propName_label.indexOf("Synonyms") == -1) {
+				else if (propName_label.indexOf("Synonyms") == -1) {
 					displayed_properties.add(propName);
 					Vector value_vec = (Vector) hmap.get(propName);
 					if (value_vec != null && value_vec.size() > 0) {
 					    int k = 0;
 					    for (int j=0; j<value_vec.size(); j++) {
 						String value = (String) value_vec.elementAt(j);
+						String value_wo_qualifier = value;
+
+						  int n = value.indexOf("|");
+						  if (n != -1 && propName_label.compareToIgnoreCase("Definition") == 0)
+						  {
+						      value_wo_qualifier = value.substring(0, n);
+						      String qualifier = value.substring(n+1, value.length());
+						      if (qualifier.compareTo("NCI") != 0) 
+						      {
+							  propName_label2 = qualifier + " " + value_wo_qualifier;
+						      }
+						  }						
+						
 						if (k == 0) {
 					%>       
-						    <tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><%=value%></td></tr>
+						    <tr><td class="standardText"><b><%=propName_label2%>:&nbsp;</b><%=value_wo_qualifier%></td></tr>
 					<% 
 						} else {
 					%>       
-						    <tr><td class="standardText"><b>&nbsp;</b><%=value%></td></tr>
+						    <tr><td class="standardText"><b>&nbsp;</b><%=value_wo_qualifier%></td></tr>
 					<% 
 						}
 						
 					    }
 					}
-					
+					%>
+					<tr><td class="standardText">&nbsp;</td></tr>
+					<%
 				}
 			}
 			%>
 			<tr><td class="standardText">&nbsp;</td></tr>
 			<tr><td class="standardText"><b>Synonyms &amp; Abbreviations:&nbsp;</b></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td><table>			
 			<%
 			for (int i=0; i<properties_to_display.size(); i++) {
 			
@@ -124,6 +181,8 @@ for (int i=0; i<displayItemList.size(); i++) {
 					if (value_vec != null && value_vec.size() > 0) {
 					    for (int j=0; j<value_vec.size(); j++) {
 						String value = (String) value_vec.elementAt(j);
+						int n = value.indexOf("|");
+						if (n != -1) value = value.substring(0, n);
 					%>       
 						    <tr><td class="standardText"><b>&nbsp;</b><%=value%></td></tr>
 					<% 
@@ -132,6 +191,11 @@ for (int i=0; i<displayItemList.size(); i++) {
 				}
 			}
 			%>
+			<tr><td class="standardText">
+			&nbsp;<a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=synonym" >Synonym Details</a>
+                        </td></tr>
+                        
+			</table></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
                         <tr><td class="standardText"><b>External Source Codes:&nbsp;</b></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
@@ -169,8 +233,17 @@ for (int i=0; i<displayItemList.size(); i++) {
 					  
 				         <td class="standardText"><i><%=propName_label%></i></td>
 				         <td class="standardText">
-				             <i><%=value%>&nbsp;
-				                 <a href="<%= prop_url %><%=value%> ">&nbsp;( <%= prop_linktext %> )</a>
+				             <i><%=value%>
+				             
+				         <%    
+				         if (prop_url != null && prop_url.compareTo("null") != 0)
+				         {
+				         %>
+				                 &nbsp;<a href="<%= prop_url %><%=value%> ">&nbsp;( <%= prop_linktext %> )</a>
+				         <%
+				         }
+				         %>
+				         
 				             </i>
 				         </td>
 				         </tr>	
@@ -280,6 +353,7 @@ String kind_label = "Kind:";
 			</table></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
                         <tr><td class="standardText"><b>URL to Bookmark</b>:&nbsp;<i>http://ncit.nci.nih.gov/<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i></td></tr>
+                        <tr><td class="standardText">&nbsp;</td></tr>
 <%
 }
 %>

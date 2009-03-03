@@ -95,7 +95,10 @@ public class NCItBrowserProperties {
 	    //public String getProperty(String key) throws Exception{
 		public static String getProperty(String key) throws Exception{
 	    	//return properties.getProperty(key);
-	    	return (String) configurableItemMap.get(key);
+	    	String ret_str = (String) configurableItemMap.get(key);
+	    	if (ret_str == null) return null;
+	    	if (ret_str.compareToIgnoreCase("null") == 0) return null;
+	    	return ret_str;
 	    }
 
 
