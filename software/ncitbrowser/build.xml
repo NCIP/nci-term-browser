@@ -69,6 +69,7 @@
                     <include name="**/*.properties"/>
                     <include name="**/*.xml"/>
                     <include name="**/*.config"/>
+                    <include name="**/*.ccf"/>
                 </patternset>
             </fileset>
             <fileset dir="${conf.dir}">
@@ -77,6 +78,7 @@
                 <include name="**/*.properties"/>
                 <include name="**/*.xml"/>
                 <include name="**/*.config"/>
+                <include name="**/*.ccf"/>
             </patternset>
         </fileset>
         </copy>

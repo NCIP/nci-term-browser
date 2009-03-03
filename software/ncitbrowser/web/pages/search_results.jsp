@@ -85,7 +85,7 @@
 
 <table>
 
-   <tr><td allign="left">
+   <tr><td allign="left" class="standardText2">
       <b>Result for: <%=matchText%></b>
    </td></tr>
 

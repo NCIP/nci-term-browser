@@ -21,6 +21,13 @@
 <%@ page import="org.LexGrid.commonTypes.EntityDescription" %>
 <%@ page import="org.LexGrid.commonTypes.Property" %>
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
+
+<%@ page import="org.LexGrid.concepts.Presentation" %>
+<%@ page import="org.LexGrid.commonTypes.Source" %>
+<%@ page import="org.LexGrid.commonTypes.EntityDescription" %>
+<%@ page import="org.LexGrid.commonTypes.Property" %>
+<%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
+
 <html>
 <head>
 <title>NCI Thesaurus Browser Home</title>
@@ -81,9 +88,6 @@
     
     String name = c.getEntityDescription().getContent();
     
-    boolean typeLinks_drawn = false;
-    boolean label_drawn = false;
-
 %>
 
 	   <tr>
@@ -91,7 +95,7 @@
 	   </tr>
 
 	   <tr>   
-	      <td>
+	      <td class="standardText2">
 		  <b><%=name%></b>
 	      </td>
 	   </tr>
@@ -108,6 +112,8 @@
 		     <%@ include file="/pages/templates/property.xhtml" %>
 		</td>
 	</tr>
+
+
 	
 	<tr>
 		<td height="20" width="100%" class="footerMenu">

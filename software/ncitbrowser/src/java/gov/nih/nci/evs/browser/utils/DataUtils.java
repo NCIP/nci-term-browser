@@ -1641,27 +1641,28 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
                             String name = "No Description";
                             if (ed != null) name = ed.getContent();
-
+/*
                             System.out.println("\nassociationName: " + associationName);
                             System.out.println("name: " + name);
                             System.out.println("code: " + ac.getConceptCode());
-
+*/
                             String pt = getPreferredName(ac.getReferencedEntry());
-                            System.out.println("pt: " + pt);
+                            //System.out.println("pt: " + pt);
 
-
-							//printAssocation(scheme, version, code, assoc.getAssociationName(), ac.getConceptCode());
-							String s = associationName + "|" + pt + "|" + ac.getConceptCode();
-							if (isRole)
-							{
-								System.out.println("Adding role: " + s);
-								roleList.add(s);
-							}
-							else
-							{
-								System.out.println("Adding association: " + s);
-								associationList.add(s);
-							}
+                            if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
+								//printAssocation(scheme, version, code, assoc.getAssociationName(), ac.getConceptCode());
+								String s = associationName + "|" + pt + "|" + ac.getConceptCode();
+								if (isRole)
+								{
+									//System.out.println("Adding role: " + s);
+									roleList.add(s);
+								}
+								else
+								{
+									//System.out.println("Adding association: " + s);
+									associationList.add(s);
+								}
+						    }
 						}
 					}
 				}
@@ -1669,22 +1670,16 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
 
 if (roleList.size() > 0) {
-System.out.println("Sorting roleList: " );
 			Collections.sort(roleList);
 		}
 
 if (associationList.size() > 0) {
-System.out.println("Sorting associationList: ");
-
 			Collections.sort(associationList);
 
 		}
 
 			map.put(TYPE_ROLE, roleList);
 			map.put(TYPE_ASSOCIATION, associationList);
-
-System.out.println("getSuperconcepts ");
-
 
 			Vector superconcept_vec = getSuperconcepts(scheme, version, code);
 			for (int i=0; i<superconcept_vec.size(); i++)
@@ -1693,12 +1688,10 @@ System.out.println("getSuperconcepts ");
 				String pt = getPreferredName(c);
 				superconceptList.add(pt + "|" + c.getId());
 			}
-System.out.println("Sorting superconceptList: ");
 
-            //Collections.sort(superconceptList);
+            Collections.sort(superconceptList);
             map.put(TYPE_SUPERCONCEPT, superconceptList);
 
-System.out.println("getSubconcepts ");
 
 			Vector subconcept_vec = getSubconcepts(scheme, version, code);
 			for (int i=0; i<subconcept_vec.size(); i++)
@@ -1707,14 +1700,9 @@ System.out.println("getSubconcepts ");
 				String pt = getPreferredName(c);
 				subconceptList.add(pt + "|" + c.getId());
 			}
-
-System.out.println("Sorting subconceptList: ");
-
-            //Collections.sort(subconceptList);
+            Collections.sort(subconceptList);
             map.put(TYPE_SUBCONCEPT, subconceptList);
 
-
-System.out.println("return map: ");
 
 		} catch (Exception ex) {
             ex.printStackTrace();
@@ -1961,7 +1949,7 @@ System.out.println("return map: ");
 		{
 			ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
 			org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
-			System.out.println(ce.getId() + " " + ce.getEntityDescription().getContent());
+			//System.out.println(ce.getId() + " " + ce.getEntityDescription().getContent());
 		}
 		return list;
 	}
