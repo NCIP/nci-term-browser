@@ -1,12 +1,5 @@
 package gov.nih.nci.evs.browser.utils;
 
-import org.apache.jcs.JCS;
-import org.apache.jcs.engine.behavior.IElementAttributes;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -39,11 +32,62 @@ import java.util.List;
   *
  */
 
+import org.apache.jcs.JCS;
+import org.apache.jcs.engine.behavior.IElementAttributes;
+import gov.nih.nci.evs.browser.utils.TreeUtils.TreeItem;
+
+
+import java.util.List;
+import java.util.Collection;
+import java.util.ArrayList;
+
+import java.util.HashMap;
+import java.util.Vector;
+import java.util.Set;
+import java.util.Collections;
+import java.util.Map;
+
+
+import org.json.*;
+
+import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
+import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
+import org.LexGrid.LexBIG.DataModel.Core.Association;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.Exceptions.LBException;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
+import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.commonTypes.EntityDescription;
+import org.LexGrid.concepts.Concept;
+import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+import org.LexGrid.concepts.Presentation;
+
 public class CacheManager
 {
     private static CacheManager instance;
     private static int checkedOut = 0;
     private static JCS treeCache;
+/*
+	  public static final String ONTOLOGY_DISPLAY_NAME = "ontology_display_name";
+	  public static final String ONTOLOGY_NODE = "ontology_node";
+
+
+	  public static final String ONTOLOGY_SOURCE = "ontology_source";
+*/
+      public static final String ONTOLOGY_NODE_ID = "ontology_node_id";
+	  public static final String ONTOLOGY_NODE_NAME = "ontology_node_name";
+	  public static final String ONTOLOGY_NODE_PARENT_ASSOC = "ontology_node_parent_assoc";
+	  public static final String ONTOLOGY_NODE_CHILD_COUNT = "ontology_node_child_count";
+	  public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
+
 
     private CacheManager()
     {
@@ -77,7 +121,6 @@ public class CacheManager
     }
 
 
-
     public HashMap getSubconcepts(String scheme, String version, String code)
     {
 		return getSubconcepts(scheme, version, code, true);
@@ -94,6 +137,7 @@ public class CacheManager
         }
         if (map == null)
         {
+			System.out.println("Not in cache -- calling getSubconcepts " );
             map = new TreeUtils().getSubconcepts(scheme, version, code);
             try {
 	            treeCache.put(key, map);
@@ -101,9 +145,12 @@ public class CacheManager
 
 			}
         }
+        else
+        {
+			System.out.println("Retrieved from cache." );
+		}
         return  map;
     }
-
 
     public List getRootConcepts(String scheme, String version)
     {
@@ -121,6 +168,7 @@ public class CacheManager
         }
         if (list == null)
         {
+			System.out.println("Not in cache -- calling getHierarchyRoots " );
             try {
 				list = new DataUtils().getHierarchyRoots(scheme, version, null);
 	            treeCache.put(key, list);
@@ -128,6 +176,129 @@ public class CacheManager
 
 			}
         }
+        else
+        {
+			System.out.println("Retrieved from cache." );
+		}
         return list;
     }
+/*
+
+    public JSONArray getRootConcepts(String scheme, String version)
+    {
+		return getRootConcepts(scheme, version, true);
+	}
+
+
+    public JSONArray getRootConcepts(String scheme, String version, boolean fromCache)
+    {
+		JSONArray nodesArray = null;
+		//List list = new ArrayList();
+		String key = scheme + "$" + version + "$root";
+		//System.out.println("key: " + key);
+        if (fromCache)
+        {
+            nodesArray = (JSONArray) treeCache.get(key);
+        }
+        if (nodesArray == null)
+        {
+			System.out.println("Not in cache -- calling getHierarchyRoots " );
+            try {
+				List list = new DataUtils().getHierarchyRoots(scheme, version, null);
+				if (list != null)
+				{
+					nodesArray = new JSONArray();
+					for (int i=0; i<list.size(); i++) {
+					  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+					  Concept concept = node.getReferencedEntry();
+					  int childCount = 1; // assumption
+
+					  JSONObject nodeObject = new JSONObject();
+					  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
+
+					  //String pt = getPreferredName(concept);
+
+					  String name = concept.getEntityDescription().getContent();
+					  nodeObject.put(ONTOLOGY_NODE_NAME, name);
+					  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+					  nodesArray.put(nodeObject);
+					}
+					if (fromCache) {
+						try {
+							treeCache.put(key, nodesArray);
+							System.out.println("treeCache.put successful -- " + key);
+						} catch (Exception ex) {
+							System.out.println("treeCache.put failed -- " + key);
+						}
+					}
+			    }
+			} catch (Exception ex) {
+                ex.printStackTrace();
+			}
+        }
+        return nodesArray;
+    }
+
+
+    public JSONArray getSubconcepts(String scheme, String version, String code)
+    {
+		return getSubconcepts(scheme, version, code, true);
+	}
+
+
+    public JSONArray getSubconcepts(String scheme, String version, String code, boolean fromCache)
+    {
+		JSONArray nodesArray = null;
+		HashMap map = null;
+		String key = scheme + "$" + version + "$" + code;
+        if (fromCache)
+        {
+            nodesArray = (JSONArray) treeCache.get(key);
+        }
+        if (nodesArray == null)
+        {
+			System.out.println("Not in cache -- calling getSubconcepts " );
+			try {
+				map = new TreeUtils().getSubconcepts(scheme, version, code);
+				nodesArray = new JSONArray();
+				Set keyset = map.keySet();
+				Object[] objs = keyset.toArray();
+				//String code = (String) objs[0];
+				TreeItem ti = (TreeItem) map.get(code);
+
+				for (String association : ti.assocToChildMap.keySet()) {
+					List<TreeItem> children = ti.assocToChildMap.get(association);
+					Collections.sort(children);
+					for (TreeItem childItem : children) {
+						//printTree(childItem, focusCode, depth + 1);
+						JSONObject nodeObject = new JSONObject();
+
+						nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
+						nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+						int knt = 0;
+						if (childItem.expandable)
+						{
+							knt = 1;
+						}
+						nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
+						nodesArray.put(nodeObject);
+					}
+				}
+				if (fromCache) {
+					try {
+						treeCache.put(key, nodesArray);
+						System.out.println("treeCache.put successful -- " + key);
+					} catch (Exception ex) {
+                        System.out.println("treeCache.put failed -- " + key);
+					}
+				}
+
+			} catch (Exception e) {
+
+			}
+
+        }
+        return nodesArray;
+    }
+*/
 }
