@@ -226,34 +226,47 @@
         -->
     </target>
 
-    <target name="install:jboss:ncitbrowser-webapp:configure" description="Configure ncitbrowser-webapp application, copies over externalized properties or configurations that are not part of the jboss configuration" unless="exclude.jboss">
+    <target name="install:jboss:ncitbrowser-webapp:configure" description="Configure ncitbrowser-webapp application, copies over externalized properties or configurations that are not part of the jboss configuration"
+        unless="exclude.jboss" depends="-install:jboss:remove:jsf, -install:jboss:configure:properties-service">
         <!-- copy over any other files you may need to configure your application -->
         <!-- copy over NCItBrowserProperties.xml -->
-
-
-
-
-
 
         <copy file="${jboss-conf.dir.dest}/${ncitbrowser-webapp.prop.file}"
               todir="${jboss.home}/server/${jboss.server.name}/data" overwrite="true"
         />
 
-
-
-
-
-
-
-
         <!-- copy JBoss-web.xml file -->
         <!--
         <copy file="${jboss-conf.dir.dest}/${jboss.web.xml.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
         -->
+
     </target>
 
-    <target name="install:jboss:configure:log4j" description="Configure custom entries in system wide log4j" unless="exclude.jboss"
-        depends="-install:jboss:remove:jsf">
+    <target name="-install:jboss:configure:properties-service">
+
+        <!-- Backup file -->
+        <copy file="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml"
+            tofile="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml.pre"
+        />
+
+        <xmltask source="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml"
+            dest="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml">
+            <xmlcatalog refid="installer.catalog"/>
+            <remove path="/server/mbean/attribute[contains(text(),'NCItBrowserProperties')]"/>
+            <insert path="/server/mbean[@code='org.jboss.varia.property.SystemPropertiesService']">
+                <![CDATA[
+                <attribute name="Properties">
+                      gov.nih.nci.evs.browser.NCItBrowserProperties=${jboss.home}/server/${jboss.server.name}/data/NCItBrowserProperties.xml
+                </attribute>
+                ]]>
+            </insert>
+        </xmltask>
+
+        <echo message="properties-service.xml updated." />
+
+    </target>
+
+    <target name="install:jboss:configure:log4j" description="Configure custom entries in system wide log4j" unless="exclude.jboss">
         <echo message="Configuring Log4J"/>
         <property name="log4j.file.name" value="log4j.xml"/>
         <copy file="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}" tofile="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}.pre"/>
@@ -301,10 +314,12 @@
             />
         <!--<copy file="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}" tofile="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}.post"/>-->
     </target>
+
     <target name="-install:jboss:remove:jsf" description="Remove JSF library files from jbossweb to allow NCIA JSF to work" unless="exclude.jboss">
         <delete file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/jsf-libs/myfaces-api.jar" failonerror="false" />
         <delete file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb-tomcat55.sar/jsf-libs/myfaces-impl.jar" failonerror="false" />
     </target>
+
     <target name="install:jboss:configure" description="Configure JBoss (bindings, login-config.xml, ect)" unless="exclude.jboss"
         depends="
             install:jboss:configure:log4j
@@ -329,6 +344,7 @@
             />
             -->
     </target>
+
     <target name="-install:jboss:configure:jbossmq-dest" description="Configure MQ settings based on contents of software/common/resource/jboss-conf/jbossmq-destinations-service.block.xml" unless="exclude.jboss">
         <!-- Provide template to change jboss mq configurations
         <property name="jboss-mq.block.file" value="${resource.dir.target}/jbossmq-destinations-service.block.xml"/>
@@ -338,6 +354,7 @@
         </xmlconfig>
         -->
     </target>
+
     <target name="install:jboss:stop" description="Stops jboss" unless="exclude.jboss">
         <if>
             <isset property="jboss.exists"/>
@@ -346,6 +363,7 @@
             </then>
         </if>
     </target>
+
     <target name="install:jboss:start" description="Starts jboss" unless="exclude.jboss">
         <if>
             <not>
@@ -357,6 +375,7 @@
             </then>
         </if>
     </target>
+
     <target name="install:validation:pre-install" description="Runs pre-install validation checks bda-utils">
         <validate-pre-install
             ant.check.version="${ant.minimum.version}"
@@ -364,9 +383,11 @@
             java.check.version.minor="${java.minor.version}"
             />
     </target>
+
     <target name="install:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop">
         <validate-ports-preinstall />
     </target>
+
     <target name="install:validation:post-install" description="Run post-install checks from bda-utils">
         <if>
             <not>
@@ -377,6 +398,7 @@
             </then>
         </if>
     </target>
+
     <target name="install:jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.jboss"
         depends="
         install:validation:pre-install,
@@ -393,6 +415,7 @@
         install:jboss:start
         " >
     </target>
+
     <target name="install" description="Installs and configures JBOSS and deploys application"
         depends="
         install:validation:pre-install,
@@ -406,6 +429,7 @@
         install:validation:post-install
         ">
     </target>
+
     <target name="install:jboss:ncitbrowser-webapp:re-configure" description="Update contents of artifacts if not all properties have been externalized, by extracting artifact, modify it as needed and re-archive it." unless="exclude.jboss">
         <!-- This is only required if configuration files are not externalized, below is a sample of what you may do.
         <delete dir="${working.dir}/ncitbrowser-webapp"/>
@@ -420,12 +444,16 @@
         </war>
         -->
     </target>
+
     <target name="upgrade:jboss" description="Wrapper target to call all targets required to upgrade jboss container." unless="exclude.jboss" depends="upgrade-ncm:jboss">
     </target>
+
     <target name="upgrade" description="Upgrades JBoss" depends="upgrade-ncm">
     </target>
+
     <target name="upgrade-with-dbinstall" description="Upgrades JBoss" depends="upgrade-ncm:with-dbinstall">
     </target>
+
     <target name="upgrade-dac:jboss" description="Wrapper target to call all targets required to upgrade jboss container." unless="exclude.jboss"
         depends="
         install:validation:pre-install,
@@ -442,6 +470,7 @@
         install:jboss:start
         ">
     </target>
+
     <target name="upgrade-dac" description="Upgrades JBoss"
         depends="
         install:validation:pre-install,
@@ -452,6 +481,7 @@
         install:validation:post-install
         ">
     </target>
+
     <target name="upgrade-dac:with-dbinstall" description="Upgrades JBoss"
         depends="
         install:validation:pre-install,
@@ -462,6 +492,7 @@
         install:validation:post-install
         ">
     </target>
+
     <target name="upgrade-cm:jboss" description="Wrapper target to call all targets required to upgrade jboss container." unless="exclude.jboss"
         depends="
         install:validation:pre-install,
@@ -476,6 +507,7 @@
         install:jboss:start
         ">
     </target>
+
     <target name="upgrade-cm" description="Upgrades JBoss"
         depends="
         install:validation:pre-install,
@@ -486,6 +518,7 @@
         install:validation:post-install
         ">
     </target>
+
     <target name="upgrade-cm:with-dbinstall" description="Upgrades JBoss"
         depends="
         install:validation:pre-install,
@@ -496,6 +529,7 @@
         install:validation:post-install
         ">
     </target>
+
     <target name="upgrade-ncm:jboss" description="Wrapper target to call all targets required to upgrade jboss container." unless="exclude.jboss"
         depends="
         install:validation:pre-install,
@@ -509,6 +543,7 @@
         install:jboss:start
         ">
     </target>
+
     <target name="upgrade-ncm" description="Upgrades JBoss"
         depends="
         install:validation:pre-install,
@@ -519,6 +554,7 @@
         install:validation:post-install
         ">
     </target>
+
     <target name="upgrade-ncm:with-dbinstall" description="Upgrades JBoss"
         depends="
         install:validation:pre-install,
@@ -529,13 +565,16 @@
         install:validation:post-install
         ">
     </target>
+
     <target name="upgrade:init">
         <!-- Do nothing here for this app -->
     </target>
+
     <target name="install:post" depends="
         install:post:jboss
         ">
     </target>
+
     <target name="install:post:jboss" unless="exclude.jboss">
         <if>
             <not>
@@ -567,4 +606,5 @@
             </then>
         </if>
     </target>
+
 </project>
