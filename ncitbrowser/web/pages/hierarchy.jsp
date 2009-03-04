@@ -38,6 +38,13 @@
 	var nodes = [];
 
 
+   	function load(url,target){
+		if (target != '') 
+			target.window.location.href = url; 
+		else 
+			window.location.href = url; 
+	}
+
 
 	function init() {
 		
@@ -168,6 +175,9 @@
 		//var graph_type = document.pg_form.graph_type.options[document.pg_form.graph_type.selectedIndex].value;		
 		//setNodeDetails(ontology_node_id, ontology_display_name);
 		//buildGraph(ontology_node_id, ontology_display_name, graph_type);
+
+		load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=' + ontology_node_id,top.opener);
+
 	}
 
 	function onClickViewEntireOntology(ontology_display_name) {
