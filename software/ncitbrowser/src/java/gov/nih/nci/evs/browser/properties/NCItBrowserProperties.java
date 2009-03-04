@@ -52,6 +52,8 @@ public class NCItBrowserProperties {
        //KLO
 		public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
 		public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
+		public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
+
 
 	    private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
 

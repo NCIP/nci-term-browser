@@ -37,6 +37,7 @@ import gov.nih.nci.evs.browser.utils.*;
 
 import gov.nih.nci.evs.browser.utils.TreeUtils.TreeItem;
 import gov.nih.nci.evs.browser.utils.CacheManager;
+import gov.nih.nci.evs.browser.utils.CacheController;
 
 import java.io.IOException;
 
@@ -213,7 +214,8 @@ public final class AjaxServlet extends HttpServlet {
 			JSONObject json = new JSONObject();
 			JSONArray nodesArray = null;
 			try {
-				HashMap hmap = CacheManager.getInstance().getSubconcepts(ontology_display_name, null, node_id);
+				//HashMap hmap = CacheManager.getInstance().getSubconcepts(ontology_display_name, null, node_id);
+				HashMap hmap = CacheController.getInstance().getSubconcepts(ontology_display_name, null, node_id);
 				nodesArray = new JSONArray();
 				Set keyset = hmap.keySet();
 				Object[] objs = keyset.toArray();
@@ -304,7 +306,9 @@ public final class AjaxServlet extends HttpServlet {
         JSONObject json = new JSONObject();
         JSONArray nodesArray = null;//new JSONArray();
         try {
-			List list = CacheManager.getInstance().getRootConcepts(ontology_display_name, null);
+			//List list = CacheManager.getInstance().getRootConcepts(ontology_display_name, null);
+			List list = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
+
 			if (list != null)
 			{
 				nodesArray = new JSONArray();
