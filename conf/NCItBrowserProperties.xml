@@ -190,8 +190,6 @@
              <key>EHCACHE_XML_PATHNAME</key>
              <value>C:\jboss-4.0.5.GA\server\default\data\ehcache.xml</value>
 	</ConfigurableItem>	
-	C:\jboss-4.0.5.GA\server\default\data
-	
 	
 </ConfigurableItems>
 </root>
