@@ -31,6 +31,8 @@ Other build commands
 cd C:\SVN-Projects\ncit\software\build>
 
 Clean:		ant clean
+Build:		ant build:all
+Deploy:		ant deploy:local:install
 Redeploy:	ant deploy:hot
 
 --------------------------------------
