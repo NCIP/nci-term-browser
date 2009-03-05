@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <!-- bda-build-template version 0.10.0 -->
+
 <project name="ncitbrowser-installer" default="upgrade" basedir="."
     xmlns:ivy="antlib:org.apache.ivy.ant"
     >
@@ -56,6 +58,7 @@
     <condition property="os.temp.dir" value="c:/temp">
         <os family="windows" />
     </condition>
+
     <property name="project.name" value="ncitbrowser"/>
 
     <!-- Generic properties -->
@@ -220,7 +223,11 @@
         <delete dir="${jboss.home}/server/${jboss.server.name}/tmp"/>
         <delete dir="${jboss.home}/server/${jboss.server.name}/work"/>
         <move file="${jboss.home}/server/${jboss.server.name}/log/server.log" tofile="${jboss.home}/server/${jboss.server.name}/log/server/log.${install.time}" failonerror="false"/>
-        <copy file="${ncitbrowser-webapp.dir.dist}/${ncitbrowser-webapp.war.file}" todir="${jboss.home}/server/${jboss.server.name}/deploy" overwrite="true" />
+        <copy file="${ncitbrowser-webapp.dir.dist}/${ncitbrowser-webapp.war.file}"
+             todir="${jboss.home}/server/${jboss.server.name}/deploy"
+             overwrite="true"
+        >
+        </copy>
         <!--  Many NCI applications require clm for csm, so you can point this to where you have the version you want to use
         <copy file="${bda-utils.dir}/clm-3.2.jar" todir="${jboss.home}/server/${jboss.server.name}/lib" overwrite="true" />
         -->
@@ -228,13 +235,22 @@
 
     <target name="install:jboss:ncitbrowser-webapp:configure" description="Configure ncitbrowser-webapp application, copies over externalized properties or configurations that are not part of the jboss configuration"
         unless="exclude.jboss" depends="-install:jboss:remove:jsf, -install:jboss:configure:properties-service">
-        <!-- copy over any other files you may need to configure your application -->
-        <!-- copy over NCItBrowserProperties.xml -->
 
-        <copy file="${jboss-conf.dir.dest}/${ncitbrowser-webapp.prop.file}"
-              todir="${jboss.home}/server/${jboss.server.name}/data" overwrite="true"
-              filtering="true"
-        />
+        <!-- copy over any other files you may need to configure your application -->
+
+        <filterset id="embedded.filterset">
+            <filter token="lex.evs.api.url" value="${lex.evs.api.url}"/>
+            <filter token="ncitbrowser.conf.path" value="${ncitbrowser.conf.path}"/>
+            <filter token="ehcache.xml.file" value="${ehcache.xml.file}"/>
+            <filter token="ehcache.cache.path" value="${ehcache.cache.path}"/>
+        </filterset>
+        <mkdir dir="${ncitbrowser.conf.path}" />
+        <copy todir="${ncitbrowser.conf.path}" filtering="true" overwrite="true">
+            <filterset refid="embedded.filterset"/>
+            <fileset dir="${ncitbrowser-webapp.dir.dist}/deploy">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
 
         <!-- copy JBoss-web.xml file -->
         <!--
@@ -257,7 +273,7 @@
             <insert path="/server/mbean[@code='org.jboss.varia.property.SystemPropertiesService']">
                 <![CDATA[
                 <attribute name="Properties">
-                   gov.nih.nci.evs.browser.NCItBrowserProperties=${jboss.home}/server/${jboss.server.name}/data/NCItBrowserProperties.xml
+                   gov.nih.nci.evs.browser.NCItBrowserProperties=${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
                    LG_CONFIG_FILE=${lg.config.file}
                 </attribute>
                 ]]>
