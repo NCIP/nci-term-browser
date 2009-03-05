@@ -1,5 +1,5 @@
 <ehcache>
-<diskStore path="C:\cache"/>
+<diskStore path="@ehcache.cache.path@"/>
 
 <cacheManagerEventListenerFactory class="" properties=""/>
 
@@ -10,7 +10,7 @@
         timeToLiveSeconds="7200"
         overflowToDisk="true"
         />
-        
+
 <cache name="subconcepts"
 maxElementsInMemory="1000"
 eternal="false"
