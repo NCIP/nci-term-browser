@@ -38,4 +38,4 @@ jcs.region.treeCache.elementattributes.IsLateral=true
 jcs.auxiliary.DC=org.apache.jcs.auxiliary.disk.indexed.IndexedDiskCacheFactory
 jcs.auxiliary.DC.attributes=org.apache.jcs.auxiliary.disk.indexed.IndexedDiskCacheAttributes
 #jcs.auxiliary.DC.attributes.DiskPath=@NCBO_JCS_CACHE_LOCATION@
-jcs.auxiliary.DC.attributes.DiskPath=c:\cache
+jcs.auxiliary.DC.attributes.DiskPath=@ehcache.cache.path@
