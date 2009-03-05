@@ -662,8 +662,9 @@ public class SearchUtils {
                                            );
 
 			LocalNameList restrictToProperties = new LocalNameList();
-		    SortOptionList sortCriteria =
-			    Constructors.createSortOptionList(new String[]{"matchToQuery"});
+			// KLO, 030509
+		    SortOptionList sortCriteria = null;
+			    //Constructors.createSortOptionList(new String[]{"matchToQuery"});
 
             try {
 				// resolve nothing
