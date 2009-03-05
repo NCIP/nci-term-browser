@@ -22,6 +22,7 @@
     <property name="webapp.build.dir" value="${basedir}/build/web" />
     <property name="webapp.classes.dir" value="${webapp.build.dir}/WEB-INF/classes" />
     <property name="webapp.dist.dir" value="${basedir}/dist" />
+    <property name="ncitbrowser-webapp.prop.file" value="NCItBrowserProperties.xml" />
 
     <!-- Build class path -->
 
@@ -57,31 +58,32 @@
         <javac srcdir="${src.dir}" destdir="${webapp.classes.dir}" debug="true">
             <classpath refid="project.compile.classpath" />
         </javac>
+        <copy todir="${webapp.classes.dir}" includeEmptyDirs="no">
+            <fileset dir="${src.dir}/java">
+                <patternset>
+                    <include name="**/*.properties"/>
+                </patternset>
+            </fileset>
+        </copy>
+        <copy todir="${webapp.classes.dir}" includeEmptyDirs="no">
+            <fileset dir="${conf.dir}">
+                <patternset>
+                    <include name="**/log4j.*"/>
+                </patternset>
+            </fileset>
+        </copy>
+        <copy todir="${webapp.classes.dir}" flatten="true" includeEmptyDirs="no" filtering="true">
+            <filterset>
+                <filter token="lex.evs.api.default.url" value="${lex.evs.api.default.url}"/>
+            </filterset>
+            <resources>
+                <file file="${conf.dir}/application-config-client.xml"/>
+            </resources>
+        </copy>
 
     </target>
 
     <target name="-war" depends="compile:application-code">
-
-        <copy todir="${webapp.classes.dir}" includeEmptyDirs="no">
-            <fileset dir="${src.dir}">
-                <patternset>
-                    <include name="**/*.conf"/>
-                    <include name="**/*.properties"/>
-                    <include name="**/*.xml"/>
-                    <include name="**/*.config"/>
-                    <include name="**/*.ccf"/>
-                </patternset>
-            </fileset>
-            <fileset dir="${conf.dir}">
-            <patternset>
-                <include name="**/*.conf"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.xml"/>
-                <include name="**/*.config"/>
-                <include name="**/*.ccf"/>
-            </patternset>
-        </fileset>
-        </copy>
 
         <mkdir dir="${dist.dir}" />
         <war destfile="${dist.dir}/${webapp.war.name}" basedir="${webapp.dir}">
@@ -93,7 +95,18 @@
 
     <target name="dist" depends="-war" description="Copies WAR file to distribution folder">
 
-        <copy todir="${webapp.dist.dir}" file="${dist.dir}/${webapp.war.name}" />
+        <echo message="Config folder: ${conf.dir}" />
+
+        <!-- Copy configuration and property files -->
+
+        <mkdir dir="${dist.dir}/deploy" />
+        <copy todir="${dist.dir}/deploy" flatten="true" includeEmptyDirs="no" filtering="false">
+            <resources>
+                <file file="${conf.dir}/cache.ccf"/>
+                <file file="${conf.dir}/ehcache.xml"/>
+                <file file="${conf.dir}/${ncitbrowser-webapp.prop.file}"/>
+            </resources>
+        </copy>
 
     </target>
 
