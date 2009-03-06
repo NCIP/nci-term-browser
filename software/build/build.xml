@@ -2,7 +2,7 @@
 
 <!-- bda-build-templage verison 0.10.0 -->
 
-<project name="build-bda-template" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+<project name="build-bda-template" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 
     <description>
         This build file is part of the bda-build-template project. This is the master build file for the project.
@@ -153,7 +153,31 @@
     </tstamp>
     <record name="${log.dir}/install-${install.time}.log" action="start" />
 
-    <!-- Targets -->
+    <!--============================-->
+    <!-- usage: show build targets  -->
+    <!--============================-->
+
+    <target name="usage" description="Explains how to use this build script">
+        <echo message="" />
+        <echo message="Build Script: ${ant.project.name}" />
+        <echo message="-----------------------------------" />
+        <echo message="" />
+        <echo message="Available targets are:" />
+        <echo message="" />
+        <echo message="clean                  --&gt; Remove classes directory for clean build" />
+        <echo message="build:all              --&gt; Normal build of application" />
+        <echo message="deploy:local:install   --&gt; Build and deploy application" />
+        <echo message="deploy:hot             --&gt; Redeploy application" />
+        <echo message="" />
+        <echo message="" />
+        <echo message="${ant.version}" />
+        <echo message="" />
+        <echo message="        JBoss home = [${jboss.home}]" />
+        <echo message="ANT base directory = [${basedir}]" />
+        <echo message="   Properties file = [${properties.file}]" />
+        <echo message="                OS = [${os.name}]" />
+        <echo message="" />
+    </target>
 
     <target name="diagnostics" description="diagnostics">
         <echoproperties />
@@ -236,6 +260,10 @@
     <target name="validate:pre:build">
         <validate-pre-build/>
     </target>
+
+    <!--=========================================-->
+    <!-- build:all: Builds all the sub projects  -->
+    <!--=========================================-->
 
     <target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
         validate:pre:build,
@@ -344,7 +372,7 @@
         -->
         <deploy-local
             target.name="${install.target}"
-            />
+        />
     </target>
 
     <target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep" description="Upgrades and configures the application on the local machine. Used for developer desktops and ci environments.">
@@ -356,7 +384,7 @@
         -->
         <deploy-local
             target.name="${upgrade.target}"
-            />
+        />
     </target>
 
     <target name="deploy:remote:install" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
@@ -387,10 +415,6 @@
         <deploy-files dist.file="${ncitbrowser-webapp.upgrade.zip.file}" />
         <!-- SSH to machine ant run ant command line to install application -->
         <remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${upgrade.target}" />
-    </target>
-
-    <target name="usage" description="Explains how to use this build script">
-        <echo message="To run a remote upgrade type: ant deploy:remote:upgrade -Dproperties.file=[path to environment proeprty file]" />
     </target>
 
     <target name="report:grand" depends="dist:installer:prep" description="Generates target flow diagrams for build files">
