@@ -23,17 +23,28 @@ https://gforge.nci.nih.gov/svnroot/ncit/trunk
 Step #2 will deploy a new JBoss container and start it at the following URL
 http://localhost:19280/ncitbrowser/
 
-The JBoss instance will be located in c:\Apps\ncitbrowser-webapp\jboss-4.0.5.GA
+The JBoss instance will be located in c:\Apps\ncitbrowser-webapp\jboss-4.0.5.GA by
+default.
+
+If you need to overwrite any settings, create a local.properties file and add the
+properties you wish to overwrite to it. Properties can be found in
+project.properties and install.properties.
+
+For example, if you need to change the location of the application server add the
+following to your local.properties:
+
+application.base.path.windows=h:/apps/ncitbrowser-webapp
 
 -----------------------
 Other build commands
 -----------------------
 cd C:\SVN-Projects\ncit\software\build>
 
-Clean:		ant clean
-Build:		ant build:all
-Deploy:		ant deploy:local:install
-Redeploy:	ant deploy:hot
+Usage:      ant
+Clean:      ant clean
+Build:      ant build:all
+Deploy:     ant deploy:local:install
+Redeploy:   ant deploy:hot
 
 --------------------------------------
 Location of files
