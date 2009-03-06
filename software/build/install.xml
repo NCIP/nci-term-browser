@@ -240,12 +240,14 @@
 
         <filterset id="embedded.filterset">
             <filter token="lex.evs.api.url" value="${lex.evs.api.url}"/>
-            <filter token="ncitbrowser.conf.path" value="${ncitbrowser.conf.path}"/>
-            <filter token="ehcache.xml.file" value="${ehcache.xml.file}"/>
-            <filter token="ehcache.cache.path" value="${ehcache.cache.path}"/>
+            <filter token="ncitbrowser.conf.path" value="${application.base.path}/${ncitbrowser.conf.path}"/>
+            <filter token="ehcache.xml.file" value="${application.base.path}/${ncitbrowser.conf.path}/${ehcache.xml.file}"/>
+            <filter token="ehcache.cache.path" value="${application.base.path}/${ehcache.cache.path}"/>
+            <filter token="sort.by.score" value="${sort.by.score}"/>
         </filterset>
-        <mkdir dir="${ncitbrowser.conf.path}" />
-        <copy todir="${ncitbrowser.conf.path}" filtering="true" overwrite="true">
+        <mkdir dir="${application.base.path}/${ncitbrowser.conf.path}" />
+        <mkdir dir="${application.base.path}/${ehcache.cache.path}" />
+        <copy todir="${application.base.path}/${ncitbrowser.conf.path}" filtering="true" overwrite="true">
             <filterset refid="embedded.filterset"/>
             <fileset dir="${ncitbrowser-webapp.dir.dist}/deploy">
                 <include name="**/*"/>
@@ -263,7 +265,7 @@
 
         <!-- Backup file -->
         <copy file="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml"
-            tofile="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml.pre"
+            tofile="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml.bak"
         />
 
         <xmltask source="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml"
@@ -273,7 +275,7 @@
             <insert path="/server/mbean[@code='org.jboss.varia.property.SystemPropertiesService']">
                 <![CDATA[
                 <attribute name="Properties">
-                   gov.nih.nci.evs.browser.NCItBrowserProperties=${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
+                   gov.nih.nci.evs.browser.NCItBrowserProperties=${application.base.path}/${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
                    LG_CONFIG_FILE=${lg.config.file}
                 </attribute>
                 ]]>
