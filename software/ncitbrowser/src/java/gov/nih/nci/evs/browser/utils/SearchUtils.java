@@ -129,6 +129,9 @@ import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
 //import gov.nih.nci.evs.reportwriter.properties.NCItBrowserProperties;
 import org.LexGrid.LexBIG.Exceptions.LBParameterException;
 
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+
+
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -162,8 +165,8 @@ import org.LexGrid.LexBIG.Exceptions.LBParameterException;
  */
 
 public class SearchUtils {
-
     //int maxReturn = 5000;
+    private boolean apply_sort_score = false;
 	Connection con;
 	Statement stmt;
 	ResultSet rs;
@@ -222,13 +225,29 @@ public class SearchUtils {
     public SearchUtils()
     {
         //setCodingSchemeMap();
+		try {
+			NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
+			String sort_str = properties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
+			apply_sort_score = false;
+			if (sort_str.compareTo("true") == 0) apply_sort_score = true;
+	    } catch (Exception ex) {
+
+		}
 	}
 
     public SearchUtils(String url)
     {
         //setCodingSchemeMap();
         this.url = url;
-        setCodingSchemeMap();
+        //setCodingSchemeMap();
+		try {
+			NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
+			String sort_str = properties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
+			apply_sort_score = false;
+			if (sort_str.compareTo("true") == 0) apply_sort_score = true;
+	    } catch (Exception ex) {
+
+		}
 	}
 
 
@@ -980,7 +999,9 @@ public class SearchUtils {
     }
 
 
-	public static Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
+	//public static Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
+	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
+
         if (matchText == null || matchText.length() == 0)
         {
 			return new Vector();
@@ -1035,6 +1056,17 @@ public class SearchUtils {
 						matchAlgorithm,
 						language);
 
+        //return sortByScore(searchPhrase, resultIterator, maxToReturn);
+		if (apply_sort_score)
+		{
+				long ms = System.currentTimeMillis();
+				try {
+					iterator = sortByScore(matchText, iterator, maxToReturn);
+				} catch (Exception ex) {
+
+				}
+				System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
+		}
 
         if (iterator != null) {
 			Vector v = resolveIterator(	iterator, maxToReturn);
@@ -1218,6 +1250,109 @@ public class SearchUtils {
        return regex.toString();
    }
 
+
+
+	/************************
+	 * Custom sort processing
+	 ************************/
+	/**
+	 * Sorts the given concept references based on a scoring algorithm
+	 * designed to provide a more natural ordering.  Scores are determined by
+	 * comparing each reference against a provided search term.
+	 * @param searchTerm The term used for comparison; single or multi-word.
+	 * @param toSort The iterator containing references to sort.
+	 * @param maxToReturn Sets upper limit for number of top-scored items returned.
+	 * @return Iterator over sorted references.
+	 * @throws LBException
+	 */
+    protected ResolvedConceptReferencesIterator sortByScore(String searchTerm, ResolvedConceptReferencesIterator toSort, int maxToReturn) throws LBException {
+        //logger.debug("Sorting by score: " + searchTerm);
+
+	    // Determine the set of individual words to compare against.
+		List<String> compareWords = toScoreWords(searchTerm);
+
+		// Create a bucket to store results.
+		Map<String, ScoredTerm> scoredResult = new TreeMap<String, ScoredTerm>();
+
+		// Score all items ...
+		while (toSort.hasNext()) {
+	        // Working in chunks of 100.
+    		ResolvedConceptReferenceList refs = toSort.next(100);
+    		for (int i = 0; i < refs.getResolvedConceptReferenceCount(); i++) {
+    			ResolvedConceptReference ref = refs.getResolvedConceptReference(i);
+    			String code = ref.getConceptCode();
+                Concept ce = ref.getReferencedEntry();
+
+                // Note: Preferred descriptions carry more weight,
+    			// but we process all terms to allow the score to improve
+                // based on any contained presentation.
+                Presentation[] allTermsForConcept = ce.getPresentation();
+    			for (Presentation p : allTermsForConcept) {
+    				float score = score(p.getText().getContent(), compareWords, p.isIsPreferred(), i);
+
+    				// Check for a previous match on this code for a different presentation.
+    				// If already present, keep the highest score.
+    				if (scoredResult.containsKey(code)) {
+    					ScoredTerm scoredTerm = (ScoredTerm) scoredResult.get(code);
+    					if (scoredTerm.score > score)
+    						continue;
+    				}
+    				scoredResult.put(code, new ScoredTerm(ref, score));
+    			}
+    		}
+		}
+		// Return an iterator that will sort the scored result.
+		return new ScoredIterator(scoredResult.values(), maxToReturn);
+	}
+
+	/**
+	 * Returns a score providing a relative comparison of the given
+	 * text against a set of keywords.
+	 * <p>
+	 * Currently the score is evaluated as a simple percentage
+	 * based on number of words in the first set that are also in the
+	 * second, with minor adjustment for order (matching later
+	 * words given slightly higher weight, anticipating often the
+	 * subject of search will follow descriptive text).  Weight
+	 * is also increased for shorter phrases (measured in # words)
+	 * If the text is indicated to be preferred, the score is doubled
+	 * to promote 'bubbling to the top'.
+	 * <p>
+	 * Ranking from the original search is available but not
+	 * currently used in the heuristic (tends to throw-off desired
+	 * alphabetic groupings later).
+	 *
+	 * @param text
+	 * @param keywords
+	 * @param isPreferred
+	 * @param searchRank
+	 * @return The score; a higher value indicates a stronger match.
+	 */
+	protected float score(String text, List<String> keywords, boolean isPreferred, float searchRank) {
+	    List<String> wordsToCompare = toScoreWords(text);
+		float totalWords = wordsToCompare.size();
+		float matchScore = 0;
+		float position = 0;
+		for (Iterator<String> words = wordsToCompare.listIterator(); words.hasNext(); position++) {
+		    String word = words.next();
+			if (keywords.contains(word))
+			    matchScore += ((position / 10) + 1);
+		}
+		return
+		    Math.max(0, 100 + (matchScore / totalWords * 100) - (totalWords * 2))
+                * (isPreferred ? 2 : 1);
+	}
+
+	/**
+	 * Return words from the given string to be used in scoring
+	 * algorithms, in order of occurrence and ignoring duplicates,
+	 * stop words, whitespace and common separators.
+	 * @param s
+	 * @return List
+	 */
+    protected List<String> toScoreWords(String s) {
+		return toWords(s, "[\\s,:+-;]", true, true);
+	}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
