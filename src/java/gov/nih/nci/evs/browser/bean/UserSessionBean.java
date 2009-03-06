@@ -138,7 +138,8 @@ public class UserSessionBean extends Object
 		request.getSession().setAttribute("vocabulary", scheme);
 
         long ms = System.currentTimeMillis();
-		Vector<org.LexGrid.concepts.Concept> v = SearchUtils.searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
+		//Vector<org.LexGrid.concepts.Concept> v = SearchUtils.searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
+		Vector<org.LexGrid.concepts.Concept> v = new SearchUtils().searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		SortUtils.quickSort(v);
 
         if (v != null && v.size() > 0)
