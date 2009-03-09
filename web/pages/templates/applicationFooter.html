@@ -4,7 +4,7 @@
                     <tr>
                       <td><img src="<%= request.getContextPath() %>/images/ftrMenuSeparator.gif" width="1" height="16" alt="" /></td>
 
-                      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='http://ncicb.nci.nih.gov/NCICB/about/contact_us'">
+                      <td height="20" class="footerMenuItem" onmouseover="changeMenuStyle(this,'footerMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'footerMenuItem'),hideCursor()" onclick="document.location.href='<%= request.getContextPath() %>/pages/contact_us.jsf'">
                         &nbsp;&nbsp;<a class="footerMenuLink" href="<%= request.getContextPath() %>/pages/contact_us.jsf">CONTACT US</a>&nbsp;&nbsp;
                       </td>
                       <td><img src="<%= request.getContextPath() %>/images/ftrMenuSeparator.gif" width="1" height="16" alt="" /></td>
