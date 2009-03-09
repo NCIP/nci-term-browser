@@ -1,6 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %> 
 <%@ page contentType="text/html;charset=windows-1252"%>
 
@@ -205,21 +203,26 @@
 	
 		tree = new YAHOO.widget.TreeView("treecontainer");
 		var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
-		
-		
+
+alert("ontology_node_id " + ontology_node_id);
+
 		//var ontology_display_name = document.pg_form.ontology_display_name.value;
 		
 		//var ontology_node_id = null;
 		var ontology_display_name = "NCI Thesaurus";
 		
-		if (ontology_node_id == null)
-		{
+		//if (ontology_node_id == null)
+		//{
+		
+//alert("buildTree " );		
 			buildTree(ontology_node_id, ontology_display_name);
-		}
-		else
-		{
-		        searchTree(ontology_node_id, ontology_display_name);
-		}
+		//}
+		//else
+		//{
+		
+//alert("searchTree " + ontology_node_id);
+                        searchTree(ontology_node_id, ontology_display_name);
+		//}
 	}
 	
 	
