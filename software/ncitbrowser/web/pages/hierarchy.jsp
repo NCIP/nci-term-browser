@@ -204,7 +204,7 @@
 		tree = new YAHOO.widget.TreeView("treecontainer");
 		var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
 
-alert("ontology_node_id " + ontology_node_id);
+//alert("ontology_node_id " + ontology_node_id);
 
 		//var ontology_display_name = document.pg_form.ontology_display_name.value;
 		
