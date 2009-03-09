@@ -1,3 +1,8 @@
+function redirect_site() {
+
+	var url = document.forms["form_link"].quicklink.value;
+	if (url.length > 1) window.location = url;
+}
 
 function changeMenuStyle(obj, new_style) { 
   obj.className = new_style; 
