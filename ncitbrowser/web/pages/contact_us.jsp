@@ -6,9 +6,8 @@
 <html>
 <head>
 <title>NCI Thesaurus Browser Home</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/dhtmlcombo.css" />
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js">
 </script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js">
@@ -17,6 +16,7 @@
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 
 <f:view>
+
 
 
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
@@ -134,7 +134,7 @@
                         
                         </form>
 
-                        <tr><td>
+                        <tr><td class="standardText">
                             <a href="http://www.cancer.gov/policies/page3" ><i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i></a>
                         </td></tr>
 		</TABLE>
