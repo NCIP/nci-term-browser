@@ -189,19 +189,40 @@
 		buildTree('', ontology_display_name);
 	}
 
+//	function initTree() {
+	
+//		tree = new YAHOO.widget.TreeView("treecontainer");
+
+//		var ontology_node_id = null;
+//		var ontology_display_name = "NCI Thesaurus";
+		
+//		buildTree(ontology_node_id, ontology_display_name);
+//	}
+
+
+
 	function initTree() {
 	
 		tree = new YAHOO.widget.TreeView("treecontainer");
-		//var ontology_node_id = document.pg_form.ontology_node_id.value;
+		var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
+		
+		
 		//var ontology_display_name = document.pg_form.ontology_display_name.value;
 		
-		var ontology_node_id = null;
+		//var ontology_node_id = null;
 		var ontology_display_name = "NCI Thesaurus";
 		
-		buildTree(ontology_node_id, ontology_display_name);
+		if (ontology_node_id == null)
+		{
+			buildTree(ontology_node_id, ontology_display_name);
+		}
+		else
+		{
+		        searchTree(ontology_node_id, ontology_display_name);
+		}
 	}
-
-
+	
+	
 	function initRootDesc() {
 		rootDescDiv.setBody('');
 		initRootDesc.show();
@@ -290,6 +311,79 @@
 		rootDescDiv.render();
 	}	
 	
+
+	function searchTree(ontology_node_id, ontology_display_name) {
+
+		var handleBuildTreeSuccess = function(o) {
+	
+			var respTxt = o.responseText;
+			var respObj = eval('(' + respTxt + ')');
+			if ( typeof(respObj) != "undefined") {
+				if ( typeof(respObj.root_nodes) != "undefined") {
+					var root = tree.getRoot();
+					if (respObj.root_nodes.length == 0) {
+						showEmptyRoot();
+					}
+					else {
+				
+						for (var i=0; i < respObj.root_nodes.length; i++) {
+							var nodeInfo = respObj.root_nodes[i];
+							//var expand = false;
+							addTreeBranch(root, nodeInfo);
+						}					
+					}
+					
+					
+					tree.draw();
+				}
+			}
+			resetTreeStatus();
+		}
+
+		var handleBuildTreeFailure = function(o) {
+			resetTreeStatus();
+			resetEmptyRoot();
+			alert('responseFailure: ' +	o.statusText);
+		}
+		
+		var buildTreeCallback =
+		{
+			success:handleBuildTreeSuccess,
+			failure:handleBuildTreeFailure
+		};
+
+		if (ontology_display_name!='') {
+			resetEmptyRoot();
+
+			showTreeLoadingStatus();
+			var ontology_source = null;//document.pg_form.ontology_source.value;
+			
+			
+			var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=search_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
+
+		}
+	}
+	
+	function addTreeBranch(rootNode, nodeInfo) {
+		var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
+		var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+
+		var expand = false;
+		var childNodes = nodeInfo.children_nodes;
+		if (childNodes.length > 0) {
+			expand = true;
+		}
+		var newNode = new YAHOO.widget.TextNode(newNodeData, rootNode, expand);
+		if (nodeInfo.ontology_node_child_count > 0) {
+			newNode.setDynamicLoad(loadNodeData);
+		}
+		
+		tree.draw();
+		for (var i=0; i < childNodes.length; i++) {
+			var childnodeInfo = childNodes[i];
+			addTreeBranch(newNode, childnodeInfo);
+		}			
+	}	
 	
 	
 	YAHOO.util.Event.addListener(window, "load", init);
@@ -301,6 +395,19 @@
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 
 <f:view>
+
+
+<form id="pg_form">
+<%
+String ontology_node_id = (String) request.getParameter("code");
+%>
+<input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
+
+<%
+String ontology_display_name = (String) request.getParameter("dictionary");
+%>
+<input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
+</form>
 
 
 
