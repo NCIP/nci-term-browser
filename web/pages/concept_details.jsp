@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -21,7 +20,6 @@
 <%@ page import="org.LexGrid.commonTypes.EntityDescription" %>
 <%@ page import="org.LexGrid.commonTypes.Property" %>
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
-
 <%@ page import="org.LexGrid.concepts.Presentation" %>
 <%@ page import="org.LexGrid.commonTypes.Source" %>
 <%@ page import="org.LexGrid.commonTypes.EntityDescription" %>
@@ -32,19 +30,12 @@
 <head>
 <title>NCI Thesaurus Browser Home</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-
 <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
 <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/dhtmlcombo.css" />
-
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js">
 </script>
-
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js">
 </script>
-
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/dhtmlcombo.js">
-</script>
-
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 
