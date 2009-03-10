@@ -17,8 +17,6 @@
 
 <f:view>
 
-
-
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
 
 
@@ -28,25 +26,6 @@
 		        <%@ include file="/pages/templates/header.xhtml" %>
 		</td> 
         </tr>
-	<tr>
-		<td VALIGN="TOP">
-		     <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-			  <tr> 
-			      <td VALIGN="TOP"> 
-				<table cellspacing="0" border=0 cellpadding="0" class="tblbdsers" width="100%" height="100%">
-					<tr> 
-					   <td width="160" valign="top"  class="tblside"> 
-					       <div align="left"> 
-						   <%@ include file="/pages/templates/menuBar.xhtml" %>
-					       </div>
-					   </td>
-					</tr>
-				</table>
-			      </td>
-			  </tr>   
-		      </table>
-                </td>
-        </tr>        
        
 	<tr>
 		<td height="1%">
