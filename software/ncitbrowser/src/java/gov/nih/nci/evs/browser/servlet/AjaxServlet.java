@@ -113,8 +113,9 @@ public final class AjaxServlet extends HttpServlet {
   public static final String ONTOLOGY_NODE_PARENT_ASSOC = "ontology_node_parent_assoc";
   public static final String ONTOLOGY_NODE_CHILD_COUNT = "ontology_node_child_count";
   public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
+  public static final String CHILDREN_NODES = "children_nodes";
 
-	/**
+  /**
    * Validates the Init and Context parameters, configures authentication URL
    *
    * @throws ServletException if the init parameters are invalid or any
@@ -163,6 +164,7 @@ public final class AjaxServlet extends HttpServlet {
 
 
 
+/*
   private String getLink(String code) {
       String t = "<a href=\"javascript:onClickNodeId(" + "'" + code + "'"  + ")\">" + code + "</a>";
       return t;
@@ -194,7 +196,7 @@ public final class AjaxServlet extends HttpServlet {
 	  String t = s1 + getLink(s2);
 	  return t;
   }
-
+*/
 
 
 
@@ -252,54 +254,73 @@ public final class AjaxServlet extends HttpServlet {
 	    }
     }
 
-
-    if (action.equals("search_tree")) {//DataConstants.ACTION_SEARCH_TREE)) {
+    else if (action.equals("search_tree")) {//DataConstants.ACTION_SEARCH_TREE)) {
 
       if (node_id != null && ontology_display_name != null) {
         response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
+
+        // Roots
+        JSONArray rootsArray = new JSONArray();
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		List list = null;
+		try {
+			list = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		if (list != null)
+		{
+			for (int i=0; i<list.size(); i++) {
+				  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+				  int childCount = 1;
+				  try {
+
+					  JSONObject nodeObject = new JSONObject();
+					  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
+					  Concept concept = getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
+					  //String pt = getPreferredName(concept);
+
+					  String name = concept.getEntityDescription().getContent();
+
+					  //nodeObject.put(ONTOLOGY_NODE_NAME, pt);
+					  nodeObject.put(ONTOLOGY_NODE_NAME, name);
+					  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+					  nodeObject.put(CHILDREN_NODES, new JSONArray());
+					  rootsArray.put(nodeObject);
+
+				  } catch (Exception ex) {
+					  ex.printStackTrace();
+				  }
+			}
+		}
+
         JSONObject json = new JSONObject();
-
         try {
-			//To be implemented
+            TreeUtils util = new TreeUtils();
+            HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
 
+			Set keyset = hmap.keySet();
+			Object[] objs = keyset.toArray();
+			String code = (String) objs[0];
+			TreeItem ti = (TreeItem) hmap.get(code); //TreeItem ti = new TreeItem("<Root>", "Root node");
 
-
+            JSONArray nodesArray = getNodesArray(ti);
+            replaceJSONObjects(rootsArray, nodesArray);
+            json.put("root_nodes", rootsArray);
         }
         catch (Exception e) {
-          //LogUtils.log(logger, Level.ERROR, e);
+            e.printStackTrace();
         }
-        response.getWriter().write(json.toString());
-        return;
-      }
-
+			response.getWriter().write(json.toString());
+			System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
+			return;
+        }
     }
 
 
-/*
-    if (action.equals("build_tree")) {//DataConstants.ACTION_BUILD_TREE)) {
-	    if (ontology_display_name == null) ontology_display_name = "NCI Thesaurus";
-        response.setContentType("text/html");
-        response.setHeader("Cache-Control", "no-cache");
-        JSONObject json = new JSONObject();
-        JSONArray nodesArray = null;
-        try {
-			nodesArray = CacheManager.getInstance().getRootConcepts(ontology_display_name, null);
-			if (nodesArray != null)
-			{
-				json.put("root_nodes", nodesArray);
-			}
-	    } catch (Exception e) {
-		  e.printStackTrace();
-		}
-
-		response.getWriter().write(json.toString());
-		System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
-        return;
-      }
-*/
-
-    if (action.equals("build_tree")) {
+    else if (action.equals("build_tree")) {
 	    if (ontology_display_name == null) ontology_display_name = "NCI Thesaurus";
         response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
@@ -342,5 +363,146 @@ public final class AjaxServlet extends HttpServlet {
 
       }
    }
+
+
+
+    private void replaceJSONObject(JSONArray nodesArray, JSONObject obj) {
+		String obj_id = null;
+		try {
+			obj_id = (String) obj.get(ONTOLOGY_NODE_ID);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return;
+		}
+		for (int i=0; i<nodesArray.length(); i++)
+		{
+			String node_id = null;
+			try {
+				JSONObject node = nodesArray.getJSONObject(i);
+				node_id = (String) node.get(ONTOLOGY_NODE_ID);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+			if (obj_id.compareTo(node_id) == 0) {
+				try {
+					nodesArray.put(i, obj);
+					break;
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+	}
+
+    private void replaceJSONObjects(JSONArray nodesArray, JSONArray nodesArray2) {
+		for (int i=0; i<nodesArray2.length(); i++)
+		{
+			try {
+				JSONObject obj = nodesArray2.getJSONObject(i);
+				replaceJSONObject(nodesArray, obj);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
+
+
+    private JSONArray getNodesArray(TreeItem ti) {
+		JSONArray nodesArray = new JSONArray();
+		for (String association : ti.assocToChildMap.keySet()) {
+			List<TreeItem> children = ti.assocToChildMap.get(association);
+			Collections.sort(children);
+			for (TreeItem childItem : children) {
+				int knt = 0;
+				if (childItem.expandable)
+				{
+					knt = 1;
+				}
+
+				JSONObject nodeObject = new JSONObject();
+				try {
+					nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
+					nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
+					nodeObject.put(CHILDREN_NODES, getNodesArray(childItem));
+					nodesArray.put(nodeObject);
+				} catch (Exception ex) {
+
+				}
+			}
+		}
+		return nodesArray;
+	}
+
+
+	public static ConceptReferenceList createConceptReferenceList(String[] codes, String codingSchemeName)
+	{
+		if (codes == null)
+		{
+			return null;
+		}
+		ConceptReferenceList list = new ConceptReferenceList();
+		for (int i = 0; i < codes.length; i++)
+		{
+			ConceptReference cr = new ConceptReference();
+			cr.setCodingScheme(codingSchemeName);
+			cr.setConceptCode(codes[i]);
+			list.addConceptReference(cr);
+		}
+		return list;
+	}
+
+	public static Concept getConceptByCode(String codingSchemeName, String vers, String ltag, String code)
+	{
+        try {
+			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+			if (lbSvc == null)
+			{
+				System.out.println("lbSvc == null???");
+				return null;
+			}
+
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			versionOrTag.setVersion(vers);
+
+			ConceptReferenceList crefs =
+				createConceptReferenceList(
+					new String[] {code}, codingSchemeName);
+
+			CodedNodeSet cns = null;
+
+			try {
+				cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
+		    } catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
+			cns = cns.restrictToCodes(crefs);
+			ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
+
+			if (matches == null)
+			{
+				System.out.println("Concep not found.");
+				return null;
+			}
+
+			// Analyze the result ...
+			if (matches.getResolvedConceptReferenceCount() > 0) {
+				ResolvedConceptReference ref =
+					(ResolvedConceptReference) matches.enumerateResolvedConceptReference().nextElement();
+
+				Concept entry = ref.getReferencedEntry();
+				return entry;
+			}
+		 } catch (Exception e) {
+			 e.printStackTrace();
+			 return null;
+		 }
+		 return null;
+	}
+
 
 }

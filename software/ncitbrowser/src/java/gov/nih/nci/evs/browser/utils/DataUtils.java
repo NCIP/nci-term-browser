@@ -1964,4 +1964,20 @@ if (associationList.size() > 0) {
 		}
 		return list;
 	}
+
+
+    public String NCICBContactURL = null;
+	public String getNCICBContactURL()
+    {
+		if (NCICBContactURL != null) return NCICBContactURL;
+		String url = "ncicb@pop.nci.nih.gov";
+		NCItBrowserProperties properties = null;
+		try {
+			properties = NCItBrowserProperties.getInstance();
+			NCICBContactURL = properties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
+	    } catch (Exception ex) {
+
+		}
+		return NCICBContactURL;
+	}
 }
