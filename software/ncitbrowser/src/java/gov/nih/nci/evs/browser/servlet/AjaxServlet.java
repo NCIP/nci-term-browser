@@ -258,13 +258,15 @@ public final class AjaxServlet extends HttpServlet {
     }
 
     else if (action.equals("search_tree")) {
-/*
+
       if (node_id != null && ontology_display_name != null) {
-        response.setContentType("text/html");
-        response.setHeader("Cache-Control", "no-cache");
+          response.setContentType("text/html");
+          response.setHeader("Cache-Control", "no-cache");
 
         // Roots
+        /*
         JSONArray rootsArray = new JSONArray();
+
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
 
 		List list = null;
@@ -299,29 +301,32 @@ public final class AjaxServlet extends HttpServlet {
 				  }
 			}
 		}
+		*/
 
-        JSONObject json = new JSONObject();
-        try {
-            TreeUtils util = new TreeUtils();
-            HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
+		// to be modified
+			JSONArray rootsArray = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
+			JSONObject json = new JSONObject();
 
-			Set keyset = hmap.keySet();
-			Object[] objs = keyset.toArray();
-			String code = (String) objs[0];
-			TreeItem ti = (TreeItem) hmap.get(code); //TreeItem ti = new TreeItem("<Root>", "Root node");
+			System.out.println("search_tree step 1");
+			try {
+				TreeUtils util = new TreeUtils();
+				HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
+				Set keyset = hmap.keySet();
+				Object[] objs = keyset.toArray();
+				String code = (String) objs[0];
+				TreeItem ti = (TreeItem) hmap.get(code); //TreeItem ti = new TreeItem("<Root>", "Root node");
 
-            JSONArray nodesArray = getNodesArray(ti);
-            replaceJSONObjects(rootsArray, nodesArray);
-            json.put("root_nodes", rootsArray);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+				JSONArray nodesArray = getNodesArray(ti);
+				replaceJSONObjects(rootsArray, nodesArray);
+				json.put("root_nodes", rootsArray);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
 			response.getWriter().write(json.toString());
 			System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
 			return;
         }
-        */
     }
 
 
@@ -407,6 +412,9 @@ public final class AjaxServlet extends HttpServlet {
     private void replaceJSONObjects(JSONArray nodesArray, JSONArray nodesArray2) {
 		for (int i=0; i<nodesArray2.length(); i++)
 		{
+
+System.out.println("replaceJSONObjects " + i);
+
 			try {
 				JSONObject obj = nodesArray2.getJSONObject(i);
 				replaceJSONObject(nodesArray, obj);
