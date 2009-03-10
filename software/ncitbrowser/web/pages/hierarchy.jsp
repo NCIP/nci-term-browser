@@ -211,18 +211,18 @@
 		//var ontology_node_id = null;
 		var ontology_display_name = "NCI Thesaurus";
 		
-		//if (ontology_node_id == null)
-		//{
+		if (ontology_node_id == null || ontology_node_id == "null")
+		{
 		
 //alert("buildTree " );		
 			buildTree(ontology_node_id, ontology_display_name);
-		//}
-		//else
-		//{
+		}
+		else
+		{
 		
 //alert("searchTree " + ontology_node_id);
                         searchTree(ontology_node_id, ontology_display_name);
-		//}
+		}
 	}
 	
 	
