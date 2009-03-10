@@ -1001,11 +1001,13 @@ public class SearchUtils {
 
 	//public static Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
-
+		String matchText0 = matchText;
+		matchText0 = matchText0.trim();
         if (matchText == null || matchText.length() == 0)
         {
 			return new Vector();
 		}
+
         matchText = matchText.trim();
         matchText = preprocessSearchString(matchText);
 
@@ -1056,6 +1058,7 @@ public class SearchUtils {
 						matchAlgorithm,
 						language);
 
+
         //return sortByScore(searchPhrase, resultIterator, maxToReturn);
 		if (apply_sort_score)
 		{
@@ -1068,6 +1071,7 @@ public class SearchUtils {
 				System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
 		}
 
+
         if (iterator != null) {
 			Vector v = resolveIterator(	iterator, maxToReturn);
 			if (v != null && v.size() > 0)
@@ -1075,7 +1079,7 @@ public class SearchUtils {
 				return v;
 			}
 			if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0) {
-				Concept c = getConceptByCode(scheme, null, null, matchText);
+				Concept c = getConceptByCode(scheme, null, null, matchText0);
 				if (c != null)
 				{
 					v = new Vector();
@@ -1087,7 +1091,8 @@ public class SearchUtils {
 		}
 
 		if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0) {
-			Concept c = getConceptByCode(scheme, null, null, matchText);
+			matchText0 = matchText0.trim();
+			Concept c = getConceptByCode(scheme, null, null, matchText0);
 			if (c != null)
 			{
 				Vector v = new Vector();
