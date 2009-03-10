@@ -78,7 +78,7 @@ public class RemoteServerUtil {
 				return lbSvc;
 			}
 		    EVSApplicationService appService = (EVSApplicationService) ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, _serviceInfo);
-           return (LexBIGService) appService;
+            return (LexBIGService) appService;
 		}
 		catch (Exception e)
 		{
