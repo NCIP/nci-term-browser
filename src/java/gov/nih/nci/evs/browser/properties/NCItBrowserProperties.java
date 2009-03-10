@@ -54,6 +54,7 @@ public class NCItBrowserProperties {
 		public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
 		public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
 		public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
+		public static final String NCICB_CONTACT_URL = "NCICB_CONTACT_URL";
 
 
 	    private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
@@ -64,6 +65,9 @@ public class NCItBrowserProperties {
 
 	    private static int maxToReturn = 1000;
 	    private static String service_url = null;
+
+	    private static String sort_by_score = null;
+	    private static String ncicb_contact_url = null;
 
 
 	    /**
@@ -90,6 +94,9 @@ public class NCItBrowserProperties {
 			String max_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
 			maxToReturn = Integer.parseInt(max_str);
 			service_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+
+			sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
+			ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
 
 			return NCItBrowserProperties ;
 		}

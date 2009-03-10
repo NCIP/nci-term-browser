@@ -3,6 +3,8 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+
 <html>
 <head>
 <title>NCI Thesaurus Browser Home</title>
@@ -16,6 +18,12 @@
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 
 <f:view>
+
+
+<% 
+    String ncicb_contact_url = new DataUtils().getNCICBContactURL();
+    System.out.println(ncicb_contact_url);
+%>
 
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
 
@@ -70,9 +78,7 @@
 			    </b></td>
 			</tr>
 			
-			<form method="post" 
-			   action="mailto:ncicb@pop.nci.nih.gov" 
-			     enctype="text/plain">
+			<form method="post" action="mailto:<%=ncicb_contact_url%>" enctype="text/plain">
 
 			<tr><td class="standardText"><i>
 			    Enter the subject of your email
