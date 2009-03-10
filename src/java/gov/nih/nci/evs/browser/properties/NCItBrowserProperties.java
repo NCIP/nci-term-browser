@@ -59,7 +59,7 @@ public class NCItBrowserProperties {
 
 	    private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
 
-		private static NCItBrowserProperties NCItBrowserProperties;
+		private static NCItBrowserProperties NCItBrowserProperties = null;
 
 	    private static Properties properties = new Properties();
 
@@ -88,17 +88,19 @@ public class NCItBrowserProperties {
 					if(NCItBrowserProperties == null) {
 						NCItBrowserProperties = new NCItBrowserProperties();
 						loadProperties();
+
+						String max_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
+						maxToReturn = Integer.parseInt(max_str);
+						service_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+
+						//System.out.println("EVS_SERVICE_URL: " + service_url);
+
+						sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
+						ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
+
 					}
 				}
 			}
-			String max_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
-			maxToReturn = Integer.parseInt(max_str);
-			service_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-
-			System.out.println("EVS_SERVICE_URL: " + service_url);
-
-			sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
-			ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
 
 			return NCItBrowserProperties ;
 		}
