@@ -216,6 +216,7 @@ public final class AjaxServlet extends HttpServlet {
 			JSONObject json = new JSONObject();
 			JSONArray nodesArray = null;
 			try {
+				/*
 				//HashMap hmap = CacheManager.getInstance().getSubconcepts(ontology_display_name, null, node_id);
 				HashMap hmap = CacheController.getInstance().getSubconcepts(ontology_display_name, null, node_id);
 				nodesArray = new JSONArray();
@@ -240,8 +241,10 @@ public final class AjaxServlet extends HttpServlet {
 						nodesArray.put(nodeObject);
 					}
 				}
+				*/
 
 				//nodesArray = CacheManager.getInstance().getSubconcepts(ontology_display_name, null, node_id);
+				nodesArray = CacheController.getInstance().getSubconcepts(ontology_display_name, null, node_id);
 				if (nodesArray != null)
 				{
 					json.put("nodes", nodesArray);
@@ -254,8 +257,8 @@ public final class AjaxServlet extends HttpServlet {
 	    }
     }
 
-    else if (action.equals("search_tree")) {//DataConstants.ACTION_SEARCH_TREE)) {
-
+    else if (action.equals("search_tree")) {
+/*
       if (node_id != null && ontology_display_name != null) {
         response.setContentType("text/html");
         response.setHeader("Cache-Control", "no-cache");
@@ -263,6 +266,7 @@ public final class AjaxServlet extends HttpServlet {
         // Roots
         JSONArray rootsArray = new JSONArray();
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+
 		List list = null;
 		try {
 			list = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
@@ -317,6 +321,7 @@ public final class AjaxServlet extends HttpServlet {
 			System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
 			return;
         }
+        */
     }
 
 
@@ -327,6 +332,7 @@ public final class AjaxServlet extends HttpServlet {
         JSONObject json = new JSONObject();
         JSONArray nodesArray = null;//new JSONArray();
         try {
+			/*
 			//List list = CacheManager.getInstance().getRootConcepts(ontology_display_name, null);
 			List list = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
 
@@ -349,6 +355,8 @@ public final class AjaxServlet extends HttpServlet {
 				  nodesArray.put(nodeObject);
 				}
 			}
+			*/
+			nodesArray = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
 			if (nodesArray != null)
 			{
 				json.put("root_nodes", nodesArray);

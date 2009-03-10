@@ -40,6 +40,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.io.Serializable;
+
 
 import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
 import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
@@ -515,7 +517,7 @@ public class TreeUtils {
     /**
      * Inner class to hold tree items for printout.
      */
-    public class TreeItem implements Comparable<TreeItem> {
+    public class TreeItem implements Serializable, Comparable<TreeItem> {
         public String code = null;
         public String text = null;
         public boolean expandable = false;

@@ -220,6 +220,8 @@ public class DataUtils {
     public static String TYPE_SUPERCONCEPT = "type_superconcept";
     public static String TYPE_SUBCONCEPT = "type_subconcept";
 
+    public String NCICBContactURL = null;
+
 
     //==================================================================================
 
@@ -1966,18 +1968,27 @@ if (associationList.size() > 0) {
 	}
 
 
-    public String NCICBContactURL = null;
+
 	public String getNCICBContactURL()
     {
-		if (NCICBContactURL != null) return NCICBContactURL;
-		String url = "ncicb@pop.nci.nih.gov";
+		if (NCICBContactURL != null)
+		{
+			return NCICBContactURL;
+		}
+		String default_url = "ncicb@pop.nci.nih.gov";
 		NCItBrowserProperties properties = null;
 		try {
 			properties = NCItBrowserProperties.getInstance();
 			NCICBContactURL = properties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
+			if (NCICBContactURL == null)
+			{
+				NCICBContactURL = default_url;
+			}
 	    } catch (Exception ex) {
 
 		}
+
+		System.out.println("getNCICBContactURL returns " + NCICBContactURL);
 		return NCICBContactURL;
 	}
 }
