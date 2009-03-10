@@ -85,6 +85,21 @@ import org.LexGrid.concepts.Presentation;
 
 public class CacheController
 {
+  public static final String ONTOLOGY_ADMINISTRATORS = "ontology_administrators";
+  public static final String ONTOLOGY_FILE = "ontology_file";
+  public static final String ONTOLOGY_FILE_ID = "ontology_file_id";
+  public static final String ONTOLOGY_DISPLAY_NAME = "ontology_display_name";
+  public static final String ONTOLOGY_NODE = "ontology_node";
+  public static final String ONTOLOGY_NODE_ID = "ontology_node_id";
+
+  public static final String ONTOLOGY_SOURCE = "ontology_source";
+
+  public static final String ONTOLOGY_NODE_NAME = "ontology_node_name";
+  public static final String ONTOLOGY_NODE_PARENT_ASSOC = "ontology_node_parent_assoc";
+  public static final String ONTOLOGY_NODE_CHILD_COUNT = "ontology_node_child_count";
+  public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
+  public static final String CHILDREN_NODES = "children_nodes";
+
     private static CacheController instance = null;
     private static Cache cache = null;
     private static CacheManager cacheManager = null;
@@ -147,6 +162,7 @@ public class CacheController
     }
 
 
+/*
     public HashMap getSubconcepts(String scheme, String version, String code)
     {
 		return getSubconcepts(scheme, version, code, true);
@@ -219,5 +235,147 @@ public class CacheController
 		}
         return list;
     }
+*/
+
+    public JSONArray getSubconcepts(String scheme, String version, String code)
+    {
+		return getSubconcepts(scheme, version, code, true);
+	}
+
+
+    public JSONArray getSubconcepts(String scheme, String version, String code, boolean fromCache)
+    {
+		HashMap map = null;
+		String key = scheme + "$" + version + "$" + code;
+		JSONArray nodeArray = null;
+        if (fromCache)
+        {
+            Element element = cache.get(key);
+            if (element != null)
+            {
+           	    nodeArray = (JSONArray) element.getValue();
+			}
+        }
+        if (nodeArray == null)
+        {
+			System.out.println("Not in cache -- calling getSubconcepts " );
+            map = new TreeUtils().getSubconcepts(scheme, version, code);
+            nodeArray = HashMap2JSONArray(map);
+
+            try {
+				Element element = new Element(key, nodeArray);
+	            cache.put(element);
+			} catch (Exception ex) {
+
+			}
+        }
+        else
+        {
+			System.out.println("Retrieved from cache." );
+		}
+        return nodeArray;
+    }
+
+    public JSONArray getRootConcepts(String scheme, String version)
+    {
+		return getRootConcepts(scheme, version, true);
+	}
+
+
+    public JSONArray getRootConcepts(String scheme, String version, boolean fromCache)
+    {
+		List list = null;//new ArrayList();
+		String key = scheme + "$" + version + "$root";
+		JSONArray nodeArray = null;
+
+        if (fromCache)
+        {
+            Element element = cache.get(key);
+            if (element != null) {
+
+				System.out.println("getRootConcepts fromCache element != null returning list" );
+	            nodeArray = (JSONArray) element.getValue();
+			}
+        }
+
+        if (nodeArray == null)
+        {
+			System.out.println("Not in cache -- calling getHierarchyRoots " );
+            try {
+				list = new DataUtils().getHierarchyRoots(scheme, version, null);
+				nodeArray = List2JSONArray(list);
+				Element element = new Element(key, nodeArray);
+	            cache.put(element);
+			} catch (Exception ex) {
+                ex.printStackTrace();
+			}
+        }
+        else
+        {
+			System.out.println("Retrieved from cache." );
+		}
+        return nodeArray;
+    }
+
+
+    private JSONArray List2JSONArray(List list) {
+        JSONArray nodesArray = null;
+        try {
+			if (list != null)
+			{
+				nodesArray = new JSONArray();
+				for (int i=0; i<list.size(); i++) {
+				  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+				  Concept concept = node.getReferencedEntry();
+				  int childCount = 1; // assumption
+
+				  JSONObject nodeObject = new JSONObject();
+				  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
+
+				  String name = concept.getEntityDescription().getContent();
+				  nodeObject.put(ONTOLOGY_NODE_NAME, name);
+				  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+				  nodesArray.put(nodeObject);
+				}
+			}
+		} catch (Exception ex) {
+
+		}
+		return nodesArray;
+	}
+
+
+    private JSONArray HashMap2JSONArray(HashMap hmap) {
+		JSONObject json = new JSONObject();
+		JSONArray nodesArray = null;
+		try {
+			nodesArray = new JSONArray();
+			Set keyset = hmap.keySet();
+			Object[] objs = keyset.toArray();
+			String code = (String) objs[0];
+			TreeItem ti = (TreeItem) hmap.get(code);
+			for (String association : ti.assocToChildMap.keySet()) {
+				List<TreeItem> children = ti.assocToChildMap.get(association);
+				Collections.sort(children);
+				for (TreeItem childItem : children) {
+					//printTree(childItem, focusCode, depth + 1);
+					JSONObject nodeObject = new JSONObject();
+					nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
+					nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+					int knt = 0;
+					if (childItem.expandable)
+					{
+						knt = 1;
+					}
+					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
+					nodesArray.put(nodeObject);
+				}
+			}
+		} catch (Exception e) {
+
+		}
+		return nodesArray;
+	}
+
 }
 

@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import java.io.Serializable;
+
 /**
  * A JSONArray is an ordered sequence of values. Its external text form is a
  * string wrapped in square brackets with commas separating the values. The
@@ -80,7 +82,7 @@ import java.util.Map;
  * @author JSON.org
  * @version 2
  */
-public class JSONArray {
+public class JSONArray implements Serializable {
 
 
     /**
@@ -210,7 +212,7 @@ public class JSONArray {
         Object o = get(index);
         try {
             return o instanceof Number ?
-                ((Number)o).doubleValue() : 
+                ((Number)o).doubleValue() :
                 Double.valueOf((String)o).doubleValue();
         } catch (Exception e) {
             throw new JSONException("JSONArray[" + index +
@@ -546,7 +548,7 @@ public class JSONArray {
         put(new JSONArray(value));
         return this;
     }
-    
+
 
     /**
      * Append a double value. This increases the array's length by one.
@@ -597,8 +599,8 @@ public class JSONArray {
         put(new JSONObject(value));
         return this;
     }
-    
-    
+
+
     /**
      * Append an object value. This increases the array's length by one.
      * @param value An object value.  The value should be a
@@ -626,7 +628,7 @@ public class JSONArray {
         return this;
     }
 
-    
+
     /**
      * Put a value in the JSONArray, where the value will be a
      * JSONArray which is produced from a Collection.
@@ -641,7 +643,7 @@ public class JSONArray {
         return this;
     }
 
-    
+
     /**
      * Put or replace a double value. If the index is greater than the length of
      *  the JSONArray, then null elements will be added as necessary to pad
@@ -701,8 +703,8 @@ public class JSONArray {
         put(index, new JSONObject(value));
         return this;
     }
-    
-    
+
+
     /**
      * Put or replace an object value in the JSONArray. If the index is greater
      *  than the length of the JSONArray, then null elements will be added as
