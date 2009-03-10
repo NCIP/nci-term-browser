@@ -198,7 +198,7 @@
 
         <ConfigurableItem>
                  <key>NCICB_CONTACT_URL</key>
-                 <value>@ncicb.contact_url@</value>
+                 <value>@ncicb.contact.url@</value>
         </ConfigurableItem>
         
     </ConfigurableItems>
