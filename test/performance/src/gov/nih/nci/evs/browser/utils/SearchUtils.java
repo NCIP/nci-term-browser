@@ -694,7 +694,12 @@ public class SearchUtils {
             try {
 				// resolve nothing
                 stopWatch.start();
-                iterator = cns.resolve(sortCriteria, null, restrictToProperties, null);
+                boolean resolveConcepts = false;
+                //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null);
+                iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+
+                //ResolvedConceptReferencesIterator     resolve(SortOptionList sortOptions, LocalNameList filterOptions, LocalNameList propertyNames, CodedNodeSet.PropertyType[] propertyTypes, boolean resolveConcepts)
+
                 System.out.println("DYEE: * cns.resolve: " + stopWatch.getResult());
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -839,8 +844,12 @@ public class SearchUtils {
 				{
 				    iteration2++;
 					ResolvedConceptReference rcr = rcra[i];
-					org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
-					//System.out.println("Iteration " + iteration + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
+
+                    //org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
+                    org.LexGrid.concepts.Concept ce = new org.LexGrid.concepts.Concept();
+                    ce.setId(rcr.getConceptCode());
+                    ce.setEntityDescription(rcr.getEntityDescription());
+                    
 					if (code == null)
 					{
 						v.add(ce);
@@ -848,7 +857,6 @@ public class SearchUtils {
 					else
 					{
 						if (ce.getId().compareTo(code) != 0) v.add(ce);
-
 					}
 				}
 			}
