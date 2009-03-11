@@ -321,6 +321,7 @@ public class CacheController
     private JSONArray List2JSONArray(List list) {
         JSONArray nodesArray = null;
         try {
+
 			if (list != null)
 			{
 				nodesArray = new JSONArray();
