@@ -2,7 +2,6 @@
 
 set lib = lib
 set lib2 = target
-set lib3 = libExt
 
 set cp = .
 set cp = "$cp":"$lib/acegi-security-1.0.4.jar"
@@ -29,11 +28,10 @@ set cp = "$cp":"$lib/sdk-client-framework.jar"
 set cp = "$cp":"$lib/spring.jar"
 set cp = "$cp":"$lib/umlslicense.jar"
 set cp = "$cp":"$lib/xercesImpl.jar"
+set cp = "$cp":"$lib/mm.mysql-2.0.6.jar"
 set cp = "$cp":"$lib2/lexBigExamples.jar"
-set cp = "$cp":"$lib3/mm.mysql-2.0.6.jar"
 
 set java = "java"
-#set config_file = "-DLG_CONFIG_FILE=resources/config.props"
 set config_file = "-DLG_CONFIG_FILE=/local/content/evs/lexbig23/resources/config/config.props"
 set class = "org.LexGrid.LexBIG.example.remote2.Main2"
 
