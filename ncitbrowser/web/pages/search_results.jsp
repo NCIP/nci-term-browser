@@ -67,7 +67,7 @@
     int num_pages = v.size() / page_size;
     if (num_pages * page_size < v.size()) num_pages++;
     
-    String istart_str = Integer.toString(istart);
+    String istart_str = Integer.toString(istart+1);
     String iend_str = Integer.toString(iend);
     
     String prev_page_num_str = Integer.toString(prev_page_num);
