@@ -2,6 +2,8 @@ package gov.nih.nci.evs.browser.utils;
 
 import java.text.DecimalFormat;
 
+import org.LexGrid.LexBIG.util.Prompt;
+
 public class Util {
 	public static final String SEPARATOR = 
 		"----------------------------------------" +
@@ -32,5 +34,27 @@ public class Util {
                 _doubleFormatter.format(timeSec) + " sec, " + 
                 _doubleFormatter.format(timeMin) + " min";
         }
+    }
+    
+    public static String promptAlgorithm(String algorithm) {
+        while (true) {
+            algorithm = Prompt.prompt("algorithm", algorithm);
+            
+            if (algorithm.equalsIgnoreCase("exactMatch") ||
+                    algorithm.equalsIgnoreCase("e")) {
+                algorithm = "exactMatch";
+                break;
+            } else if (algorithm.equalsIgnoreCase("startsWith") ||
+                    algorithm.equalsIgnoreCase("s")) {
+                algorithm = "startsWith";
+                break;
+            } else if (algorithm.equalsIgnoreCase("contains") ||
+                    algorithm.equalsIgnoreCase("c")) {
+                algorithm = "contains";
+                break;
+            }
+            System.out.println("  Valid values: exactMatch, startsWith, contains");
+        }
+        return algorithm;
     }
 }

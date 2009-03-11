@@ -28,6 +28,7 @@ set cp = "$cp":"$lib/sdk-client-framework.jar"
 set cp = "$cp":"$lib/spring.jar"
 set cp = "$cp":"$lib/umlslicense.jar"
 set cp = "$cp":"$lib/xercesImpl.jar"
+set cp = "$cp":"$lib/mm.mysql-2.0.6.jar"
 set cp = "$cp":"$lib2/lexBigExamples.jar"
 
 set java = "java"
