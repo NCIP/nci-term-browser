@@ -271,7 +271,9 @@ public final class AjaxServlet extends HttpServlet {
 
 		List list = null;
 		try {
-			list = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
+			//list = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
+			list = new DataUtils().getHierarchyRoots(scheme, version, null);
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -303,11 +305,49 @@ public final class AjaxServlet extends HttpServlet {
 		}
 		*/
 
-		// to be modified
-			JSONArray rootsArray = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
-			JSONObject json = new JSONObject();
+        JSONArray rootsArray = new JSONArray();
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
 
-			System.out.println("search_tree step 1");
+		List list = null;
+		try {
+			//list = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
+            String version = null;
+			list = new DataUtils().getHierarchyRoots(ontology_display_name, version, null);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		if (list != null)
+		{
+			for (int i=0; i<list.size(); i++) {
+				  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+				  int childCount = 1;
+				  try {
+
+					  JSONObject nodeObject = new JSONObject();
+					  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
+					  Concept concept = getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
+					  //String pt = getPreferredName(concept);
+
+					  String name = concept.getEntityDescription().getContent();
+
+					  //nodeObject.put(ONTOLOGY_NODE_NAME, pt);
+					  nodeObject.put(ONTOLOGY_NODE_NAME, name);
+					  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+					  nodeObject.put(CHILDREN_NODES, new JSONArray());
+					  rootsArray.put(nodeObject);
+
+				  } catch (Exception ex) {
+					  ex.printStackTrace();
+				  }
+			}
+		}
+
+		// to be modified
+			//JSONArray rootsArray = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
+
+			JSONObject json = new JSONObject();
 			try {
 				TreeUtils util = new TreeUtils();
 				HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
@@ -412,9 +452,6 @@ public final class AjaxServlet extends HttpServlet {
     private void replaceJSONObjects(JSONArray nodesArray, JSONArray nodesArray2) {
 		for (int i=0; i<nodesArray2.length(); i++)
 		{
-
-System.out.println("replaceJSONObjects " + i);
-
 			try {
 				JSONObject obj = nodesArray2.getJSONObject(i);
 				replaceJSONObject(nodesArray, obj);
