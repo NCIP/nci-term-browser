@@ -87,8 +87,6 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.ActiveOption;
 import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
-import org.LexGrid.LexBIG.util.AppService;
-import org.LexGrid.LexBIG.util.Prompt;
 import org.LexGrid.commonTypes.EntityDescription;
 import org.LexGrid.commonTypes.Property;
 import org.LexGrid.concepts.Concept;
@@ -131,7 +129,7 @@ import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
 //import gov.nih.nci.evs.reportwriter.properties.NCItBrowserProperties;
 import org.LexGrid.LexBIG.Exceptions.LBParameterException;
 
-//DYEE: import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 
 /**
@@ -228,10 +226,10 @@ public class SearchUtils {
     {
         //setCodingSchemeMap();
 		try {
-		    //DYEE: NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
-			//DYEE: String sort_str = properties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
+			NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
+			String sort_str = properties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
 			apply_sort_score = false;
-			//DYEE: if (sort_str.compareTo("true") == 0) apply_sort_score = true;
+			if (sort_str.compareTo("true") == 0) apply_sort_score = true;
 	    } catch (Exception ex) {
 
 		}
@@ -243,10 +241,10 @@ public class SearchUtils {
         this.url = url;
         //setCodingSchemeMap();
 		try {
-			//DYEE: NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
-			//DYEE: String sort_str = properties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
+			NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
+			String sort_str = properties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
 			apply_sort_score = false;
-			//DYEE: if (sort_str.compareTo("true") == 0) apply_sort_score = true;
+			if (sort_str.compareTo("true") == 0) apply_sort_score = true;
 	    } catch (Exception ex) {
 
 		}
@@ -654,12 +652,10 @@ public class SearchUtils {
 	    CodedNodeSet cns = null;
          ResolvedConceptReferencesIterator iterator = null;
          try {
-//            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
-//			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-//			versionOrTag.setVersion(version);
-             LexBIGService lbSvc = AppService.getInstance().getLBSvc();
-             CodingSchemeVersionOrTag versionOrTag = AppService.getInstance().getCSVT();
-             
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			versionOrTag.setVersion(version);
+
 			if (lbSvc == null)
 			{
 				System.out.println("lbSvc = null");
@@ -674,7 +670,6 @@ public class SearchUtils {
 			}
 
 			LocalNameList contextList = null;
-			Util.StopWatch stopWatch = new Util.StopWatch();
             cns = cns.restrictToMatchingProperties(propertyList,
                                            propertyTypes,
                                            sourceList,
@@ -684,7 +679,6 @@ public class SearchUtils {
                                            matchAlgorithm,
                                            language
                                            );
-            System.out.println("DYEE: * cns.restrictToMatchingProperties: " + stopWatch.getResult());
 
 			LocalNameList restrictToProperties = new LocalNameList();
 			// KLO, 030509
@@ -693,9 +687,7 @@ public class SearchUtils {
 
             try {
 				// resolve nothing
-                stopWatch.start();
                 iterator = cns.resolve(sortCriteria, null, restrictToProperties, null);
-                System.out.println("DYEE: * cns.resolve: " + stopWatch.getResult());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				return null;
@@ -826,9 +818,8 @@ public class SearchUtils {
 		}
 		try {
 			int iteration = 0;
-	        int iteration2 = 0;
 
-			Util.StopWatch stopWatch = new Util.StopWatch();
+
 			while (iterator.hasNext())
 			{
 				iteration++;
@@ -837,7 +828,6 @@ public class SearchUtils {
 				ResolvedConceptReference[] rcra = rcrl.getResolvedConceptReference();
 				for (int i=0; i<rcra.length; i++)
 				{
-				    iteration2++;
 					ResolvedConceptReference rcr = rcra[i];
 					org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
 					//System.out.println("Iteration " + iteration + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
@@ -852,10 +842,6 @@ public class SearchUtils {
 					}
 				}
 			}
-			System.out.println("DYEE: * Calling the following N times: ");
-			System.out.println("DYEE:   * rcrl.getResolvedConceptReference(); " + iteration + " times");
-			System.out.println("DYEE:   * rcr.getReferencedEntry(); " + iteration2 + " times");
-			System.out.println("DYEE:   * Total: " + stopWatch.getResult());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1117,48 +1103,27 @@ public class SearchUtils {
 		return new Vector();
 	}
 
-	private String matchText = "blood";
-	private String matchAlgorithm = "contains";
-	private boolean displayConcepts = true;
-	
-	public boolean testSearchByName() {
+
+	public void testSearchByName() {
 		String scheme = "NCI Thesaurus";
 		String version = "08.11d";
-//		String matchText = "blood";
-//		String matchAlgorithm = "contains";
-		int maxToReturn = 100000;
-		
-		AppService.getInstance(); //Initializes LexBIGService
-		System.out.println();
-        System.out.println(Util.SEPARATOR);
-		matchText = Prompt.prompt("text (q to Quit)", matchText);
-		if (matchText.equalsIgnoreCase("q"))
-		    return false;
-		matchAlgorithm = Util.promptAlgorithm(matchAlgorithm);
-        displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
+		String matchText = "blood";
+		String matchAlgorithm = "contains";
+		int maxToReturn = 1000;
 
         long ms = System.currentTimeMillis();
-        Util.StopWatch stopWatch = new Util.StopWatch();
 		Vector<org.LexGrid.concepts.Concept> v = searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
-		int j = 0;
 		if (v != null)
 		{
 			System.out.println("v.size() = " + v.size());
 			for (int i=0; i<v.size(); i++)
 			{
-				j = i + 1;
+				int j = i + 1;
 				Concept ce = (Concept) v.elementAt(i);
-				if (displayConcepts)
-				    System.out.println("(" + j + ")" + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
+				System.out.println("(" + j + ")" + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
 			}
 		}
-		System.out.println("DYEE: " + Util.SEPARATOR);
-		System.out.println("DYEE: * text: " + matchText);
-		System.out.println("DYEE: * algorithm: " + matchAlgorithm);
-		System.out.println("DYEE: * total: " + j);
-		System.out.println("DYEE: * duration: " + stopWatch.getResult());
-		return true;
 	}
 
 	protected static List<String> toWords(String s, String delimitRegex, boolean removeStopWords, boolean removeDuplicates) {
@@ -1402,13 +1367,11 @@ public class SearchUtils {
 		 if (args.length == 1)
 		 {
 			 url = args[0];
-			 //DYEE: System.out.println(url);
+			 System.out.println(url);
 		 }
 
          SearchUtils test = new SearchUtils(url);
-         while (true)
-             if (! test.testSearchByName())
-                 break;
+		 test.testSearchByName();
     }
 
 }
