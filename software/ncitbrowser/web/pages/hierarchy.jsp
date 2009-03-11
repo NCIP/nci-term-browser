@@ -368,6 +368,9 @@
 	}
 	
 	function addTreeBranch(rootNode, nodeInfo) {
+	
+//alert("addTreeBranch " + + nodeInfo.ontology_node_id);
+
 		var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
 		var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
 
