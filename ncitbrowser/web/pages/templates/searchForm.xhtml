@@ -2,38 +2,38 @@
 
 <table cellspacing=0 cellpadding=0 height="42">
     <tr bgcolor="#2D2D7F">
-	 <td align=right  style="padding-right: 6px; padding-top: 0px valign=top padding:0px; margin:0px" >
-		<SPAN class="StandardFont"><FONT COLOR="white"></font></SPAN>
+     <td align=right  style="padding-right: 6px; padding-top: 0px; vertical-align: top; padding:0px; margin:0px" >
+        <SPAN class="StandardFont"><FONT COLOR="white"></font></SPAN>
 <%
 String match_text = (String) request.getSession().getAttribute("matchText");
 if (match_text == null)
 {
-%>									
-<input CLASS="SearchField" size="22" name="matchText" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)"> 
+%>
+<input CLASS="SearchField" size="22" name="matchText" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
 <%
 }
 else
 {
 %>
-<input CLASS="SearchField" size="22" name="matchText" value="<%=match_text%>" 
-    onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)"> 
+<input CLASS="SearchField" size="22" name="matchText" value="<%=match_text%>"
+    onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
 <%
 }
 %>
 
 
 <h:commandButton
-	id="search"
-	value="Search"
-	action="#{userSessionBean.searchAction}" >
-</h:commandButton>			
+    id="search"
+    value="Search"
+    action="#{userSessionBean.searchAction}" >
+</h:commandButton>
 
-	</td> 
+    </td>
      </tr>
      <tr bgcolor="#2D2D7F">
-	  <td align=right  style="padding-right: 6px" >
+      <td align=right  style="padding-right: 6px" >
 
-		     <font COLOR="white" size="1" face="arial,helvetica">
+             <font COLOR="white" size="1" face="arial,helvetica">
 
 
 <%
@@ -41,31 +41,31 @@ String algorithm = (String) request.getSession().getAttribute("selectedAlgorithm
 if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
 {
 %>
-	<input type="radio" name="algorithm" value="exactMatch" checked >Exact Match&nbsp;
-	<input type="radio" name="algorithm" value="startsWith" >Begins With&nbsp;
-	<input type="radio" name="algorithm" value="contains">Contains&nbsp;  
-<%	
+    <input type="radio" name="algorithm" value="exactMatch" checked >Exact Match&nbsp;
+    <input type="radio" name="algorithm" value="startsWith" >Begins With&nbsp;
+    <input type="radio" name="algorithm" value="contains">Contains&nbsp;
+<%
 }
 else if (algorithm.compareTo("contains") == 0)
 {
 %>
-	<input type="radio" name="algorithm" value="exactMatch" >Exact Match&nbsp;
-	<input type="radio" name="algorithm" value="startsWith" >Begins With&nbsp;
-	<input type="radio" name="algorithm" value="contains" checked>Contains&nbsp;  
+    <input type="radio" name="algorithm" value="exactMatch" >Exact Match&nbsp;
+    <input type="radio" name="algorithm" value="startsWith" >Begins With&nbsp;
+    <input type="radio" name="algorithm" value="contains" checked>Contains&nbsp;
 <%
 }
 else
 {
 %>
-	<input type="radio" name="algorithm" value="exactMatch" >Exact Match&nbsp;
-	<input type="radio" name="algorithm" value="startsWith" checked>Begins With&nbsp;
-	<input type="radio" name="algorithm" value="contains" >Contains&nbsp;  
+    <input type="radio" name="algorithm" value="exactMatch" >Exact Match&nbsp;
+    <input type="radio" name="algorithm" value="startsWith" checked>Begins With&nbsp;
+    <input type="radio" name="algorithm" value="contains" >Contains&nbsp;
 <%
 }
 %>
-										
-		     </font> 
-	  </td>
+
+             </font>
+      </td>
      </tr>
 
 </table>
