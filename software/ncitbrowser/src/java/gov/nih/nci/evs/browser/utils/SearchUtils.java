@@ -1072,7 +1072,8 @@ public class SearchUtils {
 		{
 				long ms = System.currentTimeMillis();
 				try {
-					iterator = sortByScore(matchText, iterator, maxToReturn);
+					//iterator = sortByScore(matchText, iterator, maxToReturn);
+					iterator = sortByScore(matchText, iterator, maxToReturn, true);
 				} catch (Exception ex) {
 
 				}
@@ -1084,6 +1085,10 @@ public class SearchUtils {
 			Vector v = resolveIterator(	iterator, maxToReturn);
 			if (v != null && v.size() > 0)
 			{
+				if(!apply_sort_score)
+				{
+					SortUtils.quickSort(v);
+				}
 				return v;
 			}
 			if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0) {
@@ -1293,6 +1298,7 @@ public class SearchUtils {
     		ResolvedConceptReferenceList refs = toSort.next(100);
     		for (int i = 0; i < refs.getResolvedConceptReferenceCount(); i++) {
     			ResolvedConceptReference ref = refs.getResolvedConceptReference(i);
+
     			String code = ref.getConceptCode();
                 Concept ce = ref.getReferencedEntry();
 
@@ -1317,6 +1323,34 @@ public class SearchUtils {
 		// Return an iterator that will sort the scored result.
 		return new ScoredIterator(scoredResult.values(), maxToReturn);
 	}
+
+
+    protected ResolvedConceptReferencesIterator sortByScore(String searchTerm, ResolvedConceptReferencesIterator toSort, int maxToReturn, boolean descriptionOnly) throws LBException {
+
+        if (!descriptionOnly) return sortByScore(searchTerm, toSort, maxToReturn);
+	    // Determine the set of individual words to compare against.
+		List<String> compareWords = toScoreWords(searchTerm);
+
+		// Create a bucket to store results.
+		Map<String, ScoredTerm> scoredResult = new TreeMap<String, ScoredTerm>();
+
+		// Score all items ...
+		while (toSort.hasNext()) {
+	        // Working in chunks of 100.
+    		ResolvedConceptReferenceList refs = toSort.next(100);
+    		for (int i = 0; i < refs.getResolvedConceptReferenceCount(); i++) {
+    			ResolvedConceptReference ref = refs.getResolvedConceptReference(i);
+    			String code = ref.getConceptCode();
+    			String name = ref.getEntityDescription().getContent();
+   				float score = score(name, compareWords, true, i);
+  				scoredResult.put(code, new ScoredTerm(ref, score));
+    		}
+		}
+		// Return an iterator that will sort the scored result.
+		return new ScoredIterator(scoredResult.values(), maxToReturn);
+	}
+
+
 
 	/**
 	 * Returns a score providing a relative comparison of the given
