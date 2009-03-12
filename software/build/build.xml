@@ -278,7 +278,6 @@
         <ant inheritAll="false" inheritRefs="false" antfile="${ncitbrowser-webapp.build.file}" target="${ncitbrowser-webapp.build.target}" dir="${ncitbrowser-webapp.base.dir}">
             <property name="dist.dir" value="${ncitbrowser-webapp.dist.dir}" />
             <property name="lex.evs.api.default.url" value="${lex.evs.api.default.url}"/>
-            <property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
         </ant>
     </target>
 
