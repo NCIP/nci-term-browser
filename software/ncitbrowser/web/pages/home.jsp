@@ -17,47 +17,40 @@
 
 <f:view>
 
-<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr> 
-		<td height="1%" VALIGN="TOP"> 	
-			<%@ include file="/pages/templates/nciHeader.html" %>
-		        <%@ include file="/pages/templates/header.xhtml" %>
-		</td> 
-        </tr>
-
-	<tr>
-		<td height="1%">
-                      <%@ include file="/pages/templates/quickLink.xhtml" %>
-                </td>
-        </tr>     
-        
-	<tr>
-		<td valign="top">
-			<table>
-				<tr>
-					<td>
-					   <%@ include file="/pages/templates/welcome.html" %>
-					</td>
-				</tr>
-			</table>
-	        </td>
-	</tr>
-	<tr>
-	        <td>
-		     <%@ include file="/pages/templates/applicationFooter.html" %>
-		</td>
-	</tr>
-
-	<tr>
-		<td valign="top">
-		     <%@ include file="/pages/templates/nciFooter.html" %>
-		</td>
-	</tr>
-
-
+<table valign="top" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td height="1%" VALIGN="TOP">
+            <%@ include file="/pages/templates/nciHeader.html" %>
+            <%@ include file="/pages/templates/header.xhtml" %>
+        </td>
+    </tr>
+    <tr>
+        <td height="20px">
+            <%@ include file="/pages/templates/quickLink.xhtml" %>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">
+            <table>
+                <tr>
+                    <td>
+                       <%@ include file="/pages/templates/welcome.html" %>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+             <%@ include file="/pages/templates/applicationFooter.html" %>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top">
+             <%@ include file="/pages/templates/nciFooter.html" %>
+        </td>
+    </tr>
 </table>
-
-
 
 </f:view>
 
