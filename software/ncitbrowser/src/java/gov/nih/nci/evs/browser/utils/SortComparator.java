@@ -77,6 +77,9 @@ public class SortComparator implements Comparator<Object>{
 	    {
 			AssociatedConcept ac = (AssociatedConcept) c;
 			if (sort_option == SORT_BY_CODE) return ac.getConceptCode();
+
+System.out.println(	ac.getEntityDescription().getContent() );
+
 			return ac.getEntityDescription().getContent();
 		}
 

@@ -650,11 +650,23 @@ public class TreeUtils {
 
 					// Each association may have multiple children ...
 					AssociatedConceptList branchItemList = child.getAssociatedConcepts();
+
+                    /*
 					for (Iterator<AssociatedConcept> branchNodes = branchItemList.iterateAssociatedConcept(); branchNodes
 							.hasNext();) {
 						AssociatedConcept branchItemNode = branchNodes.next();
-						String branchItemCode = branchItemNode.getConceptCode();
+					*/
 
+					List child_list = new ArrayList();
+					for (Iterator<AssociatedConcept> branchNodes = branchItemList.iterateAssociatedConcept(); branchNodes
+							.hasNext();) {
+						AssociatedConcept branchItemNode = branchNodes.next();
+                        child_list.add(branchItemNode);
+					}
+					SortUtils.quickSort(child_list);
+					for (int i=0; i<child_list.size(); i++) {
+					    AssociatedConcept branchItemNode = (AssociatedConcept) child_list.get(i);
+						String branchItemCode = branchItemNode.getConceptCode();
 						// Add here if not in the list of excluded codes.
 						// This is also where we look to see if another level
 						// was indicated to be available.  If so, mark the
@@ -674,7 +686,6 @@ public class TreeUtils {
 				}
 			}
 			hmap.put(code, ti);
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
