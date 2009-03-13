@@ -357,7 +357,7 @@ public class CacheController
 			TreeItem ti = (TreeItem) hmap.get(code);
 			for (String association : ti.assocToChildMap.keySet()) {
 				List<TreeItem> children = ti.assocToChildMap.get(association);
-				Collections.sort(children);
+				//Collections.sort(children);
 				for (TreeItem childItem : children) {
 					//printTree(childItem, focusCode, depth + 1);
 					JSONObject nodeObject = new JSONObject();
