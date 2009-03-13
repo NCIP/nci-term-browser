@@ -25,14 +25,22 @@ public class Util {
             return System.currentTimeMillis() - _startMS;
         }
         
-        public String getResult() {
-            long time = duration();
+        public String getResult(long time) {
             double timeSec = time/1000.0;
             double timeMin = timeSec/60.0;
             
             return "Run time: " + time + " ms, " + 
                 _doubleFormatter.format(timeSec) + " sec, " + 
                 _doubleFormatter.format(timeMin) + " min";
+        }
+
+        public String getResult() {
+            return getResult(duration());
+        }
+        
+        public String getSecondsString(long time) {
+            double timeSec = time/1000.0;
+            return _doubleFormatter.format(timeSec);
         }
     }
     

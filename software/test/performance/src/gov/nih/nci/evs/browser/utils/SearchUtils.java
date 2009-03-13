@@ -700,7 +700,9 @@ public class SearchUtils {
 
                 //ResolvedConceptReferencesIterator     resolve(SortOptionList sortOptions, LocalNameList filterOptions, LocalNameList propertyNames, CodedNodeSet.PropertyType[] propertyTypes, boolean resolveConcepts)
 
-                System.out.println("DYEE: " + stopWatch.getResult() + " * cns.resolve");
+                long duration = stopWatch.duration();
+                System.out.println("DYEE: " + stopWatch.getResult(duration) + " * cns.resolve");
+                _excelBuffer.append(stopWatch.getSecondsString(duration) + "\t");
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				return null;
@@ -860,7 +862,9 @@ public class SearchUtils {
 					}
 				}
 			}
-			System.out.println("DYEE: " + stopWatch.getResult() + " * resolveIterator");
+			long duration = stopWatch.duration();
+			System.out.println("DYEE: " + stopWatch.getResult(duration) + " * resolveIterator");
+            _excelBuffer.append(stopWatch.getSecondsString(duration) + "\t");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1122,25 +1126,15 @@ public class SearchUtils {
 		return new Vector();
 	}
 
-	private String matchText = "blood";
-	private String matchAlgorithm = "contains";
-	private boolean displayConcepts = true;
-	
-	public boolean testSearchByName() {
+	public void testSearchByName(String matchText, String matchAlgorithm,
+	        boolean displayConcepts) {
 		String scheme = "NCI Thesaurus";
 		String version = "08.11d";
 //		String matchText = "blood";
 //		String matchAlgorithm = "contains";
 		int maxToReturn = 100000;
 		
-		AppService.getInstance(); //Initializes LexBIGService
-		System.out.println();
-        System.out.println(Util.SEPARATOR);
-		matchText = Prompt.prompt("text (q to Quit)", matchText);
-		if (matchText.equalsIgnoreCase("q"))
-		    return false;
-		matchAlgorithm = Util.promptAlgorithm(matchAlgorithm);
-        displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
+        _excelBuffer = new StringBuffer();
 
         long ms = System.currentTimeMillis();
         Util.StopWatch stopWatch = new Util.StopWatch();
@@ -1158,12 +1152,17 @@ public class SearchUtils {
 				    System.out.println("(" + j + ")" + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
 			}
 		}
-		System.out.println("DYEE: " + Util.SEPARATOR);
+		
+		long duration = stopWatch.duration();
 		System.out.println("DYEE: * text: " + matchText);
 		System.out.println("DYEE: * algorithm: " + matchAlgorithm);
 		System.out.println("DYEE: * total: " + j);
-		System.out.println("DYEE: " + stopWatch.getResult() + " * testSearchByName");
-		return true;
+		System.out.println("DYEE: " + stopWatch.getResult(duration) + " * testSearchByName");
+        _excelBuffer.insert(0, stopWatch.getSecondsString(duration) + "\t");
+        _excelBuffer.insert(0, j + "\t");
+        _excelBuffer.insert(0, matchAlgorithm + "\t");
+        _excelBuffer.insert(0, matchText + "\t");
+        System.out.println("DYEE: " + _excelBuffer.toString());
 	}
 
 	protected static List<String> toWords(String s, String delimitRegex, boolean removeStopWords, boolean removeDuplicates) {
@@ -1400,6 +1399,41 @@ public class SearchUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private String _matchText = "blood";
+    private String _matchAlgorithm = "contains";
+    private boolean _displayConcepts = true;
+    private static StringBuffer _debugBuffer = null;
+    private static StringBuffer _excelBuffer = null;
+    
+    public void prompt() {
+        while (true) {
+            System.out.println();
+            System.out.println(Util.SEPARATOR);
+            _matchText = Prompt.prompt("text (q to Quit)", _matchText);
+            if (_matchText.equalsIgnoreCase("q"))
+                break;
+            _matchAlgorithm = Util.promptAlgorithm(_matchAlgorithm);
+            _displayConcepts = Prompt.prompt("Display Concepts", _displayConcepts);
+            
+            testSearchByName(_matchText, _matchAlgorithm, _displayConcepts);
+        }
+    }
+    
+    public void test() {
+        _displayConcepts = Prompt.prompt("Display Concepts", _displayConcepts);
+        String keywords[] = new String[] {
+                " 100", "bone", "blood", "allele", "tumor", "cancer", "gene",
+                "neoplasm", "Adenomatoid Tumor", "grade", "cell", "ctcae",
+                "carcinoma", "infection", "event", "adverse", "stage",
+                "device", "protein", "gland", "injury" };
+        keywords = new String[] { "100", "bone", "blood" };
+        for (String keyword : keywords) {
+            System.out.println("DYEE: " + Util.SEPARATOR);
+            testSearchByName(keyword, "contains", _displayConcepts);
+            System.out.println("DYEE: ");
+        }
+    }
+    
 
 	public static void main(String[] args)
 	{
@@ -1411,9 +1445,9 @@ public class SearchUtils {
 		 }
 
          SearchUtils test = new SearchUtils(url);
-         while (true)
-             if (! test.testSearchByName())
-                 break;
+         AppService.getInstance(); //Initializes LexBIGService
+         //test.prompt();
+         test.test();
     }
 
 }
