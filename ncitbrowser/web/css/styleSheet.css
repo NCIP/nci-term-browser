@@ -11,20 +11,20 @@ For example using the blue color sheme, darker means use the darker blue and lig
 /*########## GREEN COLOR SCHEME ##########
  #6A8989 = darker green
  #98B7B7 = lighter green
- 
+
 /*########## PURPLE COLOR SCHEME ##########
  #797C9C = darker purple
  #9FA2BA = lighter purple
- 
+
 /*########## TAN COLOR SCHEME ##########
  #706C60 = darker tan
  #B3AE9C = lighter tan
- 
+
 /*########## GRAY COLOR SCHEME ##########
  #838386 = darker gray
  #AAAAAB = lighter gray
 
-/*########## COMMON AMONG ALL COLOR SCHEMES ########## 
+/*########## COMMON AMONG ALL COLOR SCHEMES ##########
  #A90101 = red
  #5C5C5C = dark gray
  #CCCCCC = medium gray
@@ -34,12 +34,13 @@ For example using the blue color sheme, darker means use the darker blue and lig
 */
 
 body{
-  margin:0; 
+  margin:0;
   padding:0;
+  font: 11px arial;
 }
 
 /*###############
-HDR AND FTR BEGINS 
+HDR AND FTR BEGINS
 ###############*/
 .hdrBG{ /* for the cell that contains the required cancer.gov header */
   background-color:#A90101; /* constant: red */
@@ -52,7 +53,7 @@ HDR AND FTR BEGINS
 }
 
 /*###############
-MENU BEGINS 
+MENU BEGINS
 ###############*/
 td.mainMenu{
   background-color:#5C5C5C; /* constant: dark gray */
@@ -61,14 +62,14 @@ td.mainMenu{
   border-top:1px solid #CCCCCC; /* constant: medium gray */
 }
 td.mainMenuItem{ /* for the off state of the main menu (top) cells */
-  font-size:0.6em;
+  font-size: 11px;
   font-weight:bold;
-  background-color:#5C5C5C; /* constant: dark gray */
+  background-color:#2D2D7F; /* constant: dark gray */
   padding-left:1em;
   padding-right:1em;
 }
 td.mainMenuItemOver{ /* for the over state of the main menu (top) cells */
-  font-size:0.6em;
+  font-size: 11px;
   font-weight:bold;
   background-color:#475B82; /* darker */
   padding-left:1em;
@@ -149,61 +150,61 @@ td.subMenuFooter{ /* for the last row in the submenu left of the footer menu */
   border-right:1px solid #CCCCCC; /* constant: medium gray */
 }
 
-/*############### 
-LINKS BEGIN 
+/*###############
+LINKS BEGIN
 ###############*/
 a:link,a:visited,a:active{ /* default links */
-	color:#000000; /* constant: black */
-	text-decoration:underline;	
-	white-space: nowrap;
+    color:#000000; /* constant: black */
+    text-decoration:underline;
+    white-space: nowrap;
 }
 a:hover{
-	color:#A90101; /* constant: red */
+    color:#A90101; /* constant: red */
 }
 a:link.subMenuPrimary,a:visited.subMenuPrimary,a:active.subMenuPrimary{ /* for the text links in the primary submenu */
-	color:#5C5C5C; /* constant: dark gray */
-	text-decoration:underline;	
+    color:#5C5C5C; /* constant: dark gray */
+    text-decoration:underline;
   white-space: nowrap;
 }
 a:hover.subMenuPrimary{
-	color:#A90101; /* constant: red */
+    color:#A90101; /* constant: red */
 }
 a:link.subMenuSecondary,a:visited.subMenuSecondary,a:active.subMenuSecondary{ /* for the text links under the secondary submenu (quick links area) */
-	color:#FFFFFF; /* constant: white */
-	text-decoration:none;	
+    color:#FFFFFF; /* constant: white */
+    text-decoration:none;
   white-space: nowrap;
 }
 a:hover.subMenuSecondary{
-	color:#FFFFFF; /* constant: white */
+    color:#FFFFFF; /* constant: white */
 }
 a:link.mainMenuLink,a:visited.mainMenuLink,a:active.mainMenuLink{ /* for the text links in the main menu */
-	color:#FFFFFF; /* constant: white */
-	text-decoration:none;
-  white-space: nowrap;
+    color:#FFFFFF; /* constant: white */
+    text-decoration:none;
+    white-space: nowrap;
 }
 a:hover.mainMenuLink{
-	color:#FFFFFF; /* constant: white */
+    color:#FFFFFF; /* constant: white */
 }
 a:link.footerMenuLink,a:visited.footerMenuLink,a:active.footerMenuLink{ /* for the text links at the top of the footer */
-	color:#FFFFFF; /* constant: white */
-	text-decoration:none;
+    color:#FFFFFF; /* constant: white */
+    text-decoration:none;
   white-space: nowrap;
 }
 a:hover.footerMenuLink{
-	color:#FFFFFF; /* constant: white */
+    color:#FFFFFF; /* constant: white */
 }
 a:link.dataPagingLink,a:visited.dataPagingLink,a:active.dataPagingLink{ /* for the previous and next links for the paging areas */
-	color:#5C5C5C; /* constant: dark gray */
-  text-decoration:underline;
-  white-space: nowrap;
+    color: #5C5C5C; /* constant: dark gray */
+    text-decoration:underline;
+    white-space: nowrap;
 }
 a:hover.dataPagingLink{
-	color:#A90101; /* constant: red */
-	text-decoration:underline;
+    color:#A90101; /* constant: red */
+    text-decoration:underline;
 }
 
-/*############### 
-FORM BEGINS 
+/*###############
+FORM BEGINS
 ###############*/
 .formRequiredNotice{ /* for the asterisk cell */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -221,7 +222,7 @@ FORM BEGINS
   color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
-	text-align:right;
+    text-align:right;
 }
 .formLabel{ /* for the non-required form labels */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -265,7 +266,7 @@ input.formFieldSized,textarea.formFieldSized,select.formFieldSized{ /* for the f
   font-family:arial,helvetica,verdana,sans-serif;
   border:1px solid #5C5C5C; /* constant: dark gray */
   font-size:1em;
-	width:25em;
+    width:25em;
 }
 input.actionButton{ /* optional style for form and action buttons */
   border-right:2px solid #5C5C5C; /* constant: dark gray */
@@ -282,8 +283,8 @@ input.actionButton{ /* optional style for form and action buttons */
   border:1px solid #5C5C5C; /* constant: dark gray */
 }
 
-/*############### 
-SIDEBAR BEGINS 
+/*###############
+SIDEBAR BEGINS
 ###############*/
 .sidebarSection{ /* for the individual sidebar sections */
   background-color:#F4F4F5; /* constant: light gray */
@@ -309,7 +310,7 @@ SIDEBAR BEGINS
 }
 
 /*###############
-DATA TABLE BEGINS 
+DATA TABLE BEGINS
 ###############*/
 .dataTablePrimaryLabel{ /* for the first row */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -387,7 +388,7 @@ DATA TABLE BEGINS
 }
 
 /*###############
-STANDARD CONTENT BEGINS 
+STANDARD CONTENT BEGINS
 ###############*/
 table.contentPage{ /* for overall top style for a content page */
   font-family:arial,helvetica,verdana,sans-serif;
