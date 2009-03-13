@@ -18,7 +18,16 @@ public class AppService {
     private LexBIGServiceConvenienceMethods _lbscm = null;
     
     private AppService() {
-        _css = Util.promptForCodeSystem();
+        try {
+            _css = Util.promptForCodeSystem();
+        } catch (ExceptionInInitializerError e) {
+            System.out.println("* Abort: Make sure LG_CONFIG_FILE is set:");
+            System.out.println("* LG_CONFIG_FILE: " + System.getProperty("LG_CONFIG_FILE"));
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
+        }
+        
         _lbSvc = getLBSvc();
         _scheme = _css.getCodingSchemeURN();
         _csvt = new CodingSchemeVersionOrTag();
