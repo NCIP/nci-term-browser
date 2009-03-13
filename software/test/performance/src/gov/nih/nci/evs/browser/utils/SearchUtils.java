@@ -674,7 +674,7 @@ public class SearchUtils {
 			}
 
 			LocalNameList contextList = null;
-			Util.StopWatch stopWatch = new Util.StopWatch();
+			//Util.StopWatch stopWatch = new Util.StopWatch();
             cns = cns.restrictToMatchingProperties(propertyList,
                                            propertyTypes,
                                            sourceList,
@@ -684,7 +684,7 @@ public class SearchUtils {
                                            matchAlgorithm,
                                            language
                                            );
-            System.out.println("DYEE: * cns.restrictToMatchingProperties: " + stopWatch.getResult());
+            //System.out.println("DYEE: * cns.restrictToMatchingProperties: " + stopWatch.getResult());
 
 			LocalNameList restrictToProperties = new LocalNameList();
 			// KLO, 030509
@@ -693,14 +693,14 @@ public class SearchUtils {
 
             try {
 				// resolve nothing
-                stopWatch.start();
+                Util.StopWatch stopWatch = new Util.StopWatch();
                 boolean resolveConcepts = false;
                 //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null);
                 iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
                 //ResolvedConceptReferencesIterator     resolve(SortOptionList sortOptions, LocalNameList filterOptions, LocalNameList propertyNames, CodedNodeSet.PropertyType[] propertyTypes, boolean resolveConcepts)
 
-                System.out.println("DYEE: * cns.resolve: " + stopWatch.getResult());
+                System.out.println("DYEE: " + stopWatch.getResult() + " * cns.resolve");
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				return null;
@@ -860,10 +860,7 @@ public class SearchUtils {
 					}
 				}
 			}
-			System.out.println("DYEE: * Calling the following N times: ");
-			System.out.println("DYEE:   * rcrl.getResolvedConceptReference(); " + iteration + " times");
-			System.out.println("DYEE:   * rcr.getReferencedEntry(); " + iteration2 + " times");
-			System.out.println("DYEE:   * Total: " + stopWatch.getResult());
+			System.out.println("DYEE: " + stopWatch.getResult() + " * resolveIterator");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1148,11 +1145,11 @@ public class SearchUtils {
         long ms = System.currentTimeMillis();
         Util.StopWatch stopWatch = new Util.StopWatch();
 		Vector<org.LexGrid.concepts.Concept> v = searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
-		System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+		//DYEE: System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
 		int j = 0;
 		if (v != null)
 		{
-			System.out.println("v.size() = " + v.size());
+			//DYEE: System.out.println("v.size() = " + v.size());
 			for (int i=0; i<v.size(); i++)
 			{
 				j = i + 1;
@@ -1165,7 +1162,7 @@ public class SearchUtils {
 		System.out.println("DYEE: * text: " + matchText);
 		System.out.println("DYEE: * algorithm: " + matchAlgorithm);
 		System.out.println("DYEE: * total: " + j);
-		System.out.println("DYEE: * duration: " + stopWatch.getResult());
+		System.out.println("DYEE: " + stopWatch.getResult() + " * testSearchByName");
 		return true;
 	}
 

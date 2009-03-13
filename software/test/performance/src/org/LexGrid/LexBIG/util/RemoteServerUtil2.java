@@ -41,7 +41,7 @@ public class RemoteServerUtil2 {
     private static String _serviceInfo = "EvsServiceInfo";
     public static final String URL = "http://lexevsapi.nci.nih.gov/lexevsapi42";
     public static final String URL_DEV = "http://lexevsapi-dev.nci.nih.gov/lexevsapi42";
-    public static String _serviceUrl = URL_DEV;
+    public static String _serviceUrl = URL;
 
     /**
      * Establish a remote LexBIG connection.
@@ -50,6 +50,7 @@ public class RemoteServerUtil2 {
         EVSApplicationService lbSvc = null;
 
         try {
+            System.out.println("Service URL: " + _serviceUrl);
             lbSvc = (EVSApplicationService) ApplicationServiceProvider
                     .getApplicationServiceFromUrl(_serviceUrl, _serviceInfo);
             return lbSvc;
