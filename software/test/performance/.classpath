@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="lib/spring.jar"/>
 	<classpathentry kind="lib" path="lib/umlslicense.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/mm.mysql-2.0.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
