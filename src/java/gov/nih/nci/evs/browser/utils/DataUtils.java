@@ -165,6 +165,7 @@ import org.LexGrid.LexBIG.Exceptions.LBParameterException;
 
 public class DataUtils {
 
+    LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
     int maxReturn = 5000;
 	Connection con;
 	Statement stmt;
@@ -1612,9 +1613,13 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		try {
 			CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
 
+			//ResolvedConceptReferenceList branch = cng.resolveAsList(focus, associationsNavigatedFwd,
+			//		!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
+
 			matches = cng.resolveAsList(
 					ConvenienceMethods.createConceptReference(code, scheme),
-					true, false, 1, 1, new LocalNameList(), null, null, 1024);
+					//true, false, 1, 1, new LocalNameList(), null, null, 1024);
+					true, false, 1, 1, noopList_, null, null, null, -1, false);
 
 			if (matches.getResolvedConceptReferenceCount() > 0) {
 				Enumeration<ResolvedConceptReference> refEnum =
@@ -1648,7 +1653,9 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
                             System.out.println("name: " + name);
                             System.out.println("code: " + ac.getConceptCode());
 */
-                            String pt = getPreferredName(ac.getReferencedEntry());
+                            //String pt = getPreferredName(ac.getReferencedEntry());
+                            String pt = name;
+
                             //System.out.println("pt: " + pt);
 
                             if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
@@ -1656,8 +1663,11 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 								String s = associationName + "|" + pt + "|" + ac.getConceptCode();
 								if (isRole)
 								{
+									if (associationName.compareToIgnoreCase("hasSubtype") != 0)
+									{
 									//System.out.println("Adding role: " + s);
-									roleList.add(s);
+										roleList.add(s);
+								    }
 								}
 								else
 								{

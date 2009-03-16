@@ -24,21 +24,13 @@
 		        <%@ include file="/pages/templates/header.xhtml" %>
 		</td> 
         </tr>
-
 	<tr>
 		<td height="1%">
                       <%@ include file="/pages/templates/quickLink.xhtml" %>
                 </td>
         </tr>     
-        
-        
-        
 	<tr>
 		<td>
-
-
-
-
 <% 
     Vector v = (Vector) request.getSession().getAttribute("search_results");
     String matchText = (String) request.getSession().getAttribute("matchText");
@@ -46,7 +38,6 @@
     String page_string = (String) request.getSession().getAttribute("page_string");
     String page_number = (String) request.getParameter("page_number");
     String selectedResultsPerPage = (String) request.getParameter("selectedResultsPerPage");
-    
     if (page_number != null)
     {
         page_string = page_number;
@@ -54,7 +45,6 @@
     int page_num = Integer.parseInt(page_string);
     int next_page_num = page_num + 1;
     int prev_page_num = page_num - 1;
-    
     int page_size = 50;
     if (selectedResultsPerPage != null)
     {
@@ -63,40 +53,29 @@
     int iend = page_num * page_size;
     int istart = iend - page_size;
     if (iend > v.size()) iend = v.size();
-    
     int num_pages = v.size() / page_size;
     if (num_pages * page_size < v.size()) num_pages++;
-    
     String istart_str = Integer.toString(istart+1);
     String iend_str = Integer.toString(iend);
-    
     String prev_page_num_str = Integer.toString(prev_page_num);
     String next_page_num_str = Integer.toString(next_page_num);
-
 %>
-
 <table>
-
    <tr><td allign="left" class="standardText2">
       <b>Result for: <%=matchText%></b>
    </td></tr>
-
    <tr>
 	<td>
 	     <hr></hr>
 	</td>
    </tr>
-
    <tr>
       <td>
          &nbsp;
       </td>
-      
       <td class="standardText" >
-      
 	<b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
 	<hr></hr>
-      
       </td>
    </tr>
 
