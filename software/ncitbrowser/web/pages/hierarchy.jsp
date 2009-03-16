@@ -454,7 +454,11 @@ String ontology_display_name = (String) request.getParameter("dictionary");
 	</div>
 </div>
 
+<!--
 <div id="treecontainer" style="overflow:auto;width:350px;height:700px;"></div>
+-->
+
+<div id="treecontainer" style="overflow:auto;width:750px;height:700px;"></div>
 
 				</td></tr>
 			
