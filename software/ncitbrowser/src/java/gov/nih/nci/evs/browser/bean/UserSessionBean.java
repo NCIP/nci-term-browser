@@ -128,7 +128,7 @@ public class UserSessionBean extends Object
 		String version = null;
 
 		String max_str = null;
-		int maxToReturn = 1000;
+		int maxToReturn = -1;//1000;
 		try {
 			max_str = NCItBrowserProperties.getInstance().getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
 			maxToReturn = Integer.parseInt(max_str);
@@ -228,7 +228,7 @@ public class UserSessionBean extends Object
 		if (event.getNewValue() == null) return;
 		String newValue = (String) event.getNewValue();
 
-		System.out.println("algorithmChanged; " + newValue);
+		//System.out.println("algorithmChanged; " + newValue);
         setSelectedAlgorithm(newValue);
 	}
 
