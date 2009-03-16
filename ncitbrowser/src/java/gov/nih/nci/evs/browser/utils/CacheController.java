@@ -162,81 +162,6 @@ public class CacheController
     }
 
 
-/*
-    public HashMap getSubconcepts(String scheme, String version, String code)
-    {
-		return getSubconcepts(scheme, version, code, true);
-	}
-
-
-    public HashMap getSubconcepts(String scheme, String version, String code, boolean fromCache)
-    {
-		HashMap map = null;
-		String key = scheme + "$" + version + "$" + code;
-        if (fromCache)
-        {
-            Element element = cache.get(key);
-            if (element != null)
-            {
-           	    map = (HashMap) element.getValue();
-			}
-        }
-        if (map == null)
-        {
-			System.out.println("Not in cache -- calling getSubconcepts " );
-            map = new TreeUtils().getSubconcepts(scheme, version, code);
-            try {
-				Element element = new Element(key, map);
-	            cache.put(element);
-			} catch (Exception ex) {
-
-			}
-        }
-        else
-        {
-			System.out.println("Retrieved from cache." );
-		}
-        return  map;
-    }
-
-    public List getRootConcepts(String scheme, String version)
-    {
-		return getRootConcepts(scheme, version, true);
-	}
-
-
-    public List getRootConcepts(String scheme, String version, boolean fromCache)
-    {
-		List list = null;//new ArrayList();
-		String key = scheme + "$" + version + "$root";
-        if (fromCache)
-        {
-            Element element = cache.get(key);
-            if (element != null) {
-
-				System.out.println("getRootConcepts fromCache element != null returning list" );
-	            list = (List) element.getValue();
-			}
-        }
-        if (list == null)
-        {
-			System.out.println("Not in cache -- calling getHierarchyRoots " );
-            try {
-				list = new DataUtils().getHierarchyRoots(scheme, version, null);
-				Element element = new Element(key, list);
-	            cache.put(element);
-			} catch (Exception ex) {
-                ex.printStackTrace();
-			}
-        }
-        else
-        {
-			System.out.println("Retrieved from cache." );
-		}
-        return list;
-    }
-*/
-
     public JSONArray getSubconcepts(String scheme, String version, String code)
     {
 		return getSubconcepts(scheme, version, code, true);
@@ -434,13 +359,9 @@ public class CacheController
 
 					  JSONObject nodeObject = new JSONObject();
 					  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
-					  Concept concept = getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
+					  Concept concept = SearchUtils.getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
 					  //String pt = getPreferredName(concept);
-
 					  String name = concept.getEntityDescription().getContent();
-
-System.out.println("Search tree ROOT: " + name);
-
 					  //nodeObject.put(ONTOLOGY_NODE_NAME, pt);
 					  nodeObject.put(ONTOLOGY_NODE_NAME, name);
 					  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
@@ -460,10 +381,6 @@ System.out.println("Search tree ROOT: " + name);
 			Set keyset = hmap.keySet();
 			Object[] objs = keyset.toArray();
 			String code = (String) objs[0];
-
-System.out.println("Search tree code: " + code);
-
-
 			TreeItem ti = (TreeItem) hmap.get(code); //TreeItem ti = new TreeItem("<Root>", "Root node");
 
 			JSONArray nodesArray = getNodesArray(ti);
@@ -477,90 +394,6 @@ System.out.println("Search tree code: " + code);
 		//System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
 		return rootsArray;
     }
-
-
-    /*
-    public JSONArray getPathsToRoots(String scheme, String version, String code, boolean fromCache)
-    {
-		String key = scheme + "$" + version + "$" + code + "$path";
-		JSONArray nodesArray = null;
-        if (fromCache)
-        {
-            Element element = cache.get(key);
-            if (element != null)
-            {
-           	    nodesArray = (JSONArray) element.getValue();
-			}
-        }
-        if (nodesArray == null)
-        {
-			JSONArray rootsArray = new JSONArray();
-			List list = null;
-			try {
-				list = new DataUtils().getHierarchyRoots(scheme, version, null);
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-
-			if (list != null)
-			{
-				for (int i=0; i<list.size(); i++) {
-					  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
-					  int childCount = 1;
-					  try {
-						  JSONObject nodeObject = new JSONObject();
-						  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
-						  Concept concept = getConceptByCode(scheme, null, null, node.getConceptCode());
-
-						  String name = concept.getEntityDescription().getContent();
-
-System.out.println("ROOT: " + name);
-
-						  nodeObject.put(ONTOLOGY_NODE_NAME, name);
-						  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
-						  nodeObject.put(CHILDREN_NODES, new JSONArray());
-						  rootsArray.put(nodeObject);
-
-					  } catch (Exception ex) {
-						  ex.printStackTrace();
-					  }
-				}
-			}
-			JSONObject json = new JSONObject();
-			try {
-				TreeUtils util = new TreeUtils();
-				HashMap hmap = util.getTreePathData(scheme, null, null, code);
-				Set keyset = hmap.keySet();
-				Object[] objs = keyset.toArray();
-
-System.out.println("objs: " + keyset.size());
-
-
-				String code0 = (String) objs[0];
-				TreeItem ti = (TreeItem) hmap.get(code0);
-				nodesArray = getNodesArray(ti);
-				replaceJSONObjects(rootsArray, nodesArray);
-
-				try {
-					Element element = new Element(key, rootsArray);
-					cache.put(element);
-				} catch (Exception ex) {
-
-				}
-
-			} catch (Exception ex) {
-
-			}
-        }
-        else
-        {
-			System.out.println("Retrieved from cache." );
-		}
-        return nodesArray;
-	}
-	*/
-
 
     private void replaceJSONObject(JSONArray nodesArray, JSONObject obj) {
 		String obj_id = null;
@@ -634,70 +467,6 @@ System.out.println("objs: " + keyset.size());
 		return nodesArray;
 	}
 
-	public static ConceptReferenceList createConceptReferenceList(String[] codes, String codingSchemeName)
-	{
-		if (codes == null)
-		{
-			return null;
-		}
-		ConceptReferenceList list = new ConceptReferenceList();
-		for (int i = 0; i < codes.length; i++)
-		{
-			ConceptReference cr = new ConceptReference();
-			cr.setCodingScheme(codingSchemeName);
-			cr.setConceptCode(codes[i]);
-			list.addConceptReference(cr);
-		}
-		return list;
-	}
 
-	public static Concept getConceptByCode(String codingSchemeName, String vers, String ltag, String code)
-	{
-        try {
-			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
-			if (lbSvc == null)
-			{
-				System.out.println("lbSvc == null???");
-				return null;
-			}
-
-			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-			versionOrTag.setVersion(vers);
-
-			ConceptReferenceList crefs =
-				createConceptReferenceList(
-					new String[] {code}, codingSchemeName);
-
-			CodedNodeSet cns = null;
-
-			try {
-				cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
-		    } catch (Exception e1) {
-				e1.printStackTrace();
-			}
-
-			cns = cns.restrictToCodes(crefs);
-			ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
-
-			if (matches == null)
-			{
-				System.out.println("Concep not found.");
-				return null;
-			}
-
-			// Analyze the result ...
-			if (matches.getResolvedConceptReferenceCount() > 0) {
-				ResolvedConceptReference ref =
-					(ResolvedConceptReference) matches.enumerateResolvedConceptReference().nextElement();
-
-				Concept entry = ref.getReferencedEntry();
-				return entry;
-			}
-		 } catch (Exception e) {
-			 e.printStackTrace();
-			 return null;
-		 }
-		 return null;
-	}
 }
 
