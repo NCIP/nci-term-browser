@@ -359,7 +359,16 @@ String kind_label = "Kind:";
 			    
 			</table></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
-                        <tr><td class="standardText"><b>URL to Bookmark</b>:&nbsp;<i>http://ncit.nci.nih.gov/<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i></td></tr>
+			
+<%
+String requestURL = request.getRequestURL().toString();
+int idx = requestURL.indexOf("pages");
+requestURL = requestURL.substring(0, idx);
+%>
+			
+			
+			
+                        <tr><td class="standardText"><b>URL to Bookmark</b>:&nbsp;<i><%= requestURL %>ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i></td></tr>
                         <tr><td class="standardText">&nbsp;</td></tr>
 <%
 }
