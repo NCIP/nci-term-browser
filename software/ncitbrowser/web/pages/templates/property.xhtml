@@ -22,8 +22,21 @@ additionalproperties.add("CONCEPT_NAME");
 additionalproperties.add("primitive");
 
 Concept curr_concept = (Concept) request.getSession().getAttribute("concept");
-Boolean bool_obj = curr_concept.isIsActive(); 
+Boolean bool_obj = curr_concept.isIsActive();
 String isActive = bool_obj.toString();
+if (bool_obj == null)
+{
+	isActive = "Unknown";
+}
+else if (bool_obj.equals(Boolean.TRUE))
+{
+	isActive = "Active Status";
+}
+else
+{
+        isActive = "Retired Status";
+}
+
 HashSet hset = new HashSet();
 HashMap hmap = new HashMap();
 Vector propertyvalues = null;
@@ -47,9 +60,6 @@ propertyvalues = new Vector();
 String concept_id = curr_concept.getId();
 propertyvalues.add(concept_id);
 hmap.put("Code", propertyvalues);
-
-
-
 Vector displayed_properties = new Vector();
 Vector properties_to_display = new Vector();
 Vector properties_to_display_label = new Vector();
@@ -66,12 +76,10 @@ for (int i=0; i<displayItemList.size(); i++) {
          properties_to_display_linktext.add(displayItem.getHyperlinkText());
     }
 }
-
 Vector external_source_codes = new Vector();
 Vector external_source_codes_label = new Vector();
 Vector external_source_codes_url = new Vector();
 Vector external_source_codes_linktext = new Vector();
-
 for (int i=0; i<displayItemList.size(); i++) {
     DisplayItem displayItem = (DisplayItem) displayItemList.get(i);	
     if (displayItem.getIsExternalCode())
@@ -82,15 +90,12 @@ for (int i=0; i<displayItemList.size(); i++) {
          external_source_codes_linktext.add(displayItem.getHyperlinkText());
     }
 }
-
 %>
                         <tr><td class="standardText">&nbsp;</td></tr>
 			<tr><td class="standardText3"><b>Term and Properties</b></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
-			
 			<tr><td class="standardText"><b>Concept Status:&nbsp;</b><i><%=isActive%></i></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
-			
 			<%
 			for (int i=0; i<properties_to_display.size(); i++) {
 			
