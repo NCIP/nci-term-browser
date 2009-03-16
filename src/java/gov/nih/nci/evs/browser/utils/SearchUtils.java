@@ -715,10 +715,11 @@ public class SearchUtils {
 		return false;
 	}
 
+
 	public static Concept getConceptByCode(String codingSchemeName, String vers, String ltag, String code)
 	{
         try {
-			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			if (lbSvc == null)
 			{
 				System.out.println("lbSvc == null???");
@@ -741,7 +742,7 @@ public class SearchUtils {
 			}
 
 			cns = cns.restrictToCodes(crefs);
-			ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
+			ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, null, false, 1);
 
 			if (matches == null)
 			{
@@ -754,7 +755,11 @@ public class SearchUtils {
 				ResolvedConceptReference ref =
 					(ResolvedConceptReference) matches.enumerateResolvedConceptReference().nextElement();
 
-				Concept entry = ref.getReferencedEntry();
+				org.LexGrid.concepts.Concept entry = new org.LexGrid.concepts.Concept();
+				entry.setId(ref.getConceptCode());
+				entry.setEntityDescription(ref.getEntityDescription());
+
+				//Concept entry = ref.getReferencedEntry();
 				return entry;
 			}
 		 } catch (Exception e) {
@@ -763,6 +768,7 @@ public class SearchUtils {
 		 }
 		 return null;
 	}
+
 
 	public static ConceptReferenceList createConceptReferenceList(String[] codes, String codingSchemeName)
 	{
