@@ -1,7 +1,8 @@
 function redirect_site() {
 
 	var url = document.forms["form_link"].quicklink.value;
-	if (url.length > 1) window.location = url;
+	//if (url.length > 1) window.location = url;
+	window.open (url, "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
 }
 
 function changeMenuStyle(obj, new_style) { 
