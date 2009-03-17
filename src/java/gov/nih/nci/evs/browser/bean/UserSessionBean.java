@@ -119,6 +119,14 @@ public class UserSessionBean extends Object
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
 		String matchText = (String) request.getParameter("matchText");
+		matchText = matchText.trim();
+		//[#19965] Error message is not displayed when Search Criteria is not proivded
+		if (matchText.length() == 0)
+		{
+			String message = "Please enter a search string.";
+			request.getSession().setAttribute("message", message);
+			return "message";
+		}
 		request.getSession().setAttribute("matchText", matchText);
 
 		String matchAlgorithm = (String) request.getParameter("algorithm");
