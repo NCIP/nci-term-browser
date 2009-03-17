@@ -362,13 +362,9 @@
 	}
 	
 	function addTreeBranch(rootNode, nodeInfo) {
-	
-//alert("addTreeBranch " + + nodeInfo.ontology_node_id);
-
-
 		var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
 		var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
-
+		
 		var expand = false;
 		var childNodes = nodeInfo.children_nodes;
 		if (childNodes.length > 0) {
@@ -385,8 +381,6 @@
 			addTreeBranch(newNode, childnodeInfo);
 		}			
 	}	
-	
-	
 	YAHOO.util.Event.addListener(window, "load", init);
 
 </script>
