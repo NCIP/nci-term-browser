@@ -200,24 +200,14 @@
 	
 		tree = new YAHOO.widget.TreeView("treecontainer");
 		var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
-
-//alert("ontology_node_id " + ontology_node_id);
-
-		//var ontology_display_name = document.pg_form.ontology_display_name.value;
-		
-		//var ontology_node_id = null;
 		var ontology_display_name = "NCI Thesaurus";
 		
 		if (ontology_node_id == null || ontology_node_id == "null")
 		{
-		
-//alert("buildTree " );		
 			buildTree(ontology_node_id, ontology_display_name);
 		}
 		else
 		{
-		
-//alert("searchTree " + ontology_node_id);
                         searchTree(ontology_node_id, ontology_display_name);
 		}
 	}
@@ -335,10 +325,8 @@
 							var nodeInfo = respObj.root_nodes[i];
 							//var expand = false;
 							addTreeBranch(root, nodeInfo);
-							//tree.draw();
 						}					
 					}
-					//tree.draw();
 				}
 			}
 			resetTreeStatus();
@@ -367,7 +355,7 @@
 		}
 	}
 	
-	function addTreeBranch(rootNode, nodeInfo) {
+	function addTreeBranch( rootNode, nodeInfo) {
 		var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
 		var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
 		
@@ -382,17 +370,11 @@
 		     newNode.setDynamicLoad(loadNodeData);
 		}
 
-		//if (ontology_node_id == nodeInfo.ontology_node_id)
-		//{
-		//     var el = newNode.getLabelEl()
-	        //     el.style.backgroundColor = "#c5dbfc";
-		//}
-		
 		tree.draw();
 		for (var i=0; i < childNodes.length; i++) {
 			var childnodeInfo = childNodes[i];
-			addTreeBranch(newNode, childnodeInfo);
-		}			
+			addTreeBranch( newNode, childnodeInfo);
+		}
 	}	
 	YAHOO.util.Event.addListener(window, "load", init);
 
