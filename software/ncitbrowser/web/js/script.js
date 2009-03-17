@@ -7,6 +7,10 @@ function redirect_site() {
 	window.open (url, "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
 }
 
+function redirect_site(url) {
+	window.open (url, "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
+}
+
 function changeMenuStyle(obj, new_style) { 
   obj.className = new_style; 
 }
