@@ -1,3 +1,6 @@
+function alert() {} 
+
+
 function redirect_site() {
 
 	var url = document.forms["form_link"].quicklink.value;
