@@ -130,7 +130,7 @@ public class CodingSchemeSelectionMenu implements Constants {
 				try {
 					Util.displayMessage("Enter the number of the Coding scheme to use, then <Enter> :");
 
-					int i = RemoteServerUtil2._serviceUrl.equals(RemoteServerUtil2.URL) ? 6 : 9;
+					int i = RemoteServerUtil2._serviceUrl.equals(RemoteServerUtil2.URL) ? 1 : 1;
                     boolean prompt = true;
 					if (prompt) {
 					    i = Prompt.prompt("Coding scheme", i);

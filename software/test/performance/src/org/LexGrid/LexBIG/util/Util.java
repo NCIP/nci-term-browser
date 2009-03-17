@@ -148,7 +148,7 @@ public class Util {
 	}
 	
     private static DecimalFormat doubleFormatter = new DecimalFormat("0.00");
-	
+    
 	public static class StopWatch {
 	    private long _startMS = 0;
 	    
@@ -164,14 +164,23 @@ public class Util {
             return System.currentTimeMillis() - _startMS;
         }
         
-        public String getResult() {
-            long time = duration();
+        public String getResult(long duration) {
+            long time = duration;
             double timeSec = time/1000.0;
             double timeMin = timeSec/60.0;
             
             return "Run time: " + time + " ms, " + 
                 doubleFormatter.format(timeSec) + " sec, " + 
                 doubleFormatter.format(timeMin) + " min";
+        }
+
+        public String getResult() {
+            return getResult(duration());
+        }
+        
+        public String getSecondString(long time) {
+            double timeSec = time/1000.0;
+            return doubleFormatter.format(timeSec);
         }
 	}
 

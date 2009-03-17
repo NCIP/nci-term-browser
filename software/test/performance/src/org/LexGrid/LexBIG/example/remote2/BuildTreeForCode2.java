@@ -76,6 +76,8 @@ import org.apache.commons.lang.StringUtils;
 public class BuildTreeForCode2 {
     LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
     private static boolean displayConcepts = true;
+    private static StringBuffer excelBuffer = new StringBuffer();
+    private static StringBuffer excelPostBuffer = new StringBuffer();
 
     public static void main(String[] args) {
         try {
@@ -85,16 +87,8 @@ public class BuildTreeForCode2 {
         }
     }
     
-    public static void run() throws Exception {
-        AppService service = AppService.getInstance();
-        LexBIGService lbsvc = AppService.getLBSvc();
-        LexBIGServiceConvenienceMethods lbscm = service.getLBSCM();
-        String scheme = service.getScheme();
-        CodingSchemeVersionOrTag csvt = service.getCSVT();
-        
-        String hierarchyID = "is_a";
-        SupportedHierarchy hierarchyDefn = getSupportedHierarchy(lbsvc, scheme, csvt, hierarchyID);
-        BuildTreeForCode2 test = new BuildTreeForCode2();
+    public static void run() throws LBException {
+        AppService.getInstance();
 
         String code = "C40312";
         code = "C32221";
@@ -103,20 +97,38 @@ public class BuildTreeForCode2 {
             if (code.equalsIgnoreCase("q"))
                 break;
             displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
-            
-            //long ms = System.currentTimeMillis();
-            Util.StopWatch stopWatch = new Util.StopWatch();
-            test.process(code);
-            Util_displayMessage("===========================================================");
-            test.run(lbsvc, lbscm, scheme, csvt, hierarchyDefn, code);
-            //System.out.println("Round trip -- Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
-            System.out.println(stopWatch.getResult() + " * Round trip");
-            System.out.println("");
+            driver(code);
         }
-        System.out.println("Done");
+        println("Done");
     }
     
     public static void run2() throws LBException {
+        AppService.getInstance();
+
+        displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
+        String codes[] = new String[] {
+            "C32221", "C38626", "C13043", "C32949", "C12275",
+            "C25763", "C34070", "C62484", "C34022",
+            "C13024", "C13091", "C32224",
+            
+            "C40312", "C40291", 
+            "C6840", "C66933", 
+            "C6217", "C9370",
+            "C6207",
+            "C34607", // Steve: Favism 
+            "C27380", // Tracy: Thyroid Gland Adenocarcinoma
+            "C69138", // Steve: Adult Classical Hodgkin Lymphoma 
+            "C9125", // Steve: Adult Lymphocyte Depleted Hodgkin Lymphoma 
+          
+        };
+
+        for (String code : codes) {
+            driver(code);
+        }
+        println("Done");
+    }
+
+    public static void driver(String code) throws LBException {
         AppService service = AppService.getInstance();
         LexBIGService lbsvc = AppService.getLBSvc();
         LexBIGServiceConvenienceMethods lbscm = service.getLBSCM();
@@ -127,37 +139,36 @@ public class BuildTreeForCode2 {
         SupportedHierarchy hierarchyDefn = getSupportedHierarchy(lbsvc, scheme, csvt, hierarchyID);
         BuildTreeForCode2 test = new BuildTreeForCode2();
 
-        displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
-        String codes[] = new String[] {
-//            "C32221", "C38626", "C13043", "C32949", "C12275",
-//            "C25763", "C34070", "C62484", "C34022",
-//            "C13024", "C13091", "C32224",
-            
-            "C40312", "C40291", "C6840", "C66933", "C6217", "C9370",
-            "C6207"
-        };
+        excelBuffer.replace(0, excelBuffer.length(), "");
+        excelPostBuffer.replace(0, excelPostBuffer.length(), "");
+        Util.StopWatch stopWatch = new Util.StopWatch();
+        test.process(code);
+        Util_displayMessage("===========================================================");
+        test.run(lbsvc, lbscm, scheme, csvt, hierarchyDefn, code);
+        long duration = stopWatch.duration();
+        println(stopWatch.getResult(duration) + " * Round trip");            
+        excelBuffer.append(stopWatch.getSecondString(duration) + "\t");
+        excelBuffer.append(excelPostBuffer.toString());
+        excelPrintln(excelBuffer.toString());
+        println("");
+    }
+        
+    public static void println(String text) {
+        System.out.println(text);
+    }
 
-        for (String code : codes) {
-            //long ms = System.currentTimeMillis();
-            Util.StopWatch stopWatch = new Util.StopWatch();
-            test.process(code);
-            Util_displayMessage("===========================================================");
-            test.run(lbsvc, lbscm, scheme, csvt, hierarchyDefn, code);
-            //System.out.println("Round trip -- Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
-            System.out.println(stopWatch.getResult() + " * Round trip");
-            System.out.println("");
-        }
-        System.out.println("Done");
+    public static void excelPrintln(String text) {
+        System.out.println(text);
     }
 
     public static void Util_displayAndLogError(String msg, Exception e) {
-		System.out.println(msg);
+		println(msg);
 		e.printStackTrace();
 	}
 
     public static void Util_displayMessage(String msg) {
         if (displayConcepts)
-            System.out.println(msg);
+            println(msg);
 	}
 
 
@@ -207,10 +218,13 @@ public class BuildTreeForCode2 {
             }
 
         } finally {
-//            System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) +
+            long duration = stopWatch.duration();
+//            println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) +
 //                " to resolve " + pathsResolved + " paths from root.");
-            System.out.println(stopWatch.getResult() +
+            println(stopWatch.getResult(duration) +
                     " * To resolve " + pathsResolved + " paths from root.");
+            excelBuffer.append(pathsResolved + "\t");
+            excelBuffer.append(stopWatch.getSecondString(duration) + "\t");
         }
 
         // Print the result ..
@@ -565,9 +579,11 @@ public class BuildTreeForCode2 {
                 Util_displayMessage("Focus code: " + code + ":" + desc);
                 Util_displayMessage("============================================================");
                 if (! displayConcepts) {
-                    System.out.println("============================================================");
-                    System.out.println("Focus code: " + code + ":" + desc);
+                    println("============================================================");
+                    println("Focus code: " + code + ":" + desc);
                 }
+                excelBuffer.append(code + "\t");
+                excelPostBuffer.append(desc + "\t");
                 
                 // Iterate through all hierarchies ...
                 String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -587,8 +603,10 @@ public class BuildTreeForCode2 {
                 }
             //}
         } finally {
-            //System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
-            System.out.println(stopWatch.getResult() + " * Calculate is_a");
+            long duration = stopWatch.duration();
+            //println("Run time (ms): " + (System.currentTimeMillis() - ms));
+            println(stopWatch.getResult(duration) + " * Calculate is_a");
+            excelBuffer.append(stopWatch.getSecondString(duration) + "\t");
         }
     }
 
