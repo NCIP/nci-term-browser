@@ -17,7 +17,7 @@
 
 <html>
 <head>
-<title>NCI Thesaurus Browser Home</title>
+<title>NCI Thesaurus Hierarchy</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
 
@@ -333,11 +333,10 @@
 							var nodeInfo = respObj.root_nodes[i];
 							//var expand = false;
 							addTreeBranch(root, nodeInfo);
+							//tree.draw();
 						}					
 					}
-					
-					
-					tree.draw();
+					//tree.draw();
 				}
 			}
 			resetTreeStatus();
@@ -370,6 +369,7 @@
 	function addTreeBranch(rootNode, nodeInfo) {
 	
 //alert("addTreeBranch " + + nodeInfo.ontology_node_id);
+
 
 		var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
 		var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
