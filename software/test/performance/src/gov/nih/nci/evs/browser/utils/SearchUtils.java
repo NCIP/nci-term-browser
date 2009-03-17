@@ -674,7 +674,6 @@ public class SearchUtils {
 			}
 
 			LocalNameList contextList = null;
-			//Util.StopWatch stopWatch = new Util.StopWatch();
             cns = cns.restrictToMatchingProperties(propertyList,
                                            propertyTypes,
                                            sourceList,
@@ -832,7 +831,6 @@ public class SearchUtils {
 		}
 		try {
 			int iteration = 0;
-	        int iteration2 = 0;
 
 			Util.StopWatch stopWatch = new Util.StopWatch();
 			while (iterator.hasNext())
@@ -843,7 +841,6 @@ public class SearchUtils {
 				ResolvedConceptReference[] rcra = rcrl.getResolvedConceptReference();
 				for (int i=0; i<rcra.length; i++)
 				{
-				    iteration2++;
 					ResolvedConceptReference rcr = rcra[i];
 
                     //org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
