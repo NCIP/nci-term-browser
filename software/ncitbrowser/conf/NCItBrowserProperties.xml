@@ -14,7 +14,7 @@
 
       <DisplayItem>
             <propertyName>ALT_DEFINITION</propertyName>
-            <itemLabel>Definition</itemLabel>
+            <itemLabel>Alternative Definition</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
@@ -22,7 +22,7 @@
 
       <DisplayItem>
             <propertyName>ALT_LONG_DEFINITION</propertyName>
-            <itemLabel>Definition</itemLabel>
+            <itemLabel>Alternative Long Definition</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
