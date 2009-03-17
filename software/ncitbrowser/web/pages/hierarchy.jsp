@@ -112,8 +112,6 @@
 
 			showTreeLoadingStatus();
 			var ontology_source = null;//document.pg_form.ontology_source.value;
-			
-			
 			var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=build_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
 
 		}
@@ -162,7 +160,6 @@
 		if (ontology_node_id!= '') {
 			showTreeLoadingStatus();
 			var ontology_source = null;//document.pg_form.ontology_source.value;
-
 			var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=reset_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,resetTreeCallback);
 		}
 	}
@@ -359,8 +356,6 @@
 
 			showTreeLoadingStatus();
 			var ontology_source = null;//document.pg_form.ontology_source.value;
-			
-			
 			var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=search_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
 
 		}
