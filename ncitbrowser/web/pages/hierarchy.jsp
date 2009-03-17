@@ -259,7 +259,12 @@
 		treeStatusDiv.render();
 	}
 
-
+	function showSearchingTreeStatus() {
+		treeStatusDiv.setBody("<img src='<%= request.getContextPath() %>/images/loading.gif'/> <span class='instruction_text'>Searching tree... Please wait.</span>");
+		treeStatusDiv.show();
+		treeStatusDiv.render();
+	}
+	
 	function loadNodeData(node, fnLoadComplete) {
 		var id = node.data.id;
 
@@ -354,7 +359,8 @@
 		if (ontology_display_name!='') {
 			resetEmptyRoot();
 
-			showTreeLoadingStatus();
+			//showTreeLoadingStatus();
+			showSearchingTreeStatus();
 			var ontology_source = null;//document.pg_form.ontology_source.value;
 			var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=search_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
 
@@ -367,13 +373,20 @@
 		
 		var expand = false;
 		var childNodes = nodeInfo.children_nodes;
+	
 		if (childNodes.length > 0) {
 			expand = true;
 		}
 		var newNode = new YAHOO.widget.TextNode(newNodeData, rootNode, expand);
 		if (nodeInfo.ontology_node_child_count > 0) {
-			newNode.setDynamicLoad(loadNodeData);
+		     newNode.setDynamicLoad(loadNodeData);
 		}
+
+		//if (ontology_node_id == nodeInfo.ontology_node_id)
+		//{
+		//     var el = newNode.getLabelEl()
+	        //     el.style.backgroundColor = "#c5dbfc";
+		//}
 		
 		tree.draw();
 		for (var i=0; i < childNodes.length; i++) {
