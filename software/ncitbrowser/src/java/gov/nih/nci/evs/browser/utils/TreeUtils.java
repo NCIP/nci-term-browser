@@ -1,4 +1,3 @@
-
 package gov.nih.nci.evs.browser.utils;
 
 /*
@@ -697,7 +696,7 @@ public class TreeUtils {
 		 url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
 
          String scheme = "NCI Thesaurus";
-         String version = null;//"08.06d";
+         String version = null;
          String code = "C26709";
 
          TreeUtils test = new TreeUtils();
@@ -710,31 +709,4 @@ public class TreeUtils {
 
 	 }
 }
-
-
-
-/*
-ResolvedConceptReferenceList resolveAsList(ConceptReference graphFocus,
-                                           boolean resolveForward,
-                                           boolean resolveBackward,
-                                           int resolveCodedEntryDepth,
-                                           int resolveAssociationDepth,
-                                           LocalNameList propertyNames,
-                                           CodedNodeSet.PropertyType[] propertyTypes,
-                                           SortOptionList sortOptions,
-                                           LocalNameList filterOptions,
-                                           int maxToReturn,
-                                           boolean keepLastAssociationLevelUnresolved)
-
-Graph
-   Restricted Graph
-       ResolvedConceptReferenceList by ResolveAsList
-           ResolvedConceptReference (node)
-                AssociationList
-                      Association
-                            AssociatedConcept
-                                    TreeItem
-
-
-*/
 

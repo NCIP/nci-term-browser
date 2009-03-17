@@ -246,24 +246,30 @@ public class CacheController
     private JSONArray List2JSONArray(List list) {
         JSONArray nodesArray = null;
         try {
-
 			if (list != null)
 			{
 				nodesArray = new JSONArray();
 				for (int i=0; i<list.size(); i++) {
-				  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
-				  Concept concept = node.getReferencedEntry();
-				  int childCount = 1; // assumption
+					  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+					  int childCount = 1;
+					  try {
 
-				  JSONObject nodeObject = new JSONObject();
-				  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
+						  JSONObject nodeObject = new JSONObject();
+						  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
+						  String name = node.getEntityDescription().getContent();
 
-				  String name = concept.getEntityDescription().getContent();
-				  nodeObject.put(ONTOLOGY_NODE_NAME, name);
-				  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
-				  nodesArray.put(nodeObject);
+						  nodeObject.put(ONTOLOGY_NODE_NAME, name);
+						  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+						  nodeObject.put(CHILDREN_NODES, new JSONArray());
+						  nodesArray.put(nodeObject);
+
+					  } catch (Exception ex) {
+						  ex.printStackTrace();
+					  }
 				}
 			}
+
+
 		} catch (Exception ex) {
 
 		}
@@ -340,41 +346,7 @@ public class CacheController
 
     public JSONArray getPathsToRoots(String ontology_display_name, String version, String node_id, boolean fromCache)
     {
-		JSONArray rootsArray = new JSONArray();
-		List list = null;
-		try {
-			//list = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
-			list = new DataUtils().getHierarchyRoots(ontology_display_name, version, null);
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		if (list != null)
-		{
-			for (int i=0; i<list.size(); i++) {
-				  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
-				  int childCount = 1;
-				  try {
-
-					  JSONObject nodeObject = new JSONObject();
-					  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
-					  Concept concept = SearchUtils.getConceptByCode(ontology_display_name, null, null, node.getConceptCode());
-					  //String pt = getPreferredName(concept);
-					  String name = concept.getEntityDescription().getContent();
-					  //nodeObject.put(ONTOLOGY_NODE_NAME, pt);
-					  nodeObject.put(ONTOLOGY_NODE_NAME, name);
-					  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
-					  nodeObject.put(CHILDREN_NODES, new JSONArray());
-					  rootsArray.put(nodeObject);
-
-				  } catch (Exception ex) {
-					  ex.printStackTrace();
-				  }
-			}
-		}
-
-		//JSONObject json = new JSONObject();
+		JSONArray rootsArray = getRootConcepts(ontology_display_name, version, true);
 		try {
 			TreeUtils util = new TreeUtils();
 			HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
@@ -385,13 +357,10 @@ public class CacheController
 
 			JSONArray nodesArray = getNodesArray(ti);
 			replaceJSONObjects(rootsArray, nodesArray);
-			//json.put("root_nodes", rootsArray);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		//response.getWriter().write(json.toString());
-		//System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
 		return rootsArray;
     }
 
