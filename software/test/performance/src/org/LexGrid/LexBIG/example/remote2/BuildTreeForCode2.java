@@ -75,17 +75,80 @@ import org.apache.commons.lang.StringUtils;
  */
 public class BuildTreeForCode2 {
     LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
+    private static boolean displayConcepts = true;
 
-    public BuildTreeForCode2() {
-        super();
+    public static void main(String[] args) {
+        try {
+            BuildTreeForCode2.run();
+        } catch (Exception e) {
+            Util_displayAndLogError("REQUEST FAILED !!!", e);
+        }
     }
+    
+    public static void run() throws Exception {
+        AppService service = AppService.getInstance();
+        LexBIGService lbsvc = AppService.getLBSvc();
+        LexBIGServiceConvenienceMethods lbscm = service.getLBSCM();
+        String scheme = service.getScheme();
+        CodingSchemeVersionOrTag csvt = service.getCSVT();
+        
+        String hierarchyID = "is_a";
+        SupportedHierarchy hierarchyDefn = getSupportedHierarchy(lbsvc, scheme, csvt, hierarchyID);
+        BuildTreeForCode2 test = new BuildTreeForCode2();
 
-    /**
-     * Entry point for processing.
-     *
-     * @param args
-     */
+        String code = "C40312";
+        code = "C32221";
+        while (true) {
+            code = Prompt.prompt("Code (q to Quit)", code).toUpperCase();
+            if (code.equalsIgnoreCase("q"))
+                break;
+            displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
+            
+            //long ms = System.currentTimeMillis();
+            Util.StopWatch stopWatch = new Util.StopWatch();
+            test.process(code);
+            Util_displayMessage("===========================================================");
+            test.run(lbsvc, lbscm, scheme, csvt, hierarchyDefn, code);
+            //System.out.println("Round trip -- Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
+            System.out.println(stopWatch.getResult() + " * Round trip");
+            System.out.println("");
+        }
+        System.out.println("Done");
+    }
+    
+    public static void run2() throws LBException {
+        AppService service = AppService.getInstance();
+        LexBIGService lbsvc = AppService.getLBSvc();
+        LexBIGServiceConvenienceMethods lbscm = service.getLBSCM();
+        String scheme = service.getScheme();
+        CodingSchemeVersionOrTag csvt = service.getCSVT();
+        
+        String hierarchyID = "is_a";
+        SupportedHierarchy hierarchyDefn = getSupportedHierarchy(lbsvc, scheme, csvt, hierarchyID);
+        BuildTreeForCode2 test = new BuildTreeForCode2();
 
+        displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
+        String codes[] = new String[] {
+//            "C32221", "C38626", "C13043", "C32949", "C12275",
+//            "C25763", "C34070", "C62484", "C34022",
+//            "C13024", "C13091", "C32224",
+            
+            "C40312", "C40291", "C6840", "C66933", "C6217", "C9370",
+            "C6207"
+        };
+
+        for (String code : codes) {
+            //long ms = System.currentTimeMillis();
+            Util.StopWatch stopWatch = new Util.StopWatch();
+            test.process(code);
+            Util_displayMessage("===========================================================");
+            test.run(lbsvc, lbscm, scheme, csvt, hierarchyDefn, code);
+            //System.out.println("Round trip -- Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
+            System.out.println(stopWatch.getResult() + " * Round trip");
+            System.out.println("");
+        }
+        System.out.println("Done");
+    }
 
     public static void Util_displayAndLogError(String msg, Exception e) {
 		System.out.println(msg);
@@ -110,7 +173,8 @@ public class BuildTreeForCode2 {
         Util_displayMessage("============================================================");
 
         TreeItem ti = new TreeItem("<Root>", "Root node");
-        long ms = System.currentTimeMillis();
+        //long ms = System.currentTimeMillis();
+        Util.StopWatch stopWatch = new Util.StopWatch();
         int pathsResolved = 0;
         try {
 
@@ -143,8 +207,10 @@ public class BuildTreeForCode2 {
             }
 
         } finally {
-            System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) +
-                " to resolve " + pathsResolved + " paths from root.");
+//            System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms) +
+//                " to resolve " + pathsResolved + " paths from root.");
+            System.out.println(stopWatch.getResult() +
+                    " * To resolve " + pathsResolved + " paths from root.");
         }
 
         // Print the result ..
@@ -467,7 +533,8 @@ public class BuildTreeForCode2 {
 
     public void process(String code) throws LBException {
         //CodingSchemeSummary css = Util.promptForCodeSystem();
-        long ms = System.currentTimeMillis();
+        // long ms = System.currentTimeMillis();
+        Util.StopWatch stopWatch = new Util.StopWatch();
         try {
             //if (css != null) {
                 //LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
@@ -497,7 +564,11 @@ public class BuildTreeForCode2 {
                 Util_displayMessage("============================================================");
                 Util_displayMessage("Focus code: " + code + ":" + desc);
                 Util_displayMessage("============================================================");
-
+                if (! displayConcepts) {
+                    System.out.println("============================================================");
+                    System.out.println("Focus code: " + code + ":" + desc);
+                }
+                
                 // Iterate through all hierarchies ...
                 String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
                 for (int i = 0; i < hierarchyIDs.length; i++) {
@@ -505,6 +576,7 @@ public class BuildTreeForCode2 {
                     Util_displayMessage("------------------------------------------------------------");
                     Util_displayMessage("Hierarchy ID: " + hierarchyID);
                     Util_displayMessage("------------------------------------------------------------");
+
                     AssociationList associations = lbscm.getHierarchyPathToRoot(scheme, csvt, hierarchyID, code, false,
                             LexBIGServiceConvenienceMethods.HierarchyPathResolveOption.ALL, null);
                     for (int j = 0; j < associations.getAssociationCount(); j++) {
@@ -515,7 +587,8 @@ public class BuildTreeForCode2 {
                 }
             //}
         } finally {
-            System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+            //System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+            System.out.println(stopWatch.getResult() + " * Calculate is_a");
         }
     }
 
@@ -548,76 +621,6 @@ public class BuildTreeForCode2 {
                     printChain(nextLevel.getAssociation(j), depth + 1);
         }
     }
-
-    private static boolean displayConcepts = true;
-    
-    public static void run() throws Exception {
-        AppService service = AppService.getInstance();
-        LexBIGService lbsvc = AppService.getLBSvc();
-        LexBIGServiceConvenienceMethods lbscm = service.getLBSCM();
-        String scheme = service.getScheme();
-        CodingSchemeVersionOrTag csvt = service.getCSVT();
-        
-        String hierarchyID = "is_a";
-        SupportedHierarchy hierarchyDefn = getSupportedHierarchy(lbsvc, scheme, csvt, hierarchyID);
-        BuildTreeForCode2 test = new BuildTreeForCode2();
-
-        String code = "C40312";
-        code = "C32221";
-        while (true) {
-            code = Prompt.prompt("Code (q to Quit)", code).toUpperCase();
-            if (code.equalsIgnoreCase("q"))
-                break;
-            displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
-            
-            long ms = System.currentTimeMillis();
-            test.process(code);
-            System.out.println("===========================================================");
-            test.run(lbsvc, lbscm, scheme, csvt, hierarchyDefn, code);
-            System.out.println("Round trip -- Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
-            System.out.println("");
-        }
-        System.out.println("Done");
-    }
-    
-    public static void run2() throws LBException {
-        AppService service = AppService.getInstance();
-        LexBIGService lbsvc = AppService.getLBSvc();
-        LexBIGServiceConvenienceMethods lbscm = service.getLBSCM();
-        String scheme = service.getScheme();
-        CodingSchemeVersionOrTag csvt = service.getCSVT();
-        
-        String hierarchyID = "is_a";
-        SupportedHierarchy hierarchyDefn = getSupportedHierarchy(lbsvc, scheme, csvt, hierarchyID);
-        BuildTreeForCode2 test = new BuildTreeForCode2();
-
-        displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
-        String codes[] = new String[] {
-            "C32221", "C38626", "C13043", "C32949", "C12275",
-            "C25763", "C34070", "C62484", "C34022",
-            "C13024", "C13091", "C32224",
-        };
-
-        for (String code : codes) {
-            long ms = System.currentTimeMillis();
-            test.process(code);
-            System.out.println("===========================================================");
-            test.run(lbsvc, lbscm, scheme, csvt, hierarchyDefn, code);
-            System.out.println("Round trip -- Run time (milliseconds): " + (System.currentTimeMillis() - ms) );
-            System.out.println("");
-        }
-        System.out.println("Done");
-    }
-
-    public static void main(String[] args) {
-        try {
-            BuildTreeForCode2.run();
-        } catch (Exception e) {
-            Util_displayAndLogError("REQUEST FAILED !!!", e);
-        }
-    }
-
-
 
     ///////////////////////////////////////////////////////
     // Helper classes
