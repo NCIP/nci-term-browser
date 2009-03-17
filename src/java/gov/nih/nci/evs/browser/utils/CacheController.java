@@ -187,12 +187,14 @@ public class CacheController
             map = new TreeUtils().getSubconcepts(scheme, version, code);
             nodeArray = HashMap2JSONArray(map);
 
-            try {
-				Element element = new Element(key, nodeArray);
-	            cache.put(element);
-			} catch (Exception ex) {
+            if (fromCache) {
+				try {
+					Element element = new Element(key, nodeArray);
+					cache.put(element);
+				} catch (Exception ex) {
 
-			}
+				}
+		    }
         }
         else
         {
@@ -229,8 +231,12 @@ public class CacheController
             try {
 				list = new DataUtils().getHierarchyRoots(scheme, version, null);
 				nodeArray = List2JSONArray(list);
-				Element element = new Element(key, nodeArray);
-	            cache.put(element);
+
+				if (fromCache)
+				{
+					Element element = new Element(key, nodeArray);
+					cache.put(element);
+			    }
 			} catch (Exception ex) {
                 ex.printStackTrace();
 			}
@@ -346,7 +352,7 @@ public class CacheController
 
     public JSONArray getPathsToRoots(String ontology_display_name, String version, String node_id, boolean fromCache)
     {
-		JSONArray rootsArray = getRootConcepts(ontology_display_name, version, true);
+		JSONArray rootsArray = getRootConcepts(ontology_display_name, version, false);
 		try {
 			TreeUtils util = new TreeUtils();
 			HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
