@@ -243,6 +243,7 @@ public class TreeUtils {
         ti.addChild(branchNavText, branchPoint);
     }
 
+
     /**
      * Populate child nodes for a single branch of the tree,
      * and indicates whether further expansion (to grandchildren)
@@ -262,13 +263,8 @@ public class TreeUtils {
         CodedNodeGraph cng = lbsvc.getNodeGraph(scheme, csvt, null);
         ConceptReference focus = Constructors.createConceptReference(branchRootCode, scheme);
         cng = cng.restrictToAssociations(Constructors.createNameAndValueList(associationsToNavigate), null);
-/*
         ResolvedConceptReferenceList branch = cng.resolveAsList(focus, associationsNavigatedFwd,
                 !associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
-*/
-        // to be reversed after loading the patch
-        ResolvedConceptReferenceList branch = cng.resolveAsList(focus, associationsNavigatedFwd,
-                !associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
 
         // The resolved branch will be represented by the first node in
         // the resolved list.  The node will be subdivided by source or
