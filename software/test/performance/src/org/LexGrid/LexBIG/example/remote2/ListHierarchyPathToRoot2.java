@@ -107,9 +107,13 @@ public class ListHierarchyPathToRoot2 implements Constants {
     public void run2() throws LBException {
         String codes[] = new String[] {
             //"C13043", "C32949", "C12275", "C12753", "C38366", "C69305"
-            "C32221", "C38626", "C13043", "C32949", "C12275",
-            "C25763", "C34070", "C62484", "C34022",
-            "C13024", "C13091", "C32224",
+
+            //"C32221", "C38626", "C13043", "C32949", "C12275",
+            //"C25763", "C34070", "C62484", "C34022",
+            //"C13024", "C13091", "C32224",
+            
+            "C40312", "C40291", "C6840", "C66933", "C6217", "C9370",
+            "C6207"
         };
         
         boolean displayConcepts = Prompt.prompt("Display Concepts", true);

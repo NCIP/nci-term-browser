@@ -20,6 +20,7 @@ public class Main2 implements Constants {
             println(INDENT + "3) " + "ListHierarchyPathToRoot2");
             println(INDENT + "4) " + "MetaMatch2");
             println(INDENT + "5) " + "SearchUtils") ;
+            println(INDENT + "6) " + "BuildTreeForCode2") ;
             println(INDENT + "0) " + "Quit");
             println(SEPARATOR2);
             i = Prompt.prompt("Choose", i);
@@ -32,6 +33,7 @@ public class Main2 implements Constants {
                 case 3: new ListHierarchyPathToRoot2().run(); break;
                 case 4: new MetaMatch2().run(); break;
                 case 5: SearchUtils.main(new String[] { null }); break;
+                case 6: BuildTreeForCode2.run(); break;
                 default: println("Invalid choice.  Try again."); break;
                 }
                 println("");
