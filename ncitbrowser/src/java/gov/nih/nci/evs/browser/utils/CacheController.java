@@ -362,7 +362,6 @@ public class CacheController
 			TreeItem ti = (TreeItem) hmap.get(code); //TreeItem ti = new TreeItem("<Root>", "Root node");
 
 			//JSONArray nodesArray = getNodesArray(ti);
-			//KLO testing
 			JSONArray nodesArray = getNodesArray(node_id, ti);
 			replaceJSONObjects(rootsArray, nodesArray);
 		}
@@ -415,42 +414,6 @@ public class CacheController
 		}
 	}
 
-
-
-    private JSONArray getNodesArray(TreeItem ti) {
-		JSONArray nodesArray = new JSONArray();
-		for (String association : ti.assocToChildMap.keySet()) {
-			List<TreeItem> children = ti.assocToChildMap.get(association);
-
-			//Collections.sort(children);
-
-			SortUtils.quickSort(children);
-
-			//for (TreeItem childItem : children) {
-			for (int i=0; i<children.size(); i++) {
-				TreeItem childItem = (TreeItem) children.get(i);
-				int knt = 0;
-				if (childItem.expandable)
-				{
-					knt = 1;
-				}
-
-				JSONObject nodeObject = new JSONObject();
-				try {
-					nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
-					nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
-					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
-					nodeObject.put(CHILDREN_NODES, getNodesArray(childItem));
-					nodesArray.put(nodeObject);
-				} catch (Exception ex) {
-
-				}
-			}
-		}
-		return nodesArray;
-	}
-
-
     private JSONArray getNodesArray(String node_id, TreeItem ti) {
 		JSONArray nodesArray = new JSONArray();
 		if (node_id.compareTo(ti.code) == 0)
@@ -459,8 +422,10 @@ public class CacheController
 		}
 		for (String association : ti.assocToChildMap.keySet()) {
 			List<TreeItem> children = ti.assocToChildMap.get(association);
-			Collections.sort(children);
-			for (TreeItem childItem : children) {
+
+			SortUtils.quickSort(children);
+			for (int i=0; i<children.size(); i++) {
+                TreeItem childItem = (TreeItem) children.get(i);
 				int knt = 0;
 				if (childItem.expandable)
 				{
@@ -473,9 +438,7 @@ public class CacheController
 					nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
 					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
 					//nodeObject.put(CHILDREN_NODES, getNodesArray(childItem));
-
 					nodeObject.put(CHILDREN_NODES, getNodesArray(node_id, childItem));
-
 					nodesArray.put(nodeObject);
 				} catch (Exception ex) {
 
@@ -484,7 +447,5 @@ public class CacheController
 		}
 		return nodesArray;
 	}
-
-
 }
 
