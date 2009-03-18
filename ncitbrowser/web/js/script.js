@@ -1,4 +1,11 @@
-function alert() {} 
+//function alert() {} 
+
+function checkEnter()   
+{   
+        var e = window.event;
+	var key = e.keyCode;   
+	if(key == 13) document.forms["searchTerm"].elements["search"].click(); 
+}
 
 function redirect_site() {
 

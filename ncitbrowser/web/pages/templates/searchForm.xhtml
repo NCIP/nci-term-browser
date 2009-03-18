@@ -6,21 +6,10 @@
         <SPAN class="StandardFont"><FONT COLOR="white"></font></SPAN>
 <%
 String match_text = (String) request.getSession().getAttribute("matchText");
-if (match_text == null)
-{
+if (match_text == null) match_text = "";
 %>
-<input CLASS="SearchField" size="22" name="matchText" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
-<%
-}
-else
-{
-%>
-<input CLASS="SearchField" size="22" name="matchText" value="<%=match_text%>"
-    onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
-<%
-}
-%>
-
+    <input CLASS="SearchField" size="22" name="matchText" value="<%=match_text%>"
+        onFocus="active = true" onBlur="active = false" onKeyPress="checkEnter()" />
 
 <h:commandButton
     id="search"
