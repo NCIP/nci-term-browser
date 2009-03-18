@@ -107,19 +107,21 @@ public class BuildTreeForCode2 {
 
         displayConcepts = Prompt.prompt("Display Concepts", displayConcepts);
         String codes[] = new String[] {
-            "C32221", "C38626", "C13043", "C32949", "C12275",
-            "C25763", "C34070", "C62484", "C34022",
-            "C13024", "C13091", "C32224",
-            
-            "C40312", "C40291", 
-            "C6840", "C66933", 
-            "C6217", "C9370",
-            "C6207",
-            "C34607", // Steve: Favism 
-            "C27380", // Tracy: Thyroid Gland Adenocarcinoma
-            "C69138", // Steve: Adult Classical Hodgkin Lymphoma 
-            "C9125", // Steve: Adult Lymphocyte Depleted Hodgkin Lymphoma 
+//            "C32221", "C38626", "C13043", "C32949", "C12275",
+//            "C25763", "C34070", "C62484", "C34022",
+//            "C13024", "C13091", "C32224",
+//            
+//            "C40312", "C40291", 
+//            "C6840", "C66933", 
+//            "C6217", "C9370",
+//            "C6207",
+//            "C34607", // Steve: Favism 
+//            "C27380", // Tracy: Thyroid Gland Adenocarcinoma
+//            "C69138", // Steve: Adult Classical Hodgkin Lymphoma 
+//            "C9125", // Steve: Adult Lymphocyte Depleted Hodgkin Lymphoma 
           
+            "C61007", // has 524 siblings
+            "C11965", // a subconcept of "C61007
         };
 
         for (String code : codes) {
