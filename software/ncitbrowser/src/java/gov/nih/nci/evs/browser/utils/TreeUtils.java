@@ -658,7 +658,9 @@ public class TreeUtils {
 						AssociatedConcept branchItemNode = branchNodes.next();
                         child_list.add(branchItemNode);
 					}
+
 					SortUtils.quickSort(child_list);
+
 					for (int i=0; i<child_list.size(); i++) {
 					    AssociatedConcept branchItemNode = (AssociatedConcept) child_list.get(i);
 						String branchItemCode = branchItemNode.getConceptCode();
