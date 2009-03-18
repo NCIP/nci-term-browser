@@ -82,7 +82,7 @@ public class MetaMatch2 implements Constants {
     public MetaMatch2() {
         AppService service = AppService.getInstance();
         _css = service.getCSS();
-        _lbSvc = service.getLBSvc();
+        _lbSvc = AppService.getLBSvc();
         _scheme = service.getScheme();
         _csvt = service.getCSVT();
     }
