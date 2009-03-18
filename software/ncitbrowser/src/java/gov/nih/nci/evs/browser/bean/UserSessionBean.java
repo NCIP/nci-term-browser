@@ -150,15 +150,26 @@ public class UserSessionBean extends Object
 		Vector<org.LexGrid.concepts.Concept> v = new SearchUtils().searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		//SortUtils.quickSort(v);
 
-        if (v != null && v.size() > 0)
+        if (v != null && v.size() > 1)
         {
         	request.getSession().setAttribute("search_results", v);
         	String match_size = Integer.toString(v.size());
         	request.getSession().setAttribute("match_size", match_size);
         	request.getSession().setAttribute("page_string", "1");
         	request.getSession().setAttribute("selectedResultsPerPage", "50");
+        	//request.getSession().setAttribute("singleton", "false");
         	return "search_results";
 		}
+
+        else if (v != null && v.size() == 1)
+        {
+        	request.getSession().setAttribute("singleton", "true");
+        	request.getSession().setAttribute("dictionary", "NCI Thesaurus");
+        	Concept c = (Concept) v.elementAt(0);
+        	request.getSession().setAttribute("code", c.getId());
+        	return "concept_details";
+		}
+
 
 		String message = "No match found.";
 		request.getSession().setAttribute("message", message);
