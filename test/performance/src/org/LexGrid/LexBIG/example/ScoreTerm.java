@@ -52,10 +52,10 @@ import org.apache.commons.collections.bidimap.TreeBidiMap;
 public class ScoreTerm {
 
 	// Inner class used to manage and sort results. 
-	protected class ScoredTerm implements Comparable {
+	protected class ScoredTerm implements Comparable<ScoredTerm> {
 		String term;
 		float score;
-		public int compareTo(Object o) {
+		public int compareTo(ScoredTerm o) {
 			if (o instanceof ScoredTerm) {
 				ScoredTerm st = (ScoredTerm) o;
 				int i = Float.valueOf(st.score).compareTo(Float.valueOf(score));
@@ -121,7 +121,7 @@ public class ScoreTerm {
 		CodingSchemeSummary css = Util.promptForCodeSystem();
 		if (css != null) {
 			// Determine the set of individual words to compare against.
-			SortedSet compareWords = toWords(term);
+			SortedSet<String> compareWords = toWords(term);
 	
 			// Create a bucket to store results.
 			// Sort the results by score (highest score first) and code key.
@@ -206,10 +206,10 @@ public class ScoreTerm {
 	 * @return The score (a percentage); a higher value indicates a
 	 * stronger match.
 	 */
-	protected float score(SortedSet wordsToCompare, SortedSet wordsToCompareAgainst) {
+	protected float score(SortedSet<String> wordsToCompare, SortedSet<String> wordsToCompareAgainst) {
 		int totalWords = wordsToCompare.size();
 		int matchWords = 0;
-		for (Iterator words = wordsToCompare.iterator(); words.hasNext(); ) {
+		for (Iterator<String> words = wordsToCompare.iterator(); words.hasNext(); ) {
 			String word = words.next().toString();
 			if (wordsToCompareAgainst.contains(word))
 				matchWords++;
@@ -269,8 +269,8 @@ public class ScoreTerm {
 	 * @return SortedSet
 	 */
 	@SuppressWarnings("unchecked")
-	protected SortedSet toWords(String s) {
-		SortedSet words = new TreeSet();
+	protected SortedSet<String> toWords(String s) {
+		SortedSet<String> words = new TreeSet<String>();
 		StringTokenizer st = new StringTokenizer(s, " \t\n\r\f,:+-;");
 		while (st.hasMoreTokens())
 			words.add(st.nextToken().toLowerCase());

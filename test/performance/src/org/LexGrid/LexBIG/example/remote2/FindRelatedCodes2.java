@@ -42,7 +42,7 @@ public class FindRelatedCodes2 implements Constants {
     public FindRelatedCodes2() throws LBException {
         AppService service = AppService.getInstance();
         _css = service.getCSS();
-        _lbSvc = service.getLBSvc();
+        _lbSvc = AppService.getLBSvc();
         _scheme = service.getScheme();
         _csvt = service.getCSVT();
     }
