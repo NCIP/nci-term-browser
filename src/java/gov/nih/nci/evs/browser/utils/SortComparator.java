@@ -13,6 +13,8 @@ import org.LexGrid.concepts.Concept;
 import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 
+import gov.nih.nci.evs.browser.utils.TreeUtils.TreeItem;
+
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -85,6 +87,13 @@ public class SortComparator implements Comparator<Object>{
 			ResolvedConceptReference ac = (ResolvedConceptReference) c;
 			if (sort_option == SORT_BY_CODE) return ac.getConceptCode();
 			return ac.getEntityDescription().getContent();
+		}
+
+	    else if (c instanceof TreeItem)
+	    {
+			TreeItem ti = (TreeItem) c;
+			if (sort_option == SORT_BY_CODE) return ti.code;
+			return ti.text;
 		}
 
 	    else if (c instanceof String)

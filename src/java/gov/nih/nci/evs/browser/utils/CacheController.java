@@ -421,8 +421,14 @@ public class CacheController
 		JSONArray nodesArray = new JSONArray();
 		for (String association : ti.assocToChildMap.keySet()) {
 			List<TreeItem> children = ti.assocToChildMap.get(association);
-			Collections.sort(children);
-			for (TreeItem childItem : children) {
+
+			//Collections.sort(children);
+
+			SortUtils.quickSort(children);
+
+			//for (TreeItem childItem : children) {
+			for (int i=0; i<children.size(); i++) {
+				TreeItem childItem = (TreeItem) children.get(i);
 				int knt = 0;
 				if (childItem.expandable)
 				{

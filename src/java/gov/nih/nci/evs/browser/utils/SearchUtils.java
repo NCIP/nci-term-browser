@@ -649,7 +649,8 @@ public class SearchUtils {
 											    java.lang.String matchAlgorithm,
 											    java.lang.String language)
 	{
-	    CodedNodeSet cns = null;
+
+	     CodedNodeSet cns = null;
          ResolvedConceptReferencesIterator iterator = null;
          try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -1023,7 +1024,7 @@ public class SearchUtils {
 		}
 
         matchText = matchText.trim();
-        matchText = preprocessSearchString(matchText);
+        //matchText = preprocessSearchString(matchText);
 
         if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0)
         {
