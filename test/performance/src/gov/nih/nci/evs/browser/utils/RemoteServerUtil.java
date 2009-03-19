@@ -57,7 +57,7 @@ public class RemoteServerUtil {
     {
 		// default URL (to be read from a property file)
 		String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
-        url = null; //DYEE
+        //url = null; //DYEE
         /* DYEE
 		NCItBrowserProperties properties = null;
 		try {
