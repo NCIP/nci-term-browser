@@ -27,5 +27,6 @@
 	<classpathentry kind="lib" path="lib/spring.jar"/>
 	<classpathentry kind="lib" path="lib/umlslicense.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.7-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

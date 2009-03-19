@@ -29,6 +29,7 @@ set CLASSPATH=%CLASSPATH%;%lib%\sdk-client-framework.jar
 set CLASSPATH=%CLASSPATH%;%lib%\spring.jar
 set CLASSPATH=%CLASSPATH%;%lib%\umlslicense.jar
 set CLASSPATH=%CLASSPATH%;%lib%\xercesImpl.jar
+set CLASSPATH=%CLASSPATH%;%lib%\mysql-connector-java-5.1.7-bin.jar
 set CLASSPATH=%CLASSPATH%;%lib2%\lexBigExamples.jar
 
 set java=java
