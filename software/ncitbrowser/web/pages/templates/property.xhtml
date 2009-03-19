@@ -164,6 +164,15 @@ for (int i=0; i<displayItemList.size(); i++) {
 						      value_wo_qualifier = value.substring(0, n);
 						      String qualifier = value.substring(n+1, value.length());
 						      value = value_wo_qualifier + " (Source: " + qualifier + ")";
+
+						      if (propName.compareTo("DEFINITION") == 0)
+						      {
+							   num_definitions++;
+						      }
+						      else if (propName.compareTo("ALT_DEFINITION") == 0)
+						      {
+							   num_alt_definitions++;
+						      }						      
 						  }						
 						
 						if (k == 0) {
