@@ -1,16 +1,7 @@
 //function alert() {} 
 
-function checkEnter()   
-{   
-        var e = window.event;
-	var key = e.keyCode;   
-	if(key == 13) document.forms["searchTerm"].elements["search"].click(); 
-}
-
 function redirect_site() {
-
 	var url = document.forms["form_link"].quicklink.value;
-	//if (url.length > 1) window.location = url;
 	window.open (url, "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
 }
 
@@ -228,6 +219,24 @@ function savemenustate(){
 	document.cookie=cookiename+"="+cookievalue
 }
 
+
+function checkEnter()   
+{ 
+	if (event.which) {
+		if(event.which == 13) {
+			document.forms['searchTerm'].elements['search'].click();
+			return true;
+		}
+	} else {
+		if(window.event.keyCode==13) {
+			document.forms['searchTerm'].elements['search'].click();
+			return true;
+		}
+	}
+}	
+	
+	
+	
 if (window.addEventListener)
 	window.addEventListener("load", onloadfunction, false)
 else if (window.attachEvent)
