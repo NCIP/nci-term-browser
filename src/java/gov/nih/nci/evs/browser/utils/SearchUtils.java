@@ -1014,37 +1014,33 @@ public class SearchUtils {
     }
 
     //search for "lycogen"
-    //For a single given substring .*de.* would catch it.  For a series including white space
-    //    .*de.*\s.*fgh.*\s.*x.* works but in practice the whitespace character "\s" seems to be unnecessary.
-
 	public static String preprocessContains(String s)
 	{
 		if (s == null) return null;
 		if (s.length() == 0) return null;
 		s = s.trim();
-		//if (s.indexOf(" ") == -1) return s;
 		List<String> words = toWords(s, "\\s", false, false);
 		String delim = ".*";
-
 		StringBuffer searchPhrase = new StringBuffer();
 
         int k = -1;
+        searchPhrase.append(delim);
+
         for (int i = 0; i < words.size(); i++) {
 			String wd = (String) words.get(i);
 			wd = wd.trim();
 			if (wd.compareTo("") != 0)
 			{
-				searchPhrase.append(delim);
 				searchPhrase.append(wd);
-				if (words.size() > 1 && i < words.size()-2)
+				if (words.size() > 1 && i < words.size()-1)
 				{
-					searchPhrase.append(delim);
 					searchPhrase.append("\\s");
 				}
 		    }
 		}
 		searchPhrase.append(delim);
 		String t = searchPhrase.toString();
+		//System.out.println("preprocessContains " + t);
 		return t;
     }
 
