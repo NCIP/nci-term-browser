@@ -2,7 +2,11 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#AAAAAB" >
     <tr>
         <td height="24px" align="right" align="center">
+        <!--
             <select id="quicklink" title="Quick Links" onChange="javascript:redirect_site();" style="height:20px;" >
+         -->   
+            <select id="quicklink" title="Quick Links" OnChange="window.open(this.options[this.selectedIndex].value, 'New')" style="height:20px;>
+            
                 <option value="#" selected>Quick Links</option>
                 <option value="http://nciterms.nci.nih.gov">NCI Terminology Browser</option>
                 <option value="http://ncimeta.nci.nih.gov/MetaServlet/">NCI MetaThesaurus</option>
