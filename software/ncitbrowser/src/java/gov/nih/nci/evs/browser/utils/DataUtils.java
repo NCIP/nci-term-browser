@@ -1612,6 +1612,74 @@ System.out.println("WARNING: property_type not found -- " + property_type);
 
 
 
+	protected List getAncestors(
+		String scheme,
+		CodingSchemeVersionOrTag csvt,
+		String hierarchyID,
+		String code,
+		int maxDistance) throws LBException
+	{
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
+		lbscm.setLexBIGService(lbSvc);
+
+		ArrayList list = new ArrayList();
+		int currentDistance = 0;
+		try {
+			addAncestorsToList(lbscm, scheme, csvt, hierarchyID, code, maxDistance, currentDistance, list);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return list;
+	}
+
+
+    protected void addAncestorsToList(
+		LexBIGServiceConvenienceMethods lbscm,
+		String scheme,
+		CodingSchemeVersionOrTag csvt,
+		String hierarchyID,
+		String code,
+		int maxDistance,
+		int currentDistance, List list) throws LBException
+	{
+		if (maxDistance < 0 || currentDistance < maxDistance) {
+			AssociationList associations = lbscm.getHierarchyLevelNext(scheme, csvt, hierarchyID, code, false, null);
+			for (int i = 0; i < associations.getAssociationCount(); i++) {
+				Association assoc = associations.getAssociation(i);
+				AssociatedConceptList concepts = assoc.getAssociatedConcepts();
+
+				if (concepts.getAssociatedConceptCount() == 0)
+				{
+					Concept c = getConceptByCode(scheme, null, null, code);
+					org.LexGrid.concepts.Concept ce = new org.LexGrid.concepts.Concept();
+					ce.setId(c.getId());
+					//ce.setEntityDescription(c.getEntityDescription().getContent());
+					ce.setEntityDescription(c.getEntityDescription());
+					list.add(ce);
+				}
+
+				for (int j = 0; j < concepts.getAssociatedConceptCount(); j++) {
+					AssociatedConcept concept = concepts.getAssociatedConcept(j);
+					String nextCode = concept.getConceptCode();
+					String nextDesc = concept.getEntityDescription().getContent();
+
+					if (currentDistance == maxDistance)
+					{
+						org.LexGrid.concepts.Concept ce = new org.LexGrid.concepts.Concept();
+						ce.setId(nextCode);
+						EntityDescription ed = new EntityDescription();
+						ed.setContent(nextDesc);
+						ce.setEntityDescription(ed);
+						list.add(ce);
+					}
+					addAncestorsToList(lbscm, scheme, csvt, hierarchyID, nextCode, maxDistance, currentDistance + 1, list);
+				}
+			}
+		}
+	}
+
+
 	public String getNCICBContactURL()
     {
 		if (NCICBContactURL != null)

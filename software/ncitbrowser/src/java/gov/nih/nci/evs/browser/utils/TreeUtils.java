@@ -142,6 +142,7 @@ public class TreeUtils {
             // printout. For every backbone node, one level of children is
             // printed, along with an indication of whether those nodes can
             // be expanded.
+
             for (Iterator<Association> paths = pathsFromRoot.iterateAssociation(); paths.hasNext();) {
                 addPathFromRoot(ti, lbsvc, lbscm, scheme, csvt, paths.next(), associationsToNavigate, associationsNavigatedFwd,
                         codesToDescriptions);
@@ -680,8 +681,6 @@ public class TreeUtils {
 							ti.addChild(childNavText, childItem);
 						}
 					}
-
-
 				}
 			}
 			hmap.put(code, ti);
@@ -693,6 +692,8 @@ public class TreeUtils {
     }
 
 //Focus code: C7387 C26709
+
+
 
 	public static void main(String[] args)
 	{
