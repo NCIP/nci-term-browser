@@ -1423,8 +1423,8 @@ public class SearchUtils {
                 "device", "protein", "gland", "injury" };
         String algorithms[] = new String[] { "exactMatch", "startsWith", "contains" };
 
-        keywords = new String[] { "100", "bone", "blood" };
-        //algorithms = new String[] { "contains" };
+        keywords = new String[] { "blood" };
+        algorithms = new String[] { "exactMatch" };
         
         for (String algorithm : algorithms) {
             for (String keyword : keywords) {

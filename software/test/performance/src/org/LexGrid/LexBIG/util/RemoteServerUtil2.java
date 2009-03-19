@@ -51,6 +51,7 @@ public class RemoteServerUtil2 {
 
         try {
             System.out.println("Service URL: " + _serviceUrl);
+            System.out.flush();
             lbSvc = (EVSApplicationService) ApplicationServiceProvider
                     .getApplicationServiceFromUrl(_serviceUrl, _serviceInfo);
             return lbSvc;
