@@ -581,8 +581,7 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 	public static Concept getConceptByCode(String codingSchemeName, String vers, String ltag, String code)
 	{
         try {
-			//EVSApplicationService lbSvc = new RemoteServerUtil().createLexBIGService();
-			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			if (lbSvc == null)
 			{
 				System.out.println("lbSvc == null???");
@@ -1116,6 +1115,12 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		else if (property_type.compareToIgnoreCase("DEFINITION")== 0)
 		{
 			properties = concept.getDefinition();
+		}
+		else
+		{
+
+System.out.println("WARNING: property_type not found -- " + property_type);
+
 		}
 
 		if (properties == null || properties.length == 0) return v;

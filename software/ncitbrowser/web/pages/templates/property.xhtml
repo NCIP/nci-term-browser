@@ -6,8 +6,6 @@
 	displayItemList = NCItBrowserProperties.getInstance().getDisplayItemList();
     } catch (Exception ex) {
     }
-    
-		
 if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) && displayItemList != null)
 {
 Vector propertytypes = new Vector();
@@ -20,23 +18,7 @@ propertytypes.add("COMMENT");
 Vector additionalproperties = new Vector();
 additionalproperties.add("CONCEPT_NAME");
 additionalproperties.add("primitive");
-
 Concept curr_concept = (Concept) request.getSession().getAttribute("concept");
-Boolean bool_obj = curr_concept.isIsActive();
-String isActive = bool_obj.toString();
-if (bool_obj == null)
-{
-	isActive = "Unknown";
-}
-else if (bool_obj.equals(Boolean.TRUE))
-{
-	isActive = "Active Status";
-}
-else
-{
-        isActive = "Retired Status";
-}
-
 HashSet hset = new HashSet();
 HashMap hmap = new HashMap();
 Vector propertyvalues = null;
@@ -76,6 +58,8 @@ for (int i=0; i<displayItemList.size(); i++) {
          properties_to_display_linktext.add(displayItem.getHyperlinkText());
     }
 }
+int num_definitions = 0;
+int num_alt_definitions = 0;
 Vector external_source_codes = new Vector();
 Vector external_source_codes_label = new Vector();
 Vector external_source_codes_url = new Vector();
@@ -94,19 +78,35 @@ for (int i=0; i<displayItemList.size(); i++) {
                         <tr><td class="standardText">&nbsp;</td></tr>
 			<tr><td class="standardText3"><b>Term and Properties</b></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
-			<tr><td class="standardText"><b>Concept Status:&nbsp;</b><i><%=isActive%></i></td></tr>
-			<tr><td class="standardText">&nbsp;</td></tr>
-			<%
+<%
+
+			for (int i=0; i<properties_to_display.size(); i++) {
+				String propName = (String) properties_to_display.elementAt(i);
+				
+				if (propName.compareTo("Concept_Status") == 0)
+				{
+				        String propName_label = (String) properties_to_display_label.elementAt(i);
+					Vector value_vec = (Vector) hmap.get(propName);
+                                        
+					if (value_vec != null && value_vec.size() > 0)
+					{
+					    String value = (String) value_vec.elementAt(0);
+			%>		
+					<tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><%=value%>
+			<%		
+			                }
+					break;
+			        }
+			}
+			
 			for (int i=0; i<properties_to_display.size(); i++) {
 			
 				String propName = (String) properties_to_display.elementAt(i);
-				
-				
 				String propName_label = (String) properties_to_display_label.elementAt(i);
 				String propName_label2 = propName_label;
 				String url = (String) properties_to_display_url.elementAt(i);
 				String linktext = (String) properties_to_display_linktext.elementAt(i);
-	
+
 				if (url != null)
 				{
 				      displayed_properties.add(propName);
@@ -122,7 +122,15 @@ for (int i=0; i<displayItemList.size(); i++) {
 				              String qualifier = value.substring(n+1, value.length());
 				              
                                               value = value_wo_qualifier + " (Source: " + qualifier + ")";
-
+                                              
+                                              if (propName.compareTo("DEFINITION") == 0)
+                                              {
+                                                   num_definitions++;
+                                              }
+                                              else if (propName.compareTo("ALT_DEFINITION") == 0)
+                                              {
+                                                   num_alt_definitions++;
+                                              }
 				          }
 				          
 				          String url_str = url + value;
@@ -180,7 +188,40 @@ for (int i=0; i<displayItemList.size(); i++) {
 					<%
 				}
 			}
+		
+			
+			if (num_definitions == 0)
+			{
+				for (int i=0; i<properties_to_display.size(); i++) {
+					String propName = (String) properties_to_display.elementAt(i);
+					if (propName.compareTo("DEFINITION") == 0)
+					{
+					    String propName_label = (String) properties_to_display_label.elementAt(i);
+					    %>
+			                    <tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><i>(None)</i>
+			                    <%
+			                    break;
+			                }
+			        }
+			}
+			
+			if (num_alt_definitions == 0)
+			{
+				for (int i=0; i<properties_to_display.size(); i++) {
+					String propName = (String) properties_to_display.elementAt(i);
+					if (propName.compareTo("ALT_DEFINITION") == 0)
+					{
+					    String propName_label = (String) properties_to_display_label.elementAt(i);
+					    %>
+			                    <tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><i>(None)</i>
+			                    <%
+			                    break;
+			                }
+			        }			
+			}				
 			%>
+			
+			
 			<tr><td class="standardText">&nbsp;</td></tr>
 			<tr><td class="standardText"><b>Synonyms &amp; Abbreviations:&nbsp;</b></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>

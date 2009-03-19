@@ -5,6 +5,14 @@
     <DisplayItems>
 
       <DisplayItem>
+            <propertyName>Concept_Status</propertyName>
+            <itemLabel>Concept Status</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+       
+      <DisplayItem>
             <propertyName>DEFINITION</propertyName>
             <itemLabel>Definition</itemLabel>
             <url>null</url>
