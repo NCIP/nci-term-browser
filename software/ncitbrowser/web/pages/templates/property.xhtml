@@ -88,25 +88,6 @@ for (int i=0; i<displayItemList.size(); i++) {
 			<tr><td class="standardText"><b>Concept Status:&nbsp;</b><i><%=concept_status%></i></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
 <%
-
-			for (int i=0; i<properties_to_display.size(); i++) {
-				String propName = (String) properties_to_display.elementAt(i);
-				
-				if (propName.compareTo("Concept_Status") == 0)
-				{
-				        String propName_label = (String) properties_to_display_label.elementAt(i);
-					Vector value_vec = (Vector) hmap.get(propName);
-                                        
-					if (value_vec != null && value_vec.size() > 0)
-					{
-					    String value = (String) value_vec.elementAt(0);
-			%>		
-					<tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><%=value%>
-			<%		
-			                }
-					break;
-			        }
-			}
 			
 			for (int i=0; i<properties_to_display.size(); i++) {
 			
