@@ -19,6 +19,13 @@ Vector additionalproperties = new Vector();
 additionalproperties.add("CONCEPT_NAME");
 additionalproperties.add("primitive");
 Concept curr_concept = (Concept) request.getSession().getAttribute("concept");
+
+String concept_status = curr_concept.getConceptStatus();
+if (concept_status == null)
+{
+	concept_status = "(not specified)";
+}
+
 HashSet hset = new HashSet();
 HashMap hmap = new HashMap();
 Vector propertyvalues = null;
@@ -77,6 +84,8 @@ for (int i=0; i<displayItemList.size(); i++) {
 %>
                         <tr><td class="standardText">&nbsp;</td></tr>
 			<tr><td class="standardText3"><b>Term and Properties</b></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td class="standardText"><b>Concept Status:&nbsp;</b><i><%=concept_status%></i></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
 <%
 

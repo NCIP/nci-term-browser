@@ -256,14 +256,26 @@ public class CacheController
 			{
 				nodesArray = new JSONArray();
 				for (int i=0; i<list.size(); i++) {
+					  Object obj = list.get(i);
+					  String code = "";
+					  String name = "";
+					  if (obj instanceof ResolvedConceptReference)
+					  {
+						  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+						  code = node.getConceptCode();
+						  name = node.getEntityDescription().getContent();
+					  }
+					  else if (obj instanceof ResolvedConceptReference) {
+						  Concept node = (Concept) list.get(i);
+						  code = node.getId();
+						  name = node.getEntityDescription().getContent();
+					  }
+
 					  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
 					  int childCount = 1;
 					  try {
-
 						  JSONObject nodeObject = new JSONObject();
-						  nodeObject.put(ONTOLOGY_NODE_ID, node.getConceptCode());
-						  String name = node.getEntityDescription().getContent();
-
+						  nodeObject.put(ONTOLOGY_NODE_ID, code);
 						  nodeObject.put(ONTOLOGY_NODE_NAME, name);
 						  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
 						  nodeObject.put(CHILDREN_NODES, new JSONArray());
@@ -447,5 +459,47 @@ public class CacheController
 		}
 		return nodesArray;
 	}
+
+
+    public JSONArray getAncestorConcepts(String scheme, String version, String code, boolean fromCache)
+    {
+		List list = null;//new ArrayList();
+		String key = scheme + "$" + version + "$ancestor";
+		JSONArray nodeArray = null;
+
+        if (fromCache)
+        {
+            Element element = cache.get(key);
+            if (element != null) {
+
+				System.out.println("getAncestorConcepts fromCache element != null returning list" );
+	            nodeArray = (JSONArray) element.getValue();
+			}
+        }
+
+        if (nodeArray == null)
+        {
+			System.out.println("Not in cache -- calling getAncestors " );
+            try {
+				list = new DataUtils().getAncestors(scheme, new CodingSchemeVersionOrTag(), null, code, 3); // to be made configurable
+				nodeArray = List2JSONArray(list);
+
+				if (fromCache)
+				{
+					Element element = new Element(key, nodeArray);
+					cache.put(element);
+			    }
+			} catch (Exception ex) {
+                ex.printStackTrace();
+			}
+        }
+        else
+        {
+			System.out.println("Retrieved from cache." );
+		}
+        return nodeArray;
+    }
+
+
 }
 
