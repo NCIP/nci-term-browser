@@ -32,7 +32,8 @@ set cp = "$cp":"$lib/mm.mysql-2.0.6.jar"
 set cp = "$cp":"$lib2/lexBigExamples.jar"
 
 set java = "java"
-set config_file = "-DLG_CONFIG_FILE=/local/content/evs/lexbig23/resources/config/config.props"
+#set config_file = "-DLG_CONFIG_FILE=/local/content/evs/lexbig23/resources/config/config.props"
+set config_file = "-DLG_CONFIG_FILE=/local/content/evs/lexbig23/resources/config-NcitBrowser/config.props"
 set class = "org.LexGrid.LexBIG.example.remote2.Main2"
 
 set cmd = "$java -cp $cp $config_file $class"
