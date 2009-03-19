@@ -22,7 +22,6 @@
 	<classpathentry kind="lib" path="lib/lucene-core-2.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-regex-2.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-snowball-2.3.2.jar"/>
-	<classpathentry kind="lib" path="lib/mm.mysql-2.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/sdk-client-framework.jar"/>
 	<classpathentry kind="lib" path="lib/spring.jar"/>
 	<classpathentry kind="lib" path="lib/umlslicense.jar"/>
