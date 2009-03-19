@@ -42,22 +42,17 @@
 <f:view>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-
     <tr>
         <td height="1%" VALIGN="TOP">
-            <%@ include file="/pages/templates/nciHeader.html" %>
+                <%@ include file="/pages/templates/nciHeader.html" %>
                 <%@ include file="/pages/templates/header.xhtml" %>
         </td>
         </tr>
-
     <tr>
         <td height="1%">
                       <%@ include file="/pages/templates/quickLink.xhtml" %>
                 </td>
         </tr>
-
-
-
 <%
     String dictionary = null;
     String code = null;
@@ -74,7 +69,6 @@
 	code = (String) request.getParameter("code");
 	type = (String) request.getParameter("type");
     }
-        
     if (type == null)
     {
         type = "properties";
@@ -83,12 +77,12 @@
     request.getSession().setAttribute("code", code);
     request.getSession().setAttribute("type", type);
     request.getSession().setAttribute("singleton", "false");
-    
     String vers = null;
     String ltag = null;
     Concept c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
     request.getSession().setAttribute("concept", c);
     String name = c.getEntityDescription().getContent();
+   
 %>
        <tr>
           <td>&nbsp;</td>
@@ -114,6 +108,7 @@
              <%@ include file="/pages/templates/relationship.xhtml" %>
         </td>
     </tr>
+
     <tr>
         <td height="20" width="100%" class="footerMenu">
              <%@ include file="/pages/templates/applicationFooter.html" %>

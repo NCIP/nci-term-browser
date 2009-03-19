@@ -143,13 +143,13 @@ public class UserSessionBean extends Object
 		} catch (Exception ex) {
 
 		}
+
 		request.getSession().setAttribute("vocabulary", scheme);
 
         long ms = System.currentTimeMillis();
 		//Vector<org.LexGrid.concepts.Concept> v = SearchUtils.searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		Vector<org.LexGrid.concepts.Concept> v = new SearchUtils().searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		//SortUtils.quickSort(v);
-
         if (v != null && v.size() > 1)
         {
         	request.getSession().setAttribute("search_results", v);
@@ -169,8 +169,6 @@ public class UserSessionBean extends Object
         	request.getSession().setAttribute("code", c.getId());
         	return "concept_details";
 		}
-
-
 		String message = "No match found.";
 		request.getSession().setAttribute("message", message);
 		return "message";

@@ -19,6 +19,7 @@ function submitSearchOnEnter(form, event)
 	}
 }
 
+
 function validateSearchForm(form) {
 	errors = false;
 	errorMsg = "Form validate failures:";
