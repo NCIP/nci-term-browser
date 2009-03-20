@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <root>
-
     <DisplayItems>
-
-      <DisplayItem>
-            <propertyName>Concept_Status</propertyName>
-            <itemLabel>Concept Status</itemLabel>
-            <url>null</url>
-            <hyperlinkText>null</hyperlinkText>
-            <isExternalCode>false</isExternalCode>
-       </DisplayItem>
-       
       <DisplayItem>
             <propertyName>DEFINITION</propertyName>
             <itemLabel>Definition</itemLabel>
@@ -194,6 +184,11 @@
                  <value>1000</value>
         </ConfigurableItem>
 
+        <ConfigurableItem>
+                 <key>MAXIMUM_TREE_LEVEL</key>
+                 <value>3</value>
+        </ConfigurableItem>
+        
         <ConfigurableItem>
                  <key>EHCACHE_XML_PATHNAME</key>
                  <value>@ehcache.xml.file@</value>
