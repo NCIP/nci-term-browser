@@ -55,7 +55,7 @@ public class NCItBrowserProperties {
 		public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
 		public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
 		public static final String NCICB_CONTACT_URL = "NCICB_CONTACT_URL";
-
+		public static final String MAXIMUM_TREE_LEVEL = "MAXIMUM_TREE_LEVEL";
 
 	    private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
 
@@ -64,11 +64,11 @@ public class NCItBrowserProperties {
 	    private static Properties properties = new Properties();
 
 	    private static int maxToReturn = 1000;
+	    private static int maxTreeLevel = 1000;
 	    private static String service_url = null;
 
 	    private static String sort_by_score = null;
 	    private static String ncicb_contact_url = null;
-
 
 	    /**
 	     * Private constructor for singleton pattern.
@@ -91,6 +91,10 @@ public class NCItBrowserProperties {
 
 						String max_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
 						maxToReturn = Integer.parseInt(max_str);
+
+						String max_tree_level_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
+						maxTreeLevel = Integer.parseInt(max_tree_level_str);
+
 						service_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
 
 						//System.out.println("EVS_SERVICE_URL: " + service_url);
