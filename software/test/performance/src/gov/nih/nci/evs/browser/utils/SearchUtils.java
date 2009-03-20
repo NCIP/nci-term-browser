@@ -726,7 +726,9 @@ public class SearchUtils {
 	public static Concept getConceptByCode(String codingSchemeName, String vers, String ltag, String code)
 	{
         try {
-			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            LexBIGService lbSvc = AppService.getInstance().getLBSvc();
+
 			if (lbSvc == null)
 			{
 				System.out.println("lbSvc == null???");
@@ -1159,7 +1161,7 @@ public class SearchUtils {
         _excelBuffer.insert(0, j + "\t");
         _excelBuffer.insert(0, matchAlgorithm + "\t");
         _excelBuffer.insert(0, matchText + "\t");
-        _excelBuffer.insert(0, "Excel: ");
+        //_excelBuffer.insert(0, "Excel: ");
         if (_printDebug)
             System.out.print(_debugBuffer.toString());
         if (_printExcel)
@@ -1421,15 +1423,15 @@ public class SearchUtils {
                 "neoplasm", "Adenomatoid Tumor", "grade", "cell", "ctcae",
                 "carcinoma", "infection", "event", "adverse", "stage",
                 "device", "protein", "gland", "injury" };
-        String algorithms[] = new String[] { "exactMatch", "startsWith", "contains" };
+        String algorithms[] = new String[] { "contains", "startsWith", "exactMatch" };
 
-        keywords = new String[] { "blood" };
+        keywords = new String[] { "blood", "cell" };
         algorithms = new String[] { "exactMatch" };
         
         for (String algorithm : algorithms) {
             for (String keyword : keywords) {
-                System.out.println();
-                System.out.println(Util.SEPARATOR);
+                //System.out.println();
+                //System.out.println(Util.SEPARATOR);
                 testSearchByName(keyword, algorithm, _displayConcepts);
             }
         }
@@ -1461,7 +1463,7 @@ public class SearchUtils {
     private static StringBuffer _debugBuffer = null;
     private static StringBuffer _excelBuffer = null;
     private static boolean _prompt = false;
-    private static boolean _printExcel = false;
-    private static boolean _printDebug = true;
+    private static boolean _printExcel = true;
+    private static boolean _printDebug = false;
 }
 
