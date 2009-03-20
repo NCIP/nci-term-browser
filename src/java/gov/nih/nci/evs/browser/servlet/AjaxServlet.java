@@ -93,6 +93,7 @@ import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.concepts.Presentation;
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 public final class AjaxServlet extends HttpServlet {
 
@@ -182,7 +183,19 @@ public final class AjaxServlet extends HttpServlet {
 				response.setHeader("Cache-Control", "no-cache");
 				JSONObject json = new JSONObject();
 				try {
-					JSONArray rootsArray = CacheController.getInstance().getPathsToRoots(ontology_display_name, null, node_id);
+					// testing
+					//JSONArray rootsArray = CacheController.getInstance().getPathsToRoots(ontology_display_name, null, node_id, true);
+
+					String max_tree_level_str = null;
+					int maxLevel = -1;
+					try {
+						max_tree_level_str = NCItBrowserProperties.getInstance().getProperty(NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
+						maxLevel = Integer.parseInt(max_tree_level_str);
+					} catch (Exception ex) {
+
+					}
+
+					JSONArray rootsArray = CacheController.getInstance().getPathsToRoots(ontology_display_name, null, node_id, true, maxLevel);
 					json.put("root_nodes", rootsArray);
 				}
 				catch (Exception e) {
