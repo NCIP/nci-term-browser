@@ -22,10 +22,11 @@
 	<classpathentry kind="lib" path="lib/lucene-core-2.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-regex-2.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-snowball-2.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/mm.mysql-2.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.7-bin.jar"/>
 	<classpathentry kind="lib" path="lib/sdk-client-framework.jar"/>
 	<classpathentry kind="lib" path="lib/spring.jar"/>
 	<classpathentry kind="lib" path="lib/umlslicense.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.7-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

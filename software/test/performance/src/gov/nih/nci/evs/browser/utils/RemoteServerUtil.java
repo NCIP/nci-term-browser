@@ -83,6 +83,12 @@ public class RemoteServerUtil {
 				return lbSvc;
 			}
             System.out.println("LexBIGService(remote): " + serviceUrl);
+//            try {
+//                throw new Exception("Not an exception.  Used to trace where this method was called.");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
 		    EVSApplicationService appService = (EVSApplicationService) ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, _serviceInfo);
            return (LexBIGService) appService;
 		}
