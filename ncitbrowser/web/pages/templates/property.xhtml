@@ -25,6 +25,10 @@ if (concept_status == null)
 {
 	concept_status = "(not specified)";
 }
+else
+{
+        concept_status = concept_status.replaceAll("_", " ");
+}
 
 HashSet hset = new HashSet();
 HashMap hmap = new HashMap();
