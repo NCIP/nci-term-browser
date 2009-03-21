@@ -219,22 +219,23 @@ function savemenustate(){
 	document.cookie=cookiename+"="+cookievalue
 }
 
+function submitEnter(commandId,e)
+{
+        var keycode;
+        if (window.event) 
+                keycode = window.event.keyCode;
+        else if (e) 
+                keycode = e.which;
+        else 
+                return true;
+        
+        if (keycode == 13) {
+                document.getElementById(commandId).click();
+                return false;
+        } else
+                return true;
+}
 
-function checkEnter()   
-{ 
-	if (event.which) {
-		if(event.which == 13) {
-			document.forms['searchTerm'].elements['search'].click();
-			return true;
-		}
-	} else {
-		if(window.event.keyCode==13) {
-			document.forms['searchTerm'].elements['search'].click();
-			return true;
-		}
-	}
-}	
-	
 	
 	
 if (window.addEventListener)
