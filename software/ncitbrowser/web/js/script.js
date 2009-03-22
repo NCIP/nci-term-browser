@@ -1,5 +1,22 @@
 //function alert() {} 
 
+function bookmark(url,title){
+  if ((navigator.appName == "Microsoft Internet Explorer") && (parseInt(navigator.appVersion) >= 4)) {
+      window.external.AddFavorite(url,title);
+  } else if (window.sidebar) { // Mozilla Firefox Bookmark
+      window.sidebar.addPanel(title, url, "");
+  } else if (navigator.appName == "Netscape") {
+      window.sidebar.addPanel(title,url,"");
+  } else if(window.opera && window.print) {// Opera   
+        var elem = document.createElement('a');   
+        elem.setAttribute('href',url);   
+        elem.setAttribute('title',title);   
+        elem.setAttribute('rel','sidebar'); 
+        elem.click();   
+  }    
+
+}
+
 function redirect_site() {
 	var url = document.forms["form_link"].quicklink.value;
 	window.open (url, "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
