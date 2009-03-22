@@ -421,11 +421,24 @@ String kind_label = "Kind:";
 String requestURL = request.getRequestURL().toString();
 int idx = requestURL.indexOf("pages");
 requestURL = requestURL.substring(0, idx);
+String url = requestURL + "ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=" + concept_id;
+String bookmark_title = "NCItBrowser%20" + concept_id;
 %>
 			
 			
 			
-                        <tr><td class="standardText"><b>URL to Bookmark</b>:&nbsp;<i><%= requestURL %>ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i></td></tr>
+                        <tr><td class="standardText"><b>URL to Bookmark</b>:&nbsp;
+                        <!--
+                        <i><%= requestURL %>ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i>
+                        <a href=javascript:bookmark('<%= url %>','<%= bookmark_title %>')>
+                        <a href=javascript:addBookmarkForBrowser('<%= bookmark_title %>')>
+                        -->
+                        
+                        <a href=javascript:bookmark('<%= url %>','<%= bookmark_title %>')>
+                        <i><%= requestURL %>ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i>
+                        </a>
+                        
+                        </td></tr>
                         <tr><td class="standardText">&nbsp;</td></tr>
 <%
 }
