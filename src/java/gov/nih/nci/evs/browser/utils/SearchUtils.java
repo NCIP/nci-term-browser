@@ -1044,6 +1044,18 @@ public class SearchUtils {
 		return t;
     }
 
+    private boolean isNumber(String s) {
+		if (s.length() == 0) return false;
+		for(int i=0; i<s.length(); i++)
+		{
+			if(!Character.isDigit(s.charAt(i)))
+			   return false;
+		}
+		return true;
+	}
+
+
+
 	//public static Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 		String matchText0 = matchText;
@@ -1058,10 +1070,13 @@ public class SearchUtils {
 
         if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0)
         {
-            if (nonAlphabetic(matchText) || matchText.indexOf(".") != -1 || matchText.indexOf("/") != -1)
-            {
-				return searchByName(scheme, version, matchText, "RegExp", maxToReturn);
-			}
+			//KLO 032409
+			if (!isNumber(matchText)) {
+				if (nonAlphabetic(matchText) || matchText.indexOf(".") != -1 || matchText.indexOf("/") != -1)
+				{
+					return searchByName(scheme, version, matchText, "RegExp", maxToReturn);
+				}
+		    }
 		}
 
 		else if (matchAlgorithm.compareToIgnoreCase("startsWith") == 0)
@@ -1072,9 +1087,15 @@ public class SearchUtils {
 
 		else if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
-				//matchText = ".*" + matchText + ".*";
+			if (matchText.length() == 1)
+			{
+				matchAlgorithm = "startsWith";
+			}
+			else
+			{
 				matchText = preprocessContains(matchText);
 				matchAlgorithm = "RegExp";
+			}
 		}
 
 		if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0)
