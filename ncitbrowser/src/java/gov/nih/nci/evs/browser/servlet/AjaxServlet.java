@@ -191,6 +191,7 @@ public final class AjaxServlet extends HttpServlet {
 					try {
 						max_tree_level_str = NCItBrowserProperties.getInstance().getProperty(NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
 						maxLevel = Integer.parseInt(max_tree_level_str);
+
 					} catch (Exception ex) {
 
 					}
