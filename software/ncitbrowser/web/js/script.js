@@ -4,7 +4,9 @@ function bookmark(url,title){
   if ((navigator.appName == "Microsoft Internet Explorer") && (parseInt(navigator.appVersion) >= 4)) {
       window.external.AddFavorite(url,title);
   } else if (window.sidebar) { // Mozilla Firefox Bookmark
-      window.sidebar.addPanel(title, url, "");
+      //window.sidebar.addPanel(title, url, "");
+      alert("Please press Ctrl-D to bookmark this page."); 
+      
   } else if (navigator.appName == "Netscape") {
       window.sidebar.addPanel(title,url,"");
   } else if(window.opera && window.print) {// Opera   
