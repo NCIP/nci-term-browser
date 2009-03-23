@@ -1,15 +1,273 @@
 <%
-if ((type.compareTo("relationship") == 0 || type.compareTo("all") == 0) && displayItemList != null)
+if (type.compareTo("relationship") == 0 || type.compareTo("all") == 0)
 {
 Concept concept_curr = (Concept) request.getSession().getAttribute("concept");
 String scheme_curr = (String) request.getSession().getAttribute("dictionary");
 String version_curr = null;
 String code_curr = (String) request.getSession().getAttribute("code");
 DataUtils util = new DataUtils();
-%>
+HashMap hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
+ArrayList superconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
+ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
+ArrayList roles = (ArrayList) hmap.get(DataUtils.TYPE_ROLE);
+ArrayList associations = (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
+%>		
+                        <tr><td>&nbsp;</td></tr>
+			<tr><td class="standardText3"><b>Relationships with other NCI Thesaurus Concepts</b></td></tr>
+                        <tr><td>&nbsp;</td></tr>
+			<tr>
+				<td>		
+				            <%
+				            String parent_concept_label = "Parent Concepts:";
+				            if (superconcepts.size() == 0)
+				            {
+				            %>
+				                <tr><td class="standardText"><b><%=parent_concept_label%></b> <i>(none)</i></td>
+				            <%
+				            }
+				            else
+				            {
+				            
+					    for (int i=0; i<superconcepts.size(); i++)
+					    {
+					  	String s = (String) superconcepts.get(i);
+					  	Vector ret_vec = DataUtils.parseData(s, "|");
+					  	
+					  	if (i > 0)
+					  	{
+					  	     parent_concept_label = "";
+					  	}
 
+						String superconcept_name = (String) ret_vec.elementAt(0);
+						String superconcept_code = (String) ret_vec.elementAt(1);
+						
+					    %>
+					  		<tr><td class="standardText"><b><%=parent_concept_label%></b>
+				  		
+					  		<a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=superconcept_code%>">
+					  		<%=superconcept_name%>
+					  		</a>
+					  		
+					  		</td>
+					  		</tr>
+							  	
+					    <%
+					    }
+					    }
+					    %>
+				</td>
+			</tr>
+			<tr>
+				<td>	
+				            <tr><td>&nbsp;</td></tr>
+				            <%
+				            String child_concept_label = "Child Concepts:";
+				            if (subconcepts.size() == 0)
+				            {
+				            %>
+				                <tr><td class="standardText"><b><%=child_concept_label%></b> <i>(none)</i></td>
+				            <%
+				            }
+				            else
+				            {
+				            %>
+				                <tr><td class="standardText"><b><%=child_concept_label%></b></td>
+				            <%    
+				            int n0 = 0;
+					    for (int i=0; i<subconcepts.size(); i++)
+					    {
+					  	String s = (String) subconcepts.get(i);
+					  	Vector ret_vec = DataUtils.parseData(s, "|");
+					  	
+					  	if (i > 0)
+					  	{
+					  	     child_concept_label = "";
+					  	}
 
+						String subconcept_name = (String) ret_vec.elementAt(0);
+						String subconcept_code = (String) ret_vec.elementAt(1);
+					    %>
+					    
+					          <% 
+						  if (n0 % 2 == 0)
+						  {
+						  %>
+						      <tr class="dataRowDark">
+						  <%    
+						  }
+						  else
+						  {
+						  %>
+						      <tr class="dataRowLight"> 
+						  <% 
+						  }
+						  n0++;
+						  %>					    
+					  		<td class="standardText">
+					  		<a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=subconcept_code%>">
+					  		<%=subconcept_name%>
+					  		</a>
+					  		</td>
+					  	  </tr>
+							  	
+					    <%	
+					    }
+					    }
+					    %>
+				</td>
+			</tr>
+			<tr>
+				<td>	
+				                <tr><td>&nbsp;</td></tr>
+						<tr>
+						         <%
+						        if (roles.size() > 0)
+						        {
+						        %>
+							<td class="standardText"><b>
+							     Role Relationships:
+							</b></td>
+							<%
+							}
+							else
+							{
+							%>
+							
+							<td class="standardText"><b>
+							     Role Relationships: </b><i>(none)</i>
+							</td>
+							
+							<%
+							}
+							%>
+						</tr>
+						<tr>
+							<td class="standardText"><i>
+							     True for current concept and descendants, may be inherited from parent(s).
+							</i></td>
+						<tr>	
+				</td>
+			</tr>
+			<tr>
+				<td>									
+					<table>
+                                            <%
+                                            int n1 = 0;
+					    for (int i=0; i<roles.size(); i++)
+					    {
+					  	String s = (String) roles.get(i);
+					  	Vector ret_vec = DataUtils.parseData(s, "|");
 
+						String role_name = (String) ret_vec.elementAt(0);
+						String target_concept_name = (String) ret_vec.elementAt(1);
+						String target_concept_code = (String) ret_vec.elementAt(2);
+					    
+						  if (n1 % 2 == 0)
+						  {
+						  %>
+						      <tr class="dataRowDark">
+						  <%    
+						  }
+						  else
+						  {
+						  %>
+						      <tr class="dataRowLight"> 
+						  <% 
+						  }
+						  n1++;
+						  %>					    
+
+						<td class="standardText"><%=role_name%></td>
+						<td class="standardText">
+						<a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=target_concept_code%>">
+						<%=target_concept_name%>
+						</a>
+						</td>
+						</tr>
+							  	
+					    <%	
+					    }
+					    %>
+					</table>
+					
+				</td>
+			</tr>
+			<tr>
+				<td>		
+				                <tr><td>&nbsp;</td></tr>
+						<tr>
+						         <%
+						        if (associations.size() > 0)
+						        {
+						        %>
+							<td class="standardText"><b>
+							     Associations:
+							</b></td>
+							<%
+							}
+							else
+							{
+							%>
+							
+							<td class="standardText"><b>
+							     Associations: </b><i>(none)</i>
+							</td>
+							
+							<%
+							}
+							%>
+						</tr>
+						<tr>
+							<td class="standardText"><i>
+							     True only for current concept.
+							</i></td>
+						<tr>	
+				</td>
+			</tr>
+			<tr>
+				<td>									
+					<table>
+                                            <%
+                                            int n2 = 0;
+					    for (int i=0; i<associations.size(); i++)
+					    {
+					  	String s = (String) associations.get(i);
+					  	Vector ret_vec = DataUtils.parseData(s, "|");
+
+						String role_name = (String) ret_vec.elementAt(0);
+						String target_concept_name = (String) ret_vec.elementAt(1);
+						String target_concept_code = (String) ret_vec.elementAt(2);
+					    
+						  if (n2 % 2 == 0)
+						  {
+						  %>
+						      <tr class="dataRowDark">
+						  <%    
+						  }
+						  else
+						  {
+						  %>
+						      <tr class="dataRowLight"> 
+						  <% 
+						  }
+						  n2++;
+						  %>					    
+
+						<td class="standardText"><%=role_name%></td>
+						<td class="standardText">
+						<a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=target_concept_code%>">
+						<%=target_concept_name%>
+						</a>
+						</td>
+						</tr>
+							  	
+					    <%	
+					    }
+					    %>
+					</table>
+					
+				</td>
+			</tr>
 <%
 }
 %>
