@@ -720,7 +720,8 @@ public class TreeUtils {
             CodingSchemeVersionOrTag csvt, Association assoc, AssociationList addTo,
             Map<String, EntityDescription> codeToEntityDescriptionMap, int maxLevel, int currLevel) throws LBException {
 
-        if (maxLevel != -1 && currLevel > maxLevel) return addTo;
+//KLO, 032209
+        if (maxLevel != -1 && currLevel >= maxLevel) return addTo;
 
         ConceptReference acRef = assoc.getAssociationReference();
         AssociatedConcept acFromRef = new AssociatedConcept();
@@ -769,11 +770,13 @@ public class TreeUtils {
             // Save code desc for future reference when setting up
             // concept references in recursive calls ...
 
+            /*
             String indent = "";
             for (int k=0; k<=currLevel; k++) {
 				indent = indent + "-";
 			}
-            //System.out.println(indent + ac.getConceptCode() + " " + ac.getEntityDescription().getContent());
+            System.out.println(indent + ac.getConceptCode() + " " + ac.getEntityDescription().getContent());
+            */
 
 
             codeToEntityDescriptionMap.put(ac.getConceptCode(), ac.getEntityDescription());
@@ -812,7 +815,7 @@ public class TreeUtils {
 				{
 					if (!association_vec.contains(ids[i])) {
 						association_vec.add(ids[i]);
-						System.out.println(ids[i]);
+						//System.out.println(ids[i]);
 					}
 				}
 		    }
@@ -847,6 +850,31 @@ public class TreeUtils {
 		return list;
 	}
 
+/*
+    public void getTopNodes(TreeItem ti, List list, int currLevel, int maxLevel) {
+        if (list == null) list = new ArrayList();
+        if (currLevel > maxLevel) return;
+        if (ti.assocToChildMap.keySet().size() > 0) {
+			if (ti.text.compareTo("Root node") != 0)
+			{
+				ResolvedConceptReference rcr = new ResolvedConceptReference();
+				rcr.setConceptCode(ti.code);
+				EntityDescription entityDescription = new EntityDescription();
+				entityDescription.setContent(ti.text);
+				rcr.setEntityDescription(entityDescription);
+				//System.out.println("Root: " + ti.text);
+				list.add(rcr);
+		    }
+		}
+
+        for (String association : ti.assocToChildMap.keySet()) {
+            List<TreeItem> children = ti.assocToChildMap.get(association);
+            Collections.sort(children);
+            for (TreeItem childItem : children)
+                getTopNodes(childItem, list, currLevel+1, maxLevel);
+        }
+    }
+*/
 
     public void getTopNodes(TreeItem ti, List list, int currLevel, int maxLevel) {
         if (list == null) list = new ArrayList();
@@ -863,11 +891,13 @@ public class TreeUtils {
 				list.add(rcr);
 		    }
 		}
+
         for (String association : ti.assocToChildMap.keySet()) {
             List<TreeItem> children = ti.assocToChildMap.get(association);
             Collections.sort(children);
-            for (TreeItem childItem : children)
+            for (TreeItem childItem : children) {
                 getTopNodes(childItem, list, currLevel+1, maxLevel);
+			}
         }
     }
 
