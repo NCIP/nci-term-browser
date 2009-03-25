@@ -222,6 +222,7 @@ public class DataUtils {
     public static String TYPE_SUBCONCEPT = "type_subconcept";
 
     public String NCICBContactURL = null;
+    public String terminologySubsetDownloadURL = null;
 
 
     //==================================================================================
@@ -1701,5 +1702,17 @@ System.out.println("WARNING: property_type not found -- " + property_type);
 
 		System.out.println("getNCICBContactURL returns " + NCICBContactURL);
 		return NCICBContactURL;
+	}
+
+	public String getTerminologySubsetDownloadURL()
+    {
+		NCItBrowserProperties properties = null;
+		try {
+			properties = NCItBrowserProperties.getInstance();
+			terminologySubsetDownloadURL = properties.getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
+	    } catch (Exception ex) {
+
+		}
+		return terminologySubsetDownloadURL;
 	}
 }

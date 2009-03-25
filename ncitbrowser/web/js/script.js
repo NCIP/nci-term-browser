@@ -19,6 +19,13 @@ function bookmark(url,title){
 
 }
 
+function openQuickLinkSite(url) {
+    if (url != "#")
+    {
+        window.open (url, "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600"); 
+    }
+}
+
 function redirect_site() {
 	var url = document.forms["form_link"].quicklink.value;
 	window.open (url, "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
