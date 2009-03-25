@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <html>
 <head>
 <title>NCI Thesaurus Browser Home</title>
@@ -24,27 +25,20 @@
 		        <%@ include file="/pages/templates/header.xhtml" %>
 		</td> 
         </tr>
-
 	<tr>
 		<td height="1%">
                       <%@ include file="/pages/templates/quickLink.xhtml" %>
                 </td>
         </tr>     
-        
-      
 	<tr>
 		<td>
-
-		
 		<TABLE width="650" border="0" align="left" cellpadding="15" cellspacing="0" >
 			<tr><td allign="left">
 			    <b>NCI Thesaurus Subsets</b>
 			</td></tr>
-			
 			<tr><td allign="left">
 			    <hr></hr>
 			</td></tr>
-
 			<tr><td class="standardText"><i>
 			    There are roughly 100 specially defined subsets in NCI Thresaurus. Each has its own NCIt concept,
 			    defining the nature of the subset, and these are hierarchically organized under the parent concept:
@@ -96,8 +90,15 @@
                         </td></tr>
 
 
+<%
+String terminology_subset_download_url = new DataUtils().getTerminologySubsetDownloadURL();
+%>
 			<tr><td class="standardText"><i>
 			    EVS is developing extended method to create, browse, download, and have direct computer API access to these and other NCIt subsets.
+			    Click 
+<a href="#" onclick="javascript:window.open('<%=terminology_subset_download_url%>', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+			    here </a>
+			    to download Terminology Subset Reports.			
 			</i></td></tr>
 
 
