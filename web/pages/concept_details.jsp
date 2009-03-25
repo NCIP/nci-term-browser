@@ -108,7 +108,11 @@
              <%@ include file="/pages/templates/relationship.xhtml" %>
         </td>
     </tr>
-
+    <tr>
+        <td>
+             <%@ include file="/pages/templates/synonym.xhtml" %>
+        </td>
+    </tr>
     <tr>
         <td height="20" width="100%" class="footerMenu">
              <%@ include file="/pages/templates/applicationFooter.html" %>
