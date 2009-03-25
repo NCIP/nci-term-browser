@@ -203,6 +203,11 @@
                  <key>NCICB_CONTACT_URL</key>
                  <value>@ncicb.contact.url@</value>
         </ConfigurableItem>
+
+         <ConfigurableItem>
+                  <key>TERMINOLOGY_SUBSET_DOWNLOAD_URL</key>
+                  <value>@terminology.subset.download.url@</value>
+        </ConfigurableItem>
         
     </ConfigurableItems>
 

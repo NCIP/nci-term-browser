@@ -56,6 +56,7 @@ public class NCItBrowserProperties {
 		public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
 		public static final String NCICB_CONTACT_URL = "NCICB_CONTACT_URL";
 		public static final String MAXIMUM_TREE_LEVEL = "MAXIMUM_TREE_LEVEL";
+		public static final String TERMINOLOGY_SUBSET_DOWNLOAD_URL= "TERMINOLOGY_SUBSET_DOWNLOAD_URL";
 
 	    private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
 
@@ -69,6 +70,7 @@ public class NCItBrowserProperties {
 
 	    private static String sort_by_score = null;
 	    private static String ncicb_contact_url = null;
+	    private static String terminology_subset_download_url = null;
 
 	    /**
 	     * Private constructor for singleton pattern.
@@ -101,7 +103,7 @@ public class NCItBrowserProperties {
 
 						sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
 						ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
-
+						terminology_subset_download_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
 					}
 				}
 			}
