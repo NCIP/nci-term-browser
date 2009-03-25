@@ -18,7 +18,7 @@
   <navigation-rule>
     <from-view-id>/pages/home.jsp</from-view-id>
     <navigation-case> 
-       <description>Search</description>
+       <description>message</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/message.jsp</to-view-id>
@@ -32,11 +32,16 @@
     </navigation-case>
 
     <navigation-case> 
-       <description>Match</description>
+       <description>concept_details</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>concept_details</from-outcome>
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>   
+
+    <navigation-case> 
+       <description>contact_us</description>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>  
     
   </navigation-rule>
  
@@ -60,6 +65,11 @@
        <from-outcome>concept_details</from-outcome>
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>   
+
+    <navigation-case> 
+       <description>contact_us</description>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>  
     
   </navigation-rule>
   
@@ -84,6 +94,11 @@
        <from-outcome>concept_details</from-outcome>
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>   
+
+    <navigation-case> 
+       <description>contact_us</description>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>  
     
   </navigation-rule>
   
