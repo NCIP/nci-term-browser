@@ -1,7 +1,15 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %> 
+<%@ page import="java.text.DateFormat" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Enumeration" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Collections.NCIChangeEventList" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.NCIHistory.NCIChangeEvent" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.NCIHistory.types.ChangeType" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 
 <html>
@@ -14,6 +22,7 @@
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" ><f:view>
 
     <%
+      DateFormat dataFormatter = new SimpleDateFormat("yyyy-MM-dd");
       String code = (String) request.getParameter("code");
       String dictionary = (String) request.getParameter("dictionary");
       
@@ -23,7 +32,6 @@
       request.getSession().setAttribute("concept", concept);
       String name = concept.getEntityDescription().getContent();
     %>
-    
 
     <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
       <tr> 
@@ -42,7 +50,7 @@
             </td></tr>
 
             <tr><td align="left">
-              <b>Sample History (UNDER CONSTRUCTION)</b>
+              <b>History</b>
             </td></tr>
                 
             <tr><td align="left">
@@ -54,14 +62,23 @@
                 </tr>
                 
                 <%
-                  String actions[] = new String[] { "create", "modify", "modify", "modify" };
-                  String dates[] = new String[] { "2003-08-12", "2003-09-23", "2003-10-31", "2003-12-25" };
-                  String references[] = new String[] { "none", "none", "none", "none" };
-                  for (int i=0; i<actions.length; ++i) {
-                    String action = actions[i];
-                    String date = dates[i];
-                    String reference = references[i];
-                    if (i % 2 == 0) {
+                  HistoryUtils hUtils = new HistoryUtils();
+                  NCIChangeEventList list = hUtils.getEditActions(code);
+                  Enumeration enumeration = list.enumerateEntry();
+                  int i=0;
+                  while (enumeration.hasMoreElements()) {
+                    NCIChangeEvent event = (NCIChangeEvent) enumeration.nextElement();
+                    ChangeType type = event.getEditaction();
+                    Date date = event.getEditDate();
+                    String refCode = event.getReferencecode();
+                    String refName = event.getReferencename();
+                    String refInfo = "none";
+                    if (refCode != null && refCode.length() > 0 && ! refCode.equalsIgnoreCase("null")) {
+                      Concept refConcept = DataUtils.getConceptByCode(dictionary, vers, ltag, refCode);
+                      refName = refConcept.getEntityDescription().getContent();
+                      refInfo = refName + " (Code " + refCode + ")";
+                    }
+                    if (i++ % 2 == 0) {
                 %>
                       <tr class="dataRowDark">
                 <%    
@@ -71,9 +88,9 @@
                 <% 
                     }
                 %>
-                        <td class="dataCellText"><%=action%></td>
-                        <td class="dataCellText"><%=date%></td>
-                        <td class="dataCellText"><%=reference%></td>
+                        <td class="dataCellText"><%=type%></td>
+                        <td class="dataCellText"><%=dataFormatter.format(date)%></td>
+                        <td class="dataCellText"><%=refInfo%></td>
                       </tr>
                 <%  
                   }
