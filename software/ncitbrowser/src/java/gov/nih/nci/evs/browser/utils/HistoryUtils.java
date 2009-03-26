@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Vector;
 
 import org.LexGrid.LexBIG.DataModel.Collections.NCIChangeEventList;
@@ -34,31 +35,36 @@ public class HistoryUtils {
         
         NCIChangeEventList list = hs.getEditActionList(Constructors
             .createConceptReference(code, null), null, null);
-        return getEditActions(codingSchemeName, vers, ltag, list);
+        return getEditActions(codingSchemeName, vers, ltag, code, list);
     }
     
     private static Vector<String> getEditActions(String codingSchemeName, 
-            String vers, String ltag, NCIChangeEventList list) {
+            String vers, String ltag, String code, NCIChangeEventList list) {
         Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
         int i = 0;
         Vector<String> v = new Vector<String>();
+        HashSet<String> hset = new HashSet<String>();
         while (enumeration.hasMoreElements()) {
             NCIChangeEvent event = enumeration.nextElement();
             ChangeType type = event.getEditaction();
             Date date = event.getEditDate();
-            String code = event.getReferencecode();
-            String info = "none";
-            if (code != null && code.length() > 0 && 
-                    ! code.equalsIgnoreCase("null")) {
+            String rCode = event.getReferencecode();
+            String desc = "none";
+            if (rCode != null && rCode.length() > 0 && 
+                    ! rCode.equalsIgnoreCase("null") && 
+                    ! rCode.equals(code)) {
                 Concept c = DataUtils.getConceptByCode(
-                    codingSchemeName, vers, ltag, code);
+                    codingSchemeName, vers, ltag, rCode);
                 String name = c.getEntityDescription().getContent();
-                info = name + " (Code " + code + ")";
+                desc = name + " (Code " + rCode + ")";
             }
             
-            String data = type + "|" + _dataFormatter.format(date) + "|" + info;
-            System.out.println(++i + ") " + data);
-            v.add(data);
+            String info = type + "|" + _dataFormatter.format(date) + "|" + desc;
+            if (hset.contains(info))
+                continue;
+            //System.out.println(++i + ") " + info);
+            v.add(info);
+            hset.add(info);
         }
         return v;
     }
