@@ -690,7 +690,11 @@ public class SearchUtils {
 				// resolve nothing
 				boolean resolveConcepts = false;
                 //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null);
-                iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                try {
+                	iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+				}  catch (Exception e) {
+					System.out.println("ERROR: cns.resolve throws exceptions.");
+				}
 
                 //ResolvedConceptReferencesIterator 	resolve(SortOptionList sortOptions, LocalNameList filterOptions, LocalNameList propertyNames, CodedNodeSet.PropertyType[] propertyTypes, boolean resolveConcepts)
 
@@ -841,7 +845,6 @@ public class SearchUtils {
 				for (int i=0; i<rcra.length; i++)
 				{
 					ResolvedConceptReference rcr = rcra[i];
-
 					//org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
 					org.LexGrid.concepts.Concept ce = new org.LexGrid.concepts.Concept();
 					ce.setId(rcr.getConceptCode());
@@ -1060,6 +1063,7 @@ public class SearchUtils {
 	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 		String matchText0 = matchText;
 		matchText0 = matchText0.trim();
+		boolean preprocess = true;
         if (matchText == null || matchText.length() == 0)
         {
 			return new Vector();
@@ -1081,27 +1085,31 @@ public class SearchUtils {
 
 		else if (matchAlgorithm.compareToIgnoreCase("startsWith") == 0)
 		{
+			/*
 			matchText = "^" + matchText;
 			matchAlgorithm = "RegExp";
+			preprocess = false;
+			*/
 		}
 
 		else if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
-			if (matchText.length() == 1)
-			{
-				matchAlgorithm = "startsWith";
-			}
-			else
-			{
+			if (matchText.indexOf(" ") != -1) {
 				matchText = preprocessContains(matchText);
 				matchAlgorithm = "RegExp";
-			}
+				preprocess = false;
+		    }
 		}
 
-		if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0)
+		//System.out.println("matchText: " + matchText);
+		//System.out.println("matchAlgorithm: " + matchAlgorithm);
+
+		if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0 && preprocess)
 		{
 			matchText = preprocessRegExp(matchText);
 		}
+
+		//System.out.println("Final matchText: " + matchText);
 
         LocalNameList propertyList = null;
         CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
@@ -1136,8 +1144,6 @@ public class SearchUtils {
 				}
 				System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
 		}
-
-//post-processing contains??? performance issue ...
 
         if (iterator != null) {
 			Vector v = resolveIterator(	iterator, maxToReturn);
@@ -1255,7 +1261,6 @@ public class SearchUtils {
 		}
 		return true;
 	}
-
 /*
 	private static String replaceSpecialChars(String s){
 		//String escapedChars = "|!(){}[]^\"~*?:;-";

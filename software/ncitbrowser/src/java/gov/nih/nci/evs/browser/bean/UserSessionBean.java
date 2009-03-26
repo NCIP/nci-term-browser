@@ -170,6 +170,9 @@ public class UserSessionBean extends Object
         	return "concept_details";
 		}
 		String message = "No match found.";
+		if (matchAlgorithm.compareTo("exactMatch") != 0) {
+			message = "Please enter a more specific search string.";
+		}
 		request.getSession().setAttribute("message", message);
 		return "message";
 
