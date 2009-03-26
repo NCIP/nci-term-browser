@@ -42,7 +42,7 @@
               <hr/><br/>
             </td></tr>
 
-            <tr><td align="left">
+            <tr><td align="left" valign="bottom" class="standardText">
               <b>History</b>
             </td></tr>
                 
@@ -73,8 +73,11 @@
                     Vector cols = DataUtils.parseData(row, "|");
                     for (int j=0; j<cols.size(); ++j) {
                       Object cell = cols.elementAt(j);
+                      String iTag = "", iTagEnd = "";
+                      if (j==0 || j==2)
+                          { iTag = "<i>"; iTagEnd = "</i>"; }
                 %>
-                        <td class="dataCellText"><%=cell%></td>
+                        <td class="dataCellText"><%=iTag%><%=cell%><%=iTagEnd%></td>
                 <%
                     }
                 %>
