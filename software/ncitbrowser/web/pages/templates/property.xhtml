@@ -110,34 +110,33 @@ for (int i=0; i<displayItemList.size(); i++) {
 				          String value_wo_qualifier = value;
 				          
 				          int n = value.indexOf("|");
-				          if (n != -1 && propName_label.indexOf("Definition") != -1)
+				          if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1))
 				          {
-				              value_wo_qualifier = value.substring(0, n);
-				              String qualifier = value.substring(n+1, value.length());
-				              
-                                              value = value_wo_qualifier + " (Source: " + qualifier + ")";
-                                              
-                                              if (propName.compareTo("DEFINITION") == 0)
-                                              {
-                                                   num_definitions++;
-                                              }
-                                              else if (propName.compareTo("ALT_DEFINITION") == 0)
-                                              {
-                                                   num_alt_definitions++;
-                                              }
+						      value_wo_qualifier = value.substring(0, n);
+						      String qualifier = value.substring(n+1, value.length());
+						      if (qualifier.compareTo("NCI") != 0)
+						      {
+							      value = value_wo_qualifier;
+							      propName_label = qualifier + " " + propName_label;
+							      if (propName.compareTo("DEFINITION") == 0)
+							      {
+								   num_definitions++;
+							      }
+							      else if (propName.compareTo("ALT_DEFINITION") == 0)
+							      {
+								   num_alt_definitions++;
+							      }
+						      }	
+						      else
+						      {
+						          value = value_wo_qualifier;
+						      }
 				          }
 				          
 				          String url_str = url + value;
-				      
 				%>
 					<tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><%=value%>
-					
-					<!--
-					   <a href="<%= url %><%=url%>">&nbsp;( <%= linktext %> )</a>
-					 -->
-					 
-					 <a href="javascript:redirect_site('<%= url_str %>')">( <%= linktext %> )</a>
-					   
+					    <a href="javascript:redirect_site('<%= url_str %>')">( <%= linktext %> )</a>
 					</td></tr>
 				<%     
 				     }
@@ -153,28 +152,41 @@ for (int i=0; i<displayItemList.size(); i++) {
 						String value_wo_qualifier = value;
 
 						  int n = value.indexOf("|");
-						  if (n != -1 && propName_label.indexOf("Definition") != -1)
+						  if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1))
 						  {
+						  
+						  System.out.println("propName_label: " + propName_label);
+						  
 						      value_wo_qualifier = value.substring(0, n);
 						      String qualifier = value.substring(n+1, value.length());
-						      value = value_wo_qualifier + " (Source: " + qualifier + ")";
-
-						      if (propName.compareTo("DEFINITION") == 0)
+						      
+						  System.out.println("value_wo_qualifier: " + value_wo_qualifier);
+						  System.out.println("qualifier: " + qualifier);
+						  
+						      
+						      if (qualifier.compareTo("NCI") != 0)
 						      {
-							   num_definitions++;
-						      }
-						      else if (propName.compareTo("ALT_DEFINITION") == 0)
+							      //value = value_wo_qualifier + " (Source: " + qualifier + ")";
+							      value = value_wo_qualifier;
+							      propName_label = qualifier + " " + propName_label;
+							      if (propName.compareTo("DEFINITION") == 0)
+							      {
+								   num_definitions++;
+							      }
+							      else if (propName.compareTo("ALT_DEFINITION") == 0)
+							      {
+								   num_alt_definitions++;
+							      }
+						      }	
+						      else
 						      {
-							   num_alt_definitions++;
+						          value = value_wo_qualifier;
 						      }						      
 						  }						
 						
 						if (k == 0) {
 					%>   
-					<!--
-						    <tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><%=value_wo_qualifier%></td></tr>
-						    -->
-						    
+			    
 						    <tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><%=value%></td></tr>
 						    
 					<% 
@@ -191,40 +203,7 @@ for (int i=0; i<displayItemList.size(); i++) {
 					<%
 				}
 			}
-		
-			
-			if (num_definitions == 0)
-			{
-				for (int i=0; i<properties_to_display.size(); i++) {
-					String propName = (String) properties_to_display.elementAt(i);
-					if (propName.compareTo("DEFINITION") == 0)
-					{
-					    String propName_label = (String) properties_to_display_label.elementAt(i);
-					    %>
-			                    <tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><i>(None)</i>
-			                    <%
-			                    break;
-			                }
-			        }
-			}
-			
-			if (num_alt_definitions == 0)
-			{
-				for (int i=0; i<properties_to_display.size(); i++) {
-					String propName = (String) properties_to_display.elementAt(i);
-					if (propName.compareTo("ALT_DEFINITION") == 0)
-					{
-					    String propName_label = (String) properties_to_display_label.elementAt(i);
-					    %>
-			                    <tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><i>(None)</i>
-			                    <%
-			                    break;
-			                }
-			        }			
-			}				
 			%>
-			
-			
 			<tr><td class="standardText">&nbsp;</td></tr>
 			<tr><td class="standardText"><b>Synonyms &amp; Abbreviations:&nbsp;</b></td></tr>
 			<tr><td class="standardText">&nbsp;</td></tr>
