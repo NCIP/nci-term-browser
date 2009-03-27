@@ -23,80 +23,70 @@
       String ltag = null;
       Concept concept = (Concept) request.getSession().getAttribute("concept");
       String name = concept.getEntityDescription().getContent();
+      Vector headers = HistoryUtils.getTableHeader();
+      Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
     %>
 
     <%@ include file="/pages/templates/header.xhtml" %>
-      <div class="center-page">
-        <div class="pagecontent">
-      
-    <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-      <tr valign="top"> 
-        <td>    
-          <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-            <tr><td align="left">
-              <b><%=name%> (Code <%=code%>)</b>
-              <hr/><br/>
-            </td></tr>
+    <div class="center-page">
+      <div class="pagecontent">
+        <div class="texttitle-blue"
+            <b><%=name%> (Code <%=code%>)</b>
+        </div>
+        <hr/><br/>
 
-            <tr><td align="right">
+        <div>
+          <table width="100%">
+            <tr class="standardText3">
+              <td align="left">
+                <b>History</b>
+              </td>
+              <td align="right">
                 <font size="1" color="red" align="right">       
-                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" alt="Term Type Definitions" border="0">
-                    <i>Send to Printer</i>
-                  </a> 
+                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0"><i>Send to Printer</i></a>
                 </font>
-            </td></tr>
-              
-            <tr><td align="left" valign="bottom" class="standardText3">
-              <b>History</b>
-            </td></tr>
-    
-            <tr><td align="left">
-              <%
-                Vector headers = HistoryUtils.getTableHeader();
-                Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
-              %>
-              <table cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
-                <tr>
-                  <%
-                  for (int i=0; i<headers.size(); ++i) {
-                    Object header = headers.elementAt(i); 
-                  %>
-                    <th class="dataTableHeader" scope="col" align="left"><%=header%></th>
-                  <%
-                  }
-                  %>
-                </tr>
-                
-                <%
-                  for (int i=0; i<rows.size(); ++i) {
-                    String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight"; 
-                %>
-                    <tr class="<%=rowColor%>">
-                <%
-                    String row = (String) rows.elementAt(i);
-                    Vector cols = DataUtils.parseData(row, "|");
-                    for (int j=0; j<cols.size(); ++j) {
-                      Object cell = cols.elementAt(j);
-                      String iTag = "", iTagEnd = "";
-                      if (j==0 || j==2)
-                          { iTag = "<i>"; iTagEnd = "</i>"; }
-                %>
-                        <td class="dataCellText"><%=iTag%><%=cell%><%=iTagEnd%></td>
-                <%
-                    }
-                %>
-                    </tr>
-                <%  
-                  }
-                %>
-                
-              <table>
-            </td></tr>
-          </table>         
-        </td> 
-      </tr>
-    </table>
+              </td>
+            </tr>
+          </table>
+        </div>
 
+        <div>
+          <table class="dataTable" width="100%" cellpadding="3" cellspacing="0" border="0">
+            <tr>
+              <%
+                for (int i=0; i<headers.size(); ++i) {
+                  Object header = headers.elementAt(i); 
+              %>
+                  <th class="dataTableHeader" scope="col" align="left"><%=header%></th>
+              <%
+                }
+              %>
+            </tr>
+                
+            <%
+              for (int i=0; i<rows.size(); ++i) {
+                String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight"; 
+            %>
+                <tr class="<%=rowColor%>">
+            <%
+                String row = (String) rows.elementAt(i);
+                Vector cols = DataUtils.parseData(row, "|");
+                for (int j=0; j<cols.size(); ++j) {
+                  Object cell = cols.elementAt(j);
+                  String iFormat = "", iFormatEnd = "";
+                  if (j==0 || j==2)
+                    { iFormat = "<i>"; iFormatEnd = "</i>"; }
+                  %>
+                    <td class="dataCellText"><%=iFormat%><%=cell%><%=iFormatEnd%></td>
+                  <%
+                }
+            %>
+                </tr>
+            <%  
+              }
+            %>
+          </table>
+        </div>
       </div>
     </div>
   </f:view></body>
