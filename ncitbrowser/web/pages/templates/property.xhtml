@@ -154,16 +154,8 @@ for (int i=0; i<displayItemList.size(); i++) {
 						  int n = value.indexOf("|");
 						  if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1))
 						  {
-						  
-						  System.out.println("propName_label: " + propName_label);
-						  
 						      value_wo_qualifier = value.substring(0, n);
 						      String qualifier = value.substring(n+1, value.length());
-						      
-						  System.out.println("value_wo_qualifier: " + value_wo_qualifier);
-						  System.out.println("qualifier: " + qualifier);
-						  
-						      
 						      if (qualifier.compareTo("NCI") != 0)
 						      {
 							      //value = value_wo_qualifier + " (Source: " + qualifier + ")";

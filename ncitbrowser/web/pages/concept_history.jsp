@@ -11,6 +11,12 @@
     <title>NCI Thesaurus Hierarchy</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
+<SCRIPT LANGUAGE="JavaScript">
+	function printPage(text){
+		text=document
+		print(text)
+	}
+</script>    
   </head>
 
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" ><f:view>
@@ -18,11 +24,11 @@
     <%
       String code = (String) request.getParameter("code");
       String dictionary = (String) request.getParameter("dictionary");
-      
       String vers = null;
       String ltag = null;
-      Concept concept = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-      request.getSession().setAttribute("concept", concept);
+      //Concept concept = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+      //request.getSession().setAttribute("concept", concept);
+      Concept concept = (Concept) request.getSession().getAttribute("concept");
       String name = concept.getEntityDescription().getContent();
     %>
 
@@ -42,7 +48,15 @@
               <hr/><br/>
             </td></tr>
 
-            <tr><td align="left" valign="bottom" class="standardText">
+	<tr>
+	       <td align="right">
+			<font size="1" color="red" align="right">       
+			     <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" alt="Term Type Definitions" border="0"><I>Send to Printer</I></a> 
+			</font>
+	       </td>
+	</tr>
+	
+            <tr><td align="left" valign="bottom" class="standardText3">
               <b>History</b>
             </td></tr>
                 
