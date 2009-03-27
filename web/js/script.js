@@ -1,5 +1,10 @@
 //function alert() {} 
 
+function printPage(text){
+  text=document;
+  print(text);
+}	
+
 function bookmark(url,title){
   if ((navigator.appName == "Microsoft Internet Explorer") && (parseInt(navigator.appVersion) >= 4)) {
       window.external.AddFavorite(url,title);
