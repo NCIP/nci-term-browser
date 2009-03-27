@@ -11,12 +11,7 @@
     <title>NCI Thesaurus Hierarchy</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
-<SCRIPT LANGUAGE="JavaScript">
-	function printPage(text){
-		text=document
-		print(text)
-	}
-</script>    
+    <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   </head>
 
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" ><f:view>
@@ -26,20 +21,15 @@
       String dictionary = (String) request.getParameter("dictionary");
       String vers = null;
       String ltag = null;
-      //Concept concept = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-      //request.getSession().setAttribute("concept", concept);
       Concept concept = (Concept) request.getSession().getAttribute("concept");
       String name = concept.getEntityDescription().getContent();
     %>
 
+    <%@ include file="/pages/templates/header.xhtml" %>
+      <div class="center-page">
+        <div class="pagecontent">
+      
     <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-      <tr> 
-        <td height="1%">    
-          <%@ include file="/pages/templates/nciHeader.html" %>
-          <br/>
-        </td> 
-      </tr>
-
       <tr valign="top"> 
         <td>    
           <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
@@ -48,18 +38,18 @@
               <hr/><br/>
             </td></tr>
 
-	<tr>
-	       <td align="right">
-			<font size="1" color="red" align="right">       
-			     <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" alt="Term Type Definitions" border="0"><I>Send to Printer</I></a> 
-			</font>
-	       </td>
-	</tr>
-	
+            <tr><td align="right">
+                <font size="1" color="red" align="right">       
+                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" alt="Term Type Definitions" border="0">
+                    <i>Send to Printer</i>
+                  </a> 
+                </font>
+            </td></tr>
+              
             <tr><td align="left" valign="bottom" class="standardText3">
               <b>History</b>
             </td></tr>
-                
+    
             <tr><td align="left">
               <%
                 Vector headers = HistoryUtils.getTableHeader();
@@ -106,5 +96,8 @@
         </td> 
       </tr>
     </table>
+
+      </div>
+    </div>
   </f:view></body>
 </html>
