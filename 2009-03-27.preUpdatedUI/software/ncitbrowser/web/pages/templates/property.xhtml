@@ -1,0 +1,416 @@
+<%
+    
+    List displayItemList = null;
+
+    try {
+	displayItemList = NCItBrowserProperties.getInstance().getDisplayItemList();
+    } catch (Exception ex) {
+    }
+if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) && displayItemList != null)
+{
+Vector propertytypes = new Vector();
+propertytypes.add("PRESENTATION");
+propertytypes.add("DEFINITION");
+propertytypes.add("GENERIC");
+propertytypes.add("INSTRUCTION");
+propertytypes.add("COMMENT");
+
+Vector additionalproperties = new Vector();
+additionalproperties.add("CONCEPT_NAME");
+additionalproperties.add("primitive");
+Concept curr_concept = (Concept) request.getSession().getAttribute("concept");
+
+String concept_status = curr_concept.getConceptStatus();
+if (concept_status == null)
+{
+	concept_status = "(not specified)";
+}
+else
+{
+        concept_status = concept_status.replaceAll("_", " ");
+}
+
+HashSet hset = new HashSet();
+HashMap hmap = new HashMap();
+Vector propertyvalues = null;
+for (int i=0; i<propertytypes.size(); i++) {
+	String propertytype = (String) propertytypes.elementAt(i);
+	Vector propertynames = DataUtils.getPropertyNamesByType(curr_concept, propertytype);
+	for (int j=0; j<propertynames.size(); j++) {
+	    String propertyname = (String) propertynames.elementAt(j);
+	    if (!hset.contains(propertyname))
+	    {
+		hset.add(propertyname);
+		propertyvalues = DataUtils.getPropertyValues(curr_concept, propertytype, propertyname);
+		if (propertyvalues != null)
+		{
+		    hmap.put(propertyname, propertyvalues);	
+		}
+	    }
+	}
+}
+propertyvalues = new Vector();
+String concept_id = curr_concept.getId();
+propertyvalues.add(concept_id);
+hmap.put("Code", propertyvalues);
+Vector displayed_properties = new Vector();
+Vector properties_to_display = new Vector();
+Vector properties_to_display_label = new Vector();
+Vector properties_to_display_url = new Vector();
+Vector properties_to_display_linktext = new Vector();
+
+for (int i=0; i<displayItemList.size(); i++) {
+    DisplayItem displayItem = (DisplayItem) displayItemList.get(i);	
+    if (!displayItem.getIsExternalCode())
+    {
+         properties_to_display.add(displayItem.getPropertyName());
+         properties_to_display_label.add(displayItem.getItemLabel());
+         properties_to_display_url.add(displayItem.getUrl());
+         properties_to_display_linktext.add(displayItem.getHyperlinkText());
+    }
+}
+int num_definitions = 0;
+int num_alt_definitions = 0;
+Vector external_source_codes = new Vector();
+Vector external_source_codes_label = new Vector();
+Vector external_source_codes_url = new Vector();
+Vector external_source_codes_linktext = new Vector();
+for (int i=0; i<displayItemList.size(); i++) {
+    DisplayItem displayItem = (DisplayItem) displayItemList.get(i);	
+    if (displayItem.getIsExternalCode())
+    {
+         external_source_codes.add(displayItem.getPropertyName());
+         external_source_codes_label.add(displayItem.getItemLabel());
+         external_source_codes_url.add(displayItem.getUrl());
+         external_source_codes_linktext.add(displayItem.getHyperlinkText());
+    }
+}
+%>
+                        <tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td class="standardText3"><b>Term and Properties</b></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td class="standardText"><b>Concept Status:&nbsp;</b><i><%=concept_status%></i></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+<%
+			
+			for (int i=0; i<properties_to_display.size(); i++) {
+			
+				String propName = (String) properties_to_display.elementAt(i);
+				String propName_label = (String) properties_to_display_label.elementAt(i);
+				String propName_label2 = propName_label;
+				String url = (String) properties_to_display_url.elementAt(i);
+				String linktext = (String) properties_to_display_linktext.elementAt(i);
+
+				if (url != null)
+				{
+				      displayed_properties.add(propName);
+				      Vector value_vec = (Vector) hmap.get(propName);
+				      if (value_vec != null && value_vec.size() > 0) {
+				          String value = (String) value_vec.elementAt(0);
+				          String value_wo_qualifier = value;
+				          
+				          int n = value.indexOf("|");
+				          if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1))
+				          {
+						      value_wo_qualifier = value.substring(0, n);
+						      String qualifier = value.substring(n+1, value.length());
+						      if (qualifier.compareTo("NCI") != 0)
+						      {
+							      value = value_wo_qualifier;
+							      propName_label = qualifier + " " + propName_label;
+							      if (propName.compareTo("DEFINITION") == 0)
+							      {
+								   num_definitions++;
+							      }
+							      else if (propName.compareTo("ALT_DEFINITION") == 0)
+							      {
+								   num_alt_definitions++;
+							      }
+						      }	
+						      else
+						      {
+						          value = value_wo_qualifier;
+						      }
+				          }
+				          
+				          String url_str = url + value;
+				%>
+					<tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><%=value%>
+					    <a href="javascript:redirect_site('<%= url_str %>')">( <%= linktext %> )</a>
+					</td></tr>
+				<%     
+				     }
+				}
+				
+				else if (propName_label.indexOf("Synonyms") == -1) {
+					displayed_properties.add(propName);
+					Vector value_vec = (Vector) hmap.get(propName);
+					if (value_vec != null && value_vec.size() > 0) {
+					    int k = 0;
+					    for (int j=0; j<value_vec.size(); j++) {
+						String value = (String) value_vec.elementAt(j);
+						String value_wo_qualifier = value;
+
+						  int n = value.indexOf("|");
+						  if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1))
+						  {
+						      value_wo_qualifier = value.substring(0, n);
+						      String qualifier = value.substring(n+1, value.length());
+						      if (qualifier.compareTo("NCI") != 0)
+						      {
+							      //value = value_wo_qualifier + " (Source: " + qualifier + ")";
+							      value = value_wo_qualifier;
+							      propName_label = qualifier + " " + propName_label;
+							      if (propName.compareTo("DEFINITION") == 0)
+							      {
+								   num_definitions++;
+							      }
+							      else if (propName.compareTo("ALT_DEFINITION") == 0)
+							      {
+								   num_alt_definitions++;
+							      }
+						      }	
+						      else
+						      {
+						          value = value_wo_qualifier;
+						      }						      
+						  }						
+						
+						if (k == 0) {
+					%>   
+			    
+						    <tr><td class="standardText"><b><%=propName_label%>:&nbsp;</b><%=value%></td></tr>
+						    
+					<% 
+						} else {
+					%>       
+						    <tr><td class="standardText"><b>&nbsp;</b><%=value%></td></tr>
+					<% 
+						}
+						
+					    }
+					}
+					%>
+					<tr><td class="standardText">&nbsp;</td></tr>
+					<%
+				}
+			}
+			%>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td class="standardText"><b>Synonyms &amp; Abbreviations:&nbsp;</b></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td><table>			
+			<%
+			for (int i=0; i<properties_to_display.size(); i++) {
+			
+				String propName = (String) properties_to_display.elementAt(i);
+				String propName_label = (String) properties_to_display_label.elementAt(i);
+				
+				if (propName_label.indexOf("Synonyms") != -1) {
+					displayed_properties.add(propName);
+					Vector value_vec = (Vector) hmap.get(propName);
+					if (value_vec != null && value_vec.size() > 0) {
+					    for (int j=0; j<value_vec.size(); j++) {
+						String value = (String) value_vec.elementAt(j);
+						int n = value.indexOf("|");
+						if (n != -1) value = value.substring(0, n);
+					%>       
+						    <tr><td class="standardText"><b>&nbsp;</b><%=value%></td></tr>
+					<% 
+					    }
+					}
+				}
+			}
+			%>
+			<tr><td class="standardText">
+			&nbsp;<a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=synonym" >Synonym Details</a>
+                        </td></tr>
+                        
+			</table></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+                        <tr><td class="standardText"><b>External Source Codes:&nbsp;</b></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td><table>
+			<%
+			int n = 0;
+			
+			for (int i=0; i<external_source_codes.size(); i++) {
+				String propName = (String) external_source_codes.elementAt(i);
+			
+				String propName_label = (String) external_source_codes_label.elementAt(i);
+				String prop_url = (String) external_source_codes_url.elementAt(i);
+				String prop_linktext = (String) external_source_codes_linktext.elementAt(i);
+				
+				displayed_properties.add(propName);
+				Vector value_vec = (Vector) hmap.get(propName);
+				if (value_vec != null && value_vec.size() > 0) {
+				    for (int j=0; j<value_vec.size(); j++) {
+					String value = (String) value_vec.elementAt(j);
+					  if (n % 2 == 0)
+					  {
+					  %>
+					      <tr class="dataRowDark">
+					  <%    
+					  }
+					  else
+					  {
+					  %>
+					      <tr class="dataRowLight"> 
+					  <% 
+					  }
+					  n++;
+					  %>
+					  
+					  
+				         <td class="standardText"><i><%=propName_label%></i></td>
+				         <td class="standardText">
+				             <i><%=value%>
+				             
+				         <%    
+				         if (prop_url != null && prop_url.compareTo("null") != 0)
+				         {
+				             String url_str = prop_url + value;
+				         %>
+				                 <a href="javascript:redirect_site('<%= url_str %>')">( <%= prop_linktext %> )</a>
+				                 
+				         <%
+				         }
+				         %>
+				         
+				             </i>
+				         </td>
+				         </tr>	
+				    <%     
+				    }
+				}
+			}
+			%>
+			
+			</table></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+                        <tr><td class="standardText"><b>Other Properties:&nbsp;</b></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td><table>
+			<%
+			Set keyset = hmap.keySet();
+			Iterator iterator = keyset.iterator(); 
+			n = 0;
+			while (iterator.hasNext())
+			{
+			     String prop_name = (String) iterator.next();
+			     if (!displayed_properties.contains(prop_name) && !additionalproperties.contains(prop_name) )
+			     {
+				Vector value_vec = (Vector) hmap.get(prop_name);
+				if (value_vec == null || value_vec.size() == 0) {
+					  if (n % 2 == 0)
+					  {
+					  %>
+					      <tr class="dataRowDark">
+					  <%    
+					  }
+					  else
+					  {
+					  %>
+					      <tr class="dataRowLight"> 
+					  <% 
+					  }
+					  n++;
+					  %>
+				         <td class="standardText"><i><%=prop_name%></i></td>
+				         <td class="standardText"><i>None</i></td>
+				         </tr>
+				<%
+				} else {
+				    for (int j=0; j<value_vec.size(); j++) {
+					String value = (String) value_vec.elementAt(j);
+					  if (n % 2 == 0)
+					  {
+					  %>
+					      <tr class="dataRowDark">
+					  <%    
+					  }
+					  else
+					  {
+					  %>
+					      <tr class="dataRowLight"> 
+					  <% 
+					  }
+					  n++;
+					  %>
+				         <td class="standardText"><i><%=prop_name%></i></td>
+				         <td class="standardText"><i><%=value%></i></td>
+				         </tr>	
+				    <%     
+				    }
+				}
+			     }
+			}
+			%>
+			</table></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+                        <tr><td class="standardText"><b>Additional Concept Data:&nbsp;</b></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			<tr><td><table>
+<%			
+String concept_name = null;
+String concept_name_prop_name = "CONCEPT_NAME";
+String concept_name_label = "Concept Name/OWL ID:";
+Vector concept_name_value_vec = (Vector) hmap.get(concept_name_prop_name);
+if (concept_name_value_vec != null) {
+   concept_name = (String) concept_name_value_vec.elementAt(0);
+}
+String primitive = null;
+String primitive_prop_name = "primitive";
+String primitive_label = "Primitive:";
+Vector primitive_value_vec = (Vector) hmap.get(primitive_prop_name);
+if (primitive_value_vec != null) {
+   primitive = (String) primitive_value_vec.elementAt(0);
+}
+String kind = "not available";
+String kind_prop_name = "Kind";
+String kind_label = "Kind:";
+%>
+			    <tr class="dataRowDark">
+				         <td class="standardText"><i><%=concept_name_label%></i></td>
+				         <td class="standardText"><i><%=concept_name%></i></td>
+			    </tr>
+			    <tr class="dataRowLight">
+				         <td class="standardText"><i><%=primitive_label%></i></td>
+				         <td class="standardText"><i><%=primitive%></i></td>
+			    </tr>
+			    <!--
+			    <tr class="dataRowDark">
+				         <td class="standardText"><i><%=kind_label%></i></td>
+				         <td class="standardText"><i><%=kind%></i></td>
+			    </tr>
+			    -->
+			    
+			</table></td></tr>
+			<tr><td class="standardText">&nbsp;</td></tr>
+			
+<%
+String requestURL = request.getRequestURL().toString();
+int idx = requestURL.indexOf("pages");
+requestURL = requestURL.substring(0, idx);
+String url = requestURL + "ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=" + concept_id;
+String bookmark_title = "NCItBrowser%20" + concept_id;
+%>
+			
+			
+			
+                        <tr><td class="standardText"><b>URL to Bookmark</b>:&nbsp;
+                        <!--
+                        <i><%= requestURL %>ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i>
+                        <a href=javascript:bookmark('<%= url %>','<%= bookmark_title %>')>
+                        <a href=javascript:addBookmarkForBrowser('<%= bookmark_title %>')>
+                        -->
+                        
+                        <a href=javascript:bookmark('<%= url %>','<%= bookmark_title %>')>
+                        <i><%= requestURL %>ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i>
+                        </a>
+                        
+                        </td></tr>
+                        <tr><td class="standardText">&nbsp;</td></tr>
+<%
+}
+%>
