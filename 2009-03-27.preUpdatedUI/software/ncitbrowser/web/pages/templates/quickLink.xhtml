@@ -1,0 +1,27 @@
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%
+String terminology_subset_download_URL = new DataUtils().getTerminologySubsetDownloadURL();
+%>
+
+<form name="form_link" id="form_link" method="post" >
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#AAAAAB" >
+    <tr>
+        <td height="24px" align="right" align="center">
+        <!--
+            <select id="quicklink" title="Quick Links" OnChange="window.open(this.options[this.selectedIndex].value, 'New')" style="height:20px;>
+         -->   
+            <select id="quicklink" title="Quick Links" OnChange="javascript:openQuickLinkSite(this.options[this.selectedIndex].value)" style="height:20px;>    
+                <option value="#">Quick Links</option>
+                <option value="#" selected>Quick Links</option>
+                <option value="http://ncicb.nci.nih.gov/NCICB/infrastructure/cacore_overview/vocabulary">EVS Home</option>
+                <option value="http://bioportal.nci.nih.gov">NCI Bioportal</option>
+                <option value="http://ncimeta.nci.nih.gov/MetaServlet/">NCI MetaThesaurus</option>
+                <option value="http://nciterms.nci.nih.gov">NCI Terminology Browser</option>
+                <option value="http://www.cancer.gov/cancertopics/terminologyresources">NCI Terminology Resources</option>
+                <option value='<%=terminology_subset_download_URL%>'>Terminology Subset Reports</option>
+            </select>
+        </td>
+        <td width="10px"></td>
+    </tr>
+</table>
+</form>
