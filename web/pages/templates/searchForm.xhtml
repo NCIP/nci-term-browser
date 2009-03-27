@@ -1,63 +1,38 @@
-<FORM NAME="searchTerm" METHOD="POST" STYLE="padding:0px;margin:0px" >
-
-<table cellspacing=0 cellpadding=0 height="42">
-    <tr bgcolor="#2D2D7F">
-     <td align=right  style="padding-right: 6px; padding-top: 0px; vertical-align: top; padding:0px; margin:0px" >
-        <SPAN class="StandardFont"><FONT COLOR="white"></font></SPAN>
-<%
-String match_text = (String) request.getSession().getAttribute("matchText");
-if (match_text == null) match_text = "";
-%>
-
-    <input CLASS="SearchField" size="22" name="matchText" value="<%=match_text%>"
-        onFocus="active = true" onBlur="active = false" onkeypress="return submitEnter('search',event)" />
-
-<h:commandButton
+<FORM NAME="searchTerm" METHOD="POST" CLASS="search-form" >
+  <%
+    String match_text = (String) request.getSession().getAttribute("matchText");
+    if (match_text == null) match_text = "";
+  %>
+  <input CLASS="searchbox-input"
+    name="matchText"
+    value="<%=match_text%>"
+    onFocus="active = true" onBlur="active = false" onkeypress="return submitEnter('search',event)"
+  />
+  <h:commandButton
     id="search"
     value="Search"
-    action="#{userSessionBean.searchAction}" >
-</h:commandButton>
-
-    </td>
-     </tr>
-     <tr bgcolor="#2D2D7F">
-      <td align=right  style="padding-right: 6px" >
-
-             <font COLOR="white" size="1" face="arial,helvetica">
-
-
-<%
-String algorithm = (String) request.getSession().getAttribute("selectedAlgorithm");
-if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
-{
-%>
-    <input type="radio" name="algorithm" value="exactMatch" checked >Exact Match&nbsp;
-    <input type="radio" name="algorithm" value="startsWith" >Begins With&nbsp;
-    <input type="radio" name="algorithm" value="contains">Contains&nbsp;
-<%
-}
-else if (algorithm.compareTo("contains") == 0)
-{
-%>
-    <input type="radio" name="algorithm" value="exactMatch" >Exact Match&nbsp;
-    <input type="radio" name="algorithm" value="startsWith" >Begins With&nbsp;
-    <input type="radio" name="algorithm" value="contains" checked>Contains&nbsp;
-<%
-}
-else
-{
-%>
-    <input type="radio" name="algorithm" value="exactMatch" >Exact Match&nbsp;
-    <input type="radio" name="algorithm" value="startsWith" checked>Begins With&nbsp;
-    <input type="radio" name="algorithm" value="contains" >Contains&nbsp;
-<%
-}
-%>
-
-             </font>
-      </td>
-     </tr>
-
-</table>
-
+    action="#{userSessionBean.searchAction}"
+    image="images/search.gif">
+  </h:commandButton>
+  &nbsp;
+  <h:commandButton
+    id="help"
+    value="Help"
+    alt="Help"
+    image="images/search-help.gif"
+    action="#">
+  </h:commandButton>
+  <%
+    String algorithm = (String) request.getSession().getAttribute("selectedAlgorithm");
+    String check_e = "", check_s = "" , check_c ="";
+    if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
+      check_e = "checked";
+    else if (algorithm.compareTo("startsWith") == 0)
+      check_s= "checked";
+    else
+      check_c = "checked";
+  %>
+  <input type="radio" name="algorithm" value="exactMatch" <%=check_e%>>Exact Match&nbsp;
+  <input type="radio" name="algorithm" value="startsWith" <%=check_s%>>Begins With&nbsp;
+  <input type="radio" name="algorithm" value="contains" <%=check_c%>>Contains&nbsp;
 </FORM>
