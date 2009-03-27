@@ -102,6 +102,14 @@
     
   </navigation-rule>
   
+  <navigation-rule>
+    <from-view-id>/pages/synonym.jsp</from-view-id>
+    <navigation-case> 
+       <description>term_type_help_info</description>
+       <to-view-id>/pages/term_type_help_info.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>  
+  
 <managed-bean>
   <managed-bean-name>DataUtils</managed-bean-name>
   <managed-bean-class>gov.nih.nci.evs.browser.bean.DataUtils</managed-bean-class>
