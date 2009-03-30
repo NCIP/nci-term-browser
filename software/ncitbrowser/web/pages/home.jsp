@@ -27,7 +27,7 @@
       </div>
       <!-- end Page content -->
     </div>
-    <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="" /></div>
     <!-- end Main box -->
   </div>
 </f:view>
