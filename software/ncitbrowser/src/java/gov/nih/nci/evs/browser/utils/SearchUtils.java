@@ -1145,6 +1145,7 @@ public class SearchUtils {
 				System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
 		}
 
+/*
         if (iterator != null) {
 			Vector v = resolveIterator(	iterator, maxToReturn);
 			if (v != null && v.size() > 0)
@@ -1177,7 +1178,26 @@ public class SearchUtils {
 				return v;
 			}
 		}
-		return new Vector();
+*/
+        //GF#19982 KLO
+        Vector v = null;
+        if (iterator != null) {
+			v = resolveIterator(iterator, maxToReturn);
+		}
+		if (v == null) v = new Vector();
+		Concept c = getConceptByCode(scheme, null, null, matchText0);
+		if (c != null)
+		{
+			v.add(c);
+		}
+		if (v.size() > 0)
+		{
+			if(!apply_sort_score)
+			{
+				SortUtils.quickSort(v);
+			}
+		}
+		return v;
 	}
 
 
