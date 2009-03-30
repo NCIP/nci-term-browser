@@ -1561,6 +1561,7 @@ System.out.println("WARNING: property_type not found -- " + property_type);
 	    StringTokenizer st = new StringTokenizer(line, tab);
 		while (st.hasMoreTokens()) {
 			String value = st.nextToken();
+			if (value.compareTo("null") == 0) value = " ";
 			data_vec.add(value);
 		}
 		return data_vec;
