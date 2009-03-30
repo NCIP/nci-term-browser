@@ -12,15 +12,15 @@
     id="search"
     value="Search"
     action="#{userSessionBean.searchAction}"
-    image="images/search.gif">
+    image="#{facesContext.externalContext.requestContextPath}/images/search.gif">
   </h:commandButton>
   &nbsp;
   <h:commandButton
     id="help"
     value="Help"
     alt="Help"
-    image="images/search-help.gif"
-    action="#">
+    action="#"
+    image="#{facesContext.externalContext.requestContextPath}/images/search-help.gif">
   </h:commandButton>
   <%
     String algorithm = (String) request.getSession().getAttribute("selectedAlgorithm");
