@@ -29,102 +29,85 @@
 
 <html>
 <head>
-<title>NCI Thesaurus Browser Home</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js">
-</script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js">
-</script>
+  <title>NCI Thesaurus Browser Home</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <f:view>
+    <%@ include file="/pages/templates/header.xhtml" %>
+    <div class="center-page">
+      <%@ include file="/pages/templates/sub-header.xhtml" %>
+      <!-- Main box -->
+      <div id="main-area">
+        <%@ include file="/pages/templates/content-header.xhtml" %>
+        <!-- Page content -->
+        <div class="pagecontent">
+          <%
+            String dictionary = null;
+            String code = null;
+            String type = null;
 
-<f:view>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-        <td height="1%" VALIGN="TOP">
-                <%@ include file="/pages/templates/nciHeader.html" %>
-                <%@ include file="/pages/templates/header.xhtml" %>
-        </td>
-        </tr>
-    <tr>
-        <td height="1%">
-                      <%@ include file="/pages/templates/quickLink.xhtml" %>
-                </td>
-        </tr>
-<%
-    String dictionary = null;
-    String code = null;
-    String type = null;
-    
-    String singleton = (String) request.getSession().getAttribute("singleton");
-    if (singleton != null && singleton.compareTo("true") == 0)
-    {
-        dictionary = (String) request.getSession().getAttribute("dictionary");
-        code = (String) request.getSession().getAttribute("code");
-    }
-    else {
-        dictionary = (String) request.getParameter("dictionary");
-	code = (String) request.getParameter("code");
-	type = (String) request.getParameter("type");
-    }
-    if (type == null)
-    {
-        type = "properties";
-    }
-    request.getSession().setAttribute("dictionary", dictionary);
-    request.getSession().setAttribute("code", code);
-    request.getSession().setAttribute("type", type);
-    request.getSession().setAttribute("singleton", "false");
-    String vers = null;
-    String ltag = null;
-    Concept c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-    request.getSession().setAttribute("concept", c);
-    String name = c.getEntityDescription().getContent();
-   
-%>
-       <tr>
-          <td>&nbsp;</td>
-       </tr>
-       <tr>
-          <td class="standardText4">
-          <b><%=name%> (Code <%=code%>)</b>
-          </td>
-          <td>&nbsp;</td>
-       </tr>
-    <tr>
-        <td height="1%" >
-             <%@ include file="/pages/templates/typeLinks.xhtml" %>
-        </td>
-    </tr>
-    <tr>
-        <td>
-             <%@ include file="/pages/templates/property.xhtml" %>
-        </td>
-    </tr>
-    <tr>
-        <td>
-             <%@ include file="/pages/templates/relationship.xhtml" %>
-        </td>
-    </tr>
-    <tr>
-        <td>
-             <%@ include file="/pages/templates/synonym.xhtml" %>
-        </td>
-    </tr>
-    <tr>
-        <td height="20" width="100%" class="footerMenu">
-             <%@ include file="/pages/templates/applicationFooter.html" %>
-        </td>
-    </tr>
-    <tr>
-        <td>
-             <%@ include file="/pages/templates/nciFooter.html" %>
-        </td>
-    </tr>
-</table>
-</f:view>
-
+            String singleton = (String) request.getSession().getAttribute("singleton");
+            if (singleton != null && singleton.compareTo("true") == 0) {
+              dictionary = (String) request.getSession().getAttribute("dictionary");
+              code = (String) request.getSession().getAttribute("code");
+            } else {
+              dictionary = (String) request.getParameter("dictionary");
+              code = (String) request.getParameter("code");
+              type = (String) request.getParameter("type");
+            }
+            if (type == null) {
+              type = "properties";
+            }
+            request.getSession().setAttribute("dictionary", dictionary);
+            request.getSession().setAttribute("code", code);
+            request.getSession().setAttribute("type", type);
+            request.getSession().setAttribute("singleton", "false");
+            String vers = null;
+            String ltag = null;
+            Concept c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+            request.getSession().setAttribute("concept", c);
+            String name = c.getEntityDescription().getContent();
+          %>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td class="texttitle-blue">
+                <b><%=name%> (Code <%=code%>)</b>
+              </td>
+            </tr>
+            <tr><td><hr></td></tr>
+            <tr>
+              <td height="1%" class="textbody">
+                <%@ include file="/pages/templates/typeLinks.xhtml" %>
+              </td>
+            </tr>
+            <tr>
+              <td class="textbody">
+                <%@ include file="/pages/templates/property.xhtml" %>
+              </td>
+            </tr>
+            <tr>
+              <td class="textbody">
+                <%@ include file="/pages/templates/relationship.xhtml" %>
+              </td>
+            </tr>
+            <tr>
+              <td class="textbody">
+                <%@ include file="/pages/templates/synonym.xhtml" %>
+              </td>
+            </tr>
+          </table>
+          <%@ include file="/pages/templates/nciFooter.html" %>
+        </div>
+        <!-- end Page content -->
+      </div>
+      <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="" /></div>
+      <!-- end Main box -->
+    </div>
+  </f:view>
 </body>
 </html>
