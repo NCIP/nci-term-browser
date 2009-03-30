@@ -1081,8 +1081,11 @@ public class SearchUtils {
 					return searchByName(scheme, version, matchText, "RegExp", maxToReturn);
 				}
 		    }
+		    if (containsSpecialChars(matchText))
+		    {
+				return searchByName(scheme, version, matchText, "RegExp", maxToReturn);
+			}
 		}
-
 		else if (matchAlgorithm.compareToIgnoreCase("startsWith") == 0)
 		{
 			/*
@@ -1101,15 +1104,10 @@ public class SearchUtils {
 		    }
 		}
 
-		//System.out.println("matchText: " + matchText);
-		//System.out.println("matchAlgorithm: " + matchAlgorithm);
-
-		if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0 && preprocess)
+    	if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0 && preprocess)
 		{
 			matchText = preprocessRegExp(matchText);
 		}
-
-		//System.out.println("Final matchText: " + matchText);
 
         LocalNameList propertyList = null;
         CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
@@ -1321,10 +1319,12 @@ public class SearchUtils {
 		return s;
 	}
 
+
    public static String preprocessRegExp(String s)
    {
 	   s = replaceSpecialChars(s);
-	   s = escapeSpecialChars(s, "()");
+	   //s = escapeSpecialChars(s, "()");
+	   s = escapeSpecialChars(s, "(){}\\,-");
        String prefix = s.toLowerCase();
        String[] words = toWords(prefix, false); // include stop words
        StringBuffer regex = new StringBuffer();
@@ -1350,8 +1350,6 @@ public class SearchUtils {
        }
        return regex.toString();
    }
-
-
 
 	/************************
 	 * Custom sort processing
@@ -1485,6 +1483,17 @@ public class SearchUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private boolean containsSpecialChars(String s){
+		String escapedChars = "/.|!(){}[]^\"~*?;-_";
+		for (int i=0; i<escapedChars.length(); i++)
+		{
+			char c = escapedChars.charAt(i);
+			if (s.indexOf(c) != -1) return true;
+		}
+		return false;
+	}
+
 
 	public static void main(String[] args)
 	{
