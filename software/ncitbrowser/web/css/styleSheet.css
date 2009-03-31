@@ -33,7 +33,10 @@ h1
 
 h2 
 {
- 
+ font-size: 12px;
+ color: #000000;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+ font-weight: bold;
 }
 
 h3 
