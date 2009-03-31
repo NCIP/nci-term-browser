@@ -386,81 +386,50 @@
 
 
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
-
-<f:view>
-
-
-<form id="pg_form">
-<%
-String ontology_node_id = (String) request.getParameter("code");
-%>
-<input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
-
-<%
-String ontology_display_name = (String) request.getParameter("dictionary");
-%>
-<input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
-</form>
-
-
-
-<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-	<tr> 
-		<td height="1%"> 	
-			<%@ include file="/pages/templates/nciHeader.html" %>
-		</td> 
-        </tr>
-
-	<tr> 
-		<td> 	
-			   <table summary="" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
-
-				<tr><td allign="left">
-				    <b>NCI Thesaurus Hierarchy</b>
-				</td></tr>
-
-				<tr><td allign="left">
-				    <hr></hr>
-				</td></tr>
-
-
-				<tr><td class="standardText">
-				
-<div id="rootDesc">
-	<div id="bd">
-	</div>
-	<div id="ft">
-	</div>
-</div>
-<div id="treeStatus">
-	<div id="bd">
-	</div>
-</div>
-<div id="emptyRoot">
-	<div id="bd">
-	</div>
-</div>
+<body>
+  <f:view>
+    <%@ include file="/pages/templates/header.xhtml" %>
+    <div class="pagecontent">
+    
+    <h2 align="left">NCI Thesaurus Hierarchy</h2>
+    <hr/>
+    
+    <table class="dataTable" width="100%">
+	  <tr><td class="standardText">
+        <div id="rootDesc">
+	      <div id="bd">
+	      </div>
+	      <div id="ft">
+	      </div>
+        </div>
+        <div id="treeStatus">
+	      <div id="bd">
+	      </div>
+        </div>
+        <div id="emptyRoot">
+	      <div id="bd">
+	      </div>
+        </div>
 
 <!--
-<div id="treecontainer" style="overflow:auto;width:350px;height:700px;"></div>
+        <div id="treecontainer" style="overflow:auto;width:350px;height:700px;"></div>
 -->
+        <div id="treecontainer" style="overflow:auto;width:750px;height:700px;"></div>
+      </td></tr>
+    </table>			
 
-<div id="treecontainer" style="overflow:auto;width:750px;height:700px;"></div>
-
-				</td></tr>
-			
-           
-			   </table>			
-			
-		</td> 
-        </tr>
-
-
-</table>
-
-
-</f:view>
-
+    <form id="pg_form">
+      <%
+        String ontology_node_id = (String) request.getParameter("code");
+      %>
+      <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
+      <%
+        String ontology_display_name = (String) request.getParameter("dictionary");
+      %>
+      <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
+    </form>
+  
+  </div>
+  </f:view>
 </body>
 </html>
