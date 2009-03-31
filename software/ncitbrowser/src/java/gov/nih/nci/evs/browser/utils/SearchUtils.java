@@ -1063,9 +1063,9 @@ public class SearchUtils {
 
 
 
-	//public static Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 		String matchText0 = matchText;
+		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 		boolean preprocess = true;
         if (matchText == null || matchText.length() == 0)
@@ -1074,8 +1074,6 @@ public class SearchUtils {
 		}
 
         matchText = matchText.trim();
-        //matchText = preprocessSearchString(matchText);
-
         if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0)
         {
 			//KLO 032409
@@ -1090,17 +1088,18 @@ public class SearchUtils {
 				return searchByName(scheme, version, matchText, "RegExp", maxToReturn);
 			}
 		}
+
 		else if (matchAlgorithm.compareToIgnoreCase("startsWith") == 0)
 		{
-			/*
+		    /*
 			matchText = "^" + matchText;
 			matchAlgorithm = "RegExp";
 			preprocess = false;
 			*/
 		}
-
 		else if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
+			matchText = replaceSpecialCharsWithBlankChar(matchText);
 			if (matchText.indexOf(" ") != -1) {
 				matchText = preprocessContains(matchText);
 				matchAlgorithm = "RegExp";
@@ -1108,7 +1107,7 @@ public class SearchUtils {
 		    }
 		}
 
-    	if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0 && preprocess)
+		if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0 && preprocess)
 		{
 			matchText = preprocessRegExp(matchText);
 		}
@@ -1133,7 +1132,6 @@ public class SearchUtils {
 						matchAlgorithm,
 						language);
 
-
         //return sortByScore(searchPhrase, resultIterator, maxToReturn);
 		if (apply_sort_score)
 		{
@@ -1146,8 +1144,6 @@ public class SearchUtils {
 				}
 				System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
 		}
-
-/*
         if (iterator != null) {
 			Vector v = resolveIterator(	iterator, maxToReturn);
 			if (v != null && v.size() > 0)
@@ -1167,10 +1163,9 @@ public class SearchUtils {
 					return v;
 				}
 			}
-			return new Vector();
+			//return new Vector();
 		}
-
-		if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0) {
+		if (matchAlgorithm0.compareToIgnoreCase("exactMatch") == 0) {
 			matchText0 = matchText0.trim();
 			Concept c = getConceptByCode(scheme, null, null, matchText0);
 			if (c != null)
@@ -1180,28 +1175,12 @@ public class SearchUtils {
 				return v;
 			}
 		}
-*/
-        //GF#19982 KLO
-        Vector v = null;
-        if (iterator != null) {
-			v = resolveIterator(iterator, maxToReturn);
-		}
-		if (v == null) v = new Vector();
-		Concept c = getConceptByCode(scheme, null, null, matchText0);
-		if (c != null)
+		else
 		{
-			v.add(c);
+			return searchByName(scheme, version, matchText0, "exactMatch", maxToReturn);
 		}
-		if (v.size() > 0)
-		{
-			if(!apply_sort_score)
-			{
-				SortUtils.quickSort(v);
-			}
-		}
-		return v;
+		return new Vector();
 	}
-
 
 	public void testSearchByName() {
 		String scheme = "NCI Thesaurus";
@@ -1498,6 +1477,16 @@ public class SearchUtils {
 		return false;
 	}
 
+	private static String replaceSpecialCharsWithBlankChar(String s){
+		String escapedChars = "/.|!(){}[]^\"~*?;-_";
+		for (int i=0; i<escapedChars.length(); i++)
+		{
+			char c = escapedChars.charAt(i);
+			s = s.replace(c, ' ');
+		}
+		s = s.trim();
+		return s;
+	}
 
 	public static void main(String[] args)
 	{
