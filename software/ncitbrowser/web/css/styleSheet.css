@@ -358,3 +358,14 @@ h3
  border-width: 0;
 }
 }
+
+.redbutton 
+{
+ font-size: 10px;
+ background-color: #A90101;
+ border-color: #000;
+ border-width: 1px;
+ border-style: solid;
+ color: #FFF;
+ cursor: pointer;
+}
