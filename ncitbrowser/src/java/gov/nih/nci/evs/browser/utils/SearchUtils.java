@@ -1324,7 +1324,7 @@ public class SearchUtils {
    {
 	   s = replaceSpecialChars(s);
 	   //s = escapeSpecialChars(s, "()");
-	   s = escapeSpecialChars(s, "(){}\\,-");
+	   s = escapeSpecialChars(s, "(){}\\,-[]");
        String prefix = s.toLowerCase();
        String[] words = toWords(prefix, false); // include stop words
        StringBuffer regex = new StringBuffer();
