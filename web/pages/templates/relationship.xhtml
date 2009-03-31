@@ -11,79 +11,106 @@
     ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
     ArrayList roles = (ArrayList) hmap.get(DataUtils.TYPE_ROLE);
     ArrayList associations = (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
+    ArrayList concepts = null;
+    String label = "";
 %>
   <h2>Relationships with other NCI Thesaurus Concepts</h2>
   <p>
     <%
-      String parent_concept_label = "Parent Concepts:";
-      if (superconcepts.size() == 0) {
-    %>
-        <b><%=parent_concept_label%></b> <i>(none)</i>
-    <%
-      } else {
-        for (int i=0; i<superconcepts.size(); i++) {
-          String s = (String) superconcepts.get(i);
-          Vector ret_vec = DataUtils.parseData(s, "|");
-
-          if (i > 0) parent_concept_label = "";
-          String superconcept_name = (String) ret_vec.elementAt(0);
-          String superconcept_code = (String) ret_vec.elementAt(1);
-          %>
-            <b><%=parent_concept_label%></b>
-            <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=superconcept_code%>">
-              <%=superconcept_name%>
-            </a>
-            <br/>
-          <%
-        }
-      }
-    %>
-  </p>
-  <p>
-    <%
-      String child_concept_label = "Child Concepts:";
-      if (subconcepts.size() == 0)
+      label = "Parent Concepts:";
+      concepts = superconcepts;
+      if (concepts.size() <= 0)
       {
     %>
-        <b><%=child_concept_label%></b> <i>(none)</i>
+        <b><%=label%></b> <i>(none)</i>
     <%
-      } else if (subconcepts.size() == 1) {
-          String s = (String) subconcepts.get(0);
+      } else if (concepts.size() == 1) {
+          String s = (String) concepts.get(0);
           Vector ret_vec = DataUtils.parseData(s, "|");
-
-          String subconcept_name = (String) ret_vec.elementAt(0);
-          String subconcept_code = (String) ret_vec.elementAt(1);
+          String cName = (String) ret_vec.elementAt(0);
+          String cCode = (String) ret_vec.elementAt(1);
     %>
-          <b><%=child_concept_label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=subconcept_code%>">
-            <%=subconcept_name%>
+          <b><%=label%></b>
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=cCode%>">
+            <%=cName%>
           </a>
     <%
       } else {
     %>
-        <b><%=child_concept_label%></b>
+        <b><%=label%></b>
         <table class="dataTable" width="100%">
-    <%
-        for (int i=0; i<subconcepts.size(); i++) {
-          String s = (String) subconcepts.get(i);
+    <%    
+        for (int i=0; i<concepts.size(); i++) {
+          String s = (String) concepts.get(i);
           Vector ret_vec = DataUtils.parseData(s, "|");
-
-          String subconcept_name = (String) ret_vec.elementAt(0);
-          String subconcept_code = (String) ret_vec.elementAt(1);
-          String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
-    %>
+          String cName = (String) ret_vec.elementAt(0);
+          String cCode = (String) ret_vec.elementAt(1);
+          String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight"; 
+    %>    
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=subconcept_code%>">
-                <%=subconcept_name%>
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=cCode%>">
+                <%=cName%>
               </a>
             </td>
           </tr>
-    <%
+    <%  
         }
+    %>
+        </table>
+    <%  
       }
     %>
   </p>
+
+  <p>
+    <%
+      label = "Child Concepts:";
+      concepts = subconcepts;
+      if (concepts.size() <= 0)
+      {
+    %>
+        <b><%=label%></b> <i>(none)</i>
+    <%
+      } else if (concepts.size() == 1) {
+          String s = (String) concepts.get(0);
+          Vector ret_vec = DataUtils.parseData(s, "|");
+          String cName = (String) ret_vec.elementAt(0);
+          String cCode = (String) ret_vec.elementAt(1);
+    %>
+          <b><%=label%></b>
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=cCode%>">
+            <%=cName%>
+          </a>
+    <%
+      } else {
+    %>
+        <b><%=label%></b>
+        <table class="dataTable" width="100%">
+    <%    
+        for (int i=0; i<concepts.size(); i++) {
+          String s = (String) concepts.get(i);
+          Vector ret_vec = DataUtils.parseData(s, "|");
+          String cName = (String) ret_vec.elementAt(0);
+          String cCode = (String) ret_vec.elementAt(1);
+          String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight"; 
+    %>    
+          <tr class="<%=rowColor%>">
+            <td class="dataCellText">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=cCode%>">
+                <%=cName%>
+              </a>
+            </td>
+          </tr>
+    <%  
+        }
+    %>
+        </table>
+    <%  
+      }
+    %>
+  </p>
+
   <p>
   <%
      if (roles.size() > 0)
