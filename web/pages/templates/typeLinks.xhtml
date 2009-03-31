@@ -61,11 +61,10 @@
         &nbsp;|&nbsp;
   </td>
   <td class="dataCellText" align="right">
-      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/hierarchy.gif" alt="View in Hierarchy" HEIGHT="35" WIDTH="35" BORDER="0">View in Hierarchy</a>
-      &nbsp;
-      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_history.jsf?dictionary=<%=scheme%>&code=<%=id%>', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/history.gif" alt="View History" HEIGHT="35" WIDTH="35" BORDER="0">View History</a>
+    <input type="button" class="redButton" value="View in Hierarchy"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" />
+    <input type="button" class="redButton" value="View History"
+      onClick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_history.jsf?dictionary=<%=scheme%>&code=<%=id%>', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" />
   </td>
 </tr>
 </table>
