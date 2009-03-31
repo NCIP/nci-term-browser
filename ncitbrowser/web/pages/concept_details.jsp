@@ -73,34 +73,14 @@
             request.getSession().setAttribute("concept", c);
             String name = c.getEntityDescription().getContent();
           %>
-          <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="texttitle-blue">
-                <b><%=name%> (Code <%=code%>)</b>
-              </td>
-            </tr>
-            <tr><td><hr></td></tr>
-            <tr>
-              <td height="1%" class="textbody">
-                <%@ include file="/pages/templates/typeLinks.xhtml" %>
-              </td>
-            </tr>
-            <tr>
-              <td class="textbody">
-                <%@ include file="/pages/templates/property.xhtml" %>
-              </td>
-            </tr>
-            <tr>
-              <td class="textbody">
-                <%@ include file="/pages/templates/relationship.xhtml" %>
-              </td>
-            </tr>
-            <tr>
-              <td class="textbody">
-                <%@ include file="/pages/templates/synonym.xhtml" %>
-              </td>
-            </tr>
-          </table>
+          <div class="texttitle-blue">
+            <%=name%> (Code <%=code%>)
+          </div>
+          <hr>
+          <%@ include file="/pages/templates/typeLinks.xhtml" %>
+          <%@ include file="/pages/templates/property.xhtml" %>
+          <%@ include file="/pages/templates/relationship.xhtml" %>
+          <%@ include file="/pages/templates/synonym.xhtml" %>
           <%@ include file="/pages/templates/nciFooter.html" %>
         </div>
         <!-- end Page content -->
