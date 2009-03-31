@@ -671,15 +671,19 @@ public class SearchUtils {
 			}
 
 			LocalNameList contextList = null;
-            cns = cns.restrictToMatchingProperties(propertyList,
-                                           propertyTypes,
-                                           sourceList,
-                                           contextList,
-                                           qualifierList,
-                                           matchText,
-                                           matchAlgorithm,
-                                           language
-                                           );
+			try {
+				cns = cns.restrictToMatchingProperties(propertyList,
+											   propertyTypes,
+											   sourceList,
+											   contextList,
+											   qualifierList,
+											   matchText,
+											   matchAlgorithm,
+											   language
+											   );
+			} catch (Exception ex) {
+				return null;
+			}
 
 			LocalNameList restrictToProperties = new LocalNameList();
 			// KLO, 030509
