@@ -20,11 +20,12 @@
     additionalproperties.add("CONCEPT_NAME");
     additionalproperties.add("primitive");
     Concept curr_concept = (Concept) request.getSession().getAttribute("concept");
+    Boolean bool_obj = curr_concept.isIsActive(); 
+    String isActive = bool_obj.toString();    
+    
     String concept_status = curr_concept.getConceptStatus();
 
-    if (concept_status == null) {
-      concept_status = "(not specified)";
-    } else {
+    if (concept_status != null) {
       concept_status = concept_status.replaceAll("_", " ");
     }
 
@@ -87,7 +88,19 @@
   }
 %>
 <h2>Term and Properties</h2>
-<p><b>Concept Status:</b>&nbsp;<i><%=concept_status%></i></p>
+<%
+if (bool_obj.equals(Boolean.TRUE))
+{
+%>
+    <p><b><i>Retired</i></b></p>
+<%
+}
+if (concept_status != null) {
+%>
+    <p><b>Concept Status:</b>&nbsp;<i><%=concept_status%></i></p>
+<%
+}
+%>
 <%
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
