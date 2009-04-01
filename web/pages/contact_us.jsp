@@ -16,14 +16,15 @@
   <body>
     <f:view>
       <%@ include file="/pages/templates/header.xhtml" %>
-      <%@ include file="/pages/templates/quickLink.xhtml" %>
       <div class="center-page">
+      <%@ include file="/pages/templates/sub-header.xhtml" %>
       <div id="main-area">
+      <%@ include file="/pages/templates/content-header.xhtml" %>
       <div class="pagecontent">
     
       <%
         String ncicb_contact_url = new DataUtils().getNCICBContactURL();
-        System.out.println(ncicb_contact_url);
+        //System.out.println(ncicb_contact_url);
       %>
 
 
