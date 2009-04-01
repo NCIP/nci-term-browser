@@ -9,7 +9,7 @@
   String basePath = request.getContextPath();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <title>NCI Thesaurus Hierarchy</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -43,7 +43,7 @@
         <div id="popupContentArea">
           <!-- History content -->
           <div class="pageTitle"><b><%=name%> (Code <%=code%>)</b></div>
-          <table width="100%">
+          <table width="570px">
             <tr class="textbody">
               <td align="left">
                 <b>History</b>
@@ -55,7 +55,7 @@
               </td>
             </tr>
           </table>
-          <table width="100%" cellpadding="3" cellspacing="0" border="0">
+          <table width="570px" cellpadding="3" cellspacing="0" border="0">
             <tr>
               <%
                 for (int i=0; i<headers.size(); ++i) {
