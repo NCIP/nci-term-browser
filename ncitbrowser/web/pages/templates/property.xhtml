@@ -171,7 +171,7 @@
 %>
 <p>
 <b>Synonyms &amp; Abbreviations:&nbsp;</b>
-<table class="datatable" width="100%">
+<table class="datatable">
 <%
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
@@ -208,7 +208,7 @@
 <a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=synonym" >Synonym Details</a>
 <p>
   <b>External Source Codes:&nbsp;</b>
-  <table class="datatable" width="100%">
+  <table class="datatable">
     <%
       int n = 0;
       for (int i=0; i<external_source_codes.size(); i++) {
@@ -257,7 +257,7 @@
 </p>
 <p>
   <b>Other Properties:</b>
-  <table class="datatable" width="100%">
+  <table class="datatable">
     <%
       Set keyset = hmap.keySet();
       Iterator iterator = keyset.iterator();
@@ -310,7 +310,7 @@
 </p>
 <p>
   <b>Additional Concept Data:&nbsp;</b>
-  <table class="datatable" width="100%">
+  <table class="datatable">
     <%
       String concept_name = null;
       String concept_name_prop_name = "CONCEPT_NAME";
