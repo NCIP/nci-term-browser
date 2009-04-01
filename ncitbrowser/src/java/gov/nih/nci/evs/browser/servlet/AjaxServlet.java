@@ -197,6 +197,10 @@ public final class AjaxServlet extends HttpServlet {
 					}
 
 					JSONArray rootsArray = CacheController.getInstance().getPathsToRoots(ontology_display_name, null, node_id, true, maxLevel);
+					if (rootsArray.length() == 0)
+					{
+                        rootsArray = CacheController.getInstance().getRootConcepts(ontology_display_name, null);
+					}
 					json.put("root_nodes", rootsArray);
 				}
 				catch (Exception e) {
