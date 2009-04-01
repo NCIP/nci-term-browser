@@ -49,6 +49,88 @@ h3
  display: none;
 }
 
+/* ------------- Popup styles ----------------- */
+#popupContainer 
+{
+ text-align: left;
+}
+
+#popupContainer a, #popupContainer a:active, #popupContainer a:visited, #popupContainer a:hover 
+{
+ color: #000;
+}
+
+#popupContainer a.expandedlink, #popupContainer a:active.expandedlink, #popupContainer a:visited.expandedlink, #popupContainer a:hover.expandedlink 
+{
+ font-weight: bold;
+ color: #A90101;
+}
+
+#popupMainArea 
+{
+ width: 628px;
+ padding-top: 0px;
+ padding-right: 8px;
+ padding-bottom: 0px;
+ padding-left: 8px;
+}
+
+#popupContentArea 
+{
+ width: 580px;
+ padding-top: 0px;
+ padding-right: 15px;
+ padding-bottom: 0px;
+ padding-left: 15px;
+ border-color: #ADADC2;
+ border-width: 1px;
+ border-style: solid;
+ background-color: #FFF;
+}
+
+#closeWindow 
+{
+ height: 10px;
+ font-size: 10px;
+ color: #2F2F5F;
+ padding-top: 10px;
+ padding-right: 25px;
+ padding-bottom: 0px;
+ padding-left: 10px;
+ text-align: right;
+}
+
+#closeWindow a, #closeWindow a:active, #closeWindow a:visited, #closeWindow a:hover 
+{
+ color: #2F2F5F;
+ text-decoration: none;
+}
+
+.evslogobg 
+{
+ background-image: url(images/evs-logo-bg);
+ background-repeat: repeat-x;
+ width: 100%;
+}
+
+.pagetitle 
+{
+ font-size: 18px;
+ font-weight: bold;
+ color: #2F2F5F;
+ margin-bottom: 10px;
+ padding-bottom: 4px;
+ border-bottom-color: #2F2F5F;
+ border-bottom-width: 1px;
+ border-bottom-style: solid;
+}
+
+.ncipopupbanner {
+ width:100%;
+ background:#A90101;
+ height:39px;
+}
+
 /* ------------- nci banner ------------------- */
 .ncibanner 
 {
