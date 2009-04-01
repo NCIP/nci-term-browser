@@ -125,10 +125,11 @@ h3
  border-bottom-style: solid;
 }
 
-.ncipopupbanner {
- width:100%;
- background:#A90101;
- height:39px;
+.ncipopupbanner 
+{
+ width: 100%;
+ background-color: #A90101;
+ height: 39px;
 }
 
 /* ------------- nci banner ------------------- */
@@ -168,6 +169,15 @@ h3
  font-size: 12px;
  color: #444444;
  font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+}
+
+.textbodyred 
+{
+ font-size: 12px;
+ color: #A90101;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+ font-style: italic;
+ font-weight: bold;
 }
 
 .datarowdark 
@@ -393,7 +403,6 @@ h3
 .tabtablecontentcontainer a 
 {
  font-size: 12px;
- color: #A90101;
  text-decoration: underline;
 }
 
