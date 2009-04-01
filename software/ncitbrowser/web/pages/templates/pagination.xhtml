@@ -17,18 +17,20 @@
         </i>&nbsp;
         <%
           }
-          for (int idx=1; idx<=num_pages; idx++) {
-            String idx_str = Integer.toString(idx);
-            if (page_num != idx) {
-              %>
-                <a href="<%=request.getContextPath() %>/pages/search_results.jsf?page_number=<%=idx_str%>"><%=idx_str%></a>
-                &nbsp;
-              <%
-            } else {
-              %>
-                <%=idx_str%>&nbsp;
-              <%
-            }
+          if (num_pages > 1) {
+		  for (int idx=1; idx<=num_pages; idx++) {
+		    String idx_str = Integer.toString(idx);
+		    if (page_num != idx) {
+		      %>
+			<a href="<%=request.getContextPath() %>/pages/search_results.jsf?page_number=<%=idx_str%>"><%=idx_str%></a>
+			&nbsp;
+		      <%
+		    } else {
+		      %>
+			<%=idx_str%>&nbsp;
+		      <%
+		    }
+		  }
           }
           if (next_page_num < num_pages) {
         %>
