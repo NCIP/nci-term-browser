@@ -26,8 +26,8 @@
 <%@ page import="org.LexGrid.commonTypes.EntityDescription" %>
 <%@ page import="org.LexGrid.commonTypes.Property" %>
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
-
-<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>NCI Thesaurus Browser Home</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -78,14 +78,16 @@
           </div>
           <hr>
           <%@ include file="/pages/templates/typeLinks.xhtml" %>
-          <%@ include file="/pages/templates/property.xhtml" %>
-          <%@ include file="/pages/templates/relationship.xhtml" %>
-          <%@ include file="/pages/templates/synonym.xhtml" %>
-          <%@ include file="/pages/templates/nciFooter.html" %>
+          <div class="tabTableContentContainer">
+            <%@ include file="/pages/templates/property.xhtml" %>
+            <%@ include file="/pages/templates/relationship.xhtml" %>
+            <%@ include file="/pages/templates/synonym.xhtml" %>
+            <%@ include file="/pages/templates/nciFooter.html" %>
+          </div>
         </div>
         <!-- end Page content -->
       </div>
-      <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="" /></div>
+      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="" /></div>
       <!-- end Main box -->
     </div>
   </f:view>
