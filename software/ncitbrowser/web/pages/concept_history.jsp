@@ -5,6 +5,9 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
+<%
+  String basePath = request.getContextPath();
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -13,31 +16,35 @@
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   </head>
-
-  <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" ><f:view>
-
-    <%
-      String code = (String) request.getParameter("code");
-      String dictionary = (String) request.getParameter("dictionary");
-      String vers = null;
-      String ltag = null;
-      Concept concept = (Concept) request.getSession().getAttribute("concept");
-      String name = concept.getEntityDescription().getContent();
-      Vector headers = HistoryUtils.getTableHeader();
-      Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
-    %>
-
-    <%@ include file="/pages/templates/header.xhtml" %>
-    <div class="center-page">
-      <div class="pagecontent">
-        <div class="texttitle-blue"
-            <b><%=name%> (Code <%=code%>)</b>
-        </div>
-        <hr/><br/>
-
-        <div>
+  <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
+  <%
+    String code = (String) request.getParameter("code");
+    String dictionary = (String) request.getParameter("dictionary");
+    String vers = null;
+    String ltag = null;
+    Concept concept = (Concept) request.getSession().getAttribute("concept");
+    String name = concept.getEntityDescription().getContent();
+    Vector headers = HistoryUtils.getTableHeader();
+    Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
+  %>
+  <f:view>
+    <div id="popupContainer">
+      <!-- nci popup banner -->
+      <div class="ncipopupbanner"><a href="http://www.cancer.gov"><img src="<%=basePath%>/images/nci-banner-1.gif" width="440" height="39" border="0" alt="National Cancer Institute" /></a><a href="http://www.cancer.gov"><img src="<%=basePath%>/images/spacer.gif" width="48" height="39" border="0" alt="National Cancer Institute" class="print-header" /></a></div>
+      <!-- end nci popup banner -->
+      <div id="popupMainArea">
+        <table class="evsLogoBg" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+          <td valign="top"><img src="<%=basePath%>/images/evs-popup-logo.gif" width="213" height="26" alt="EVS: Enterprise Vocabulary Services" title="EVS: Enterprise Vocabulary Services" border="0" /></td>
+          <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" />&nbsp;CLOSE WINDOW</a></div></td>
+        </tr>
+        </table>
+        <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="" title="" border="0" /></div>
+        <div id="popupContentArea">
+          <!-- History content -->
+          <div class="pageTitle"><b><%=name%> (Code <%=code%>)</b></div>
           <table width="100%">
-            <tr class="standardText3">
+            <tr class="textbody">
               <td align="left">
                 <b>History</b>
               </td>
@@ -48,10 +55,7 @@
               </td>
             </tr>
           </table>
-        </div>
-
-        <div>
-          <table class="dataTable" width="100%" cellpadding="3" cellspacing="0" border="0">
+          <table width="100%" cellpadding="3" cellspacing="0" border="0">
             <tr>
               <%
                 for (int i=0; i<headers.size(); ++i) {
@@ -62,7 +66,6 @@
                 }
               %>
             </tr>
-
             <%
               for (int i=0; i<rows.size(); ++i) {
                 String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
@@ -86,8 +89,10 @@
               }
             %>
           </table>
+          <!-- End of history content -->
         </div>
       </div>
     </div>
-  </f:view></body>
+  </f:view>
+  </body>
 </html>
