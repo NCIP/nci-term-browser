@@ -1,11 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %> 
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page import="java.util.Vector" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
     <title>NCI Thesaurus Hierarchy</title>
@@ -42,7 +42,7 @@
                 <b>History</b>
               </td>
               <td align="right">
-                <font size="1" color="red" align="right">       
+                <font size="1" color="red" align="right">
                   <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0"><i>Send to Printer</i></a>
                 </font>
               </td>
@@ -55,17 +55,17 @@
             <tr>
               <%
                 for (int i=0; i<headers.size(); ++i) {
-                  Object header = headers.elementAt(i); 
+                  Object header = headers.elementAt(i);
               %>
                   <th class="dataTableHeader" scope="col" align="left"><%=header%></th>
               <%
                 }
               %>
             </tr>
-                
+
             <%
               for (int i=0; i<rows.size(); ++i) {
-                String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight"; 
+                String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
             %>
                 <tr class="<%=rowColor%>">
             <%
@@ -82,7 +82,7 @@
                 }
             %>
                 </tr>
-            <%  
+            <%
               }
             %>
           </table>
