@@ -16,7 +16,7 @@
 <%
   String basePath = request.getContextPath();
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
   <title>NCI Thesaurus Hierarchy</title>
@@ -382,23 +382,17 @@
         <div id="popupContentArea">
           <div class="pageTitle">NCI Thesaurus Hierarchy</div>
             <!-- Tree content -->
-            <table class="dataTable" width="100%">
-              <tr>
-                <td class="textbody">
-                  <div id="rootDesc">
-                    <div id="bd"></div>
-                    <div id="ft"></div>
-                  </div>
-                  <div id="treeStatus">
-                    <div id="bd"></div>
-                  </div>
-                  <div id="emptyRoot">
-                    <div id="bd"></div>
-                  </div>
-                  <div id="treecontainer" style="overflow:auto;width:750px;height:700px;"></div>
-                </td>
-              </tr>
-            </table>
+            <div id="rootDesc">
+              <div id="bd"></div>
+              <div id="ft"></div>
+            </div>
+            <div id="treeStatus">
+              <div id="bd"></div>
+            </div>
+            <div id="emptyRoot">
+              <div id="bd"></div>
+            </div>
+            <div id="treecontainer"></div>
             <form id="pg_form">
               <%
                 String ontology_node_id = (String) request.getParameter("code");
