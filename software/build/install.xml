@@ -243,6 +243,8 @@
             <filter token="ncitbrowser.conf.path" value="${application.base.path}/${ncitbrowser.conf.path}"/>
             <filter token="ehcache.xml.file" value="${application.base.path}/${ncitbrowser.conf.path}/${ehcache.xml.file}"/>
             <filter token="ehcache.cache.path" value="${application.base.path}/${ehcache.cache.path}"/>
+        	<filter token="maximum.return" value="${maximum.return}"/>
+            <filter token="maximum.tree.level" value="${maximum.tree.level}"/>
             <filter token="sort.by.score" value="${sort.by.score}"/>
             <filter token="ncicb.contact.url" value="${ncicb.contact.url}"/>
         </filterset>

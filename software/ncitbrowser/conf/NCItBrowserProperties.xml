@@ -181,12 +181,12 @@
 
         <ConfigurableItem>
                  <key>MAXIMUM_RETURN</key>
-                 <value>1000</value>
+                 <value>@maximum.return@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
                  <key>MAXIMUM_TREE_LEVEL</key>
-                 <value>3</value>
+                 <value>@maximum.tree.level@</value>
         </ConfigurableItem>
         
         <ConfigurableItem>
