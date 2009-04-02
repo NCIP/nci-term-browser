@@ -12,7 +12,7 @@
 
       <DisplayItem>
             <propertyName>ALT_DEFINITION</propertyName>
-            <itemLabel>Alternative Definition</itemLabel>
+            <itemLabel>Definition</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>

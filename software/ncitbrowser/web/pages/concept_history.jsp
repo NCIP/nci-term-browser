@@ -23,7 +23,7 @@
     String vers = null;
     String ltag = null;
     Concept concept = (Concept) request.getSession().getAttribute("concept");
-    String name = concept.getEntityDescription().getContent();
+    String concept_name = concept.getEntityDescription().getContent();
     Vector headers = HistoryUtils.getTableHeader();
     Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
   %>
@@ -42,7 +42,7 @@
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="" title="" border="0" /></div>
         <div id="popupContentArea">
           <!-- History content -->
-          <div class="pageTitle"><b><%=name%> (Code <%=code%>)</b></div>
+          <div class="pageTitle"><b><%=concept_name%> (Code <%=code%>)</b></div>
           <table width="570px">
             <tr class="textbody">
               <td align="left">
