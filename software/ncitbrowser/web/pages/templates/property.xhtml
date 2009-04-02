@@ -89,13 +89,13 @@
 %>
 <h2>Term and Properties</h2>
 <%
-if (!bool_obj.equals(Boolean.TRUE) || (concept_status != null && concept_status.compareToIgnoreCase("Retired Status") == 0)) // non-active
+if (!bool_obj.equals(Boolean.TRUE) || (concept_status != null && concept_status.compareToIgnoreCase("Retired Concept") == 0)) // non-active
 {
 %>
-    <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Status</i></p>
+    <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i></p>
 <%
 }
-else if (concept_status != null && concept_status.compareToIgnoreCase("Retired Status") != 0) {
+else if (concept_status != null && concept_status.compareToIgnoreCase("Retired Concept") != 0) {
 %>
     <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbody"><%=concept_status%></i></p>
 <%
