@@ -18,7 +18,7 @@ import org.LexGrid.concepts.Concept;
 public class HistoryUtils {
     private static final String CODING_SCHEME = "NCI Thesaurus";
     private static DateFormat _dataFormatter = new SimpleDateFormat("yyyy-MM-dd");
-    
+
     public static Vector<String> getTableHeader() {
         Vector<String> v = new Vector<String>();
         v.add("Edit Actions");
@@ -26,18 +26,18 @@ public class HistoryUtils {
         v.add("Reference Concept");
         return v;
     }
-    
-    public static Vector<String> getEditActions(String codingSchemeName, 
+
+    public static Vector<String> getEditActions(String codingSchemeName,
             String vers, String ltag, String code) throws LBException {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         HistoryService hs = lbSvc.getHistoryService(CODING_SCHEME);
-        
+
         NCIChangeEventList list = hs.getEditActionList(Constructors
             .createConceptReference(code, null), null, null);
         return getEditActions(codingSchemeName, vers, ltag, code, list);
     }
-    
-    private static Vector<String> getEditActions(String codingSchemeName, 
+
+    private static Vector<String> getEditActions(String codingSchemeName,
             String vers, String ltag, String code, NCIChangeEventList list) {
         Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
         //int i = 0;
@@ -48,16 +48,21 @@ public class HistoryUtils {
             Date date = event.getEditDate();
             String rCode = event.getReferencecode();
             String desc = "none";
-            if (rCode != null && rCode.length() > 0 && 
+            if (rCode != null && rCode.length() > 0 &&
                     ! rCode.equalsIgnoreCase("null")) {
                 Concept c = DataUtils.getConceptByCode(
                     codingSchemeName, vers, ltag, rCode);
-                String name = c.getEntityDescription().getContent();
-                desc = name + " (Code " + rCode + ")";
+                //KLO
+                if (c != null) {
+					String name = c.getEntityDescription().getContent();
+					desc = name + " (Code " + rCode + ")";
+			    } else {
+					desc = rCode;
+				}
             }
-            
+
             String info = type + "|" + _dataFormatter.format(date) + "|" + desc;
-            //System.out.println(++i + ") " + info);
+            System.out.println("NCIChangeEvent: " + info);
             v.add(info);
         }
         return v;
