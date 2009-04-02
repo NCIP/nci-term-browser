@@ -89,15 +89,15 @@
 %>
 <h2>Term and Properties</h2>
 <%
-if (!bool_obj.equals(Boolean.TRUE))
+if (!bool_obj.equals(Boolean.TRUE) || (concept_status != null && concept_status.compareToIgnoreCase("Retired Status") == 0)) // non-active
 {
 %>
-    <p class="textbodyred">Retired Concept</p>
+    <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Status</i></p>
 <%
 }
-if (concept_status != null) {
+else if (concept_status != null && concept_status.compareToIgnoreCase("Retired Status") != 0) {
 %>
-    <p><b>Concept Status:</b>&nbsp;<i><%=concept_status%></i></p>
+    <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbody"><%=concept_status%></i></p>
 <%
 }
 %>
@@ -108,7 +108,7 @@ if (concept_status != null) {
     String propName_label2 = propName_label;
     String url = (String) properties_to_display_url.elementAt(i);
     String linktext = (String) properties_to_display_linktext.elementAt(i);
-
+    String qualifier = ""; 
     if (url != null) {
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
@@ -116,18 +116,15 @@ if (concept_status != null) {
       if (value_vec != null && value_vec.size() > 0) {
         String value = (String) value_vec.elementAt(0);
         String value_wo_qualifier = value;
+        
         int n = value.indexOf("|");
 
         if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
           value_wo_qualifier = value.substring(0, n);
-          String qualifier = value.substring(n+1, value.length());
+          qualifier = value.substring(n+1, value.length());
           if (qualifier.compareTo("NCI") != 0) {
             value = value_wo_qualifier;
-            propName_label = qualifier + " " + propName_label;
-            if (propName.compareTo("DEFINITION") == 0)
-              num_definitions++;
-            else if (propName.compareTo("ALT_DEFINITION") == 0)
-              num_alt_definitions++;
+            propName_label = qualifier + " " + propName_label2;
           } else
               value = value_wo_qualifier;
         }
@@ -153,15 +150,10 @@ if (concept_status != null) {
 
           if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
             value_wo_qualifier = value.substring(0, n);
-            String qualifier = value.substring(n+1, value.length());
+            qualifier = value.substring(n+1, value.length());
             if (qualifier.compareTo("NCI") != 0) {
               value = value_wo_qualifier;
-              propName_label = qualifier + " " + propName_label;
-              if (propName.compareTo("DEFINITION") == 0) {
-                num_definitions++;
-              } else if (propName.compareTo("ALT_DEFINITION") == 0) {
-                num_alt_definitions++;
-              }
+              propName_label = qualifier + " " + propName_label2;
             } else {
               value = value_wo_qualifier;
             }
