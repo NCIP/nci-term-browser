@@ -176,9 +176,13 @@ public class TreeUtils {
                 " to resolve " + pathsResolved + " paths from root.");
         }
 
+        /*
+        // KLO, 040309
+        Vector nodes = getNodesInTree(ti);
+        String version = null;
+	    createPaths(scheme, version, ti, focusCode, nodes);
+	    */
         hmap.put(focusCode, ti);
-
-        // Print the result ..
         return hmap;
 
     }
@@ -331,7 +335,8 @@ public class TreeUtils {
      * @param ti
      */
 
-    protected void printTree(TreeItem ti, String focusCode, int depth) {
+    //protected void printTree(TreeItem ti, String focusCode, int depth) {
+	public void printTree(TreeItem ti, String focusCode, int depth) {
         StringBuffer indent = new StringBuffer();
         for (int i = 0; i < depth * 2; i++)
             indent.append("| ");
@@ -352,6 +357,8 @@ public class TreeUtils {
                 printTree(childItem, focusCode, depth + 1);
         }
     }
+
+
 
 
     ///////////////////////////////////////////////////////
@@ -428,6 +435,8 @@ public class TreeUtils {
     protected AssociationList getPathsFromRoot(LexBIGService lbsvc, LexBIGServiceConvenienceMethods lbscm,
             String scheme, CodingSchemeVersionOrTag csvt, String hierarchyID, String focusCode,
             Map<String, EntityDescription> codesToDescriptions, int maxLevel) throws LBException {
+
+System.out.println("TreeUtil getPathsFromRoot " + focusCode);
 
         // Get paths from the focus code to the root from the
         // convenience method.  All paths are resolved.  If only
@@ -720,6 +729,9 @@ public class TreeUtils {
             CodingSchemeVersionOrTag csvt, Association assoc, AssociationList addTo,
             Map<String, EntityDescription> codeToEntityDescriptionMap, int maxLevel, int currLevel) throws LBException {
 
+System.out.println("TreeUtil reverseAssoc " );
+
+
 //KLO, 032209
         if (maxLevel != -1 && currLevel >= maxLevel) return addTo;
 
@@ -727,6 +739,10 @@ public class TreeUtils {
         AssociatedConcept acFromRef = new AssociatedConcept();
         acFromRef.setCodingScheme(acRef.getCodingScheme());
         acFromRef.setConceptCode(acRef.getConceptCode());
+
+ System.out.println("TreeUtil reverseAssoc code: " + acRef.getConceptCode());
+
+
         AssociationList acSources = new AssociationList();
         acFromRef.setIsNavigable(Boolean.TRUE);
         acFromRef.setSourceOf(acSources);
@@ -770,26 +786,29 @@ public class TreeUtils {
             // Save code desc for future reference when setting up
             // concept references in recursive calls ...
 
-            /*
-            String indent = "";
-            for (int k=0; k<=currLevel; k++) {
-				indent = indent + "-";
-			}
-            System.out.println(indent + ac.getConceptCode() + " " + ac.getEntityDescription().getContent());
-            */
-
+String indent = "";
+for (int k=0; k<=currLevel; k++) {
+	indent = indent + "-";
+}
+System.out.println(indent + ac.getConceptCode() + " " + ac.getEntityDescription().getContent());
 
             codeToEntityDescriptionMap.put(ac.getConceptCode(), ac.getEntityDescription());
-
             AssociationList sourceOf = ac.getSourceOf();
-            if (sourceOf != null)
+            if (sourceOf != null) {
+
+				System.out.println("sourceOf != null");
+
                 for (Association sourceAssoc : sourceOf.getAssociation()) {
                     AssociationList pos = reverseAssoc(lbsvc, lbscm, scheme, csvt, sourceAssoc, addTo,
                             codeToEntityDescriptionMap, maxLevel, currLevel+1);
+
+System.out.println("pos.addAssociation(rAssoc)");
                     pos.addAssociation(rAssoc);
                 }
-            else
+			} else {
+System.out.println("sourceOf == null STOP");
                 addTo.addAssociation(rAssoc);
+			}
         }
         return acSources;
     }
@@ -850,31 +869,6 @@ public class TreeUtils {
 		return list;
 	}
 
-/*
-    public void getTopNodes(TreeItem ti, List list, int currLevel, int maxLevel) {
-        if (list == null) list = new ArrayList();
-        if (currLevel > maxLevel) return;
-        if (ti.assocToChildMap.keySet().size() > 0) {
-			if (ti.text.compareTo("Root node") != 0)
-			{
-				ResolvedConceptReference rcr = new ResolvedConceptReference();
-				rcr.setConceptCode(ti.code);
-				EntityDescription entityDescription = new EntityDescription();
-				entityDescription.setContent(ti.text);
-				rcr.setEntityDescription(entityDescription);
-				//System.out.println("Root: " + ti.text);
-				list.add(rcr);
-		    }
-		}
-
-        for (String association : ti.assocToChildMap.keySet()) {
-            List<TreeItem> children = ti.assocToChildMap.get(association);
-            Collections.sort(children);
-            for (TreeItem childItem : children)
-                getTopNodes(childItem, list, currLevel+1, maxLevel);
-        }
-    }
-*/
 
     public void getTopNodes(TreeItem ti, List list, int currLevel, int maxLevel) {
         if (list == null) list = new ArrayList();
@@ -901,6 +895,60 @@ public class TreeUtils {
         }
     }
 
+    // KLO, 040309
+ 	public Vector getNodesInTree(TreeItem ti) {
+		Vector w = new Vector();
+	    getNodesInTree(ti, w);
+	    return w;
+	}
+
+
+ 	public void getNodesInTree(TreeItem ti, Vector nodes) {
+		if (nodes == null) nodes = new Vector();
+		if (ti != null && ti.code != null) nodes.add(ti.code);
+		for (String association : ti.assocToChildMap.keySet()) {
+			List<TreeItem> children = ti.assocToChildMap.get(association);
+			for (TreeItem childItem : children) {
+				getNodesInTree(childItem, nodes);
+			}
+		}
+	}
+
+	public void createPaths(String scheme, String version, TreeItem root, String focusCode, Vector nodes) {
+        if (!nodes.contains(root.code))
+        {
+			System.out.println("Not in path: " + root.text+ " " + root.code + " " + root.expandable);
+			return;
+		}
+        else if (focusCode.compareTo(root.code) == 0)
+        {
+			System.out.println("Focus node: " + root.text+ " " + root.code + " " + root.expandable);
+			return;
+		}
+		if (root.code.compareTo("<Root>") == 0)
+		{
+			for (String association : root.assocToChildMap.keySet()) {
+				List<TreeItem> children = root.assocToChildMap.get(association);
+				for (TreeItem childItem : children) {
+					createPaths(scheme, version, childItem, focusCode, nodes);
+				}
+			}
+			return;
+		}
+
+        HashMap hmap = getSubconcepts(scheme, version, root.code);
+		Set keyset = hmap.keySet();
+		Object[] objs = keyset.toArray();
+		String code = (String) objs[0];
+		TreeItem ti = (TreeItem) hmap.get(code);
+		for (String association : ti.assocToChildMap.keySet()) {
+			List<TreeItem> children = ti.assocToChildMap.get(association);
+			root.addAll(association, children);
+			for (TreeItem childItem : children) {
+                createPaths(scheme, version, childItem, focusCode, nodes);
+			}
+		}
+    }
 
 
 	public static void main(String[] args)
