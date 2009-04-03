@@ -167,6 +167,7 @@
         <echo message="clean                  --&gt; Remove classes directory for clean build" />
         <echo message="build:all              --&gt; Normal build of application" />
         <echo message="deploy:local:install   --&gt; Build and deploy application" />
+        <echo message="deploy:local:upgrade   --&gt; Build and upgrade application" />
         <echo message="deploy:hot             --&gt; Redeploy application" />
         <echo message="" />
         <echo message="" />
