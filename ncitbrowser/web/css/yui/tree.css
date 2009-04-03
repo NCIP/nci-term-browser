@@ -152,7 +152,7 @@
 }
 
 /* the style of the text label in ygTextNode */
-.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover 
+.ygtvlabel 
 {
  margin-left: 2px;
  color: Black;
@@ -162,13 +162,12 @@
 .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover 
 {
  margin-left: 2px;
- color: Black;
 }
 
 .ygtvlabel_highlight 
 {
  margin-left: 2px;
- color: Black;
+ color: #A90101;
  font-weight: bold;
 }
 
