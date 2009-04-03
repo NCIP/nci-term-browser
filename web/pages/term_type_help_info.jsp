@@ -35,9 +35,9 @@
         abbr_vec.add("SY");
 
         def_vec.add("Abbreviation");
-        def_vec.add("Adjectival form (and other parts of grammer");
+        def_vec.add("Adjectival form (and other parts of grammer)");
         def_vec.add("Antiquated preferred term");
-        def_vec.add("Antiquated term, use when there is more than one antiquated term within a concept");
+        def_vec.add("Antiquated term, use when there are antiquated synonyms within a concept");
         def_vec.add("US brand name");
         def_vec.add("ISO 3166 alpha-2 country code");
         def_vec.add("ISO 3166 alpha-3 country code");
