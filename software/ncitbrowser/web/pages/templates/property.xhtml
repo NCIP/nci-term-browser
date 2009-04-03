@@ -328,11 +328,13 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
       String primitive = null;
       String primitive_prop_name = "primitive";
-      String primitive_label = "Primitive:";
+      String primitive_label = "Defined Fully by Roles:";
       Vector primitive_value_vec = (Vector) hmap.get(primitive_prop_name);
 
       if (primitive_value_vec != null) {
         primitive = (String) primitive_value_vec.elementAt(0);
+        if (primitive.compareTo("true") == 0) primitive = "No";
+        else primitive = "Yes";
       }
 
       String kind = "not available";
