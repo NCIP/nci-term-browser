@@ -219,8 +219,7 @@ public class CacheController
         {
             Element element = cache.get(key);
             if (element != null) {
-
-				System.out.println("getRootConcepts fromCache element != null returning list" );
+				//System.out.println("getRootConcepts fromCache element != null returning list" );
 	            nodeArray = (JSONArray) element.getValue();
 			}
         }
@@ -337,8 +336,6 @@ public class CacheController
 		JSONArray nodeArray = null;
 		Element element = cache.get(key);
 		if (element != null) {
-
-			System.out.println("getPathsToRoots fromCache element != null returning list" );
 			nodeArray = (JSONArray) element.getValue();
 		}
 
@@ -370,17 +367,8 @@ public class CacheController
 
     public JSONArray getPathsToRoots(String ontology_display_name, String version, String node_id, boolean fromCache, int maxLevel)
     {
-
-System.out.println("CacheController getPathsToRoots ontology_display_name " + ontology_display_name);
-System.out.println("CacheController getPathsToRoots node_id " + node_id);
-System.out.println("CacheController getPathsToRoots maxLevel " + maxLevel);
-
-
 		JSONArray rootsArray = null;
 		if (maxLevel == -1) {
-
-System.out.println("CacheController getRootConcepts ");
-
 			rootsArray = getRootConcepts(ontology_display_name, version, false);
 			try {
 				TreeUtils util = new TreeUtils();
@@ -392,13 +380,7 @@ System.out.println("CacheController getRootConcepts ");
 				Object[] objs = keyset.toArray();
 				String code = (String) objs[0];
 				TreeItem ti = (TreeItem) hmap.get(code); //TreeItem ti = new TreeItem("<Root>", "Root node");
-
-System.out.println("CacheController getNodesArray " + node_id);
-
 				JSONArray nodesArray = getNodesArray(node_id, ti);
-
-System.out.println("CacheController replaceJSONObjects ");
-
 				replaceJSONObjects(rootsArray, nodesArray);
 			}
 			catch (Exception e) {
@@ -409,25 +391,11 @@ System.out.println("CacheController replaceJSONObjects ");
 	    else {
 			try {
 				TreeUtils util = new TreeUtils();
-
-System.out.println("CacheController TreeUtils.getTreePathData " + node_id);
-
 				HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id, maxLevel);
 				Object[] objs = hmap.keySet().toArray();
 				String code = (String) objs[0];
-
-System.out.println("CacheController TreeUtils.getTreePathData returns code " + code);
-
 				TreeItem ti = (TreeItem) hmap.get(code);
-
-
-util.printTree(ti, node_id, 3);
-
-
 				List list = util.getTopNodes(ti);
-System.out.println("CacheController TreeUtils.getTopNodes returns " + list.size());
-System.out.println("CacheController list2JSONArray " );
-
 				rootsArray = list2JSONArray(list);
 				/*
 				Set keyset = hmap.keySet();
@@ -436,14 +404,7 @@ System.out.println("CacheController list2JSONArray " );
 				TreeItem ti = (TreeItem) hmap.get(code); //TreeItem ti = new TreeItem("<Root>", "Root node");
                 */
 				//JSONArray nodesArray = getNodesArray(ti);
-
-
-System.out.println("CacheController getNodesArray " + node_id);
-
 				JSONArray nodesArray = getNodesArray(node_id, ti);
-
-System.out.println("CacheController replaceJSONObjects ");
-
 				replaceJSONObjects(rootsArray, nodesArray);
 			}
 			catch (Exception e) {
@@ -460,10 +421,6 @@ System.out.println("CacheController replaceJSONObjects ");
 		String obj_id = null;
 		try {
 			obj_id = (String) obj.get(ONTOLOGY_NODE_ID);
-
-System.out.println("CacheController replaceJSONObject obj_id " + obj_id);
-
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return;
@@ -474,10 +431,6 @@ System.out.println("CacheController replaceJSONObject obj_id " + obj_id);
 			try {
 				JSONObject node = nodesArray.getJSONObject(i);
 				node_id = (String) node.get(ONTOLOGY_NODE_ID);
-
-System.out.println("CacheController replaceJSONObject node_id " + node_id);
-
-
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
