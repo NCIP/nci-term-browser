@@ -57,13 +57,12 @@ h3
 
 #popupContainer a, #popupContainer a:active, #popupContainer a:visited, #popupContainer a:hover 
 {
- color: #000;
+ 
 }
 
 #popupContainer a.expandedlink, #popupContainer a:active.expandedlink, #popupContainer a:visited.expandedlink, #popupContainer a:hover.expandedlink 
 {
  font-weight: bold;
- color: #A90101;
 }
 
 #popupMainArea 
