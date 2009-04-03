@@ -21,7 +21,7 @@
       <div id="main-area">
       <%@ include file="/pages/templates/content-header.xhtml" %>
       <div class="pagecontent">
-    
+
       <%
         String ncicb_contact_url = new DataUtils().getNCICBContactURL();
         //System.out.println(ncicb_contact_url);
@@ -30,7 +30,7 @@
 
       <h2 align="left">Contact Us</h2>
       <hr></hr>
-      
+
       <p><b>
         If you would like information immediately, please call:
       </b></p>
@@ -40,7 +40,7 @@
         &nbsp;&nbsp;&nbsp;&nbsp;<i>9:00 a.m. to 4:30 p.m. local time, Monday through Friday</i><br/>
         &nbsp;&nbsp;&nbsp;&nbsp;TTY 1-800-332-8615<br/>
       </p>
-      
+
       <p><b>
         Cras lobortis tincidunt nisi. In hac habitasse platea dictumst. In a orci. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer sed arcu. Mauris luctus nisi sed dolor. Vestibulum consequat pellentesque eros. Proin malesuada congue massa. Maecenas facilisis leo ut purus. Fusce orci leo, commodo sed, pellentesque eleifend, euismod ac, justo. Morbi convallis varius urna.
       </b></p>
@@ -51,23 +51,23 @@
 
       <form method="post" action="mailto:<%=ncicb_contact_url%>" enctype="text/plain">
         <p><i>Enter the subject of your email</i></p>
-        <input CLASS="input.formField" size="22" name="subject" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
-        
+        <input CLASS="input.formField" size="100" name="subject" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
+
         <p><i>
           Enter your message.<br/>
           &nbsp;&nbsp;&nbsp;&nbsp;Please include all pertinent details within the contact message box.<br/>
           &nbsp;&nbsp;&nbsp;&nbsp;We do not open attachments to e-mail messages.
         </i></p>
-        <TEXTAREA Name="message" rows="4" cols="20"></TEXTAREA>
-        
+        <TEXTAREA Name="message" rows="4" cols="75"></TEXTAREA>
+
         <p><i>
           E-mail address<br/>
           &nbsp;&nbsp;&nbsp;&nbsp;For example, jdoe@yahoo.com
         </i></p>
-        <input CLASS="input.formField" size="22" name="emailaddress" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
+        <input CLASS="input.formField" size="100" name="emailaddress" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
         <br/><br/>
         <INPUT  type="submit" value="Submit">&nbsp;&nbsp;<INPUT type="reset" value="Clear">
-      </form>        
+      </form>
       <a href="http://www.cancer.gov/policies/page3" ><i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i></a>
 
     </div>
