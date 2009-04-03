@@ -357,9 +357,10 @@
 
       tree.draw();
       for (var i=0; i < childNodes.length; i++) {
-        var childnodeInfo = childNodes[i];
-        addTreeBranch(ontology_node_id, newNode, childnodeInfo);
+	var childnodeInfo = childNodes[i];
+	addTreeBranch(ontology_node_id, newNode, childnodeInfo);
       }
+	      
     }
     YAHOO.util.Event.addListener(window, "load", init);
 
