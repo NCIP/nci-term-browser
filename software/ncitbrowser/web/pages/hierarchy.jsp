@@ -27,6 +27,7 @@
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/grids.css" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/code.css" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/tree.css" />
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
 
   <script language="JavaScript">
 
@@ -382,6 +383,22 @@
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="" title="" border="0" /></div>
         <div id="popupContentArea">
           <div class="pageTitle">NCI Thesaurus Hierarchy</div>
+          
+           <div>
+           <table width="570px">
+            <tr class="textbody">
+              <td align="left">
+                <b>&nbsp;</b>
+              </td>
+              <td align="right">
+                <font size="1" color="red" align="right">
+                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0"><i>Send to Printer</i></a>
+                </font>
+              </td>
+            </tr>
+          </table>
+          </div>
+                    
             <!-- Tree content -->
             <div id="rootDesc">
               <div id="bd"></div>
