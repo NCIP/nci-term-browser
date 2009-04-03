@@ -435,9 +435,6 @@ public class TreeUtils {
     protected AssociationList getPathsFromRoot(LexBIGService lbsvc, LexBIGServiceConvenienceMethods lbscm,
             String scheme, CodingSchemeVersionOrTag csvt, String hierarchyID, String focusCode,
             Map<String, EntityDescription> codesToDescriptions, int maxLevel) throws LBException {
-
-System.out.println("TreeUtil getPathsFromRoot " + focusCode);
-
         // Get paths from the focus code to the root from the
         // convenience method.  All paths are resolved.  If only
         // one path is required, it would be possible to use
@@ -729,8 +726,6 @@ System.out.println("TreeUtil getPathsFromRoot " + focusCode);
             CodingSchemeVersionOrTag csvt, Association assoc, AssociationList addTo,
             Map<String, EntityDescription> codeToEntityDescriptionMap, int maxLevel, int currLevel) throws LBException {
 
-System.out.println("TreeUtil reverseAssoc " );
-
 
 //KLO, 032209
         if (maxLevel != -1 && currLevel >= maxLevel) return addTo;
@@ -739,9 +734,6 @@ System.out.println("TreeUtil reverseAssoc " );
         AssociatedConcept acFromRef = new AssociatedConcept();
         acFromRef.setCodingScheme(acRef.getCodingScheme());
         acFromRef.setConceptCode(acRef.getConceptCode());
-
- System.out.println("TreeUtil reverseAssoc code: " + acRef.getConceptCode());
-
 
         AssociationList acSources = new AssociationList();
         acFromRef.setIsNavigable(Boolean.TRUE);
@@ -785,28 +777,22 @@ System.out.println("TreeUtil reverseAssoc " );
 
             // Save code desc for future reference when setting up
             // concept references in recursive calls ...
-
+/*
 String indent = "";
 for (int k=0; k<=currLevel; k++) {
 	indent = indent + "-";
 }
 System.out.println(indent + ac.getConceptCode() + " " + ac.getEntityDescription().getContent());
-
+*/
             codeToEntityDescriptionMap.put(ac.getConceptCode(), ac.getEntityDescription());
             AssociationList sourceOf = ac.getSourceOf();
             if (sourceOf != null) {
-
-				System.out.println("sourceOf != null");
-
                 for (Association sourceAssoc : sourceOf.getAssociation()) {
                     AssociationList pos = reverseAssoc(lbsvc, lbscm, scheme, csvt, sourceAssoc, addTo,
                             codeToEntityDescriptionMap, maxLevel, currLevel+1);
-
-System.out.println("pos.addAssociation(rAssoc)");
                     pos.addAssociation(rAssoc);
                 }
 			} else {
-System.out.println("sourceOf == null STOP");
                 addTo.addAssociation(rAssoc);
 			}
         }
