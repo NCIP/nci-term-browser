@@ -68,6 +68,7 @@ lex.evs.api.url=
 ###  NCIT BROWSER SETTINGS  ###
 ###############################
 # Files created under application.base.path
+ncitbrowser.files.path=
 ncitbrowser.conf.path=
 ehcache.cache.path=
 ehcache.xml.file=
