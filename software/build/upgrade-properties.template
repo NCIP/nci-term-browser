@@ -31,6 +31,7 @@ jboss.server.hostname=The server name where jboss will be running. Example: loca
 jboss.server.name=The jboss server instance name, $JBOSS_HOME/server/${jboss.server.name}. Example: default
 jboss.server.port=The port used to connect to the jboss instance via http.
 jboss.server.jndi.port=Port used to connect when shutting down jboss.
+exclude.jboss.backup=
 ##############
 ### TOMCAT ###
 ##############
