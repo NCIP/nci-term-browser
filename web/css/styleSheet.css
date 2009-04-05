@@ -288,7 +288,9 @@ h3
  height: 32px;
 }
 
-.quicklinksholder 
+/* ------------ Quick links ------------ */
+
+#quicklinksholder
 {
  margin-left: 570px;
  padding-top: 7px;
@@ -356,6 +358,8 @@ h3
 {
  background-color: #e5e5e5;
 }
+
+/* ----------- End quick links ------------ */
 
 .pagecontent 
 {
