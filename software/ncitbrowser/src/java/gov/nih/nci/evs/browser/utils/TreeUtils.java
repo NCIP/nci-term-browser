@@ -205,25 +205,14 @@ public class TreeUtils {
 	}
 
 
-    /**
-     * The given path represents a multi-tier association with associated
-     * concepts and targets.  This method expands the association content
-     * and adds results to the given tree item, recursing as necessary to
-     * process each level in the path.
-     * <p>
-     * Nodes in the association acts as the backbone for the display.
-     * For each backbone node, additional children are resolved one level
-     * deep along with an indication of further expandability.
-     */
-    protected void addPathFromRoot(TreeItem ti,
-            LexBIGService lbsvc, LexBIGServiceConvenienceMethods lbscm,
-            String scheme, CodingSchemeVersionOrTag csvt,
-            Association path, String[] associationsToNavigate, boolean associationsNavigatedFwd,
-            Map<String, EntityDescription> codesToDescriptions)
-        throws LBException {
+
+    protected void addPathFromRoot(TreeItem ti, LexBIGService lbsvc, LexBIGServiceConvenienceMethods lbscm,
+            String scheme, CodingSchemeVersionOrTag csvt, Association path, String[] associationsToNavigate,
+            boolean associationsNavigatedFwd, Map<String, EntityDescription> codesToDescriptions) throws LBException {
 
         // First, add the branch point from the path ...
         ConceptReference branchRoot = path.getAssociationReference();
+        //=======================================================================v.50
         String branchCode = branchRoot.getConceptCode();
         String branchCodeDescription = codesToDescriptions.containsKey(branchCode) ? codesToDescriptions
                 .get(branchCode).getContent() : getCodeDescription(lbsvc, scheme, csvt, branchCode);
@@ -235,55 +224,67 @@ public class TreeUtils {
         AssociatedConceptList concepts = path.getAssociatedConcepts();
         for (int i = 0; i < concepts.getAssociatedConceptCount(); i++) {
 
-            // Add all immediate leafs in the branch, and indication of
-            // sub-nodes. Do not process codes already in the backbone here;
-            // they will be printed in the recursive call ...
+            // Determine the next concept in the branch and
+            // add a corresponding item to the tree.
             AssociatedConcept concept = concepts.getAssociatedConcept(i);
             String code = concept.getConceptCode();
             TreeItem branchItem = new TreeItem(code, getCodeDescription(concept));
             branchPoint.addChild(branchNavText, branchItem);
 
-            addChildren(branchItem, lbsvc, lbscm, scheme, csvt, code, codesToDescriptions.keySet(),
-                    associationsToNavigate, associationsNavigatedFwd);
-
             // Recurse to process the remainder of the backbone ...
             AssociationList nextLevel = concept.getSourceOf();
             if (nextLevel != null) {
                 if (nextLevel.getAssociationCount() != 0) {
+                    // Add immediate children of the focus code with an
+                    // indication of sub-nodes (+).  Codes already
+                    // processed as part of the path are ignored since
+                    // they are handled through recursion.
+                    addChildren(branchItem, lbsvc, lbscm, scheme, csvt, code, codesToDescriptions.keySet(),
+                            associationsToNavigate, associationsNavigatedFwd);
+
                     // More levels left to process ...
                     for (int j = 0; j < nextLevel.getAssociationCount(); j++)
-                        addPathFromRoot(branchPoint, lbsvc, lbscm, scheme, csvt, nextLevel.getAssociation(j), associationsToNavigate,
-                                associationsNavigatedFwd, codesToDescriptions);
+                        addPathFromRoot(branchPoint, lbsvc, lbscm, scheme, csvt, nextLevel.getAssociation(j),
+                                associationsToNavigate, associationsNavigatedFwd, codesToDescriptions);
                 } else {
                     // End of the line ...
-                    // Always add immediate children ot the focus code.
-                    addChildren(branchItem, lbsvc, lbscm, scheme,
-                        csvt, concept.getConceptCode(), Collections.EMPTY_SET,
-                        associationsToNavigate, associationsNavigatedFwd);
+                    // Always add immediate children of the focus code,
+                    // in this case with no exclusions since we are moving
+                    // beyond the path to root and allowed to duplicate
+                    // nodes that may have occurred in the path to root.
+                    addChildren(branchItem, lbsvc, lbscm, scheme, csvt, code, Collections.EMPTY_SET,
+                            associationsToNavigate, associationsNavigatedFwd);
                 }
+            } else {
+                // Add immediate children of the focus code with an
+                // indication of sub-nodes (+).  Codes already
+                // processed as part of the path are ignored since
+                // they are handled through recursion.
+                addChildren(branchItem, lbsvc, lbscm, scheme, csvt, code, codesToDescriptions.keySet(),
+                        associationsToNavigate, associationsNavigatedFwd);
             }
         }
+
+        // Add immediate children of the node being processed,
+        // and indication of sub-nodes.
+        addChildren(branchPoint, lbsvc, lbscm, scheme, csvt, branchCode, codesToDescriptions.keySet(),
+                associationsToNavigate, associationsNavigatedFwd);
 
         // Add the populated tree item to those tracked from root.
         ti.addChild(branchNavText, branchPoint);
     }
 
-
     /**
-     * Populate child nodes for a single branch of the tree,
-     * and indicates whether further expansion (to grandchildren)
-     * is possible.
+     * Populate child nodes for a single branch of the tree, and indicates
+     * whether further expansion (to grandchildren) is possible.
      */
-    protected void addChildren(TreeItem ti,
-            LexBIGService lbsvc, LexBIGServiceConvenienceMethods lbscm,
-            String scheme, CodingSchemeVersionOrTag csvt,
-            String branchRootCode, Set<String> codesToExclude, String[] associationsToNavigate,
-            boolean associationsNavigatedFwd)
-        throws LBException {
+    protected void addChildren(TreeItem ti, LexBIGService lbsvc, LexBIGServiceConvenienceMethods lbscm, String scheme,
+            CodingSchemeVersionOrTag csvt, String branchRootCode, Set<String> codesToExclude,
+            String[] associationsToNavigate, boolean associationsNavigatedFwd) throws LBException {
 
         // Resolve the next branch, representing children of the given
         // code, navigated according to the provided relationship and
-        // direction.  Resolve the children as a code graph, looking 2
+        // direction. Resolve the children as a code graph, looking 2
         // levels deep but leaving the final level unresolved.
         CodedNodeGraph cng = lbsvc.getNodeGraph(scheme, csvt, null);
         ConceptReference focus = Constructors.createConceptReference(branchRootCode, scheme);
@@ -292,7 +293,7 @@ public class TreeUtils {
                 !associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
 
         // The resolved branch will be represented by the first node in
-        // the resolved list.  The node will be subdivided by source or
+        // the resolved list. The node will be subdivided by source or
         // target associations (depending on direction). The associated
         // nodes define the children.
         for (Iterator<ResolvedConceptReference> nodes = branch.iterateResolvedConceptReference(); nodes.hasNext();) {
@@ -300,7 +301,8 @@ public class TreeUtils {
             AssociationList childAssociationList = associationsNavigatedFwd ? node.getSourceOf() : node.getTargetOf();
 
             // Process each association defining children ...
-            for (Iterator<Association> pathsToChildren = childAssociationList.iterateAssociation(); pathsToChildren.hasNext();) {
+            for (Iterator<Association> pathsToChildren = childAssociationList.iterateAssociation(); pathsToChildren
+                    .hasNext();) {
                 Association child = pathsToChildren.next();
                 String childNavText = getDirectionalLabel(lbscm, scheme, csvt, child, associationsNavigatedFwd);
 
@@ -313,13 +315,11 @@ public class TreeUtils {
 
                     // Add here if not in the list of excluded codes.
                     // This is also where we look to see if another level
-                    // was indicated to be available.  If so, mark the
+                    // was indicated to be available. If so, mark the
                     // entry with a '+' to indicate it can be expanded.
                     if (!codesToExclude.contains(branchItemCode)) {
                         TreeItem childItem = new TreeItem(branchItemCode, getCodeDescription(branchItemNode));
-                        AssociationList grandchildBranch =
-                            associationsNavigatedFwd
-                                ? branchItemNode.getSourceOf()
+                        AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode.getSourceOf()
                                 : branchItemNode.getTargetOf();
                         if (grandchildBranch != null)
                             childItem.expandable = true;
@@ -329,6 +329,9 @@ public class TreeUtils {
             }
         }
     }
+
+
+
 
     /**
      * Prints the given tree item, recursing through all branches.
@@ -722,19 +725,17 @@ public class TreeUtils {
  	}
 
 
+
     protected AssociationList reverseAssoc(LexBIGService lbsvc, LexBIGServiceConvenienceMethods lbscm, String scheme,
             CodingSchemeVersionOrTag csvt, Association assoc, AssociationList addTo,
             Map<String, EntityDescription> codeToEntityDescriptionMap, int maxLevel, int currLevel) throws LBException {
 
-
-//KLO, 032209
         if (maxLevel != -1 && currLevel >= maxLevel) return addTo;
 
         ConceptReference acRef = assoc.getAssociationReference();
         AssociatedConcept acFromRef = new AssociatedConcept();
-        acFromRef.setCodingScheme(acRef.getCodingScheme());
+        //===============================================================================v5.0
         acFromRef.setConceptCode(acRef.getConceptCode());
-
         AssociationList acSources = new AssociationList();
         acFromRef.setIsNavigable(Boolean.TRUE);
         acFromRef.setSourceOf(acSources);
@@ -756,7 +757,8 @@ public class TreeUtils {
 
             // On reverse, old associated concept is new reference point.
             ConceptReference ref = new ConceptReference();
-            ref.setCodingScheme(ac.getCodingScheme());
+            //===============================================================================v5.0
+            //ref.setCodingSchemeName(ac.getCodingSchemeName());
             ref.setConceptCode(ac.getConceptCode());
             rAssoc.setAssociationReference(ref);
 
@@ -777,24 +779,17 @@ public class TreeUtils {
 
             // Save code desc for future reference when setting up
             // concept references in recursive calls ...
-/*
-String indent = "";
-for (int k=0; k<=currLevel; k++) {
-	indent = indent + "-";
-}
-System.out.println(indent + ac.getConceptCode() + " " + ac.getEntityDescription().getContent());
-*/
             codeToEntityDescriptionMap.put(ac.getConceptCode(), ac.getEntityDescription());
+
             AssociationList sourceOf = ac.getSourceOf();
-            if (sourceOf != null) {
+            if (sourceOf != null)
                 for (Association sourceAssoc : sourceOf.getAssociation()) {
                     AssociationList pos = reverseAssoc(lbsvc, lbscm, scheme, csvt, sourceAssoc, addTo,
                             codeToEntityDescriptionMap, maxLevel, currLevel+1);
                     pos.addAssociation(rAssoc);
                 }
-			} else {
+            else
                 addTo.addAssociation(rAssoc);
-			}
         }
         return acSources;
     }
