@@ -176,12 +176,6 @@ public class TreeUtils {
                 " to resolve " + pathsResolved + " paths from root.");
         }
 
-        /*
-        // KLO, 040309
-        Vector nodes = getNodesInTree(ti);
-        String version = null;
-	    createPaths(scheme, version, ti, focusCode, nodes);
-	    */
         hmap.put(focusCode, ti);
         return hmap;
 
@@ -878,61 +872,6 @@ public class TreeUtils {
                 getTopNodes(childItem, list, currLevel+1, maxLevel);
 			}
         }
-    }
-
-    // KLO, 040309
- 	public Vector getNodesInTree(TreeItem ti) {
-		Vector w = new Vector();
-	    getNodesInTree(ti, w);
-	    return w;
-	}
-
-
- 	public void getNodesInTree(TreeItem ti, Vector nodes) {
-		if (nodes == null) nodes = new Vector();
-		if (ti != null && ti.code != null) nodes.add(ti.code);
-		for (String association : ti.assocToChildMap.keySet()) {
-			List<TreeItem> children = ti.assocToChildMap.get(association);
-			for (TreeItem childItem : children) {
-				getNodesInTree(childItem, nodes);
-			}
-		}
-	}
-
-	public void createPaths(String scheme, String version, TreeItem root, String focusCode, Vector nodes) {
-        if (!nodes.contains(root.code))
-        {
-			System.out.println("Not in path: " + root.text+ " " + root.code + " " + root.expandable);
-			return;
-		}
-        else if (focusCode.compareTo(root.code) == 0)
-        {
-			System.out.println("Focus node: " + root.text+ " " + root.code + " " + root.expandable);
-			return;
-		}
-		if (root.code.compareTo("<Root>") == 0)
-		{
-			for (String association : root.assocToChildMap.keySet()) {
-				List<TreeItem> children = root.assocToChildMap.get(association);
-				for (TreeItem childItem : children) {
-					createPaths(scheme, version, childItem, focusCode, nodes);
-				}
-			}
-			return;
-		}
-
-        HashMap hmap = getSubconcepts(scheme, version, root.code);
-		Set keyset = hmap.keySet();
-		Object[] objs = keyset.toArray();
-		String code = (String) objs[0];
-		TreeItem ti = (TreeItem) hmap.get(code);
-		for (String association : ti.assocToChildMap.keySet()) {
-			List<TreeItem> children = ti.assocToChildMap.get(association);
-			root.addAll(association, children);
-			for (TreeItem childItem : children) {
-                createPaths(scheme, version, childItem, focusCode, nodes);
-			}
-		}
     }
 
 
