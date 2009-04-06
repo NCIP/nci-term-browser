@@ -459,14 +459,9 @@ public class CacheController
 		}
 	}
 
+/*
     private JSONArray getNodesArray(String node_id, TreeItem ti) {
 		JSONArray nodesArray = new JSONArray();
-		/* KLO
-		if (node_id.compareTo(ti.code) == 0)
-		{
-			return nodesArray;
-		}
-		*/
 		for (String association : ti.assocToChildMap.keySet()) {
 			List<TreeItem> children = ti.assocToChildMap.get(association);
 			SortUtils.quickSort(children);
@@ -482,7 +477,6 @@ public class CacheController
 					nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
 					nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
 					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
-					//nodeObject.put(CHILDREN_NODES, getNodesArray(childItem));
 					nodeObject.put(CHILDREN_NODES, getNodesArray(node_id, childItem));
 					nodesArray.put(nodeObject);
 				} catch (Exception ex) {
@@ -492,6 +486,108 @@ public class CacheController
 		}
 		return nodesArray;
 	}
+*/
+
+
+    private int findFocusNodePosition(String node_id, List<TreeItem> children) {
+		for (int i=0; i<children.size(); i++) {
+			TreeItem childItem = (TreeItem) children.get(i);
+			if (node_id.compareTo(childItem.code) == 0) return i;
+		}
+		return -1;
+	}
+
+
+
+    private JSONArray getNodesArray(String node_id, TreeItem ti) {
+		JSONArray nodesArray = new JSONArray();
+		for (String association : ti.assocToChildMap.keySet()) {
+			List<TreeItem> children = ti.assocToChildMap.get(association);
+			SortUtils.quickSort(children);
+
+			if (children.size() <=200) {
+				for (int i=0; i<children.size(); i++) {
+					TreeItem childItem = (TreeItem) children.get(i);
+					int knt = 0;
+					if (childItem.expandable)
+					{
+						knt = 1;
+					}
+					JSONObject nodeObject = new JSONObject();
+					try {
+						nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
+						nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+						nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
+						nodeObject.put(CHILDREN_NODES, getNodesArray(node_id, childItem));
+						nodesArray.put(nodeObject);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+		    } else {
+				int len = children.size();
+				int min = 0;
+				int max = len - 1;
+				int pos = findFocusNodePosition(node_id, children);
+				if (pos == -1) {
+					for (int i=0; i<children.size(); i++) {
+						TreeItem childItem = (TreeItem) children.get(i);
+						int knt = 0;
+						if (childItem.expandable)
+						{
+							knt = 1;
+						}
+						JSONObject nodeObject = new JSONObject();
+						try {
+							nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
+							nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+							nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
+							nodeObject.put(CHILDREN_NODES, getNodesArray(node_id, childItem));
+							nodesArray.put(nodeObject);
+						} catch (Exception ex) {
+
+						}
+					}
+				} else {
+					if (pos - 50 > 0) min = pos - 50;
+					if (pos + 50 < max) max = pos + 50;
+
+                    JSONObject nodeObject = null;
+					for (int i=min; i<max; i++) {
+						TreeItem childItem = (TreeItem) children.get(i);
+						int knt = 0;
+						if (childItem.expandable)
+						{
+							knt = 1;
+						}
+						nodeObject = new JSONObject();
+						try {
+							nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
+							nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+							nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
+							nodeObject.put(CHILDREN_NODES, getNodesArray(node_id, childItem));
+							nodesArray.put(nodeObject);
+						} catch (Exception ex) {
+
+						}
+					}
+
+					nodeObject = new JSONObject();
+                    try {
+						nodeObject.put(ONTOLOGY_NODE_ID, node_id);
+						nodeObject.put(ONTOLOGY_NODE_NAME, "(Too many sibling nodes -- only 100 out of " + len + " are displayed.)");
+						nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, 0);
+						nodeObject.put(CHILDREN_NODES, new JSONArray());
+						nodesArray.put(nodeObject);
+					} catch (Exception ex) {
+                        ex.printStackTrace();
+					}
+				}
+			}
+		}
+		return nodesArray;
+	}
+
 
 }
 
