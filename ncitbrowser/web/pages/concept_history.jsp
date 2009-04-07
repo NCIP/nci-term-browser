@@ -45,8 +45,8 @@
           <div class="pageTitle"><b><%=concept_name%> (Code <%=code%>)</b></div>
           <table width="570px">
             <tr class="textbody">
-              <td align="left">
-                <b>History</b>
+              <td align="left" class="texttitle-gray">
+                History
               </td>
               <td align="right">
                 <font size="1" color="red" align="right">
@@ -88,6 +88,7 @@
             <%
               }
             %>
+            <tr><td height="10px"></td></tr>
           </table>
           <!-- End of history content -->
         </div>
