@@ -188,7 +188,7 @@
                  <key>MAXIMUM_TREE_LEVEL</key>
                  <value>@maximum.tree.level@</value>
         </ConfigurableItem>
-        
+
         <ConfigurableItem>
                  <key>EHCACHE_XML_PATHNAME</key>
                  <value>@ehcache.xml.file@</value>
@@ -208,7 +208,12 @@
                   <key>TERMINOLOGY_SUBSET_DOWNLOAD_URL</key>
                   <value>@terminology.subset.download.url@</value>
         </ConfigurableItem>
-        
+
+        <ConfigurableItem>
+                 <key>NCIT_BUILD_INFO</key>
+                 <value>@ncit.build.info@</value>
+        </ConfigurableItem>
+
     </ConfigurableItems>
 
 </root>
