@@ -505,7 +505,11 @@ public class CacheController
 			List<TreeItem> children = ti.assocToChildMap.get(association);
 			SortUtils.quickSort(children);
 
-			if (children.size() <=200) {
+			int cut_off = 200;
+			int m = cut_off / 2;
+			int m2 = m / 2;
+
+			if (children.size() <= cut_off) {
 				for (int i=0; i<children.size(); i++) {
 					TreeItem childItem = (TreeItem) children.get(i);
 					int knt = 0;
@@ -549,8 +553,14 @@ public class CacheController
 						}
 					}
 				} else {
-					if (pos - 50 > 0) min = pos - 50;
-					if (pos + 50 < max) max = pos + 50;
+					if (pos < m) {
+						min = 0;
+						max = m + 1;
+						if (max > len) max = len;
+					} else {
+						if (pos - m2 > 0) min = pos - m2;
+						if (pos + m2 < max) max = pos + m2;
+				    }
 
                     JSONObject nodeObject = null;
 					for (int i=min; i<max; i++) {
@@ -575,7 +585,7 @@ public class CacheController
 					nodeObject = new JSONObject();
                     try {
 						nodeObject.put(ONTOLOGY_NODE_ID, node_id);
-						nodeObject.put(ONTOLOGY_NODE_NAME, "(Too many sibling nodes -- only 100 out of " + len + " are displayed.)");
+						nodeObject.put(ONTOLOGY_NODE_NAME, "(Too many sibling nodes -- only " + m + " of a total " + len + " are displayed.)");
 						nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, 0);
 						nodeObject.put(CHILDREN_NODES, new JSONArray());
 						nodesArray.put(nodeObject);
