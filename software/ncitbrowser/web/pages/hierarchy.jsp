@@ -226,6 +226,12 @@
       emptyRootDiv.render();
     }
 
+    function showPartialHierarchy() {
+      rootDescDiv.setBody("<span class='instruction_text'>(Note: This tree only shows partial hierarchy.)</span>");
+      rootDescDiv.show();
+      rootDescDiv.render();
+    }
+    
     function showTreeLoadingStatus() {
       treeStatusDiv.setBody("<img src='<%=basePath%>/images/loading.gif'/> <span class='instruction_text'>Building tree ...</span>");
       treeStatusDiv.show();
@@ -302,7 +308,7 @@
               showEmptyRoot();
             }
             else {
-
+              showPartialHierarchy();
               for (var i=0; i < respObj.root_nodes.length; i++) {
                 var nodeInfo = respObj.root_nodes[i];
                 //var expand = false;
