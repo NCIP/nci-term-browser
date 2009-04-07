@@ -3,6 +3,10 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%
+  String ncit_build_info = new DataUtils().getNCITBuildInfo();
+%>
+<!-- Build info: <%=ncit_build_info%> -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
