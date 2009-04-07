@@ -223,7 +223,7 @@ public class DataUtils {
 
     public String NCICBContactURL = null;
     public String terminologySubsetDownloadURL = null;
-
+    public String NCITBuildInfo = null;
 
     //==================================================================================
 
@@ -1767,4 +1767,27 @@ System.out.println("WARNING: property_type not found -- " + property_type);
 		}
 		return terminologySubsetDownloadURL;
 	}
+	
+    public String getNCITBuildInfo()
+    {
+        if (NCITBuildInfo != null)
+        {
+            return NCITBuildInfo;
+        }
+        String default_info = "N/A";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            NCITBuildInfo = properties.getProperty(NCItBrowserProperties.NCIT_BUILD_INFO);
+            if (NCITBuildInfo == null)
+            {
+                NCITBuildInfo = default_info;
+            }
+        } catch (Exception ex) {
+
+        }
+
+        System.out.println("getNCITBuildInfo returns " + NCITBuildInfo);
+        return NCITBuildInfo;
+    }	
 }
