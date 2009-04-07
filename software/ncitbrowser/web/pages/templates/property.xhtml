@@ -347,10 +347,16 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       <td><i><%=concept_name_label%></i></td>
       <td><i><%=concept_name%></i></td>
     </tr>
+    <%
+    if (primitive != null) {
+    %>
     <tr class="dataRowLight">
       <td><i><%=primitive_label%></i></td>
       <td><i><%=primitive%></i></td>
     </tr>
+    <%
+    }
+    %>
   </table>
 </p>
 <%

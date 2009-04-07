@@ -62,7 +62,7 @@ public class HistoryUtils {
             }
 
             String info = type + "|" + _dataFormatter.format(date) + "|" + desc;
-            System.out.println("NCIChangeEvent: " + info);
+            //System.out.println("NCIChangeEvent: " + info);
             v.add(info);
         }
         return v;
