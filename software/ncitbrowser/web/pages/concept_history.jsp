@@ -43,7 +43,7 @@
         <div id="popupContentArea">
           <!-- History content -->
           <div class="pageTitle"><b><%=concept_name%> (Code <%=code%>)</b></div>
-          <table width="570px">
+          <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
               <td align="left" class="texttitle-gray">
                 History
@@ -55,7 +55,7 @@
               </td>
             </tr>
           </table>
-          <table width="570px" cellpadding="3" cellspacing="0" border="0">
+          <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr>
               <%
                 for (int i=0; i<headers.size(); ++i) {
