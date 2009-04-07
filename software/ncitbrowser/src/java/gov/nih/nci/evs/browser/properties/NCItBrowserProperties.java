@@ -46,96 +46,97 @@ import org.apache.log4j.Logger;
 
 public class NCItBrowserProperties {
 
-	    private static List displayItemList;
-	    private static HashMap configurableItemMap;
+        private static List displayItemList;
+        private static HashMap configurableItemMap;
 
        //KLO
-		public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
-		public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
-		public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
-		public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
-		public static final String NCICB_CONTACT_URL = "NCICB_CONTACT_URL";
-		public static final String MAXIMUM_TREE_LEVEL = "MAXIMUM_TREE_LEVEL";
-		public static final String TERMINOLOGY_SUBSET_DOWNLOAD_URL= "TERMINOLOGY_SUBSET_DOWNLOAD_URL";
+        public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
+        public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
+        public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
+        public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
+        public static final String NCICB_CONTACT_URL = "NCICB_CONTACT_URL";
+        public static final String MAXIMUM_TREE_LEVEL = "MAXIMUM_TREE_LEVEL";
+        public static final String TERMINOLOGY_SUBSET_DOWNLOAD_URL= "TERMINOLOGY_SUBSET_DOWNLOAD_URL";
+        public static final String NCIT_BUILD_INFO = "NCIT_BUILD_INFO";
 
-	    private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
+        private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
 
-		private static NCItBrowserProperties NCItBrowserProperties = null;
+        private static NCItBrowserProperties NCItBrowserProperties = null;
 
-	    private static Properties properties = new Properties();
+        private static Properties properties = new Properties();
 
-	    private static int maxToReturn = 1000;
-	    private static int maxTreeLevel = 1000;
-	    private static String service_url = null;
+        private static int maxToReturn = 1000;
+        private static int maxTreeLevel = 1000;
+        private static String service_url = null;
 
-	    private static String sort_by_score = null;
-	    private static String ncicb_contact_url = null;
-	    private static String terminology_subset_download_url = null;
+        private static String sort_by_score = null;
+        private static String ncicb_contact_url = null;
+        private static String terminology_subset_download_url = null;
 
-	    /**
-	     * Private constructor for singleton pattern.
-	     */
-		private NCItBrowserProperties() {}
+        /**
+         * Private constructor for singleton pattern.
+         */
+        private NCItBrowserProperties() {}
 
-		/**
-		 * Gets the single instance of NCItBrowserProperties.
-		 *
-		 * @return single instance of NCItBrowserProperties
-		 *
-		 * @throws Exception the exception
-		 */
-		public static NCItBrowserProperties getInstance() throws Exception{
-			if(NCItBrowserProperties == null) {
-				synchronized(NCItBrowserProperties.class) {
-					if(NCItBrowserProperties == null) {
-						NCItBrowserProperties = new NCItBrowserProperties();
-						loadProperties();
+        /**
+         * Gets the single instance of NCItBrowserProperties.
+         *
+         * @return single instance of NCItBrowserProperties
+         *
+         * @throws Exception the exception
+         */
+        public static NCItBrowserProperties getInstance() throws Exception{
+            if(NCItBrowserProperties == null) {
+                synchronized(NCItBrowserProperties.class) {
+                    if(NCItBrowserProperties == null) {
+                        NCItBrowserProperties = new NCItBrowserProperties();
+                        loadProperties();
 
-						String max_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
-						maxToReturn = Integer.parseInt(max_str);
+                        String max_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
+                        maxToReturn = Integer.parseInt(max_str);
 
-						String max_tree_level_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
-						maxTreeLevel = Integer.parseInt(max_tree_level_str);
+                        String max_tree_level_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
+                        maxTreeLevel = Integer.parseInt(max_tree_level_str);
 
-						service_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+                        service_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
 
-						//System.out.println("EVS_SERVICE_URL: " + service_url);
+                        //System.out.println("EVS_SERVICE_URL: " + service_url);
 
-						sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
-						ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
-						terminology_subset_download_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
-					}
-				}
-			}
+                        sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
+                        ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
+                        terminology_subset_download_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
+                    }
+                }
+            }
 
-			return NCItBrowserProperties ;
-		}
-
-
-	    //public String getProperty(String key) throws Exception{
-		public static String getProperty(String key) throws Exception{
-	    	//return properties.getProperty(key);
-	    	String ret_str = (String) configurableItemMap.get(key);
-	    	if (ret_str == null) return null;
-	    	if (ret_str.compareToIgnoreCase("null") == 0) return null;
-	    	return ret_str;
-	    }
+            return NCItBrowserProperties ;
+        }
 
 
-		public List getDisplayItemList() {
-			return this.displayItemList;
-		}
+        //public String getProperty(String key) throws Exception{
+        public static String getProperty(String key) throws Exception{
+            //return properties.getProperty(key);
+            String ret_str = (String) configurableItemMap.get(key);
+            if (ret_str == null) return null;
+            if (ret_str.compareToIgnoreCase("null") == 0) return null;
+            return ret_str;
+        }
 
 
-	    private static void loadProperties() throws Exception {
-			String propertyFile = System.getProperty("gov.nih.nci.evs.browser.NCItBrowserProperties");
+        public List getDisplayItemList() {
+            return this.displayItemList;
+        }
 
-			log.info("NCItBrowserProperties File Location= "+ propertyFile);
 
-			PropertyFileParser parser = new PropertyFileParser(propertyFile);
-			parser.run();
+        private static void loadProperties() throws Exception {
+            String propertyFile = System.getProperty("gov.nih.nci.evs.browser.NCItBrowserProperties");
 
-			displayItemList = parser.getDisplayItemList();
-			configurableItemMap = parser.getConfigurableItemMap();
-		}
-	}
+            log.info("NCItBrowserProperties File Location= "+ propertyFile);
+
+            PropertyFileParser parser = new PropertyFileParser(propertyFile);
+            parser.run();
+
+            displayItemList = parser.getDisplayItemList();
+            configurableItemMap = parser.getConfigurableItemMap();
+        }
+    }
