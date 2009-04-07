@@ -70,7 +70,7 @@ h3
  padding-top: 0px;
  padding-right: 0;
  padding-bottom: 0px;
- padding-left: 0;
+ padding-left: 12px;
  word-wrap: break-word;
  width: 612px;
 }
@@ -289,8 +289,7 @@ h3
 }
 
 /* ------------ Quick links ------------ */
-
-#quicklinksholder
+#quicklinksholder 
 {
  margin-left: 570px;
  padding-top: 7px;
@@ -360,7 +359,6 @@ h3
 }
 
 /* ----------- End quick links ------------ */
-
 .pagecontent 
 {
  background-image: url(../images/content-background.gif);
