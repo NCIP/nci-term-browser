@@ -8,6 +8,13 @@ Pre-installation requirements
 1. JDK 1.5
 2. Apache ANT 1.7 or newer
 
+
+--------------------------------------
+Deploy to DEV remotely from desktop
+--------------------------------------
+1. Rename local.properties so that it does not overwrite the remote properties file.
+2. ant -Dproperties.file=dev-upgrade.properties deploy:remote:upgrade
+
 -----------------------
 Build the application
 -----------------------
