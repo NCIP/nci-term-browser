@@ -231,7 +231,7 @@
       rootDescDiv.show();
       rootDescDiv.render();
     }
-    
+
     function showTreeLoadingStatus() {
       treeStatusDiv.setBody("<img src='<%=basePath%>/images/loading.gif'/> <span class='instruction_text'>Building tree ...</span>");
       treeStatusDiv.show();
@@ -364,10 +364,10 @@
 
       tree.draw();
       for (var i=0; i < childNodes.length; i++) {
-	var childnodeInfo = childNodes[i];
-	addTreeBranch(ontology_node_id, newNode, childnodeInfo);
+  var childnodeInfo = childNodes[i];
+  addTreeBranch(ontology_node_id, newNode, childnodeInfo);
       }
-	      
+
     }
     YAHOO.util.Event.addListener(window, "load", init);
 
@@ -389,9 +389,9 @@
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="" title="" border="0" /></div>
         <div id="popupContentArea">
           <div class="pageTitle">NCI Thesaurus Hierarchy</div>
-          
+
            <div>
-           <table width="570px">
+           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
               <td align="left">
                 <b>&nbsp;</b>
@@ -404,7 +404,7 @@
             </tr>
           </table>
           </div>
-                    
+
             <!-- Tree content -->
             <div id="rootDesc">
               <div id="bd"></div>
