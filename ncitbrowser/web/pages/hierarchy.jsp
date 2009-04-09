@@ -388,46 +388,41 @@
         </table>
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="" title="" border="0" /></div>
         <div id="popupContentArea">
-          <div class="pageTitle">NCI Thesaurus Hierarchy</div>
-
-           <div>
-           <table width="580px" cellpadding="3" cellspacing="0" border="0">
+          <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
-              <td align="left">
-                <b>&nbsp;</b>
+              <td class="pageTitle" align="left">
+                NCI Thesaurus Hierarchy
               </td>
-              <td align="right">
+              <td class="pageTitle" align="right">
                 <font size="1" color="red" align="right">
                   <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0"><i>Send to Printer</i></a>
                 </font>
               </td>
             </tr>
           </table>
+          <!-- Tree content -->
+          <div id="rootDesc">
+            <div id="bd"></div>
+            <div id="ft"></div>
           </div>
-
-            <!-- Tree content -->
-            <div id="rootDesc">
-              <div id="bd"></div>
-              <div id="ft"></div>
-            </div>
-            <div id="treeStatus">
-              <div id="bd"></div>
-            </div>
-            <div id="emptyRoot">
-              <div id="bd"></div>
-            </div>
-            <div id="treecontainer"></div>
-            <form id="pg_form">
-              <%
-                String ontology_node_id = (String) request.getParameter("code");
-              %>
-              <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
-              <%
-                String ontology_display_name = (String) request.getParameter("dictionary");
-              %>
-              <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
-            </form>
-            <!-- End of Tree control content -->
+          <div id="treeStatus">
+            <div id="bd"></div>
+          </div>
+          <div id="emptyRoot">
+            <div id="bd"></div>
+          </div>
+          <div id="treecontainer"></div>
+          <form id="pg_form">
+            <%
+              String ontology_node_id = (String) request.getParameter("code");
+            %>
+            <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
+            <%
+              String ontology_display_name = (String) request.getParameter("dictionary");
+            %>
+            <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
+          </form>
+          <!-- End of Tree control content -->
         </div>
       </div>
     </div>
