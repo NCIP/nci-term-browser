@@ -108,8 +108,9 @@ public class SortComparator implements Comparator<Object>{
 
 
     public int compare(Object object1, Object object2) {
-        String key1 = getKey(object1, sort_option);
-        String key2 = getKey(object2, sort_option);
+		// case insensitive sort
+        String key1 = getKey(object1, sort_option).toLowerCase();
+        String key2 = getKey(object2, sort_option).toLowerCase();
         return key1.compareTo(key2);
     }
 }
