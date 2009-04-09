@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Vector;
 
 import org.LexGrid.LexBIG.DataModel.Collections.NCIChangeEventList;
@@ -40,8 +41,8 @@ public class HistoryUtils {
     private static Vector<String> getEditActions(String codingSchemeName,
             String vers, String ltag, String code, NCIChangeEventList list) {
         Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
-        //int i = 0;
         Vector<String> v = new Vector<String>();
+        HashSet<String> hset = new HashSet<String>();
         while (enumeration.hasMoreElements()) {
             NCIChangeEvent event = enumeration.nextElement();
             ChangeType type = event.getEditaction();
@@ -62,8 +63,11 @@ public class HistoryUtils {
             }
 
             String info = type + "|" + _dataFormatter.format(date) + "|" + desc;
+            if (hset.contains(info))
+                continue;
             //System.out.println("NCIChangeEvent: " + info);
             v.add(info);
+            hset.add(info);
         }
         return v;
     }
