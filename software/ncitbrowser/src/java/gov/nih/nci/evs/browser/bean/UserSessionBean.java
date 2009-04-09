@@ -5,6 +5,7 @@ import java.io.File;
 
 import gov.nih.nci.evs.browser.utils.SortUtils;
 import gov.nih.nci.evs.browser.utils.SearchUtils;
+import gov.nih.nci.evs.browser.utils.Utils;
 
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
@@ -146,10 +147,21 @@ public class UserSessionBean extends Object
 
 		request.getSession().setAttribute("vocabulary", scheme);
 
-        long ms = System.currentTimeMillis();
+        Utils.StopWatch stopWatch = new Utils.StopWatch();
+        boolean debug = false;
+        
 		//Vector<org.LexGrid.concepts.Concept> v = SearchUtils.searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		Vector<org.LexGrid.concepts.Concept> v = new SearchUtils().searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		//SortUtils.quickSort(v);
+
+		if (debug) {
+		    System.out.println("scheme: " + scheme);
+            System.out.println("version: " + version);
+            System.out.println("keyword(s): " + matchText);
+            System.out.println("algorithm: " + matchAlgorithm);
+            System.out.println(stopWatch.getResult());
+		}
+
         if (v != null && v.size() > 1)
         {
         	request.getSession().setAttribute("search_results", v);

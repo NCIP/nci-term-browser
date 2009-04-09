@@ -70,13 +70,22 @@ public class RemoteServerUtil {
 
 	public static LexBIGService createLexBIGService(String serviceUrl)
     {
-		try{
-			//System.out.println("RemoteServerUtil serviceUrl: " + serviceUrl);
+        try{
+            boolean debug = false;
 			if (serviceUrl == null || serviceUrl.compareTo("") == 0)
 			{
+			    if (debug) {
+			        System.out.println(Utils.SEPARATOR);
+			        System.out.println("LexBIGService(local): new LexBIGServiceImpl();");
+			        System.out.println("LG_CONFIG_FILE: " + System.getProperty("LG_CONFIG_FILE"));
+			    }
 				LexBIGService lbSvc = new LexBIGServiceImpl();
 				return lbSvc;
 			}
+            if (debug) {
+                System.out.println(Utils.SEPARATOR);
+                System.out.println("LexBIGService(remote): " + serviceUrl);
+            }
 		    EVSApplicationService appService = (EVSApplicationService) ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, _serviceInfo);
             return (LexBIGService) appService;
 		}
