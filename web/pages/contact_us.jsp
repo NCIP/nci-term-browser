@@ -40,7 +40,7 @@
               Morbi convallis varius urna.</b>
             </p>
             <p><b>You must fill in every box below</b></p>
-            <form method="post" action="mailto:<%=ncicb_contact_url%>" enctype="text/plain">
+            <form method="post">
               <p><i>Enter the subject of your email</i></p>
               <input CLASS="input.formField" size="100" name="subject" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
               <p>
@@ -57,7 +57,13 @@
               </p>
               <input CLASS="input.formField" size="100" name="emailaddress" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
               <br/><br/>
-              <INPUT  type="submit" value="Submit">&nbsp;&nbsp;<INPUT type="reset" value="Clear">
+              
+              <h:commandButton
+                id="mail"
+                value="Submit"
+                action="#{userSessionBean.contactUs}" >
+              </h:commandButton>
+              &nbsp;&nbsp;<INPUT type="reset" value="Clear">
             </form>
             <a href="http://www.cancer.gov/policies/page3" ><i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i></a>
             <%@ include file="/pages/templates/nciFooter.html" %>

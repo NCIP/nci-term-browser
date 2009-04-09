@@ -3,6 +3,7 @@ package gov.nih.nci.evs.browser.bean;
 
 import java.io.File;
 
+import gov.nih.nci.evs.browser.utils.MailUtils;
 import gov.nih.nci.evs.browser.utils.SortUtils;
 import gov.nih.nci.evs.browser.utils.SearchUtils;
 import gov.nih.nci.evs.browser.utils.Utils;
@@ -274,5 +275,13 @@ public class UserSessionBean extends Object
 		return this.selectedAlgorithm;
 	}
 
-
-  }
+    public void contactUs() throws Exception {
+        HttpServletRequest request = (HttpServletRequest) FacesContext
+            .getCurrentInstance().getExternalContext().getRequest();
+        String subject = request.getParameter("subject");
+        String message = request.getParameter("message");
+        String from = request.getParameter("emailaddress");
+        String recipients[] = MailUtils.getRecipients();
+        MailUtils.postMail(from, recipients, subject, message);
+    }
+}
