@@ -36,6 +36,7 @@
     <replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
     <property file="${properties.file}" />
     <property name="env.name" value="local"/>
+
     <!-- Set application.base.path based on platform -->
     <condition property="application.base.path" value="${application.base.path.linux}">
         <or>
@@ -48,6 +49,19 @@
     </condition>
     <echo message="application.base.path=${application.base.path}"/>
     <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+
+    <!-- Set application.data.path based on platform -->
+    <condition property="application.data.path" value="${application.data.path.linux}">
+        <or>
+            <os family="unix" />
+            <os family="mac" />
+        </or>
+    </condition>
+    <condition property="application.data.path" value="${application.data.path.windows}">
+        <os family="windows" />
+    </condition>
+    <echo message="application.data.path=${application.data.path}"/>
+
     <!--OS Temp dir -->
     <condition property="os.temp.dir" value="/tmp">
         <or>
@@ -145,7 +159,7 @@
     <basename file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.file"/>
     <dirname file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.dir"/>
     <!-- Start logging -->
-    <property name="install-logs.dir" location="${application.base.path}/change-logs"/>
+    <property name="install-logs.dir" location="${application.data.path}/change-logs"/>
     <mkdir dir="${install-logs.dir}"/>
     <tstamp>
         <format property="install.time" pattern="yyyy-MM-dd-HH-mm" />
@@ -244,9 +258,9 @@
 
         <filterset id="embedded.filterset">
             <filter token="lex.evs.api.url" value="${lex.evs.api.url}"/>
-            <filter token="ncitbrowser.conf.path" value="${application.base.path}/${ncitbrowser.conf.path}"/>
-            <filter token="ehcache.xml.file" value="${application.base.path}/${ncitbrowser.conf.path}/${ehcache.xml.file}"/>
-            <filter token="ehcache.cache.path" value="${application.base.path}/${ehcache.cache.path}"/>
+            <filter token="ncitbrowser.conf.path" value="${application.data.path}/${ncitbrowser.conf.path}"/>
+            <filter token="ehcache.xml.file" value="${application.data.path}/${ncitbrowser.conf.path}/${ehcache.xml.file}"/>
+            <filter token="ehcache.cache.path" value="${application.data.path}/${ehcache.cache.path}"/>
             <filter token="maximum.return" value="${maximum.return}"/>
             <filter token="maximum.tree.level" value="${maximum.tree.level}"/>
             <filter token="sort.by.score" value="${sort.by.score}"/>
@@ -254,9 +268,9 @@
             <filter token="terminology.subset.download.url" value="${terminology.subset.download.url}"/>
             <filter token="ncit.build.info" value="Built: ${BUILD_DATE}"/>
         </filterset>
-        <mkdir dir="${application.base.path}/${ncitbrowser.conf.path}" />
-        <mkdir dir="${application.base.path}/${ehcache.cache.path}" />
-        <copy todir="${application.base.path}/${ncitbrowser.conf.path}" filtering="true" overwrite="true">
+        <mkdir dir="${application.data.path}/${ncitbrowser.conf.path}" />
+        <mkdir dir="${application.data.path}/${ehcache.cache.path}" />
+        <copy todir="${application.data.path}/${ncitbrowser.conf.path}" filtering="true" overwrite="true">
             <filterset refid="embedded.filterset"/>
             <fileset dir="${ncitbrowser-webapp.dir.dist}/deploy">
                 <include name="**/*"/>
@@ -284,7 +298,7 @@
             <insert path="/server/mbean[@code='org.jboss.varia.property.SystemPropertiesService']">
                 <![CDATA[
                 <attribute name="Properties">
-                   gov.nih.nci.evs.browser.NCItBrowserProperties=${application.base.path}/${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
+                   gov.nih.nci.evs.browser.NCItBrowserProperties=${application.data.path}/${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
                    LG_CONFIG_FILE=${lg.config.file}
                 </attribute>
                 ]]>
