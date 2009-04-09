@@ -1,6 +1,8 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class Utils {
 	public static final String SEPARATOR = 
@@ -31,6 +33,29 @@ public class Utils {
             return "Run time: " + time + " ms, " + 
                 _doubleFormatter.format(timeSec) + " sec, " + 
                 _doubleFormatter.format(timeMin) + " min";
+        }
+    }
+    
+    public static String[] toStrings(String value, String delimiter, 
+        boolean includeDelimiter) {
+        StringTokenizer tokenizer = new StringTokenizer(
+            value, delimiter, includeDelimiter);
+        ArrayList<String> list = new ArrayList<String>();
+        while (tokenizer.hasMoreElements()) {
+            String s = tokenizer.nextToken().trim();
+            if (s.length() > 0)
+                list.add(s);
+        }
+        return list.toArray(new String[list.size()]);
+    }
+    
+    public static void debug(String msg, String[] list) {
+        if (msg != null && msg.length() > 0)
+            System.out.println(msg);
+        if (list == null)
+            return;
+        for (int i=0; i<list.length; ++i) {
+            System.out.println("  " + (i+1) + ") " + list[i]);
         }
     }
 }
