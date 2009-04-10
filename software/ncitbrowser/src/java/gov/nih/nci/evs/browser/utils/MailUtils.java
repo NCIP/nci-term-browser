@@ -45,15 +45,19 @@ public class MailUtils extends Object {
         String incoming_mail_host = getIncomingMailHost();
 
         if (incoming_mail_host == null || incoming_mail_host.length() <= 0)
-            error.append("mail host not set.\n");
+            error.append("    * mail host\n");
         if (from == null || from.length() <= 0)
-            error.append("from field not set.\n");
+            error.append("    * from\n");
         if (subject == null || subject.length() <= 0)
-            error.append("subject field not set.\n");
+            error.append("    * subject\n");
         if (message == null || message.length() <= 0)
-            error.append("message field not set.\n");
-        if (error.length() > 0)
+            error.append("    * message\n");
+        if (error.length() > 0) {
+            String s = "Warning: Your message was not sent successfully.\n\n";
+            s += "The following fields were not set:\n";
+            error.insert(0, s);
             throw new Exception(error.toString());
+        }
 
         // Sets the host smtp address.
         Properties props = new Properties();
