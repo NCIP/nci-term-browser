@@ -275,13 +275,24 @@ public class UserSessionBean extends Object
 		return this.selectedAlgorithm;
 	}
 
-    public void contactUs() throws Exception {
+    public String contactUs() throws Exception {
+        String msg = "Your message was successfully sent.";
         HttpServletRequest request = (HttpServletRequest) FacesContext
             .getCurrentInstance().getExternalContext().getRequest();
-        String subject = request.getParameter("subject");
-        String message = request.getParameter("message");
-        String from = request.getParameter("emailaddress");
-        String recipients[] = MailUtils.getRecipients();
-        MailUtils.postMail(from, recipients, subject, message);
+        
+        try {
+            String subject = request.getParameter("subject");
+            String message = request.getParameter("message");
+            String from = request.getParameter("emailaddress");
+            String recipients[] = MailUtils.getRecipients();
+            MailUtils.postMail(from, recipients, subject, message);
+        } catch (Exception e) {
+            msg = e.getMessage();
+        }
+        
+        msg = msg.replaceAll("\n", "<br/>");
+        msg = msg.replaceAll("  ", "&nbsp;&nbsp;");
+        request.getSession().setAttribute("message", msg);
+        return "message";
     }
 }
