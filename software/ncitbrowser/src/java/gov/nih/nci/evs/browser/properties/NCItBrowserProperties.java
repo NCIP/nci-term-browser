@@ -54,6 +54,7 @@ public class NCItBrowserProperties {
         public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
         public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
         public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
+        public static final String INCOMING_MAIL_HOST = "INCOMING_MAIL_HOST";
         public static final String NCICB_CONTACT_URL = "NCICB_CONTACT_URL";
         public static final String MAXIMUM_TREE_LEVEL = "MAXIMUM_TREE_LEVEL";
         public static final String TERMINOLOGY_SUBSET_DOWNLOAD_URL= "TERMINOLOGY_SUBSET_DOWNLOAD_URL";
@@ -70,6 +71,7 @@ public class NCItBrowserProperties {
         private static String service_url = null;
 
         private static String sort_by_score = null;
+        private static String incoming_mail_host = null;
         private static String ncicb_contact_url = null;
         private static String terminology_subset_download_url = null;
 
@@ -104,6 +106,7 @@ public class NCItBrowserProperties {
 
                         sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
                         ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
+                        incoming_mail_host = NCItBrowserProperties.getProperty(NCItBrowserProperties.INCOMING_MAIL_HOST);
                         terminology_subset_download_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
                     }
                 }

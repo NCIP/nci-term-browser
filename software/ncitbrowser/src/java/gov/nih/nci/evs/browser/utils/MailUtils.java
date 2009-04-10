@@ -14,19 +14,50 @@ import javax.mail.internet.MimeMessage;
 public class MailUtils extends Object {
     private static final long serialVersionUID = 1L;
 
-    private static final String MAIL_HOST_INCOMING = "mailfwd.nih.gov";
+    public static String getProperty(String property, String propertyName)
+            throws Exception {
+        String value = null;
+        try {
+            value = NCItBrowserProperties.getProperty(property);
+        } catch (Exception e) {
+            throw new Exception("Error reading \"" + propertyName
+                    + "\" property.");
+        }
+        return value;
+    }
 
     public static String[] getRecipients() throws Exception {
-        String ncicb_contact_url = NCItBrowserProperties.getProperty(
-            NCItBrowserProperties.NCICB_CONTACT_URL);
-        return Utils.toStrings(ncicb_contact_url, ";", false);
+        String value = getProperty(NCItBrowserProperties.NCICB_CONTACT_URL,
+            "ncicb.contact.url");
+        return Utils.toStrings(value, ";", false);
+    }
+
+    public static String getIncomingMailHost() throws Exception {
+        String value = getProperty(NCItBrowserProperties.INCOMING_MAIL_HOST,
+            "incoming.mail.host");
+        return value;
     }
 
     public static void postMail(String from, String recipients[],
-            String subject, String message) throws MessagingException {
+            String subject, String message) throws MessagingException,
+            Exception {
+        StringBuffer error = new StringBuffer();
+        String incoming_mail_host = getIncomingMailHost();
+
+        if (incoming_mail_host == null || incoming_mail_host.length() <= 0)
+            error.append("mail host not set.\n");
+        if (from == null || from.length() <= 0)
+            error.append("from field not set.\n");
+        if (subject == null || subject.length() <= 0)
+            error.append("subject field not set.\n");
+        if (message == null || message.length() <= 0)
+            error.append("message field not set.\n");
+        if (error.length() > 0)
+            throw new Exception(error.toString());
+
         // Sets the host smtp address.
         Properties props = new Properties();
-        props.put("mail.smtp.host", MAIL_HOST_INCOMING);
+        props.put("mail.smtp.host", incoming_mail_host);
 
         // Creates some properties and get the default session.
         Session session = Session.getDefaultInstance(props, null);
