@@ -43,6 +43,13 @@
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>  
 
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
     <navigation-case> 
        <description>help</description>
        <to-view-id>/pages/help.jsp</to-view-id>
@@ -78,6 +85,13 @@
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>  
 
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
     <navigation-case> 
        <description>help</description>
        <to-view-id>/pages/help.jsp</to-view-id>
@@ -111,6 +125,13 @@
        <description>contact_us</description>
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>  
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
 
     <navigation-case> 
        <description>help</description>
@@ -146,7 +167,14 @@
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>  
  
-     <navigation-case> 
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case> 
         <description>help</description>
         <to-view-id>/pages/help.jsp</to-view-id>
     </navigation-case>  
@@ -189,6 +217,13 @@
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>  
 
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
     <navigation-case> 
        <description>help</description>
        <to-view-id>/pages/help.jsp</to-view-id>
@@ -222,6 +257,14 @@
        <description>contact_us</description>
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>  
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+    
   </navigation-rule>
   
 <managed-bean>
