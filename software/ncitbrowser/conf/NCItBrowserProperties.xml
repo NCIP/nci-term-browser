@@ -200,13 +200,18 @@
         </ConfigurableItem>
 
         <ConfigurableItem>
+                 <key>INCOMING_MAIL_HOST</key>
+                 <value>@incoming.mail.host@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
                  <key>NCICB_CONTACT_URL</key>
                  <value>@ncicb.contact.url@</value>
         </ConfigurableItem>
 
-         <ConfigurableItem>
-                  <key>TERMINOLOGY_SUBSET_DOWNLOAD_URL</key>
-                  <value>@terminology.subset.download.url@</value>
+        <ConfigurableItem>
+                 <key>TERMINOLOGY_SUBSET_DOWNLOAD_URL</key>
+                 <value>@terminology.subset.download.url@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
