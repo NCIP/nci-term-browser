@@ -42,11 +42,22 @@
             &nbsp;&nbsp;&nbsp;&nbsp;TTY 1-800-332-8615<br/>
             </p>
             <p>
-              <b>Cras lobortis tincidunt nisi. In hac habitasse platea dictumst. In a orci. Cum sociis natoque
-              penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer sed arcu. Mauris luctus
-              nisi sed dolor. Vestibulum consequat pellentesque eros. Proin malesuada congue massa. Maecenas
-              facilisis leo ut purus. Fusce orci leo, commodo sed, pellentesque eleifend, euismod ac, justo.
-              Morbi convallis varius urna.</b>
+              <b>
+                The email contact point for questions or suggestions on NCIt
+                content, browsers, distribution files, or other issues is:
+                <br/><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;NCIThesaurus@mail.nih.gov
+                <br/><br/>
+              </b>
+              You can also use the
+              <a href="http://dev1.cancer.gov/namkim/evs/design3A.html">online form</a> 
+              available on this browser. &nbsp;
+              For questions related to NCI’s Cancer.gov Web site,<br/> 
+              see the
+              <a href="http://www.cancer.gov/help">Cancer.gov help page</a>. &nbsp;
+              For help and other questions concerning NCI Enterprise Vocabulary
+              Services (EVS), <br/>
+              see the <a href="http://evs.nci.nih.gov/">EVS Web site</a>.
             </p>
 
             <%
