@@ -15,6 +15,15 @@
   </head>
   <%
     String ncicb_contact_url = new DataUtils().getNCICBContactURL();
+    String subject = request.getParameter("subject");
+    String message = request.getParameter("message");
+    String emailaddress = request.getParameter("emailaddress");
+    if (subject == null) subject = "";
+    if (message == null) message = "";
+    if (emailaddress == null) emailaddress = "";
+    boolean error = false;
+    Boolean errorAttr = (Boolean) request.getAttribute("error");
+    if (errorAttr != null) error = errorAttr.booleanValue();
   %>
   <body>
     <f:view>
@@ -39,23 +48,34 @@
               facilisis leo ut purus. Fusce orci leo, commodo sed, pellentesque eleifend, euismod ac, justo.
               Morbi convallis varius urna.</b>
             </p>
-            <p><b>You must fill in every box below</b></p>
+
+            <%
+              String color = ""; 
+              if (error)
+                color = "style=\"color:#FF0000;\"";
+            %>
+            <p><b <%= color %>>You must fill in every box below.</b></p>
             <form method="post">
-              <p><i>Enter the subject of your email</i></p>
-              <input CLASS="input.formField" size="100" name="subject" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
               <p>
-                <i>Enter your message.<br/>
+                <% if (error) %> <i style="color:#FF0000;">* Required)</i>
+                <i>Enter the subject of your email:</i>
+              </p>
+              <input CLASS="input.formField" size="100" name="subject" value="<%= subject %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
+              <p>
+                <% if (error) %> <i style="color:#FF0000;">* Required)</i>
+                <i>Enter your message:<br/>
                   &nbsp;&nbsp;&nbsp;&nbsp;Please include all pertinent details within the contact message box.<br/>
                   &nbsp;&nbsp;&nbsp;&nbsp;We do not open attachments to e-mail messages.
                 </i>
               </p>
-              <TEXTAREA Name="message" rows="4" cols="75"></TEXTAREA>
+              <TEXTAREA Name="message" rows="4" cols="75"><%= message %></TEXTAREA>
               <p>
-                <i>E-mail address<br/>
+                <% if (error) %> <i style="color:#FF0000;">* Required)</i>
+                <i>E-mail address:<br/>
                   &nbsp;&nbsp;&nbsp;&nbsp;For example, jdoe@yahoo.com
                 </i>
               </p>
-              <input CLASS="input.formField" size="100" name="emailaddress" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
+              <input CLASS="input.formField" size="100" name="emailaddress" value="<%= emailaddress %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
               <br/><br/>
               
               <h:commandButton
