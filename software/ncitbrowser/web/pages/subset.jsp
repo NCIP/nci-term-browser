@@ -43,6 +43,23 @@
         </p>
         <table width="100%" border="0">
           <tr>
+            <td>
+              <a href="http://www.cancer.gov/cancertopics/terminologyresources/CDISC">
+                <img src="<%=basePath%>/images/CDISC_Logo.jpg" alt="CDISC" border="0"/>
+              </a>
+            </td>
+            <td>
+              <a href="http://www.cancer.gov/cancertopics/terminologyresources/FDA">
+                <img src="<%=basePath%>/images/FDA_Logo.jpg" alt="FDA" border="0"/>
+              </a>
+            </td>
+            <td>
+              <a href="http://www.cancer.gov/cancertopics/terminologyresources/FMT">
+                <img src="<%=basePath%>/images/FMT_Logo.jpg" alt="FMT" border="0"/>
+              </a>
+            </td>
+          </tr>
+          <tr>
             <td class="textbody" valign="top">
               <i>
                 <a href="#" onclick="javascript:window.open('http://www.cancer.gov/cancertopics/terminologyresources/CDISC', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
