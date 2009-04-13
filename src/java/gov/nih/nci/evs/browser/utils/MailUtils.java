@@ -37,31 +37,60 @@ public class MailUtils extends Object {
             "incoming.mail.host");
         return value;
     }
+    
+    public static boolean isValidEmailAddress(String text) {
+        int posOfAtChar = text.indexOf('@');
+        int posOfDotChar = text.indexOf('.');
+
+        if (posOfAtChar <= 0 || posOfDotChar <= 0)
+            return false;
+        if (posOfAtChar > posOfDotChar)
+            return false;
+        if (posOfAtChar == posOfDotChar-1)
+            return false;
+        return true;
+    }
+    
+    private static void postMailValidation(String incomingMailHost,
+            String from, String recipients[],
+            String subject, String message) throws Exception {
+        StringBuffer error = new StringBuffer();
+        String indent = "    ";
+        int ctr = 0;
+
+        if (incomingMailHost == null || incomingMailHost.length() <= 0)
+            { error.append(indent + "* mail host\n"); ++ctr; }
+        if (subject == null || subject.length() <= 0)
+            { error.append(indent + "* subject of your email\n"); ++ctr; }
+        if (message == null || message.length() <= 0)
+            { error.append(indent + "* message\n"); ++ctr; }
+        if (from == null || from.length() <= 0)
+            { error.append(indent + "* e-mail address\n"); ++ctr; }
+        if (error.length() > 0) {
+            String s = "Warning: Your message was not sent.\n";
+            if (ctr > 1)
+                s += "The following fields were not set:\n";
+            else s += "The following field was not set:\n";
+            error.insert(0, s);
+            throw new Exception(error.toString());
+        }
+        
+        if (! isValidEmailAddress(from)) {
+            error.append("Warning: Your message was not sent.\n");
+            error.append(indent + "* Invalid e-mail address.");
+            throw new Exception(error.toString());
+        }
+    }
 
     public static void postMail(String from, String recipients[],
             String subject, String message) throws MessagingException,
             Exception {
-        StringBuffer error = new StringBuffer();
-        String incoming_mail_host = getIncomingMailHost();
-
-        if (incoming_mail_host == null || incoming_mail_host.length() <= 0)
-            error.append("    * mail host\n");
-        if (from == null || from.length() <= 0)
-            error.append("    * from\n");
-        if (subject == null || subject.length() <= 0)
-            error.append("    * subject\n");
-        if (message == null || message.length() <= 0)
-            error.append("    * message\n");
-        if (error.length() > 0) {
-            String s = "Warning: Your message was not sent successfully.\n\n";
-            s += "The following fields were not set:\n";
-            error.insert(0, s);
-            throw new Exception(error.toString());
-        }
-
+        String incomingMailHost = getIncomingMailHost();
+        postMailValidation(incomingMailHost, from, recipients, subject, message);
+        
         // Sets the host smtp address.
         Properties props = new Properties();
-        props.put("mail.smtp.host", incoming_mail_host);
+        props.put("mail.smtp.host", incomingMailHost);
 
         // Creates some properties and get the default session.
         Session session = Session.getDefaultInstance(props, null);

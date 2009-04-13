@@ -58,4 +58,10 @@ public class Utils {
             System.out.println("  " + (i+1) + ") " + list[i]);
         }
     }
+    
+    public static String toHtml(String text) {
+        text = text.replaceAll("\n", "<br/>");
+        text = text.replaceAll("  ", "&nbsp;&nbsp;");
+        return text;
+    }
 }

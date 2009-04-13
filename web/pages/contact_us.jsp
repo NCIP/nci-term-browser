@@ -21,9 +21,9 @@
     if (subject == null) subject = "";
     if (message == null) message = "";
     if (emailaddress == null) emailaddress = "";
-    boolean error = false;
-    Boolean errorAttr = (Boolean) request.getAttribute("error");
-    if (errorAttr != null) error = errorAttr.booleanValue();
+    String errorMsg = (String) request.getAttribute("errorMsg");
+    if (errorMsg == null) errorMsg = "";
+    boolean error = errorMsg.length() > 0;
   %>
   <body>
     <f:view>
@@ -54,7 +54,15 @@
               if (error)
                 color = "style=\"color:#FF0000;\"";
             %>
-            <p><b <%= color %>>You must fill in every box below.</b></p>
+            <p><b <%= color %>>You must fill in every box below.</b>
+              <%
+                if (errorMsg != null && errorMsg.length() > 0) {
+              %>
+                  <br/><br/><i style="color:#FF0000;"><%= errorMsg %></i>
+              <%
+                }
+              %>
+            </p>
             <form method="post">
               <p>
                 <% if (error) %> <i style="color:#FF0000;">* Required)</i>
@@ -71,7 +79,7 @@
               <TEXTAREA Name="message" rows="4" cols="75"><%= message %></TEXTAREA>
               <p>
                 <% if (error) %> <i style="color:#FF0000;">* Required)</i>
-                <i>E-mail address:<br/>
+                <i>Enter your e-mail address:<br/>
                   &nbsp;&nbsp;&nbsp;&nbsp;For example, jdoe@yahoo.com
                 </i>
               </p>
