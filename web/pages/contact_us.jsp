@@ -49,14 +49,11 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;NCIThesaurus@mail.nih.gov
                 <br/><br/>
               </b>
-              You can also use the
-              <a href="http://dev1.cancer.gov/namkim/evs/design3A.html">online form</a> 
-              available on this browser. &nbsp;
-              For questions related to NCI’s Cancer.gov Web site,<br/> 
+              For questions related to NCI’s Cancer.gov Web site,
               see the
               <a href="http://www.cancer.gov/help">Cancer.gov help page</a>. &nbsp;
               For help and other questions concerning NCI Enterprise Vocabulary
-              Services (EVS), <br/>
+              Services (EVS),
               see the <a href="http://evs.nci.nih.gov/">EVS Web site</a>.
             </p>
 
