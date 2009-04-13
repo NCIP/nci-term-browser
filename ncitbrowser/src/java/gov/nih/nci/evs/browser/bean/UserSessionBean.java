@@ -288,6 +288,8 @@ public class UserSessionBean extends Object
             MailUtils.postMail(from, recipients, subject, message);
         } catch (Exception e) {
             msg = e.getMessage();
+            request.setAttribute("error", new Boolean(Boolean.TRUE));
+            return "error";
         }
         
         msg = msg.replaceAll("\n", "<br/>");
