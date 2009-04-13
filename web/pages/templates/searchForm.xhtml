@@ -14,14 +14,9 @@
     action="#{userSessionBean.searchAction}"
     image="#{facesContext.externalContext.requestContextPath}/images/search.gif">
   </h:commandButton>
-  &nbsp;
-  <h:commandButton
-    id="help"
-    value="Help"
-    alt="Help"
-    action="#"
-    image="#{facesContext.externalContext.requestContextPath}/images/search-help.gif">
-  </h:commandButton>
+  <h:outputLink value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf">
+    <h:graphicImage value="/images/search-help.gif" style="border-width:0;"/>
+  </h:outputLink>
   <%
     String algorithm = (String) request.getSession().getAttribute("selectedAlgorithm");
     String check_e = "", check_s = "" , check_c ="";
