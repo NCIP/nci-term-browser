@@ -283,12 +283,8 @@ public class TreeUtils {
         CodedNodeGraph cng = lbsvc.getNodeGraph(scheme, csvt, null);
         ConceptReference focus = Constructors.createConceptReference(branchRootCode, scheme);
         cng = cng.restrictToAssociations(Constructors.createNameAndValueList(associationsToNavigate), null);
-        /*
         ResolvedConceptReferenceList branch = cng.resolveAsList(focus, associationsNavigatedFwd,
                 !associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
-        */
-        ResolvedConceptReferenceList branch = cng.resolveAsList(focus, associationsNavigatedFwd,
-                !associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
 
         // The resolved branch will be represented by the first node in
         // the resolved list. The node will be subdivided by source or
@@ -568,12 +564,8 @@ public class TreeUtils {
 			ConceptReference focus = Constructors.createConceptReference(code, scheme);
 			cng = cng.restrictToAssociations(Constructors.createNameAndValueList(assocName), null);
 			boolean associationsNavigatedFwd = true;
-/*
 			ResolvedConceptReferenceList branch = cng.resolveAsList(focus, associationsNavigatedFwd,
 					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
-*/
-			ResolvedConceptReferenceList branch = cng.resolveAsList(focus, associationsNavigatedFwd,
-					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
 
 			for (Iterator<ResolvedConceptReference> nodes = branch.iterateResolvedConceptReference(); nodes.hasNext();) {
 				ResolvedConceptReference node = nodes.next();
