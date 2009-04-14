@@ -157,6 +157,15 @@ h3
  font-weight: bold;
 }
 
+.texttitle-blue-rightjust 
+{
+ font-size: 10px;
+ color: #2F2F5F;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+ font-weight: bold;
+ text-align: right;
+}
+
 .texttitle-gray 
 {
  font-size: 20px;
