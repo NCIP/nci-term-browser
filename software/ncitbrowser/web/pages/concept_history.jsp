@@ -36,10 +36,10 @@
         <table class="evsLogoBg" cellspacing="0" cellpadding="0" border="0">
         <tr>
           <td valign="top"><img src="<%=basePath%>/images/evs-popup-logo.gif" width="213" height="26" alt="EVS: Enterprise Vocabulary Services" title="EVS: Enterprise Vocabulary Services" border="0" /></td>
-          <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" />&nbsp;CLOSE WINDOW</a></div></td>
+          <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" alt="Close Window" />&nbsp;CLOSE WINDOW</a></div></td>
         </tr>
         </table>
-        <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="" title="" border="0" /></div>
+        <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
         <div id="popupContentArea">
           <!-- History content -->
           <div class="pageTitle"><b><%=concept_name%> (Code <%=code%>)</b></div>
@@ -50,7 +50,7 @@
               </td>
               <td align="right">
                 <font size="1" color="red" align="right">
-                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0"><i>Send to Printer</i></a>
+                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer" ><i>Send to Printer</i></a>
                 </font>
               </td>
             </tr>
