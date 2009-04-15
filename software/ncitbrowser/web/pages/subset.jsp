@@ -45,17 +45,20 @@
           <tr>
             <td>
               <a href="http://www.cancer.gov/cancertopics/terminologyresources/CDISC">
-                <img src="<%=basePath%>/images/CDISC_Logo.jpg" alt="CDISC" border="0"/>
+                <img src="<%=basePath%>/images/CDISC_Logo.jpg" border="0"
+                  alt="Clinical Data Interchange Standards Consortium (CDISC) Termiology"/>
               </a>
             </td>
             <td>
               <a href="http://www.cancer.gov/cancertopics/terminologyresources/FDA">
-                <img src="<%=basePath%>/images/FDA_Logo.jpg" alt="FDA" border="0"/>
+                <img src="<%=basePath%>/images/FDA_Logo.jpg" border="0"
+                  alt="U.S. Food ad Drug Administration Termiology"/>
               </a>
             </td>
             <td>
               <a href="http://www.cancer.gov/cancertopics/terminologyresources/FMT">
-                <img src="<%=basePath%>/images/FMT_Logo.jpg" alt="FMT" border="0"/>
+                <img src="<%=basePath%>/images/FMT_Logo.jpg" border="0"
+                  alt="Federal Medication Terminologies"/>
               </a>
             </td>
           </tr>
@@ -109,7 +112,7 @@
       </div>
       <!-- end Page content -->
     </div>
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>
