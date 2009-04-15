@@ -46,7 +46,8 @@
                 The email contact point for questions or suggestions on NCIt
                 content, browsers, distribution files, or other issues is:
                 <br/><br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;NCIThesaurus@mail.nih.gov
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="mailto:NCIThesaurus@mail.nih.gov">NCIThesaurus@mail.nih.gov</a>
                 <br/><br/>
               </b>
               For questions related to NCI’s Cancer.gov Web site,
