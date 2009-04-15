@@ -52,6 +52,7 @@
           The email contact point for questions or suggestions on NCIt content, browsers, distribution files,
           or other issues is:<br>
           <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;
           <a href="mailto:NCIThesaurus@mail.nih.gov">NCIThesaurus@mail.nih.gov</a><br>
           <br>
           You can also use the <a href="contact_us.jsf">online</a> form available on this browser. For questions related
