@@ -12,7 +12,8 @@
     id="search"
     value="Search"
     action="#{userSessionBean.searchAction}"
-    image="#{facesContext.externalContext.requestContextPath}/images/search.gif">
+    image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+    alt="Search">
   </h:commandButton>
   <h:outputLink value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf">
     <h:graphicImage value="/images/search-help.gif" style="border-width:0;"/>
@@ -27,7 +28,7 @@
     else
       check_c = "checked";
   %>
-  <input type="radio" name="algorithm" value="exactMatch" <%=check_e%>>Exact Match&nbsp;
-  <input type="radio" name="algorithm" value="startsWith" <%=check_s%>>Begins With&nbsp;
-  <input type="radio" name="algorithm" value="contains" <%=check_c%>>Contains&nbsp;
+  <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
+  <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
+  <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains&nbsp;
 </FORM>
