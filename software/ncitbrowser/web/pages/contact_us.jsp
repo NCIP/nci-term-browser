@@ -76,7 +76,7 @@
                 <% if (error) %> <i style="color:#FF0000;">* Required)</i>
                 <i>Enter the subject of your email:</i>
               </p>
-              <input CLASS="input.formField" size="100" name="subject" value="<%= subject %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
+              <input CLASS="input.formField" size="100" name="subject" alt="Subject" value="<%= subject %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
               <p>
                 <% if (error) %> <i style="color:#FF0000;">* Required)</i>
                 <i>Enter your message:<br/>
@@ -84,29 +84,30 @@
                   &nbsp;&nbsp;&nbsp;&nbsp;We do not open attachments to e-mail messages.
                 </i>
               </p>
-              <TEXTAREA Name="message" rows="4" cols="75"><%= message %></TEXTAREA>
+              <TEXTAREA Name="message" alt="Message" rows="4" cols="75"><%= message %></TEXTAREA>
               <p>
                 <% if (error) %> <i style="color:#FF0000;">* Required)</i>
                 <i>Enter your e-mail address:<br/>
                   &nbsp;&nbsp;&nbsp;&nbsp;For example, jdoe@yahoo.com
                 </i>
               </p>
-              <input CLASS="input.formField" size="100" name="emailaddress" value="<%= emailaddress %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
+              <input CLASS="input.formField" size="100" name="emailaddress" alt="Email Address" value="<%= emailaddress %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
               <br/><br/>
               
               <h:commandButton
                 id="mail"
                 value="Submit"
+                alt="Submit"
                 action="#{userSessionBean.contactUs}" >
               </h:commandButton>
-              &nbsp;&nbsp;<INPUT type="reset" value="Clear">
+              &nbsp;&nbsp;<INPUT type="reset" value="Clear" alt="Clear">
             </form>
             <a href="http://www.cancer.gov/policies/page3" ><i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i></a>
             <%@ include file="/pages/templates/nciFooter.html" %>
           </div>
           <!-- end Page content -->
         </div>
-        <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="" /></div>
+        <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
         <!-- end Main box -->
       </div>
     </f:view>

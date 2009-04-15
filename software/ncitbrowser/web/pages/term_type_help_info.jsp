@@ -62,10 +62,10 @@
         <table class="evsLogoBg" cellspacing="3" cellpadding="0" border="0" width="570px">
         <tr>
           <td valign="top"><img src="<%=basePath%>/images/evs-popup-logo.gif" width="213" height="26" alt="EVS: Enterprise Vocabulary Services" title="EVS: Enterprise Vocabulary Services" border="0" /></td>
-          <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" />&nbsp;CLOSE WINDOW</a></div></td>
+          <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" alt="Close Window" />&nbsp;CLOSE WINDOW</a></div></td>
         </tr>
         </table>
-        <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="" title="" border="0" /></div>
+        <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
         <div id="popupContentArea">
           <!-- Term Type content -->
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
@@ -75,7 +75,7 @@
               </td>
               <td align="right">
                 <font size="1" color="red" align="right">
-                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0"><i>Send to Printer</i></a>
+                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer" ><i>Send to Printer</i></a>
                 </font>
               </td>
             </tr>
@@ -106,7 +106,17 @@
           <br/>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody"><td align="left">
-              *Note on special rules governing NCI PT, HD, and AQ term types: Each concept should have one, and only one, term coded with one of these three values. The NCI Preferred Term is always taken from one of the NCI terms, normally that with a type of PT (Preferred Term). However, in special cases, a concept will not have a PT term, but instead, will have either an HD (Header) term or an AQ term. These tags are considered equivalent to PT by the software. This means that a concept may have only as single NCI PT, or HD, or AQ term. In those cases where multiple antiquated terms are needed for a concept which is itself coded as antiquated, one should be tagged AQ and the rest tagged AQS.
+              *Note on special rules governing NCI PT, HD, and AQ term types:
+              Each concept should have one, and only one, term coded with one
+              of these three values. The NCI Preferred Term is always taken
+              from one of the NCI terms, normally that with a type of PT
+              (Preferred Term). However, in special cases, a concept will
+              not have a PT term, but instead, will have either an HD (Header)
+              term or an AQ term. These tags are considered equivalent to PT
+              by the software. This means that a concept may have only as
+              single NCI PT, or HD, or AQ term. In those cases where multiple
+              antiquated terms are needed for a concept which is itself coded
+              as antiquated, one should be tagged AQ and the rest tagged AQS.
             </td></tr>
             <tr><td height="10px"></td></tr>
           </table>
