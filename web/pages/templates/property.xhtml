@@ -7,7 +7,8 @@
     // Do nothing
   }
 
-  if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) && displayItemList != null) {
+  if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) && 
+    displayItemList != null) {
 
     Vector propertytypes = new Vector();
     propertytypes.add("PRESENTATION");
@@ -35,14 +36,16 @@
 
     for (int i=0; i<propertytypes.size(); i++) {
       String propertytype = (String) propertytypes.elementAt(i);
-      Vector propertynames = DataUtils.getPropertyNamesByType(curr_concept, propertytype);
+      Vector propertynames = DataUtils.getPropertyNamesByType(
+        curr_concept, propertytype);
 
       for (int j=0; j<propertynames.size(); j++) {
         String propertyname = (String) propertynames.elementAt(j);
 
         if (!hset.contains(propertyname)) {
           hset.add(propertyname);
-          propertyvalues = DataUtils.getPropertyValues(curr_concept, propertytype, propertyname);
+          propertyvalues = DataUtils.getPropertyValues(
+            curr_concept, propertytype, propertyname);
 
           if (propertyvalues != null)
             hmap.put(propertyname, propertyvalues);
@@ -89,7 +92,9 @@
 %>
 <h2>Term and Properties</h2>
 <%
-if (!bool_obj.equals(Boolean.TRUE) || (concept_status != null && concept_status.compareToIgnoreCase("Retired Concept") == 0)) // non-active
+if (!bool_obj.equals(Boolean.TRUE) || 
+  (concept_status != null && 
+    concept_status.compareToIgnoreCase("Retired Concept") == 0)) // non-active
 {
 %>
     <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i></p>
@@ -148,7 +153,8 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           String value_wo_qualifier = value;
           int n = value.indexOf("|");
 
-          if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
+          if (n != -1 && (propName_label.indexOf("Definition") != -1 ||
+              propName_label.indexOf("DEFINITION") != -1)) {
             value_wo_qualifier = value.substring(0, n);
             qualifier = value.substring(n+1, value.length());
             if (qualifier.compareTo("NCI") != 0) {

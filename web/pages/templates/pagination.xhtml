@@ -46,7 +46,9 @@
     <tr>
       <td class="textbody" align=left>
         Show
-        <h:selectOneMenu id="id" value="#{userSessionBean.selectedResultsPerPage}" valueChangeListener="#{userSessionBean.resultsPerPageChanged}" >
+        <h:selectOneMenu
+          id="id" value="#{userSessionBean.selectedResultsPerPage}"
+          valueChangeListener="#{userSessionBean.resultsPerPageChanged}">
           <f:selectItems value="#{userSessionBean.resultsPerPageList}"/>
         </h:selectOneMenu>
         &nbsp;results per page
