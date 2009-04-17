@@ -90,7 +90,7 @@
     }
   }
 %>
-<h2>Terms and Properties</h2>
+<p class="textsubtitle-blue">Terms and Properties</p>
 <%
 if (!bool_obj.equals(Boolean.TRUE) ||
   (concept_status != null &&
@@ -181,7 +181,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 }
 %>
 <p>
-<b>Synonyms &amp; Abbreviations:&nbsp;</b>
+<p class="textsubtitle-blue">Synonyms &amp; Abbreviations:&nbsp;</p>
 <table class="datatable">
 <%
   for (int i=0; i<properties_to_display.size(); i++) {
