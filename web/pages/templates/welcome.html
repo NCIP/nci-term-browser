@@ -1,11 +1,6 @@
 <%
-  String version = new DataUtils().getVocabularyVersionByTag(
-    "NCI Thesaurus", "PRODUCTION");
-  if (version == null)
-    version = new DataUtils().getVocabularyVersionByTag(
-      "NCI Thesaurus", null);
-  if (version == null)
-    version = "";
+  String version = DataUtils.getVersion();
+  if (version == null) version = "";
 %>
 
 <div id="message" class="textbody">

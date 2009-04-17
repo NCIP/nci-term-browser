@@ -1,6 +1,8 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import gov.nih.nci.system.applicationservice.EVSApplicationService;
@@ -9,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -23,6 +26,7 @@ import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Exceptions.LBException;
+import org.LexGrid.LexBIG.History.HistoryService;
 import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
@@ -95,6 +99,7 @@ import org.LexGrid.concepts.Concept;
 import org.LexGrid.concepts.ConceptProperty;
 
 import org.LexGrid.relations.Relations;
+import org.LexGrid.versions.SystemRelease;
 
 import org.LexGrid.commonTypes.PropertyQualifier;
 
@@ -164,7 +169,8 @@ import org.LexGrid.LexBIG.Exceptions.LBParameterException;
  */
 
 public class DataUtils {
-
+    private static final String CODING_SCHEME = "NCI Thesaurus";
+    
     LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
     int maxReturn = 5000;
 	Connection con;
@@ -858,6 +864,32 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		}
 		return association_vec;
 	}
+    
+    public static String getVersion() {
+        String info = getReleaseDate();
+
+        String version = getVocabularyVersionByTag(CODING_SCHEME, "PRODUCTION");
+        if (version == null)
+            version = getVocabularyVersionByTag(CODING_SCHEME, null);
+
+        if (version != null && version.length() > 0)
+            info += " (" + version + ")";
+        return info;
+    }
+    
+    public static String getReleaseDate() {
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy");
+            HistoryService hs = lbSvc.getHistoryService(CODING_SCHEME);
+            SystemRelease release = hs.getLatestBaseline();
+            Date date = release.getReleaseDate();
+            return formatter.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
 	public static String getVocabularyVersionByTag(String codingSchemeName, String ltag)
 	{
