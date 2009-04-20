@@ -4,6 +4,16 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%
+  String terminology_subset_download_url = new DataUtils().getTerminologySubsetDownloadURL();
+  String term_subset_link = null;
+  if ( (terminology_subset_download_url == null) ||
+    (terminology_subset_download_url.compareToIgnoreCase("null") == 0) ) {
+    term_subset_link = "javascript:alert('Not available yet.');";
+  } else {
+    term_subset_link = "javascript:window.open('" + terminology_subset_download_url + "','_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');";
+  }
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -30,6 +40,9 @@
           <i>
             There are over 100 specially defined subsets in NCI Thresaurus. Each has its own NCIt concept,
             defining the nature of the subset, and these are hierarchically organized under the parent concept
+
+            term_subset_link
+
             <a href="http://ncit-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
             Terminology Subset (C54443)</a>. These subset concepts are linked to subset-member concepts through
             some 10,000 association relationships.
@@ -96,14 +109,11 @@
             </td>
           </tr>
         </table>
-        <%
-          String terminology_subset_download_url = new DataUtils().getTerminologySubsetDownloadURL();
-        %>
         <p>
           <i>
             EVS is developing extended method to create, browse, download, and have direct computer API access to these and other NCIt subsets.
             Click
-            <a href="#" onclick="javascript:window.open('<%=terminology_subset_download_url%>', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+            <a href="#" onclick="<%=term_subset_link%>">
             here</a> to see the new download page for Terminology Subset Reports (still under development).
           </i>
         </p>
