@@ -29,78 +29,99 @@
         <div class="texttitle-blue">Help</div>
         <p class="textbody">
           <A HREF="#introduction">Introduction</A><br>
-          <A HREF="#contactus">Contact Us</A><br>
-          <A HREF="#searchhelp">Search Help</A><br>
+          <A HREF="#searchhelp">Search</A><br>
+          <A HREF="#conceptdetails">Concept Details</A><br>
           <A HREF="#viewhierarchy">View Hierarchy</A><br>
           <A HREF="#subsets">Subsets</A><br>
+          <A HREF="#knownissues">Known Issues</A><br>
           <A HREF="#additionalinfo">Additional Information</A>
         </p>
         <p class="textbody">
           <h2><A NAME="introduction">Introduction</A></h2>
-          <b>NCI Thesaurus (NCIt)</b> is an extensive reference terminology with some complex features.
-          Each specific meaning, such as melanoma, lung, or chemotherapy, is represented by a distinct
-          concept with a unique, permanent code.  Each concept provides additional information, such as
-          a preferred name, other terms and codes, definitions, and relationships with other concepts.
-          Concepts are organized within major categories (kinds), such as anatomy and gene, and arranged
-          in logical parent-child hierarchies from very broad top concepts down to the most specific subcategories.
+          <b>NCI Thesaurus (NCIt)</b> is an extensive reference terminology
+          with some complex features.  Each specific meaning, such as melanoma,
+          lung, or chemotherapy, is represented by a distinct <i>concept</i>
+          with a unique, permanent <i>code</i>.  Each concept provides 
+          additional information such as a preferred name, other terms
+          and codes, definitions, and relationships with other concepts.  
+          Concepts are organized within major categories <i>(kinds)</i>,
+          such as anatomy and gene, and arranged in logical parent-child
+          hierarchies from very broad top concepts down to the most
+          specific subcategories.
         </p>
         <p class="textbody">
-          <b>This help file</b> provides a basic starting point, to help use the NCIt browser effectively. It also provides pointers on how to learn more, get additional help or offer suggestions.
+          <b>The NCIt Browser</b> is designed for ease of use by a diverse
+          user community.  This first release focuses on the data and
+          features most users want.  Future releases will add advanced
+          search options, user-defined reports, and other things users
+          ask for.  For information on other NCIt browsers, file formats,
+          and computer application access, see the
+          <a href="http://evs.nci.nih.gov/">EVS web site</a>.
         </p>
         <p class="textbody">
-          <h2><A NAME="contactus">Contact Us</A></h2>
-          The email contact point for questions or suggestions on NCIt content, browsers, distribution files,
-          or other issues is:<br>
-          <br>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <a href="mailto:NCIThesaurus@mail.nih.gov">NCIThesaurus@mail.nih.gov</a><br>
-          <br>
-          You can also use the <a href="contact_us.jsf">online</a> form available on this browser. For questions related
-          to NCI’s Cancer.gov Web site, see the <a href="http://www.cancer.gov/help">Cancer.gov help page</a>. For help and
-          other questions concerning NCI Enterprise Vocabulary Services (EVS), see the <a href="http://evs.nci.nih.gov/">EVS Web site</a>.
+          <% String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf"; %>
+          <b>Get in touch</b> to get help or offer suggestions using the
+          browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
         </p>
         <p class="textbody">
-          <h2><A NAME="searchhelp">Search Help</A></h2>
+          <b>This help file</b> provides basic information about how to
+          use the NCIt Browser effectively.  It also provides pointers
+          on how to learn more about NCIt and related resources.
+        </p>
+
+        <p class="textbody">
+          <h2><A NAME="searchhelp">Search</A></h2>
           <b>In the Search box</b>, enter all or part of what you are looking for and click the "Search" button. Some details:
           <ul>
             <li>You can search for a concept’s preferred name, synonyms, acronyms, or codes.
             <li>"Exact Match" is the default: Only terms or codes that are identical will match.
             <li>"Begins With" can be selected to find all terms or codes that start with the words or characters you enter.
-            <li>"Contains" will search for what you enter anywhere within a term or code (e.g., "carcinoma" will match adenocarcinoma).
-            <li>Search is not case sensitive (e.g., aids will match aids, Aids, and AIDS).
-            <li>There are no wildcard characters.  All characters are matched literally (e.g., using "Begins With", NAT2* will match NAT2*5 Allele but not NAT2 Gene).
+            <li>"Contains" will search for what you enter anywhere within a term or code (e.g., "carcinoma" will match <i>adenocarcinoma</i>).
+            <li>Search is not case sensitive (e.g., aids will match <i>aids</i>, <i>Aids</i>, and <i>AIDS</i>).
+            <li>There are no wildcard characters.  All characters are matched literally (e.g., using "Begins With", NAT2* will match <i>NAT2*5 Allele</i> but not <i>NAT2 Gene</i>).
+            <li>Searching for multiple words does not search on each word separately.  To match, all words have to be found in the same order you provided.  For example, if you do a “Contains” search on “Melanoma Corneal,” no results will be returned.  But if you search on “Corneal Melanoma,” you get the detail page for Corneal Melanoma.</li>
+            
           </ul>
           Search of other concept data, approximate matching, and other features will be added to future releases of this
           browser. Some of these features are currently available in the <a href="http://bioportal.nci.nih.gov/ncbo/faces/index.xhtml">NCI BioPortal Browser</a>.
         </p>
+        
         <p class="textbody">
-          <b>Search results</b> are displayed by concept preferred name in alphabetical order.  Some details:
+          <b>Search results</b> are displayed by concept preferred name in
+          alphabetical order .  (If there is only one match, the concept
+          details page is shown directly without first listing results.)
+          Some details:
+            <ul>
+              <li>All matching concepts are returned.</li> 
+              <li>The match will often be to synonyms or codes only visible on the concept details page (e.g., searching “Begins With” melanoma will show <i>Corneal Melanoma</i> in the results list because that concept contains a synonym of <i>Melanoma of the Cornea</i>.) A future release will show these matches in the results window.</li>
+              <li>If there are too many to show on one page, you can page through the results with a default of 50 per page. To change the default number, use the “Show results per page” drop-down menu at the bottom of the results page.</li>
+              <li>In the next release, concepts whose status is unusual (e.g., retired or obsolete) will show their status in parentheses in the results listing.</li>
+              <li>Click on the preferred name to see a concept’s details.</li>
+            </ul>
+        </p>
+        
+        <p class="textbody">
+          <h2><A NAME="conceptdetails">Concept Details</A></h2>
+          
+          Detailed information on the selected concept is grouped and shown on several related pages:
           <ul>
-            <li>All matching concepts are returned.
-              <ul>
-                <li>NOTE: The match will often be to synonyms or codes only visible on the concept details page (e.g., searching "Begins With" melanoma will show Corneal Melanoma in the results list because that concept contains a synonym of Melanoma of the Cornea.) A future release will show these matches in the results window.
-              </ul>
-            <li>In the next release, concepts whose status is unusual (e.g., retired or obsolete) will show their status in parentheses in the results listing. If there are too many to show on one page, you can page through the results with a default of 50 per page. Use the "Show results per page" drop-down menu at the bottom of the results page to display more or less.
-            <li>In the next release, concepts whose status is unusual (e.g., retired or obsolete) will show their status in parentheses in the results listing.
-            <li>Click on the preferred name to see a concept’s details. This includes:
-              <ul>
-                <li>Tabbed information for the following:
-                  <ul>
-                    <li>Terms & Properties - including definition, synonyms, and abbreviations.
-                    <li>Relationships - including parent concepts, child concepts, roles, and associations.
-                    <li>Synonym Details - including the synonym term, term type, source, and code.
-                    <li>View All - allows you to view the entire concept record at once.
-                  </ul>
-                <li>View hierarchy button - click on this to see where the concept exists within the NCI Thesaurus hierarchy.
-                <li>View History button - click on this to view a history of edit actions on this concept, including dates and reference concepts.
-              </ul>
-            <li>If there is only one match, the concept details page is shown directly without first listing results.
+            <li>Tabbed information gives the concept’s meaning, labels, and direct relationships:</li>
+            <ul> 
+              <li><b>Terms & Properties:</b> Gives definitions, synonyms, abbreviations, codes, and other information.</li>
+              <li><b>Relationships:</b> Shows how other concepts are directly related to this concept as  parents, children, or in other ways.</li>
+              <li><b>Synonym Details:</b> For each term or abbreviation, shows its term type, source, and code (for outside sources that have them).</li>
+              <li><b>View All:</b> Combines all of the above information on a single page.</li>
+            </ul> 
+            <li><b>View in Hierarchy</b> button – click on this to see where the concept exists within the NCI Thesaurus hierarchy.  The focused concept will be bold, underlined, and colored red.</li>  
+            <li><b>View History</b> button – click on this to view a history of edit actions on this concept, including dates and reference concepts.</li>
           </ul>
         </p>
+        
+        
         <p class="textbody">
           <h2><A NAME="viewhierarchy">View Hierarchy</A></h2>
           <ul>
-            <li>Click on the View Hierarchy link at the top of the page to bring up a separate window showing the NCI Thesaurus hierarchy.
+            <li>Click on the <b>View Hierarchy</b> link at the top of the page to bring up a separate window showing the NCI Thesaurus hierarchy.
             <li>Browse through the levels by clicking on the + next to each concept.
             <li>Click on the concept name itself to see the concept’s details in the main browser window.
           </ul>
@@ -108,13 +129,23 @@
         <p class="textbody">
           <h2><A NAME="subsets">Subsets</A></h2>
           <ul>
-            <li>Click on the Subsets link at the top of the page to read about and link to NCI Thesaurus Subsets.
+            <li>Click on the <b>Subsets</b> link at the top of the page to read about and link to NCI Thesaurus Subsets.
           </ul>
         </p>
+
+        <p class="textbody">
+          <h2><A NAME="knownissues">Known Issues</A></h2>
+          <ul>
+            <li>Single character?</li>
+          </ul>
+        </p>
+
         <p class="textbody">
           <h2><A NAME="additionalinfo">Additional Information</A></h2>
-          Several journal articles describe NCIt in greater detail.  These are listed in the <a href="http://evs.nci.nih.gov/aboutEVS">About EVS</a> page on the EVS Web site.
-          (Need to make available, describe, and link to other NCIt documentation.  This section will be provided soon.)
+          Sources
+          <br/>Versions: browser, data
+          <br/>Several journal articles describe NCIt in greater detail.  These are listed in the <a href="http://evs.nci.nih.gov/aboutEVS">About EVS</a> page on the EVS Web site.
+          <br/>(Need to make available, describe, and link to other NCIt documentation.  This section will be provided soon.)
         </p>
         <br>
         <%@ include file="/pages/templates/nciFooter.html" %>
