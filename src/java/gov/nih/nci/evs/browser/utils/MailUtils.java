@@ -63,9 +63,9 @@ public class MailUtils extends Object {
         if (subject == null || subject.length() <= 0)
             { error.append(indent + "* subject of your email\n"); ++ctr; }
         if (message == null || message.length() <= 0)
-            { error.append(indent + "* message\n"); ++ctr; }
+            { error.append(indent + "* detailed description\n"); ++ctr; }
         if (from == null || from.length() <= 0)
-            { error.append(indent + "* e-mail address\n"); ++ctr; }
+            { error.append(indent + "* your e-mail address\n"); ++ctr; }
         if (error.length() > 0) {
             String s = "Warning: Your message was not sent.\n";
             if (ctr > 1)
