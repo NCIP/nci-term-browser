@@ -2,7 +2,6 @@
   String version = DataUtils.getVersion();
   if (version == null) version = "";
 %>
-
 <div id="message" class="textbody">
   <table border="0" width="100%"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
@@ -27,8 +26,7 @@
           <li>Over 200,000 cross-links between concepts, providing formal
             logic-based definition of many concepts;
           <li>Extensive content integrated from NCI and other partners, much
-            available as separate NCIt
-            <a href="<%=terminology_subset_download_URL%>">subsets</a>;
+            available as separate NCIt <a href="<%= request.getContextPath() %>/pages/subset.jsf">subsets</a>
           <li>Updated frequently by a team of subject matter experts.
         </ul>
         NCIt is a widely recognized standard for biomedical coding and reference,
