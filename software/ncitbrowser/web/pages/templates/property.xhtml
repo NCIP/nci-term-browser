@@ -7,7 +7,7 @@
     // Do nothing
   }
 
-  if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) && 
+  if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) &&
     displayItemList != null) {
 
     Vector propertytypes = new Vector();
@@ -90,10 +90,10 @@
     }
   }
 %>
-<h2>Term and Properties</h2>
+<p class="textsubtitle-blue">Terms and Properties</p>
 <%
-if (!bool_obj.equals(Boolean.TRUE) || 
-  (concept_status != null && 
+if (!bool_obj.equals(Boolean.TRUE) ||
+  (concept_status != null &&
     concept_status.compareToIgnoreCase("Retired Concept") == 0)) // non-active
 {
 %>
@@ -113,7 +113,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     String propName_label2 = propName_label;
     String url = (String) properties_to_display_url.elementAt(i);
     String linktext = (String) properties_to_display_linktext.elementAt(i);
-    String qualifier = ""; 
+    String qualifier = "";
     if (url != null) {
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
@@ -121,7 +121,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       if (value_vec != null && value_vec.size() > 0) {
         String value = (String) value_vec.elementAt(0);
         String value_wo_qualifier = value;
-        
+
         int n = value.indexOf("|");
 
         if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
@@ -181,7 +181,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 }
 %>
 <p>
-<b>Synonyms &amp; Abbreviations:&nbsp;</b>
+<p class="textsubtitle-blue">Synonyms &amp; Abbreviations:&nbsp;</p>
 <table class="datatable">
 <%
   for (int i=0; i<properties_to_display.size(); i++) {
@@ -325,7 +325,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     <%
       String concept_name = curr_concept.getEntityDescription().getContent();
       concept_name = concept_name.replaceAll(" ", "_");
-      
+
       //String concept_name_prop_name = "CONCEPT_NAME";
       String concept_name_label = "Concept Name:";
       //Vector concept_name_value_vec = (Vector) hmap.get(concept_name_prop_name);
