@@ -191,11 +191,17 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     if (propName_label.indexOf("Synonyms") != -1) {
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
+      value_vec = SortUtils.quickSort(value_vec);
       if (value_vec != null && value_vec.size() > 0) {
+        HashSet hset2 = new HashSet();
         for (int j=0; j<value_vec.size(); j++) {
           String value = (String) value_vec.elementAt(j);
           int n = value.indexOf("|");
           if (n != -1) value = value.substring(0, n);
+          String valueLC = value.toLowerCase();
+          if (hset2.contains(valueLC))
+            continue;
+          hset2.add(valueLC);
           if (j % 2 == 0) {
             %>
               <tr class="dataRowDark">
