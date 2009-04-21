@@ -32,9 +32,9 @@ public class MailUtils extends Object {
         return Utils.toStrings(value, ";", false);
     }
 
-    public static String getIncomingMailHost() throws Exception {
-        String value = getProperty(NCItBrowserProperties.INCOMING_MAIL_HOST,
-            "incoming.mail.host");
+    public static String getMailSmtpServer() throws Exception {
+        String value = getProperty(NCItBrowserProperties.MAIL_SMTP_SERVER,
+            "mail.smtp.server");
         return value;
     }
     
@@ -82,14 +82,14 @@ public class MailUtils extends Object {
     public static void postMail(String from, String recipients[],
             String subject, String message) throws MessagingException,
             Exception {
-        String incomingMailHost = getIncomingMailHost();
-        if (incomingMailHost == null || incomingMailHost.length() <= 0)
+        String mail_smtp_server = getMailSmtpServer();
+        if (mail_smtp_server == null || mail_smtp_server.length() <= 0)
             throw new MessagingException("SMTP host not set.");
         postMailValidation(from, recipients, subject, message);
         
         // Sets the host smtp address.
         Properties props = new Properties();
-        props.put("mail.smtp.host", incomingMailHost);
+        props.put("mail.smtp.host", mail_smtp_server);
 
         // Creates some properties and get the default session.
         Session session = Session.getDefaultInstance(props, null);
