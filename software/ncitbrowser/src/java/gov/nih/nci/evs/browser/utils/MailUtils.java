@@ -51,15 +51,12 @@ public class MailUtils extends Object {
         return true;
     }
     
-    private static void postMailValidation(String incomingMailHost,
-            String from, String recipients[],
-            String subject, String message) throws Exception {
+    private static void postMailValidation(String from, String recipients[],
+            String subject, String message) throws UserInputException {
         StringBuffer error = new StringBuffer();
         String indent = "    ";
         int ctr = 0;
 
-        if (incomingMailHost == null || incomingMailHost.length() <= 0)
-            { error.append(indent + "* mail host\n"); ++ctr; }
         if (subject == null || subject.length() <= 0)
             { error.append(indent + "* subject of your email\n"); ++ctr; }
         if (message == null || message.length() <= 0)
@@ -72,13 +69,13 @@ public class MailUtils extends Object {
                 s += "The following fields were not set:\n";
             else s += "The following field was not set:\n";
             error.insert(0, s);
-            throw new Exception(error.toString());
+            throw new UserInputException(error.toString());
         }
         
         if (! isValidEmailAddress(from)) {
             error.append("Warning: Your message was not sent.\n");
             error.append(indent + "* Invalid e-mail address.");
-            throw new Exception(error.toString());
+            throw new UserInputException(error.toString());
         }
     }
 
@@ -86,7 +83,9 @@ public class MailUtils extends Object {
             String subject, String message) throws MessagingException,
             Exception {
         String incomingMailHost = getIncomingMailHost();
-        postMailValidation(incomingMailHost, from, recipients, subject, message);
+        if (incomingMailHost == null || incomingMailHost.length() <= 0)
+            throw new MessagingException("SMTP host not set.");
+        postMailValidation(from, recipients, subject, message);
         
         // Sets the host smtp address.
         Properties props = new Properties();
