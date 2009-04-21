@@ -6,6 +6,7 @@ import java.io.File;
 import gov.nih.nci.evs.browser.utils.MailUtils;
 import gov.nih.nci.evs.browser.utils.SortUtils;
 import gov.nih.nci.evs.browser.utils.SearchUtils;
+import gov.nih.nci.evs.browser.utils.UserInputException;
 import gov.nih.nci.evs.browser.utils.Utils;
 
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
@@ -286,9 +287,19 @@ public class UserSessionBean extends Object
             String from = request.getParameter("emailaddress");
             String recipients[] = MailUtils.getRecipients();
             MailUtils.postMail(from, recipients, subject, message);
-        } catch (Exception e) {
+        } catch (UserInputException e) {
             msg = e.getMessage();
             request.setAttribute("errorMsg", Utils.toHtml(msg));
+            request.setAttribute("errorType", "user");
+            return "error";
+        } catch (Exception e) {
+            msg = "System Error: Your message was not sent.\n";
+            msg += "    (If possible, please contact NCI systems team.)\n";
+            msg += "\n";
+            msg += e.getMessage();
+            request.setAttribute("errorMsg", Utils.toHtml(msg));
+            request.setAttribute("errorType", "system");
+            e.printStackTrace();
             return "error";
         }
         
