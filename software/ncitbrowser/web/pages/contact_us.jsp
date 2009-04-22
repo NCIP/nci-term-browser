@@ -103,7 +103,7 @@
                 <% if (userError) %> <i style="color:#FF0000;">* Required)</i>
                 <i>Detailed description of your problem or suggestion (no attachments):</i>
               </p>
-              <TEXTAREA class="textbody" Name="message" alt="Message" rows="4" cols="75"><%= message %></TEXTAREA>
+              <TEXTAREA class="textbody" Name="message" alt="Message" rows="4" cols="98"><%= message %></TEXTAREA>
               <p>
                 <% if (userError) %> <i style="color:#FF0000;">* Required)</i>
                 <i>Your e-mail address:</i>
