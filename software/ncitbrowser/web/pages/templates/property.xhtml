@@ -194,6 +194,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       value_vec = SortUtils.quickSort(value_vec);
       if (value_vec != null && value_vec.size() > 0) {
         HashSet hset2 = new HashSet();
+        int row=0;
         for (int j=0; j<value_vec.size(); j++) {
           String value = (String) value_vec.elementAt(j);
           int n = value.indexOf("|");
@@ -202,7 +203,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           if (hset2.contains(valueLC))
             continue;
           hset2.add(valueLC);
-          if (j % 2 == 0) {
+          if ((row++) % 2 == 0) {
             %>
               <tr class="dataRowDark">
             <%
