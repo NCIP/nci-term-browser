@@ -48,7 +48,7 @@ public class HistoryUtils {
             ChangeType type = event.getEditaction();
             Date date = event.getEditDate();
             String rCode = event.getReferencecode();
-            String desc = "none";
+            String desc = "N/A";
             if (rCode != null && rCode.length() > 0 &&
                     ! rCode.equalsIgnoreCase("null")) {
                 Concept c = DataUtils.getConceptByCode(
