@@ -106,7 +106,6 @@
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
-
        <DisplayItem>
             <propertyName>NCI_META_CUI</propertyName>
             <itemLabel>NCI META CUI</itemLabel>
@@ -177,6 +176,11 @@
         <ConfigurableItem>
                  <key>EVS_SERVICE_URL</key>
                  <value>@lex.evs.api.url@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>LG_CONFIG_FILE</key>
+                 <value>@lg.config.file@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
