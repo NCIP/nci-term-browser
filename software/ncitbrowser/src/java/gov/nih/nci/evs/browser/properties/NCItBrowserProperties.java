@@ -49,8 +49,9 @@ public class NCItBrowserProperties {
         private static List displayItemList;
         private static HashMap configurableItemMap;
 
-       //KLO
+        // KLO
         public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
+        public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
         public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
         public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
         public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
@@ -69,6 +70,7 @@ public class NCItBrowserProperties {
         private static int maxToReturn = 1000;
         private static int maxTreeLevel = 1000;
         private static String service_url = null;
+        private static String lg_config_file = null;
 
         private static String sort_by_score = null;
         private static String mail_smtp_server = null;
@@ -90,6 +92,7 @@ public class NCItBrowserProperties {
         public static NCItBrowserProperties getInstance() throws Exception{
             if(NCItBrowserProperties == null) {
                 synchronized(NCItBrowserProperties.class) {
+
                     if(NCItBrowserProperties == null) {
                         NCItBrowserProperties = new NCItBrowserProperties();
                         loadProperties();
@@ -101,14 +104,17 @@ public class NCItBrowserProperties {
                         maxTreeLevel = Integer.parseInt(max_tree_level_str);
 
                         service_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-
                         //System.out.println("EVS_SERVICE_URL: " + service_url);
+
+                        lg_config_file = NCItBrowserProperties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
+                        //System.out.println("LG_CONFIG_FILE: " + lg_config_file);
 
                         sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
                         ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
                         mail_smtp_server = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAIL_SMTP_SERVER);
                         terminology_subset_download_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
                     }
+
                 }
             }
 
