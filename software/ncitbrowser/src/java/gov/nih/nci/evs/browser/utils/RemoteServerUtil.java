@@ -41,8 +41,8 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
  */
 
 public class RemoteServerUtil {
-	private static String _serviceInfo = "EvsServiceInfo";
-	private Properties systemProperties = null;
+    private static String _serviceInfo = "EvsServiceInfo";
+    private Properties systemProperties = null;
 
     //public static EVSApplicationService  appService = null;
     //public static LexBIGService lbSvc;
@@ -53,47 +53,54 @@ public class RemoteServerUtil {
     }
 
 
-	public static LexBIGService createLexBIGService()
+    public static LexBIGService createLexBIGService()
     {
-		// default URL (to be read from a property file)
-		String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
-		NCItBrowserProperties properties = null;
-		try {
-			properties = NCItBrowserProperties.getInstance();
-			url = properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-	    } catch (Exception ex) {
+        // default URL (to be read from a property file)
+        String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            url = properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+        } catch (Exception ex) {
 
-		}
-		return createLexBIGService(url);
-	}
+        }
+        return createLexBIGService(url);
+    }
 
 
-	public static LexBIGService createLexBIGService(String serviceUrl)
+    public static LexBIGService createLexBIGService(String serviceUrl)
     {
-        try{
+        try {
+
             boolean debug = false;
-			if (serviceUrl == null || serviceUrl.compareTo("") == 0)
-			{
-			    if (debug) {
-			        System.out.println(Utils.SEPARATOR);
-			        System.out.println("LexBIGService(local): new LexBIGServiceImpl();");
-			        System.out.println("LG_CONFIG_FILE: " + System.getProperty("LG_CONFIG_FILE"));
-			    }
-				LexBIGService lbSvc = new LexBIGServiceImpl();
-				return lbSvc;
-			}
+            NCItBrowserProperties properties = null;
+            properties = NCItBrowserProperties.getInstance();
+
+            if (serviceUrl == null || serviceUrl.compareTo("") == 0)
+            {
+                String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
+                if (debug) {
+                    System.out.println(Utils.SEPARATOR);
+                    System.out.println("LexBIGService(local): new LexBIGServiceImpl();");
+                    System.out.println("LG_CONFIG_FILE: " + lg_config_file);
+                }
+                System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
+                LexBIGService lbSvc = new LexBIGServiceImpl();
+                return lbSvc;
+            }
             if (debug) {
                 System.out.println(Utils.SEPARATOR);
                 System.out.println("LexBIGService(remote): " + serviceUrl);
             }
-		    EVSApplicationService appService = (EVSApplicationService) ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, _serviceInfo);
+            EVSApplicationService appService = (EVSApplicationService) ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, _serviceInfo);
             return (LexBIGService) appService;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return null;
-	}
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
