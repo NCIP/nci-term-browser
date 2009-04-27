@@ -151,7 +151,7 @@ public class UserSessionBean extends Object
 
         Utils.StopWatch stopWatch = new Utils.StopWatch();
         boolean debug = false;
-        
+
 		//Vector<org.LexGrid.concepts.Concept> v = SearchUtils.searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		Vector<org.LexGrid.concepts.Concept> v = new SearchUtils().searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 		//SortUtils.quickSort(v);
@@ -211,25 +211,30 @@ public class UserSessionBean extends Object
 		return resultsPerPageList;
 	}
 
-	public void setSelectedResultsPerPage(String selectedResultsPerPage) {
-		this.selectedResultsPerPage = selectedResultsPerPage;
-		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		request.getSession().setAttribute("selectedResultsPerPage", selectedResultsPerPage);
-	}
+    public void setSelectedResultsPerPage(String selectedResultsPerPage) {
+        this.selectedResultsPerPage = selectedResultsPerPage;
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        request.getSession().setAttribute("selectedResultsPerPage", selectedResultsPerPage);
+    }
 
-	public String getSelectedResultsPerPage() {
-		return this.selectedResultsPerPage;
-	}
+    public String getSelectedResultsPerPage() {
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String s = (String) request.getSession().getAttribute("selectedResultsPerPage");
+        if (s != null) {
+            this.selectedResultsPerPage = s;
+	    }
+	    return this.selectedResultsPerPage;
+    }
 
 
-	public void resultsPerPageChanged(ValueChangeEvent event) {
-		if (event.getNewValue() == null) return;
-		String newValue = (String) event.getNewValue();
-
-		System.out.println("resultsPerPageChanged; " + newValue);
+    public void resultsPerPageChanged(ValueChangeEvent event) {
+        if (event.getNewValue() == null)
+        {
+			return;
+		}
+        String newValue = (String) event.getNewValue();
         setSelectedResultsPerPage(newValue);
-
-	}
+    }
 
 
 
@@ -280,7 +285,7 @@ public class UserSessionBean extends Object
         String msg = "Your message was successfully sent.";
         HttpServletRequest request = (HttpServletRequest) FacesContext
             .getCurrentInstance().getExternalContext().getRequest();
-        
+
         try {
             String subject = request.getParameter("subject");
             String message = request.getParameter("message");
@@ -302,7 +307,7 @@ public class UserSessionBean extends Object
             e.printStackTrace();
             return "error";
         }
-        
+
         request.getSession().setAttribute("message", Utils.toHtml(msg));
         return "message";
     }
