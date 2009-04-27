@@ -60,13 +60,13 @@
             <td>
               <a href="http://www.cancer.gov/cancertopics/terminologyresources/CDISC">
                 <img src="<%=basePath%>/images/CDISC_Logo.jpg" border="0"
-                  alt="Clinical Data Interchange Standards Consortium (CDISC) Termiology"/>
+                  alt="Clinical Data Interchange Standards Consortium (CDISC) Terminology"/>
               </a>
             </td>
             <td>
               <a href="http://www.cancer.gov/cancertopics/terminologyresources/FDA">
                 <img src="<%=basePath%>/images/FDA_Logo.jpg" border="0"
-                  alt="U.S. Food ad Drug Administration Termiology"/>
+                  alt="U.S. Food ad Drug Administration Terminology"/>
               </a>
             </td>
             <td>
@@ -80,7 +80,7 @@
             <td class="textbody" valign="top">
               <i>
                 <a href="#" onclick="javascript:window.open('http://www.cancer.gov/cancertopics/terminologyresources/CDISC', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-                  Clinical Data Interchange Standards Consortium (CDISC) Termiology:
+                  Clinical Data Interchange Standards Consortium Terminology:
                 </a>
                 CDISC is an international, non-profit organization hat develops and supports global data standards for medical research.
                 CDISC is working actively with EVS to develop and support controlled terminology in several aras, notably CDISC's Study
@@ -90,7 +90,7 @@
             <td class="textbody" valign="top">
               <i>
                 <a href="#" onclick="javascript:window.open('http://www.cancer.gov/cancertopics/terminologyresources/FDA', '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-                  U.S. Food ad Drug Administration Termiology:
+                  U.S. Food ad Drug Administration Terminology:
                 </a>
                 The FDA is working with EVS to develop and supporyt controlled
                 terminology in several areas. More than 10,000 FDA terms and codes are stored in NCI Thesaurus (NCIt).
