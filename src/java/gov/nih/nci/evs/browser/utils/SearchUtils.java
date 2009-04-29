@@ -1062,7 +1062,7 @@ public class SearchUtils {
 	}
 
 
-
+//p11.1-q11.1
 	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
@@ -1106,7 +1106,6 @@ public class SearchUtils {
 				preprocess = false;
 		    }
 		}
-
 		if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0 && preprocess)
 		{
 			matchText = preprocessRegExp(matchText);
@@ -1177,7 +1176,7 @@ public class SearchUtils {
 				return v;
 			}
 		}
-		else
+		else if (matchAlgorithm.compareTo("RegExp") != 0)
 		{
 			return searchByName(scheme, version, matchText0, "exactMatch", maxToReturn);
 		}
