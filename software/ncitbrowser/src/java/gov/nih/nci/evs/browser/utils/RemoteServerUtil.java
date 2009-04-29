@@ -41,15 +41,13 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
  */
 
 public class RemoteServerUtil {
+
+    private static boolean debug = false;
     private static String _serviceInfo = "EvsServiceInfo";
     private Properties systemProperties = null;
 
-    //public static EVSApplicationService  appService = null;
-    //public static LexBIGService lbSvc;
-    //private static String serviceUrl = null;
-
     public RemoteServerUtil() {
-
+        // Do nothing
     }
 
 
@@ -57,12 +55,13 @@ public class RemoteServerUtil {
     {
         // default URL (to be read from a property file)
         String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
+
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
             url = properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
         } catch (Exception ex) {
-
+            // Do nothing
         }
         return createLexBIGService(url);
     }
@@ -72,19 +71,18 @@ public class RemoteServerUtil {
     {
         try {
 
-            boolean debug = false;
             NCItBrowserProperties properties = null;
             properties = NCItBrowserProperties.getInstance();
 
             if (serviceUrl == null || serviceUrl.compareTo("") == 0)
             {
                 String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
+                System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
                 if (debug) {
                     System.out.println(Utils.SEPARATOR);
                     System.out.println("LexBIGService(local): new LexBIGServiceImpl();");
-                    System.out.println("LG_CONFIG_FILE: " + lg_config_file);
+                    System.out.println("NCIT: LG_CONFIG_FILE: " + System.getProperty(NCItBrowserProperties.LG_CONFIG_FILE));
                 }
-                System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
                 LexBIGService lbSvc = new LexBIGServiceImpl();
                 return lbSvc;
             }
