@@ -1132,6 +1132,8 @@ public class SearchUtils {
 						matchAlgorithm,
 						language);
 
+        // KLO, 042909
+        if (iterator == null) return null;
         //return sortByScore(searchPhrase, resultIterator, maxToReturn);
 		if (apply_sort_score)
 		{
