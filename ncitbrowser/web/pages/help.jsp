@@ -91,10 +91,7 @@
         </p>
         
         <p class="textbody">
-          <b>Search results</b> are displayed by concept preferred name in
-          alphabetical order .  (If there is only one match, the concept
-          details page is shown directly without first listing results.)
-          Some details:
+            <b>Search results</b> are displayed by concept preferred name. (If there is only one match, the concept details page is shown directly without first listing results.) Some details:           
             <ul>
               <li>All matching concepts are returned.</li> 
               <li>Results are listed from best match to weakest. For example, a “Contains” search on “Bone” returns <i>Bone</i> at the top, followed by concepts with two word matches (e.g., <i>Flat Bone</i>), followed by concepts whose terms have more non-“Bone” content.</li>
@@ -138,6 +135,7 @@
           Click on the <a href="<%= subsetsUrl %>">Subsets</a> link at the top of the page to read about and link to NCI Thesaurus Subsets. The text on this page provides additional information.        </p>
         <p class="textbody">
           <h2><A NAME="knownissues">Known Issues</A></h2>
+          Most known issues are limits to functionality and documentation that we are working to address for release 2.  These include the following: 
           <ul>
             <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3 server.  The browser detects this failure and falls back to a safe search that will return only some of the matching concepts (only full-word matches, normally the best), warning the user about the problem.  This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
             <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming “Advanced Search” page.</li>
