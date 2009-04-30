@@ -170,7 +170,7 @@ public class UserSessionBean extends Object
         	String match_size = Integer.toString(v.size());
         	request.getSession().setAttribute("match_size", match_size);
         	request.getSession().setAttribute("page_string", "1");
-        	request.getSession().setAttribute("selectedResultsPerPage", "50");
+        	//request.getSession().setAttribute("selectedResultsPerPage", "50");
         	//request.getSession().setAttribute("singleton", "false");
         	return "search_results";
 		}
@@ -215,6 +215,9 @@ public class UserSessionBean extends Object
         this.selectedResultsPerPage = selectedResultsPerPage;
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         request.getSession().setAttribute("selectedResultsPerPage", selectedResultsPerPage);
+		//KLO
+		request.getSession().setAttribute("singleton", "false");
+
     }
 
     public String getSelectedResultsPerPage() {
@@ -222,7 +225,11 @@ public class UserSessionBean extends Object
         String s = (String) request.getSession().getAttribute("selectedResultsPerPage");
         if (s != null) {
             this.selectedResultsPerPage = s;
-	    }
+	    } else {
+			this.selectedResultsPerPage = "50";
+			request.getSession().setAttribute("selectedResultsPerPage", "50");
+		}
+
 	    return this.selectedResultsPerPage;
     }
 
