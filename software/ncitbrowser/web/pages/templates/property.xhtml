@@ -1,14 +1,20 @@
 <%
   List displayItemList = null;
+  Concept curr_concept = null;
+  Boolean bool_obj = null;
+  //String isActive = null;
 
   try {
     displayItemList = NCItBrowserProperties.getInstance().getDisplayItemList();
+    curr_concept = (Concept) request.getSession().getAttribute("concept");
+    bool_obj = curr_concept.isIsActive();
+
   } catch (Exception ex) {
     // Do nothing
   }
 
   if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) &&
-    displayItemList != null) {
+    displayItemList != null && curr_concept != null) {
 
     Vector propertytypes = new Vector();
     propertytypes.add("PRESENTATION");
@@ -20,9 +26,6 @@
     Vector additionalproperties = new Vector();
     additionalproperties.add("CONCEPT_NAME");
     additionalproperties.add("primitive");
-    Concept curr_concept = (Concept) request.getSession().getAttribute("concept");
-    Boolean bool_obj = curr_concept.isIsActive();
-    String isActive = bool_obj.toString();
 
     String concept_status = curr_concept.getConceptStatus();
 
