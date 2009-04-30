@@ -67,7 +67,7 @@ import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 public class UserSessionBean extends Object
 {
-	private static String contains_warning_msg = "WARNING: Only a subset of results may be returned due to the limitation of the current server (see Known Issues on Help page).";
+	private static String contains_warning_msg = "(WARNING: Only a subset of results may appear due to current limits in the terminology server (see Known Issues on the Help page).)";
 	private static Logger KLO_log = Logger.getLogger("UserSessionBean KLO");
 
 	private String selectedQuickLink = null;
