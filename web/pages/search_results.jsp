@@ -31,6 +31,7 @@
           String page_number = (String) request.getParameter("page_number");
           //String selectedResultsPerPage = (String) request.getParameter("selectedResultsPerPage");
           String selectedResultsPerPage = (String) request.getSession().getAttribute("selectedResultsPerPage");
+          
           if (page_number != null)
           {
               page_string = page_number;
