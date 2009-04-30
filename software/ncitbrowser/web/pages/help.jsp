@@ -15,6 +15,10 @@
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
+  <% 
+    String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf"; 
+    String subsetsUrl = request.getContextPath() + "/pages/subset.jsf"; 
+  %>
   <%@ include file="/pages/templates/header.xhtml" %>
   <div class="center-page">
     <%@ include file="/pages/templates/sub-header.xhtml" %>
@@ -44,7 +48,7 @@
           with a unique, permanent <i>code</i>.  Each concept provides 
           additional information such as a preferred name, other terms
           and codes, definitions, and relationships with other concepts.  
-          Concepts are organized within major categories <i>(kinds)</i>,
+          Concepts are organized within major categories,
           such as anatomy and gene, and arranged in logical parent-child
           hierarchies from very broad top concepts down to the most
           specific subcategories.
@@ -59,7 +63,6 @@
           <a href="http://evs.nci.nih.gov/">EVS web site</a>.
         </p>
         <p class="textbody">
-          <% String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf"; %>
           <b>Get in touch</b> to get help or offer suggestions using the
           browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
         </p>
@@ -71,15 +74,16 @@
 
         <p class="textbody">
           <h2><A NAME="searchhelp">Search</A></h2>
-          <b>In the Search box</b>, enter all or part of what you are looking for and click the "Search" button. Some details:
+          <b>In the Search box</b>, enter all or part of what you are looking for and click the &#8220;Search&#8221; button. Some details:
           <ul>
             <li>You can search for a concept’s preferred name, synonyms, acronyms, or codes.
             <li>"Exact Match" is the default: Only terms or codes that are identical will match.
             <li>"Begins With" can be selected to find all terms or codes that start with the words or characters you enter.
             <li>"Contains" will search for what you enter anywhere within a term or code (e.g., "carcinoma" will match <i>adenocarcinoma</i>).
-            <li>Search is not case sensitive (e.g., aids will match <i>aids</i>, <i>Aids</i>, and <i>AIDS</i>).
-            <li>There are no wildcard characters.  All characters are matched literally (e.g., using "Begins With", NAT2* will match <i>NAT2*5 Allele</i> but not <i>NAT2 Gene</i>).
-            <li>Searching for multiple words does not search on each word separately.  To match, all words have to be found in the same order you provided.  For example, if you do a “Contains” search on “Melanoma Corneal,” no results will be returned.  But if you search on “Corneal Melanoma,” you get the detail page for Corneal Melanoma.</li>
+            <li>Concept Codes will only match if they exactly match what you enter, even if you select “Begins With” or “Contains.”
+            <li>Search is not case sensitive (e.g., “aids” will match <i>aids</i>, <i>Aids</i>, and <i>AIDS</i>).
+            <li>There are no wildcard characters.  All characters are matched literally (e.g., searching for "Begins With", "NAT2*" will match <i>NAT2*5 Allele</i> but not <i>NAT2 Gene</i>).
+            <li>Searching for multiple words does not search on each word separately.  To match, all words have to be found in the same order you provided.  For example, if you do a “Contains” search on “Melanoma Corneal,” no results will be returned, but if you search on “Corneal Melanoma” you get the detail page for <i>Corneal Melanoma</i>.</li>
             
           </ul>
           Search of other concept data, approximate matching, and other features will be added to future releases of this
@@ -93,7 +97,8 @@
           Some details:
             <ul>
               <li>All matching concepts are returned.</li> 
-              <li>The match will often be to synonyms or codes only visible on the concept details page (e.g., searching “Begins With” melanoma will show <i>Corneal Melanoma</i> in the results list because that concept contains a synonym of <i>Melanoma of the Cornea</i>.) A future release will show these matches in the results window.</li>
+              <li>Results are listed from best match to weakest. For example, a “Contains” search on “Bone” returns <i>Bone</i> at the top, followed by concepts with two word matches (e.g., <i>Flat Bone</i>), followed by concepts whose terms have more non-“Bone” content.</li>
+              <li>The match will often be to synonyms or codes only visible on the concept details page (e.g., searching “Begins With” “melanoma” will show <i>Corneal Melanoma</i> in the results list because that concept contains a synonym of <i>Melanoma of the Cornea</i>.) A future release will show these matches in the results window.</li>
               <li>If there are too many to show on one page, you can page through the results with a default of 50 per page. To change the default number, use the “Show results per page” drop-down menu at the bottom of the results page.</li>
               <li>In the next release, concepts whose status is unusual (e.g., retired or obsolete) will show their status in parentheses in the results listing.</li>
               <li>Click on the preferred name to see a concept’s details.</li>
@@ -112,40 +117,39 @@
               <li><b>Synonym Details:</b> For each term or abbreviation, shows its term type, source, and code (for outside sources that have them).</li>
               <li><b>View All:</b> Combines all of the above information on a single page.</li>
             </ul> 
-            <li><b>View in Hierarchy</b> button – click on this to see where the concept exists within the NCI Thesaurus hierarchy.  The focused concept will be bold, underlined, and colored red.</li>  
-            <li><b>View History</b> button – click on this to view a history of edit actions on this concept, including dates and reference concepts.</li>
+            <li><b>View in Hierarchy:</b> Click the button to see where the concept is found within the NCI Thesaurus hierarchy. Concepts are often found in several different places. The focused concept will be bold, underlined, and colored red.</li>
+            <li><b>View History:</b> Click the button to view a history of edit actions on this concept, including dates and reference concepts involved in actions that split or merge concepts.</li>
           </ul>
         </p>
         
         
         <p class="textbody">
           <h2><A NAME="viewhierarchy">View Hierarchy</A></h2>
+          Click on the <b>View Hierarchy</b> link at the top of the page to bring up a separate window showing the NCI Thesaurus hierarchy.  Some details:
           <ul>
-            <li>Click on the <b>View Hierarchy</b> link at the top of the page to bring up a separate window showing the NCI Thesaurus hierarchy.
-            <li>Browse through the levels by clicking on the + next to each concept.
-            <li>Click on the concept name itself to see the concept’s details in the main browser window.
+            <li>At first, only the top level nodes of the hierarchy are shown.</li>
+            <li>At each level, concepts are listed alphabetically by concept preferred name.</li>
+            <li>Browse through the levels by clicking on the + next to each concept.</li>
+            <li>Click on the concept name itself to see the concept’s details in the main browser window.</li> 
           </ul>
         </p>
         <p class="textbody">
           <h2><A NAME="subsets">Subsets</A></h2>
-          <ul>
-            <li>Click on the <b>Subsets</b> link at the top of the page to read about and link to NCI Thesaurus Subsets.
-          </ul>
-        </p>
-
+          Click on the <a href="<%= subsetsUrl %>">Subsets</a> link at the top of the page to read about and link to NCI Thesaurus Subsets. The text on this page provides additional information.        </p>
         <p class="textbody">
           <h2><A NAME="knownissues">Known Issues</A></h2>
           <ul>
-            <li>Single character?</li>
+            <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3 server.  The browser detects this failure and falls back to a safe search that will return only some of the matching concepts (only full-word matches, normally the best), warning the user about the problem.  This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
+            <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming “Advanced Search” page.</li>
+            <li>Online and standalone documentation are still under development.</li>
           </ul>
+          Please report any bugs or suggestions using the browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
         </p>
 
         <p class="textbody">
           <h2><A NAME="additionalinfo">Additional Information</A></h2>
-          Sources
-          <br/>Versions: browser, data
-          <br/>Several journal articles describe NCIt in greater detail.  These are listed in the <a href="http://evs.nci.nih.gov/aboutEVS">About EVS</a> page on the EVS Web site.
-          <br/>(Need to make available, describe, and link to other NCIt documentation.  This section will be provided soon.)
+          Additional information about NCIt and EVS can be found on the <a href="http://evs.nci.nih.gov/">EVS Web</a> and <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki">EVS Wiki sites</a>. 
+          </br>Several journal articles describe NCIt in greater detail; these are listed in the <a href="http://evs.nci.nih.gov/aboutEVS">About EVS</a> page on the EVS Web site.
         </p>
         <br>
         <%@ include file="/pages/templates/nciFooter.html" %>
