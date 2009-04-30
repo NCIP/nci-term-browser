@@ -70,20 +70,28 @@
           <b>This help file</b> provides basic information about how to
           use the NCIt Browser effectively.  It also provides pointers
           on how to learn more about NCIt and related resources.
+
+          <b>This help file</b> provides basic information about how to use the NCIt Browser effectively. It also provides pointers on how to learn more about NCIt and related resources. The following typeface font conventions are used for describing search and the browser interface:
+          <ul>
+            <li><b>Sans Serif Bold</b>: Browser links and buttons
+            <li><font face="courier">Fixed Width</font>: Search strings
+            <li><i>Italics</i>: Concept terms
+          </ul>
         </p>
 
         <p class="textbody">
           <h2><A NAME="searchhelp">Search</A></h2>
-          <b>In the Search box</b>, enter all or part of what you are looking for and click the &#8220;Search&#8221; button. Some details:
+          <b>In the Search box</b>, enter all or part of what you are looking for and click the <b>Search</b> button. Some details:
           <ul>
             <li>You can search for a concept’s preferred name, synonyms, acronyms, or codes.
-            <li>"Exact Match" is the default: Only terms or codes that are identical will match.
-            <li>"Begins With" can be selected to find all terms or codes that start with the words or characters you enter.
-            <li>"Contains" will search for what you enter anywhere within a term or code (e.g., "carcinoma" will match <i>adenocarcinoma</i>).
-            <li>Concept Codes will only match if they exactly match what you enter, even if you select “Begins With” or “Contains.”
-            <li>Search is not case sensitive (e.g., “aids” will match <i>aids</i>, <i>Aids</i>, and <i>AIDS</i>).
-            <li>There are no wildcard characters.  All characters are matched literally (e.g., searching for "Begins With", "NAT2*" will match <i>NAT2*5 Allele</i> but not <i>NAT2 Gene</i>).
-            <li>Searching for multiple words does not search on each word separately.  To match, all words have to be found in the same order you provided.  For example, if you do a “Contains” search on “Melanoma Corneal,” no results will be returned, but if you search on “Corneal Melanoma” you get the detail page for <i>Corneal Melanoma</i>.</li>
+            <li><b>Exact Match</b> is the default: Only terms or codes that are identical will match.
+            <li><b>Begins With</b> can be selected to find all terms or codes that start with the words or characters you enter.
+            <li><b>Contains</b> will search for what you enter anywhere within a term or code (e.g., <font face="courier">carcinoma</font> will match <i>adenocarcinoma</i>).
+            <li>Concept Codes will only match if they exactly match what you enter, even if you select <b>Begins With</b> or <b>Contains</b>.
+            <li>Search is not case sensitive (e.g., <font face="courier">aids</font> will match <i>aids</i>, <i>Aids</i>, and <i>AIDS</i>).
+            <li>There are no wildcard characters.  All characters are matched literally (e.g., searching for <b>Begins With</b> <font face="courier">NAT2*</font> will match <i>NAT2*5 Allele</i> but not <i>NAT2 Gene</i>).
+            <li>Do not use quotes – they will be searched for literally, as characters in concept terms.
+            <li>Searching for multiple words does not search on each word separately.  To match, all words have to be found in the same order you provided.  For example, if you do a <b>Contains</b> search on <font face="courier">Melanoma Corneal</font> no results will be returned, but if you search on <font face="courier">Corneal Melanoma</font> you get the detail page for <i>Corneal Melanoma</i>.</li>
             
           </ul>
           Search of other concept data, approximate matching, and other features will be added to future releases of this
@@ -94,9 +102,9 @@
             <b>Search results</b> are displayed by concept preferred name. (If there is only one match, the concept details page is shown directly without first listing results.) Some details:           
             <ul>
               <li>All matching concepts are returned.</li> 
-              <li>Results are listed from best match to weakest. For example, a “Contains” search on “Bone” returns <i>Bone</i> at the top, followed by concepts with two word matches (e.g., <i>Flat Bone</i>), followed by concepts whose terms have more non-“Bone” content.</li>
-              <li>The match will often be to synonyms or codes only visible on the concept details page (e.g., searching “Begins With” “melanoma” will show <i>Corneal Melanoma</i> in the results list because that concept contains a synonym of <i>Melanoma of the Cornea</i>.) A future release will show these matches in the results window.</li>
-              <li>If there are too many to show on one page, you can page through the results with a default of 50 per page. To change the default number, use the “Show results per page” drop-down menu at the bottom of the results page.</li>
+              <li>Results are listed from best match to weakest. For example, a <b>Contains</b> search on <font face="courier">Bone</font> returns <i>Bone</i> at the top, followed by concepts with two word matches (e.g., <i>Flat Bone</i>), followed by concepts whose terms have more non-<i>Bone</i> content.</li>
+              <li>The match will often be to synonyms or codes only visible on the concept details page (e.g., searching <b>Begins With</b> <font face="courier">melanoma</font> will show <i>Corneal Melanoma</i> in the results list because that concept contains a synonym of <i>Melanoma of the Cornea</i>.) A future release will show these matches in the results window.</li>
+              <li>If there are too many to show on one page, you can page through the results with a default of 50 per page. To change the default number, use the <b>Show results per page</b> drop-down menu at the bottom of the results page.</li>
               <li>In the next release, concepts whose status is unusual (e.g., retired or obsolete) will show their status in parentheses in the results listing.</li>
               <li>Click on the preferred name to see a concept’s details.</li>
             </ul>
@@ -138,7 +146,7 @@
           Most known issues are limits to functionality and documentation that we are working to address for release 2.  These include the following: 
           <ul>
             <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3 server.  The browser detects this failure and falls back to a safe search that will return only some of the matching concepts (only full-word matches, normally the best), warning the user about the problem.  This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
-            <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming “Advanced Search” page.</li>
+            <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming <b>Advanced Search</b> page.</li>
             <li>Online and standalone documentation are still under development.</li>
           </ul>
           Please report any bugs or suggestions using the browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
