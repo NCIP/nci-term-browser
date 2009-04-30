@@ -212,12 +212,12 @@ public class UserSessionBean extends Object
 	}
 
     public void setSelectedResultsPerPage(String selectedResultsPerPage) {
+		if (selectedResultsPerPage == null) return;
+
         this.selectedResultsPerPage = selectedResultsPerPage;
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         request.getSession().setAttribute("selectedResultsPerPage", selectedResultsPerPage);
-		//KLO
-		request.getSession().setAttribute("singleton", "false");
-
+		//request.getSession().setAttribute("singleton", "false");
     }
 
     public String getSelectedResultsPerPage() {
