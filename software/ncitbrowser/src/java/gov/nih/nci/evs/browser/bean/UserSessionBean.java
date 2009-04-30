@@ -67,7 +67,7 @@ import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 public class UserSessionBean extends Object
 {
-	private static String contains_warning_msg = "(Note: This list may contain only a subset of potential matches due to a 'maxClause' setting issue in LexBIG 2.3.)";
+	private static String contains_warning_msg = "WARNING: Only a subset of results may be returned due to the limitation of the current server (see Known Issues on Help page).";
 	private static Logger KLO_log = Logger.getLogger("UserSessionBean KLO");
 
 	private String selectedQuickLink = null;
@@ -172,7 +172,6 @@ public class UserSessionBean extends Object
         	request.getSession().setAttribute("match_size", match_size);
         	request.getSession().setAttribute("page_string", "1");
 
-        	//if (matchText.length() < 4 && matchAlgorithm.compareTo("exactMatch") != 0) {
 		    if (matchText.length() < 4 && matchAlgorithm.compareTo("contains") == 0) {
 				request.getSession().setAttribute("contains_warning_msg", contains_warning_msg);
 			}
