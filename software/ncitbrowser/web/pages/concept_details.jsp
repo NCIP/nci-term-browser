@@ -59,6 +59,7 @@
               dictionary = (String) request.getParameter("dictionary");
               code = (String) request.getParameter("code");
               type = (String) request.getParameter("type");
+             
             }
             if (type == null) {
               type = "properties";
@@ -69,9 +70,14 @@
             request.getSession().setAttribute("singleton", "false");
             String vers = null;
             String ltag = null;
+           
+            
             Concept c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-            request.getSession().setAttribute("concept", c);
-            String name = c.getEntityDescription().getContent();
+            String name = "";
+            if (c != null) {
+               request.getSession().setAttribute("concept", c);
+               name = c.getEntityDescription().getContent();
+            }
           %>
           <div class="texttitle-blue">
             <%=name%> (Code <%=code%>)
