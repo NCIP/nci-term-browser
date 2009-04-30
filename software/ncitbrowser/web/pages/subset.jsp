@@ -111,7 +111,7 @@
         </table>
         <p>
           <i>
-            EVS is developing extended method to create, browse, download, and have direct computer API access to these and other NCIt subsets.
+            EVS is developing extended methods to create, browse, download, and have direct computer API access to these and other NCIt subsets.
             Click
             <a href="#" onclick="<%=term_subset_link%>">
             here</a> to see the new download page for Terminology Subset Reports (still under development).
