@@ -1129,8 +1129,8 @@ public class SearchUtils {
 			matchText = preprocessRegExp(matchText);
 		}
 
-		System.out.println("matchText: " + matchText);
-		System.out.println("matchAlgorithm: " + matchAlgorithm);
+		//System.out.println("matchText: " + matchText);
+		//System.out.println("matchAlgorithm: " + matchAlgorithm);
 
         LocalNameList propertyList = null;
         CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
