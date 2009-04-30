@@ -67,6 +67,7 @@ import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 public class UserSessionBean extends Object
 {
+	private static String contains_warning_msg = "(Note: This list may contain only a subset of potential matches due to a 'maxClause' setting issue in LexBIG 2.3.)";
 	private static Logger KLO_log = Logger.getLogger("UserSessionBean KLO");
 
 	private String selectedQuickLink = null;
@@ -120,7 +121,7 @@ public class UserSessionBean extends Object
 
 	public String searchAction() {
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-
+        request.getSession().setAttribute("contains_warning_msg", "");
 		String matchText = (String) request.getParameter("matchText");
 		matchText = matchText.trim();
 		//[#19965] Error message is not displayed when Search Criteria is not proivded
@@ -170,8 +171,14 @@ public class UserSessionBean extends Object
         	String match_size = Integer.toString(v.size());
         	request.getSession().setAttribute("match_size", match_size);
         	request.getSession().setAttribute("page_string", "1");
-        	//request.getSession().setAttribute("selectedResultsPerPage", "50");
-        	//request.getSession().setAttribute("singleton", "false");
+
+        	//if (matchText.length() < 4 && matchAlgorithm.compareTo("exactMatch") != 0) {
+		    if (matchText.length() < 4 && matchAlgorithm.compareTo("contains") == 0) {
+				request.getSession().setAttribute("contains_warning_msg", contains_warning_msg);
+			}
+		    else if (matchText.length() == 1 && matchAlgorithm.compareTo("startsWith") == 0) {
+				request.getSession().setAttribute("contains_warning_msg", contains_warning_msg);
+			}
         	return "search_results";
 		}
 
