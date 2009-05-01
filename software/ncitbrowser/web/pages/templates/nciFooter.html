@@ -1,26 +1,32 @@
 <!-- footer -->
 <div class="footer">
   <ul>
-    <li><a href="http://www.cancer.gov">NCI Home</a> |</li>
+    <li><a href="#" onclick="openNewWindow('http://www.cancer.gov')">NCI Home</a> |
     <li><a href="<%= request.getContextPath() %>/pages/contact_us.jsf">Contact Us</a> |</i>
-    <li><a href="http://www.cancer.gov/policies">Policies</a> |</li>
-    <li><a href="http://www.cancer.gov/policies/page4">Accessibility</a> |</li>
-    <li><a href="http://www.cancer.gov/policies/page7">FOIA</a></li>
+    <li><a href="#" onclick="openNewWindow('http://www.cancer.gov/policies')")>Policies</a> |</li>
+    <li><a href="#" onclick="openNewWindow('http://www.cancer.gov/policies/page4')">Accessibility</a> |</li>
+    <li><a href="#" onclick="openNewWindow('http://www.cancer.gov/policies/page7')">FOIA</a></li>
   </ul>
+
   <p>
     A Service of the National Cancer Institute<br />
     <img src="<%=basePath%>/images/external-footer-logos.gif"
       alt="External Footer Logos" width="238" height="34" border="0"
       usemap="#external-footer" />
   </p>
+
   <map id="external-footer" name="external-footer">
-    <area shape="rect" coords="0,0,46,34" href="http://www.cancer.gov/"
+    <area shape="rect" coords="0,0,46,34" href="#" 
+      onclick="openNewWindow('http://www.cancer.gov')"
       alt="National Cancer Institute" />
-    <area shape="rect" coords="55,1,99,32" href="http://www.hhs.gov/"
+    <area shape="rect" coords="55,1,99,32" href="#"
+      onclick="openNewWindow('http://www.hhs.gov/')"
       alt="U.S. Health &amp; Human Services" />
-    <area shape="rect" coords="103,1,147,31" href="http://www.nih.gov/"
+    <area shape="rect" coords="103,1,147,31" href="#"
+      onclick="openNewWindow('http://www.nih.gov/')"
       alt="National Institutes of Health" />
-    <area shape="rect" coords="148,1,235,33" href="http://www.usa.gov/"
+    <area shape="rect" coords="148,1,235,33" href="#"
+      onclick="openNewWindow('http://www.usa.gov/')"
       alt="USA.gov" />
   </map>
 </div>
