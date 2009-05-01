@@ -41,7 +41,10 @@
           <A HREF="#additionalinfo">Additional Information</A>
         </p>
         <p class="textbody">
-          <h2><A NAME="introduction">Introduction</A></h2>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="introduction">Introduction</A></h2></td>
+            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
           <b>NCI Thesaurus (NCIt)</b> is an extensive reference terminology
           with some complex features.  Each specific meaning, such as melanoma,
           lung, or chemotherapy, is represented by a distinct <i>concept</i>
@@ -80,7 +83,10 @@
         </p>
 
         <p class="textbody">
-          <h2><A NAME="searchhelp">Search</A></h2>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="searchhelp">Search</A></h2></td>
+            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
           <b>In the Search box</b>, enter all or part of what you are looking for and click the <b>Search</b> button. Some details:
           <ul>
             <li>You can search for a concept’s preferred name, synonyms, acronyms, or codes.
@@ -111,8 +117,11 @@
         </p>
         
         <p class="textbody">
-          <h2><A NAME="conceptdetails">Concept Details</A></h2>
-          
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="conceptdetails">Concept Details</A></h2></td>
+            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
+
           Detailed information on the selected concept is grouped and shown on several related pages:
           <ul>
             <li>Tabbed information gives the concept’s meaning, labels, and direct relationships:</li>
@@ -129,7 +138,11 @@
         
         
         <p class="textbody">
-          <h2><A NAME="viewhierarchy">View Hierarchy</A></h2>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="viewhierarchy">View Hierarchy</A></h2></td>
+            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
+          
           Click on the <b>View Hierarchy</b> link at the top of the page to bring up a separate window showing the NCI Thesaurus hierarchy.  Some details:
           <ul>
             <li>At first, only the top level nodes of the hierarchy are shown.</li>
@@ -138,11 +151,22 @@
             <li>Click on the concept name itself to see the concept’s details in the main browser window.</li> 
           </ul>
         </p>
+        
         <p class="textbody">
-          <h2><A NAME="subsets">Subsets</A></h2>
-          Click on the <a href="<%= subsetsUrl %>">Subsets</a> link at the top of the page to read about and link to NCI Thesaurus Subsets. The text on this page provides additional information.        </p>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="subsets">Subsets</A></h2></td>
+            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
+          
+          Click on the <a href="<%= subsetsUrl %>">Subsets</a> link at the top of the page to read about and link to NCI Thesaurus Subsets. The text on this page provides additional information.
+        </p>
+        
         <p class="textbody">
-          <h2><A NAME="knownissues">Known Issues</A></h2>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="knownissues">Known Issues</A></h2></td>
+            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
+          
           Most known issues are limits to functionality and documentation that we are working to address for release 2.  These include the following: 
           <ul>
             <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3 server.  The browser detects this failure and falls back to a safe search that will return only some of the matching concepts (only full-word matches, normally the best), warning the user about the problem.  This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
@@ -153,7 +177,11 @@
         </p>
 
         <p class="textbody">
-          <h2><A NAME="additionalinfo">Additional Information</A></h2>
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="additionalinfo">Additional Information</A></h2></td>
+            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
+          
           Additional information about NCIt and EVS can be found on the <a href="http://evs.nci.nih.gov/">EVS Web</a> and <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki">EVS Wiki sites</a>. 
           </br>Several journal articles describe NCIt in greater detail; these are listed in the <a href="http://evs.nci.nih.gov/aboutEVS">About EVS</a> page on the EVS Web site.
         </p>
