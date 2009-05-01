@@ -28,16 +28,18 @@
           String matchText = (String) request.getSession().getAttribute("matchText");
           String match_size = (String) request.getSession().getAttribute("match_size");
           String page_string = (String) request.getSession().getAttribute("page_string");
+          Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
           String page_number = (String) request.getParameter("page_number");
           //String selectedResultsPerPage = (String) request.getParameter("selectedResultsPerPage");
           String selectedResultsPerPage = (String) request.getSession().getAttribute("selectedResultsPerPage");
           
           String contains_warning_msg = (String) request.getSession().getAttribute("contains_warning_msg");
           
-          if (page_number != null)
+          if (page_number != null && new_search == Boolean.FALSE)
           {
               page_string = page_number;
           }
+          request.getSession().setAttribute("new_search", Boolean.FALSE);
           int page_num = Integer.parseInt(page_string);
           int next_page_num = page_num + 1;
           int prev_page_num = page_num - 1;
