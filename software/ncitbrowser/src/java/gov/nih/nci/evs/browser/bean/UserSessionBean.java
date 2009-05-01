@@ -171,6 +171,7 @@ public class UserSessionBean extends Object
         	String match_size = Integer.toString(v.size());
         	request.getSession().setAttribute("match_size", match_size);
         	request.getSession().setAttribute("page_string", "1");
+        	request.getSession().setAttribute("new_search", Boolean.TRUE);
 
 		    if (matchText.length() < 4 && matchAlgorithm.compareTo("contains") == 0) {
 				request.getSession().setAttribute("contains_warning_msg", contains_warning_msg);
