@@ -1062,7 +1062,6 @@ public class SearchUtils {
 	}
 
 
-
 	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
@@ -1097,20 +1096,41 @@ public class SearchUtils {
 			preprocess = false;
 			*/
 		}
-		else if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+		else if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
 		{
-			matchText = replaceSpecialCharsWithBlankChar(matchText);
+			/*
+			//matchText = replaceSpecialCharsWithBlankChar(matchText);
 			if (matchText.indexOf(" ") != -1) {
 				matchText = preprocessContains(matchText);
 				matchAlgorithm = "RegExp";
 				preprocess = false;
-		    }
-		}
+		    } else {
+				String delim = ".*";
+				matchText = delim + matchText + delim;
+				matchAlgorithm = "RegExp";
+				preprocess = false;
+			}
+			*/
 
+            if (containsSpecialChars(matchText)) {
+				String delim = ".*";
+				matchText = delim + matchText + delim;
+				matchAlgorithm = "RegExp";
+				preprocess = false;
+		    } else if (matchText.indexOf(" ") != -1) {
+				matchText = preprocessContains(matchText);
+				matchAlgorithm = "RegExp";
+				preprocess = false;
+		    }
+
+		}
 		if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0 && preprocess)
 		{
 			matchText = preprocessRegExp(matchText);
 		}
+
+		//System.out.println("matchText: " + matchText);
+		//System.out.println("matchAlgorithm: " + matchAlgorithm);
 
         LocalNameList propertyList = null;
         CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
@@ -1133,40 +1153,40 @@ public class SearchUtils {
 						language);
 
         // KLO, 042909
-        if (iterator == null) return null;
-        //return sortByScore(searchPhrase, resultIterator, maxToReturn);
-		if (apply_sort_score)
-		{
-				long ms = System.currentTimeMillis();
-				try {
-					//iterator = sortByScore(matchText, iterator, maxToReturn);
-					iterator = sortByScore(matchText0, iterator, maxToReturn, true);
-				} catch (Exception ex) {
-
-				}
-				System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
-		}
         if (iterator != null) {
-			Vector v = resolveIterator(	iterator, maxToReturn);
-			if (v != null && v.size() > 0)
+			if (apply_sort_score)
 			{
-				if(!apply_sort_score)
-				{
-					SortUtils.quickSort(v);
-				}
-				return v;
+					long ms = System.currentTimeMillis();
+					try {
+						//iterator = sortByScore(matchText, iterator, maxToReturn);
+						iterator = sortByScore(matchText0, iterator, maxToReturn, true);
+					} catch (Exception ex) {
+
+					}
+					System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
 			}
-			if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0) {
-				Concept c = getConceptByCode(scheme, null, null, matchText0);
-				if (c != null)
+			if (iterator != null) {
+				Vector v = resolveIterator(	iterator, maxToReturn);
+				if (v != null && v.size() > 0)
 				{
-					v = new Vector();
-					v.add(c);
+					if(!apply_sort_score)
+					{
+						SortUtils.quickSort(v);
+					}
 					return v;
 				}
+				if (matchAlgorithm.compareToIgnoreCase("exactMatch") == 0) {
+					Concept c = getConceptByCode(scheme, null, null, matchText0);
+					if (c != null)
+					{
+						v = new Vector();
+						v.add(c);
+						return v;
+					}
+				}
 			}
-			//return new Vector();
-		}
+	    }
+
 		if (matchAlgorithm0.compareToIgnoreCase("exactMatch") == 0) {
 			matchText0 = matchText0.trim();
 			Concept c = getConceptByCode(scheme, null, null, matchText0);
@@ -1177,7 +1197,12 @@ public class SearchUtils {
 				return v;
 			}
 		}
-		else
+		else if (matchAlgorithm0.compareTo("contains") == 0) // /100{WBC} & search by code
+		{
+			return searchByName(scheme, version, matchText0, "startsWith", maxToReturn);
+		}
+
+		else if (matchAlgorithm.compareTo("RegExp") != 0)
 		{
 			return searchByName(scheme, version, matchText0, "exactMatch", maxToReturn);
 		}
@@ -1186,7 +1211,7 @@ public class SearchUtils {
 
 	public void testSearchByName() {
 		String scheme = "NCI Thesaurus";
-		String version = "08.11d";
+		String version = null;
 		String matchText = "blood";
 		String matchAlgorithm = "contains";
 		int maxToReturn = 1000;

@@ -31,6 +31,9 @@
           String page_number = (String) request.getParameter("page_number");
           //String selectedResultsPerPage = (String) request.getParameter("selectedResultsPerPage");
           String selectedResultsPerPage = (String) request.getSession().getAttribute("selectedResultsPerPage");
+          
+          String contains_warning_msg = (String) request.getSession().getAttribute("contains_warning_msg");
+          
           if (page_number != null)
           {
               page_string = page_number;
@@ -67,7 +70,7 @@
           </tr>
           <tr>
             <td>
-              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
+              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>&nbsp;<%=contains_warning_msg%>
             </td>
           </tr>
           <tr>

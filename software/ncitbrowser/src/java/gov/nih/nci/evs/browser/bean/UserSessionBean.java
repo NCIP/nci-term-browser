@@ -67,6 +67,7 @@ import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 public class UserSessionBean extends Object
 {
+	private static String contains_warning_msg = "(WARNING: Only a subset of results may appear due to current limits in the terminology server (see Known Issues on the Help page).)";
 	private static Logger KLO_log = Logger.getLogger("UserSessionBean KLO");
 
 	private String selectedQuickLink = null;
@@ -120,7 +121,7 @@ public class UserSessionBean extends Object
 
 	public String searchAction() {
 		HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-
+        request.getSession().setAttribute("contains_warning_msg", "");
 		String matchText = (String) request.getParameter("matchText");
 		matchText = matchText.trim();
 		//[#19965] Error message is not displayed when Search Criteria is not proivded
@@ -170,8 +171,13 @@ public class UserSessionBean extends Object
         	String match_size = Integer.toString(v.size());
         	request.getSession().setAttribute("match_size", match_size);
         	request.getSession().setAttribute("page_string", "1");
-        	request.getSession().setAttribute("selectedResultsPerPage", "50");
-        	//request.getSession().setAttribute("singleton", "false");
+
+		    if (matchText.length() < 4 && matchAlgorithm.compareTo("contains") == 0) {
+				request.getSession().setAttribute("contains_warning_msg", contains_warning_msg);
+			}
+		    else if (matchText.length() == 1 && matchAlgorithm.compareTo("startsWith") == 0) {
+				request.getSession().setAttribute("contains_warning_msg", contains_warning_msg);
+			}
         	return "search_results";
 		}
 
@@ -212,9 +218,12 @@ public class UserSessionBean extends Object
 	}
 
     public void setSelectedResultsPerPage(String selectedResultsPerPage) {
+		if (selectedResultsPerPage == null) return;
+
         this.selectedResultsPerPage = selectedResultsPerPage;
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         request.getSession().setAttribute("selectedResultsPerPage", selectedResultsPerPage);
+		//request.getSession().setAttribute("singleton", "false");
     }
 
     public String getSelectedResultsPerPage() {
@@ -222,7 +231,11 @@ public class UserSessionBean extends Object
         String s = (String) request.getSession().getAttribute("selectedResultsPerPage");
         if (s != null) {
             this.selectedResultsPerPage = s;
-	    }
+	    } else {
+			this.selectedResultsPerPage = "50";
+			request.getSession().setAttribute("selectedResultsPerPage", "50");
+		}
+
 	    return this.selectedResultsPerPage;
     }
 
