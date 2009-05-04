@@ -63,7 +63,7 @@
           search options, user-defined reports, and other things users
           ask for.  For information on other NCIt browsers, file formats,
           and computer application access, see the
-          <a href="http://evs.nci.nih.gov/">EVS web site</a>.
+          <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS web site</a>.
         </p>
         <p class="textbody">
           <b>Get in touch</b> to get help or offer suggestions using the
@@ -101,7 +101,7 @@
             
           </ul>
           Search of other concept data, approximate matching, and other features will be added to future releases of this
-          browser. Some of these features are currently available in the <a href="http://bioportal.nci.nih.gov/ncbo/faces/index.xhtml">NCI BioPortal Browser</a>.
+          browser. Some of these features are currently available in the <a href="http://bioportal.nci.nih.gov/" target="_blank" alt="NCI Bioportal">NCI BioPortal Browser</a>.
         </p>
         
         <p class="textbody">
@@ -182,8 +182,8 @@
             <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
           
-          Additional information about NCIt and EVS can be found on the <a href="http://evs.nci.nih.gov/">EVS Web</a> and <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki">EVS Wiki sites</a>. 
-          </br>Several journal articles describe NCIt in greater detail; these are listed in the <a href="http://evs.nci.nih.gov/aboutEVS">About EVS</a> page on the EVS Web site.
+          Additional information about NCIt and EVS can be found on the <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS Web</a> and <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank" alt="EVS Wiki sites">EVS Wiki sites</a>. 
+          </br>Several journal articles describe NCIt in greater detail; these are listed in the <a href="http://evs.nci.nih.gov/aboutEVS" target="_blank" alt="About EVS">About EVS</a> page on the EVS Web site.
         </p>
         <br>
         <%@ include file="/pages/templates/nciFooter.html" %>
