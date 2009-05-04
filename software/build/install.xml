@@ -307,11 +307,9 @@
                     dest="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml">
                     <xmlcatalog refid="installer.catalog"/>
                     <replace path="/server/mbean/attribute[contains(text(),'NCItBrowserProperties')]">
-                        <![CDATA[
-                        <attribute name="Properties">
-                            gov.nih.nci.evs.browser.NCItBrowserProperties=${application.data.path}/${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
-                        </attribute>
-                        ]]>
+<![CDATA[<attribute name="Properties">
+    gov.nih.nci.evs.browser.NCItBrowserProperties=${application.data.path}/${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
+</attribute>]]>
                     </replace>
                 </xmltask>
             </then>
@@ -320,11 +318,9 @@
                     dest="${jboss.home}/server/${jboss.server.name}/deploy/properties-service.xml">
                     <xmlcatalog refid="installer.catalog"/>
                     <insert path="/server/mbean[@code='org.jboss.varia.property.SystemPropertiesService']">
-                        <![CDATA[
-                        <attribute name="Properties">
-                            gov.nih.nci.evs.browser.NCItBrowserProperties=${application.data.path}/${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
-                        </attribute>
-                        ]]>
+<![CDATA[<attribute name="Properties">
+    gov.nih.nci.evs.browser.NCItBrowserProperties=${application.data.path}/${ncitbrowser.conf.path}/${ncitbrowser-webapp.prop.file}
+</attribute>]]>
                     </insert>
                 </xmltask>
             </else>
