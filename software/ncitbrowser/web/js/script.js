@@ -24,6 +24,16 @@ function bookmark(url,title){
 
 }
 
+function openNewWindow(url) {
+    window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');
+}
+
+function statusBarText(message){
+  //window.status = message;
+  window.status = message;
+  return true;
+}
+
 function openQuickLinkSite(url) {
     if (url != "#")
     {
