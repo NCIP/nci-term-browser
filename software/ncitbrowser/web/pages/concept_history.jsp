@@ -30,7 +30,10 @@
   <f:view>
     <div id="popupContainer">
       <!-- nci popup banner -->
-      <div class="ncipopupbanner"><a href="http://www.cancer.gov"><img src="<%=basePath%>/images/nci-banner-1.gif" width="440" height="39" border="0" alt="National Cancer Institute" /></a><a href="http://www.cancer.gov"><img src="<%=basePath%>/images/spacer.gif" width="48" height="39" border="0" alt="National Cancer Institute" class="print-header" /></a></div>
+      <div class="ncipopupbanner">
+        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/nci-banner-1.gif" width="440" height="39" border="0" alt="National Cancer Institute" /></a>
+        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/spacer.gif" width="48" height="39" border="0" alt="National Cancer Institute" class="print-header" /></a>
+      </div>
       <!-- end nci popup banner -->
       <div id="popupMainArea">
         <table class="evsLogoBg" cellspacing="0" cellpadding="0" border="0">
