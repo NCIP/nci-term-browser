@@ -4,6 +4,7 @@
 
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -16,6 +17,7 @@
 <%
   String basePath = request.getContextPath();
 %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
@@ -421,11 +423,11 @@
           <div id="treecontainer"></div>
           <form id="pg_form">
             <%
-              String ontology_node_id = (String) request.getParameter("code");
+              String ontology_node_id = HTTPUtils.cleanXSS((String)request.getParameter("code"));
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
             <%
-              String ontology_display_name = (String) request.getParameter("dictionary");
+              String ontology_display_name = HTTPUtils.cleanXSS((String)request.getParameter("dictionary"));
             %>
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
           </form>
