@@ -43,7 +43,7 @@
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="introduction">Introduction</A></h2></td>
-            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
           <b>NCI Thesaurus (NCIt)</b> is an extensive reference terminology
           with some complex features.  Each specific meaning, such as melanoma,
@@ -63,7 +63,7 @@
           search options, user-defined reports, and other things users
           ask for.  For information on other NCIt browsers, file formats,
           and computer application access, see the
-          <a href="http://evs.nci.nih.gov/">EVS web site</a>.
+          <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS web site</a>.
         </p>
         <p class="textbody">
           <b>Get in touch</b> to get help or offer suggestions using the
@@ -85,7 +85,7 @@
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="searchhelp">Search</A></h2></td>
-            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
           <b>In the Search box</b>, enter all or part of what you are looking for and click the <b>Search</b> button. Some details:
           <ul>
@@ -101,7 +101,7 @@
             
           </ul>
           Search of other concept data, approximate matching, and other features will be added to future releases of this
-          browser. Some of these features are currently available in the <a href="http://bioportal.nci.nih.gov/ncbo/faces/index.xhtml">NCI BioPortal Browser</a>.
+          browser. Some of these features are currently available in the <a href="http://bioportal.nci.nih.gov/" target="_blank" alt="NCI Bioportal">NCI BioPortal Browser</a>.
         </p>
         
         <p class="textbody">
@@ -119,7 +119,7 @@
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="conceptdetails">Concept Details</A></h2></td>
-            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
 
           Detailed information on the selected concept is grouped and shown on several related pages:
@@ -140,7 +140,7 @@
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="viewhierarchy">View Hierarchy</A></h2></td>
-            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
           
           Click on the <b>View Hierarchy</b> link at the top of the page to bring up a separate window showing the NCI Thesaurus hierarchy.  Some details:
@@ -155,7 +155,7 @@
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="subsets">Subsets</A></h2></td>
-            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
           
           Click on the <a href="<%= subsetsUrl %>">Subsets</a> link at the top of the page to read about and link to NCI Thesaurus Subsets. The text on this page provides additional information.
@@ -164,7 +164,7 @@
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="knownissues">Known Issues</A></h2></td>
-            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
           
           Most known issues are limits to functionality and documentation that we are working to address for release 2.  These include the following: 
@@ -179,11 +179,11 @@
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="additionalinfo">Additional Information</A></h2></td>
-            <td align="right"><a href="#top"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
           
-          Additional information about NCIt and EVS can be found on the <a href="http://evs.nci.nih.gov/">EVS Web</a> and <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki">EVS Wiki sites</a>. 
-          </br>Several journal articles describe NCIt in greater detail; these are listed in the <a href="http://evs.nci.nih.gov/aboutEVS">About EVS</a> page on the EVS Web site.
+          Additional information about NCIt and EVS can be found on the <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS Web</a> and <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank" alt="EVS Wiki sites">EVS Wiki sites</a>. 
+          </br>Several journal articles describe NCIt in greater detail; these are listed in the <a href="http://evs.nci.nih.gov/aboutEVS" target="_blank" alt="About EVS">About EVS</a> page on the EVS Web site.
         </p>
         <br>
         <%@ include file="/pages/templates/nciFooter.html" %>

@@ -4,6 +4,7 @@
 
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -16,6 +17,7 @@
 <%
   String basePath = request.getContextPath();
 %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
@@ -377,12 +379,19 @@
   <f:view>
     <div id="popupContainer">
       <!-- nci popup banner -->
-      <div class="ncipopupbanner"><a href="http://www.cancer.gov"><img src="<%=basePath%>/images/nci-banner-1.gif" width="440" height="39" border="0" alt="National Cancer Institute" /></a><a href="http://www.cancer.gov"><img src="<%=basePath%>/images/spacer.gif" width="48" height="39" border="0" alt="National Cancer Institute" class="print-header" /></a></div>
+      <div class="ncipopupbanner">
+        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/nci-banner-1.gif" width="440" height="39" border="0" alt="National Cancer Institute" /></a>
+        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/spacer.gif" width="48" height="39" border="0" alt="National Cancer Institute" class="print-header" /></a>
+      </div>
       <!-- end nci popup banner -->
       <div id="popupMainArea">
         <table class="evsLogoBg" cellspacing="0" cellpadding="0" border="0">
         <tr>
-          <td valign="top"><img src="<%=basePath%>/images/evs-popup-logo.gif" width="213" height="26" alt="EVS: Enterprise Vocabulary Services" title="EVS: Enterprise Vocabulary Services" border="0" /></td>
+          <td valign="top">
+            <a href="http://evs.nci.nih.gov/" target="_blank" alt="Enterprise Vocabulary Services">
+              <img src="<%=basePath%>/images/evs-popup-logo.gif" width="213" height="26" alt="EVS: Enterprise Vocabulary Services" title="EVS: Enterprise Vocabulary Services" border="0" />
+            </a>
+          </td>
           <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" alt="Close Window" />&nbsp;CLOSE WINDOW</a></div></td>
         </tr>
         </table>
@@ -414,11 +423,11 @@
           <div id="treecontainer"></div>
           <form id="pg_form">
             <%
-              String ontology_node_id = (String) request.getParameter("code");
+              String ontology_node_id = HTTPUtils.cleanXSS((String)request.getParameter("code"));
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
             <%
-              String ontology_display_name = (String) request.getParameter("dictionary");
+              String ontology_display_name = HTTPUtils.cleanXSS((String)request.getParameter("dictionary"));
             %>
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
           </form>

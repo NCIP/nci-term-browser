@@ -98,11 +98,21 @@
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
+<!--   Note: Locus_ID has been deprecated by EntrezGene_ID.
        <DisplayItem>
             <propertyName>Locus_ID</propertyName>
             <itemLabel>Locus ID</itemLabel>
             <url>http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=</url>
             <hyperlinkText>see Locus ID info</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem>
+ -->
+        
+       <DisplayItem>
+            <propertyName>EntrezGene_ID</propertyName>
+            <itemLabel>EntrezGene ID</itemLabel>
+            <url>http://www.ncbi.nlm.nih.gov/sites/entrez?Db=gene&amp;cmd=ShowDetailView&amp;TermToSearch=</url>
+            <hyperlinkText>see EntrezGene ID info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
