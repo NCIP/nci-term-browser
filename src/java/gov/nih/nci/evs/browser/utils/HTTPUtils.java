@@ -13,6 +13,8 @@ public class HTTPUtils {
      * @return
      */
     public static String cleanXSS(String value) {
+    	
+      if (value == null || value.length() < 1) return value; 
       value = value.replaceAll("<", "& lt;").replaceAll(">", "& gt;");
       value = value.replaceAll("\\(", "& #40;").replaceAll("\\)", "& #41;");
       value = value.replaceAll("'", "& #39;");
@@ -20,6 +22,7 @@ public class HTTPUtils {
       value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']","\"\"");
       value = value.replaceAll("script", "");
       return value;
+      
     }
     
 }
