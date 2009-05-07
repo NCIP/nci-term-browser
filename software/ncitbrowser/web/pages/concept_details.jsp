@@ -59,8 +59,10 @@
               dictionary = (String) request.getParameter("dictionary");
               code = (String) request.getParameter("code");
               type = (String) request.getParameter("type");
-             
             }
+            if (dictionary == null) {
+                dictionary = "NCI Thesaurus";
+            }            
             if (type == null) {
                 type = "properties";
             }
@@ -70,27 +72,32 @@
                      type.compareTo("all") != 0) {
                 type = "properties";     
             }
-                       
-            dictionary = "NCI Thesaurus";
-            request.getSession().setAttribute("dictionary", dictionary);
-            request.getSession().setAttribute("type", type);
-            request.getSession().setAttribute("singleton", "false");
-            String vers = null;
-            String ltag = null;
-            
-            Concept c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-            String name = "";
-            if (c != null) {
-               request.getSession().setAttribute("concept", c);
-               request.getSession().setAttribute("code", code);
-               name = c.getEntityDescription().getContent();
+             
+            String name = ""; 
+            Concept c = null;
+            if (dictionary.compareTo("NCI Thesaurus") != 0) {
+               //name = "The server encountered an internal error that prevented it from fulfilling this request.";
+               name = "ERROR: Invalid coding scheme name: " + dictionary + ".";
             } else {
-               name = "The server encountered an internal error that prevented it from fulfilling this request.";
-               code = "";
-            }
+		    String vers = null;
+		    String ltag = null;
+		    c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+		    if (c != null) {
+		       request.getSession().setAttribute("concept", c);
+		       request.getSession().setAttribute("code", code);
+		       name = c.getEntityDescription().getContent();
+		    } else {
+		       //name = "The server encountered an internal error that prevented it from fulfilling this request.";
+		       name = "ERROR: Invalid code: " + code + ".";
+		    }
+	   }
 
            
           if (c != null) {
+		    request.getSession().setAttribute("dictionary", dictionary);
+		    request.getSession().setAttribute("type", type);
+		    request.getSession().setAttribute("singleton", "false");
+          
           %>
 		  <div class="texttitle-blue">
 		      <%=name%> (Code <%=code%>)
@@ -106,7 +113,7 @@
           <%
           } else {
           %>
- 		  <div class="textbodyredregular">
+ 		  <div class="textbody">
 		      <%=name%>
 		  </div> 
 	  <%	  
