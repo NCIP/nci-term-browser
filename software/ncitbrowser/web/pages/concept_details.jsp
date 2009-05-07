@@ -77,7 +77,7 @@
             Concept c = null;
             if (dictionary.compareTo("NCI Thesaurus") != 0) {
                //name = "The server encountered an internal error that prevented it from fulfilling this request.";
-               name = "ERROR: Invalid coding scheme name: " + dictionary + ".";
+               name = "ERROR: Invalid coding scheme name - " + dictionary + ".";
             } else {
 		    String vers = null;
 		    String ltag = null;
@@ -88,7 +88,7 @@
 		       name = c.getEntityDescription().getContent();
 		    } else {
 		       //name = "The server encountered an internal error that prevented it from fulfilling this request.";
-		       name = "ERROR: Invalid code: " + code + ".";
+		       name = "ERROR: Invalid code - " + code + ".";
 		    }
 	   }
 
