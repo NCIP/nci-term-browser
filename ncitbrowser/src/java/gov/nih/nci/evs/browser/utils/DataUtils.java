@@ -170,7 +170,7 @@ import org.LexGrid.LexBIG.Exceptions.LBParameterException;
 
 public class DataUtils {
     private static final String CODING_SCHEME = "NCI Thesaurus";
-    
+
     LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
     int maxReturn = 5000;
 	Connection con;
@@ -594,7 +594,6 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 				System.out.println("lbSvc == null???");
 				return null;
 			}
-
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 			versionOrTag.setVersion(vers);
 
@@ -603,29 +602,32 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 					new String[] {code}, codingSchemeName);
 
 			CodedNodeSet cns = null;
-
 			try {
 				cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
+				cns = cns.restrictToCodes(crefs);
+				ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
+				if (matches == null)
+				{
+					System.out.println("Concep not found.");
+					return null;
+				}
+                int count = matches.getResolvedConceptReferenceCount();
+				// Analyze the result ...
+				if (count == 0) return null;
+				if (count > 0) {
+                    try {
+					    ResolvedConceptReference ref =
+							(ResolvedConceptReference) matches.enumerateResolvedConceptReference().nextElement();
+						Concept entry = ref.getReferencedEntry();
+						return entry;
+					} catch (Exception ex1) {
+						System.out.println("Exception entry == null");
+						return null;
+					}
+				}
 		    } catch (Exception e1) {
 				e1.printStackTrace();
-			}
-
-			cns = cns.restrictToCodes(crefs);
-			ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
-
-			if (matches == null)
-			{
-				System.out.println("Concep not found.");
 				return null;
-			}
-
-			// Analyze the result ...
-			if (matches.getResolvedConceptReferenceCount() > 0) {
-				ResolvedConceptReference ref =
-					(ResolvedConceptReference) matches.enumerateResolvedConceptReference().nextElement();
-
-				Concept entry = ref.getReferencedEntry();
-				return entry;
 			}
 		 } catch (Exception e) {
 			 e.printStackTrace();
@@ -864,7 +866,7 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		}
 		return association_vec;
 	}
-    
+
     public static String getVersion() {
         String info = getReleaseDate();
 
@@ -876,7 +878,7 @@ LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             info += " (" + version + ")";
         return info;
     }
-    
+
     public static String getReleaseDate() {
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -1799,7 +1801,7 @@ System.out.println("WARNING: property_type not found -- " + property_type);
 		}
 		return terminologySubsetDownloadURL;
 	}
-	
+
     public String getNCITBuildInfo()
     {
         if (NCITBuildInfo != null)
@@ -1821,5 +1823,5 @@ System.out.println("WARNING: property_type not found -- " + property_type);
 
         System.out.println("getNCITBuildInfo returns " + NCITBuildInfo);
         return NCITBuildInfo;
-    }	
+    }
 }
