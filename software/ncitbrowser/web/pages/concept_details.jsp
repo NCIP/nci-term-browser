@@ -51,18 +51,18 @@
             String code = null;
             String type = null;
 
-            String singleton = (String) request.getSession().getAttribute("singleton");
+            String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("singleton"));
             if (singleton != null && singleton.compareTo("true") == 0) {
-              dictionary = (String) request.getSession().getAttribute("dictionary");
-              code = (String) request.getSession().getAttribute("code");
+              dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
+              code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
             } else {
-              dictionary = (String) request.getParameter("dictionary");
-              code = (String) request.getParameter("code");
-              type = (String) request.getParameter("type");
+              dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+              code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+              type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             }
             if (dictionary == null) {
                 dictionary = "NCI Thesaurus";
-            }            
+            }
             if (type == null) {
                 type = "properties";
             }
@@ -70,57 +70,57 @@
                      type.compareTo("relationship") != 0 &&
                      type.compareTo("synonym") != 0 &&
                      type.compareTo("all") != 0) {
-                type = "properties";     
+                type = "properties";
             }
-             
-            String name = ""; 
+
+            String name = "";
             Concept c = null;
             if (dictionary.compareTo("NCI Thesaurus") != 0) {
                //name = "The server encountered an internal error that prevented it from fulfilling this request.";
                name = "ERROR: Invalid coding scheme name - " + dictionary + ".";
             } else {
-		    String vers = null;
-		    String ltag = null;
-		    c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-		    if (c != null) {
-		       request.getSession().setAttribute("concept", c);
-		       request.getSession().setAttribute("code", code);
-		       name = c.getEntityDescription().getContent();
-		    } else {
-		       //name = "The server encountered an internal error that prevented it from fulfilling this request.";
-		       name = "ERROR: Invalid code - " + code + ".";
-		    }
-	   }
+        String vers = null;
+        String ltag = null;
+        c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+        if (c != null) {
+           request.getSession().setAttribute("concept", c);
+           request.getSession().setAttribute("code", code);
+           name = c.getEntityDescription().getContent();
+        } else {
+           //name = "The server encountered an internal error that prevented it from fulfilling this request.";
+           name = "ERROR: Invalid code - " + code + ".";
+        }
+     }
 
-           
+
           if (c != null) {
-		    request.getSession().setAttribute("dictionary", dictionary);
-		    request.getSession().setAttribute("type", type);
-		    request.getSession().setAttribute("singleton", "false");
-          
+        request.getSession().setAttribute("dictionary", dictionary);
+        request.getSession().setAttribute("type", type);
+        request.getSession().setAttribute("singleton", "false");
+
           %>
-		  <div class="texttitle-blue">
-		      <%=name%> (Code <%=code%>)
-		  </div>
-		  
-		  <hr>
-		  <%@ include file="/pages/templates/typeLinks.xhtml" %>
-		  <div class="tabTableContentContainer">
-			    <%@ include file="/pages/templates/property.xhtml" %>
-			    <%@ include file="/pages/templates/relationship.xhtml" %>
-			    <%@ include file="/pages/templates/synonym.xhtml" %>
-		  </div>	    
+      <div class="texttitle-blue">
+          <%=name%> (Code <%=code%>)
+      </div>
+
+      <hr>
+      <%@ include file="/pages/templates/typeLinks.xhtml" %>
+      <div class="tabTableContentContainer">
+          <%@ include file="/pages/templates/property.xhtml" %>
+          <%@ include file="/pages/templates/relationship.xhtml" %>
+          <%@ include file="/pages/templates/synonym.xhtml" %>
+      </div>
           <%
           } else {
           %>
- 		  <div class="textbody">
-		      <%=name%>
-		  </div> 
-	  <%	  
+      <div class="textbody">
+          <%=name%>
+      </div>
+    <%
           }
           %>
-          
-            
+
+
             <%@ include file="/pages/templates/nciFooter.html" %>
           </div>
         </div>
