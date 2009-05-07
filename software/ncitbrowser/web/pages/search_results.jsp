@@ -32,9 +32,9 @@
           String page_number = (String) request.getParameter("page_number");
           //String selectedResultsPerPage = (String) request.getParameter("selectedResultsPerPage");
           String selectedResultsPerPage = (String) request.getSession().getAttribute("selectedResultsPerPage");
-          
+
           String contains_warning_msg = (String) request.getSession().getAttribute("contains_warning_msg");
-          
+
           if (page_number != null && new_search == Boolean.FALSE)
           {
               page_string = page_number;
@@ -58,7 +58,7 @@
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
         %>
-        <table width="100%">
+        <table width="700px">
           <tr>
             <table>
               <tr>
