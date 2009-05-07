@@ -73,7 +73,6 @@
                        
             dictionary = "NCI Thesaurus";
             request.getSession().setAttribute("dictionary", dictionary);
-            
             request.getSession().setAttribute("type", type);
             request.getSession().setAttribute("singleton", "false");
             String vers = null;
@@ -89,16 +88,32 @@
                name = "The server encountered an internal error that prevented it from fulfilling this request.";
                code = "";
             }
-           %>  
-          <div class="texttitle-blue">
-	      <%=name%> (Code <%=code%>)
-          </div>              
-          <hr>
-          <%@ include file="/pages/templates/typeLinks.xhtml" %>
-          <div class="tabTableContentContainer">
-            <%@ include file="/pages/templates/property.xhtml" %>
-            <%@ include file="/pages/templates/relationship.xhtml" %>
-            <%@ include file="/pages/templates/synonym.xhtml" %>
+
+           
+          if (c != null) {
+          %>
+		  <div class="texttitle-blue">
+		      <%=name%> (Code <%=code%>)
+		  </div>
+		  
+		  <hr>
+		  <%@ include file="/pages/templates/typeLinks.xhtml" %>
+		  <div class="tabTableContentContainer">
+			    <%@ include file="/pages/templates/property.xhtml" %>
+			    <%@ include file="/pages/templates/relationship.xhtml" %>
+			    <%@ include file="/pages/templates/synonym.xhtml" %>
+		  </div>	    
+          <%
+          } else {
+          %>
+ 		  <div class="textbodyredregular">
+		      <%=name%>
+		  </div> 
+	  <%	  
+          }
+          %>
+          
+            
             <%@ include file="/pages/templates/nciFooter.html" %>
           </div>
         </div>
