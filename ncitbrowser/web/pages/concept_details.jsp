@@ -62,26 +62,37 @@
              
             }
             if (type == null) {
-              type = "properties";
+                type = "properties";
             }
+            else if (type.compareTo("properties") != 0 &&
+                     type.compareTo("relationship") != 0 &&
+                     type.compareTo("synonym") != 0 &&
+                     type.compareTo("all") != 0) {
+                type = "properties";     
+            }
+                       
+            dictionary = "NCI Thesaurus";
             request.getSession().setAttribute("dictionary", dictionary);
-            request.getSession().setAttribute("code", code);
+            
             request.getSession().setAttribute("type", type);
             request.getSession().setAttribute("singleton", "false");
             String vers = null;
             String ltag = null;
-           
             
             Concept c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
             String name = "";
             if (c != null) {
                request.getSession().setAttribute("concept", c);
+               request.getSession().setAttribute("code", code);
                name = c.getEntityDescription().getContent();
+            } else {
+               name = "The server encountered an internal error that prevented it from fulfilling this request.";
+               code = "";
             }
-          %>
+           %>  
           <div class="texttitle-blue">
-            <%=name%> (Code <%=code%>)
-          </div>
+	      <%=name%> (Code <%=code%>)
+          </div>              
           <hr>
           <%@ include file="/pages/templates/typeLinks.xhtml" %>
           <div class="tabTableContentContainer">
