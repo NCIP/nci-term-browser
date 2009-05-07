@@ -4,6 +4,7 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -15,9 +16,9 @@
   </head>
   <%
     String ncicb_contact_url = new DataUtils().getNCICBContactURL();
-    String subject = request.getParameter("subject");
-    String message = request.getParameter("message");
-    String emailaddress = request.getParameter("emailaddress");
+    String subject = HTTPUtils.cleanXSS(request.getParameter("subject"));
+    String message = HTTPUtils.cleanXSS(request.getParameter("message"));
+    String emailaddress = HTTPUtils.cleanXSS(request.getParameter("emailaddress"));
     if (subject == null) subject = "";
     if (message == null) message = "";
     if (emailaddress == null) emailaddress = "";
