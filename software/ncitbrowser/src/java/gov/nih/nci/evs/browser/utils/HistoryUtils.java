@@ -33,9 +33,14 @@ public class HistoryUtils {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         HistoryService hs = lbSvc.getHistoryService(CODING_SCHEME);
 
-        NCIChangeEventList list = hs.getEditActionList(Constructors
-            .createConceptReference(code, null), null, null);
-        return getEditActions(codingSchemeName, vers, ltag, code, list);
+        try {
+			NCIChangeEventList list = hs.getEditActionList(Constructors
+				.createConceptReference(code, null), null, null);
+			return getEditActions(codingSchemeName, vers, ltag, code, list);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
     }
 
     private static Vector<String> getEditActions(String codingSchemeName,

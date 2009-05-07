@@ -3,6 +3,7 @@
 <%@ page import="java.util.Vector" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%
@@ -19,15 +20,38 @@
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
   <%
     String code = (String) request.getParameter("code");
+    code = HTTPUtils.cleanXSS(code);
+    
     String dictionary = (String) request.getParameter("dictionary");
+    dictionary = HTTPUtils.cleanXSS(dictionary);
     String vers = null;
     String ltag = null;
     Concept concept = (Concept) request.getSession().getAttribute("concept");
-    String concept_name = concept.getEntityDescription().getContent();
-    Vector headers = HistoryUtils.getTableHeader();
-    Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
+    if (concept == null) {
+        concept = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+    } else {
+        request.getSession().setAttribute("concept", concept);    
+    }
+    String msg = null;   
+    if (concept == null) {
+           msg = "ERROR: Invalid code - " + code + ".";
+    } else {
+           msg = "ERROR: Unable to generate the requested page.";
+    }    
   %>
   <f:view>
+  <% 
+    if (concept == null) {
+   %>  
+ 		  <div class="textbody">
+		      <%=msg%>
+		  </div> 
+  <%
+    } else {
+	    Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
+	    String concept_name = concept.getEntityDescription().getContent();
+	    Vector headers = HistoryUtils.getTableHeader();
+  %>  
     <div id="popupContainer">
       <!-- nci popup banner -->
       <div class="ncipopupbanner">
@@ -101,6 +125,9 @@
         </div>
       </div>
     </div>
+    <%
+    }
+    %>
   </f:view>
   </body>
 </html>
