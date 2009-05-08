@@ -5,6 +5,7 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -175,7 +176,7 @@
     }
 
     function onClickViewEntireOntology(ontology_display_name) {
-      var ontology_display_name = "NCI Thesaurus";//document.pg_form.ontology_display_name.value;
+      var ontology_display_name = Constants.CODING_SCHEME_NAME;//document.pg_form.ontology_display_name.value;
       tree = new YAHOO.widget.TreeView("treecontainer");
       tree.draw();
       resetRootDesc();
@@ -186,7 +187,7 @@
 
       tree = new YAHOO.widget.TreeView("treecontainer");
       var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
-      var ontology_display_name = "NCI Thesaurus";
+      var ontology_display_name = Constants.CODING_SCHEME_NAME;
 
       if (ontology_node_id == null || ontology_node_id == "null")
       {
@@ -283,7 +284,7 @@
         failure:responseFailure
       };
 
-      var ontology_display_name = "NCI Thesaurus";
+      var ontology_display_name = Constants.CODING_SCHEME_NAME;
       var cObj = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name,callback);
     }
 
