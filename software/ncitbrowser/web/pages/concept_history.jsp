@@ -20,7 +20,7 @@
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
   <%
     String code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
-    String dictionary = (String) request.getParameter("dictionary");
+    String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
     dictionary = HTTPUtils.cleanXSS(dictionary);
     String vers = null;
     String ltag = null;
