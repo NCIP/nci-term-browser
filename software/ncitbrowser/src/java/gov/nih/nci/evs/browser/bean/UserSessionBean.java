@@ -143,6 +143,11 @@ public class UserSessionBean extends Object {
 			System.out.println("version: " + version);
 			System.out.println("keyword(s): " + matchText);
 			System.out.println("algorithm: " + matchAlgorithm);
+            try {
+                System.out.println("sort.by.score: " + NCItBrowserProperties.
+                    getProperty(NCItBrowserProperties.SORT_BY_SCORE));
+            } catch (Exception e) {
+            } 
 			System.out.println(stopWatch.getResult());
 		}
 
