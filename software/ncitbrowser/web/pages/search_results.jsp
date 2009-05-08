@@ -4,6 +4,7 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -26,15 +27,13 @@
       <div class="pagecontent">
         <%
           Vector v = (Vector) request.getSession().getAttribute("search_results");
-          String matchText = (String) request.getSession().getAttribute("matchText");
-          String match_size = (String) request.getSession().getAttribute("match_size");
-          String page_string = (String) request.getSession().getAttribute("page_string");
+          String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
+          String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
+          String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
           Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
-          String page_number = (String) request.getParameter("page_number");
-          //String selectedResultsPerPage = (String) request.getParameter("selectedResultsPerPage");
-          String selectedResultsPerPage = (String) request.getSession().getAttribute("selectedResultsPerPage");
-
-          String contains_warning_msg = (String) request.getSession().getAttribute("contains_warning_msg");
+          String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+          String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
+          String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
 
           if (page_number != null && new_search == Boolean.FALSE)
           {
