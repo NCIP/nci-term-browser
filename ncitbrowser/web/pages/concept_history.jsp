@@ -19,9 +19,7 @@
   </head>
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
   <%
-    String code = (String) request.getParameter("code");
-    code = HTTPUtils.cleanXSS(code);
-    
+    String code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
     String dictionary = (String) request.getParameter("dictionary");
     dictionary = HTTPUtils.cleanXSS(dictionary);
     String vers = null;
@@ -30,28 +28,28 @@
     if (concept == null) {
         concept = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
     } else {
-        request.getSession().setAttribute("concept", concept);    
+        request.getSession().setAttribute("concept", concept);
     }
-    String msg = null;   
+    String msg = null;
     if (concept == null) {
            msg = "ERROR: Invalid code - " + code + ".";
     } else {
            msg = "ERROR: Unable to generate the requested page.";
-    }    
+    }
   %>
   <f:view>
-  <% 
+  <%
     if (concept == null) {
-   %>  
- 		  <div class="textbody">
-		      <%=msg%>
-		  </div> 
+   %>
+      <div class="textbody">
+          <%=msg%>
+      </div>
   <%
     } else {
-	    Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
-	    String concept_name = concept.getEntityDescription().getContent();
-	    Vector headers = HistoryUtils.getTableHeader();
-  %>  
+      Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
+      String concept_name = concept.getEntityDescription().getContent();
+      Vector headers = HistoryUtils.getTableHeader();
+  %>
     <div id="popupContainer">
       <!-- nci popup banner -->
       <div class="ncipopupbanner">
