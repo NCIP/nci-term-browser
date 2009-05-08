@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -96,7 +97,7 @@
                       }
                       %>
                           <td class="dataCellText">
-                            <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI_Thesaurus&code=<%=code%>" ><%=name%></a>
+                            <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=code%>" ><%=name%></a>
                           </td>
                         </tr>
                       <%
