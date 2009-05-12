@@ -971,9 +971,9 @@ public class SearchUtils {
 				preprocess = false;
 			}
 			 */
-
+            String delim = ".*";
 			if (containsSpecialChars(matchText)) {
-				String delim = ".*";
+
 				matchText = delim + matchText + delim;
 				matchAlgorithm = "RegExp";
 				preprocess = false;
@@ -981,8 +981,12 @@ public class SearchUtils {
 				matchText = preprocessContains(matchText);
 				matchAlgorithm = "RegExp";
 				preprocess = false;
+				//KLO 051209
+			} else if (matchText.indexOf(" ") == -1) {
+				matchText = delim + matchText + delim;
+				matchAlgorithm = "RegExp";
+				preprocess = false;
 			}
-
 		}
 		if (matchAlgorithm.compareToIgnoreCase("RegExp") == 0 && preprocess) {
 			matchText = preprocessRegExp(matchText);
