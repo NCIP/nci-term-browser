@@ -41,7 +41,7 @@
           <i>
             There are over 100 specially defined subsets in NCI Thresaurus. Each has its own NCIt concept,
             defining the nature of the subset, and these are hierarchically organized under the parent concept
-            <a href="http://ncit-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
+            <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
             Terminology Subset (C54443)</a>. These subset concepts are linked to subset-member concepts through
             some 10,000 association relationships.
           </i>
