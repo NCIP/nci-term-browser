@@ -1411,6 +1411,7 @@ public class SearchUtils {
 		return s;
 	}
 
+/*
 	public static Vector resolveIterator(
 			ResolvedConceptReferencesIterator iterator, int maxToReturn,
 			String code, boolean sortLight) {
@@ -1454,6 +1455,66 @@ public class SearchUtils {
 		}
 		return v;
 	}
+*/
+
+
+    public static Vector resolveIterator(ResolvedConceptReferencesIterator iterator, int maxToReturn, String code, boolean sortLight)
+    {
+        Vector v = new Vector();
+        if (iterator == null)
+        {
+            System.out.println("No match.");
+            return v;
+        }
+
+        if (maxToReturn <= 0) maxToReturn = 100;
+        try {
+            int iteration = 0;
+            while (iterator.hasNext())
+            {
+                iteration++;
+                iterator = iterator.scroll(maxToReturn);
+                ResolvedConceptReferenceList rcrl = iterator.getNext();
+                if (rcrl != null) {
+					ResolvedConceptReference[] rcra = rcrl.getResolvedConceptReference();
+					if (rcra != null && rcra.length > 0) {
+						for (int i=0; i<rcra.length; i++)
+						{
+							ResolvedConceptReference rcr = rcra[i];
+							if (rcr != null) {
+								if (sortLight) {
+									org.LexGrid.concepts.Concept ce = new org.LexGrid.concepts.Concept();
+									ce.setId(rcr.getConceptCode());
+									ce.setEntityDescription(rcr.getEntityDescription());
+									if (code == null)
+									{
+										v.add(ce);
+									}
+									else
+									{
+										if (ce.getId().compareTo(code) != 0) v.add(ce);
+									}
+								} else {
+									Concept ce = rcr.getReferencedEntry();
+									if (ce == null) {
+										System.out.println("rcr.getReferencedEntry() returns null???");
+									} else {
+										if (code == null) v.add(ce);
+										else if (ce.getId().compareTo(code) != 0) v.add(ce);
+									}
+								}
+						    }
+					   }
+			       }
+		       }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return v;
+    }
+
+
 
 	public static void main(String[] args) {
 		String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
