@@ -138,10 +138,11 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         }
 
         String url_str = url + value;
+        System.out.println("DYEE1 linktext: " + linktext);
 %>
         <p>
           <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
-          <a href="javascript:redirect_site('<%= url_str %>')">( <%= linktext %> )</a>
+          <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
         </p>
 <%
       }
@@ -185,7 +186,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 %>
 <p>
 <b>Synonyms &amp; Abbreviations:</b>
-<a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=synonym">(See Synonym Details)</a>
+<a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=synonym">(see Synonym Details)</a>
 
 <table class="datatable">
 <%
@@ -263,7 +264,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
                     if (prop_url != null && prop_url.compareTo("null") != 0) {
                       String url_str = prop_url + value;
                       %>
-                        <a href="javascript:redirect_site('<%= url_str %>')">( <%= prop_linktext %> )</a>
+                        <a href="javascript:redirect_site('<%= url_str %>')">(<%= prop_linktext %>)</a>
                       <%
                     }
                   %>
