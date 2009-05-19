@@ -42,7 +42,6 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
 
 public class RemoteServerUtil {
 
-    private static boolean debug = false;
     private static String _serviceInfo = "EvsServiceInfo";
     private Properties systemProperties = null;
 
@@ -78,7 +77,7 @@ public class RemoteServerUtil {
             {
                 String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
                 System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
-                if (debug) {
+                if (NCItBrowserProperties.debugOn) {
                     System.out.println(Utils.SEPARATOR);
                     System.out.println("LexBIGService(local): new LexBIGServiceImpl();");
                     System.out.println("NCIT: LG_CONFIG_FILE: " + System.getProperty(NCItBrowserProperties.LG_CONFIG_FILE));
@@ -86,7 +85,7 @@ public class RemoteServerUtil {
                 LexBIGService lbSvc = new LexBIGServiceImpl();
                 return lbSvc;
             }
-            if (debug) {
+            if (NCItBrowserProperties.debugOn) {
                 System.out.println(Utils.SEPARATOR);
                 System.out.println("LexBIGService(remote): " + serviceUrl);
             }
