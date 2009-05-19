@@ -50,6 +50,7 @@ public class NCItBrowserProperties {
         private static HashMap configurableItemMap;
 
         // KLO
+        public static final String DEBUG_ON = "DEBUG_ON";
         public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
         public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
         public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
@@ -67,6 +68,7 @@ public class NCItBrowserProperties {
 
         private static Properties properties = new Properties();
 
+        public static boolean debugOn = false;
         private static int maxToReturn = 1000;
         private static int maxTreeLevel = 1000;
         private static String service_url = null;
@@ -97,6 +99,8 @@ public class NCItBrowserProperties {
                         NCItBrowserProperties = new NCItBrowserProperties();
                         loadProperties();
 
+                        debugOn = Boolean.parseBoolean(getProperty(DEBUG_ON));
+                        
                         String max_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
                         maxToReturn = Integer.parseInt(max_str);
 

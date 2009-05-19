@@ -133,12 +133,11 @@ public class UserSessionBean extends Object {
 
 		request.getSession().setAttribute("vocabulary", scheme);
 		Utils.StopWatch stopWatch = new Utils.StopWatch();
-		boolean debug = false;
 		Vector<org.LexGrid.concepts.Concept> v = new SearchUtils()
 				.searchByName(scheme, version, matchText, matchAlgorithm,
 						maxToReturn);
 
-		if (debug) {
+		if (NCItBrowserProperties.debugOn) {
 			System.out.println("scheme: " + scheme);
 			System.out.println("version: " + version);
 			System.out.println("keyword(s): " + matchText);
