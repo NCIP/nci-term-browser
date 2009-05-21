@@ -117,6 +117,11 @@ public class UserSessionBean extends Object {
 		request.getSession().setAttribute("matchText", matchText);
 
 		String matchAlgorithm = (String) request.getParameter("algorithm");
+        if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
+            String message = "Warning: Search algorithm parameter is not set.";
+            request.getSession().setAttribute("message", message);
+            return "message";
+        }
 		setSelectedAlgorithm(matchAlgorithm);
 
 		String scheme = CODING_SCHEME_NAME;
