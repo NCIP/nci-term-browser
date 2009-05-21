@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.browser.servlet;
 
+import gov.nih.nci.evs.browser.common.AErrorHandler;
+
 import java.io.IOException;
 
 import javax.faces.webapp.FacesServlet;
@@ -84,8 +86,8 @@ public class AFacesServlet extends HttpServlet {
 		} catch (Throwable ex) {
 			// Make Sure the Stack Trace is Printed to the Log
 			ex.printStackTrace();
-			// Set the Data to be Displayed
-			setPageErrorData(ex, (HttpServletRequest) _request);
+            // Set the Data to be Displayed 
+            AErrorHandler.setPageErrorData(ex, (HttpServletRequest)_request); 
 			// Re-direct to Error Page
 			redirectToErrorPage((HttpServletRequest) _request,
 					(HttpServletResponse) _response);
@@ -99,18 +101,9 @@ public class AFacesServlet extends HttpServlet {
 	 */
 	private void redirectToErrorPage(HttpServletRequest _request,
 			HttpServletResponse _response) throws IOException {
-		if (errorPage != null && !errorPage.equals("")) {
+		if (!"".equals(errorPage)) {
 			_response.sendRedirect(_request.getContextPath() + errorPage);
 		}
-	}
-
-	/**
-	 * @param _e
-	 * @param _request
-	 */
-	public static void setPageErrorData(Throwable _e,
-			HttpServletRequest _request) {
-		_request.getSession().setAttribute(ERROR_MESSAGE, ERROR_UNEXPECTED);
 	}
 
 }
