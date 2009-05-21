@@ -106,14 +106,14 @@ public class UserSessionBean extends Object {
 				.getCurrentInstance().getExternalContext().getRequest();
 		request.getSession().setAttribute("contains_warning_msg", "");
 		String matchText = (String) request.getParameter("matchText");		
-		if (matchText == null) return "concept_details";
-		matchText = matchText.trim();
+
 		//[#19965] Error message is not displayed when Search Criteria is not provided
-		if (matchText.length() == 0) {
+		if (matchText == null || matchText.length() == 0) {
 			String message = "Please enter a search string.";
 			request.getSession().setAttribute("message", message);
 			return "message";
 		}
+		matchText = matchText.trim();
 		request.getSession().setAttribute("matchText", matchText);
 
 		String matchAlgorithm = (String) request.getParameter("algorithm");
@@ -204,13 +204,11 @@ public class UserSessionBean extends Object {
 	public void setSelectedResultsPerPage(String selectedResultsPerPage) {
 		if (selectedResultsPerPage == null)
 			return;
-
 		this.selectedResultsPerPage = selectedResultsPerPage;
 		HttpServletRequest request = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
 		request.getSession().setAttribute("selectedResultsPerPage",
 				selectedResultsPerPage);
-		//request.getSession().setAttribute("singleton", "false");
 	}
 
 	public String getSelectedResultsPerPage() {
@@ -224,7 +222,6 @@ public class UserSessionBean extends Object {
 			this.selectedResultsPerPage = "50";
 			request.getSession().setAttribute("selectedResultsPerPage", "50");
 		}
-
 		return this.selectedResultsPerPage;
 	}
 
