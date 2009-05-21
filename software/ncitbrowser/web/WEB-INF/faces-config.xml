@@ -16,15 +16,6 @@
   </application>
 
   <navigation-rule>
-    <description>Global Navigation Rule for Errors</description>
-    <from-view-id>*</from-view-id>
-    <navigation-case>
-       <from-outcome>internalerror</from-outcome>
-       <to-view-id>/pages/error_handler.jsp</to-view-id>
-    </navigation-case>
-  </navigation-rule>
-
-  <navigation-rule>
     <from-view-id>/pages/home.jsp</from-view-id>
     <navigation-case>
        <description>message</description>
@@ -256,12 +247,6 @@
 
   <navigation-rule>
     <from-view-id>/pages/error_handler.jsp</from-view-id>
-    <navigation-case>
-       <description>message</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>message</from-outcome>
-       <to-view-id>/pages/message.jsp</to-view-id>
-    </navigation-case>
 
     <navigation-case>
        <description>Search</description>
@@ -277,19 +262,6 @@
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
 
-    <navigation-case>
-       <description>contact_us_message</description>
-       <from-action>#{userSessionBean.contactUs}</from-action>
-       <from-outcome>message</from-outcome>
-       <to-view-id>/pages/message.jsp</to-view-id>
-    </navigation-case>
-
-    <navigation-case>
-       <description>contact_us_error</description>
-       <from-action>#{userSessionBean.contactUs}</from-action>
-       <from-outcome>error</from-outcome>
-       <to-view-id>/pages/contact_us.jsp</to-view-id>
-    </navigation-case>
   </navigation-rule>
 
   <managed-bean>
