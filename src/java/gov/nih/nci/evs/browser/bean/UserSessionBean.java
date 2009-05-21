@@ -105,9 +105,10 @@ public class UserSessionBean extends Object {
 		HttpServletRequest request = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
 		request.getSession().setAttribute("contains_warning_msg", "");
-		String matchText = (String) request.getParameter("matchText");
+		String matchText = (String) request.getParameter("matchText");		
+		if (matchText == null) return "concept_details";
 		matchText = matchText.trim();
-		//[#19965] Error message is not displayed when Search Criteria is not proivded
+		//[#19965] Error message is not displayed when Search Criteria is not provided
 		if (matchText.length() == 0) {
 			String message = "Please enter a search string.";
 			request.getSession().setAttribute("message", message);
