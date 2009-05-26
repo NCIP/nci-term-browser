@@ -1,6 +1,5 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.regex.Pattern;
 
@@ -23,7 +22,7 @@ public class HTTPUtils {
 		
 		try {
 			value = URLDecoder.decode(value, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			// Do nothing, just use the input
 		}
 
