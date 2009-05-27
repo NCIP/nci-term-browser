@@ -178,7 +178,7 @@
                   will returns results since
                     <ul><li>'&amp;amp;'</ul>
                   is the HTML special entity for the '&' character.
-                <li>This is a known problem which is addressed in our next release.
+                <li>This is a known problem which is addressed in our next release based on LexBIG 5.0.
               </ul>
             <li>GForge item #<a href="https://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=21471&group_id=547&atid=2059">21471</a> - Hyper links to the NCI Metathesaurus such as those found on the 'Terms & Properties' tab of some concepts occasionally fail with an 'NoSuchObjectException' message. This is a know intermittent problem with the Metathesaurus and is currently under investigation.
             <li>Searching
@@ -188,6 +188,7 @@
                 <li>Online and standalone documentation are still under development.
               </ul>
             <li>Online and standalone documentation are still under development.</li>
+            <li>For the latest updates of known issues, <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Thesaurus+Browser+1.0+Release+Notes">(see NCI Thesaurus Browser 1.0 Release Notes)</a>
           </ul>
           Please report any bugs or suggestions using the browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
         </p>
