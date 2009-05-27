@@ -171,6 +171,22 @@
           <ul>
             <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3 server.  The browser detects this failure and falls back to a safe search that will return only some of the matching concepts (only full-word matches, normally the best), warning the user about the problem.  This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
             <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming <b>Advanced Search</b> page.</li>
+            <li>GForge item #<a href="https://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=21305&group_id=547&atid=2059">21305</a> - Escaped characters in data don't match searches
+              <ul>
+                <li>Browser does not return results when the search term contains escape characters. For example, searching for 'D&C' does not return results. Workaround is to use HTML special entities. For example, searching for
+                    <ul><li>'D&amp;amp;C'</ul>
+                  will returns results since
+                    <ul><li>'&amp;amp;'</ul>
+                  is the HTML special entity for the '&' character.
+                <li>This is a known problem which is addressed in our next release.
+              </ul>
+            <li>GForge item #<a href="https://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=21471&group_id=547&atid=2059">21471</a> - Hyper links to the NCI Metathesaurus such as those found on the 'Terms & Properties' tab of some concepts occasionally fail with an 'NoSuchObjectException' message. This is a know intermittent problem with the Metathesaurus and is currently under investigation.
+            <li>Searching
+              <ul>
+                <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3 server. The browser detects this failure and falls back to a safe search that will return only some of the matching concepts (only full-word matches, normally the best), warning the user about the problem. This problem should be fixed with the LexEVS 5.0 release in June 2009.
+                <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming Advanced Search page.
+                <li>Online and standalone documentation are still under development.
+              </ul>
             <li>Online and standalone documentation are still under development.</li>
           </ul>
           Please report any bugs or suggestions using the browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
