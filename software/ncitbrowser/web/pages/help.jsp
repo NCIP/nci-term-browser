@@ -15,9 +15,9 @@
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
-  <% 
-    String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf"; 
-    String subsetsUrl = request.getContextPath() + "/pages/subset.jsf"; 
+  <%
+    String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
+    String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
   %>
   <%@ include file="/pages/templates/header.xhtml" %>
   <div class="center-page">
@@ -48,9 +48,9 @@
           <b>NCI Thesaurus (NCIt)</b> is an extensive reference terminology
           with some complex features.  Each specific meaning, such as melanoma,
           lung, or chemotherapy, is represented by a distinct <i>concept</i>
-          with a unique, permanent <i>code</i>.  Each concept provides 
+          with a unique, permanent <i>code</i>.  Each concept provides
           additional information such as a preferred name, other terms
-          and codes, definitions, and relationships with other concepts.  
+          and codes, definitions, and relationships with other concepts.
           Concepts are organized within major categories,
           such as anatomy and gene, and arranged in logical parent-child
           hierarchies from very broad top concepts down to the most
@@ -98,16 +98,16 @@
             <li>There are no wildcard characters.  All characters are matched literally (e.g., searching for <b>Begins With</b> <font face="courier">NAT2*</font> will match <i>NAT2*5 Allele</i> but not <i>NAT2 Gene</i>).
             <li>Do not use quotes – they will be searched for literally, as characters in concept terms.
             <li>Searching for multiple words does not search on each word separately.  To match, all words have to be found in the same order you provided.  For example, if you do a <b>Contains</b> search on <font face="courier">Melanoma Corneal</font> no results will be returned, but if you search on <font face="courier">Corneal Melanoma</font> you get the detail page for <i>Corneal Melanoma</i>.</li>
-            
+
           </ul>
           Search of other concept data, approximate matching, and other features will be added to future releases of this
           browser. Some of these features are currently available in the <a href="http://bioportal.nci.nih.gov/" target="_blank" alt="NCI Bioportal">NCI BioPortal Browser</a>.
         </p>
-        
+
         <p class="textbody">
-            <b>Search results</b> are displayed by concept preferred name. (If there is only one match, the concept details page is shown directly without first listing results.) Some details:           
+            <b>Search results</b> are displayed by concept preferred name. (If there is only one match, the concept details page is shown directly without first listing results.) Some details:
             <ul>
-              <li>All matching concepts are returned.</li> 
+              <li>All matching concepts are returned.</li>
               <li>Results are listed from best match to weakest. For example, a <b>Contains</b> search on <font face="courier">Bone</font> returns <i>Bone</i> at the top, followed by concepts with two word matches (e.g., <i>Flat Bone</i>), followed by concepts whose terms have more non-<i>Bone</i> content.</li>
               <li>The match will often be to synonyms or codes only visible on the concept details page (e.g., searching <b>Begins With</b> <font face="courier">melanoma</font> will show <i>Corneal Melanoma</i> in the results list because that concept contains a synonym of <i>Melanoma of the Cornea</i>.) A future release will show these matches in the results window.</li>
               <li>If there are too many to show on one page, you can page through the results with a default of 50 per page. To change the default number, use the <b>Show results per page</b> drop-down menu at the bottom of the results page.</li>
@@ -115,7 +115,7 @@
               <li>Click on the preferred name to see a concept’s details.</li>
             </ul>
         </p>
-        
+
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="conceptdetails">Concept Details</A></h2></td>
@@ -125,49 +125,49 @@
           Detailed information on the selected concept is grouped and shown on several related pages:
           <ul>
             <li>Tabbed information gives the concept’s meaning, labels, and direct relationships:</li>
-            <ul> 
+            <ul>
               <li><b>Terms & Properties:</b> Gives definitions, synonyms, abbreviations, codes, and other information.</li>
               <li><b>Relationships:</b> Shows how other concepts are directly related to this concept as  parents, children, or in other ways.</li>
               <li><b>Synonym Details:</b> For each term or abbreviation, shows its term type, source, and code (for outside sources that have them).</li>
               <li><b>View All:</b> Combines all of the above information on a single page.</li>
-            </ul> 
+            </ul>
             <li><b>View in Hierarchy:</b> Click the button to see where the concept is found within the NCI Thesaurus hierarchy. Concepts are often found in several different places. The focused concept will be bold, underlined, and colored red.</li>
             <li><b>View History:</b> Click the button to view a history of edit actions on this concept, including dates and reference concepts involved in actions that split or merge concepts.</li>
           </ul>
         </p>
-        
-        
+
+
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="viewhierarchy">View Hierarchy</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-          
+
           Click on the <b>View Hierarchy</b> link at the top of the page to bring up a separate window showing the NCI Thesaurus hierarchy.  Some details:
           <ul>
             <li>At first, only the top level nodes of the hierarchy are shown.</li>
             <li>At each level, concepts are listed alphabetically by concept preferred name.</li>
             <li>Browse through the levels by clicking on the + next to each concept.</li>
-            <li>Click on the concept name itself to see the concept’s details in the main browser window.</li> 
+            <li>Click on the concept name itself to see the concept’s details in the main browser window.</li>
           </ul>
         </p>
-        
+
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="subsets">Subsets</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-          
+
           Click on the <a href="<%= subsetsUrl %>">Subsets</a> link at the top of the page to read about and link to NCI Thesaurus Subsets. The text on this page provides additional information.
         </p>
-        
+
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="knownissues">Known Issues</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-          
-          Most known issues are limits to functionality and documentation that we are working to address for release 2.  These include the following: 
+
+          Most known issues are limits to functionality and documentation that we are working to address for release 2.  These include the following:
           <ul>
             <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3 server.  The browser detects this failure and falls back to a safe search that will return only some of the matching concepts (only full-word matches, normally the best), warning the user about the problem.  This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
             <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming <b>Advanced Search</b> page.</li>
@@ -178,7 +178,8 @@
                   will returns results since
                     <ul><li>'&amp;amp;'</ul>
                   is the HTML special entity for the '&' character.
-                <li>This is a known problem which is addressed in our next release based on LexBIG 5.0.
+                <li>Other characters, such as .,&lt;? may also cause incorrect search results.
+                <li>The LexBIG 5.0 release fixes this problem.  The next release of NCIt Browser will use LexBIG 5.0 and therefore resolve this issue.
               </ul>
             <li>GForge item #<a href="https://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=21471&group_id=547&atid=2059">21471</a> - Hyper links to the NCI Metathesaurus such as those found on the 'Terms & Properties' tab of some concepts occasionally fail with an 'NoSuchObjectException' message. This is a know intermittent problem with the Metathesaurus and is currently under investigation.
             <li>Searching
@@ -198,8 +199,8 @@
             <td><h2><A NAME="additionalinfo">Additional Information</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-          
-          Additional information about NCIt and EVS can be found on the <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS Web</a> and <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank" alt="EVS Wiki sites">EVS Wiki sites</a>. 
+
+          Additional information about NCIt and EVS can be found on the <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS Web</a> and <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank" alt="EVS Wiki sites">EVS Wiki sites</a>.
           </br>Several journal articles describe NCIt in greater detail; these are listed in the <a href="http://evs.nci.nih.gov/aboutEVS" target="_blank" alt="About EVS">About EVS</a> page on the EVS Web site.
         </p>
         <br>
