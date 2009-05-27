@@ -1,6 +1,5 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.net.URLDecoder;
 import java.util.regex.Pattern;
 
 /**
@@ -19,12 +18,6 @@ public class HTTPUtils {
 
 		if (value == null || value.length() < 1)
 			return value;
-		
-		try {
-			value = URLDecoder.decode(value, "UTF-8");
-		} catch (Exception e) {
-			// Do nothing, just use the input
-		}
 
 		// Remove XSS attacks
 		value = replaceAll(value,"<\\s*script\\s*>.*</\\s*script\\s*>", "");		
