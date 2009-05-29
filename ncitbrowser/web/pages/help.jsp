@@ -169,26 +169,16 @@
 
           Most known issues are limits to functionality and documentation that we are working to address for release 2.  These include the following:
           <ul>
-            <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming <b>Advanced Search</b> page.</li>
+            <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3
+              server. The browser detects this failure and falls back to a safe search that will return only
+              some of the matching concepts (only full-word matches, normally the best), warning the user about
+              the problem. This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
+            <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming Advanced Search page.</li>
             <li>Two characters - "&" and "<" - fail normal searching because they are stored and processed in special
-                ways.  An ampersand ("&") can mostly be found using its encoded "&amp;amp;" or double-encoded "&amp;amp;amp;" forms;
-                less-than ("<") by using "&amp;lt;" or "&amp;amp;lt;". This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
-            <li>GForge item #<a href="https://gforge.nci.nih.gov/tracker/index.php?func=detail&aid=21471&group_id=547&atid=2059">21471</a> - Hyper
-                links to the NCI Metathesaurus such as those found on the 'Terms & Properties' tab of some concepts
-                occasionally fail with an 'NoSuchObjectException' message. This is a know intermittent problem with
-                the Metathesaurus and is currently under investigation.</li>
-            <li>Searching
-              <ul>
-                <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3
-                    server. The browser detects this failure and falls back to a safe search that will return only
-                    some of the matching concepts (only full-word matches, normally the best), warning the user about
-                    the problem. This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
-                <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming Advanced Search page.</li>
-                <li>Online and standalone documentation are still under development.</li>
-              </ul>
-            </li>
+              ways.  An ampersand ("&") can mostly be found using its encoded "&amp;amp;" or double-encoded "&amp;amp;amp;" forms;
+              less-than ("<") by using "&amp;lt;" or "&amp;amp;lt;". This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
             <li>Online and standalone documentation are still under development.</li>
-            <li>For the latest updates of known issues, <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Thesaurus+Browser+1.0+Release+Notes">(see NCI Thesaurus Browser 1.0 Release Notes)</a>
+            <li>For the latest updates of known issues, <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Thesaurus+Browser+1.0+Release+Notes" target="_blank" alt="NCI Thesaurus Browser 1.0 Release Notes">(see NCI Thesaurus Browser 1.0 Release Notes)</a>
           </ul>
           Please report any bugs or suggestions using the browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
         </p>
