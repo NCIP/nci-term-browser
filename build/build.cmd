@@ -8,6 +8,10 @@ if "%1" == "" (
     ant usage
     goto DONE
 )
+if "%1" == "all" (
+    ant build:all
+    goto DONE
+)
 if "%1" == "upgrade" (
     ant deploy:local:upgrade
     goto DONE
