@@ -9,29 +9,22 @@ Pre-installation requirements
 2. Apache ANT 1.7 or newer
 
 
---------------------------------------
-Deploy to DEV remotely from desktop
---------------------------------------
-1. Rename local.properties so that it does not overwrite the remote properties file.
-2. ant -Dproperties.file=dev-upgrade.properties deploy:remote:upgrade
-
 -----------------------
 Build the application
 -----------------------
 Checkout source files from SVN at the following URL:
 https://gforge.nci.nih.gov/svnroot/ncit/trunk
 
-1. Compile the application
-   cd C:\SVN-Projects\ncit\software\build
-   ant build:all
-2. Deploy the application
-   ant deploy:local:install
+1. Change to the build directory
+   Example; c:> cd C:\SVN-Projects\ncit\software\build
 
-Step #2 will deploy a new JBoss container and start it at the following URL
+2. Compile and deploy the application locally
+   c:\...\build> ant deploy:local:install
+
+Step (2) will deploy a new JBoss container and start it at the following URL
 http://localhost:19280/ncitbrowser/
 
-The JBoss instance will be located in c:\Apps\ncitbrowser-webapp\jboss-4.0.5.GA by
-default.
+The JBoss instance will be located in "C:\Apps\evs\jboss-4.0.5.GA" by default.
 
 If you need to overwrite any settings, create a local.properties file and add the
 properties you wish to overwrite to it. Properties can be found in
@@ -40,7 +33,15 @@ project.properties and install.properties.
 For example, if you need to change the location of the application server add the
 following to your local.properties:
 
-application.base.path.windows=h:/apps/ncitbrowser-webapp
+application.base.path.windows=h:/Apps/evs/ncitbrowser-webapp
+
+
+--------------------------------------
+Deploy to DEV remotely from desktop
+--------------------------------------
+1. Rename local.properties so that it does not overwrite the remote properties file.
+2. ant -Dproperties.file=dev-upgrade.properties deploy:remote:upgrade
+
 
 -----------------------
 Other build commands
@@ -53,10 +54,12 @@ Build:      ant build:all
 Deploy:     ant deploy:local:install
 Redeploy:   ant deploy:hot
 
+
 --------------------------------------
 Location of files
 --------------------------------------
 URL:        http://localhost:19280/ncitbrowser
+
 
 --------------------------------------
 Trouble shooting
