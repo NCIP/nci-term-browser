@@ -116,6 +116,7 @@
             <pathelement location="${bda-utils.dir}/antunit-1.0.jar" />
         </classpath>
     </taskdef>
+    <taskdef name="xmlconfig" classname="com.xmlconfig.anttask.XmlConfig" classpathref="bda-utils.classpath" />
     <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask">
         <classpath>
             <pathelement location="${bda-utils.dir}/ant-contrib-1.0b3.jar"/>
