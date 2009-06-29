@@ -3,8 +3,7 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -90,9 +89,15 @@
               To use this web form, please fill in every box below and then click on “Submit”. 
               <%
                 if (errorMsg != null && errorMsg.length() > 0) {
+                    errorMsg = errorMsg.replaceAll("&lt;br/&gt;", "\n");
+                    String[] list = Utils.toStrings(errorMsg, "\n", false, false);
+                    for (int i=0; i<list.length; ++i) {
+                      String text = list[i];
+                      text = Utils.toHtml(text); // For leading spaces (indentation)
               %>
-                  <br/><br/><i style="color:#FF0000;"><%= errorMsg %></i>
+                      <br/><i style="color:#FF0000;"><%= text %></i>
               <%
+                    }
                 }
               %>
             </p>
