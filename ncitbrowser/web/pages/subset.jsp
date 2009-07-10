@@ -11,7 +11,7 @@
     (terminology_subset_download_url.compareToIgnoreCase("null") == 0) ) {
     term_subset_link = "href=\"#\" onclick=\"javascript:alert('Not available yet.')\";";
   } else {
-    term_subset_link = "href=\"" + terminology_subset_download_url + 
+    term_subset_link = "href=\"" + terminology_subset_download_url +
       "\" target=\"_blank\" alt=\"Terminology Subset Download\"";
   }
 %>
@@ -21,6 +21,7 @@
   <title>NCI Thesaurus</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
+  <link rel="icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
