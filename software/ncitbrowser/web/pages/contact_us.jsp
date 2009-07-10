@@ -10,6 +10,7 @@
     <title>NCI Thesaurus</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
+    <link rel="icon" href="/ncitbrowser/favicon.ico" type="image/x-icon" />
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   </head>
@@ -59,10 +60,10 @@
             </table>
             <p>
 
-              Telephone support is available Monday to Friday, 8 am – 8 pm 
-              Eastern Time, excluding government holidays. You may leave a 
+              Telephone support is available Monday to Friday, 8 am – 8 pm
+              Eastern Time, excluding government holidays. You may leave a
               message, send an email, or submit a support request via the Web
-              at any time.  Please include: 
+              at any time.  Please include:
               <ul>
                 <li>Your contact information;</li>
                 <li>Reference to the NCIt Browser; and</li>
@@ -80,13 +81,13 @@
             </p>
 
             <%
-              String color = ""; 
+              String color = "";
               if (userError)
                 color = "style=\"color:#FF0000;\"";
             %>
             <p><b>Online Form</b></p>
             <p <%= color %>>
-              To use this web form, please fill in every box below and then click on “Submit”. 
+              To use this web form, please fill in every box below and then click on “Submit”.
               <%
                 if (errorMsg != null && errorMsg.length() > 0) {
                     errorMsg = errorMsg.replaceAll("&lt;br/&gt;", "\n");
@@ -118,7 +119,7 @@
               </p>
               <input class="textbody" size="100" name="emailaddress" alt="Email Address" value="<%= emailaddress %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
               <br/><br/>
-              
+
               <h:commandButton
                 id="mail"
                 value="Submit"
