@@ -40,7 +40,7 @@ application.base.path.windows=h:/Apps/evs/ncitbrowser-webapp
 Deploy to DEV remotely from desktop
 --------------------------------------
 1. Rename local.properties so that it does not overwrite the remote properties file.
-2. ant -Dproperties.file=dev-upgrade.properties deploy:remote:upgrade
+2. ant -Dproperties.file=C:\SVN-Projects\ncit-properties\properties\dev-upgrade.properties deploy:remote:upgrade
 
 
 -----------------------
