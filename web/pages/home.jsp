@@ -5,6 +5,7 @@
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
+  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
 %>
 <!-- Build info: <%=ncit_build_info%> -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
