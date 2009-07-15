@@ -61,6 +61,7 @@ public class NCItBrowserProperties {
         public static final String MAXIMUM_TREE_LEVEL = "MAXIMUM_TREE_LEVEL";
         public static final String TERMINOLOGY_SUBSET_DOWNLOAD_URL= "TERMINOLOGY_SUBSET_DOWNLOAD_URL";
         public static final String NCIT_BUILD_INFO = "NCIT_BUILD_INFO";
+        public static final String NCIM_URL = "NCIM_URL";
 
         private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
 
@@ -100,7 +101,7 @@ public class NCItBrowserProperties {
                         loadProperties();
 
                         debugOn = Boolean.parseBoolean(getProperty(DEBUG_ON));
-                        
+
                         String max_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
                         maxToReturn = Integer.parseInt(max_str);
 

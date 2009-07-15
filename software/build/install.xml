@@ -255,6 +255,7 @@
             <filter token="ncicb.contact.url" value="${ncicb.contact.url}"/>
             <filter token="terminology.subset.download.url" value="${terminology.subset.download.url}"/>
             <filter token="ncit.build.info" value="Built: ${BUILD_DATE}"/>
+            <filter token="ncim.url" value="${ncim.url}"/>
         </filterset>
         <mkdir dir="${application.data.path}/${ncitbrowser.conf.path}" />
         <mkdir dir="${application.data.path}/${ehcache.cache.path}" />
