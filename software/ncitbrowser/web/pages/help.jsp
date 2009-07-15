@@ -15,6 +15,9 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<%
+  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
+%>
 <f:view>
   <%
     String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
