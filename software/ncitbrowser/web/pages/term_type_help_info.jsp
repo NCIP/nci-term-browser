@@ -15,6 +15,9 @@
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   </head>
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
+  <%
+    String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
+  %>
   <f:view>
   <div id="popupContainer">
       <div class="ncipopupbanner">

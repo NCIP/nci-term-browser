@@ -139,6 +139,7 @@ public class DataUtils {
 
     public String NCICBContactURL = null;
     public String terminologySubsetDownloadURL = null;
+    public String term_suggestion_application_url = null;
     public String NCITBuildInfo = null;
     public String NCImURL = null;
 
@@ -1686,6 +1687,18 @@ public class DataUtils {
 
         }
         return NCImURL;
+    }
+
+    public String getTermSuggestionURL() {
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            term_suggestion_application_url = properties
+                    .getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
+        } catch (Exception ex) {
+
+        }
+        return term_suggestion_application_url;
     }
 
 }
