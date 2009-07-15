@@ -17,6 +17,9 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<%
+  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
+%>
 <f:view>
   <%@ include file="/pages/templates/header.xhtml" %>
   <div class="center-page">
