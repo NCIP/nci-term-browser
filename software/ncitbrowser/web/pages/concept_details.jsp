@@ -94,16 +94,26 @@
         }
      }
 
+        NCItBrowserProperties properties = null;
+        properties = NCItBrowserProperties.getInstance();
+        String term_suggestion_application_url = properties.getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
 
-          if (c != null) {
+        String tg_dictionary = "NCI%20MetaThesaurus";
+        if (c != null) {
         request.getSession().setAttribute("dictionary", dictionary);
         request.getSession().setAttribute("type", type);
         request.getSession().setAttribute("singleton", "false");
 
           %>
-      <div class="texttitle-blue">
-          <%=name%> (Code <%=code%>)
-      </div>
+
+      <table border="0" width="700px">
+        <tr>
+          <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
+          <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
+             <a href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
+          </td>
+        </tr>
+      </table>
 
       <hr>
       <%@ include file="/pages/templates/typeLinks.xhtml" %>
