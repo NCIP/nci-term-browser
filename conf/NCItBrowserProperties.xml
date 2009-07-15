@@ -53,7 +53,7 @@
         <DisplayItem>
             <propertyName>NCI_META_CUI</propertyName>
             <itemLabel>NCI Metathesaurus CUI</itemLabel>
-            <url>http://ncimeta.nci.nih.gov/MetaServlet/servlet/ResultServlet?cui=</url>
+            <url>@ncim.url@/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
@@ -61,7 +61,7 @@
       <DisplayItem>
             <propertyName>UMLS_CUI</propertyName>
             <itemLabel>NCI Metathesaurus CUI</itemLabel>
-            <url>http://ncimeta.nci.nih.gov/MetaServlet/servlet/ResultServlet?cui=</url>
+            <url>@ncim.url@/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
@@ -115,7 +115,7 @@
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
  -->
-        
+
        <DisplayItem>
             <propertyName>EntrezGene_ID</propertyName>
             <itemLabel>EntrezGene ID</itemLabel>
@@ -127,7 +127,7 @@
        <DisplayItem>
             <propertyName>NCI_META_CUI</propertyName>
             <itemLabel>NCI META CUI</itemLabel>
-            <url>http://ncimeta.nci.nih.gov/MetaServlet/servlet/ResultServlet?cui=</url>
+            <url>@ncim.url@/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
@@ -183,7 +183,7 @@
        <DisplayItem>
             <propertyName>UMLS_CUI</propertyName>
             <itemLabel>UMLS CUI</itemLabel>
-            <url>http://ncimeta.nci.nih.gov/MetaServlet/servlet/ResultServlet?cui=</url>
+            <url>@ncim.url@/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
@@ -244,6 +244,11 @@
         <ConfigurableItem>
                  <key>NCIT_BUILD_INFO</key>
                  <value>@ncit.build.info@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>NCIM_URL</key>
+                 <value>@ncim.url@</value>
         </ConfigurableItem>
 
     </ConfigurableItems>
