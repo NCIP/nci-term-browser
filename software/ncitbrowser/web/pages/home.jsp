@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
