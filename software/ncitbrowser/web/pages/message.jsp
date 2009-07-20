@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -14,6 +15,9 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
+<%
+  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
+%>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
   <%@ include file="/pages/templates/header.xhtml" %>
