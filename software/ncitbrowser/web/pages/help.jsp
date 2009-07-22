@@ -183,9 +183,10 @@
               ways.  An ampersand ("&") can mostly be found using its encoded "&amp;amp;" or double-encoded "&amp;amp;amp;" forms;
               less-than ("<") by using "&amp;lt;" or "&amp;amp;lt;". This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
             <li>Online and standalone documentation are still under development.</li>
-            <li>For the latest updates of known issues, <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Thesaurus+Browser+1.0+Release+Notes" target="_blank" alt="NCI Thesaurus Browser 1.0 Release Notes">(see NCI Thesaurus Browser 1.0 Release Notes)</a>
+            <li>For the latest updates of known issues, <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Thesaurus+Browser+1.0+Release+Notes" target="_blank" alt="NCI Thesaurus Browser 1.0 Release Notes"> see NCI Thesaurus Browser 1.0 Release Notes</a>.
           </ul>
-          Please report any bugs or suggestions using the browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
+          Please report any bugs or suggestions using the browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.<br>
+          Suggestions to add a new concept or make changes to an existing concept can also be made using the <b>Term Suggestion</b> link below the Search box or the <b>Suggest changes to this concept</b> link in the upper right of all concept details pages.
         </p>
 
         <p class="textbody">
