@@ -47,6 +47,7 @@ import org.apache.log4j.Logger;
 public class NCItBrowserProperties {
 
         private static List displayItemList;
+        private static List metadataElementList;
         private static HashMap configurableItemMap;
 
         // KLO
@@ -140,10 +141,13 @@ public class NCItBrowserProperties {
         }
 
 
-        public List getDisplayItemList() {
-            return this.displayItemList;
+        public static List getDisplayItemList() {
+            return displayItemList;
         }
 
+        public static List getMetadataElementList() {
+            return metadataElementList;
+        }
 
         private static void loadProperties() throws Exception {
             String propertyFile = System.getProperty("gov.nih.nci.evs.browser.NCItBrowserProperties");
@@ -154,6 +158,7 @@ public class NCItBrowserProperties {
             parser.run();
 
             displayItemList = parser.getDisplayItemList();
+            metadataElementList = parser.getMetadataElementList();
             configurableItemMap = parser.getConfigurableItemMap();
         }
     }
