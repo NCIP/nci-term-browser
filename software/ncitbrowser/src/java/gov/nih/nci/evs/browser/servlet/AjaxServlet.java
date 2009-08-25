@@ -56,7 +56,7 @@ public final class AjaxServlet extends HttpServlet {
 
 	/**
 	 * Validates the Init and Context parameters, configures authentication URL
-	 * 
+	 *
 	 * @throws ServletException
 	 *             if the init parameters are invalid or any other problems
 	 *             occur during initialisation
@@ -67,12 +67,12 @@ public final class AjaxServlet extends HttpServlet {
 
 	/**
 	 * Route the user to the execute method
-	 * 
+	 *
 	 * @param request
 	 *            The HTTP request we are processing
 	 * @param response
 	 *            The HTTP response we are creating
-	 * 
+	 *
 	 * @exception IOException
 	 *                if an input/output error occurs
 	 * @exception ServletException
@@ -85,12 +85,12 @@ public final class AjaxServlet extends HttpServlet {
 
 	/**
 	 * Route the user to the execute method
-	 * 
+	 *
 	 * @param request
 	 *            The HTTP request we are processing
 	 * @param response
 	 *            The HTTP response we are creating
-	 * 
+	 *
 	 * @exception IOException
 	 *                if an input/output error occurs
 	 * @exception ServletException
@@ -104,12 +104,12 @@ public final class AjaxServlet extends HttpServlet {
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
 	 * response (or forward to another web component that will create it).
-	 * 
+	 *
 	 * @param request
 	 *            The HTTP request we are processing
 	 * @param response
 	 *            The HTTP response we are creating
-	 * 
+	 *
 	 * @exception IOException
 	 *                if an input/output error occurs
 	 * @exception ServletException
@@ -125,6 +125,9 @@ public final class AjaxServlet extends HttpServlet {
 				.getParameter("ontology_display_name");// DataConstants.ONTOLOGY_DISPLAY_NAME);
 		// String ontology_source =
 		// request.getParameter(DataConstants.ONTOLOGY_SOURCE);
+
+System.out.println("*** AjaxServlet ontology_display_name action " + action);
+System.out.println("*** AjaxServlet ontology_display_name " + ontology_display_name);
 
 		long ms = System.currentTimeMillis();
 
@@ -195,6 +198,11 @@ public final class AjaxServlet extends HttpServlet {
 		else if (action.equals("build_tree")) {
 			if (ontology_display_name == null)
 				ontology_display_name = CODING_SCHEME_NAME;
+
+
+System.out.println("****************** AjaxServlet ontology_display_name " + ontology_display_name);
+
+
 			response.setContentType("text/html");
 			response.setHeader("Cache-Control", "no-cache");
 			JSONObject json = new JSONObject();

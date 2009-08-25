@@ -17,6 +17,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import gov.nih.nci.evs.browser.bean.DisplayItem;
+import gov.nih.nci.evs.browser.bean.MetadataElement;
 
 
 /**
@@ -55,17 +56,21 @@ public class PropertyFileParser {
 
 	List displayItemList;
 	HashMap configurableItemMap;
+
+	List metadataElementList;
 	String xmlfile;
 
 	Document dom;
 
 	public PropertyFileParser(){
 		displayItemList = new ArrayList();
+		metadataElementList = new ArrayList();
 		configurableItemMap = new HashMap();
 	}
 
 	public PropertyFileParser(String xmlfile){
 		displayItemList = new ArrayList();
+		metadataElementList = new ArrayList();
 		configurableItemMap = new HashMap();
 		this.xmlfile = xmlfile;
 	}
@@ -78,6 +83,10 @@ public class PropertyFileParser {
 
 	public List getDisplayItemList() {
 		return this.displayItemList;
+	}
+
+	public List getMetadataElementList() {
+		return this.metadataElementList;
 	}
 
 	public HashMap getConfigurableItemMap() {
@@ -117,6 +126,15 @@ public class PropertyFileParser {
 				getConfigurableItem(el);
 			}
 		}
+
+		NodeList list3 = docEle.getElementsByTagName("MetadataElement");
+		if(list3 != null && list3.getLength() > 0) {
+			for(int i = 0 ; i < list3.getLength();i++) {
+				Element el = (Element) list3.item(i);
+				MetadataElement e = getMetadataElement(el);
+				metadataElementList.add(e);
+			}
+		}
 	}
 
 
@@ -139,6 +157,14 @@ public class PropertyFileParser {
 		DisplayItem item = new DisplayItem(propertyName,itemLabel,url,hyperlinkText, isExternalCode);
 		return item;
 	}
+
+
+	private MetadataElement getMetadataElement(Element metadataElement) {
+	    String name = getTextValue(metadataElement,"name");
+		MetadataElement item = new MetadataElement(name);
+		return item;
+	}
+
 
 
 	private void getConfigurableItem(Element displayItemElement) {

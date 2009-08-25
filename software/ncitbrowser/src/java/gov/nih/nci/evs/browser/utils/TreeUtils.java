@@ -33,6 +33,7 @@ package gov.nih.nci.evs.browser.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -61,13 +62,15 @@ import org.LexGrid.LexBIG.Utility.Constructors;
 import org.LexGrid.codingSchemes.CodingScheme;
 import org.LexGrid.commonTypes.EntityDescription;
 import org.LexGrid.naming.SupportedHierarchy;
-import org.LexGrid.codingSchemes.Mappings;
+import org.LexGrid.naming.Mappings;
 import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
 import org.LexGrid.concepts.Concept;
 import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
 
-import static gov.nih.nci.evs.browser.common.Constants.*;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
+
+//import static gov.nih.nci.evs.browser.common.Constants.*;
 
 /**
  * Attempts to provide a tree, based on a focus code, that includes the
@@ -142,7 +145,7 @@ public class TreeUtils {
 			// registered hierarchy to prevent need to hard code
 			// relationship and direction info used on lookup ...
 			String hierarchyID = hierarchyDefn.getLocalId();
-			String[] associationsToNavigate = hierarchyDefn.getAssociationIds();
+			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
 			boolean associationsNavigatedFwd = hierarchyDefn
 					.getIsForwardNavigable();
 
@@ -498,83 +501,23 @@ public class TreeUtils {
 				+ hierarchyID);
 	}
 
-	///////////////////////////////////////////////////////
-	// Helper classes
-	///////////////////////////////////////////////////////
-
-	/**
-	 * Inner class to hold tree items for printout.
-	 */
-	public class TreeItem implements Serializable, Comparable<TreeItem> {
-		public String code = null;
-		public String text = null;
-		public boolean expandable = false;
-		public Map<String, List<TreeItem>> assocToChildMap = new TreeMap<String, List<TreeItem>>();
-
-		public boolean equals(Object o) {
-			return o instanceof TreeItem
-					&& code.compareTo(((TreeItem) o).code) == 0;
-		}
-
-		public int compareTo(TreeItem ti) {
-			String c1 = code;
-			String c2 = ti.code;
-			if (c1.startsWith("@"))
-				return 1;
-			if (c2.startsWith("@"))
-				return -1;
-			return c1.compareTo(c2);
-		}
-
-		public TreeItem(String code, String text) {
-			super();
-			this.code = code;
-			this.text = text;
-		}
-
-		public void addAll(String assocText, List<TreeItem> children) {
-			for (TreeItem item : children)
-				addChild(assocText, item);
-		}
-
-		public void addChild(String assocText, TreeItem child) {
-			List<TreeItem> children = assocToChildMap.get(assocText);
-			if (children == null) {
-				children = new ArrayList<TreeItem>();
-				assocToChildMap.put(assocText, children);
-			}
-			int i;
-			if ((i = children.indexOf(child)) >= 0) {
-				TreeItem existingTreeItem = children.get(i);
-				for (String assoc : child.assocToChildMap.keySet()) {
-					List<TreeItem> toAdd = child.assocToChildMap.get(assoc);
-					if (!toAdd.isEmpty()) {
-						existingTreeItem.addAll(assoc, toAdd);
-						existingTreeItem.expandable = false;
-					}
-				}
-			} else
-				children.add(child);
-		}
-	}
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public HashMap getSubconcepts(String scheme, String version, String code) {
-		//String assocName = "hasSubtype";
-		String hierarchicalAssoName = "hasSubtype";
+		String hierarchicalAssoName = "subClassOf";
+		/* NCI Thesaurus
 		Vector hierarchicalAssoName_vec = getHierarchyAssociationId(scheme,
 				version);
 		if (hierarchicalAssoName_vec != null
 				&& hierarchicalAssoName_vec.size() > 0) {
 			hierarchicalAssoName = (String) hierarchicalAssoName_vec
 					.elementAt(0);
+			System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
 		}
-		return getAssociationTargets(scheme, version, code,
-				hierarchicalAssoName);
+		*/
+		return getAssociatedConcepts(scheme, version, code,	hierarchicalAssoName, false);
 	}
 
-	public HashMap getAssociationTargets(String scheme, String version,
-			String code, String assocName) {
+	public HashMap getAssociatedConcepts(String scheme, String version, String code, String assocName, boolean direction) {
 		HashMap hmap = new HashMap();
 		TreeItem ti = null;
 		long ms = System.currentTimeMillis();
@@ -587,7 +530,6 @@ public class TreeUtils {
 		ResolvedConceptReferenceList matches = null;
 		Vector v = new Vector();
 		try {
-			//EVSApplicationService lbSvc = new RemoteServerUtil().createLexBIGService();
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
 					.getGenericExtension("LexBIGServiceConvenienceMethods");
@@ -602,19 +544,16 @@ public class TreeUtils {
 					scheme);
 			cng = cng.restrictToAssociations(Constructors
 					.createNameAndValueList(assocName), null);
-			boolean associationsNavigatedFwd = true;
+			boolean associationsNavigatedFwd = direction;
 			ResolvedConceptReferenceList branch = cng.resolveAsList(focus,
 					associationsNavigatedFwd,
 					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
-					!associationsNavigatedFwd, -1, 2, noopList_, null, null,
-					null, -1, false);
+					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
 
 			for (Iterator<ResolvedConceptReference> nodes = branch
 					.iterateResolvedConceptReference(); nodes.hasNext();) {
 				ResolvedConceptReference node = nodes.next();
-				AssociationList childAssociationList = associationsNavigatedFwd ? node
-						.getSourceOf()
-						: node.getTargetOf();
+				AssociationList childAssociationList = associationsNavigatedFwd ? node.getSourceOf(): node.getTargetOf();
 
 				// Process each association defining children ...
 				for (Iterator<Association> pathsToChildren = childAssociationList
@@ -673,6 +612,16 @@ public class TreeUtils {
 		return hmap;
 	}
 
+	public HashMap getAssociationSources(String scheme, String version,
+			String code, String assocName) {
+		return getAssociatedConcepts(scheme, version, code, assocName, false);
+    }
+
+	public HashMap getAssociationTargets(String scheme, String version,
+			String code, String assocName) {
+		return getAssociatedConcepts(scheme, version, code, assocName, true);
+    }
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Configurable tree size (MAXIMUM_TREE_LEVEL)
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -685,7 +634,7 @@ public class TreeUtils {
 		ConceptReferenceList list = new ConceptReferenceList();
 		for (int i = 0; i < codes.length; i++) {
 			ConceptReference cr = new ConceptReference();
-			cr.setCodingScheme(codingSchemeName);
+			cr.setCodingSchemeName(codingSchemeName);
 			cr.setConceptCode(codes[i]);
 			list.addConceptReference(cr);
 		}
@@ -846,7 +795,7 @@ public class TreeUtils {
 			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
 
 			for (int k = 0; k < hierarchies.length; k++) {
-				java.lang.String[] ids = hierarchies[k].getAssociationIds();
+				java.lang.String[] ids = hierarchies[k].getAssociationNames();
 
 				for (int i = 0; i < ids.length; i++) {
 					if (!association_vec.contains(ids[i])) {
@@ -912,11 +861,145 @@ public class TreeUtils {
 		}
 	}
 
+
+    public void dumpTree(HashMap hmap, String focusCode, int level) {
+        try {
+            Set keyset = hmap.keySet();
+            Object[] objs = keyset.toArray();
+            String code = (String) objs[0];
+            TreeItem ti = (TreeItem) hmap.get(code);
+            for (String association : ti.assocToChildMap.keySet()) {
+				System.out.println("\nassociation: " + association);
+                List<TreeItem> children = ti.assocToChildMap.get(association);
+                for (TreeItem childItem : children) {
+                    System.out.println(childItem.text + "(" + childItem.code + ")");
+                    int knt = 0;
+                    if (childItem.expandable)
+                    {
+                        knt = 1;
+                        System.out.println("\tnode.expandable");
+
+                        printTree(childItem, focusCode, level);
+
+                        List list = getTopNodes(childItem);
+						for (int i=0; i<list.size(); i++) {
+							  Object obj = list.get(i);
+							  String nd_code = "";
+							  String nd_name = "";
+							  if (obj instanceof ResolvedConceptReference)
+							  {
+								  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+								  nd_code = node.getConceptCode();
+								  nd_name = node.getEntityDescription().getContent();
+							  }
+							  else if (obj instanceof Concept) {
+								  Concept node = (Concept) list.get(i);
+								  nd_code = node.getEntityCode();
+								  nd_name = node.getEntityDescription().getContent();
+							  }
+							  System.out.println("TOP NODE: " + nd_name + " (" + nd_code + ")" );
+						}
+
+
+
+                    } else {
+						System.out.println("\tnode.NOT expandable");
+					}
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+//====================================================================================================================
+
+	public static String[] getHierarchyIDs(String codingScheme, CodingSchemeVersionOrTag versionOrTag) throws LBException {
+
+		String[] hier = null;
+		Set<String> ids = new HashSet<String>();
+		SupportedHierarchy[] sh = null;
+		try {
+			sh = getSupportedHierarchies(codingScheme, versionOrTag);
+			if (sh != null)
+			{
+				for (int i = 0; i < sh.length; i++)
+				{
+					ids.add(sh[i].getLocalId());
+				}
+
+				// Cache and return the new value ...
+				hier = ids.toArray(new String[ids.size()]);
+			}
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return hier;
+	}
+
+	protected static SupportedHierarchy[] getSupportedHierarchies(String codingScheme, CodingSchemeVersionOrTag versionOrTag) throws LBException {
+
+		CodingScheme cs = null;
+		try {
+			cs = getCodingScheme(codingScheme, versionOrTag);
+		} catch (Exception ex) {
+
+		}
+		if(cs == null){
+			throw new LBResourceUnavailableException("Coding scheme not found -- " + codingScheme);
+		}
+		Mappings mappings = cs.getMappings();
+		return mappings.getSupportedHierarchy();
+	}
+
+
+	protected static CodingScheme getCodingScheme(String codingScheme, CodingSchemeVersionOrTag versionOrTag) throws LBException {
+		CodingScheme cs = null;
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+		return cs;
+	}
+
+
+    public static String getHierarchyID(String codingScheme, String version) {
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) versionOrTag.setVersion(version);
+		try {
+			String[] ids = getHierarchyIDs(codingScheme, versionOrTag);
+			if (ids.length > 0) return ids[0];
+		} catch (Exception e) {
+
+		}
+		return null;
+	}
+
+    public static ResolvedConceptReferenceList getHierarchyRoots(java.lang.String codingScheme, String version) {
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) versionOrTag.setVersion(version);
+        try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        	LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+                .getGenericExtension("LexBIGServiceConvenienceMethods");
+            lbscm.setLexBIGService(lbSvc);
+			String hierarchyID = getHierarchyID(codingScheme, version);
+			return lbscm.getHierarchyRoots(codingScheme, versionOrTag, hierarchyID);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+
+
 	public static void main(String[] args) {
 		String url = "http://lexevsapi-dev.nci.nih.gov/lexevsapi42";
-		url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
+		url = "http://lexevsapi-qa.nci.nih.gov/lexevsapi50";
 
-		String scheme = CODING_SCHEME_NAME;
+		String scheme = "NCI Thesaurus";
 		String version = null;
 		String code = "C26709";
 
