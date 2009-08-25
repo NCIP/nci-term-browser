@@ -5,22 +5,17 @@
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
   <title>NCI Thesaurus</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
-  <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<%
-  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-%>
 <f:view>
   <%@ include file="/pages/templates/header.xhtml" %>
   <div class="center-page">
@@ -31,20 +26,28 @@
       <!-- Page content -->
       <div class="pagecontent">
         <%
-          Vector v = (Vector) request.getSession().getAttribute("search_results");
-          String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
-          String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
-          String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
-          Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
+          Vector v = (Vector) request.getAttribute("search_results");
+          
+if (v != null) {          
+	System.out.println("single search results: " + v.size());
+} else {
+    System.out.println("single search results: v is NULL???");
+}
+         
+          
+          String matchText = HTTPUtils.cleanXSS((String) request.getAttribute("matchText"));
+          String match_size = HTTPUtils.cleanXSS((String) request.getAttribute("match_size"));
+          String page_string = HTTPUtils.cleanXSS((String) request.getAttribute("page_string"));
+          Boolean new_search = (Boolean) request.getAttribute("new_search");
           String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
-          String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
-          String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
+          String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getAttribute("selectedResultsPerPage"));
+          String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getAttribute("contains_warning_msg"));
 
           if (page_number != null && new_search == Boolean.FALSE)
           {
               page_string = page_number;
           }
-          request.getSession().setAttribute("new_search", Boolean.FALSE);
+          request.setAttribute("new_search", Boolean.FALSE);
           int page_num = Integer.parseInt(page_string);
           int next_page_num = page_num + 1;
           int prev_page_num = page_num - 1;

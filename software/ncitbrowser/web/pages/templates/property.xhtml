@@ -20,14 +20,14 @@
     propertytypes.add("PRESENTATION");
     propertytypes.add("DEFINITION");
     propertytypes.add("GENERIC");
-    propertytypes.add("INSTRUCTION");
+    //propertytypes.add("INSTRUCTION");
     propertytypes.add("COMMENT");
 
     Vector additionalproperties = new Vector();
     additionalproperties.add("CONCEPT_NAME");
     additionalproperties.add("primitive");
 
-    String concept_status = curr_concept.getConceptStatus();
+    String concept_status = curr_concept.getStatus();
 
     if (concept_status != null) {
       concept_status = concept_status.replaceAll("_", " ");
@@ -57,7 +57,7 @@
     }
 
     propertyvalues = new Vector();
-    String concept_id = curr_concept.getId();
+    String concept_id = curr_concept.getEntityCode();
     propertyvalues.add(concept_id);
     hmap.put("Code", propertyvalues);
     Vector displayed_properties = new Vector();
@@ -192,7 +192,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
     String propName_label = (String) properties_to_display_label.elementAt(i);
-
     if (propName_label.indexOf("Synonyms") != -1) {
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
@@ -244,6 +243,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         if (value_vec != null && value_vec.size() > 0) {
           for (int j=0; j<value_vec.size(); j++) {
             String value = (String) value_vec.elementAt(j);
+            
             if (n % 2 == 0) {
               %>
                 <tr class="dataRowDark">

@@ -1,19 +1,4 @@
-package gov.nih.nci.evs.browser.utils;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-import java.util.Collections;
-
-import java.util.Comparator;
-
-import org.LexGrid.concepts.Concept;
-import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-
-//import gov.nih.nci.evs.browser.utils.TreeItem;
+package gov.nih.nci.evs.browser.bean;
 
 /**
   * <!-- LICENSE_TEXT_START -->
@@ -47,70 +32,33 @@ import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
   *
  */
 
-public class SortComparator implements Comparator<Object>{
+public class MetadataElement {
 
-    private static int SORT_BY_NAME = 1;
-    private static int SORT_BY_CODE = 2;
-    private int sort_option = SORT_BY_NAME;
+	private String name;
 
-    public SortComparator()
-    {
+	public MetadataElement(){
 
 	}
 
-    public SortComparator(int sort_option)
-    {
-		this.sort_option = sort_option;
+	public MetadataElement(String name) {
+		this.name = name;
 	}
 
 
-    private String getKey(Object c, int sort_option)
-    {
-		if (c == null) return "NULL";
-	    if (c instanceof org.LexGrid.concepts.Concept)
-	    {
-			org.LexGrid.concepts.Concept concept = (org.LexGrid.concepts.Concept) c;
-			if (sort_option == SORT_BY_CODE) return concept.getEntityCode();
-			return concept.getEntityDescription().getContent();
-
-		}
-
-	    else if (c instanceof AssociatedConcept)
-	    {
-			AssociatedConcept ac = (AssociatedConcept) c;
-			if (sort_option == SORT_BY_CODE) return ac.getConceptCode();
-			return ac.getEntityDescription().getContent();
-		}
-
-	    else if (c instanceof ResolvedConceptReference)
-	    {
-			ResolvedConceptReference ac = (ResolvedConceptReference) c;
-			if (sort_option == SORT_BY_CODE) return ac.getConceptCode();
-			return ac.getEntityDescription().getContent();
-		}
-
-	    else if (c instanceof TreeItem)
-	    {
-			TreeItem ti = (TreeItem) c;
-			if (sort_option == SORT_BY_CODE) return ti.code;
-			return ti.text;
-		}
-
-	    else if (c instanceof String)
-	    {
-			String s = (String) c;
-			return s;
-		}
-
-	    return c.toString();
-    }
+	public String getName() {
+		return this.name;
+	}
 
 
 
-    public int compare(Object object1, Object object2) {
-		// case insensitive sort
-        String key1 = getKey(object1, sort_option).toLowerCase();
-        String key2 = getKey(object2, sort_option).toLowerCase();
-        return key1.compareTo(key2);
-    }
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("MetadataElement ");
+		sb.append("\n");
+		sb.append("\tname: " + name);
+		sb.append("\n");
+		sb.append("\n");
+
+		return sb.toString();
+	}
 }

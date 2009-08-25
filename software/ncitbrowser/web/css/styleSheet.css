@@ -113,6 +113,15 @@ h3
  width: 100%;
 }
 
+
+.vocabularyName 
+{
+ font-size: 18px;
+ font-weight: bold;
+ color: #2F2F5F;
+}
+
+
 .pagetitle 
 {
  font-size: 18px;
@@ -322,6 +331,14 @@ h3
  background-repeat: repeat-x;
  height: 32px;
 }
+
+/* ------------ Quick links ------------ */
+#ontologyholder 
+{
+ margin-left: 10px;
+ padding-top: 7px;
+}
+
 
 /* ------------ Quick links ------------ */
 #quicklinksholder 

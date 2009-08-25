@@ -45,46 +45,81 @@
       <!-- Main box -->
       <div id="main-area">
       
+         <%
+            String dictionary = (String) request.getAttribute("dictionary");
+            String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
+            if (dictionary == null) {
+                dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+            }
+            
+         %>      
+
+<!-- Thesaurus, banner search area -->
+<div class="bannerarea">
+
+<%
+
+System.out.println("**** concept_details2 dictionary " + dictionary);
+
+if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {  
+%>
+        <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
+<%
+} else {
+%>
+    <div class="banner">
+        &nbsp;&nbsp;<%=dictionary%>
+    </div>
+<%
+}
+%>
+
+    
+    <div class="search-globalnav">
+        <!-- Search box -->
+        <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
+        <div class="searchbox"><%@ include file="/pages/templates/searchForm.xhtml" %></div>
+        <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
+        <!-- end Search box -->
+        <!-- Global Navigation -->
+        
+        <%@ include file="/pages/templates/menuBar.xhtml" %>
+            
+        <!-- end Global Navigation -->
+    </div>
+</div>
+<!-- end Thesaurus, banner search area -->
+<!-- Quick links bar -->
+<%@ include file="/pages/templates/quickLink.xhtml" %>
+<!-- end Quick links bar -->
+    
+        
+        <!-- Page content -->
+        <div class="pagecontent">
           <%
-            String dictionary = null;
+            //String dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
             String code = null;
             String type = null;
 
-            String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-            String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("singleton"));
-            
+            String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("singleton"));
             if (singleton != null && singleton.compareTo("true") == 0) {
-                dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
-
- dictionary = DataUtils.getCodingSchemeName(dictionary);
+              dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
               
-              code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("code"));
-  
- if (code == null) {
-    code = (String) request.getSession().getAttribute("code");
- }
               
+              code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
             } else {
-                 dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-
-dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
-dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
-dictionary = DataUtils.getCodingSchemeName( dictionary ); 
-
-                 code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
-
-if (code == null) {
-   code = (String) request.getSession().getAttribute("code");
-}
-                 
-                 
-                 type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
+              dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+              code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+              type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             }
+            
+            
+ System.out.println("concept details page: " +  dictionary);
+ 
             
             if (dictionary == null) {
                 dictionary = Constants.CODING_SCHEME_NAME;
-            }             
-            
+            }
             if (type == null) {
                 type = "properties";
             }
@@ -100,13 +135,11 @@ if (code == null) {
 
 		String vers = null;
 		String ltag = null;
-		
 		c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 		if (c != null) {
 		   request.getSession().setAttribute("concept", c);
 		   request.getSession().setAttribute("code", code);
 		   name = c.getEntityDescription().getContent();
-		   
 
 		   System.out.println(name);          
 
@@ -116,33 +149,14 @@ if (code == null) {
 		   name = "ERROR: Invalid code - " + code + ".";
 		}
 
-       
-        if (dictionary.compareTo("NCI Thesaurus") == 0) {
-        %>
-        	<%@ include file="/pages/templates/content-header.xhtml" %>
-        <%	
-       	} else {
-       	        request.getSession().setAttribute("dictionary", dictionary);
-       	%>
-       	        <%@ include file="/pages/templates/content-header2.xhtml" %>
-       	<%        
-       	}
 
         String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
         if (c != null) {
-        //request.getSession().setAttribute("dictionary", dictionary);
+        request.getSession().setAttribute("dictionary", dictionary);
         request.getSession().setAttribute("type", type);
         request.getSession().setAttribute("singleton", "false");
 
-          %>      
-      
-
-       
-        
-        <!-- Page content -->
-        <div class="pagecontent">
-        
-
+          %>
 
       <table border="0" width="700px">
         <tr>
@@ -169,6 +183,8 @@ if (code == null) {
     <%
           }
           %>
+          
+
             <%@ include file="/pages/templates/nciFooter.html" %>
           </div>
         </div>

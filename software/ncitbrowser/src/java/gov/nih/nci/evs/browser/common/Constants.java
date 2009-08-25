@@ -17,11 +17,15 @@ public class Constants {
 	static public final String TRUE = "true";
 	static public final String FALSE = "false";
 	static public final String EMPTY = "";
-	
+
+	static public final String ALL = "ALL";
+
 	// Application error constants
 	static public final String INIT_PARAM_ERROR_PAGE = "errorPage";
 	static public final String ERROR_MESSAGE = "systemMessage";
-	static public final String ERROR_UNEXPECTED = "Warning: An unexpected processing error has occurred.";	
+	static public final String ERROR_UNEXPECTED = "Warning: An unexpected processing error has occurred.";
+
+    static public final int DEFAULT_PAGE_SIZE = 50;
 
 	/**
 	 * Constructor
