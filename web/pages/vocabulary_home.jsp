@@ -5,6 +5,9 @@
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.MetadataElement" %>
+
 
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
@@ -32,6 +35,13 @@ String download_site = null;
 String voc_description = null;
 String voc_version = null;
 Vector v = null;
+Vector metadata_names = new Vector();
+List metadataElementList = NCItBrowserProperties.getMetadataElementList();
+for (int i=0; i<metadataElementList.size(); i++) {
+    MetadataElement ele = (MetadataElement) metadataElementList.get(i);
+    System.out.println("Metadata: " + ele.getName());
+    metadata_names.add(ele.getName());
+}
 
 %>
 
@@ -40,7 +50,6 @@ Vector v = null;
     <%@ include file="/pages/templates/sub-header.xhtml" %>
     <!-- Main box -->
     
-
 
     <div id="main-area">
     
@@ -175,28 +184,30 @@ menubar_version = menubar_version.replaceAll(" ", "%20");
 		String s = (String) v.get(i);
 		Vector ret_vec = DataUtils.parseData(s, "|");
 		String meta_prop_name = (String) ret_vec.elementAt(0);
-		String meta_prop_value = (String) ret_vec.elementAt(1);
-		if (meta_prop_value.startsWith("ftp:") || meta_prop_value.startsWith("http:")) {
-		    meta_prop_value = DataUtils.getDownloadLink(meta_prop_value);
-		}
+		if (!metadata_names.contains(meta_prop_name)) {
+			String meta_prop_value = (String) ret_vec.elementAt(1);
+			if (meta_prop_value.startsWith("ftp:") || meta_prop_value.startsWith("http:")) {
+			    meta_prop_value = DataUtils.getDownloadLink(meta_prop_value);
+			}
 
-		if (n1 % 2 == 0) {
-		  %>
-		    <tr class="dataRowDark">
-		  <%
-		} else {
-		  %>
-		    <tr class="dataRowLight">
-		  <%
-		}
-		n1++;
+			if (n1 % 2 == 0) {
+			  %>
+			    <tr class="dataRowDark">
+			  <%
+			} else {
+			  %>
+			    <tr class="dataRowLight">
+			  <%
+			}
+			n1++;
+			%>
+			      <td><%=meta_prop_name%></td>
+			      <td><%=meta_prop_value%></td>
+			    </tr>
+		      <%
+		      }
+	        }
 		%>
-		      <td><%=meta_prop_name%></td>
-		      <td><%=meta_prop_value%></td>
-		    </tr>
-	      <%
-	      }
-	      %>
 	  </table>              
       <%    
       }
