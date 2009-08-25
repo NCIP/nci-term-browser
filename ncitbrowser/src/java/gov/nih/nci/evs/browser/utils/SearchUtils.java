@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.Arrays;
 
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
 import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
 import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
@@ -39,13 +40,20 @@ import org.LexGrid.concepts.Presentation;
 import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
 import org.LexGrid.LexBIG.DataModel.Core.types.CodingSchemeVersionStatus;
 import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
-import org.LexGrid.codingSchemes.Mappings;
+import org.LexGrid.naming.Mappings;
 import org.LexGrid.naming.SupportedHierarchy;
 import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
 import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
 
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 import static gov.nih.nci.evs.browser.common.Constants.*;
+import org.LexGrid.naming.SupportedNamespace;
+import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
+import org.LexGrid.commonTypes.EntityDescription;
+//import org.LexGrid.LexBIG.DataModel.enums.SearchDesignationOption;
+import org.apache.commons.codec.language.DoubleMetaphone;
+
+import org.LexGrid.LexBIG.Utility.Constructors;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -80,6 +88,11 @@ import static gov.nih.nci.evs.browser.common.Constants.*;
  */
 
 public class SearchUtils {
+	private DoubleMetaphone doubleMetaphone = null;
+
+	private int max_str_length = 1000;
+	private int penalty_multiplier_1 = 1;
+	private int penalty_multiplier_2 = 2;
 
 	private boolean apply_sort_score = false;
 	private boolean sort_by_pt_only = true;
@@ -188,7 +201,7 @@ public class SearchUtils {
 						}
 
 					} catch (Exception e) {
-						String urn = css.getCodingSchemeURN();
+						String urn = css.getCodingSchemeURI();
 						try {
 							scheme = lbSvc.resolveCodingScheme(urn, vt);
 							if (scheme != null) {
@@ -346,7 +359,7 @@ public class SearchUtils {
 			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);
 			Mappings mappings = cs.getMappings();
 			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
-			java.lang.String[] ids = hierarchies[0].getAssociationIds();
+			java.lang.String[] ids = hierarchies[0].getAssociationNames();
 
 			for (int i = 0; i < ids.length; i++) {
 				if (!association_vec.contains(ids[i])) {
@@ -511,6 +524,12 @@ public class SearchUtils {
 			Vector qualifier_value_vec, java.lang.String matchText,
 			java.lang.String matchAlgorithm, java.lang.String language) {
 
+
+System.out.println("restrictToMatchingProperty codingSchemeName " + codingSchemeName);
+System.out.println("restrictToMatchingProperty matchText " + matchText);
+System.out.println("restrictToMatchingProperty matchAlgorithm " + matchAlgorithm);
+
+
 		LocalNameList propertyList = vector2LocalNameList(property_vec);
 		CodedNodeSet.PropertyType[] propertyTypes = null;
 		LocalNameList sourceList = vector2LocalNameList(source_vec);
@@ -534,22 +553,34 @@ public class SearchUtils {
 			java.lang.String matchText, java.lang.String matchAlgorithm,
 			java.lang.String language) {
 
+System.out.println("2 restrictToMatchingProperty codingSchemeName " + codingSchemeName);
+System.out.println("2 restrictToMatchingProperty matchText " + matchText);
+System.out.println("2 restrictToMatchingProperty matchAlgorithm " + matchAlgorithm);
+
+
 		CodedNodeSet cns = null;
 		ResolvedConceptReferencesIterator iterator = null;
 		try {
 			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-			versionOrTag.setVersion(version);
+			if (version != null) versionOrTag.setVersion(version);
 
 			if (lbSvc == null) {
 				System.out.println("lbSvc = null");
 				return null;
 			}
 
+
+System.out.println("2 restrictToMatchingProperty getCodingSchemeConcepts " + codingSchemeName);
+
+
 			cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
 			if (cns == null) {
 				System.out.println("cns = null");
 				return null;
+			} else {
+
+System.out.println("2 restrictToMatchingProperty getCodingSchemeConcepts cns != null " + codingSchemeName);
 			}
 
 			LocalNameList contextList = null;
@@ -558,6 +589,10 @@ public class SearchUtils {
 						propertyTypes, sourceList, contextList, qualifierList,
 						matchText, matchAlgorithm, language);
 			} catch (Exception ex) {
+System.out.println("2 restrictToMatchingProperty restrictToMatchingProperties matchText " + matchText);
+System.out.println("2 restrictToMatchingProperty restrictToMatchingProperties matchAlgorithm " + matchAlgorithm);
+System.out.println("2 restrictToMatchingProperty restrictToMatchingProperties returns NULL??? " + codingSchemeName);
+
 				return null;
 			}
 
@@ -572,15 +607,21 @@ public class SearchUtils {
 				if (apply_sort_score && !sort_by_pt_only)
 					resolveConcepts = true;
 				try {
+
+System.out.println("2 restrictToMatchingProperty calling cns.resolve " + codingSchemeName);
+
+
 					iterator = cns.resolve(sortCriteria, null,
 							restrictToProperties, null, resolveConcepts);
 				} catch (Exception e) {
 					System.out.println("ERROR: cns.resolve throws exceptions.");
 				}
-				//ResolvedConceptReferencesIterator 	resolve(SortOptionList sortOptions, LocalNameList filterOptions, LocalNameList propertyNames, CodedNodeSet.PropertyType[] propertyTypes, boolean resolveConcepts)
 
 			} catch (Exception ex) {
-				ex.printStackTrace();
+
+System.out.println("2 restrictToMatchingProperty exception encountered " + codingSchemeName);
+
+				//ex.printStackTrace();
 				return null;
 			}
 
@@ -643,7 +684,7 @@ public class SearchUtils {
 						.enumerateResolvedConceptReference().nextElement();
 
 				org.LexGrid.concepts.Concept entry = new org.LexGrid.concepts.Concept();
-				entry.setId(ref.getConceptCode());
+				entry.setEntityCode(ref.getConceptCode());
 				entry.setEntityDescription(ref.getEntityDescription());
 
 				//Concept entry = ref.getReferencedEntry();
@@ -664,7 +705,7 @@ public class SearchUtils {
 		ConceptReferenceList list = new ConceptReferenceList();
 		for (int i = 0; i < codes.length; i++) {
 			ConceptReference cr = new ConceptReference();
-			cr.setCodingScheme(codingSchemeName);
+			cr.setCodingSchemeName(codingSchemeName);
 			cr.setConceptCode(codes[i]);
 			list.addConceptReference(cr);
 		}
@@ -726,13 +767,13 @@ public class SearchUtils {
 					ResolvedConceptReference rcr = rcra[i];
 					//org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
 					org.LexGrid.concepts.Concept ce = new org.LexGrid.concepts.Concept();
-					ce.setId(rcr.getConceptCode());
+					ce.setEntityCode(rcr.getConceptCode());
 					ce.setEntityDescription(rcr.getEntityDescription());
 
 					if (code == null) {
 						v.add(ce);
 					} else {
-						if (ce.getId().compareTo(code) != 0)
+						if (ce.getEntityCode().compareTo(code) != 0)
 							v.add(ce);
 					}
 				}
@@ -923,12 +964,19 @@ public class SearchUtils {
 		return true;
 	}
 
-	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme,
-			String version, String matchText, String matchAlgorithm,
-			int maxToReturn) {
+/*
+	public Vector<org.LexGrid.concepts.Concept> searchByName(String scheme, String version, String matchText, String matchAlgorithm, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
+
+
+System.out.println("searchByName scheme: " + scheme);
+System.out.println("searchByName matchText: " + matchText);
+System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
+System.out.println("searchByName maxToReturn: " + maxToReturn);
+
+
 		boolean preprocess = true;
 		if (matchText == null || matchText.length() == 0) {
 			return new Vector();
@@ -951,26 +999,10 @@ public class SearchUtils {
 		}
 
 		else if (matchAlgorithm.compareToIgnoreCase("startsWith") == 0) {
-			/*
-			matchText = "^" + matchText;
-			matchAlgorithm = "RegExp";
-			preprocess = false;
-			 */
+
 		} else if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
 		{
-			/*
-			//matchText = replaceSpecialCharsWithBlankChar(matchText);
-			if (matchText.indexOf(" ") != -1) {
-				matchText = preprocessContains(matchText);
-				matchAlgorithm = "RegExp";
-				preprocess = false;
-			} else {
-				String delim = ".*";
-				matchText = delim + matchText + delim;
-				matchAlgorithm = "RegExp";
-				preprocess = false;
-			}
-			 */
+
             String delim = ".*";
 			if (containsSpecialChars(matchText)) {
 
@@ -992,8 +1024,8 @@ public class SearchUtils {
 			matchText = preprocessRegExp(matchText);
 		}
 
-		//System.out.println("matchText: " + matchText);
-		//System.out.println("matchAlgorithm: " + matchAlgorithm);
+		System.out.println("(2) matchText: " + matchText);
+		System.out.println("(2) matchAlgorithm: " + matchAlgorithm);
 
 		LocalNameList propertyList = null;
 		CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
@@ -1004,26 +1036,19 @@ public class SearchUtils {
 		String language = null;
 		ResolvedConceptReferencesIterator iterator = restrictToMatchingProperty(
 				scheme, version,
-
 				propertyList, propertyTypes, sourceList, qualifierList,
-
 				matchText, matchAlgorithm, language);
 
 		// KLO, 042909
-		if (iterator != null) {
-			/*
-			if (apply_sort_score)
-			{
-					long ms = System.currentTimeMillis();
-					try {
-						//iterator = sortByScore(matchText, iterator, maxToReturn);
-						iterator = sortByScore(matchText0, iterator, maxToReturn, true);
-					} catch (Exception ex) {
 
-					}
-					System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
-			}
-			 */
+System.out.println("Step 1: ");
+
+		if (iterator == null) {
+			System.out.println("Step 1 iterator == null: ");
+		}
+
+		if (iterator != null) {
+
 
 			if (apply_sort_score) {
 				long ms = System.currentTimeMillis();
@@ -1062,6 +1087,9 @@ public class SearchUtils {
 			}
 		}
 
+System.out.println("Step 2: ");
+
+
 		if (matchAlgorithm0.compareToIgnoreCase("exactMatch") == 0) {
 			matchText0 = matchText0.trim();
 			Concept c = getConceptByCode(scheme, null, null, matchText0);
@@ -1070,19 +1098,323 @@ public class SearchUtils {
 				v.add(c);
 				return v;
 			}
-		} else if (matchAlgorithm0.compareTo("contains") == 0) // /100{WBC} & search by code
-		{
+		} else if (matchAlgorithm0.compareTo("contains") == 0) { // /100{WBC} & search by code
+
+
+System.out.println("Step 3: startsWith ");
+
 			return searchByName(scheme, version, matchText0, "startsWith",
 					maxToReturn);
 		}
 
 		else if (matchAlgorithm.compareTo("RegExp") != 0) {
+
+System.out.println("Step 4: ");
+
 			return searchByName(scheme, version, matchText0, "exactMatch",
 					maxToReturn);
 		}
 		return new Vector();
 	}
+*/
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 5.1 implementation
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public ResolvedConceptReferencesIterator searchByName(String scheme, String version, String matchText, String matchAlgorithm, boolean ranking, int maxToReturn) {
+		return searchByName(scheme, version, matchText, null, matchAlgorithm, ranking, maxToReturn);
+	}
+
+
+    public ResolvedConceptReferencesIterator searchByName(String scheme, String version, String matchText, String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
+		String matchText0 = matchText;
+		String matchAlgorithm0 = matchAlgorithm;
+		matchText0 = matchText0.trim();
+
+		boolean preprocess = true;
+        if (matchText == null || matchText.length() == 0)
+        {
+			return null;
+		}
+
+        matchText = matchText.trim();
+        if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
+		{
+			matchAlgorithm = "subString";
+		}
+		System.out.println("algorithm: " + matchAlgorithm);
+
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null)
+            {
+                System.out.println("lbSvc = null");
+                return null;
+            }
+
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (version != null) versionOrTag.setVersion(version);
+            cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+
+            if (cns == null)
+            {
+                System.out.println("cns = null");
+                return null;
+            }
+
+            //LocalNameList contextList = null;
+            try {
+				cns = cns.restrictToMatchingDesignations(matchText, SearchDesignationOption.ALL, matchAlgorithm, null);
+				cns = restrictToSource(cns, source);
+            } catch (Exception ex) {
+                return null;
+            }
+
+            LocalNameList restrictToProperties = new LocalNameList();
+            boolean resolveConcepts = true;
+            if (!ranking) resolveConcepts = false;
+
+            SortOptionList sortCriteria = null;
+
+            //if (sortOption.isApplySortScore() && !sortOption.isSortByPtOnly()) {
+		    if (ranking){
+				System.out.println("*** Sort by Lucene score...");
+				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
+
+            } else {
+                sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
+                System.out.println("*** Sort alphabetically...");
+                resolveConcepts = false;
+			}
+            try {
+               try {
+					long ms = System.currentTimeMillis(), delay = 0;
+					System.out.println("*** calling cns.resolve..");
+                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+					System.out.println("*** exit cns.resolve..");
+					//Debug.println("cns.resolve delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms) + " -- matchAlgorithm " + matchAlgorithm);
+                    //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
+
+                }  catch (Exception e) {
+                    System.out.println("ERROR: cns.resolve throws exceptions.");
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+        if (iterator == null) {
+			System.out.println("*** WARNING: iterator == null.." + scheme);
+			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
+		} else {
+			try {
+				int size = iterator.numberRemaining();
+				System.out.println("*** number of matches: " + size);
+				if (size == 0) {
+					iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
+				}
+			} catch (Exception e) {
+
+			}
+		}
+        return iterator;
+    }
+
+    public ResolvedConceptReferencesIterator searchByName(Vector schemes, Vector versions, String matchText, String matchAlgorithm, boolean ranking, int maxToReturn) {
+		return searchByName(schemes, versions, matchText, null, matchAlgorithm, ranking, maxToReturn);
+	}
+
+
+    public ResolvedConceptReferencesIterator searchByName(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
+		String matchText0 = matchText;
+		String matchAlgorithm0 = matchAlgorithm;
+		matchText0 = matchText0.trim();
+
+		boolean preprocess = true;
+        if (matchText == null || matchText.length() == 0)
+        {
+			return null;
+		}
+
+        matchText = matchText.trim();
+        if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
+		{
+			matchAlgorithm = "subString";
+		}
+		System.out.println("algorithm: " + matchAlgorithm);
+
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
+
+        String scheme = null;
+        String version = null;
+
+
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null)
+            {
+                System.out.println("lbSvc = null");
+                return null;
+            }
+
+			Vector cns_vec = new Vector();
+			for (int i=0; i<schemes.size(); i++) {
+				cns = null;
+				iterator = null;
+				scheme = (String) schemes.elementAt(i);
+				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+				version = (String) versions.elementAt(i);
+				if (version != null) versionOrTag.setVersion(version);
+
+	System.out.println("scheme: " + scheme);
+	System.out.println("version: " + version);
+
+				try {
+					if (lbSvc == null)
+					{
+						System.out.println("lbSvc = null");
+						return null;
+					}
+
+					cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+
+					if (cns != null)
+					{
+						try {
+							cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
+							cns = restrictToSource(cns, source);
+						} catch (Exception ex) {
+							//return null;
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					//return null;
+				}
+				if (cns != null) {
+	System.out.println("cns_vec.add(cns): " + scheme);
+					cns_vec.add(cns);
+				}
+			}
+
+			iterator = null;
+			cns = union(cns_vec);
+			if (cns == null) return null;
+
+            LocalNameList restrictToProperties = new LocalNameList();
+            boolean resolveConcepts = true;
+            if (!ranking) resolveConcepts = false;
+
+            SortOptionList sortCriteria = null;
+
+            //if (sortOption.isApplySortScore() && !sortOption.isSortByPtOnly()) {
+		    if (ranking){
+				System.out.println("*** Sort by Lucene score...");
+				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
+
+            } else {
+                sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
+                System.out.println("*** Sort alphabetically...");
+                resolveConcepts = false;
+			}
+            try {
+               try {
+					long ms = System.currentTimeMillis(), delay = 0;
+					System.out.println("*** calling cns.resolve");
+                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    System.out.println("*** exit cns.resolve");
+					//Debug.println("cns.resolve delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms) + " -- matchAlgorithm " + matchAlgorithm);
+                    //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
+
+                }  catch (Exception e) {
+                    System.out.println("ERROR: cns.resolve throws exceptions.");
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+        if (iterator == null) {
+			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
+		} else {
+			try {
+				int size = iterator.numberRemaining();
+				System.out.println("*** number of matches " + size);
+				if (size == 0) {
+					iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
+				}
+			} catch (Exception e) {
+
+			}
+		}
+        return iterator;
+    }
+
+
+	public ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
+		LexBIGService lbs = RemoteServerUtil.createLexBIGService();
+		Vector v = new Vector();
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) versionOrTag.setVersion(version);
+		CodedNodeSet cns = null;
+		ResolvedConceptReferencesIterator iterator = null;
+		try {
+			cns = lbs.getNodeSet(scheme, versionOrTag, null);
+			if (source != null) cns = restrictToSource(cns, source);
+			CodedNodeSet.PropertyType[] propertyTypes = null;
+			LocalNameList sourceList = null;
+			LocalNameList contextList = null;
+			NameAndValueList qualifierList = null;
+			cns = cns.restrictToMatchingProperties(ConvenienceMethods.createLocalNameList(new String[]{"conceptCode"}),
+					  propertyTypes, sourceList, contextList,
+					  qualifierList,matchText, matchAlgorithm, null);
+
+            LocalNameList restrictToProperties = new LocalNameList();
+            SortOptionList sortCriteria = null;
+            try {
+                boolean resolveConcepts = true;
+                try {
+					long ms = System.currentTimeMillis(), delay = 0;
+                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+
+                    int size = iterator.numberRemaining();
+                    System.out.println("cns.resolve size: " + size);
+
+                }  catch (Exception e) {
+                    System.out.println("ERROR: cns.resolve throws exceptions.");
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+
+		} catch (Exception ex) {
+			System.out.println("WARNING: searchByCode throws exception.");
+		}
+        return iterator;
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
 	public void testSearchByName() {
 		String scheme = CODING_SCHEME_NAME;
 		String version = null;
@@ -1100,12 +1432,12 @@ public class SearchUtils {
 			for (int i = 0; i < v.size(); i++) {
 				int j = i + 1;
 				Concept ce = (Concept) v.elementAt(i);
-				System.out.println("(" + j + ")" + " " + ce.getId() + " "
+				System.out.println("(" + j + ")" + " " + ce.getEntityCode() + " "
 						+ ce.getEntityDescription().getContent());
 			}
 		}
 	}
-
+*/
 	protected static List<String> toWords(String s, String delimitRegex,
 			boolean removeStopWords, boolean removeDuplicates) {
 		String[] words = s.split(delimitRegex);
@@ -1279,6 +1611,7 @@ public class SearchUtils {
 
 				String code = ref.getConceptCode();
 				Concept ce = ref.getReferencedEntry();
+				ce.setEntityCodeNamespace(ref.getCodingSchemeName());
 
 				// Note: Preferred descriptions carry more weight,
 				// but we process all terms to allow the score to improve
@@ -1286,7 +1619,7 @@ public class SearchUtils {
 				Presentation[] allTermsForConcept = ce.getPresentation();
 				for (Presentation p : allTermsForConcept) {
 					//float score = score(p.getValue().getContent(), compareWords, p.isIsPreferred(), i);
-					float score = score(p.getText().getContent(), compareWords,
+					float score = score(p.getValue().getContent(), compareWords,
 							p.isIsPreferred(), i);
 
 					// Check for a previous match on this code for a different presentation.
@@ -1334,6 +1667,256 @@ public class SearchUtils {
 		return new ScoredIterator(scoredResult.values(), maxToReturn);
 	}
 
+    protected float score_contains(String text, String target) {
+		String text_lower = text.toLowerCase();
+		String target_lower = target.toLowerCase();
+		int n = text_lower.indexOf(target_lower);
+		if (n == -1) return -1 * max_str_length;
+		int m1 = n;
+		int m2 = text.length() - (n + target.length());
+		int score = max_str_length - penalty_multiplier_2 * m2 - penalty_multiplier_1 * m1;
+		return Math.max(0, score);
+	}
+/*
+    protected ResolvedConceptReferencesIterator sortByScore(String searchTerm, ResolvedConceptReferencesIterator toSort, int maxToReturn) throws LBException {
+        // Determine the set of individual words to compare against.
+        List<String> compareWords = toScoreWords(searchTerm);
+
+        // Create a bucket to store results.
+        Map<String, ScoredTerm> scoredResult = new TreeMap<String, ScoredTerm>();
+
+        // Score all items ...
+        while (toSort.hasNext()) {
+            // Working in chunks of 100.
+            ResolvedConceptReferenceList refs = toSort.next(100);
+            for (int i = 0; i < refs.getResolvedConceptReferenceCount(); i++) {
+                ResolvedConceptReference ref = refs.getResolvedConceptReference(i);
+
+                String code = ref.getConceptCode();
+                Concept ce = ref.getReferencedEntry();
+
+// This didn't help. ref.getCodingSchemeName() is "Thesaurus", not "NCI Thesaurus", or "NCI_Thesaurus"
+// ce.setEntityCodeNamespace(ref.getCodingSchemeName());
+
+                // Note: Preferred descriptions carry more weight,
+                // but we process all terms to allow the score to improve
+                // based on any contained presentation.
+                Presentation[] allTermsForConcept = ce.getPresentation();
+                for (Presentation p : allTermsForConcept) {
+                    float score = score(p.getValue().getContent(), compareWords);
+
+                    // Check for a previous match on this code for a different presentation.
+                    // If already present, keep the highest score.
+                    if (score > 0.) {
+						if (scoredResult.containsKey(code)) {
+							ScoredTerm scoredTerm = (ScoredTerm) scoredResult.get(code);
+							if (scoredTerm.score > score)
+								continue;
+						}
+						scoredResult.put(code, new ScoredTerm(ref, score));
+				    }
+                }
+            }
+        }
+        // Return an iterator that will sort the scored result.
+        return new ScoredIterator(scoredResult.values(), maxToReturn);
+    }
+*/
+    protected ResolvedConceptReferencesIterator sortByScore(String searchTerm, ResolvedConceptReferencesIterator toSort,
+                                                            int maxToReturn, String algorithm) throws LBException {
+        // Determine the set of individual words to compare against.
+        List<String> compareWords = toScoreWords(searchTerm);
+        List<String> compareCodes = new ArrayList<String>();
+		for (int k=0; k<compareWords.size(); k++) {
+			String word = (String) compareWords.get(k);
+			compareCodes.add(word);
+		}
+        String target = "";
+		if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
+			compareCodes = new ArrayList<String>();
+			for (int k=0; k<compareWords.size(); k++) {
+				String word = (String) compareWords.get(k);
+				String doubleMetaphonecode = doubleMetaphoneEncode(word);
+				compareCodes.add(doubleMetaphonecode);
+				//System.out.println("*** DoubleMetaphoneLuceneQuery word " + word + " code: " + doubleMetaphone.encode(word));
+				target = target + doubleMetaphonecode;
+				if (k < compareWords.size()-1) target = target + " ";
+			}
+		}
+        // Create a bucket to store results.
+        Map<String, ScoredTerm> scoredResult = new TreeMap<String, ScoredTerm>();
+        // Score all items ...
+
+        int knt = 0, nloops = 0;
+        long msTotal = System.currentTimeMillis(), msTotal_toSortNext = 0, msTotal_sorted = 0;
+        while (toSort.hasNext()) {
+            ++nloops;
+            // Working in chunks of 100.
+            long ms = System.currentTimeMillis(), delay = 0;
+            ResolvedConceptReferenceList refs = toSort.next(500); // slow why???
+            ////Debug.println("Run time (ms): toSort.next() method call took " + (delay = System.currentTimeMillis() - ms) + " millisec.");
+            //DBG.debugDetails("" + nloops + ") toSort.next(500): " + Utils.timeToString(delay) + " [ResolvedConceptReferencesIterator.next]");
+            msTotal_toSortNext += delay;
+
+            ms = System.currentTimeMillis();
+
+            for (int i = 0; i < refs.getResolvedConceptReferenceCount(); i++) {
+                ResolvedConceptReference ref = refs.getResolvedConceptReference(i);
+
+                String code = ref.getConceptCode();
+                Concept ce = ref.getReferencedEntry();
+                ce.setEntityCodeNamespace(ref.getCodingSchemeName());
+
+                // Note: Preferred descriptions carry more weight,
+                // but we process all terms to allow the score to improve
+                // based on any contained presentation.
+                Presentation[] allTermsForConcept = ce.getPresentation();
+                for (Presentation p : allTermsForConcept) {
+					float score = (float) 0.0;
+					/*
+					if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") != 0) {
+                        score = score(p.getValue().getContent(), compareWords);
+					} else {
+						score = score(p.getValue().getContent(), compareWords, compareCodes, target, true);
+					}
+					*/
+					if (algorithm.compareTo("contains") == 0 || algorithm.compareTo("RegExp") == 0) {
+                        score = score_contains(p.getValue().getContent(), searchTerm);
+                        //score = score(p.getValue().getContent(), compareWords);
+					} else if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0){
+						score = score(p.getValue().getContent(), compareWords, compareCodes, target, true);
+					} else {
+                        score = score(p.getValue().getContent(), compareWords);
+					}
+
+					if (score > 0.) {
+						// Check for a previous match on this code for a different presentation.
+						// If already present, keep the highest score.
+						if (scoredResult.containsKey(code)) {
+							ScoredTerm scoredTerm = (ScoredTerm) scoredResult.get(code);
+							if (scoredTerm.score > score)
+								continue;
+						}
+						scoredResult.put(code, new ScoredTerm(ref, score));
+				    }
+                }
+            }
+            int num_concepts = refs.getResolvedConceptReferenceCount();
+
+            knt = knt + num_concepts;
+            //if (knt > 1000) break;
+            ////Debug.println("" + knt + " completed.  Run time (ms): Assigning scores to " + num_concepts + " concepts took " + (delay = System.currentTimeMillis() - ms) + " millisec.");
+            //DBG.debugDetails("" + nloops + ") Sorted [" + knt + " concepts]: " + Utils.timeToString(delay));
+            msTotal_sorted += delay;
+        }
+        //if (//DBG.isPerformanceTesting()) {
+            //long duration = System.currentTimeMillis() - msTotal;
+            //long avgDuration = duration/nloops;
+            //DBG.debugDetails("* Summary of toSort/Sorted calls:");
+            //DBG.debugDetails(duration, "Run Time", "sortByScore");
+            //DBG.debugDetails("Iterations", nloops);
+            //DBG.debugDetails(avgDuration, "Average", "sortByScore");
+            //DBG.debugDetails(msTotal_toSortNext, "Total toSort.next time", "sortByScore");
+            //DBG.debugDetails(msTotal_sorted, "Total sorted time", "sortByScore");
+        //}
+        // Return an iterator that will sort the scored result.
+        return new ScoredIterator(scoredResult.values(), maxToReturn);
+    }
+
+/*
+    protected ResolvedConceptReferencesIterator sortByScore(String searchTerm, ResolvedConceptReferencesIterator toSort, int maxToReturn, boolean descriptionOnly) throws LBException {
+        if (!descriptionOnly) return sortByScore(searchTerm, toSort, maxToReturn);
+        // Determine the set of individual words to compare against.
+        List<String> compareWords = toScoreWords(searchTerm);
+
+        // Create a bucket to store results.
+        Map<String, ScoredTerm> scoredResult = new TreeMap<String, ScoredTerm>();
+
+        // Score all items ...
+        while (toSort.hasNext()) {
+            // Working in chunks of 100.
+            ResolvedConceptReferenceList refs = toSort.next(100);
+            for (int i = 0; i < refs.getResolvedConceptReferenceCount(); i++) {
+                ResolvedConceptReference ref = refs.getResolvedConceptReference(i);
+                String code = ref.getConceptCode();
+                String name = ref.getEntityDescription().getContent();
+                float score = score(name, compareWords);
+                if (score > 0.) {
+                	scoredResult.put(code, new ScoredTerm(ref, score));
+			    }
+            }
+        }
+        // Return an iterator that will sort the scored result.
+        return new ScoredIterator(scoredResult.values(), maxToReturn);
+    }
+*/
+
+    protected ResolvedConceptReferencesIterator sortByScore(String searchTerm, ResolvedConceptReferencesIterator toSort, int maxToReturn,
+                                                            boolean descriptionOnly, String algorithm) throws LBException {
+
+        if (!descriptionOnly) {
+			return sortByScore(searchTerm, toSort, maxToReturn);
+		}
+        // Determine the set of individual words to compare against.
+
+        List<String> compareWords = toScoreWords(searchTerm);
+        List<String> compareCodes = new ArrayList<String>(compareWords.size());
+        String target = "";
+        if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
+			for (int k=0; k<compareWords.size(); k++) {
+				String word = (String) compareWords.get(k);
+				String doubleMetaphonecode = doubleMetaphoneEncode(word);
+				compareCodes.set(k, doubleMetaphonecode);
+				target = target + doubleMetaphonecode;
+				if (k < compareWords.size()-1) target = target + " ";
+			}
+		}
+
+        // Create a bucket to store results.
+        Map<String, ScoredTerm> scoredResult = new TreeMap<String, ScoredTerm>();
+
+        // Score all items ...
+        while (toSort.hasNext()) {
+            // Working in chunks of 100.
+            long ms = System.currentTimeMillis();
+
+            ResolvedConceptReferenceList refs = toSort.next(500); // slow why???
+            //System.out.println("Run time (ms): toSort.next() took " + (System.currentTimeMillis() - ms) + " millisec.");
+
+            ms = System.currentTimeMillis();
+            for (int i = 0; i < refs.getResolvedConceptReferenceCount(); i++) {
+                ResolvedConceptReference ref = refs.getResolvedConceptReference(i);
+                String code = ref.getConceptCode();
+                String name = ref.getEntityDescription().getContent();
+                float score = (float) 0.0;//score(name, compareWords, true, i);
+                /*
+				if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
+					score = score(name, compareWords, compareCodes, target, true);
+				} else {
+					score = score(name, compareWords);
+				}
+				*/
+
+				if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
+					score = score(name, compareWords, compareCodes, target, true);
+				} else if (algorithm.compareTo("contains") == 0 || algorithm.compareTo("RegExp") == 0) {
+					score = score_contains(name, searchTerm);
+				} else {
+					score = score(name, compareWords);
+				}
+
+				if (score > 0.) {
+                	scoredResult.put(code, new ScoredTerm(ref, score));
+			    }
+            }
+            //System.out.println("Run time (ms): assigning scores took " + (System.currentTimeMillis() - ms) + " millisec.");
+        }
+        // Return an iterator that will sort the scored result.
+        return new ScoredIterator(scoredResult.values(), maxToReturn);
+    }
+
+
+
 	/**
 	 * Returns a score providing a relative comparison of the given
 	 * text against a set of keywords.
@@ -1376,6 +1959,43 @@ public class SearchUtils {
 		//* (isPreferred ? 2 : 1);
 	}
 
+    /* scoring method for DoubleMetaphoneLuceneQuery */
+    protected float score(String text, List<String> keywords, List<String> keyword_codes, String target, boolean fuzzy_match) {
+        List<String> wordsToCompare = toScoreWords(text);
+        float totalWords = wordsToCompare.size();
+        float matchScore = 0;
+        float position = 0;
+        String s = "";
+        int k = 0;
+        for (Iterator<String> words = wordsToCompare.listIterator(); words.hasNext(); position++) {
+            String word = words.next();
+            if (keywords.contains(word)) {
+                //matchScore += ((position / 10) + 1);
+                //matchScore = matchScore * 2;
+                matchScore = matchScore + (float) 10. * ((position / 10) + 1);
+                word = doubleMetaphoneEncode(word);
+
+			} else if (fuzzy_match) {
+				word = doubleMetaphoneEncode(word);
+				if (keyword_codes.contains(word)) {
+					matchScore += ((position / 10) + 1);
+				}
+			}
+			s = s + word;
+			if (k < wordsToCompare.size()-1) s = s + " ";
+			k++;
+        }
+
+        if (s.indexOf(target) == -1) {
+			return (float) 0.0;
+		}
+        float score = Math.max(0, 100 + (matchScore / totalWords * 100) - (totalWords * 2));
+        return score;
+            //Math.max(0, 100 + (matchScore / totalWords * 100) - (totalWords * 2))
+                //* (isPreferred ? 2 : 1);
+    }
+
+
 	/**
 	 * Return words from the given string to be used in scoring
 	 * algorithms, in order of occurrence and ignoring duplicates,
@@ -1412,53 +2032,6 @@ public class SearchUtils {
 		return s;
 	}
 
-/*
-	public static Vector resolveIterator(
-			ResolvedConceptReferencesIterator iterator, int maxToReturn,
-			String code, boolean sortLight) {
-		Vector v = new Vector();
-		if (iterator == null) {
-			System.out.println("No match.");
-			return v;
-		}
-		try {
-			int iteration = 0;
-
-			while (iterator.hasNext()) {
-				iteration++;
-				iterator = iterator.scroll(maxToReturn);
-				ResolvedConceptReferenceList rcrl = iterator.getNext();
-				ResolvedConceptReference[] rcra = rcrl
-						.getResolvedConceptReference();
-				for (int i = 0; i < rcra.length; i++) {
-					ResolvedConceptReference rcr = rcra[i];
-					if (sortLight) {
-						org.LexGrid.concepts.Concept ce = new org.LexGrid.concepts.Concept();
-						ce.setId(rcr.getConceptCode());
-						ce.setEntityDescription(rcr.getEntityDescription());
-						if (code == null) {
-							v.add(ce);
-						} else {
-							if (ce.getId().compareTo(code) != 0)
-								v.add(ce);
-						}
-					} else {
-						Concept ce = rcr.getReferencedEntry();
-						if (code == null)
-							v.add(ce);
-						else if (ce.getId().compareTo(code) != 0)
-							v.add(ce);
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return v;
-	}
-*/
-
-
     public static Vector resolveIterator(ResolvedConceptReferencesIterator iterator, int maxToReturn, String code, boolean sortLight)
     {
         Vector v = new Vector();
@@ -1485,7 +2058,7 @@ public class SearchUtils {
 							if (rcr != null) {
 								if (sortLight) {
 									org.LexGrid.concepts.Concept ce = new org.LexGrid.concepts.Concept();
-									ce.setId(rcr.getConceptCode());
+									ce.setEntityCode(rcr.getConceptCode());
 									ce.setEntityDescription(rcr.getEntityDescription());
 									if (code == null)
 									{
@@ -1493,7 +2066,7 @@ public class SearchUtils {
 									}
 									else
 									{
-										if (ce.getId().compareTo(code) != 0) v.add(ce);
+										if (ce.getEntityCode().compareTo(code) != 0) v.add(ce);
 									}
 								} else {
 									Concept ce = rcr.getReferencedEntry();
@@ -1501,7 +2074,7 @@ public class SearchUtils {
 										System.out.println("rcr.getReferencedEntry() returns null???");
 									} else {
 										if (code == null) v.add(ce);
-										else if (ce.getId().compareTo(code) != 0) v.add(ce);
+										else if (ce.getEntityCode().compareTo(code) != 0) v.add(ce);
 									}
 								}
 						    }
@@ -1515,7 +2088,462 @@ public class SearchUtils {
         return v;
     }
 
+///////////////////////////////////////////////////////////////////
+    public HashMap getNamespaceId2CodingSchemeFormalNameMapping()
+	{
+		HashMap hmap = new HashMap();
+        LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+		if (lbSvc == null)
+		{
+			System.out.println("setCodingSchemeMap..??????????????" );
+			return null;
+		}
+        try {
+            CodingSchemeRenderingList csrl = null;
+            try {
+				csrl = lbSvc.getSupportedCodingSchemes();
+			} catch (LBInvocationException ex) {
+				ex.printStackTrace();
+				System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
+				return null;
+			}
 
+			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+			for (int i=0; i<csrs.length; i++)
+			{
+				CodingSchemeRendering csr = csrs[i];
+            	Boolean isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
+				//System.out.println("\nActive? " + isActive);
+
+				if (isActive != null && isActive.equals(Boolean.TRUE))
+				{
+					CodingSchemeSummary css = csr.getCodingSchemeSummary();
+					String formalname = css.getFormalName();
+
+					 System.out.println("\tformalname: " + formalname);
+					 EntityDescription ed = css.getCodingSchemeDescription();
+					 System.out.println("\tcodingSchemeDescription: " + ed.getContent());
+					 java.lang.String uri = css.getCodingSchemeURI();
+					 System.out.println("\tURI: " + uri);
+					 java.lang.String localName = css.getLocalName();
+					 System.out.println("\tlocalName: " + localName);
+					 java.lang.String version = css.getRepresentsVersion();
+					 System.out.println("\tversion: " + version + "\n");
+					 CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+					 CodingScheme cs = lbSvc.resolveCodingScheme(formalname, versionOrTag);
+					 SupportedNamespace[] namespaces = cs.getMappings().getSupportedNamespace();
+					 for (int j=0; j<namespaces.length; j++) {
+                         SupportedNamespace ns =  namespaces[j];
+                         java.lang.String ns_name = ns.getEquivalentCodingScheme();
+                         java.lang.String ns_id = ns.getContent() ;
+                         System.out.println("\tns_name: " + ns_name + " ns_id:" + ns_id);
+                         if (ns_id != null && ns_id.compareTo("") != 0) {
+							 hmap.put(ns_id, formalname);
+						 }
+					 }
+			    }
+			}
+	    } catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return hmap;
+	}
+
+	public Vector searchByCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
+		LexBIGService lbs = RemoteServerUtil.createLexBIGService();
+		Vector v = new Vector();
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) versionOrTag.setVersion(version);
+		CodedNodeSet cns = null;
+		try {
+			cns = lbs.getNodeSet(scheme, versionOrTag, null);
+			if (source != null) cns = restrictToSource(cns, source);
+			CodedNodeSet.PropertyType[] propertyTypes = null;
+			LocalNameList sourceList = null;
+			LocalNameList contextList = null;
+			NameAndValueList qualifierList = null;
+			cns = cns.restrictToMatchingProperties(ConvenienceMethods.createLocalNameList(new String[]{"conceptCode"}),
+					  propertyTypes, sourceList, contextList,
+					  qualifierList,matchText, matchAlgorithm, null);
+
+			ResolvedConceptReference[] list = null;
+			try {
+				list = cns.resolveToList(null, null, null, 500).getResolvedConceptReference();
+
+				for(ResolvedConceptReference ref : list) {
+					v.add(ref.getReferencedEntry());
+				}
+			} catch (Exception ex) {
+				System.out.println("WARNING: searchByCode throws exception.");
+			}
+		} catch (Exception ex) {
+			System.out.println("WARNING: searchByCode throws exception.");
+		}
+        return v;
+	}
+
+    private CodedNodeSet union(Vector<CodedNodeSet> cns_vec) {
+		if (cns_vec == null) return null;
+		if (cns_vec.size() == 0) return null;
+		CodedNodeSet cns = cns_vec.elementAt(0);
+
+		if (cns_vec.size() == 1) return cns;
+		for (int i=1; i<cns_vec.size(); i++) {
+			CodedNodeSet next_cns = cns_vec.elementAt(i);
+			try {
+				cns = cns.union(next_cns);
+			} catch (Exception ex) {
+				System.out.println("WARNING: cns.union throws exception.");
+			}
+		}
+		return cns;
+	}
+
+/*
+    public Vector<org.LexGrid.concepts.Concept> searchByName(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm, SortOption sortOption, int maxToReturn) {
+		String matchText0 = matchText;
+		String matchAlgorithm0 = matchAlgorithm;
+		matchText0 = matchText0.trim();
+
+System.out.println("matchAlgorithm: " + matchAlgorithm);
+System.out.println("matchText0: " + matchText0);
+
+		boolean preprocess = true;
+        if (matchText == null || matchText.length() == 0)
+        {
+			return new Vector();
+		}
+
+        matchText = matchText.trim();
+        if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
+		{
+            String delim = ".*";
+            if (containsSpecialChars(matchText)) {
+				matchText = delim + matchText + delim;
+				matchAlgorithm = "RegExp";
+		    } else if (matchText.indexOf(" ") != -1) {
+				// multiple tokens case:
+				matchText = preprocessContains(matchText);
+				matchAlgorithm = "RegExp";
+			} else if (matchText.indexOf(" ") == -1) {
+				// single token case:
+				matchText = delim + matchText + delim;
+				matchAlgorithm = "RegExp";
+			}
+		}
+
+		LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+		Vector cns_vec = new Vector();
+        for (int i=0; i<schemes.size(); i++) {
+			CodedNodeSet cns = null;
+			ResolvedConceptReferencesIterator iterator = null;
+
+			String scheme = (String) schemes.elementAt(i);
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			String version = (String) versions.elementAt(i);
+			if (version != null) versionOrTag.setVersion(version);
+
+System.out.println("scheme: " + scheme);
+System.out.println("version: " + version);
+
+			try {
+				if (lbSvc == null)
+				{
+					System.out.println("lbSvc = null");
+					return null;
+				}
+
+				cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+
+				if (cns != null)
+				{
+					try {
+						//cns = cns.restrictToMatchingDesignations(matchText, SearchDesignationOption.ALL, matchAlgorithm, null);
+						cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
+						cns = restrictToSource(cns, source);
+					} catch (Exception ex) {
+						//return null;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				//return null;
+			}
+			if (cns != null) {
+System.out.println("cns_vec.add(cns): " + scheme);
+
+				cns_vec.add(cns);
+			}
+		}
+
+		// find the union of all CNSs
+
+        ResolvedConceptReferencesIterator iterator = null;
+        CodedNodeSet cns = union(cns_vec);
+        if (cns == null) {
+System.out.println("union returns null??? " );
+
+		} else {
+System.out.println("union returns NOT NULL " );
+
+			LocalNameList restrictToProperties = new LocalNameList();
+			SortOptionList sortCriteria = null;
+				//Constructors.createSortOptionList(new String[]{"matchToQuery"});
+
+
+			try {
+				// resolve nothing unless sort_by_pt_only is set to false
+				boolean resolveConcepts = false;
+				if (sortOption.isApplySortScore() && !sortOption.isSortByPtOnly()) resolveConcepts = true;
+
+				System.out.println("resolveConcepts? " + resolveConcepts);
+
+				try {
+					long ms = System.currentTimeMillis(), delay = 0;
+					iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+					////Debug.println("cns.resolve delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms) + " -- matchAlgorithm " + matchAlgorithm);
+					//DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
+
+				}  catch (Exception e) {
+					System.out.println("ERROR: cns.resolve throws exceptions.");
+				}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return null;
+			}
+
+            if (iterator == null) {
+				System.out.println("cns.resolve returns null???");
+			} else {
+				System.out.println("cns.resolve returns OK");
+			}
+
+			System.out.println("sortOption: " + sortOption);
+			System.out.println("apply_sort_score? " + sortOption.isApplySortScore());
+
+			if (sortOption.isApplySortScore())
+			{
+				long ms = System.currentTimeMillis();
+				try {
+					if (sortOption.isSortByPtOnly()) {
+						iterator = sortByScore(matchText0, iterator, maxToReturn, true, matchAlgorithm0);
+					} else {
+						iterator = sortByScore(matchText0, iterator, maxToReturn, matchAlgorithm0);
+					}
+
+				} catch (Exception ex) {
+
+				}
+				////Debug.println("sortByScore delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
+			}
+
+	    }
+
+        Vector v = null;
+        if (iterator != null) {
+			//testing KLO
+			//v = resolveIterator( iterator, maxToReturn, null, sort_by_pt_only);
+			long ms = System.currentTimeMillis(), delay = 0;
+			v = resolveIterator( iterator, maxToReturn, null, sortOption.isSortByPtOnly());
+			////Debug.println("resolveIterator delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms));
+			//DBG.debugDetails(delay, "resolveIterator", "searchByName");
+        }
+
+        if (v == null || v.size() == 0) {
+			System.out.println("** No match -- trying matching by code " );
+
+			v = new Vector();
+			for (int j=0; j<schemes.size(); j++) {
+				String scheme = (String) schemes.elementAt(j);
+				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+				String version = (String) versions.elementAt(j);
+				if (version != null) versionOrTag.setVersion(version);
+
+				Vector w = searchByCode(scheme, version, matchText0, source, "LuceneQuery");
+				if (w.size() > 0) {
+					for (int k=0; k<w.size(); k++) {
+						Concept con = (Concept) w.elementAt(k);
+						v.add(con);
+					}
+				}
+				if (v.size() > 0) return v;
+				boolean searchInactive = true;
+				// to be modified -- case insensitive source code match. Is this feasible???
+				//Vector u = new SearchUtils().findConceptWithSourceCodeMatching(scheme, version,
+				Vector u = findConceptWithSourceCodeMatching(scheme, version,
+													  source, matchText0, maxToReturn, searchInactive);
+				if (u != null) {
+					for (int k=0; k<w.size(); k++) {
+						Concept con = (Concept) u.elementAt(k);
+						v.add(con);
+					}
+				}
+				if (v.size() > 0) return v;
+		    }
+	    }
+
+		if(!sortOption.isApplySortScore())
+		{
+			v = SortUtils.quickSort(v);
+		}
+        return v;
+    }
+*/
+   public Vector findConceptWithSourceCodeMatching(String scheme, String version,
+												   String sourceAbbr, String code,
+												   int maxToReturn, boolean searchInactive)
+   {
+	    if (sourceAbbr == null || code == null) return new Vector();
+
+		LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		versionOrTag.setVersion(version);
+
+		if (lbSvc == null)
+		{
+			System.out.println("lbSvc = null");
+			return null;
+		}
+
+	    LocalNameList contextList = null;
+        NameAndValueList qualifierList = null;
+
+ 		Vector<String> v = null;
+
+		if (code != null && code.compareTo("") != 0)
+		{
+			qualifierList = new NameAndValueList();
+			NameAndValue nv = new NameAndValue();
+			nv.setName("source-code");
+			nv.setContent(code);
+			qualifierList.addNameAndValue(nv);
+		}
+
+        LocalNameList propertyLnL = null;
+     // sourceLnL
+        Vector<String> w2 = new Vector<String>();
+        w2.add(sourceAbbr);
+        LocalNameList sourceLnL = vector2LocalNameList(w2);
+        if (sourceAbbr.compareTo("*") == 0 || sourceAbbr.compareToIgnoreCase("ALL") == 0)
+        {
+			sourceLnL = null;
+		}
+
+        ResolvedConceptReferencesIterator matchIterator = null;
+		SortOptionList sortCriteria = null;//Constructors.createSortOptionList(new String[]{"matchToQuery", "code"});
+		try {
+			CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, null);
+			if (cns == null)
+			{
+				System.out.println("lbSvc.getCodingSchemeConceptsd returns null");
+				return null;
+			}
+			CodedNodeSet.PropertyType[] types = new CodedNodeSet.PropertyType[] {CodedNodeSet.PropertyType.PRESENTATION};
+			cns = cns.restrictToProperties(propertyLnL, types, sourceLnL, contextList, qualifierList);
+
+            if (cns != null) {
+				boolean activeOnly = !searchInactive;
+				cns = restrictToActiveStatus(cns, activeOnly);
+
+				try {
+					matchIterator = cns.resolve(sortCriteria, null,null);//ConvenienceMethods.createLocalNameList(getPropertyForCodingScheme(cs)),null);
+				} catch (Exception ex) {
+
+				}
+				if (matchIterator != null) {
+					v = resolveIterator(	matchIterator, maxToReturn);
+					return v;
+				}
+		    }
+
+		} catch (Exception e) {
+			 //getLogger().error("ERROR: Exception in findConceptWithSourceCodeMatching.");
+			 return null;
+		}
+		return null;
+    }
+
+   private CodedNodeSet restrictToActiveStatus(CodedNodeSet cns, boolean activeOnly)
+   {
+		 if (cns == null) return null;
+		 if (!activeOnly) return cns; // no restriction, do nothing
+		 try {
+		 	 cns = cns.restrictToStatus(CodedNodeSet.ActiveOption.ACTIVE_ONLY, null);
+		 	 return cns;
+		 } catch (Exception e) {
+			 e.printStackTrace();
+			 return null;
+		 }
+   }
+
+
+    public static CodedNodeSet restrictToSource(CodedNodeSet cns, String source) {
+		if (cns == null) return cns;
+		if (source == null || source.compareTo("*") == 0 || source.compareTo("") == 0 || source.compareTo("ALL") == 0) return cns;
+
+		LocalNameList contextList = null;
+		LocalNameList sourceLnL = null;
+		NameAndValueList qualifierList = null;
+
+		Vector<String> w2 = new Vector<String>();
+		w2.add(source);
+		sourceLnL = vector2LocalNameList(w2);
+		LocalNameList propertyLnL = null;
+		CodedNodeSet.PropertyType[] types = new CodedNodeSet.PropertyType[] {CodedNodeSet.PropertyType.PRESENTATION};
+		try {
+			cns = cns.restrictToProperties(propertyLnL, types, sourceLnL, contextList, qualifierList);
+		} catch (Exception ex) {
+			System.out.println("restrictToSource throws exceptions.");
+			return null;
+		}
+		return cns;
+	}
+
+	private static final boolean isInteger(final String s)
+	{
+		for (int x = 0; x < s.length(); x++) {
+			final char c = s.charAt(x);
+			if (x == 0 && (c == '-')) continue;  // negative
+			if ((c >= '0') && (c <= '9')) continue;  // 0 - 9
+			return false; // invalid
+		}
+		return true; // valid
+	}
+
+	private static final boolean containsDigit(final String s)
+	{
+		for (int x = 0; x < s.length(); x++) {
+			final char c = s.charAt(x);
+			if (x == 0 && (c == '-')) continue;  // negative
+			if ((c >= '0') && (c <= '9')) return true;
+		}
+		return false; // does not contain digit
+	}
+
+    protected String doubleMetaphoneEncode(String word) {
+		if (word == null || word.length() == 0) return word;
+		//if (isInteger(word)) return word;
+		if (containsDigit(word)) return word;
+
+		return doubleMetaphone.encode(word);
+	}
+
+    protected float score(String text, List<String> keywords) {
+        List<String> wordsToCompare = toScoreWords(text);
+        float totalWords = wordsToCompare.size();
+        float matchScore = 0;
+        float position = 0;
+        for (Iterator<String> words = wordsToCompare.listIterator(); words.hasNext(); position++) {
+            String word = words.next();
+            if (keywords.contains(word))
+                matchScore += ((position / 10) + 1);
+        }
+        return Math.max(0, 100 + (matchScore / totalWords * 100) - (totalWords * 2));
+            //Math.max(0, 100 + (matchScore / totalWords * 100) - (totalWords * 2))
+                //* (isPreferred ? 2 : 1);
+    }
 
 	public static void main(String[] args) {
 		String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
@@ -1525,7 +2553,7 @@ public class SearchUtils {
 		}
 
 		SearchUtils test = new SearchUtils(url);
-		test.testSearchByName();
+		//test.testSearchByName();
 	}
 
 }
