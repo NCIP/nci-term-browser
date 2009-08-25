@@ -1,13 +1,24 @@
 package gov.nih.nci.evs.browser.utils;
 
-import gov.nih.nci.system.applicationservice.EVSApplicationService;
+//v5.0
+import gov.nih.nci.system.applicationservice.ApplicationException;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
+import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSApplicationService;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDataService;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSService;
+import org.LexGrid.codingSchemes.CodingScheme;
+
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 import java.util.Hashtable;
 import java.util.Properties;
 
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
+
 /**
   * <!-- LICENSE_TEXT_START -->
 * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -41,19 +52,20 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
  */
 
 public class RemoteServerUtil {
-
+    private static boolean debug = false;
     private static String _serviceInfo = "EvsServiceInfo";
     private Properties systemProperties = null;
+    private static String serviceURL = null;
 
     public RemoteServerUtil() {
         // Do nothing
     }
 
-
     public static LexBIGService createLexBIGService()
     {
         // default URL (to be read from a property file)
-        String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
+        //String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
+        String url = "http://lexevsapi-qa.nci.nih.gov/lexevsapi50";
 
         NCItBrowserProperties properties = null;
         try {
@@ -77,21 +89,21 @@ public class RemoteServerUtil {
             {
                 String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
                 System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
-                if (NCItBrowserProperties.debugOn) {
+
+                if (debug) {
                     System.out.println(Utils.SEPARATOR);
                     System.out.println("LexBIGService(local): new LexBIGServiceImpl();");
-                    System.out.println("NCIT: LG_CONFIG_FILE: " + System.getProperty(NCItBrowserProperties.LG_CONFIG_FILE));
+                    System.out.println("NCIM: LG_CONFIG_FILE: " + System.getProperty(NCItBrowserProperties.LG_CONFIG_FILE));
                 }
                 LexBIGService lbSvc = new LexBIGServiceImpl();
                 return lbSvc;
             }
-            if (NCItBrowserProperties.debugOn) {
+            if (debug) {
                 System.out.println(Utils.SEPARATOR);
                 System.out.println("LexBIGService(remote): " + serviceUrl);
             }
-            EVSApplicationService appService = (EVSApplicationService) ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, _serviceInfo);
-            return (LexBIGService) appService;
-
+            LexEVSApplicationService lexevsService = (LexEVSApplicationService)ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
+            return (LexBIGService) lexevsService;
         }
         catch (Exception e)
         {
@@ -100,4 +112,7 @@ public class RemoteServerUtil {
         return null;
     }
 
+    public static String getServiceURL() {
+        return serviceURL;
+    }
 }

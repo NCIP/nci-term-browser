@@ -6,6 +6,7 @@
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -72,7 +73,6 @@
     }
 
     function buildTree(ontology_node_id, ontology_display_name) {
-
       var handleBuildTreeSuccess = function(o) {
         var respTxt = o.responseText;
         var respObj = eval('(' + respTxt + ')');
@@ -115,7 +115,7 @@
         var ontology_source = null;//document.pg_form.ontology_source.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=build_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
 
-      }
+      } 
     }
 
     function resetTree(ontology_node_id, ontology_display_name) {
@@ -171,12 +171,18 @@
       //setNodeDetails(ontology_node_id, ontology_display_name);
       //buildGraph(ontology_node_id, ontology_display_name, graph_type);
 
-      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=' + ontology_node_id,top.opener);
+      //var ontology_display_name = document.pg_form.ontology_display_name.value;
+      var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
+
+      //load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=' + ontology_node_id,top.opener);
+      
+      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&code=' + ontology_node_id,top.opener);
 
     }
 
     function onClickViewEntireOntology(ontology_display_name) {
-      var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";//document.pg_form.ontology_display_name.value;
+      //var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";//document.pg_form.ontology_display_name.value;
+      var ontology_display_name = document.pg_form.ontology_display_name.value;
       tree = new YAHOO.widget.TreeView("treecontainer");
       tree.draw();
       resetRootDesc();
@@ -187,15 +193,18 @@
 
       tree = new YAHOO.widget.TreeView("treecontainer");
       var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
-      var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";
+      //var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";
+      //var ontology_display_name = document.pg_form.ontology_display_name.value;
+      
+      var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
 
       if (ontology_node_id == null || ontology_node_id == "null")
       {
-        buildTree(ontology_node_id, ontology_display_name);
+          buildTree(ontology_node_id, ontology_display_name);
       }
       else
       {
-                          searchTree(ontology_node_id, ontology_display_name);
+          searchTree(ontology_node_id, ontology_display_name);
       }
     }
 
@@ -378,6 +387,8 @@
 </head>
 <body>
   <f:view>
+  
+ 
     <div id="popupContainer">
       <!-- nci popup banner -->
       <div class="ncipopupbanner">
@@ -396,12 +407,35 @@
           <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" alt="Close Window" />&nbsp;CLOSE WINDOW</a></div></td>
         </tr>
         </table>
+
+<%
+String hierarchy_dictionary = request.getParameter("dictionary");
+String hierarchy_schema = request.getParameter("schema");
+if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
+String hierarchy_version = request.getParameter("version");
+
+System.out.println("*** hierarchy.jsp dictionary: " + hierarchy_dictionary);
+System.out.println("*** hierarchy.jsp schema: " + hierarchy_schema);
+System.out.println("*** hierarchy.jsp version: " + hierarchy_version);
+
+if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {  
+%>
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
+<%
+} else {
+%>
+    <div class="banner">
+        &nbsp;&nbsp;<%=hierarchy_dictionary%>
+    </div>
+<%
+}
+%>
+        
         <div id="popupContentArea">
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
               <td class="pageTitle" align="left">
-                NCI Thesaurus Hierarchy
+                <%=hierarchy_schema%> Hierarchy
               </td>
               <td class="pageTitle" align="right">
                 <font size="1" color="red" align="right">
@@ -422,15 +456,33 @@
             <div id="bd"></div>
           </div>
           <div id="treecontainer"></div>
+          
           <form id="pg_form">
             <%
               String ontology_node_id = HTTPUtils.cleanXSS((String)request.getParameter("code"));
+              
+              //String ontology_display_name = hierarchy_dictionary;
+	      //String schema = hierarchy_schema;
+	      //String version = hierarchy_version;
+
+String schema = request.getParameter("schema");
+String version = request.getParameter("version");	      
+String ontology_display_name = request.getParameter("schema");
+if (ontology_display_name == null) {
+    ontology_display_name = request.getParameter("dictionary");
+}
+
+
+
+              //String ontology_display_name = HTTPUtils.cleanXSS((String)request.getParameter("dictionary"));
+              //String schema = HTTPUtils.cleanXSS((String)request.getParameter("schema"));
+              //String version = HTTPUtils.cleanXSS((String)request.getParameter("version"));
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
-            <%
-              String ontology_display_name = HTTPUtils.cleanXSS((String)request.getParameter("dictionary"));
-            %>
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
+            <input type="hidden" id="schema" name="schema" value="<%=schema%>" />
+            <input type="hidden" id="version" name="version" value="<%=version%>" />
+            
           </form>
           <!-- End of Tree control content -->
         </div>

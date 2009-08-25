@@ -3,42 +3,25 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 
 <%
-  String ncim_url = new DataUtils().getNCImURL();
+
+  String ncim_url_link = new DataUtils().getNCImURL();
   String vocablary_version = DataUtils.getVersion();
   if (vocablary_version == null) vocablary_version = "";
 %>
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
-    <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version %></div></td>
+    <td><div class="texttitle-blue-rightJust">Version: <%= voc_version %></div></td>
   </tr></table>
   <hr/>
   <table border="0">
     <tr>
       <td class="textbody">
-        NCI Thesaurus (NCIt) provides reference terminology for many NCI and
-        other systems. It covers vocabulary for clinical care, translational
-        and basic research, and public information and administrative activities.
+
+<%=voc_description%>
+
         <br><br>
-        <b>NCIt features:</b>
-        <ul>
-          <li>Stable, unique codes for biomedical concepts;
-          <li>Preferred terms, synonyms, definitions, research codes,
-            external source codes, and other information;
-          <li>Links to
-            <a href="<%=ncim_url%>" target="_blank"
-              alt="NCI Metathesaurus">NCI Metathesaurus</a>
-            and other information sources;
-          <li>Over 200,000 cross-links between concepts, providing formal
-            logic-based definition of many concepts;
-          <li>Extensive content integrated from NCI and other partners, much
-            available as separate NCIt
-            <a href="<%= request.getContextPath() %>/pages/subset.jsf">subsets</a>
-          <li>Updated frequently by a team of subject matter experts.
-        </ul>
-        NCIt is a widely recognized standard for biomedical coding and reference,
-        used by a broad variety of public and private partners both nationally
-        and internationally.
+
       </td>
       <td valign="top">
         <table border="0">
@@ -60,14 +43,14 @@
           <tr valign="top">
             <td width="10px"></td>
             <td>
-              <a href="<%=ncim_url%>" target="_blank" alt="NCIm">
+              <a href="<%=ncim_url_link%>" target="_blank" alt="NCIm">
                 <img src="<%=basePath%>/images/NCImTile.gif"
                   width="77" height="38px" alt="NCIm" border="0"/>
               </a>
             </td>
             <td width="3px"></td>
             <td class="textbody" valign="top">
-              <a href="<%=ncim_url%>" target="_blank" alt="NCIm">
+              <a href="<%=ncim_url_link%>" target="_blank" alt="NCIm">
                 NCI Metathesaurus</a>:
               Comprehensive database of 4,600,000 terms from 70 terminologies.
             </td>

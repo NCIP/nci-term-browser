@@ -258,4 +258,34 @@
 
     </ConfigurableItems>
 
+    <MetadataElements>
+        <MetadataElement>
+                 <name>description</name>
+        </MetadataElement>
+        <MetadataElement>
+                 <name>homepage</name>
+        </MetadataElement>         
+        <MetadataElement>
+                 <name>display_label</name>
+        </MetadataElement>
+        <MetadataElement>
+                 <name>version</name>
+        </MetadataElement> 
+        <MetadataElement>
+                 <name>version_releaseDate</name>
+        </MetadataElement>        
+        <MetadataElement>
+                 <name>download_format</name>
+        </MetadataElement>
+        <MetadataElement>
+                 <name>download_url</name>
+        </MetadataElement>
+        <MetadataElement>
+                 <name>documentation</name>
+        </MetadataElement>        
+        <MetadataElement>
+                 <name>contact</name>
+        </MetadataElement> 
+   </MetadataElements>     
+
 </root>

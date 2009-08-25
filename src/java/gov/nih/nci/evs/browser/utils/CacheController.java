@@ -45,7 +45,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 
-import gov.nih.nci.evs.browser.utils.TreeUtils.TreeItem;
+//import gov.nih.nci.evs.browser.utils.TreeItem;
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 
@@ -228,7 +228,16 @@ public class CacheController
         {
 			System.out.println("Not in cache -- calling getHierarchyRoots " );
             try {
+
+System.out.println("(*) getRootConcepts scheme " + scheme);
+System.out.println("(*) getRootConcepts version " + version);
+
 				list = new DataUtils().getHierarchyRoots(scheme, version, null);
+
+
+System.out.println("(*) getRootConcepts list " + list.size());
+
+
 				nodeArray = list2JSONArray(list);
 
 				if (fromCache)
@@ -260,14 +269,22 @@ public class CacheController
 					  String name = "";
 					  if (obj instanceof ResolvedConceptReference)
 					  {
-						  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
+						  ResolvedConceptReference node = (ResolvedConceptReference) obj;
 						  code = node.getConceptCode();
 						  name = node.getEntityDescription().getContent();
+
+						  System.out.println("list2JSONArray code: " + code);
+						  System.out.println("list2JSONArray name: " + name);
+
 					  }
-					  else if (obj instanceof ResolvedConceptReference) {
-						  Concept node = (Concept) list.get(i);
-						  code = node.getId();
+					  else if (obj instanceof Concept) {
+						  Concept node = (Concept) obj;
+						  code = node.getEntityCode();
 						  name = node.getEntityDescription().getContent();
+
+						  System.out.println("list2JSONArray code: " + code);
+						  System.out.println("list2JSONArray name: " + name);
+
 					  }
 
 					  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
