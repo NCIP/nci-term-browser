@@ -947,11 +947,9 @@ String t = "";
             }
         }
 
-System.out.println("******* request.getParameterValues ontology_list");
-
         String[] ontology_list = request.getParameterValues("ontology_list");
         if (ontology_list == null) {
-			String message = "UserSessionBean multipleSearchAction: ontology_list == null???";
+			String message = "Please select at least one vocabulary.";
 			request.getSession().setAttribute("message", message);
 			return "message";
 		}
@@ -971,7 +969,7 @@ System.out.println("******* request.getParameterValues ontology_list");
 		String version = null;
 
 		//List list = ontologiesToSearchOn;
-String t = "";
+		String t = "";
 		if (ontologiesToSearchOn.size() == 0) {
 			String message = "Please select at least one vocabulary.";
 			request.getSession().setAttribute("message", message);
@@ -984,7 +982,7 @@ String t = "";
 				System.out.println(key);
 
 				if (key != null) {
-// to be modified
+
 					scheme = DataUtils.key2CodingSchemeName(key);
 					version = DataUtils.key2CodingSchemeVersion(key);
 
@@ -992,8 +990,7 @@ String t = "";
 						schemes.add(scheme);
 						// to be modified (handling of versions)
 						versions.add(version);
-		System.out.println("multipleSearchAction: " + scheme + " (" + version + ")");
-		t = t + scheme + " (" + version + ")" + "\n";
+						t = t + scheme + " (" + version + ")" + "\n";
                     } else {
 						System.out.println("Unable to identify " + key);
 					}
@@ -1087,9 +1084,6 @@ String t = "";
 				ResolvedConceptReference ref = (ResolvedConceptReference) list.get(0);
 
 				String coding_scheme = ref.getCodingSchemeName();
-
-System.out.println("multipleSearchAction: coding_scheme " + coding_scheme);
-
 				request.getSession().setAttribute("singleton", "true");
 				request.getSession().setAttribute("dictionary", coding_scheme);
 
@@ -1104,26 +1098,14 @@ System.out.println("multipleSearchAction: coding_scheme " + coding_scheme);
 					// to be modified
 					c = ref.getReferencedEntry();
 					if (c == null) {
-System.out.println("multipleSearchAction: c == null) " );
-
-System.out.println("multipleSearchAction: DataUtils.getConceptByCode coding_scheme " + coding_scheme);
-System.out.println("multipleSearchAction: DataUtils.getConceptByCode code " + ref.getConceptCode());
-
 						c = DataUtils.getConceptByCode(coding_scheme, null, null, ref.getConceptCode());
-					} else {
-System.out.println("multipleSearchAction: c != null) " );
-
 					}
 				}
 
 				request.getSession().setAttribute("code", ref.getConceptCode());
 				request.getSession().setAttribute("concept", c);
 				request.getSession().setAttribute("type", "properties");
-
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
-
-System.out.println("multipleSearchAction: concept_details " + coding_scheme);
-
                 request.setAttribute("dictionary", coding_scheme);
 
 				return "concept_details2";
