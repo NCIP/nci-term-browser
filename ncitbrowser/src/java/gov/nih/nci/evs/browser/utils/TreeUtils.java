@@ -93,7 +93,7 @@ import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
  * assumed.
  */
 public class TreeUtils {
-	LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
+	static LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
 
 	public TreeUtils() {
 
@@ -192,7 +192,11 @@ public class TreeUtils {
 		printTree(ti, focusCode, 0);
 	}
 
-	public void printTree(HashMap hmap) {
+	public static void printTree(HashMap hmap) {
+		if (hmap == null) {
+			System.out.println("ERROR printTree -- hmap is null.");
+			return;
+		}
 		Object[] objs = hmap.keySet().toArray();
 		String code = (String) objs[0];
 		TreeItem ti = (TreeItem) hmap.get(code);
@@ -356,7 +360,7 @@ public class TreeUtils {
 	 */
 
 	//protected void printTree(TreeItem ti, String focusCode, int depth) {
-	public void printTree(TreeItem ti, String focusCode, int depth) {
+	public static void printTree(TreeItem ti, String focusCode, int depth) {
 		StringBuffer indent = new StringBuffer();
 		for (int i = 0; i < depth * 2; i++)
 			indent.append("| ");
@@ -386,7 +390,7 @@ public class TreeUtils {
 	/**
 	 * Returns the entity description for the given code.
 	 */
-	protected String getCodeDescription(LexBIGService lbsvc, String scheme,
+	protected static String getCodeDescription(LexBIGService lbsvc, String scheme,
 			CodingSchemeVersionOrTag csvt, String code) throws LBException {
 
 		CodedNodeSet cns = lbsvc.getCodingSchemeConcepts(scheme, csvt);
@@ -406,7 +410,7 @@ public class TreeUtils {
 	/**
 	 * Returns the entity description for the given resolved concept reference.
 	 */
-	protected String getCodeDescription(ResolvedConceptReference ref)
+	protected static String getCodeDescription(ResolvedConceptReference ref)
 			throws LBException {
 		EntityDescription desc = ref.getEntityDescription();
 		if (desc != null)
@@ -426,7 +430,7 @@ public class TreeUtils {
 	 * Returns the label to display for the given association and directional
 	 * indicator.
 	 */
-	protected String getDirectionalLabel(LexBIGServiceConvenienceMethods lbscm,
+	protected static String getDirectionalLabel(LexBIGServiceConvenienceMethods lbscm,
 			String scheme, CodingSchemeVersionOrTag csvt, Association assoc,
 			boolean navigatedFwd) throws LBException {
 
@@ -502,7 +506,7 @@ public class TreeUtils {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public HashMap getSubconcepts(String scheme, String version, String code) {
+	public static HashMap getSubconcepts(String scheme, String version, String code) {
 		String hierarchicalAssoName = "subClassOf";
 		/* NCI Thesaurus
 		Vector hierarchicalAssoName_vec = getHierarchyAssociationId(scheme,
@@ -517,7 +521,7 @@ public class TreeUtils {
 		return getAssociatedConcepts(scheme, version, code,	hierarchicalAssoName, false);
 	}
 
-	public HashMap getAssociatedConcepts(String scheme, String version, String code, String assocName, boolean direction) {
+	public static HashMap getAssociatedConcepts(String scheme, String version, String code, String assocName, boolean direction) {
 		HashMap hmap = new HashMap();
 		TreeItem ti = null;
 		long ms = System.currentTimeMillis();
@@ -555,52 +559,56 @@ public class TreeUtils {
 				ResolvedConceptReference node = nodes.next();
 				AssociationList childAssociationList = associationsNavigatedFwd ? node.getSourceOf(): node.getTargetOf();
 
+                if (childAssociationList != null) {
 				// Process each association defining children ...
-				for (Iterator<Association> pathsToChildren = childAssociationList
-						.iterateAssociation(); pathsToChildren.hasNext();) {
-					Association child = pathsToChildren.next();
-					String childNavText = getDirectionalLabel(lbscm, scheme,
-							csvt, child, associationsNavigatedFwd);
+					for (Iterator<Association> pathsToChildren = childAssociationList
+							.iterateAssociation(); pathsToChildren.hasNext();) {
+						Association child = pathsToChildren.next();
+						String childNavText = getDirectionalLabel(lbscm, scheme,
+								csvt, child, associationsNavigatedFwd);
 
-					// Each association may have multiple children ...
-					AssociatedConceptList branchItemList = child
-							.getAssociatedConcepts();
+						// Each association may have multiple children ...
+						AssociatedConceptList branchItemList = child
+								.getAssociatedConcepts();
 
-					/*
-					for (Iterator<AssociatedConcept> branchNodes = branchItemList.iterateAssociatedConcept(); branchNodes
-							.hasNext();) {
-						AssociatedConcept branchItemNode = branchNodes.next();
-					 */
+						/*
+						for (Iterator<AssociatedConcept> branchNodes = branchItemList.iterateAssociatedConcept(); branchNodes
+								.hasNext();) {
+							AssociatedConcept branchItemNode = branchNodes.next();
+						 */
 
-					List child_list = new ArrayList();
-					for (Iterator<AssociatedConcept> branchNodes = branchItemList
-							.iterateAssociatedConcept(); branchNodes.hasNext();) {
-						AssociatedConcept branchItemNode = branchNodes.next();
-						child_list.add(branchItemNode);
-					}
+						List child_list = new ArrayList();
+						for (Iterator<AssociatedConcept> branchNodes = branchItemList
+								.iterateAssociatedConcept(); branchNodes.hasNext();) {
+							AssociatedConcept branchItemNode = branchNodes.next();
+							child_list.add(branchItemNode);
+						}
 
-					SortUtils.quickSort(child_list);
+						SortUtils.quickSort(child_list);
 
-					for (int i = 0; i < child_list.size(); i++) {
-						AssociatedConcept branchItemNode = (AssociatedConcept) child_list
-								.get(i);
-						String branchItemCode = branchItemNode.getConceptCode();
-						// Add here if not in the list of excluded codes.
-						// This is also where we look to see if another level
-						// was indicated to be available.  If so, mark the
-						// entry with a '+' to indicate it can be expanded.
-						if (!codesToExclude.contains(branchItemCode)) {
-							TreeItem childItem = new TreeItem(branchItemCode,
-									getCodeDescription(branchItemNode));
-							ti.expandable = true;
-							AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode
-									.getSourceOf()
-									: branchItemNode.getTargetOf();
-							if (grandchildBranch != null)
-								childItem.expandable = true;
-							ti.addChild(childNavText, childItem);
+						for (int i = 0; i < child_list.size(); i++) {
+							AssociatedConcept branchItemNode = (AssociatedConcept) child_list
+									.get(i);
+							String branchItemCode = branchItemNode.getConceptCode();
+							// Add here if not in the list of excluded codes.
+							// This is also where we look to see if another level
+							// was indicated to be available.  If so, mark the
+							// entry with a '+' to indicate it can be expanded.
+							if (!codesToExclude.contains(branchItemCode)) {
+								TreeItem childItem = new TreeItem(branchItemCode,
+										getCodeDescription(branchItemNode));
+								ti.expandable = true;
+								AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode
+										.getSourceOf()
+										: branchItemNode.getTargetOf();
+								if (grandchildBranch != null)
+									childItem.expandable = true;
+								ti.addChild(childNavText, childItem);
+							}
 						}
 					}
+				} else {
+					System.out.println("WARNING: childAssociationList == null.");
 				}
 			}
 			hmap.put(code, ti);
@@ -1013,3 +1021,5 @@ public class TreeUtils {
 
 	}
 }
+
+
