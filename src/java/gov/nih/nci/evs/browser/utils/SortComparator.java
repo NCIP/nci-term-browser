@@ -71,14 +71,15 @@ public class SortComparator implements Comparator<Object>{
 	    {
 			org.LexGrid.concepts.Concept concept = (org.LexGrid.concepts.Concept) c;
 			if (sort_option == SORT_BY_CODE) return concept.getEntityCode();
+			if (concept.getEntityDescription() == null) return null;
 			return concept.getEntityDescription().getContent();
-
 		}
 
 	    else if (c instanceof AssociatedConcept)
 	    {
 			AssociatedConcept ac = (AssociatedConcept) c;
 			if (sort_option == SORT_BY_CODE) return ac.getConceptCode();
+			if (ac.getEntityDescription() == null) return null;
 			return ac.getEntityDescription().getContent();
 		}
 
@@ -86,6 +87,11 @@ public class SortComparator implements Comparator<Object>{
 	    {
 			ResolvedConceptReference ac = (ResolvedConceptReference) c;
 			if (sort_option == SORT_BY_CODE) return ac.getConceptCode();
+
+			if (ac.getEntityDescription() == null) {
+				System.out.println("WARNING: ac.getEntityDescription() == null");
+				return null;
+			}
 			return ac.getEntityDescription().getContent();
 		}
 
@@ -109,8 +115,13 @@ public class SortComparator implements Comparator<Object>{
 
     public int compare(Object object1, Object object2) {
 		// case insensitive sort
-        String key1 = getKey(object1, sort_option).toLowerCase();
-        String key2 = getKey(object2, sort_option).toLowerCase();
+        String key1 = getKey(object1, sort_option);
+        String key2 = getKey(object2, sort_option);
+
+        if (key1 == null || key2 == null) return 0;
+        key1 = getKey(object1, sort_option).toLowerCase();
+        key2 = getKey(object2, sort_option).toLowerCase();
+
         return key1.compareTo(key2);
     }
 }
