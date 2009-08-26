@@ -1510,8 +1510,27 @@ System.out.println("*** calling DataUtils: getOntologyList ");
         LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
                 .getGenericExtension("LexBIGServiceConvenienceMethods");
         lbscm.setLexBIGService(lbSvc);
+
         ResolvedConceptReferenceList roots = lbscm.getHierarchyRoots(scheme,
                 csvt, hierarchyID);
+
+        for (int i = 0; i < roots.getResolvedConceptReferenceCount(); i++) {
+             ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
+             if (rcr.getEntityDescription() == null) {
+				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+				 EntityDescription e = new EntityDescription();
+				 e.setContent(name);
+				 rcr.setEntityDescription(e);
+			 } else if (rcr.getEntityDescription().getContent() == null) {
+				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+				 EntityDescription e = new EntityDescription();
+				 e.setContent(name);
+				 rcr.setEntityDescription(e);
+			 }
+			 System.out.println("(*) getHierarchyRoots Root: " + rcr.getEntityDescription().getContent());
+
+		 }
+
         List list = ResolvedConceptReferenceList2List(roots);
         SortUtils.quickSort(list);
         return list;
