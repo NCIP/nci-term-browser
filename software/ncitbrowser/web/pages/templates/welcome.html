@@ -3,7 +3,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 
 <%
-  String ncim_url = new DataUtils().getNCImURL();
+  String nci_meta_url = new DataUtils().getNCImURL();
   String vocablary_version = DataUtils.getVersion();
   if (vocablary_version == null) vocablary_version = "";
 %>
@@ -26,7 +26,7 @@
           <li>Preferred terms, synonyms, definitions, research codes,
             external source codes, and other information;
           <li>Links to
-            <a href="<%=ncim_url%>" target="_blank"
+            <a href="<%=nci_meta_url%>" target="_blank"
               alt="NCI Metathesaurus">NCI Metathesaurus</a>
             and other information sources;
           <li>Over 200,000 cross-links between concepts, providing formal
@@ -60,14 +60,14 @@
           <tr valign="top">
             <td width="10px"></td>
             <td>
-              <a href="<%=ncim_url%>" target="_blank" alt="NCIm">
+              <a href="<%=nci_meta_url%>" target="_blank" alt="NCIm">
                 <img src="<%=basePath%>/images/NCImTile.gif"
                   width="77" height="38px" alt="NCIm" border="0"/>
               </a>
             </td>
             <td width="3px"></td>
             <td class="textbody" valign="top">
-              <a href="<%=ncim_url%>" target="_blank" alt="NCIm">
+              <a href="<%=nci_meta_url%>" target="_blank" alt="NCIm">
                 NCI Metathesaurus</a>:
               Comprehensive database of 4,600,000 terms from 70 terminologies.
             </td>
@@ -75,15 +75,15 @@
           <tr valign="top">
             <td width="10px"></td>
             <td>
-              <a href="http://bioportal.nci.nih.gov" target="_blank" alt="Bio Portal">
+              <a href="<%= request.getContextPath() %>/start.jsf" target="_blank" alt="NCI Term Browser">
                 <img src="<%=basePath%>/images/EVSBioPortalTile.gif"
                   width="77" height="38px" alt="Bio Portal" border="0"/>
               </a>
             </td>
             <td width="3px"></td>
             <td class="textbody" valign="top">
-              <a href="http://bioportal.nci.nih.gov" target="_blank" alt="NCI Bio Portal">
-                NCI BioPortal</a>:
+              <a href="<%= request.getContextPath() %>/start.jsf" target="_blank" alt="NCI Term Browser">
+                NCI Term Browser</a>:
               View NCI and other terminologies in an integrated ontology environment.
             </td>
           </tr>
