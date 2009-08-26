@@ -55,29 +55,51 @@ for (int i=0; i<metadataElementList.size(); i++) {
     
         <%
             String dictionary = (String) request.getParameter("dictionary");
-            
-
             String scheme = (String) request.getParameter("scheme");
+            if (scheme == null) {
+                scheme = (String) request.getAttribute("scheme");
+            }
             String version = (String) request.getParameter("version");
+            if (version == null) {
+                version = (String) request.getAttribute("version");
+            }
+            
             
             if (dictionary != null && scheme == null) {
                 scheme = dictionary;
-                dictionary = dictionary + " (version" + version + ")";
+                if (version != null) {
+                    dictionary = dictionary + " (version" + version + ")";
+                    version = version.replaceAll("%20", " ");
+                }
             }
-            
-            dictionary = dictionary.replaceAll("%20", " ");
-            scheme = scheme.replaceAll("%20", " ");
+ 
+System.out.println("** scheme: " + scheme);
+System.out.println("** version: " + version);
+System.out.println("** dictionary: " + dictionary);
 
-            
-            version = version.replaceAll("%20", " ");
+
+ 
+            if (dictionary != null) dictionary = dictionary.replaceAll("%20", " ");
+            if (scheme != null) scheme = scheme.replaceAll("%20", " ");
 
 menubar_scheme = scheme;
 menubar_version = version;
 menubar_scheme0 = menubar_scheme;
 
-            request.setAttribute("scheme", scheme);
-            request.setAttribute("version", version);
-            request.setAttribute("dictionary", dictionary);
+
+
+            if (scheme != null) {
+                scheme = scheme.replaceAll("%20", " ");
+                request.setAttribute("scheme", scheme);
+            }
+            if (version != null) {
+                version = version.replaceAll("%20", " ");
+                request.setAttribute("version", version);
+            }
+            if (dictionary != null) {
+                dictionary = dictionary.replaceAll("%20", " ");
+                request.setAttribute("dictionary", dictionary);
+            }
             
         %>
         
@@ -99,15 +121,15 @@ menubar_scheme0 = menubar_scheme;
 <%		
 v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
 Vector u1 = MetadataUtils.getMetadataValues(v, "description");
-if (u1.size() > 0) {
+if (u1 != null && u1.size() > 0) {
 	voc_description = (String) u1.elementAt(0);
 }
 Vector u2 = MetadataUtils.getMetadataValues(v, "version");
-if (u2.size() > 0) {
+if (u2 != null && u2.size() > 0) {
 	voc_version = (String) u2.elementAt(0);
 }
 Vector u3 = MetadataUtils.getMetadataValues(v, "download_url");
-if (u3.size() > 0) {
+if (u3 != null && u3.size() > 0) {
 	download_site = (String) u3.elementAt(0);
 }
 
@@ -122,8 +144,16 @@ menubar_version = menubar_version.replaceAll(" ", "%20");
 %>
 
 <div class="global-nav">
+<%
+if (menubar_version == null) {
+%>
+  <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
+<%
+} else {
+%>
   <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
-<%  
+<%
+}
   if (download_site != null) {
 %>  
   | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
@@ -133,7 +163,7 @@ menubar_version = menubar_version.replaceAll(" ", "%20");
   }
 %> 
   
-  | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?scheme=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+  | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
     View Hierarchy
   </a>
   
