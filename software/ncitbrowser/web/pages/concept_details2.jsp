@@ -54,13 +54,11 @@
             
          %>      
 
+         
 <!-- Thesaurus, banner search area -->
 <div class="bannerarea">
 
 <%
-
-System.out.println("**** concept_details2 dictionary " + dictionary);
-
 if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {  
 %>
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
@@ -74,7 +72,6 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 }
 %>
 
-    
     <div class="search-globalnav">
         <!-- Search box -->
         <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
@@ -93,7 +90,7 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 <%@ include file="/pages/templates/quickLink.xhtml" %>
 <!-- end Quick links bar -->
     
-        
+
         <!-- Page content -->
         <div class="pagecontent">
           <%
@@ -113,9 +110,6 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
               type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             }
             
-            
- System.out.println("concept details page: " +  dictionary);
- 
             
             if (dictionary == null) {
                 dictionary = Constants.CODING_SCHEME_NAME;
@@ -148,8 +142,6 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 		   //name = "The server encountered an internal error that prevented it from fulfilling this request.";
 		   name = "ERROR: Invalid code - " + code + ".";
 		}
-
-
         String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
         if (c != null) {
         request.getSession().setAttribute("dictionary", dictionary);
