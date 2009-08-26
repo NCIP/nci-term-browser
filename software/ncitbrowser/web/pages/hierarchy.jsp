@@ -293,7 +293,8 @@
         failure:responseFailure
       };
 
-      var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";
+      var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
+      //var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";
       var cObj = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name,callback);
     }
 
