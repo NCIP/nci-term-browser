@@ -123,6 +123,9 @@ v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
 Vector u1 = MetadataUtils.getMetadataValues(v, "description");
 if (u1 != null && u1.size() > 0) {
 	voc_description = (String) u1.elementAt(0);
+	if (voc_description == null || voc_description.compareTo("") == 0 || voc_description.compareTo("null") == 0) {
+	    voc_description = "";
+	}
 }
 Vector u2 = MetadataUtils.getMetadataValues(v, "version");
 if (u2 != null && u2.size() > 0) {
