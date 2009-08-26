@@ -252,6 +252,16 @@ public class MetadataUtils {
 
     public static Vector getMetadataNameValuePairs(String codingSchemeName, String version, String urn) {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+		if (version == null) {
+			try {
+				CodingScheme cs = lbSvc.resolveCodingScheme(codingSchemeName, null);
+				version = cs.getRepresentsVersion();
+			} catch (Exception ex) {
+
+			}
+		}
+
 		MetadataPropertyList mdpl = getMetadataPropertyList(lbSvc, codingSchemeName, version, urn);
 		return getMetadataNameValuePairs(mdpl);
 
