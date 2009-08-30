@@ -256,6 +256,16 @@
                  <value>@term.suggestion.application.url@</value>
         </ConfigurableItem>
 
+        <ConfigurableItem>
+                 <key>MEDDRA_SECURITY_TOKEN</key>
+                 <value>@meddra_security_token@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>SNOMEDCT_SECURITY_TOKEN</key>
+                 <value>@snomedct_security_token@</value>
+        </ConfigurableItem>
+        
     </ConfigurableItems>
 
     <MetadataElements>
