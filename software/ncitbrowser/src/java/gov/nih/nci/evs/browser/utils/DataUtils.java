@@ -1791,6 +1791,22 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 		return SortUtils.quickSort(v);
 	}
 */
+
+    public static CodingScheme resolveCodingScheme(LexBIGService lbSvc, String formalname, CodingSchemeVersionOrTag versionOrTag) {
+		try {
+			CodingScheme cs = lbSvc.resolveCodingScheme(formalname, versionOrTag);
+
+			return cs;
+		} catch (Exception ex) {
+			System.out.println("(*) Unable to resolveCodingScheme " +  formalname);
+			System.out.println("(*) \tMay require security token. " +  formalname);
+	    }
+        return null;
+	}
+
+
+
+
     public static HashMap getNamespaceId2CodingSchemeFormalNameMapping()
 	{
 		if (namespace2CodingScheme != null) {
@@ -1804,21 +1820,28 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 			System.out.println("setCodingSchemeMap..??????????????" );
 			return null;
 		}
-        try {
-            CodingSchemeRenderingList csrl = null;
-            try {
-				csrl = lbSvc.getSupportedCodingSchemes();
-			} catch (LBInvocationException ex) {
-				ex.printStackTrace();
-				System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
-				return null;
-			}
 
-			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-			for (int i=0; i<csrs.length; i++)
-			{
-				CodingSchemeRendering csr = csrs[i];
-            	Boolean isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
+		CodingSchemeRenderingList csrl = null;
+		CodingSchemeRendering[] csrs = null;
+
+		try {
+			csrl = lbSvc.getSupportedCodingSchemes();
+			csrs = csrl.getCodingSchemeRendering();
+		} catch (LBInvocationException ex) {
+			System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
+			return null;
+		}
+
+		for (int i=0; i<csrs.length; i++)
+		{
+			CodingSchemeRendering csr = csrs[i];
+			if (csr != null && csr.getRenderingDetail() != null) {
+				Boolean isActive = null;
+				try {
+					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
+				} catch (Exception e2) {
+
+				}
 				//System.out.println("\nActive? " + isActive);
 
 				if (isActive != null && isActive.equals(Boolean.TRUE))
@@ -1826,33 +1849,38 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 					CodingSchemeSummary css = csr.getCodingSchemeSummary();
 					String formalname = css.getFormalName();
 
-					 System.out.println("\tformalname: " + formalname);
-					 EntityDescription ed = css.getCodingSchemeDescription();
-					 //System.out.println("\tcodingSchemeDescription: " + ed.getContent());
-					 java.lang.String uri = css.getCodingSchemeURI();
-					 //System.out.println("\tURI: " + uri);
-					 java.lang.String localName = css.getLocalName();
-					 //System.out.println("\tlocalName: " + localName);
 					 java.lang.String version = css.getRepresentsVersion();
-					 //System.out.println("\tversion: " + version + "\n");
+					 System.out.println("\tversion: " + version + "\n");
 					 CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-					 CodingScheme cs = lbSvc.resolveCodingScheme(formalname, versionOrTag);
-					 SupportedNamespace[] namespaces = cs.getMappings().getSupportedNamespace();
-					 for (int j=0; j<namespaces.length; j++) {
-                         SupportedNamespace ns =  namespaces[j];
-                         java.lang.String ns_name = ns.getEquivalentCodingScheme();
-                         java.lang.String ns_id = ns.getContent() ;
-                         //System.out.println("\tns_name: " + ns_name + " ns_id:" + ns_id);
-                         if (ns_id != null && ns_id.compareTo("") != 0) {
-							 hmap.put(ns_id, formalname);
+					 if (version != null) versionOrTag.setVersion(version);
+
+					 CodingScheme cs = null;
+					 cs = resolveCodingScheme(lbSvc, formalname, versionOrTag);
+					 if (cs != null) {
+						 Mappings mapping = cs.getMappings();
+						 if (mapping != null) {
+							 SupportedNamespace[] namespaces = mapping.getSupportedNamespace();
+							 if (namespaces != null) {
+								 for (int j=0; j<namespaces.length; j++) {
+									 SupportedNamespace ns =  namespaces[j];
+									 if (ns != null) {
+										 java.lang.String ns_name = ns.getEquivalentCodingScheme();
+										 java.lang.String ns_id = ns.getContent() ;
+										 //System.out.println("\tns_name: " + ns_name + " ns_id:" + ns_id);
+										 if (ns_id != null && ns_id.compareTo("") != 0) {
+											 hmap.put(ns_id, formalname);
+										 }
+									 }
+								 }
+							 }
 						 }
+					 } else {
+						 System.out.println("??? Unable to resolveCodingScheme " + formalname);
 					 }
-			    }
-			}
-	    } catch (Exception e) {
-			e.printStackTrace();
-			return null;
+				}
+		    }
 		}
+
 		namespace2CodingScheme = hmap;
 		return hmap;
 	}
@@ -1870,7 +1898,6 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 			System.out.println("key2CodingSchemeName key == NULL???");
 			return null;
 		}
-
 		if (csnv2codingSchemeNameMap == null) {
 			setCodingSchemeMap();
 		}
@@ -1878,11 +1905,7 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 		if (key.indexOf("%20") != -1) {
 			key.replaceAll("%20", " ");
 		}
-
-		System.out.println("key2CodingSchemeName key " + key);
 		String value = (String) csnv2codingSchemeNameMap.get(key);
-		System.out.println("key2CodingSchemeName value " + value);
-
 		if (value == null) {
 			System.out.println("key2CodingSchemeName returns " + key);
 			return key;
@@ -1892,9 +1915,9 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 
     public static String key2CodingSchemeVersion(String key) {
 		if (key == null) {
-			System.out.println("key2CodingSchemeVersion key == NULL???");
 			return null;
-		}		if (csnv2VersionMap == null) setCodingSchemeMap();
+		}
+		if (csnv2VersionMap == null) setCodingSchemeMap();
 		if (key.indexOf("%20") != -1) {
 			key.replaceAll("%20", " ");
 		}

@@ -7,6 +7,7 @@
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
@@ -36,11 +37,27 @@
       <!-- Page content -->
       <div class="pagecontent">
         <%
+        
+System.out.println("*********** multiple_search_results.jsp calling getNamespaceId2CodingSchemeFormalNameMapping ****************");  
+        
           HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
         
-System.out.println("*********** multiple_search_results.jsp getNamespaceId2CodingSchemeFormalNameMapping ****************");       
+
+if (hmap == null) {
+System.out.println("+++++++++ multiple_search_results.jsp getNamespaceId2CodingSchemeFormalNameMapping hmap == null???");  
+} else {
+System.out.println("+++++++++ multiple_search_results.jsp getNamespaceId2CodingSchemeFormalNameMapping hmap != null");  
+
+}
+
           IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
+
+if (iteratorBean == null) {
+   System.out.println("*********** multiple_search_results.jsp iteratorBean == null");
+} else {
+   System.out.println("*********** multiple_search_results.jsp iteratorBean != null");
+}
         
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
@@ -49,6 +66,13 @@ System.out.println("*********** multiple_search_results.jsp getNamespaceId2Codin
           String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
           String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
+
+System.out.println("*********** multiple_search_results.jsp matchText " + matchText);
+System.out.println("*********** multiple_search_results.jsp match_size " + match_size);
+System.out.println("*********** multiple_search_results.jsp page_string " + page_string);
+System.out.println("*********** multiple_search_results.jsp new_search " + new_search);
+System.out.println("*********** multiple_search_results.jsp page_number " + page_number);
+System.out.println("*********** multiple_search_results.jsp selectedResultsPerPage " + selectedResultsPerPage);
 
           if (page_number != null && new_search == Boolean.FALSE)
           {
@@ -66,6 +90,8 @@ System.out.println("*********** multiple_search_results.jsp getNamespaceId2Codin
           int iend = page_num * page_size;
           int istart = iend - page_size;
           int size = iteratorBean.getSize();
+
+System.out.println("*********** multiple_search_results.jsp size " + size);
           
           if (iend > size) iend = size;
           int num_pages = size / page_size;
@@ -74,6 +100,10 @@ System.out.println("*********** multiple_search_results.jsp getNamespaceId2Codin
           String iend_str = Integer.toString(iend);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
+          
+System.out.println("*********** multiple_search_results.jsp next_page_num_str " + next_page_num_str);
+          
+          
         %>
         <table width="700px">
           <tr>
@@ -107,8 +137,24 @@ System.out.println("*********** multiple_search_results.jsp getNamespaceId2Codin
                       String code = rcr.getConceptCode();
                       String name = rcr.getEntityDescription().getContent();
                     
+System.out.println("*********** multiple_search_results.jsp code " + code);
+System.out.println("*********** multiple_search_results.jsp name " + name);
+System.out.println("*********** multiple_search_results.jsp rcr.getCodingSchemeName() " + rcr.getCodingSchemeName());
+                   
+
+if (hmap == null) {
+System.out.println("+++++++++ multiple_search_results.jsp getNamespaceId2CodingSchemeFormalNameMapping hmap == null???");  
+} else {
+System.out.println("+++++++++ multiple_search_results.jsp getNamespaceId2CodingSchemeFormalNameMapping hmap != null");  
+}
+ 
+  
                       String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
-                      String vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
+                      
+ System.out.println("*********** multiple_search_results.jsp vocabulary_name " + vocabulary_name);
+                     
+                      String vocabulary_name_encoded = null;
+                      if (vocabulary_name != null) vocabulary_name.replace(" ", "%20");
                     
                       if (i % 2 == 0) {
                         %>
