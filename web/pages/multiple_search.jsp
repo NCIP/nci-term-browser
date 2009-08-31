@@ -184,9 +184,9 @@ if (version != null) http_version = version.replaceAll(" ", "%20");
 				     <tr>
 				        <td>
 				        
-<input type="button" name="SelectAll" value="Select All" onClick="checkAll(document.searchTerm.ontology_list)">
+<input type="image" src="<%= request.getContextPath() %>/images/selectAll.gif" name="selectAll" alt="selectAll" onClick="checkAll(document.searchTerm.ontology_list)" />
 &nbsp;&nbsp;
-<input type="Reset" name="Reset" value="Reset">
+<input type="image" src="<%= request.getContextPath() %>/images/reset.gif" name="reset" alt="reset" onClick="uncheckAll(document.searchTerm.ontology_list)" />
 
                                         </td>
                                      </tr>   

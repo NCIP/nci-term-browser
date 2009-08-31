@@ -159,7 +159,6 @@ public class DataUtils {
 
     public static List getOntologyList() {
         if (_ontologies == null)
-System.out.println("*** calling DataUtils: getOntologyList ");
             setCodingSchemeMap();
         return _ontologies;
     }
@@ -200,11 +199,7 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 						String value = formalname + " (version: " + representsVersion + ")";
 						nv_vec.add(value);
 
-	System.out.println("csnv2codingSchemeNameMap " + value + " --> " + formalname);
-
 						csnv2codingSchemeNameMap.put(value, formalname);
-
-	System.out.println("csnv2VersionMap " + value + " --> " + representsVersion);
 
 						csnv2VersionMap.put(value, representsVersion);
 					//}
@@ -1199,8 +1194,6 @@ System.out.println("*** calling DataUtils: getOntologyList ");
                     for (int i = 0; i < associations.length; i++) {
                         Association assoc = associations[i];
                         String associationName = assoc.getAssociationName();
-                        // System.out.println("\t" +
-                        // assoc.getAssociationName());
 
                         boolean isRole = false;
                         if (list.contains(associationName)) {
@@ -1527,8 +1520,6 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 				 e.setContent(name);
 				 rcr.setEntityDescription(e);
 			 }
-			 System.out.println("(*) getHierarchyRoots Root: " + rcr.getEntityDescription().getContent());
-
 		 }
 
         List list = ResolvedConceptReferenceList2List(roots);
@@ -1658,7 +1649,7 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 
         }
 
-        System.out.println("getNCICBContactURL returns " + NCICBContactURL);
+        //System.out.println("getNCICBContactURL returns " + NCICBContactURL);
         return NCICBContactURL;
     }
 
@@ -1692,7 +1683,7 @@ System.out.println("*** calling DataUtils: getOntologyList ");
 			ex.printStackTrace();
         }
 
-        System.out.println("getNCITBuildInfo returns " + NCITBuildInfo);
+        //System.out.println("getNCITBuildInfo returns " + NCITBuildInfo);
         return NCITBuildInfo;
     }
 
