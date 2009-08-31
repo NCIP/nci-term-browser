@@ -183,10 +183,11 @@ if (version != null) http_version = version.replaceAll(" ", "%20");
 				     </tr>
 				     <tr>
 				        <td>
-				        
-<input type="image" src="<%= request.getContextPath() %>/images/selectAll.gif" name="selectAll" alt="selectAll" onClick="checkAll(document.searchTerm.ontology_list)" />
+
+
+<img src="<%= request.getContextPath() %>/images/selectAll.gif" name="selectAll" alt="selectAll" onClick="checkAll(document.searchTerm.ontology_list)"/>
 &nbsp;&nbsp;
-<input type="image" src="<%= request.getContextPath() %>/images/reset.gif" name="reset" alt="reset" onClick="uncheckAll(document.searchTerm.ontology_list)" />
+<img src="<%= request.getContextPath() %>/images/reset.gif" name="reset" alt="reset" onClick="uncheckAll(document.searchTerm.ontology_list)"/>
 
                                         </td>
                                      </tr>   
