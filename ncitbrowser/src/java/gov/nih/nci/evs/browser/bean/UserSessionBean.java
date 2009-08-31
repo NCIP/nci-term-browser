@@ -1117,14 +1117,25 @@ String t = "";
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
 // update LicenseBean -- to be implemented.
-
         String scheme = (String) request.getParameter("scheme");
         String version = (String) request.getParameter("version");
+
+		LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+
+	    if (licenseBean == null) {
+			System.out.println("*** licenseBean == null???");
+			licenseBean = new LicenseBean();
+			licenseBean.addLicenseAgreement(scheme);
+			request.getSession().setAttribute("licenseBean", licenseBean);
+
+		} else {
+			licenseBean.addLicenseAgreement(scheme);
+			request.getSession().setAttribute("licenseBean", licenseBean);
+		}
 
         request.getSession().setAttribute("scheme", scheme);
         request.getSession().setAttribute("version", version);
         return "vocabulary_home";
-
 
 	}
 
