@@ -126,9 +126,6 @@ public final class AjaxServlet extends HttpServlet {
 		// String ontology_source =
 		// request.getParameter(DataConstants.ONTOLOGY_SOURCE);
 
-System.out.println("*** AjaxServlet ontology_display_name action " + action);
-System.out.println("*** AjaxServlet ontology_display_name " + ontology_display_name);
-
 		long ms = System.currentTimeMillis();
 
 		if (action.equals("expand_tree")) {
@@ -198,10 +195,6 @@ System.out.println("*** AjaxServlet ontology_display_name " + ontology_display_n
 		else if (action.equals("build_tree")) {
 			if (ontology_display_name == null)
 				ontology_display_name = CODING_SCHEME_NAME;
-
-
-System.out.println("****************** AjaxServlet ontology_display_name " + ontology_display_name);
-
 
 			response.setContentType("text/html");
 			response.setHeader("Cache-Control", "no-cache");
