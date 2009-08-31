@@ -98,9 +98,42 @@ Please review the License/Copyright Agreement for <%=scheme%> available <a href=
 If and only if you agree to these terms/conditions, click the Accept button to proceed.   
 </p>
 <P>
-<img src="<%= request.getContextPath() %>/images/selectAll.gif" name="selectAll" alt="selectAll" onClick="checkAll(document.searchTerm.ontology_list)"/>
+<%
+
+String scheme0 = scheme;
+String version0 = version;
+
+            if (scheme != null) {
+                scheme = scheme.replaceAll(" ", "%20");
+            }
+            if (version != null) {
+                version = version.replaceAll(" ", "%20");
+            }
+            if (dictionary != null) {
+                dictionary = dictionary.replaceAll(" ", "%20");
+            }
+            
+%>
+
+
+<form>
+
+		  <h:commandButton
+		    id="accept"
+		    value="Accept"
+		    action="#{userSessionBean.acceptLicenseAgreement}"
+		    image="#{facesContext.externalContext.requestContextPath}/images/selectAll.gif"
+		    alt="Accept">
+		  </h:commandButton>
+		  
 &nbsp;&nbsp;
-<img src="<%= request.getContextPath() %>/images/reset.gif" name="reset" alt="reset" onClick="history.back()" />
+<img src="<%= request.getContextPath() %>/images/reset.gif" name="cancel" alt="reset" onClick="history.back()" />
+
+
+<input type="hidden" id="scheme" name="scheme" value="<%=scheme0%>" />
+<input type="hidden" id="version" name="version" value="<%=version0%>" />
+
+</form>
 </p>
 
 <%
