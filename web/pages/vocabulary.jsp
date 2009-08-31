@@ -93,10 +93,11 @@ System.out.println("** isLicensed: " + isLicensed);
 if (isLicensed) {
 %>
 <P>
-Please review the License/Copyright Agreement for <%=scheme%> available <a href="url">here</a>.   
+Please review the License/Copyright Agreement for <%=scheme%> available <a href="url">here</a>.  
+</p>
+<P>
 If and only if you agree to these terms/conditions, click the Accept button to proceed.   
 </p>
-
 <P>
 <img src="<%= request.getContextPath() %>/images/selectAll.gif" name="selectAll" alt="selectAll" onClick="checkAll(document.searchTerm.ontology_list)"/>
 &nbsp;&nbsp;
