@@ -1790,7 +1790,7 @@ public class DataUtils {
 			return cs;
 		} catch (Exception ex) {
 			System.out.println("(*) Unable to resolveCodingScheme " +  formalname);
-			System.out.println("(*) \tMay require security token. " +  formalname);
+			System.out.println("(*) \tMay require security token. " );
 	    }
         return null;
 	}

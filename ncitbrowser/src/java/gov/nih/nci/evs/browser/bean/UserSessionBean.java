@@ -94,7 +94,7 @@ public class UserSessionBean extends Object {
 			return;
 		String newValue = (String) event.getNewValue();
 
-		System.out.println("quickLinkChanged; " + newValue);
+		//System.out.println("quickLinkChanged; " + newValue);
 		setSelectedQuickLink(newValue);
 
 		HttpServletResponse response = (HttpServletResponse) FacesContext
@@ -363,9 +363,6 @@ public class UserSessionBean extends Object {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
         String matchText = (String) request.getParameter("matchText");
-
-System.out.println("******************* searchAction matchText " + matchText);
-
         if (matchText != null) matchText = matchText.trim();
         //[#19965] Error message is not displayed when Search Criteria is not proivded
         if (matchText == null || matchText.length() == 0)
@@ -415,8 +412,6 @@ if (scheme == null) {
 if (scheme == null) {
 	scheme = (String) request.getParameter("dictionary");
 }
-
-System.out.println("******************* searchAction  scheme " + scheme);
 
         if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
         //String scheme = Constants.CODING_SCHEME_NAME;
@@ -718,8 +713,6 @@ System.out.println("******************* searchAction  scheme " + scheme);
 		}
 		String newValue = (String) event.getNewValue();
 
-		System.out.println("ontologySelectionChanged; " + newValue);
-
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
 
@@ -960,7 +953,7 @@ String t = "";
         List list = new ArrayList<String>();
         ontologiesToSearchOn = new ArrayList<String>();
         for (int i = 0; i < ontology_list.length; ++i) {
-			System.out.println("( " + i + ")" + ontology_list[i]);
+			//System.out.println("( " + i + ")" + ontology_list[i]);
 			list.add(ontology_list[i]);
 			ontologiesToSearchOn.add(ontology_list[i]);
 		}
@@ -979,7 +972,7 @@ String t = "";
 
 			for (int k=0; k<ontologiesToSearchOn.size(); k++) {
 				String key = (String) list.get(k);
-				System.out.println(key);
+				//System.out.println(key);
 
 				if (key != null) {
 
@@ -1065,7 +1058,7 @@ String t = "";
 
 			int size = iteratorBean.getSize();
 
-			System.out.println("multipleSearchAction: size " + size);
+			//System.out.println("multipleSearchAction: size " + size);
 
 			if (size > 1) {
 
@@ -1089,7 +1082,7 @@ String t = "";
 
 				Concept c = null;
 				if (ref == null) {
-					System.out.println("************ ref = NULL???");
+					//System.out.println("************ ref = NULL???");
 					String msg = "Error: Null ResolvedConceptReference encountered.";
 					request.getSession().setAttribute("message", msg);
 					return "message";

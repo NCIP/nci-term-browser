@@ -41,7 +41,6 @@ Vector metadata_names = new Vector();
 List metadataElementList = NCItBrowserProperties.getMetadataElementList();
 for (int i=0; i<metadataElementList.size(); i++) {
     MetadataElement ele = (MetadataElement) metadataElementList.get(i);
-    System.out.println("Metadata: " + ele.getName());
     metadata_names.add(ele.getName());
 }
 
