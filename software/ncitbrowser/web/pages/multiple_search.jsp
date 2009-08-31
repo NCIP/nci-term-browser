@@ -165,11 +165,21 @@ if (label != null) http_label = label.replaceAll(" ", "%20");
 if (scheme != null) http_scheme = scheme.replaceAll(" ", "%20");
 if (version != null) http_version = version.replaceAll(" ", "%20");
 
-					    %>	   
+					    %>	
+					    
+					    <!--
 					            <li>
 					            <input type="checkbox" name="ontology_list" value="<%=label%>" />
 					    	    <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=http_label%>&scheme=<%=http_scheme%>&version=<%=http_version%>" alt="<%=label%>"><%=label%></a>
 				                    </li>
+				                    
+				             -->       
+				                    
+					            <li>
+					            <input type="checkbox" name="ontology_list" value="<%=label%>" />
+					    	    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_label%>&scheme=<%=http_scheme%>&version=<%=http_version%>" alt="<%=label%>"><%=label%></a>
+				                    </li>
+				                    
 				            <%		
 						}
 					    %>	
