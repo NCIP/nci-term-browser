@@ -1113,6 +1113,23 @@ String t = "";
         return "message";
     }
 
+    public String acceptLicenseAgreement() {
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+
+// update LicenseBean -- to be implemented.
+
+        String scheme = (String) request.getParameter("scheme");
+        String version = (String) request.getParameter("version");
+
+        request.getSession().setAttribute("scheme", scheme);
+        request.getSession().setAttribute("version", version);
+        return "vocabulary_home";
+
+
+	}
+
+
+
 
 
 }

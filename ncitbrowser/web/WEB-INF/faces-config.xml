@@ -15,6 +15,25 @@
     </locale-config>
   </application>
 
+
+  <navigation-rule>
+    <from-view-id>/pages/vocabulary.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.acceptLicenseAgreement}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>vocabulary_home</description>
+       <from-action>#{userSessionBean.acceptLicenseAgreement}</from-action>
+       <from-outcome>vocabulary_home</from-outcome>
+       <to-view-id>/pages/vocabulary_home.jsp</to-view-id>
+    </navigation-case>
+    
+   </navigation-rule> 
+    
   <navigation-rule>
     <from-view-id>/pages/home.jsp</from-view-id>
     <navigation-case>
