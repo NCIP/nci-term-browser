@@ -228,15 +228,7 @@ public class CacheController
         {
 			System.out.println("Not in cache -- calling getHierarchyRoots " );
             try {
-
-System.out.println("(*) getRootConcepts scheme " + scheme);
-System.out.println("(*) getRootConcepts version " + version);
-
 				list = new DataUtils().getHierarchyRoots(scheme, version, null);
-
-
-System.out.println("(*) getRootConcepts list " + list.size());
-
 
 				nodeArray = list2JSONArray(list);
 
@@ -273,17 +265,11 @@ System.out.println("(*) getRootConcepts list " + list.size());
 						  code = node.getConceptCode();
 						  name = node.getEntityDescription().getContent();
 
-						  System.out.println("list2JSONArray code: " + code);
-						  System.out.println("list2JSONArray name: " + name);
-
 					  }
 					  else if (obj instanceof Concept) {
 						  Concept node = (Concept) obj;
 						  code = node.getEntityCode();
 						  name = node.getEntityDescription().getContent();
-
-						  System.out.println("list2JSONArray code: " + code);
-						  System.out.println("list2JSONArray name: " + name);
 
 					  }
 
@@ -389,8 +375,6 @@ System.out.println("(*) getRootConcepts list " + list.size());
 			rootsArray = getRootConcepts(ontology_display_name, version, false);
 			try {
 				TreeUtils util = new TreeUtils();
-
-				System.out.println("CacheController TreeUtils.getTreePathData ");
 
 				HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
 				Set keyset = hmap.keySet();
