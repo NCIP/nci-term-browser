@@ -87,9 +87,17 @@ menubar_scheme0 = menubar_scheme;
 
 
 boolean isLicensed = LicenseBean.isLicensed(scheme, version);
+
+LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+if (licenseBean == null) {
+	licenseBean = new LicenseBean();
+	request.getSession().setAttribute("licenseBean", licenseBean);
+}
+boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
+
 System.out.println("** isLicensed: " + isLicensed);
 
-if (isLicensed) {
+if (isLicensed && !accepted) {
 %>
 <P>
 Please review the License/Copyright Agreement for <%=scheme%> available <a href="url">here</a>.  
