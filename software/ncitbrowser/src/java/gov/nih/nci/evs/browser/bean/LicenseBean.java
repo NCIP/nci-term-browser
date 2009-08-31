@@ -2,7 +2,7 @@ package gov.nih.nci.evs.browser.bean;
 
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.HashSet;
 
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
@@ -44,11 +44,19 @@ import gov.nih.nci.evs.browser.utils.RemoteServerUtil;
 
 public class LicenseBean extends Object {
 
-    HashMap licenseAgreementHashMap = null;
+    HashSet licenseAgreementHashSet = null;
 
     public LicenseBean() {
-        licenseAgreementHashMap = new HashMap();
+        licenseAgreementHashSet = new HashSet();
     }
+
+    public void addLicenseAgreement(String scheme) {
+		licenseAgreementHashSet.add(scheme);
+	}
+
+    public boolean licenseAgreementAccepted(String scheme) {
+		return (licenseAgreementHashSet.contains(scheme));
+	}
 
     public static boolean isLicensed(String codingSchemeName, String version) {
 	    String s = resolveCodingSchemeCopyright(codingSchemeName, version);
