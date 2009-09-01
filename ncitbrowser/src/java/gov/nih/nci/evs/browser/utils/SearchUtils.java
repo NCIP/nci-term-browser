@@ -193,7 +193,7 @@ public class SearchUtils {
 
 							String value = formalname + " (version: "
 									+ representsVersion + ")";
-							System.out.println(value);
+							//System.out.println(value);
 
 							csnv2codingSchemeNameMap.put(value, formalname);
 							csnv2VersionMap.put(value, representsVersion);
@@ -210,7 +210,7 @@ public class SearchUtils {
 
 								String value = formalname + " (version: "
 										+ representsVersion + ")";
-								System.out.println(value);
+								//System.out.println(value);
 
 								csnv2codingSchemeNameMap.put(value, formalname);
 								csnv2VersionMap.put(value, representsVersion);
@@ -229,7 +229,7 @@ public class SearchUtils {
 
 									String value = formalname + " (version: "
 											+ representsVersion + ")";
-									System.out.println(value);
+									//System.out.println(value);
 
 									csnv2codingSchemeNameMap.put(value,
 											formalname);

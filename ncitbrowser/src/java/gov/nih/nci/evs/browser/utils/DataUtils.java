@@ -800,10 +800,11 @@ public class DataUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+			System.out.println("Version corresponding to tag " + ltag
+					+ " is not found " + " in " + codingSchemeName);
+
+            //e.printStackTrace();
         }
-        System.out.println("Version corresponding to tag " + ltag
-                + " is not found " + " in " + codingSchemeName);
         return null;
     }
 
