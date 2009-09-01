@@ -75,10 +75,6 @@ for (int i=0; i<metadataElementList.size(); i++) {
                 }
             }
  
-System.out.println("** scheme: " + scheme);
-System.out.println("** version: " + version);
-System.out.println("** dictionary: " + dictionary);
- 
             if (dictionary != null) dictionary = dictionary.replaceAll("%20", " ");
             if (scheme != null) scheme = scheme.replaceAll("%20", " ");
 
@@ -96,7 +92,6 @@ if (licenseBean == null) {
 }
 boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
 
-System.out.println("** isLicensed: " + isLicensed);
 
 if (isLicensed && !accepted) {
 
