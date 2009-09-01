@@ -895,6 +895,19 @@ String t = "";
 	}
 */
 
+   private String[] getSelectedVocabularies(String ontology_list_str) {
+	   Vector v = DataUtils.parseData(ontology_list_str);
+	   String[] ontology_list = new String[v.size()];
+	   for (int i=0; i<v.size(); i++) {
+		   String s = (String) v.elementAt(i);
+		   ontology_list[i] = s;
+	   }
+	   return ontology_list;
+   }
+
+
+
+
    public String multipleSearchAction() {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
@@ -940,7 +953,30 @@ String t = "";
             }
         }
 
-        String[] ontology_list = request.getParameterValues("ontology_list");
+        String[] ontology_list = null;
+        String ontology_list_str = request.getParameter("ontology_list_str");
+
+        if (ontology_list_str != null) {
+			ontology_list = getSelectedVocabularies(ontology_list_str);
+			String scheme = (String) request.getParameter("scheme");
+			String version = (String) request.getParameter("version");
+
+			LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+
+			if (licenseBean == null) {
+				licenseBean = new LicenseBean();
+				licenseBean.addLicenseAgreement(scheme);
+				request.getSession().setAttribute("licenseBean", licenseBean);
+
+			} else {
+				licenseBean.addLicenseAgreement(scheme);
+				request.getSession().setAttribute("licenseBean", licenseBean);
+			}
+
+		} else {
+            ontology_list = request.getParameterValues("ontology_list");
+	    }
+
         if (ontology_list == null) {
 			String message = "Please select at least one vocabulary.";
 			request.getSession().setAttribute("message", message);
@@ -953,10 +989,20 @@ String t = "";
         List list = new ArrayList<String>();
         ontologiesToSearchOn = new ArrayList<String>();
         for (int i = 0; i < ontology_list.length; ++i) {
-			//System.out.println("( " + i + ")" + ontology_list[i]);
 			list.add(ontology_list[i]);
 			ontologiesToSearchOn.add(ontology_list[i]);
 		}
+
+		if (ontology_list_str == null) {
+			ontology_list_str = "";
+			for (int i = 0; i < ontology_list.length; ++i) {
+				ontology_list_str = ontology_list_str + ontology_list[i];
+				if (i < ontology_list.length-1) {
+					ontology_list_str = ontology_list_str + "|";
+				}
+			}
+		}
+
 
 		String scheme = null;
 		String version = null;
@@ -972,10 +1018,7 @@ String t = "";
 
 			for (int k=0; k<ontologiesToSearchOn.size(); k++) {
 				String key = (String) list.get(k);
-				//System.out.println(key);
-
 				if (key != null) {
-
 					scheme = DataUtils.key2CodingSchemeName(key);
 					version = DataUtils.key2CodingSchemeVersion(key);
 
@@ -984,6 +1027,24 @@ String t = "";
 						// to be modified (handling of versions)
 						versions.add(version);
 						t = t + scheme + " (" + version + ")" + "\n";
+
+						LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+						if (licenseBean == null) {
+							licenseBean = new LicenseBean();
+							request.getSession().setAttribute("licenseBean", licenseBean);
+						}
+						boolean isLicensed = LicenseBean.isLicensed(scheme, version);
+						boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
+
+                        if (isLicensed && !accepted) {
+							request.setAttribute("matchText", matchText);
+							request.setAttribute("algorithm", matchAlgorithm);
+							request.setAttribute("ontology_list_str", ontology_list_str);
+							request.setAttribute("scheme", scheme);
+							request.setAttribute("version", version);
+							return "license";
+						}
+
                     } else {
 						System.out.println("Unable to identify " + key);
 					}
@@ -1009,7 +1070,6 @@ String t = "";
 		matchText = matchText.trim();
 		request.getSession().setAttribute("matchText", matchText);
 
-		//String matchAlgorithm = (String) request.getParameter("algorithm");
         if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
             String message = "Warning: Search algorithm parameter is not set.";
             request.getSession().setAttribute("message", message);
@@ -1033,7 +1093,6 @@ String t = "";
         ResolvedConceptReferencesIterator iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
 
         request.getSession().setAttribute("vocabulary", scheme);
-        //request.getSession().setAttribute("matchtype", matchtype);
 
         request.getSession().removeAttribute("neighborhood_synonyms");
         request.getSession().removeAttribute("neighborhood_atoms");
@@ -1057,17 +1116,10 @@ String t = "";
 			}
 
 			int size = iteratorBean.getSize();
-
-			//System.out.println("multipleSearchAction: size " + size);
-
 			if (size > 1) {
-
-				//request.getSession().setAttribute("search_results", v);
-
 				String match_size = Integer.toString(size);;//Integer.toString(v.size());
 				request.getSession().setAttribute("match_size", match_size);
 				request.getSession().setAttribute("page_string", "1");
-
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
 				return "search_results";
 		    } else if (size == 1) {
@@ -1113,17 +1165,40 @@ String t = "";
         return "message";
     }
 
+/*
+    public String acceptLicenseAgreementAction() {
+	   // update license agreement
+       HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+
+       // update LicenseBean
+       String scheme = (String) request.getParameter("scheme");
+       String version = (String) request.getParameter("version");
+
+	   LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+
+	   if (licenseBean == null) {
+		   licenseBean = new LicenseBean();
+		   licenseBean.addLicenseAgreement(scheme);
+		   request.getSession().setAttribute("licenseBean", licenseBean);
+
+	   } else {
+	       licenseBean.addLicenseAgreement(scheme);
+		   request.getSession().setAttribute("licenseBean", licenseBean);
+	   }
+	   return multipleSearchAction();
+    }
+*/
+
     public String acceptLicenseAgreement() {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
-// update LicenseBean -- to be implemented.
+        // update LicenseBean
         String scheme = (String) request.getParameter("scheme");
         String version = (String) request.getParameter("version");
 
 		LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
 
 	    if (licenseBean == null) {
-			System.out.println("*** licenseBean == null???");
 			licenseBean = new LicenseBean();
 			licenseBean.addLicenseAgreement(scheme);
 			request.getSession().setAttribute("licenseBean", licenseBean);
