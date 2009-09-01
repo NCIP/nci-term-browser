@@ -14,11 +14,6 @@ if (menubar_version == null) {
 
 String menubar_scheme0 = menubar_scheme;
 
-System.out.println("(*) menuBar3 menubar_scheme: " + menubar_scheme);
-System.out.println("(*) menuBar3 menubar_version: " + menubar_version);
-System.out.println("(*) menuBar3 menubar_scheme0: " + menubar_scheme0);
-
-
 Vector u = MetadataUtils.getMetadataNameValuePairs(menubar_scheme, menubar_version, null);
 String download_site = null;
 for (int j=0; j<u.size(); j++) {
