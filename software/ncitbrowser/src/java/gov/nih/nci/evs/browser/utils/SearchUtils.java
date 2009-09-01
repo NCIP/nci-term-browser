@@ -401,10 +401,10 @@ public class SearchUtils {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("Version corresponding to tag " + ltag
+			//e.printStackTrace();
+			System.out.println("Version corresponding to tag " + ltag
 				+ " is not found " + " in " + codingSchemeName);
+		}
 		return null;
 	}
 
@@ -524,12 +524,6 @@ public class SearchUtils {
 			Vector qualifier_value_vec, java.lang.String matchText,
 			java.lang.String matchAlgorithm, java.lang.String language) {
 
-
-System.out.println("restrictToMatchingProperty codingSchemeName " + codingSchemeName);
-System.out.println("restrictToMatchingProperty matchText " + matchText);
-System.out.println("restrictToMatchingProperty matchAlgorithm " + matchAlgorithm);
-
-
 		LocalNameList propertyList = vector2LocalNameList(property_vec);
 		CodedNodeSet.PropertyType[] propertyTypes = null;
 		LocalNameList sourceList = vector2LocalNameList(source_vec);
@@ -553,11 +547,6 @@ System.out.println("restrictToMatchingProperty matchAlgorithm " + matchAlgorithm
 			java.lang.String matchText, java.lang.String matchAlgorithm,
 			java.lang.String language) {
 
-System.out.println("2 restrictToMatchingProperty codingSchemeName " + codingSchemeName);
-System.out.println("2 restrictToMatchingProperty matchText " + matchText);
-System.out.println("2 restrictToMatchingProperty matchAlgorithm " + matchAlgorithm);
-
-
 		CodedNodeSet cns = null;
 		ResolvedConceptReferencesIterator iterator = null;
 		try {
@@ -570,17 +559,10 @@ System.out.println("2 restrictToMatchingProperty matchAlgorithm " + matchAlgorit
 				return null;
 			}
 
-
-System.out.println("2 restrictToMatchingProperty getCodingSchemeConcepts " + codingSchemeName);
-
-
 			cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
 			if (cns == null) {
 				System.out.println("cns = null");
 				return null;
-			} else {
-
-System.out.println("2 restrictToMatchingProperty getCodingSchemeConcepts cns != null " + codingSchemeName);
 			}
 
 			LocalNameList contextList = null;
@@ -589,9 +571,6 @@ System.out.println("2 restrictToMatchingProperty getCodingSchemeConcepts cns != 
 						propertyTypes, sourceList, contextList, qualifierList,
 						matchText, matchAlgorithm, language);
 			} catch (Exception ex) {
-System.out.println("2 restrictToMatchingProperty restrictToMatchingProperties matchText " + matchText);
-System.out.println("2 restrictToMatchingProperty restrictToMatchingProperties matchAlgorithm " + matchAlgorithm);
-System.out.println("2 restrictToMatchingProperty restrictToMatchingProperties returns NULL??? " + codingSchemeName);
 
 				return null;
 			}
@@ -608,9 +587,6 @@ System.out.println("2 restrictToMatchingProperty restrictToMatchingProperties re
 					resolveConcepts = true;
 				try {
 
-System.out.println("2 restrictToMatchingProperty calling cns.resolve " + codingSchemeName);
-
-
 					iterator = cns.resolve(sortCriteria, null,
 							restrictToProperties, null, resolveConcepts);
 				} catch (Exception e) {
@@ -618,9 +594,6 @@ System.out.println("2 restrictToMatchingProperty calling cns.resolve " + codingS
 				}
 
 			} catch (Exception ex) {
-
-System.out.println("2 restrictToMatchingProperty exception encountered " + codingSchemeName);
-
 				//ex.printStackTrace();
 				return null;
 			}
@@ -1143,7 +1116,6 @@ System.out.println("Step 4: ");
 		{
 			matchAlgorithm = "subString";
 		}
-		System.out.println("algorithm: " + matchAlgorithm);
 
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
@@ -1193,9 +1165,7 @@ System.out.println("Step 4: ");
             try {
                try {
 					long ms = System.currentTimeMillis(), delay = 0;
-					System.out.println("*** calling cns.resolve..");
                     iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
-					System.out.println("*** exit cns.resolve..");
 					//Debug.println("cns.resolve delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms) + " -- matchAlgorithm " + matchAlgorithm);
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
@@ -1251,7 +1221,6 @@ System.out.println("Step 4: ");
 		{
 			matchAlgorithm = "subString";
 		}
-		System.out.println("algorithm: " + matchAlgorithm);
 
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
@@ -1278,9 +1247,6 @@ System.out.println("Step 4: ");
 				version = (String) versions.elementAt(i);
 				if (version != null) versionOrTag.setVersion(version);
 
-	System.out.println("scheme: " + scheme);
-	System.out.println("version: " + version);
-
 				try {
 					if (lbSvc == null)
 					{
@@ -1304,7 +1270,6 @@ System.out.println("Step 4: ");
 					//return null;
 				}
 				if (cns != null) {
-	System.out.println("cns_vec.add(cns): " + scheme);
 					cns_vec.add(cns);
 				}
 			}
@@ -1332,9 +1297,7 @@ System.out.println("Step 4: ");
             try {
                try {
 					long ms = System.currentTimeMillis(), delay = 0;
-					System.out.println("*** calling cns.resolve");
                     iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
-                    System.out.println("*** exit cns.resolve");
 					//Debug.println("cns.resolve delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms) + " -- matchAlgorithm " + matchAlgorithm);
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
