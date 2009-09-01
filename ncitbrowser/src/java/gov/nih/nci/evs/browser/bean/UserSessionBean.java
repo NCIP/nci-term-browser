@@ -653,7 +653,7 @@ if (scheme == null) {
 	public List getOntologyList() {
 		if (ontologyList == null) {
 			ontologyList = DataUtils.getOntologyList();
-			System.out.println("--- Number of ontologies: " + ontologyList.size());
+			//System.out.println("--- Number of ontologies: " + ontologyList.size());
         }
 /*
 		HttpServletRequest request = (HttpServletRequest) FacesContext
@@ -708,7 +708,7 @@ if (scheme == null) {
 	public void ontologySelectionChanged(ValueChangeEvent event) {
 
 		if (event.getNewValue() == null) {
-			System.out.println("ontologySelectionChanged; event.getNewValue() == null ");
+			//System.out.println("ontologySelectionChanged; event.getNewValue() == null ");
 			return;
 		}
 		String newValue = (String) event.getNewValue();
