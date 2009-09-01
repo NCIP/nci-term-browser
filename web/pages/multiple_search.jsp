@@ -39,9 +39,6 @@
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
-<%
-  boolean useListbox = false;
-%>
   <f:view>
     <%@ include file="/pages/templates/header.xhtml" %>
     <div class="center-page">
@@ -129,14 +126,7 @@
 				  <table class="datatable">
 				     <tr>
 
-					<td>
-						<h:selectManyListbox id="selectOntologiesListbox"
-						    valueChangeListener="#{userSessionBean.ontologiesToSearchOnChanged}" value="#{userSessionBean.ontologiesToSearchOn}"  >
-						    <f:selectItems value="#{userSessionBean.ontologyList}"/>
-						</h:selectManyListbox>
-					</td>
 					<%
-					} else {
 					    List ontology_list = DataUtils.getOntologyList();
 					    if (ontology_list == null) System.out.println("??????????? ontology_list == null");
 					    int num_vocabularies = ontology_list.size();
@@ -150,15 +140,15 @@
 						    String label = (String) item.getLabel();
 						    
 
-String scheme = DataUtils.key2CodingSchemeName(value);
-String version = DataUtils.key2CodingSchemeVersion(value);
-String http_label = null;
-String http_scheme = null;
-String http_version = null;
+							String scheme = DataUtils.key2CodingSchemeName(value);
+							String version = DataUtils.key2CodingSchemeVersion(value);
+							String http_label = null;
+							String http_scheme = null;
+							String http_version = null;
 
-if (label != null) http_label = label.replaceAll(" ", "%20");
-if (scheme != null) http_scheme = scheme.replaceAll(" ", "%20");
-if (version != null) http_version = version.replaceAll(" ", "%20");
+							if (label != null) http_label = label.replaceAll(" ", "%20");
+							if (scheme != null) http_scheme = scheme.replaceAll(" ", "%20");
+							if (version != null) http_version = version.replaceAll(" ", "%20");
 
 					    %>	
 					    
@@ -181,9 +171,6 @@ if (version != null) http_version = version.replaceAll(" ", "%20");
  					    </ol>
 					
 					</td>
-					<%
-					}
-					%>
 					
 				     </tr>
 				     <tr>
