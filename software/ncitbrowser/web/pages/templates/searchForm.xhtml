@@ -6,13 +6,7 @@
     String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
     String vocab_name = (String) request.getParameter("dictionary");
 
-
-System.out.println("========== searchForm match_text " + match_text);
-System.out.println("========== searchForm vocab_name " + vocab_name);
-
-vocab_name = DataUtils.getCodingSchemeName(vocab_name);
-
-System.out.println("==========** searchForm vocab_name " + vocab_name);
+    vocab_name = DataUtils.getCodingSchemeName(vocab_name);
 
 
     if (match_text == null) match_text = "";
