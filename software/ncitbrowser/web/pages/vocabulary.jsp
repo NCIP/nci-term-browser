@@ -7,6 +7,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.MetadataElement" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.LicenseBean" %>
 
 
 <%
@@ -98,14 +99,21 @@ boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
 System.out.println("** isLicensed: " + isLicensed);
 
 if (isLicensed && !accepted) {
+
+String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
+
 %>
 <P>
-Please review the License/Copyright Agreement for <%=scheme%> available <a href="url">here</a>.  
+Please review the following License/Copyright statement for <%=scheme%>.  
+</p>
+<P>
+<%=licenseStmt%>  
 </p>
 <P>
 If and only if you agree to these terms/conditions, click the Accept button to proceed.   
 </p>
 <P>
+
 <%
 
 String scheme0 = scheme;

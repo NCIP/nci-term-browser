@@ -179,9 +179,7 @@ public class DataUtils {
 
             CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
             if (csrl == null) {
-                System.out.println("csrl is NULL");
-			} else {
-				System.out.println("csrl is NOT NULL ");
+                System.out.println("WARNING: csrl is NULL");
 			}
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
@@ -206,7 +204,6 @@ public class DataUtils {
                  }
             }
         } catch (Exception e) {
-           //e.printStackTrace();
            System.out.println("setCodingSchemeMap exception??? ");
         }
         if (nv_vec.size() > 0) {
@@ -309,22 +306,7 @@ public class DataUtils {
         return null;
     }
 
-/*
-    public static String getCodingSchemeName(String key) {
-		if (csnv2codingSchemeNameMap == null) {
-			setCodingSchemeMap();
-		}
-		System.out.println("DataUtils getCodingSchemeName key " + key);
-		String value = (String) csnv2codingSchemeNameMap.get(key);
-		System.out.println("DataUtils getCodingSchemeName value " + value);
-        return (String) csnv2codingSchemeNameMap.get(key);
-    }
 
-    public static String getCodingSchemeVersion(String key) {
-        return (String) csnv2VersionMap.get(key);
-    }
-
-*/
     public static Vector<String> getRepresentationalFormListData(String key) {
         String codingSchemeName = (String) csnv2codingSchemeNameMap.get(key);
         if (codingSchemeName == null)
@@ -660,8 +642,7 @@ public class DataUtils {
                     associations = lbscm.getHierarchyLevelNext(scheme, csvt,
                             hierarchyID, code, false, null);
                 } catch (Exception e) {
-                    System.out
-                            .println("getSubconceptCodes - Exception lbscm.getHierarchyLevelNext  ");
+                    System.out.println("getSubconceptCodes - Exception lbscm.getHierarchyLevelNext  ");
                     return v;
                 }
 
@@ -1841,7 +1822,6 @@ public class DataUtils {
 					String formalname = css.getFormalName();
 
 					 java.lang.String version = css.getRepresentsVersion();
-					 System.out.println("\tversion: " + version + "\n");
 					 CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 					 if (version != null) versionOrTag.setVersion(version);
 
