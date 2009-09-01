@@ -128,10 +128,7 @@
 </p>				
 				  <table class="datatable">
 				     <tr>
-				        <%
-				        if (useListbox) {
-				            System.out.println("*** list box: " );
-				        %>
+
 					<td>
 						<h:selectManyListbox id="selectOntologiesListbox"
 						    valueChangeListener="#{userSessionBean.ontologiesToSearchOnChanged}" value="#{userSessionBean.ontologiesToSearchOn}"  >
@@ -140,11 +137,9 @@
 					</td>
 					<%
 					} else {
-					    System.out.println("*** check box: " );
 					    List ontology_list = DataUtils.getOntologyList();
 					    if (ontology_list == null) System.out.println("??????????? ontology_list == null");
 					    int num_vocabularies = ontology_list.size();
-					    System.out.println("*** num_vocabularies: " + num_vocabularies);
 					%>
 					<td class="textbody">
 					    <ol>
