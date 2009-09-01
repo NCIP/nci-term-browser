@@ -138,12 +138,12 @@ String version0 = version;
 		    id="accept"
 		    value="Accept"
 		    action="#{userSessionBean.acceptLicenseAgreement}"
-		    image="#{facesContext.externalContext.requestContextPath}/images/selectAll.gif"
+		    image="#{facesContext.externalContext.requestContextPath}/images/accept.gif"
 		    alt="Accept">
 		  </h:commandButton>
 		  
 &nbsp;&nbsp;
-<img src="<%= request.getContextPath() %>/images/reset.gif" name="cancel" alt="reset" onClick="history.back()" />
+<img src="<%= request.getContextPath() %>/images/cancel.gif" name="cancel" alt="reset" onClick="history.back()" />
 
 
 <input type="hidden" id="scheme" name="scheme" value="<%=scheme0%>" />
