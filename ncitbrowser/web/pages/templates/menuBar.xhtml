@@ -1,12 +1,16 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 
 <%
     String dictionaryName0 = null;
     String dictionaryName = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-    if (dictionaryName != null) {
-	    dictionaryName = dictionaryName.replaceAll(" ", "%20");
-    }
+    if (dictionaryName == null) dictionaryName = Constants.CODING_SCHEME_NAME; 
+    
     dictionaryName0 = dictionaryName;
+    dictionaryName = dictionaryName.replaceAll(" ", "%20");
+    
+System.out.println("======== menuBar " + dictionaryName);
+    
 %>
 
 <div class="global-nav">
@@ -18,7 +22,7 @@
      } else {
         String menubar_version = (String) request.getAttribute("version");
         
- System.out.println("menubar_version " + menubar_version);
+ System.out.println("======== menuBar version " + menubar_version);
  
         if (menubar_version == null) {
   %>  
@@ -36,7 +40,7 @@
     View Hierarchy
   </a>
   <%
-  if (dictionaryName0 != null && dictionaryName0.compareTo("NCI Thesaurus") == 0) {
+  if (dictionaryName0 != null && dictionaryName0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
   %>
   | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
   <%
