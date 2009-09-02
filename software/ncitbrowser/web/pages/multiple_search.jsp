@@ -181,6 +181,15 @@
 &nbsp;&nbsp;
 <img src="<%= request.getContextPath() %>/images/reset.gif" name="reset" alt="reset" onClick="uncheckAll(document.searchTerm.ontology_list)"/>
 
+&nbsp;&nbsp;
+		  <h:commandButton
+		    id="search"
+		    value="Search"
+		    action="#{userSessionBean.multipleSearchAction}"
+		    image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+		    alt="Search">
+		  </h:commandButton>
+		  
                                         </td>
                                      </tr>   
 				  </table>

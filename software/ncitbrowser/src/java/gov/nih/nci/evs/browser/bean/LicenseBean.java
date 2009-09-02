@@ -51,11 +51,14 @@ public class LicenseBean extends Object {
     }
 
     public void addLicenseAgreement(String scheme) {
+		System.out.println("LicenseBean addLicenseAgreement " +  scheme);
 		licenseAgreementHashSet.add(scheme);
 	}
 
     public boolean licenseAgreementAccepted(String scheme) {
-		return (licenseAgreementHashSet.contains(scheme));
+		boolean retval = licenseAgreementHashSet.contains(scheme);
+		System.out.println("LicenseBean licenseAgreementAccepted for " +  scheme + "??? " + retval);
+		return (retval);
 	}
 
     public static boolean isLicensed(String codingSchemeName, String version) {

@@ -910,7 +910,6 @@ String t = "";
 
    public String multipleSearchAction() {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-
         String matchText = (String) request.getParameter("matchText");
 
         if (matchText != null) matchText = matchText.trim();
@@ -956,13 +955,19 @@ String t = "";
         String[] ontology_list = null;
         String ontology_list_str = request.getParameter("ontology_list_str");
 
+		LicenseBean licenseBean = null;
+
         if (ontology_list_str != null) {
 			ontology_list = getSelectedVocabularies(ontology_list_str);
 			String scheme = (String) request.getParameter("scheme");
+			if (scheme.indexOf("%20") != -1) {
+				scheme = scheme.replaceAll("%20", " ");
+			}
 			String version = (String) request.getParameter("version");
-
-			LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
-
+			if (version.indexOf("%20") != -1) {
+				version = version.replaceAll("%20", " ");
+			}
+			licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
 			if (licenseBean == null) {
 				licenseBean = new LicenseBean();
 				licenseBean.addLicenseAgreement(scheme);
@@ -1015,27 +1020,24 @@ String t = "";
 			return "message";
 
 		} else {
+		System.out.println("ontologiesToSearchOn.size() " +  ontologiesToSearchOn.size() );
 
 			for (int k=0; k<ontologiesToSearchOn.size(); k++) {
 				String key = (String) list.get(k);
 				if (key != null) {
 					scheme = DataUtils.key2CodingSchemeName(key);
 					version = DataUtils.key2CodingSchemeVersion(key);
-
 					if (scheme != null) {
 						schemes.add(scheme);
 						// to be modified (handling of versions)
 						versions.add(version);
 						t = t + scheme + " (" + version + ")" + "\n";
-
-						LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+						boolean isLicensed = LicenseBean.isLicensed(scheme, version);
 						if (licenseBean == null) {
 							licenseBean = new LicenseBean();
 							request.getSession().setAttribute("licenseBean", licenseBean);
 						}
-						boolean isLicensed = LicenseBean.isLicensed(scheme, version);
 						boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
-
                         if (isLicensed && !accepted) {
 							request.setAttribute("matchText", matchText);
 							request.setAttribute("algorithm", matchAlgorithm);
