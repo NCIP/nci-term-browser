@@ -86,6 +86,7 @@ public class NCItBrowserProperties {
         private static String term_suggestion_application_url = null;
 
         private static String license_page_option = null;
+        private static String ncim_url = null;
 
         /**
          * Private constructor for singleton pattern.
@@ -127,6 +128,7 @@ public class NCItBrowserProperties {
                         terminology_subset_download_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
                         term_suggestion_application_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
                         license_page_option = NCItBrowserProperties.getProperty(NCItBrowserProperties.LICENSE_PAGE_OPTION);
+                        ncim_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCIM_URL);
                     }
                 }
             }
@@ -170,4 +172,7 @@ public class NCItBrowserProperties {
             return license_page_option;
         }
 
+        public static String getNCIM_URL() {
+            return ncim_url;
+        }
     }
