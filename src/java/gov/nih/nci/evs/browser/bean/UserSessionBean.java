@@ -497,8 +497,16 @@ if (scheme == null) {
 
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
 
-				if (scheme.compareTo("NCI Thesaurus") == 0) {
+
+System.out.println("******************* searchAction scheme " + scheme);
+
+
+				if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI%20Thesaurus") == 0) {
 					return "concept_details";
+
+				} else if (scheme.indexOf("NCI Thesaurus") != -1 || scheme.indexOf("NCI%20Thesaurus") != -1 ) {
+					return "concept_details";
+
 				} else {
 					return "concept_details2";
 				}
