@@ -177,7 +177,8 @@ public class SearchUtils {
 				CodingSchemeRendering csr = csrs[i];
 				Boolean isActive = csr.getRenderingDetail().getVersionStatus()
 						.equals(CodingSchemeVersionStatus.ACTIVE);
-				if (isActive != null && isActive.equals(Boolean.TRUE)) {
+				//if (isActive != null && isActive.equals(Boolean.TRUE))
+				{
 					CodingSchemeSummary css = csr.getCodingSchemeSummary();
 					String formalname = css.getFormalName();
 					String representsVersion = css.getRepresentsVersion();
@@ -424,7 +425,8 @@ public class SearchUtils {
 				CodingSchemeRendering csr = csrs[i];
 				Boolean isActive = csr.getRenderingDetail().getVersionStatus()
 						.equals(CodingSchemeVersionStatus.ACTIVE);
-				if (isActive != null && isActive.equals(Boolean.TRUE)) {
+				//if (isActive != null && isActive.equals(Boolean.TRUE))
+				{
 					CodingSchemeSummary css = csr.getCodingSchemeSummary();
 					String formalname = css.getFormalName();
 					if (formalname.compareTo(codingSchemeName) == 0) {
@@ -2078,7 +2080,7 @@ System.out.println("Step 4: ");
             	Boolean isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
 				//System.out.println("\nActive? " + isActive);
 
-				if (isActive != null && isActive.equals(Boolean.TRUE))
+				//if (isActive != null && isActive.equals(Boolean.TRUE))
 				{
 					CodingSchemeSummary css = csr.getCodingSchemeSummary();
 					String formalname = css.getFormalName();
