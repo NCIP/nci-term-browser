@@ -10,6 +10,9 @@ import org.LexGrid.codingSchemes.CodingScheme;
 import org.LexGrid.LexBIG.Exceptions.LBException;
 
 import gov.nih.nci.evs.browser.utils.RemoteServerUtil;
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -56,8 +59,11 @@ public class LicenseBean extends Object {
 	}
 
     public boolean licenseAgreementAccepted(String scheme) {
+        // option to not pop-up the license agreement page:
+		String license_page_option = NCItBrowserProperties.getLicensePageOption();
+		if (license_page_option.compareToIgnoreCase("true") != 0) return true;
+
 		boolean retval = licenseAgreementHashSet.contains(scheme);
-		System.out.println("LicenseBean licenseAgreementAccepted for " +  scheme + "??? " + retval);
 		return (retval);
 	}
 
