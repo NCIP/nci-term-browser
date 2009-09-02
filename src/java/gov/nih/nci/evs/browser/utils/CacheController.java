@@ -226,6 +226,9 @@ public class CacheController
 
 		if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
 
+System.out.println("*** CacheController scheme: " + scheme);
+
+
 		String retval = DataUtils.getCodingSchemeName(scheme);
 		if (retval != null) {
 			scheme = retval;
@@ -247,6 +250,8 @@ public class CacheController
 			System.out.println("Not in cache -- calling getHierarchyRoots " );
             try {
 				list = new DataUtils().getHierarchyRoots(scheme, version, null);
+
+System.out.println("*** CacheController returned from DataUtils().getHierarchyRoots " + scheme);
 
 				nodeArray = list2JSONArray(list);
 
