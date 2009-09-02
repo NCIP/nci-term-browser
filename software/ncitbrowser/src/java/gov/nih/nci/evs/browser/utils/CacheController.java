@@ -47,6 +47,7 @@ import net.sf.ehcache.Element;
 
 //import gov.nih.nci.evs.browser.utils.TreeItem;
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import gov.nih.nci.evs.browser.common.Constants;
 
 
 import java.util.List;
@@ -170,6 +171,14 @@ public class CacheController
 
     public JSONArray getSubconcepts(String scheme, String version, String code, boolean fromCache)
     {
+		if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
+
+		String retval = DataUtils.getCodingSchemeName(scheme);
+		if (retval != null) {
+			scheme = retval;
+			version = DataUtils.key2CodingSchemeVersion(scheme);
+		}
+
 		HashMap map = null;
 		String key = scheme + "$" + version + "$" + code;
 		JSONArray nodeArray = null;
@@ -214,6 +223,15 @@ public class CacheController
 		List list = null;//new ArrayList();
 		String key = scheme + "$" + version + "$root";
 		JSONArray nodeArray = null;
+
+		if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
+
+		String retval = DataUtils.getCodingSchemeName(scheme);
+		if (retval != null) {
+			scheme = retval;
+			version = DataUtils.key2CodingSchemeVersion(scheme);
+		}
+
 
         if (fromCache)
         {
