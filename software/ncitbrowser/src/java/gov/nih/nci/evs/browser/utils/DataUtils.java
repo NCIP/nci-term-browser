@@ -1572,11 +1572,13 @@ System.out.println("\n\tActive? " + isActive);
              ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
              if (rcr.getEntityDescription() == null) {
 				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+				 if (name == null) name = rcr.getConceptCode();//HL7
 				 EntityDescription e = new EntityDescription();
 				 e.setContent(name);
 				 rcr.setEntityDescription(e);
 			 } else if (rcr.getEntityDescription().getContent() == null) {
 				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+				 if (name == null) name = rcr.getConceptCode();//HL7
 				 EntityDescription e = new EntityDescription();
 				 e.setContent(name);
 				 rcr.setEntityDescription(e);
