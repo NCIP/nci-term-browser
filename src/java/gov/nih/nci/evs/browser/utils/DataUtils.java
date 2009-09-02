@@ -163,6 +163,83 @@ public class DataUtils {
         return _ontologies;
     }
 
+
+    private static void setCodingSchemeMap()
+	{
+        _ontologies = new ArrayList();
+        codingSchemeMap = new HashMap();
+        csnv2codingSchemeNameMap = new HashMap();
+        csnv2VersionMap = new HashMap();
+
+        Vector nv_vec = new Vector();
+boolean includeInactive = true;
+
+
+        try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+System.out.println("Calling lbSvc.getSupportedCodingSchemes() from setCodingSchemeMap..." );
+
+            CodingSchemeRenderingList csrl = null;
+            try {
+				csrl = lbSvc.getSupportedCodingSchemes();
+			} catch (LBInvocationException ex) {
+				ex.printStackTrace();
+				System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
+                return;
+			}
+
+
+			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+System.out.println("(***) csrs.length: " + csrs.length);
+			for (int i=0; i<csrs.length; i++)
+			{
+				int j = i+1;
+				CodingSchemeRendering csr = csrs[i];
+
+				CodingSchemeSummary css = csr.getCodingSchemeSummary();
+				String formalname = css.getFormalName();
+				String representsVersion = css.getRepresentsVersion();
+
+System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
+
+				Boolean isActive = null;
+				if (csr == null) {
+					System.out.println("\tcsr == null???");
+				} else if (csr.getRenderingDetail() == null) {
+					System.out.println("\tcsr.getRenderingDetail() == null");
+				} else if (csr.getRenderingDetail().getVersionStatus() == null) {
+					System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
+				} else {
+
+					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
+				}
+
+System.out.println("\n\tActive? " + isActive);
+
+				if ((includeInactive && isActive == null) || (isActive != null && isActive.equals(Boolean.TRUE))
+				     || (includeInactive && (isActive != null && isActive.equals(Boolean.FALSE))))
+				{
+						String value = formalname + " (version: " + representsVersion + ")";
+						nv_vec.add(value);
+						csnv2codingSchemeNameMap.put(value, formalname);
+						csnv2VersionMap.put(value, representsVersion);
+				}
+			}
+	    } catch (Exception e) {
+			//e.printStackTrace();
+			//return null;
+		}
+        if (nv_vec.size() > 0) {
+			nv_vec = SortUtils.quickSort(nv_vec);
+			for (int k=0; k<nv_vec.size(); k++) {
+				String value = (String) nv_vec.elementAt(k);
+				_ontologies.add(new SelectItem(value, value));
+			}
+		}
+	}
+
+	/*
     private static void setCodingSchemeMap() {
         // if (_ontologies != null) return;
         _ontologies = new ArrayList();
@@ -183,11 +260,12 @@ public class DataUtils {
 			}
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+            System.out.println("csrs.length: " + csrs.length);
             for (int i = 0; i < csrs.length; i++) {
                 CodingSchemeRendering csr = csrs[i];
                 Boolean isActive = csr.getRenderingDetail().getVersionStatus()
                         .equals(CodingSchemeVersionStatus.ACTIVE);
-                if (isActive != null && isActive.equals(Boolean.TRUE)) {
+                //if (isActive != null && isActive.equals(Boolean.TRUE)) {
                     CodingSchemeSummary css = csr.getCodingSchemeSummary();
                     String formalname = css.getFormalName();
 
@@ -201,7 +279,7 @@ public class DataUtils {
 
 						csnv2VersionMap.put(value, representsVersion);
 					//}
-                 }
+                 //}
             }
         } catch (Exception e) {
            System.out.println("setCodingSchemeMap exception??? ");
@@ -214,6 +292,7 @@ public class DataUtils {
 			}
 		}
     }
+    */
 
     public static Vector<String> getSupportedAssociationNames(String key) {
         if (csnv2codingSchemeNameMap == null) {
@@ -824,14 +903,14 @@ public class DataUtils {
                 CodingSchemeRendering csr = csrs[i];
                 Boolean isActive = csr.getRenderingDetail().getVersionStatus()
                         .equals(CodingSchemeVersionStatus.ACTIVE);
-                if (isActive != null && isActive.equals(Boolean.TRUE)) {
+                //if (isActive != null && isActive.equals(Boolean.TRUE)) {
                     CodingSchemeSummary css = csr.getCodingSchemeSummary();
                     String formalname = css.getFormalName();
                     if (formalname.compareTo(codingSchemeName) == 0) {
                         String representsVersion = css.getRepresentsVersion();
                         v.add(representsVersion);
                     }
-                }
+                //}
             }
         } catch (Exception ex) {
 
@@ -1810,14 +1889,20 @@ public class DataUtils {
 			CodingSchemeRendering csr = csrs[i];
 			if (csr != null && csr.getRenderingDetail() != null) {
 				Boolean isActive = null;
-				try {
-					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
-				} catch (Exception e2) {
+				if (csr == null) {
+					System.out.println("\tcsr == null???");
+				} else if (csr.getRenderingDetail() == null) {
+					System.out.println("\tcsr.getRenderingDetail() == null");
+				} else if (csr.getRenderingDetail().getVersionStatus() == null) {
+					System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
+				} else {
 
+					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
 				}
+
 				//System.out.println("\nActive? " + isActive);
 
-				if (isActive != null && isActive.equals(Boolean.TRUE))
+				//if (isActive != null && isActive.equals(Boolean.TRUE))
 				{
 					CodingSchemeSummary css = csr.getCodingSchemeSummary();
 					String formalname = css.getFormalName();
@@ -1871,12 +1956,19 @@ public class DataUtils {
 			return null;
 		}
 		if (csnv2codingSchemeNameMap == null) {
+			System.out.println("setCodingSchemeMap");
 			setCodingSchemeMap();
 		}
 
 		if (key.indexOf("%20") != -1) {
 			key.replaceAll("%20", " ");
 		}
+
+		if (csnv2codingSchemeNameMap == null) {
+			System.out.println("csnv2codingSchemeNameMap == NULL???");
+			return key;
+		}
+
 		String value = (String) csnv2codingSchemeNameMap.get(key);
 		if (value == null) {
 			System.out.println("key2CodingSchemeName returns " + key);
@@ -1893,6 +1985,12 @@ public class DataUtils {
 		if (key.indexOf("%20") != -1) {
 			key.replaceAll("%20", " ");
 		}
+
+		if (csnv2VersionMap == null) {
+			System.out.println("csnv2VersionMap == NULL???");
+			return key;
+		}
+
 		String value = (String) csnv2VersionMap.get(key);
 		return value;
 	}
