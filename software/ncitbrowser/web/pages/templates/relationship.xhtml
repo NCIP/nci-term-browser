@@ -5,6 +5,13 @@
     String scheme_curr = (String) request.getSession().getAttribute("dictionary");
     String version_curr = null;
     String code_curr = (String) request.getSession().getAttribute("code");
+    
+
+System.out.println("** relationship scheme_curr " + scheme_curr);
+System.out.println("** relationship version_curr " + version_curr);
+System.out.println("** relationship code_curr " + code_curr);
+
+    
     DataUtils util = new DataUtils();
     HashMap hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
     ArrayList superconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
@@ -14,7 +21,7 @@
     ArrayList concepts = null;
     String label = "";
 %>
-  <p class="textsubtitle-blue">Relationships with other NCI Thesaurus Concepts</p>
+  <p class="textsubtitle-blue">Relationships with other <%=scheme_curr%> Concepts</p>
   <p>
     <%
       label = "Parent Concepts:";
@@ -31,7 +38,7 @@
           String cCode = (String) ret_vec.elementAt(1);
     %>
           <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=cCode%>">
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=cCode%>">
             <%=cName%>
           </a>
     <%
@@ -49,7 +56,7 @@
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=cCode%>">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>
@@ -79,7 +86,7 @@
           String cCode = (String) ret_vec.elementAt(1);
     %>
           <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=cCode%>">
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=cCode%>">
             <%=cName%>
           </a>
     <%
@@ -97,7 +104,7 @@
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=cCode%>">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>
@@ -150,7 +157,7 @@
         %>
               <td><%=role_name%></td>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               </td>
@@ -198,7 +205,7 @@
         %>
               <td><%=role_name%></td>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               </td>

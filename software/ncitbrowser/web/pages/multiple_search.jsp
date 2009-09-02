@@ -138,7 +138,6 @@
 						    SelectItem item = (SelectItem) ontology_list.get(i);
 						    String value = (String) item.getValue();
 						    String label = (String) item.getLabel();
-						    
 
 							String scheme = DataUtils.key2CodingSchemeName(value);
 							String version = DataUtils.key2CodingSchemeVersion(value);
@@ -150,22 +149,29 @@
 							if (scheme != null) http_scheme = scheme.replaceAll(" ", "%20");
 							if (version != null) http_version = version.replaceAll(" ", "%20");
 
-					    %>	
-					    
-					    <!--
-					            <li>
-					            <input type="checkbox" name="ontology_list" value="<%=label%>" />
-					    	    <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=http_label%>&scheme=<%=http_scheme%>&version=<%=http_version%>" alt="<%=label%>"><%=label%></a>
-				                    </li>
-				                    
-				             -->       
-				                    
-					            <li>
-					            <input type="checkbox" name="ontology_list" value="<%=label%>" />
-					    	    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_label%>&scheme=<%=http_scheme%>&version=<%=http_version%>" alt="<%=label%>"><%=label%></a>
-				                    </li>
-				                    
-				            <%		
+                                                    if ( scheme.compareTo("NCI Thesaurus") == 0) {
+                                                    %>
+							    <li>
+							    <input type="checkbox" name="ontology_list" value="<%=label%>" />
+							    <a href="<%= request.getContextPath() %>"><%=label%></a>
+							    </li>  
+					            <%		    
+                                                    } else if ( scheme.compareTo("NCI MetaThesaurus") == 0) {
+                                                        String ncimurl = NCItBrowserProperties.getNCIM_URL();
+                                                    %>
+							    <li>
+							    <input type="checkbox" name="ontology_list" value="<%=label%>" />
+							    <a href="http://ncim.nci.nih.gov"><%=label%></a>
+							    </li>  
+					            <%		    
+                                                    } else {
+                                                    %>
+							    <li>
+							    <input type="checkbox" name="ontology_list" value="<%=label%>" />
+							    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_label%>&scheme=<%=http_scheme%>&version=<%=http_version%>" alt="<%=label%>"><%=label%></a>
+							    </li>
+				                    <%
+				                    }
 						}
 					    %>	
  					    </ol>

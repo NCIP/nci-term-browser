@@ -388,6 +388,14 @@ public class CacheController
 
     public JSONArray getPathsToRoots(String ontology_display_name, String version, String node_id, boolean fromCache, int maxLevel)
     {
+		if (ontology_display_name == null) ontology_display_name = Constants.CODING_SCHEME_NAME;
+
+		String retval = DataUtils.getCodingSchemeName(ontology_display_name);
+		if (retval != null) {
+			ontology_display_name = retval;
+			version = DataUtils.key2CodingSchemeVersion(ontology_display_name);
+		}
+
 		JSONArray rootsArray = null;
 		if (maxLevel == -1) {
 			rootsArray = getRootConcepts(ontology_display_name, version, false);
