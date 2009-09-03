@@ -511,7 +511,8 @@ public class UserSessionBean extends Object {
         if (matchAlgorithm.compareTo("exactMatch") == 0) {
             message = "No match found. Please try 'Beings With' or 'Contains' search instead.";
         }
-        request.getSession().setAttribute("message", message);
+        request.setAttribute("message", message);
+        request.setAttribute("dictionary", scheme);
         return "message";
     }
 
