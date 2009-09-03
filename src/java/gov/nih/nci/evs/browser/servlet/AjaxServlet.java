@@ -186,6 +186,9 @@ public final class AjaxServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 				response.getWriter().write(json.toString());
+
+
+
 				System.out.println("Run time (milliseconds): "
 						+ (System.currentTimeMillis() - ms));
 				return;
@@ -211,6 +214,7 @@ public final class AjaxServlet extends HttpServlet {
 			}
 
 			response.getWriter().write(json.toString());
+
 			System.out.println("Run time (milliseconds): "
 					+ (System.currentTimeMillis() - ms));
 			return;

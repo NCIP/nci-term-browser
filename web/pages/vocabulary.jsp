@@ -196,6 +196,8 @@ voc_version = "";
 if (u2 != null && u2.size() > 0) {
 	voc_version = (String) u2.elementAt(0);
 }
+if (voc_version.compareTo("") == 0) voc_version = version;
+
 Vector u3 = MetadataUtils.getMetadataValues(v, "download_url");
 if (u3 != null && u3.size() > 0) {
 	download_site = (String) u3.elementAt(0);
