@@ -3,7 +3,7 @@
   {
     Concept concept_curr = (Concept) request.getSession().getAttribute("concept");
     String scheme_curr = (String) request.getSession().getAttribute("dictionary");
-    String version_curr = null;
+    String version_curr = (String) request.getSession().getAttribute("version");
     String code_curr = (String) request.getSession().getAttribute("code");
     
 
@@ -26,12 +26,12 @@ System.out.println("** relationship code_curr " + code_curr);
     <%
       label = "Parent Concepts:";
       concepts = superconcepts;
-      if (concepts.size() <= 0)
+      if (concepts == null || concepts.size() <= 0)
       {
     %>
         <b><%=label%></b> <i>(none)</i>
     <%
-      } else if (concepts.size() == 1) {
+      } else if (concepts != null && concepts.size() == 1) {
           String s = (String) concepts.get(0);
           Vector ret_vec = DataUtils.parseData(s, "|");
           String cName = (String) ret_vec.elementAt(0);
@@ -42,7 +42,7 @@ System.out.println("** relationship code_curr " + code_curr);
             <%=cName%>
           </a>
     <%
-      } else {
+      } else if (concepts != null) {
     %>
         <b><%=label%></b>
         <table class="dataTable">
@@ -74,12 +74,12 @@ System.out.println("** relationship code_curr " + code_curr);
     <%
       label = "Child Concepts:";
       concepts = subconcepts;
-      if (concepts.size() <= 0)
+      if (concepts == null || concepts.size() <= 0)
       {
     %>
         <b><%=label%></b> <i>(none)</i>
     <%
-      } else if (concepts.size() == 1) {
+      } else if (concepts != null && concepts.size() == 1) {
           String s = (String) concepts.get(0);
           Vector ret_vec = DataUtils.parseData(s, "|");
           String cName = (String) ret_vec.elementAt(0);
@@ -90,7 +90,7 @@ System.out.println("** relationship code_curr " + code_curr);
             <%=cName%>
           </a>
     <%
-      } else {
+      } else if (concepts != null) {
     %>
         <b><%=label%></b>
         <table class="dataTable">
@@ -120,24 +120,17 @@ System.out.println("** relationship code_curr " + code_curr);
 
   <p>
   <%
-     if (roles.size() > 0)
+     if (roles != null && roles.size() > 0)
      {
   %>
        <b>Role Relationships:</b>
-  <%
-     } else {
-  %>
-       <b>Role Relationships: </b><i>(none)</i>
-  <%
-     }
-  %>
+       
   <br/>
   <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
   <table class="dataTable">
     <%
       int n1 = 0;
       for (int i=0; i<roles.size(); i++) {
-
         String s = (String) roles.get(i);
         Vector ret_vec = DataUtils.parseData(s, "|");
         String role_name = (String) ret_vec.elementAt(0);
@@ -167,18 +160,20 @@ System.out.println("** relationship code_curr " + code_curr);
       %>
   </table>
 </p>
-<p>
+<p>     
+       
+  <%
+     } else if (roles == null || roles.size() == 0) {
+  %>
+       <b>Role Relationships: </b><i>(none)</i>
+  <%
+     }
+  %>
+
 <%
-  if (associations.size() > 0) {
+  if (associations != null && associations.size() > 0) {
 %>
     <b>Associations:</b>
-<%
-  } else {
-    %>
-    <b>Associations: </b><i>(none)</i>
-    <%
-  }
-%>
 <br/>
 <i>(Associations are true only for the current concept.)</i>
 <table class="dataTable">
@@ -214,7 +209,16 @@ System.out.println("** relationship code_curr " + code_curr);
         }
         %>
  </table>
-</p>
+</p>    
+    
+<%
+  } else if (associations == null || associations.size() == 0) {
+    %>
+    <b>Associations: </b><i>(none)</i>
+    <%
+  }
+%>
+
 <%
 }
 %>
