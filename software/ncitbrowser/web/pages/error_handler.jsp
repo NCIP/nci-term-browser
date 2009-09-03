@@ -3,9 +3,9 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
-<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -27,10 +27,28 @@
     <%@ include file="/pages/templates/sub-header.xhtml" %>
     <!-- Main box -->
     <div id="main-area">
-      <%@ include file="/pages/templates/content-header.xhtml" %>
+
+        <%
+        String err_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
+        System.out.println("err_dictionary: " + err_dictionary);
+        if (err_dictionary == null || err_dictionary.compareTo("NCI Thesaurus") == 0) {
+        %>
+        	<%@ include file="/pages/templates/content-header.xhtml" %>
+        <%	
+       	} else if (err_dictionary != null) {
+       	        request.getSession().setAttribute("dictionary", err_dictionary);
+       	%>
+       	        <%@ include file="/pages/templates/content-header1.xhtml" %>
+       	<%        
+       	}
+       	%>
+    
+      
       <!-- Page content -->
-      <div class="pagecontent" align="center">
-        <% String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute(Constants.ERROR_MESSAGE)); %>
+      <div class="pagecontent">
+        <%
+          String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute(Constants.ERROR_MESSAGE)); %>
+        %>
         <b><%=message%></b>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
@@ -42,3 +60,4 @@
 </f:view>
 </body>
 </html>
+

@@ -25,11 +25,27 @@
     <%@ include file="/pages/templates/sub-header.xhtml" %>
     <!-- Main box -->
     <div id="main-area">
-      <%@ include file="/pages/templates/content-header.xhtml" %>
+
+        <%
+        String msg_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
+        System.out.println("msg_dictionary: " + msg_dictionary);
+        if (msg_dictionary == null || msg_dictionary.compareTo("NCI Thesaurus") == 0) {
+        %>
+        	<%@ include file="/pages/templates/content-header.xhtml" %>
+        <%	
+       	} else if (msg_dictionary != null) {
+       	        request.getSession().setAttribute("dictionary", msg_dictionary);
+       	%>
+       	        <%@ include file="/pages/templates/content-header1.xhtml" %>
+       	<%        
+       	}
+       	%>
+    
+      
       <!-- Page content -->
       <div class="pagecontent">
         <%
-          String message = (String) request.getSession().getAttribute("message");
+          String message = (String) request.getAttribute("message");
         %>
         <b><%=message%></b>
         <%@ include file="/pages/templates/nciFooter.html" %>
