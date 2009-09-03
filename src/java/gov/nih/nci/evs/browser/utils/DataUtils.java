@@ -540,8 +540,14 @@ System.out.println("\n\tActive? " + isActive);
                 cns = lbSvc.getCodingSchemeConcepts(codingSchemeName,
                         versionOrTag);
                 cns = cns.restrictToCodes(crefs);
-                ResolvedConceptReferenceList matches = cns.resolveToList(null,
-                        null, null, 1);
+                //ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
+ 				ResolvedConceptReferenceList matches = null;
+				try {
+					matches = cns.resolveToList(null, null, null, 1);
+				} catch (Exception e) {
+					System.out.println("cns.resolveToList failed???");
+				}
+
                 if (matches == null) {
                     System.out.println("Concep not found.");
                     return null;
