@@ -9,8 +9,6 @@
     dictionaryName0 = dictionaryName;
     dictionaryName = dictionaryName.replaceAll(" ", "%20");
     
-System.out.println("======== menuBar " + dictionaryName);
-    
 %>
 
 <div class="global-nav">
@@ -21,8 +19,6 @@ System.out.println("======== menuBar " + dictionaryName);
   <%
      } else {
         String menubar_version = (String) request.getAttribute("version");
-        
- System.out.println("======== menuBar version " + menubar_version);
  
         if (menubar_version == null) {
   %>  
