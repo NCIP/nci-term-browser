@@ -19,7 +19,7 @@ import org.LexGrid.concepts.Concept;
 import static gov.nih.nci.evs.browser.common.Constants.*;
 
 public class HistoryUtils {
-	
+
 	private static DateFormat _dataFormatter = new SimpleDateFormat(
 			"yyyy-MM-dd");
 
@@ -31,10 +31,24 @@ public class HistoryUtils {
 		return v;
 	}
 
+
+	public static boolean isHistoryServiceAvailable(String codingSchemeName) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		HistoryService hs = null;
+		try {
+			hs = lbSvc.getHistoryService(codingSchemeName);
+			if (hs != null) return true;
+		} catch (Exception ex) {
+			System.out.println("Unable to getHistoryService for " + codingSchemeName);
+		}
+		return false;
+	}
+
 	public static Vector<String> getEditActions(String codingSchemeName,
 			String vers, String ltag, String code) throws LBException {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-		HistoryService hs = lbSvc.getHistoryService(CODING_SCHEME_NAME);
+		//HistoryService hs = lbSvc.getHistoryService(CODING_SCHEME_NAME);
+		HistoryService hs = lbSvc.getHistoryService(codingSchemeName);
 
 		try {
 			NCIChangeEventList list = hs.getEditActionList(Constructors
