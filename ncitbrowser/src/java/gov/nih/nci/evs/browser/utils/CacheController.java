@@ -225,16 +225,11 @@ public class CacheController
 		JSONArray nodeArray = null;
 
 		if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
-
-System.out.println("*** CacheController scheme: " + scheme);
-
-
 		String retval = DataUtils.getCodingSchemeName(scheme);
 		if (retval != null) {
 			scheme = retval;
 			version = DataUtils.key2CodingSchemeVersion(scheme);
 		}
-
 
         if (fromCache)
         {
@@ -250,9 +245,6 @@ System.out.println("*** CacheController scheme: " + scheme);
 			System.out.println("Not in cache -- calling getHierarchyRoots " );
             try {
 				list = new DataUtils().getHierarchyRoots(scheme, version, null);
-
-System.out.println("*** CacheController returned from DataUtils().getHierarchyRoots " + scheme);
-
 				nodeArray = list2JSONArray(list);
 
 				if (fromCache)
@@ -273,6 +265,7 @@ System.out.println("*** CacheController returned from DataUtils().getHierarchyRo
 
 
     private JSONArray list2JSONArray(List list) {
+        List newlist = new ArrayList();
         JSONArray nodesArray = null;
         try {
 			if (list != null)
@@ -286,15 +279,98 @@ System.out.println("*** CacheController returned from DataUtils().getHierarchyRo
 					  {
 						  ResolvedConceptReference node = (ResolvedConceptReference) obj;
 						  code = node.getConceptCode();
-						  name = node.getEntityDescription().getContent();
-
+						  try {
+						  	  name = node.getEntityDescription().getContent();
+						  } catch (Exception e) {
+							  name = code;
+						  }
+						  if (name.compareTo("<Not assigned>") == 0) name = code;
+						  EntityDescription ed = new EntityDescription();
+						  ed.setContent(name);
+						  node.setEntityDescription(ed);
+						  newlist.add(node);
 					  }
 					  else if (obj instanceof Concept) {
 						  Concept node = (Concept) obj;
 						  code = node.getEntityCode();
-						  name = node.getEntityDescription().getContent();
-
+						  try {
+						  	  name = node.getEntityDescription().getContent();
+						  } catch (Exception e) {
+							  name = code;
+						  }
+						  if (name.compareTo("<Not assigned>") == 0) name = code;
+						  EntityDescription ed = new EntityDescription();
+						  ed.setContent(name);
+						  node.setEntityDescription(ed);
+						  newlist.add(node);
 					  }
+			     }
+			     SortUtils.quickSort(newlist);
+
+				 for (int i=0; i<newlist.size(); i++) {
+					  Object obj = newlist.get(i);
+					  ResolvedConceptReference node = (ResolvedConceptReference) obj;
+					  String code = node.getConceptCode();
+					  String name = node.getEntityDescription().getContent();
+
+					  int childCount = 1;
+					  try {
+						  JSONObject nodeObject = new JSONObject();
+						  nodeObject.put(ONTOLOGY_NODE_ID, code);
+						  nodeObject.put(ONTOLOGY_NODE_NAME, name);
+						  nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+						  nodeObject.put(CHILDREN_NODES, new JSONArray());
+						  nodesArray.put(nodeObject);
+
+					  } catch (Exception ex) {
+						  ex.printStackTrace();
+					  }
+				}
+			}
+
+
+		} catch (Exception ex) {
+
+		}
+		return nodesArray;
+	}
+
+/*
+    //HL7 fix
+    private JSONArray list2JSONArray(List list) {
+        JSONArray nodesArray = null;
+        try {
+			if (list != null)
+			{
+				nodesArray = new JSONArray();
+				for (int i=0; i<list.size(); i++) {
+					  Object obj = list.get(i);
+					  String code = "";
+					  String name = "";
+					  if (obj instanceof ResolvedConceptReference)
+					  {
+						  ResolvedConceptReference node = (ResolvedConceptReference) obj;
+						  code = node.getConceptCode();
+						  try {
+						  	  name = node.getEntityDescription().getContent();
+						  } catch (Exception e) {
+							  name = code;
+						  }
+					  }
+					  else if (obj instanceof Concept) {
+						  Concept node = (Concept) obj;
+						  code = node.getEntityCode();
+						  try {
+						  	  name = node.getEntityDescription().getContent();
+						  } catch (Exception e) {
+							  name = code;
+						  }
+					  }
+
+					  int j = i+1;
+					  System.out.println("( " + j + ") code: " + code + " name: " + name);
+
+					  if (name.compareTo("<Not assigned>") == 0) name = code;
 
 					  ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
 					  int childCount = 1;
@@ -318,7 +394,7 @@ System.out.println("*** CacheController returned from DataUtils().getHierarchyRo
 		}
 		return nodesArray;
 	}
-
+*/
 
     private JSONArray HashMap2JSONArray(HashMap hmap) {
 		JSONObject json = new JSONObject();
@@ -436,6 +512,7 @@ System.out.println("*** CacheController returned from DataUtils().getHierarchyRo
 				TreeItem ti = (TreeItem) hmap.get(code); //TreeItem ti = new TreeItem("<Root>", "Root node");
                 */
 				//JSONArray nodesArray = getNodesArray(ti);
+
 				JSONArray nodesArray = getNodesArray(node_id, ti);
 				replaceJSONObjects(rootsArray, nodesArray);
 			}
