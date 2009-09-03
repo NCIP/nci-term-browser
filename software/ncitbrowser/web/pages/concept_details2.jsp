@@ -47,9 +47,17 @@
       
          <%
             String dictionary = (String) request.getAttribute("dictionary");
+            
+System.out.println("** concept_details2 " +  dictionary);           
+            
+            
             String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
             if (dictionary == null) {
-                dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+                //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+                dictionary = (String) request.getParameter("dictionary");
+                dictionary = DataUtils.getCodingSchemeName(dictionary);
+System.out.println("** concept_details2 after cleanXSS " +  dictionary);           
+                
             }
             
          %>      
@@ -100,12 +108,12 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 
             String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("singleton"));
             if (singleton != null && singleton.compareTo("true") == 0) {
-              dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
-              
+              //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
+              //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
               
               code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
             } else {
-              dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+              //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
               code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
               type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             }

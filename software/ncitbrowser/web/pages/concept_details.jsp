@@ -51,6 +51,11 @@
             String type = null;
 
 dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+
+System.out.println("********** concept_details.jsp dictionary " + dictionary);
+
+
+
 code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("code"));
 type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
 
@@ -66,13 +71,19 @@ if (code == null) {
  		if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
 			dictionary = DataUtils.getCodingSchemeName(dictionary);
 		}
-		System.out.println("********** concept_details.jsp dictionary " + dictionary);              
-              
+             
             } else if (dictionary != null) {
+
+
+System.out.println("********** concept_details.jsp dictionary " + dictionary);
 
 
 dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
 dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
+
+System.out.println("********** concept_details.jsp dictionary " + dictionary);
+
+
 dictionary = DataUtils.getCodingSchemeName( dictionary ); 
                 
             }
