@@ -76,7 +76,7 @@ import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 
 public class MetadataUtils {
 
-	private static final String codingSchemeNameProperty = "codingScheme";
+	private static final String CODING_SCHEME_NAME_PROPERTY = "codingScheme";
 
 	private static Vector getMetadataCodingSchemeNames(MetadataPropertyList mdpl){
 		//List<MetadataProperty> metaDataProperties = new ArrayList<MetadataProperty>();
@@ -84,7 +84,7 @@ public class MetadataUtils {
 		Iterator<MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
 		while(metaItr.hasNext()){
 			MetadataProperty property = metaItr.next();
-			if (property.getName().equals(codingSchemeNameProperty)) {
+			if (property.getName().equals(CODING_SCHEME_NAME_PROPERTY)) {
 	            v.add(property.getValue());
 			}
 		}
@@ -98,17 +98,17 @@ public class MetadataUtils {
 	 * @param codingScheme The Coding Scheme to restrict to
 	 * @return All of the Metadata Properties associated with the given Coding Scheme.
 	 */
-	private static List<MetadataProperty> getMetadataForCodingScheme(MetadataPropertyList mdpl, String codingScheme){
+	private static List<MetadataProperty> getMetadataForCodingSchemes(MetadataPropertyList mdpl, String codingScheme){
 		List<MetadataProperty> metaDataProperties = new ArrayList<MetadataProperty>();
 
 		Iterator<MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
 		while(metaItr.hasNext()){
 			MetadataProperty property = metaItr.next();
-			if (property.getName().equals(codingSchemeNameProperty) && property.getValue().equals(codingScheme)) {
+			if (property.getName().equals(CODING_SCHEME_NAME_PROPERTY) && property.getValue().equals(codingScheme)) {
 				metaDataProperties.add(property);
 				while(metaItr.hasNext()){
 					property = metaItr.next();
-					if(!property.getName().equals(codingSchemeNameProperty)){
+					if(!property.getName().equals(CODING_SCHEME_NAME_PROPERTY)){
 						metaDataProperties.add(property);
 					} else {
 						return metaDataProperties;
@@ -129,8 +129,8 @@ public class MetadataUtils {
         try {
 			smd = lbSvc.getServiceMetadata();
 			if (smd == null) return null;
-			acsvr.setCodingSchemeURN(urn);
-			acsvr.setCodingSchemeVersion(version);
+			if (urn != null) acsvr.setCodingSchemeURN(urn);
+			if (version != null) acsvr.setCodingSchemeVersion(version);
 
 			try {
 				smd = smd.restrictToCodingScheme(acsvr);
@@ -171,7 +171,7 @@ public class MetadataUtils {
 		return mdpl;
 	}
 
- 	public static Vector<String> getAvailableCodingSchemeVersions(LexBIGService lbSvc, String codingSchemeName) //CodingScheme cs)
+ 	public static Vector<String> getAvailableCodingSchemeVersions(LexBIGService lbSvc, String codingSchemeName)
 	{
 		Vector<String> v = new Vector<String>();
 		try {
@@ -194,7 +194,7 @@ public class MetadataUtils {
 		return v;
 	}
 
-    public static Vector getMetadataForCodingSchemes(String codingSchemeName, String propertyName) {
+    public static Vector getMetadataForCodingScheme(String codingSchemeName, String propertyName) {
 		//String codingSchemeName = Constants.CODING_SCHEME_NAME;
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
@@ -204,11 +204,11 @@ public class MetadataUtils {
 
 		//String urn = "urn:oid:2.16.840.1.113883.3.26.1.2";//urn:oid:2.16.840.1.113883.3.26.1.2
 		MetadataPropertyList mdpl = getMetadataPropertyList(lbSvc, codingSchemeName, version, null);
-		return getMetadataForCodingSchemes(mdpl, propertyName);
+		return getMetadataForCodingScheme(mdpl, propertyName);
 	}
 
 
-    public static Vector getMetadataForCodingSchemes(MetadataPropertyList mdpl, String propertyName) {
+    public static Vector getMetadataForCodingScheme(MetadataPropertyList mdpl, String propertyName) {
 		Vector v = new Vector();
 		Vector codingSchemeNames = getMetadataCodingSchemeNames(mdpl);
 
@@ -292,6 +292,17 @@ public class MetadataUtils {
 			}
 		}
 		return w;
+	}
+
+	public static Vector getMetadataValues(String codingSchemeName, String version, String urn, String propertyName){
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		MetadataPropertyList mdpl = getMetadataPropertyList(lbSvc, codingSchemeName, version, urn);
+		if (mdpl == null) return null;
+
+		Vector metadata = getMetadataNameValuePairs(mdpl);
+		if (metadata == null) return null;
+
+		return getMetadataValues(metadata, propertyName);
 	}
 
 

@@ -403,20 +403,18 @@ public class UserSessionBean extends Object {
             }
         }
 
-String scheme = request.getParameter("scheme");
+		String scheme = request.getParameter("scheme");
 
-if (scheme == null) {
-	scheme = (String) request.getAttribute("scheme");
-}
+		if (scheme == null) {
+			scheme = (String) request.getAttribute("scheme");
+		}
 
-if (scheme == null) {
-	scheme = (String) request.getParameter("dictionary");
-}
+		if (scheme == null) {
+			scheme = (String) request.getParameter("dictionary");
+		}
 
         if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
         //String scheme = Constants.CODING_SCHEME_NAME;
-
-
 
         String version = null;
         String max_str = null;
@@ -496,10 +494,6 @@ if (scheme == null) {
 				request.getSession().setAttribute("type", "properties");
 
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
-
-
-System.out.println("******************* searchAction scheme " + scheme);
-
 
 				if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI%20Thesaurus") == 0) {
 					return "concept_details";
