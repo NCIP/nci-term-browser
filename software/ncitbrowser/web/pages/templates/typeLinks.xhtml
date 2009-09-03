@@ -1,3 +1,4 @@
+<%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
 <table width="700px" cellspacing="0" cellpadding="0" border="0" class="tabTable">
   <tr>
     <%
@@ -109,12 +110,20 @@
                   type="button"
                  class="redButton"
                  value="View in Hierarchy"
-        />&nbsp;&nbsp;
+        />
+        <%
+        
+        if (HistoryUtils.isHistoryServiceAvailable(scheme)) {
+        %>
+        &nbsp;&nbsp;
         <input onClick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_history.jsf?dictionary=<%=scheme%>&code=<%=id%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');"
                   type="button"
                  class="redButton"
                  value="View History"
         />
+        <%
+        }
+        %>
     </td>
   </tr>
 </table>
