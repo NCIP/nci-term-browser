@@ -5,7 +5,16 @@
 setlocal
 cls
 if "%1" == "" (
-    ant usage
+    echo.
+    echo Available targets are:
+    echo.
+    echo   clean        -- Remove classes directory for clean build
+    echo   all          -- Normal build of application
+    echo   upgrade      -- Build and upgrade application
+    echo   install      -- Builds, installs JBoss locally
+    echo   dev          -- Builds, upgrades JBoss on DEV
+    echo   qa           -- Builds, upgrades JBoss on QA
+    echo   deploy       -- Redeploy application
     goto DONE
 )
 if "%1" == "all" (
@@ -14,6 +23,10 @@ if "%1" == "all" (
 )
 if "%1" == "upgrade" (
     ant deploy:local:upgrade
+    goto DONE
+)
+if "%1" == "install" (
+    ant deploy:local:install
     goto DONE
 )
 if "%1" == "deploy" (
