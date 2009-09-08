@@ -6,6 +6,10 @@
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+<%@ page import="javax.faces.context.FacesContext" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -31,7 +35,12 @@
       <!-- Page content -->
       <div class="pagecontent">
         <%
-          Vector v = (Vector) request.getSession().getAttribute("search_results");
+        
+          HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
+ 
+          IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
+                .getSessionMap().get("iteratorBean");
+       
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
           String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
@@ -55,14 +64,18 @@
           }
           int iend = page_num * page_size;
           int istart = iend - page_size;
-          if (iend > v.size()) iend = v.size();
-          int num_pages = v.size() / page_size;
-          if (num_pages * page_size < v.size()) num_pages++;
+          int size = iteratorBean.getSize();
+          
+          if (iend > size) iend = size;
+          int num_pages = size / page_size;
+          if (num_pages * page_size < size) num_pages++;
           String istart_str = Integer.toString(istart+1);
           String iend_str = Integer.toString(iend);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
+          
         %>
+        
         <table width="700px">
           <tr>
             <table>
@@ -84,11 +97,15 @@
             <td class="textbody">
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <%
-                  for (int i=istart; i<iend; i++) {
-                    if (i >= 0 && i<v.size()) {
-                      Concept c = (Concept) v.elementAt(i);
-                      String code = c.getEntityCode();
-                      String name = c.getEntityDescription().getContent();
+                
+                  List list = iteratorBean.getData(istart, iend);
+                  for (int i=0; i<list.size(); i++) {
+                      ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
+                      
+                      String code = rcr.getConceptCode();
+                      String name = rcr.getEntityDescription().getContent();
+  
+                      String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
 
                       if (i % 2 == 0) {
                         %>
@@ -101,12 +118,12 @@
                       }
                       %>
                           <td class="dataCellText">
-                            <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=code%>" ><%=name%></a>
+                            <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
                           </td>
                         </tr>
                       <%
-                    }
                   }
+                  
                 %>
               </table>
             </td>
