@@ -30,7 +30,7 @@
 
         <%
         String err_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
-        System.out.println("err_dictionary: " + err_dictionary);
+        System.out.println("*** err_dictionary: " + err_dictionary);
         if (err_dictionary == null || err_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
         	<%@ include file="/pages/templates/content-header.xhtml" %>
