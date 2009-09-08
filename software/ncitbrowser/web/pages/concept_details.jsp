@@ -56,12 +56,15 @@ System.out.println("********** concept_details.jsp dictionary " + dictionary);
 
 
 
-code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("code"));
+code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
 type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
 
 if (code == null) {
     code = (String) request.getSession().getAttribute("code");
 }
+
+System.out.println("============= concept_details.jsp code " + code);
+
 
             String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
             String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("singleton"));
@@ -109,6 +112,12 @@ dictionary = DataUtils.getCodingSchemeName( dictionary );
 		String ltag = null;
 		
 		c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+		
+System.out.println("********** concept_details.jsp getConceptByCode dictionary dictionary " + dictionary);
+System.out.println("********** concept_details.jsp getConceptByCode dictionary vers " + vers);
+System.out.println("********** concept_details.jsp getConceptByCode dictionary code " + code);
+		
+		
 		if (c != null) {
 		   request.getSession().setAttribute("concept", c);
 		   request.getSession().setAttribute("code", code);

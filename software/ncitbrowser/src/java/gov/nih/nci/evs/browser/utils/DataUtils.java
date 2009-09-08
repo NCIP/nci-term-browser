@@ -830,12 +830,16 @@ System.out.println("\n\tActive? " + isActive);
     }
 
     public static String getVersion() {
-        String info = getReleaseDate();
+		return getVersion(CODING_SCHEME_NAME);
+	}
 
-        String version = getVocabularyVersionByTag(CODING_SCHEME_NAME,
+    public static String getVersion(String coding_scheme_name) {
+        String info = getReleaseDate(coding_scheme_name);
+
+        String version = getVocabularyVersionByTag(coding_scheme_name,
                 "PRODUCTION");
         if (version == null)
-            version = getVocabularyVersionByTag(CODING_SCHEME_NAME, null);
+            version = getVocabularyVersionByTag(coding_scheme_name, null);
 
         if (version != null && version.length() > 0)
             info += " (" + version + ")";
@@ -843,10 +847,15 @@ System.out.println("\n\tActive? " + isActive);
     }
 
     public static String getReleaseDate() {
+		return getReleaseDate(CODING_SCHEME_NAME);
+    }
+
+
+    public static String getReleaseDate(String coding_scheme_name) {
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy");
-            HistoryService hs = lbSvc.getHistoryService(CODING_SCHEME_NAME);
+            HistoryService hs = lbSvc.getHistoryService(coding_scheme_name);
             SystemRelease release = hs.getLatestBaseline();
             Date date = release.getReleaseDate();
             return formatter.format(date);
@@ -1235,7 +1244,44 @@ System.out.println("\n\tActive? " + isActive);
         ArrayList superconceptList = new ArrayList();
         ArrayList subconceptList = new ArrayList();
 
+
         HashMap map = new HashMap();
+
+String[] associationsToNavigate = TreeUtils.getAssociationsToNavigate(scheme, version);
+Vector w = new Vector();
+for (int k=0; k<associationsToNavigate.length; k++) {
+	w.add(associationsToNavigate[k]);
+	System.out.println("*************** associationsToNavigate " + associationsToNavigate[k]);
+}
+
+
+		HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
+		if (hmap_super != null) {
+			TreeItem ti = (TreeItem) hmap_super.get(code);
+			for (String association : ti.assocToChildMap.keySet()) {
+				List<TreeItem> children = ti.assocToChildMap.get(association);
+				for (TreeItem childItem : children) {
+					superconceptList.add(childItem.text + "|" + childItem.code);
+				}
+			}
+		}
+		Collections.sort(superconceptList);
+		map.put(TYPE_SUPERCONCEPT, superconceptList);
+
+		HashMap hmap_sub = TreeUtils.getSubconcepts(scheme, version, code);
+		if (hmap_sub != null) {
+			TreeItem ti = (TreeItem) hmap_sub.get(code);
+			for (String association : ti.assocToChildMap.keySet()) {
+				List<TreeItem> children = ti.assocToChildMap.get(association);
+				for (TreeItem childItem : children) {
+					subconceptList.add(childItem.text + "|" + childItem.code);
+				}
+			}
+		}
+
+		Collections.sort(subconceptList);
+		map.put(TYPE_SUBCONCEPT, subconceptList);
+
         try {
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
 
@@ -1280,25 +1326,34 @@ System.out.println("\n\tActive? " + isActive);
                             // String pt =
                             // getPreferredName(ac.getReferencedEntry());
                             String pt = name;
-                            if (associationName
-                                    .compareToIgnoreCase("equivalentClass") != 0) {
-                                // printAssocation(scheme, version, code,
-                                // assoc.getAssociationName(),
-                                // ac.getConceptCode());
-                                String s = associationName + "|" + pt + "|"
-                                        + ac.getConceptCode();
-                                if (isRole) {
-                                    if (associationName
-                                            .compareToIgnoreCase("hasSubtype") != 0) {
-                                        // System.out.println("Adding role: " +
-                                        // s);
-                                        roleList.add(s);
-                                    }
-                                } else {
-                                    // System.out.println("Adding association: "
-                                    // + s);
-                                    associationList.add(s);
-                                }
+                            if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
+
+								//
+								//String[] sortedArray = new String[]{"ant", "bat", "cat", "dog"};
+
+								    // Search for the word "cat"
+								//    int index = Arrays.binarySearch(sortedArray, "cat");
+								//
+
+
+								if (!w.contains(associationName)) {
+									// printAssocation(scheme, version, code,
+									// assoc.getAssociationName(),
+									// ac.getConceptCode());
+									String s = associationName + "|" + pt + "|"
+											+ ac.getConceptCode();
+									if (isRole) {
+										if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
+											// System.out.println("Adding role: " +
+											// s);
+											roleList.add(s);
+										}
+									} else {
+										// System.out.println("Adding association: "
+										// + s);
+										associationList.add(s);
+									}
+							    }
                             }
                         }
                     }
@@ -1317,6 +1372,8 @@ System.out.println("\n\tActive? " + isActive);
             map.put(TYPE_ROLE, roleList);
             map.put(TYPE_ASSOCIATION, associationList);
 
+/*
+NCI Thesaurus:
 
 			Vector superconcept_vec = getSuperconcepts(scheme, version, code);
 			for (int i = 0; i < superconcept_vec.size(); i++) {
@@ -1337,6 +1394,9 @@ System.out.println("\n\tActive? " + isActive);
 			}
 			Collections.sort(subconceptList);
 			map.put(TYPE_SUBCONCEPT, subconceptList);
+*/
+
+
 
 
         } catch (Exception ex) {
@@ -1667,7 +1727,7 @@ System.out.println("\n\tActive? " + isActive);
 		int n = 0;
 		for (int i = 0; i < properties.length; i++) {
 			Presentation p = properties[i];
-			if (p.getPropertyName().compareTo("FULL_SYN") == 0) {
+			//if (p.getPropertyName().compareTo("FULL_SYN") == 0) {
 				String term_name = p.getValue().getContent();
 				String term_type = "null";
 				String term_source = "null";
@@ -1694,7 +1754,7 @@ System.out.println("\n\tActive? " + isActive);
 				}
 				v.add(term_name + "|" + term_type + "|" + term_source + "|"
 						+ term_source_code);
-			}
+			//}
 		}
 		SortUtils.quickSort(v);
 		return v;

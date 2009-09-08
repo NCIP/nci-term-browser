@@ -485,7 +485,9 @@ public class UserSessionBean extends Object {
 				} else {
 					c = ref.getReferencedEntry();
 					if (c == null) {
-						c = DataUtils.getConceptByCode(Constants.CODING_SCHEME_NAME, null, null, ref.getConceptCode());
+						//c = DataUtils.getConceptByCode(Constants.CODING_SCHEME_NAME, null, null, ref.getConceptCode());
+System.out.println("(*) Match by code " + scheme + " " + ref.getConceptCode());
+						c = DataUtils.getConceptByCode(scheme, null, null, ref.getConceptCode());
 					}
 				}
 
