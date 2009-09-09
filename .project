@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>ncitbrowser</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>classes</name>
+			<type>2</type>
+			<location>C:/SVN-Projects/ncitbrowser/software/ncitbrowser/build/web/WEB-INF/classes</location>
+		</link>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>C:/SVN-Projects/ncitbrowser/software/ncitbrowser/build/web/WEB-INF/classes/java</location>
+		</link>
+	</linkedResources>
+</projectDescription>
