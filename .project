@@ -23,7 +23,7 @@
 		<link>
 			<name>java</name>
 			<type>2</type>
-			<location>C:/SVN-Projects/ncitbrowser/software/ncitbrowser/build/web/WEB-INF/classes/java</location>
+			<location>C:/SVN-Projects/ncitbrowser/software/ncitbrowser/src/java</location>
 		</link>
 	</linkedResources>
 </projectDescription>

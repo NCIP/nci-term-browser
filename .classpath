@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="classes" path="java"/>
+	<classpathentry kind="src" output="software/ncitbrowser/build/web/WEB-INF/classes" path="java"/>
 	<classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
 	<classpathentry kind="lib" path="C:/SVN-Projects/ncitbrowser/software/ncitbrowser/lib/LexEVSSecurity.jar"/>
 	<classpathentry kind="lib" path="C:/SVN-Projects/ncitbrowser/software/ncitbrowser/lib/acegi-security-1.0.4.jar"/>
@@ -46,6 +46,5 @@
 	<classpathentry kind="lib" path="C:/SVN-Projects/ncitbrowser/software/ncitbrowser/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="C:/SVN-Projects/ncitbrowser/software/ncitbrowser/lib/spring.jar"/>
 	<classpathentry kind="lib" path="C:/SVN-Projects/ncitbrowser/software/ncitbrowser/lib/xercesImpl.jar"/>
-	<classpathentry kind="con" path="C:/SVN-Projects/ncitbrowser/software/ncitbrowser/build/web/WEB-INF/classes"/>
-	<classpathentry kind="output" path="software/ncitbrowser/build/web/WEB-INF/classes/java"/>
+	<classpathentry kind="output" path="software/ncitbrowser/build/web/WEB-INF/classes"/>
 </classpath>
