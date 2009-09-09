@@ -275,6 +275,9 @@
 
     <MetadataElements>
         <MetadataElement>
+                 <name>html_compatable_description</name>
+        </MetadataElement>
+        <MetadataElement>
                  <name>description</name>
         </MetadataElement>
         <MetadataElement>
@@ -291,9 +294,6 @@
         </MetadataElement>        
         <MetadataElement>
                  <name>download_format</name>
-        </MetadataElement>
-        <MetadataElement>
-                 <name>download_url</name>
         </MetadataElement>
         <MetadataElement>
                  <name>documentation</name>
