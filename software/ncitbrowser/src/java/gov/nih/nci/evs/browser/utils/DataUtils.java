@@ -1244,12 +1244,11 @@ System.out.println("\n\tActive? " + isActive);
 
         HashMap map = new HashMap();
 
-String[] associationsToNavigate = TreeUtils.getAssociationsToNavigate(scheme, version);
-Vector w = new Vector();
-for (int k=0; k<associationsToNavigate.length; k++) {
-	w.add(associationsToNavigate[k]);
-	System.out.println("*************** associationsToNavigate " + associationsToNavigate[k]);
-}
+		String[] associationsToNavigate = TreeUtils.getAssociationsToNavigate(scheme, version);
+		Vector w = new Vector();
+		for (int k=0; k<associationsToNavigate.length; k++) {
+			w.add(associationsToNavigate[k]);
+		}
 
 
 		HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
