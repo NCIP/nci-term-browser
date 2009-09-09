@@ -50,12 +50,29 @@
             String code = null;
             String type = null;
 
+            String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("singleton"));
+
+
 dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+            
+            if (dictionary != null) {
 
-System.out.println("********** concept_details.jsp dictionary " + dictionary);
+dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
+dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
+dictionary = DataUtils.getCodingSchemeName( dictionary ); 
+                
+            } else {
+                dictionary = Constants.CODING_SCHEME_NAME;
+            }    
 
+            if (singleton != null && singleton.compareTo("true") == 0) {
 
-
+ 		if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
+			dictionary = DataUtils.getCodingSchemeName(dictionary);
+		}
+             
+            } 
+            
 code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
 type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
 
@@ -63,42 +80,19 @@ if (code == null) {
     code = (String) request.getSession().getAttribute("code");
 }
 
+System.out.println("============= concept_details.jsp dictionary " + dictionary);
 System.out.println("============= concept_details.jsp code " + code);
 
 
             String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-            String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("singleton"));
-            
-            if (singleton != null && singleton.compareTo("true") == 0) {
-
- 		if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
-			dictionary = DataUtils.getCodingSchemeName(dictionary);
-		}
-             
-            } else if (dictionary != null) {
-
-
-System.out.println("********** concept_details.jsp dictionary " + dictionary);
-
-
-dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
-dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
-
-System.out.println("********** concept_details.jsp dictionary " + dictionary);
-
-
-dictionary = DataUtils.getCodingSchemeName( dictionary ); 
-                
+            if (dictionary.compareTo("NCI Thesaurus") != 0) {
+                term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
             }
-
-            if (dictionary == null) {
-                dictionary = Constants.CODING_SCHEME_NAME;
-            }             
+            
             
             if (type == null) {
                 type = "properties";
-            }
-            else if (type.compareTo("properties") != 0 &&
+            } else if (type.compareTo("properties") != 0 &&
                      type.compareTo("relationship") != 0 &&
                      type.compareTo("synonym") != 0 &&
                      type.compareTo("all") != 0) {
@@ -113,19 +107,10 @@ dictionary = DataUtils.getCodingSchemeName( dictionary );
 		
 		c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 		
-System.out.println("********** concept_details.jsp getConceptByCode dictionary dictionary " + dictionary);
-System.out.println("********** concept_details.jsp getConceptByCode dictionary vers " + vers);
-System.out.println("********** concept_details.jsp getConceptByCode dictionary code " + code);
-		
-		
 		if (c != null) {
 		   request.getSession().setAttribute("concept", c);
 		   request.getSession().setAttribute("code", code);
 		   name = c.getEntityDescription().getContent();
-		   
-
-		   System.out.println(name);          
-
 
 		} else {
 		   //name = "The server encountered an internal error that prevented it from fulfilling this request.";
@@ -140,13 +125,12 @@ System.out.println("********** concept_details.jsp getConceptByCode dictionary c
        	} else {
        	        request.getSession().setAttribute("dictionary", dictionary);
        	%>
-       	        <%@ include file="/pages/templates/content-header2.xhtml" %>
+       	        <%@ include file="/pages/templates/content-header1.xhtml" %>
        	<%        
        	}
 
         String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
         if (c != null) {
-        //request.getSession().setAttribute("dictionary", dictionary);
         request.getSession().setAttribute("type", type);
         request.getSession().setAttribute("singleton", "false");
 
@@ -160,9 +144,17 @@ System.out.println("********** concept_details.jsp getConceptByCode dictionary c
       <table border="0" width="700px">
         <tr>
           <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
+          
+          <%
+          if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
+          %>
           <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
              <a href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
           </td>
+          <%
+          }
+          %>
+
         </tr>
       </table>
 

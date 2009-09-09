@@ -34,10 +34,11 @@ if (menubar_version != null) {
 menubar_version = menubar_version.replaceAll(" ", "%20");
 }
 
+
 %>
 
 <div class="global-nav">
-  <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
+  <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
 <%  
   if (download_site != null) {
 %>  
