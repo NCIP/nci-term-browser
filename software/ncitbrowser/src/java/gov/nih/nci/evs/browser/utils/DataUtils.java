@@ -870,9 +870,7 @@ System.out.println("\n\tActive? " + isActive);
         if (codingSchemeName == null)
             return null;
         try {
-            // EVSApplicationService lbSvc = new
-            // RemoteServerUtil().createLexBIGService();
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+           LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
             CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
             for (int i = 0; i < csra.length; i++) {
@@ -880,8 +878,7 @@ System.out.println("\n\tActive? " + isActive);
                 CodingSchemeSummary css = csr.getCodingSchemeSummary();
                 if (css.getFormalName().compareTo(codingSchemeName) == 0
                         || css.getLocalName().compareTo(codingSchemeName) == 0) {
-                    if (ltag == null)
-                        return css.getRepresentsVersion();
+                    if (ltag == null) return css.getRepresentsVersion();
                     RenderingDetail rd = csr.getRenderingDetail();
                     CodingSchemeTagList cstl = rd.getVersionTags();
                     java.lang.String[] tags = cstl.getTag();
@@ -1844,6 +1841,22 @@ NCI Thesaurus:
         } catch (Exception ex) {
 
         }
+        return term_suggestion_application_url;
+    }
+
+    public static String getTermSuggestionURL(String codingSchemeName, String version) {
+		String propertyName = "term_suggestion_application_url";
+		String term_suggestion_application_url = "";
+		String urn = null;
+
+        if (version == null) {
+            version = getVocabularyVersionByTag(codingSchemeName, "PRODUCTION");
+            if (version == null) version = getVocabularyVersionByTag(codingSchemeName, null);
+		}
+
+        Vector v = MetadataUtils.getMetadataValues(codingSchemeName, version, urn, propertyName);
+        if (v != null && v.size() > 0) return (String) v.elementAt(0);
+
         return term_suggestion_application_url;
     }
 
