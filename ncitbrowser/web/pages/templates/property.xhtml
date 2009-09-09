@@ -397,12 +397,13 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
   
   
   String url = requestURL + "ConceptReport.jsp?dictionary=" + prop_dictionary + "&code=" + concept_id;
+  String url_text = "ConceptReport.jsp?dictionary=" + prop_dictionary + "&code=" + concept_id;
   String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>
   <b>URL to Bookmark</b>:
   <a href=javascript:bookmark('<%= url %>','<%= bookmark_title %>')>
-    <i><%= requestURL %>ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=<%=concept_id%></i>
+    <i><%= requestURL %><%= url_text %></i>
   </a>
 <%
 }
