@@ -11,7 +11,11 @@
        	} else if (hdr_dictionary != null) {
        	        request.getSession().setAttribute("dictionary", hdr_dictionary);
        	%>
-       	        <%=hdr_dictionary%>
+       	
+	    <div class="vocabularyName">
+		&nbsp;&nbsp;<%=hdr_dictionary%>
+	    </div>       	
+
        	<%        
        	}
        	%>
