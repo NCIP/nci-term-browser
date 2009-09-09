@@ -133,7 +133,7 @@
                           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                                String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
                           %>     
-                               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a> 
+                               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>&nbsp;<img src='<%=basePath%>/images/newWindow.gif'/>
                           <%     
                           } else {
                           %>
