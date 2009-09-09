@@ -998,9 +998,12 @@ String t = "";
 
         List list = new ArrayList<String>();
         ontologiesToSearchOn = new ArrayList<String>();
+
+        String ontologiesToSearchOnStr = "|";
         for (int i = 0; i < ontology_list.length; ++i) {
 			list.add(ontology_list[i]);
 			ontologiesToSearchOn.add(ontology_list[i]);
+			ontologiesToSearchOnStr = ontologiesToSearchOnStr + ontology_list[i] + "|";
 		}
 
 		if (ontology_list_str == null) {
@@ -1025,8 +1028,7 @@ String t = "";
 			return "message";
 
 		} else {
-		System.out.println("ontologiesToSearchOn.size() " +  ontologiesToSearchOn.size() );
-
+            request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
 			for (int k=0; k<ontologiesToSearchOn.size(); k++) {
 				String key = (String) list.get(k);
 				if (key != null) {
