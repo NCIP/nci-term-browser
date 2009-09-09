@@ -183,12 +183,20 @@ String version0 = version;
 		
 <%		
 v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
-Vector u1 = MetadataUtils.getMetadataValues(v, "description");
+Vector u1 = MetadataUtils.getMetadataValues(v, "html_compatable_description");
 voc_description = scheme;
 if (u1 != null && u1.size() > 0) {
 	voc_description = (String) u1.elementAt(0);
 	if (voc_description == null || voc_description.compareTo("") == 0 || voc_description.compareTo("null") == 0) {
 	    voc_description = "";
+	}
+} else {
+    u1 = MetadataUtils.getMetadataValues(v, "description");
+	if (u1 != null && u1.size() > 0) {
+		voc_description = (String) u1.elementAt(0);
+		if (voc_description == null || voc_description.compareTo("") == 0 || voc_description.compareTo("null") == 0) {
+		    voc_description = "";
+		}
 	}
 }
 Vector u2 = MetadataUtils.getMetadataValues(v, "version");
@@ -284,7 +292,7 @@ if (menubar_version == null) {
 		String s = (String) v.get(i);
 		Vector ret_vec = DataUtils.parseData(s, "|");
 		String meta_prop_name = (String) ret_vec.elementAt(0);
-		if (!metadata_names.contains(meta_prop_name)) {
+		if (!metadata_names.contains(meta_prop_name) && meta_prop_name.compareTo("html_compatable_description") != 0) {
 			String meta_prop_value = (String) ret_vec.elementAt(1);
 			if (meta_prop_value.startsWith("ftp:") || meta_prop_value.startsWith("http:")) {
 			    meta_prop_value = DataUtils.getDownloadLink(meta_prop_value);
