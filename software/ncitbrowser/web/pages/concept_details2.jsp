@@ -47,18 +47,19 @@
       
          <%
             String dictionary = (String) request.getAttribute("dictionary");
-            
-System.out.println("** concept_details2 " +  dictionary);           
-            
-            
-            String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
+
             if (dictionary == null) {
                 //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
                 dictionary = (String) request.getParameter("dictionary");
                 dictionary = DataUtils.getCodingSchemeName(dictionary);
-System.out.println("** concept_details2 after cleanXSS " +  dictionary);           
                 
-            }
+            }            
+            
+            String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
+            if (dictionary.compareTo("NCI Thesaurus") != 0) {
+                term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
+            }            
+
             
          %>      
 
@@ -161,9 +162,16 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
       <table border="0" width="700px">
         <tr>
           <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
+          <%
+          if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
+          %>
           <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
              <a href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
           </td>
+          <%
+          }
+          %>
+          
         </tr>
       </table>
 

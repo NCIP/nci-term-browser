@@ -6,12 +6,6 @@
     String version_curr = (String) request.getSession().getAttribute("version");
     String code_curr = (String) request.getSession().getAttribute("code");
     
-
-System.out.println("** relationship scheme_curr " + scheme_curr);
-System.out.println("** relationship version_curr " + version_curr);
-System.out.println("** relationship code_curr " + code_curr);
-
-    
     DataUtils util = new DataUtils();
     HashMap hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
     ArrayList superconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
