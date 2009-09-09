@@ -2,7 +2,7 @@
 <div class="bannerarea">
 
         <%
-        String hdr_dictionary = dictionary;//gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
+        String hdr_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
         System.out.println("hdr_dictionary: " + hdr_dictionary);
         if (hdr_dictionary == null || hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
