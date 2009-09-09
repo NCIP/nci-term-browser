@@ -392,8 +392,13 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
   String requestURL = request.getRequestURL().toString();
   int idx = requestURL.indexOf("pages");
   requestURL = requestURL.substring(0, idx);
-  String url = requestURL + "ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=" + concept_id;
-  String bookmark_title = "NCItBrowser%20" + concept_id;
+  
+  System.out.println("(*) property.xhtml dictionary: " + dictionary);
+  String prop_dictionary = dictionary.replace(" ", "%20");
+  
+  
+  String url = requestURL + "ConceptReport.jsp?dictionary=" + prop_dictionary + "&code=" + concept_id;
+  String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>
   <b>URL to Bookmark</b>:
