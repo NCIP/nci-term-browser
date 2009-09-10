@@ -606,6 +606,60 @@ public class TreeUtils {
 		}
 	}
 
+    protected static Association processForAnonomousNodes(Association assoc) {
+        // clone Association except associatedConcepts
+        Association temp = new Association();
+        temp.setAssociatedData(assoc.getAssociatedData());
+        temp.setAssociationName(assoc.getAssociationName());
+        temp.setAssociationReference(assoc.getAssociationReference());
+        temp.setDirectionalName(assoc.getDirectionalName());
+        temp.setAssociatedConcepts(new AssociatedConceptList());
+
+        for (int i = 0; i < assoc.getAssociatedConcepts()
+                .getAssociatedConceptCount(); i++) {
+            // Conditionals to deal with anonymous nodes and UMLS top nodes
+            // "V-X"
+            // The first three allow UMLS traversal to top node.
+            // The last two are specific to owl anonymous nodes which can act
+            // like false
+            // top nodes.
+
+/*
+            if (assoc.getAssociatedConcepts().getAssociatedConcept(i).getReferencedEntry() != null) {
+				System.out.println(assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                    .getReferencedEntry().getEntityDescription().getContent() + " === IsAnonymous? " + assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                    .getReferencedEntry().getIsAnonymous());
+			} else {
+				System.out.println("assoc.getAssociatedConcepts().getAssociatedConcept(i).getReferencedEntry() == null");
+			}
+*/
+
+            if (assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                    .getReferencedEntry() != null
+                    && assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                            .getReferencedEntry().getIsAnonymous() != false) {
+				// do nothing (NCI Thesaurus)
+			}
+
+            else if (assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                    .getReferencedEntry() != null
+                    && assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                            .getReferencedEntry().getIsAnonymous() != null
+                    && assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                            .getReferencedEntry().getIsAnonymous() != false
+                    && !assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                            .getConceptCode().equals("@")
+                    && !assoc.getAssociatedConcepts().getAssociatedConcept(i)
+                            .getConceptCode().equals("@@")) {
+                // do nothing
+            } else {
+                temp.getAssociatedConcepts().addAssociatedConcept(
+                        assoc.getAssociatedConcepts().getAssociatedConcept(i));
+            }
+        }
+        return temp;
+    }
+
 	public static HashMap getAssociatedConcepts(String scheme, String version, String code, String assocName, boolean direction) {
 		HashMap hmap = new HashMap();
 		TreeItem ti = null;
@@ -634,10 +688,18 @@ public class TreeUtils {
 			cng = cng.restrictToAssociations(Constructors
 					.createNameAndValueList(assocName), null);
 			boolean associationsNavigatedFwd = direction;
+
+            // To remove anonymous classes (KLO, 091009), the resolveCodedEntryDepth parameter cannot be set to -1.
+			/*
 			ResolvedConceptReferenceList branch = cng.resolveAsList(focus,
 					associationsNavigatedFwd,
 					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
 					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
+            */
+			ResolvedConceptReferenceList branch = cng.resolveAsList(focus,
+					associationsNavigatedFwd,
+					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
+					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
 
 			for (Iterator<ResolvedConceptReference> nodes = branch
 					.iterateResolvedConceptReference(); nodes.hasNext();) {
@@ -649,6 +711,12 @@ public class TreeUtils {
 					for (Iterator<Association> pathsToChildren = childAssociationList
 							.iterateAssociation(); pathsToChildren.hasNext();) {
 						Association child = pathsToChildren.next();
+						//KLO 091009 remove anonomous nodes
+
+System.out.println("(***) Calling processForAnonomousNodes");
+						child = processForAnonomousNodes(child);
+
+
 						String childNavText = getDirectionalLabel(lbscm, scheme,
 								csvt, child, associationsNavigatedFwd);
 
