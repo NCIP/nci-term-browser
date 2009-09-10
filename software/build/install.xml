@@ -163,7 +163,7 @@
         <math result="jboss.ssl.port" operand1="${jboss.server.port}" operation="+" operand2="363" datatype="int"/>
         <property name="jboss.ssl.enable" value="false"/>
         <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
-        <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${ncitbrowser-webapp.name}"/>
+        <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${project.name}"/>
         <available file="${jboss.home}/server/${jboss.server.name}/conf/jboss-service.xml" property="jboss.exists"/>
         <basename file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.file"/>
         <dirname file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.dir"/>
