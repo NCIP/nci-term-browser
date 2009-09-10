@@ -18,8 +18,9 @@
         </tr>
 
         <%
+        
           Concept concept_syn = (Concept) request.getSession().getAttribute("concept");
-          Vector synonyms = new DataUtils().getSynonyms(concept_syn);
+          Vector synonyms = new DataUtils().getSynonyms(dictionary, concept_syn);
           for (int n=0; n<synonyms.size(); n++)
           {
             String s = (String) synonyms.elementAt(n);

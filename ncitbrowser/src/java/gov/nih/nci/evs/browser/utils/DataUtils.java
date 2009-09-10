@@ -1710,9 +1710,10 @@ NCI Thesaurus:
 			String code) {
 		Vector v = new Vector();
 		Concept concept = getConceptByCode(scheme, version, tag, code);
-		return getSynonyms(concept);
+		// KLO, 091009
+		//getSynonyms(concept);
+		return getSynonyms(scheme, concept);
 	}
-
 
 
 	public static Vector getSynonyms(Concept concept) {
@@ -1728,7 +1729,6 @@ NCI Thesaurus:
 				String term_type = "null";
 				String term_source = "null";
 				String term_source_code = "null";
-
 
 				PropertyQualifier[] qualifiers = p.getPropertyQualifier();
 				if (qualifiers != null) {
@@ -1751,6 +1751,55 @@ NCI Thesaurus:
 				v.add(term_name + "|" + term_type + "|" + term_source + "|"
 						+ term_source_code);
 			//}
+		}
+		SortUtils.quickSort(v);
+		return v;
+	}
+
+
+	public static Vector getSynonyms(String scheme, Concept concept) {
+		if (concept == null)
+			return null;
+		Vector v = new Vector();
+		Presentation[] properties = concept.getPresentation();
+		int n = 0;
+		boolean inclusion = true;
+		for (int i = 0; i < properties.length; i++) {
+			Presentation p = properties[i];
+			// for NCI Thesaurus or Pre-NCI Thesaurus, show FULL_SYNs only
+			if (scheme != null && scheme.indexOf(CODING_SCHEME_NAME) != -1) {
+				inclusion = false;
+				if (p.getPropertyName().compareTo("FULL_SYN") == 0) {
+					inclusion = true;
+				}
+			}
+			if (inclusion) {
+				String term_name = p.getValue().getContent();
+				String term_type = "null";
+				String term_source = "null";
+				String term_source_code = "null";
+
+				PropertyQualifier[] qualifiers = p.getPropertyQualifier();
+				if (qualifiers != null) {
+					for (int j = 0; j < qualifiers.length; j++) {
+						PropertyQualifier q = qualifiers[j];
+						String qualifier_name = q.getPropertyQualifierName();
+						String qualifier_value = q.getValue().getContent();
+						if (qualifier_name.compareTo("source-code") == 0) {
+							term_source_code = qualifier_value;
+							break;
+						}
+					}
+				}
+				term_type = p.getRepresentationalForm();
+				Source[] sources = p.getSource();
+				if (sources != null && sources.length > 0) {
+					Source src = sources[0];
+					term_source = src.getContent();
+				}
+				v.add(term_name + "|" + term_type + "|" + term_source + "|"
+						+ term_source_code);
+			}
 		}
 		SortUtils.quickSort(v);
 		return v;
