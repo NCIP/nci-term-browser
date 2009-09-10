@@ -112,8 +112,8 @@
                  value="View in Hierarchy"
         />
         <%
-        
-        if (HistoryUtils.isHistoryServiceAvailable(scheme)) {
+        String link_scheme = scheme.replaceAll("%20", " ");
+        if (HistoryUtils.isHistoryServiceAvailable(link_scheme)) {
         %>
         &nbsp;&nbsp;
         <input onClick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_history.jsf?dictionary=<%=scheme%>&code=<%=id%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');"
