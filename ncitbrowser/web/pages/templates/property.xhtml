@@ -27,7 +27,12 @@
     additionalproperties.add("CONCEPT_NAME");
     additionalproperties.add("primitive");
 
-    String concept_status = curr_concept.getStatus();
+    String concept_status = null;
+    try {
+        concept_status = curr_concept.getStatus();
+    } catch (Exception ex) {
+        
+    }
 
     if (concept_status != null) {
       concept_status = concept_status.replaceAll("_", " ");

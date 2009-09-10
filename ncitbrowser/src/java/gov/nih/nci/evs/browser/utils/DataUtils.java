@@ -172,14 +172,10 @@ public class DataUtils {
         csnv2VersionMap = new HashMap();
 
         Vector nv_vec = new Vector();
-boolean includeInactive = true;
-
+		boolean includeInactive = true;
 
         try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-
-System.out.println("Calling lbSvc.getSupportedCodingSchemes() from setCodingSchemeMap..." );
-
             CodingSchemeRenderingList csrl = null;
             try {
 				csrl = lbSvc.getSupportedCodingSchemes();
@@ -191,7 +187,6 @@ System.out.println("Calling lbSvc.getSupportedCodingSchemes() from setCodingSche
 
 
 			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-System.out.println("(***) csrs.length: " + csrs.length);
 			for (int i=0; i<csrs.length; i++)
 			{
 				int j = i+1;
@@ -200,9 +195,7 @@ System.out.println("(***) csrs.length: " + csrs.length);
 				CodingSchemeSummary css = csr.getCodingSchemeSummary();
 				String formalname = css.getFormalName();
 				String representsVersion = css.getRepresentsVersion();
-
 System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
-
 				Boolean isActive = null;
 				if (csr == null) {
 					System.out.println("\tcsr == null???");
@@ -855,10 +848,17 @@ System.out.println("\n\tActive? " + isActive);
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             DateFormat formatter = new SimpleDateFormat("MMMM d, yyyy");
-            HistoryService hs = lbSvc.getHistoryService(coding_scheme_name);
-            SystemRelease release = hs.getLatestBaseline();
-            Date date = release.getReleaseDate();
-            return formatter.format(date);
+            HistoryService hs = null;
+            try {
+            	hs = lbSvc.getHistoryService(coding_scheme_name);
+			} catch (Exception ex) {
+				System.out.println("WARNING: HistoryService is not available for " + coding_scheme_name);
+			}
+			if (hs != null) {
+				SystemRelease release = hs.getLatestBaseline();
+				Date date = release.getReleaseDate();
+				return formatter.format(date);
+		    }
         } catch (Exception e) {
             e.printStackTrace();
         }
