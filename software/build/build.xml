@@ -264,7 +264,7 @@
                 <property name="commonlibrary.dir" value="" />
         </ant>
         <!--
-        <ant inheritAll="false" inheritRefs="false" antfile="${bda-blueprints-webapp.build.file}" target="ivy-clean" dir="${bda-blueprints-webapp.base.dir}" />
+        <ant inheritAll="false" inheritRefs="false" antfile="${ncitbrowser-webapp.build.file}" target="ivy-clean" dir="${ncitbrowser-webapp.base.dir}" />
         -->
     </target>
 
