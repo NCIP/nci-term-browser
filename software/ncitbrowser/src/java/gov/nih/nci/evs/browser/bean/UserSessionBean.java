@@ -489,6 +489,10 @@ public class UserSessionBean extends Object {
 System.out.println("(*) Match by code " + scheme + " " + ref.getConceptCode());
 						c = DataUtils.getConceptByCode(scheme, null, null, ref.getConceptCode());
 					}
+
+System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDescription().getContent() + " " + c.getEntityCode());
+
+
 				}
 
 				request.getSession().setAttribute("code", ref.getConceptCode());

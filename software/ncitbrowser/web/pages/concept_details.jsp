@@ -72,13 +72,15 @@ dictionary = DataUtils.getCodingSchemeName( dictionary );
 		}
              
             } 
-            
-code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+
+code = (String) request.getSession().getAttribute("code");
+if (code == null) {
+    System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&  concept_details.jsp code code == null get from input parameter " + code);
+    code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+}            
+
 type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
 
-if (code == null) {
-    code = (String) request.getSession().getAttribute("code");
-}
 
 System.out.println("============= concept_details.jsp dictionary " + dictionary);
 System.out.println("============= concept_details.jsp code " + code);
