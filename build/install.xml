@@ -100,115 +100,115 @@
         <echoproperties/>
     </target>
     <target name="common:init:pre">
-	    <!-- Set application.base.path based on platform -->
-	    <condition property="application.base.path" value="${application.base.path.linux}">
-		    <or>                    
-			    <os family="unix" />
-			    <os family="mac" />
-		    </or>           
-	    </condition>
-	                            
-	    <condition property="application.base.path" value="${application.base.path.windows}">
-		    <os family="windows" />
-	    </condition>    
-	    <echo message="application.base.path=${application.base.path}"/>
-	    <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
-	    <!-- Set application.data.path based on platform -->
-	    <condition property="application.data.path" value="${application.data.path.linux}">
-		    <or>
-			    <os family="unix" />
-			    <os family="mac" />
-		    </or>
-	    </condition>
-	    <condition property="application.data.path" value="${application.data.path.windows}">
-		    <os family="windows" />
-	    </condition>
-	    <echo message="application.data.path=${application.data.path}"/>
+        <!-- Set application.base.path based on platform -->
+        <condition property="application.base.path" value="${application.base.path.linux}">
+            <or>
+                <os family="unix" />
+                <os family="mac" />
+            </or>
+        </condition>
+
+        <condition property="application.base.path" value="${application.base.path.windows}">
+            <os family="windows" />
+        </condition>
+        <echo message="application.base.path=${application.base.path}"/>
+        <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+        <!-- Set application.data.path based on platform -->
+        <condition property="application.data.path" value="${application.data.path.linux}">
+            <or>
+                <os family="unix" />
+                <os family="mac" />
+            </or>
+        </condition>
+        <condition property="application.data.path" value="${application.data.path.windows}">
+            <os family="windows" />
+        </condition>
+        <echo message="application.data.path=${application.data.path}"/>
     </target>
 
     <target name="install:jboss:init" depends="common:init:pre" unless="upgrade.running">
-	    <!-- determine if port configurations or port lists are being called -->
-	    <if>
-		    <isset property="jboss.ncicb-standard.port-config"/>
-		    <then>
-			    <!-- Read some port properties from standard bindings file -->
-			    <echo message="Using JBoss NCICB Standard port configurations"/>
-			    <property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
-			    <jboss-read-ports
-				    jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
-				    />
-			    <echo message="http -${jboss.server.port} "/>
-			    <echo message="http -${jboss.server.jndi.port} "/>
-			    <properties-exist
-				    properties.list="jboss.server.jndi.port,jboss.server.port,jboss.server.ports.name"
-				    />
-			    <!-- Make sure there are not unexpanded tokens and that the jboss.server.ports.name is a configuration in the bindings file. -->
-			    <jboss-bindings-validate
-				    jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
-				    />
+        <!-- determine if port configurations or port lists are being called -->
+        <if>
+            <isset property="jboss.ncicb-standard.port-config"/>
+            <then>
+                <!-- Read some port properties from standard bindings file -->
+                <echo message="Using JBoss NCICB Standard port configurations"/>
+                <property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+                <jboss-read-ports
+                    jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
+                    />
+                <echo message="http -${jboss.server.port} "/>
+                <echo message="http -${jboss.server.jndi.port} "/>
+                <properties-exist
+                    properties.list="jboss.server.jndi.port,jboss.server.port,jboss.server.ports.name"
+                    />
+                <!-- Make sure there are not unexpanded tokens and that the jboss.server.ports.name is a configuration in the bindings file. -->
+                <jboss-bindings-validate
+                    jboss.server.bindingfile.location="${jboss.server.binding.template.location}"
+                    />
 
-		    </then>
-		    <else>
-			    <!-- else ensure that all ports are set, since these will be removed from install-properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
-			    <echo message="Using custom JBoss port configurations"/>
-			    <property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
-			    <properties-exist
-				    properties.list="jboss.server.jndi.port,jboss.server.port,jboss.cobraorb.port,jboss.ejbinvoker.port,jboss.hajndi.port,jboss.hajrmi.port,jboss.jms.port,jboss.jmx-rmi.port,jboss.messaging.port,jboss.pooledha.port,jboss.remoting.port,jboss.server.bind.port,jboss.server.rmi.port,jboss.service.rmiobject.port,jboss.snmp.port,jboss.snmp-trapd.port,jboss.web.service.port"
-				    />
-		    </else>
-	    </if>
+            </then>
+            <else>
+                <!-- else ensure that all ports are set, since these will be removed from install-properties.template we will verify here.  They have to be removed so the validator works with or without the properties or we have to change the format of the file. -->
+                <echo message="Using custom JBoss port configurations"/>
+                <property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+                <properties-exist
+                    properties.list="jboss.server.jndi.port,jboss.server.port,jboss.cobraorb.port,jboss.ejbinvoker.port,jboss.hajndi.port,jboss.hajrmi.port,jboss.jms.port,jboss.jmx-rmi.port,jboss.messaging.port,jboss.pooledha.port,jboss.remoting.port,jboss.server.bind.port,jboss.server.rmi.port,jboss.service.rmiobject.port,jboss.snmp.port,jboss.snmp-trapd.port,jboss.web.service.port"
+                    />
+            </else>
+        </if>
     </target>
 
     <target name="common:jboss:init" depends="common:init:pre" unless="exclude.jboss">
-	    <math result="jboss.ssl.port" operand1="${jboss.server.port}" operation="+" operand2="363" datatype="int"/>
-	    <property name="jboss.ssl.enable" value="false"/>
-	    <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
-	    <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${bda-blueprints-webapp.name}"/>
-	    <available file="${jboss.home}/server/${jboss.server.name}/conf/jboss-service.xml" property="jboss.exists"/>
-	    <basename file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.file"/>
-	    <dirname file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.dir"/>
-	    <basename file="${jboss.grid.secure.cert.location}" property="jboss.grid.secure.cert.file"/>
-	    <dirname file="${jboss.grid.secure.cert.location}" property="jboss.grid.secure.dir"/>
-	    <basename file="${jboss.grid.secure.key.location}" property="jboss.grid.secure.key.file"/>
-	    <property name="jboss.socket.ports" value="${jboss.server.port},${jboss.server.rmi.port},${jboss.server.jndi.port},${jboss.service.rmiobject.port},${jboss.jms.port},${jboss.web.service.port}"/>
+        <math result="jboss.ssl.port" operand1="${jboss.server.port}" operation="+" operand2="363" datatype="int"/>
+        <property name="jboss.ssl.enable" value="false"/>
+        <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+        <property name="jboss.application.url" value="http://${jboss.server.hostname}:${jboss.server.port}/${ncitbrowser-webapp.name}"/>
+        <available file="${jboss.home}/server/${jboss.server.name}/conf/jboss-service.xml" property="jboss.exists"/>
+        <basename file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.file"/>
+        <dirname file="${jboss.ssl.keystore.location}" property="jboss.ssl.keystore.dir"/>
+        <basename file="${jboss.grid.secure.cert.location}" property="jboss.grid.secure.cert.file"/>
+        <dirname file="${jboss.grid.secure.cert.location}" property="jboss.grid.secure.dir"/>
+        <basename file="${jboss.grid.secure.key.location}" property="jboss.grid.secure.key.file"/>
+        <property name="jboss.socket.ports" value="${jboss.server.port},${jboss.server.rmi.port},${jboss.server.jndi.port},${jboss.service.rmiobject.port},${jboss.jms.port},${jboss.web.service.port}"/>
     </target>
 
     <target name="common:init" depends="common:init:pre">
-	    <property name="properties.template.file" value="${basedir}/properties.template" />
-	    <!--
-	    <filterset id="embedded.filterset">
-		    <filter token="application.base.path" value="${application.base.path}"/>
-		    <filter token="application.url" value="${application.url}"/>
-		    <filter token="jboss.home" value="${jboss.home}"/>
-		    <filter token="tomcat.home" value="${tomcat.home}"/>
-		    <filter token="env.LOGNAME" value="${env.LOGNAME}"/>
-		    <filter token="env.JAVA_HOME" value="${env.JAVA_HOME}"/>
-		    <filter token="project.name" value="project.name"/>
-	    </filterset>
-	    -->
+        <property name="properties.template.file" value="${basedir}/properties.template" />
+        <!--
+        <filterset id="embedded.filterset">
+            <filter token="application.base.path" value="${application.base.path}"/>
+            <filter token="application.url" value="${application.url}"/>
+            <filter token="jboss.home" value="${jboss.home}"/>
+            <filter token="tomcat.home" value="${tomcat.home}"/>
+            <filter token="env.LOGNAME" value="${env.LOGNAME}"/>
+            <filter token="env.JAVA_HOME" value="${env.JAVA_HOME}"/>
+            <filter token="project.name" value="project.name"/>
+        </filterset>
+        -->
 
-	    <!--OS Temp dir -->
-	    <condition property="os.temp.dir" value="/tmp">
-		    <or>
-			    <os family="unix" />
-			    <os family="mac" />
-		    </or>
-	    </condition>
+        <!--OS Temp dir -->
+        <condition property="os.temp.dir" value="/tmp">
+            <or>
+                <os family="unix" />
+                <os family="mac" />
+            </or>
+        </condition>
 
-	    <condition property="os.temp.dir" value="c:/temp">
-		    <os family="windows" />
-	    </condition>
-	    <!-- Copy files to ensure values containing variables are expanded, such properties are stored in embedded.filterset and then copy with filter files -->
-	    <copy todir="${common.dir.dest}" filtering="true">
-		    <fileset dir="${common.dir.src}">
-			    <include name="**/*"/>
-		    </fileset>
-		    <filterset refid="embedded.filterset"/>
-		    <filterset>
-			    <filtersfile file="${properties.file}"/>
-			    <filtersfile file="project.properties"/>
-		    </filterset>
-	    </copy>
+        <condition property="os.temp.dir" value="c:/temp">
+            <os family="windows" />
+        </condition>
+        <!-- Copy files to ensure values containing variables are expanded, such properties are stored in embedded.filterset and then copy with filter files -->
+        <copy todir="${common.dir.dest}" filtering="true">
+            <fileset dir="${common.dir.src}">
+                <include name="**/*"/>
+            </fileset>
+            <filterset refid="embedded.filterset"/>
+            <filterset>
+                <filtersfile file="${properties.file}"/>
+                <filtersfile file="project.properties"/>
+            </filterset>
+        </copy>
     </target>
 
 
@@ -246,7 +246,7 @@
     </target>
 
     <target name="install:jboss:ncitbrowser-webapp" description="Deploy ncitbrowser-webapp and common libraries to jboss installation" unless="exclude.jboss"
-	    depends="common:jboss:init, common:init">
+        depends="common:jboss:init, common:init">
         <!-- added to ensure working.dirs are fresh for our install -->
         <delete dir="${jboss.home}/server/${jboss.server.name}/tmp"/>
         <delete dir="${jboss.home}/server/${jboss.server.name}/work"/>
@@ -286,13 +286,13 @@
             <filter token="ncit.build.info" value="Built: ${BUILD_DATE}"/>
             <filter token="ncim.url" value="${ncim.url}"/>
             <filter token="term.suggestion.application.url" value="${term.suggestion.application.url}"/>
-		    <filter token="application.base.path" value="${application.base.path}"/>
-		    <filter token="application.url" value="${application.url}"/>
-		    <filter token="jboss.home" value="${jboss.home}"/>
-		    <filter token="tomcat.home" value="${tomcat.home}"/>
-		    <filter token="env.LOGNAME" value="${env.LOGNAME}"/>
-		    <filter token="env.JAVA_HOME" value="${env.JAVA_HOME}"/>
-		    <filter token="project.name" value="project.name"/>
+            <filter token="application.base.path" value="${application.base.path}"/>
+            <filter token="application.url" value="${application.url}"/>
+            <filter token="jboss.home" value="${jboss.home}"/>
+            <filter token="tomcat.home" value="${tomcat.home}"/>
+            <filter token="env.LOGNAME" value="${env.LOGNAME}"/>
+            <filter token="env.JAVA_HOME" value="${env.JAVA_HOME}"/>
+            <filter token="project.name" value="project.name"/>
         </filterset>
         <mkdir dir="${application.data.path}/${ncitbrowser.conf.path}" />
         <mkdir dir="${application.data.path}/${ehcache.cache.path}" />
@@ -407,9 +407,9 @@
 
     <target name="install:jboss:configure" description="Configure JBoss (bindings, login-config.xml, ect)" unless="exclude.jboss"
         depends="common:jboss:init,
-		common:init,
-		install:jboss:configure:log4j
-		">
+        common:init,
+        install:jboss:configure:log4j
+        ">
         <!-- Calls the following macros
             jboss-bindings - configures ports for jboss
             jboss-login-config - sets up authentication
@@ -461,70 +461,70 @@
         </if>
     </target>
     <target name="install:common:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="common:init">
-	    <validate-pre-install-common
-		    ant.check.version="${ant.minimum.version}"
-		    java.check.version.major="${java.major.version}"
-		    java.check.version.minor="${java.minor.version}"
-		    />
+        <validate-pre-install-common
+            ant.check.version="${ant.minimum.version}"
+            java.check.version.major="${java.major.version}"
+            java.check.version.minor="${java.minor.version}"
+            />
     </target>
-    <target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils" 
-	    depends="
-	    common:jboss:init,common:init,
-	    install:common:validation:pre-install
-	    ">
-	    <validate-pre-install-jboss
-		    />
+    <target name="install:jboss:validation:pre-install" description="Runs pre-install validation checks bda-utils"
+        depends="
+        common:jboss:init,common:init,
+        install:common:validation:pre-install
+        ">
+        <validate-pre-install-jboss
+            />
     </target>
     <target name="install:jboss:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop"
-	    depends="
-	    common:init,
-	    install:jboss:stop
-	    ">
-	    <validate-pre-jboss-ports
-		    />
+        depends="
+        common:init,
+        install:jboss:stop
+        ">
+        <validate-pre-jboss-ports
+            />
     </target>
 
     <target name="install:common:validation:post-install" description="Run post-install checks from bda-utils"
-	    depends="
-	    common:init
-	    ">
-	    <validate-post-common />
+        depends="
+        common:init
+        ">
+        <validate-post-common />
     </target>
     <target name="install:jboss:validation:post-install" description="Run post-install checks from bda-utils"
-	    depends="
-	    common:jboss:init,
-	    common:init,
-	    install:jboss:start
-	    ">
-	    <if>
-		    <not>
-			    <isset property="exclude.start.servers"/>
-		    </not>
-		    <then>
-			    <validate-post-jboss />
-		    </then>
-	    </if>
+        depends="
+        common:jboss:init,
+        common:init,
+        install:jboss:start
+        ">
+        <if>
+            <not>
+                <isset property="exclude.start.servers"/>
+            </not>
+            <then>
+                <validate-post-jboss />
+            </then>
+        </if>
     </target>
 
 
     <target name="install:jboss" description="Wrapper scripts that calls all required targets to install the jboss container" unless="exclude.jboss"
         depends="
-	common:jboss:init,
-	common:init,
-	install:jboss:init,
-	install:jboss:validation:pre-install,
-	install:common:validation:pre-install,
-	install:jboss:stop,
-	install:jboss:validation:pre-install:ports,
-	install:jboss:clean,
-	install:jboss:binaries,
+    common:jboss:init,
+    common:init,
+    install:jboss:init,
+    install:jboss:validation:pre-install,
+    install:common:validation:pre-install,
+    install:jboss:stop,
+    install:jboss:validation:pre-install:ports,
+    install:jboss:clean,
+    install:jboss:binaries,
         install:jboss:ncitbrowser-webapp:re-configure,
         install:jboss:ncitbrowser-webapp,
         install:jboss:ncitbrowser-webapp:configure,
-	install:jboss:configure,
-	install:post:jboss,
-	install:jboss:start,
-	install:jboss:validation:post-install
+    install:jboss:configure,
+    install:post:jboss,
+    install:jboss:start,
+    install:jboss:validation:post-install
         " >
     </target>
 
@@ -554,67 +554,67 @@
 
     <target name="upgrade-dac:jboss" description="Wrapper target to call all targets required to upgrade jboss container." unless="exclude.jboss"
         depends="
-	upgrade:jboss:init,
-	common:init,
-	common:jboss:init,
-	install:jboss:validation:pre-install,
-	install:common:validation:pre-install,
-	install:jboss:stop,
-	install:jboss:validation:pre-install:ports,
-	install:jboss:clean,
-	install:jboss:binaries,
-	install:jboss:configure,
+    upgrade:jboss:init,
+    common:init,
+    common:jboss:init,
+    install:jboss:validation:pre-install,
+    install:common:validation:pre-install,
+    install:jboss:stop,
+    install:jboss:validation:pre-install:ports,
+    install:jboss:clean,
+    install:jboss:binaries,
+    install:jboss:configure,
         install:jboss:ncitbrowser-webapp:re-configure,
         install:jboss:ncitbrowser-webapp,
         install:jboss:ncitbrowser-webapp:configure,
-	upgrade:post:jboss,
-	install:post:jboss,
-	install:jboss:start,
-	install:jboss:validation:post-install
+    upgrade:post:jboss,
+    install:post:jboss,
+    install:jboss:start,
+    install:jboss:validation:post-install
         ">
     </target>
 
     <target name="upgrade-cm:jboss" description="Wrapper target to call all targets required to upgrade jboss container." unless="exclude.jboss"
         depends="
-	upgrade:jboss:init,
-	common:init,
-	common:jboss:init,
-	install:jboss:validation:pre-install,
-	install:common:validation:pre-install,
-	install:jboss:stop,
-	install:jboss:validation:pre-install:ports,
-	install:jboss:configure,
+    upgrade:jboss:init,
+    common:init,
+    common:jboss:init,
+    install:jboss:validation:pre-install,
+    install:common:validation:pre-install,
+    install:jboss:stop,
+    install:jboss:validation:pre-install:ports,
+    install:jboss:configure,
         install:jboss:ncitbrowser-webapp:re-configure,
         install:jboss:ncitbrowser-webapp,
         install:jboss:ncitbrowser-webapp:configure,
-	upgrade:post:jboss,
-	install:post:jboss,
-	install:jboss:start,
-	install:jboss:validation:post-install
+    upgrade:post:jboss,
+    install:post:jboss,
+    install:jboss:start,
+    install:jboss:validation:post-install
         ">
     </target>
 
     <target name="upgrade-ncm:jboss" description="Wrapper target to call all targets required to upgrade jboss container." unless="exclude.jboss"
         depends="
-	upgrade:jboss:init,
-	common:init,
-	common:jboss:init,
-	install:jboss:validation:pre-install,
-	install:common:validation:pre-install,
-	install:jboss:stop,
-	install:jboss:validation:pre-install:ports,
+    upgrade:jboss:init,
+    common:init,
+    common:jboss:init,
+    install:jboss:validation:pre-install,
+    install:common:validation:pre-install,
+    install:jboss:stop,
+    install:jboss:validation:pre-install:ports,
         install:jboss:ncitbrowser-webapp:re-configure,
         install:jboss:ncitbrowser-webapp,
         install:jboss:ncitbrowser-webapp:configure,
-	upgrade:post:jboss,
-	install:post:jboss,
-	install:jboss:start,
-	install:jboss:validation:post-install
+    upgrade:post:jboss,
+    install:post:jboss,
+    install:jboss:start,
+    install:jboss:validation:post-install
         ">
     </target>
 
     <target name="install:common:post"
-	    depends="common:init,install:post:jboss">
+        depends="common:init,install:post:jboss">
     </target>
 
     <target name="install:post:jboss" unless="exclude.jboss">
@@ -652,71 +652,71 @@
     <target name="upgrade:common:init" depends="upgrade:jboss:init " unless="install.running">
     </target>
     <target name="upgrade:jboss:init" unless="install.running"
-	    depends="
-	    upgrade:jboss:init:prep,
-	    upgrade:jboss:readers:bda,
-	    upgrade:jboss:readers:custom
-	    ">
-	    <properties-print
-		    properties.list="${read.properties.list}"
-		    />
-	    <properties-exist
-		    properties.list="${read.properties.list}"
-		    />
-	    <properties-write
-		    properties.list="${read.properties.list}"
-		    />
+        depends="
+        upgrade:jboss:init:prep,
+        upgrade:jboss:readers:bda,
+        upgrade:jboss:readers:custom
+        ">
+        <properties-print
+            properties.list="${read.properties.list}"
+            />
+        <properties-exist
+            properties.list="${read.properties.list}"
+            />
+        <properties-write
+            properties.list="${read.properties.list}"
+            />
     </target>
     <target name="upgrade:common:init:prep" unless="install.running">
-	    <if>
-		    <not>
-			    <isset property="application.base.path"/>
-		    </not>
-		    <then>
-			    <!-- Set application.base.path based on platform -->
-			    <condition property="application.base.path" value="${application.base.path.linux}">
-				    <or>
-					    <os family="unix" />
-					    <os family="mac" />
-				    </or>
-			    </condition>
+        <if>
+            <not>
+                <isset property="application.base.path"/>
+            </not>
+            <then>
+                <!-- Set application.base.path based on platform -->
+                <condition property="application.base.path" value="${application.base.path.linux}">
+                    <or>
+                        <os family="unix" />
+                        <os family="mac" />
+                    </or>
+                </condition>
 
-			    <condition property="application.base.path" value="${application.base.path.windows}">
-				    <os family="windows" />
-			    </condition>
-			    <echo message="application.base.path=${application.base.path}"/>
-		    </then>
-	    </if>
-	    <properties-print
-		    properties.list="application.base.path,jboss.home,tomcat.home,jboss.server.name"
-		    />
-	    <var name="read.properties.list" value=""/>
-	    <property name="upgrade.running" value="true"/>
+                <condition property="application.base.path" value="${application.base.path.windows}">
+                    <os family="windows" />
+                </condition>
+                <echo message="application.base.path=${application.base.path}"/>
+            </then>
+        </if>
+        <properties-print
+            properties.list="application.base.path,jboss.home,tomcat.home,jboss.server.name"
+            />
+        <var name="read.properties.list" value=""/>
+        <property name="upgrade.running" value="true"/>
     </target>
 
     <target name="upgrade:jboss:init:prep" depends="upgrade:common:init:prep" unless="install.running">
-	    <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
-	    <if>
-		    <equals arg1="${jboss.ncicb-standard.port-config}" arg2="true"/>
-		    <then>
-			    <property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
-		    </then>
-		    <else>
-			    <property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
-		    </else>
-	    </if>
+        <property name="jboss.home" value="${application.base.path}/${jboss.relative.path}"/>
+        <if>
+            <equals arg1="${jboss.ncicb-standard.port-config}" arg2="true"/>
+            <then>
+                <property name="jboss.server.binding.template.location" value="${basedir}/${jboss-bindings.file}"/>
+            </then>
+            <else>
+                <property name="jboss.server.binding.template.location" value="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings.xml"/>
+            </else>
+        </if>
 
-	    <property name="upgrade.running" value="true"/>
-	    <!-- Upgrades always use port configs -->
-	    <property name="jboss.ncicb-standard.port-config" value="true"/>
-	    <available file="${jboss.home}" property="jboss.exists"/>
-	    <property name="read.jboss.home" value="${jboss.home}"/>
+        <property name="upgrade.running" value="true"/>
+        <!-- Upgrades always use port configs -->
+        <property name="jboss.ncicb-standard.port-config" value="true"/>
+        <available file="${jboss.home}" property="jboss.exists"/>
+        <property name="read.jboss.home" value="${jboss.home}"/>
 
     </target>
 
 
     <target name="upgrade:jboss:readers:custom" unless="install.running">
-	    <!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
+        <!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
     </target>
 
 
