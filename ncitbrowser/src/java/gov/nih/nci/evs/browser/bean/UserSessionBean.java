@@ -404,7 +404,6 @@ public class UserSessionBean extends Object {
         }
 
 		String scheme = request.getParameter("scheme");
-
 		if (scheme == null) {
 			scheme = (String) request.getAttribute("scheme");
 		}
@@ -415,6 +414,8 @@ public class UserSessionBean extends Object {
 
         if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
         //String scheme = Constants.CODING_SCHEME_NAME;
+
+System.out.println("* scheme: " + scheme);
 
         String version = null;
         String max_str = null;
@@ -467,6 +468,7 @@ public class UserSessionBean extends Object {
 				request.getSession().setAttribute("page_string", "1");
 
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
+				request.setAttribute("dictionary", scheme);
 				return "search_results";
 		    } else if (size == 1) {
 				request.getSession().setAttribute("singleton", "true");
@@ -486,12 +488,10 @@ public class UserSessionBean extends Object {
 					c = ref.getReferencedEntry();
 					if (c == null) {
 						//c = DataUtils.getConceptByCode(Constants.CODING_SCHEME_NAME, null, null, ref.getConceptCode());
-System.out.println("(*) Match by code " + scheme + " " + ref.getConceptCode());
 						c = DataUtils.getConceptByCode(scheme, null, null, ref.getConceptCode());
 					}
 
 System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDescription().getContent() + " " + c.getEntityCode());
-
 
 				}
 

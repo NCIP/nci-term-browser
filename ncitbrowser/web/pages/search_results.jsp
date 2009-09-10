@@ -31,7 +31,25 @@
     <%@ include file="/pages/templates/sub-header.xhtml" %>
     <!-- Main box -->
     <div id="main-area">
+
+<%      
+String search_results_dictionary = (String) request.getAttribute("dictionary");
+
+System.out.println("(*) search_results.jsp dictionary " + search_results_dictionary);
+
+
+if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
+%>
+   
       <%@ include file="/pages/templates/content-header.xhtml" %>
+<%      
+} else {
+%>
+      <%@ include file="/pages/templates/content-header1.xhtml" %>
+<%      
+}
+%>
+      
       <!-- Page content -->
       <div class="pagecontent">
         <%
