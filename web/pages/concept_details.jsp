@@ -75,16 +75,10 @@ dictionary = DataUtils.getCodingSchemeName( dictionary );
 
 code = (String) request.getSession().getAttribute("code");
 if (code == null) {
-    System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&  concept_details.jsp code code == null get from input parameter " + code);
     code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
 }            
 
 type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
-
-
-System.out.println("============= concept_details.jsp dictionary " + dictionary);
-System.out.println("============= concept_details.jsp code " + code);
-
 
             String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
             if (dictionary.compareTo("NCI Thesaurus") != 0) {
