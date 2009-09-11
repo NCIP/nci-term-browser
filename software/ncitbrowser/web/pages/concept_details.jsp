@@ -73,10 +73,10 @@ dictionary = DataUtils.getCodingSchemeName( dictionary );
              
             } 
 
-code = (String) request.getSession().getAttribute("code");
+code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
 if (code == null) {
-    code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
-}            
+    code = (String) request.getSession().getAttribute("code");
+}  
 
 Boolean new_search = null;
 Object new_search_obj = request.getSession().getAttribute("new_search");
