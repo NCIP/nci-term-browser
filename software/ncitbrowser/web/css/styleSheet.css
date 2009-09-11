@@ -314,6 +314,12 @@ h3
  padding: 4px;
 }
 
+.search-form-main-area
+{
+ margin: 0;
+ padding: 0px;
+}
+
 #main-area
 {
  border-left-color: #adadc2;
