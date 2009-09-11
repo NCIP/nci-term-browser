@@ -11,8 +11,6 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
-
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -30,19 +28,15 @@
     <%@ include file="/pages/templates/sub-header.xhtml" %>
     <!-- Main box -->
     <div id="main-area">
-    
-      <%@ include file="/pages/templates/content-header2.xhtml" %>
-      
-      
+      <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
       <!-- Page content -->
       <div class="pagecontent">
         <%
-        
           HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
- 
+
           IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
-       
+
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
           String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
@@ -67,7 +61,7 @@
           int iend = page_num * page_size;
           int istart = iend - page_size;
           int size = iteratorBean.getSize();
-          
+
           if (iend > size) iend = size;
           int num_pages = size / page_size;
           if (num_pages * page_size < size) num_pages++;
@@ -75,7 +69,6 @@
           String iend_str = Integer.toString(iend);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
-          
         %>
         <table width="700px">
           <tr>
@@ -97,23 +90,23 @@
           <tr>
             <td class="textbody">
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-              
-		      <th class="dataTableHeader" scope="col" align="left">Concept</th>
-		      <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
-              
+
+          <th class="dataTableHeader" scope="col" align="left">Concept</th>
+          <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
+
                 <%
                   List list = iteratorBean.getData(istart, iend);
                   for (int i=0; i<list.size(); i++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
-                      
+
                       String code = rcr.getConceptCode();
                       String name = rcr.getEntityDescription().getContent();
-  
+
                       String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
-                    
+
                       String vocabulary_name_encoded = null;
                       if (vocabulary_name != null) vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
-                    
+
                       if (i % 2 == 0) {
                         %>
                           <tr class="dataRowDark">
@@ -132,13 +125,13 @@
                           <%
                           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                                String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
-                          %>    
+                          %>
                                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>
                                <!--
                                &nbsp;<img src='<%=basePath%>/images/newWindow.gif'/>
                                -->
-                               
-                          <%     
+
+                          <%
                           } else {
                           %>
                                <a href="<%=request.getContextPath() %>/pages/concept_details2.jsf?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
@@ -148,11 +141,10 @@
                           </td>
                           <td class="dataCellText">
                             <%=vocabulary_name%>
-                          </td>                          
-                          
+                          </td>
+
                         </tr>
                       <%
-
                   }
                 %>
               </table>
