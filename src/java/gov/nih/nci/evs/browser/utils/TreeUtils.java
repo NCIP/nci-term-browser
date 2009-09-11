@@ -607,6 +607,7 @@ public class TreeUtils {
 	}
 
     protected static Association processForAnonomousNodes(Association assoc) {
+		if (assoc == null) return null;
         // clone Association except associatedConcepts
         Association temp = new Association();
         temp.setAssociatedData(assoc.getAssociatedData());
@@ -633,15 +634,15 @@ public class TreeUtils {
 				System.out.println("assoc.getAssociatedConcepts().getAssociatedConcept(i).getReferencedEntry() == null");
 			}
 */
-
+/*
             if (assoc.getAssociatedConcepts().getAssociatedConcept(i)
                     .getReferencedEntry() != null
                     && assoc.getAssociatedConcepts().getAssociatedConcept(i)
                             .getReferencedEntry().getIsAnonymous() != false) {
 				// do nothing (NCI Thesaurus)
 			}
-
-            else if (assoc.getAssociatedConcepts().getAssociatedConcept(i)
+*/
+            if (assoc.getAssociatedConcepts().getAssociatedConcept(i)
                     .getReferencedEntry() != null
                     && assoc.getAssociatedConcepts().getAssociatedConcept(i)
                             .getReferencedEntry().getIsAnonymous() != null
