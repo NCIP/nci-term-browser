@@ -78,13 +78,18 @@ if (code == null) {
     code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
 }            
 
-type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
+Boolean new_search = null;
+Object new_search_obj = request.getSession().getAttribute("new_search");
+if (new_search_obj != null) {
+    new_search = (Boolean) new_search_obj;
+    if (new_search.equals(Boolean.TRUE)) {
+        type = "properties";
+        request.getSession().setAttribute("new_search", Boolean.FALSE);
+    }
+}
 
-            String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-            if (dictionary.compareTo("NCI Thesaurus") != 0) {
-                term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
-            }
-            
+if (type == null) {
+type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             
             if (type == null) {
                 type = "properties";
@@ -94,7 +99,14 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
                      type.compareTo("all") != 0) {
                 type = "properties";
             }
+}
 
+
+            String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
+            if (dictionary.compareTo("NCI Thesaurus") != 0) {
+                term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
+            }
+            
             String name = "";
             Concept c = null;
 

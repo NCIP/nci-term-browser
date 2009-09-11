@@ -1225,6 +1225,12 @@ System.out.println("\n\tActive? " + isActive);
             String code) {
         // EVSApplicationService lbSvc = new
         // RemoteServerUtil().createLexBIGService();
+
+ System.out.println("(*) DataUtils scheme: " + scheme);
+ System.out.println("(*) DataUtils version: " + version);
+ System.out.println("(*) DataUtils code: " + code);
+
+
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
@@ -1245,6 +1251,13 @@ System.out.println("\n\tActive? " + isActive);
         HashMap map = new HashMap();
 
 		String[] associationsToNavigate = TreeUtils.getAssociationsToNavigate(scheme, version);
+		if (associationsToNavigate == null) {
+ System.out.println("(*) DataUtils associationsToNavigate == null??? " );
+
+
+			return map;
+		}
+
 		Vector w = new Vector();
 		for (int k=0; k<associationsToNavigate.length; k++) {
 			w.add(associationsToNavigate[k]);
@@ -1339,11 +1352,11 @@ System.out.println("\n\tActive? " + isActive);
 									String s = associationName + "|" + pt + "|"
 											+ ac.getConceptCode();
 									if (isRole) {
-										if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
+										//if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
 											// System.out.println("Adding role: " +
 											// s);
 											roleList.add(s);
-										}
+										//}
 									} else {
 										// System.out.println("Adding association: "
 										// + s);
@@ -2100,7 +2113,7 @@ NCI Thesaurus:
 
 		String value = (String) csnv2codingSchemeNameMap.get(key);
 		if (value == null) {
-			System.out.println("key2CodingSchemeName returns " + key);
+			//System.out.println("key2CodingSchemeName returns " + key);
 			return key;
 		}
 		return value;
