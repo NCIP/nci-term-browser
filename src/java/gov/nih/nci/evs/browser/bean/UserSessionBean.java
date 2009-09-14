@@ -918,6 +918,10 @@ String t = "";
 
 
    public String multipleSearchAction() {
+
+System.out.println("*** Enter multipleSearchAction ");
+
+
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String matchText = (String) request.getParameter("matchText");
 
@@ -930,6 +934,10 @@ String t = "";
             return "message";
         }
         request.getSession().setAttribute("matchText", matchText);
+
+
+
+
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
         //setSelectedAlgorithm(matchAlgorithm);
@@ -962,7 +970,9 @@ String t = "";
         }
 
         String[] ontology_list = null;
-        String ontology_list_str = request.getParameter("ontology_list_str");
+        String ontology_list_str = (String) request.getParameter("ontology_list_str");
+
+System.out.println("ontology_list_str " + ontology_list_str);
 
 		LicenseBean licenseBean = null;
 
@@ -991,11 +1001,29 @@ String t = "";
             ontology_list = request.getParameterValues("ontology_list");
 	    }
 
+        String ontologiesToSearchOnStr = null;
+        if (ontology_list == null) {
+			ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+			if (ontologiesToSearchOnStr != null) {
+				Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
+				ontology_list = new String[ontologies_to_search_on.size()];
+				for (int k=0; k<ontologies_to_search_on.size(); k++) {
+					String s = (String) ontologies_to_search_on.elementAt(k);
+					int j = k+1;
+					System.out.println("(" + j + ") " + s);
+					ontology_list[k] = s;
+				}
+			}
+		}
+
         if (ontology_list == null) {
 			String message = "Please select at least one vocabulary.";
 			request.getSession().setAttribute("message", message);
 			return "message";
 		}
+
+
+//searchForm-termbrowser.xhtml
 
 		Vector schemes = new Vector();
 		Vector versions = new Vector();
@@ -1003,7 +1031,7 @@ String t = "";
         List list = new ArrayList<String>();
         ontologiesToSearchOn = new ArrayList<String>();
 
-        String ontologiesToSearchOnStr = "|";
+        ontologiesToSearchOnStr = "|";
         for (int i = 0; i < ontology_list.length; ++i) {
 			list.add(ontology_list[i]);
 			ontologiesToSearchOn.add(ontology_list[i]);
