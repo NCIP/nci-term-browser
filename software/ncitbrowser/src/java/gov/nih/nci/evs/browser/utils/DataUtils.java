@@ -2369,4 +2369,34 @@ NCI Thesaurus:
     }
 
 
+    public static String getVisitedConceptLink(String scheme, Vector concept_vec) {
+		String retstr = "<A onmouseover=\"Tip('";
+		String line = null;
+		for (int i=0; i<concept_vec.size(); i++) {
+			Concept c = (Concept) concept_vec.elementAt(i);
+            line =
+               "<a href='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
+               + scheme
+               + "&code="
+               + c.getEntityCode()
+               + "\'>"
+               + c.getEntityDescription().getContent()
+               + "</a><br>";
+            retstr = retstr + line;
+		}
+		line = "',";
+		retstr = retstr + line;
+
+		line = "WIDTH, 300, TITLE, 'Visted Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\"";
+		retstr = retstr + line;
+
+		line = "onmouseout=UnTip()";
+		retstr = retstr + line;
+
+		line = "href=\"#\">Visted Concepts</A>";
+		retstr = retstr + line;
+
+		return retstr;
+	}
+
 }
