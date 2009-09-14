@@ -28,7 +28,9 @@
     <%@ include file="/pages/templates/sub-header.xhtml" %>
     <!-- Main box -->
     <div id="main-area">
-      <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
+      <form name="searchTerm" method="post" class="search-form-main-area">
+          <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
+      </form>
       <!-- Page content -->
       <div class="pagecontent">
         <%

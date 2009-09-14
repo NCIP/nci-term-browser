@@ -47,7 +47,7 @@
       <!-- Page content -->
       <div class="pagecontent">
         <%
-          String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute(Constants.ERROR_MESSAGE)); %>
+          String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute(Constants.ERROR_MESSAGE));
         %>
         <b><%=message%></b>
         <%@ include file="/pages/templates/nciFooter.html" %>
