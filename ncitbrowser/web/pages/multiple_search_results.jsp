@@ -20,14 +20,14 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
 <f:view>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
 
   <%@ include file="/pages/templates/header.xhtml" %>
   <div class="center-page">
