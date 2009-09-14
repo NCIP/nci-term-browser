@@ -1009,8 +1009,8 @@ System.out.println("ontology_list_str " + ontology_list_str);
 				ontology_list = new String[ontologies_to_search_on.size()];
 				for (int k=0; k<ontologies_to_search_on.size(); k++) {
 					String s = (String) ontologies_to_search_on.elementAt(k);
-					int j = k+1;
-					System.out.println("(" + j + ") " + s);
+					//int j = k+1;
+					//System.out.println("(" + j + ") " + s);
 					ontology_list[k] = s;
 				}
 			}
