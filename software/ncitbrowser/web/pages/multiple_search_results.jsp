@@ -115,7 +115,7 @@ if (ontologiesToSearchOnStr != null) {
 	}
 }
 %>
-from <a onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabualaries.</a> 
+from <a onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>. 
             </td>
           </tr>
           <tr>
