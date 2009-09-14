@@ -20,9 +20,15 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
 <f:view>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
+
   <%@ include file="/pages/templates/header.xhtml" %>
   <div class="center-page">
     <%@ include file="/pages/templates/sub-header.xhtml" %>
@@ -86,7 +92,30 @@
           </tr>
           <tr>
             <td>
+            <%
+              if (contains_warning_msg != null) {
+             %> 
               <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>&nbsp;<%=contains_warning_msg%>
+             <% 
+              } else {
+              %>
+              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
+              <%
+              }
+              %>
+
+<%              
+String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+String tooltip_str = "";
+if (ontologiesToSearchOnStr != null) {
+	Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
+	for (int k=0; k<ontologies_to_search_on.size(); k++) {
+		String s = (String) ontologies_to_search_on.elementAt(k);
+		tooltip_str = tooltip_str + s + "; ";
+	}
+}
+%>
+from <a onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabualaries.</a> 
             </td>
           </tr>
           <tr>
