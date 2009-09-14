@@ -20,6 +20,10 @@
     ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
     ArrayList roles = (ArrayList) hmap.get(DataUtils.TYPE_ROLE);
     ArrayList associations = (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
+    
+    ArrayList inverse_roles = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ROLE);
+    ArrayList inverse_associations = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
+    
     ArrayList concepts = null;
     String label = "";
     
@@ -224,6 +228,111 @@
     <%
   }
 %>
+
+
+  <p>
+  <%
+     if (inverse_roles != null && inverse_roles.size() > 0)
+     {
+  %>
+       <b>Inverse Role Relationships:</b>
+       
+  <br/>
+  <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
+  <table class="dataTable">
+    <%
+      int n1 = 0;
+      for (int i=0; i<inverse_roles.size(); i++) {
+        String s = (String) inverse_roles.get(i);
+        Vector ret_vec = DataUtils.parseData(s, "|");
+        String role_name = (String) ret_vec.elementAt(0);
+        String target_concept_name = (String) ret_vec.elementAt(1);
+        String target_concept_code = (String) ret_vec.elementAt(2);
+
+        if (n1 % 2 == 0) {
+          %>
+            <tr class="dataRowDark">
+          <%
+        } else {
+          %>
+            <tr class="dataRowLight">
+          <%
+        }
+        n1++;
+        %>
+              <td><%=role_name%></td>
+              <td>
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
+                  <%=target_concept_name%>
+                </a>
+              </td>
+            </tr>
+      <%
+      }
+      %>
+  </table>
+</p>
+<p>     
+       
+  <%
+     } else if (inverse_roles == null || inverse_roles.size() == 0) {
+  %>
+       <b>Inverse Role Relationships: </b><i>(none)</i>
+  <%
+     }
+  %>
+
+<p>
+<%
+  if (inverse_associations != null && inverse_associations.size() > 0) {
+%>
+    <b>Inverse Associations:</b>
+<br/>
+<i>(Associations are true only for the current concept.)</i>
+<table class="dataTable">
+  <%
+    int n2 = 0;
+
+    for (int i=0; i<inverse_associations.size(); i++) {
+      String s = (String) inverse_associations.get(i);
+      Vector ret_vec = DataUtils.parseData(s, "|");
+      String role_name = (String) ret_vec.elementAt(0);
+      String target_concept_name = (String) ret_vec.elementAt(1);
+      String target_concept_code = (String) ret_vec.elementAt(2);
+
+      if (n2 % 2 == 0) {
+        %>
+            <tr class="dataRowDark">
+        <%
+        } else {
+        %>
+            <tr class="dataRowLight">
+        <%
+        }
+        n2++;
+        %>
+              <td><%=role_name%></td>
+              <td>
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
+                  <%=target_concept_name%>
+                </a>
+              </td>
+            </tr>
+        <%
+        }
+        %>
+ </table>
+</p>    
+    
+<%
+  } else if (inverse_associations == null || inverse_associations.size() == 0) {
+    %>
+    <b>Inverse Associations: </b><i>(none)</i>
+    <%
+  }
+%>
+
+
 
 <%
 }
