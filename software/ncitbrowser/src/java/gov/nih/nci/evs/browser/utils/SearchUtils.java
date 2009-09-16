@@ -1119,6 +1119,8 @@ System.out.println("Step 4: ");
 			matchAlgorithm = "subString";
 		}
 
+System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
+
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
         try {
@@ -1196,7 +1198,7 @@ System.out.println("Step 4: ");
 					iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
 				}
 			} catch (Exception e) {
-
+                e.printStackTrace();
 			}
 		}
         return iterator;
