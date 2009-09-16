@@ -52,17 +52,16 @@
 
             String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("singleton"));
 
-
 dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
             
             if (dictionary != null) {
-
 dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
 dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
 dictionary = DataUtils.getCodingSchemeName( dictionary ); 
+request.getSession().setAttribute("dictionary", dictionary);
                 
             } else {
-                dictionary = Constants.CODING_SCHEME_NAME;
+                dictionary = (String) request.getSession().getAttribute("dictionary");
             }    
 
             if (singleton != null && singleton.compareTo("true") == 0) {
@@ -127,7 +126,7 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
 		   name = "ERROR: Invalid code - " + code + ".";
 		}
 
-       
+ 
         if (dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
         	<%@ include file="/pages/templates/content-header.xhtml" %>
