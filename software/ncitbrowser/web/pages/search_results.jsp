@@ -33,17 +33,19 @@
     <div id="main-area">
 
 <%      
-String search_results_dictionary = (String) request.getAttribute("dictionary");
+String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
 
 System.out.println("(*) search_results.jsp dictionary " + search_results_dictionary);
 
 
 if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
+System.out.println("(*) search_results.jsp content-header.xhtml " + search_results_dictionary);
 %>
    
       <%@ include file="/pages/templates/content-header.xhtml" %>
 <%      
 } else {
+System.out.println("(*) search_results.jsp content-header1.xhtml " + search_results_dictionary);
 %>
       <%@ include file="/pages/templates/content-header1.xhtml" %>
 <%      
