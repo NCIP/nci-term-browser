@@ -29,7 +29,7 @@
     <div id="main-area">
 
         <%
-        String err_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
+        String err_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
         System.out.println("*** err_dictionary: " + err_dictionary);
         if (err_dictionary == null) {
         %>
