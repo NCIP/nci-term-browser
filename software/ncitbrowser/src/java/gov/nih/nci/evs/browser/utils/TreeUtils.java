@@ -320,6 +320,9 @@ public class TreeUtils {
 					.getSourceOf()
 					: node.getTargetOf();
 
+            //KLO 091509
+            if (childAssociationList == null) return;
+
 			// Process each association defining children ...
 			for (Iterator<Association> pathsToChildren = childAssociationList
 					.iterateAssociation(); pathsToChildren.hasNext();) {
@@ -714,7 +717,6 @@ public class TreeUtils {
 						Association child = pathsToChildren.next();
 						//KLO 091009 remove anonomous nodes
 
-System.out.println("(***) Calling processForAnonomousNodes");
 						child = processForAnonomousNodes(child);
 
 
