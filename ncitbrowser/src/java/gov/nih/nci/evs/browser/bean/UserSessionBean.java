@@ -446,6 +446,14 @@ System.out.println("* scheme: " + scheme);
         //if (v != null && v.size() > 1)
         if (iterator != null) {
 
+int numberRemaining = 0;
+try {
+	numberRemaining = iterator.numberRemaining();
+} catch (Exception ex) {
+	ex.printStackTrace();
+}
+System.out.println("* numberRemaining: " + numberRemaining);
+
             IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
 
@@ -458,6 +466,7 @@ System.out.println("* scheme: " + scheme);
 			}
 
 			int size = iteratorBean.getSize();
+System.out.println("* size: " + size);
 
 			if (size > 1) {
 
@@ -468,7 +477,7 @@ System.out.println("* scheme: " + scheme);
 				request.getSession().setAttribute("page_string", "1");
 
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
-				request.setAttribute("dictionary", scheme);
+				request.getSession().setAttribute("dictionary", scheme);
 				return "search_results";
 		    } else if (size == 1) {
 				request.getSession().setAttribute("singleton", "true");
