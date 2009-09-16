@@ -517,8 +517,8 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
         if (matchAlgorithm.compareTo("exactMatch") == 0) {
             message = "No match found. Please try 'Beings With' or 'Contains' search instead.";
         }
-        request.setAttribute("message", message);
-        request.setAttribute("dictionary", scheme);
+        request.getSession().setAttribute("message", message);
+        request.getSession().setAttribute("dictionary", scheme);
         return "message";
     }
 
