@@ -31,18 +31,21 @@
         <%
         String err_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
         System.out.println("*** err_dictionary: " + err_dictionary);
-        if (err_dictionary == null || err_dictionary.compareTo("NCI Thesaurus") == 0) {
+        if (err_dictionary == null) {
+        %>
+        	<%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
+        <%        
+        } else if (err_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
         	<%@ include file="/pages/templates/content-header.xhtml" %>
         <%	
-       	} else if (err_dictionary != null) {
-       	        request.getSession().setAttribute("dictionary", err_dictionary);
+       	} else {
+       	        request.getSession().setAttribute("dictionary", msg_dictionary);
        	%>
        	        <%@ include file="/pages/templates/content-header1.xhtml" %>
        	<%        
        	}
-       	%>
-    
+       	%>        
       
       <!-- Page content -->
       <div class="pagecontent">

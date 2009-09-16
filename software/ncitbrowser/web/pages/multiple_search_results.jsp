@@ -40,6 +40,8 @@
       <!-- Page content -->
       <div class="pagecontent">
         <%
+          request.getSession().removeAttribute("dictionary");
+        
           HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 
           IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
