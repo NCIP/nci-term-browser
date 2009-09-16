@@ -935,10 +935,6 @@ System.out.println("*** Enter multipleSearchAction ");
         }
         request.getSession().setAttribute("matchText", matchText);
 
-
-
-
-
         String matchAlgorithm = (String) request.getParameter("algorithm");
         //setSelectedAlgorithm(matchAlgorithm);
         String matchtype = (String) request.getParameter("matchtype");
@@ -972,8 +968,6 @@ System.out.println("*** Enter multipleSearchAction ");
         String[] ontology_list = null;
         String ontology_list_str = (String) request.getParameter("ontology_list_str");
 
-System.out.println("ontology_list_str " + ontology_list_str);
-
 		LicenseBean licenseBean = null;
 
         if (ontology_list_str != null) {
@@ -1002,21 +996,21 @@ System.out.println("ontology_list_str " + ontology_list_str);
 	    }
 
         String ontologiesToSearchOnStr = null;
+        int knt = 0;
         if (ontology_list == null) {
 			ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 			if (ontologiesToSearchOnStr != null) {
 				Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
 				ontology_list = new String[ontologies_to_search_on.size()];
+				knt = ontologies_to_search_on.size();
 				for (int k=0; k<ontologies_to_search_on.size(); k++) {
 					String s = (String) ontologies_to_search_on.elementAt(k);
-					//int j = k+1;
-					//System.out.println("(" + j + ") " + s);
 					ontology_list[k] = s;
 				}
 			}
 		}
 
-        if (ontology_list == null) {
+        if (knt == 0) {
 			String message = "Please select at least one vocabulary.";
 			request.getSession().setAttribute("message", message);
 			return "message";

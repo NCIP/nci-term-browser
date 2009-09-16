@@ -29,23 +29,26 @@
         <%
         String msg_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("dictionary"));
         System.out.println("msg_dictionary: " + msg_dictionary);
-        if (msg_dictionary == null || msg_dictionary.compareTo("NCI Thesaurus") == 0) {
+        if (msg_dictionary == null) {
+        %>
+        	<%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
+        <%        
+        } else if (msg_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
         	<%@ include file="/pages/templates/content-header.xhtml" %>
         <%	
-       	} else if (msg_dictionary != null) {
+       	} else {
        	        request.getSession().setAttribute("dictionary", msg_dictionary);
        	%>
        	        <%@ include file="/pages/templates/content-header1.xhtml" %>
        	<%        
        	}
        	%>
-    
-      
+          
       <!-- Page content -->
       <div class="pagecontent">
         <%
-          String message = (String) request.getAttribute("message");
+          String message = (String) request.getSession().getAttribute("message");
         %>
         <b><%=message%></b>
         <%@ include file="/pages/templates/nciFooter.html" %>
