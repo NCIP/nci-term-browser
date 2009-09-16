@@ -111,11 +111,11 @@ if (ontologiesToSearchOnStr != null) {
 	Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
 	for (int k=0; k<ontologies_to_search_on.size(); k++) {
 		String s = (String) ontologies_to_search_on.elementAt(k);
-		tooltip_str = tooltip_str + s + "; ";
+		tooltip_str = tooltip_str + s + "<br/>";
 	}
 }
 %>
-from <a onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>. 
+from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>. 
             </td>
           </tr>
           <tr>
