@@ -919,8 +919,8 @@ String t = "";
 
    public String multipleSearchAction() {
 
+int knt = 0;
 System.out.println("*** Enter multipleSearchAction ");
-
 
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String matchText = (String) request.getParameter("matchText");
@@ -944,7 +944,6 @@ System.out.println("*** Enter multipleSearchAction ");
         //boolean ranking = rankingStr != null && rankingStr.equals("on");
 
         boolean ranking = true;
-
         //request.getSession().setAttribute("ranking", Boolean.toString(ranking));
         String source = (String) request.getParameter("source");
         if (source == null) {
@@ -965,38 +964,42 @@ System.out.println("*** Enter multipleSearchAction ");
             }
         }
 
-        String[] ontology_list = null;
-        String ontology_list_str = (String) request.getParameter("ontology_list_str");
+        String[] ontology_list = request.getParameterValues("ontology_list");
+        String ontology_list_str = null;
 
 		LicenseBean licenseBean = null;
 
-        if (ontology_list_str != null) {
-			ontology_list = getSelectedVocabularies(ontology_list_str);
-			String scheme = (String) request.getParameter("scheme");
-			if (scheme.indexOf("%20") != -1) {
-				scheme = scheme.replaceAll("%20", " ");
-			}
-			String version = (String) request.getParameter("version");
-			if (version.indexOf("%20") != -1) {
-				version = version.replaceAll("%20", " ");
-			}
-			licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
-			if (licenseBean == null) {
-				licenseBean = new LicenseBean();
-				licenseBean.addLicenseAgreement(scheme);
-				request.getSession().setAttribute("licenseBean", licenseBean);
+        if (ontology_list == null) {
+			ontology_list_str = (String) request.getParameter("ontology_list_str");
 
-			} else {
-				licenseBean.addLicenseAgreement(scheme);
-				request.getSession().setAttribute("licenseBean", licenseBean);
-			}
+			if (ontology_list_str != null) {
+				ontology_list = getSelectedVocabularies(ontology_list_str);
+				String scheme = (String) request.getParameter("scheme");
+				if (scheme.indexOf("%20") != -1) {
+					scheme = scheme.replaceAll("%20", " ");
+				}
+				String version = (String) request.getParameter("version");
+				if (version.indexOf("%20") != -1) {
+					version = version.replaceAll("%20", " ");
+				}
+				licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+				if (licenseBean == null) {
+					licenseBean = new LicenseBean();
+					licenseBean.addLicenseAgreement(scheme);
+					request.getSession().setAttribute("licenseBean", licenseBean);
 
-		} else {
-            ontology_list = request.getParameterValues("ontology_list");
-	    }
+				} else {
+					licenseBean.addLicenseAgreement(scheme);
+					request.getSession().setAttribute("licenseBean", licenseBean);
+				}
+
+			}
+	    } else {
+			knt = ontology_list.length;
+		}
 
         String ontologiesToSearchOnStr = null;
-        int knt = 0;
+
         if (ontology_list == null) {
 			ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 			if (ontologiesToSearchOnStr != null) {
@@ -1015,7 +1018,6 @@ System.out.println("*** Enter multipleSearchAction ");
 			request.getSession().setAttribute("message", message);
 			return "message";
 		}
-
 
 //searchForm-termbrowser.xhtml
 
@@ -1041,7 +1043,6 @@ System.out.println("*** Enter multipleSearchAction ");
 				}
 			}
 		}
-
 
 		String scheme = null;
 		String version = null;
@@ -1086,7 +1087,6 @@ System.out.println("*** Enter multipleSearchAction ");
                 }
 			}
 		}
-
         boolean debugging = false;
 		if (debugging) {
 			String message = t;
