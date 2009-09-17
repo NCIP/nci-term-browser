@@ -74,6 +74,9 @@ import org.LexGrid.LexBIG.caCore.interfaces.LexEVSService;
 import org.LexGrid.codingSchemes.CodingScheme;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 
+import javax.faces.model.SelectItem;
+
+
 public class MetadataUtils {
 
 	private static final String CODING_SCHEME_NAME_PROPERTY = "codingScheme";
@@ -303,6 +306,29 @@ public class MetadataUtils {
 		if (metadata == null) return null;
 
 		return getMetadataValues(metadata, propertyName);
+	}
+
+
+    public Vector getSupportedVocabularyMetadataValues(String propertyName) {
+		Vector v = new Vector();
+		List ontology_list = DataUtils.getOntologyList();
+		for (int i = 0; i < ontology_list.size(); i++) {
+			  SelectItem item = (SelectItem) ontology_list.get(i);
+			  String value = (String) item.getValue();
+			  String label = (String) item.getLabel();
+			  String scheme = DataUtils.key2CodingSchemeName(value);
+			  String version = DataUtils.key2CodingSchemeVersion(value);
+			  String urn = null;
+
+			  Vector w = getMetadataValues(scheme, version, urn, propertyName);
+			  if (w == null || w.size() == 0) {
+				  v.add(value + "|" + propertyName + " not available");
+			  } else {
+				  String t = (String) w.elementAt(0);
+				  v.add(value + "|" + t);
+			  }
+	    }
+	    return v;
 	}
 
 
