@@ -65,7 +65,7 @@ public class RemoteServerUtil {
     {
         // default URL (to be read from a property file)
         //String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
-        String url = "http://lexevsapi-qa.nci.nih.gov/lexevsapi50";
+        String url = "http://ncias-d177-v.nci.nih.gov:19280/lexevsapi51";
 
         NCItBrowserProperties properties = null;
         try {
@@ -73,6 +73,7 @@ public class RemoteServerUtil {
             url = properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
         } catch (Exception ex) {
             // Do nothing
+            System.out.println("WARNING: NCItBrowserProperties loading error...");
         }
         return createLexBIGService(url);
     }
