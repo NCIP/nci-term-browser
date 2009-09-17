@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import gov.nih.nci.evs.browser.bean.DisplayItem;
 import gov.nih.nci.evs.browser.bean.MetadataElement;
+import gov.nih.nci.evs.browser.bean.DefSourceMapping;
 
 
 /**
@@ -58,6 +59,8 @@ public class PropertyFileParser {
 	HashMap configurableItemMap;
 
 	List metadataElementList;
+	List defSourceMappingList;
+
 	String xmlfile;
 
 	Document dom;
@@ -65,12 +68,14 @@ public class PropertyFileParser {
 	public PropertyFileParser(){
 		displayItemList = new ArrayList();
 		metadataElementList = new ArrayList();
+		defSourceMappingList = new ArrayList();
 		configurableItemMap = new HashMap();
 	}
 
 	public PropertyFileParser(String xmlfile){
 		displayItemList = new ArrayList();
 		metadataElementList = new ArrayList();
+		defSourceMappingList = new ArrayList();
 		configurableItemMap = new HashMap();
 		this.xmlfile = xmlfile;
 	}
@@ -87,6 +92,10 @@ public class PropertyFileParser {
 
 	public List getMetadataElementList() {
 		return this.metadataElementList;
+	}
+
+	public List getDefSourceMappingList() {
+		return this.defSourceMappingList;
 	}
 
 	public HashMap getConfigurableItemMap() {
@@ -135,6 +144,16 @@ public class PropertyFileParser {
 				metadataElementList.add(e);
 			}
 		}
+
+		NodeList list4 = docEle.getElementsByTagName("DefSourceMapping");
+		if(list3 != null && list4.getLength() > 0) {
+			for(int i = 0 ; i < list4.getLength();i++) {
+				Element el = (Element) list4.item(i);
+				DefSourceMapping e = getDefSourceMapping(el);
+				defSourceMappingList.add(e);
+			}
+		}
+
 	}
 
 
@@ -165,7 +184,12 @@ public class PropertyFileParser {
 		return item;
 	}
 
-
+	private DefSourceMapping getDefSourceMapping(Element defSourceMapping) {
+	    String name = getTextValue(defSourceMapping,"name");
+	    String value = getTextValue(defSourceMapping,"value");
+		DefSourceMapping item = new DefSourceMapping(name, value);
+		return item;
+	}
 
 	private void getConfigurableItem(Element displayItemElement) {
 	    String key = getTextValue(displayItemElement,"key");
@@ -203,9 +227,5 @@ public class PropertyFileParser {
 		PropertyFileParser parser = new PropertyFileParser();
 		parser.run();
 	}
-
-
-
-
 
 }

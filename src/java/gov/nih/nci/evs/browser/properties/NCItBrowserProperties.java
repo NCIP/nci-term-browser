@@ -48,6 +48,7 @@ public class NCItBrowserProperties {
 
         private static List displayItemList;
         private static List metadataElementList;
+        private static List defSourceMappingList;
         private static HashMap configurableItemMap;
 
         // KLO
@@ -155,6 +156,10 @@ public class NCItBrowserProperties {
             return metadataElementList;
         }
 
+        public static List getDefSourceMappingList() {
+            return defSourceMappingList;
+        }
+
         private static void loadProperties() throws Exception {
             String propertyFile = System.getProperty("gov.nih.nci.evs.browser.NCItBrowserProperties");
 
@@ -165,6 +170,7 @@ public class NCItBrowserProperties {
 
             displayItemList = parser.getDisplayItemList();
             metadataElementList = parser.getMetadataElementList();
+            defSourceMappingList = parser.getDefSourceMappingList();
             configurableItemMap = parser.getConfigurableItemMap();
         }
 
