@@ -60,6 +60,20 @@ public class HistoryUtils {
 		return null;
 	}
 
+
+    private static Vector<String> getEditActions(LexBIGService lbSvc, HistoryService hs, String codingSchemeName,
+            String vers, String ltag, String code) throws LBException {
+        try {
+			NCIChangeEventList list = hs.getEditActionList(Constructors
+				.createConceptReference(code, null), null, null);
+			return getEditActions(codingSchemeName, vers, ltag, code, list);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+    }
+
+
 	private static Vector<String> getEditActions(String codingSchemeName,
 			String vers, String ltag, String code, NCIChangeEventList list) {
 		Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
@@ -92,4 +106,49 @@ public class HistoryUtils {
 		}
 		return v;
 	}
+
+    public static Vector<String> getAncestors(String codingSchemeName,
+            String vers, String ltag, String code) throws LBException {
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        HistoryService hs = null;
+        try {
+			hs = lbSvc.getHistoryService(codingSchemeName);
+		} catch (Exception ex) {
+			System.out.println("Unable to getHistoryService for " + codingSchemeName);
+			return null;
+		}
+
+        try {
+ 			NCIChangeEventList list = hs.getAncestors(Constructors
+                     .createConceptReference(code, null));
+
+			return getEditActions(codingSchemeName, vers, ltag, code, list);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+    }
+
+    public static Vector<String> getDescendants(String codingSchemeName,
+            String vers, String ltag, String code) throws LBException {
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        HistoryService hs = null;
+        try {
+			hs = lbSvc.getHistoryService(codingSchemeName);
+		} catch (Exception ex) {
+			System.out.println("Unable to getHistoryService for " + codingSchemeName);
+			return null;
+		}
+
+        try {
+ 			NCIChangeEventList list = hs.getDescendants(Constructors
+                     .createConceptReference(code, null));
+
+			return getEditActions(codingSchemeName, vers, ltag, code, list);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+    }
+
 }
