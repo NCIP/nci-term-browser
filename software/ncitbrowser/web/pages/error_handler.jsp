@@ -40,7 +40,7 @@
         	<%@ include file="/pages/templates/content-header.xhtml" %>
         <%	
        	} else {
-       	        request.getSession().setAttribute("dictionary", msg_dictionary);
+       	        request.getSession().setAttribute("dictionary", err_dictionary);
        	%>
        	        <%@ include file="/pages/templates/content-header1.xhtml" %>
        	<%        
