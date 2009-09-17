@@ -301,6 +301,69 @@
         <MetadataElement>
                  <name>contact</name>
         </MetadataElement> 
-   </MetadataElements>     
+   </MetadataElements>  
+   
+    <DefSourceMappings>
+        <DefSourceMapping>
+                 <name>CSP2000</name>
+                 <value>CRISP-2000</value>
+        </DefSourceMapping>
+        
+        <DefSourceMapping>
+                 <name>CSP2002</name>
+                 <value>CRISP-2000</value>
+        </DefSourceMapping>        
+
+        <DefSourceMapping>
+                 <name>CSP2002</name>
+                 <value>CRISP-2002</value>
+        </DefSourceMapping> 
+        
+        <DefSourceMapping>
+                 <name>CSP2003</name>
+                 <value>CRISP-2003</value>
+        </DefSourceMapping> 
+        
+        <DefSourceMapping>
+                 <name>ICDO3</name>
+                 <value>ICD-O-3</value>
+        </DefSourceMapping>
+        
+        <DefSourceMapping>
+                 <name>MSH2001</name>
+                 <value>MeSH-2001</value>
+        </DefSourceMapping>
+        
+        <DefSourceMapping>
+                 <name>MSH2002</name>
+                 <value>MeSH-2002</value>
+        </DefSourceMapping>
+
+        <DefSourceMapping>
+                 <name>MSH2002_06_01</name>
+                 <value>MeSH-2002</value>
+        </DefSourceMapping>
+ 
+        <DefSourceMapping>
+                 <name>MSH2003_2003_05_12</name>
+                 <value>MeSH-2003</value>
+        </DefSourceMapping>
+        
+        <DefSourceMapping>
+                 <name>MSH2004_2003_12_12</name>
+                 <value>MeSH-2004</value>
+        </DefSourceMapping>
+        
+        <DefSourceMapping>
+                 <name>UMD2001</name>
+                 <value>UMD-2001</value>
+        </DefSourceMapping>
+ 
+        <DefSourceMapping>
+                 <name>UWDA142</name>
+                 <value>UWDA-1.4.2</value>
+        </DefSourceMapping>
+    </DefSourceMappings>
+   
 
 </root>
