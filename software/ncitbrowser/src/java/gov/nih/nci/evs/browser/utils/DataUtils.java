@@ -2374,7 +2374,7 @@ NCI Thesaurus:
 
 
     public static String getVisitedConceptLink(String scheme, Vector concept_vec) {
-		String retstr = "<A onmouseover=\"Tip('";
+		String retstr = "<A href=\"#\" onmouseover=\"Tip('";
 		String line = null;
 		for (int i=0; i<concept_vec.size(); i++) {
 			Concept c = (Concept) concept_vec.elementAt(i);
@@ -2394,10 +2394,10 @@ NCI Thesaurus:
 		line = "WIDTH, 300, TITLE, 'Visted Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\"";
 		retstr = retstr + line;
 
-		line = "onmouseout=UnTip()";
+		line = " onmouseout=\"UnTip()\" ";
 		retstr = retstr + line;
 
-		line = "href=\"#\">Visted Concepts</A>";
+		line = ">Visted Concepts</A>";
 		retstr = retstr + line;
 
 		return retstr;
