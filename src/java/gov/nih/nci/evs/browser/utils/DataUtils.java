@@ -2372,7 +2372,7 @@ NCI Thesaurus:
        return t;
     }
 
-
+/*
     public static String getVisitedConceptLink(String scheme, Vector concept_vec) {
 		String retstr = "<A href=\"#\" onmouseover=\"Tip('";
 		String line = null;
@@ -2394,7 +2394,7 @@ NCI Thesaurus:
 		line = "WIDTH, 300, TITLE, 'Visted Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\"";
 		retstr = retstr + line;
 
-		line = " onmouseout=\"UnTip()\" ";
+		line = " onmouseout=UnTip() ";
 		retstr = retstr + line;
 
 		line = ">Visted Concepts</A>";
@@ -2402,6 +2402,75 @@ NCI Thesaurus:
 
 		return retstr;
 	}
+*/
+
+    public static String getVisitedConceptLink(String scheme, Vector concept_vec) {
+		StringBuffer strbuf = new StringBuffer();
+		String line = "<A href=\"#\" onmouseover=\"Tip('";
+        strbuf.append(line);
+		for (int i=0; i<concept_vec.size(); i++) {
+			Concept c = (Concept) concept_vec.elementAt(i);
+            line =
+               "<a href=\\'<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
+               + scheme
+               + "&code="
+               + c.getEntityCode()
+               + "\\'>"
+               + c.getEntityDescription().getContent()
+               + "</a><br>";
+            strbuf.append(line);
+		}
+		line = "',";
+		strbuf.append(line);
+
+		line = "WIDTH, 300, TITLE, 'Visited Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\"";
+		strbuf.append(line);
+
+		line = " onmouseout=UnTip() ";
+		strbuf.append(line);
+		line = ">Visted Concepts</A>";
+		strbuf.append(line);
+
+		return strbuf.toString();
+	}
+
+
+
+    public static String getVisitedConceptLink(Vector concept_vec) {
+		StringBuffer strbuf = new StringBuffer();
+		String line = "<A href=\"#\" onmouseover=\"Tip('";
+        strbuf.append(line);
+		for (int i=0; i<concept_vec.size(); i++) {
+			String concept_data = (String) concept_vec.elementAt(i);
+			Vector w = parseData(concept_data);
+			String scheme = (String) w.elementAt(0);
+			String code = (String) w.elementAt(1);
+			String name = (String) w.elementAt(2);
+
+            line =
+               "<a href=\\'<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
+               + scheme
+               + "&code="
+               + code
+               + "\\'>"
+               + name
+               + "</a><br>";
+            strbuf.append(line);
+		}
+		line = "',";
+		strbuf.append(line);
+
+		line = "WIDTH, 300, TITLE, 'Visited Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\"";
+		strbuf.append(line);
+
+		line = " onmouseout=UnTip() ";
+		strbuf.append(line);
+		line = ">Visted Concepts</A>";
+		strbuf.append(line);
+
+		return strbuf.toString();
+	}
+
 
 
     public void dumpRelationshipHashMap(HashMap hmap) {
