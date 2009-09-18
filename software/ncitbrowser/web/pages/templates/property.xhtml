@@ -107,6 +107,20 @@ if (!bool_obj.equals(Boolean.TRUE) ||
 %>
     <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i></p>
 <%
+    String prop_dictionary = (String) request.getSession().getAttribute("dictionary");
+    System.out.println("(*) property.xhtml dictionary " + dictionary);
+    
+    Vector descendantCodes = HistoryUtils.getDescendantCodes(dictionary, null, null, curr_concept.getEntityCode());
+    if (descendantCodes != null) {
+	    for (int i=0; i<descendantCodes.size(); i++) {
+		String t = (String) descendantCodes.elementAt(i);
+		System.out.println("descendantCode: " + t);
+	    }
+    }
+    
+%>    
+    
+<%
 }
 else if (concept_status != null && concept_status.compareToIgnoreCase("Retired Concept") != 0) {
 %>

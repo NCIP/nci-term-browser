@@ -108,7 +108,7 @@ public class HistoryUtils {
 	}
 
     public static Vector<String> getAncestors(String codingSchemeName,
-            String vers, String ltag, String code) throws LBException {
+            String vers, String ltag, String code) {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         HistoryService hs = null;
         try {
@@ -130,7 +130,7 @@ public class HistoryUtils {
     }
 
     public static Vector<String> getDescendants(String codingSchemeName,
-            String vers, String ltag, String code) throws LBException {
+            String vers, String ltag, String code) {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         HistoryService hs = null;
         try {
@@ -150,5 +150,52 @@ public class HistoryUtils {
 		}
 		return null;
     }
+
+    public static Vector<String> getDescendantCodes(String codingSchemeName,
+            String vers, String ltag, String code) {
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        HistoryService hs = null;
+        try {
+			hs = lbSvc.getHistoryService(codingSchemeName);
+		} catch (Exception ex) {
+			System.out.println("Unable to getHistoryService for " + codingSchemeName);
+			return null;
+		}
+
+        Vector<String> v = new Vector<String>();
+        try {
+ 			NCIChangeEventList list = hs.getDescendants(Constructors
+                     .createConceptReference(code, null));
+
+			HashSet<String> hset = new HashSet<String>();
+			Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
+			while (enumeration.hasMoreElements()) {
+				NCIChangeEvent event = enumeration.nextElement();
+				ChangeType type = event.getEditaction();
+				Date date = event.getEditDate();
+				String rCode = event.getReferencecode();
+				String name = "unassigned";
+				if (rCode != null && rCode.length() > 0
+						&& !rCode.equalsIgnoreCase("null")) {
+					Concept c = DataUtils.getConceptByCode(codingSchemeName, vers,
+							ltag, rCode);
+
+					if (c != null) {
+						name = c.getEntityDescription().getContent();
+					}
+				}
+				String info = name + "|" + rCode;
+				if (hset.contains(info))
+					continue;
+				v.add(info);
+				hset.add(info);
+			}
+
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+		return v;
+	}
 
 }
