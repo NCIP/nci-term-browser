@@ -1252,9 +1252,11 @@ System.out.println("\n\tActive? " + isActive);
 
 		String[] associationsToNavigate = TreeUtils.getAssociationsToNavigate(scheme, version);
 		Vector w = new Vector();
-		for (int k=0; k<associationsToNavigate.length; k++) {
-			w.add(associationsToNavigate[k]);
-		}
+		if (associationsToNavigate != null) {
+			for (int k=0; k<associationsToNavigate.length; k++) {
+				w.add(associationsToNavigate[k]);
+			}
+	    }
 
 
 		HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
@@ -1291,13 +1293,17 @@ System.out.println("\n\tActive? " + isActive);
             // associationsNavigatedFwd,
             // !associationsNavigatedFwd, -1, 2, noopList_, null, null, null,
             // -1, false);
-
-            matches = cng.resolveAsList(ConvenienceMethods
+            matches = null;
+            try {
+               matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
             // true, false, 1, 1, new LocalNameList(), null, null, 1024);
                     true, false, 1, 1, noopList_, null, null, null, -1, false);
+			} catch (Exception e) {
+                System.out.println("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
+			}
 
-            if (matches.getResolvedConceptReferenceCount() > 0) {
+            if (matches != null && matches.getResolvedConceptReferenceCount() > 0) {
                 Enumeration<ResolvedConceptReference> refEnum = matches
                         .enumerateResolvedConceptReference();
 
@@ -1454,8 +1460,6 @@ NCI Thesaurus:
 			Collections.sort(subconceptList);
 			map.put(TYPE_SUBCONCEPT, subconceptList);
 */
-
-
 
 
         } catch (Exception ex) {
@@ -2397,6 +2401,176 @@ NCI Thesaurus:
 		retstr = retstr + line;
 
 		return retstr;
+	}
+
+
+    public void dumpRelationshipHashMap(HashMap hmap) {
+		ArrayList superconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
+		ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
+		ArrayList roles = (ArrayList) hmap.get(DataUtils.TYPE_ROLE);
+		ArrayList associations = (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
+
+		ArrayList inverse_roles = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ROLE);
+		ArrayList inverse_associations = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
+        ArrayList concepts = null;
+
+        concepts = superconcepts;
+        String label = "Parent Concepts:";
+
+        if (concepts == null || concepts.size() <= 0)
+        {
+            System.out.println(label + "(none)");
+        } else if (concepts != null && concepts.size() == 1) {
+            String s = (String) concepts.get(0);
+            Vector ret_vec = DataUtils.parseData(s, "|");
+            String cName = (String) ret_vec.elementAt(0);
+            String cCode = (String) ret_vec.elementAt(1);
+
+            System.out.println(label + " " + cName + "(" + cCode + ")");
+        } else if (concepts != null) {
+            System.out.println(label);
+            for (int i=0; i<concepts.size(); i++) {
+               String s = (String) concepts.get(i);
+               Vector ret_vec = DataUtils.parseData(s, "|");
+               String cName = (String) ret_vec.elementAt(0);
+               String cCode = (String) ret_vec.elementAt(1);
+               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+		    }
+		}
+
+        concepts = subconcepts;
+        label = "Child Concepts:";
+
+        if (concepts == null || concepts.size() <= 0)
+        {
+            System.out.println(label + "(none)");
+        } else if (concepts != null && concepts.size() == 1) {
+            String s = (String) concepts.get(0);
+            Vector ret_vec = DataUtils.parseData(s, "|");
+            String cName = (String) ret_vec.elementAt(0);
+            String cCode = (String) ret_vec.elementAt(1);
+
+            System.out.println(label + " " + cName + "(" + cCode + ")");
+        } else if (concepts != null) {
+            System.out.println(label);
+            for (int i=0; i<concepts.size(); i++) {
+               String s = (String) concepts.get(i);
+               Vector ret_vec = DataUtils.parseData(s, "|");
+               String cName = (String) ret_vec.elementAt(0);
+               String cCode = (String) ret_vec.elementAt(1);
+               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+		    }
+		}
+
+        concepts = roles;
+        label = "Roles:";
+
+        if (concepts == null || concepts.size() <= 0)
+        {
+            System.out.println(label + "(none)");
+        } else if (concepts != null && concepts.size() == 1) {
+            String s = (String) concepts.get(0);
+            Vector ret_vec = DataUtils.parseData(s, "|");
+            String cName = (String) ret_vec.elementAt(0);
+            String cCode = (String) ret_vec.elementAt(1);
+
+            System.out.println(label + " " + cName + "(" + cCode + ")");
+        } else if (concepts != null) {
+            System.out.println(label);
+            for (int i=0; i<concepts.size(); i++) {
+               String s = (String) concepts.get(i);
+               Vector ret_vec = DataUtils.parseData(s, "|");
+               String cName = (String) ret_vec.elementAt(0);
+               String cCode = (String) ret_vec.elementAt(1);
+               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+		    }
+		}
+        concepts = associations;
+        label = "Associations:";
+
+        if (concepts == null || concepts.size() <= 0)
+        {
+            System.out.println(label + "(none)");
+        } else if (concepts != null && concepts.size() == 1) {
+            String s = (String) concepts.get(0);
+            Vector ret_vec = DataUtils.parseData(s, "|");
+            String cName = (String) ret_vec.elementAt(0);
+            String cCode = (String) ret_vec.elementAt(1);
+
+            System.out.println(label + " " + cName + "(" + cCode + ")");
+        } else if (concepts != null) {
+            System.out.println(label);
+            for (int i=0; i<concepts.size(); i++) {
+               String s = (String) concepts.get(i);
+               Vector ret_vec = DataUtils.parseData(s, "|");
+               String cName = (String) ret_vec.elementAt(0);
+               String cCode = (String) ret_vec.elementAt(1);
+               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+		    }
+		}
+
+        concepts = inverse_roles;
+        label = "Inverse Roles:";
+
+        if (concepts == null || concepts.size() <= 0)
+        {
+            System.out.println(label + "(none)");
+        } else if (concepts != null && concepts.size() == 1) {
+            String s = (String) concepts.get(0);
+            Vector ret_vec = DataUtils.parseData(s, "|");
+            String cName = (String) ret_vec.elementAt(0);
+            String cCode = (String) ret_vec.elementAt(1);
+
+            System.out.println(label + " " + cName + "(" + cCode + ")");
+        } else if (concepts != null) {
+            System.out.println(label);
+            for (int i=0; i<concepts.size(); i++) {
+               String s = (String) concepts.get(i);
+               Vector ret_vec = DataUtils.parseData(s, "|");
+               String cName = (String) ret_vec.elementAt(0);
+               String cCode = (String) ret_vec.elementAt(1);
+               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+		    }
+		}
+        concepts = inverse_associations;
+        label = "Inverse Associations:";
+
+        if (concepts == null || concepts.size() <= 0)
+        {
+            System.out.println(label + "(none)");
+        } else if (concepts != null && concepts.size() == 1) {
+            String s = (String) concepts.get(0);
+            Vector ret_vec = DataUtils.parseData(s, "|");
+            String cName = (String) ret_vec.elementAt(0);
+            String cCode = (String) ret_vec.elementAt(1);
+
+            System.out.println(label + " " + cName + "(" + cCode + ")");
+        } else if (concepts != null) {
+            System.out.println(label);
+            for (int i=0; i<concepts.size(); i++) {
+               String s = (String) concepts.get(i);
+               Vector ret_vec = DataUtils.parseData(s, "|");
+               String cName = (String) ret_vec.elementAt(0);
+               String cCode = (String) ret_vec.elementAt(1);
+               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+		    }
+		}
+
+	}
+
+
+
+	public static void main(String[] args) {
+		String scheme = "NCI Thesaurus";
+		String version = null;
+		//Breast Carcinoma (Code C4872)
+		String code = "C4872";
+
+		DataUtils test = new DataUtils();
+
+		HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
+		test.dumpRelationshipHashMap(hmap);
+
 	}
 
 }
