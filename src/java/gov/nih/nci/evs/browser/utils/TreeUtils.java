@@ -399,9 +399,15 @@ public class TreeUtils {
 		CodedNodeSet cns = lbsvc.getCodingSchemeConcepts(scheme, csvt);
 		cns = cns.restrictToCodes(Constructors.createConceptReferenceList(code,
 				scheme));
-		ResolvedConceptReferenceList rcrl = cns.resolveToList(null, noopList_,
-				null, 1);
-		if (rcrl.getResolvedConceptReferenceCount() > 0) {
+		ResolvedConceptReferenceList rcrl = null;
+		try {
+			rcrl = cns.resolveToList(null, noopList_, null, 1);
+		} catch (Exception ex) {
+			System.out.println("WARNING: TreeUtils getCodeDescription cns.resolveToList throws exceptions");
+			return "null";
+		}
+
+		if (rcrl != null && rcrl.getResolvedConceptReferenceCount() > 0) {
 			EntityDescription desc = rcrl.getResolvedConceptReference(0)
 					.getEntityDescription();
 			if (desc != null)
@@ -598,13 +604,17 @@ public class TreeUtils {
 			if (cs == null) return null;
 			Mappings mappings = cs.getMappings();
 			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
-			if (hierarchies == null || hierarchies.length == 0) return null;
+			if (hierarchies == null || hierarchies.length == 0) {
+				System.out.println("TreeUtils mappings.getSupportedHierarchy() either returns null, or an empty array");
+				return null;
+			}
 		    SupportedHierarchy hierarchyDefn = hierarchies[0];
 			String hier_id = hierarchyDefn.getLocalId();
 			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
 
 			return associationsToNavigate;
 		} catch (Exception ex) {
+			System.out.println("WARNING: TreeUtils getAssociationsToNavigate throws exceptions");
 			return null;
 		}
 	}
@@ -700,10 +710,16 @@ public class TreeUtils {
 					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
 					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
             */
-			ResolvedConceptReferenceList branch = cng.resolveAsList(focus,
+			ResolvedConceptReferenceList branch = null;
+			try {
+				branch = cng.resolveAsList(focus,
 					associationsNavigatedFwd,
 					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
 					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
+			} catch (Exception e) {
+				System.out.println("TreeUtils getAssociatedConcepts throws exceptions.");
+				return null;
+			}
 
 			for (Iterator<ResolvedConceptReference> nodes = branch
 					.iterateResolvedConceptReference(); nodes.hasNext();) {
