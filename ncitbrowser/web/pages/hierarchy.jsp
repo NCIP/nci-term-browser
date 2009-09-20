@@ -256,6 +256,12 @@
       treeStatusDiv.render();
     }
 
+    function showConstructingTreeStatus() {
+      treeStatusDiv.setBody("<img src='<%=basePath%>/images/loading.gif'/> <span class='instruction_text'>Constructing tree... Please wait.</span>");
+      treeStatusDiv.show();
+      treeStatusDiv.render();
+    }
+    
     function loadNodeData(node, fnLoadComplete) {
       var id = node.data.id;
 
@@ -322,6 +328,8 @@
             }
             else {
               showPartialHierarchy();
+              showConstructingTreeStatus();
+              
               for (var i=0; i < respObj.root_nodes.length; i++) {
                 var nodeInfo = respObj.root_nodes[i];
                 //var expand = false;
@@ -356,6 +364,7 @@
       }
     }
 
+
     function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {
       var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
       var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
@@ -364,23 +373,38 @@
       var childNodes = nodeInfo.children_nodes;
 
       if (childNodes.length > 0) {
-        expand = true;
+          expand = true;
       }
       var newNode = new YAHOO.widget.TextNode(newNodeData, rootNode, expand);
       if (nodeInfo.ontology_node_id == ontology_node_id) {
           newNode.labelStyle = "ygtvlabel_highlight";
       }
 
-      if (nodeInfo.ontology_node_child_count > 0) {
-           newNode.setDynamicLoad(loadNodeData);
+      if (nodeInfo.ontology_node_id == ontology_node_id) {
+         newNode.isLeaf = true;
+         if (nodeInfo.ontology_node_child_count > 0) {
+             newNode.isLeaf = false;
+             newNode.setDynamicLoad(loadNodeData);
+         } else {
+             tree.draw();
+         }
+
+      } else {
+          if (nodeInfo.ontology_node_id != ontology_node_id) {
+          if (nodeInfo.ontology_node_child_count == 0 && nodeInfo.ontology_node_id != ontology_node_id) {
+        newNode.isLeaf = true;
+          } else if (childNodes.length == 0) {
+        newNode.setDynamicLoad(loadNodeData);
+          }
+        }
       }
 
       tree.draw();
       for (var i=0; i < childNodes.length; i++) {
   var childnodeInfo = childNodes[i];
+  
   addTreeBranch(ontology_node_id, newNode, childnodeInfo);
       }
-
     }
     YAHOO.util.Event.addListener(window, "load", init);
 
