@@ -1150,7 +1150,9 @@ System.out.println("\n\tActive? " + isActive);
 							.getAssociation();
 					for (int j = 0; j < asso_array.length; j++) {
 						org.LexGrid.relations.Association association = (org.LexGrid.relations.Association) asso_array[j];
-						list.add(association.getAssociationName());
+						//list.add(association.getAssociationName());
+						//KLO, 092209
+						list.add(association.getForwardName());
 					}
 				}
 			}
