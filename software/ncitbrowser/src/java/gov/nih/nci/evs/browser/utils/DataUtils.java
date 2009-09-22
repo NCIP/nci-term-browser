@@ -1300,7 +1300,8 @@ System.out.println("\n\tActive? " + isActive);
                matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
             // true, false, 1, 1, new LocalNameList(), null, null, 1024);
-                    true, false, 1, 1, noopList_, null, null, null, -1, false);
+                    //true, false, 1, 1, noopList_, null, null, null, -1, false);
+                    true, true, 1, 1, noopList_, null, null, null, -1, false);
 			} catch (Exception e) {
                 System.out.println("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
 			}
