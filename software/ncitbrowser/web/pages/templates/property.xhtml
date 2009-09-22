@@ -110,14 +110,34 @@ if (!bool_obj.equals(Boolean.TRUE) ||
     <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i></p>
 <%
     String prop_dictionary = (String) request.getSession().getAttribute("dictionary");
-    System.out.println("(*) property.xhtml dictionary " + dictionary);
+    System.out.println("(*) property.xhtml dictionary " + prop_dictionary);
     
     Vector descendantCodes = HistoryUtils.getDescendantCodes(dictionary, null, null, curr_concept.getEntityCode());
     if (descendantCodes != null) {
-	    for (int i=0; i<descendantCodes.size(); i++) {
-		String t = (String) descendantCodes.elementAt(i);
-		System.out.println("descendantCode: " + t);
-	    }
+            if (descendantCodes != null && descendantCodes.size() > 0) {
+		    String link = " (See: "; 
+
+	%>            
+		    <%=link%>
+	<%            
+		    for (int i=0; i<descendantCodes.size(); i++) {
+			String t = (String) descendantCodes.elementAt(i);
+			Vector w = DataUtils.parseData(t);
+			String descendantName = (String) w.elementAt(0);
+			String descendantCode = (String) w.elementAt(1);
+	%>
+
+		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary%>&code=<%=descendantCode%>">
+			<%=descendantName%>;
+		      </a>
+	<%              
+		    }
+
+		    link = ")"; 
+	%>            
+		    <%=link%>	
+	<%    
+            }
     }
     
 %>    
