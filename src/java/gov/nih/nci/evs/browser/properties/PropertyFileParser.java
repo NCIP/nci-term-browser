@@ -60,6 +60,7 @@ public class PropertyFileParser {
 
 	List metadataElementList;
 	List defSourceMappingList;
+	HashMap defSourceMappingHashMap;
 
 	String xmlfile;
 
@@ -69,6 +70,7 @@ public class PropertyFileParser {
 		displayItemList = new ArrayList();
 		metadataElementList = new ArrayList();
 		defSourceMappingList = new ArrayList();
+		defSourceMappingHashMap = new HashMap();
 		configurableItemMap = new HashMap();
 	}
 
@@ -76,6 +78,7 @@ public class PropertyFileParser {
 		displayItemList = new ArrayList();
 		metadataElementList = new ArrayList();
 		defSourceMappingList = new ArrayList();
+		defSourceMappingHashMap = new HashMap();
 		configurableItemMap = new HashMap();
 		this.xmlfile = xmlfile;
 	}
@@ -96,6 +99,10 @@ public class PropertyFileParser {
 
 	public List getDefSourceMappingList() {
 		return this.defSourceMappingList;
+	}
+
+	public HashMap getDefSourceMappingHashMap() {
+		return defSourceMappingHashMap;
 	}
 
 	public HashMap getConfigurableItemMap() {
@@ -146,11 +153,12 @@ public class PropertyFileParser {
 		}
 
 		NodeList list4 = docEle.getElementsByTagName("DefSourceMapping");
-		if(list3 != null && list4.getLength() > 0) {
+		if(list4 != null && list4.getLength() > 0) {
 			for(int i = 0 ; i < list4.getLength();i++) {
 				Element el = (Element) list4.item(i);
 				DefSourceMapping e = getDefSourceMapping(el);
 				defSourceMappingList.add(e);
+				defSourceMappingHashMap.put(e.getName(), e.getValue());
 			}
 		}
 
