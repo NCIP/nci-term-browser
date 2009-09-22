@@ -1,4 +1,6 @@
 <%
+  HashMap def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
+  
   List displayItemList = null;
   Concept curr_concept = null;
   Boolean bool_obj = null;
@@ -159,11 +161,18 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
         if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
           value_wo_qualifier = value.substring(0, n);
           qualifier = value.substring(n+1, value.length());
-          if (qualifier.compareTo("NCI") != 0) {
-            value = value_wo_qualifier;
-            propName_label = qualifier + " " + propName_label2;
-          } else
-              value = value_wo_qualifier;
+          
+          if (def_map != null && def_map.containsKey(qualifier)) {
+              String def_source_display_value = (String) def_map.get(qualifier);
+              value = value_wo_qualifier + " (" + qualifier + ")";
+              propName_label = def_source_display_value + " " + propName_label2;
+          } else {
+		  if (qualifier.compareTo("NCI") != 0) {
+		      value = value_wo_qualifier;
+		      propName_label = qualifier + " " + propName_label2;
+		  } else
+		      value = value_wo_qualifier;
+	  }
         }
 
         String url_str = url + value;
@@ -185,16 +194,22 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
           String value_wo_qualifier = value;
           int n = value.indexOf("|");
 
-          if (n != -1 && (propName_label.indexOf("Definition") != -1 ||
-              propName_label.indexOf("DEFINITION") != -1)) {
-            value_wo_qualifier = value.substring(0, n);
-            qualifier = value.substring(n+1, value.length());
-            if (qualifier.compareTo("NCI") != 0) {
-              value = value_wo_qualifier;
-              propName_label = qualifier + " " + propName_label2;
-            } else {
-              value = value_wo_qualifier;
-            }
+          if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
+              value_wo_qualifier = value.substring(0, n);
+              qualifier = value.substring(n+1, value.length());
+            
+              if (def_map != null && def_map.containsKey(qualifier)) {
+	          String def_source_display_value = (String) def_map.get(qualifier);
+	          value = value_wo_qualifier + " (" + qualifier + ")";
+                  propName_label = def_source_display_value + " " + propName_label2;
+              } else {
+		    if (qualifier.compareTo("NCI") != 0) {
+		      value = value_wo_qualifier;
+		      propName_label = qualifier + " " + propName_label2;
+		    } else {
+		      value = value_wo_qualifier;
+		    }
+              }
           }
 
           if (k == 0) {
