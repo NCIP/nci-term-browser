@@ -76,10 +76,31 @@ request.getSession().setAttribute("dictionary", dictionary);
              
             } 
 
-code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
-if (code == null) {
-    code = (String) request.getSession().getAttribute("code");
-}  
+
+	code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+	if (code == null) {
+		Concept con = (Concept) request.getSession().getAttribute("concept");
+		if (con != null) {
+		    code = con.getEntityCode();
+		    request.getSession().setAttribute("code", code);
+		} else {	
+	            code = (String) request.getSession().getAttribute("code");
+	        }
+	} 
+	
+	
+/*
+Concept con = (Concept) request.getSession().getAttribute("concept");
+if (con != null) {
+    code = con.getEntityCode();
+} else {
+	code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+	if (code == null) {
+	    code = (String) request.getSession().getAttribute("code");
+	} 
+}
+*/
+//request.getSession().setAttribute("code", code);
 
 Boolean new_search = null;
 Object new_search_obj = request.getSession().getAttribute("new_search");
@@ -88,7 +109,6 @@ if (new_search_obj != null) {
     if (new_search.equals(Boolean.TRUE)) {
         type = "properties";
         request.getSession().setAttribute("new_search", Boolean.FALSE);
-        
         code = (String) request.getSession().getAttribute("code");
     }
 }
@@ -115,20 +135,26 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
             String name = "";
             Concept c = null;
 
-		String vers = null;
-		String ltag = null;
-		
-		c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-		
-		if (c != null) {
-		   request.getSession().setAttribute("concept", c);
-		   request.getSession().setAttribute("code", code);
-		   name = c.getEntityDescription().getContent();
+	String vers = null;
+	String ltag = null;
 
-		} else {
-		   //name = "The server encountered an internal error that prevented it from fulfilling this request.";
-		   name = "ERROR: Invalid code - " + code + ".";
-		}
+
+System.out.println("(*) concept_details.jsp calling getConceptByCode " + code);
+
+	c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+
+	if (c != null) {
+	
+System.out.println("(*) concept_details.jsp calling setAttribute concept " + code);
+	
+	   request.getSession().setAttribute("concept", c);
+	   request.getSession().setAttribute("code", code);
+	   name = c.getEntityDescription().getContent();
+
+	} else {
+	   //name = "The server encountered an internal error that prevented it from fulfilling this request.";
+	   name = "ERROR: Invalid code - " + code + ".";
+	}
 
  
         if (dictionary.compareTo("NCI Thesaurus") == 0) {
@@ -172,6 +198,14 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
       </table>
 
       <hr>
+      
+
+<%
+	request.getSession().setAttribute("concept", c);
+	request.getSession().setAttribute("code", code);
+%>
+      
+      
       <%@ include file="/pages/templates/typeLinks.xhtml" %>
       <div class="tabTableContentContainer">
           <%@ include file="/pages/templates/property.xhtml" %>
