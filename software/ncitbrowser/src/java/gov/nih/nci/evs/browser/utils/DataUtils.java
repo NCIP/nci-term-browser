@@ -2320,7 +2320,7 @@ NCI Thesaurus:
 
     public static String key2CodingSchemeName(String key) {
 		if (key == null) {
-			System.out.println("key2CodingSchemeName key == NULL???");
+			//System.out.println("key2CodingSchemeName key == NULL???");
 			return null;
 		}
 		if (csnv2codingSchemeNameMap == null) {
@@ -2451,12 +2451,13 @@ NCI Thesaurus:
 			String name = (String) w.elementAt(2);
 
             line =
-               "<a href=\\'<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
+               //"<a href=\\'<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
+               "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
                + scheme
                + "&code="
                + code
                + "\\'>"
-               + name
+               + name + " &#40;" + scheme + "&#41;"
                + "</a><br>";
             strbuf.append(line);
 		}
@@ -2487,7 +2488,7 @@ NCI Thesaurus:
         ArrayList concepts = null;
 
         concepts = superconcepts;
-        String label = "Parent Concepts:";
+        String label = "\nParent Concepts:";
 
         if (concepts == null || concepts.size() <= 0)
         {
@@ -2511,7 +2512,7 @@ NCI Thesaurus:
 		}
 
         concepts = subconcepts;
-        label = "Child Concepts:";
+        label = "\nChild Concepts:";
 
         if (concepts == null || concepts.size() <= 0)
         {
@@ -2535,7 +2536,7 @@ NCI Thesaurus:
 		}
 
         concepts = roles;
-        label = "Roles:";
+        label = "\nRoles:";
 
         if (concepts == null || concepts.size() <= 0)
         {
@@ -2558,7 +2559,7 @@ NCI Thesaurus:
 		    }
 		}
         concepts = associations;
-        label = "Associations:";
+        label = "\nAssociations:";
 
         if (concepts == null || concepts.size() <= 0)
         {
@@ -2582,7 +2583,7 @@ NCI Thesaurus:
 		}
 
         concepts = inverse_roles;
-        label = "Inverse Roles:";
+        label = "\nInverse Roles:";
 
         if (concepts == null || concepts.size() <= 0)
         {
@@ -2605,7 +2606,7 @@ NCI Thesaurus:
 		    }
 		}
         concepts = inverse_associations;
-        label = "Inverse Associations:";
+        label = "\nInverse Associations:";
 
         if (concepts == null || concepts.size() <= 0)
         {
