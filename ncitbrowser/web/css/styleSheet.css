@@ -114,23 +114,23 @@ h3
 }
 
 .vocabularynamebanner
- {
+{
   float: left;
   width: 383px;
   height: 83px;
   background-image: url(../images/evs_browser_other_term_logo.gif);
   background-repeat: no-repeat;
- }
+}
 
- .vocabularyname
- {
+.vocabularyname
+{
   position: relative;
   left: 29px;
-  bottom: 59px;
-  family-name: sans-serif;
-  font-size: 26px;
-  font-weight: bold;
+  bottom: -9px;
+  font-family: Arial, Verdana, Helvetica, sans-serif;
+  font-size: 52px;
   color: #2F2F5F;
+  white-space:nowrap;
 }
 
 .pagetitle
