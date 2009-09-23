@@ -138,15 +138,9 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
 	String vers = null;
 	String ltag = null;
 
-
-System.out.println("(*) concept_details.jsp calling getConceptByCode " + code);
-
 	c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 
 	if (c != null) {
-	
-System.out.println("(*) concept_details.jsp calling setAttribute concept " + code);
-	
 	   request.getSession().setAttribute("concept", c);
 	   request.getSession().setAttribute("code", code);
 	   name = c.getEntityDescription().getContent();
@@ -167,7 +161,7 @@ System.out.println("(*) concept_details.jsp calling setAttribute concept " + cod
        	        <%@ include file="/pages/templates/content-header1.xhtml" %>
        	<%        
        	}
-
+        String tg_dictionary_0 = dictionary;
         String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
         if (c != null) {
         request.getSession().setAttribute("type", type);
@@ -185,6 +179,17 @@ System.out.println("(*) concept_details.jsp calling setAttribute concept " + cod
           <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
           
           <%
+
+Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
+if (visitedConcepts == null) {
+    visitedConcepts = new Vector();
+}
+String visitedConceptStr = tg_dictionary_0 + "|" + code + "|" + name;
+if (!visitedConcepts.contains(visitedConceptStr)) {
+	visitedConcepts.add(visitedConceptStr);
+} 
+request.getSession().setAttribute("visitedConcepts", visitedConcepts);
+          
           if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
           %>
           <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
