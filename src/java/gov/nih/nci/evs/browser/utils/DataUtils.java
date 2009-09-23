@@ -2414,7 +2414,8 @@ NCI Thesaurus:
 		for (int i=0; i<concept_vec.size(); i++) {
 			Concept c = (Concept) concept_vec.elementAt(i);
             line =
-               "<a href=\\'<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
+               //"<a href=\\'<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
+               "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
                + scheme
                + "&code="
                + c.getEntityCode()
