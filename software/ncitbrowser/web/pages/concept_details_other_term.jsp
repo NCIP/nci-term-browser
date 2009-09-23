@@ -78,8 +78,8 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 <%
 } else {
 %>
-    <div class="vocabularyName">
-        &nbsp;&nbsp;<%=dictionary%> BBBBBBBBBBBBBBBBBBB
+    <div class="vocabularynamebanner">
+      <div class="vocabularyName"><%=dictionary%></div>
     </div>
 <%
 }
