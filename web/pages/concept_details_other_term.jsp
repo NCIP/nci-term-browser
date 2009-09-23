@@ -48,7 +48,7 @@
       <%@ include file="/pages/templates/sub-header.xhtml" %>
       <!-- Main box -->
       <div id="main-area">
-      
+
          <%
             String dictionary = (String) request.getAttribute("dictionary");
 
@@ -56,30 +56,30 @@
                 //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
                 dictionary = (String) request.getParameter("dictionary");
                 dictionary = DataUtils.getCodingSchemeName(dictionary);
-                
-            }            
-            
+
+            }
+
             String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
             if (dictionary.compareTo("NCI Thesaurus") != 0) {
                 term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
-            }            
+            }
 
-            
-         %>      
 
-         
+         %>
+
+
 <!-- Thesaurus, banner search area -->
 <div class="bannerarea">
 
 <%
-if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {  
+if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
 <%
 } else {
 %>
     <div class="vocabularyName">
-        &nbsp;&nbsp;<%=dictionary%>
+        &nbsp;&nbsp;<%=dictionary%> BBBBBBBBBBBBBBBBBBB
     </div>
 <%
 }
@@ -92,9 +92,9 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
         <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
         <!-- end Search box -->
         <!-- Global Navigation -->
-        
+
         <%@ include file="/pages/templates/menuBar.xhtml" %>
-            
+
         <!-- end Global Navigation -->
     </div>
 </div>
@@ -102,7 +102,7 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 <!-- Quick links bar -->
 <%@ include file="/pages/templates/quickLink.xhtml" %>
 <!-- end Quick links bar -->
-    
+
 
         <!-- Page content -->
         <div class="pagecontent">
@@ -115,15 +115,15 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
             if (singleton != null && singleton.compareTo("true") == 0) {
               //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
               //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
-              
+
               code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
             } else {
               //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
               code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
               type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             }
-            
-            
+
+
             if (dictionary == null) {
                 dictionary = Constants.CODING_SCHEME_NAME;
             }
@@ -140,21 +140,21 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
             String name = "";
             Concept c = null;
 
-		String vers = null;
-		String ltag = null;
-		c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-		if (c != null) {
-		   request.getSession().setAttribute("concept", c);
-		   request.getSession().setAttribute("code", code);
-		   name = c.getEntityDescription().getContent();
+    String vers = null;
+    String ltag = null;
+    c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+    if (c != null) {
+       request.getSession().setAttribute("concept", c);
+       request.getSession().setAttribute("code", code);
+       name = c.getEntityDescription().getContent();
 
-		   System.out.println(name);          
+       System.out.println(name);
 
 
-		} else {
-		   //name = "The server encountered an internal error that prevented it from fulfilling this request.";
-		   name = "ERROR: Invalid code - " + code + ".";
-		}
+    } else {
+       //name = "The server encountered an internal error that prevented it from fulfilling this request.";
+       name = "ERROR: Invalid code - " + code + ".";
+    }
         String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
         if (c != null) {
         request.getSession().setAttribute("dictionary", dictionary);
@@ -175,7 +175,7 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
           <%
           }
           %>
-          
+
         </tr>
       </table>
 
@@ -195,7 +195,7 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
     <%
           }
           %>
-          
+
 
             <%@ include file="/pages/templates/nciFooter.html" %>
           </div>

@@ -41,7 +41,7 @@
       <div class="pagecontent">
         <%
           request.getSession().removeAttribute("dictionary");
-        
+
           HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 
           IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
@@ -96,9 +96,9 @@
             <td>
             <%
               if (contains_warning_msg != null) {
-             %> 
+             %>
               <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>&nbsp;<%=contains_warning_msg%>
-             <% 
+             <%
               } else {
               %>
               <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
@@ -106,18 +106,18 @@
               }
               %>
 
-<%              
+<%
 String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 String tooltip_str = "";
 if (ontologiesToSearchOnStr != null) {
-	Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
-	for (int k=0; k<ontologies_to_search_on.size(); k++) {
-		String s = (String) ontologies_to_search_on.elementAt(k);
-		tooltip_str = tooltip_str + s + "<br/>";
-	}
+  Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
+  for (int k=0; k<ontologies_to_search_on.size(); k++) {
+    String s = (String) ontologies_to_search_on.elementAt(k);
+    tooltip_str = tooltip_str + s + "<br/>";
+  }
 }
 %>
-from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>. 
+from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>.
             </td>
           </tr>
           <tr>
@@ -167,7 +167,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           <%
                           } else {
                           %>
-                               <a href="<%=request.getContextPath() %>/pages/concept_details2.jsf?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
+                               <a href="<%=request.getContextPath() %>/pages/concept_details_other_term.jsf?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
                           <%
                           }
                           %>
