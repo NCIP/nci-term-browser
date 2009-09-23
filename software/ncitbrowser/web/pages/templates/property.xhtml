@@ -112,7 +112,6 @@ if (!bool_obj.equals(Boolean.TRUE) ||
     <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i></p>
 <%
     String prop_dictionary = (String) request.getSession().getAttribute("dictionary");
-    System.out.println("(*) property.xhtml dictionary " + prop_dictionary);
     
     Vector descendantCodes = HistoryUtils.getDescendantCodes(dictionary, null, null, curr_concept.getEntityCode());
     if (descendantCodes != null) {
