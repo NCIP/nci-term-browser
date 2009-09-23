@@ -126,9 +126,10 @@ h3
 {
   position: relative;
   left: 29px;
-  bottom: -9px;
+  bottom: -32px;
   font-family: Arial, Verdana, Helvetica, sans-serif;
-  font-size: 52px;
+  font-size: 30px;
+  font-weight: bold;
   color: #2F2F5F;
   white-space:nowrap;
 }
