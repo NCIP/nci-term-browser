@@ -22,6 +22,10 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+
 <%
   String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
 %>
