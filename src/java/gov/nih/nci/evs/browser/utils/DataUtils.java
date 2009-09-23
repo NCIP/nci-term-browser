@@ -153,10 +153,13 @@ public class DataUtils {
     public static String TYPE_INVERSE_ROLE = "type_inverse_role";
     public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
+    public static HashMap formalName2LocalNameHashMap = null;
+
     // ==================================================================================
 
     public DataUtils() {
         // setCodingSchemeMap();
+
     }
 
     public static List getOntologyList() {
@@ -172,6 +175,7 @@ public class DataUtils {
         codingSchemeMap = new HashMap();
         csnv2codingSchemeNameMap = new HashMap();
         csnv2VersionMap = new HashMap();
+        formalName2LocalNameHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
 		boolean includeInactive = true;
@@ -198,6 +202,11 @@ public class DataUtils {
 				String formalname = css.getFormalName();
 				String representsVersion = css.getRepresentsVersion();
 System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
+
+                String locallname = css.getLocalName();
+
+                formalName2LocalNameHashMap.put(formalname, locallname);
+
 				Boolean isActive = null;
 				if (csr == null) {
 					System.out.println("\tcsr == null???");
@@ -288,6 +297,14 @@ System.out.println("\n\tActive? " + isActive);
 		}
     }
     */
+
+    public static String getLocalName(String key) {
+		if (formalName2LocalNameHashMap == null) {
+			setCodingSchemeMap();
+		}
+		return (String) formalName2LocalNameHashMap.get(key);
+	}
+
 
     public static Vector<String> getSupportedAssociationNames(String key) {
         if (csnv2codingSchemeNameMap == null) {
