@@ -40,6 +40,21 @@
   <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
   <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains&nbsp;
   
+  
+    <%
+      String searchTarget = (String) request.getSession().getAttribute("searchTarget");
+      String check_n = "", check_p = "" , check_r ="";
+      if (searchTarget == null || searchTarget.compareTo("names") == 0)
+        check_n = "checked";
+      else if (searchTarget.compareTo("properties") == 0)
+        check_p= "checked";
+      else
+        check_r = "checked";
+    %>
+  <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name/Code&nbsp;
+  <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%>>Properties&nbsp;
+  <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%>>Relationships&nbsp;
+  
   <%
   if (vocab_name != null) {
   %>
