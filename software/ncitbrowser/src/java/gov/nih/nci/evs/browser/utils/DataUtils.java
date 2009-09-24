@@ -244,61 +244,6 @@ System.out.println("\n\tActive? " + isActive);
 		}
 	}
 
-	/*
-    private static void setCodingSchemeMap() {
-        // if (_ontologies != null) return;
-        _ontologies = new ArrayList();
-        codingSchemeMap = new HashMap();
-        csnv2codingSchemeNameMap = new HashMap();
-        csnv2VersionMap = new HashMap();
-
-        Vector nv_vec = new Vector();
-
-        try {
-            RemoteServerUtil rsu = new RemoteServerUtil();
-            // EVSApplicationService lbSvc = rsu.createLexBIGService();
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-
-            CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-            if (csrl == null) {
-                System.out.println("WARNING: csrl is NULL");
-			}
-
-            CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-            System.out.println("csrs.length: " + csrs.length);
-            for (int i = 0; i < csrs.length; i++) {
-                CodingSchemeRendering csr = csrs[i];
-                Boolean isActive = csr.getRenderingDetail().getVersionStatus()
-                        .equals(CodingSchemeVersionStatus.ACTIVE);
-                //if (isActive != null && isActive.equals(Boolean.TRUE)) {
-                    CodingSchemeSummary css = csr.getCodingSchemeSummary();
-                    String formalname = css.getFormalName();
-
-                    //if (formalname.indexOf("MetaThesaurus") == -1) { // exclude NCI MetaThesaurus for the time being
-						String representsVersion = css.getRepresentsVersion();
-
-						String value = formalname + " (version: " + representsVersion + ")";
-						nv_vec.add(value);
-
-						csnv2codingSchemeNameMap.put(value, formalname);
-
-						csnv2VersionMap.put(value, representsVersion);
-					//}
-                 //}
-            }
-        } catch (Exception e) {
-           System.out.println("setCodingSchemeMap exception??? ");
-        }
-        if (nv_vec.size() > 0) {
-			nv_vec = SortUtils.quickSort(nv_vec);
-			for (int k=0; k<nv_vec.size(); k++) {
-				String value = (String) nv_vec.elementAt(k);
-				_ontologies.add(new SelectItem(value, value));
-			}
-		}
-    }
-    */
-
     public static String getLocalName(String key) {
 		if (formalName2LocalNameHashMap == null) {
 			setCodingSchemeMap();
@@ -1981,68 +1926,6 @@ NCI Thesaurus:
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/*
-    public static Vector getSupportedCodingSchemeNames()
-	{
-        LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
-		if (lbSvc == null)
-		{
-			System.out.println("lbSvc == null..???" );
-			return null;
-		}
-
-		Vector v = new Vector();
-        try {
-            CodingSchemeRenderingList csrl = null;
-            try {
-				csrl = lbSvc.getSupportedCodingSchemes();
-			} catch (LBInvocationException ex) {
-				ex.printStackTrace();
-				System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
-				return null;
-			}
-
-			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-			for (int i=0; i<csrs.length; i++)
-			{
-				CodingSchemeRendering csr = csrs[i];
-            	Boolean isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
-				//System.out.println("\nActive? " + isActive);
-
-				if (isActive != null && isActive.equals(Boolean.TRUE))
-				{
-					 CodingSchemeSummary css = csr.getCodingSchemeSummary();
-					 String formalname = css.getFormalName();
-					 v.add(formalname);
-
-					 System.out.println("\tformalname: " + formalname);
-					 EntityDescription ed = css.getCodingSchemeDescription();
-					 System.out.println("\tcodingSchemeDescription: " + ed.getContent());
-					 java.lang.String uri = css.getCodingSchemeURI();
-					 System.out.println("\tURI: " + uri);
-					 java.lang.String localName = css.getLocalName();
-					 System.out.println("\tlocalName: " + localName);
-					 java.lang.String version = css.getRepresentsVersion();
-					 System.out.println("\tversion: " + version + "\n");
-					 CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-					 CodingScheme cs = lbSvc.resolveCodingScheme(formalname, versionOrTag);
-					 SupportedNamespace[] namespaces = cs.getMappings().getSupportedNamespace();
-					 for (int j=0; j<namespaces.length; j++) {
-                         SupportedNamespace ns =  namespaces[j];
-                         java.lang.String ns_name = ns.getEquivalentCodingScheme();
-                         java.lang.String ns_id = ns.getContent() ;
-                         System.out.println("\tns_name: " + ns_name + " ns_id:" + ns_id);
-					 }
-
-			    }
-			}
-	    } catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		return SortUtils.quickSort(v);
-	}
-*/
 
     public static CodingScheme resolveCodingScheme(LexBIGService lbSvc, String formalname, CodingSchemeVersionOrTag versionOrTag) {
 		try {
@@ -2069,7 +1952,7 @@ NCI Thesaurus:
         LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 		if (lbSvc == null)
 		{
-			System.out.println("setCodingSchemeMap..??????????????" );
+			System.out.println("ERROR: setCodingSchemeMap RemoteServerUtil().createLexBIGService() returns null." );
 			return null;
 		}
 
@@ -2152,7 +2035,6 @@ NCI Thesaurus:
 
     public static String key2CodingSchemeName(String key) {
 		if (key == null) {
-			//System.out.println("key2CodingSchemeName key == NULL???");
 			return null;
 		}
 		if (csnv2codingSchemeNameMap == null) {
@@ -2467,11 +2349,15 @@ NCI Thesaurus:
 
     public static Vector getStatusByConceptCodes(String scheme, String version, String ltag, Vector codes) {
 		Vector w = new Vector();
+		long ms = System.currentTimeMillis();
 		for (int i=0; i<codes.size(); i++) {
 			String code = (String) codes.elementAt(i);
 			Concept c = getConceptByCode(scheme, version, ltag, code);
 			w.add(c.getStatus());
 		}
+        System.out.println("getStatusByConceptCodes Run time (ms): "
+                    + (System.currentTimeMillis() - ms));
+
 		return w;
 	}
 
