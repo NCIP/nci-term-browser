@@ -1116,7 +1116,7 @@ System.out.println("Step 4: ");
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
 		{
-			matchAlgorithm = "subString";
+			matchAlgorithm = "subString"; // to be replace by literalSubString
 		}
 
 System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
