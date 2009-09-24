@@ -60,7 +60,7 @@ System.out.println("(*) search_results.jsp content-header1.xhtml " + search_resu
       <div class="pagecontent">
         <%
         
-          HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
+          //HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
  
           IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
@@ -114,7 +114,17 @@ System.out.println("(*) search_results.jsp content-header1.xhtml " + search_resu
           </tr>
           <tr>
             <td>
-              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>&nbsp;<%=contains_warning_msg%>
+               <%
+               if (contains_warning_msg != null) {
+               %>
+                  <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>&nbsp;<%=contains_warning_msg%>
+               <%   
+               } else {
+               %>
+                  <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
+               <%
+               }
+               %>
             </td>
           </tr>
           <tr>
@@ -123,13 +133,27 @@ System.out.println("(*) search_results.jsp content-header1.xhtml " + search_resu
                 <%
                 
                   List list = iteratorBean.getData(istart, iend);
+Vector code_vec = new Vector();
+                  for (int k=0; k<list.size(); k++) {
+                      ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
+                      code_vec.add(rcr.getConceptCode());
+                  }
+
+Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);                 
+                  
                   for (int i=0; i<list.size(); i++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
                       
                       String code = rcr.getConceptCode();
                       String name = rcr.getEntityDescription().getContent();
+                      String con_status = null;
+                      
+                      if (status_vec.elementAt(i) != null) {
+                      	  con_status = (String) status_vec.elementAt(i);
+                      	  con_status = con_status.replaceAll("_", " ");
+                      } 
   
-                      String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+                      String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
 
                       if (i % 2 == 0) {
                         %>
@@ -142,7 +166,17 @@ System.out.println("(*) search_results.jsp content-header1.xhtml " + search_resu
                       }
                       %>
                           <td class="dataCellText">
-                            <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
+                          <%
+                          if (con_status == null) {
+                          %>
+                             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
+                          <%   
+                          } else {
+                          %>
+                             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+                          <%
+                          }
+                          %>
                           </td>
                         </tr>
                       <%
