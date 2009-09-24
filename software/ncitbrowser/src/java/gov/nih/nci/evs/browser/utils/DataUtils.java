@@ -2465,6 +2465,15 @@ NCI Thesaurus:
 	}
 
 
+    public static Vector getStatusByConceptCodes(String scheme, String version, String ltag, Vector codes) {
+		Vector w = new Vector();
+		for (int i=0; i<codes.size(); i++) {
+			String code = (String) codes.elementAt(i);
+			Concept c = getConceptByCode(scheme, version, ltag, code);
+			w.add(c.getStatus());
+		}
+		return w;
+	}
 
 	public static void main(String[] args) {
 		String scheme = "NCI Thesaurus";
