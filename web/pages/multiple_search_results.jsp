@@ -136,6 +136,13 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                       String name = rcr.getEntityDescription().getContent();
 
                       String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+                      
+                      Concept con = DataUtils.getConceptByCode(vocabulary_name, null, null, code);
+                      String con_status = con.getStatus();
+                      
+                      if (con_status != null) {
+                      	  con_status = con_status.replaceAll("_", " ");
+                      }                       
 
                       String vocabulary_name_encoded = null;
                       if (vocabulary_name != null) vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
@@ -150,6 +157,10 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                         <%
                       }
                       %>
+                          <%
+                          if (con_status == null) {
+                          %>
+                      
                           <td class="dataCellText">
                           <%
                           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
@@ -160,10 +171,6 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                                String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
                           %>
                                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>
-                               <!--
-                               &nbsp;<img src='<%=basePath%>/images/newWindow.gif'/>
-                               -->
-
                           <%
                           } else {
                           %>
@@ -175,6 +182,39 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           <td class="dataCellText">
                             <%=vocabulary_name%>
                           </td>
+                          
+                          
+                          <%
+                          } else {
+                          %>
+
+
+                          <td class="dataCellText">
+                          <%
+                          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
+                          %>
+                               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+                          <%
+                          } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
+                               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
+                          %>
+                               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>&nbsp;(<%=con_status%>)
+                          <%
+                          } else {
+                          %>
+                               <a href="<%=request.getContextPath() %>/pages/concept_details_other_term.jsf?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+                          <%
+                          }
+                          %>
+                          </td>
+                          <td class="dataCellText">
+                            <%=vocabulary_name%>
+                          </td>                          
+                          
+                          <%
+                          }
+                          %>
+                          
 
                         </tr>
                       <%
