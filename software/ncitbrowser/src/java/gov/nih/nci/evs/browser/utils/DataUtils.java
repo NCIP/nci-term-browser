@@ -2356,7 +2356,7 @@ NCI Thesaurus:
 			w.add(c.getStatus());
 		}
         System.out.println("getStatusByConceptCodes Run time (ms): "
-                    + (System.currentTimeMillis() - ms));
+                    + (System.currentTimeMillis() - ms) + " number of concepts: " + codes.size());
 
 		return w;
 	}
