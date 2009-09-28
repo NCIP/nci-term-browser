@@ -1195,6 +1195,9 @@ System.out.println("*** Enter multipleSearchAction ");
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
+
+                request.setAttribute("algorithm", matchAlgorithm);
+
                 request.setAttribute("dictionary", coding_scheme);
 
                 return "concept_details_other_term";
