@@ -946,12 +946,6 @@ public class SearchUtils {
 		matchText0 = matchText0.trim();
 
 
-System.out.println("searchByName scheme: " + scheme);
-System.out.println("searchByName matchText: " + matchText);
-System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
-System.out.println("searchByName maxToReturn: " + maxToReturn);
-
-
 		boolean preprocess = true;
 		if (matchText == null || matchText.length() == 0) {
 			return new Vector();
@@ -1158,7 +1152,6 @@ System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
 
             //if (sortOption.isApplySortScore() && !sortOption.isSortByPtOnly()) {
 		    if (ranking){
-				System.out.println("*** Sort by Lucene score...");
 				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
 
             } else {
