@@ -1139,7 +1139,6 @@ System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
 
             SortOptionList sortCriteria = null;
 
-            //if (sortOption.isApplySortScore() && !sortOption.isSortByPtOnly()) {
 		    if (ranking){
 				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
 
@@ -1270,9 +1269,7 @@ System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
 
             SortOptionList sortCriteria = null;
 
-            //if (sortOption.isApplySortScore() && !sortOption.isSortByPtOnly()) {
 		    if (ranking){
-				System.out.println("*** Sort by Lucene score...");
 				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
 
             } else {
@@ -2604,7 +2601,6 @@ System.out.println("union returns NOT NULL " );
             SortOptionList sortCriteria = null;
 
 		    if (ranking){
-				System.out.println("*** Sort by Lucene score...");
 				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
 
             } else {
@@ -2781,7 +2777,6 @@ System.out.println("union returns NOT NULL " );
             SortOptionList sortCriteria = null;
 
 		    if (ranking){
-				System.out.println("*** Sort by Lucene score...");
 				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
 
             } else {
