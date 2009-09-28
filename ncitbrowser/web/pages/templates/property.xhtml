@@ -109,14 +109,14 @@ if (!bool_obj.equals(Boolean.TRUE) ||
     concept_status.compareToIgnoreCase("Retired Concept") == 0)) // non-active
 {
 %>
-    <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i></p>
+    <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i>
 <%
     String prop_dictionary = (String) request.getSession().getAttribute("dictionary");
     
     Vector descendantCodes = HistoryUtils.getDescendantCodes(dictionary, null, null, curr_concept.getEntityCode());
     if (descendantCodes != null) {
             if (descendantCodes != null && descendantCodes.size() > 0) {
-		    String link = " (See: "; 
+		    String link = "&nbsp;(See:&nbsp;"; 
 
 	%>            
 		    <%=link%>
@@ -129,14 +129,14 @@ if (!bool_obj.equals(Boolean.TRUE) ||
 	%>
 
 		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary%>&code=<%=descendantCode%>">
-			<%=descendantName%>;
+			<%=descendantName%>
 		      </a>
 	<%              
 		    }
 
 		    link = ")"; 
 	%>            
-		    <%=link%>	
+		    <%=link%></p>	
 	<%    
             }
     }
