@@ -1009,9 +1009,6 @@ public class SearchUtils {
 				matchText, matchAlgorithm, language);
 
 		// KLO, 042909
-
-System.out.println("Step 1: ");
-
 		if (iterator == null) {
 			System.out.println("Step 1 iterator == null: ");
 		}
@@ -1056,9 +1053,6 @@ System.out.println("Step 1: ");
 			}
 		}
 
-System.out.println("Step 2: ");
-
-
 		if (matchAlgorithm0.compareToIgnoreCase("exactMatch") == 0) {
 			matchText0 = matchText0.trim();
 			Concept c = getConceptByCode(scheme, null, null, matchText0);
@@ -1068,18 +1062,11 @@ System.out.println("Step 2: ");
 				return v;
 			}
 		} else if (matchAlgorithm0.compareTo("contains") == 0) { // /100{WBC} & search by code
-
-
-System.out.println("Step 3: startsWith ");
-
 			return searchByName(scheme, version, matchText0, "startsWith",
 					maxToReturn);
 		}
 
 		else if (matchAlgorithm.compareTo("RegExp") != 0) {
-
-System.out.println("Step 4: ");
-
 			return searchByName(scheme, version, matchText0, "exactMatch",
 					maxToReturn);
 		}
