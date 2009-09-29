@@ -160,6 +160,18 @@
             <tr>
               <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
               <%
+              
+visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
+if (visitedConcepts == null) {
+    visitedConcepts = new Vector();
+}
+String visitedConceptStr = dictionary + "|" + code + "|" + name;
+if (!visitedConcepts.contains(visitedConceptStr)) {
+	visitedConcepts.add(visitedConceptStr);
+} 
+request.getSession().setAttribute("visitedConcepts", visitedConcepts);   
+              
+              
               if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
               %>
               <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
