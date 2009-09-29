@@ -942,6 +942,9 @@ String t = "";
         request.getSession().setAttribute("matchText", matchText);
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
+
+		request.getSession().setAttribute("algorithm", matchAlgorithm);
+
         //setSelectedAlgorithm(matchAlgorithm);
         String matchtype = (String) request.getParameter("matchtype");
         if (matchtype == null) matchtype = "string";
