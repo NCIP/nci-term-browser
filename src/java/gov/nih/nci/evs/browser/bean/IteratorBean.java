@@ -66,7 +66,7 @@ public class IteratorBean extends Object {
 	}
 
 
-	public IteratorBean(ResolvedConceptReferencesIterator iterator, int maxReturn) {
+    public IteratorBean(ResolvedConceptReferencesIterator iterator, int maxReturn) {
 		this.iterator = iterator;
 		this.maxReturn = maxReturn;
 		initialize();
