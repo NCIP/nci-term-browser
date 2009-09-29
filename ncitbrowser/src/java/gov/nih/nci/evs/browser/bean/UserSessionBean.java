@@ -375,8 +375,21 @@ public class UserSessionBean extends Object {
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
         setSelectedAlgorithm(matchAlgorithm);
+
+        /*
         String matchtype = (String) request.getParameter("matchtype");
         if (matchtype == null) matchtype = "string";
+        */
+
+        String searchTarget = (String) request.getParameter("searchTarget");
+        request.getSession().setAttribute("searchTarget", searchTarget);
+        System.out.println("searchTarget: " + searchTarget);
+
+        if (searchTarget.compareTo("names") != 0) {
+			String msg = "To be implemented.";
+			request.getSession().setAttribute("message", msg);
+			return "message";
+		}
 
         //String rankingStr = (String) request.getParameter("ranking");
         //boolean ranking = rankingStr != null && rankingStr.equals("on");
@@ -395,7 +408,7 @@ public class UserSessionBean extends Object {
             try {
                 System.out.println(Utils.SEPARATOR);
                 System.out.println("* criteria: " + matchText);
-                System.out.println("* matchType: " + matchtype);
+                //System.out.println("* matchType: " + matchtype);
                 System.out.println("* source: " + source);
                 System.out.println("* ranking: " + ranking);
                // System.out.println("* sortOption: " + sortOption);
@@ -945,10 +958,22 @@ String t = "";
 
 		request.getSession().setAttribute("algorithm", matchAlgorithm);
 
+
+        String searchTarget = (String) request.getParameter("searchTarget");
+        request.getSession().setAttribute("searchTarget", searchTarget);
+        System.out.println("searchTarget: " + searchTarget);
+
+        if (searchTarget.compareTo("names") != 0) {
+			String msg = "To be implemented.";
+			request.getSession().setAttribute("message", msg);
+			return "message";
+		}
+
+/*
         //setSelectedAlgorithm(matchAlgorithm);
         String matchtype = (String) request.getParameter("matchtype");
         if (matchtype == null) matchtype = "string";
-
+*/
         //String rankingStr = (String) request.getParameter("ranking");
         //boolean ranking = rankingStr != null && rankingStr.equals("on");
 
@@ -965,7 +990,7 @@ String t = "";
             try {
                 System.out.println(Utils.SEPARATOR);
                 System.out.println("* criteria: " + matchText);
-                System.out.println("* matchType: " + matchtype);
+                //System.out.println("* matchType: " + matchtype);
                 System.out.println("* source: " + source);
                 System.out.println("* ranking: " + ranking);
                // System.out.println("* sortOption: " + sortOption);
