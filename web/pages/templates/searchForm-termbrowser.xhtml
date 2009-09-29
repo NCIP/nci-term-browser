@@ -27,7 +27,7 @@
     style="border-width:0;" />
   </h:outputLink>
   <%
-    String algorithm = (String) request.getSession().getAttribute("selectedAlgorithm");
+    String algorithm = (String) request.getSession().getAttribute("algorithm");
     String check_e = "", check_s = "" , check_c ="";
     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
       check_e = "checked";
