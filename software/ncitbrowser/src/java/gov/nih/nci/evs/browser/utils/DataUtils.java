@@ -179,7 +179,7 @@ public class DataUtils {
         formalName2LocalNameHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
-		boolean includeInactive = true;
+		boolean includeInactive = false;
 
         try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
