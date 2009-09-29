@@ -2146,7 +2146,7 @@ NCI Thesaurus:
 
 		line = " onmouseout=UnTip() ";
 		strbuf.append(line);
-		line = ">Visted Concepts</A>";
+		line = ">Visited Concepts</A>";
 		strbuf.append(line);
 
 		return strbuf.toString();
