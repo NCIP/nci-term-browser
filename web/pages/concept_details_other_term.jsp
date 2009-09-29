@@ -53,12 +53,12 @@
               //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
               dictionary = (String) request.getParameter("dictionary");
               dictionary = DataUtils.getCodingSchemeName(dictionary);
-
           }
           String shortName = "Vocabulary";
           if (dictionary != null) {
-            shortName = new DataUtils().getLocalName(dictionary);
+              shortName = DataUtils.getLocalName(dictionary);
           }
+          
           String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
           if (dictionary.compareTo("NCI Thesaurus") != 0) {
               term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
@@ -75,10 +75,11 @@
        <%
           } else {
         %>
-              <div class="vocabularynamebanner">
-                <div class="vocabularyName"><%=dictionary.substring(0,20)%></div>
-              </div>
-       <%
+	  <div class="vocabularynamebanner">
+		  <div class="vocabularynameshort"><%=shortName%></div>
+		  <div class="vocabularynamelong"><%=dictionary%></div>
+	  </div>
+        <%
           }
         %>
           <div class="search-globalnav">
