@@ -74,6 +74,7 @@ public class RemoteServerUtil {
         } catch (Exception ex) {
             // Do nothing
             System.out.println("WARNING: NCItBrowserProperties loading error...");
+            System.out.println("\t-- trying to connect to " + url + " instead.");
         }
         return createLexBIGService(url);
     }

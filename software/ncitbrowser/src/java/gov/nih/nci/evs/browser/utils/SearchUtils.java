@@ -125,7 +125,7 @@ public class SearchUtils {
 	public static final int SEARCH_ROLE_VALUE = 6;
 	public static final int SEARCH_ASSOCIATION_VALUE = 7;
 
-	public static final String CONTAIN_SEARCH_ALGORTHM = "subString";
+	public static final String CONTAIN_SEARCH_ALGORITHM = "subString";
 
 	static final List<String> STOP_WORDS = Arrays.asList(new String[] { "a",
 			"an", "and", "by", "for", "of", "on", "in", "nos", "the", "to",
@@ -1099,7 +1099,7 @@ public class SearchUtils {
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
 		{
-			matchAlgorithm = CONTAIN_SEARCH_ALGORTHM; // to be replace by literalSubString
+			matchAlgorithm = CONTAIN_SEARCH_ALGORITHM; // to be replace by literalSubString
 		}
 
 System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
@@ -1204,7 +1204,7 @@ System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
 		{
-			matchAlgorithm = CONTAIN_SEARCH_ALGORTHM;
+			matchAlgorithm = CONTAIN_SEARCH_ALGORITHM;
 		}
 
         CodedNodeSet cns = null;
@@ -2533,7 +2533,7 @@ System.out.println("union returns NOT NULL " );
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
-			matchAlgorithm = CONTAIN_SEARCH_ALGORTHM; // to be replaced by literalSubString
+			matchAlgorithm = CONTAIN_SEARCH_ALGORITHM; // to be replaced by literalSubString
 		}
 
         CodedNodeSet cns = null;
@@ -2696,7 +2696,7 @@ System.out.println("union returns NOT NULL " );
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
-			matchAlgorithm = CONTAIN_SEARCH_ALGORTHM; // to be replaced by literalSubString
+			matchAlgorithm = CONTAIN_SEARCH_ALGORITHM; // to be replaced by literalSubString
 		}
 
         CodedNodeSet cns = null;

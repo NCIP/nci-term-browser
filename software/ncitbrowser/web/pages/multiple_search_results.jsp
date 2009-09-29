@@ -224,7 +224,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
             </td>
           </tr>
         </table>
-        <%@ include file="/pages/templates/pagination.xhtml" %>
+        <%@ include file="/pages/templates/pagination-termbrowser.xhtml" %>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->

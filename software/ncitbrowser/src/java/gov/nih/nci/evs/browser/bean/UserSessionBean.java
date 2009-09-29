@@ -924,12 +924,9 @@ String t = "";
    }
 
 
-
-
    public String multipleSearchAction() {
 
-int knt = 0;
-System.out.println("*** Enter multipleSearchAction ");
+		int knt = 0;
 
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String matchText = (String) request.getParameter("matchText");
@@ -1153,6 +1150,7 @@ System.out.println("*** Enter multipleSearchAction ");
 
             if (iteratorBean == null) {
                 iteratorBean = new IteratorBean(iterator);
+
                 FacesContext.getCurrentInstance().getExternalContext()
                    .getSessionMap().put("iteratorBean", iteratorBean);
             } else {
@@ -1165,6 +1163,7 @@ System.out.println("*** Enter multipleSearchAction ");
                 request.getSession().setAttribute("match_size", match_size);
                 request.getSession().setAttribute("page_string", "1");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
+                //route to multiple_search_results.jsp
                 return "search_results";
             } else if (size == 1) {
                 //Concept c = (Concept) v.elementAt(0);
