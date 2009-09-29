@@ -488,7 +488,7 @@ System.out.println("\n\tActive? " + isActive);
                 return null;
             }
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-            versionOrTag.setVersion(vers);
+            if (vers != null) versionOrTag.setVersion(vers);
 
             ConceptReferenceList crefs = createConceptReferenceList(
                     new String[] { code }, codingSchemeName);
