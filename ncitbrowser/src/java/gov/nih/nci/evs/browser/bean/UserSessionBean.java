@@ -939,6 +939,7 @@ String t = "";
 
    public String multipleSearchAction() {
 
+        String ontologiesToSearchOnStr = null;
 		int knt = 0;
 
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -957,7 +958,6 @@ String t = "";
         String matchAlgorithm = (String) request.getParameter("algorithm");
 
 		request.getSession().setAttribute("algorithm", matchAlgorithm);
-
 
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
@@ -998,7 +998,17 @@ String t = "";
             }
         }
 
+	    String initial_search = (String) request.getParameter("initial_search");
         String[] ontology_list = request.getParameterValues("ontology_list");
+
+        if (initial_search != null) {
+			if (ontology_list == null || ontology_list.length == 0) {
+					String message = "Please select at least one vocabulary.";
+					request.getSession().setAttribute("message", message);
+					return "message";
+			}
+		}
+
         String ontology_list_str = null;
 
         LicenseBean licenseBean = null;
@@ -1027,12 +1037,19 @@ String t = "";
                     request.getSession().setAttribute("licenseBean", licenseBean);
                 }
 
-            }
-        } else {
-            knt = ontology_list.length;
-        }
 
-        String ontologiesToSearchOnStr = null;
+                if (ontology_list.length == 0) {
+					String message = "Please select at least one vocabulary.";
+					request.getSession().setAttribute("message", message);
+					return "message";
+				}
+			}
+
+        } else {
+			//KLO testing
+            knt = ontology_list.length;
+            //request.getSession().removeAttribute("ontology_list_str");
+        }
 
         if (ontology_list == null) {
             ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
