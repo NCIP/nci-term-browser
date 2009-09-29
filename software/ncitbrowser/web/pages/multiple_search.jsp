@@ -32,6 +32,9 @@
     <!-- Main box -->
     <div id="main-area">
       <form name="searchTerm" method="post" class="search-form-main-area">
+      
+        <input type="hidden" name="initial_search" value="initial_search" />
+      
         <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
         <!-- Page content -->
         <div class="pagecontent">
