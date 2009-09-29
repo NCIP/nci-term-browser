@@ -116,6 +116,9 @@ if (ontologiesToSearchOnStr != null) {
     tooltip_str = tooltip_str + s + "<br/>";
   }
 }
+
+//request.getSession().removeAttribute("ontologiesToSearchOn"); //KLO testing
+
 %>
 from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>.
             </td>
