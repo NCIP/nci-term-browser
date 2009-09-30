@@ -2,7 +2,8 @@
 <div class="bannerarea">
 
         <%
-        String hdr_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
+        //String hdr_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
+        String hdr_dictionary = (String) request.getSession().getAttribute("dictionary");
         request.getSession().setAttribute("dictionary", hdr_dictionary);
         
 System.out.println("content-header1.xhtml hdr_dictionary " + hdr_dictionary);        
