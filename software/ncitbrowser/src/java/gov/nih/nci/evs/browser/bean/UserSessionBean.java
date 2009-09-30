@@ -938,10 +938,6 @@ String t = "";
 
 
    public String multipleSearchAction() {
-
-System.out.println("*** multipleSearchAction " );
-
-
         String ontologiesToSearchOnStr = null;
 		int knt = 0;
 
@@ -1245,9 +1241,9 @@ System.out.println("*** multipleSearchAction " );
 
                 request.setAttribute("algorithm", matchAlgorithm);
 
-                request.setAttribute("dictionary", coding_scheme);
+coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme);
 
-System.out.println("*** Multiple search against " + coding_scheme);
+                request.setAttribute("dictionary", coding_scheme);
                 if (coding_scheme.compareTo("NCI Thesaurus") == 0 || coding_scheme.compareTo("NCI_Thesaurus") == 0) return "concept_details";
                 return "concept_details_other_term";
             }

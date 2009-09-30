@@ -155,6 +155,7 @@ public class DataUtils {
     public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
     public static HashMap formalName2LocalNameHashMap = null;
+    public static HashMap localName2FormalNameHashMap = null;
 
     // ==================================================================================
 
@@ -177,6 +178,7 @@ public class DataUtils {
         csnv2codingSchemeNameMap = new HashMap();
         csnv2VersionMap = new HashMap();
         formalName2LocalNameHashMap = new HashMap();
+        localName2FormalNameHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
 		boolean includeInactive = false;
@@ -207,6 +209,8 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
                 String locallname = css.getLocalName();
 
                 formalName2LocalNameHashMap.put(formalname, locallname);
+                localName2FormalNameHashMap.put(locallname, formalname);
+                localName2FormalNameHashMap.put(formalname, formalname);
 
 				Boolean isActive = null;
 				if (csr == null) {
@@ -482,12 +486,7 @@ System.out.println("\n\tActive? " + isActive);
     public static Concept getConceptByCode(String codingSchemeName,
             String vers, String ltag, String code) {
         try {
-
-
-System.out.println("getConceptByCode codingSchemeName: " + codingSchemeName);
-System.out.println("getConceptByCode vers: " + vers);
-System.out.println("getConceptByCode code: " + code);
-
+			String formalname = (String) localName2FormalNameHashMap.get(codingSchemeName);
 
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
@@ -502,12 +501,16 @@ System.out.println("getConceptByCode code: " + code);
 
             CodedNodeSet cns = null;
             try {
-                cns = lbSvc.getCodingSchemeConcepts(codingSchemeName,
-                        versionOrTag);
+				try {
+					cns = lbSvc.getCodingSchemeConcepts(codingSchemeName,
+							versionOrTag);
+				} catch (Exception e) {
+					cns = lbSvc.getCodingSchemeConcepts(formalname,
+							versionOrTag);
+				}
 
                 if (cns == null) {
 					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
-
 					return null;
 				}
 
