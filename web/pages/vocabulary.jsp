@@ -213,6 +213,10 @@
  				menubar_version = menubar_version
  						.replaceAll(" ", "%20");
  			}
+ 			
+ 			
+ System.out.println("(*) vocabulary.jsp " + menubar_scheme + " " + 	menubar_version);		
+ 			
  %>
 
   <div class="global-nav">
