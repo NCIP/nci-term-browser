@@ -1249,6 +1249,16 @@ coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme
             }
         }
 
+//KLO, 093009
+        if (ontologiesToSearchOn.size() == 0) {
+			request.getSession().removeAttribute("vocabulary");
+		} else if (ontologiesToSearchOn.size() == 1) {
+			String msg_scheme = (String) ontologiesToSearchOn.get(0);
+			request.getSession().setAttribute("vocabulary", msg_scheme);
+		} else {
+			request.getSession().removeAttribute("vocabulary");
+		}
+
         String message = "No match found.";
         if (matchAlgorithm.compareTo("exactMatch") == 0) {
             message = "No match found. Please try 'Beings With' or 'Contains' search instead.";
