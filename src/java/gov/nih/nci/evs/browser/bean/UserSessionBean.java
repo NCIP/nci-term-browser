@@ -1217,6 +1217,8 @@ String t = "";
 
                 String coding_scheme = ref.getCodingSchemeName();
                 request.getSession().setAttribute("singleton", "true");
+
+                System.out.println("(**) multipleSearchAction singleton coding_scheme " + coding_scheme);
                 request.getSession().setAttribute("dictionary", coding_scheme);
 
                 Concept c = null;
