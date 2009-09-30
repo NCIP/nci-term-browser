@@ -95,7 +95,6 @@ public class HistoryUtils {
 	public static Vector<String> getEditActions(String codingSchemeName,
 			String vers, String ltag, String code) throws LBException {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-		//HistoryService hs = lbSvc.getHistoryService(CODING_SCHEME_NAME);
 		HistoryService hs = lbSvc.getHistoryService(codingSchemeName);
 		return getEditActions(lbSvc, hs, codingSchemeName, vers, ltag, code);
 	}
@@ -106,6 +105,8 @@ public class HistoryUtils {
         try {
 			Concept c = DataUtils.getConceptByCode(codingSchemeName, vers, ltag, code);
 			if (c == null) return null;
+			NCIChangeEventList list = hs.getEditActionList(Constructors.createConceptReference(code, null), null, null);
+			/*
 			Boolean isActive = c.isIsActive();
 			NCIChangeEventList list = null;
 			if (isActive != null &&  isActive.equals(Boolean.FALSE)) {
@@ -113,6 +114,7 @@ public class HistoryUtils {
 			} else {
 			    list = hs.getEditActionList(Constructors.createConceptReference(code, null), null, null);
 			}
+			*/
 			return getEditActions(codingSchemeName, vers, ltag, code, list);
 	    } catch (Exception ex) {
 			ex.printStackTrace();
@@ -124,10 +126,15 @@ public class HistoryUtils {
 	private static Vector<String> getEditActions(String codingSchemeName,
 			String vers, String ltag, String code, NCIChangeEventList list) {
 		Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
+		LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
 		Vector<String> v = new Vector<String>();
 		HashSet<String> hset = new HashSet<String>();
 		while (enumeration.hasMoreElements()) {
 			NCIChangeEvent event = enumeration.nextElement();
+
+			event = convertNCIChangeEvent(lbSvc, codingSchemeName, vers, ltag, code, event);
+
 			ChangeType type = event.getEditaction();
 			Date date = event.getEditDate();
 			String rCode = event.getReferencecode();
@@ -243,6 +250,103 @@ public class HistoryUtils {
 			return null;
 		}
 		return v;
+	}
+
+/*
+C21344|Growth_Factor_Gene|merge|12-AUG-03|C21344|Growth_Factor_Gene
+C18438|Proto-Oncogene_Growth_Factor|merge|12-AUG-03|C21344|Growth_Factor_Gene
+C18438|Proto-Oncogene_Growth_Factor|retire|12-AUG-03|(null)|(null)
+*/
+
+    private static NCIChangeEvent convertNCIChangeEvent(LexBIGService lbSvc, String codingSchemeName,
+            String vers, String ltag, String code, NCIChangeEvent event) {
+        if (event == null) return null;
+        ChangeType type = event.getEditaction();
+        String type_str = type.toString();
+        if (type_str.compareTo("merge") == 0) {
+			Date date = event.getEditDate();
+			String rCode = event.getReferencecode();
+			if (rCode.compareTo(code) == 0) {
+
+				System.out.println("rCode." + rCode + " == code == " + code);
+
+				try {
+					HistoryService hs = lbSvc.getHistoryService(codingSchemeName);
+					if (hs == null) {
+						System.out.println("Unable to getHistoryService for " + codingSchemeName);
+						return null;
+					}
+					try {
+						System.out.println("\tcheck Ancestors");
+
+						NCIChangeEventList list = hs.getAncestors(Constructors.createConceptReference(code, null));
+						Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
+						Vector<String> v = new Vector<String>();
+						HashSet<String> hset = new HashSet<String>();
+						while (enumeration.hasMoreElements()) {
+							NCIChangeEvent event2 = enumeration.nextElement();
+							String con_code = event2.getConceptcode();
+							String ref_code = event2.getReferencecode();
+
+							System.out.println("\tAncestor -- con_code " + con_code + "; ref_code == " + ref_code);
+
+							Date date2 = event2.getEditDate();
+							ChangeType type2 = event2.getEditaction();
+							String type_str2 = type2.toString();
+							if (type_str.compareTo("merge") == 0 && ref_code.compareTo(con_code) != 0 && ref_code.compareTo(code) == 0 && date.toString().compareTo(date2.toString()) == 0) {
+								//System.out.println("(***) con_code: " + con_code + " ref_code: " + ref_code);
+
+								System.out.println("\tsubstituting...");
+							    event2.setConceptcode(ref_code);
+							    event2.setReferencecode(con_code);
+							    return event2;
+							}
+						}
+					} catch (Exception ex) {
+						//ex.printStackTrace();
+						System.out.println("getAncestors throws exception.");
+					}
+
+					try {
+						System.out.println("\tcheck Descendants");
+
+						NCIChangeEventList list = hs.getDescendants(Constructors.createConceptReference(code, null));
+						Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
+						Vector<String> v = new Vector<String>();
+						HashSet<String> hset = new HashSet<String>();
+						while (enumeration.hasMoreElements()) {
+							NCIChangeEvent event2 = enumeration.nextElement();
+							String con_code = event2.getConceptcode();
+							String ref_code = event2.getReferencecode();
+
+							System.out.println("\tDescendant con_code " + con_code + "; ref_code == " + ref_code);
+
+							Date date2 = event2.getEditDate();
+							ChangeType type2 = event2.getEditaction();
+							String type_str2 = type2.toString();
+							if (type_str.compareTo("merge") == 0 && ref_code.compareTo(con_code) != 0 && ref_code.compareTo(code) == 0 && date.toString().compareTo(date2.toString()) == 0) {
+								//System.out.println("(***) con_code: " + con_code + " ref_code: " + ref_code);
+
+								System.out.println("\tsubstituting...");
+							    event2.setConceptcode(ref_code);
+							    event2.setReferencecode(con_code);
+							    return event2;
+							}
+						}
+					} catch (Exception ex) {
+						//ex.printStackTrace();
+						System.out.println("getAncestors throws exception.");
+					}
+
+				} catch (Exception ex) {
+					//ex.printStackTrace();
+					System.out.println("getAncestors throws exception.");
+				}
+			}
+
+		}
+
+		return event;
 	}
 
 }
