@@ -39,7 +39,8 @@
     }
 
     if (concept_status != null) {
-      concept_status = concept_status.replaceAll("_", " ");
+       concept_status = concept_status.replaceAll("_", " ");
+       if (concept_status.compareToIgnoreCase("active") == 0 || concept_status.compareToIgnoreCase("reviewed") == 0) concept_status = null;
     }
 
     HashSet hset = new HashSet();
