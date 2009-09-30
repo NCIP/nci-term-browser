@@ -482,6 +482,13 @@ System.out.println("\n\tActive? " + isActive);
     public static Concept getConceptByCode(String codingSchemeName,
             String vers, String ltag, String code) {
         try {
+
+
+System.out.println("getConceptByCode codingSchemeName: " + codingSchemeName);
+System.out.println("getConceptByCode vers: " + vers);
+System.out.println("getConceptByCode code: " + code);
+
+
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
                 System.out.println("lbSvc == null???");
@@ -497,6 +504,13 @@ System.out.println("\n\tActive? " + isActive);
             try {
                 cns = lbSvc.getCodingSchemeConcepts(codingSchemeName,
                         versionOrTag);
+
+                if (cns == null) {
+					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+
+					return null;
+				}
+
                 cns = cns.restrictToCodes(crefs);
                 //ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
  				ResolvedConceptReferenceList matches = null;
@@ -829,7 +843,7 @@ System.out.println("\n\tActive? " + isActive);
         }
         return "";
     }
-
+/*
     public static String getVocabularyVersionByTag(String codingSchemeName,
             String ltag) {
         if (codingSchemeName == null)
@@ -863,6 +877,52 @@ System.out.println("\n\tActive? " + isActive);
         }
         return null;
     }
+*/
+
+    public static String getVocabularyVersionByTag(String codingSchemeName, String ltag)
+    {
+         if (codingSchemeName == null) return null;
+         String version = null;
+         int knt = 0;
+         try {
+             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+             CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
+             CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
+             for (int i=0; i<csra.length; i++)
+             {
+                CodingSchemeRendering csr = csra[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                if (css.getFormalName().compareTo(codingSchemeName) == 0 || css.getLocalName().compareTo(codingSchemeName) == 0)
+                {
+					version = css.getRepresentsVersion();
+					knt++;
+
+                    if (ltag == null) return css.getRepresentsVersion();
+                    RenderingDetail rd = csr.getRenderingDetail();
+                    CodingSchemeTagList cstl = rd.getVersionTags();
+                    java.lang.String[] tags = cstl.getTag();
+
+                    for (int j=0; j<tags.length; j++)
+                    {
+                        String version_tag = (String) tags[j];
+
+                        if (version_tag.compareToIgnoreCase(ltag) == 0)
+                        {
+                            return css.getRepresentsVersion();
+                        }
+                    }
+                }
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+         System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
+         if (ltag == null || (ltag.compareToIgnoreCase("PRODUCTION") == 0 & knt == 1)) {
+			 System.out.println("\tUse " + version + " as default.");
+			 return version;
+		 }
+         return null;
+     }
 
     public static Vector<String> getVersionListData(String codingSchemeName) {
 
