@@ -68,6 +68,9 @@ request.getSession().setAttribute("dictionary", dictionary);
                 dictionary = (String) request.getSession().getAttribute("dictionary");
             }    
 
+System.out.println("Concept Details page: " + dictionary);
+
+
             if (singleton != null && singleton.compareTo("true") == 0) {
 
  		if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
@@ -151,7 +154,7 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
 	}
 
  
-        if (dictionary.compareTo("NCI Thesaurus") == 0) {
+        if (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0) {
         %>
         	<%@ include file="/pages/templates/content-header.xhtml" %>
         <%	
