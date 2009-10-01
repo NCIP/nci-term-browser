@@ -43,5 +43,10 @@
     <!-- end Main box -->
   </div>
 </f:view>
+
+<%
+    request.getSession().setAttribute("dictionary", "NCI Thesaurus");
+%>
+
 </body>
 </html>
