@@ -2155,39 +2155,6 @@ NCI Thesaurus:
        return t;
     }
 
-/*
-    public static String getVisitedConceptLink(String scheme, Vector concept_vec) {
-		StringBuffer strbuf = new StringBuffer();
-		String line = "<A href=\"#\" onmouseover=\"Tip('";
-        strbuf.append(line);
-        scheme = (String) formalName2LocalNameHashMap.get(scheme);
-		for (int i=0; i<concept_vec.size(); i++) {
-			int j = concept_vec.size()-i-1;
-			Concept c = (Concept) concept_vec.elementAt(j);
-            line =
-               "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
-               + scheme
-               + "&code="
-               + c.getEntityCode()
-               + "\\'>"
-               + c.getEntityDescription().getContent()
-               + "</a><br>";
-            strbuf.append(line);
-		}
-		line = "',";
-		strbuf.append(line);
-
-		line = "WIDTH, 300, TITLE, 'Visited Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\"";
-		strbuf.append(line);
-
-		line = " onmouseout=UnTip() ";
-		strbuf.append(line);
-		line = ">Visited Concepts</A>";
-		strbuf.append(line);
-
-		return strbuf.toString();
-	}
-*/
 
     public static String getVisitedConceptLink(String scheme, Vector concept_vec) {
 		StringBuffer strbuf = new StringBuffer();
@@ -2202,7 +2169,6 @@ NCI Thesaurus:
 			Concept c = (Concept) concept_vec.elementAt(j);
 
 			strbuf.append("<li>");
-			//strbuf.append("&ordm;");
 
             line =
                "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
@@ -2233,45 +2199,7 @@ NCI Thesaurus:
 		return strbuf.toString();
 	}
 
-/*
-    public static String getVisitedConceptLink(Vector concept_vec) {
-		StringBuffer strbuf = new StringBuffer();
-		String line = "<A href=\"#\" onmouseover=\"Tip('";
-        strbuf.append(line);
-		for (int i=0; i<concept_vec.size(); i++) {
-			int j = concept_vec.size()-i-1;
-			String concept_data = (String) concept_vec.elementAt(j);
-			Vector w = parseData(concept_data);
-			String scheme = (String) w.elementAt(0);
-			scheme = (String) formalName2LocalNameHashMap.get(scheme);
-			String code = (String) w.elementAt(1);
-			String name = (String) w.elementAt(2);
 
-            line =
-               //"<a href=\\'<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
-               "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
-               + scheme
-               + "&code="
-               + code
-               + "\\'>"
-               + name + " &#40;" + scheme + "&#41;"
-               + "</a><br>";
-            strbuf.append(line);
-		}
-		line = "',";
-		strbuf.append(line);
-
-		line = "WIDTH, 300, TITLE, 'Visited Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\"";
-		strbuf.append(line);
-
-		line = " onmouseout=UnTip() ";
-		strbuf.append(line);
-		line = ">Visited Concepts</A>";
-		strbuf.append(line);
-
-		return strbuf.toString();
-	}
-*/
 
     public static String getVisitedConceptLink(Vector concept_vec) {
 		StringBuffer strbuf = new StringBuffer();
