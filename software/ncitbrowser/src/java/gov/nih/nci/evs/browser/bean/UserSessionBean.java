@@ -386,6 +386,7 @@ public class UserSessionBean extends Object {
         System.out.println("searchTarget: " + searchTarget);
 
         if (searchTarget.compareTo("names") != 0) {
+			//request.getSession().removeAttribute("dictionary");
 			String msg = "To be implemented.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
@@ -775,157 +776,6 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-/*
-    public String multipleSearchAction() {
-
-System.out.println( "************* multipleSearchAction *****************");
-
-        String scheme = CODING_SCHEME_NAME;
-        String version = null;
-        HttpServletRequest request = (HttpServletRequest) FacesContext
-                .getCurrentInstance().getExternalContext().getRequest();
-        request.getSession().setAttribute("contains_warning_msg", "");
-        String matchText = (String) request.getParameter("matchText");
-
-        Vector schemes = new Vector();
-        Vector versions = new Vector();
-
-
-        String[] ontology_list = request.getParameterValues("ontology_list");
-        if (ontology_list == null) {
-            String message = "UserSessionBean multipleSearchAction: ontology_list == null???";
-            request.getSession().setAttribute("message", message);
-            return "message";
-        }
-
-        List list = new ArrayList<String>();
-        ontologiesToSearchOn = new ArrayList<String>();
-        for (int i = 0; i < ontology_list.length; ++i) {
-            System.out.println("( " + i + ")" + ontology_list[i]);
-            list.add(ontology_list[i]);
-            ontologiesToSearchOn.add(ontology_list[i]);
-        }
-
-        //List list = ontologiesToSearchOn;
-String t = "";
-        if (ontologiesToSearchOn.size() == 0) {
-            String message = "Please select at least one vocabulary.";
-            request.getSession().setAttribute("message", message);
-            return "message";
-
-        } else {
-
-            for (int k=0; k<ontologiesToSearchOn.size(); k++) {
-                String key = (String) list.get(k);
-                System.out.println(key);
-
-                if (key != null) {
-// to be modified
-                    scheme = DataUtils.key2CodingSchemeName(key);
-                    version = DataUtils.key2CodingSchemeVersion(key);
-
-                    if (scheme != null) {
-                        schemes.add(scheme);
-                        // to be modified (handling of versions)
-                        versions.add(version);
-        System.out.println("multipleSearchAction: " + scheme + " (" + version + ")");
-        t = t + scheme + " (" + version + ")" + "\n";
-                    } else {
-                        System.out.println("Unable to identify " + key);
-                    }
-                }
-            }
-        }
-
-        boolean debugging = false;
-        if (debugging) {
-            String message = t;
-            request.getSession().setAttribute("message", message);
-            return "message";
-        }
-
-
-        if (matchText == null || matchText.length() == 0) {
-            String message = "Please enter a search string.";
-            request.getSession().setAttribute("message", message);
-            return "message";
-        }
-
-
-        matchText = matchText.trim();
-        request.getSession().setAttribute("matchText", matchText);
-
-        String matchAlgorithm = (String) request.getParameter("algorithm");
-        if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
-            String message = "Warning: Search algorithm parameter is not set.";
-            request.getSession().setAttribute("message", message);
-            return "message";
-        }
-
-        setSelectedAlgorithm(matchAlgorithm);
-        //String version = null;
-
-        String max_str = null;
-        int maxToReturn = -1;//1000;
-        try {
-            max_str = NCItBrowserProperties
-                    .getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
-            maxToReturn = Integer.parseInt(max_str);
-        } catch (Exception ex) {
-            // Do nothing
-        }
-
-
-
-        Utils.StopWatch stopWatch = new Utils.StopWatch();
-        Vector<org.LexGrid.concepts.Concept> v = null;
-        if (schemes.size() == 1) {
-            request.getSession().setAttribute("vocabulary", scheme);
-            v = new SearchUtils().searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
-        } else {
-            SortOption sortOption = new SortOption(SortOption.Type.ALL);
-            String source = null;
-            v = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, sortOption, maxToReturn);
-            System.out.println("Multiple search found " + v.size() + " matches.");
-        }
-
-
-        if (v != null && v.size() > 1) {
-            request.getSession().setAttribute("search_results", v);
-            String match_size = Integer.toString(v.size());
-            request.getSession().setAttribute("match_size", match_size);
-            request.getSession().setAttribute("page_string", "1");
-            request.getSession().setAttribute("new_search", Boolean.TRUE);
-
-            if (matchText.length() < 4
-                    && matchAlgorithm.compareTo("contains") == 0) {
-                request.getSession().setAttribute("contains_warning_msg",
-                        contains_warning_msg);
-            } else if (matchText.length() == 1
-                    && matchAlgorithm.compareTo("startsWith") == 0) {
-                request.getSession().setAttribute("contains_warning_msg",
-                        contains_warning_msg);
-            }
-
-            System.out.println("*** return to search_results " );
-
-            return "search_results";
-        }
-
-        else if (v != null && v.size() == 1) {
-            request.getSession().setAttribute("singleton", "true");
-            request.getSession().setAttribute("dictionary", scheme);
-            Concept c = (Concept) v.elementAt(0);
-            request.getSession().setAttribute("code", c.getEntityCode());
-            return "concept_details";
-        }
-        String message = "No match found.";
-        request.getSession().setAttribute("message", message);
-        return "message";
-
-    }
-*/
-
    private String[] getSelectedVocabularies(String ontology_list_str) {
        Vector v = DataUtils.parseData(ontology_list_str);
        String[] ontology_list = new String[v.size()];
@@ -963,6 +813,7 @@ String t = "";
         System.out.println("searchTarget: " + searchTarget);
 
         if (searchTarget.compareTo("names") != 0) {
+			//request.getSession().removeAttribute("dictionary");
 			String msg = "To be implemented.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
@@ -1002,9 +853,10 @@ String t = "";
 
         if (initial_search != null) {
 			if (ontology_list == null || ontology_list.length == 0) {
-					String message = "Please select at least one vocabulary.";
-					request.getSession().setAttribute("message", message);
-					return "message";
+				request.getSession().removeAttribute("vocabulary");
+				String message = "Please select at least one vocabulary.";
+				request.getSession().setAttribute("message", message);
+				return "message";
 			}
 		}
 
