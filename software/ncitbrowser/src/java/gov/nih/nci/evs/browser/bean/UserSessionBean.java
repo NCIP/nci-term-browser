@@ -843,7 +843,6 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
                 //System.out.println("* matchType: " + matchtype);
                 System.out.println("* source: " + source);
                 System.out.println("* ranking: " + ranking);
-               // System.out.println("* sortOption: " + sortOption);
             } catch (Exception e) {
             }
         }
@@ -853,10 +852,11 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 
         if (initial_search != null) {
 			if (ontology_list == null || ontology_list.length == 0) {
-				request.getSession().removeAttribute("vocabulary");
-				String message = "Please select at least one vocabulary.";
+				//request.getSession().removeAttribute("vocabulary");
+				String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
+				request.getSession().setAttribute("warning", message);
 				request.getSession().setAttribute("message", message);
-				return "message";
+				return "multiple_search";
 			}
 		}
 
@@ -890,9 +890,10 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 
 
                 if (ontology_list.length == 0) {
-					String message = "Please select at least one vocabulary.";
+					String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
+					request.getSession().setAttribute("warning", message);
 					request.getSession().setAttribute("message", message);
-					return "message";
+					return "multiple_search";
 				}
 			}
 
@@ -916,9 +917,10 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
         }
 
         if (knt == 0) {
-            String message = "Please select at least one vocabulary.";
+            String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
+            request.getSession().setAttribute("warning", message);
             request.getSession().setAttribute("message", message);
-            return "message";
+            return "multiple_search";
         }
 
 //searchForm-termbrowser.xhtml
@@ -949,13 +951,12 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
         String scheme = null;
         String version = null;
 
-        //List list = ontologiesToSearchOn;
         String t = "";
         if (ontologiesToSearchOn.size() == 0) {
-            String message = "Please select at least one vocabulary.";
+            String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
+            request.getSession().setAttribute("warning", message);
             request.getSession().setAttribute("message", message);
-            return "message";
-
+            return "multiple_search";
         } else {
             request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
             for (int k=0; k<ontologiesToSearchOn.size(); k++) {
