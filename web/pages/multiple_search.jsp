@@ -4,6 +4,7 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
@@ -39,8 +40,23 @@
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">
-            <p class="textbody">&nbsp;Select NCI hosted terminologies to
-            search, or click on a source name to go to its browser home page.</p>
+            
+            
+                 <%
+                 String warning_msg = (String) request.getSession().getAttribute("warning");
+                 if (warning_msg == null) {
+                 %>
+                    <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.</p>
+                 <%   
+                 } else if (warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
+                 %>
+                    <p class="textbodyred">&nbsp;<%=warning_msg%></p>
+                    
+                 <%
+                 }
+                 request.getSession().removeAttribute("warning");
+                 %>
+            
             <table class="termstable">
               <tr>
                 <%
@@ -158,5 +174,10 @@
     <!-- end Main box -->
   </div>
 </f:view>
+
+<%
+    request.getSession().removeAttribute("dictionary");
+%>
+
 </body>
 </html>
