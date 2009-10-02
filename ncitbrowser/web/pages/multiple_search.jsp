@@ -53,6 +53,7 @@
                     <p class="textbodyred">&nbsp;<%=warning_msg%></p>
                     
                  <%
+                    request.getSession().removeAttribute("ontologiesToSearchOn");
                  }
                  request.getSession().removeAttribute("warning");
                  %>
@@ -177,6 +178,7 @@
 
 <%
     request.getSession().removeAttribute("dictionary");
+
 %>
 
 </body>
