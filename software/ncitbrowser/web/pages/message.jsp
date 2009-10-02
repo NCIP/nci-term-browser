@@ -50,7 +50,7 @@
         <%
           String message = (String) request.getSession().getAttribute("message");
         %>
-        <b><%=message%></b>
+        <p class="textbodyred">&nbsp;ERROR:&nbsp;<%=message%></p>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->
