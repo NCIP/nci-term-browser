@@ -28,6 +28,7 @@ public class Constants {
     static public final int DEFAULT_PAGE_SIZE = 50;
 
     static public final String ERROR_NO_VOCABULARY_SELECTED = "Please select at least one vocabulary.";
+    static public final String ERROR_NO_SEARCH_STRING_ENTERED = "Please enter a search string.";
 
 
 	/**

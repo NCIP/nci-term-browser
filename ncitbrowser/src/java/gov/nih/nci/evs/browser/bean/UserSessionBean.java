@@ -369,6 +369,7 @@ public class UserSessionBean extends Object {
         {
             String message = "Please enter a search string.";
             request.getSession().setAttribute("message", message);
+            request.getSession().removeAttribute("matchText");
             return "message";
         }
         request.getSession().setAttribute("matchText", matchText);
@@ -788,29 +789,83 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 
 
    public String multipleSearchAction() {
-        String ontologiesToSearchOnStr = null;
-		int knt = 0;
-
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
         String matchText = (String) request.getParameter("matchText");
-
-        if (matchText != null) matchText = matchText.trim();
-        //[#19965] Error message is not displayed when Search Criteria is not proivded
-        if (matchText == null || matchText.length() == 0)
-        {
-            String message = "Please enter a search string.";
-            request.getSession().setAttribute("message", message);
-            return "message";
-        }
+        if (matchText != null) {
+			matchText = matchText.trim();
+		}
         request.getSession().setAttribute("matchText", matchText);
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
-
 		request.getSession().setAttribute("algorithm", matchAlgorithm);
-
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
         System.out.println("searchTarget: " + searchTarget);
+
+	    String initial_search = (String) request.getParameter("initial_search");
+        String[] ontology_list = request.getParameterValues("ontology_list");
+        List list = new ArrayList<String>();
+
+        String ontologiesToSearchOnStr = null;
+        String ontology_list_str = null;
+        List<String> ontologiesToSearchOn = null;
+        int knt = 0;
+
+
+        if (initial_search != null) { // from home page
+            request.getSession().removeAttribute("ontologiesToSearchOn");
+			if (ontology_list == null || ontology_list.length == 0) {
+				String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
+				request.getSession().setAttribute("warning", message);
+				request.getSession().setAttribute("message", message);
+				return "multiple_search";
+			} else {
+				ontologiesToSearchOn = new ArrayList<String>();
+
+				ontologiesToSearchOnStr = "|";
+				for (int i = 0; i < ontology_list.length; ++i) {
+					list.add(ontology_list[i]);
+					ontologiesToSearchOn.add(ontology_list[i]);
+					ontologiesToSearchOnStr = ontologiesToSearchOnStr + ontology_list[i] + "|";
+				}
+
+				if (ontology_list_str == null) {
+					ontology_list_str = "";
+					for (int i = 0; i < ontology_list.length; ++i) {
+						ontology_list_str = ontology_list_str + ontology_list[i];
+						if (i < ontology_list.length-1) {
+							ontology_list_str = ontology_list_str + "|";
+						}
+					}
+				}
+				request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
+			}
+		} else {
+			ontologiesToSearchOn = new ArrayList<String>();
+            ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+            if (ontologiesToSearchOnStr != null) {
+                Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
+                ontology_list = new String[ontologies_to_search_on.size()];
+                knt = ontologies_to_search_on.size();
+                for (int k=0; k<ontologies_to_search_on.size(); k++) {
+                    String s = (String) ontologies_to_search_on.elementAt(k);
+                    ontology_list[k] = s;
+                    ontologiesToSearchOn.add(s);
+                }
+            }
+
+		}
+
+        //[#19965] Error message is not displayed when Search Criteria is not proivded
+        if (matchText == null || matchText.length() == 0)
+        {
+            String message = Constants.ERROR_NO_SEARCH_STRING_ENTERED;
+            request.getSession().setAttribute("warning", message);
+            request.getSession().setAttribute("message", message);
+            request.getSession().removeAttribute("matchText");
+            return "multiple_search";
+        }
+        request.getSession().setAttribute("matchText", matchText);
 
         if (searchTarget.compareTo("names") != 0) {
 			//request.getSession().removeAttribute("dictionary");
@@ -819,55 +874,31 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 			return "message";
 		}
 
-/*
-        //setSelectedAlgorithm(matchAlgorithm);
-        String matchtype = (String) request.getParameter("matchtype");
-        if (matchtype == null) matchtype = "string";
-*/
-        //String rankingStr = (String) request.getParameter("ranking");
-        //boolean ranking = rankingStr != null && rankingStr.equals("on");
-
         boolean ranking = true;
-        //request.getSession().setAttribute("ranking", Boolean.toString(ranking));
         String source = (String) request.getParameter("source");
         if (source == null) {
             source = "ALL";
         }
-        //request.getSession().setAttribute("source", source);
-        //setSelectedSource(source);
 
         if (NCItBrowserProperties.debugOn) {
             try {
                 System.out.println(Utils.SEPARATOR);
                 System.out.println("* criteria: " + matchText);
-                //System.out.println("* matchType: " + matchtype);
                 System.out.println("* source: " + source);
                 System.out.println("* ranking: " + ranking);
             } catch (Exception e) {
             }
         }
 
-	    String initial_search = (String) request.getParameter("initial_search");
-        String[] ontology_list = request.getParameterValues("ontology_list");
-
-        if (initial_search != null) {
-			if (ontology_list == null || ontology_list.length == 0) {
-				//request.getSession().removeAttribute("vocabulary");
-				String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
-				request.getSession().setAttribute("warning", message);
-				request.getSession().setAttribute("message", message);
-				return "multiple_search";
-			}
-		}
-
-        String ontology_list_str = null;
+        //String ontology_list_str = null;
 
         LicenseBean licenseBean = null;
 
         if (ontology_list == null) {
-            ontology_list_str = (String) request.getParameter("ontology_list_str");
+            ontology_list_str = (String) request.getParameter("ontology_list_str"); // from multiple_search_results (hidden variable)
 
             if (ontology_list_str != null) {
+
                 ontology_list = getSelectedVocabularies(ontology_list_str);
                 String scheme = (String) request.getParameter("scheme");
                 if (scheme.indexOf("%20") != -1) {
@@ -888,7 +919,6 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
                     request.getSession().setAttribute("licenseBean", licenseBean);
                 }
 
-
                 if (ontology_list.length == 0) {
 					String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
 					request.getSession().setAttribute("warning", message);
@@ -898,13 +928,20 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 			}
 
         } else {
-			//KLO testing
             knt = ontology_list.length;
             //request.getSession().removeAttribute("ontology_list_str");
         }
 
+/*
         if (ontology_list == null) {
+
+System.out.println("(*) multipleSearchAction Step 6a " + ontology_list == null);
+
             ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+
+System.out.println("(*) multipleSearchAction Step 6b ontologiesToSearchOnStr " + ontologiesToSearchOnStr);
+
+
             if (ontologiesToSearchOnStr != null) {
                 Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
                 ontology_list = new String[ontologies_to_search_on.size()];
@@ -915,6 +952,7 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
                 }
             }
         }
+*/
 
         if (knt == 0) {
             String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
@@ -923,12 +961,9 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
             return "multiple_search";
         }
 
-//searchForm-termbrowser.xhtml
-
         Vector schemes = new Vector();
         Vector versions = new Vector();
 
-        List list = new ArrayList<String>();
         ontologiesToSearchOn = new ArrayList<String>();
 
         ontologiesToSearchOnStr = "|";
@@ -989,29 +1024,6 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
                     }
                 }
             }
-        }
-        boolean debugging = false;
-        if (debugging) {
-            String message = t;
-            request.getSession().setAttribute("message", message);
-            return "message";
-        }
-
-
-        if (matchText == null || matchText.length() == 0) {
-            String message = "Please enter a search string.";
-            request.getSession().setAttribute("message", message);
-            return "message";
-        }
-
-
-        matchText = matchText.trim();
-        request.getSession().setAttribute("matchText", matchText);
-
-        if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
-            String message = "Warning: Search algorithm parameter is not set.";
-            request.getSession().setAttribute("message", message);
-            return "message";
         }
 
         //setSelectedAlgorithm(matchAlgorithm);
@@ -1076,7 +1088,6 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 
                 Concept c = null;
                 if (ref == null) {
-                    //System.out.println("************ ref = NULL???");
                     String msg = "Error: Null ResolvedConceptReference encountered.";
                     request.getSession().setAttribute("message", msg);
                     return "message";
@@ -1122,29 +1133,7 @@ coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme
         return "message";
     }
 
-/*
-    public String acceptLicenseAgreementAction() {
-       // update license agreement
-       HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
-       // update LicenseBean
-       String scheme = (String) request.getParameter("scheme");
-       String version = (String) request.getParameter("version");
-
-       LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
-
-       if (licenseBean == null) {
-           licenseBean = new LicenseBean();
-           licenseBean.addLicenseAgreement(scheme);
-           request.getSession().setAttribute("licenseBean", licenseBean);
-
-       } else {
-           licenseBean.addLicenseAgreement(scheme);
-           request.getSession().setAttribute("licenseBean", licenseBean);
-       }
-       return multipleSearchAction();
-    }
-*/
 
     public String acceptLicenseAgreement() {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();

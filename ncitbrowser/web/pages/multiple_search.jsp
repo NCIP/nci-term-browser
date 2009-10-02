@@ -44,17 +44,14 @@
             
                  <%
                  String warning_msg = (String) request.getSession().getAttribute("warning");
-                 if (warning_msg == null) {
+                 if (warning_msg != null) {
+                 %>
+                    <p class="textbodyred">&nbsp;ERROR:&nbsp;<%=warning_msg%></p>
+                 <%                
+                 }
                  %>
                     <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.</p>
                  <%   
-                 } else if (warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
-                 %>
-                    <p class="textbodyred">&nbsp;<%=warning_msg%></p>
-                    
-                 <%
-                    request.getSession().removeAttribute("ontologiesToSearchOn");
-                 }
                  request.getSession().removeAttribute("warning");
                  %>
             
@@ -65,9 +62,7 @@
                   if (ontology_list == null)
                     System.out.println("??????????? ontology_list == null");
                   int num_vocabularies = ontology_list.size();
-
-                  String ontologiesToSearchOn = (String) request.getSession()
-                      .getAttribute("ontologiesToSearchOn");
+                  String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
                 %>
                   <td class="textbody">
                   <ol>
