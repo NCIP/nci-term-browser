@@ -26,6 +26,12 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
+
+<%
+    request.getSession().removeAttribute("dictionary");
+%>
+
+
 <f:view>
   <%@ include file="/pages/templates/header.xhtml" %>
   <div class="center-page">
