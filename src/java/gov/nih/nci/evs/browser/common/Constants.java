@@ -29,6 +29,8 @@ public class Constants {
 
     static public final String ERROR_NO_VOCABULARY_SELECTED = "Please select at least one vocabulary.";
     static public final String ERROR_NO_SEARCH_STRING_ENTERED = "Please enter a search string.";
+    static public final String ERROR_NO_MATCH_FOUND = "No match found.";
+    static public final String ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS = "No match found. Please try 'Beings With' or 'Contains' search instead.";
 
 
 	/**
