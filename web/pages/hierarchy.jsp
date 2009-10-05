@@ -448,10 +448,11 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
 <%
 } else {
+     String hierarchy_shortName = DataUtils.getLocalName(hierarchy_schema);
 %>
-    <div class="banner">
-        &nbsp;&nbsp;<%=hierarchy_dictionary%>
-    </div>
+  <div class="vocabularynamebanner">
+	  <div class="vocabularynameshort"><%=hierarchy_shortName%></div>
+  </div>
 <%
 }
 %>
