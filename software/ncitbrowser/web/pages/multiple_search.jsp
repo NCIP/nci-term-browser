@@ -34,27 +34,27 @@
     <div id="main-area">
       <form name="searchTerm" method="post" class="search-form-main-area">
       
-        <input type="hidden" name="initial_search" value="initial_search" />
+        <input type="hidden" name="initial_search" value="true" />
       
         <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">
-            
-            
                  <%
                  String warning_msg = (String) request.getSession().getAttribute("warning");
                  if (warning_msg != null) {
                  %>
-                    <p class="textbodyred">&nbsp;ERROR:&nbsp;<%=warning_msg%></p>
+                    <p class="textbodyred">&nbsp;<%=warning_msg%></p>
                  <%                
                  }
-                 %>
-                    <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.</p>
-                 <%   
                  request.getSession().removeAttribute("warning");
                  %>
-            
+<%            
+            String hide_ontology_list = (String) request.getSession().getAttribute("hide_ontology_list");
+            request.getSession().removeAttribute("hide_ontology_list");
+            if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
+ %>         
+            <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.</p>
             <table class="termstable">
               <tr>
                 <%
@@ -63,6 +63,7 @@
                     System.out.println("??????????? ontology_list == null");
                   int num_vocabularies = ontology_list.size();
                   String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+                  
                 %>
                   <td class="textbody">
                   <ol>
@@ -161,6 +162,11 @@
                   </h:commandButton></td>
                 </tr>
             </table>
+            
+<%
+}
+%>
+            
           </div> <!-- end tabTableContentContainer -->
           <%@ include file="/pages/templates/nciFooter.html"%>
         </div> <!-- end Page content -->
