@@ -6,8 +6,7 @@
 <%@ page import="org.LexGrid.concepts.Concept"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils"%>
-<%@ page
-  import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties"%>
+<%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties"%>
 <%@ page import="gov.nih.nci.evs.browser.bean.MetadataElement"%>
 <%@ page import="gov.nih.nci.evs.browser.bean.LicenseBean"%>
 <%
@@ -60,6 +59,8 @@
   <div id="main-area">
   <%
   	String dictionary = (String) request.getParameter("dictionary");
+  	
+  	
   		String scheme = (String) request.getParameter("scheme");
   		String shortName = "Vocabulary";
   		if (scheme == null) {
@@ -79,10 +80,10 @@
   				version = version.replaceAll("%20", " ");
   			}
   		}
-  		if (dictionary != null)
-  			dictionary = dictionary.replaceAll("%20", " ");
-  		if (scheme != null)
-  			scheme = scheme.replaceAll("%20", " ");
+  		
+ 		
+request.getSession().setAttribute("dictionary", scheme);
+		
   		menubar_scheme = scheme;
   		menubar_version = version;
   		menubar_scheme0 = menubar_scheme;
@@ -111,17 +112,8 @@
   <P>
   <%
   	String scheme0 = scheme;
-  			String version0 = version;
-
-  			if (scheme != null) {
-  				scheme = scheme.replaceAll(" ", "%20");
-  			}
-  			if (version != null) {
-  				version = version.replaceAll(" ", "%20");
-  			}
-  			if (dictionary != null) {
-  				dictionary = dictionary.replaceAll(" ", "%20");
-  			}
+  	String version0 = version;
+		
   %>
   
   <form><h:commandButton id="accept" value="Accept"
@@ -139,20 +131,25 @@
 
   <%
   	} else {
+  	
   			if (scheme != null) {
-  				scheme = scheme.replaceAll("%20", " ");
+  				//scheme = scheme.replaceAll("%20", " ");
   				request.setAttribute("scheme", scheme);
   			}
   			if (version != null) {
-  				version = version.replaceAll("%20", " ");
+  				//version = version.replaceAll("%20", " ");
   				request.setAttribute("version", version);
   			}
   			if (dictionary != null) {
-  				dictionary = dictionary.replaceAll("%20", " ");
+  				//dictionary = dictionary.replaceAll("%20", " ");
   				request.setAttribute("dictionary", dictionary);
   			}
   %>
   
+  
+
+
+
   <!-- Thesaurus, banner search area -->
   <div class="bannerarea">
   <div class="vocabularynamebanner">
@@ -215,7 +212,6 @@
  			}
  			
  			
- System.out.println("(*) vocabulary.jsp " + menubar_scheme + " " + 	menubar_version);		
  			
  %>
 

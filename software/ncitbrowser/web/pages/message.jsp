@@ -27,7 +27,8 @@
     <div id="main-area">
 
         <%
-        String msg_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
+        //String msg_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
+        String msg_dictionary = (String) request.getSession().getAttribute("dictionary");
         System.out.println("msg_dictionary: " + msg_dictionary);
         if (msg_dictionary == null) {
         %>
@@ -44,6 +45,9 @@
        	<%        
        	}
        	%>
+          
+          
+          
           
       <!-- Page content -->
       <div class="pagecontent">
