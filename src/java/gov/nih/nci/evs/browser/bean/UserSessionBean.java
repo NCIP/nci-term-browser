@@ -151,13 +151,14 @@ public class UserSessionBean extends Object {
         request.getSession().setAttribute("searchTarget", searchTarget);
         System.out.println("searchTarget: " + searchTarget);
 
-        if (searchTarget.compareTo("names") != 0) {
+/*
+        if (searchTarget.compareTo("name") != 0) {
 			//request.getSession().removeAttribute("dictionary");
 			String msg = "To be implemented.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
 		}
-
+*/
         //String rankingStr = (String) request.getParameter("ranking");
         //boolean ranking = rankingStr != null && rankingStr.equals("on");
 
@@ -196,8 +197,16 @@ public class UserSessionBean extends Object {
         //String scheme = Constants.CODING_SCHEME_NAME;
 
 System.out.println("* scheme: " + scheme);
+Vector schemes = new Vector();
+schemes.add(scheme);
+
 
         String version = null;
+Vector versions = new Vector();
+versions.add(version);
+
+
+
         String max_str = null;
         int maxToReturn = -1;//1000;
         try {
@@ -210,7 +219,19 @@ System.out.println("* scheme: " + scheme);
         Vector<org.LexGrid.concepts.Concept> v = null;
 
         //v = new SearchUtils().searchByName(scheme, version, matchText, source, matchAlgorithm, sortOption, maxToReturn);
-        ResolvedConceptReferencesIterator iterator = new SearchUtils().searchByName(scheme, version, matchText, source, matchAlgorithm, ranking, maxToReturn);
+        //ResolvedConceptReferencesIterator iterator = new SearchUtils().searchByName(scheme, version, matchText, source, matchAlgorithm, ranking, maxToReturn);
+
+        //v = new SearchUtils().searchByName(scheme, version, matchText, source, matchAlgorithm, sortOption, maxToReturn);
+        boolean designationOnly = false;
+        ResolvedConceptReferencesIterator iterator = null;
+        if (searchTarget.compareTo("names") == 0) {
+       	    iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+		} else if (searchTarget.compareTo("properties") == 0) {
+            iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+		} else if (searchTarget.compareTo("relationships") == 0) {
+			designationOnly = true;
+            iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+		}
 
         request.getSession().setAttribute("vocabulary", scheme);
         //request.getSession().setAttribute("matchtype", matchtype);
@@ -568,7 +589,7 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 		request.getSession().setAttribute("algorithm", matchAlgorithm);
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
-        //System.out.println("searchTarget: " + searchTarget);
+        System.out.println("searchTarget: " + searchTarget);
 
 	    String initial_search = (String) request.getParameter("initial_search");
         String[] ontology_list = request.getParameterValues("ontology_list");
@@ -656,12 +677,14 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
             return "multiple_search";
         }
 
+/*
         if (searchTarget.compareTo("names") != 0) {
 			//request.getSession().removeAttribute("dictionary");
 			String msg = "To be implemented.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
 		}
+*/
 
         boolean ranking = true;
         String source = (String) request.getParameter("source");
@@ -807,7 +830,16 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
         }
 
         //v = new SearchUtils().searchByName(scheme, version, matchText, source, matchAlgorithm, sortOption, maxToReturn);
-        ResolvedConceptReferencesIterator iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+        boolean designationOnly = false;
+        ResolvedConceptReferencesIterator iterator = null;
+        if (searchTarget.compareTo("names") == 0) {
+       	    iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+		} else if (searchTarget.compareTo("properties") == 0) {
+            iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+		} else if (searchTarget.compareTo("relationships") == 0) {
+			designationOnly = true;
+            iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+		}
 
         request.getSession().setAttribute("vocabulary", scheme);
 
