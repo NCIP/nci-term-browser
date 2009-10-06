@@ -922,9 +922,9 @@ System.out.println("\n\tActive? " + isActive);
          } catch (Exception e) {
              e.printStackTrace();
          }
-         System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
+         //System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
          if (ltag == null || (ltag.compareToIgnoreCase("PRODUCTION") == 0 & knt == 1)) {
-			 System.out.println("\tUse " + version + " as default.");
+			 System.out.println("\tUse " + version + " as default version.");
 			 return version;
 		 }
          return null;
