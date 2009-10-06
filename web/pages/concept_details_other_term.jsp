@@ -141,10 +141,7 @@
                request.getSession().setAttribute("concept", c);
                request.getSession().setAttribute("code", code);
                name = c.getEntityDescription().getContent();
-
-               System.out.println(name);
-
-
+               //request.getSession().removeAttribute("RelationshipHashMap");
             } else {
                name = "ERROR: Invalid code - " + code + ".";
             }
@@ -155,6 +152,18 @@
             request.getSession().setAttribute("type", type);
             request.getSession().setAttribute("singleton", "false");
 
+
+String active_code = (String) request.getSession().getAttribute("active_code");
+if (active_code == null) {
+    request.getSession().setAttribute("active_code", code);
+} else {
+   if (active_code.compareTo(code) != 0) {
+       request.getSession().removeAttribute("RelationshipHashMap");
+       request.getSession().setAttribute("active_code", code);
+   }
+}
+	
+	
           %>
           <table border="0" width="700px">
             <tr>
