@@ -83,24 +83,23 @@ request.getSession().setAttribute("dictionary", dictionary);
 		if (con != null) {
 		    code = con.getEntityCode();
 		    request.getSession().setAttribute("code", code);
+		    
 		} else {	
 	            code = (String) request.getSession().getAttribute("code");
 	        }
 	} 
 	
+	String active_code = (String) request.getSession().getAttribute("active_code");
+	if (active_code == null) {
+	    request.getSession().setAttribute("active_code", code);
+	} else {
+	   if (active_code.compareTo(code) != 0) {
+	       request.getSession().removeAttribute("RelationshipHashMap");
+	       request.getSession().setAttribute("active_code", code);
+	   }
+	}
 	
-/*
-Concept con = (Concept) request.getSession().getAttribute("concept");
-if (con != null) {
-    code = con.getEntityCode();
-} else {
-	code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
-	if (code == null) {
-	    code = (String) request.getSession().getAttribute("code");
-	} 
-}
-*/
-//request.getSession().setAttribute("code", code);
+
 
 Boolean new_search = null;
 Object new_search_obj = request.getSession().getAttribute("new_search");

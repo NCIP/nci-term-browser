@@ -450,9 +450,9 @@ public class SearchUtils {
          } catch (Exception e) {
              e.printStackTrace();
          }
-         System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
+         //System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
          if (ltag == null || (ltag.compareToIgnoreCase("PRODUCTION") == 0 & knt == 1)) {
-			 System.out.println("\tUse " + version + " as default.");
+			 System.out.println("\tUse " + version + " as default version.");
 			 return version;
 		 }
          return null;
@@ -975,7 +975,6 @@ public class SearchUtils {
 		}
 		searchPhrase.append(delim);
 		String t = searchPhrase.toString();
-		//System.out.println("preprocessContains " + t);
 		return t;
 	}
 
@@ -1149,8 +1148,6 @@ public class SearchUtils {
 		{
 			matchAlgorithm = CONTAIN_SEARCH_ALGORITHM; // to be replace by literalSubString
 		}
-
-System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
 
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
@@ -1408,30 +1405,7 @@ System.out.println("searchByName matchAlgorithm: " + matchAlgorithm);
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-	public void testSearchByName() {
-		String scheme = CODING_SCHEME_NAME;
-		String version = null;
-		String matchText = "blood";
-		String matchAlgorithm = "contains";
-		int maxToReturn = 1000;
 
-		long ms = System.currentTimeMillis();
-		Vector<org.LexGrid.concepts.Concept> v = searchByName(scheme, version,
-				matchText, matchAlgorithm, maxToReturn);
-		System.out.println("Run time (ms): "
-				+ (System.currentTimeMillis() - ms));
-		if (v != null) {
-			System.out.println("v.size() = " + v.size());
-			for (int i = 0; i < v.size(); i++) {
-				int j = i + 1;
-				Concept ce = (Concept) v.elementAt(i);
-				System.out.println("(" + j + ")" + " " + ce.getEntityCode() + " "
-						+ ce.getEntityDescription().getContent());
-			}
-		}
-	}
-*/
 	protected static List<String> toWords(String s, String delimitRegex,
 			boolean removeStopWords, boolean removeDuplicates) {
 		String[] words = s.split(delimitRegex);
@@ -2854,18 +2828,5 @@ System.out.println("union returns NOT NULL " );
         return iterator;
     }
 
-
-
-
-	public static void main(String[] args) {
-		String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
-		if (args.length == 1) {
-			url = args[0];
-			System.out.println(url);
-		}
-
-		SearchUtils test = new SearchUtils(url);
-		//test.testSearchByName();
-	}
 
 }
