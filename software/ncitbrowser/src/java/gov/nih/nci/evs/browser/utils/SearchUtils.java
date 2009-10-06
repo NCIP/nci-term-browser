@@ -54,6 +54,8 @@ import org.LexGrid.commonTypes.EntityDescription;
 import org.apache.commons.codec.language.DoubleMetaphone;
 
 import org.LexGrid.LexBIG.Utility.Constructors;
+//import org.LexGrid.LexBIG.DataModel.enums.PropertyType;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -2594,32 +2596,25 @@ System.out.println("union returns NOT NULL " );
 					if (cns != null)
 					{
 						try {
-							System.out.println("(*) scheme " + scheme);
 							if (designationOnly) {
-								System.out.println("\t(*) restrictToMatchingDesignations " + matchText);
 								cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
 							}
 							LocalNameList propertyNames = null;
-							CodedNodeSet.PropertyType[] propertyTypes = null;
+							propertyNames = new LocalNameList();
+							CodedNodeSet.PropertyType[] propertyTypes = getAllPropertypes();
 							String language = null;
-
-							System.out.println("\t(*) restrictToMatchingProperties " + matchText + " matchAlgorithm: " + matchAlgorithm );
 							try {
                             	cns = cns.restrictToMatchingProperties(propertyNames, propertyTypes, matchText, matchAlgorithm, language);
 							} catch (Exception e) {
 								System.out.println("\t(*) restrictToMatchingProperties throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
 								e.printStackTrace();
 							}
-                            System.out.println("\t(*) done with restrictToMatchingProperties. ");
-
-                            System.out.println("\t(*) restrictToSource " + source);
 							try {
                             	cns = restrictToSource(cns, source);
 							} catch (Exception e) {
 								System.out.println("\t(*) restrictToSource throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
 								e.printStackTrace();
 							}
-                            System.out.println("\t(*) done with restrictToSource. ");
 
 						} catch (Exception ex) {
 							ex.printStackTrace();
@@ -2850,5 +2845,15 @@ System.out.println("union returns NOT NULL " );
         return iterator;
     }
 
+
+    private CodedNodeSet.PropertyType[] getAllPropertypes() {
+    	CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[4];
+    	propertyTypes[0] = PropertyType.COMMENT;
+    	propertyTypes[1] = PropertyType.DEFINITION;
+    	propertyTypes[2] = PropertyType.GENERIC;
+    	//propertyTypes[3] = PropertyType.INSTRUCTION;
+    	propertyTypes[3] = PropertyType.PRESENTATION;
+    	return propertyTypes;
+	}
 
 }

@@ -151,14 +151,14 @@ public class UserSessionBean extends Object {
         request.getSession().setAttribute("searchTarget", searchTarget);
         System.out.println("searchTarget: " + searchTarget);
 
-/*
+
         if (searchTarget.compareTo("name") != 0) {
 			//request.getSession().removeAttribute("dictionary");
 			String msg = "To be implemented.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
 		}
-*/
+
         //String rankingStr = (String) request.getParameter("ranking");
         //boolean ranking = rankingStr != null && rankingStr.equals("on");
 
@@ -677,14 +677,14 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
             return "multiple_search";
         }
 
-/*
+
         if (searchTarget.compareTo("names") != 0) {
 			//request.getSession().removeAttribute("dictionary");
 			String msg = "To be implemented.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
 		}
-*/
+
 
         boolean ranking = true;
         String source = (String) request.getParameter("source");
