@@ -2546,7 +2546,7 @@ System.out.println("union returns NOT NULL " );
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 
-		boolean preprocess = true;
+		//boolean preprocess = true;
         if (matchText == null || matchText.length() == 0)
         {
 			return null;
@@ -2563,7 +2563,6 @@ System.out.println("union returns NOT NULL " );
 
         String scheme = null;
         String version = null;
-
 
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -2595,12 +2594,35 @@ System.out.println("union returns NOT NULL " );
 					if (cns != null)
 					{
 						try {
+							System.out.println("(*) scheme " + scheme);
 							if (designationOnly) {
+								System.out.println("\t(*) restrictToMatchingDesignations " + matchText);
 								cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
 							}
-							cns = restrictToSource(cns, source);
+							LocalNameList propertyNames = null;
+							CodedNodeSet.PropertyType[] propertyTypes = null;
+							String language = null;
+
+							System.out.println("\t(*) restrictToMatchingProperties " + matchText + " matchAlgorithm: " + matchAlgorithm );
+							try {
+                            	cns = cns.restrictToMatchingProperties(propertyNames, propertyTypes, matchText, matchAlgorithm, language);
+							} catch (Exception e) {
+								System.out.println("\t(*) restrictToMatchingProperties throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
+								e.printStackTrace();
+							}
+                            System.out.println("\t(*) done with restrictToMatchingProperties. ");
+
+                            System.out.println("\t(*) restrictToSource " + source);
+							try {
+                            	cns = restrictToSource(cns, source);
+							} catch (Exception e) {
+								System.out.println("\t(*) restrictToSource throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
+								e.printStackTrace();
+							}
+                            System.out.println("\t(*) done with restrictToSource. ");
+
 						} catch (Exception ex) {
-							//return null;
+							ex.printStackTrace();
 						}
 					}
 				} catch (Exception e) {

@@ -489,6 +489,8 @@ System.out.println("\n\tActive? " + isActive);
     public static Concept getConceptByCode(String codingSchemeName,
             String vers, String ltag, String code) {
         try {
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
 			String formalname = (String) localName2FormalNameHashMap.get(codingSchemeName);
 
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -2404,11 +2406,15 @@ NCI Thesaurus:
 		for (int i=0; i<codes.size(); i++) {
 			String code = (String) codes.elementAt(i);
 			Concept c = getConceptByCode(scheme, version, ltag, code);
-			w.add(c.getStatus());
+			if (c != null) {
+				w.add(c.getStatus());
+			} else {
+				System.out.println("WARNING: getStatusByConceptCode returns null on " + scheme + " code: "  + code );
+				w.add(null);
+			}
 		}
         System.out.println("getStatusByConceptCodes Run time (ms): "
                     + (System.currentTimeMillis() - ms) + " number of concepts: " + codes.size());
-
 		return w;
 	}
 

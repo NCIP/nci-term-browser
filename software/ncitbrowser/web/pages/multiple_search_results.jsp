@@ -140,6 +140,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                       String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
                       
                       Concept con = DataUtils.getConceptByCode(vocabulary_name, null, null, code);
+                      if (con != null) {
                       String con_status = con.getStatus();
                       
                       if (con_status != null) {
@@ -220,6 +221,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
 
                         </tr>
                       <%
+                      }
                   }
                 %>
               </table>
