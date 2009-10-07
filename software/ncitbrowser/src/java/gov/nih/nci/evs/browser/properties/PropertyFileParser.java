@@ -184,8 +184,11 @@ public class PropertyFileParser {
 			for(int i = 0 ; i < list5.getLength();i++) {
 				Element el = (Element) list5.item(i);
 				SecurityTokenHolder e = getSecurityTokenHolder(el);
-				securityTokenList.add(e);
-				securityTokenHashMap.put(e.getName(), e.getValue());
+
+				if (e.getValue().indexOf("token") == -1) {
+					securityTokenList.add(e);
+					securityTokenHashMap.put(e.getName(), e.getValue());
+			    }
 			}
 		}
 	}
