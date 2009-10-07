@@ -141,18 +141,12 @@ public class UserSessionBean extends Object {
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
         setSelectedAlgorithm(matchAlgorithm);
-
-        /*
-        String matchtype = (String) request.getParameter("matchtype");
-        if (matchtype == null) matchtype = "string";
-        */
-
         String searchTarget = (String) request.getParameter("searchTarget");
+
         request.getSession().setAttribute("searchTarget", searchTarget);
         System.out.println("searchTarget: " + searchTarget);
 
-
-        if (searchTarget.compareTo("name") != 0) {
+        if (searchTarget.compareTo("names") != 0) {
 			//request.getSession().removeAttribute("dictionary");
 			String msg = "To be implemented.";
 			request.getSession().setAttribute("message", msg);
@@ -590,6 +584,13 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
         System.out.println("searchTarget: " + searchTarget);
+
+
+        if (searchTarget.compareTo("names") != 0) {
+			String msg = "To be implemented.";
+			request.getSession().setAttribute("message", msg);
+			return "message";
+		}
 
 	    String initial_search = (String) request.getParameter("initial_search");
         String[] ontology_list = request.getParameterValues("ontology_list");
