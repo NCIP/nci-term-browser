@@ -1333,7 +1333,6 @@ System.out.println("\n\tActive? " + isActive);
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
             matches = null;
             try {
-
                matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
                    true, true, 1, 1, noopList_, null, null, null, -1, false);
@@ -1350,38 +1349,40 @@ System.out.println("\n\tActive? " + isActive);
                     AssociationList sourceof = ref.getSourceOf();
                     if (sourceof != null) {
 						Association[] associations = sourceof.getAssociation();
-						for (int i = 0; i < associations.length; i++) {
-							Association assoc = associations[i];
-							String associationName = lbscm.getAssociationNameFromAssociationCode(scheme, csvt, assoc.getAssociationName());
-							boolean isRole = false;
-							if (list.contains(associationName)) {
-								isRole = true;
-							}
+						if (associations != null) {
+							for (int i = 0; i < associations.length; i++) {
+								Association assoc = associations[i];
+								String associationName = lbscm.getAssociationNameFromAssociationCode(scheme, csvt, assoc.getAssociationName());
+								boolean isRole = false;
+								if (list.contains(associationName)) {
+									isRole = true;
+								}
 
-							AssociatedConcept[] acl = assoc.getAssociatedConcepts()
-									.getAssociatedConcept();
-							for (int j = 0; j < acl.length; j++) {
-								AssociatedConcept ac = acl[j];
-								EntityDescription ed = ac.getEntityDescription();
+								AssociatedConcept[] acl = assoc.getAssociatedConcepts()
+										.getAssociatedConcept();
+								for (int j = 0; j < acl.length; j++) {
+									AssociatedConcept ac = acl[j];
+									EntityDescription ed = ac.getEntityDescription();
 
-								String name = "No Description";
-								if (ed != null)
-									name = ed.getContent();
-								String pt = name;
-								if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
-									if (!w.contains(associationName)) {
-										String s = associationName + "|" + pt + "|"
-												+ ac.getConceptCode();
-										if (isRole) {
-											//if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
-												// System.out.println("Adding role: " +
-												// s);
-												roleList.add(s);
-											//}
-										} else {
-											// System.out.println("Adding association: "
-											// + s);
-											associationList.add(s);
+									String name = "No Description";
+									if (ed != null)
+										name = ed.getContent();
+									String pt = name;
+									if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
+										if (!w.contains(associationName)) {
+											String s = associationName + "|" + pt + "|"
+													+ ac.getConceptCode();
+											if (isRole) {
+												//if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
+													// System.out.println("Adding role: " +
+													// s);
+													roleList.add(s);
+												//}
+											} else {
+												// System.out.println("Adding association: "
+												// + s);
+												associationList.add(s);
+											}
 										}
 									}
 								}
@@ -1393,39 +1394,41 @@ System.out.println("\n\tActive? " + isActive);
                     AssociationList targetof = ref.getTargetOf();
                     if (targetof != null) {
 						Association[] inv_associations = targetof.getAssociation();
-						for (int i = 0; i < inv_associations.length; i++) {
-							Association assoc = inv_associations[i];
-							//String associationName = assoc.getAssociationName();
-							String associationName = lbscm.getAssociationNameFromAssociationCode(scheme, csvt, assoc.getAssociationName());
-							boolean isRole = false;
-							if (list.contains(associationName)) {
-								isRole = true;
-							}
-							AssociatedConcept[] acl = assoc.getAssociatedConcepts()
-									.getAssociatedConcept();
-							for (int j = 0; j < acl.length; j++) {
-								AssociatedConcept ac = acl[j];
-								EntityDescription ed = ac.getEntityDescription();
+						if (inv_associations != null) {
+							for (int i = 0; i < inv_associations.length; i++) {
+								Association assoc = inv_associations[i];
+								//String associationName = assoc.getAssociationName();
+								String associationName = lbscm.getAssociationNameFromAssociationCode(scheme, csvt, assoc.getAssociationName());
+								boolean isRole = false;
+								if (list.contains(associationName)) {
+									isRole = true;
+								}
+								AssociatedConcept[] acl = assoc.getAssociatedConcepts()
+										.getAssociatedConcept();
+								for (int j = 0; j < acl.length; j++) {
+									AssociatedConcept ac = acl[j];
+									EntityDescription ed = ac.getEntityDescription();
 
-								String name = "No Description";
-								if (ed != null)
-									name = ed.getContent();
+									String name = "No Description";
+									if (ed != null)
+										name = ed.getContent();
 
-								String pt = name;
-								if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
+									String pt = name;
+									if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
 
-									if (!w.contains(associationName)) {
-										String s = associationName + "|" + pt + "|"
-												+ ac.getConceptCode();
-										if (isRole) {
-											inverse_roleList.add(s);
-										} else {
-											inverse_associationList.add(s);
+										if (!w.contains(associationName)) {
+											String s = associationName + "|" + pt + "|"
+													+ ac.getConceptCode();
+											if (isRole) {
+												inverse_roleList.add(s);
+											} else {
+												inverse_associationList.add(s);
+											}
 										}
 									}
 								}
 							}
-						}
+					    }
 				    }
                 }
             }
