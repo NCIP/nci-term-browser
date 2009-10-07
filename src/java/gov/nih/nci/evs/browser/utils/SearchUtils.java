@@ -127,7 +127,7 @@ public class SearchUtils {
 	public static final int SEARCH_ROLE_VALUE = 6;
 	public static final int SEARCH_ASSOCIATION_VALUE = 7;
 
-	public static final String CONTAIN_SEARCH_ALGORITHM = "subString";
+	public static final String CONTAIN_SEARCH_ALGORITHM = "literalSubString";//"subString";
 
 	static final List<String> STOP_WORDS = Arrays.asList(new String[] { "a",
 			"an", "and", "by", "for", "of", "on", "in", "nos", "the", "to",
