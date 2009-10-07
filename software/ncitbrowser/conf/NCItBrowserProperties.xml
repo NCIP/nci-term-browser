@@ -257,16 +257,6 @@
         </ConfigurableItem>
 
         <ConfigurableItem>
-                 <key>MEDDRA_SECURITY_TOKEN</key>
-                 <value>@meddra_security_token@</value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-                 <key>SNOMEDCT_SECURITY_TOKEN</key>
-                 <value>@snomedct_security_token@</value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
                  <key>LICENSE_PAGE_OPTION</key>
                  <value>@license_page_option@</value>
         </ConfigurableItem>
@@ -365,5 +355,11 @@
         </DefSourceMapping>
     </DefSourceMappings>
    
-
+    <SecurityTokenHolders>
+        <SecurityTokenHolder>
+                 <name>MedDRA (Medical Dictionary for Regulatory Activities Terminology)</name>
+                 <value>@meddra_security_token@</value>
+        </SecurityTokenHolder>
+    </SecurityTokenHolders>  
+    
 </root>
