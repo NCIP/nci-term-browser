@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 import gov.nih.nci.evs.browser.bean.DisplayItem;
 import gov.nih.nci.evs.browser.bean.MetadataElement;
 import gov.nih.nci.evs.browser.bean.DefSourceMapping;
+import gov.nih.nci.evs.browser.bean.SecurityTokenHolder;
 
 
 /**
@@ -62,6 +63,10 @@ public class PropertyFileParser {
 	List defSourceMappingList;
 	HashMap defSourceMappingHashMap;
 
+	List securityTokenList;
+	HashMap securityTokenHashMap;
+
+
 	String xmlfile;
 
 	Document dom;
@@ -71,6 +76,8 @@ public class PropertyFileParser {
 		metadataElementList = new ArrayList();
 		defSourceMappingList = new ArrayList();
 		defSourceMappingHashMap = new HashMap();
+		securityTokenList = new ArrayList();
+		securityTokenHashMap = new HashMap();
 		configurableItemMap = new HashMap();
 	}
 
@@ -79,6 +86,8 @@ public class PropertyFileParser {
 		metadataElementList = new ArrayList();
 		defSourceMappingList = new ArrayList();
 		defSourceMappingHashMap = new HashMap();
+		securityTokenList = new ArrayList();
+		securityTokenHashMap = new HashMap();
 		configurableItemMap = new HashMap();
 		this.xmlfile = xmlfile;
 	}
@@ -103,6 +112,14 @@ public class PropertyFileParser {
 
 	public HashMap getDefSourceMappingHashMap() {
 		return defSourceMappingHashMap;
+	}
+
+	public List getSecurityTokenList() {
+		return this.securityTokenList;
+	}
+
+	public HashMap getSecurityTokenHashMap() {
+		return securityTokenHashMap;
 	}
 
 	public HashMap getConfigurableItemMap() {
@@ -162,6 +179,15 @@ public class PropertyFileParser {
 			}
 		}
 
+		NodeList list5 = docEle.getElementsByTagName("SecurityTokenHolder");
+		if(list5 != null && list5.getLength() > 0) {
+			for(int i = 0 ; i < list5.getLength();i++) {
+				Element el = (Element) list5.item(i);
+				SecurityTokenHolder e = getSecurityTokenHolder(el);
+				securityTokenList.add(e);
+				securityTokenHashMap.put(e.getName(), e.getValue());
+			}
+		}
 	}
 
 
@@ -196,6 +222,13 @@ public class PropertyFileParser {
 	    String name = getTextValue(defSourceMapping,"name");
 	    String value = getTextValue(defSourceMapping,"value");
 		DefSourceMapping item = new DefSourceMapping(name, value);
+		return item;
+	}
+
+	private SecurityTokenHolder getSecurityTokenHolder(Element securityTokenHolder) {
+	    String name = getTextValue(securityTokenHolder,"name");
+	    String value = getTextValue(securityTokenHolder,"value");
+		SecurityTokenHolder item = new SecurityTokenHolder(name, value);
 		return item;
 	}
 

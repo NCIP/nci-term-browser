@@ -50,6 +50,10 @@ public class NCItBrowserProperties {
         private static List metadataElementList;
         private static List defSourceMappingList;
         private static HashMap defSourceMappingHashMap;
+
+	    private static List securityTokenList;
+	    private static HashMap securityTokenHashMap;
+
         private static HashMap configurableItemMap;
 
         // KLO
@@ -165,6 +169,14 @@ public class NCItBrowserProperties {
             return defSourceMappingHashMap;
         }
 
+        public static List getSecurityTokenList() {
+            return securityTokenList;
+        }
+
+        public static HashMap getSecurityTokenHashMap() {
+            return securityTokenHashMap;
+        }
+
         private static void loadProperties() throws Exception {
             String propertyFile = System.getProperty("gov.nih.nci.evs.browser.NCItBrowserProperties");
             log.info("NCItBrowserProperties File Location= "+ propertyFile);
@@ -175,7 +187,11 @@ public class NCItBrowserProperties {
             metadataElementList = parser.getMetadataElementList();
             defSourceMappingList = parser.getDefSourceMappingList();
             defSourceMappingHashMap = parser.getDefSourceMappingHashMap();
+            securityTokenList = parser.getSecurityTokenList();
+            securityTokenHashMap = parser.getSecurityTokenHashMap();
+
             configurableItemMap = parser.getConfigurableItemMap();
+
         }
 
         public static String getLicensePageOption() {
