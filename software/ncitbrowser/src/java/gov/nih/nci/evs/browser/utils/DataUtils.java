@@ -110,7 +110,9 @@ public class DataUtils {
     private static org.LexGrid.LexBIG.LexBIGService.LexBIGService lbSvc = null;
     public org.LexGrid.LexBIG.Utility.ConvenienceMethods lbConvMethods = null;
     public CodingSchemeRenderingList csrl = null;
-    private static HashMap codingSchemeMap = null;
+    //private static HashMap codingSchemeMap = null;
+
+    private static HashSet codingSchemeHashSet = null;
 
     private static HashMap csnv2codingSchemeNameMap = null;
     private static HashMap csnv2VersionMap = null;
@@ -171,10 +173,17 @@ public class DataUtils {
     }
 
 
+    private static boolean isCodingSchemeSupported(String codingSchemeName) {
+		if (codingSchemeHashSet == null) setCodingSchemeMap();
+		return codingSchemeHashSet.contains(codingSchemeName);
+	}
+
+
     private static void setCodingSchemeMap()
 	{
+		codingSchemeHashSet = new HashSet();
         _ontologies = new ArrayList();
-        codingSchemeMap = new HashMap();
+        //codingSchemeMap = new HashMap();
         csnv2codingSchemeNameMap = new HashMap();
         csnv2VersionMap = new HashMap();
         formalName2LocalNameHashMap = new HashMap();
@@ -203,6 +212,10 @@ public class DataUtils {
 
 				CodingSchemeSummary css = csr.getCodingSchemeSummary();
 				String formalname = css.getFormalName();
+
+				if (!codingSchemeHashSet.contains(formalname)) {
+					codingSchemeHashSet.add(formalname);
+				}
 				String representsVersion = css.getRepresentsVersion();
 System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
 
@@ -2001,11 +2014,11 @@ NCI Thesaurus:
     public static CodingScheme resolveCodingScheme(LexBIGService lbSvc, String formalname, CodingSchemeVersionOrTag versionOrTag) {
 		try {
 			CodingScheme cs = lbSvc.resolveCodingScheme(formalname, versionOrTag);
-
 			return cs;
 		} catch (Exception ex) {
 			System.out.println("(*) Unable to resolveCodingScheme " +  formalname);
 			System.out.println("(*) \tMay require security token. " );
+
 	    }
         return null;
 	}
