@@ -58,11 +58,9 @@
 
   <div id="main-area">
   <%
-  	String dictionary = (String) request.getParameter("dictionary");
-  	
-  	
-  		String scheme = (String) request.getParameter("scheme");
-  		String shortName = "Vocabulary";
+ 	
+  		String scheme = (String) request.getParameter("dictionary");
+  		String shortName = scheme;
   		if (scheme == null) {
   			scheme = (String) request.getAttribute("scheme");
   		}
@@ -82,7 +80,7 @@
   		}
   		
  		
-request.getSession().setAttribute("dictionary", scheme);
+                request.getSession().setAttribute("dictionary", scheme);
 		
   		menubar_scheme = scheme;
   		menubar_version = version;
@@ -104,7 +102,7 @@ request.getSession().setAttribute("dictionary", scheme);
   			String licenseStmt = LicenseBean
   					.resolveCodingSchemeCopyright(scheme, version);
   %>
-  <P>Please review the following License/Copyright statement for <%=scheme%>.
+  <P>Please review the following License/Copyright statement for <b><%=scheme%></b>.
   </p>
   <P><%=licenseStmt%></p>
   <P>If and only if you agree to these terms/conditions, click the
@@ -122,10 +120,9 @@ request.getSession().setAttribute("dictionary", scheme);
     alt="Accept">
   </h:commandButton> &nbsp;&nbsp; <img
     src="<%=request.getContextPath()%>/images/cancel.gif" name="cancel"
-    alt="reset" onClick="history.back()" /> <input type="hidden"
-    id="scheme" name="scheme" value="<%=scheme0%>" /> <input
-    type="hidden" id="version" name="version" value="<%=version0%>" />
-
+    alt="reset" onClick="history.back()" /> 
+    <input type="hidden" id="dictionary" name="dictionary" value="<%=scheme0%>" /> 
+    <input type="hidden" id="version" name="version" value="<%=version0%>" />
   </form>
   </p>
 
@@ -146,10 +143,6 @@ request.getSession().setAttribute("dictionary", scheme);
   			}
   %>
   
-  
-
-
-
   <!-- Thesaurus, banner search area -->
   <div class="bannerarea">
   <div class="vocabularynamebanner">
