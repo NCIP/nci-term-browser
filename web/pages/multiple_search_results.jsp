@@ -138,6 +138,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                       String name = rcr.getEntityDescription().getContent();
 
                       String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+                      String short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
                       
                       Concept con = DataUtils.getConceptByCode(vocabulary_name, null, null, code);
                       if (con != null) {
@@ -183,7 +184,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           %>
                           </td>
                           <td class="dataCellText">
-                            <%=vocabulary_name%>
+                            <%=short_vocabulary_name%>
                           </td>
                           
                           
@@ -211,7 +212,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           %>
                           </td>
                           <td class="dataCellText">
-                            <%=vocabulary_name%>
+                            <%=short_vocabulary_name%>
                           </td>                          
                           
                           <%
