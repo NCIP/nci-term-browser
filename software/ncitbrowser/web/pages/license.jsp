@@ -41,26 +41,27 @@
             String version = (String) request.getAttribute("version");
             String ontology_list_str = (String) request.getAttribute("ontology_list_str");
 	    String matchText = (String) request.getAttribute("matchText");
+	    String searchTarget = (String) request.getAttribute("searchTarget");
 	    String matchAlgorithm = (String) request.getAttribute("algorithm");
             if (scheme != null) scheme = scheme.replaceAll("%20", " ");
 
-String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
+		String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
 
-%>
-<P>
-Please review the following License/Copyright statement for <%=scheme%>.  
-</p>
-<P>
-<%=licenseStmt%>  
-</p>
-<P>
-If and only if you agree to these terms/conditions, click the Accept button to proceed.   
-</p>
-<P>
-<%
+		%>
+		<P>
+		Please review the following License/Copyright statement for <b><%=scheme%></b>.  
+		</p>
+		<P>
+		<%=licenseStmt%>  
+		</p>
+		<P>
+		If and only if you agree to these terms/conditions, click the Accept button to proceed.   
+		</p>
+		<P>
+		<%
 
-String scheme0 = scheme;
-String version0 = version;
+		String scheme0 = scheme;
+		String version0 = version;
 
             if (scheme != null) {
                 scheme = scheme.replaceAll(" ", "%20");
@@ -72,26 +73,27 @@ String version0 = version;
 %>
 
 
-<form>
+		<form>
 
-		  <h:commandButton
-		    id="search"
-		    value="Search"
-		    action="#{userSessionBean.multipleSearchAction}"
-		    image="#{facesContext.externalContext.requestContextPath}/images/accept.gif"
-		    alt="Search">
-		  </h:commandButton>
-		  
-&nbsp;&nbsp;
-<img src="<%= request.getContextPath() %>/images/cancel.gif" name="cancel" alt="reset" onClick="history.back()" />
+				  <h:commandButton
+				    id="search"
+				    value="Search"
+				    action="#{userSessionBean.multipleSearchAction}"
+				    image="#{facesContext.externalContext.requestContextPath}/images/accept.gif"
+				    alt="Search">
+				  </h:commandButton>
 
-<input type="hidden" id="matchText" name="matchText" value="<%=matchText%>" />
-<input type="hidden" id="algorithm" name="algorithm" value="<%=matchAlgorithm%>" />
-<input type="hidden" id="ontology_list_str" name="ontology_list_str" value="<%=ontology_list_str%>" />
-<input type="hidden" id="scheme" name="scheme" value="<%=scheme%>" />
-<input type="hidden" id="version" name="version" value="<%=version%>" />
+		&nbsp;&nbsp;
+		<img src="<%= request.getContextPath() %>/images/cancel.gif" name="cancel" alt="reset" onClick="history.back()" />
 
-</form>
+		<input type="hidden" id="matchText" name="matchText" value="<%=matchText%>" />
+		<input type="hidden" id="algorithm" name="algorithm" value="<%=matchAlgorithm%>" />
+		<input type="hidden" id="ontology_list_str" name="ontology_list_str" value="<%=ontology_list_str%>" />
+		<input type="hidden" id="scheme" name="scheme" value="<%=scheme0%>" />
+		<input type="hidden" id="version" name="version" value="<%=version0%>" />
+		<input type="hidden" id="searchTarget" name="searchTarget" value="<%=searchTarget%>" />
+
+		</form>
 
 
       
