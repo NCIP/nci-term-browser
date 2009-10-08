@@ -144,8 +144,6 @@ public class UserSessionBean extends Object {
         String searchTarget = (String) request.getParameter("searchTarget");
 
         request.getSession().setAttribute("searchTarget", searchTarget);
-        System.out.println("searchTarget: " + searchTarget);
-
         if (searchTarget.compareTo("names") != 0) {
 			//request.getSession().removeAttribute("dictionary");
 			String msg = "To be implemented.";
@@ -190,7 +188,6 @@ public class UserSessionBean extends Object {
         if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
         //String scheme = Constants.CODING_SCHEME_NAME;
 
-System.out.println("* scheme: " + scheme);
 Vector schemes = new Vector();
 schemes.add(scheme);
 
@@ -198,7 +195,6 @@ schemes.add(scheme);
         String version = null;
 Vector versions = new Vector();
 versions.add(version);
-
 
 
         String max_str = null;
@@ -216,6 +212,7 @@ versions.add(version);
         //ResolvedConceptReferencesIterator iterator = new SearchUtils().searchByName(scheme, version, matchText, source, matchAlgorithm, ranking, maxToReturn);
 
         //v = new SearchUtils().searchByName(scheme, version, matchText, source, matchAlgorithm, sortOption, maxToReturn);
+
         boolean designationOnly = false;
         ResolvedConceptReferencesIterator iterator = null;
         if (searchTarget.compareTo("names") == 0) {
@@ -237,7 +234,6 @@ versions.add(version);
         request.getSession().removeAttribute("codeInNCI");
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
-
         //if (v != null && v.size() > 1)
         if (iterator != null) {
 
@@ -247,7 +243,6 @@ try {
 } catch (Exception ex) {
     ex.printStackTrace();
 }
-System.out.println("* numberRemaining: " + numberRemaining);
 
             IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
@@ -261,8 +256,6 @@ System.out.println("* numberRemaining: " + numberRemaining);
             }
 
             int size = iteratorBean.getSize();
-System.out.println("* size: " + size);
-
             if (size > 1) {
 
                 request.getSession().setAttribute("search_results", v);
@@ -294,9 +287,6 @@ System.out.println("* size: " + size);
                         //c = DataUtils.getConceptByCode(Constants.CODING_SCHEME_NAME, null, null, ref.getConceptCode());
                         c = DataUtils.getConceptByCode(scheme, null, null, ref.getConceptCode());
                     }
-
-System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDescription().getContent() + " " + c.getEntityCode());
-
                 }
 
                 request.getSession().setAttribute("code", ref.getConceptCode());
@@ -570,6 +560,23 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
 
    public String multipleSearchAction() {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		String scheme = (String) request.getParameter("scheme");
+		String version = (String) request.getParameter("version");
+
+		// Called from license.jsp
+		LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+		if (scheme != null && version != null) {
+
+			if (licenseBean == null) {
+				licenseBean = new LicenseBean();
+			}
+			licenseBean.addLicenseAgreement(scheme);
+			request.getSession().setAttribute("licenseBean", licenseBean);
+			request.getSession().removeAttribute("scheme");
+			request.getSession().removeAttribute("version");
+			request.getSession().setAttribute("licenseBean", licenseBean);
+		}
+
         String matchText = (String) request.getParameter("matchText");
         if (matchText != null) {
 			matchText = matchText.trim();
@@ -703,42 +710,10 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
             }
         }
 
-        //String ontology_list_str = null;
-
-        LicenseBean licenseBean = null;
-
         if (ontology_list == null) {
             ontology_list_str = (String) request.getParameter("ontology_list_str"); // from multiple_search_results (hidden variable)
-
             if (ontology_list_str != null) {
-
                 ontology_list = getSelectedVocabularies(ontology_list_str);
-                String scheme = (String) request.getParameter("scheme");
-                if (scheme.indexOf("%20") != -1) {
-                    scheme = scheme.replaceAll("%20", " ");
-                }
-                String version = (String) request.getParameter("version");
-                if (version.indexOf("%20") != -1) {
-                    version = version.replaceAll("%20", " ");
-                }
-                licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
-                if (licenseBean == null) {
-                    licenseBean = new LicenseBean();
-                    licenseBean.addLicenseAgreement(scheme);
-                    request.getSession().setAttribute("licenseBean", licenseBean);
-
-                } else {
-                    licenseBean.addLicenseAgreement(scheme);
-                    request.getSession().setAttribute("licenseBean", licenseBean);
-                }
-
-                if (ontology_list.length == 0) {
-					String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
-					request.getSession().setAttribute("warning", message);
-					request.getSession().setAttribute("message", message);
-					request.getSession().removeAttribute("ontologiesToSearchOn");
-					return "multiple_search";
-				}
 			}
 
         } else {
@@ -776,8 +751,8 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
             }
         }
 
-        String scheme = null;
-        String version = null;
+        scheme = null;
+        version = null;
 
         String t = "";
         if (ontologiesToSearchOn.size() == 0) {
@@ -803,16 +778,17 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
                             licenseBean = new LicenseBean();
                             request.getSession().setAttribute("licenseBean", licenseBean);
                         }
+
                         boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
                         if (isLicensed && !accepted) {
                             request.setAttribute("matchText", matchText);
+                            request.setAttribute("searchTarget", searchTarget);
                             request.setAttribute("algorithm", matchAlgorithm);
                             request.setAttribute("ontology_list_str", ontology_list_str);
                             request.setAttribute("scheme", scheme);
                             request.setAttribute("version", version);
                             return "license";
                         }
-
                     } else {
                         System.out.println("Unable to identify " + key);
                     }
@@ -829,10 +805,10 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
         } catch (Exception ex) {
             // Do nothing
         }
-
         //v = new SearchUtils().searchByName(scheme, version, matchText, source, matchAlgorithm, sortOption, maxToReturn);
         boolean designationOnly = false;
         ResolvedConceptReferencesIterator iterator = null;
+
         if (searchTarget.compareTo("names") == 0) {
        	    iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
 		} else if (searchTarget.compareTo("properties") == 0) {
@@ -943,34 +919,22 @@ System.out.println("(*) singleton concept found " + scheme + " " + c.getEntityDe
     }
 
 
-
     public String acceptLicenseAgreement() {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
-
         // update LicenseBean
-        String scheme = (String) request.getParameter("scheme");
+        String dictionary = (String) request.getParameter("dictionary");
         String version = (String) request.getParameter("version");
 
         LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
-
         if (licenseBean == null) {
             licenseBean = new LicenseBean();
-            licenseBean.addLicenseAgreement(scheme);
-            request.getSession().setAttribute("licenseBean", licenseBean);
+		}
+        licenseBean.addLicenseAgreement(dictionary);
+        request.getSession().setAttribute("licenseBean", licenseBean);
 
-        } else {
-            licenseBean.addLicenseAgreement(scheme);
-            request.getSession().setAttribute("licenseBean", licenseBean);
-        }
-
-        request.getSession().setAttribute("scheme", scheme);
+        request.getSession().setAttribute("dictionary", dictionary);
+        request.getSession().setAttribute("scheme", dictionary);
         request.getSession().setAttribute("version", version);
         return "vocabulary_home";
-
     }
-
-
-
-
-
 }

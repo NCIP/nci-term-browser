@@ -141,7 +141,7 @@
                             <%
                                 }
                              %>
-                         <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_label%>&scheme=<%=http_scheme%>&version=<%=http_version%>">
+                         <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
                             <%=label%>
                          </a>
                        </li>
