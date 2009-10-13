@@ -27,7 +27,8 @@
     <h:graphicImage value="/images/search-help.gif" style="border-width:0;"/>
   </h:outputLink>
   <%
-    String algorithm = (String) request.getSession().getAttribute("selectedAlgorithm");
+    String algorithm = (String) request.getSession().getAttribute("algorithm");
+   
     String check_e = "", check_s = "" , check_c ="";
     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
       check_e = "checked";
@@ -43,6 +44,7 @@
   
     <%
       String searchTarget = (String) request.getSession().getAttribute("searchTarget");
+     
       String check_n = "", check_p = "" , check_r ="";
       if (searchTarget == null || searchTarget.compareTo("names") == 0)
         check_n = "checked";
