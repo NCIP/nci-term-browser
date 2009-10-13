@@ -1162,11 +1162,21 @@ System.out.println("\n\tActive? " + isActive);
 			Property p = (Property) properties[i];
 			if (property_name.compareTo(p.getPropertyName()) == 0) {
 				String t = p.getValue().getContent();
+
+//System.out.println("property_name: " + property_name);
+//System.out.println("property_value p.getValue().getContent(): " + t);
+
 				Source[] sources = p.getSource();
 				if (sources != null && sources.length > 0) {
 					Source src = sources[0];
 					t = t + "|" + src.getContent();
+
+//System.out.println("src.getContent(): " + src.getContent());
+
 				}
+
+//System.out.println("getPropertyValues return : " + t);
+
 				v.add(t);
 			}
 		}

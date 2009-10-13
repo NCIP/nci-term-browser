@@ -77,6 +77,7 @@ request.getSession().setAttribute("dictionary", dictionary);
             } 
 
 
+
 	code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
 	if (code == null) {
 		Concept con = (Concept) request.getSession().getAttribute("concept");
@@ -90,6 +91,7 @@ request.getSession().setAttribute("dictionary", dictionary);
 	} 
 	
 	String active_code = (String) request.getSession().getAttribute("active_code");
+
 	if (active_code == null) {
 	    request.getSession().setAttribute("active_code", code);
 	} else {
@@ -99,7 +101,6 @@ request.getSession().setAttribute("dictionary", dictionary);
 	   }
 	}
 	
-
 
 Boolean new_search = null;
 Object new_search_obj = request.getSession().getAttribute("new_search");
@@ -126,6 +127,7 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
 }
 
 
+
             String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
             if (dictionary.compareTo("NCI Thesaurus") != 0) {
                 term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
@@ -149,13 +151,13 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
 	   name = "ERROR: Invalid code - " + code + ".";
 	}
 
- 
         if (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0) {
+               
         %>
         	<%@ include file="/pages/templates/content-header.xhtml" %>
         <%	
        	} else {
-       	        request.getSession().setAttribute("dictionary", dictionary);
+      	        request.getSession().setAttribute("dictionary", dictionary);
        	%>
        	        <%@ include file="/pages/templates/content-header1.xhtml" %>
        	<%        
@@ -207,6 +209,7 @@ request.getSession().setAttribute("visitedConcepts", visitedConcepts);
 <%
 	request.getSession().setAttribute("concept", c);
 	request.getSession().setAttribute("code", code);
+
 %>
       
       
