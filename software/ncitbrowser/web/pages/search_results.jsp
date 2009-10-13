@@ -39,17 +39,12 @@
 <%      
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
 
-System.out.println("(*) search_results.jsp dictionary " + search_results_dictionary);
-
-
 if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
-System.out.println("(*) search_results.jsp content-header.xhtml " + search_results_dictionary);
 %>
    
       <%@ include file="/pages/templates/content-header.xhtml" %>
 <%      
 } else {
-System.out.println("(*) search_results.jsp content-header1.xhtml " + search_results_dictionary);
 %>
       <%@ include file="/pages/templates/content-header1.xhtml" %>
 <%      
@@ -133,53 +128,57 @@ System.out.println("(*) search_results.jsp content-header1.xhtml " + search_resu
                 <%
                 
                   List list = iteratorBean.getData(istart, iend);
-Vector code_vec = new Vector();
+                  Vector code_vec = new Vector();
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
                       code_vec.add(rcr.getConceptCode());
                   }
 
-Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);                 
-                  
-                  for (int i=0; i<list.size(); i++) {
-                      ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
+                  Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);                 
+                  int i = -1;
+                  for (int k=0; k<list.size(); k++) {
+                      ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
                       
                       String code = rcr.getConceptCode();
                       String name = rcr.getEntityDescription().getContent();
-                      String con_status = null;
-                      
-                      if (status_vec.elementAt(i) != null) {
-                      	  con_status = (String) status_vec.elementAt(i);
-                      	  con_status = con_status.replaceAll("_", " ");
-                      } 
-  
-                      String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
+                     
+                      if (code.indexOf("@_A") == -1) {
+                              i++;
+			      String con_status = null;
 
-                      if (i % 2 == 0) {
-                        %>
-                          <tr class="dataRowDark">
-                        <%
-                      } else {
-                        %>
-                          <tr class="dataRowLight">
-                        <%
+			      if (status_vec.elementAt(i) != null) {
+				  con_status = (String) status_vec.elementAt(i);
+				  con_status = con_status.replaceAll("_", " ");
+			      } 
+
+			      String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
+
+			      if (i % 2 == 0) {
+				%>
+				  <tr class="dataRowDark">
+				<%
+			      } else {
+				%>
+				  <tr class="dataRowLight">
+				<%
+			      }
+			      %>
+				  <td class="dataCellText">
+				  <%
+				  if (con_status == null) {
+				  %>
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
+				  <%   
+				  } else {
+				  %>
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+				  <%
+				  }
+				  %>
+				  </td>
+				</tr>
+			      <%
                       }
-                      %>
-                          <td class="dataCellText">
-                          <%
-                          if (con_status == null) {
-                          %>
-                             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
-                          <%   
-                          } else {
-                          %>
-                             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
-                          <%
-                          }
-                          %>
-                          </td>
-                        </tr>
-                      <%
                   }
                   
                 %>

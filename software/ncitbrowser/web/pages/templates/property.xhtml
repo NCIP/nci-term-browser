@@ -180,15 +180,29 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 
         int n = value.indexOf("|");
 
+ System.out.println("propName_label: " +  propName_label);        
+
         if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
           value_wo_qualifier = value.substring(0, n);
+          
+ System.out.println("value_wo_qualifier: " +  value_wo_qualifier);        
+          
           qualifier = value.substring(n+1, value.length());
           
+System.out.println("Qualifier: " +  qualifier);        
+         
           if (def_map != null && def_map.containsKey(qualifier)) {
+          
+   System.out.println("Case 1-1: ");        
+         
               String def_source_display_value = (String) def_map.get(qualifier);
               value = value_wo_qualifier + " (" + qualifier + ")";
               propName_label = def_source_display_value + " " + propName_label2;
           } else {
+          
+    System.out.println("Case 1-2: ");        
+        
+          
 		  if (qualifier.compareTo("NCI") != 0) {
 		      value = value_wo_qualifier;
 		      propName_label = qualifier + " " + propName_label2;
@@ -206,33 +220,74 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 <%
       }
     } else if (propName_label.indexOf("Synonyms") == -1) {
+    
+ 
+  System.out.println("(*) propName_label does not contain Synonyms: " + propName_label);        
+
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
 
       if (value_vec != null && value_vec.size() > 0) {
-        int k = 0;
+        
+        int k = 0;  
+        
+ System.out.println("(*) value_vec: " +  value_vec.size());        
+        
+        
         for (int j=0; j<value_vec.size(); j++) {
           String value = (String) value_vec.elementAt(j);
+          
+ System.out.println("(*) value: " +  value);        
+          
+          
           String value_wo_qualifier = value;
           int n = value.indexOf("|");
 
           if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
               value_wo_qualifier = value.substring(0, n);
+              
+ System.out.println("value_wo_qualifier: " +  value_wo_qualifier);        
+              
               qualifier = value.substring(n+1, value.length());
+
+ System.out.println("(*) Qualifier: " +  qualifier);        
             
               if (def_map != null && def_map.containsKey(qualifier)) {
+              
+  System.out.println("Case 2-1: ");        
+              
 	          String def_source_display_value = (String) def_map.get(qualifier);
 	          value = value_wo_qualifier + " (" + qualifier + ")";
                   propName_label = def_source_display_value + " " + propName_label2;
+                  
+                  
               } else {
+              
+  System.out.println("Case 2-2: ");  
+  
 		    if (qualifier.compareTo("NCI") != 0) {
 		      value = value_wo_qualifier;
 		      propName_label = qualifier + " " + propName_label2;
+		      
+		      
+  System.out.println("Case 2-2a value: " + value);  
+  System.out.println("Case 2-2a propName_label: " + propName_label);  
+		      
+		      
 		    } else {
 		      value = value_wo_qualifier;
+
+  System.out.println("Case 2-2b value: " + value);  
+  System.out.println("Case 2-2b propName_label: " + propName_label);  
+		      
 		    }
               }
           }
+
+  System.out.println("k: " + k);  
+  System.out.println("propName_label: " + propName_label);  
+  System.out.println("value: " + value);  
+
 
           if (k == 0) {
 %>

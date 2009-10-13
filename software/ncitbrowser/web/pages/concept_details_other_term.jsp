@@ -48,6 +48,7 @@
       <!-- Main box -->
       <div id="main-area">
        <%
+       
           String dictionary = (String) request.getAttribute("dictionary");
           if (dictionary == null) {
               //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
