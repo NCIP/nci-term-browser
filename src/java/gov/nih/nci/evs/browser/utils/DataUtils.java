@@ -66,6 +66,8 @@ import static gov.nih.nci.evs.browser.common.Constants.*;
 import org.LexGrid.naming.SupportedNamespace;
 import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
 import org.LexGrid.concepts.Entity;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
+
 
 
 /**
@@ -1356,9 +1358,22 @@ System.out.println("\n\tActive? " + isActive);
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
             matches = null;
             try {
+
+//KLO testing
+
+            CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
+            propertyTypes[0] = PropertyType.PRESENTATION;
+            int resolveCodedEntryDepth = 0;
+
+			//matches = cng.resolveAsList(Constructors.createConceptReference(code, scheme), true, true, resolveCodedEntryDepth, 1, null, propertyTypes, null, -1);
+//ResolvedConceptReferenceList 	resolveAsList(ConceptReference graphFocus, boolean resolveForward, boolean resolveBackward,
+//int resolveCodedEntryDepth, int resolveAssociationDepth, LocalNameList propertyNames, CodedNodeSet.PropertyType[] propertyTypes, SortOptionList sortOptions, LocalNameList filterOptions, int maxToReturn, boolean keepLastAssociationLevelUnresolved)
                matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
-                   true, true, 1, 1, noopList_, null, null, null, -1, false);
+                   //true, true, 1, 1, noopList_, null, null, null, -1, false);
+                   //true, true, 1, 1, noopList_, propertyTypes, null, null, -1, false);
+                   true, true, 0, 1, null, propertyTypes, null, null, -1, false);
+
 			} catch (Exception e) {
                 System.out.println("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
 			}
