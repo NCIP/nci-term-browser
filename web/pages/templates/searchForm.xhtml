@@ -5,9 +5,7 @@
   <%
     String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
     String vocab_name = (String) request.getParameter("dictionary");
-
     vocab_name = DataUtils.getCodingSchemeName(vocab_name);
-
 
     if (match_text == null) match_text = "";
   %>
@@ -28,7 +26,7 @@
   </h:outputLink>
   <%
     String algorithm = (String) request.getSession().getAttribute("algorithm");
-   
+
     String check_e = "", check_s = "" , check_c ="";
     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
       check_e = "checked";
@@ -40,11 +38,10 @@
   <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
   <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
   <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains&nbsp;
-  
-  
+  <br>
     <%
       String searchTarget = (String) request.getSession().getAttribute("searchTarget");
-     
+
       String check_n = "", check_p = "" , check_r ="";
       if (searchTarget == null || searchTarget.compareTo("names") == 0)
         check_n = "checked";
@@ -56,13 +53,13 @@
   <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name/Code&nbsp;
   <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%>>Property&nbsp;
   <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%>>Relationship&nbsp;
-  
+
   <%
   if (vocab_name != null) {
   %>
-  	<input type="hidden" id="vocabulary" name="vocabulary" value="<%=vocab_name%>" />
-  <%	
+    <input type="hidden" id="vocabulary" name="vocabulary" value="<%=vocab_name%>" />
+  <%
   }
   %>
-  
+
 </FORM>
