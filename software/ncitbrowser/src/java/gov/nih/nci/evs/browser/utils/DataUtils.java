@@ -904,6 +904,7 @@ System.out.println("\n\tActive? " + isActive);
 
     public static String getVocabularyVersionByTag(String codingSchemeName, String ltag)
     {
+
          if (codingSchemeName == null) return null;
          String version = null;
          int knt = 0;
@@ -920,28 +921,31 @@ System.out.println("\n\tActive? " + isActive);
 					version = css.getRepresentsVersion();
 					knt++;
 
-                    if (ltag == null) return css.getRepresentsVersion();
+                    if (ltag == null) return version;
                     RenderingDetail rd = csr.getRenderingDetail();
                     CodingSchemeTagList cstl = rd.getVersionTags();
                     java.lang.String[] tags = cstl.getTag();
+                    //KLO, 102409
+                    if (tags == null) return version;
 
-                    for (int j=0; j<tags.length; j++)
-                    {
-                        String version_tag = (String) tags[j];
-
-                        if (version_tag.compareToIgnoreCase(ltag) == 0)
-                        {
-                            return css.getRepresentsVersion();
-                        }
-                    }
+                    if (tags != null && tags.length > 0) {
+						for (int j=0; j<tags.length; j++)
+						{
+							String version_tag = (String) tags[j];
+							if (version_tag.compareToIgnoreCase(ltag) == 0)
+							{
+								return version;
+							}
+						}
+				    }
                 }
              }
          } catch (Exception e) {
              e.printStackTrace();
          }
-         //System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
-         if (ltag == null || (ltag.compareToIgnoreCase("PRODUCTION") == 0 & knt == 1)) {
-			 System.out.println("\tUse " + version + " as default version.");
+         System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
+         if (ltag != null && ltag.compareToIgnoreCase("PRODUCTION") == 0 & knt == 1) {
+			 System.out.println("\tUse " + version + " as default.");
 			 return version;
 		 }
          return null;
