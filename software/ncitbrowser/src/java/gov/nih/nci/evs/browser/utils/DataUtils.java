@@ -1410,7 +1410,8 @@ System.out.println("\n\tActive? " + isActive);
 									if (ed != null)
 										name = ed.getContent();
 									String pt = name;
-									if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
+									if (associationName.compareToIgnoreCase("equivalentClass") != 0 &&
+									    ac.getConceptCode().indexOf("@") == -1) {
 										if (!w.contains(associationName)) {
 											String s = associationName + "|" + pt + "|"
 													+ ac.getConceptCode();
@@ -1456,7 +1457,10 @@ System.out.println("\n\tActive? " + isActive);
 										name = ed.getContent();
 
 									String pt = name;
-									if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
+									//if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
+									if (associationName.compareToIgnoreCase("equivalentClass") != 0 &&
+									    ac.getConceptCode().indexOf("@") == -1) {
+
 
 										if (!w.contains(associationName)) {
 											String s = associationName + "|" + pt + "|"
