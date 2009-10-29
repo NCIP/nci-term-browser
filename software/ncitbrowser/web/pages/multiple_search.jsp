@@ -159,7 +159,7 @@
                     name="selectAll" alt="selectAll"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
                   &nbsp;&nbsp; <img
-                    src="<%= request.getContextPath() %>/images/reset.gif"
+                    src="<%= request.getContextPath() %>/images/clear.gif"
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
                   &nbsp;&nbsp; <h:commandButton id="search" value="Search"
