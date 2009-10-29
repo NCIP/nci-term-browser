@@ -39,9 +39,9 @@
     <!-- Main box -->
     <div id="main-area">
       <form name="searchTerm" method="post" class="search-form-main-area">
-      
+
         <input type="hidden" name="initial_search" value="true" />
-      
+
         <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
         <!-- Page content -->
         <div class="pagecontent">
@@ -51,17 +51,17 @@
                  if (warning_msg != null) {
                  %>
                     <p class="textbodyred">&nbsp;<%=warning_msg%></p>
-                 <%                
+                 <%
                  }
                  request.getSession().removeAttribute("warning");
                  %>
-<%            
+<%
             String hide_ontology_list = (String) request.getSession().getAttribute("hide_ontology_list");
             request.getSession().removeAttribute("hide_ontology_list");
             if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
- %>         
+ %>
             <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.</p>
-            <table class="termstable">
+            <table class="termstable" border="0">
               <tr>
                 <%
                   List ontology_list = DataUtils.getOntologyList();
@@ -69,89 +69,90 @@
                     System.out.println("??????????? ontology_list == null");
                   int num_vocabularies = ontology_list.size();
                   String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
-                  
+
                 %>
                   <td class="textbody">
-                  <ol>
-                    <%
-                        for (int i = 0; i < ontology_list.size(); i++) {
-                          SelectItem item = (SelectItem) ontology_list.get(i);
-                          String value = (String) item.getValue();
-                          String label = (String) item.getLabel();
-                          String label2 = "|" + label + "|";
+                    <table border="0" cellpadding="0" cellspacing="0">
+                      <%
+                      for (int i = 0; i < ontology_list.size(); i++) {
+                        SelectItem item = (SelectItem) ontology_list.get(i);
+                        String value = (String) item.getValue();
+                        String label = (String) item.getLabel();
+                        String label2 = "|" + label + "|";
 
-                          String scheme = DataUtils.key2CodingSchemeName(value);
-                          String version = DataUtils.key2CodingSchemeVersion(value);
-                          String http_label = null;
-                          String http_scheme = null;
-                          String http_version = null;
+                        String scheme = DataUtils.key2CodingSchemeName(value);
+                        String version = DataUtils.key2CodingSchemeVersion(value);
+                        String http_label = null;
+                        String http_scheme = null;
+                        String http_version = null;
 
-                          if (label != null)
-                            http_label = label.replaceAll(" ", "%20");
-                          if (scheme != null)
-                            http_scheme = scheme.replaceAll(" ", "%20");
-                          if (version != null)
-                            http_version = version.replaceAll(" ", "%20");
-
-                          if (scheme.compareTo("NCI Thesaurus") == 0) {
-                     %>
-                            <li>
-                               <%
-                                   if (ontologiesToSearchOn != null
-                                      && ontologiesToSearchOn.indexOf(label2) != -1) {
-                                %>
-                                      <input type="checkbox" name="ontology_list" value="<%=label%>" checked />
-                                <%
-                                   } else {
-                                %>
-                                      <input type="checkbox" name="ontology_list" value="<%=label%>" /> <%
-                                   } %>
-                                <a href="<%= request.getContextPath() %>"><%=label%></a></li>
+                        if (label != null)
+                          http_label = label.replaceAll(" ", "%20");
+                        if (scheme != null)
+                          http_scheme = scheme.replaceAll(" ", "%20");
+                        if (version != null)
+                          http_version = version.replaceAll(" ", "%20");
+                        %>
+                        <tr>
+                          <td width="25px"></td>
+                          <td>
+                        <%
+                        if (scheme.compareTo("NCI Thesaurus") == 0) {
+                           if (ontologiesToSearchOn != null
+                              && ontologiesToSearchOn.indexOf(label2) != -1) {
+                           %>
+                              <input type="checkbox" name="ontology_list" value="<%=label%>" checked />
                            <%
-                           } else if (scheme.compareTo("NCI MetaThesaurus") == 0) {
-                                String ncimurl = NCItBrowserProperties.getNCIM_URL();
+                           } else {
                             %>
-                            <li>
-                                 <%
-                                    if (ontologiesToSearchOn != null
-                                      && ontologiesToSearchOn.indexOf(label2) != -1) {
-                                  %> <input type="checkbox" name="ontology_list"
-                                        value="<%=label%>" checked />
-                                 <%
-                                     } else {
-                                  %>
-                                       <input type="checkbox" name="ontology_list" value="<%=label%>" />
-                                 <%
-                                     }
-                                  %>
-                                <a href="http://ncim.nci.nih.gov"><%=label%></a></li>
-                            <%
+                              <input type="checkbox" name="ontology_list" value="<%=label%>" /> <%
+                           }
+                           %>
+                              <a href="<%= request.getContextPath() %>"><%=label%></a>
+                           <%
+                        } else if (scheme.compareTo("NCI MetaThesaurus") == 0) {
+                              String ncimurl = NCItBrowserProperties.getNCIM_URL();
+                            if (ontologiesToSearchOn != null
+                               && ontologiesToSearchOn.indexOf(label2) != -1) {
+                           %>
+                              <input type="checkbox" name="ontology_list"
+                                      value="<%=label%>" checked />
+                           <%
                             } else {
-                             %>
-                            <li>
-                            <%
-                                if (ontologiesToSearchOn != null
-                                  && ontologiesToSearchOn.indexOf(label2) != -1) {
-                             %>
-                                       <input type="checkbox" name="ontology_list" value="<%=label%>" checked /
-                            <%
-                                } else {
-                             %>
-                                       <input type="checkbox" name="ontology_list" value="<%=label%>" />
-                            <%
-                                }
-                             %>
-                         <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
-                            <%=label%>
-                         </a>
-                       </li>
-                  <%
+                            %>
+                              <input type="checkbox" name="ontology_list" value="<%=label%>" />
+                           <%
+                            }
+                            %>
+                              <a href="http://ncim.nci.nih.gov"><%=label%></a>
+                           <%
+                        } else {
+                           if (ontologiesToSearchOn != null
+                              && ontologiesToSearchOn.indexOf(label2) != -1) {
+                            %>
+                              <input type="checkbox" name="ontology_list" value="<%=label%>" checked /
+                           <%
+                           } else {
+                            %>
+                              <input type="checkbox" name="ontology_list" value="<%=label%>" />
+                           <%
+                           }
+                            %>
+                              <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
+                                <%=label%>
+                              </a>
+                           <%
                         }
-                    }
-                  %>
-                  </ol>
+                      %>
+                        </td>
+                      </tr>
+                     <%
+                      }
+                     %>
+                    </table>
                   </td>
                 </tr>
+                <tr><td height="20"></td></tr>
                 <tr>
                   <td><img
                     src="<%= request.getContextPath() %>/images/selectAll.gif"
@@ -168,11 +169,11 @@
                   </h:commandButton></td>
                 </tr>
             </table>
-            
+
 <%
 }
 %>
-            
+
           </div> <!-- end tabTableContentContainer -->
           <%@ include file="/pages/templates/nciFooter.html"%>
         </div> <!-- end Page content -->
