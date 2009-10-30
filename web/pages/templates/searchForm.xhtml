@@ -1,7 +1,5 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-
-
-<FORM NAME="searchTerm" METHOD="POST" CLASS="search-form" >
+<form name="searchTerm" method="post" class="search-form" >
   <%
     String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
     String vocab_name = (String) request.getParameter("dictionary");
@@ -9,7 +7,7 @@
 
     if (match_text == null) match_text = "";
   %>
-  <input CLASS="searchbox-input"
+  <input class="searchbox-input"
     name="matchText"
     value="<%=match_text%>"
     onFocus="active = true" onBlur="active = false" onkeypress="return submitEnter('search',event)"
@@ -35,13 +33,19 @@
     else
       check_c = "checked";
   %>
-  <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
-  <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
-  <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains&nbsp;
-  <br>
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr valign="top" align="left">
+      <td align="left" class="textbody">
+        <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
+        <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
+        <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains
+      </td>
+    </tr>
+    <tr align="left">
+      <td height="1px" bgcolor="#2F2F5F"></td>
+    </tr>
     <%
       String searchTarget = (String) request.getSession().getAttribute("searchTarget");
-
       String check_n = "", check_p = "" , check_r ="";
       if (searchTarget == null || searchTarget.compareTo("names") == 0)
         check_n = "checked";
@@ -50,10 +54,14 @@
       else
         check_r = "checked";
     %>
-  <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name/Code&nbsp;
-  <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%>>Property&nbsp;
-  <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%>>Relationship&nbsp;
-
+    <tr valign="top" align="left">
+      <td align="left" class="textbody">
+        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name/Code&nbsp;
+        <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%>>Property&nbsp;
+        <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%>>Relationship
+      </td>
+    </tr>
+  </table>
   <%
   if (vocab_name != null) {
   %>
@@ -61,5 +69,4 @@
   <%
   }
   %>
-
 </FORM>
