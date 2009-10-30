@@ -43,17 +43,16 @@
         <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
         <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
         <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains&nbsp;
-        <br>
-          <%
-            String searchTarget = (String) request.getSession().getAttribute("searchTarget");
-            String check_n = "", check_p = "" , check_r ="";
-            if (searchTarget == null || searchTarget.compareTo("names") == 0)
-              check_n = "checked";
-            else if (searchTarget.compareTo("properties") == 0)
-              check_p= "checked";
-            else
-              check_r = "checked";
-          %>
+        <%
+          String searchTarget = (String) request.getSession().getAttribute("searchTarget");
+          String check_n = "", check_p = "" , check_r ="";
+          if (searchTarget == null || searchTarget.compareTo("names") == 0)
+            check_n = "checked";
+          else if (searchTarget.compareTo("properties") == 0)
+            check_p= "checked";
+          else
+            check_r = "checked";
+        %>
       </td>
     </tr>
     <tr align="left">
