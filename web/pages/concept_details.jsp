@@ -184,9 +184,19 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
 Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
 if (visitedConcepts == null) {
     visitedConcepts = new Vector();
+    
+    
 }
-String visitedConceptStr = tg_dictionary_0 + "|" + code + "|" + name;
+String localCodingSchemeName = DataUtils.getLocalName(tg_dictionary_0); 
+
+String visitedConceptStr = localCodingSchemeName + "|" + code + "|" + name;
+
+System.out.println("(*) visitedConceptStr: " + visitedConceptStr);
+
 if (!visitedConcepts.contains(visitedConceptStr)) {
+
+System.out.println("(*) Add visitedConceptStr: " + visitedConceptStr);
+
 	visitedConcepts.add(visitedConceptStr);
 } 
 request.getSession().setAttribute("visitedConcepts", visitedConcepts);

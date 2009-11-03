@@ -12,10 +12,11 @@
         } else if (hdr_dictionary != null) {
             request.getSession().setAttribute("dictionary", hdr_dictionary);
             String content_hdr_shortName = DataUtils.getLocalName(hdr_dictionary);
+            String content_hdr_formalName = DataUtils.getFormalName(content_hdr_shortName);
 %>
   <div class="vocabularynamebanner">
     <div class="vocabularynameshort"><%=content_hdr_shortName%></div>
-    <div class="vocabularynamelong"><%=hdr_dictionary%></div>
+    <div class="vocabularynamelong"><%=content_hdr_formalName%></div>
   </div>
 
 
