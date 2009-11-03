@@ -175,11 +175,13 @@ visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
 if (visitedConcepts == null) {
     visitedConcepts = new Vector();
 }
-String visitedConceptStr = dictionary + "|" + code + "|" + name;
+String localCodingSchemeName = DataUtils.getLocalName(dictionary); 
+String visitedConceptStr = localCodingSchemeName + "|" + code + "|" + name;
 if (!visitedConcepts.contains(visitedConceptStr)) {
 	visitedConcepts.add(visitedConceptStr);
+	request.getSession().removeAttribute("visitedConcepts");
+	request.getSession().setAttribute("visitedConcepts", visitedConcepts);	
 } 
-request.getSession().setAttribute("visitedConcepts", visitedConcepts);   
               
               
               if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {

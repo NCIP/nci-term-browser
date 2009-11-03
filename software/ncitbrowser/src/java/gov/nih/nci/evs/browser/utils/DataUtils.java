@@ -2264,6 +2264,9 @@ NCI Thesaurus:
 
 
     public static String getVisitedConceptLink(Vector concept_vec) {
+
+System.out.println("Visited concepts: " + concept_vec.size());
+
 		StringBuffer strbuf = new StringBuffer();
 		String line = "<A href=\"#\" onmouseover=\"Tip('";
         strbuf.append(line);
@@ -2276,6 +2279,7 @@ NCI Thesaurus:
 			//String localName = scheme;
 			//scheme = (String) formalName2LocalNameHashMap.get(scheme);
 			String formalName = (String) localName2FormalNameHashMap.get(scheme);
+			String localName = (String) formalName2LocalNameHashMap.get(scheme);
 			String code = (String) w.elementAt(1);
 			String name = (String) w.elementAt(2);
             strbuf.append("<li>");
@@ -2285,7 +2289,7 @@ NCI Thesaurus:
                + "&code="
                + code
                + "\\'>"
-               + name + " &#40;" + scheme + "&#41;"
+               + name + " &#40;" + localName + "&#41;"
                + "</a><br>";
             strbuf.append(line);
             strbuf.append("</li>");
