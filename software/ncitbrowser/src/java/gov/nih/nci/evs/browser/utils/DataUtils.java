@@ -2483,6 +2483,20 @@ System.out.println("Visited concepts: " + concept_vec.size());
 		return w;
 	}
 
+
+    public static String searchFormalName(String s) {
+		if (formalName2LocalNameHashMap.containsKey(s)) return s;
+		Iterator it = formalName2LocalNameHashMap.keySet().iterator();
+		while (it.hasNext()) {
+			String t = (String) it.next();
+			String t0 = t;
+			t = t.trim();
+			if (t.compareTo(s) == 0) return t0;
+		}
+		return s;
+	}
+
+
 	public static void main(String[] args) {
 		String scheme = "NCI Thesaurus";
 		String version = null;
