@@ -273,6 +273,13 @@ System.out.println("\n\tActive? " + isActive);
 		return (String) formalName2LocalNameHashMap.get(key);
 	}
 
+    public static String getFormalName(String key) {
+		if (localName2FormalNameHashMap == null) {
+			setCodingSchemeMap();
+		}
+		return (String) localName2FormalNameHashMap.get(key);
+	}
+
 
     public static Vector<String> getSupportedAssociationNames(String key) {
         if (csnv2codingSchemeNameMap == null) {
@@ -1334,12 +1341,14 @@ System.out.println("\n\tActive? " + isActive);
 		HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
 		if (hmap_super != null) {
 			TreeItem ti = (TreeItem) hmap_super.get(code);
-			for (String association : ti.assocToChildMap.keySet()) {
-				List<TreeItem> children = ti.assocToChildMap.get(association);
-				for (TreeItem childItem : children) {
-					superconceptList.add(childItem.text + "|" + childItem.code);
+			if (ti != null) {
+				for (String association : ti.assocToChildMap.keySet()) {
+					List<TreeItem> children = ti.assocToChildMap.get(association);
+					for (TreeItem childItem : children) {
+						superconceptList.add(childItem.text + "|" + childItem.code);
+					}
 				}
-			}
+		    }
 		}
 		Collections.sort(superconceptList);
 		map.put(TYPE_SUPERCONCEPT, superconceptList);
@@ -1347,12 +1356,14 @@ System.out.println("\n\tActive? " + isActive);
 		HashMap hmap_sub = TreeUtils.getSubconcepts(scheme, version, code);
 		if (hmap_sub != null) {
 			TreeItem ti = (TreeItem) hmap_sub.get(code);
-			for (String association : ti.assocToChildMap.keySet()) {
-				List<TreeItem> children = ti.assocToChildMap.get(association);
-				for (TreeItem childItem : children) {
-					subconceptList.add(childItem.text + "|" + childItem.code);
+			if (ti != null) {
+				for (String association : ti.assocToChildMap.keySet()) {
+					List<TreeItem> children = ti.assocToChildMap.get(association);
+					for (TreeItem childItem : children) {
+						subconceptList.add(childItem.text + "|" + childItem.code);
+					}
 				}
-			}
+		    }
 		}
 
 		Collections.sort(subconceptList);
@@ -2262,14 +2273,15 @@ NCI Thesaurus:
 			String concept_data = (String) concept_vec.elementAt(j);
 			Vector w = parseData(concept_data);
 			String scheme = (String) w.elementAt(0);
-			scheme = (String) formalName2LocalNameHashMap.get(scheme);
+			//String localName = scheme;
+			//scheme = (String) formalName2LocalNameHashMap.get(scheme);
+			String formalName = (String) localName2FormalNameHashMap.get(scheme);
 			String code = (String) w.elementAt(1);
 			String name = (String) w.elementAt(2);
             strbuf.append("<li>");
             line =
-               //"<a href=\\'<%= request.getContextPath() %>/ConceptReport.jsp?dictionary="
                "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
-               + scheme
+               + formalName
                + "&code="
                + code
                + "\\'>"
