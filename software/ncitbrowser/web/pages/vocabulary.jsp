@@ -214,6 +214,11 @@
     onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
   Download </a> <%
   }
+  
+  System.out.println("(*) vocabulary.jsp menubar_scheme " + menubar_scheme);
+  System.out.println("(*) vocabulary.jsp menubar_version " + menubar_version);
+    
+  
  %> | <a href="#"
     onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
   View Hierarchy </a> <%

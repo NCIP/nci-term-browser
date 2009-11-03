@@ -516,6 +516,7 @@ public class TreeUtils {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static HashMap getSubconcepts(String scheme, String version, String code) {
+
 		//String hierarchicalAssoName = "subClassOf";
 		/* NCI Thesaurus
 		Vector hierarchicalAssoName_vec = getHierarchyAssociationId(scheme,
@@ -548,8 +549,10 @@ public class TreeUtils {
 			if (hierarchies == null || hierarchies.length == 0) return null;
 		    SupportedHierarchy hierarchyDefn = hierarchies[0];
 			String hier_id = hierarchyDefn.getLocalId();
+
 			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
 			String assocName = associationsToNavigate[0];
+
 			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
 			return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
 		} catch (Exception ex) {
@@ -558,9 +561,11 @@ public class TreeUtils {
 	}
 
 	public static HashMap getSuperconcepts(String scheme, String version, String code) {
+		/*
 		if (scheme.compareTo("NCI Thesaurus") == 0) {
 		    return getAssociatedConcepts(scheme, version, code,	"subClassOf", true);
 		}
+		*/
 
 		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
 		if (version != null)
@@ -710,12 +715,25 @@ public class TreeUtils {
 					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
 					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
             */
+
 			ResolvedConceptReferenceList branch = null;
 			try {
+
+/*
 				branch = cng.resolveAsList(focus,
 					associationsNavigatedFwd,
 					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
 					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
+*/
+
+
+				branch = cng.resolveAsList(focus,
+					associationsNavigatedFwd,
+					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
+					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
+
+
+
 			} catch (Exception e) {
 				System.out.println("TreeUtils getAssociatedConcepts throws exceptions.");
 				return null;
@@ -724,7 +742,15 @@ public class TreeUtils {
 			for (Iterator<ResolvedConceptReference> nodes = branch
 					.iterateResolvedConceptReference(); nodes.hasNext();) {
 				ResolvedConceptReference node = nodes.next();
-				AssociationList childAssociationList = associationsNavigatedFwd ? node.getSourceOf(): node.getTargetOf();
+				AssociationList childAssociationList = null;
+
+				//AssociationList childAssociationList = associationsNavigatedFwd ? node.getSourceOf(): node.getTargetOf();
+
+				if (associationsNavigatedFwd) {
+					childAssociationList = node.getSourceOf();
+				} else {
+					childAssociationList = node.getTargetOf();
+				}
 
                 if (childAssociationList != null) {
 				// Process each association defining children ...
@@ -1179,17 +1205,50 @@ public class TreeUtils {
 		String url = "http://lexevsapi-dev.nci.nih.gov/lexevsapi42";
 		url = "http://lexevsapi-qa.nci.nih.gov/lexevsapi50";
 
+        HashMap hmap = null;
+
 		String scheme = "NCI Thesaurus";
 		String version = null;
 		String code = "C26709";
 
 		TreeUtils test = new TreeUtils();
-		HashMap hmap = test.getSubconcepts(scheme, version, code);
-		test.printTree(hmap);
+
+		//hmap = test.getSubconcepts(scheme, version, code);
+		//test.printTree(hmap);
 
 		code = "C2910";
+		code = "C9335";
+
+		String hierarchyID = test.getHierarchyID(scheme, null);
+		System.out.println("(*) " + scheme + " Hierarchy ID: " + hierarchyID);
+
 		hmap = test.getSubconcepts(scheme, version, code);
 		test.printTree(hmap);
+
+System.out.println("=============================================================");
+
+		scheme = "Gene Ontology";
+		code = "GO:0008150";
+
+		hierarchyID = test.getHierarchyID(scheme, null);
+		System.out.println("Hierarchy ID: " + hierarchyID);
+
+		hmap = test.getSubconcepts(scheme, version, code);
+		test.printTree(hmap);
+
+
+System.out.println("=============================================================");
+
+
+		scheme = "HL7 Reference Information Model        ";
+		code = "AcknowledgementType";
+
+		hierarchyID = test.getHierarchyID(scheme, null);
+		System.out.println("Hierarchy ID: " + hierarchyID);
+
+		hmap = test.getSubconcepts(scheme, version, code);
+		test.printTree(hmap);
+
 
 	}
 }
