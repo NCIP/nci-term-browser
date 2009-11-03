@@ -401,9 +401,8 @@
 
       tree.draw();
       for (var i=0; i < childNodes.length; i++) {
-  var childnodeInfo = childNodes[i];
-  
-  addTreeBranch(ontology_node_id, newNode, childnodeInfo);
+         var childnodeInfo = childNodes[i];
+         addTreeBranch(ontology_node_id, newNode, childnodeInfo);
       }
     }
     YAHOO.util.Event.addListener(window, "load", init);
@@ -438,10 +437,6 @@ String hierarchy_dictionary = request.getParameter("dictionary");
 String hierarchy_schema = request.getParameter("schema");
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
 String hierarchy_version = request.getParameter("version");
-
-System.out.println("*** hierarchy.jsp dictionary: " + hierarchy_dictionary);
-System.out.println("*** hierarchy.jsp schema: " + hierarchy_schema);
-System.out.println("*** hierarchy.jsp version: " + hierarchy_version);
 
 if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {  
 %>
@@ -498,11 +493,6 @@ if (ontology_display_name == null) {
     ontology_display_name = request.getParameter("dictionary");
 }
 
-
-
-              //String ontology_display_name = HTTPUtils.cleanXSS((String)request.getParameter("dictionary"));
-              //String schema = HTTPUtils.cleanXSS((String)request.getParameter("schema"));
-              //String version = HTTPUtils.cleanXSS((String)request.getParameter("version"));
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />

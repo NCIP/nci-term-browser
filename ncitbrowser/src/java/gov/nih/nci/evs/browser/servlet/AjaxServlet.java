@@ -45,6 +45,7 @@ import org.apache.log4j.Logger;
 
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 import static gov.nih.nci.evs.browser.common.Constants.*;
+import gov.nih.nci.evs.browser.utils.DataUtils;
 
 public final class AjaxServlet extends HttpServlet {
 
@@ -135,6 +136,11 @@ public final class AjaxServlet extends HttpServlet {
 				JSONObject json = new JSONObject();
 				JSONArray nodesArray = null;
 				try {
+
+// for HL7 (temporary fix)
+ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
+
+
 					nodesArray = CacheController.getInstance().getSubconcepts(
 							ontology_display_name, null, node_id);
 					if (nodesArray != null) {
