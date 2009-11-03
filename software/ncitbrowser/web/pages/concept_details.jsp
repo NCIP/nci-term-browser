@@ -184,22 +184,22 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
 Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
 if (visitedConcepts == null) {
     visitedConcepts = new Vector();
-    
-    
 }
+
+
+for (int lcv=0; lcv<visitedConcepts.size(); lcv++) {
+   String visitedConcept = (String) visitedConcepts.elementAt(lcv);
+   System.out.println("(" + lcv + ") " + visitedConcept);
+}
+
+
 String localCodingSchemeName = DataUtils.getLocalName(tg_dictionary_0); 
-
 String visitedConceptStr = localCodingSchemeName + "|" + code + "|" + name;
-
-System.out.println("(*) visitedConceptStr: " + visitedConceptStr);
-
 if (!visitedConcepts.contains(visitedConceptStr)) {
-
-System.out.println("(*) Add visitedConceptStr: " + visitedConceptStr);
-
 	visitedConcepts.add(visitedConceptStr);
+	request.getSession().removeAttribute("visitedConcepts");
+	request.getSession().setAttribute("visitedConcepts", visitedConcepts);	
 } 
-request.getSession().setAttribute("visitedConcepts", visitedConcepts);
           
           if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
           %>
