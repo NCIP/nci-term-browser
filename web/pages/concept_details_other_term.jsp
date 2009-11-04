@@ -75,6 +75,9 @@
                   <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
        <%
           } else {
+          
+System.out.println("Concept Details vocabularynamelong "  + vocabularynamelong + " " + vocabularynamelong.length());         
+          
         %>
 	  <div class="vocabularynamebanner">
 		  <div class="vocabularynameshort"><%=shortName%></div>
@@ -103,18 +106,13 @@
         <!-- Page content -->
         <div class="pagecontent">
           <%
-            //String dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
             String code = null;
             String type = null;
 
             String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("singleton"));
             if (singleton != null && singleton.compareTo("true") == 0) {
-              //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
-              //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
-
               code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
             } else {
-              //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
               code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
               type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             }
@@ -136,6 +134,10 @@
 
             String vers = null;
             String ltag = null;
+            
+System.out.println("Concept Details getConceptByCode "  + dictionary + " " + dictionary.length());         
+System.out.println("Concept Details getConceptByCode "  + code + " " + code.length());         
+            
             c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 
             if (c != null) {

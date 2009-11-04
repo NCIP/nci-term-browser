@@ -115,6 +115,7 @@
         var ontology_source = null;//document.pg_form.ontology_source.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=build_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
 
+        showTreeDrawingStatus();
       } 
     }
 
@@ -250,6 +251,12 @@
       treeStatusDiv.render();
     }
 
+    function showTreeDrawingStatus() {
+      treeStatusDiv.setBody("<img src='<%=basePath%>/images/loading.gif'/> <span class='instruction_text'>Drawing tree ...</span>");
+      treeStatusDiv.show();
+      treeStatusDiv.render();
+    }
+    
     function showSearchingTreeStatus() {
       treeStatusDiv.setBody("<img src='<%=basePath%>/images/loading.gif'/> <span class='instruction_text'>Searching tree... Please wait.</span>");
       treeStatusDiv.show();
@@ -356,7 +363,6 @@
       if (ontology_display_name!='') {
         resetEmptyRoot();
 
-        //showTreeLoadingStatus();
         showSearchingTreeStatus();
         var ontology_source = null;//document.pg_form.ontology_source.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=search_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
