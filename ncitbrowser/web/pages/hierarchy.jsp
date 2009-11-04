@@ -114,8 +114,6 @@
         showTreeLoadingStatus();
         var ontology_source = null;//document.pg_form.ontology_source.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=build_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
-
-        showTreeDrawingStatus();
       } 
     }
 
