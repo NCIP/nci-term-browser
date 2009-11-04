@@ -57,11 +57,19 @@
             String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("singleton"));
 
 dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+
+System.out.println("(1) Concept Details dictionary "  + dictionary + " " + dictionary.length());         
+
             
             if (dictionary != null) {
 dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
 dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
 dictionary = DataUtils.getCodingSchemeName( dictionary ); 
+
+
+System.out.println("(2) Concept Details dictionary "  + dictionary + " " + dictionary.length());         
+
+
 request.getSession().setAttribute("dictionary", dictionary);
                 
             } else {
@@ -78,7 +86,11 @@ request.getSession().setAttribute("dictionary", dictionary);
 
 
 
-	code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+	//code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+code = (String) request.getParameter("code");	
+System.out.println("(3) Concept Details code "  + code + " " + code.length());         
+	
+	
 	if (code == null) {
 		Concept con = (Concept) request.getSession().getAttribute("concept");
 		if (con != null) {
@@ -138,6 +150,10 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
 
 	String vers = null;
 	String ltag = null;
+
+System.out.println("(4) Concept Details dictionary "  + dictionary + " " + dictionary.length());         
+System.out.println("(5) Concept Details code "  + code + " " + code.length());         
+
 
 	c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 
