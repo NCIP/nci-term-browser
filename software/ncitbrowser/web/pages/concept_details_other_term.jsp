@@ -50,6 +50,10 @@
        <%
        
           String dictionary = (String) request.getAttribute("dictionary");
+
+ System.out.println("*** concept details dictionary " + dictionary);         
+          
+          
           if (dictionary == null) {
               //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
               dictionary = (String) request.getParameter("dictionary");
@@ -75,6 +79,9 @@
                   <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
        <%
           } else {
+          
+ System.out.println("*** concept details dictionary " + dictionary);         
+          
           
         %>
 	  <div class="vocabularynamebanner">
