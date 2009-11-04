@@ -516,15 +516,13 @@ public class TreeUtils {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static HashMap getSubconcepts(String scheme, String version, String code) {
-/*
 		if (scheme.compareTo("NCI Thesaurus") == 0) {
 		    return getAssociatedConcepts(scheme, version, code,	"subClassOf", false);
 		}
-*/
+
 		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
 		if (version != null)
 			csvt.setVersion(version);
-
 		try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
@@ -536,20 +534,19 @@ public class TreeUtils {
 			Mappings mappings = cs.getMappings();
 			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
 			if (hierarchies == null || hierarchies.length == 0) return null;
+
 		    SupportedHierarchy hierarchyDefn = hierarchies[0];
 			String hier_id = hierarchyDefn.getLocalId();
-/*
-			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
-			String assocName = associationsToNavigate[0];
-*/
-            String assocName = hier_id;
 
+			//String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
+			String assocName = hier_id;//associationsToNavigate[0];
 			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
 			return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
 		} catch (Exception ex) {
 			return null;
 		}
 	}
+
 
 	public static HashMap getSuperconcepts(String scheme, String version, String code) {
 		/*
@@ -670,6 +667,128 @@ public class TreeUtils {
         return temp;
     }
 
+/*
+	public static HashMap getAssociatedConcepts(String scheme, String version, String code, String assocName, boolean direction) {
+		HashMap hmap = new HashMap();
+		TreeItem ti = null;
+		long ms = System.currentTimeMillis();
+
+		Set<String> codesToExclude = Collections.EMPTY_SET;
+
+		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		if (version != null)
+			csvt.setVersion(version);
+		ResolvedConceptReferenceList matches = null;
+		Vector v = new Vector();
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+					.getGenericExtension("LexBIGServiceConvenienceMethods");
+			lbscm.setLexBIGService(lbSvc);
+
+			String name = getCodeDescription(lbSvc, scheme, csvt, code);
+			ti = new TreeItem(code, name);
+			ti.expandable = false;
+
+			CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+			ConceptReference focus = Constructors.createConceptReference(code,
+					scheme);
+			cng = cng.restrictToAssociations(Constructors
+					.createNameAndValueList(assocName), null);
+			boolean associationsNavigatedFwd = direction;
+
+            // To remove anonymous classes (KLO, 091009), the resolveCodedEntryDepth parameter cannot be set to -1.
+
+			ResolvedConceptReferenceList branch = null;
+			try {
+				branch = cng.resolveAsList(focus,
+					associationsNavigatedFwd,
+					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
+					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
+
+			} catch (Exception e) {
+				System.out.println("TreeUtils getAssociatedConcepts throws exceptions.");
+				return null;
+			}
+
+			for (Iterator<ResolvedConceptReference> nodes = branch
+					.iterateResolvedConceptReference(); nodes.hasNext();) {
+				ResolvedConceptReference node = nodes.next();
+				AssociationList childAssociationList = null;
+
+				//AssociationList childAssociationList = associationsNavigatedFwd ? node.getSourceOf(): node.getTargetOf();
+
+				if (associationsNavigatedFwd) {
+					childAssociationList = node.getSourceOf();
+				} else {
+					childAssociationList = node.getTargetOf();
+				}
+
+                if (childAssociationList != null) {
+				// Process each association defining children ...
+					for (Iterator<Association> pathsToChildren = childAssociationList
+							.iterateAssociation(); pathsToChildren.hasNext();) {
+						Association child = pathsToChildren.next();
+						//KLO 091009 remove anonomous nodes
+
+						child = processForAnonomousNodes(child);
+
+
+						String childNavText = getDirectionalLabel(lbscm, scheme,
+								csvt, child, associationsNavigatedFwd);
+
+						// Each association may have multiple children ...
+						AssociatedConceptList branchItemList = child
+								.getAssociatedConcepts();
+
+
+
+						List child_list = new ArrayList();
+						for (Iterator<AssociatedConcept> branchNodes = branchItemList
+								.iterateAssociatedConcept(); branchNodes.hasNext();) {
+							AssociatedConcept branchItemNode = branchNodes.next();
+							child_list.add(branchItemNode);
+						}
+
+						SortUtils.quickSort(child_list);
+
+						for (int i = 0; i < child_list.size(); i++) {
+							AssociatedConcept branchItemNode = (AssociatedConcept) child_list
+									.get(i);
+							String branchItemCode = branchItemNode.getConceptCode();
+							// Add here if not in the list of excluded codes.
+							// This is also where we look to see if another level
+							// was indicated to be available.  If so, mark the
+							// entry with a '+' to indicate it can be expanded.
+							if (!codesToExclude.contains(branchItemCode)) {
+								TreeItem childItem = new TreeItem(branchItemCode,
+										getCodeDescription(branchItemNode));
+								ti.expandable = true;
+								AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode
+										.getSourceOf()
+										: branchItemNode.getTargetOf();
+								if (grandchildBranch != null)
+									childItem.expandable = true;
+								ti.addChild(childNavText, childItem);
+							}
+						}
+					}
+				} else {
+					System.out.println("WARNING: childAssociationList == null.");
+				}
+			}
+			hmap.put(code, ti);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		System.out.println("Run time (milliseconds) getSubconcepts: "
+				+ (System.currentTimeMillis() - ms) + " to resolve ");
+		return hmap;
+	}
+
+*/
+
+
 	public static HashMap getAssociatedConcepts(String scheme, String version, String code, String assocName, boolean direction) {
 		HashMap hmap = new HashMap();
 		TreeItem ti = null;
@@ -711,7 +830,6 @@ public class TreeUtils {
 			try {
 				branch = cng.resolveAsList(focus,
 					associationsNavigatedFwd,
-					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
 					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
 
 			} catch (Exception e) {
@@ -797,6 +915,7 @@ public class TreeUtils {
 				+ (System.currentTimeMillis() - ms) + " to resolve ");
 		return hmap;
 	}
+
 
 	public HashMap getAssociationSources(String scheme, String version,
 			String code, String assocName) {
