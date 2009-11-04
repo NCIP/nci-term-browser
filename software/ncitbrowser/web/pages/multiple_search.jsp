@@ -110,7 +110,7 @@
                            %>
                               <a href="<%= request.getContextPath() %>"><%=label%></a>
                            <%
-                        } else if (scheme.compareTo("NCI MetaThesaurus") == 0) {
+                        } else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
                               String ncimurl = NCItBrowserProperties.getNCIM_URL();
                             if (ontologiesToSearchOn != null
                                && ontologiesToSearchOn.indexOf(label2) != -1) {
