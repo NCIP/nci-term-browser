@@ -76,8 +76,6 @@
        <%
           } else {
           
-System.out.println("Concept Details vocabularynamelong "  + vocabularynamelong + " " + vocabularynamelong.length());         
-          
         %>
 	  <div class="vocabularynamebanner">
 		  <div class="vocabularynameshort"><%=shortName%></div>
