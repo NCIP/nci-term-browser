@@ -2483,7 +2483,7 @@ System.out.println("Visited concepts: " + concept_vec.size());
 		return w;
 	}
 
-
+    // for HL7 fix
     public static String searchFormalName(String s) {
 		if (formalName2LocalNameHashMap.containsKey(s)) return s;
 		Iterator it = formalName2LocalNameHashMap.keySet().iterator();

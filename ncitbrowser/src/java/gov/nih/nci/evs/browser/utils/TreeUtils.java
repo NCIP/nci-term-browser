@@ -516,22 +516,11 @@ public class TreeUtils {
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static HashMap getSubconcepts(String scheme, String version, String code) {
-
-		//String hierarchicalAssoName = "subClassOf";
-		/* NCI Thesaurus
-		Vector hierarchicalAssoName_vec = getHierarchyAssociationId(scheme,
-				version);
-		if (hierarchicalAssoName_vec != null
-				&& hierarchicalAssoName_vec.size() > 0) {
-			hierarchicalAssoName = (String) hierarchicalAssoName_vec
-					.elementAt(0);
-			System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
-		}
-		*/
+/*
 		if (scheme.compareTo("NCI Thesaurus") == 0) {
 		    return getAssociatedConcepts(scheme, version, code,	"subClassOf", false);
 		}
-
+*/
 		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
 		if (version != null)
 			csvt.setVersion(version);
@@ -549,9 +538,11 @@ public class TreeUtils {
 			if (hierarchies == null || hierarchies.length == 0) return null;
 		    SupportedHierarchy hierarchyDefn = hierarchies[0];
 			String hier_id = hierarchyDefn.getLocalId();
-
+/*
 			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
 			String assocName = associationsToNavigate[0];
+*/
+            String assocName = hier_id;
 
 			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
 			return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
@@ -718,21 +709,10 @@ public class TreeUtils {
 
 			ResolvedConceptReferenceList branch = null;
 			try {
-
-/*
 				branch = cng.resolveAsList(focus,
 					associationsNavigatedFwd,
 					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
 					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
-*/
-
-
-				branch = cng.resolveAsList(focus,
-					associationsNavigatedFwd,
-					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
-					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
-
-
 
 			} catch (Exception e) {
 				System.out.println("TreeUtils getAssociatedConcepts throws exceptions.");
