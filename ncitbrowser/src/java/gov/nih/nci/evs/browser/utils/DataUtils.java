@@ -1771,25 +1771,35 @@ NCI Thesaurus:
                 .getGenericExtension("LexBIGServiceConvenienceMethods");
         lbscm.setLexBIGService(lbSvc);
 
-        ResolvedConceptReferenceList roots = lbscm.getHierarchyRoots(scheme,
-                csvt, hierarchyID);
+        ResolvedConceptReferenceList roots = lbscm.getHierarchyRoots(scheme, csvt, hierarchyID);
 
         for (int i = 0; i < roots.getResolvedConceptReferenceCount(); i++) {
-             ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
+			 ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
+			 //System.out.println("getHierarchyRoots rcr.getConceptCode(): " + rcr.getConceptCode());
+
+			 Concept c = rcr.getReferencedEntry();
+			 if (c != null) {
+				 rcr.setConceptCode(c.getEntityCode());
+			 } else {
+				 System.out.println("getHierarchyRoots rcr.getReferencedEntry() returns null.");
+			 }
+
              if (rcr.getEntityDescription() == null) {
+				 System.out.println("getHierarchyRoots rcr.getEntityDescription() == null.");
 				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
 				 if (name == null) name = rcr.getConceptCode();//HL7
 				 EntityDescription e = new EntityDescription();
 				 e.setContent(name);
 				 rcr.setEntityDescription(e);
 			 } else if (rcr.getEntityDescription().getContent() == null) {
+				 System.out.println("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
 				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
 				 if (name == null) name = rcr.getConceptCode();//HL7
 				 EntityDescription e = new EntityDescription();
 				 e.setContent(name);
 				 rcr.setEntityDescription(e);
 			 }
-		 }
+		}
 
         List list = ResolvedConceptReferenceList2List(roots);
         SortUtils.quickSort(list);
