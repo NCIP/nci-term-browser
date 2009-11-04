@@ -544,8 +544,15 @@ public class TreeUtils {
 			String hier_id = hierarchyDefn.getLocalId();
 
 			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
-			String assocName = hier_id;//associationsToNavigate[0];
+			//String assocName = hier_id;//associationsToNavigate[0];
+			String assocName = associationsToNavigate[0];
+
+			if (assocName.compareTo("part_of") == 0) assocName = "is_a";
+
 			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
+
+			if (assocName.compareTo("PAR") == 0) associationsNavigatedFwd = false;
+
 			return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
 		} catch (Exception ex) {
 			return null;
@@ -579,11 +586,16 @@ public class TreeUtils {
 			if (hierarchies == null || hierarchies.length == 0) return null;
 
 		    SupportedHierarchy hierarchyDefn = hierarchies[0];
-			String hier_id = hierarchyDefn.getLocalId();
-
 			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
-			String assocName = hier_id;//associationsToNavigate[0];
+			//String assocName = hier_id;//associationsToNavigate[0];
+			String assocName = associationsToNavigate[0];
+
+			if (assocName.compareTo("part_of") == 0) assocName = "is_a";
+
 			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
+
+			if (assocName.compareTo("PAR") == 0) associationsNavigatedFwd = false;
+
 			return getAssociatedConcepts(scheme, version, code, assocName, !associationsNavigatedFwd);
 		} catch (Exception ex) {
 			return null;
