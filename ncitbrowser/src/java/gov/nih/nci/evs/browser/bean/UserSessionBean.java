@@ -264,7 +264,6 @@ public class UserSessionBean extends Object {
                 request.getSession().setAttribute("type", "properties");
 
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
-
                 if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI%20Thesaurus") == 0) {
                     return "concept_details";
 
