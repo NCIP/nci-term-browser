@@ -520,9 +520,14 @@ public class TreeUtils {
 		    return getAssociatedConcepts(scheme, version, code,	"subClassOf", false);
 		}
 
+		else if (scheme.indexOf("MedDRA") != -1) {
+		    return getAssociatedConcepts(scheme, version, code,	"CHD", true);
+		}
+
 		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
 		if (version != null)
 			csvt.setVersion(version);
+
 		try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
@@ -538,7 +543,7 @@ public class TreeUtils {
 		    SupportedHierarchy hierarchyDefn = hierarchies[0];
 			String hier_id = hierarchyDefn.getLocalId();
 
-			//String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
+			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
 			String assocName = hier_id;//associationsToNavigate[0];
 			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
 			return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
@@ -549,12 +554,45 @@ public class TreeUtils {
 
 
 	public static HashMap getSuperconcepts(String scheme, String version, String code) {
-		/*
 		if (scheme.compareTo("NCI Thesaurus") == 0) {
 		    return getAssociatedConcepts(scheme, version, code,	"subClassOf", true);
 		}
-		*/
 
+		else if (scheme.indexOf("MedDRA") != -1) {
+		    return getAssociatedConcepts(scheme, version, code,	"CHD", false);
+		}
+
+		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		if (version != null)
+			csvt.setVersion(version);
+
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+					.getGenericExtension("LexBIGServiceConvenienceMethods");
+			lbscm.setLexBIGService(lbSvc);
+
+			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+			if (cs == null) return null;
+			Mappings mappings = cs.getMappings();
+			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
+			if (hierarchies == null || hierarchies.length == 0) return null;
+
+		    SupportedHierarchy hierarchyDefn = hierarchies[0];
+			String hier_id = hierarchyDefn.getLocalId();
+
+			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
+			String assocName = hier_id;//associationsToNavigate[0];
+			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
+			return getAssociatedConcepts(scheme, version, code, assocName, !associationsNavigatedFwd);
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+
+
+/*
+	public static HashMap getSuperconcepts(String scheme, String version, String code) {
 		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
 		if (version != null)
 			csvt.setVersion(version);
@@ -580,7 +618,7 @@ public class TreeUtils {
 			return null;
 		}
 	}
-
+*/
 
     public static String[] getAssociationsToNavigate(String scheme, String version) {
 		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
