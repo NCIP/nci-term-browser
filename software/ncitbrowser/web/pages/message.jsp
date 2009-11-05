@@ -31,23 +31,23 @@
         String msg_dictionary = (String) request.getSession().getAttribute("dictionary");
         if (msg_dictionary == null) {
         %>
-        	<%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
-        <%        
+          <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
+        <%
         } else if (msg_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
-        	<%@ include file="/pages/templates/content-header.xhtml" %>
-        <%	
-       	} else {
-       	        request.getSession().setAttribute("dictionary", msg_dictionary);
-       	%>
-       	        <%@ include file="/pages/templates/content-header1.xhtml" %>
-       	<%        
-       	}
-       	%>
-          
-          
-          
-          
+          <%@ include file="/pages/templates/content-header.xhtml" %>
+        <%
+        } else {
+                request.getSession().setAttribute("dictionary", msg_dictionary);
+        %>
+                <%@ include file="/pages/templates/content-header-other.xhtml" %>
+        <%
+        }
+        %>
+
+
+
+
       <!-- Page content -->
       <div class="pagecontent">
         <%

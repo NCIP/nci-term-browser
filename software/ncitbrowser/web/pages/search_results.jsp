@@ -36,30 +36,30 @@
     <!-- Main box -->
     <div id="main-area">
 
-<%      
+<%
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
 
 if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
-   
+
       <%@ include file="/pages/templates/content-header.xhtml" %>
-<%      
+<%
 } else {
 %>
-      <%@ include file="/pages/templates/content-header1.xhtml" %>
-<%      
+      <%@ include file="/pages/templates/content-header-other.xhtml" %>
+<%
 }
 %>
-      
+
       <!-- Page content -->
       <div class="pagecontent">
         <%
-        
+
           //HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
- 
+
           IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
-       
+
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
           String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
@@ -84,7 +84,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
           int iend = page_num * page_size;
           int istart = iend - page_size;
           int size = iteratorBean.getSize();
-          
+
           if (iend > size) iend = size;
           int num_pages = size / page_size;
           if (num_pages * page_size < size) num_pages++;
@@ -92,9 +92,9 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
           String iend_str = Integer.toString(iend);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
-          
+
         %>
-        
+
         <table width="700px">
           <tr>
             <table>
@@ -113,7 +113,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
                if (contains_warning_msg != null) {
                %>
                   <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>&nbsp;<%=contains_warning_msg%>
-               <%   
+               <%
                } else {
                %>
                   <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
@@ -126,7 +126,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
             <td class="textbody">
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <%
-                
+
                   List list = iteratorBean.getData(istart, iend);
                   Vector code_vec = new Vector();
                   for (int k=0; k<list.size(); k++) {
@@ -134,53 +134,53 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
                       code_vec.add(rcr.getConceptCode());
                   }
 
-                  Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);                 
+                  Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);
                   int i = -1;
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
-                      
+
                       String code = rcr.getConceptCode();
                       String name = rcr.getEntityDescription().getContent();
-                     
+
                       if (code.indexOf("@_A") == -1) {
                               i++;
-			      String con_status = null;
+            String con_status = null;
 
-			      if (status_vec.elementAt(i) != null) {
-				  con_status = (String) status_vec.elementAt(i);
-				  con_status = con_status.replaceAll("_", " ");
-			      } 
+            if (status_vec.elementAt(i) != null) {
+          con_status = (String) status_vec.elementAt(i);
+          con_status = con_status.replaceAll("_", " ");
+            }
 
-			      String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
+            String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
 
-			      if (i % 2 == 0) {
-				%>
-				  <tr class="dataRowDark">
-				<%
-			      } else {
-				%>
-				  <tr class="dataRowLight">
-				<%
-			      }
-			      %>
-				  <td class="dataCellText">
-				  <%
-				  if (con_status == null) {
-				  %>
-				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
-				  <%   
-				  } else {
-				  %>
-				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
-				  <%
-				  }
-				  %>
-				  </td>
-				</tr>
-			      <%
+            if (i % 2 == 0) {
+        %>
+          <tr class="dataRowDark">
+        <%
+            } else {
+        %>
+          <tr class="dataRowLight">
+        <%
+            }
+            %>
+          <td class="dataCellText">
+          <%
+          if (con_status == null) {
+          %>
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
+          <%
+          } else {
+          %>
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+          <%
+          }
+          %>
+          </td>
+        </tr>
+            <%
                       }
                   }
-                  
+
                 %>
               </table>
             </td>
