@@ -48,7 +48,7 @@
       <%@ include file="/pages/templates/sub-header.xhtml" %>
       <!-- Main box -->
       <div id="main-area">
-      
+
           <%
             String dictionary = null;
             String code = null;
@@ -63,52 +63,52 @@ dictionary = (String) request.getParameter("dictionary");
 if (dictionary == null) {
    dictionary = "NCI Thesaurus";
 }
-            
+
             if (dictionary != null) {
 dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
 dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
-dictionary = DataUtils.getCodingSchemeName( dictionary ); 
+dictionary = DataUtils.getCodingSchemeName( dictionary );
 
 
 request.getSession().setAttribute("dictionary", dictionary);
-                
+
             } else {
                 dictionary = (String) request.getSession().getAttribute("dictionary");
-            }    
+            }
 
             if (singleton != null && singleton.compareTo("true") == 0) {
 
- 		if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
-			dictionary = DataUtils.getCodingSchemeName(dictionary);
-		}
-             
-            } 
+    if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
+      dictionary = DataUtils.getCodingSchemeName(dictionary);
+    }
 
-code = (String) request.getParameter("code");	
-	
-	if (code == null) {
-		Concept con = (Concept) request.getSession().getAttribute("concept");
-		if (con != null) {
-		    code = con.getEntityCode();
-		    request.getSession().setAttribute("code", code);
-		    
-		} else {	
-	            code = (String) request.getSession().getAttribute("code");
-	        }
-	} 
-	
-	String active_code = (String) request.getSession().getAttribute("active_code");
+            }
+
+code = (String) request.getParameter("code");
+
+  if (code == null) {
+    Concept con = (Concept) request.getSession().getAttribute("concept");
+    if (con != null) {
+        code = con.getEntityCode();
+        request.getSession().setAttribute("code", code);
+
+    } else {
+              code = (String) request.getSession().getAttribute("code");
+          }
+  }
+
+  String active_code = (String) request.getSession().getAttribute("active_code");
 
 
-	if (active_code == null) {
-	    request.getSession().setAttribute("active_code", code);
-	} else {
-	   if (active_code.compareTo(code) != 0) {
-	       request.getSession().removeAttribute("RelationshipHashMap");
-	       request.getSession().setAttribute("active_code", code);
-	   }
-	}
-	
+  if (active_code == null) {
+      request.getSession().setAttribute("active_code", code);
+  } else {
+     if (active_code.compareTo(code) != 0) {
+         request.getSession().removeAttribute("RelationshipHashMap");
+         request.getSession().setAttribute("active_code", code);
+     }
+  }
+
 
 Boolean new_search = null;
 Object new_search_obj = request.getSession().getAttribute("new_search");
@@ -123,7 +123,7 @@ if (new_search_obj != null) {
 
 if (type == null) {
 type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
-            
+
             if (type == null) {
                 type = "properties";
             } else if (type.compareTo("properties") != 0 &&
@@ -140,53 +140,53 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
             if (dictionary.compareTo("NCI Thesaurus") != 0) {
                 term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
             }
-            
+
             String name = "";
             Concept c = null;
 
-	String vers = null;
-	String ltag = null;
+  String vers = null;
+  String ltag = null;
 
-	c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+  c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 
-	if (c != null) {
-	   request.getSession().setAttribute("concept", c);
-	   request.getSession().setAttribute("code", code);
-	   name = c.getEntityDescription().getContent();
+  if (c != null) {
+     request.getSession().setAttribute("concept", c);
+     request.getSession().setAttribute("code", code);
+     name = c.getEntityDescription().getContent();
 
-	} else {
-	   //name = "The server encountered an internal error that prevented it from fulfilling this request.";
-	   name = "ERROR: Invalid code - " + code + ".";
-	}
+  } else {
+     //name = "The server encountered an internal error that prevented it from fulfilling this request.";
+     name = "ERROR: Invalid code - " + code + ".";
+  }
 
         if (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0) {
-               
+
         %>
-        	<%@ include file="/pages/templates/content-header.xhtml" %>
-        <%	
-       	} else {
-      	        request.getSession().setAttribute("dictionary", dictionary);
-       	%>
-       	        <%@ include file="/pages/templates/content-header1.xhtml" %>
-       	<%        
-       	}
+          <%@ include file="/pages/templates/content-header.xhtml" %>
+        <%
+        } else {
+                request.getSession().setAttribute("dictionary", dictionary);
+        %>
+                <%@ include file="/pages/templates/content-header-other.xhtml" %>
+        <%
+        }
         String tg_dictionary_0 = dictionary;
         String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
         if (c != null) {
         request.getSession().setAttribute("type", type);
         request.getSession().setAttribute("singleton", "false");
 
-          %>      
-        
+          %>
+
         <!-- Page content -->
         <div class="pagecontent">
-        
+
 
 
       <table border="0" width="700px">
         <tr>
           <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
-          
+
           <%
 
 Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
@@ -201,14 +201,14 @@ for (int lcv=0; lcv<visitedConcepts.size(); lcv++) {
 }
 
 
-String localCodingSchemeName = DataUtils.getLocalName(tg_dictionary_0); 
+String localCodingSchemeName = DataUtils.getLocalName(tg_dictionary_0);
 String visitedConceptStr = localCodingSchemeName + "|" + code + "|" + name;
 if (!visitedConcepts.contains(visitedConceptStr)) {
-	visitedConcepts.add(visitedConceptStr);
-	request.getSession().removeAttribute("visitedConcepts");
-	request.getSession().setAttribute("visitedConcepts", visitedConcepts);	
-} 
-          
+  visitedConcepts.add(visitedConceptStr);
+  request.getSession().removeAttribute("visitedConcepts");
+  request.getSession().setAttribute("visitedConcepts", visitedConcepts);
+}
+
           if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
           %>
           <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
@@ -222,15 +222,15 @@ if (!visitedConcepts.contains(visitedConceptStr)) {
       </table>
 
       <hr>
-      
+
 
 <%
-	request.getSession().setAttribute("concept", c);
-	request.getSession().setAttribute("code", code);
+  request.getSession().setAttribute("concept", c);
+  request.getSession().setAttribute("code", code);
 
 %>
-      
-      
+
+
       <%@ include file="/pages/templates/typeLinks.xhtml" %>
       <div class="tabTableContentContainer">
           <%@ include file="/pages/templates/property.xhtml" %>
