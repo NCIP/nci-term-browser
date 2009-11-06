@@ -46,7 +46,7 @@
         <p>
           Please review the following License/Copyright statement for <b><%=scheme%></b>:
         </p>
-        <textarea cols="75" rows="15" readonly>
+        <textarea cols="75" rows="15" readonly align="left">
           <%=licenseStmt%>
         </textarea>
         <p>
