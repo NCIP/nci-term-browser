@@ -24,12 +24,12 @@
     String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
     String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
   %>
-  <%@ include file="/pages/templates/header.xhtml" %>
+  <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.xhtml" %>
+    <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-      <%@ include file="/pages/templates/content-header.xhtml" %>
+      <%@ include file="/pages/templates/content-header.jsp" %>
       <!-- Page content -->
       <div class="pagecontent">
         <!-- ======================================= -->
