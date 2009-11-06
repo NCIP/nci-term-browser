@@ -33,16 +33,16 @@
 
 
 <f:view>
-  <%@ include file="/pages/templates/header.xhtml" %>
+  <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.xhtml" %>
+    <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
       <form name="searchTerm" method="post" class="search-form-main-area">
 
         <input type="hidden" name="initial_search" value="true" />
 
-        <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
+        <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">

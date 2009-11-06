@@ -32,11 +32,11 @@
   %>
   <body>
     <f:view>
-      <%@ include file="/pages/templates/header.xhtml" %>
+      <%@ include file="/pages/templates/header.jsp" %>
       <div class="center-page">
-        <%@ include file="/pages/templates/sub-header.xhtml" %>
+        <%@ include file="/pages/templates/sub-header.jsp" %>
         <div id="main-area">
-          <%@ include file="/pages/templates/content-header.xhtml" %>
+          <%@ include file="/pages/templates/content-header.jsp" %>
           <div class="pagecontent">
             <div class="texttitle-blue">Contact Us</div>
             <hr></hr>

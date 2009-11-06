@@ -22,9 +22,9 @@
 %>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
-  <%@ include file="/pages/templates/header.xhtml" %>
+  <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.xhtml" %>
+    <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
 
@@ -33,16 +33,16 @@
         System.out.println("*** err_dictionary: " + err_dictionary);
         if (err_dictionary == null) {
         %>
-          <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
+          <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
         <%
         } else if (err_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
-          <%@ include file="/pages/templates/content-header.xhtml" %>
+          <%@ include file="/pages/templates/content-header.jsp" %>
         <%
         } else {
                 request.getSession().setAttribute("dictionary", err_dictionary);
         %>
-                <%@ include file="/pages/templates/content-header-other.xhtml" %>
+                <%@ include file="/pages/templates/content-header-other.jsp" %>
         <%
         }
         %>
