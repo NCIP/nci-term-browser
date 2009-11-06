@@ -10,18 +10,18 @@
     <div class="texttitle-blue">Welcome</div>
     </td>
     <td>
-    <div class="texttitle-blue-rightJust">Version: <%= voc_version%></div>
+    <div class="texttitle-blue-rightJust">Version: <%=voc_version%></div>
     </td>
   </tr>
 </table>
 <hr />
 <table border="0">
   <tr>
-    <td class="textbody"><%=voc_description%> <br>
+    <td class="textbody" width="407px" align="left" valign="top"><%=voc_description%> <br>
     <br>
     </td>
-    <td valign="top">
-    <table border="0">
+    <td valign="top" width="308px">
+    <table border="0" width="100%">
       <tr valign="top">
         <td width="10px"></td>
         <td><a href="http://evs.nci.nih.gov/" target="_blank"
