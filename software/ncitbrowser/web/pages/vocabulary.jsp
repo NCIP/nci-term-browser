@@ -52,9 +52,9 @@
         metadata_names.add(ele.getName());
       }
   %>
-  <%@ include file="/pages/templates/header.xhtml"%>
+  <%@ include file="/pages/templates/header.jsp"%>
   <div class="center-page"><%@ include
-    file="/pages/templates/sub-header.xhtml"%> <!-- Main box -->
+    file="/pages/templates/sub-header.jsp"%> <!-- Main box -->
 
   <div id="main-area">
   <%
@@ -147,7 +147,7 @@
     src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
     alt="SearchBox Top" /></div>
   <div class="searchbox"><%@ include
-    file="/pages/templates/searchForm.xhtml"%></div>
+    file="/pages/templates/searchForm.jsp"%></div>
   <div class="searchbox-bottom"><img
     src="<%=basePath%>/images/searchbox-bottom.gif" width="352"
     height="2" alt="SearchBox Bottom" /></div>
@@ -214,7 +214,7 @@
     onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
   Download </a> <%
   }
-  
+
  %> | <a href="#"
     onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
   View Hierarchy </a> <%
@@ -228,8 +228,8 @@
 
   </div>
   <!-- end Thesaurus, banner search area --> <!-- Quick links bar --> <%@ include
-    file="/pages/templates/quickLink.xhtml"%> <!-- end Quick links bar -->
-  <%@ include file="/pages/templates/welcome2.html"%>
+    file="/pages/templates/quickLink.jsp"%> <!-- end Quick links bar -->
+  <%@ include file="/pages/templates/welcome2.jsp"%>
   <!-- Page content --> <%
   if (v == null || v.size() == 0) {
  %> <i>Metadata not found.</i> <%

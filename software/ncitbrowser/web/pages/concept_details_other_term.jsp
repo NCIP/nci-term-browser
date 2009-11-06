@@ -42,15 +42,15 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
   <f:view>
-    <%@ include file="/pages/templates/header.xhtml" %>
+    <%@ include file="/pages/templates/header.jsp" %>
     <div class="center-page">
-      <%@ include file="/pages/templates/sub-header.xhtml" %>
+      <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
        <%
-       
+
           String dictionary = (String) request.getAttribute("dictionary");
-           
+
           if (dictionary == null) {
               //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
               dictionary = (String) request.getParameter("dictionary");
@@ -60,7 +60,7 @@
           if (dictionary != null) {
               shortName = DataUtils.getLocalName(dictionary);
           }
-          
+
           String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
           if (dictionary.compareTo("NCI Thesaurus") != 0) {
               term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
@@ -76,32 +76,32 @@
                   <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
        <%
           } else {
-        
-          
+
+
         %>
-	  <div class="vocabularynamebanner">
-		  <div class="vocabularynameshort"><%=shortName%></div>
-		  <div class="vocabularynamelong"><%=dictionary%></div>
-	  </div>
+    <div class="vocabularynamebanner">
+      <div class="vocabularynameshort"><%=shortName%></div>
+      <div class="vocabularynamelong"><%=dictionary%></div>
+    </div>
         <%
           }
         %>
           <div class="search-globalnav">
               <!-- Search box -->
               <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-              <div class="searchbox"><%@ include file="/pages/templates/searchForm.xhtml" %></div>
+              <div class="searchbox"><%@ include file="/pages/templates/searchForm.jsp" %></div>
               <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
               <!-- end Search box -->
               <!-- Global Navigation -->
 
-              <%@ include file="/pages/templates/menuBar.xhtml" %>
+              <%@ include file="/pages/templates/menuBar.jsp" %>
 
               <!-- end Global Navigation -->
           </div>
       </div>
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
-      <%@ include file="/pages/templates/quickLink.xhtml" %>
+      <%@ include file="/pages/templates/quickLink.jsp" %>
       <!-- end Quick links bar -->
         <!-- Page content -->
         <div class="pagecontent">
@@ -134,7 +134,7 @@
 
             String vers = null;
             String ltag = null;
-            
+
             c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 
             if (c != null) {
@@ -162,27 +162,27 @@ if (active_code == null) {
        request.getSession().setAttribute("active_code", code);
    }
 }
-	
-	
+
+
           %>
           <table border="0" width="700px">
             <tr>
               <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
               <%
-              
+
 visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
 if (visitedConcepts == null) {
     visitedConcepts = new Vector();
 }
-String localCodingSchemeName = DataUtils.getLocalName(dictionary); 
+String localCodingSchemeName = DataUtils.getLocalName(dictionary);
 String visitedConceptStr = localCodingSchemeName + "|" + code + "|" + name;
 if (!visitedConcepts.contains(visitedConceptStr)) {
-	visitedConcepts.add(visitedConceptStr);
-	request.getSession().removeAttribute("visitedConcepts");
-	request.getSession().setAttribute("visitedConcepts", visitedConcepts);	
-} 
-              
-              
+  visitedConcepts.add(visitedConceptStr);
+  request.getSession().removeAttribute("visitedConcepts");
+  request.getSession().setAttribute("visitedConcepts", visitedConcepts);
+}
+
+
               if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
               %>
               <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
@@ -195,11 +195,11 @@ if (!visitedConcepts.contains(visitedConceptStr)) {
             </tr>
           </table>
           <hr>
-          <%@ include file="/pages/templates/typeLinks.xhtml" %>
+          <%@ include file="/pages/templates/typeLinks.jsp" %>
           <div class="tabTableContentContainer">
-              <%@ include file="/pages/templates/property.xhtml" %>
-              <%@ include file="/pages/templates/relationship.xhtml" %>
-              <%@ include file="/pages/templates/synonym.xhtml" %>
+              <%@ include file="/pages/templates/property.jsp" %>
+              <%@ include file="/pages/templates/relationship.jsp" %>
+              <%@ include file="/pages/templates/synonym.jsp" %>
           </div>
               <%
               } else {

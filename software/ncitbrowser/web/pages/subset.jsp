@@ -29,12 +29,12 @@
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
-  <%@ include file="/pages/templates/header.xhtml" %>
+  <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.xhtml" %>
+    <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-      <%@ include file="/pages/templates/content-header.xhtml" %>
+      <%@ include file="/pages/templates/content-header.jsp" %>
       <!-- Page content -->
       <div class="pagecontent">
         <div class="texttitle-blue">NCI Thesaurus Subsets</div>

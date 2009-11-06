@@ -29,13 +29,13 @@
 
 <f:view>
 
-  <%@ include file="/pages/templates/header.xhtml" %>
+  <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.xhtml" %>
+    <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
       <form name="searchTerm" method="post" class="search-form-main-area">
-          <%@ include file="/pages/templates/content-header-termbrowser.xhtml" %>
+          <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
       </form>
       <!-- Page content -->
       <div class="pagecontent">
@@ -139,14 +139,14 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
 
                       String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
                       String short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-                      
+
                       Concept con = DataUtils.getConceptByCode(vocabulary_name, null, null, code);
                       if (con != null) {
                       String con_status = con.getStatus();
-                      
+
                       if (con_status != null) {
-                      	  con_status = con_status.replaceAll("_", " ");
-                      }                       
+                          con_status = con_status.replaceAll("_", " ");
+                      }
 
                       String vocabulary_name_encoded = null;
                       if (vocabulary_name != null) vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
@@ -164,7 +164,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           <%
                           if (con_status == null) {
                           %>
-                      
+
                           <td class="dataCellText">
                           <%
                           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
@@ -186,8 +186,8 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           <td class="dataCellText">
                             <%=short_vocabulary_name%>
                           </td>
-                          
-                          
+
+
                           <%
                           } else {
                           %>
@@ -213,12 +213,12 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           </td>
                           <td class="dataCellText">
                             <%=short_vocabulary_name%>
-                          </td>                          
-                          
+                          </td>
+
                           <%
                           }
                           %>
-                          
+
 
                         </tr>
                       <%
@@ -229,7 +229,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
             </td>
           </tr>
         </table>
-        <%@ include file="/pages/templates/pagination-termbrowser.xhtml" %>
+        <%@ include file="/pages/templates/pagination-termbrowser.jsp" %>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->
