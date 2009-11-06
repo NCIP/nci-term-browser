@@ -43,9 +43,9 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
   <f:view>
-    <%@ include file="/pages/templates/header.xhtml" %>
+    <%@ include file="/pages/templates/header.jsp" %>
     <div class="center-page">
-      <%@ include file="/pages/templates/sub-header.xhtml" %>
+      <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
 
@@ -162,12 +162,12 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
         if (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0) {
 
         %>
-          <%@ include file="/pages/templates/content-header.xhtml" %>
+          <%@ include file="/pages/templates/content-header.jsp" %>
         <%
         } else {
                 request.getSession().setAttribute("dictionary", dictionary);
         %>
-                <%@ include file="/pages/templates/content-header-other.xhtml" %>
+                <%@ include file="/pages/templates/content-header-other.jsp" %>
         <%
         }
         String tg_dictionary_0 = dictionary;
@@ -231,11 +231,11 @@ if (!visitedConcepts.contains(visitedConceptStr)) {
 %>
 
 
-      <%@ include file="/pages/templates/typeLinks.xhtml" %>
+      <%@ include file="/pages/templates/typeLinks.jsp" %>
       <div class="tabTableContentContainer">
-          <%@ include file="/pages/templates/property.xhtml" %>
-          <%@ include file="/pages/templates/relationship.xhtml" %>
-          <%@ include file="/pages/templates/synonym.xhtml" %>
+          <%@ include file="/pages/templates/property.jsp" %>
+          <%@ include file="/pages/templates/relationship.jsp" %>
+          <%@ include file="/pages/templates/synonym.jsp" %>
       </div>
           <%
           } else {

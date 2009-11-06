@@ -17,23 +17,23 @@
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
-  <%@ include file="/pages/templates/header.xhtml" %>
+  <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.xhtml" %>
+    <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-      <%@ include file="/pages/templates/content-header.xhtml" %>
+      <%@ include file="/pages/templates/content-header.jsp" %>
       <!-- Page content -->
       <div class="pagecontent">
         <%
           Vector v = (Vector) request.getAttribute("search_results");
-          
-	  if (v != null) {          
-		System.out.println("single search results: " + v.size());
-	  } else {
-	    System.out.println("single search results: v is NULL???");
-	  }
-          
+
+    if (v != null) {
+    System.out.println("single search results: " + v.size());
+    } else {
+      System.out.println("single search results: v is NULL???");
+    }
+
           String matchText = HTTPUtils.cleanXSS((String) request.getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getAttribute("match_size"));
           String page_string = HTTPUtils.cleanXSS((String) request.getAttribute("page_string"));
@@ -114,7 +114,7 @@
             </td>
           </tr>
         </table>
-        <%@ include file="/pages/templates/pagination.xhtml" %>
+        <%@ include file="/pages/templates/pagination.jsp" %>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->

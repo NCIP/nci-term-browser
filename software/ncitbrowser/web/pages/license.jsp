@@ -28,9 +28,9 @@
 %>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
-  <%@ include file="/pages/templates/header.xhtml" %>
+  <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.xhtml" %>
+    <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
       <!-- Thesaurus, banner search area -->
@@ -39,7 +39,7 @@
       </div>
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
-      <%@ include file="/pages/templates/quickLink.xhtml" %>
+      <%@ include file="/pages/templates/quickLink.jsp" %>
       <!-- end Quick links bar -->
       <!-- Page content -->
       <div class="pagecontent">
