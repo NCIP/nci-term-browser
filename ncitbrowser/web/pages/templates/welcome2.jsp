@@ -4,7 +4,6 @@
 <%
   String ncim_url_link = new DataUtils().getNCImURL();
 %>
-<div id="message" class="textbody">
 <table border="0" width="700px">
   <tr>
     <td>
@@ -72,4 +71,3 @@
     </td>
   </tr>
 </table>
-</div>
