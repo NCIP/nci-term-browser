@@ -95,12 +95,12 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
       <div class="vocabularynamelong"><%=scheme%></div>
     </div>
       <div class="search-globalnav">
-    <!-- Search box -->
-    <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-    <div class="searchbox"><%@ include file="/pages/templates/searchForm.jsp" %></div>
-    <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
-    <!-- end Search box -->
-    <!-- Global Navigation -->
+      <!-- Search box -->
+      <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
+      <div class="searchbox"><%@ include file="/pages/templates/searchForm.jsp" %></div>
+      <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
+      <!-- end Search box -->
+      <!-- Global Navigation -->
     <%
       v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
       Vector u1 = MetadataUtils.getMetadataValues(v, "description");
@@ -130,40 +130,40 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
       }
     %>
 
-<div class="global-nav">
-<%
-if (menubar_version == null) {
-%>
-  <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
-<%
-} else {
-%>
-  <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
-<%
-  }
-  if (download_site != null) {
-%>
-  | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-    Download
-  </a>
-<%
-}
-%>
-  | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-    View Hierarchy
-  </a>
-<%
-if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) {
-%>
-  | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
-<%
-}
-%>
+    <div class="global-nav">
+    <%
+    if (menubar_version == null) {
+    %>
+      <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
+    <%
+    } else {
+    %>
+      <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
+    <%
+      }
+      if (download_site != null) {
+    %>
+      | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+        Download
+      </a>
+    <%
+    }
+    %>
+      | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+        View Hierarchy
+      </a>
+    <%
+    if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) {
+    %>
+      | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
+    <%
+    }
+    %>
 
-  | <a href="<%= request.getContextPath() %>/pages/help.jsf">Help</a>
-</div>
+      | <a href="<%= request.getContextPath() %>/pages/help.jsf">Help</a>
+    </div>
     <!-- end Global Navigation -->
-      </div>
+  </div>
 
 </div>
 <!-- end Thesaurus, banner search area -->
@@ -171,10 +171,8 @@ if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) {
 <!-- Quick links bar -->
 <%@ include file="/pages/templates/quickLink.jsp" %>
 <!-- end Quick links bar -->
-
-
-<%@ include file="/pages/templates/welcome2.jsp" %>
-
+<div class="pagecontent">
+<%@ include file="/pages/templates/welcome-other.jsp" %>
 
       <!-- Page content -->
     <%
