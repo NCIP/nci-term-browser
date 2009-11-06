@@ -124,7 +124,7 @@
                            <%
                             }
                             %>
-                              <a href="http://ncim.nci.nih.gov" target="_blank"><%=label%></a>
+                              <a href="<%=ncimurl%>" target="_blank"><%=label%></a>
                            <%
                         } else {
                            if (ontologiesToSearchOn != null
