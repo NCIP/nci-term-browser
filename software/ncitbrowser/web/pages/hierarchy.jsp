@@ -114,7 +114,7 @@
         showTreeLoadingStatus();
         var ontology_source = null;//document.pg_form.ontology_source.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=build_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&ontology_source='+ontology_source,buildTreeCallback);
-      } 
+      }
     }
 
     function resetTree(ontology_node_id, ontology_display_name) {
@@ -174,7 +174,7 @@
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
 
       //load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=' + ontology_node_id,top.opener);
-      
+
       load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&code=' + ontology_node_id,top.opener);
 
     }
@@ -194,7 +194,7 @@
       var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
       //var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";
       //var ontology_display_name = document.pg_form.ontology_display_name.value;
-      
+
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
 
       if (ontology_node_id == null || ontology_node_id == "null")
@@ -254,7 +254,7 @@
       treeStatusDiv.show();
       treeStatusDiv.render();
     }
-    
+
     function showSearchingTreeStatus() {
       treeStatusDiv.setBody("<img src='<%=basePath%>/images/loading.gif'/> <span class='instruction_text'>Searching tree... Please wait.</span>");
       treeStatusDiv.show();
@@ -266,7 +266,7 @@
       treeStatusDiv.show();
       treeStatusDiv.render();
     }
-    
+
     function loadNodeData(node, fnLoadComplete) {
       var id = node.data.id;
 
@@ -334,7 +334,7 @@
             else {
               showPartialHierarchy();
               showConstructingTreeStatus();
-              
+
               for (var i=0; i < respObj.root_nodes.length; i++) {
                 var nodeInfo = respObj.root_nodes[i];
                 //var expand = false;
@@ -415,8 +415,8 @@
 </head>
 <body>
   <f:view>
-  
- 
+
+
     <div id="popupContainer">
       <!-- nci popup banner -->
       <div class="ncipopupbanner">
@@ -442,20 +442,21 @@ String hierarchy_schema = request.getParameter("schema");
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
 String hierarchy_version = request.getParameter("version");
 
-if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {  
+if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 %>
-        <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
+    <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
 <%
 } else {
      String hierarchy_shortName = DataUtils.getLocalName(hierarchy_schema);
 %>
-  <div class="vocabularynamebanner">
-	  <div class="vocabularynameshort"><%=hierarchy_shortName%></div>
-  </div>
+    <div>
+      <img src="<%=basePath%>/images/other_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
+      <div class="vocabularynamepopupshort"><%=hierarchy_shortName%></div>
+    </div>
 <%
 }
 %>
-        
+
         <div id="popupContentArea">
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
@@ -481,17 +482,17 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
             <div id="bd"></div>
           </div>
           <div id="treecontainer"></div>
-          
+
           <form id="pg_form">
             <%
               String ontology_node_id = HTTPUtils.cleanXSS((String)request.getParameter("code"));
-              
+
               //String ontology_display_name = hierarchy_dictionary;
-	      //String schema = hierarchy_schema;
-	      //String version = hierarchy_version;
+        //String schema = hierarchy_schema;
+        //String version = hierarchy_version;
 
 String schema = request.getParameter("schema");
-String version = request.getParameter("version");	      
+String version = request.getParameter("version");
 String ontology_display_name = request.getParameter("schema");
 if (ontology_display_name == null) {
     ontology_display_name = request.getParameter("dictionary");
@@ -502,7 +503,7 @@ if (ontology_display_name == null) {
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
             <input type="hidden" id="schema" name="schema" value="<%=schema%>" />
             <input type="hidden" id="version" name="version" value="<%=version%>" />
-            
+
           </form>
           <!-- End of Tree control content -->
         </div>
