@@ -342,16 +342,19 @@ public class TreeUtils {
 					// This is also where we look to see if another level
 					// was indicated to be available. If so, mark the
 					// entry with a '+' to indicate it can be expanded.
-					if (!codesToExclude.contains(branchItemCode)) {
-						TreeItem childItem = new TreeItem(branchItemCode,
-								getCodeDescription(branchItemNode));
-						AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode
-								.getSourceOf()
-								: branchItemNode.getTargetOf();
-						if (grandchildBranch != null)
-							childItem.expandable = true;
-						ti.addChild(childNavText, childItem);
-					}
+					//if (!branchItemNode.getReferencedEntry().getIsAnonymous()) {
+					  if (!branchItemCode.startsWith("@")) {
+						if (!codesToExclude.contains(branchItemCode)) {
+							TreeItem childItem = new TreeItem(branchItemCode,
+									getCodeDescription(branchItemNode));
+							AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode
+									.getSourceOf()
+									: branchItemNode.getTargetOf();
+							if (grandchildBranch != null)
+								childItem.expandable = true;
+							ti.addChild(childNavText, childItem);
+						}
+				    }
 				}
 			}
 		}
