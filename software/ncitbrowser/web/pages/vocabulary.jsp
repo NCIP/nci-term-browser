@@ -149,26 +149,6 @@
               <div class="banner"><a href="<%=basePath%>">
                 <img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" border="0"/></a>
               </div>
-              <table class="global-nav" border="0" height="94px" cellpadding="0" cellspacing="0">
-                <tr>
-                  <td align="left" valign="bottom">
-                    <% if (menubar_version == null) { %>
-                          <a href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
-                    <% } else { %>
-                          <a href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
-                    <% }
-                       if (download_site != null) {
-                    %>    | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-                          Download </a>
-                    <% } %>
-                    | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-                    View Hierarchy </a>
-                    <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
-                          | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>
-                    <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
-                  </td>
-                </tr>      
-              </table>  
             </div>
             <!-- end Thesaurus, banner search area -->
             <!-- Quick links bar -->
