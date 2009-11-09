@@ -920,7 +920,6 @@ public class TreeUtils {
 
 						child = processForAnonomousNodes(child);
 
-
 						String childNavText = getDirectionalLabel(lbscm, scheme,
 								csvt, child, associationsNavigatedFwd);
 
@@ -947,21 +946,24 @@ public class TreeUtils {
 							AssociatedConcept branchItemNode = (AssociatedConcept) child_list
 									.get(i);
 							String branchItemCode = branchItemNode.getConceptCode();
-							// Add here if not in the list of excluded codes.
-							// This is also where we look to see if another level
-							// was indicated to be available.  If so, mark the
-							// entry with a '+' to indicate it can be expanded.
-							if (!codesToExclude.contains(branchItemCode)) {
-								TreeItem childItem = new TreeItem(branchItemCode,
-										getCodeDescription(branchItemNode));
-								ti.expandable = true;
-								AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode
-										.getSourceOf()
-										: branchItemNode.getTargetOf();
-								if (grandchildBranch != null)
-									childItem.expandable = true;
-								ti.addChild(childNavText, childItem);
-							}
+
+							if (!branchItemCode.startsWith("@")) {
+								// Add here if not in the list of excluded codes.
+								// This is also where we look to see if another level
+								// was indicated to be available.  If so, mark the
+								// entry with a '+' to indicate it can be expanded.
+								if (!codesToExclude.contains(branchItemCode)) {
+									TreeItem childItem = new TreeItem(branchItemCode,
+											getCodeDescription(branchItemNode));
+									ti.expandable = true;
+									AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode
+											.getSourceOf()
+											: branchItemNode.getTargetOf();
+									if (grandchildBranch != null)
+										childItem.expandable = true;
+									ti.addChild(childNavText, childItem);
+								}
+						    }
 						}
 					}
 				} else {
