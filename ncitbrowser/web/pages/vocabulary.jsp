@@ -157,7 +157,7 @@
             <div class="pagecontent">
               <p>Please review the following License/Copyright statement for <b><%=scheme%></b>.
               </p>
-              <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%>]</textarea>
+              <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>
               <p>If and only if you agree to these terms/conditions, click the
               Accept button to proceed.</p>
               <p>
