@@ -482,8 +482,12 @@ public class CacheController
 			rootsArray = getRootConcepts(ontology_display_name, version, false);
 			try {
 				TreeUtils util = new TreeUtils();
+//testing KLO 110909
+				//HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
+				System.out.println("Calling util.getTreePathData2...");
+				HashMap hmap = util.getTreePathData2(ontology_display_name, null, node_id, maxLevel);
+				//util.printTree(hmap);
 
-				HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
 				Set keyset = hmap.keySet();
 				Object[] objs = keyset.toArray();
 				String code = (String) objs[0];
@@ -499,7 +503,11 @@ public class CacheController
 	    else {
 			try {
 				TreeUtils util = new TreeUtils();
-				HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id, maxLevel);
+//testing KLO 110909
+				System.out.println("Calling util.getTreePathData2...");
+				//HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id, maxLevel);
+				HashMap hmap = util.getTreePathData2(ontology_display_name, null, node_id, maxLevel);
+				//util.printTree(hmap);
 				Object[] objs = hmap.keySet().toArray();
 				String code = (String) objs[0];
 				TreeItem ti = (TreeItem) hmap.get(code);

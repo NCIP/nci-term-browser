@@ -1760,6 +1760,9 @@ NCI Thesaurus:
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         if (version != null)
             csvt.setVersion(version);
+
+        //HL7
+        scheme = searchFormalName(scheme);
         return getHierarchyRoots(scheme, csvt, hierarchyID);
     }
 
