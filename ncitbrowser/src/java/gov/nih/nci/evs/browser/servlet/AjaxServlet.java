@@ -191,8 +191,14 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				response.getWriter().write(json.toString());
 
+
+System.out.println("AjaxServlet.java dumping json.toString() ");
+
+
+				response.getWriter().write(json.toString());
+//KLO
+				response.getWriter().flush();
 
 
 				System.out.println("Run time (milliseconds): "
@@ -220,6 +226,7 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 			}
 
 			response.getWriter().write(json.toString());
+			//response.getWriter().flush();
 
 			System.out.println("Run time (milliseconds): "
 					+ (System.currentTimeMillis() - ms));

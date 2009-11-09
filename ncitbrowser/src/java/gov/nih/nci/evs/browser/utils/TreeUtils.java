@@ -515,6 +515,14 @@ public class TreeUtils {
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public boolean hasSubconcepts(String scheme, String version, String code) {
+		HashMap hmap = getSubconcepts(scheme, version, code);
+		if (hmap == null) return false;
+		TreeItem item = (TreeItem) hmap.get(code);
+		return item.expandable;
+
+	}
+
 	public static HashMap getSubconcepts(String scheme, String version, String code) {
 		if (scheme.compareTo("NCI Thesaurus") == 0) {
 		    return getAssociatedConcepts(scheme, version, code,	"subClassOf", false);
@@ -1347,6 +1355,153 @@ public class TreeUtils {
 			return null;
 		}
 	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void traverseUp(LexBIGService lbsvc,
+                           LexBIGServiceConvenienceMethods lbscm,
+                           java.lang.String codingScheme,
+						   CodingSchemeVersionOrTag versionOrTag,
+						   java.lang.String hierarchyID,
+						   java.lang.String conceptCode,
+						   TreeItem root,
+						   TreeItem ti,
+						   Set<String> codesToExclude,
+						   String[] associationsToNavigate,
+						   boolean associationsNavigatedFwd,
+						   Set<String> visited_links,
+						   HashMap<String, TreeItem> visited_nodes, int maxLevel, int currLevel) {
+
+		if (maxLevel != -1 && currLevel >= maxLevel) {
+			root.addChild("CHD", ti);
+			root.expandable = true;
+			return;
+		}
+
+	    boolean resolveConcepts = false;
+	    NameAndValueList associationQualifiers = null;
+		try {
+    	    AssociationList list = null;
+    	    list = lbscm.getHierarchyLevelPrev(codingScheme, versionOrTag, hierarchyID, conceptCode, resolveConcepts,
+    	                                                     associationQualifiers);
+            int parent_knt = 0;
+			if (list != null && list.getAssociationCount() > 0) {
+				Association[] associations = list.getAssociation();
+				for (int k=0; k<associations.length; k++) {
+					Association association = associations[k];
+					AssociatedConceptList acl = association.getAssociatedConcepts();
+					for (int i = 0; i < acl.getAssociatedConceptCount(); i++) {
+                        //child_knt = child_knt + acl.getAssociatedConceptCount();
+						// Determine the next concept in the branch and
+						// add a corresponding item to the tree.
+						AssociatedConcept concept = acl.getAssociatedConcept(i);
+						String parentCode = concept.getConceptCode();
+						String link = conceptCode + "|" + parentCode;
+                        if (!visited_links.contains(link)) {
+							visited_links.add(link);
+							//System.out.println(	getCodeDescription(concept) + "(" + parentCode + ")");
+							TreeItem branchItem = null;
+							if (visited_nodes.containsKey(parentCode)) {
+								branchItem = (TreeItem) visited_nodes.get(parentCode);
+							} else {
+						    	branchItem = new TreeItem(parentCode, getCodeDescription(concept));
+						    	branchItem.expandable = false;
+						    	visited_nodes.put(parentCode, branchItem);
+							}
+
+							try {
+								codesToExclude.add(conceptCode);
+								addChildren(branchItem, lbsvc,
+										lbscm, codingScheme,
+										versionOrTag,
+										parentCode,
+										codesToExclude,
+										associationsToNavigate,
+										associationsNavigatedFwd);
+						    } catch (Exception ex) {
+
+							}
+
+							branchItem.addChild("CHD", ti);
+							parent_knt++;
+
+							//ti.addChild("PAR", branchItem);
+							branchItem.expandable = true;
+
+						    traverseUp(lbsvc, lbscm, codingScheme, versionOrTag, hierarchyID, parentCode, root, branchItem, codesToExclude,
+						        associationsToNavigate, associationsNavigatedFwd, visited_links, visited_nodes, maxLevel, currLevel+1);
+						}
+ 				    }
+				}
+			}
+
+			if (parent_knt == 0) {
+				root.addChild("CHD", ti);
+				root.expandable = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+	public HashMap getTreePathData2(String scheme, String version, String code, int maxLevel) {
+		HashMap hmap = new HashMap();
+		TreeItem root = new TreeItem("<Root>", "Root node");
+		root.expandable = false;
+		long ms = System.currentTimeMillis();
+
+		Set<String> codesToExclude = new HashSet<String>();
+        HashMap<String, TreeItem> visited_nodes = new HashMap<String, TreeItem>();
+        Set<String> visited_links = new HashSet<String>();
+
+		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		if (version != null) csvt.setVersion(version);
+		ResolvedConceptReferenceList matches = null;
+		Vector v = new Vector();
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+					.getGenericExtension("LexBIGServiceConvenienceMethods");
+			lbscm.setLexBIGService(lbSvc);
+
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null) versionOrTag.setVersion(version);
+
+			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+			if (cs == null) return null;
+			Mappings mappings = cs.getMappings();
+			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
+			if (hierarchies == null || hierarchies.length == 0) return null;
+			SupportedHierarchy hierarchyDefn = hierarchies[0];
+			String hierarchyID = hierarchyDefn.getLocalId();
+			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
+			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
+
+			String name = getCodeDescription(lbSvc, scheme, csvt, code);
+			TreeItem ti = new TreeItem(code, name);
+			//ti.expandable = false;
+			ti.expandable = hasSubconcepts(scheme, version, code);
+
+			System.out.println(name + "(" + code + ")");
+
+			traverseUp(lbSvc, lbscm, scheme, csvt, hierarchyID, code, root, ti, codesToExclude, associationsToNavigate, associationsNavigatedFwd, visited_links, visited_nodes, maxLevel, 0);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			System.out.println("Run time (milliseconds): "
+					+ (System.currentTimeMillis() - ms) + " to resolve "
+					//+ pathsResolved + " paths from root.");
+					+ " paths from root.");
+		}
+
+		hmap.put(code, root);
+		return hmap;
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
