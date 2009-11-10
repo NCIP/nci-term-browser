@@ -139,7 +139,6 @@ public class UserSessionBean extends Object {
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
-
         boolean ranking = true;
 
         request.getSession().setAttribute("ranking", Boolean.toString(ranking));
@@ -230,6 +229,7 @@ public class UserSessionBean extends Object {
             int size = iteratorBean.getSize();
             if (size > 1) {
 
+
                 request.getSession().setAttribute("search_results", v);
 
                 String match_size = Integer.toString(size);;//Integer.toString(v.size());
@@ -246,7 +246,6 @@ public class UserSessionBean extends Object {
                 int pageNumber = 1;
                 List list = iteratorBean.getData(1);
                 ResolvedConceptReference ref = (ResolvedConceptReference) list.get(0);
-
                 Concept c = null;
                 if (ref == null) {
                     String msg = "Error: Null ResolvedConceptReference encountered.";
@@ -254,17 +253,37 @@ public class UserSessionBean extends Object {
                     return "message";
 
                 } else {
+					if (ref.getConceptCode() == null) {
+						String message = "Code has not been assigned to the concept matches with '" + matchText + "'";
+						System.out.println("WARNING: " + message);
+						request.getSession().setAttribute("message", message);
+						request.getSession().setAttribute("dictionary", scheme);
+						return "message";
+					} else {
+request.getSession().setAttribute("code", ref.getConceptCode());
+					}
+
                     c = ref.getReferencedEntry();
+
                     if (c == null) {
                         c = DataUtils.getConceptByCode(scheme, null, null, ref.getConceptCode());
-                    }
+                        if (c == null) {
+							String message = "Unable to find the concept with a code '" + ref.getConceptCode() + "'";
+							System.out.println("WARNING: " + message);
+							request.getSession().setAttribute("message", message);
+							request.getSession().setAttribute("dictionary", scheme);
+							return "message";
+					    }
+                    } else {
+
+request.getSession().setAttribute("code", c.getEntityCode());
+
+					}
                 }
 
-                request.getSession().setAttribute("code", ref.getConceptCode());
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
-
 
                 if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI%20Thesaurus") == 0) {
                    return "concept_details";

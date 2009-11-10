@@ -93,13 +93,15 @@ code = (String) request.getParameter("code");
         request.getSession().setAttribute("code", code);
 
     } else {
-              code = (String) request.getSession().getAttribute("code");
-          }
+        code = (String) request.getSession().getAttribute("code");
+    }
+    if (code == null) {
+	System.out.println("WARNING: concept_details.jsp code: " + code);
+    }
   }
 
+
   String active_code = (String) request.getSession().getAttribute("active_code");
-
-
   if (active_code == null) {
       request.getSession().setAttribute("active_code", code);
   } else {
