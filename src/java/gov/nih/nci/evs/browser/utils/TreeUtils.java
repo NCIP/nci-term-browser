@@ -564,7 +564,8 @@ public class TreeUtils {
 
 			if (assocName.compareTo("PAR") == 0) associationsNavigatedFwd = false;
 
-			return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
+			//return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
+			return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, assocName, associationsNavigatedFwd);
 		} catch (Exception ex) {
 			return null;
 		}
@@ -849,8 +850,20 @@ public class TreeUtils {
 
 */
 
-
 	public static HashMap getAssociatedConcepts(String scheme, String version, String code, String assocName, boolean direction) {
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+					.getGenericExtension("LexBIGServiceConvenienceMethods");
+			lbscm.setLexBIGService(lbSvc);
+			return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, assocName, direction);
+		} catch (Exception ex) {
+            return null;
+		}
+    }
+
+	public static HashMap getAssociatedConcepts(LexBIGService lbSvc, LexBIGServiceConvenienceMethods lbscm,
+	                                            String scheme, String version, String code, String assocName, boolean direction) {
 		HashMap hmap = new HashMap();
 		TreeItem ti = null;
 		long ms = System.currentTimeMillis();
@@ -863,10 +876,12 @@ public class TreeUtils {
 		ResolvedConceptReferenceList matches = null;
 		Vector v = new Vector();
 		try {
+			/*
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
 					.getGenericExtension("LexBIGServiceConvenienceMethods");
 			lbscm.setLexBIGService(lbSvc);
+			*/
 
 			String name = getCodeDescription(lbSvc, scheme, csvt, code);
 			ti = new TreeItem(code, name);
