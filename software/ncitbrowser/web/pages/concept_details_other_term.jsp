@@ -111,9 +111,9 @@
 
             String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("singleton"));
             if (singleton != null && singleton.compareTo("true") == 0) {
-              code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
+              //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
             } else {
-              code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+              //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
               type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             }
             if (dictionary == null) {
@@ -143,6 +143,7 @@
                name = c.getEntityDescription().getContent();
                //request.getSession().removeAttribute("RelationshipHashMap");
             } else {
+               request.getSession().setAttribute("dictionary", dictionary);
                name = "ERROR: Invalid code - " + code + ".";
             }
 
