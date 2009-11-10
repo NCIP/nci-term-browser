@@ -1176,20 +1176,12 @@ System.out.println("\n\tActive? " + isActive);
 			if (property_name.compareTo(p.getPropertyName()) == 0) {
 				String t = p.getValue().getContent();
 
-//System.out.println("property_name: " + property_name);
-//System.out.println("property_value p.getValue().getContent(): " + t);
-
 				Source[] sources = p.getSource();
 				if (sources != null && sources.length > 0) {
 					Source src = sources[0];
 					t = t + "|" + src.getContent();
 
-//System.out.println("src.getContent(): " + src.getContent());
-
 				}
-
-//System.out.println("getPropertyValues return : " + t);
-
 				v.add(t);
 			}
 		}
@@ -1374,15 +1366,10 @@ System.out.println("\n\tActive? " + isActive);
             matches = null;
             try {
 
-//KLO testing
-
             CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
             propertyTypes[0] = PropertyType.PRESENTATION;
             int resolveCodedEntryDepth = 0;
 
-			//matches = cng.resolveAsList(Constructors.createConceptReference(code, scheme), true, true, resolveCodedEntryDepth, 1, null, propertyTypes, null, -1);
-//ResolvedConceptReferenceList 	resolveAsList(ConceptReference graphFocus, boolean resolveForward, boolean resolveBackward,
-//int resolveCodedEntryDepth, int resolveAssociationDepth, LocalNameList propertyNames, CodedNodeSet.PropertyType[] propertyTypes, SortOptionList sortOptions, LocalNameList filterOptions, int maxToReturn, boolean keepLastAssociationLevelUnresolved)
                matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
                    //true, true, 1, 1, noopList_, null, null, null, -1, false);
@@ -2277,9 +2264,6 @@ NCI Thesaurus:
 
 
     public static String getVisitedConceptLink(Vector concept_vec) {
-
-System.out.println("Visited concepts: " + concept_vec.size());
-
 		StringBuffer strbuf = new StringBuffer();
 		String line = "<A href=\"#\" onmouseover=\"Tip('";
         strbuf.append(line);
