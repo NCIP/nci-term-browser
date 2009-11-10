@@ -1088,7 +1088,6 @@ public class SearchUtils {
 		} else {
 			try {
 				int size = iterator.numberRemaining();
-				System.out.println("*** number of matches: " + size);
 				if (size == 0) {
 					iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
 				}
@@ -1215,7 +1214,6 @@ public class SearchUtils {
 		} else {
 			try {
 				int size = iterator.numberRemaining();
-				System.out.println("*** number of matches " + size);
 				if (size == 0) {
 					iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
 				}
@@ -1254,8 +1252,6 @@ public class SearchUtils {
                     iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
                     int size = iterator.numberRemaining();
-                    System.out.println("cns.resolve size: " + size);
-
                 }  catch (Exception e) {
                     System.out.println("ERROR: cns.resolve throws exceptions.");
                 }

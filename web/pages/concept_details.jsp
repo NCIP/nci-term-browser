@@ -195,11 +195,6 @@ if (visitedConcepts == null) {
 }
 
 
-for (int lcv=0; lcv<visitedConcepts.size(); lcv++) {
-   String visitedConcept = (String) visitedConcepts.elementAt(lcv);
-   System.out.println("(" + lcv + ") " + visitedConcept);
-}
-
 
 String localCodingSchemeName = DataUtils.getLocalName(tg_dictionary_0);
 String visitedConceptStr = localCodingSchemeName + "|" + code + "|" + name;
