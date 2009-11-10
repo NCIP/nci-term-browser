@@ -895,18 +895,14 @@ public class TreeUtils {
 			boolean associationsNavigatedFwd = direction;
 
             // To remove anonymous classes (KLO, 091009), the resolveCodedEntryDepth parameter cannot be set to -1.
-			/*
-			ResolvedConceptReferenceList branch = cng.resolveAsList(focus,
-					associationsNavigatedFwd,
-					//!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, true);
-					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
-            */
+            // Alternative -- use code to determine whether the class is anonymous
 
 			ResolvedConceptReferenceList branch = null;
 			try {
 				branch = cng.resolveAsList(focus,
 					associationsNavigatedFwd,
-					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
+					//!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
+					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
 
 			} catch (Exception e) {
 				System.out.println("TreeUtils getAssociatedConcepts throws exceptions.");
