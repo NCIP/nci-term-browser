@@ -511,6 +511,10 @@ System.out.println("\n\tActive? " + isActive);
     public static Concept getConceptByCode(String codingSchemeName,
             String vers, String ltag, String code) {
         try {
+			if (code == null) {
+				System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+				return null;
+			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
 
 			String formalname = (String) localName2FormalNameHashMap.get(codingSchemeName);

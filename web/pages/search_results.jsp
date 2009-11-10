@@ -139,6 +139,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
                       String code = rcr.getConceptCode();
+
                       String name = rcr.getEntityDescription().getContent();
 
                       //if (code.indexOf("@_A") == -1) {

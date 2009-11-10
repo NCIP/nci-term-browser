@@ -29,9 +29,9 @@
           Vector v = (Vector) request.getAttribute("search_results");
 
     if (v != null) {
-    System.out.println("single search results: " + v.size());
+         System.out.println("single search results: " + v.size());
     } else {
-      System.out.println("single search results: v is NULL???");
+         System.out.println("single search results: v is NULL???");
     }
 
           String matchText = HTTPUtils.cleanXSS((String) request.getAttribute("matchText"));
