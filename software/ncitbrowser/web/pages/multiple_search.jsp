@@ -124,7 +124,9 @@
                            <%
                             }
                             %>
-                              <a href="<%=ncimurl%>" target="_blank"><%=label%></a>
+                              <a href="<%=ncimurl%>" target="_blank"><%=label%>
+                                <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=label%>" />
+                              </a>
                            <%
                         } else {
                            if (ontologiesToSearchOn != null
@@ -143,7 +145,7 @@
                               </a>
                            <%
                         }
-                      %>
+                      %>                          
                         </td>
                       </tr>
                      <%
@@ -169,11 +171,9 @@
                   </h:commandButton></td>
                 </tr>
             </table>
-
 <%
 }
 %>
-
           </div> <!-- end tabTableContentContainer -->
           <%@ include file="/pages/templates/nciFooter.html"%>
         </div> <!-- end Page content -->
