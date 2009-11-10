@@ -138,20 +138,19 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
                   int i = -1;
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
-
                       String code = rcr.getConceptCode();
                       String name = rcr.getEntityDescription().getContent();
 
-                      if (code.indexOf("@_A") == -1) {
-                              i++;
-            String con_status = null;
+                      //if (code.indexOf("@_A") == -1) {
+                      if (code != null && code.indexOf("@") == -1) {
+                          i++;
+            		  String con_status = null;
+			  if (status_vec != null && status_vec.elementAt(i) != null) {
+			     con_status = (String) status_vec.elementAt(i);
+			     con_status = con_status.replaceAll("_", " ");
+			  }
 
-            if (status_vec.elementAt(i) != null) {
-          con_status = (String) status_vec.elementAt(i);
-          con_status = con_status.replaceAll("_", " ");
-            }
-
-            String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
+                          String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
 
             if (i % 2 == 0) {
         %>
