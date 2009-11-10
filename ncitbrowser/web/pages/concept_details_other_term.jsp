@@ -112,8 +112,10 @@
             String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("singleton"));
             if (singleton != null && singleton.compareTo("true") == 0) {
               //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
+              code = (String) request.getSession().getAttribute("code");
             } else {
               //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+              code = (String) request.getSession().getAttribute("code");
               type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
             }
             if (dictionary == null) {
