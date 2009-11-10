@@ -139,6 +139,7 @@ public class UserSessionBean extends Object {
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
+
         boolean ranking = true;
 
         request.getSession().setAttribute("ranking", Boolean.toString(ranking));
@@ -262,10 +263,11 @@ public class UserSessionBean extends Object {
                 request.getSession().setAttribute("code", ref.getConceptCode());
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
-
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
+
+
                 if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI%20Thesaurus") == 0) {
-                    return "concept_details";
+                   return "concept_details";
 
                 } else if (scheme.indexOf("NCI Thesaurus") != -1 || scheme.indexOf("NCI%20Thesaurus") != -1 ) {
                     return "concept_details";
