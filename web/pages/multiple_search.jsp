@@ -130,7 +130,7 @@
                            if (ontologiesToSearchOn != null
                               && ontologiesToSearchOn.indexOf(label2) != -1) {
                             %>
-                              <input type="checkbox" name="ontology_list" value="<%=label%>" checked /
+                              <input type="checkbox" name="ontology_list" value="<%=label%>" checked />
                            <%
                            } else {
                             %>
