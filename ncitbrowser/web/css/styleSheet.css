@@ -270,8 +270,10 @@ h3
 
 .datatable
 {
- font-size: 11px;
- width: 708px;
+ table-layout: fixed;
+ width: 708px; 
+ word-wrap: break-word; 
+ font-size: 11px; 
 }
 
 .datatableheader
@@ -284,7 +286,6 @@ h3
 
 .datacelltext
 {
- white-space: nowrap;
  font-size: 11px;
  color: #444444;
 }
