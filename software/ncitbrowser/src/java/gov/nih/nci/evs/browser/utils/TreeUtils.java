@@ -69,6 +69,7 @@ import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
 
 import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
 
 //import static gov.nih.nci.evs.browser.common.Constants.*;
 
@@ -1518,6 +1519,163 @@ public class TreeUtils {
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public List getHierarchyRoots(String scheme, String version,
+            String hierarchyID) throws LBException {
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
+
+        //HL7
+        scheme = DataUtils.searchFormalName(scheme);
+        return getHierarchyRoots(scheme, csvt, hierarchyID);
+    }
+
+    public List getHierarchyRoots(String scheme, CodingSchemeVersionOrTag csvt,
+            String hierarchyID) throws LBException {
+/*
+	    // HL7 patch
+	    if (scheme.indexOf("HL7") != -1) {
+			return getTreeRoots(scheme, csvt, hierarchyID);
+		}
+*/
+        int maxDepth = 1;
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+                .getGenericExtension("LexBIGServiceConvenienceMethods");
+        lbscm.setLexBIGService(lbSvc);
+
+        ResolvedConceptReferenceList roots = lbscm.getHierarchyRoots(scheme, csvt, hierarchyID);
+
+        for (int i = 0; i < roots.getResolvedConceptReferenceCount(); i++) {
+			 ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
+			 //System.out.println("getHierarchyRoots rcr.getConceptCode(): " + rcr.getConceptCode());
+
+			 Concept c = rcr.getReferencedEntry();
+			 if (c != null) {
+				 rcr.setConceptCode(c.getEntityCode());
+			 } else {
+				 System.out.println("getHierarchyRoots rcr.getReferencedEntry() returns null.");
+			 }
+
+             if (rcr.getEntityDescription() == null) {
+				 System.out.println("getHierarchyRoots rcr.getEntityDescription() == null.");
+				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+				 if (name == null) name = rcr.getConceptCode();//HL7
+				 EntityDescription e = new EntityDescription();
+				 e.setContent(name);
+				 rcr.setEntityDescription(e);
+			 } else if (rcr.getEntityDescription().getContent() == null) {
+				 System.out.println("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
+				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+				 if (name == null) name = rcr.getConceptCode();//HL7
+				 EntityDescription e = new EntityDescription();
+				 e.setContent(name);
+				 rcr.setEntityDescription(e);
+			 }
+		}
+
+        List list = ResolvedConceptReferenceList2List(roots);
+        SortUtils.quickSort(list);
+        return list;
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+	public List search(LexBIGService lbSvc, LexBIGServiceConvenienceMethods lbscm, String codingSchemeName, String t, String algorithm) throws Exception {
+		LexBIGService lbs = RemoteServerUtil.createLexBIGService();
+		CodedNodeSet cns = lbs.getCodingSchemeConcepts(codingSchemeName, null);
+		cns = cns.restrictToMatchingDesignations(t, SearchDesignationOption.ALL, algorithm, null);
+		ResolvedConceptReferenceList list = null;
+		int knt = 0;
+		try {
+			list = cns.resolveToList(null, null, null, 500);//.getResolvedConceptReference();
+			if (list == null) return null;
+			return ResolvedConceptReferenceList2List(list);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		if (knt == 0) System.out.println("No match.");
+		System.out.println("\n\n");
+		return new ArrayList();
+	}
+
+    // For HL7 (not yet used, pending Mayo resolution)
+    public List getTreeRoots(String scheme, CodingSchemeVersionOrTag csvt,
+            String hierarchyID) throws LBException {
+        int maxDepth = 1;
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+                .getGenericExtension("LexBIGServiceConvenienceMethods");
+        lbscm.setLexBIGService(lbSvc);
+
+        ResolvedConceptReferenceList roots = lbscm.getHierarchyRoots(scheme, csvt, hierarchyID);
+        ResolvedConceptReferenceList modified_roots = new ResolvedConceptReferenceList();
+
+        int knt0 = 0;
+        int knt = 0;
+        for (int i = 0; i < roots.getResolvedConceptReferenceCount(); i++) {
+			 ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
+			 //System.out.println("getHierarchyRoots rcr.getConceptCode(): " + rcr.getConceptCode());
+
+			 Concept c = rcr.getReferencedEntry();
+			 if (c != null) {
+				 rcr.setConceptCode(c.getEntityCode());
+			 } else {
+				 System.out.println("WARNING: getHierarchyRoots rcr.getReferencedEntry() returns null.");
+			 }
+
+             if (rcr.getEntityDescription() == null) {
+				 String name = getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+
+				 if (name == null) {
+					 name = "<Not Assigned> (code: " + rcr.getConceptCode() + ")";//HL7
+				 }
+
+				 EntityDescription e = new EntityDescription();
+				 e.setContent(name);
+				 rcr.setEntityDescription(e);
+			 } else if (rcr.getEntityDescription().getContent() == null) {
+				 System.out.println("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
+				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+				 if (name == null) {
+					 name = "<Not Assigned> (code: " + rcr.getConceptCode() + ")";//HL7
+				 }
+				 EntityDescription e = new EntityDescription();
+				 e.setContent(name);
+				 rcr.setEntityDescription(e);
+			 }
+			 List list = new ArrayList();
+             try {
+				 list = search(lbSvc, lbscm, scheme, rcr.getEntityDescription().getContent(), "exactMatch");
+
+			 } catch (Exception ex) {
+
+			 }
+			 if (list.size() == 0) knt0++;
+			 else if (list.size() > 1) knt++;
+
+			 if (list.size() != 0) {
+				 ResolvedConceptReference rc = (ResolvedConceptReference) list.get(0);
+				 modified_roots.addResolvedConceptReference(rc);
+			 } else {
+				 modified_roots.addResolvedConceptReference(rcr);
+			 }
+		}
+        List list = ResolvedConceptReferenceList2List(modified_roots);
+        SortUtils.quickSort(list);
+        return list;
+    }
+
+
+    public List ResolvedConceptReferenceList2List(
+            ResolvedConceptReferenceList rcrl) {
+        ArrayList list = new ArrayList();
+        for (int i = 0; i < rcrl.getResolvedConceptReferenceCount(); i++) {
+            ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+            list.add(rcr);
+        }
+        return list;
+    }
 
 
 

@@ -83,6 +83,8 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.concepts.Presentation;
 
+//import gov.nih.nci.evs.browser.utils.DataUtils;
+
 
 public class CacheController
 {
@@ -244,7 +246,8 @@ public class CacheController
         {
 			System.out.println("Not in cache -- calling getHierarchyRoots " );
             try {
-				list = new DataUtils().getHierarchyRoots(scheme, version, null);
+				//list = new DataUtils().getHierarchyRoots(scheme, version, null);
+				list = new TreeUtils().getHierarchyRoots(scheme, version, null);
 				nodeArray = list2JSONArray(list);
 
 				if (fromCache)
