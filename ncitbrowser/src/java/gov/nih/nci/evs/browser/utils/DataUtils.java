@@ -101,7 +101,7 @@ import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
  *
  */
 public class DataUtils {
-    LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
+    static LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
     int maxReturn = 5000;
     Connection con;
     Statement stmt;
@@ -1744,70 +1744,6 @@ NCI Thesaurus:
         String link = url + "/ConceptReport.jsp?dictionary=" + codingScheme
                 + "&code=" + code;
         return link;
-    }
-
-    public List getHierarchyRoots(String scheme, String version,
-            String hierarchyID) throws LBException {
-        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
-        if (version != null)
-            csvt.setVersion(version);
-
-        //HL7
-        scheme = searchFormalName(scheme);
-        return getHierarchyRoots(scheme, csvt, hierarchyID);
-    }
-
-    public List getHierarchyRoots(String scheme, CodingSchemeVersionOrTag csvt,
-            String hierarchyID) throws LBException {
-        int maxDepth = 1;
-        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
-                .getGenericExtension("LexBIGServiceConvenienceMethods");
-        lbscm.setLexBIGService(lbSvc);
-
-        ResolvedConceptReferenceList roots = lbscm.getHierarchyRoots(scheme, csvt, hierarchyID);
-
-        for (int i = 0; i < roots.getResolvedConceptReferenceCount(); i++) {
-			 ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
-			 //System.out.println("getHierarchyRoots rcr.getConceptCode(): " + rcr.getConceptCode());
-
-			 Concept c = rcr.getReferencedEntry();
-			 if (c != null) {
-				 rcr.setConceptCode(c.getEntityCode());
-			 } else {
-				 System.out.println("getHierarchyRoots rcr.getReferencedEntry() returns null.");
-			 }
-
-             if (rcr.getEntityDescription() == null) {
-				 System.out.println("getHierarchyRoots rcr.getEntityDescription() == null.");
-				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
-				 if (name == null) name = rcr.getConceptCode();//HL7
-				 EntityDescription e = new EntityDescription();
-				 e.setContent(name);
-				 rcr.setEntityDescription(e);
-			 } else if (rcr.getEntityDescription().getContent() == null) {
-				 System.out.println("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
-				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
-				 if (name == null) name = rcr.getConceptCode();//HL7
-				 EntityDescription e = new EntityDescription();
-				 e.setContent(name);
-				 rcr.setEntityDescription(e);
-			 }
-		}
-
-        List list = ResolvedConceptReferenceList2List(roots);
-        SortUtils.quickSort(list);
-        return list;
-    }
-
-    public List ResolvedConceptReferenceList2List(
-            ResolvedConceptReferenceList rcrl) {
-        ArrayList list = new ArrayList();
-        for (int i = 0; i < rcrl.getResolvedConceptReferenceCount(); i++) {
-            ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
-            list.add(rcr);
-        }
-        return list;
     }
 
 
