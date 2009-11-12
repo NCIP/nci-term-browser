@@ -139,13 +139,11 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
                       String code = rcr.getConceptCode();
-
                       String name = rcr.getEntityDescription().getContent();
 
                       if (code == null || code.indexOf("@") != -1) {
                           i++;
-                          String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
-				    if (i % 2 == 0) {
+				if (i % 2 == 0) {
 				%>
 				  <tr class="dataRowDark">
 				<%
