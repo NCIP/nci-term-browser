@@ -140,6 +140,32 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                       String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
                       String short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
 
+
+                      if (code == null || code.indexOf("@") != -1) {
+				if (i % 2 == 0) {
+				%>
+				  <tr class="dataRowDark">
+				<%
+				    } else {
+				%>
+				  <tr class="dataRowLight">
+				<%
+				    }
+				    %>
+				  <td class="dataCellText">
+				     <%=name%>
+				  </td>
+
+				  <td class="dataCellText">
+				     <%=short_vocabulary_name%>
+				  </td>
+				  
+				</tr>
+		      <%
+		      
+                      } else {
+                      
+                      
                       Concept con = DataUtils.getConceptByCode(vocabulary_name, null, null, code);
                       if (con != null) {
                       String con_status = con.getStatus();
@@ -222,6 +248,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
 
                         </tr>
                       <%
+                          }
                       }
                   }
                 %>
