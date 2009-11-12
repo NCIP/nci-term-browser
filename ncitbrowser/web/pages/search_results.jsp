@@ -142,8 +142,27 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 
                       String name = rcr.getEntityDescription().getContent();
 
-                      //if (code.indexOf("@_A") == -1) {
-                      if (code != null && code.indexOf("@") == -1) {
+                      if (code == null || code.indexOf("@") != -1) {
+                          i++;
+                          String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
+				    if (i % 2 == 0) {
+				%>
+				  <tr class="dataRowDark">
+				<%
+				    } else {
+				%>
+				  <tr class="dataRowLight">
+				<%
+				    }
+				    %>
+				  <td class="dataCellText">
+				     <%=name%>
+				  </td>
+				</tr>
+		      <%	
+                      }
+                      
+                      else if (code != null && code.indexOf("@") == -1) {
                           i++;
             		  String con_status = null;
 			  if (status_vec != null && status_vec.elementAt(i) != null) {
@@ -153,32 +172,32 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 
                           String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
 
-            if (i % 2 == 0) {
-        %>
-          <tr class="dataRowDark">
-        <%
-            } else {
-        %>
-          <tr class="dataRowLight">
-        <%
-            }
-            %>
-          <td class="dataCellText">
-          <%
-          if (con_status == null) {
-          %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
-          <%
-          } else {
-          %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
-          <%
-          }
-          %>
-          </td>
-        </tr>
-            <%
-                      }
+				    if (i % 2 == 0) {
+				%>
+				  <tr class="dataRowDark">
+				<%
+				    } else {
+				%>
+				  <tr class="dataRowLight">
+				<%
+				    }
+				    %>
+				  <td class="dataCellText">
+				  <%
+				  if (con_status == null) {
+				  %>
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
+				  <%
+				  } else {
+				  %>
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+				  <%
+				  }
+				  %>
+				  </td>
+				</tr>
+				    <%
+                     }
                   }
 
                 %>
