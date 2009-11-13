@@ -216,6 +216,19 @@
                     <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
                           | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>
                     <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
+           
+           
+           
+    <%
+        Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
+        if (visitedConcepts != null && visitedConcepts.size() > 0) {
+          String visitedConceptsStr = DataUtils.getVisitedConceptLink(visitedConcepts);
+       %> <%=visitedConceptsStr%> <%
+        }
+     %>
+                  
+                    
+                    
                     </div>          
                   <!-- end Global Navigation -->                       
                 </div>
