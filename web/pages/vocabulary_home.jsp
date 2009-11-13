@@ -129,42 +129,42 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
         menubar_version = menubar_version.replaceAll(" ", "%20");
       }
     %>
-
-    <div class="global-nav">
-    <%
-    if (menubar_version == null) {
-    %>
-      <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
-    <%
-    } else {
-    %>
-      <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
-    <%
-      }
-      if (download_site != null) {
-    %>
-      | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-        Download
-      </a>
-    <%
-    }
-    %>
-      | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-        View Hierarchy
-      </a>
-    <%
-    if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) {
-    %>
-      | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
-    <%
-    }
-    %>
-
-      | <a href="<%= request.getContextPath() %>/pages/help.jsf">Help</a>
-    </div>
+    <table class="global-nav" border="0" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>    
+          <% if (menubar_version == null) { %>
+          <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
+          <% } else { %>
+          <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
+          <% }
+          if (download_site != null) {
+        	 %>
+          | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+              Download
+            </a>
+          <% } %>
+          | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+              View Hierarchy
+            </a>
+          <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
+          | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
+          <% } %>
+          | <a href="<%= request.getContextPath() %>/pages/help.jsf">Help</a>
+        </td>
+        <td align="right">                                
+          <%
+             Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
+             if (visitedConcepts != null && visitedConcepts.size() > 0) {
+               String visitedConceptsStr = DataUtils.getVisitedConceptLink(visitedConcepts);
+          %>
+               <%=visitedConceptsStr%>
+          <% } %>
+        </td>   
+        <td width="7"></td>                             
+      </tr>          
+    </table>
     <!-- end Global Navigation -->
   </div>
-
 </div>
 <!-- end Thesaurus, banner search area -->
 
