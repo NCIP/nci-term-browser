@@ -95,8 +95,8 @@ public class RemoteServerUtil {
 
             if (serviceUrl == null || serviceUrl.compareTo("") == 0)
             {
-                //String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
-                //System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
+                String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
+                System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
                 LexBIGService lbSvc = new LexBIGServiceImpl();
                 return lbSvc;
             }
