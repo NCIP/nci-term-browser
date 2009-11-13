@@ -35,6 +35,7 @@ public class Constants {
 	public static final String EXACT_SEARCH_ALGORITHM = "exactMatch";// "literalSubString";//"subString";
 	public static final String STARTWITH_SEARCH_ALGORITHM = "startsWith";// "literalSubString";//"subString";
 	public static final String CONTAIN_SEARCH_ALGORITHM = "nonLeadingWildcardLiteralSubString";// "literalSubString";//"subString";
+	public static final String LICENSE_STATEMENT = "license_statement";// "literalSubString";//"subString";
 
 	/**
 	 * Constructor
