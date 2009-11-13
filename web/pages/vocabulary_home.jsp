@@ -114,7 +114,7 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
         }
       }
       Vector u2 = MetadataUtils.getMetadataValues(v, "version");
-      voc_version = "";
+      voc_version = version;
       if (u2 != null && u2.size() > 0) {
         voc_version = (String) u2.elementAt(0);
       }
