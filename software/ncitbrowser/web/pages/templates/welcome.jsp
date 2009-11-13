@@ -1,45 +1,116 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
 
 <%
   String nci_meta_url = new DataUtils().getNCImURL();
   String vocablary_version = DataUtils.getVersion();
-  if (vocablary_version == null) vocablary_version = "";
+  String vocablary_version_value = DataUtils.getVersion();
+  
+  String curr_version = DataUtils.getVocabularyVersionByTag(Constants.CODING_SCHEME_NAME, null);
+    
+  if (vocablary_version_value == null) vocablary_version_value = "";
 %>
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
-    <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version %></div></td>
+    <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version_value %></div></td>
   </tr></table>
   <hr/>
+  
+  
+<% 
+String html_compatable_description_value = null;
+Vector w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "html_compatable_description");
+if (w != null && w.size() > 0) {
+    html_compatable_description_value = (String) w.elementAt(0);
+}
+
+String version_value = null;
+w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "version");
+if (w != null && w.size() > 0) {
+    version_value = (String) w.elementAt(0);
+}
+
+String download_format_value = null;
+w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "download_format");
+if (w != null && w.size() > 0) {
+    download_format_value = (String) w.elementAt(0);
+}
+
+String download_url_value = null;
+w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "download_url");
+if (w != null && w.size() > 0) {
+    download_url_value = (String) w.elementAt(0);
+}
+
+String license_statement_value = null;
+w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "license_statement");
+if (w != null && w.size() > 0) {
+    license_statement_value = (String) w.elementAt(0);
+}
+%>
   <table border="0">
     <tr>
       <td class="textbody">
-        NCI Thesaurus (NCIt) provides reference terminology for many NCI and
-        other systems. It covers vocabulary for clinical care, translational
-        and basic research, and public information and administrative activities.
-        <br><br>
-        <b>NCIt features:</b>
-        <ul>
-          <li>Stable, unique codes for biomedical concepts;
-          <li>Preferred terms, synonyms, definitions, research codes,
-            external source codes, and other information;
-          <li>Links to
-            <a href="<%=nci_meta_url%>" target="_blank"
-              alt="NCI Metathesaurus">NCI Metathesaurus</a>
-            and other information sources;
-          <li>Over 200,000 cross-links between concepts, providing formal
-            logic-based definition of many concepts;
-          <li>Extensive content integrated from NCI and other partners, much
-            available as separate NCIt
-            <a href="<%= request.getContextPath() %>/pages/subset.jsf">subsets</a>
-          <li>Updated frequently by a team of subject matter experts.
-        </ul>
-        NCIt is a widely recognized standard for biomedical coding and reference,
-        used by a broad variety of public and private partners both nationally
-        and internationally.
+      <%
+        if (html_compatable_description_value == null) {
+      %>  
+
+		NCI Thesaurus (NCIt) provides reference terminology for many NCI and
+		other systems. It covers vocabulary for clinical care, translational
+		and basic research, and public information and administrative activities.
+		<br><br>
+		<b>NCIt features:</b>
+		<ul>
+		  <li>Stable, unique codes for biomedical concepts;
+		  <li>Preferred terms, synonyms, definitions, research codes,
+		    external source codes, and other information;
+		  <li>Links to
+		    <a href="<%=nci_meta_url%>" target="_blank"
+		      alt="NCI Metathesaurus">NCI Metathesaurus</a>
+		    and other information sources;
+		  <li>Over 200,000 cross-links between concepts, providing formal
+		    logic-based definition of many concepts;
+		  <li>Extensive content integrated from NCI and other partners, much
+		    available as separate NCIt
+		    <a href="<%= request.getContextPath() %>/pages/subset.jsf">subsets</a>
+		  <li>Updated frequently by a team of subject matter experts.
+		</ul>
+		NCIt is a widely recognized standard for biomedical coding and reference,
+		used by a broad variety of public and private partners both nationally
+		and internationally.
+        <%
+        } else {
+        %>
+            <%=html_compatable_description_value%>
+        <%    
+        }
+        %>
+        
+        <%
+        if (download_url_value != null) {
+        %>
+            <p>
+            Source URL: 
+              <a href="<%=download_url_value%>" target="_blank"><%=download_url_value%></a>
+            </p>
+        <%    
+        }
+
+        if (license_statement_value != null) {
+        %>
+            <p>
+            <%=license_statement_value%>
+            </p>
+        <%
+        }
+        %>
+        
       </td>
+      
+      
       <td valign="top">
         <table border="0">
           <tr valign="top">
