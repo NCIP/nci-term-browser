@@ -2,14 +2,17 @@ package gov.nih.nci.evs.browser.bean;
 
 import java.io.*;
 import java.util.HashSet;
+import java.util.Vector;
 
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.codingSchemes.CodingScheme;
 import org.LexGrid.LexBIG.Exceptions.LBException;
 
-import gov.nih.nci.evs.browser.utils.RemoteServerUtil;
+//import gov.nih.nci.evs.browser.utils.RemoteServerUtil;
+import gov.nih.nci.evs.browser.utils.*;
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import gov.nih.nci.evs.browser.common.Constants;
 
 
 /**
@@ -73,7 +76,11 @@ public class LicenseBean extends Object {
 	    if (s == null || s.compareTo("") == 0 || (s.indexOf("Copyright information unavailable") != -1)) return false;
 	    return true;
 */
+/*
         if (codingSchemeName.indexOf("MedDRA") != -1 || codingSchemeName.indexOf("SNOMED") != -1 || codingSchemeName.indexOf("Semantic Net") != -1) return true;
+        return false;
+*/
+        if (resolveCodingSchemeCopyright(codingSchemeName, version) != null) return true;
         return false;
     }
 
@@ -84,7 +91,15 @@ public class LicenseBean extends Object {
 		if (version != null) versionOrTag.setVersion(version);
 		String copyRightStmt = null;
 		try {
-			copyRightStmt = lbs.resolveCodingSchemeCopyright(codingSchemeName, versionOrTag);
+			String urn = null;
+			if (version == null) {
+				version = DataUtils.getVocabularyVersionByTag(codingSchemeName, "PRODUCTION");
+				if (version == null) version = DataUtils.getVocabularyVersionByTag(codingSchemeName, null);
+			}
+			Vector v = MetadataUtils.getMetadataValues(codingSchemeName, version, urn, Constants.LICENSE_STATEMENT);
+			if (v != null && v.size() > 0) return (String) v.elementAt(0);
+
+			//copyRightStmt = lbs.resolveCodingSchemeCopyright(codingSchemeName, versionOrTag);
 		} catch (Exception ex) {
 		}
 		return copyRightStmt;
