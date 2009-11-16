@@ -28,17 +28,16 @@
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="javax.faces.model.SelectItem" %>
-<%  String ncim_url = new DataUtils().getNCImURL(); %>
-
-<%
+<%  
+    String ncim_url = new DataUtils().getNCImURL(); 
     String quicklink_dictionary = (String) request.getSession().getAttribute("dictionary");
-    String dictionary2 = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-    if (dictionary2 == null)
-        dictionary2 = "NCI Thesaurus";
-    String term_suggestion_application_url2 = new DataUtils().getTermSuggestionURL();
-    if (dictionary2.compareTo("NCI Thesaurus") != 0)
-        term_suggestion_application_url2 = DataUtils.getTermSuggestionURL(dictionary2, null);
-    String dictionary_encoded2 = DataUtils.replaceAll(dictionary2, " ", "%20");
+    String term_suggestion_application_url2 = "", dictionary_encoded2 = "";
+    if (quicklink_dictionary != null) {
+        term_suggestion_application_url2 = new DataUtils().getTermSuggestionURL();
+        if (quicklink_dictionary.compareTo("NCI Thesaurus") != 0)
+            term_suggestion_application_url2 = DataUtils.getTermSuggestionURL(quicklink_dictionary, null);
+        dictionary_encoded2 = DataUtils.replaceAll(quicklink_dictionary, " ", "%20");
+    }
 %>
 
 
