@@ -238,15 +238,13 @@
               <%@ include file="/pages/templates/quickLink.jsp" %>
               <!-- end Quick links bar -->                                                     
               <div class="pagecontent">
-                <%@ include file="/pages/templates/welcome-other.jsp"%>  
-
-                
+                <%@ include file="/pages/templates/welcome-other.jsp"%>
                 <%@ include file="/pages/templates/nciFooter.html" %>
               </div> 
         <% } %>
-        </div><!-- end main-area -->
-        <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+        </div><!-- end main-area -->        
       </div><!-- end center-page -->
+      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     </f:view>
     <br/>
   </body>
