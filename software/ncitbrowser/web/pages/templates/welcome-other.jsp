@@ -55,7 +55,7 @@ String copyright_statement_value = DataUtils.getMetadataValue(scheme, "copyright
         if (download_url_value != null) {
         %>
             <p>
-            Source URL: 
+            Source Home Page: 
               <a href="<%=download_url_value%>" target="_blank"><%=download_url_value%></a>
             </p>
         <%    
