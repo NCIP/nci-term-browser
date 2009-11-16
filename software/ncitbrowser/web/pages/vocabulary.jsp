@@ -63,10 +63,13 @@
         }
         String version = (String) request.getParameter("version");
         if (version == null) {
-          version = (String) request.getAttribute("version");
+            version = (String) request.getAttribute("version");
         }
+        
+        String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
         if (scheme != null) {
-          shortName = new DataUtils().getLocalName(scheme);
+          //shortName = new DataUtils().getLocalName(scheme);
+            shortName = DataUtils.getMetadataValue(scheme, "display_name");
         }
         if (scheme != null && scheme == null) {
           if (version != null) {
@@ -188,7 +191,7 @@
               <div class="bannerarea">
                 <div class="vocabularynamebanner">
                   <div class="vocabularynameshort"><%=shortName%></div>
-                  <div class="vocabularynamelong"><%=scheme%></div>
+                  <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
                 </div>              
                 <div class="search-globalnav">
                   <!-- Search box -->
