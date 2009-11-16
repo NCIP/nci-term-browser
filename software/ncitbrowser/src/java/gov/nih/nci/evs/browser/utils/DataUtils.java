@@ -67,6 +67,7 @@ import org.LexGrid.naming.SupportedNamespace;
 import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
 import org.LexGrid.concepts.Entity;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
+import org.LexGrid.LexBIG.DataModel.Collections.MetadataPropertyList;
 
 
 
@@ -161,6 +162,9 @@ public class DataUtils {
     public static HashMap formalName2LocalNameHashMap = null;
     public static HashMap localName2FormalNameHashMap = null;
 
+    public static HashMap formalName2MetadataHashMap = null;
+
+
     // ==================================================================================
 
     public DataUtils() {
@@ -190,6 +194,7 @@ public class DataUtils {
         csnv2VersionMap = new HashMap();
         formalName2LocalNameHashMap = new HashMap();
         localName2FormalNameHashMap = new HashMap();
+        formalName2MetadataHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
 		boolean includeInactive = false;
@@ -229,6 +234,11 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
                 localName2FormalNameHashMap.put(formalname, formalname);
                 localName2FormalNameHashMap.put(locallname, formalname);
 
+                MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
+                if (mdpl != null) {
+					Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl);
+					formalName2MetadataHashMap.put(formalname, metadataProperties);
+				}
 
 				Boolean isActive = null;
 				if (csr == null) {
@@ -265,6 +275,17 @@ System.out.println("\n\tActive? " + isActive);
 			}
 		}
 	}
+
+    public static String getMetadataValue(String scheme, String propertyName) {
+		if (formalName2MetadataHashMap == null) setCodingSchemeMap();
+		if (!formalName2MetadataHashMap.containsKey(scheme)) return null;
+		Vector metadata = (Vector) formalName2MetadataHashMap.get(scheme);
+		if (metadata == null || metadata.size() == 0) return null;
+		Vector v = MetadataUtils.getMetadataValues(metadata, propertyName);
+		if (v == null || v.size() == 0) return null;
+		return (String) v.elementAt(0);
+    }
+
 
     public static String getLocalName(String key) {
 		if (formalName2LocalNameHashMap == null) {
