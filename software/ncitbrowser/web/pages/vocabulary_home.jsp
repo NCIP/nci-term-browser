@@ -172,55 +172,7 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
 <%@ include file="/pages/templates/quickLink.jsp" %>
 <!-- end Quick links bar -->
 <div class="pagecontent">
-<%@ include file="/pages/templates/welcome-other.jsp" %>
-
-      <!-- Page content -->
-    <%
-    if (v == null || v.size() == 0) {
-    %>
-          <i>Metadata not found.</i>
-     <%
-     } else {
-     %>
-          <i>&nbsp;</i>
-    <table class="dataTable">
-      <%
-          int n1 = 0;
-          for (int i = 0; i < v.size(); i++) {
-            String s = (String) v.get(i);
-            Vector ret_vec = DataUtils.parseData(s, "|");
-            String meta_prop_name = (String) ret_vec.elementAt(0);
-            if (!metadata_names.contains(meta_prop_name)) {
-          String meta_prop_value = (String) ret_vec.elementAt(1);
-          if (meta_prop_value.startsWith("ftp:")
-              || meta_prop_value.startsWith("http:")) {
-            meta_prop_value = DataUtils
-            .getDownloadLink(meta_prop_value);
-          }
-
-          if (n1 % 2 == 0) {
-      %>
-          <tr class="dataRowDark">
-        <%
-        } else {
-        %>
-          <tr class="dataRowLight">
-        <%
-            }
-            n1++;
-        %>
-            <td><%=meta_prop_name%></td>
-            <td><%=meta_prop_value%></td>
-          </tr>
-          <%
-              }
-              }
-          %>
-    </table>
-      <%
-      }
-      %>
-
+      <%@ include file="/pages/templates/welcome-other.jsp" %>
       <%@ include file="/pages/templates/nciFooter.html" %>
 
       <!-- end Page content -->
