@@ -8,11 +8,19 @@
   String vocablary_version = DataUtils.getVersion();
   String vocablary_version_value = DataUtils.getVersion();
   if (vocablary_version_value == null) vocablary_version_value = "";
+
+  String dictionary = dictionaryName0;
+  String dictionary_encoded = DataUtils.replaceAll(dictionary, " ", "%20");
 %>
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
-    <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version_value %></div></td>
+    <td>
+      <div class="texttitle-blue-rightJust">
+        <a href="<%=term_suggestion_application_url%>?dictionary=<%=dictionary_encoded%>" target="_blank" alt="Term Suggestion">Suggest new concept</a>
+        <br/><br/>Version: <%= vocablary_version_value %>
+      </div>
+    </td>
   </tr></table>
   <hr/>
   
