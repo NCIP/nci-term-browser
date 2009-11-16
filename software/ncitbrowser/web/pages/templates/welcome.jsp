@@ -19,9 +19,15 @@
 <% 
 String html_compatable_description_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "html_compatable_description");
 String version_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "version");
-String download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "source_url");
-if (download_url_value == null) download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "download_url");
-String copyright_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "copyright");
+String source_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "source_url");
+String download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "download_url");
+
+String license_statement_value = null;
+String license_display_value = DataUtils.getMetadataValue(scheme, "license_display");
+if (license_display_value.compareTo("show") == 0 || license_display_value.compareTo("accept") == 0) {
+    license_statement_value = DataUtils.getMetadataValue(scheme, "license_statement");
+}
+
 %>
   <table border="0">
     <tr>
@@ -62,19 +68,36 @@ String copyright_statement_value = DataUtils.getMetadataValue(Constants.CODING_S
         %>
         
         <%
-        if (download_url_value != null) {
+        if (source_url_value != null) {
         %>
             <p>
             Source Home Page: 
-              <a href="<%=download_url_value%>" target="_blank"><%=download_url_value%></a>
+              <a href="<%=download_url_value%>" target="_blank"><%=source_url_value%></a>
             </p>
         <%    
         }
 
+        if (download_url_value != null) {
+        %>
+            <p>
+            Download: 
+              <a href="<%=download_url_value%>" target="_blank"><%=download_url_value%></a>
+            </p>
+        <%    
+        }
+        
         if (copyright_statement_value != null) {
         %>
             <p>
             <%=copyright_statement_value%>
+            </p>
+        <%
+        }
+
+        if (license_statement_value != null) {
+        %>
+            <p>
+            <%=license_statement_value%>
             </p>
         <%
         }
