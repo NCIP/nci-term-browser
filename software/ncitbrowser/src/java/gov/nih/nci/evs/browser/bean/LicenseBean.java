@@ -80,7 +80,15 @@ public class LicenseBean extends Object {
         if (codingSchemeName.indexOf("MedDRA") != -1 || codingSchemeName.indexOf("SNOMED") != -1 || codingSchemeName.indexOf("Semantic Net") != -1) return true;
         return false;
 */
-        if (resolveCodingSchemeCopyright(codingSchemeName, version) != null) return true;
+
+
+        String download_license = null;
+        download_license = DataUtils.getMetadataValue(codingSchemeName, download_license);
+        if (download_licensecompareTo("accept") == 0) return true;
+
+        // to be removed:
+        else if (download_license == null && resolveCodingSchemeCopyright(codingSchemeName, version) != null) return true;
+
         return false;
     }
 
