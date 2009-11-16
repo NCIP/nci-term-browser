@@ -25,7 +25,7 @@ String copyright_statement_value = DataUtils.getMetadataValue(scheme, "copyright
 %>
   <table border="0">
     <tr>
-      <td class="textbody">
+      <td class="textbody" width="388px" valign="top" align="left">
       <%
         if (html_compatable_description_value == null) {
       %>  
@@ -60,18 +60,18 @@ String copyright_statement_value = DataUtils.getMetadataValue(scheme, "copyright
       </td>
       
       
-      <td valign="top">
+      <td valign="top" align="right">
         <table border="0">
           <tr valign="top">
             <td width="10px"></td>
-            <td>
+            <td width="77px">
               <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">
                 <img src="<%=basePath%>/images/EVSTile.gif"
-                  width="77" height="38px" alt="EVS" border="0"/>
+                  width="77px" height="38px" alt="EVS" border="0"/>
               </a>
             </td>
             <td width="3px"></td>
-            <td class="textbody" valign="top">
+            <td class="textbody" align="left" valign="top" width="210px">
               <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">
                 NCI Enterprise Vocabulary Services</a>:
               Terminology resources and services for NCI and the biomedical community.
