@@ -32,6 +32,13 @@
 
 <%
     String quicklink_dictionary = (String) request.getSession().getAttribute("dictionary");
+    String dictionary2 = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+    if (dictionary2 == null)
+        dictionary2 = "NCI Thesaurus";
+    String term_suggestion_application_url2 = new DataUtils().getTermSuggestionURL();
+    if (dictionary2.compareTo("NCI Thesaurus") != 0)
+        term_suggestion_application_url2 = DataUtils.getTermSuggestionURL(dictionary2, null);
+    String dictionary_encoded2 = DataUtils.replaceAll(dictionary2, " ", "%20");
 %>
 
 
@@ -66,6 +73,10 @@
               alt="NCI Term Browser">NCI Term Browser</a></li>
             <li><a href="http://www.cancer.gov/cancertopics/terminologyresources" target="_blank"
               alt="NCI Terminology Resources">NCI Terminology Resources</a></li>
+            <% if (term_suggestion_application_url2 != null && term_suggestion_application_url2.length() > 0) { %>
+              <li><a href="<%=term_suggestion_application_url2%>?dictionary=<%=dictionary_encoded2%>" target="_blank" alt="Term Suggestion">Suggest new concept</a></li>
+            <% } %>
+              
           </ul>
         </li>
       </ul>
