@@ -7,9 +7,6 @@
   String nci_meta_url = new DataUtils().getNCImURL();
   String vocablary_version = DataUtils.getVersion();
   String vocablary_version_value = DataUtils.getVersion();
-  
-  String curr_version = DataUtils.getVocabularyVersionByTag(Constants.CODING_SCHEME_NAME, null);
-    
   if (vocablary_version_value == null) vocablary_version_value = "";
 %>
 <div id="message" class="textbody">
@@ -19,37 +16,12 @@
   </tr></table>
   <hr/>
   
-  
 <% 
-String html_compatable_description_value = null;
-Vector w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "html_compatable_description");
-if (w != null && w.size() > 0) {
-    html_compatable_description_value = (String) w.elementAt(0);
-}
-
-String version_value = null;
-w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "version");
-if (w != null && w.size() > 0) {
-    version_value = (String) w.elementAt(0);
-}
-
-String download_format_value = null;
-w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "download_format");
-if (w != null && w.size() > 0) {
-    download_format_value = (String) w.elementAt(0);
-}
-
-String download_url_value = null;
-w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "download_url");
-if (w != null && w.size() > 0) {
-    download_url_value = (String) w.elementAt(0);
-}
-
-String license_statement_value = null;
-w = MetadataUtils.getMetadataValues(Constants.CODING_SCHEME_NAME, curr_version, null, "license_statement");
-if (w != null && w.size() > 0) {
-    license_statement_value = (String) w.elementAt(0);
-}
+String html_compatable_description_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "html_compatable_description");
+String version_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "version");
+String download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "source_url");
+if (download_url_value == null) download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "download_url");
+String license_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "license_statement");
 %>
   <table border="0">
     <tr>
