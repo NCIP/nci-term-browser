@@ -71,20 +71,9 @@ public class LicenseBean extends Object {
 
     public static boolean isLicensed(String codingSchemeName, String version) {
 		//MedDRA, SNOMED CT, and UMLS Semantic Network.
-/*
-	    String s = resolveCodingSchemeCopyright(codingSchemeName, version);
-	    if (s == null || s.compareTo("") == 0 || (s.indexOf("Copyright information unavailable") != -1)) return false;
-	    return true;
-*/
-/*
-        if (codingSchemeName.indexOf("MedDRA") != -1 || codingSchemeName.indexOf("SNOMED") != -1 || codingSchemeName.indexOf("Semantic Net") != -1) return true;
-        return false;
-*/
-
-
         String download_license = null;
-        download_license = DataUtils.getMetadataValue(codingSchemeName, download_license);
-        if (download_licensecompareTo("accept") == 0) return true;
+        download_license = DataUtils.getMetadataValue(codingSchemeName, "download_license");
+        if (download_license != null && download_license.compareTo("accept") == 0) return true;
 
         // to be removed:
         else if (download_license == null && resolveCodingSchemeCopyright(codingSchemeName, version) != null) return true;
