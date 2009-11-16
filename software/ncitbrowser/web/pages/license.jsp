@@ -44,11 +44,11 @@
       <!-- Page content -->
       <div class="pagecontent">
         <p>
-          Please review the following License/Copyright statement for <b><%=scheme%></b>:
+          To access <b><%=display_name%></b>, please review and accept the copyright/license statement below:
         </p>
         <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>
         <p>
-          If and only if you agree to these terms/conditions, click the Accept button to proceed.
+          If and only if you agree to these terms and conditions, click the Accept button to proceed.
         </p>
         <%
           String scheme0 = scheme;
