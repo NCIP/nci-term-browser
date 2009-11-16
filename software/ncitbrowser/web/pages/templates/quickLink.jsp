@@ -73,7 +73,7 @@
             <li><a href="http://www.cancer.gov/cancertopics/terminologyresources" target="_blank"
               alt="NCI Terminology Resources">NCI Terminology Resources</a></li>
             <% if (term_suggestion_application_url2 != null && term_suggestion_application_url2.length() > 0) { %>
-              <li><a href="<%=term_suggestion_application_url2%>?dictionary=<%=dictionary_encoded2%>" target="_blank" alt="Term Suggestion">Suggest new concept</a></li>
+              <li><a href="<%=term_suggestion_application_url2%>?dictionary=<%=dictionary_encoded2%>" target="_blank" alt="Term Suggestion">Term Suggestion</a></li>
             <% } %>
               
           </ul>
