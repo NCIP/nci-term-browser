@@ -44,6 +44,10 @@
       <!-- Page content -->
       <div class="pagecontent">
         <p>
+        <%
+          String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+        %>  
+        
           To access <b><%=display_name%></b>, please review and accept the copyright/license statement below:
         </p>
         <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>

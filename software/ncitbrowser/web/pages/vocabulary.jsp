@@ -158,10 +158,17 @@
             <%@ include file="/pages/templates/quickLink.jsp" %>
             <!-- end Quick links bar -->  
             <div class="pagecontent">
-              <p>Please review the following License/Copyright statement for <b><%=scheme%></b>.
-              </p>
+            
+        <p>
+        <%
+          String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+        %>  
+          To access <b><%=display_name%></b>, please review and accept the copyright/license statement below:
+        </p>            
+            
+
               <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>
-              <p>If and only if you agree to these terms/conditions, click the
+              <p>If and only if you agree to these terms and conditions, click the
               Accept button to proceed.</p>
               <p>
               <form><h:commandButton id="accept" value="Accept"
