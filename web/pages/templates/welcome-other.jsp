@@ -7,27 +7,11 @@
   String nci_meta_url = new DataUtils().getNCImURL();
   String vocablary_version_value = version;
   if (vocablary_version_value == null) vocablary_version_value = "";
-  
-  dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-  if (dictionary.compareTo("NCI Thesaurus") != 0)
-      term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
-  String dictionary_encoded = DataUtils.replaceAll(dictionary, " ", "%20");
 %>
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
-    <td>
-      <div class="texttitle-blue-rightJust">
-        <% if (term_suggestion_application_url != null && term_suggestion_application_url.length() > 0) { %>
-          <a href="<%=term_suggestion_application_url%>?dictionary=<%=dictionary_encoded%>" target="_blank" alt="Term Suggestion">Suggest new concept</a><br/><br/>
-        <% } %>
-        <!--
-        Version: <%= vocablary_version_value %>
-        -->
-        
-      </div>
-    </td>
+    <!-- <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version_value %></div></td> -->
   </tr></table>
   <hr/>
   
