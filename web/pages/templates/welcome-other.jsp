@@ -20,7 +20,7 @@ String html_compatable_description_value = DataUtils.getMetadataValue(scheme, "h
 String version_value = DataUtils.getMetadataValue(scheme, "version");
 String download_url_value = DataUtils.getMetadataValue(scheme, "source_url");
 if (download_url_value == null) download_url_value = DataUtils.getMetadataValue(scheme, "download_url");
-String license_statement_value = DataUtils.getMetadataValue(scheme, "license_statement");
+String copyright_statement_value = DataUtils.getMetadataValue(scheme, "copyright");
 %>
   <table border="0">
     <tr>
@@ -47,10 +47,10 @@ String license_statement_value = DataUtils.getMetadataValue(scheme, "license_sta
         <%    
         }
 
-        if (license_statement_value != null) {
+        if (copyright_statement_value != null) {
         %>
             <p>
-            <%=license_statement_value%>
+            <%=copyright_statement_value%>
             </p>
         <%
         }
