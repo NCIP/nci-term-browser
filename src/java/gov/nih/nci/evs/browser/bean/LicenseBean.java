@@ -91,6 +91,7 @@ public class LicenseBean extends Object {
 		if (version != null) versionOrTag.setVersion(version);
 		String copyRightStmt = null;
 		try {
+			/*
 			String urn = null;
 			if (version == null) {
 				version = DataUtils.getVocabularyVersionByTag(codingSchemeName, "PRODUCTION");
@@ -100,6 +101,8 @@ public class LicenseBean extends Object {
 			if (v != null && v.size() > 0) return (String) v.elementAt(0);
 
 			//copyRightStmt = lbs.resolveCodingSchemeCopyright(codingSchemeName, versionOrTag);
+			*/
+			copyRightStmt = DataUtils.getMetadataValue(codingSchemeName, Constants.LICENSE_STATEMENT);
 		} catch (Exception ex) {
 		}
 		return copyRightStmt;
