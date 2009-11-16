@@ -97,7 +97,7 @@ public class LicenseBean extends Object {
 
 			//copyRightStmt = lbs.resolveCodingSchemeCopyright(codingSchemeName, versionOrTag);
 			*/
-			copyRightStmt = DataUtils.getMetadataValue(codingSchemeName, Constants.LICENSE_STATEMENT);
+			copyRightStmt = DataUtils.getMetadataValue(codingSchemeName, "copyright");
 		} catch (Exception ex) {
 		}
 		return copyRightStmt;
