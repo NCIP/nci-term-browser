@@ -17,7 +17,8 @@
   
 <% 
 String html_compatable_description_value = DataUtils.getMetadataValue(scheme, "html_compatable_description");
-String version_value = DataUtils.getMetadataValue(scheme, "version");
+String version_value = DataUtils.getMetadataValue(scheme, "term_browser_version");
+if (version_value == null) version_value = DataUtils.getMetadataValue(scheme, "version");
 String download_url_value = DataUtils.getMetadataValue(scheme, "source_url");
 if (download_url_value == null) download_url_value = DataUtils.getMetadataValue(scheme, "download_url");
 String copyright_statement_value = DataUtils.getMetadataValue(scheme, "copyright");
