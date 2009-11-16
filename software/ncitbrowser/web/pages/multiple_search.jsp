@@ -13,7 +13,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-  <title>NCI Thesaurus</title>
+  <title>NCI Term Browser</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
@@ -140,9 +140,9 @@
                            <%
                            }
                            
-                           String display_label = DataUtils.getMetadataValue(scheme, "display_label");
+                           String display_label = DataUtils.getMetadataValue(scheme, "display_name");
                            String full_name = DataUtils.getMetadataValue(scheme, "full_name");
-                           String term_browser_version = DataUtils.getMetadataValue(scheme, "version");
+                           String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
                            
                            if (display_label != null && display_label.compareTo("null") != 0 &&
                                full_name != null && full_name.compareTo("null") != 0 &&
