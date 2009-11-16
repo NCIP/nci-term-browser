@@ -22,6 +22,14 @@ if (version_value == null) version_value = DataUtils.getMetadataValue(scheme, "v
 String source_url_value = DataUtils.getMetadataValue(scheme, "source_url");
 String download_url_value = DataUtils.getMetadataValue(scheme, "download_url");
 String copyright_statement_value = DataUtils.getMetadataValue(scheme, "copyright");
+
+String license_statement_value = null;
+String license_display_value = DataUtils.getMetadataValue(scheme, "license_display");
+if (license_display_value.compareTo("show") == 0 || license_display_value.compareTo("accept") == 0) {
+    license_statement_value = DataUtils.getMetadataValue(scheme, "license_statement");
+}
+
+
 %>
   <table border="0">
     <tr>
@@ -61,6 +69,14 @@ String copyright_statement_value = DataUtils.getMetadataValue(scheme, "copyright
         %>
             <p>
             <%=copyright_statement_value%>
+            </p>
+        <%
+        }
+
+        if (license_statement_value != null) {
+        %>
+            <p>
+            <%=license_statement_value%>
             </p>
         <%
         }
