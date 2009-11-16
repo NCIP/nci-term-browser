@@ -17,8 +17,8 @@
     <td><div class="texttitle-blue">Welcome</div></td>
     <td>
       <div class="texttitle-blue-rightJust">
-        <a href="<%=term_suggestion_application_url%>?dictionary=<%=dictionary_encoded%>" target="_blank" alt="Term Suggestion">Suggest new concept</a>
-        <br/><br/>Version: <%= vocablary_version_value %>
+        <a href="<%=term_suggestion_application_url%>?dictionary=<%=dictionary_encoded%>" target="_blank" alt="Term Suggestion">Suggest new concept</a><br/><br/>
+        Version: <%= vocablary_version_value %>
       </div>
     </td>
   </tr></table>
