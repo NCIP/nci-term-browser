@@ -147,7 +147,7 @@
                            if (display_label != null && display_label.compareTo("null") != 0 &&
                                full_name != null && full_name.compareTo("null") != 0 &&
                                term_browser_version != null && term_browser_version.compareTo("null") != 0) {
-                               label = display_label + ":&nbsp;" + label + "&nbsp;(" + term_browser_version + ")";
+                               label = display_label + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
                            }
                          
                             %>
