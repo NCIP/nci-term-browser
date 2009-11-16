@@ -127,6 +127,9 @@ public class MetadataUtils {
     public static MetadataPropertyList getMetadataPropertyList(LexBIGService lbSvc, String codingSchemeName, String version, String urn) {
 		AbsoluteCodingSchemeVersionReference acsvr = new AbsoluteCodingSchemeVersionReference();
 
+System.out.println("getMetadataPropertyList codingSchemeName " + codingSchemeName);
+System.out.println("getMetadataPropertyList version " + version);
+
         LexBIGServiceMetadata smd = null;
         MetadataPropertyList mdpl = null;
         try {

@@ -54,12 +54,14 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
     }
     String shortName = "Vocabulary";
     if (scheme != null) {
-      shortName = DataUtils.getLocalName(scheme);
+      //shortName = DataUtils.getLocalName(scheme);
+      shortName = DataUtils.getMetadataValue(scheme, "display_name");
     }
     String version = (String) request.getParameter("version");
     if (version == null) {
       version = (String) request.getAttribute("version");
     }
+    String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
     if (dictionary != null && scheme == null) {
       scheme = dictionary;
       if (version != null) {
@@ -92,7 +94,7 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
   <div class="bannerarea">
     <div class="vocabularynamebanner">
       <div class="vocabularynameshort"><%=shortName%></div>
-      <div class="vocabularynamelong"><%=scheme%></div>
+      <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
     </div>
       <div class="search-globalnav">
       <!-- Search box -->
