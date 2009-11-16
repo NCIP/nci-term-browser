@@ -149,15 +149,15 @@ h3
 .vocabularynamelong
 {
  position: relative;
- left: 24px;
+ left: 36px;
  bottom: -5px;
  width: 336px;
  font-family: Arial, Verdana, Helvetica, sans-serif;
- font-size: 12px;
+ font-size: 10px;
  font-weight: bold;
  color: #2F2F5F;
  white-space: wrap;
- padding-top: 5px;
+ padding-top: 10px;
 }
 
 .pagetitle
