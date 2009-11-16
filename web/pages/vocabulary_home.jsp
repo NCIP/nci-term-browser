@@ -174,13 +174,12 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
 <div class="pagecontent">
       <%@ include file="/pages/templates/welcome-other.jsp" %>
       <%@ include file="/pages/templates/nciFooter.html" %>
-
       <!-- end Page content -->
-    </div>
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div>    
     <!-- end Main box -->
   </div>
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
-
+<br/>
 </body>
 </html>
