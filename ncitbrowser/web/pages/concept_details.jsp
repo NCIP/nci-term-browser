@@ -30,7 +30,35 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>NCI Thesaurus</title>
+
+<%
+            String dictionary = null;
+	    dictionary = (String) request.getParameter("dictionary");
+	    if (dictionary == null) {
+		dictionary = "NCI Thesaurus";
+	    }
+            if (dictionary != null) {
+		dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
+		dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
+		dictionary = DataUtils.getCodingSchemeName( dictionary );
+		request.getSession().setAttribute("dictionary", dictionary);
+            } else {
+                dictionary = (String) request.getSession().getAttribute("dictionary");
+            }
+            
+            if (dictionary.compareTo("NCI Thesaurus") == 0) {
+            %>
+               <title>NCI Thesaurus</title>
+            <%   
+            } else {
+            %>
+               <title>NCI Term Browser</title>
+            <%
+            }
+            %>
+
+%>
+
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -50,38 +78,14 @@
       <div id="main-area">
 
           <%
-            String dictionary = null;
             String code = null;
             String type = null;
-
             String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("singleton"));
 
-//dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-
-dictionary = (String) request.getParameter("dictionary");
-
-if (dictionary == null) {
-   dictionary = "NCI Thesaurus";
-}
-
-            if (dictionary != null) {
-dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
-dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
-dictionary = DataUtils.getCodingSchemeName( dictionary );
-
-
-request.getSession().setAttribute("dictionary", dictionary);
-
-            } else {
-                dictionary = (String) request.getSession().getAttribute("dictionary");
-            }
-
             if (singleton != null && singleton.compareTo("true") == 0) {
-
-    if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
-      dictionary = DataUtils.getCodingSchemeName(dictionary);
-    }
-
+		    if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
+			 dictionary = DataUtils.getCodingSchemeName(dictionary);
+		    }
             }
 
 code = (String) request.getParameter("code");
