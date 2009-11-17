@@ -197,11 +197,17 @@
               }
         %>              
               <!-- Thesaurus, banner search area -->
-              <div class="bannerarea">
-                <div class="vocabularynamebanner">
-                  <div class="vocabularynameshort"><%=shortName%></div>
-                  <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
-                </div>              
+              <div class="bannerarea">                
+                <% if (menubar_version == null) { %>
+                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">
+                <% } else { %>
+                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">
+                <% } %>            
+                    <div class="vocabularynamebanner">
+                      <div class="vocabularynameshort"><%=shortName%></div>
+                      <div class="vocabularynamelong">Version: <%=term_browser_version%></div>                
+                    </div>
+                  </a>                              
                 <div class="search-globalnav">
                   <!-- Search box -->
                   <div class="searchbox-top"><img
