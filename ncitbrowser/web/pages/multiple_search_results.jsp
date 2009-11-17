@@ -204,7 +204,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           <%
                           } else {
                           %>
-                               <a href="<%=request.getContextPath() %>/pages/concept_details_other_term.jsf?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
+                               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
                           <%
                           }
                           %>
@@ -232,7 +232,7 @@ from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">sele
                           <%
                           } else {
                           %>
-                               <a href="<%=request.getContextPath() %>/pages/concept_details_other_term.jsf?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+                               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
                           <%
                           }
                           %>
