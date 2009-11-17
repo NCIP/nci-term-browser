@@ -51,7 +51,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         %>
             <p>
             Source Home Page: 
-              <a href="<%=download_url_value%>" target="_blank"><%=source_url_value%></a>
+              <a href="<%=source_url_value%>" target="_blank"><%=source_url_value%></a>
             </p>
         <%    
         }
