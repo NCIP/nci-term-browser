@@ -67,9 +67,11 @@
         }
         
         String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+        if (term_browser_version == null) term_browser_version = "N/A";
+        
         if (scheme != null) {
-          //shortName = new DataUtils().getLocalName(scheme);
             shortName = DataUtils.getMetadataValue(scheme, "display_name");
+            if (shortName == null) shortName = "Vocabulary";
         }
         if (scheme != null && scheme == null) {
           if (version != null) {

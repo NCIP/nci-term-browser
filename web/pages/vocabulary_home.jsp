@@ -49,19 +49,20 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
   <%
     String dictionary = (String) request.getParameter("dictionary");
     String scheme = (String) request.getParameter("scheme");
+    String shortName = "Vocabulary";
     if (scheme == null) {
       scheme = (String) request.getAttribute("scheme");
-    }
-    String shortName = "Vocabulary";
-    if (scheme != null) {
-      //shortName = DataUtils.getLocalName(scheme);
+    } else {
       shortName = DataUtils.getMetadataValue(scheme, "display_name");
+      if (shortName == null) shortName = "Vocabulary";
     }
     String version = (String) request.getParameter("version");
     if (version == null) {
       version = (String) request.getAttribute("version");
     }
     String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+    if (term_browser_version == null) term_browser_version = "N/A";
+    
     if (dictionary != null && scheme == null) {
       scheme = dictionary;
       if (version != null) {
