@@ -576,7 +576,7 @@ System.out.println("\n\tActive? " + isActive);
 				}
 
                 if (matches == null) {
-                    System.out.println("Concep not found.");
+                    System.out.println("Concept not found.");
                     return null;
                 }
                 int count = matches.getResolvedConceptReferenceCount();
