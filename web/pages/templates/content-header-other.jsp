@@ -1,4 +1,5 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+
 <!-- Thesaurus, banner search area -->
 <div class="bannerarea">
 <%
@@ -13,10 +14,18 @@
             request.getSession().setAttribute("dictionary", hdr_dictionary);
             String content_hdr_shortName = DataUtils.getLocalName(hdr_dictionary);
             String content_hdr_formalName = DataUtils.getFormalName(content_hdr_shortName);
+            
+            String display_name = DataUtils.getMetadataValue(content_hdr_formalName, "display_name");
+            String term_browser_version = DataUtils.getMetadataValue(content_hdr_formalName, "term_browser_version");
+            
+            if (display_name == null || display_name.compareTo("null") == 0) {
+                display_name = content_hdr_shortName;
+            }
+
 %>
 <div class="vocabularynamebanner">
-<div class="vocabularynameshort"><%=content_hdr_shortName%></div>
-<div class="vocabularynamelong"><%=content_hdr_formalName%></div>
+<div class="vocabularynameshort"><%=display_name%></div>
+<div class="vocabularynamelong">Version:&nbsp;<%=term_browser_version%></div>
 </div>
 <%
         }
