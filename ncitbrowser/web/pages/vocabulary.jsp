@@ -44,6 +44,8 @@
         String voc_description = null;
         String voc_version = null;
         Vector v = null;
+        
+        /*
         Vector metadata_names = new Vector();
         List metadataElementList = NCItBrowserProperties
             .getMetadataElementList();
@@ -52,11 +54,13 @@
               .get(i);
           metadata_names.add(ele.getName());
         }
+        */
          
         /* ------------------------ */
         
         String scheme = (String) request.getParameter("dictionary");
-        String shortName = scheme;
+        String shortName = DataUtils.getLocalName(scheme);
+        
         String dictionary = null;
         if (scheme == null) {
           scheme = (String) request.getAttribute("scheme");
@@ -67,12 +71,18 @@
         }
         
         String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
-        if (term_browser_version == null) term_browser_version = "N/A";
+        if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;//"N/A";
         
+        String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+        if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
+       
+        /*
         if (scheme != null) {
             shortName = DataUtils.getMetadataValue(scheme, "display_name");
             if (shortName == null) shortName = "Vocabulary";
         }
+        */
+        
         if (scheme != null && scheme == null) {
           if (version != null) {
             dictionary = scheme + " (version" + version + ")";
@@ -163,7 +173,7 @@
             
         <p>
         <%
-          String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+          //String display_name = DataUtils.getMetadataValue(scheme, "display_name");
         %>  
           To access <b><%=display_name%></b>, please review and accept the copyright/license statement below:
         </p>            
@@ -204,7 +214,7 @@
                   <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">
                 <% } %>            
                     <div class="vocabularynamebanner">
-                      <div class="vocabularynameshort"><%=shortName%></div>
+                      <div class="vocabularynameshort"><%=display_name%></div>
                       <div class="vocabularynamelong">Version: <%=term_browser_version%></div>                
                     </div>
                   </a>                              

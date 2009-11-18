@@ -22,6 +22,13 @@
                 display_name = content_hdr_shortName;
             }
 
+            if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
+		term_browser_version = (String) request.getParameter("version");
+		if (term_browser_version == null) {
+		    term_browser_version = (String) request.getAttribute("version");
+		}
+       	    }
+        
 %>
 <div class="vocabularynamebanner">
 <div class="vocabularynameshort"><%=display_name%></div>
