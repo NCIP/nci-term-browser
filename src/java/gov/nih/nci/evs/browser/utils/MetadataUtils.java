@@ -73,6 +73,7 @@ import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 import org.LexGrid.LexBIG.caCore.interfaces.LexEVSService;
 import org.LexGrid.codingSchemes.CodingScheme;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
 
 import javax.faces.model.SelectItem;
 
@@ -123,7 +124,7 @@ public class MetadataUtils {
 		throw new RuntimeException("Error retrieving Metadata from Coding Scheme: " + codingScheme);
 	}
 
-
+/*
     public static MetadataPropertyList getMetadataPropertyList(LexBIGService lbSvc, String codingSchemeName, String version, String urn) {
 		AbsoluteCodingSchemeVersionReference acsvr = new AbsoluteCodingSchemeVersionReference();
 
@@ -173,6 +174,7 @@ public class MetadataUtils {
 
 		return mdpl;
 	}
+*/
 
  	public static Vector<String> getAvailableCodingSchemeVersions(LexBIGService lbSvc, String codingSchemeName)
 	{
@@ -330,6 +332,29 @@ public class MetadataUtils {
 	    }
 	    return v;
 	}
+
+
+
+    public static MetadataPropertyList getMetadataPropertyList(LexBIGService lbSvc, String codingSchemeName, String version, String urn) {
+		LexBIGServiceConvenienceMethods lbscm = null;
+		MetadataPropertyList mdpl = null;
+		try {
+			lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+					.getGenericExtension("LexBIGServiceConvenienceMethods");
+			lbscm.setLexBIGService(lbSvc);
+
+			LexBIGServiceMetadata lbsm = lbSvc.getServiceMetadata();
+			lbsm = lbsm.restrictToCodingScheme(Constructors.createAbsoluteCodingSchemeVersionReference(codingSchemeName, version));
+			mdpl = lbsm.resolve();
+
+			return mdpl;
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return mdpl;
+    }
+
+
 
 
 	/**
