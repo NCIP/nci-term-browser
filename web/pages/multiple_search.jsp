@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
+<%@ page import="java.util.HashMap"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
@@ -70,14 +71,45 @@
                   int num_vocabularies = ontology_list.size();
                   String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 
+HashMap display_name_hmap = null;
+Vector display_name_vec = null;
+display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
+display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+if (display_name_hmap == null || display_name_vec == null) {
+        display_name_hmap = new HashMap();
+        display_name_vec = new Vector();
+
+	for (int i = 0; i < ontology_list.size(); i++) {
+		SelectItem item = (SelectItem) ontology_list.get(i);
+		String value = (String) item.getValue();
+		String label = (String) item.getLabel();
+		//String label2 = "|" + label + "|";
+
+		String scheme = DataUtils.key2CodingSchemeName(value);
+		String version = DataUtils.key2CodingSchemeVersion(value);
+		String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+		if (display_name == null || display_name.compareTo("null") == 0) display_name = DataUtils.getLocalName(scheme);
+		display_name_hmap.put(display_name, value);
+		display_name_vec.add(display_name); 
+	}
+	display_name_vec = SortUtils.quickSort(display_name_vec);
+	request.getSession().setAttribute("display_name_hmap", display_name_hmap);
+	request.getSession().setAttribute("display_name_vec", display_name_vec);
+}
+
                 %>
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <%
-                      for (int i = 0; i < ontology_list.size(); i++) {
-                        SelectItem item = (SelectItem) ontology_list.get(i);
-                        String value = (String) item.getValue();
-                        String label = (String) item.getLabel();
+                      //for (int i = 0; i < ontology_list.size(); i++) {
+                      //  SelectItem item = (SelectItem) ontology_list.get(i);
+                      for (int i = 0; i < display_name_vec.size(); i++) {
+                        String display_name = (String) display_name_vec.elementAt(i);
+                        String value = (String)  display_name_hmap.get(display_name);
+                        String label = (String)  display_name_hmap.get(display_name);
+                        //String value = (String) item.getValue();
+                        //String label = (String) item.getLabel();
+                        
                         String label2 = "|" + label + "|";
 
                         String scheme = DataUtils.key2CodingSchemeName(value);
@@ -140,15 +172,12 @@
                            <%
                            }
                            
-                           String display_label = DataUtils.getMetadataValue(scheme, "display_name");
                            String full_name = DataUtils.getMetadataValue(scheme, "full_name");
+                           if (full_name == null || full_name.compareTo("null") == 0) full_name = scheme;
                            String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+                           if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;
                            
-                           if (display_label != null && display_label.compareTo("null") != 0 &&
-                               full_name != null && full_name.compareTo("null") != 0 &&
-                               term_browser_version != null && term_browser_version.compareTo("null") != 0) {
-                               label = display_label + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
-                           }
+                           label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
                          
                             %>
                               <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">

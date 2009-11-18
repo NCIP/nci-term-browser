@@ -76,13 +76,7 @@
         String display_name = DataUtils.getMetadataValue(scheme, "display_name");
         if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
        
-        /*
-        if (scheme != null) {
-            shortName = DataUtils.getMetadataValue(scheme, "display_name");
-            if (shortName == null) shortName = "Vocabulary";
-        }
-        */
-        
+       
         if (scheme != null && scheme == null) {
           if (version != null) {
             dictionary = scheme + " (version" + version + ")";
