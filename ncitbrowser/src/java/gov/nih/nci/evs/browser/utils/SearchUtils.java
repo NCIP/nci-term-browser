@@ -2393,6 +2393,9 @@ public class SearchUtils {
 							//CodedNodeSet 	difference(CodedNodeSet codesToRemove)
 							cns = cns2.difference(cns);
 							if (cns != null) {
+//KLO, testing
+                                cns = filterOutAnonymousClasses(lbSvc, scheme, cns);
+
 								cns_vec.add(cns);
 							}
 
@@ -2432,6 +2435,9 @@ public class SearchUtils {
 					long ms = System.currentTimeMillis(), delay = 0;
                     iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
+                    // testing, KLO (work-around) failed
+                    // iterator = filterOutAnonymousClasses(cns, iterator);
+
                 }  catch (Exception e) {
                     System.out.println("ERROR: cns.resolve throws exceptions.");
                 }
@@ -2460,4 +2466,94 @@ public class SearchUtils {
     	return propertyTypes;
 	}
 
+
+    private ResolvedConceptReferencesIterator filterOutAnonymousClasses(LexBIGService lbSvc, String scheme, CodedNodeSet cns, ResolvedConceptReferencesIterator iterator) {
+
+		int maxReturn = 100;
+		ConceptReferenceList codeList = new ConceptReferenceList();
+		int knt = 0;
+		int knt_concept = 0;
+
+        try {
+			if (iterator == null || iterator.numberRemaining() == 0) return iterator;
+
+			//System.out.println("iterator.numberRemaining(): " + iterator.numberRemaining());
+
+			while(iterator.hasNext()) {
+				ResolvedConceptReference[] refs = iterator.next(maxReturn).getResolvedConceptReference();
+				for(ResolvedConceptReference ref : refs) {
+					String code = ref.getConceptCode();
+					knt++;
+					System.out.println("(" + knt + ") code: " + code);
+					if (code.indexOf("@") == -1) {
+						codeList.addConceptReference(ref);
+						knt_concept++;
+					} else {
+						System.out.println("name: " + ref.getEntityDescription().getContent());
+					}
+				}
+			}
+
+			//System.out.println("(**) Number of concepts: " + knt_concept);
+
+            cns = lbSvc.getNodeSet(scheme, null, null);
+
+			cns = cns.restrictToCodes(codeList);
+			SortOptionList sortCriteria = null;
+			LocalNameList restrictToProperties = new LocalNameList();
+			boolean resolveConcepts = false;
+			iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+
+			//System.out.println("New iterator.numberRemaining(): " + iterator.numberRemaining());
+
+			return iterator;
+		} catch (Exception ex) {
+
+		}
+		return null;
+	}
+
+
+    private CodedNodeSet filterOutAnonymousClasses(LexBIGService lbSvc, String scheme, CodedNodeSet cns) {
+        if (cns == null) return cns;
+
+		SortOptionList sortCriteria = null;
+		LocalNameList restrictToProperties = new LocalNameList();
+		boolean resolveConcepts = false;
+
+		int maxReturn = 100;
+		ConceptReferenceList codeList = new ConceptReferenceList();
+		int knt = 0;
+		int knt_concept = 0;
+
+        try {
+		    ResolvedConceptReferencesIterator iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+			//System.out.println("iterator.numberRemaining(): " + iterator.numberRemaining());
+
+			while(iterator.hasNext()) {
+				ResolvedConceptReference[] refs = iterator.next(maxReturn).getResolvedConceptReference();
+				for(ResolvedConceptReference ref : refs) {
+					String code = ref.getConceptCode();
+					knt++;
+					//System.out.println("(" + knt + ") code: " + code);
+					if (code.indexOf("@") == -1) {
+						codeList.addConceptReference(ref);
+						knt_concept++;
+					} else {
+						System.out.println("name: " + ref.getEntityDescription().getContent());
+					}
+				}
+			}
+
+			//System.out.println("(**) Number of concepts: " + knt_concept);
+
+            cns = lbSvc.getNodeSet(scheme, null, null);
+			cns = cns.restrictToCodes(codeList);
+
+			return cns;
+		} catch (Exception ex) {
+
+		}
+		return null;
+	}
 }
