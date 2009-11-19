@@ -52,15 +52,11 @@
           String dictionary = (String) request.getAttribute("dictionary");
 
           if (dictionary == null) {
-              //dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
               dictionary = (String) request.getParameter("dictionary");
               dictionary = DataUtils.getCodingSchemeName(dictionary);
           }
-          String shortName = "Vocabulary";
-          if (dictionary != null) {
-              shortName = DataUtils.getLocalName(dictionary);
-          }
 
+          String shortName = DataUtils.getLocalName(dictionary);
           String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
           if (dictionary.compareTo("NCI Thesaurus") != 0) {
               term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
@@ -79,10 +75,26 @@
 
 
         %>
+        
+ 
+ <%
+         String version = (String) request.getParameter("version");
+         if (version == null) {
+             version = (String) request.getAttribute("version");
+         }
+         
+         String term_browser_version = DataUtils.getMetadataValue(dictionary, "term_browser_version");
+         if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;
+         String display_name = DataUtils.getMetadataValue(dictionary, "display_name");
+         if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
+ %>       
+        
+        
     <div class="vocabularynamebanner">
-      <div class="vocabularynameshort"><%=shortName%></div>
-      <div class="vocabularynamelong"><%=dictionary%></div>
+      <div class="vocabularynameshort"><%=display_name%></div>
+      <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
     </div>
+    
         <%
           }
         %>
