@@ -36,7 +36,24 @@
       <div class="center-page">
         <%@ include file="/pages/templates/sub-header.jsp" %>
         <div id="main-area">
-          <%@ include file="/pages/templates/content-header.jsp" %>
+<%          
+String contact_dictionary = (String) request.getSession().getAttribute("dictionary");
+if (contact_dictionary == null) {
+%>
+   <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+<%   
+}
+else if (contact_dictionary.compareTo("NCI Thesaurus") == 0) {
+%>
+   <%@ include file="/pages/templates/content-header.jsp" %>
+<%
+} else {
+%>
+   <%@ include file="/pages/templates/content-header-other.jsp" %>
+<%   
+}
+%>
+          
           <div class="pagecontent">
             <div class="texttitle-blue">Contact Us</div>
             <hr></hr>
