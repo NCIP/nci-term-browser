@@ -71,9 +71,17 @@
         }
         
         String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+        
+System.out.println( "term_browser_version: " + term_browser_version);
+
+        
         if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;//"N/A";
         
         String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+        
+
+System.out.println( "display_name: " + display_name);
+        
         if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
        
        
