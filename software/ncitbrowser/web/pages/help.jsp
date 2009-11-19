@@ -29,7 +29,25 @@
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-      <%@ include file="/pages/templates/content-header.jsp" %>
+    
+<%          
+String help_dictionary = (String) request.getSession().getAttribute("dictionary");
+if (help_dictionary == null) {
+%>
+   <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+<%   
+}
+else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
+%>
+   <%@ include file="/pages/templates/content-header.jsp" %>
+<%
+} else {
+%>
+   <%@ include file="/pages/templates/content-header-other.jsp" %>
+<%   
+}
+%>
+
       <!-- Page content -->
       <div class="pagecontent">
         <!-- ======================================= -->
