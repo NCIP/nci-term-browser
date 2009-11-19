@@ -285,6 +285,8 @@ request.getSession().setAttribute("code", c.getEntityCode());
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
 
+                /*
+
                 if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI%20Thesaurus") == 0) {
                    return "concept_details";
 
@@ -294,6 +296,8 @@ request.getSession().setAttribute("code", c.getEntityCode());
                 } else {
                     return "concept_details_other_term";
                 }
+                */
+                return "concept_details";
             }
         }
 
