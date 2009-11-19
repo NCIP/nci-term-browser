@@ -1014,7 +1014,8 @@ public class SearchUtils {
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
 		{
-			matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM; // to be replace by literalSubString
+			//matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM; // to be replace by literalSubString
+			matchAlgorithm = findBestContainsAlgorithm(matchText);
 		}
 
         CodedNodeSet cns = null;
@@ -1117,7 +1118,8 @@ public class SearchUtils {
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0) //p11.1-q11.1  /100{WBC}
 		{
-			matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM;
+			//matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM;
+			matchAlgorithm = findBestContainsAlgorithm(matchText);
 		}
 
         CodedNodeSet cns = null;
@@ -2157,7 +2159,8 @@ public class SearchUtils {
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
-			matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM; // to be replaced by literalSubString
+			//matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM; // to be replaced by literalSubString
+			matchAlgorithm = findBestContainsAlgorithm(matchText);
 		}
 
         CodedNodeSet cns = null;
@@ -2336,7 +2339,8 @@ public class SearchUtils {
         matchText = matchText.trim();
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
-			matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM; // to be replaced by literalSubString
+			//matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM; // to be replaced by literalSubString
+			matchAlgorithm = findBestContainsAlgorithm(matchText);
 		}
 
         CodedNodeSet cns = null;
@@ -2556,4 +2560,17 @@ public class SearchUtils {
 		}
 		return null;
 	}
+
+    private String findBestContainsAlgorithm(String matchText) {
+		if (matchText == null) return "nonLeadingWildcardLiteralSubString";
+		matchText = matchText.trim();
+		if (matchText.length() == 0) return "nonLeadingWildcardLiteralSubString"; // or null
+		if (matchText.length() > 1) return "nonLeadingWildcardLiteralSubString";
+		char ch = matchText.charAt(0);
+		if (Character.isDigit(ch)) return "literal";
+		else if (Character.isLetter(ch)) return "LuceneQuery";
+		else return "literalContains";
+	}
+
+
 }
