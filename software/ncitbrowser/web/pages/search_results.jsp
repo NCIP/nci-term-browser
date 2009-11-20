@@ -57,8 +57,18 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 
           //HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 
+/*
           IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
+*/
+          
+          String key = (String) request.getAttribute("key");
+          System.out.println(key);
+          IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+                .getSessionMap().get("iteratorBeanManager");
+                
+          IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+          
 
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));

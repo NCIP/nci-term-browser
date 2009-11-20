@@ -59,6 +59,8 @@ public class IteratorBean extends Object {
     int lastResolved;
     int maxReturn = 100;
 
+    String key = null;
+
 	public IteratorBean(ResolvedConceptReferencesIterator iterator) {
 		this.iterator = iterator;
 		this.maxReturn = DEFAULT_MAX_RETURN;
@@ -77,6 +79,10 @@ public class IteratorBean extends Object {
 		this.iterator = iterator;
 		this.maxReturn = DEFAULT_MAX_RETURN;
 		initialize();
+	}
+
+    public ResolvedConceptReferencesIterator getIterator() {
+		return this.iterator;
 	}
 
 	public void initialize() {
@@ -224,6 +230,15 @@ public class IteratorBean extends Object {
 			int j = i+1;
 			displayRef(osWriter, j, rcr);
 		}
+	}
+
+    public void setKey(String key) {
+		this.key = key;
+	}
+
+
+    public String getKey() {
+		return this.key;
 	}
 
 }
