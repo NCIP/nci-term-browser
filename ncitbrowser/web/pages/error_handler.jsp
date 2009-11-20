@@ -27,26 +27,13 @@
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-
-        <%
-        String err_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
-        System.out.println("*** err_dictionary: " + err_dictionary);
-        if (err_dictionary == null) {
-        %>
-          <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
-        <%
-        } else if (err_dictionary.compareTo("NCI Thesaurus") == 0) {
-        %>
-          <%@ include file="/pages/templates/content-header.jsp" %>
-        <%
-        } else {
-                request.getSession().setAttribute("dictionary", err_dictionary);
-        %>
-                <%@ include file="/pages/templates/content-header-other.jsp" %>
-        <%
-        }
-        %>
-
+      <div class="bannerarea">
+        <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" border="0"/></a></div>
+      </div>
+      <!-- end Thesaurus, banner search area -->
+      <!-- Quick links bar -->
+      <%@ include file="/pages/templates/quickLink.jsp" %>
+      <!-- end Quick links bar -->
       <!-- Page content -->
       <div class="pagecontent">
         <%
