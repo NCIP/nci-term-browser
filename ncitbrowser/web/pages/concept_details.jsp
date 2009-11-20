@@ -30,45 +30,42 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-
 <%
-            String dictionary = null;
-	    dictionary = (String) request.getParameter("dictionary");
-	    if (dictionary == null) {
+	String dictionary = null;
+	dictionary = (String) request.getParameter("dictionary");
+	if (dictionary == null) {
 		dictionary = "NCI Thesaurus";
-	    }
-            if (dictionary != null) {
+	}
+	if (dictionary != null) {
 		dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
 		dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
-		dictionary = DataUtils.getCodingSchemeName( dictionary );
+		dictionary = DataUtils.getCodingSchemeName(dictionary);
 		request.getSession().setAttribute("dictionary", dictionary);
-            } else {
-                dictionary = (String) request.getSession().getAttribute("dictionary");
-            }
-            
-            if (dictionary.compareTo("NCI Thesaurus") == 0) {
-            %>
+	} else {
+		dictionary = (String) request.getSession().getAttribute(
+				"dictionary");
+	}
+
+	if (dictionary.compareTo("NCI Thesaurus") == 0) {
+%>
                <title>NCI Thesaurus</title>
-            <%   
-            } else {
+            <%
+            	} else {
             %>
                <title>NCI Term Browser</title>
             <%
-            }
+            	}
             %>
-
-%>
-
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleSheet.css" />
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/script.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/search.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/dropdown.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
 
   <f:view>
     <%@ include file="/pages/templates/header.jsp" %>
@@ -78,111 +75,122 @@
       <div id="main-area">
 
           <%
-            String code = null;
-            String type = null;
-            String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("singleton"));
+          	String code = null;
+          		String type = null;
+          		String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils
+          				.cleanXSS((String) request.getAttribute("singleton"));
 
-            if (singleton != null && singleton.compareTo("true") == 0) {
-		    if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
-			 dictionary = DataUtils.getCodingSchemeName(dictionary);
-		    }
-            }
+          		if (singleton != null && singleton.compareTo("true") == 0) {
+          			if (dictionary != null
+          					&& dictionary
+          							.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
+          				dictionary = DataUtils.getCodingSchemeName(dictionary);
+          			}
+          		}
 
-code = (String) request.getParameter("code");
+          		code = (String) request.getParameter("code");
 
-  if (code == null) {
-    Concept con = (Concept) request.getSession().getAttribute("concept");
-    if (con != null) {
-        code = con.getEntityCode();
-        request.getSession().setAttribute("code", code);
+          		if (code == null) {
+          			Concept con = (Concept) request.getSession().getAttribute(
+          					"concept");
+          			if (con != null) {
+          				code = con.getEntityCode();
+          				request.getSession().setAttribute("code", code);
 
-    } else {
-        code = (String) request.getSession().getAttribute("code");
-    }
-    if (code == null) {
-	System.out.println("WARNING: concept_details.jsp code: " + code);
-    }
-  }
+          			} else {
+          				code = (String) request.getSession().getAttribute(
+          						"code");
+          			}
+          			if (code == null) {
+          				System.out
+          						.println("WARNING: concept_details.jsp code: "
+          								+ code);
+          			}
+          		}
 
+          		String active_code = (String) request.getSession()
+          				.getAttribute("active_code");
+          		if (active_code == null) {
+          			request.getSession().setAttribute("active_code", code);
+          		} else {
+          			if (active_code.compareTo(code) != 0) {
+          				request.getSession().removeAttribute(
+          						"RelationshipHashMap");
+          				request.getSession().setAttribute("active_code", code);
+          			}
+          		}
 
-  String active_code = (String) request.getSession().getAttribute("active_code");
-  if (active_code == null) {
-      request.getSession().setAttribute("active_code", code);
-  } else {
-     if (active_code.compareTo(code) != 0) {
-         request.getSession().removeAttribute("RelationshipHashMap");
-         request.getSession().setAttribute("active_code", code);
-     }
-  }
+          		Boolean new_search = null;
+          		Object new_search_obj = request.getSession().getAttribute(
+          				"new_search");
+          		if (new_search_obj != null) {
+          			new_search = (Boolean) new_search_obj;
+          			if (new_search.equals(Boolean.TRUE)) {
+          				type = "properties";
+          				request.getSession().setAttribute("new_search",
+          						Boolean.FALSE);
+          				code = (String) request.getSession().getAttribute(
+          						"code");
+          			}
+          		}
 
+          		if (type == null) {
+          			type = gov.nih.nci.evs.browser.utils.HTTPUtils
+          					.cleanXSS((String) request.getParameter("type"));
 
-Boolean new_search = null;
-Object new_search_obj = request.getSession().getAttribute("new_search");
-if (new_search_obj != null) {
-    new_search = (Boolean) new_search_obj;
-    if (new_search.equals(Boolean.TRUE)) {
-        type = "properties";
-        request.getSession().setAttribute("new_search", Boolean.FALSE);
-        code = (String) request.getSession().getAttribute("code");
-    }
-}
+          			if (type == null) {
+          				type = "properties";
+          			} else if (type.compareTo("properties") != 0
+          					&& type.compareTo("relationship") != 0
+          					&& type.compareTo("synonym") != 0
+          					&& type.compareTo("all") != 0) {
+          				type = "properties";
+          			}
+          		}
 
-if (type == null) {
-type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
+          		String term_suggestion_application_url = new DataUtils()
+          				.getTermSuggestionURL();
+          		if (dictionary.compareTo("NCI Thesaurus") != 0) {
+          			term_suggestion_application_url = DataUtils
+          					.getTermSuggestionURL(dictionary, null);
+          		}
 
-            if (type == null) {
-                type = "properties";
-            } else if (type.compareTo("properties") != 0 &&
-                     type.compareTo("relationship") != 0 &&
-                     type.compareTo("synonym") != 0 &&
-                     type.compareTo("all") != 0) {
-                type = "properties";
-            }
-}
+          		String name = "";
+          		Concept c = null;
 
+          		String vers = null;
+          		String ltag = null;
 
+          		c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 
-            String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-            if (dictionary.compareTo("NCI Thesaurus") != 0) {
-                term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
-            }
+          		if (c != null) {
+          			request.getSession().setAttribute("concept", c);
+          			request.getSession().setAttribute("code", code);
+          			name = c.getEntityDescription().getContent();
 
-            String name = "";
-            Concept c = null;
+          		} else {
+          			//name = "The server encountered an internal error that prevented it from fulfilling this request.";
+          			name = "ERROR: Invalid code - " + code + ".";
+          		}
 
-  String vers = null;
-  String ltag = null;
-
-  c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-
-  if (c != null) {
-     request.getSession().setAttribute("concept", c);
-     request.getSession().setAttribute("code", code);
-     name = c.getEntityDescription().getContent();
-
-  } else {
-     //name = "The server encountered an internal error that prevented it from fulfilling this request.";
-     name = "ERROR: Invalid code - " + code + ".";
-  }
-
-        if (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0) {
-
-        %>
+          		if (dictionary.compareTo("NCI Thesaurus") == 0
+          				|| dictionary.compareTo("NCI_Thesaurus") == 0) {
+          %>
           <%@ include file="/pages/templates/content-header.jsp" %>
         <%
-        } else {
-                request.getSession().setAttribute("dictionary", dictionary);
+        	} else {
+        			request.getSession().setAttribute("dictionary", dictionary);
         %>
                 <%@ include file="/pages/templates/content-header-other.jsp" %>
         <%
-        }
-        String tg_dictionary_0 = dictionary;
-        String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
-        if (c != null) {
-        request.getSession().setAttribute("type", type);
-        request.getSession().setAttribute("singleton", "false");
-
-          %>
+        	}
+        		String tg_dictionary_0 = dictionary;
+        		String tg_dictionary = DataUtils.replaceAll(dictionary, " ",
+        				"%20");
+        		if (c != null) {
+        			request.getSession().setAttribute("type", type);
+        			request.getSession().setAttribute("singleton", "false");
+        %>
 
         <!-- Page content -->
         <div class="pagecontent">
@@ -194,29 +202,31 @@ type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getPara
           <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
 
           <%
+          	Vector visitedConcepts = (Vector) request.getSession()
+          					.getAttribute("visitedConcepts");
+          			if (visitedConcepts == null) {
+          				visitedConcepts = new Vector();
+          			}
 
-Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
-if (visitedConcepts == null) {
-    visitedConcepts = new Vector();
-}
+          			String localCodingSchemeName = DataUtils
+          					.getLocalName(tg_dictionary_0);
+          			String visitedConceptStr = localCodingSchemeName + "|"
+          					+ code + "|" + name;
+          			if (!visitedConcepts.contains(visitedConceptStr)) {
+          				visitedConcepts.add(visitedConceptStr);
+          				request.getSession().removeAttribute("visitedConcepts");
+          				request.getSession().setAttribute("visitedConcepts",
+          						visitedConcepts);
+          			}
 
-
-
-String localCodingSchemeName = DataUtils.getLocalName(tg_dictionary_0);
-String visitedConceptStr = localCodingSchemeName + "|" + code + "|" + name;
-if (!visitedConcepts.contains(visitedConceptStr)) {
-  visitedConcepts.add(visitedConceptStr);
-  request.getSession().removeAttribute("visitedConcepts");
-  request.getSession().setAttribute("visitedConcepts", visitedConcepts);
-}
-
-          if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
+          			if (term_suggestion_application_url != null
+          					&& term_suggestion_application_url.compareTo("") != 0) {
           %>
           <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
              <a href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
           </td>
           <%
-          }
+          	}
           %>
 
         </tr>
@@ -226,9 +236,8 @@ if (!visitedConcepts.contains(visitedConceptStr)) {
 
 
 <%
-  request.getSession().setAttribute("concept", c);
-  request.getSession().setAttribute("code", code);
-
+	request.getSession().setAttribute("concept", c);
+			request.getSession().setAttribute("code", code);
 %>
 
 
@@ -239,14 +248,14 @@ if (!visitedConcepts.contains(visitedConceptStr)) {
           <%@ include file="/pages/templates/synonym.jsp" %>
       </div>
           <%
-          } else {
+          	} else {
           %>
       <div class="textbody">
           <%=name%>
       </div>
     <%
-          }
-          %>
+    	}
+    %>
             <%@ include file="/pages/templates/nciFooter.html" %>
           </div>
         </div>
