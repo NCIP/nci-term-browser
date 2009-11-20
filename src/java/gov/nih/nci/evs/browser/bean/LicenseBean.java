@@ -73,12 +73,19 @@ public class LicenseBean extends Object {
 		//MedDRA, SNOMED CT, and UMLS Semantic Network.
         String license_display = null;
 
-        license_display = DataUtils.getMetadataValue(codingSchemeName, "license_display");
-        if (license_display != null && license_display.compareTo("show") == 0) return true;
+        license_display = getLicenseDisplay(codingSchemeName, "license_display");
+        //if (license_display != null && (license_display.compareTo("show") == 0 || license_display.compareTo("accept") == 0)) return true;
+        if (license_display != null && license_display.compareTo("accept") == 0) return true;
 
         return false;
     }
 
+
+    public static String getLicenseDisplay(String codingSchemeName, String version) {
+		//MedDRA, SNOMED CT, and UMLS Semantic Network.
+        String license_display = null;
+        return DataUtils.getMetadataValue(codingSchemeName, "license_display");
+    }
 
 	public static String resolveCodingSchemeCopyright(String codingSchemeName, String version) {
 		LexBIGService lbs = RemoteServerUtil.createLexBIGService();
@@ -86,17 +93,6 @@ public class LicenseBean extends Object {
 		if (version != null) versionOrTag.setVersion(version);
 		String copyRightStmt = null;
 		try {
-			/*
-			String urn = null;
-			if (version == null) {
-				version = DataUtils.getVocabularyVersionByTag(codingSchemeName, "PRODUCTION");
-				if (version == null) version = DataUtils.getVocabularyVersionByTag(codingSchemeName, null);
-			}
-			Vector v = MetadataUtils.getMetadataValues(codingSchemeName, version, urn, Constants.LICENSE_STATEMENT);
-			if (v != null && v.size() > 0) return (String) v.elementAt(0);
-
-			//copyRightStmt = lbs.resolveCodingSchemeCopyright(codingSchemeName, versionOrTag);
-			*/
 			copyRightStmt = DataUtils.getMetadataValue(codingSchemeName, "copyright");
 		} catch (Exception ex) {
 		}
