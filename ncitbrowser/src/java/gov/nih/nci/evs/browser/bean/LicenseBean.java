@@ -74,7 +74,7 @@ public class LicenseBean extends Object {
         String license_display = null;
 
         license_display = DataUtils.getMetadataValue(codingSchemeName, "license_display");
-        if (license_display != null && license_display.compareTo("accept") == 0) return true;
+        if (license_display != null && license_display.compareTo("show") == 0) return true;
 
         return false;
     }
