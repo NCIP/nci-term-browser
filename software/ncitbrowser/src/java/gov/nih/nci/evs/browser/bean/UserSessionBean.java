@@ -189,14 +189,58 @@ public class UserSessionBean extends Object {
         Vector<org.LexGrid.concepts.Concept> v = null;
 
         boolean designationOnly = false;
+
+        // check if this search has been performance previously through IteratorBeanManager
+		IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+			.getSessionMap().get("iteratorBeanManager");
+
+		if (iteratorBeanManager == null) {
+			iteratorBeanManager = new IteratorBeanManager();
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("iteratorBeanManager", iteratorBeanManager);
+		}
+
+        IteratorBean iteratorBean = null;
         ResolvedConceptReferencesIterator iterator = null;
+        String key = iteratorBeanManager.createIteratorKey(schemes, matchText, searchTarget, matchAlgorithm, maxToReturn);
         if (searchTarget.compareTo("names") == 0) {
-       	    iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+			if (iteratorBeanManager.containsIteratorBean(key)) {
+				iteratorBean = iteratorBeanManager.getIteratorBean(key);
+				iterator = iteratorBean.getIterator();
+			} else {
+       	    	iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+       	    	if (iterator != null) {
+					iteratorBean = new IteratorBean(iterator);
+					iteratorBean.setKey(key);
+					iteratorBeanManager.addIteratorBean(iteratorBean);
+				}
+			}
+
 		} else if (searchTarget.compareTo("properties") == 0) {
-            iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+			if (iteratorBeanManager.containsIteratorBean(key)) {
+				iteratorBean = iteratorBeanManager.getIteratorBean(key);
+				iterator = iteratorBean.getIterator();
+			} else {
+                iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+       	    	if (iterator != null) {
+					iteratorBean = new IteratorBean(iterator);
+					iteratorBean.setKey(key);
+					iteratorBeanManager.addIteratorBean(iteratorBean);
+				}
+			}
+
 		} else if (searchTarget.compareTo("relationships") == 0) {
 			designationOnly = true;
-            iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+			if (iteratorBeanManager.containsIteratorBean(key)) {
+				iteratorBean = iteratorBeanManager.getIteratorBean(key);
+				iterator = iteratorBean.getIterator();
+			} else {
+                iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+       	    	if (iterator != null) {
+					iteratorBean = new IteratorBean(iterator);
+					iteratorBean.setKey(key);
+					iteratorBeanManager.addIteratorBean(iteratorBean);
+				}
+			}
 		}
 
         request.getSession().setAttribute("vocabulary", scheme);
@@ -207,13 +251,19 @@ public class UserSessionBean extends Object {
         request.getSession().removeAttribute("codeInNCI");
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
+
         if (iterator != null) {
+
+			request.setAttribute("key", key);
+
 			int numberRemaining = 0;
 			try {
 				numberRemaining = iterator.numberRemaining();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+
+/*
 
             IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
@@ -225,24 +275,21 @@ public class UserSessionBean extends Object {
             } else {
                 iteratorBean.setIterator(iterator);
             }
-
+*/
             int size = iteratorBean.getSize();
             if (size > 1) {
-
-
                 request.getSession().setAttribute("search_results", v);
-
-                String match_size = Integer.toString(size);;//Integer.toString(v.size());
+                String match_size = Integer.toString(size);
                 request.getSession().setAttribute("match_size", match_size);
                 request.getSession().setAttribute("page_string", "1");
 
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
                 request.getSession().setAttribute("dictionary", scheme);
                 return "search_results";
+
             } else if (size == 1) {
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", scheme);//Constants.CODING_SCHEME_NAME);
-                //Concept c = (Concept) v.elementAt(0);
                 int pageNumber = 1;
                 List list = iteratorBean.getData(1);
                 ResolvedConceptReference ref = (ResolvedConceptReference) list.get(0);
@@ -260,7 +307,7 @@ public class UserSessionBean extends Object {
 						request.getSession().setAttribute("dictionary", scheme);
 						return "message";
 					} else {
-request.getSession().setAttribute("code", ref.getConceptCode());
+						request.getSession().setAttribute("code", ref.getConceptCode());
 					}
 
                     c = ref.getReferencedEntry();
@@ -275,18 +322,14 @@ request.getSession().setAttribute("code", ref.getConceptCode());
 							return "message";
 					    }
                     } else {
-
-request.getSession().setAttribute("code", c.getEntityCode());
+						request.getSession().setAttribute("code", c.getEntityCode());
 
 					}
                 }
-
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
-
                 /*
-
                 if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI%20Thesaurus") == 0) {
                    return "concept_details";
 
