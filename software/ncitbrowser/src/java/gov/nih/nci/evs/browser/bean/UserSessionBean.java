@@ -709,6 +709,10 @@ public class UserSessionBean extends Object {
                 System.out.println("* criteria: " + matchText);
                 System.out.println("* source: " + source);
                 System.out.println("* ranking: " + ranking);
+                System.out.println("* ontology_list: ");
+                for (int i=0; i<ontology_list.length; ++i) {
+                    System.out.println("  " + i + ") " + ontology_list[i]);
+                }
             } catch (Exception e) {
             }
         }

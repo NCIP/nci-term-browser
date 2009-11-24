@@ -643,7 +643,10 @@ public class SearchUtils {
 					iterator = cns.resolve(sortCriteria, null,
 							restrictToProperties, null, resolveConcepts);
 				} catch (Exception e) {
-					System.out.println("ERROR: cns.resolve throws exceptions.");
+                    System.out.println("Method: SearchUtil.restrictToMatchingProperty");
+					System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
 				}
 
 			} catch (Exception ex) {
@@ -1070,7 +1073,10 @@ public class SearchUtils {
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
                 }  catch (Exception e) {
-                    System.out.println("ERROR: cns.resolve throws exceptions.");
+                    System.out.println("Method: SearchUtil.searchByName");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
                 }
 
             } catch (Exception ex) {
@@ -1198,7 +1204,10 @@ public class SearchUtils {
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
                 }  catch (Exception e) {
-                    System.out.println("ERROR: cns.resolve throws exceptions.");
+                    System.out.println("Method: SearchUtil.searchByName 2");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
                 }
 
             } catch (Exception ex) {
@@ -1255,7 +1264,10 @@ public class SearchUtils {
 
                     int size = iterator.numberRemaining();
                 }  catch (Exception e) {
-                    System.out.println("ERROR: cns.resolve throws exceptions.");
+                    System.out.println("Method: SearchUtil.matchConceptCode");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
                 }
 
             } catch (Exception ex) {
@@ -2259,7 +2271,10 @@ public class SearchUtils {
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
                 }  catch (Exception e) {
-                    System.out.println("ERROR: cns.resolve throws exceptions.");
+                    System.out.println("Method: SearchUtil.searchByProperties");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
                 }
 
             } catch (Exception ex) {
@@ -2443,7 +2458,10 @@ public class SearchUtils {
                     // iterator = filterOutAnonymousClasses(cns, iterator);
 
                 }  catch (Exception e) {
-                    System.out.println("ERROR: cns.resolve throws exceptions.");
+                    System.out.println("Method: SearchUtil.searchByAssociations");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
                 }
 
             } catch (Exception ex) {
