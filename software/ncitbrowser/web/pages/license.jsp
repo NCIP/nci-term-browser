@@ -72,7 +72,9 @@
               alt="Search">
             </h:commandButton>
             &nbsp;&nbsp;
-            <img src="<%= request.getContextPath() %>/images/cancel.gif" name="cancel" alt="reset" onClick="history.back()" />
+            <a href="<%= request.getContextPath() %>/start.jsf">
+              <img src="<%= request.getContextPath() %>/images/cancel.gif" alt="Cancel"/>
+            </a>
             <input type="hidden" id="matchText" name="matchText" value="<%=matchText%>" />
             <input type="hidden" id="algorithm" name="algorithm" value="<%=matchAlgorithm%>" />
             <input type="hidden" id="ontology_list_str" name="ontology_list_str" value="<%=ontology_list_str%>" />
