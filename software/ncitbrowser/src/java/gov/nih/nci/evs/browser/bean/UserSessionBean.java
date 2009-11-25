@@ -583,12 +583,7 @@ public class UserSessionBean extends Object {
 		String scheme = (String) request.getParameter("scheme");
 		String version = (String) request.getParameter("version");
 
-		System.out.println(Utils.SEPARATOR);
-	    System.out.println("Method: UserSessionBean.multipleSearchAction");
-	    System.out.println("* scheme: " + scheme);
-	    System.out.println("* version: " + version);
-	   	
-	    // Called from license.jsp
+		// Called from license.jsp
 		LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
 		if (scheme != null && version != null) {
 
@@ -596,10 +591,10 @@ public class UserSessionBean extends Object {
 				licenseBean = new LicenseBean();
 			}
 			licenseBean.addLicenseAgreement(scheme);
-			request.getSession().setAttribute("licenseBean", licenseBean); //DYEE_A: Duplicate
+			request.getSession().setAttribute("licenseBean", licenseBean);
 			request.getSession().removeAttribute("scheme");
 			request.getSession().removeAttribute("version");
-			request.getSession().setAttribute("licenseBean", licenseBean); //DYEE_A: Duplicate
+			request.getSession().setAttribute("licenseBean", licenseBean);
 		}
 
         String matchText = (String) request.getParameter("matchText");
@@ -628,8 +623,7 @@ public class UserSessionBean extends Object {
 
         if (initial_search != null) { // from home page
             if (multiple_search_error != null) {
-                
-                //DYEE_D: Same code (Begin)
+
 				ontologiesToSearchOn = new ArrayList<String>();
 				ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 
@@ -643,17 +637,15 @@ public class UserSessionBean extends Object {
 						ontologiesToSearchOn.add(s);
 					}
 				}
-				//DYEE_D: Same code (End)
 			}
 
 			if (ontology_list == null || ontology_list.length == 0) {
 				String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
-				request.getSession().setAttribute("warning", message); //DYEE_C: Why both messages types? 
-				request.getSession().setAttribute("message", message); //DYEE_C: Why both messages types?
+				request.getSession().setAttribute("warning", message);
+				request.getSession().setAttribute("message", message);
 				request.getSession().removeAttribute("ontologiesToSearchOn");
 				return "multiple_search";
 			} else {
-		        // DYEE_B: Same code (Begin)
 				ontologiesToSearchOn = new ArrayList<String>();
 
 				ontologiesToSearchOnStr = "|";
@@ -672,11 +664,9 @@ public class UserSessionBean extends Object {
 						}
 					}
 				}
-		        // DYEE_B: Same code (End)
 				request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
 			}
 		} else {
-		    //DYEE_D: Same code (Begin)
 			ontologiesToSearchOn = new ArrayList<String>();
             ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
             if (ontologiesToSearchOnStr != null) {
@@ -689,7 +679,7 @@ public class UserSessionBean extends Object {
                     ontologiesToSearchOn.add(s);
                 }
             }
-            //DYEE_D: Same code (End)
+
 		}
 
         String hide_ontology_list = "false";
@@ -702,8 +692,8 @@ public class UserSessionBean extends Object {
 				hide_ontology_list = "true";
 			}
 			request.getSession().setAttribute("hide_ontology_list", hide_ontology_list);
-            request.getSession().setAttribute("warning", message); //DYEE_C: Why both messages types?
-            request.getSession().setAttribute("message", message); //DYEE_C: Why both messages types?
+            request.getSession().setAttribute("warning", message);
+            request.getSession().setAttribute("message", message);
             return "multiple_search";
         }
 
@@ -737,8 +727,8 @@ public class UserSessionBean extends Object {
             knt = ontology_list.length;
 			if (knt == 0) {
 				String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
-				request.getSession().setAttribute("warning", message); //DYEE_C: Why both messages types?
-				request.getSession().setAttribute("message", message); //DYEE_C: Why both messages types?
+				request.getSession().setAttribute("warning", message);
+				request.getSession().setAttribute("message", message);
 				request.getSession().setAttribute("hide_ontology_list", "true");
 	            request.getSession().removeAttribute("ontologiesToSearchOn");
 				return "multiple_search";
@@ -748,7 +738,6 @@ public class UserSessionBean extends Object {
         Vector schemes = new Vector();
         Vector versions = new Vector();
 
-        // DYEE_B: Same code (Begin)
         ontologiesToSearchOn = new ArrayList<String>();
 
         ontologiesToSearchOnStr = "|";
@@ -767,7 +756,6 @@ public class UserSessionBean extends Object {
                 }
             }
         }
-        // DYEE_B: Same code (End)
 
         scheme = null;
         version = null;
@@ -775,8 +763,8 @@ public class UserSessionBean extends Object {
         String t = "";
         if (ontologiesToSearchOn.size() == 0) {
             String message = Constants.ERROR_NO_VOCABULARY_SELECTED;//"Please select at least one vocabulary.";
-            request.getSession().setAttribute("warning", message); //DYEE_C: Why both messages types?
-            request.getSession().setAttribute("message", message); //DYEE_C: Why both messages types?
+            request.getSession().setAttribute("warning", message);
+            request.getSession().setAttribute("message", message);
             request.getSession().removeAttribute("ontologiesToSearchOn");
             return "multiple_search";
         } else {
@@ -802,7 +790,7 @@ public class UserSessionBean extends Object {
                             request.setAttribute("matchText", matchText);
                             request.setAttribute("searchTarget", searchTarget);
                             request.setAttribute("algorithm", matchAlgorithm);
-                            //request.setAttribute("ontology_list_str", ontology_list_str); //DYEE
+                            request.setAttribute("ontology_list_str", ontology_list_str);
                             request.setAttribute("scheme", scheme);
                             request.setAttribute("version", version);
                             return "license";
@@ -921,8 +909,8 @@ public class UserSessionBean extends Object {
 		}
 
 		request.getSession().setAttribute("hide_ontology_list", hide_ontology_list);
-		request.getSession().setAttribute("warning", message); //DYEE_C: Why both messages types?
-		request.getSession().setAttribute("message", message); //DYEE_C: Why both messages types?
+		request.getSession().setAttribute("warning", message);
+		request.getSession().setAttribute("message", message);
 		request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
 		request.getSession().setAttribute("multiple_search_no_match_error", "true");
 		return "multiple_search";
