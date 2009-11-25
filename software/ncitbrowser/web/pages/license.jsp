@@ -73,7 +73,7 @@
             </h:commandButton>
             &nbsp;&nbsp;
             <a href="<%= request.getContextPath() %>/start.jsf">
-              <img src="<%= request.getContextPath() %>/images/cancel.gif" alt="Cancel"/>
+              <img src="<%= request.getContextPath() %>/images/cancel.gif" border="0" alt="Cancel"/>
             </a>
             <input type="hidden" id="matchText" name="matchText" value="<%=matchText%>" />
             <input type="hidden" id="algorithm" name="algorithm" value="<%=matchAlgorithm%>" />
