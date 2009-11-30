@@ -32,6 +32,11 @@ public class Constants {
     static public final String ERROR_NO_MATCH_FOUND = "No match found.";
     static public final String ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS = "No match found. Please try 'Beings With' or 'Contains' search instead.";
 
+    static public final String ERROR_ENCOUNTERED_TRY_NARROW_QUERY = "Unable to perform search successfully. Please narrow your query.";
+
+
+
+
 	public static final String EXACT_SEARCH_ALGORITHM = "exactMatch";// "literalSubString";//"subString";
 	public static final String STARTWITH_SEARCH_ALGORITHM = "startsWith";// "literalSubString";//"subString";
 	public static final String CONTAIN_SEARCH_ALGORITHM = "nonLeadingWildcardLiteralSubString";// "literalSubString";//"subString";

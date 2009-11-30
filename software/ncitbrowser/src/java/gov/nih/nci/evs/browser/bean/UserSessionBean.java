@@ -345,9 +345,14 @@ public class UserSessionBean extends Object {
         }
 
         String message = "No match found.";
-        if (matchAlgorithm.compareTo("exactMatch") == 0) {
-            message = "No match found. Please try 'Beings With' or 'Contains' search instead.";
+        if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
+            message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
         }
+
+        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0 && matchText.length() <= 2) {
+            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
+        }
+
         request.getSession().setAttribute("message", message);
         request.getSession().setAttribute("dictionary", scheme);
         return "message";
@@ -683,7 +688,7 @@ public class UserSessionBean extends Object {
 		}
 
         String hide_ontology_list = "false";
-        //[#19965] Error message is not displayed when Search Criteria is not proivded
+        //[#19965] Error message is not displayed when Search Criteria is not proivided
         if (matchText == null || matchText.length() == 0)
         {
             String message = Constants.ERROR_NO_SEARCH_STRING_ENTERED;
@@ -903,6 +908,11 @@ public class UserSessionBean extends Object {
         if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
             message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
         }
+
+        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0 && matchText.length() <= 2) {
+            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
+        }
+
 		hide_ontology_list = "false";
 		if (initial_search == null) {
 			hide_ontology_list = "true";
