@@ -440,7 +440,11 @@
 String hierarchy_dictionary = request.getParameter("dictionary");
 String hierarchy_schema = request.getParameter("schema");
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
+
 String hierarchy_version = request.getParameter("version");
+String term_browser_version = DataUtils.getMetadataValue(hierarchy_schema, "term_browser_version");
+String display_name = DataUtils.getMetadataValue(hierarchy_schema, "display_name");
+
 
 if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 %>
@@ -451,7 +455,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 %>
     <div>
       <img src="<%=basePath%>/images/other_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
-      <div class="vocabularynamepopupshort"><%=hierarchy_shortName%></div>
+      <div class="vocabularynamepopupshort"><%=display_name%></div>
     </div>
 <%
 }
@@ -461,7 +465,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
               <td class="pageTitle" align="left">
-                <%=hierarchy_schema%> Hierarchy
+                <%=display_name%> Hierarchy
               </td>
               <td class="pageTitle" align="right">
                 <font size="1" color="red" align="right">
