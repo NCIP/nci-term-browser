@@ -209,6 +209,13 @@ if (display_name_hmap == null || display_name_vec == null) {
                     image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
                     alt="Search">
                   </h:commandButton></td>
+
+                   <% 
+                   if (warning_msg != null) {
+                      request.getSession().removeAttribute("ontologiesToSearchOn");
+                   } 
+                  %>
+                  
                 </tr>
             </table>
 <%
