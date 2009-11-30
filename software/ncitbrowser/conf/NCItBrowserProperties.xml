@@ -192,7 +192,7 @@
             <propertyName>NCIt_Code</propertyName>
             <itemLabel>NCIt Code</itemLabel>
             <url>@ncit.url@/ConceptReport.jsp?dictionary=NCI%20Thesaurus&amp;code=</url>
-            <hyperlinkText>see NCI Thesaurus</hyperlinkText>
+            <hyperlinkText>see NCI Thesaurus info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
        
@@ -200,7 +200,7 @@
             <propertyName>MedDRA_Code</propertyName>
             <itemLabel>MedDRA Code</itemLabel>
             <url>@ncit.url@/ConceptReport.jsp?dictionary=MedDRA%20(Medical%20Dictionary%20for%20Regulatory%20Activities%20Terminology)&amp;code=</url>
-            <hyperlinkText>see MedDRA</hyperlinkText>
+            <hyperlinkText>see MedDRA info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
