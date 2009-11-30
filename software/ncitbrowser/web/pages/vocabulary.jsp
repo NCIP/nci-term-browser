@@ -161,7 +161,7 @@
             <!-- Thesaurus, banner search area -->
             <div class="bannerarea">
               <div class="banner"><a href="<%=basePath%>">
-                <img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" border="0"/></a>
+                <img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" border="0"/>
               </div>
             </div>
             <!-- end Thesaurus, banner search area -->
@@ -208,9 +208,9 @@
               <!-- Thesaurus, banner search area -->
               <div class="bannerarea">                
                 <% if (menubar_version == null) { %>
-                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">
+                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>">
                 <% } else { %>
-                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">
+                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>">
                 <% } %>            
                     <div class="vocabularynamebanner">
                       <div class="vocabularynameshort"><%=display_name%></div>
@@ -232,9 +232,9 @@
                     <tr>
                       <td>
                         <% if (menubar_version == null) { %>
-                              <a href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
+                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>">Home</a>
                         <% } else { %>
-                              <a href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
+                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
                         <% }
                            if (download_site != null) {
                         %>    | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
