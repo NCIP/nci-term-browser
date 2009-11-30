@@ -32,10 +32,12 @@
        	    }
         
 %>
-<div class="vocabularynamebanner">
-<div class="vocabularynameshort"><%=display_name%></div>
-<div class="vocabularynamelong">Version:&nbsp;<%=term_browser_version%></div>
-</div>
+<a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=hdr_dictionary%>">
+  <div class="vocabularynamebanner">
+    <div class="vocabularynameshort"><%=display_name%></div>
+    <div class="vocabularynamelong">Version:&nbsp;<%=term_browser_version%></div>
+  </div>
+</a>  
 <%
         }
         %>
