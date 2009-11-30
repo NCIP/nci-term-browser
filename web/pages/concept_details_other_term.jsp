@@ -88,13 +88,12 @@
          String display_name = DataUtils.getMetadataValue(dictionary, "display_name");
          if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
  %>       
-        
-        
-    <div class="vocabularynamebanner">
-      <div class="vocabularynameshort"><%=display_name%></div>
-      <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
-    </div>
-    
+    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=dictionary%>">        
+      <div class="vocabularynamebanner">
+        <div class="vocabularynameshort"><%=display_name%></div>
+        <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
+      </div>
+    </a>
         <%
           }
         %>
@@ -105,9 +104,26 @@
               <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
               <!-- end Search box -->
               <!-- Global Navigation -->
-
-              <%@ include file="/pages/templates/menuBar.jsp" %>
-
+              <table class="global-nav" border="0" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=dictionary%>">Home</a>
+                    | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=dictionary%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                    View Hierarchy </a>
+                    | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
+                  </td>
+                  <td align="right">                                
+                    <%
+                       Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
+                       if (visitedConcepts != null && visitedConcepts.size() > 0) {
+                         String visitedConceptsStr = DataUtils.getVisitedConceptLink(visitedConcepts);
+                    %>
+                         <%=visitedConceptsStr%>
+                    <% } %>
+                  </td>   
+                  <td width="7"></td>                             
+                </tr>                    
+              </table> 
               <!-- end Global Navigation -->
           </div>
       </div>
