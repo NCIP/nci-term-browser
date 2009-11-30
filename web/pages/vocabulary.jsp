@@ -59,6 +59,8 @@
         /* ------------------------ */
         
         String scheme = (String) request.getParameter("dictionary");
+ 	scheme = DataUtils.searchFormalName(scheme);       
+      
         String shortName = DataUtils.getLocalName(scheme);
         
         String dictionary = null;
@@ -71,16 +73,11 @@
         }
         
         String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
-        
-System.out.println( "term_browser_version: " + term_browser_version);
 
         
         if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;//"N/A";
         
         String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-        
-
-System.out.println( "display_name: " + display_name);
         
         if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
        
@@ -95,6 +92,7 @@ System.out.println( "display_name: " + display_name);
         menubar_scheme = scheme;
         menubar_version = version;
         menubar_scheme0 = menubar_scheme;  
+        
         boolean isLicensed = LicenseBean.isLicensed(scheme, version);  
         LicenseBean licenseBean = (LicenseBean) request.getSession()
             .getAttribute("licenseBean");
@@ -107,8 +105,7 @@ System.out.println( "display_name: " + display_name);
         
         /* ------------------------ */
         
-        v = MetadataUtils.getMetadataNameValuePairs(scheme,
-                version, null);
+        v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
         Vector u1 = MetadataUtils.getMetadataValues(v,
             "html_compatable_description");
         voc_description = scheme;
