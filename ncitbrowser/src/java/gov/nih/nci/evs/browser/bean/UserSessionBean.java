@@ -619,12 +619,14 @@ public class UserSessionBean extends Object {
 
 	    String initial_search = (String) request.getParameter("initial_search");
         String[] ontology_list = request.getParameterValues("ontology_list");
+
         List list = new ArrayList<String>();
 
         String ontologiesToSearchOnStr = null;
         String ontology_list_str = null;
         List<String> ontologiesToSearchOn = null;
         int knt = 0;
+
 
         if (initial_search != null) { // from home page
             if (multiple_search_error != null) {
