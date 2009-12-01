@@ -11,6 +11,14 @@
        </DisplayItem>
 
       <DisplayItem>
+            <propertyName>definition</propertyName>
+            <itemLabel>Definition</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+       
+      <DisplayItem>
             <propertyName>ALT_DEFINITION</propertyName>
             <itemLabel>Definition</itemLabel>
             <url>null</url>
@@ -42,6 +50,38 @@
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
 
+       <DisplayItem>
+            <propertyName>print_name</propertyName>
+            <itemLabel>Print Name</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>   
+       
+       <DisplayItem>
+            <propertyName>display_name</propertyName>
+            <itemLabel>Display Name</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+       
+       <DisplayItem>
+            <propertyName>preferred term</propertyName>
+            <itemLabel>Preferred Term</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+
+       <DisplayItem>
+            <propertyName>label</propertyName>
+            <itemLabel>Label</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>           
+       
        <DisplayItem>
             <propertyName>Legacy_Concept_Name</propertyName>
             <itemLabel>Legacy Concept Name</itemLabel>
@@ -90,6 +130,30 @@
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
 
+       <DisplayItem>
+            <propertyName>textualPresentation</propertyName>
+            <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+
+       <DisplayItem>
+            <propertyName>synonym</propertyName>
+            <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+
+       <DisplayItem>
+            <propertyName>rdf:id</propertyName>
+            <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+       
        <DisplayItem>
             <propertyName>CAS_Registry</propertyName>
             <itemLabel>CAS Registry Number</itemLabel>
