@@ -582,6 +582,32 @@ public class UserSessionBean extends Object {
        return ontology_list;
    }
 
+   public String acceptLicenseAction() {
+        HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		String dictionary = (String) request.getParameter("dictionary");
+		String code = (String) request.getParameter("code");
+
+		if (dictionary != null && code != null) {
+			LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
+			if (licenseBean == null) {
+				licenseBean = new LicenseBean();
+			}
+			licenseBean.addLicenseAgreement(dictionary);
+			request.getSession().setAttribute("licenseBean", licenseBean);
+
+            Concept c = DataUtils.getConceptByCode(dictionary, null, null, code);
+            request.getSession().setAttribute("code", code);
+            request.getSession().setAttribute("concept", c);
+            request.getSession().setAttribute("type", "properties");
+
+            return "concept_details";
+		} else {
+			String message = "Unidentifiable vocabulary name, or code";
+			request.getSession().setAttribute("warning", message);
+			return "message";
+		}
+   }
+
 
    public String multipleSearchAction() {
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -599,7 +625,6 @@ public class UserSessionBean extends Object {
 			request.getSession().setAttribute("licenseBean", licenseBean);
 			request.getSession().removeAttribute("scheme");
 			request.getSession().removeAttribute("version");
-			request.getSession().setAttribute("licenseBean", licenseBean);
 		}
 
         String matchText = (String) request.getParameter("matchText");
@@ -891,8 +916,9 @@ public class UserSessionBean extends Object {
 				coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme);
 
                 request.setAttribute("dictionary", coding_scheme);
-                if (coding_scheme.compareTo("NCI Thesaurus") == 0 || coding_scheme.compareTo("NCI_Thesaurus") == 0) return "concept_details";
-                return "concept_details_other_term";
+                //if (coding_scheme.compareTo("NCI Thesaurus") == 0 || coding_scheme.compareTo("NCI_Thesaurus") == 0) return "concept_details";
+                //return "concept_details_other_term";
+                return "concept_details";
             }
         }
 

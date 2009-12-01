@@ -676,6 +676,25 @@
 
   </navigation-rule>
 
+
+  <navigation-rule>
+    <from-view-id>ConceptReport.jsp</from-view-id>
+    <navigation-case>
+       <description>Concept Report</description>
+       <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Message</description>
+       <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>  
+    
+    
   <managed-bean>
     <managed-bean-name>userSessionBean</managed-bean-name>
     <managed-bean-class>gov.nih.nci.evs.browser.bean.UserSessionBean</managed-bean-class>
