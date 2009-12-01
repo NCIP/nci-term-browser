@@ -83,14 +83,6 @@
        </DisplayItem>           
        
        <DisplayItem>
-            <propertyName>Legacy_Concept_Name</propertyName>
-            <itemLabel>Legacy Concept Name</itemLabel>
-            <url>null</url>
-            <hyperlinkText>null</hyperlinkText>
-            <isExternalCode>false</isExternalCode>
-       </DisplayItem>
-       
-       <DisplayItem>
             <propertyName>Code</propertyName>
             <itemLabel>NCI Thesaurus Code</itemLabel>
             <url>null</url>
