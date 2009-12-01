@@ -14,7 +14,7 @@
 scheme = (String) DataUtils.localName2FormalNameHashMap.get(scheme);
 
       String jsp_page_name = "concept_details.jsf";
-      if (scheme.compareTo("NCI Thesaurus") != 0) jsp_page_name = "concept_details_other_term.jsf";
+      //if (scheme.compareTo("NCI Thesaurus") != 0) jsp_page_name = "concept_details_other_term.jsf";
 
       //String id = (String) gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
  String id = null;
