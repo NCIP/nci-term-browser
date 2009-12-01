@@ -179,7 +179,7 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
         String value_wo_qualifier = value;
 
         int n = value.indexOf("|");
-        if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
+        if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 || propName_label.indexOf("definition") != -1)) {
           value_wo_qualifier = value.substring(0, n);
           qualifier = value.substring(n+1, value.length());
           if (def_map != null && def_map.containsKey(qualifier)) {
@@ -216,7 +216,7 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
           String value_wo_qualifier = value;
           int n = value.indexOf("|");
 
-          if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1)) {
+          if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 || propName_label.indexOf("definition") != -1)) {
               value_wo_qualifier = value.substring(0, n);
               qualifier = value.substring(n+1, value.length());
               if (def_map != null && def_map.containsKey(qualifier)) {
