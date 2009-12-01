@@ -75,6 +75,14 @@
        </DisplayItem>
 
        <DisplayItem>
+             <propertyName>unique_identifier</propertyName>
+             <itemLabel>Unique Identifier</itemLabel>
+             <url>null</url>
+             <hyperlinkText>null</hyperlinkText>
+             <isExternalCode>false</isExternalCode>
+       </DisplayItem>  
+       
+       <DisplayItem>
             <propertyName>label</propertyName>
             <itemLabel>Label</itemLabel>
             <url>null</url>
