@@ -667,7 +667,6 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
 
         if (initial_search != null) { // from home page
             if (multiple_search_error != null) {
-
 				ontologiesToSearchOn = new ArrayList<String>();
 				ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 
@@ -747,7 +746,6 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
             source = "ALL";
         }
 
-
         if (NCItBrowserProperties.debugOn) {
             try {
                 System.out.println(Utils.SEPARATOR);
@@ -761,7 +759,6 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
             } catch (Exception e) {
             }
         }
-
         if (ontology_list == null) {
             ontology_list_str = (String) request.getParameter("ontology_list_str"); // from multiple_search_results (hidden variable)
             if (ontology_list_str != null) {
@@ -932,8 +929,6 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
 				coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme);
 
 				request.setAttribute("dictionary", coding_scheme);
-				//if (coding_scheme.compareTo("NCI Thesaurus") == 0 || coding_scheme.compareTo("NCI_Thesaurus") == 0) return "concept_details";
-				//return "concept_details_other_term";
 				return "concept_details";
 			}
 			else if (size > 0) {
@@ -955,7 +950,6 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
 			request.getSession().removeAttribute("vocabulary");
 		}
 
-
         String message = Constants.ERROR_NO_MATCH_FOUND;
         if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
             message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
@@ -966,10 +960,11 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
         }
 
 		hide_ontology_list = "false";
+/*
 		if (initial_search == null) {
 			hide_ontology_list = "true";
 		}
-
+*/
 		request.getSession().setAttribute("hide_ontology_list", hide_ontology_list);
 		request.getSession().setAttribute("warning", message);
 		request.getSession().setAttribute("message", message);
