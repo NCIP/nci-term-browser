@@ -896,23 +896,7 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
 
             int size = iteratorBean.getSize();
 
-                String match_size = Integer.toString(size);;//Integer.toString(v.size());
-                request.getSession().setAttribute("match_size", match_size);
-                request.getSession().setAttribute("page_string", "1");
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
-                //route to multiple_search_results.jsp
-                return "search_results";
-
-            /*
-            if (size > 1) {
-                String match_size = Integer.toString(size);;//Integer.toString(v.size());
-                request.getSession().setAttribute("match_size", match_size);
-                request.getSession().setAttribute("page_string", "1");
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
-                //route to multiple_search_results.jsp
-                return "search_results";
-
-            } else if (size == 1) {
+            if (size == 1) {
                 int pageNumber = 1;
                 list = iteratorBean.getData(1);
                 ResolvedConceptReference ref = (ResolvedConceptReference) list.get(0);
@@ -946,7 +930,13 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
                 //return "concept_details_other_term";
                 return "concept_details";
             }
-            */
+
+			String match_size = Integer.toString(size);;//Integer.toString(v.size());
+			request.getSession().setAttribute("match_size", match_size);
+			request.getSession().setAttribute("page_string", "1");
+			request.getSession().setAttribute("new_search", Boolean.TRUE);
+			//route to multiple_search_results.jsp
+			return "search_results";
         }
 
         if (ontologiesToSearchOn.size() == 0) {
