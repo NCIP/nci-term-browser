@@ -177,7 +177,7 @@
             <td><hr></td>
           </tr>
           <tr>
-            <td>
+            <td class="dataTableHeader">
             <%
               if (contains_warning_msg != null) {
              %>
@@ -185,7 +185,7 @@
              <%
               } else {
               %>
-              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
+              Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
               <%
               }
               String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
