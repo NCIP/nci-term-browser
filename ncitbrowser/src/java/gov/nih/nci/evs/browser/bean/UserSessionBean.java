@@ -881,62 +881,71 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
         request.getSession().removeAttribute("type");
 
         if (iterator != null) {
+			/*
+			int num = 0;
+			try {
+				num = iterator.numberRemaining();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			if (num > 0) {
+			*/
+				IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().get("iteratorBean");
 
-            IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
-                .getSessionMap().get("iteratorBean");
+				if (iteratorBean == null) {
+					iteratorBean = new IteratorBean(iterator);
 
-            if (iteratorBean == null) {
-                iteratorBean = new IteratorBean(iterator);
+					FacesContext.getCurrentInstance().getExternalContext()
+					   .getSessionMap().put("iteratorBean", iteratorBean);
+				} else {
+					iteratorBean.setIterator(iterator);
+				}
 
-                FacesContext.getCurrentInstance().getExternalContext()
-                   .getSessionMap().put("iteratorBean", iteratorBean);
-            } else {
-                iteratorBean.setIterator(iterator);
-            }
+				int size = iteratorBean.getSize();
+				if (size == 1) {
+					int pageNumber = 1;
+					list = iteratorBean.getData(1);
+					ResolvedConceptReference ref = (ResolvedConceptReference) list.get(0);
 
-            int size = iteratorBean.getSize();
+					String coding_scheme = ref.getCodingSchemeName();
+					request.getSession().setAttribute("singleton", "true");
+					request.getSession().setAttribute("dictionary", coding_scheme);
+					Concept c = null;
+					if (ref == null) {
+						String msg = "Error: Null ResolvedConceptReference encountered.";
+						request.getSession().setAttribute("message", msg);
+						return "message";
 
-            if (size == 1) {
-                int pageNumber = 1;
-                list = iteratorBean.getData(1);
-                ResolvedConceptReference ref = (ResolvedConceptReference) list.get(0);
+					} else {
+						c = ref.getReferencedEntry();
+						if (c == null) {
+							c = DataUtils.getConceptByCode(coding_scheme, null, null, ref.getConceptCode());
+						}
+					}
 
-                String coding_scheme = ref.getCodingSchemeName();
-                request.getSession().setAttribute("singleton", "true");
-                request.getSession().setAttribute("dictionary", coding_scheme);
-                Concept c = null;
-                if (ref == null) {
-                    String msg = "Error: Null ResolvedConceptReference encountered.";
-                    request.getSession().setAttribute("message", msg);
-                    return "message";
+					request.getSession().setAttribute("code", ref.getConceptCode());
+					request.getSession().setAttribute("concept", c);
+					request.getSession().setAttribute("type", "properties");
+					request.getSession().setAttribute("new_search", Boolean.TRUE);
 
-                } else {
-                    c = ref.getReferencedEntry();
-                    if (c == null) {
-                        c = DataUtils.getConceptByCode(coding_scheme, null, null, ref.getConceptCode());
-                    }
-                }
+					request.setAttribute("algorithm", matchAlgorithm);
+					coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme);
 
-                request.getSession().setAttribute("code", ref.getConceptCode());
-                request.getSession().setAttribute("concept", c);
-                request.getSession().setAttribute("type", "properties");
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
-
-                request.setAttribute("algorithm", matchAlgorithm);
-				coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme);
-
-                request.setAttribute("dictionary", coding_scheme);
-                //if (coding_scheme.compareTo("NCI Thesaurus") == 0 || coding_scheme.compareTo("NCI_Thesaurus") == 0) return "concept_details";
-                //return "concept_details_other_term";
-                return "concept_details";
-            }
-
-			String match_size = Integer.toString(size);;//Integer.toString(v.size());
-			request.getSession().setAttribute("match_size", match_size);
-			request.getSession().setAttribute("page_string", "1");
-			request.getSession().setAttribute("new_search", Boolean.TRUE);
-			//route to multiple_search_results.jsp
-			return "search_results";
+					request.setAttribute("dictionary", coding_scheme);
+					//if (coding_scheme.compareTo("NCI Thesaurus") == 0 || coding_scheme.compareTo("NCI_Thesaurus") == 0) return "concept_details";
+					//return "concept_details_other_term";
+					return "concept_details";
+				}
+				else if (size > 0) {
+					String match_size = Integer.toString(size);;//Integer.toString(v.size());
+					request.getSession().setAttribute("match_size", match_size);
+					request.getSession().setAttribute("page_string", "1");
+					request.getSession().setAttribute("new_search", Boolean.TRUE);
+					//route to multiple_search_results.jsp
+					return "search_results";
+			    }
+		   // }
         }
 
         if (ontologiesToSearchOn.size() == 0) {
