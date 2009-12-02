@@ -21,23 +21,27 @@
         
           Concept concept_syn = (Concept) request.getSession().getAttribute("concept");
           Vector synonyms = new DataUtils().getSynonyms(dictionary, concept_syn);
+          HashSet hset = new HashSet();
           for (int n=0; n<synonyms.size(); n++)
           {
             String s = (String) synonyms.elementAt(n);
-            Vector synonym_data = DataUtils.parseData(s, "|");
-            String term_name = (String) synonym_data.elementAt(0);
-            String term_type = (String) synonym_data.elementAt(1);
-            String term_source = (String) synonym_data.elementAt(2);
-            String term_source_code = (String) synonym_data.elementAt(3);
-            String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
-        %>
-            <tr class="<%=rowColor%>">
-              <td class="dataCellText"><%=term_name%></td>
-              <td class="dataCellText"><%=term_source%></td>
-              <td class="dataCellText"><%=term_type%></td>
-              <td class="dataCellText"><%=term_source_code%></td>
-            </tr>
-        <%
+            if (!hset.contains(s)) {
+                hset.add(s);
+		    Vector synonym_data = DataUtils.parseData(s, "|");
+		    String term_name = (String) synonym_data.elementAt(0);
+		    String term_type = (String) synonym_data.elementAt(1);
+		    String term_source = (String) synonym_data.elementAt(2);
+		    String term_source_code = (String) synonym_data.elementAt(3);
+		    String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
+		%>
+		    <tr class="<%=rowColor%>">
+		      <td class="dataCellText"><%=term_name%></td>
+		      <td class="dataCellText"><%=term_source%></td>
+		      <td class="dataCellText"><%=term_type%></td>
+		      <td class="dataCellText"><%=term_source_code%></td>
+		    </tr>
+		<%
+            }
           }
         %>
       </table>
