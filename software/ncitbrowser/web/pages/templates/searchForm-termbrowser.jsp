@@ -1,10 +1,12 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
-    .cleanXSS((String) request.getSession().getAttribute(
-    "matchText"));
-  if (match_text == null)
-    match_text = "";
+    .cleanXSS((String) request.getSession().getAttribute("matchText"));
+  
+  if (match_text == null) match_text = "";
+  
+  System.out.println("(***) searchForm-termbrowser.jsp match_text : " + match_text);
+  
 %>
 <div class="search-form">
   <input CLASS="searchbox-input"
