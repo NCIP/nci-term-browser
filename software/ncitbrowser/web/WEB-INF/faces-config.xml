@@ -15,7 +15,23 @@
     </locale-config>
   </application>
 
-
+  <navigation-rule>
+    <from-view-id>/pages/accept_license.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>    
+  
+  </navigation-rule> 
+    
   <navigation-rule>
     <from-view-id>/pages/vocabulary.jsp</from-view-id>
     <navigation-case>
