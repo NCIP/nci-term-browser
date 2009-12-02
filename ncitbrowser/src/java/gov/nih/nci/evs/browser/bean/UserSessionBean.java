@@ -748,7 +748,7 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
         }
 
 
-        //if (NCItBrowserProperties.debugOn) {
+        if (NCItBrowserProperties.debugOn) {
             try {
                 System.out.println(Utils.SEPARATOR);
                 System.out.println("* criteria: " + matchText);
@@ -760,7 +760,7 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
                 }
             } catch (Exception e) {
             }
-        //}
+        }
 
         if (ontology_list == null) {
             ontology_list_str = (String) request.getParameter("ontology_list_str"); // from multiple_search_results (hidden variable)
@@ -971,10 +971,9 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
 			hide_ontology_list = "true";
 		}
 
-System.out.println("hide_ontology_list: " + hide_ontology_list);
-System.out.println("message: " + message);
-System.out.println("ontologiesToSearchOn: " + ontologiesToSearchOn);
-
+//System.out.println("hide_ontology_list: " + hide_ontology_list);
+//System.out.println("message: " + message);
+//System.out.println("ontologiesToSearchOn: " + ontologiesToSearchOn);
 
 
 		request.getSession().setAttribute("hide_ontology_list", hide_ontology_list);
