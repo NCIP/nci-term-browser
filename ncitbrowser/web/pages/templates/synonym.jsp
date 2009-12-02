@@ -26,7 +26,7 @@
           {
             String s = (String) synonyms.elementAt(n);
             if (!hset.contains(s)) {
-                hset.add(s);
+                    hset.add(s);
 		    Vector synonym_data = DataUtils.parseData(s, "|");
 		    String term_name = (String) synonym_data.elementAt(0);
 		    String term_type = (String) synonym_data.elementAt(1);
