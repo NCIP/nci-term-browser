@@ -1134,9 +1134,6 @@ public class SearchUtils {
         String scheme = null;
         String version = null;
 
-System.out.println("SearchUtils searchByName schemes " + schemes.size());
-
-
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 
@@ -1151,8 +1148,6 @@ System.out.println("SearchUtils searchByName schemes " + schemes.size());
 				cns = null;
 				iterator = null;
 				scheme = (String) schemes.elementAt(i);
-
-System.out.println("SearchUtils searchByName scheme " + scheme);
 
 				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 				version = (String) versions.elementAt(i);
@@ -1255,8 +1250,6 @@ System.out.println("SearchUtils searchByName scheme " + scheme);
 			version = (String) versions.elementAt(lcv);
 			if (version != null) versionOrTag.setVersion(version);
 
-			//System.out.println("Matching code: " + matchText0 + " source: " + source + " scheme: " + scheme);
-
 			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
 			if (iterator != null) {
 				try {
@@ -1265,7 +1258,6 @@ System.out.println("SearchUtils searchByName scheme " + scheme);
 
 				}
 			}
-
 			lcv++;
 		}
         return iterator;

@@ -37,8 +37,6 @@
      String match_text = (String) request.getSession().getAttribute("matchText"); 
     
      if (match_text == null) match_text = "";
-     
-     System.out.println("(***) multiple_search_results.jsp match_text : " + match_text);
     
      String algorithm = (String) request.getSession().getAttribute("algorithm");
     
