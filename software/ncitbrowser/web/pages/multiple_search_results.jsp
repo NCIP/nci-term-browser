@@ -60,14 +60,15 @@
       check_r = "checked";
 %>
       <!-- Thesaurus, banner search area -->
+      <form class="search-form-main-area"> 
       <div class="bannerarea">
         <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" alt="Thesaurus Browser Logo" border="0"/></a></div>
         <div class="search-globalnav">
           <!-- Search box -->
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-          <div class="search-form">
-            <!-- form name="searchTerm" method="post" class="search-form-main-area" -->
-            <form class="search-form-main-area">  
+            <!-- form name="searchTerm" method="post" class="search-form-main-area" --> 
+            <div class="searchbox">
+              <div class="search-form">  
               <input CLASS="searchbox-input" name="matchText" type="text" value="<%=match_text%>" />
               <h:commandButton
                 id="search"
@@ -100,8 +101,8 @@
                   </td>
                 </tr>
               </table>
-            </form>    
-          </div> <!--  end search-form -->
+              </div> <!--  end search-form -->
+            </div> <!-- end searchbox -->            
           <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
           <!-- end Search box -->
           <!-- Global Navigation -->
@@ -109,6 +110,7 @@
           <!-- end Global Navigation -->
       </div> <!-- end search-globalnav -->
     </div> <!-- end bannerarea -->
+    </form>
     <!-- end Thesaurus, banner search area -->
     <!-- Quick links bar -->
     <%@ include file="/pages/templates/quickLink.jsp" %>
@@ -338,12 +340,11 @@
         </table>
         <%@ include file="/pages/templates/pagination-termbrowser.jsp" %>
         <%@ include file="/pages/templates/nciFooter.html" %>
-      </div>
-      <!-- end Page content -->
-    </div>
+      </div> <!-- end Page content -->
+    </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
-  </div>
+  </div> <!-- end center-page -->
 </f:view>
 </body>
 </html>
