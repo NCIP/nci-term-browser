@@ -20,6 +20,11 @@
   String version = (String) request.getAttribute("version");
   String ontology_list_str = (String) request.getAttribute("ontology_list_str");
   String matchText = (String) request.getAttribute("matchText");
+  
+  
+System.out.println("(***) license.jsp  matchText " + matchText); 
+  
+  
   String searchTarget = (String) request.getAttribute("searchTarget");
   String matchAlgorithm = (String) request.getAttribute("algorithm");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
@@ -75,12 +80,14 @@
             <a href="<%= request.getContextPath() %>/start.jsf">
               <img src="<%= request.getContextPath() %>/images/cancel.gif" border="0" alt="Cancel"/>
             </a>
+
             <input type="hidden" id="matchText" name="matchText" value="<%=matchText%>" />
             <input type="hidden" id="algorithm" name="algorithm" value="<%=matchAlgorithm%>" />
             <input type="hidden" id="ontology_list_str" name="ontology_list_str" value="<%=ontology_list_str%>" />
             <input type="hidden" id="scheme" name="scheme" value="<%=scheme0%>" />
             <input type="hidden" id="version" name="version" value="<%=version0%>" />
             <input type="hidden" id="searchTarget" name="searchTarget" value="<%=searchTarget%>" />
+           
           </form>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>

@@ -610,6 +610,8 @@ public class UserSessionBean extends Object {
 
 
    public String multipleSearchAction() {
+
+
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		String scheme = (String) request.getParameter("scheme");
 		String version = (String) request.getParameter("version");
@@ -623,14 +625,25 @@ public class UserSessionBean extends Object {
 			}
 			licenseBean.addLicenseAgreement(scheme);
 			request.getSession().setAttribute("licenseBean", licenseBean);
-			request.getSession().removeAttribute("scheme");
-			request.getSession().removeAttribute("version");
+			//request.getSession().removeAttribute("scheme");
+			//request.getSession().removeAttribute("version");
 		}
 
-        String matchText = (String) request.getParameter("matchText");
+String matchText = (String) request.getParameter("matchText");
+/*
+String calledFromLicense = (String) request.getParameter("calledFromLicense");
+if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
+	matchText = (String) request.getSession().getAttribute("matchText");
+} else {
+	matchText = (String) request.getParameter("matchText");
+}
+*/
+
         if (matchText != null) {
 			matchText = matchText.trim();
 			request.getSession().setAttribute("matchText", matchText);
+		} else {
+			matchText = (String) request.getSession().getAttribute("matchText");
 		}
 
 		String multiple_search_error = (String) request.getSession().getAttribute("multiple_search_no_match_error");
@@ -734,6 +747,7 @@ public class UserSessionBean extends Object {
         if (source == null) {
             source = "ALL";
         }
+
 
         if (NCItBrowserProperties.debugOn) {
             try {
@@ -853,6 +867,7 @@ public class UserSessionBean extends Object {
 			designationOnly = true;
             iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
 		}
+
         request.getSession().setAttribute("vocabulary", scheme);
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
@@ -866,6 +881,7 @@ public class UserSessionBean extends Object {
         request.getSession().removeAttribute("type");
 
         if (iterator != null) {
+
             IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBean");
 
@@ -879,6 +895,15 @@ public class UserSessionBean extends Object {
             }
 
             int size = iteratorBean.getSize();
+
+                String match_size = Integer.toString(size);;//Integer.toString(v.size());
+                request.getSession().setAttribute("match_size", match_size);
+                request.getSession().setAttribute("page_string", "1");
+                request.getSession().setAttribute("new_search", Boolean.TRUE);
+                //route to multiple_search_results.jsp
+                return "search_results";
+
+            /*
             if (size > 1) {
                 String match_size = Integer.toString(size);;//Integer.toString(v.size());
                 request.getSession().setAttribute("match_size", match_size);
@@ -886,6 +911,7 @@ public class UserSessionBean extends Object {
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
                 //route to multiple_search_results.jsp
                 return "search_results";
+
             } else if (size == 1) {
                 int pageNumber = 1;
                 list = iteratorBean.getData(1);
@@ -920,6 +946,7 @@ public class UserSessionBean extends Object {
                 //return "concept_details_other_term";
                 return "concept_details";
             }
+            */
         }
 
         if (ontologiesToSearchOn.size() == 0) {
