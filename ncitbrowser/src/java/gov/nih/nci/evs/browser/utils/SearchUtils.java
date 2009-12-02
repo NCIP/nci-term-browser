@@ -1134,6 +1134,8 @@ public class SearchUtils {
         String scheme = null;
         String version = null;
 
+System.out.println("SearchUtils searchByName schemes " + schemes.size());
+
 
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -1149,6 +1151,9 @@ public class SearchUtils {
 				cns = null;
 				iterator = null;
 				scheme = (String) schemes.elementAt(i);
+
+System.out.println("SearchUtils searchByName scheme " + scheme);
+
 				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 				version = (String) versions.elementAt(i);
 				if (version != null) versionOrTag.setVersion(version);
@@ -1204,7 +1209,7 @@ public class SearchUtils {
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtil.searchByName 2");
+                    System.out.println("Method: SearchUtils.searchByName 2");
                     System.out.println("* ERROR: cns.resolve throws exceptions.");
                     System.out.println("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
@@ -1220,6 +1225,7 @@ public class SearchUtils {
 			return null;
 		}
 
+        /*
         if (iterator == null) {
 			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
 		} else {
@@ -1231,6 +1237,36 @@ public class SearchUtils {
 			} catch (Exception e) {
 
 			}
+		}
+		*/
+		int lcv = 0;
+		int iterator_size = 0;
+		if (iterator != null) {
+			try {
+				iterator_size = iterator.numberRemaining();
+			} catch (Exception ex) {
+
+			}
+	    }
+
+        while (iterator_size == 0 && lcv < schemes.size()) {
+			scheme = (String) schemes.elementAt(lcv);
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			version = (String) versions.elementAt(lcv);
+			if (version != null) versionOrTag.setVersion(version);
+
+			//System.out.println("Matching code: " + matchText0 + " source: " + source + " scheme: " + scheme);
+
+			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
+			if (iterator != null) {
+				try {
+					iterator_size = iterator.numberRemaining();
+				} catch (Exception ex) {
+
+				}
+			}
+
+			lcv++;
 		}
         return iterator;
     }
