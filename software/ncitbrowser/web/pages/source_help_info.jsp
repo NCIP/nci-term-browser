@@ -74,7 +74,8 @@ the MSSO website at www.meddramsso.com, or write the MSSO at 12011 Sunset Hills 
           <br/>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <%
-              String propertyName = "description";
+              //String propertyName = "description";
+              String propertyName = "html_compatable_description";
               Vector abbr_vec = (Vector) request.getSession().getAttribute("source_descriptions");
               if (abbr_vec == null) {
                   abbr_vec = new MetadataUtils().getSupportedVocabularyMetadataValues(propertyName);
