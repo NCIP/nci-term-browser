@@ -39,11 +39,18 @@
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
+    
+    <!--
       <form name="searchTerm" method="post" class="search-form-main-area">
-
+     -->
+     <form>
+     
         <input type="hidden" name="initial_search" value="true" />
 
         <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+        
+        
+        
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">
@@ -233,6 +240,8 @@ if (display_name_hmap == null || display_name_vec == null) {
 
 <%
     request.getSession().removeAttribute("dictionary");
+    request.getSession().removeAttribute("ontologiesToSearchOn");
+    request.getSession().removeAttribute("matchText");
 
 %>
 

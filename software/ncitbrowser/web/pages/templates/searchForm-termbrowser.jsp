@@ -4,9 +4,7 @@
     .cleanXSS((String) request.getSession().getAttribute("matchText"));
   
   if (match_text == null) match_text = "";
-  
-  System.out.println("(***) searchForm-termbrowser.jsp match_text : " + match_text);
-  
+ 
 %>
 <div class="search-form">
   <input CLASS="searchbox-input"
