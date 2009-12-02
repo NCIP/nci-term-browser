@@ -34,9 +34,128 @@
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-      <form name="searchTerm" method="post" class="search-form-main-area">
-          <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
-      </form>
+    
+         
+ <%
+   //String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
+   //  .cleanXSS((String) request.getSession().getAttribute("matchText"));
+   String match_text = (String) request.getSession().getAttribute("matchText"); 
+  
+   if (match_text == null) match_text = "";
+   
+     System.out.println("(***) multiple_search_results.jsp match_text : " + match_text);
+    
+     String algorithm = (String) request.getSession().getAttribute("algorithm");
+ 
+     String check_e = "", check_s = "" , check_c ="";
+     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
+       check_e = "checked";
+     else if (algorithm.compareTo("startsWith") == 0)
+       check_s= "checked";
+     else
+       check_c = "checked";
+
+
+  String searchTarget = (String) request.getSession().getAttribute("searchTarget");
+  String check_n = "", check_p = "" , check_r ="";
+  if (searchTarget == null || searchTarget.compareTo("names") == 0)
+    check_n = "checked";
+  else if (searchTarget.compareTo("properties") == 0)
+    check_p= "checked";
+  else
+    check_r = "checked";
+
+            
+%>
+      
+
+<!-- Thesaurus, banner search area -->
+<div class="bannerarea">
+    <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" alt="Thesaurus Browser Logo" border="0"/></a></div>
+    <div class="search-globalnav">
+        <!-- Search box -->
+        <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
+
+
+  <div class="search-form">
+
+<!--  
+<form name="searchTerm" method="post" class="search-form-main-area">
+-->
+
+<form>
+  
+<input CLASS="searchbox-input" name="matchText" type="text" value="<%=match_text%>" />
+
+<!--
+
+  <input CLASS="searchbox-input"
+    name="matchText"
+    value="<%=match_text%>"
+    onFocus="active = true"
+    onBlur="active = false"
+    onkeypress="return submitEnter('search',event)"
+  />
+-->  
+  
+  <h:commandButton
+    id="search"
+    value="Search"
+    action="#{userSessionBean.multipleSearchAction}"
+    image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+    alt="Search">
+  </h:commandButton>
+  
+  <h:outputLink
+    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp">
+    <h:graphicImage value="/images/search-help.gif"
+    style="border-width:0;" />
+  </h:outputLink>
+
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr valign="top" align="left">
+      <td align="left" class="textbody">
+        <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
+        <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
+        <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains&nbsp;
+      </td>
+    </tr>
+    <tr align="left">
+      <td height="1px" bgcolor="#2F2F5F"></td>
+    </tr>
+    <tr valign="top" align="left">
+      <td align="left" class="textbody">
+        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name/Code&nbsp;
+        <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%>>Property&nbsp;
+        <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%>>Relationship&nbsp;
+      </td>
+    </tr>
+  </table>
+</div>
+
+      
+</form>          
+        
+        <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
+        <!-- end Search box -->
+        <!-- Global Navigation -->
+        
+        
+        
+            <%@ include file="/pages/templates/menuBar-termbrowser.jsp" %>
+            
+            
+            
+        <!-- end Global Navigation -->
+    </div>
+</div>
+<!-- end Thesaurus, banner search area -->
+<!-- Quick links bar -->
+<%@ include file="/pages/templates/quickLink.jsp" %>
+<!-- end Quick links bar -->
+
+        
+      
       <!-- Page content -->
       <div class="pagecontent">
         <%
@@ -51,6 +170,10 @@
           String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
           String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
           Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
+          
+ System.out.println("(*) multiple_search_results.jsp new_search: " + new_search);        
+          
+          
           String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
           String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
@@ -60,6 +183,7 @@
               page_string = page_number;
           }
           request.getSession().setAttribute("new_search", Boolean.FALSE);
+          
           int page_num = Integer.parseInt(page_string);
           int next_page_num = page_num + 1;
           int prev_page_num = page_num - 1;
