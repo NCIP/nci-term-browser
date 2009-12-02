@@ -33,9 +33,13 @@
 <%
 	String dictionary = null;
 	dictionary = (String) request.getParameter("dictionary");
+	/*
 	if (dictionary == null) {
-		dictionary = "NCI Thesaurus";
+		//dictionary = "NCI Thesaurus";
+		dictionary = (String) request.getSession().getAttribute("dictionary");
 	}
+	*/
+	
 	if (dictionary != null) {
 		dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
 		dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
@@ -56,6 +60,7 @@
             <%
             	}
             %>
+            
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleSheet.css" />
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/script.js"></script>
@@ -89,7 +94,6 @@
           		}
 
           		code = (String) request.getParameter("code");
-
           		if (code == null) {
           			Concept con = (Concept) request.getSession().getAttribute(
           					"concept");
@@ -162,6 +166,7 @@
           		String ltag = null;
 
           		c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+
 
           		if (c != null) {
           			request.getSession().setAttribute("concept", c);
