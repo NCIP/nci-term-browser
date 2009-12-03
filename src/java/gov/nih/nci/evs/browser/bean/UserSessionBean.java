@@ -136,6 +136,9 @@ public class UserSessionBean extends Object {
         String matchAlgorithm = (String) request.getParameter("algorithm");
         String searchTarget = (String) request.getParameter("searchTarget");
 
+System.out.println("============ searchTarget: " + searchTarget);
+
+
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 

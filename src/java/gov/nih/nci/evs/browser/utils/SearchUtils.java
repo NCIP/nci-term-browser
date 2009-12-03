@@ -1220,20 +1220,6 @@ public class SearchUtils {
 			return null;
 		}
 
-        /*
-        if (iterator == null) {
-			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
-		} else {
-			try {
-				int size = iterator.numberRemaining();
-				if (size == 0) {
-					iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
-				}
-			} catch (Exception e) {
-
-			}
-		}
-		*/
 		int lcv = 0;
 		int iterator_size = 0;
 		if (iterator != null) {
@@ -2315,20 +2301,34 @@ public class SearchUtils {
 			return null;
 		}
 
-        if (iterator == null) {
-			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
-		} else {
+		int lcv = 0;
+		int iterator_size = 0;
+		if (iterator != null) {
 			try {
-				int size = iterator.numberRemaining();
-				System.out.println("*** SearchUtils searchByProperties number of matches " + size);
-				if (size == 0) {
-					iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
-				}
-			} catch (Exception e) {
+				iterator_size = iterator.numberRemaining();
+			} catch (Exception ex) {
 
 			}
+	    }
+
+        while (iterator_size == 0 && lcv < schemes.size()) {
+			scheme = (String) schemes.elementAt(lcv);
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			version = (String) versions.elementAt(lcv);
+			if (version != null) versionOrTag.setVersion(version);
+
+			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
+			if (iterator != null) {
+				try {
+					iterator_size = iterator.numberRemaining();
+				} catch (Exception ex) {
+
+				}
+			}
+			lcv++;
 		}
         return iterator;
+
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
