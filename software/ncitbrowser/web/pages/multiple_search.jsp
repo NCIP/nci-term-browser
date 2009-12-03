@@ -43,7 +43,7 @@
     <!--
       <form name="searchTerm" method="post" class="search-form-main-area">
      -->
-     <form>
+     <form name="searchTerm">
      
         <input type="hidden" name="initial_search" value="true" />
 
