@@ -1,6 +1,10 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.regex.*;
+
+import javax.faces.context.*;
+import javax.servlet.http.*;
 
 /**
  * HTTP Utility methods
@@ -45,5 +49,57 @@ public class HTTPUtils {
 		return string;
 
 	}
+	
+    public static void printRequestSessionAttributes() {
+        System.out.println(" ");
+        System.out.println(Utils.SEPARATOR);
+        System.out.println("Request Session Attribute(s):");
 
+        try {
+            HttpServletRequest request = (HttpServletRequest)FacesContext.
+                getCurrentInstance().getExternalContext().getRequest();
+    
+            HttpSession session = request.getSession();
+            Enumeration<?> enumeration = SortUtils.sort(session.getAttributeNames());
+            int i=0;
+            while (enumeration.hasMoreElements()) {
+                String name = (String) enumeration.nextElement();
+                Object value = session.getAttribute(name);
+                System.out.println("  " + i + ") " + name + ": " + value);
+                ++i;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getClass().getSimpleName() + ": " +
+                e.getMessage());
+        }
+    }
+
+    public static void printRequestAttributes() {
+        System.out.println(" ");
+        System.out.println(Utils.SEPARATOR);
+        System.out.println("Request Attribute(s):");
+
+        try {
+            HttpServletRequest request = (HttpServletRequest)FacesContext.
+                getCurrentInstance().getExternalContext().getRequest();
+    
+            Enumeration<?> enumeration = SortUtils.sort(request.getAttributeNames());
+            int i=0;
+            while (enumeration.hasMoreElements()) {
+                String name = (String) enumeration.nextElement();
+                Object value = request.getAttribute(name);
+                System.out.println("  " + i + ") " + name + ": " + value);
+                ++i;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getClass().getSimpleName() + ": " +
+                e.getMessage());
+        }
+	}
+	
+	public static void printAttributes() {
+	    printRequestSessionAttributes();
+	    printRequestAttributes();
+        System.out.println(" ");
+	}
 }

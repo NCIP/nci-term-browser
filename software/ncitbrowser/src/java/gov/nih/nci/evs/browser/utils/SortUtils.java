@@ -2,6 +2,7 @@ package gov.nih.nci.evs.browser.utils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -109,5 +110,15 @@ public class SortUtils {
 	   return quickSort(v, SORT_BY_NAME);
    }
 
+   @SuppressWarnings("unchecked")
+   public static Enumeration<?> sort(Enumeration<?> enumeration) {
+       if (enumeration == null)
+           return enumeration;
+       
+       List keyList = Collections.list(enumeration);
+       Collections.sort(keyList);
+       enumeration = Collections.enumeration(keyList);
+       return enumeration;
+   }
 }
 
