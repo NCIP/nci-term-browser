@@ -11,7 +11,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Source Help Informaton</title>
+    <title>Sources</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
     <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
@@ -43,7 +43,7 @@
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="pageTitle">
               <td align="left">
-                <b>Source Help Information</b>
+                <b>Sources</b>
               </td>
               <td align="right">
                 <font size="1" color="red" align="right">
@@ -57,17 +57,49 @@
             <tr class="textbody"><td align="left">
 
 <p>
-The NCI Term Browser includes the following source vocabularies.
-Certain vocabularies, such as MedDRA,
-is made available, by permission, for NON-COMMERCIAL USE ONLY.
+The NCI Term Browser provides access to the terminology sources listed below, some of which are proprietary and included, by permission, 
+for non-commercial use only.
 </p>
-<p>
-MedDRA License Agreement.  The Medical Dictionary for Regulatory Activities (MedDRA) terminology is a licensed terminology.
-The use of MedDRA from this NCI website is licensed for NCI employees and contractors performing work for NCI.
-All other use is prohibited.  Users who are NOT NCI employees or contractors performing work for NCI must subscribe to
-MedDRA from the MedDRA MSSO.  For questions regarding MedDRA, please contact the MSSO at mssohelp@ngc.com, or visit
-the MSSO website at www.meddramsso.com, or write the MSSO at 12011 Sunset Hills Road Reston Virginia, 20190-3285 or phone 877.258.8280.
-</p>
+<ul>
+<li>
+NCIm is built using the National Library of Medicine's UMLS Metathesaurus, use of which is restricted under the UMLS license agreement 
+(see 
+		    <a href="http://www.nlm.nih.gov/research/umls/license.html" target="_blank"
+		      alt="UMLS Metathesaurus License">http://www.nlm.nih.gov/research/umls/license.html</a>
+).
+</li>
+<li>
+The National Library of Medicine makes the UMLS Semantic Network freely available without charge on request, subject to the conditions specified at 
+		    <a href="http://semanticnetwork.nlm.nih.gov/TermsAndConditions/" target="_blank"
+		      alt="UMLS Metathesaurus Terms and Conditions">http://semanticnetwork.nlm.nih.gov/TermsAndConditions/</a>
+.
+</li>
+<li>
+The World Health Organization allows use of ICD-10 and ICD-O-3 in NCI Enterprise Vocabulary Services, but requires licensing for other purposes (see 
+		    <a href="http://www.who.int/classifications/icd/en/" target="_blank"
+		      alt="ICD10 License">http://www.who.int/classifications/icd/en/</a>
+).
+</li>
+<li>
+The International Health Terminology Standards Development Organisation (IHTSDO) allows use of SNOMED CT in NCI Enterprise Vocabulary Services, 
+but requires licensing for other purposes (see 
+		    <a href="http://www.ihtsdo.org/join-us/use-snomed-ct-licenses/" target="_blank"
+		      alt="SNOMED CT License">http://www.ihtsdo.org/join-us/use-snomed-ct-licenses/</a>
+).
+</li>
+<li>
+The Medical Dictionary for Regulatory Activities (MedDRA) terminology is licensed for NCI work and may be viewed on NCI browsers. 
+All other uses are prohibited, unless covered by separate subscription to MedDRA from the MedDRA MSSO 
+(see 
+		    <a href="http://www.meddramsso.com" target="_blank"
+		      alt="MedDRA License">http://www.meddramsso.com</a>
+or contact at 
+
+		    <a href="http://mssohelp@ngc.com" target="_blank"
+		      alt="MedDRA Help Desk">http://mssohelp@ngc.com</a>
+, 877.258.8280, or 12011 Sunset Hills Road Reston Virginia, 20190-3285
+</li>
+</ul>
 
             </td></tr>
           </table>
