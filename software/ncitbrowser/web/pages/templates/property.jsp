@@ -423,31 +423,12 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
         else primitive = "Yes";
       }
       
-      String legacy_concept_name = null;
-      String legacy_concept_name_prop_name = "Legacy_Concept_Name";
-      String legacy_concept_name_label = legacy_concept_name_prop_name;
-      Vector legacy_concept_name_value_vec = (Vector) hmap.get(legacy_concept_name_prop_name);
-      
-      if (legacy_concept_name_value_vec != null) {
-         legacy_concept_name = (String) legacy_concept_name_value_vec.elementAt(0);
-      }
-
       String kind = "not available";
       String kind_prop_name = "Kind";
       String kind_label = "Kind:";
     %>
     
-    <%
-    if (legacy_concept_name != null) {
-    %>
-    <tr class="dataRowLight">
-      <td><i><%=legacy_concept_name_label%></i>&nbsp;<i><%=legacy_concept_name%></i></td>
-      <td><i>&nbsp;</i></td>
-    </tr>
-    <%
-    }
-    %>
-    
+   
     <%
     if (primitive != null) {
     %>
