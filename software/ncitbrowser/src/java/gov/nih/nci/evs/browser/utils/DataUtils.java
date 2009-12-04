@@ -164,6 +164,9 @@ public class DataUtils {
 
     public static HashMap formalName2MetadataHashMap = null;
 
+    public static HashMap displayName2FormalNameHashMap = null;
+
+
 
     // ==================================================================================
 
@@ -195,6 +198,7 @@ public class DataUtils {
         formalName2LocalNameHashMap = new HashMap();
         localName2FormalNameHashMap = new HashMap();
         formalName2MetadataHashMap = new HashMap();
+        displayName2FormalNameHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
 		boolean includeInactive = false;
@@ -233,6 +237,9 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 
                 localName2FormalNameHashMap.put(formalname, formalname);
                 localName2FormalNameHashMap.put(locallname, formalname);
+
+                String displayName = getMetadataValue(formalname, "display_name");
+                localName2FormalNameHashMap.put(displayName, formalname);
 
                 MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
                 if (mdpl != null) {
@@ -2454,6 +2461,14 @@ NCI Thesaurus:
 		return s;
 	}
 
+
+    public static String getFormalNameByDisplayName(String s) {
+		if (displayName2FormalNameHashMap == null) setCodingSchemeMap();
+		if (displayName2FormalNameHashMap.containsKey(s)) {
+			return (String) displayName2FormalNameHashMap.get(s);
+		}
+		return s;
+	}
 
 	public static void main(String[] args) {
 		String scheme = "NCI Thesaurus";

@@ -67,8 +67,13 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
           IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBeanManager");
                 
+System.out.println("KEY" " + key);                
+                
           IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
           
+if (iteratorBean == null){
+    System.out.println("iteratorBean NOT FOUND???" " + key);  
+}
 
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
@@ -77,6 +82,15 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
           String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
           String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
+/*
+System.out.println("matchText" " + matchText);                
+System.out.println("match_size" " + match_size);                
+System.out.println("page_string" " + page_string);                
+System.out.println("new_search" " + new_search);                
+System.out.println("page_number" " + page_number);                
+System.out.println("selectedResultsPerPage" " + selectedResultsPerPage);                
+System.out.println("contains_warning_msg" " + contains_warning_msg);                
+*/
 
           if (page_number != null && new_search == Boolean.FALSE)
           {
