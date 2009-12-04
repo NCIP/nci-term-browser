@@ -13,31 +13,31 @@
         } else if (hdr_dictionary != null) {
             request.getSession().setAttribute("dictionary", hdr_dictionary);
             String content_hdr_shortName = DataUtils.getLocalName(hdr_dictionary);
-           
+
             String content_hdr_formalName = DataUtils.getFormalName(content_hdr_shortName);
-            
+
             String display_name = DataUtils.getMetadataValue(content_hdr_formalName, "display_name");
-            
+
             String term_browser_version = DataUtils.getMetadataValue(content_hdr_formalName, "term_browser_version");
-            
+
             if (display_name == null || display_name.compareTo("null") == 0) {
                 display_name = content_hdr_shortName;
             }
 
             if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
-		term_browser_version = (String) request.getParameter("version");
-		if (term_browser_version == null) {
-		    term_browser_version = (String) request.getAttribute("version");
-		}
-       	    }
-        
+    term_browser_version = (String) request.getParameter("version");
+    if (term_browser_version == null) {
+        term_browser_version = (String) request.getAttribute("version");
+    }
+            }
+
 %>
 <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=hdr_dictionary%>">
   <div class="vocabularynamebanner">
     <div class="vocabularynameshort"><%=display_name%></div>
     <div class="vocabularynamelong">Version:&nbsp;<%=term_browser_version%></div>
   </div>
-</a>  
+</a>
 <%
         }
         %>
