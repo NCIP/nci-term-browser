@@ -72,7 +72,7 @@ System.out.println("KEY " + key);
           IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
           
 if (iteratorBean == null){
-    System.out.println("iteratorBean NOT FOUND???" " + key);  
+    System.out.println("iteratorBean NOT FOUND???" + key);  
 }
 
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
