@@ -1,4 +1,13 @@
 <%
+  List displayItemList2 = NCItBrowserProperties.getInstance().getDisplayItemList();
+  String prop_url = "";
+  for (int i=0; i<displayItemList2.size(); i++) {
+    DisplayItem displayItem = (DisplayItem) displayItemList2.get(i);
+    String propertyName = displayItem.getPropertyName();    
+    if (propertyName.equals("MedDRA_Code"))
+      prop_url = displayItem.getUrl();
+  }
+
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
   {
     %>
@@ -38,7 +47,14 @@
 		      <td class="dataCellText"><%=term_name%></td>
 		      <td class="dataCellText"><%=term_source%></td>
 		      <td class="dataCellText"><%=term_type%></td>
-		      <td class="dataCellText"><%=term_source_code%></td>
+              <%
+                if (prop_url != null && prop_url.compareTo("null") != 0) {
+                  String url_str = prop_url + term_source_code;
+              %>
+                <td><a href="javascript:redirect_site('<%= url_str %>')"><%= term_source_code %></a></td>
+              <%} else {%>
+		        <td class="dataCellText"><%=term_source_code%></td>
+              <%}%>
 		    </tr>
 		<%
             }
