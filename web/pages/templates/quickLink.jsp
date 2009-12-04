@@ -28,14 +28,12 @@
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="javax.faces.model.SelectItem" %>
-<%  
-    String ncim_url = new DataUtils().getNCImURL(); 
+<%
+    String ncim_url = new DataUtils().getNCImURL();
     String quicklink_dictionary = (String) request.getSession().getAttribute("dictionary");
     String term_suggestion_application_url2 = "", dictionary_encoded2 = "";
     if (quicklink_dictionary != null) {
         term_suggestion_application_url2 = new DataUtils().getTermSuggestionURL();
-        if (quicklink_dictionary.compareTo("NCI Thesaurus") != 0)
-            term_suggestion_application_url2 = DataUtils.getTermSuggestionURL(quicklink_dictionary, null);
         dictionary_encoded2 = DataUtils.replaceAll(quicklink_dictionary, " ", "%20");
     }
 %>
@@ -55,27 +53,27 @@
               alt="Enterprise Vocabulary Services">EVS Home</a></li>
             <li><a href="<%=ncim_url%>" target="_blank"
               alt="NCI MetaThesaurus">NCI MetaThesaurus Browser</a></li>
-              
+
             <%
             if (quicklink_dictionary == null || quicklink_dictionary.compareTo("NCI Thesaurus") != 0) {
             %>
-              
+
             <li><a href="<%= request.getContextPath() %>/index.jsf"
               alt="NCI Thesaurus Browser">NCI Thesaurus Browser</a></li>
-            
+
             <%
             }
             %>
-              
-              
-            <li><a href="<%= request.getContextPath() %>/start.jsf" 
+
+
+            <li><a href="<%= request.getContextPath() %>/start.jsf"
               alt="NCI Term Browser">NCI Term Browser</a></li>
             <li><a href="http://www.cancer.gov/cancertopics/terminologyresources" target="_blank"
               alt="NCI Terminology Resources">NCI Terminology Resources</a></li>
             <% if (term_suggestion_application_url2 != null && term_suggestion_application_url2.length() > 0) { %>
               <li><a href="<%=term_suggestion_application_url2%>?dictionary=<%=dictionary_encoded2%>" target="_blank" alt="Term Suggestion">Term Suggestion</a></li>
             <% } %>
-              
+
           </ul>
         </li>
       </ul>
