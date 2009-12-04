@@ -2004,23 +2004,6 @@ NCI Thesaurus:
         return term_suggestion_application_url;
     }
 
-    public static String getTermSuggestionURL(String codingSchemeName, String version) {
-		String propertyName = "term_suggestion_application_url";
-		String term_suggestion_application_url = "";
-		String urn = null;
-
-        if (version == null) {
-            version = getVocabularyVersionByTag(codingSchemeName, "PRODUCTION");
-            if (version == null) version = getVocabularyVersionByTag(codingSchemeName, null);
-		}
-
-        Vector v = MetadataUtils.getMetadataValues(codingSchemeName, version, urn, propertyName);
-        if (v != null && v.size() > 0) return (String) v.elementAt(0);
-
-        return term_suggestion_application_url;
-    }
-
-
 ///////////////////////////////////////////////////////////////////////////////
 
     public static CodingScheme resolveCodingScheme(LexBIGService lbSvc, String formalname, CodingSchemeVersionOrTag versionOrTag) {
