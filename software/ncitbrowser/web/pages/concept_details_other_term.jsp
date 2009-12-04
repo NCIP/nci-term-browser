@@ -32,15 +32,15 @@
 <head>
   <title>NCI Term Browser</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleSheet.css" />
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/script.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/search.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/dropdown.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
-  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
   <f:view>
     <%@ include file="/pages/templates/header.jsp" %>
     <div class="center-page">
@@ -48,49 +48,50 @@
       <!-- Main box -->
       <div id="main-area">
        <%
-
-          String dictionary = (String) request.getAttribute("dictionary");
+        String dictionary = (String) request.getAttribute("dictionary");
 
           if (dictionary == null) {
-              dictionary = (String) request.getParameter("dictionary");
-              dictionary = DataUtils.getCodingSchemeName(dictionary);
+            dictionary = (String) request.getParameter("dictionary");
+            dictionary = DataUtils.getCodingSchemeName(dictionary);
           }
 
           String shortName = DataUtils.getLocalName(dictionary);
-          String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-          if (dictionary.compareTo("NCI Thesaurus") != 0) {
-              term_suggestion_application_url = DataUtils.getTermSuggestionURL(dictionary, null);
-          }
-
-        %>
+          String term_suggestion_application_url = new DataUtils()
+              .getTermSuggestionURL();
+       %>
           <!-- Thesaurus, banner search area -->
           <div class="bannerarea">
 
        <%
-          if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
-        %>
+        if (dictionary != null
+              && dictionary.compareTo("NCI Thesaurus") == 0) {
+       %>
                   <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
        <%
-          } else {
+        } else {
+       %>
 
 
-        %>
-        
- 
  <%
-         String version = (String) request.getParameter("version");
-         if (version == null) {
-             version = (String) request.getAttribute("version");
-         }
-         
-         String term_browser_version = DataUtils.getMetadataValue(dictionary, "term_browser_version");
-         if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;
-         String display_name = DataUtils.getMetadataValue(dictionary, "display_name");
-         if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
- %>       
-    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=dictionary%>">        
+            String version = (String) request.getParameter("version");
+                if (version == null) {
+                  version = (String) request.getAttribute("version");
+                }
+
+                String term_browser_version = DataUtils.getMetadataValue(
+                    dictionary, "term_browser_version");
+                if (term_browser_version == null
+                    || term_browser_version.compareTo("null") == 0)
+                  term_browser_version = version;
+                String display_name = DataUtils.getMetadataValue(
+                    dictionary, "display_name");
+                if (display_name == null
+                    || display_name.compareTo("null") == 0)
+                  display_name = shortName;
+          %>
+    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=dictionary%>">
       <div class="vocabularynamebanner">
-        <div class="vocabularynameshort"><%=display_name%></div>
+        <div class="vocabularynameshort"><%=display_name%>_1</div>
         <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
       </div>
     </a>
@@ -112,18 +113,22 @@
                     View Hierarchy </a>
                     | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
                   </td>
-                  <td align="right">                                
+                  <td align="right">
                     <%
-                       Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
-                       if (visitedConcepts != null && visitedConcepts.size() > 0) {
-                         String visitedConceptsStr = DataUtils.getVisitedConceptLink(visitedConcepts);
-                    %>
+                                                      Vector visitedConcepts = (Vector) request.getSession()
+                                                            .getAttribute("visitedConcepts");
+                                                        if (visitedConcepts != null && visitedConcepts.size() > 0) {
+                                                          String visitedConceptsStr = DataUtils
+                                                              .getVisitedConceptLink(visitedConcepts);
+                                                    %>
                          <%=visitedConceptsStr%>
-                    <% } %>
-                  </td>   
-                  <td width="7"></td>                             
-                </tr>                    
-              </table> 
+                    <%
+                      }
+                    %>
+                  </td>
+                  <td width="7"></td>
+                </tr>
+              </table>
               <!-- end Global Navigation -->
           </div>
       </div>
@@ -135,92 +140,98 @@
         <div class="pagecontent">
           <%
             String code = null;
-            String type = null;
+              String type = null;
 
-            String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("singleton"));
-            if (singleton != null && singleton.compareTo("true") == 0) {
-              //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
-              code = (String) request.getSession().getAttribute("code");
-            } else {
-              //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
-              code = (String) request.getSession().getAttribute("code");
-              type = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("type"));
-            }
-            if (dictionary == null) {
+              String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils
+                  .cleanXSS((String) request.getSession().getAttribute(
+                      "singleton"));
+              if (singleton != null && singleton.compareTo("true") == 0) {
+                //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
+                code = (String) request.getSession().getAttribute("code");
+              } else {
+                //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+                code = (String) request.getSession().getAttribute("code");
+                type = gov.nih.nci.evs.browser.utils.HTTPUtils
+                    .cleanXSS((String) request.getParameter("type"));
+              }
+              if (dictionary == null) {
                 dictionary = Constants.CODING_SCHEME_NAME;
-            }
-            if (type == null) {
+              }
+              if (type == null) {
                 type = "properties";
-            }
-            else if (type.compareTo("properties") != 0 &&
-                     type.compareTo("relationship") != 0 &&
-                     type.compareTo("synonym") != 0 &&
-                     type.compareTo("all") != 0) {
+              } else if (type.compareTo("properties") != 0
+                  && type.compareTo("relationship") != 0
+                  && type.compareTo("synonym") != 0
+                  && type.compareTo("all") != 0) {
                 type = "properties";
-            }
+              }
 
-            String name = "";
-            Concept c = null;
+              String name = "";
+              Concept c = null;
 
-            String vers = null;
-            String ltag = null;
+              String vers = null;
+              String ltag = null;
 
-            c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+              c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 
-            if (c != null) {
-               request.getSession().setAttribute("concept", c);
-               request.getSession().setAttribute("code", code);
-               name = c.getEntityDescription().getContent();
-               //request.getSession().removeAttribute("RelationshipHashMap");
-            } else {
-               request.getSession().setAttribute("dictionary", dictionary);
-               name = "ERROR: Invalid code - " + code + ".";
-            }
+              if (c != null) {
+                request.getSession().setAttribute("concept", c);
+                request.getSession().setAttribute("code", code);
+                name = c.getEntityDescription().getContent();
+                //request.getSession().removeAttribute("RelationshipHashMap");
+              } else {
+                request.getSession().setAttribute("dictionary", dictionary);
+                name = "ERROR: Invalid code - " + code + ".";
+              }
 
-            String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
-            if (c != null) {
-            request.getSession().setAttribute("dictionary", dictionary);
-            request.getSession().setAttribute("type", type);
-            request.getSession().setAttribute("singleton", "false");
+              String tg_dictionary = DataUtils.replaceAll(dictionary, " ",
+                  "%20");
+              if (c != null) {
+                request.getSession().setAttribute("dictionary", dictionary);
+                request.getSession().setAttribute("type", type);
+                request.getSession().setAttribute("singleton", "false");
 
-
-String active_code = (String) request.getSession().getAttribute("active_code");
-if (active_code == null) {
-    request.getSession().setAttribute("active_code", code);
-} else {
-   if (active_code.compareTo(code) != 0) {
-       request.getSession().removeAttribute("RelationshipHashMap");
-       request.getSession().setAttribute("active_code", code);
-   }
-}
-
-
+                String active_code = (String) request.getSession()
+                    .getAttribute("active_code");
+                if (active_code == null) {
+                  request.getSession().setAttribute("active_code", code);
+                } else {
+                  if (active_code.compareTo(code) != 0) {
+                    request.getSession().removeAttribute(
+                        "RelationshipHashMap");
+                    request.getSession().setAttribute("active_code",
+                        code);
+                  }
+                }
           %>
           <table border="0" width="700px">
             <tr>
               <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
               <%
+                visitedConcepts = (Vector) request.getSession()
+                        .getAttribute("visitedConcepts");
+                    if (visitedConcepts == null) {
+                      visitedConcepts = new Vector();
+                    }
+                    String localCodingSchemeName = DataUtils
+                        .getLocalName(dictionary);
+                    String visitedConceptStr = localCodingSchemeName + "|"
+                        + code + "|" + name;
+                    if (!visitedConcepts.contains(visitedConceptStr)) {
+                      visitedConcepts.add(visitedConceptStr);
+                      request.getSession().removeAttribute("visitedConcepts");
+                      request.getSession().setAttribute("visitedConcepts",
+                          visitedConcepts);
+                    }
 
-visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
-if (visitedConcepts == null) {
-    visitedConcepts = new Vector();
-}
-String localCodingSchemeName = DataUtils.getLocalName(dictionary);
-String visitedConceptStr = localCodingSchemeName + "|" + code + "|" + name;
-if (!visitedConcepts.contains(visitedConceptStr)) {
-  visitedConcepts.add(visitedConceptStr);
-  request.getSession().removeAttribute("visitedConcepts");
-  request.getSession().setAttribute("visitedConcepts", visitedConcepts);
-}
-
-
-              if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) {
+                    if (term_suggestion_application_url != null
+                        && term_suggestion_application_url.compareTo("") != 0) {
               %>
               <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
                  <a href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
               </td>
               <%
-              }
+                }
               %>
 
             </tr>
@@ -233,14 +244,14 @@ if (!visitedConcepts.contains(visitedConceptStr)) {
               <%@ include file="/pages/templates/synonym.jsp" %>
           </div>
               <%
-              } else {
+                } else {
               %>
           <div class="textbody">
               <%=name%>
           </div>
            <%
-              }
-            %>
+            }
+           %>
            <%@ include file="/pages/templates/nciFooter.html" %>
           </div>
         </div>
