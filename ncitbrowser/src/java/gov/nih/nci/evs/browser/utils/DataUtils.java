@@ -239,7 +239,7 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
                 localName2FormalNameHashMap.put(locallname, formalname);
 
                 String displayName = getMetadataValue(formalname, "display_name");
-                localName2FormalNameHashMap.put(displayName, formalname);
+                displayName2FormalNameHashMap.put(displayName, formalname);
 
                 MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
                 if (mdpl != null) {
@@ -2444,16 +2444,13 @@ NCI Thesaurus:
 		return s;
 	}
 
-
     public static String getFormalNameByDisplayName(String s) {
-		if (displayName2FormalNameHashMap == null) setCodingSchemeMap();
-		if (displayName2FormalNameHashMap.containsKey(s)) {
-			return (String) displayName2FormalNameHashMap.get(s);
-		}
-		return s;
+		if (displayName2FormalNameHashMap == null)
+		    setCodingSchemeMap();
+		return (String) displayName2FormalNameHashMap.get(s);
 	}
-
-	public static void main(String[] args) {
+    
+    public static void main(String[] args) {
 		String scheme = "NCI Thesaurus";
 		String version = null;
 		//Breast Carcinoma (Code C4872)
