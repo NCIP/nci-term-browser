@@ -57,6 +57,8 @@ import org.apache.commons.codec.language.DoubleMetaphone;
 import org.LexGrid.LexBIG.Utility.Constructors;
 //import org.LexGrid.LexBIG.DataModel.enums.PropertyType;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
+import org.LexGrid.naming.SupportedProperty;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -132,6 +134,8 @@ public class SearchUtils {
 			"an", "and", "by", "for", "of", "on", "in", "nos", "the", "to",
 			"with" });
 
+    static HashMap propertyLocalNameListHashMap = null;
+
 	public SearchUtils() {
 		initializeSortParameters();
 	}
@@ -142,6 +146,7 @@ public class SearchUtils {
 	}
 
 	private void initializeSortParameters() {
+		propertyLocalNameListHashMap = new HashMap();
 		try {
 			NCItBrowserProperties properties = NCItBrowserProperties
 					.getInstance();
@@ -2228,9 +2233,22 @@ public class SearchUtils {
 							if (designationOnly) {
 								cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
 							}
+							/*
 							LocalNameList propertyNames = null;
 							propertyNames = new LocalNameList();
 							CodedNodeSet.PropertyType[] propertyTypes = getAllPropertypes();
+							*/
+
+							LocalNameList propertyNames = null;
+							try {
+								propertyNames = getPropertyLocalNameList(scheme);//getAllPropertyNames(scheme);
+								int entryCount = propertyNames.getEntryCount();
+								System.out.println("Number of properties: " + entryCount);
+							} catch (Exception ex) {
+								propertyNames = new LocalNameList();
+							}
+							CodedNodeSet.PropertyType[] propertyTypes = null;//getAllPropertypes();
+
 							String language = null;
 							try {
                             	cns = cns.restrictToMatchingProperties(propertyNames, propertyTypes, matchText, matchAlgorithm, language);
@@ -2618,5 +2636,31 @@ public class SearchUtils {
 		else return "literalContains";
 	}
 
+	public static LocalNameList getPropertyLocalNameList(String codingSchemeName) {
+		if (propertyLocalNameListHashMap == null) {
+			propertyLocalNameListHashMap = new HashMap();
+		}
+		if (!propertyLocalNameListHashMap.containsKey(codingSchemeName)) {
+			try {
+				LocalNameList lnl = getAllPropertyNames(codingSchemeName);
+				propertyLocalNameListHashMap.put(codingSchemeName, lnl);
+				return lnl;
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} else {
+			return (LocalNameList) propertyLocalNameListHashMap.get(codingSchemeName);
+		}
+		return null;
+	}
 
+    public static LocalNameList getAllPropertyNames(String codingSchemeName) throws Exception {
+		LocalNameList propertyNames = new LocalNameList();
+		LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+		CodingScheme cs = lbSvc.resolveCodingScheme(codingSchemeName, null);
+		for(SupportedProperty prop : cs.getMappings().getSupportedProperty()){
+			propertyNames.addEntry(prop.getLocalId());
+		}
+		return propertyNames;
+    }
 }
