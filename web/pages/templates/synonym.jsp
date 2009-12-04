@@ -1,13 +1,4 @@
 <%
-  List displayItemList2 = NCItBrowserProperties.getInstance().getDisplayItemList();
-  String prop_url = "";
-  for (int i=0; i<displayItemList2.size(); i++) {
-    DisplayItem displayItem = (DisplayItem) displayItemList2.get(i);
-    String propertyName = displayItem.getPropertyName();    
-    if (propertyName.equals("MedDRA_Code"))
-      prop_url = displayItem.getUrl();
-  }
-
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
   {
     %>
@@ -40,6 +31,11 @@
 		    String term_name = (String) synonym_data.elementAt(0);
 		    String term_type = (String) synonym_data.elementAt(1);
 		    String term_source = (String) synonym_data.elementAt(2);
+		    String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
+            if (term_source_formal_name == null)
+                term_source_formal_name = DataUtils.getFormalName(term_source);
+            if (term_source.equalsIgnoreCase("nci"))
+                term_source_formal_name = "NCI Thesaurus";
 		    String term_source_code = (String) synonym_data.elementAt(3);
 		    String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
 		%>
@@ -48,10 +44,12 @@
 		      <td class="dataCellText"><%=term_source%></td>
 		      <td class="dataCellText"><%=term_type%></td>
               <%
-                if (prop_url != null && prop_url.compareTo("null") != 0) {
-                  String url_str = prop_url + term_source_code;
+                if (term_source_formal_name != null && term_source_code != null) {
+                  String url_str = request.getContextPath() + 
+                      "/pages/concept_details.jsf?dictionary=" + 
+                      term_source_formal_name + "&code=" + term_source_code;
               %>
-                <td><a href="javascript:redirect_site('<%= url_str %>')"><%= term_source_code %></a></td>
+                <td><a href="<%= url_str %>"><%= term_source_code %></a></td>
               <%} else {%>
 		        <td class="dataCellText"><%=term_source_code%></td>
               <%}%>
