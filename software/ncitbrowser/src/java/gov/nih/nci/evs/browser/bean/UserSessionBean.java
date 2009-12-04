@@ -257,7 +257,7 @@ System.out.println("============ searchTarget: " + searchTarget);
 
         if (iterator != null) {
 
-			request.setAttribute("key", key);
+			request.getSession().setAttribute("key", key);
 
 			int numberRemaining = 0;
 			try {
