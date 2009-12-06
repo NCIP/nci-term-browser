@@ -237,6 +237,12 @@
       emptyRootDiv.render();
     }
 
+    function showNodeNotFound(node_id) {
+      emptyRootDiv.setBody("<span class='instruction_text'>Concept with code " + node_id + " not found in the hierarchy.</span>");
+      emptyRootDiv.show();
+      emptyRootDiv.render();
+    }
+    
     function showPartialHierarchy() {
       rootDescDiv.setBody("<span class='instruction_text'>(Note: This tree only shows partial hierarchy.)</span>");
       rootDescDiv.show();
@@ -326,7 +332,12 @@
         var respTxt = o.responseText;
         var respObj = eval('(' + respTxt + ')');
         if ( typeof(respObj) != "undefined") {
-          if ( typeof(respObj.root_nodes) != "undefined") {
+        
+          if ( typeof(respObj.dummy_root_nodes) != "undefined") {
+              showNodeNotFound(ontology_node_id);
+          }
+            
+          else if ( typeof(respObj.root_nodes) != "undefined") {
             var root = tree.getRoot();
             if (respObj.root_nodes.length == 0) {
               showEmptyRoot();
