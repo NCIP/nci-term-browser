@@ -154,7 +154,7 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 						+ (System.currentTimeMillis() - ms));
 			}
 		}
-
+/*
 		else if (action.equals("search_tree")) {
 
 			if (node_id != null && ontology_display_name != null) {
@@ -206,6 +206,67 @@ System.out.println("AjaxServlet.java dumping json.toString() ");
 				return;
 			}
 		}
+*/
+		else if (action.equals("search_tree")) {
+
+
+			if (node_id != null && ontology_display_name != null) {
+				response.setContentType("text/html");
+				response.setHeader("Cache-Control", "no-cache");
+				JSONObject json = new JSONObject();
+				try {
+					// testing
+					// JSONArray rootsArray =
+					// CacheController.getInstance().getPathsToRoots(ontology_display_name,
+					// null, node_id, true);
+
+					String max_tree_level_str = null;
+					int maxLevel = -1;
+					try {
+						max_tree_level_str = NCItBrowserProperties
+								.getInstance()
+								.getProperty(
+										NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
+						maxLevel = Integer.parseInt(max_tree_level_str);
+
+					} catch (Exception ex) {
+
+					}
+
+					JSONArray rootsArray = CacheController.getInstance()
+							.getPathsToRoots(ontology_display_name, null,
+									node_id, true, maxLevel);
+
+					if (rootsArray.length() == 0) {
+						rootsArray = CacheController.getInstance()
+								.getRootConcepts(ontology_display_name, null);
+
+						boolean is_root = isRoot(rootsArray, node_id);
+						if (!is_root) {
+							//rootsArray = null;
+							json.put("dummy_root_nodes", rootsArray);
+							response.getWriter().write(json.toString());
+							response.getWriter().flush();
+
+							System.out.println("Run time (milliseconds): "
+									+ (System.currentTimeMillis() - ms));
+							return;
+						}
+					}
+					json.put("root_nodes", rootsArray);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				response.getWriter().write(json.toString());
+				response.getWriter().flush();
+
+				System.out.println("Run time (milliseconds): "
+						+ (System.currentTimeMillis() - ms));
+				return;
+			}
+		}
+
 
 		else if (action.equals("build_tree")) {
 			if (ontology_display_name == null)
@@ -234,4 +295,18 @@ System.out.println("AjaxServlet.java dumping json.toString() ");
 		}
 	}
 
+	private boolean isRoot(JSONArray rootsArray, String code) {
+		for (int i=0; i<rootsArray.length(); i++)
+		{
+			String node_id = null;
+			try {
+				JSONObject node = rootsArray.getJSONObject(i);
+				node_id = (String) node.get(CacheController.ONTOLOGY_NODE_ID);
+				if (node_id.compareTo(code) == 0) return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 }
