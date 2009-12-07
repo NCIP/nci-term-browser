@@ -188,6 +188,7 @@ public class UserSessionBean extends Object {
         Utils.StopWatch stopWatch = new Utils.StopWatch();
         Vector<org.LexGrid.concepts.Concept> v = null;
 
+        boolean excludeDesignation = true;
         boolean designationOnly = false;
 
         // check if this search has been performance previously through IteratorBeanManager
@@ -220,7 +221,7 @@ public class UserSessionBean extends Object {
 				iteratorBean = iteratorBeanManager.getIteratorBean(key);
 				iterator = iteratorBean.getIterator();
 			} else {
-                iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+                iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
        	    	if (iterator != null) {
 					iteratorBean = new IteratorBean(iterator);
 					iteratorBean.setKey(key);
