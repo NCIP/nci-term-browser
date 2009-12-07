@@ -26,9 +26,7 @@
        request.getSession().setAttribute("licenseBean", licenseBean);
    }
    
-   System.out.println("(*) isLicensed: " + LicenseBean.isLicensed(dictionary, null));
-   System.out.println("(*) licenseAgreementAccepted: " + licenseBean.licenseAgreementAccepted(dictionary));
-   
+  
    if (LicenseBean.isLicensed(dictionary, null) && !licenseBean.licenseAgreementAccepted(dictionary)) {
    %>  
        <jsp:forward page="/pages/accept_license.jsf?dictionary=<%=dictionary%>&code=<%=code%>" />
