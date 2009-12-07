@@ -21,10 +21,6 @@
   String ontology_list_str = (String) request.getAttribute("ontology_list_str");
   String matchText = (String) request.getAttribute("matchText");
   
-  
-System.out.println("(***) license.jsp  matchText " + matchText); 
-  
-  
   String searchTarget = (String) request.getAttribute("searchTarget");
   String matchAlgorithm = (String) request.getAttribute("algorithm");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
