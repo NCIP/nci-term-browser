@@ -152,10 +152,10 @@
                 }
               }
 
-              String term_suggestion_application_url = new DataUtils()
-                  .getTermSuggestionURL();
+              //String term_suggestion_application_url = new DataUtils()
+              //    .getTermSuggestionURL();
 
-              String yyy = new DataUtils().getTermSuggestionURL();
+              String term_suggestion_application_url = DataUtils.getMetadataValue(dictionary, "term_suggestion_application_url");
 
               String name = "";
               Concept c = null;
