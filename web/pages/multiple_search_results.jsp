@@ -128,8 +128,6 @@
         String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
         Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
         
-        System.out.println("(*) multiple_search_results.jsp new_search: " + new_search);        
-
         String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
         String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
         String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
