@@ -2176,6 +2176,7 @@ public class SearchUtils {
 		}
 	}
 
+/*
     public ResolvedConceptReferencesIterator searchByProperties(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm, boolean designationOnly, boolean ranking, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
@@ -2233,11 +2234,6 @@ public class SearchUtils {
 							if (designationOnly) {
 								cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
 							}
-							/*
-							LocalNameList propertyNames = null;
-							propertyNames = new LocalNameList();
-							CodedNodeSet.PropertyType[] propertyTypes = getAllPropertypes();
-							*/
 
 							LocalNameList propertyNames = null;
 							try {
@@ -2348,6 +2344,181 @@ public class SearchUtils {
         return iterator;
 
     }
+*/
+
+    public ResolvedConceptReferencesIterator searchByProperties(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm,
+                                                                boolean excludeDesignation, boolean ranking, int maxToReturn) {
+		String matchText0 = matchText;
+		String matchAlgorithm0 = matchAlgorithm;
+		matchText0 = matchText0.trim();
+
+        if (matchText == null || matchText.length() == 0)
+        {
+			return null;
+		}
+
+        matchText = matchText.trim();
+        if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+		{
+			matchAlgorithm = findBestContainsAlgorithm(matchText);
+		}
+
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
+
+        String scheme = null;
+        String version = null;
+
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null)
+            {
+                System.out.println("lbSvc = null");
+                return null;
+            }
+
+			Vector cns_vec = new Vector();
+			for (int i=0; i<schemes.size(); i++) {
+				cns = null;
+				iterator = null;
+				scheme = (String) schemes.elementAt(i);
+				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+				version = (String) versions.elementAt(i);
+				if (version != null) versionOrTag.setVersion(version);
+
+				try {
+					if (lbSvc == null)
+					{
+						System.out.println("lbSvc = null");
+						return null;
+					}
+
+					cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+
+					if (cns != null)
+					{
+						try {
+							LocalNameList propertyNames = new LocalNameList();
+							CodedNodeSet.PropertyType[] propertyTypes = getAllPropertyTypes();
+
+							if (excludeDesignation) {
+								propertyTypes = getAllNonPresentationPropertyTypes();
+							}
+
+							String language = null;
+							try {
+                            	cns = cns.restrictToMatchingProperties(propertyNames, propertyTypes, matchText, matchAlgorithm, language);
+							} catch (Exception e) {
+								System.out.println("\t(*) restrictToMatchingProperties throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
+								//e.printStackTrace();
+							}
+							try {
+                            	cns = restrictToSource(cns, source);
+							} catch (Exception e) {
+								System.out.println("\t(*) restrictToSource throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
+								//e.printStackTrace();
+							}
+
+						} catch (Exception ex) {
+							//ex.printStackTrace();
+							System.out.println("\t(*) searchByProperties2 throws exceptions.");
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					//return null;
+				}
+				if (cns != null) {
+					cns_vec.add(cns);
+				}
+			}
+
+			iterator = null;
+			cns = union(cns_vec);
+			if (cns == null) return null;
+
+            LocalNameList restrictToProperties = null;//new LocalNameList();
+            boolean resolveConcepts = false;
+            SortOptionList sortCriteria = null;
+		    if (ranking){
+				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
+
+            } else {
+                sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
+                System.out.println("*** Sort alphabetically...");
+                resolveConcepts = false;
+			}
+            try {
+               try {
+					long ms = System.currentTimeMillis(), delay = 0;
+                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+
+                }  catch (Exception e) {
+                    System.out.println("Method: SearchUtil.searchByProperties");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
+                    e.printStackTrace();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		if (!excludeDesignation) {
+			int lcv = 0;
+			int iterator_size = 0;
+			if (iterator != null) {
+				try {
+					iterator_size = iterator.numberRemaining();
+				} catch (Exception ex) {
+
+				}
+			}
+
+			while (iterator_size == 0 && lcv < schemes.size()) {
+				scheme = (String) schemes.elementAt(lcv);
+				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+				version = (String) versions.elementAt(lcv);
+				if (version != null) versionOrTag.setVersion(version);
+
+				iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
+				if (iterator != null) {
+					try {
+						iterator_size = iterator.numberRemaining();
+					} catch (Exception ex) {
+
+					}
+				}
+				lcv++;
+			}
+	    }
+        return iterator;
+    }
+
+
+    private CodedNodeSet.PropertyType[] getAllPropertyTypes() {
+    	CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[4];
+    	propertyTypes[0] = PropertyType.COMMENT;
+    	propertyTypes[1] = PropertyType.DEFINITION;
+    	propertyTypes[2] = PropertyType.GENERIC;
+    	propertyTypes[3] = PropertyType.PRESENTATION;
+    	return propertyTypes;
+	}
+
+    private CodedNodeSet.PropertyType[] getAllNonPresentationPropertyTypes() {
+    	CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[3];
+    	propertyTypes[0] = PropertyType.COMMENT;
+    	propertyTypes[1] = PropertyType.DEFINITION;
+    	propertyTypes[2] = PropertyType.GENERIC;
+   	    return propertyTypes;
+	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Search by matching ALL relationships
