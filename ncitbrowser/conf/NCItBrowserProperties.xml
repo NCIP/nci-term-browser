@@ -43,7 +43,15 @@
        </DisplayItem>
 
        <DisplayItem>
-            <propertyName>Display_Name</propertyName>
+            <propertyName>Preferred Name</propertyName>
+            <itemLabel>Preferred Name</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+       
+       <DisplayItem>
+            <propertyName>Display Name</propertyName>
             <itemLabel>Display Name</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
