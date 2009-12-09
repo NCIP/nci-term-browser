@@ -263,13 +263,18 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <td><h2><A NAME="viewhierarchy">View Hierarchy</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-
-          Click on the <b>View Hierarchy</b> link at the top of the page to bring up a separate window showing the NCI Thesaurus hierarchy.  Some details:
+          Click on the <b>View Hierarchy</b> link, at the top of 
+          pages for sources that support it, to bring up a separate
+          window showing the full source hierarchy. Some details: 
           <ul>
-            <li>At first, only the top level nodes of the hierarchy are shown.</li>
-            <li>At each level, concepts are listed alphabetically by concept preferred name.</li>
-            <li>Browse through the levels by clicking on the + next to each concept.</li>
-            <li>Click on the concept name itself to see the concept’s details in the main browser window.</li>
+            <li>At first, only the top level nodes of the hierarchy
+              are shown.</li>
+            <li>At each level, concepts are listed alphabetically
+              by concept preferred name.</li>
+            <li>Browse through the levels by clicking on the + next
+              to each concept.</li>
+            <li>Click on the concept name itself to see the concept's
+              details in the main browser window.</li>
           </ul>
         </p>
 
