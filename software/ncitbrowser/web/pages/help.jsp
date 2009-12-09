@@ -54,6 +54,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
           <A HREF="#searchhelp">Search</A><br>
           <A HREF="#conceptdetails">Concept Details</A><br>
           <A HREF="#viewhierarchy">View Hierarchy</A><br>
+          <A HREF="#otherlinks">Other Links</A><br>
           <A HREF="#subsets">Subsets</A><br>
           <A HREF="#knownissues">Known Issues</A><br>
           <A HREF="#additionalinfo">Additional Information</A>
@@ -275,6 +276,35 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
               to each concept.</li>
             <li>Click on the concept name itself to see the concept's
               details in the main browser window.</li>
+          </ul>
+        </p>
+
+        <p class="textbody">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="otherlinks">OtherLinks</A></h2></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
+          Several other browser links appear in the upper parts of
+            pages to which they apply:
+          <ul>
+            <li><b>Visited Concepts</b> will appear under the Search box
+              once you start visiting individual concept pages.  It
+              shows the concept name and source for each concept
+              visited, with most recent concepts at the top.</li>
+            <li><b>Term Suggestion</b> appears on the initial pages of 
+              sources for which NCI can handle such requests, and
+              goes to a special suggestion page.  This link is lost
+              when <b>Visited Concepts</b> start, but is still available
+              on the <b>Quick Links</b> pull-down menu.</li>
+            <li><b>Suggest changes to this concept</b> link appears in the
+              upper right of all concept details pages of sources
+              for which NCI can handle such requests.  It goes to
+              a special suggestion page with source and concept code
+              filled in.</li>
+            <li><b>Subsets</b> on NCI Thesaurus (NCIt) pages links to a
+              special page to read about and link to NCI Thesaurus
+              Subsets. The text on this page provides additional
+              information. </li>
           </ul>
         </p>
 
