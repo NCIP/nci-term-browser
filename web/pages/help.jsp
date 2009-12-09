@@ -50,6 +50,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
         <div class="texttitle-blue">Help</div>
         <p class="textbody">
           <A HREF="#introduction">Introduction</A><br>
+          <A HREF="#sources">Sources</A><br>
           <A HREF="#searchhelp">Search</A><br>
           <A HREF="#conceptdetails">Concept Details</A><br>
           <A HREF="#viewhierarchy">View Hierarchy</A><br>
@@ -62,7 +63,6 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <td><h2><A NAME="introduction">Introduction</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-        <p class="textbody">
           <b>NCI Term Browser</b> provides a consistent, user-friendly tool to 
           browse and search all of the biomedical terminologies hosted 
           by NCI EVS, including both NCI Thesaurus (NCIt) and the NCI 
@@ -95,6 +95,28 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <li><font face="courier">Fixed Width</font>: Search strings. 
             <li><i>Italics</i>: Concept terms. 
           </ul>
+        </p>
+
+        <p class="textbody">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td><h2><A NAME="sources">Sources</A></h2></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+          </tr></table>
+            The NCI Term Browser home page lists alphabetically the 
+            terminology sources that are available.  Click on a source 
+            name to go to its home page, or click on a source's check 
+            box to include it in a search from the NCI Term Browser 
+            home page.  Below the sources list are three buttons:
+            
+            <ul>
+              <li><b>Select All</b> includes all sources for searching, leaving their check boxes checked.</li>
+              <li><b>Clear</b> unselects all sources, unchecking their check boxes.</li>
+              <li><b>Search</b> starts a search in the same way as the Search button in the search box.</li>
+            </ul>
+            
+            The <b>Sources</b> link at the top of the NCI Term Browser home page 
+            gives information about all sources, including the source 
+            descriptions appearing on each source's home page. 
         </p>
 
         <p class="textbody">
