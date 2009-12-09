@@ -62,40 +62,38 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <td><h2><A NAME="introduction">Introduction</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-          <b>NCI Thesaurus (NCIt)</b> is an extensive reference terminology
-          with some complex features.  Each specific meaning, such as melanoma,
-          lung, or chemotherapy, is represented by a distinct <i>concept</i>
-          with a unique, permanent <i>code</i>.  Each concept provides
-          additional information such as a preferred name, other terms
-          and codes, definitions, and relationships with other concepts.
-          Concepts are organized within major categories,
-          such as anatomy and gene, and arranged in logical parent-child
-          hierarchies from very broad top concepts down to the most
-          specific subcategories.
+        <p class="textbody">
+          <b>NCI Term Browser</b> provides a consistent, user-friendly tool to 
+          browse and search all of the biomedical terminologies hosted 
+          by NCI EVS, including both NCI Thesaurus (NCIt) and the NCI 
+          Metathesaurus (NCIm), which itself includes more than 70 
+          terminologies,  These terminologies normally represent each
+          specific meaning, such as melanoma, lung, orchemotherapy, by
+          a distinct <i>concept</i> with a unique, permanent <i>code</i>. Each concept 
+          normally provides additional information such as a preferred 
+          name, other terms and codes, definitions, and relationships 
+          with other concepts. Concepts are normally organized in 
+          parent-child hierarchies from very broad top concepts down 
+          to the most specific subcategories.  All browsing and searching 
+          in this browser reflects this concept-based view of terminology. 
+          For information on other EVS browsers, file formats, and computer 
+          application access, see the 
+          <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS web site</a>. 
         </p>
         <p class="textbody">
-          <b>The NCIt Browser</b> is designed for ease of use by a diverse
-          user community.  This first release focuses on the data and
-          features most users want.  Future releases will add advanced
-          search options, user-defined reports, and other things users
-          ask for.  For information on other NCIt browsers, file formats,
-          and computer application access, see the
-          <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS web site</a>.
+          <b>Get in touch</b> to get help or offer suggestions using the 
+          browser's <a href="<%= contactUsUrl %>">Contact Us</a> page. 
         </p>
         <p class="textbody">
-          <b>Get in touch</b> to get help or offer suggestions using the
-          browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.
-        </p>
-        <p class="textbody">
-          <b>This help file</b> provides basic information about how to
-          use the NCIt Browser effectively.  It also provides pointers
-          on how to learn more about NCIt and related resources.
-
-          <b>This help file</b> provides basic information about how to use the NCIt Browser effectively. It also provides pointers on how to learn more about NCIt and related resources. The following typeface font conventions are used for describing search and the browser interface:
+          This help file provides basic information about how to use 
+          the NCI Term Browser effectively as well as links to additional 
+          information elsewhere. The following typeface font conventions 
+          are used for describing search and the browser interface: 
+          
           <ul>
-            <li><b>Sans Serif Bold</b>: Browser links and buttons
-            <li><font face="courier">Fixed Width</font>: Search strings
-            <li><i>Italics</i>: Concept terms
+            <li><b>Bold</b>: Browser links, buttons, page tabs, and drop-down boxes. 
+            <li><font face="courier">Fixed Width</font>: Search strings. 
+            <li><i>Italics</i>: Concept terms. 
           </ul>
         </p>
 
