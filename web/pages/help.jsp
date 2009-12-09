@@ -231,18 +231,30 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <td><h2><A NAME="conceptdetails">Concept Details</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-
-          Detailed information on the selected concept is grouped and shown on several related pages:
+          Detailed information on the selected concept is grouped
+            and shown on several related pages: 
           <ul>
-            <li>Tabbed information gives the concept’s meaning, labels, and direct relationships:</li>
-            <ul>
-              <li><b>Terms & Properties:</b> Gives definitions, synonyms, abbreviations, codes, and other information.</li>
-              <li><b>Relationships:</b> Shows how other concepts are directly related to this concept as  parents, children, or in other ways.</li>
-              <li><b>Synonym Details:</b> For each term or abbreviation, shows its term type, source, and code (for outside sources that have them).</li>
-              <li><b>View All:</b> Combines all of the above information on a single page.</li>
-            </ul>
-            <li><b>View in Hierarchy:</b> Click the button to see where the concept is found within the NCI Thesaurus hierarchy. Concepts are often found in several different places. The focused concept will be bold, underlined, and colored red.</li>
-            <li><b>View History:</b> Click the button to view a history of edit actions on this concept, including dates and reference concepts involved in actions that split or merge concepts.</li>
+            <li>Tabbed information gives the concept's meaning, labels,
+                and direct relationships:</li>
+              <ul>
+                <li><b>Terms & Properties</b>: Gives definitions, synonyms,
+                  abbreviations, codes, and other information.</li>
+                <li><b>Relationships</b>: Shows how other concepts are
+                  directly related to this concept as parents,
+                  children, or in other ways.</li>
+                <li><b>Synonym Details</b>: For each term or abbreviation,
+                  shows its term type, source, and code (for sources
+                  that have them).</li>
+                <li><b>View All</b>: Combines all of the above information
+                  on a single page.</li>
+              </ul>
+            <li><b>View in Hierarchy</b>: Click the button to see where the
+              concept is found within the source hierarchy. Concepts
+              are often found in several different places. The focus
+              concept will be bold, underlined, and colored red.</li>
+            <li><b>View History</b>: Click the button (for sources that have
+              it) to view a history of edit actions on this concept,
+              possibly including dates and other information.</li>
           </ul>
         </p>
 
