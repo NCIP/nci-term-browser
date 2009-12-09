@@ -322,22 +322,31 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <td><h2><A NAME="knownissues">Known Issues</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
-
-          Most known issues are limits to functionality and documentation that we are working to address for release 2.  These include the following:
+          This browser addresses many of the issues identified in the
+          NCIt Browser on which it is based. We are still working on
+          remaining issues of data, functionality and documentation,
+          which include the following: 
           <ul>
-            <li>Some searches returning thousands of results hit internal limits in the LexEVS 4.2/LexBIG 2.3
-              server. The browser detects this failure and falls back to a safe search that will return only
-              some of the matching concepts (only full-word matches, normally the best), warning the user about
-              the problem. This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
-            <li>The default scoring for search matches will continue to be improved, and some user-settable options should be part of the forthcoming Advanced Search page.</li>
-            <li>Two characters - "&" and "<" - fail normal searching because they are stored and processed in special
-              ways.  An ampersand ("&") can mostly be found using its encoded "&amp;amp;" or double-encoded "&amp;amp;amp;" forms;
-              less-than ("<") by using "&amp;lt;" or "&amp;amp;lt;". This problem should be fixed with the LexEVS 5.0 release in June 2009.</li>
-            <li>Online and standalone documentation are still under development.</li>
-            <li>For the latest updates of known issues, <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Thesaurus+Browser+1.0.1+Release+Notes" target="_blank" alt="NCI Thesaurus Browser 1.0 Release Notes"> see NCI Thesaurus Browser 1.0.1 Release Notes</a>.
+            <li><b>Data</b>: Some source data are not being properly loaded
+              into the LexBIG database, or are not being correctly
+              processed for presentation and search.  We are addressing
+              such issues through ongoing changes in data file formats
+              and loading, and expect significant improvements to be
+              visible even before the next browser release.</li>
+            <li><b>Functionality</b>: The default scoring for search matches
+              will continue to be improved, especially in balancing
+              scoring from multiple sources.  Some user-settable
+              options should be part of a forthcoming Advanced Search
+              page. Performance in some features, such as the display
+              of concept placement in source hierarchies, still needs
+              major improvement.</li>
+            <li><b>Documentation</b>: Online and standalone documentation
+              are still under development.</li>
+            <li>For the latest updates of known issues, 
+              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+1.1+Release+Notes" target="_blank" alt="NCI Thesaurus Browser 1.0 Release Notes"> see NCI Thesaurus Browser 1.0 Release Notes</a>.</li>
           </ul>
-          Please report any bugs or suggestions using the browser’s <a href="<%= contactUsUrl %>">Contact Us</a> page.<br>
-          Suggestions to add a new concept or make changes to an existing concept can also be made using the <b>Term Suggestion</b> link below the Search box or the <b>Suggest changes to this concept</b> link in the upper right of all concept details pages.
+          Please report any bugs or suggestions using the browser's
+          <a href="<%= contactUsUrl %>">Contact Us</a> page.
         </p>
 
         <p class="textbody">
