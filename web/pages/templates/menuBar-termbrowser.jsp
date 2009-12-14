@@ -4,7 +4,7 @@
     <td align="left"><a
       href="<%= request.getContextPath() %>/start.jsf">Home</a> | <a
       href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/source_help_info.jsf',
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/tb_source_help_info.jsf',
     '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
     Sources</a> | <a href="<%= request.getContextPath() %>/pages/help.jsf">Help</a>
     </td>
