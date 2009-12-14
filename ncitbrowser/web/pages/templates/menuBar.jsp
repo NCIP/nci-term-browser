@@ -12,13 +12,14 @@
   dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#41;", ")");
   String menubar_dictionary = DataUtils.getCodingSchemeName( dictionaryName0 );
   String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );
+    
 %>
 <table class="global-nav" border="0" width="100%" cellpadding="0"
   cellspacing="0">
   <tr>
     <td align="left">
     <%
-         if (menubar_dictionary != null && menubar_dictionary.compareTo("NCI Thesaurus") == 0) {
+         if (menubar_dictionary != null && menubar_dictionary.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
       %> <a href="<%= request.getContextPath() %>">Home</a> <%
          } else {
             if (menubar_version == null) {
