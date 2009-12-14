@@ -457,6 +457,10 @@ String term_browser_version = DataUtils.getMetadataValue(hierarchy_schema, "term
 String display_name = DataUtils.getMetadataValue(hierarchy_schema, "display_name");
 
 
+if (display_name == null || display_name.compareTo("null") == 0) {
+   display_name = DataUtils.getLocalName(hierarchy_schema); 
+}
+
 if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 %>
     <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
