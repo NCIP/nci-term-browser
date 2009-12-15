@@ -1,4 +1,9 @@
 <%
+  String source_header = MetadataUtils.getMetadataValue(
+      dictionary, null, null, "source_header");
+  String term_type_header = MetadataUtils.getMetadataValue(
+      dictionary, null, null, "term_type_header");
+
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
   {
     %>
@@ -8,16 +13,20 @@
         <tr>
           <th class="dataTableHeader" scope="col" align="left">Term</th>
           <th class="dataTableHeader" scope="col" align="left">Source
-            <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/source_help_info.jsf?dictionary=<%=dictionary%>',
-                '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-              <img src="<%= request.getContextPath() %>/images/help.gif" alt="Term Type Definitions" border="0">
-            </a>
+            <% if (source_header != null && source_header.length() > 0) { %>
+              <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/source_help_info.jsf?dictionary=<%=dictionary%>',
+                  '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                <img src="<%= request.getContextPath() %>/images/help.gif" alt="Term Type Definitions" border="0">
+              </a>
+            <% } %>
           </th>
           <th class="dataTableHeader" scope="col" align="left">Type
-            <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/term_type_help_info.jsf?dictionary=<%=dictionary%>',
-                '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-              <img src="<%= request.getContextPath() %>/images/help.gif" alt="Term Type Definitions" border="0">
-            </a>
+            <% if (term_type_header != null && term_type_header.length() > 0) { %>
+              <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/term_type_help_info.jsf?dictionary=<%=dictionary%>',
+                  '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                <img src="<%= request.getContextPath() %>/images/help.gif" alt="Term Type Definitions" border="0">
+              </a>
+            <% } %>
           </th>
           <th class="dataTableHeader" scope="col" align="left">Code</th>
         </tr>
