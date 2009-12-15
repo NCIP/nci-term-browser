@@ -96,10 +96,34 @@ public class HTTPUtils {
                 e.getMessage());
         }
 	}
-	
+    
+    public static void printRequestParameters() {
+        System.out.println(" ");
+        System.out.println(Utils.SEPARATOR);
+        System.out.println("Request Parameter(s):");
+
+        try {
+            HttpServletRequest request = (HttpServletRequest)FacesContext.
+                getCurrentInstance().getExternalContext().getRequest();
+
+            Enumeration<?> enumeration = SortUtils.sort(request.getParameterNames());
+            int i=0;
+            while (enumeration.hasMoreElements()) {
+                String name = (String) enumeration.nextElement();
+                Object value = request.getParameter(name);
+                System.out.println("  " + i + ") " + name + ": " + value);
+                ++i;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getClass().getSimpleName() + ": " +
+                e.getMessage());
+        }
+    }
+    
 	public static void printAttributes() {
 	    printRequestSessionAttributes();
 	    printRequestAttributes();
+        printRequestParameters();
         System.out.println(" ");
 	}
 }
