@@ -255,7 +255,8 @@ public class MetadataUtils {
 
 	}
 
-    public static Vector getMetadataNameValuePairs(String codingSchemeName, String version, String urn) {
+    public static Vector getMetadataNameValuePairs(String codingSchemeName, 
+        String version, String urn) {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
 		if (version == null) {
@@ -272,7 +273,7 @@ public class MetadataUtils {
 
 	}
 
-	public static Vector getMetadataNameValuePairs(MetadataPropertyList mdpl){
+	public static Vector getMetadataNameValuePairs(MetadataPropertyList mdpl, boolean sort){
 		if (mdpl == null) return null;
 		Vector v = new Vector();
 		Iterator<MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
@@ -281,9 +282,15 @@ public class MetadataUtils {
 			String t = property.getName() + "|" + property.getValue();
             v.add(t);
 		}
-		return SortUtils.quickSort(v);
+		if (sort)
+		    return SortUtils.quickSort(v);
+		return v;
 	}
-
+	
+	public static Vector getMetadataNameValuePairs(MetadataPropertyList mdpl){
+	    return getMetadataNameValuePairs(mdpl, true);
+	}
+	
 	public static Vector getMetadataValues(Vector metadata, String propertyName){
 		if (metadata == null) return null;
 		Vector w = new Vector();
@@ -299,17 +306,43 @@ public class MetadataUtils {
 		return w;
 	}
 
-	public static Vector getMetadataValues(String codingSchemeName, String version, String urn, String propertyName){
+	public static Vector getMetadataValues(String codingSchemeName, String version, 
+	    String urn, String propertyName, boolean sort){
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		MetadataPropertyList mdpl = getMetadataPropertyList(lbSvc, codingSchemeName, version, urn);
 		if (mdpl == null) return null;
 
-		Vector metadata = getMetadataNameValuePairs(mdpl);
+		Vector metadata = getMetadataNameValuePairs(mdpl, sort);
 		if (metadata == null) return null;
 
 		return getMetadataValues(metadata, propertyName);
 	}
 
+    public static Vector getMetadataValues(String codingSchemeName, String version, 
+        String urn, String propertyName){
+        return getMetadataValues(codingSchemeName, version, 
+            urn, propertyName, true);
+    }
+    
+    public static String getMetadataValue(String codingSchemeName, String version, 
+        String urn, String propertyName) {
+        Vector v = getMetadataValues(codingSchemeName, version, urn, propertyName);
+        if (v == null)
+            return "";
+        int n = v.size();
+        if (n <= 0)
+            return "";
+        if (v.size() == 1)
+            return v.elementAt(0).toString();
+        
+        StringBuffer buffer = new StringBuffer();
+        for (int i=0; i<n; ++i) {
+            if (i > 0)
+                buffer.append(" | ");
+            buffer.append(v.elementAt(i).toString());
+        }
+        return buffer.toString();
+    }
 
     public Vector getSupportedVocabularyMetadataValues(String propertyName) {
 		Vector v = new Vector();
