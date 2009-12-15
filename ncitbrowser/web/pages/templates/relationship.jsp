@@ -3,6 +3,8 @@
   {
     Concept concept_curr = (Concept) request.getSession().getAttribute("concept");
     String scheme_curr = (String) request.getSession().getAttribute("dictionary");
+    String rel_display_name = DataUtils.getMetadataValue(scheme_curr, "display_name");
+    if (rel_display_name == null) rel_display_name = DataUtils.getLocalName(scheme_curr);
     
     if (scheme_curr == null) {
         scheme_curr = (String) request.getParameter("dictionary");
@@ -34,7 +36,7 @@
     
     
 %>
-  <p class="textsubtitle-blue">Relationships with other <%=scheme_curr%> Concepts</p>
+  <p class="textsubtitle-blue">Relationships with other <%=rel_display_name%> Concepts</p>
   <p>
     <%
       scheme_curr = scheme_curr.replaceAll(" ", "%20");
