@@ -53,10 +53,40 @@
             </tr>
           </table>
           <hr/>
+          
+          <%
+            String codingScheme = Constants.CODING_SCHEME_NAME;
+            String header = MetadataUtils.getMetadataValue(
+                codingScheme, null, null, "source_header");
+            String footer = MetadataUtils.getMetadataValue(
+                codingScheme, null, null, "source_footer");
+          %>
 
-          Under Construction: Not Yet Implement
+          <%=header%>
           <br/>
+          <table width="580px" cellpadding="3" cellspacing="0" border="0">
+            <%
+              Vector names = MetadataUtils.getMetadataValues(
+                  codingScheme, null, null, "source_name", false);
+              Vector descriptions = MetadataUtils.getMetadataValues(
+                  codingScheme, null, null, "source_description", false);
+              if (names != null && descriptions != null) {
+                for (int n=0; n<names.size(); n++) {
+                  String name = (String) names.elementAt(n);
+                  String description = (String) descriptions.elementAt(n);
+                  String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
+              %>
+                  <tr class="<%=rowColor%>">
+                    <td><%=name%></td>
+                    <td><%=description%></td>
+                  </tr>
+              <%
+                }
+              }
+            %>
+          </table>
           <br/>
+          <%=footer%>
 
         </div>
         <!-- End of Term Type content -->
