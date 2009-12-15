@@ -266,12 +266,22 @@
         n1++;
         %>
               <td>
+              <%
+              if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
+              %>
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
+              <%  
+              } else {
+              %>
+                <%=target_concept_name%> 
+              <%
+              }
+              %>
               </td>
               <td><%=role_name%></td>
-            </tr>
+           </tr>
       <%
       }
       %>
@@ -317,9 +327,22 @@
         n2++;
         %>
               <td>
+              
+              <%
+              if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
+              %>
+              
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
+              <%  
+              } else {
+              %>
+                <%=target_concept_name%> 
+              <%
+              }
+              %>                
+                
               </td>
               <td><%=role_name%></td>
             </tr>
