@@ -564,7 +564,7 @@ public class TreeUtils {
 			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
 
 			if (assocName.compareTo("PAR") == 0) associationsNavigatedFwd = false;
-
+			//if (assocName.compareTo("subClassOf") == 0) associationsNavigatedFwd = false;
 			//return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
 			return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, assocName, associationsNavigatedFwd);
 		} catch (Exception ex) {
@@ -919,8 +919,14 @@ public class TreeUtils {
 
 				if (associationsNavigatedFwd) {
 					childAssociationList = node.getSourceOf();
+
+					System.out.println(	"getAssociatedConcepts: node.getSourceOf() ");
+
+
 				} else {
 					childAssociationList = node.getTargetOf();
+
+					System.out.println(	"getAssociatedConcepts: node.getTargetOf() ");
 				}
 
                 if (childAssociationList != null) {
@@ -967,12 +973,14 @@ public class TreeUtils {
 								if (!codesToExclude.contains(branchItemCode)) {
 									TreeItem childItem = new TreeItem(branchItemCode,
 											getCodeDescription(branchItemNode));
+
 									ti.expandable = true;
 									AssociationList grandchildBranch = associationsNavigatedFwd ? branchItemNode
 											.getSourceOf()
 											: branchItemNode.getTargetOf();
 									if (grandchildBranch != null)
 										childItem.expandable = true;
+
 									ti.addChild(childNavText, childItem);
 								}
 						    }
