@@ -259,7 +259,7 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
 				}
 
-System.out.println("\n\tActive? " + isActive);
+System.out.println("\tActive? " + isActive);
 
 				if ((includeInactive && isActive == null) || (isActive != null && isActive.equals(Boolean.TRUE))
 				     || (includeInactive && (isActive != null && isActive.equals(Boolean.FALSE))))
@@ -292,7 +292,6 @@ System.out.println("\n\tActive? " + isActive);
 		if (v == null || v.size() == 0) return null;
 		return (String) v.elementAt(0);
     }
-
 
     public static String getLocalName(String key) {
 		if (formalName2LocalNameHashMap == null) {
