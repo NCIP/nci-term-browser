@@ -39,11 +39,20 @@
         </table>
         <div><img src="<%=basePath%>/images/termbrowser_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
         <div id="popupContentArea">
+
+          <%
+            String codingScheme = request.getParameter("dictionary");
+            String header = MetadataUtils.getMetadataValue(
+                codingScheme, null, null, "source_header");
+            String footer = MetadataUtils.getMetadataValue(
+                codingScheme, null, null, "source_footer");
+          %>
+
           <!-- Term Type content -->
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="pageTitle">
               <td align="left">
-                <b>Sources</b>
+                <b>Sources (<%=codingScheme%>)</b>
               </td>
               <td align="right">
                 <font size="1" color="red" align="right">
@@ -54,14 +63,6 @@
           </table>
           <hr/>
           
-          <%
-            String codingScheme = Constants.CODING_SCHEME_NAME;
-            String header = MetadataUtils.getMetadataValue(
-                codingScheme, null, null, "source_header");
-            String footer = MetadataUtils.getMetadataValue(
-                codingScheme, null, null, "source_footer");
-          %>
-
           <%=header%>
           <br/>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
