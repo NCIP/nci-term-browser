@@ -289,13 +289,18 @@ System.out.println("\tActive? " + isActive);
 	}
 
     public static String getMetadataValue(String scheme, String propertyName) {
+		Vector v = getMetadataValues(scheme, propertyName);
+		if (v == null || v.size() == 0) return null;
+		return (String) v.elementAt(0);
+    }
+
+    public static Vector getMetadataValues(String scheme, String propertyName) {
 		if (formalName2MetadataHashMap == null) setCodingSchemeMap();
 		if (!formalName2MetadataHashMap.containsKey(scheme)) return null;
 		Vector metadata = (Vector) formalName2MetadataHashMap.get(scheme);
 		if (metadata == null || metadata.size() == 0) return null;
 		Vector v = MetadataUtils.getMetadataValues(metadata, propertyName);
-		if (v == null || v.size() == 0) return null;
-		return (String) v.elementAt(0);
+		return v;
     }
 
     public static String getLocalName(String key) {
