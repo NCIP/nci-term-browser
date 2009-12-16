@@ -26,9 +26,6 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
-<%
-  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-%>
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
