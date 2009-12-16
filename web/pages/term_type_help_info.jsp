@@ -37,43 +37,36 @@
           <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" alt="Close Window" />&nbsp;CLOSE WINDOW</a></div></td>
         </tr>
         </table>
-        
-        
-        
-<%
-String term_type_dictionary = request.getParameter("dictionary");
-String term_type_schema = request.getParameter("schema");
-if (term_type_dictionary != null && term_type_schema == null) term_type_schema = term_type_dictionary;
 
-String term_type_version = request.getParameter("version");
-String term_browser_version = DataUtils.getMetadataValue(term_type_schema, "term_browser_version");
-String display_name = DataUtils.getMetadataValue(term_type_schema, "display_name");
-
-
-if (display_name == null || display_name.compareTo("null") == 0) {
-   display_name = DataUtils.getLocalName(term_type_schema); 
-}
-
-if (term_type_schema.compareTo("NCI Thesaurus") == 0) {
-%>
-    <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
-<%
-} else {
-     String term_type_shortName = DataUtils.getLocalName(term_type_schema);
-%>
-    <div>
-      <img src="<%=basePath%>/images/other_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
-      <div class="vocabularynamepopupshort"><%=display_name%></div>
-    </div>
-<%
-}
-%>        
-        
+        <%
+          String dictionary = request.getParameter("dictionary");
+          String schema = request.getParameter("schema");
+          if (dictionary != null && schema == null)
+            schema = dictionary;
+          
+          String display_name = DataUtils.getMetadataValue(schema, "display_name");
+          if (display_name == null || display_name.compareTo("null") == 0) {
+            display_name = DataUtils.getLocalName(schema); 
+          }
+          
+          if (schema.compareTo("NCI Thesaurus") == 0) {
+        %>
+            <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif"
+              width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
+        <% } else { %>
+            <div>
+              <img src="<%=basePath%>/images/other_popup_banner.gif"
+                width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
+              <div class="vocabularynamepopupshort"><%=display_name%></div>
+            </div>
+        <%
+          }
+        %>        
         
         <div id="popupContentArea">
 
           <%
-            String codingScheme = term_type_dictionary;
+            String codingScheme = dictionary;
             String header = MetadataUtils.getMetadataValue(
                 codingScheme, null, null, "term_type_header");
             String footer = MetadataUtils.getMetadataValue(
