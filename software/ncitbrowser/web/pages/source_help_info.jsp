@@ -88,7 +88,9 @@
           </table>
           <hr/>
           
-          <%=header%>
+          <% if (header != null) { %>
+            <%=header%>
+          <% } %>
           <br/>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <%
@@ -112,7 +114,9 @@
             %>
           </table>
           <br/>
-          <%=footer%>
+          <% if (footer != null) { %>
+            <%=footer%>
+          <% } %>
 
         </div>
         <!-- End of Term Type content -->
