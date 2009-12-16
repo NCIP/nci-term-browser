@@ -14,7 +14,6 @@
     term_subset_link = "href=\"" + terminology_subset_download_url +
       "\" target=\"_blank\" alt=\"Terminology Subset Download\"";
   }
-  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
