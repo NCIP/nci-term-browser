@@ -26,7 +26,7 @@ String copyright_statement_value = DataUtils.getMetadataValue(Constants.CODING_S
 String license_statement_value = null;
 String license_display_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "license_display");
 if (license_display_value != null && (license_display_value.compareTo("show") == 0 || license_display_value.compareTo("accept") == 0)) {
-    license_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "copyright");
+    license_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "license_statement");
 }
 
 %>
