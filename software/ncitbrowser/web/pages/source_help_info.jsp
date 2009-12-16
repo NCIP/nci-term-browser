@@ -67,10 +67,10 @@
 
           <%
             String codingScheme = dictionary;
-            String header = MetadataUtils.getMetadataValue(
-                codingScheme, null, null, "source_header");
-            String footer = MetadataUtils.getMetadataValue(
-                codingScheme, null, null, "source_footer");
+            String header = DataUtils.getMetadataValue(
+                codingScheme, "source_header");
+            String footer = DataUtils.getMetadataValue(
+                codingScheme, "source_footer");
           %>
 
           <!-- Term Type content -->
@@ -92,10 +92,10 @@
           <br/>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <%
-              Vector names = MetadataUtils.getMetadataValues(
-                  codingScheme, null, null, "source_name", false);
-              Vector descriptions = MetadataUtils.getMetadataValues(
-                  codingScheme, null, null, "source_description", false);
+              Vector names = DataUtils.getMetadataValues(
+                  codingScheme, "source_name");
+              Vector descriptions = DataUtils.getMetadataValues(
+                  codingScheme, "source_description");
               if (names != null && descriptions != null) {
                 for (int n=0; n<names.size(); n++) {
                   String name = (String) names.elementAt(n);
