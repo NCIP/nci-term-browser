@@ -93,7 +93,8 @@ public class LicenseBean extends Object {
 		if (version != null) versionOrTag.setVersion(version);
 		String copyRightStmt = null;
 		try {
-			copyRightStmt = DataUtils.getMetadataValue(codingSchemeName, "copyright");
+			//[#24879] Update UMLS SN licence metadata
+			copyRightStmt = DataUtils.getMetadataValue(codingSchemeName, "license_statement");
 		} catch (Exception ex) {
 		}
 		return copyRightStmt;
