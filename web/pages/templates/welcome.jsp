@@ -22,6 +22,7 @@ String version_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, 
 String source_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "source_url");
 String download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "download_url");
 String copyright_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "copyright");
+String cabig_vkc_index_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "cabig_vkc_index_url");
 
 String license_statement_value = null;
 String license_display_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "license_display");
@@ -85,8 +86,17 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
               <a href="<%=download_url_value%>" target="_blank"><%=download_url_value%></a>
             </p>
         <%    
-        }
-
+        }       
+      
+        if (cabig_vkc_index_url_value != null) {
+        %>
+            <p>
+            caBIG VKC Link:
+              <a href="<%=cabig_vkc_index_url_value%>" target="_blank"><%=cabig_vkc_index_url_value%></a>
+            </p>
+        <%    
+        }         
+          
         if (license_statement_value != null) {
         %>
             <p>
