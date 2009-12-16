@@ -792,7 +792,7 @@ public class TreeUtils {
 					for (Iterator<Association> pathsToChildren = childAssociationList
 							.iterateAssociation(); pathsToChildren.hasNext();) {
 						Association child = pathsToChildren.next();
-						//KLO 091009 remove anonomous nodes
+						//KLO 091009 remove anonymous nodes
 
 						child = processForAnonomousNodes(child);
 
@@ -877,12 +877,6 @@ public class TreeUtils {
 		ResolvedConceptReferenceList matches = null;
 		Vector v = new Vector();
 		try {
-			/*
-			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
-					.getGenericExtension("LexBIGServiceConvenienceMethods");
-			lbscm.setLexBIGService(lbSvc);
-			*/
 
 			String name = getCodeDescription(lbSvc, scheme, csvt, code);
 			ti = new TreeItem(code, name);
@@ -920,13 +914,8 @@ public class TreeUtils {
 				if (associationsNavigatedFwd) {
 					childAssociationList = node.getSourceOf();
 
-					System.out.println(	"getAssociatedConcepts: node.getSourceOf() ");
-
-
 				} else {
 					childAssociationList = node.getTargetOf();
-
-					System.out.println(	"getAssociatedConcepts: node.getTargetOf() ");
 				}
 
                 if (childAssociationList != null) {
@@ -934,7 +923,7 @@ public class TreeUtils {
 					for (Iterator<Association> pathsToChildren = childAssociationList
 							.iterateAssociation(); pathsToChildren.hasNext();) {
 						Association child = pathsToChildren.next();
-						//KLO 091009 remove anonomous nodes
+						//KLO 091009 remove anonymous nodes
 
 						child = processForAnonomousNodes(child);
 
