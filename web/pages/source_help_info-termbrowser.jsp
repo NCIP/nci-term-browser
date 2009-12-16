@@ -57,49 +57,51 @@
             <tr class="textbody"><td align="left">
 
 <p>
-The NCI Term Browser provides access to the terminology sources listed below, some of which are proprietary and included, by permission, 
-for non-commercial use only.
+The NCI Term Browser provides access to the terminology sources listed below, some of which are proprietary and included, by permission, for non-commercial use only. 
 </p>
 <ul>
 <li>
-NCIm is built using the National Library of Medicine's UMLS Metathesaurus, use of which is restricted under the UMLS license agreement 
-(see 
-		    <a href="http://www.nlm.nih.gov/research/umls/license.html" target="_blank"
-		      alt="UMLS Metathesaurus License">http://www.nlm.nih.gov/research/umls/license.html</a>
-).
-</li>
-<li>
-The National Library of Medicine makes the UMLS Semantic Network freely available without charge on request, subject to the conditions specified at 
-		    <a href="http://semanticnetwork.nlm.nih.gov/TermsAndConditions/" target="_blank"
-		      alt="UMLS Metathesaurus Terms and Conditions">http://semanticnetwork.nlm.nih.gov/TermsAndConditions/</a>
-.
-</li>
-<li>
-The World Health Organization allows use of ICD-10 and ICD-O-3 in NCI Enterprise Vocabulary Services, but requires licensing for other purposes (see 
+<b>ICD-10</b> & <b>ICD-O-3</b>: The World Health Organization allows use of ICD-10 and ICD-O-3 in NCI Enterprise Vocabulary Services, 
+but requires licensing for other purposes 
+(see
 		    <a href="http://www.who.int/classifications/icd/en/" target="_blank"
 		      alt="ICD10 License">http://www.who.int/classifications/icd/en/</a>
-).
+). 
 </li>
 <li>
-The International Health Terminology Standards Development Organisation (IHTSDO) allows use of SNOMED CT in NCI Enterprise Vocabulary Services, 
-but requires licensing for other purposes (see 
-		    <a href="http://www.ihtsdo.org/join-us/use-snomed-ct-licenses/" target="_blank"
-		      alt="SNOMED CT License">http://www.ihtsdo.org/join-us/use-snomed-ct-licenses/</a>
-).
-</li>
-<li>
-The Medical Dictionary for Regulatory Activities (MedDRA) terminology is licensed for NCI work and may be viewed on NCI browsers. 
+<b>MedDRA</b>: The Medical Dictionary for Regulatory Activities (MedDRA) terminology is licensed for NCI work and may be viewed on NCI browsers. 
 All other uses are prohibited, unless covered by separate subscription to MedDRA from the MedDRA MSSO 
 (see 
 		    <a href="http://www.meddramsso.com" target="_blank"
 		      alt="MedDRA License">http://www.meddramsso.com</a>
-or contact at 
-
-		    <a href="http://mssohelp@ngc.com" target="_blank"
-		      alt="MedDRA Help Desk">http://mssohelp@ngc.com</a>
-, 877.258.8280, or 12011 Sunset Hills Road Reston Virginia, 20190-3285
+)
+or contact at http://mssohelp@ngc.com , 877.258.8280, or 12011 Sunset Hills Road Reston Virginia, 20190-3285. 
+</li>
+<li>
+<b>NCIm</b> is built using the National Library of Medicine's UMLS Metathesaurus, 
+use of which is restricted under the UMLS license agreement 
+(see 
+		    <a href="http://www.nlm.nih.gov/research/umls/license.html" target="_blank"
+		      alt="UMLS Metathesaurus License">http://www.nlm.nih.gov/research/umls/license.html</a>
+). 
+</li>
+<li>
+<b>SNOMED CT</b>: The International Health Terminology Standards Development Organisation (IHTSDO) allows use of SNOMED CT in NCI Enterprise Vocabulary Services, 
+but requires licensing for other purposes 
+(see 
+		    <a href="http://www.ihtsdo.org/join-us/use-snomed-ct-licenses/" target="_blank"
+		      alt="SNOMED CT License">http://www.ihtsdo.org/join-us/use-snomed-ct-licenses/</a>
+). 
+</li>
+<li>
+<b>UMLS Semantic Network</b>: The National Library of Medicine makes the UMLS Semantic Network freely available without charge on request, 
+subject to the conditions specified at  
+		    <a href="http://semanticnetwork.nlm.nih.gov/TermsAndConditions/" target="_blank"
+		      alt="UMLS Metathesaurus Terms and Conditions">http://semanticnetwork.nlm.nih.gov/TermsAndConditions/</a>
+. 
 </li>
 </ul>
+
 
             </td></tr>
           </table>
