@@ -240,13 +240,13 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 
                 String displayName = getMetadataValue(formalname, "display_name");
                 displayName2FormalNameHashMap.put(displayName, formalname);
-
+/*
                 MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
                 if (mdpl != null) {
 					Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl);
 					formalName2MetadataHashMap.put(formalname, metadataProperties);
 				}
-
+*/
 				Boolean isActive = null;
 				if (csr == null) {
 					System.out.println("\tcsr == null???");
@@ -268,6 +268,11 @@ System.out.println("\tActive? " + isActive);
 						nv_vec.add(value);
 						csnv2codingSchemeNameMap.put(value, formalname);
 						csnv2VersionMap.put(value, representsVersion);
+						MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
+						if (mdpl != null) {
+							Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl);
+							formalName2MetadataHashMap.put(formalname, metadataProperties);
+						}
 				}
 			}
 	    } catch (Exception e) {
