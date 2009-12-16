@@ -270,7 +270,10 @@ System.out.println("\tActive? " + isActive);
 						csnv2VersionMap.put(value, representsVersion);
 						MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
 						if (mdpl != null) {
-							Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl);
+						    //Note: Need to set sorting to false (in the following line)
+						    //  so source_help_info.jsp and term_type_help_info.jsp
+						    //  will show up correctly.
+							Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl, false);
 							formalName2MetadataHashMap.put(formalname, metadataProperties);
 						}
 				}
