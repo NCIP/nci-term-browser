@@ -15,9 +15,6 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<%
-  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
-%>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>

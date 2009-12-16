@@ -21,7 +21,6 @@
   // Determine which sub app the message or error came from in order to 
   //   display the correct banner. 
   
-  String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
   String dictionary = (String) request.getSession().getAttribute("dictionary");  
   String display_name = null;
   final int TB=0, NCIT=1, NCIO=2;    

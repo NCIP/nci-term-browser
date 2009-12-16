@@ -20,7 +20,6 @@
     String subject = HTTPUtils.cleanXSS(request.getParameter("subject"));
     String message = HTTPUtils.cleanXSS(request.getParameter("message"));
     String emailaddress = HTTPUtils.cleanXSS(request.getParameter("emailaddress"));
-    String term_suggestion_application_url = new DataUtils().getTermSuggestionURL();
     if (subject == null) subject = "";
     if (message == null) message = "";
     if (emailaddress == null) emailaddress = "";
