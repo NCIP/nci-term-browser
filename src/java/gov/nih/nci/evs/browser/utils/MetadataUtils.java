@@ -255,7 +255,7 @@ public class MetadataUtils {
 
 	}
 
-    public static Vector getMetadataNameValuePairs(String codingSchemeName, 
+    public static Vector getMetadataNameValuePairs(String codingSchemeName,
         String version, String urn) {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
@@ -286,11 +286,11 @@ public class MetadataUtils {
 		    return SortUtils.quickSort(v);
 		return v;
 	}
-	
+
 	public static Vector getMetadataNameValuePairs(MetadataPropertyList mdpl){
 	    return getMetadataNameValuePairs(mdpl, true);
 	}
-	
+
 	public static Vector getMetadataValues(Vector metadata, String propertyName){
 		if (metadata == null) return null;
 		Vector w = new Vector();
@@ -306,7 +306,7 @@ public class MetadataUtils {
 		return w;
 	}
 
-	public static Vector getMetadataValues(String codingSchemeName, String version, 
+	public static Vector getMetadataValues(String codingSchemeName, String version,
 	    String urn, String propertyName, boolean sort){
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		MetadataPropertyList mdpl = getMetadataPropertyList(lbSvc, codingSchemeName, version, urn);
@@ -318,13 +318,13 @@ public class MetadataUtils {
 		return getMetadataValues(metadata, propertyName);
 	}
 
-    public static Vector getMetadataValues(String codingSchemeName, String version, 
+    public static Vector getMetadataValues(String codingSchemeName, String version,
         String urn, String propertyName){
-        return getMetadataValues(codingSchemeName, version, 
+        return getMetadataValues(codingSchemeName, version,
             urn, propertyName, true);
     }
-    
-    public static String getMetadataValue(String codingSchemeName, String version, 
+
+    public static String getMetadataValue(String codingSchemeName, String version,
         String urn, String propertyName) {
         Vector v = getMetadataValues(codingSchemeName, version, urn, propertyName);
         if (v == null)
@@ -334,7 +334,7 @@ public class MetadataUtils {
             return "";
         if (v.size() == 1)
             return v.elementAt(0).toString();
-        
+
         StringBuffer buffer = new StringBuffer();
         for (int i=0; i<n; ++i) {
             if (i > 0)
@@ -350,17 +350,20 @@ public class MetadataUtils {
 		for (int i = 0; i < ontology_list.size(); i++) {
 			  SelectItem item = (SelectItem) ontology_list.get(i);
 			  String value = (String) item.getValue();
+
 			  String label = (String) item.getLabel();
 			  String scheme = DataUtils.key2CodingSchemeName(value);
 			  String version = DataUtils.key2CodingSchemeVersion(value);
+			  String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+
 			  String urn = null;
 
 			  Vector w = getMetadataValues(scheme, version, urn, propertyName);
 			  if (w == null || w.size() == 0) {
-				  v.add(value + "|" + propertyName + " not available");
+				  v.add(display_name + "|" + propertyName + " not available");
 			  } else {
 				  String t = (String) w.elementAt(0);
-				  v.add(value + "|" + t);
+				  v.add(display_name + " (version: " + version + ")" + "|" + t);
 			  }
 	    }
 	    return v;
