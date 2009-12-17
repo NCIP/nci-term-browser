@@ -52,7 +52,7 @@
             <li><a href="http://evs.nci.nih.gov/" target="_blank"
               alt="Enterprise Vocabulary Services">EVS Home</a></li>
             <li><a href="<%=ncim_url%>" target="_blank"
-              alt="NCI MetaThesaurus">NCI MetaThesaurus Browser</a></li>
+              alt="NCI Metathesaurus">NCI Metathesaurus Browser</a></li>
 
             <%
             if (quicklink_dictionary == null || quicklink_dictionary.compareTo("NCI Thesaurus") != 0) {
