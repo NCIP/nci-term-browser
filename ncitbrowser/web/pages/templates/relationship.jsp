@@ -217,10 +217,20 @@
         %>
               <td><%=role_name%></td>
               <td>
+              <%
+              if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
+              %>
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
-              </td>
+              <%  
+              } else {
+              %>
+                <%=target_concept_name%> 
+              <%
+              }
+              %>
+              </td>              
             </tr>
         <%
         }
@@ -239,7 +249,13 @@
 
   <p>
   <%
-     if (inverse_roles != null && inverse_roles.size() > 0)
+     String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr, "display_inverse_relationships");
+     boolean display_inverse_relationships = true;
+     if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
+         display_inverse_relationships = false;
+     }
+  
+     if (inverse_roles != null && inverse_roles.size() > 0 && display_inverse_relationships)
      {
   %>
        <b>Inverse Role Relationships:</b>
@@ -269,7 +285,8 @@
         %>
               <td>
               <%
-              if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
+              //if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
+              if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
               %>
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
@@ -292,7 +309,7 @@
 <p>     
        
   <%
-     } else if (inverse_roles == null || inverse_roles.size() == 0) {
+     } else if ((inverse_roles == null || inverse_roles.size() == 0) && display_inverse_relationships) {
   %>
        <b>Inverse Role Relationships: </b><i>(none)</i>
   <%
@@ -301,7 +318,7 @@
 
 <p>
 <%
-  if (inverse_associations != null && inverse_associations.size() > 0) {
+  if (inverse_associations != null && inverse_associations.size() > 0 && display_inverse_relationships) {
 %>
     <b>Inverse Associations:</b>
 <br/>
@@ -355,7 +372,7 @@
 </p>    
     
 <%
-  } else if (inverse_associations == null || inverse_associations.size() == 0) {
+  } else if ((inverse_associations == null || inverse_associations.size() == 0) && display_inverse_relationships) {
     %>
     <b>Inverse Associations: </b><i>(none)</i>
     <%
