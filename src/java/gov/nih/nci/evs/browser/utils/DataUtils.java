@@ -2730,7 +2730,7 @@ NCI Thesaurus:
     }
 
     //[#25027] Encountering "Service Temporarily Unavailable" on display of last search results page (see NCIm #24585) (KLO, 121709)
-    public static HashMap getPropertyValuesForCodes(String scheme, String version, Vector codes, String propertyName) {
+    public HashMap getPropertyValuesForCodes(String scheme, String version, Vector codes, String propertyName) {
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 
@@ -2764,7 +2764,7 @@ NCI Thesaurus:
 				long ms = System.currentTimeMillis(), delay = 0;
                 SortOptionList sortOptions = null;
                 LocalNameList filterOptions = null;
-                boolean resolveObjects = false;
+                boolean resolveObjects = true; // needs to be set to true
                 int maxToReturn = 1000;
 
                 ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames,
@@ -2778,13 +2778,29 @@ NCI Thesaurus:
 					return null;
 				}
 
-				// Analyze the result ...
 				if (rcrl.getResolvedConceptReferenceCount() > 0) {
-					ResolvedConceptReference ref = (ResolvedConceptReference) rcrl
-							.enumerateResolvedConceptReference().nextElement();
-
+					//ResolvedConceptReference[] list = rcrl.getResolvedConceptReference();
+                    for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
+						ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+						System.out.println("(*) " + rcr.getCode());
+						Concept c = rcr.getReferencedEntry();
+						if (c == null) {
+							System.out.println("Concept is null.");
+						} else {
+							System.out.println(c.getEntityDescription().getContent());
+							Property[] properties = c.getProperty();
+							String values = "";
+							for (int j=0; j<properties.length; j++) {
+								Property prop = properties[j];
+								values = values + prop.getValue().getContent();
+								if (j < properties.length-1) {
+									values = values + "; ";
+								}
+							}
+							hmap.put(rcr.getCode(), values);
+						}
+					}
 				}
-
                 return hmap;
 
 			}  catch (Exception e) {
@@ -2794,12 +2810,10 @@ NCI Thesaurus:
 					e.getMessage());
 				e.printStackTrace();
 			}
-
 		} catch (Exception ex) {
 
 		}
-
 		return null;
-
 	}
+
 }
