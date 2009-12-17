@@ -1576,8 +1576,6 @@ System.out.println("\tActive? " + isActive);
 
     public HashMap getRelationshipHashMap(String scheme, String version,
             String code) {
-        // EVSApplicationService lbSvc = new
-        // RemoteServerUtil().createLexBIGService();
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		LexBIGServiceConvenienceMethods lbscm = createLexBIGServiceConvenienceMethods(lbSvc);
 
@@ -1601,6 +1599,7 @@ System.out.println("\tActive? " + isActive);
 
         HashMap map = new HashMap();
 
+// Exclude hierarchical relationships:
 		String[] associationsToNavigate = TreeUtils.getAssociationsToNavigate(scheme, version);
 		Vector w = new Vector();
 		if (associationsToNavigate != null) {
@@ -1648,8 +1647,7 @@ System.out.println("\tActive? " + isActive);
             CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
             propertyTypes[0] = PropertyType.PRESENTATION;
             int resolveCodedEntryDepth = 0;
-
-               matches = cng.resolveAsList(ConvenienceMethods
+            matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
                    //true, true, 1, 1, noopList_, null, null, null, -1, false);
                    //true, true, 1, 1, noopList_, propertyTypes, null, null, -1, false);
@@ -1671,6 +1669,7 @@ System.out.println("\tActive? " + isActive);
 						if (associations != null) {
 							for (int i = 0; i < associations.length; i++) {
 								Association assoc = associations[i];
+
 								String associationName = lbscm.getAssociationNameFromAssociationCode(scheme, csvt, assoc.getAssociationName());
 								boolean isRole = false;
 								if (list.contains(associationName)) {
@@ -1679,6 +1678,7 @@ System.out.println("\tActive? " + isActive);
 
 								AssociatedConcept[] acl = assoc.getAssociatedConcepts()
 										.getAssociatedConcept();
+
 								for (int j = 0; j < acl.length; j++) {
 									AssociatedConcept ac = acl[j];
 									EntityDescription ed = ac.getEntityDescription();
@@ -1687,11 +1687,11 @@ System.out.println("\tActive? " + isActive);
 									if (ed != null)
 										name = ed.getContent();
 									String pt = name;
+
 									if (associationName.compareToIgnoreCase("equivalentClass") != 0 &&
 									    ac.getConceptCode().indexOf("@") == -1) {
 										if (!w.contains(associationName)) {
-											String s = associationName + "|" + pt + "|"
-													+ ac.getConceptCode();
+											String s = associationName + "|" + pt + "|" + ac.getConceptCode();
 											if (isRole) {
 												//if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
 													// System.out.println("Adding role: " +
@@ -1745,8 +1745,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 									    ac.getConceptCode().indexOf("@") == -1) {
 
 										if (!w.contains(associationName)) {
-											String s = associationName + "|" + pt + "|"
-													+ ac.getConceptCode();
+											String s = associationName + "|" + pt + "|" + ac.getConceptCode();
 											if (isRole) {
 												inverse_roleList.add(s);
 											} else {
@@ -1783,31 +1782,6 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 
             map.put(TYPE_INVERSE_ROLE, inverse_roleList);
             map.put(TYPE_INVERSE_ASSOCIATION, inverse_associationList);
-
-
-/*
-NCI Thesaurus:
-
-			Vector superconcept_vec = getSuperconcepts(scheme, version, code);
-			for (int i = 0; i < superconcept_vec.size(); i++) {
-				Concept c = (Concept) superconcept_vec.elementAt(i);
-				String pt = getPreferredName(c);
-				superconceptList.add(pt + "|" + c.getEntityCode());
-			}
-
-            Collections.sort(superconceptList);
-            map.put(TYPE_SUPERCONCEPT, superconceptList);
-
-
-			Vector subconcept_vec = getSubconcepts(scheme, version, code);
-			for (int i = 0; i < subconcept_vec.size(); i++) {
-				Concept c = (Concept) subconcept_vec.elementAt(i);
-				String pt = getPreferredName(c);
-				subconceptList.add(pt + "|" + c.getEntityCode());
-			}
-			Collections.sort(subconceptList);
-			map.put(TYPE_SUBCONCEPT, subconceptList);
-*/
 
         } catch (Exception ex) {
             ex.printStackTrace();
