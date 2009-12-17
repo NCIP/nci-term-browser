@@ -739,6 +739,24 @@ System.out.println("\tActive? " + isActive);
 	}
 
 
+	public static ConceptReferenceList createConceptReferenceList(
+			Vector codes, String codingSchemeName) {
+		if (codes == null) {
+			return null;
+		}
+		ConceptReferenceList list = new ConceptReferenceList();
+		for (int i = 0; i < codes.size(); i++) {
+			String code = (String) codes.elementAt(i);
+			ConceptReference cr = new ConceptReference();
+			cr.setCodingSchemeName(codingSchemeName);
+			cr.setConceptCode(code);
+			list.addConceptReference(cr);
+		}
+		return list;
+	}
+
+
+
     public Vector getSubconceptCodes(String scheme, String version, String code) { // throws
         // LBException{
         Vector v = new Vector();
