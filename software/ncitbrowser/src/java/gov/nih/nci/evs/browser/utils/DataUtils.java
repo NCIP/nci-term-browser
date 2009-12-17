@@ -167,6 +167,7 @@ public class DataUtils {
     public static HashMap displayName2FormalNameHashMap = null;
 
 
+    public static Vector nonConcept2ConceptAssociations = null;
 
     // ==================================================================================
 
@@ -2698,4 +2699,14 @@ NCI Thesaurus:
 
 	}
 
+	public static boolean isNonConcept2ConceptAssociation(String associationName) {
+	    if (nonConcept2ConceptAssociations == null) {
+			nonConcept2ConceptAssociations = new Vector();
+			nonConcept2ConceptAssociations.add("domain");
+			nonConcept2ConceptAssociations.add("range");
+			nonConcept2ConceptAssociations.add("instance");
+		}
+		if (associationName == null) return false;
+		return nonConcept2ConceptAssociations.contains(associationName);
+    }
 }
