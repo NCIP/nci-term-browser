@@ -135,7 +135,7 @@
         <DisplayItem>
             <propertyName>NCI_META_CUI</propertyName>
             <itemLabel>NCI Metathesaurus CUI</itemLabel>
-            <url>http://ncim-dev.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
+            <url>@ncim.url@/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
@@ -143,7 +143,7 @@
       <DisplayItem>
             <propertyName>UMLS_CUI</propertyName>
             <itemLabel>NCI Metathesaurus CUI</itemLabel>
-            <url>http://ncim-dev.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
+            <url>@ncim.url@/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
@@ -273,7 +273,7 @@
        <DisplayItem>
             <propertyName>NCI_META_CUI</propertyName>
             <itemLabel>NCI META CUI</itemLabel>
-            <url>http://ncim-dev.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
+            <url>@ncim.url@/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
@@ -329,7 +329,7 @@
        <DisplayItem>
             <propertyName>UMLS_CUI</propertyName>
             <itemLabel>UMLS CUI</itemLabel>
-            <url>http://ncim-dev.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
+            <url>@ncim.url@/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
@@ -337,7 +337,7 @@
        <DisplayItem>
             <propertyName>NCIt_Code</propertyName>
             <itemLabel>NCIt Code</itemLabel>
-            <url>http://localhost:19280/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&amp;code=</url>
+            <url>@ncit.url@/ConceptReport.jsp?dictionary=NCI%20Thesaurus&amp;code=</url>
             <hyperlinkText>see NCI Thesaurus info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
@@ -345,7 +345,7 @@
        <DisplayItem>
             <propertyName>MedDRA_Code</propertyName>
             <itemLabel>MedDRA Code</itemLabel>
-            <url>http://localhost:19280/ncitbrowser/ConceptReport.jsp?dictionary=MedDRA%20(Medical%20Dictionary%20for%20Regulatory%20Activities%20Terminology)&amp;code=</url>
+            <url>@ncit.url@/ConceptReport.jsp?dictionary=MedDRA%20(Medical%20Dictionary%20for%20Regulatory%20Activities%20Terminology)&amp;code=</url>
             <hyperlinkText>see MedDRA info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
