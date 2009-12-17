@@ -2699,6 +2699,7 @@ NCI Thesaurus:
 
 	}
 
+    //[#25034] Remove hyperlink from instances on the Relationship tab. (KLO, 121709)
 	public static boolean isNonConcept2ConceptAssociation(String associationName) {
 	    if (nonConcept2ConceptAssociations == null) {
 			nonConcept2ConceptAssociations = new Vector();
@@ -2709,4 +2710,78 @@ NCI Thesaurus:
 		if (associationName == null) return false;
 		return nonConcept2ConceptAssociations.contains(associationName);
     }
+
+    //[#25027] Encountering "Service Temporarily Unavailable" on display of last search results page (see NCIm #24585) (KLO, 121709)
+    public static HashMap getPropertyValuesForCodes(String scheme, String version, Vector codes, String propertyName) {
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null)
+            {
+                System.out.println("lbSvc = null");
+                return null;
+            }
+
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			versionOrTag.setVersion(version);
+
+			ConceptReferenceList crefs = createConceptReferenceList(codes, scheme);
+
+			CodedNodeSet cns = null;
+
+			try {
+				cns = lbSvc.getCodingSchemeConcepts(scheme,
+						versionOrTag);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
+			cns = cns.restrictToCodes(crefs);
+
+		    try {
+                LocalNameList propertyNames = new LocalNameList();
+                propertyNames.addEntry(propertyName);
+                CodedNodeSet.PropertyType[] propertyTypes = null;
+
+				long ms = System.currentTimeMillis(), delay = 0;
+                SortOptionList sortOptions = null;
+                LocalNameList filterOptions = null;
+                boolean resolveObjects = false;
+                int maxToReturn = 1000;
+
+                ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames,
+                    propertyTypes, resolveObjects, maxToReturn);
+
+                System.out.println("resolveToList done");
+                HashMap hmap = new HashMap();
+
+				if (rcrl == null) {
+					System.out.println("Concep not found.");
+					return null;
+				}
+
+				// Analyze the result ...
+				if (rcrl.getResolvedConceptReferenceCount() > 0) {
+					ResolvedConceptReference ref = (ResolvedConceptReference) rcrl
+							.enumerateResolvedConceptReference().nextElement();
+
+				}
+
+                return hmap;
+
+			}  catch (Exception e) {
+				System.out.println("Method: SearchUtil.searchByProperties");
+				System.out.println("* ERROR: cns.resolve throws exceptions.");
+				System.out.println("* " + e.getClass().getSimpleName() + ": " +
+					e.getMessage());
+				e.printStackTrace();
+			}
+
+		} catch (Exception ex) {
+
+		}
+
+		return null;
+
+	}
 }
