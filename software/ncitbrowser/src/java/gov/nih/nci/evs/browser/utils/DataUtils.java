@@ -228,6 +228,8 @@ public class DataUtils {
 				if (!codingSchemeHashSet.contains(formalname)) {
 					codingSchemeHashSet.add(formalname);
 				}
+/*
+
 				String representsVersion = css.getRepresentsVersion();
 System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
 
@@ -241,12 +243,6 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 
                 String displayName = getMetadataValue(formalname, "display_name");
                 displayName2FormalNameHashMap.put(displayName, formalname);
-/*
-                MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
-                if (mdpl != null) {
-					Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl);
-					formalName2MetadataHashMap.put(formalname, metadataProperties);
-				}
 */
 				Boolean isActive = null;
 				if (csr == null) {
@@ -260,11 +256,26 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
 				}
 
-System.out.println("\tActive? " + isActive);
+				System.out.println("\tActive? " + isActive);
+				String representsVersion = css.getRepresentsVersion();
+				System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
 
 				if ((includeInactive && isActive == null) || (isActive != null && isActive.equals(Boolean.TRUE))
 				     || (includeInactive && (isActive != null && isActive.equals(Boolean.FALSE))))
 				{
+
+						String locallname = css.getLocalName();
+
+						formalName2LocalNameHashMap.put(formalname, locallname);
+						formalName2LocalNameHashMap.put(locallname, locallname);
+
+						localName2FormalNameHashMap.put(formalname, formalname);
+						localName2FormalNameHashMap.put(locallname, formalname);
+
+						String displayName = getMetadataValue(formalname, "display_name");
+						displayName2FormalNameHashMap.put(displayName, formalname);
+
+
 						String value = formalname + " (version: " + representsVersion + ")";
 						nv_vec.add(value);
 						csnv2codingSchemeNameMap.put(value, formalname);
