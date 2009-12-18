@@ -1574,6 +1574,8 @@ System.out.println("\tActive? " + isActive);
     }
 */
 
+
+/*
     public HashMap getRelationshipHashMap(String scheme, String version,
             String code) {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -1789,7 +1791,266 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
         return map;
     }
 
+*/
+    public HashMap getRelationshipHashMap(String scheme, String version,
+            String code) {
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		LexBIGServiceConvenienceMethods lbscm = createLexBIGServiceConvenienceMethods(lbSvc);
 
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
+
+        // Perform the query ...
+        ResolvedConceptReferenceList matches = null;
+        List list = getSupportedRoleNames(lbSvc, scheme, version);
+
+        ArrayList roleList = new ArrayList();
+        ArrayList associationList = new ArrayList();
+
+        ArrayList inverse_roleList = new ArrayList();
+        ArrayList inverse_associationList = new ArrayList();
+
+        ArrayList superconceptList = new ArrayList();
+        ArrayList subconceptList = new ArrayList();
+
+
+        HashMap map = new HashMap();
+
+// Exclude hierarchical relationships:
+		String[] associationsToNavigate = TreeUtils.getAssociationsToNavigate(scheme, version);
+		Vector w = new Vector();
+		if (associationsToNavigate != null) {
+			for (int k=0; k<associationsToNavigate.length; k++) {
+				w.add(associationsToNavigate[k]);
+			}
+	    }
+
+		HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
+		if (hmap_super != null) {
+			TreeItem ti = (TreeItem) hmap_super.get(code);
+			if (ti != null) {
+				for (String association : ti.assocToChildMap.keySet()) {
+					List<TreeItem> children = ti.assocToChildMap.get(association);
+					for (TreeItem childItem : children) {
+						superconceptList.add(childItem.text + "|" + childItem.code);
+					}
+				}
+		    }
+		}
+		Collections.sort(superconceptList);
+		map.put(TYPE_SUPERCONCEPT, superconceptList);
+
+		HashMap hmap_sub = TreeUtils.getSubconcepts(scheme, version, code);
+		if (hmap_sub != null) {
+			TreeItem ti = (TreeItem) hmap_sub.get(code);
+			if (ti != null) {
+				for (String association : ti.assocToChildMap.keySet()) {
+					List<TreeItem> children = ti.assocToChildMap.get(association);
+					for (TreeItem childItem : children) {
+						subconceptList.add(childItem.text + "|" + childItem.code);
+					}
+				}
+		    }
+		}
+
+		Collections.sort(subconceptList);
+		map.put(TYPE_SUBCONCEPT, subconceptList);
+
+        try {
+            CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+            matches = null;
+            try {
+
+				CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
+				propertyTypes[0] = PropertyType.PRESENTATION;
+				int resolveCodedEntryDepth = 0;
+
+				matches =
+				lbSvc.getNodeGraph(scheme, csvt, null)
+					.resolveAsList(
+						ConvenienceMethods.createConceptReference(code, scheme),
+						true, false, 1, 1, new LocalNameList(), null, null, 1024);
+           /*
+            matches = cng.resolveAsList(ConvenienceMethods
+                    .createConceptReference(code, scheme),
+                   //true, true, 1, 1, noopList_, null, null, null, -1, false);
+                   //true, true, 1, 1, noopList_, propertyTypes, null, null, -1, false);
+                   true, true, 0, 1, null, propertyTypes, null, null, -1, false);
+           */
+
+
+			} catch (Exception e) {
+                System.out.println("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
+			}
+
+            if (matches != null && matches.getResolvedConceptReferenceCount() > 0) {
+                Enumeration<ResolvedConceptReference> refEnum = matches
+                        .enumerateResolvedConceptReference();
+
+                while (refEnum.hasMoreElements()) {
+                    ResolvedConceptReference ref = refEnum.nextElement();
+                    AssociationList sourceof = ref.getSourceOf();
+                    if (sourceof != null) {
+						Association[] associations = sourceof.getAssociation();
+						if (associations != null) {
+							for (int i = 0; i < associations.length; i++) {
+								Association assoc = associations[i];
+
+								String associationName = lbscm.getAssociationNameFromAssociationCode(scheme, csvt, assoc.getAssociationName());
+								boolean isRole = false;
+								if (list.contains(associationName)) {
+									isRole = true;
+								}
+
+								AssociatedConcept[] acl = assoc.getAssociatedConcepts()
+										.getAssociatedConcept();
+
+								for (int j = 0; j < acl.length; j++) {
+									AssociatedConcept ac = acl[j];
+									EntityDescription ed = ac.getEntityDescription();
+
+									String name = "No Description";
+									if (ed != null)
+										name = ed.getContent();
+									String pt = name;
+
+									if (associationName.compareToIgnoreCase("equivalentClass") != 0 &&
+									    ac.getConceptCode().indexOf("@") == -1) {
+										if (!w.contains(associationName)) {
+											String s = associationName + "|" + pt + "|" + ac.getConceptCode();
+											if (isRole) {
+												//if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
+													// System.out.println("Adding role: " +
+													// s);
+													roleList.add(s);
+												//}
+											} else {
+												// System.out.println("Adding association: "
+												// + s);
+												associationList.add(s);
+											}
+										}
+									}
+								}
+							}
+					    }
+                    }
+				}
+			}
+
+
+            cng = lbSvc.getNodeGraph(scheme, csvt, null);
+            matches = null;
+            try {
+
+				CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
+				propertyTypes[0] = PropertyType.PRESENTATION;
+				int resolveCodedEntryDepth = 0;
+
+				matches =
+				lbSvc.getNodeGraph(scheme, csvt, null)
+					.resolveAsList(
+						ConvenienceMethods.createConceptReference(code, scheme),
+						false, true, 1, 1, new LocalNameList(), null, null, 1024);
+           /*
+            matches = cng.resolveAsList(ConvenienceMethods
+                    .createConceptReference(code, scheme),
+                   //true, true, 1, 1, noopList_, null, null, null, -1, false);
+                   //true, true, 1, 1, noopList_, propertyTypes, null, null, -1, false);
+                   true, true, 0, 1, null, propertyTypes, null, null, -1, false);
+           */
+
+
+			} catch (Exception e) {
+                System.out.println("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
+			}
+
+            if (matches != null && matches.getResolvedConceptReferenceCount() > 0) {
+                Enumeration<ResolvedConceptReference> refEnum = matches
+                        .enumerateResolvedConceptReference();
+
+                while (refEnum.hasMoreElements()) {
+                    ResolvedConceptReference ref = refEnum.nextElement();
+
+                    //inverse roles and associations
+                    AssociationList targetof = ref.getTargetOf();
+                    if (targetof != null) {
+						Association[] inv_associations = targetof.getAssociation();
+						if (inv_associations != null) {
+							for (int i = 0; i < inv_associations.length; i++) {
+								Association assoc = inv_associations[i];
+								//String associationName = assoc.getAssociationName();
+								String associationName = lbscm.getAssociationNameFromAssociationCode(scheme, csvt, assoc.getAssociationName());
+								boolean isRole = false;
+								if (list.contains(associationName)) {
+									isRole = true;
+								}
+								AssociatedConcept[] acl = assoc.getAssociatedConcepts()
+										.getAssociatedConcept();
+								for (int j = 0; j < acl.length; j++) {
+									AssociatedConcept ac = acl[j];
+									EntityDescription ed = ac.getEntityDescription();
+
+									String name = "No Description";
+									if (ed != null)
+										name = ed.getContent();
+
+									String pt = name;
+
+//[#24749] inverse association names are empty for domain and range
+if (associationName.compareTo("domain") == 0 || associationName.compareTo("range") == 0) {
+     pt = lbscm.getAssociationNameFromAssociationCode(scheme, csvt, ac.getConceptCode());
+}
+
+									//if (associationName.compareToIgnoreCase("equivalentClass") != 0) {
+									if (associationName.compareToIgnoreCase("equivalentClass") != 0 &&
+									    ac.getConceptCode().indexOf("@") == -1) {
+
+										if (!w.contains(associationName)) {
+											String s = associationName + "|" + pt + "|" + ac.getConceptCode();
+											if (isRole) {
+												inverse_roleList.add(s);
+											} else {
+												inverse_associationList.add(s);
+											}
+										}
+									}
+								}
+							}
+					    }
+				    }
+                }
+            }
+
+            if (roleList.size() > 0) {
+                Collections.sort(roleList);
+            }
+
+            if (associationList.size() > 0) {
+                Collections.sort(associationList);
+            }
+
+            map.put(TYPE_ROLE, roleList);
+            map.put(TYPE_ASSOCIATION, associationList);
+
+
+            if (inverse_roleList.size() > 0) {
+                Collections.sort(inverse_roleList);
+            }
+
+            if (inverse_associationList.size() > 0) {
+                Collections.sort(inverse_associationList);
+            }
+
+            map.put(TYPE_INVERSE_ROLE, inverse_roleList);
+            map.put(TYPE_INVERSE_ASSOCIATION, inverse_associationList);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return map;
+    }
 
 
     public Vector getSuperconcepts(String scheme, String version, String code) {
