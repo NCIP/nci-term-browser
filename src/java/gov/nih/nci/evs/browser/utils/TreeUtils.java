@@ -660,6 +660,11 @@ public class TreeUtils {
 
 			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
 
+			if (associationsToNavigate != null && associationsToNavigate.length == 1) {
+				if (associationsToNavigate[0].compareTo("subClassOf") == 0) {
+					 return getAssociatedConcepts(scheme, version, code, "subClassOf", false);
+				}
+			}
 			//if (assocName.compareTo("PAR") == 0) associationsNavigatedFwd = false;
 			//if (assocName.compareTo("subClassOf") == 0) associationsNavigatedFwd = false;
 			//return getAssociatedConcepts(scheme, version, code, assocName, associationsNavigatedFwd);
@@ -672,9 +677,12 @@ public class TreeUtils {
 
 
 	public static HashMap getSuperconcepts(String scheme, String version, String code) {
+
+		/*
 		if (scheme.compareTo("NCI Thesaurus") == 0) {
 		    return getAssociatedConcepts(scheme, version, code,	"subClassOf", true);
 		}
+		*/
         /*
 		else if (scheme.indexOf("MedDRA") != -1) {
 		    return getAssociatedConcepts(scheme, version, code,	"CHD", false);
@@ -712,6 +720,11 @@ public class TreeUtils {
 			//if (assocName.compareTo("PAR") == 0) associationsNavigatedFwd = false;
 
 			//return getAssociatedConcepts(scheme, version, code, assocName, !associationsNavigatedFwd);
+			if (associationsToNavigate != null && associationsToNavigate.length == 1) {
+				if (associationsToNavigate[0].compareTo("subClassOf") == 0) {
+					 return getAssociatedConcepts(scheme, version, code, "subClassOf", true);
+				}
+			}
 			return getAssociatedConcepts(scheme, version, code, associationsToNavigate, !associationsNavigatedFwd);
 		} catch (Exception ex) {
 			return null;
@@ -749,38 +762,6 @@ public class TreeUtils {
 	}
 */
 
-    public static String[] getAssociationsToNavigate(String scheme, String version) {
-		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
-		/*
-		if (version != null)
-			csvt.setVersion(version);
-		*/
-		version = null;
-
-		try {
-			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
-					.getGenericExtension("LexBIGServiceConvenienceMethods");
-			lbscm.setLexBIGService(lbSvc);
-
-			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
-			if (cs == null) return null;
-			Mappings mappings = cs.getMappings();
-			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
-			if (hierarchies == null || hierarchies.length == 0) {
-				System.out.println("TreeUtils mappings.getSupportedHierarchy() either returns null, or an empty array");
-				return null;
-			}
-		    SupportedHierarchy hierarchyDefn = hierarchies[0];
-			String hier_id = hierarchyDefn.getLocalId();
-			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
-
-			return associationsToNavigate;
-		} catch (Exception ex) {
-			System.out.println("WARNING: TreeUtils getAssociationsToNavigate throws exceptions");
-			return null;
-		}
-	}
 
     protected static Association processForAnonomousNodes(Association assoc) {
 		if (assoc == null) return null;
@@ -1919,6 +1900,35 @@ public class TreeUtils {
         return list;
     }
 
+
+
+	public static String[] getAssociationsToNavigate(String scheme, String version) {
+		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		if (version != null)
+			csvt.setVersion(version);
+
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+					.getGenericExtension("LexBIGServiceConvenienceMethods");
+			lbscm.setLexBIGService(lbSvc);
+
+			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+			if (cs == null) return null;
+			Mappings mappings = cs.getMappings();
+			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
+			if (hierarchies == null || hierarchies.length == 0) return null;
+
+		    SupportedHierarchy hierarchyDefn = hierarchies[0];
+			String hier_id = hierarchyDefn.getLocalId();
+
+			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
+			return associationsToNavigate;
+		} catch (Exception ex) {
+
+		}
+		return null;
+	}
 
 
 	public static void main(String[] args) {
