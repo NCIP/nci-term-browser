@@ -67,7 +67,12 @@
             request.getSession().removeAttribute("hide_ontology_list");
             if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
  %>
-            <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.</p>
+            <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.
+            <br>
+            &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow; try NCI Metathesaurus separately.)
+            </br>
+            </p>          
+
             <table class="termstable" border="0">
               <tr>
                 <%
@@ -206,10 +211,17 @@ if (display_name_hmap == null || display_name_vec == null) {
                     src="<%= request.getContextPath() %>/images/selectAll.gif"
                     name="selectAll" alt="selectAll"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
+                    
+                  &nbsp;&nbsp; <img
+                    src="<%= request.getContextPath() %>/images/selectAll.gif"
+                    name="reset" alt="selectAllButNCIm"
+                    onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
+                    
                   &nbsp;&nbsp; <img
                     src="<%= request.getContextPath() %>/images/clear.gif"
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
+                    
                   &nbsp;&nbsp; <h:commandButton id="search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{facesContext.externalContext.requestContextPath}/images/search.gif"

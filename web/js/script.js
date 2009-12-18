@@ -12,6 +12,12 @@ for (i = 0; i < field.length; i++)
 	field[i].checked = false ;
 }
 
+function checkAllButOne(field, label)
+{
+for (i = 0; i < field.length; i++)
+    if (field[i].value.indexOf(label) == -1)
+	field[i].checked = true ;
+}
 
 function printPage(text){
   text=document;

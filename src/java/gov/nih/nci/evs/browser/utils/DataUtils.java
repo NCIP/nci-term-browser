@@ -1645,11 +1645,11 @@ System.out.println("\tActive? " + isActive);
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
             matches = null;
             try {
-
+/*
 				CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
 				propertyTypes[0] = PropertyType.PRESENTATION;
 				int resolveCodedEntryDepth = 0;
-
+*/
 				matches =
 				lbSvc.getNodeGraph(scheme, csvt, null)
 					.resolveAsList(
@@ -1727,11 +1727,11 @@ System.out.println("\tActive? " + isActive);
             cng = lbSvc.getNodeGraph(scheme, csvt, null);
             matches = null;
             try {
-
+/*
 				CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
 				propertyTypes[0] = PropertyType.PRESENTATION;
 				int resolveCodedEntryDepth = 0;
-
+*/
 				matches =
 				lbSvc.getNodeGraph(scheme, csvt, null)
 					.resolveAsList(
@@ -2151,6 +2151,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 		boolean inclusion = true;
 		for (int i = 0; i < properties.length; i++) {
 			Presentation p = properties[i];
+
 			// for NCI Thesaurus or Pre-NCI Thesaurus, show FULL_SYNs only
 			if (scheme != null && scheme.indexOf(CODING_SCHEME_NAME) != -1) {
 				inclusion = false;
@@ -2158,6 +2159,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 					inclusion = true;
 				}
 			}
+
 			if (inclusion) {
 				String term_name = p.getValue().getContent();
 				String term_type = "null";
