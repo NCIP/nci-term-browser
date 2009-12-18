@@ -1654,7 +1654,7 @@ System.out.println("\tActive? " + isActive);
 				lbSvc.getNodeGraph(scheme, csvt, null)
 					.resolveAsList(
 						ConvenienceMethods.createConceptReference(code, scheme),
-						true, false, 1, 1, new LocalNameList(), null, null, 10000);
+						true, false, 0, 1, new LocalNameList(), null, null, 10000);
            /*
             matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
@@ -1736,7 +1736,7 @@ System.out.println("\tActive? " + isActive);
 				lbSvc.getNodeGraph(scheme, csvt, null)
 					.resolveAsList(
 						ConvenienceMethods.createConceptReference(code, scheme),
-						false, true, 1, 1, new LocalNameList(), null, null, 10000);
+						false, true, 0, 1, new LocalNameList(), null, null, 10000);
            /*
             matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
