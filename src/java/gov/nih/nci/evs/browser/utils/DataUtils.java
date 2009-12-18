@@ -1665,7 +1665,9 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 				lbSvc.getNodeGraph(scheme, csvt, null)
 					.resolveAsList(
 						ConvenienceMethods.createConceptReference(code, scheme),
-						true, false, 0, 1, new LocalNameList(), null, null, 10000);
+						//true, false, 0, 1, new LocalNameList(), null, null, 10000);
+						//true, false, 0, 1, null, new LocalNameList(), null, null, -1, false);
+						true, false, 0, 1, null, null, null, null, -1, false);
            /*
             matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
@@ -1747,7 +1749,9 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 				lbSvc.getNodeGraph(scheme, csvt, null)
 					.resolveAsList(
 						ConvenienceMethods.createConceptReference(code, scheme),
-						false, true, 0, 1, new LocalNameList(), null, null, 10000);
+						//false, true, 0, 1, new LocalNameList(), null, null, 10000);
+						//false, true, 0, 1, null, new LocalNameList(), null, null, -1, false);
+						false, true, 0, 1, null, null, null, null, -1, false);
            /*
             matches = cng.resolveAsList(ConvenienceMethods
                     .createConceptReference(code, scheme),
