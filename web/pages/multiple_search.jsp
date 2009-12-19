@@ -38,18 +38,18 @@
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-    
+
     <!--
       <form name="searchTerm" method="post" class="search-form-main-area">
      -->
      <form name="searchTerm">
-     
+
         <input type="hidden" name="initial_search" value="true" />
 
         <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
-        
-        
-        
+
+
+
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">
@@ -71,7 +71,7 @@
             <br>
             &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow; try NCI Metathesaurus separately.)
             </br>
-            </p>          
+            </p>
 
             <table class="termstable" border="0">
               <tr>
@@ -90,22 +90,22 @@ if (display_name_hmap == null || display_name_vec == null) {
         display_name_hmap = new HashMap();
         display_name_vec = new Vector();
 
-	for (int i = 0; i < ontology_list.size(); i++) {
-		SelectItem item = (SelectItem) ontology_list.get(i);
-		String value = (String) item.getValue();
-		String label = (String) item.getLabel();
-		//String label2 = "|" + label + "|";
+  for (int i = 0; i < ontology_list.size(); i++) {
+    SelectItem item = (SelectItem) ontology_list.get(i);
+    String value = (String) item.getValue();
+    String label = (String) item.getLabel();
+    //String label2 = "|" + label + "|";
 
-		String scheme = DataUtils.key2CodingSchemeName(value);
-		String version = DataUtils.key2CodingSchemeVersion(value);
-		String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-		if (display_name == null || display_name.compareTo("null") == 0) display_name = DataUtils.getLocalName(scheme);
-		display_name_hmap.put(display_name, value);
-		display_name_vec.add(display_name); 
-	}
-	display_name_vec = SortUtils.quickSort(display_name_vec);
-	request.getSession().setAttribute("display_name_hmap", display_name_hmap);
-	request.getSession().setAttribute("display_name_vec", display_name_vec);
+    String scheme = DataUtils.key2CodingSchemeName(value);
+    String version = DataUtils.key2CodingSchemeVersion(value);
+    String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+    if (display_name == null || display_name.compareTo("null") == 0) display_name = DataUtils.getLocalName(scheme);
+    display_name_hmap.put(display_name, value);
+    display_name_vec.add(display_name);
+  }
+  display_name_vec = SortUtils.quickSort(display_name_vec);
+  request.getSession().setAttribute("display_name_hmap", display_name_hmap);
+  request.getSession().setAttribute("display_name_vec", display_name_vec);
 }
 
                 %>
@@ -120,7 +120,7 @@ if (display_name_hmap == null || display_name_vec == null) {
                         String label = (String)  display_name_hmap.get(display_name);
                         //String value = (String) item.getValue();
                         //String label = (String) item.getLabel();
-                        
+
                         String label2 = "|" + label + "|";
 
                         String scheme = DataUtils.key2CodingSchemeName(value);
@@ -182,21 +182,21 @@ if (display_name_hmap == null || display_name_vec == null) {
                               <input type="checkbox" name="ontology_list" value="<%=label%>" />
                            <%
                            }
-                           
+
                            String full_name = DataUtils.getMetadataValue(scheme, "full_name");
                            if (full_name == null || full_name.compareTo("null") == 0) full_name = scheme;
                            String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
                            if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;
-                           
+
                            label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
-                         
+
                             %>
                               <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
                                 <%=label%>
                               </a>
                            <%
                         }
-                      %>                          
+                      %>
                         </td>
                       </tr>
                      <%
@@ -211,29 +211,29 @@ if (display_name_hmap == null || display_name_vec == null) {
                     src="<%= request.getContextPath() %>/images/selectAll.gif"
                     name="selectAll" alt="selectAll"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
-                    
+
                   &nbsp;&nbsp; <img
-                    src="<%= request.getContextPath() %>/images/selectAll.gif"
+                    src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
                     name="reset" alt="selectAllButNCIm"
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
-                    
+
                   &nbsp;&nbsp; <img
                     src="<%= request.getContextPath() %>/images/clear.gif"
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
-                    
+
                   &nbsp;&nbsp; <h:commandButton id="search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
                     alt="Search">
                   </h:commandButton></td>
 
-                   <% 
+                   <%
                    if (warning_msg != null) {
                       request.getSession().removeAttribute("ontologiesToSearchOn");
-                   } 
+                   }
                   %>
-                  
+
                 </tr>
             </table>
 <%
