@@ -16,7 +16,9 @@ function checkAllButOne(field, label)
 {
 for (i = 0; i < field.length; i++)
     if (field[i].value.indexOf(label) == -1)
-	field[i].checked = true ;
+	field[i].checked = true;
+    else
+        field[i].checked = false;
 }
 
 function printPage(text){
