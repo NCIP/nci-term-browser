@@ -354,16 +354,16 @@ public class MetadataUtils {
 			  String label = (String) item.getLabel();
 			  String scheme = DataUtils.key2CodingSchemeName(value);
 			  String version = DataUtils.key2CodingSchemeVersion(value);
-			  String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+			  String name = DataUtils.getMetadataValue(scheme, "full_name");
 
 			  String urn = null;
 
 			  Vector w = getMetadataValues(scheme, version, urn, propertyName);
 			  if (w == null || w.size() == 0) {
-				  v.add(display_name + "|" + propertyName + " not available");
+				  v.add(name + "|" + propertyName + " not available");
 			  } else {
 				  String t = (String) w.elementAt(0);
-				  v.add(display_name + " (version: " + version + ")" + "|" + t);
+				  v.add(name + " (version: " + version + ")" + "|" + t);
 			  }
 	    }
 	    return v;
