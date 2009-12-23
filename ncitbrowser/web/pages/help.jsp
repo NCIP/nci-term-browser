@@ -55,7 +55,6 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
           <A HREF="#conceptdetails">Concept Details</A><br>
           <A HREF="#viewhierarchy">View Hierarchy</A><br>
           <A HREF="#otherlinks">Other Links</A><br>
-          <A HREF="#subsets">Subsets</A><br>
           <A HREF="#knownissues">Known Issues</A><br>
           <A HREF="#additionalinfo">Additional Information</A>
         </p>
@@ -68,7 +67,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
           browse and search all of the biomedical terminologies hosted 
           by NCI EVS, including both NCI Thesaurus (NCIt) and the NCI 
           Metathesaurus (NCIm), which itself includes more than 70 
-          terminologies,  These terminologies normally represent each
+          terminologies.  These terminologies normally represent each
           specific meaning, such as melanoma, lung, orchemotherapy, by
           a distinct <i>concept</i> with a unique, permanent <i>code</i>. Each concept 
           normally provides additional information such as a preferred 
@@ -87,7 +86,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
         </p>
         <p class="textbody">
           This help file provides basic information about how to use 
-          the NCI Term Browser effectively as well as links to additional 
+          the NCI Term Browser effectively, as well as links to additional 
           information elsewhere. The following typeface font conventions 
           are used for describing search and the browser interface: 
           
@@ -107,10 +106,11 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             terminology sources that are available.  Click on a source 
             name to go to its home page, or click on a source's check 
             box to include it in a search from the NCI Term Browser 
-            home page.  Below the sources list are three buttons:
+            home page.  Below the sources list are four buttons:
             
             <ul>
               <li><b>Select All</b> includes all sources for searching, leaving their check boxes checked.</li>
+              <li><b>All but NCIm</b> includes all sources except NCI Metathesaurus (NCIm), as searches with thousands of hits may be slow when NCIm is included.</li>
               <li><b>Clear</b> unselects all sources, unchecking their check boxes.</li>
               <li><b>Search</b> starts a search in the same way as the Search button in the search box.</li>
             </ul>
@@ -240,9 +240,13 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
               <ul>
                 <li><b>Terms & Properties</b>: Gives definitions, synonyms,
                   abbreviations, codes, and other information.</li>
-                <li><b>Relationships</b>: Shows how other concepts are
-                  directly related to this concept as parents,
-                  children, or in other ways.</li>
+                <li><b>Relationships</b>: Shows how other concepts are 
+                  directly related to this concept as parents, children, 
+                  or in other ways.  Note: For some sources, the browser
+                  adds inverse relationships not asserted bidirectionally
+                  in the source data file; this is often useful for 
+                  navigational purposes, but might be confusing, and 
+                  will be evaluated for adjustments in future releases.</li>
                 <li><b>Synonym Details</b>: For each term or abbreviation,
                   shows its term type, source, and code (for sources
                   that have them).</li>
@@ -281,7 +285,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
 
         <p class="textbody">
           <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="otherlinks">OtherLinks</A></h2></td>
+            <td><h2><A NAME="otherlinks">Other Links</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
           </tr></table>
           Several other browser links appear in the upper parts of
@@ -302,19 +306,11 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
               a special suggestion page with source and concept code
               filled in.</li>
             <li><b>Subsets</b> on NCI Thesaurus (NCIt) pages links to a
-              special page to read about and link to NCI Thesaurus
-              Subsets. The text on this page provides additional
+              special page to read about and link to 
+              <a href="<%= subsetsUrl %>">NCI Thesaurus Subsets</a>
+              The text on this page provides additional
               information. </li>
           </ul>
-        </p>
-
-        <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="subsets">Subsets</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
-          </tr></table>
-
-          Click on the <a href="<%= subsetsUrl %>">Subsets</a> link at the top of the page to read about and link to NCI Thesaurus Subsets. The text on this page provides additional information.
         </p>
 
         <p class="textbody">
@@ -333,17 +329,19 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
               such issues through ongoing changes in data file formats
               and loading, and expect significant improvements to be
               visible even before the next browser release.</li>
-            <li><b>Functionality</b>: The default scoring for search matches
-              will continue to be improved, especially in balancing
-              scoring from multiple sources.  Some user-settable
-              options should be part of a forthcoming Advanced Search
-              page. Performance in some features, such as the display
-              of concept placement in source hierarchies, still needs
-              major improvement.</li>
+            <li><b>Functionality</b>: The default scoring for search 
+              matches will continue to be improved, especially in 
+              harmonizing the currently very uneven scoring of matches 
+              from multiple sources. The often large performance penalty 
+              for searching NCIm together with other sources also needs 
+              to be fixed.  Some user-settable options should be part 
+              of a forthcoming Advanced Search page. Performance in 
+              some features, such as the display of concept placement 
+              in source hierarchies, still needs major improvement.</li>
             <li><b>Documentation</b>: Online and standalone documentation
               are still under development.</li>
             <li>For the latest updates of known issues, 
-              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+1.1+Release+Notes" target="_blank" alt="NCI Thesaurus Browser 1.0 Release Notes"> see NCI Thesaurus Browser 1.0 Release Notes</a>.</li>
+              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+1.0+Release+Notes" target="_blank" alt="NCI Thesaurus Browser 1.0 Release Notes"> see NCI Term Browser 1.0 Release Notes</a>.</li>
           </ul>
           Please report any bugs or suggestions using the browser's
           <a href="<%= contactUsUrl %>">Contact Us</a> page.
