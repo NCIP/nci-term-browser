@@ -354,7 +354,7 @@ public class MetadataUtils {
 			  String label = (String) item.getLabel();
 			  String scheme = DataUtils.key2CodingSchemeName(value);
 			  String version = DataUtils.key2CodingSchemeVersion(value);
-			  String name = DataUtils.getMetadataValue(scheme, "full_name");
+			  String name = DataUtils.getMetadataValue(scheme, "display_name");
 
 			  String urn = null;
 
