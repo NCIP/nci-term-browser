@@ -25,89 +25,72 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
-
-
 <%
     request.getSession().removeAttribute("dictionary");
 %>
-
-
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
+    <form name="searchTerm">    
     <div id="main-area">
-
-    <!--
-      <form name="searchTerm" method="post" class="search-form-main-area">
-     -->
-     <form name="searchTerm">
-
+     
         <input type="hidden" name="initial_search" value="true" />
-
         <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
-
-
-
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">
-                 <%
-                 String warning_msg = (String) request.getSession().getAttribute("warning");
-                 if (warning_msg != null) {
-                 %>
-                    <p class="textbodyred">&nbsp;<%=warning_msg%></p>
-                 <%
-                 }
-                 request.getSession().removeAttribute("warning");
-                 %>
-<%
-            String hide_ontology_list = (String) request.getSession().getAttribute("hide_ontology_list");
-            request.getSession().removeAttribute("hide_ontology_list");
-            if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
- %>
+             <%
+             String warning_msg = (String) request.getSession().getAttribute("warning");
+             if (warning_msg != null) {
+             %>
+                <p class="textbodyred">&nbsp;<%=warning_msg%></p>
+             <%
+             }
+             request.getSession().removeAttribute("warning");
+             String hide_ontology_list = (String) request.getSession().getAttribute("hide_ontology_list");
+             request.getSession().removeAttribute("hide_ontology_list");
+             if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
+             %>
             <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.
-            <br>
+            <br/>
             &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow; try NCI Metathesaurus separately.)
-            </br>
             </p>
-
             <table class="termstable" border="0">
               <tr>
-                <%
-                  List ontology_list = DataUtils.getOntologyList();
-                  if (ontology_list == null)
-                    System.out.println("??????????? ontology_list == null");
-                  int num_vocabularies = ontology_list.size();
-                  String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+              <%
+                List ontology_list = DataUtils.getOntologyList();
+                if (ontology_list == null)
+                  System.out.println("??????????? ontology_list == null");
+                int num_vocabularies = ontology_list.size();
+                String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 
-HashMap display_name_hmap = null;
-Vector display_name_vec = null;
-display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
-display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-if (display_name_hmap == null || display_name_vec == null) {
-        display_name_hmap = new HashMap();
-        display_name_vec = new Vector();
+                HashMap display_name_hmap = null;
+                Vector display_name_vec = null;
+                display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
+                display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+                if (display_name_hmap == null || display_name_vec == null) {
+                        display_name_hmap = new HashMap();
+                        display_name_vec = new Vector();
 
-  for (int i = 0; i < ontology_list.size(); i++) {
-    SelectItem item = (SelectItem) ontology_list.get(i);
-    String value = (String) item.getValue();
-    String label = (String) item.getLabel();
-    //String label2 = "|" + label + "|";
-
-    String scheme = DataUtils.key2CodingSchemeName(value);
-    String version = DataUtils.key2CodingSchemeVersion(value);
-    String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-    if (display_name == null || display_name.compareTo("null") == 0) display_name = DataUtils.getLocalName(scheme);
-    display_name_hmap.put(display_name, value);
-    display_name_vec.add(display_name);
-  }
-  display_name_vec = SortUtils.quickSort(display_name_vec);
-  request.getSession().setAttribute("display_name_hmap", display_name_hmap);
-  request.getSession().setAttribute("display_name_vec", display_name_vec);
-}
-
+                  for (int i = 0; i < ontology_list.size(); i++) {
+                    SelectItem item = (SelectItem) ontology_list.get(i);
+                    String value = (String) item.getValue();
+                    String label = (String) item.getLabel();
+                    //String label2 = "|" + label + "|";
+                
+                    String scheme = DataUtils.key2CodingSchemeName(value);
+                    String version = DataUtils.key2CodingSchemeVersion(value);
+                    String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+                    if (display_name == null || display_name.compareTo("null") == 0) display_name = DataUtils.getLocalName(scheme);
+                    display_name_hmap.put(display_name, value);
+                    display_name_vec.add(display_name);
+                  }
+                  display_name_vec = SortUtils.quickSort(display_name_vec);
+                  request.getSession().setAttribute("display_name_hmap", display_name_hmap);
+                  request.getSession().setAttribute("display_name_vec", display_name_vec);
+                }
                 %>
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
@@ -227,13 +210,11 @@ if (display_name_hmap == null || display_name_vec == null) {
                     image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
                     alt="Search">
                   </h:commandButton></td>
-
                    <%
                    if (warning_msg != null) {
                       request.getSession().removeAttribute("ontologiesToSearchOn");
                    }
                   %>
-
                 </tr>
             </table>
 <%
@@ -242,19 +223,16 @@ if (display_name_hmap == null || display_name_vec == null) {
           </div> <!-- end tabTableContentContainer -->
           <%@ include file="/pages/templates/nciFooter.html"%>
         </div> <!-- end Page content -->
-      </form>
     </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-    <!-- end Main box -->
-  </div>
+  </form>
+  </div> <!-- end center-page -->
+  <br>
 </f:view>
-
 <%
     request.getSession().removeAttribute("dictionary");
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().removeAttribute("matchText");
-
 %>
-
 </body>
 </html>
