@@ -1,44 +1,38 @@
-<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.text.SimpleDateFormat" %>
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.Date"%>
+<%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashSet"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Set"%>
 <%@ page import="java.util.Iterator"%>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.properties.PropertyFileParser" %>
-<%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
-<%@ page import="gov.nih.nci.evs.browser.bean.DisplayItem" %>
-<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
-<%@ page import="org.LexGrid.concepts.Concept" %>
-<%@ page import="org.LexGrid.concepts.Presentation" %>
-<%@ page import="org.LexGrid.commonTypes.Source" %>
-<%@ page import="org.LexGrid.commonTypes.EntityDescription" %>
-<%@ page import="org.LexGrid.commonTypes.Property" %>
-<%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
-<%@ page import="org.LexGrid.concepts.Presentation" %>
-<%@ page import="org.LexGrid.commonTypes.Source" %>
-<%@ page import="org.LexGrid.commonTypes.EntityDescription" %>
-<%@ page import="org.LexGrid.commonTypes.Property" %>
-<%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
-<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+<%@ page import="gov.nih.nci.evs.browser.properties.PropertyFileParser"%>
+<%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties"%>
+<%@ page import="gov.nih.nci.evs.browser.bean.DisplayItem"%>
+<%@ page import="gov.nih.nci.evs.browser.bean.*"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.*"%>
+<%@ page import="org.LexGrid.concepts.Concept"%>
+<%@ page import="org.LexGrid.concepts.Presentation"%>
+<%@ page import="org.LexGrid.commonTypes.Source"%>
+<%@ page import="org.LexGrid.commonTypes.EntityDescription"%>
+<%@ page import="org.LexGrid.commonTypes.Property"%>
+<%@ page import="org.LexGrid.commonTypes.PropertyQualifier"%>
+<%@ page import="org.LexGrid.concepts.Presentation"%>
+<%@ page import="org.LexGrid.commonTypes.Source"%>
+<%@ page import="org.LexGrid.commonTypes.EntityDescription"%>
+<%@ page import="org.LexGrid.commonTypes.Property"%>
+<%@ page import="org.LexGrid.commonTypes.PropertyQualifier"%>
+<%@ page import="gov.nih.nci.evs.browser.common.Constants"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <%
   String dictionary = null;
   dictionary = (String) request.getParameter("dictionary");
-  /*
-  if (dictionary == null) {
-    //dictionary = "NCI Thesaurus";
-    dictionary = (String) request.getSession().getAttribute("dictionary");
-  }
-  */
 
   if (dictionary != null) {
     dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
@@ -52,34 +46,39 @@
 
   if (dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
-               <title>NCI Thesaurus</title>
-            <%
+<title>NCI Thesaurus</title>
+<%
               } else {
             %>
-               <title>NCI Term Browser</title>
-            <%
+<title>NCI Term Browser</title>
+<%
               }
             %>
 
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleSheet.css" />
-  <script type="text/javascript" src="<%=request.getContextPath()%>/js/script.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/js/search.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/js/dropdown.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css"
+  href="<%=request.getContextPath()%>/css/styleSheet.css" />
+<script type="text/javascript"
+  src="<%=request.getContextPath()%>/js/script.js"></script>
+<script type="text/javascript"
+  src="<%=request.getContextPath()%>/js/search.js"></script>
+<script type="text/javascript"
+  src="<%=request.getContextPath()%>/js/dropdown.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <script type="text/javascript" src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
-  <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
+<script type="text/javascript"
+  src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
+<script type="text/javascript"
+  src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
+<script type="text/javascript"
+  src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
 
-  <f:view>
-    <%@ include file="/pages/templates/header.jsp" %>
-    <div class="center-page">
-      <%@ include file="/pages/templates/sub-header.jsp" %>
-      <!-- Main box -->
-      <div id="main-area">
-
-          <%
+<f:view>
+  <%@ include file="/pages/templates/header.jsp"%>
+  <div class="center-page"><%@ include
+    file="/pages/templates/sub-header.jsp"%> <!-- Main box -->
+  <div id="main-area">
+  <%
             String code = null;
               String type = null;
               String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils
@@ -165,12 +164,10 @@
 
               c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
 
-
               if (c != null) {
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("code", code);
                 name = c.getEntityDescription().getContent();
-
               } else {
                 //name = "The server encountered an internal error that prevented it from fulfilling this request.";
                 name = "ERROR: Invalid code - " + code + ".";
@@ -178,14 +175,12 @@
 
               if (dictionary.compareTo("NCI Thesaurus") == 0
                   || dictionary.compareTo("NCI_Thesaurus") == 0) {
-          %>
-          <%@ include file="/pages/templates/content-header.jsp" %>
-        <%
+          %> <%@ include file="/pages/templates/content-header.jsp"%>
+  <%
           } else {
               request.getSession().setAttribute("dictionary", dictionary);
-        %>
-                <%@ include file="/pages/templates/content-header-other.jsp" %>
-        <%
+        %> <%@ include file="/pages/templates/content-header-other.jsp"%>
+  <%
           }
             String tg_dictionary_0 = dictionary;
             String tg_dictionary = DataUtils.replaceAll(dictionary, " ",
@@ -193,18 +188,13 @@
             if (c != null) {
               request.getSession().setAttribute("type", type);
               request.getSession().setAttribute("singleton", "false");
-        %>
+        %> <!-- Page content -->
+  <div class="pagecontent">
+  <table border="0" width="700px">
+    <tr>
+      <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
 
-        <!-- Page content -->
-        <div class="pagecontent">
-
-
-
-      <table border="0" width="700px">
-        <tr>
-          <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
-
-          <%
+      <%
             Vector visitedConcepts = (Vector) request.getSession()
                     .getAttribute("visitedConcepts");
                 if (visitedConcepts == null) {
@@ -225,47 +215,45 @@
                 if (term_suggestion_application_url != null
                     && term_suggestion_application_url.compareTo("") != 0) {
           %>
-          <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
-             <a href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
-          </td>
-          <%
+      <td align="right" valign="bottom" class="texttitle-blue-rightJust"
+        nowrap><a
+        href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>"
+        target="_blank" alt="Term Suggestion">Suggest changes to
+      this concept</a></td>
+      <%
             }
           %>
-        </tr>
-      </table>
+    </tr>
+  </table>
 
-      <hr>
+  <hr>
 
 
-<%
+  <%
   request.getSession().setAttribute("concept", c);
       request.getSession().setAttribute("code", code);
-%>
-
-
-      <%@ include file="/pages/templates/typeLinks.jsp" %>
-      <div class="tabTableContentContainer">
-          <%@ include file="/pages/templates/property.jsp" %>
-          <%@ include file="/pages/templates/relationship.jsp" %>
-          <%@ include file="/pages/templates/synonym.jsp" %>
-      </div>
-          <%
+%> <%@ include file="/pages/templates/typeLinks.jsp"%>
+  <div class="tabTableContentContainer"><%@ include
+    file="/pages/templates/property.jsp"%> <%@ include
+    file="/pages/templates/relationship.jsp"%>
+  <%@ include file="/pages/templates/synonym.jsp"%>
+  </div>
+  <%
             } else {
           %>
-      <div class="textbody">
-          <%=name%>
-      </div>
-    <%
+  <div class="textbody"><%=name%></div>
+  <%
       }
-    %>
-            <%@ include file="/pages/templates/nciFooter.html" %>
-          </div>
-        </div>
-        <!-- end Page content -->
-      </div>
-      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-      <!-- end Main box -->
-    </div>
-  </f:view>
+    %> <%@ include file="/pages/templates/nciFooter.html"%>
+  </div>
+  </div>
+  <!-- end Page content --></div>
+  <div class="mainbox-bottom"><img
+    src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5"
+    alt="Mainbox Bottom" /></div>
+  <!-- end Main box -->
+  </div>
+  <br />
+</f:view>
 </body>
 </html>
