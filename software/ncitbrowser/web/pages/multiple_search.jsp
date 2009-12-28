@@ -8,8 +8,10 @@
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
+  String application_version = new DataUtils().getApplicationVersion();
 %>
 <!-- Build info: <%=ncit_build_info%> -->
+<!-- Version info: <%=application_version%> -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -33,9 +35,9 @@
   <div class="center-page">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <form name="searchTerm">    
+    <form name="searchTerm">
     <div id="main-area">
-     
+
         <input type="hidden" name="initial_search" value="true" />
         <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
         <!-- Page content -->
@@ -79,7 +81,7 @@
                     String value = (String) item.getValue();
                     String label = (String) item.getLabel();
                     //String label2 = "|" + label + "|";
-                
+
                     String scheme = DataUtils.key2CodingSchemeName(value);
                     String version = DataUtils.key2CodingSchemeVersion(value);
                     String display_name = DataUtils.getMetadataValue(scheme, "display_name");
