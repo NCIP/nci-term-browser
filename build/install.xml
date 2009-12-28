@@ -286,8 +286,9 @@
             <filter token="ncicb.contact.url" value="${ncicb.contact.url}"/>
             <filter token="terminology.subset.download.url" value="${terminology.subset.download.url}"/>
             <filter token="ncit.build.info" value="Built: ${BUILD_DATE}"/>
+            <filter token="application.version" value="${application.version}"/>
             <filter token="ncit.url" value="${ncit.url}"/>
-        	<filter token="ncim.url" value="${ncim.url}"/>
+            <filter token="ncim.url" value="${ncim.url}"/>
             <filter token="term.suggestion.application.url" value="${term.suggestion.application.url}"/>
             <!-- Begin security token parameters -->
             <filter token="license_page_option" value="${license_page_option}"/>

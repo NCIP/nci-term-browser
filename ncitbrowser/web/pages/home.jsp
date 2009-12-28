@@ -6,8 +6,10 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
+  String application_version = new DataUtils().getApplicationVersion();
 %>
 <!-- Build info: <%=ncit_build_info%> -->
+<!-- Version info: <%=application_version%> -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>

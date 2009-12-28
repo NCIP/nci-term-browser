@@ -113,10 +113,8 @@ public class DataUtils {
     private static org.LexGrid.LexBIG.LexBIGService.LexBIGService lbSvc = null;
     public org.LexGrid.LexBIG.Utility.ConvenienceMethods lbConvMethods = null;
     public CodingSchemeRenderingList csrl = null;
-    //private static HashMap codingSchemeMap = null;
-
+    
     private static HashSet codingSchemeHashSet = null;
-
     private static HashMap csnv2codingSchemeNameMap = null;
     private static HashMap csnv2VersionMap = null;
 
@@ -152,6 +150,7 @@ public class DataUtils {
     public String terminologySubsetDownloadURL = null;
     public String term_suggestion_application_url = null;
     public String NCITBuildInfo = null;
+    public String NCITAppVersion = null;
     public String NCImURL = null;
 
 	public static HashMap namespace2CodingScheme = null;
@@ -173,7 +172,6 @@ public class DataUtils {
 
     public DataUtils() {
         // setCodingSchemeMap();
-
     }
 
     public static List getOntologyList() {
@@ -2041,7 +2039,6 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 		return parseData(line, tab);
 	}
 
-
     public static Vector<String> parseData(String line, String tab) {
         Vector data_vec = new Vector();
         StringTokenizer st = new StringTokenizer(line, tab);
@@ -2062,50 +2059,6 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
         return link;
     }
 
-
-	/*
-	 * protected List getAncestors( String scheme, CodingSchemeVersionOrTag
-	 * csvt, String hierarchyID, String code, int maxDistance) throws
-	 * LBException { LexBIGService lbSvc =
-	 * RemoteServerUtil.createLexBIGService(); LexBIGServiceConvenienceMethods
-	 * lbscm = (LexBIGServiceConvenienceMethods)
-	 * lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
-	 * lbscm.setLexBIGService(lbSvc);
-	 *
-	 * ArrayList list = new ArrayList(); int currentDistance = 0; try {
-	 * addAncestorsToList(lbscm, scheme, csvt, hierarchyID, code, maxDistance,
-	 * currentDistance, list); } catch (Exception ex) { ex.printStackTrace(); }
-	 * return list; }
-	 *
-	 *
-	 * protected void addAncestorsToList( LexBIGServiceConvenienceMethods lbscm,
-	 * String scheme, CodingSchemeVersionOrTag csvt, String hierarchyID, String
-	 * code, int maxDistance, int currentDistance, List list) throws LBException {
-	 * if (maxDistance < 0 || currentDistance < maxDistance) { AssociationList
-	 * associations = lbscm.getHierarchyLevelNext(scheme, csvt, hierarchyID,
-	 * code, false, null); for (int i = 0; i <
-	 * associations.getAssociationCount(); i++) { Association assoc =
-	 * associations.getAssociation(i); AssociatedConceptList concepts =
-	 * assoc.getAssociatedConcepts();
-	 *
-	 * if (concepts.getAssociatedConceptCount() == 0) { Concept c =
-	 * getConceptByCode(scheme, null, null, code); org.LexGrid.concepts.Concept
-	 * ce = new org.LexGrid.concepts.Concept(); ce.setId(c.getEntityCode());
-	 * //ce.setEntityDescription(c.getEntityDescription().getContent());
-	 * ce.setEntityDescription(c.getEntityDescription()); list.add(ce); }
-	 *
-	 * for (int j = 0; j < concepts.getAssociatedConceptCount(); j++) {
-	 * AssociatedConcept concept = concepts.getAssociatedConcept(j); String
-	 * nextCode = concept.getConceptCode(); String nextDesc =
-	 * concept.getEntityDescription().getContent();
-	 *
-	 * if (currentDistance == maxDistance) { org.LexGrid.concepts.Concept ce =
-	 * new org.LexGrid.concepts.Concept(); ce.setId(nextCode); EntityDescription
-	 * ed = new EntityDescription(); ed.setContent(nextDesc);
-	 * ce.setEntityDescription(ed); list.add(ce); } addAncestorsToList(lbscm,
-	 * scheme, csvt, hierarchyID, nextCode, maxDistance, currentDistance + 1,
-	 * list); } } } }
-	 */
 	public static Vector getSynonyms(String scheme, String version, String tag,
 			String code) {
 		Vector v = new Vector();
@@ -2114,7 +2067,6 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 		//getSynonyms(concept);
 		return getSynonyms(scheme, concept);
 	}
-
 
 	public static Vector getSynonyms(Concept concept) {
 		if (concept == null)
@@ -2259,10 +2211,29 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 			ex.printStackTrace();
         }
 
-        //System.out.println("getNCITBuildInfo returns " + NCITBuildInfo);
         return NCITBuildInfo;
     }
 
+    public String getApplicationVersion() {
+        if (NCITAppVersion != null) {
+            return NCITAppVersion;
+        }
+        String default_info = "1.0";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            NCITAppVersion = properties
+                    .getProperty(NCItBrowserProperties.NCIT_APP_VERSION);
+            if (NCITAppVersion == null) {
+            	NCITAppVersion = default_info;
+            }
+        } catch (Exception ex) {
+			ex.printStackTrace();
+        }
+
+        return NCITAppVersion;
+    }    
+    
     public String getNCImURL() {
         if (NCImURL != null) {
             return NCImURL;
