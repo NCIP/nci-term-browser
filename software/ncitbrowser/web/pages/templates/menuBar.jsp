@@ -11,20 +11,22 @@
   dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#40;", "(");
   dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#41;", ")");
   String menubar_dictionary = DataUtils.getCodingSchemeName( dictionaryName0 );
-  String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );
-    
+  String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );    
+  
+  String hdr_dictionary0 = (String) request.getSession().getAttribute("dictionary");
+  if (hdr_dictionary0 == null) hdr_dictionary0 = ""; // Set to empty string
 %>
 <table class="global-nav" border="0" width="100%" cellpadding="0"
   cellspacing="0">
   <tr>
     <td align="left">
     <%
-         if (menubar_dictionary != null && menubar_dictionary.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
-      %> <a href="<%= request.getContextPath() %>">Home</a> <%
+         if (hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
+      %> <a href="<%= request.getContextPath()%>">Home</a> <%
          } else {
             if (menubar_version == null) {
       %> <a
-      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=menubar_dictionary%>">Home</a>
+      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=hdr_dictionary0%>">Home</a>
     <%
             } else {
       %> <a
@@ -33,7 +35,7 @@
             }
          }
       %> | <a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=menubar_dictionary%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=hdr_dictionary0%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
     View Hierarchy </a> <%
       if (menubar_dictionary != null && menubar_dictionary.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
       %> | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
