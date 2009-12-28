@@ -10,8 +10,10 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.MetadataElement" %>
 <%
 String ncit_build_info = new DataUtils().getNCITBuildInfo();
+String application_version = new DataUtils().getApplicationVersion();
 %>
 <!-- Build info: <%=ncit_build_info%> -->
+<!-- Version info: <%=application_version%> -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -62,7 +64,7 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
     }
     String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
     if (term_browser_version == null) term_browser_version = "N/A";
-    
+
     if (dictionary != null && scheme == null) {
       scheme = dictionary;
       if (version != null) {
@@ -97,12 +99,12 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
       <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">
     <% } else { %>
       <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">
-    <% } %>   
+    <% } %>
         <div class="vocabularynamebanner">
           <div class="vocabularynameshort"><%=shortName%></div>
           <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
         </div>
-      </a>  
+      </a>
       <div class="search-globalnav">
       <!-- Search box -->
       <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
@@ -140,14 +142,14 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
     %>
     <table class="global-nav" border="0" width="100%" cellpadding="0" cellspacing="0">
       <tr>
-        <td>    
+        <td>
           <% if (menubar_version == null) { %>
           <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
           <% } else { %>
           <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
           <% }
           if (download_site != null) {
-        	 %>
+           %>
           | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
               Download
             </a>
@@ -160,7 +162,7 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
           <% } %>
           | <a href="<%= request.getContextPath() %>/pages/help.jsf">Help</a>
         </td>
-        <td align="right">                                
+        <td align="right">
           <%
              Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
              if (visitedConcepts != null && visitedConcepts.size() > 0) {
@@ -168,9 +170,9 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
           %>
                <%=visitedConceptsStr%>
           <% } %>
-        </td>   
-        <td width="7"></td>                             
-      </tr>          
+        </td>
+        <td width="7"></td>
+      </tr>
     </table>
     <!-- end Global Navigation -->
   </div>
@@ -184,7 +186,7 @@ String ncit_build_info = new DataUtils().getNCITBuildInfo();
       <%@ include file="/pages/templates/welcome-other.jsp" %>
       <%@ include file="/pages/templates/nciFooter.html" %>
       <!-- end Page content -->
-    </div>    
+    </div>
     <!-- end Main box -->
   </div>
   <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>

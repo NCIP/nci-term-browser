@@ -12,8 +12,10 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.LicenseBean"%>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
+  String application_version = new DataUtils().getApplicationVersion();
 %>
 <!-- Build info: <%=ncit_build_info%> -->
+<!-- Version info: <%=application_version%> -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -44,14 +46,14 @@
         String voc_description = null;
         String voc_version = null;
         Vector v = null;
-         
+
         /* ------------------------ */
-        
+
         String scheme = (String) request.getParameter("dictionary");
-        scheme = DataUtils.searchFormalName(scheme);       
-      
+        scheme = DataUtils.searchFormalName(scheme);
+
         String shortName = DataUtils.getLocalName(scheme);
-        
+
         String dictionary = null;
         if (scheme == null) {
           scheme = (String) request.getAttribute("scheme");
@@ -60,29 +62,29 @@
         if (version == null) {
             version = (String) request.getAttribute("version");
         }
-        
+
         String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
 
-        
+
         if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;//"N/A";
-        
+
         String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-        
+
         if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
-       
-       
+
+
         if (scheme != null && scheme == null) {
           if (version != null) {
             dictionary = scheme + " (version" + version + ")";
             version = version.replaceAll("%20", " ");
           }
-        }  
-        request.getSession().setAttribute("dictionary", scheme);  
+        }
+        request.getSession().setAttribute("dictionary", scheme);
         menubar_scheme = scheme;
         menubar_version = version;
-        menubar_scheme0 = menubar_scheme;  
-        
-        boolean isLicensed = LicenseBean.isLicensed(scheme, version);  
+        menubar_scheme0 = menubar_scheme;
+
+        boolean isLicensed = LicenseBean.isLicensed(scheme, version);
         LicenseBean licenseBean = (LicenseBean) request.getSession()
             .getAttribute("licenseBean");
         if (licenseBean == null) {
@@ -90,10 +92,10 @@
           request.getSession().setAttribute("licenseBean",
               licenseBean);
         }
-        boolean accepted = licenseBean.licenseAgreementAccepted(scheme);     
-        
+        boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
+
         /* ------------------------ */
-        
+
         v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
         Vector u1 = MetadataUtils.getMetadataValues(v,
             "html_compatable_description");
@@ -137,13 +139,13 @@
           menubar_version = menubar_version
               .replaceAll(" ", "%20");
         }
-        
-      %>    
+
+      %>
       <%@ include file="/pages/templates/header.jsp" %>
       <div class="center-page">
         <%@ include file="/pages/templates/sub-header.jsp"%> <!-- Main box -->
         <div id="main-area">
-        <%        
+        <%
           if (isLicensed && !accepted) {
             String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
         %>
@@ -156,16 +158,16 @@
             <!-- end Thesaurus, banner search area -->
             <!-- Quick links bar -->
             <%@ include file="/pages/templates/quickLink.jsp" %>
-            <!-- end Quick links bar -->  
+            <!-- end Quick links bar -->
             <div class="pagecontent">
-            
+
         <p>
         <%
           //String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-        %>  
+        %>
           To access <b><%=display_name%></b>, please review and accept the copyright/license statement below:
-        </p>            
-            
+        </p>
+
 
               <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>
               <p>If and only if you agree to these terms and conditions, click the
@@ -180,10 +182,10 @@
                 alt="reset" onClick="history.back()" /> <input type="hidden"
                 id="dictionary" name="dictionary" value="<%=scheme%>" /> <input
                 type="hidden" id="version" name="version" value="<%=version%>" /></form>
-              </p>      
+              </p>
               <%@ include file="/pages/templates/nciFooter.html" %>
-            </div>                          
-        <% } else {         
+            </div>
+        <% } else {
               if (scheme != null) {
                 request.setAttribute("scheme", scheme);
               }
@@ -193,19 +195,19 @@
               if (dictionary != null) {
                 request.setAttribute("dictionary", dictionary);
               }
-        %>              
+        %>
               <!-- Thesaurus, banner search area -->
-              <div class="bannerarea">                
+              <div class="bannerarea">
                 <% if (menubar_version == null) { %>
                   <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>">
                 <% } else { %>
                   <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>">
-                <% } %>            
+                <% } %>
                     <div class="vocabularynamebanner">
                       <div class="vocabularynameshort"><%=display_name%></div>
-                      <div class="vocabularynamelong">Version: <%=term_browser_version%></div>                
+                      <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
                     </div>
-                  </a>                              
+                  </a>
                 <div class="search-globalnav">
                   <!-- Search box -->
                   <div class="searchbox-top"><img
@@ -235,7 +237,7 @@
                               | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>
                         <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
                       </td>
-                      <td align="right">                                
+                      <td align="right">
                         <%
                            Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
                            if (visitedConcepts != null && visitedConcepts.size() > 0) {
@@ -243,22 +245,22 @@
                         %>
                              <%=visitedConceptsStr%>
                         <% } %>
-                      </td>   
-                      <td width="7"></td>                             
-                    </tr>                    
-                  </table>                        
-                  <!-- end Global Navigation -->                       
+                      </td>
+                      <td width="7"></td>
+                    </tr>
+                  </table>
+                  <!-- end Global Navigation -->
                 </div>
               </div>
               <!-- Quick links bar -->
               <%@ include file="/pages/templates/quickLink.jsp" %>
-              <!-- end Quick links bar -->                                                     
+              <!-- end Quick links bar -->
               <div class="pagecontent">
                 <%@ include file="/pages/templates/welcome-other.jsp"%>
                 <%@ include file="/pages/templates/nciFooter.html" %>
-              </div> 
+              </div>
         <% } %>
-        </div><!-- end main-area -->        
+        </div><!-- end main-area -->
       </div><!-- end center-page -->
       <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     </f:view>
