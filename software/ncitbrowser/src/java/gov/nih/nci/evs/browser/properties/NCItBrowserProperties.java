@@ -50,10 +50,8 @@ public class NCItBrowserProperties {
         private static List metadataElementList;
         private static List defSourceMappingList;
         private static HashMap defSourceMappingHashMap;
-
 	    private static List securityTokenList;
 	    private static HashMap securityTokenHashMap;
-
         private static HashMap configurableItemMap;
 
         // KLO
@@ -68,15 +66,13 @@ public class NCItBrowserProperties {
         public static final String MAXIMUM_TREE_LEVEL = "MAXIMUM_TREE_LEVEL";
         public static final String TERMINOLOGY_SUBSET_DOWNLOAD_URL= "TERMINOLOGY_SUBSET_DOWNLOAD_URL";
         public static final String NCIT_BUILD_INFO = "NCIT_BUILD_INFO";
+        public static final String NCIT_APP_VERSION = "APPLICATION_VERSION";
         public static final String NCIM_URL = "NCIM_URL";
         public static final String TERM_SUGGESTION_APPLICATION_URL= "TERM_SUGGESTION_APPLICATION_URL";
         public static final String LICENSE_PAGE_OPTION= "LICENSE_PAGE_OPTION";
 
-
         private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
-
         private static NCItBrowserProperties NCItBrowserProperties = null;
-
         private static Properties properties = new Properties();
 
         public static boolean debugOn = false;

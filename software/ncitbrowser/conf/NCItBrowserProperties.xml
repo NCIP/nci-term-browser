@@ -17,7 +17,7 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
+
       <DisplayItem>
             <propertyName>ALT_DEFINITION</propertyName>
             <itemLabel>Definition</itemLabel>
@@ -49,7 +49,7 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
+
        <DisplayItem>
             <propertyName>Display Name</propertyName>
             <itemLabel>Display Name</itemLabel>
@@ -65,7 +65,7 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
+
        <DisplayItem>
             <propertyName>display_name</propertyName>
             <itemLabel>Display Name</itemLabel>
@@ -73,33 +73,33 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
-       
+
+
        <DisplayItem>
             <propertyName>print_name</propertyName>
             <itemLabel>Print Name</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
-       </DisplayItem>       
-       
+       </DisplayItem>
+
        <DisplayItem>
             <propertyName>Print_Name</propertyName>
             <itemLabel>Print Name</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
-       </DisplayItem>  
-       
+       </DisplayItem>
+
        <DisplayItem>
             <propertyName>MeSH_Name</propertyName>
             <itemLabel>MeSH Name</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
-       </DisplayItem>  
-       
-       
+       </DisplayItem>
+
+
        <DisplayItem>
             <propertyName>preferred term</propertyName>
             <itemLabel>Preferred Term</itemLabel>
@@ -114,16 +114,16 @@
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
-       </DisplayItem>       
-       
+       </DisplayItem>
+
        <DisplayItem>
              <propertyName>unique_identifier</propertyName>
              <itemLabel>Unique Identifier</itemLabel>
              <url>null</url>
              <hyperlinkText>null</hyperlinkText>
              <isExternalCode>false</isExternalCode>
-       </DisplayItem>  
-   
+       </DisplayItem>
+
        <DisplayItem>
             <propertyName>Code</propertyName>
             <itemLabel>NCI Thesaurus Code</itemLabel>
@@ -163,7 +163,7 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
+
        <DisplayItem>
             <propertyName>VA_National_Formulary_Name</propertyName>
             <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
@@ -179,7 +179,7 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
+
        <DisplayItem>
             <propertyName>ABR</propertyName>
             <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
@@ -195,7 +195,7 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
+
        <DisplayItem>
             <propertyName>Synonym</propertyName>
             <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
@@ -227,7 +227,7 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
+
        <DisplayItem>
             <propertyName>CAS_Registry</propertyName>
             <itemLabel>CAS Registry Number</itemLabel>
@@ -341,7 +341,7 @@
             <hyperlinkText>see NCI Thesaurus info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
-       
+
        <DisplayItem>
             <propertyName>MedDRA_Code</propertyName>
             <itemLabel>MedDRA Code</itemLabel>
@@ -406,6 +406,11 @@
         <ConfigurableItem>
                  <key>NCIT_BUILD_INFO</key>
                  <value>@ncit.build.info@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>APPLICATION_VERSION</key>
+                 <value>@application.version@</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
