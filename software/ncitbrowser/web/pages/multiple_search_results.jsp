@@ -210,17 +210,12 @@
 
                       String code = rcr.getConceptCode();
                       String name = rcr.getEntityDescription().getContent();
-
                       String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
-                      String short_vocabulary_name = null;
-                      //String short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+                      String short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+                      
                       if (name_hmap.containsKey(vocabulary_name)) {
                           short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
                       } else {
-                          short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
-                          if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
-                              short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-                          }
                           name_hmap.put(vocabulary_name, short_vocabulary_name);
                       }
 
@@ -342,5 +337,6 @@
     <!-- end Main box -->
   </div> <!-- end center-page -->
 </f:view>
+<br/>
 </body>
 </html>
