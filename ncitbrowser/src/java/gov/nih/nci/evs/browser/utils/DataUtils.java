@@ -2514,10 +2514,9 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 			String concept_data = (String) concept_vec.elementAt(j);
 			Vector w = parseData(concept_data);
 			String scheme = (String) w.elementAt(0);
-			//String localName = scheme;
-			//scheme = (String) formalName2LocalNameHashMap.get(scheme);
 			String formalName = (String) localName2FormalNameHashMap.get(scheme);
 			String localName = (String) formalName2LocalNameHashMap.get(scheme);
+			String vocabulary_name = getMetadataValue(formalName, "display_name");
 			String code = (String) w.elementAt(1);
 			String name = (String) w.elementAt(2);
             strbuf.append("<li>");
@@ -2527,7 +2526,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
                + "&code="
                + code
                + "\\'>"
-               + name + " &#40;" + localName + "&#41;"
+               + name + " &#40;" + vocabulary_name + "&#41;"
                + "</a><br>";
             strbuf.append(line);
             strbuf.append("</li>");
