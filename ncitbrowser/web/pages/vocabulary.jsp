@@ -44,22 +44,11 @@
         String voc_description = null;
         String voc_version = null;
         Vector v = null;
-        
-        /*
-        Vector metadata_names = new Vector();
-        List metadataElementList = NCItBrowserProperties
-            .getMetadataElementList();
-        for (int i = 0; i < metadataElementList.size(); i++) {
-          MetadataElement ele = (MetadataElement) metadataElementList
-              .get(i);
-          metadata_names.add(ele.getName());
-        }
-        */
          
         /* ------------------------ */
         
         String scheme = (String) request.getParameter("dictionary");
- 	scheme = DataUtils.searchFormalName(scheme);       
+        scheme = DataUtils.searchFormalName(scheme);       
       
         String shortName = DataUtils.getLocalName(scheme);
         
