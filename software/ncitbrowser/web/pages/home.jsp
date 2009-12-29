@@ -7,9 +7,13 @@
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
+  String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
 %>
-<!-- Build info: <%=ncit_build_info%> -->
-<!-- Version info: <%=application_version%> -->
+<!--
+   Build info: <%=ncit_build_info%>
+ Version info: <%=application_version%>
+          Tag: <%=anthill_build_tag_built%>
+  -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
