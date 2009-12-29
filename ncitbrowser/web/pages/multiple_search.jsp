@@ -27,10 +27,17 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body onload="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus');">
+<body onload="checkVisited();">
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+  <script language="JavaScript">
+     function checkVisited() {
+       var test = '<%= request.getSession().getAttribute("visited") %>';
+       if (test == "" || test == "null") 
+    	   checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus');
+     }  
+  </script>
 <%
     request.getSession().removeAttribute("dictionary");
 %>
@@ -41,7 +48,6 @@
     <!-- Main box -->
     <form name="searchTerm">
     <div id="main-area">
-
         <input type="hidden" name="initial_search" value="true" />
         <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
         <!-- Page content -->
@@ -231,6 +237,7 @@
     request.getSession().removeAttribute("dictionary");
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().removeAttribute("matchText");
+    request.getSession().putValue("visited","true");
 %>
 <br/>
 </body>
