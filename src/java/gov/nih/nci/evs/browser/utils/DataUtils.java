@@ -151,6 +151,7 @@ public class DataUtils {
     public String term_suggestion_application_url = null;
     public String NCITBuildInfo = null;
     public String NCITAppVersion = null;
+    public String NCITAnthillBuildTagBuilt = null;
     public String NCImURL = null;
 
 	public static HashMap namespace2CodingScheme = null;
@@ -2233,7 +2234,27 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 
         return NCITAppVersion;
     }    
-    
+
+    public String getNCITAnthillBuildTagBuilt() {
+        if (NCITAnthillBuildTagBuilt != null) {
+            return NCITAnthillBuildTagBuilt;
+        }
+        String default_info = "N/A";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            NCITAnthillBuildTagBuilt = properties
+                    .getProperty(NCItBrowserProperties.ANTHILL_BUILD_TAG_BUILT);
+            if (NCITAnthillBuildTagBuilt == null) {
+            	NCITAnthillBuildTagBuilt = default_info;
+            }
+        } catch (Exception ex) {
+			ex.printStackTrace();
+        }
+
+        return NCITAnthillBuildTagBuilt;
+    }    
+        
     public String getNCImURL() {
         if (NCImURL != null) {
             return NCImURL;
