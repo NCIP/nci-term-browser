@@ -18,19 +18,19 @@ if "%1" == "" (
     goto DONE
 )
 if "%1" == "all" (
-    ant build:all
+    ant -Danthill.build.tag_built=desktop build:all
     goto DONE
 )
 if "%1" == "upgrade" (
-    ant deploy:local:upgrade
+    ant -Danthill.build.tag_built=desktop deploy:local:upgrade
     goto DONE
 )
 if "%1" == "install" (
-    ant deploy:local:install
+    ant -Danthill.build.tag_built=desktop deploy:local:install
     goto DONE
 )
 if "%1" == "deploy" (
-    ant deploy:hot
+    ant -Danthill.build.tag_built=desktop deploy:hot
     goto DONE
 )
 if "%1" == "clean" (
@@ -41,11 +41,11 @@ if "%1" == "clean" (
     goto DONE
 )
 if "%1" == "dev" (
-    ant -Dproperties.file=C:\SVN-Projects\ncit-properties\properties\dev-upgrade.properties deploy:remote:upgrade
+    ant -Dproperties.file=C:\SVN-Projects\ncit-properties\properties\dev-upgrade.properties -Danthill.build.tag_built=desktop deploy:remote:upgrade
     goto DONE
 )
 if "%1" == "qa" (
-    ant -Dproperties.file=C:\SVN-Projects\ncit-properties\properties\qa-upgrade.properties deploy:remote:upgrade
+    ant -Dproperties.file=C:\SVN-Projects\ncit-properties\properties\qa-upgrade.properties -Danthill.build.tag_built=desktop deploy:remote:upgrade
     goto DONE
 )
 
