@@ -23,7 +23,7 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body>
+<body onload="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus');">
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
@@ -80,8 +80,6 @@
                     SelectItem item = (SelectItem) ontology_list.get(i);
                     String value = (String) item.getValue();
                     String label = (String) item.getLabel();
-                    //String label2 = "|" + label + "|";
-
                     String scheme = DataUtils.key2CodingSchemeName(value);
                     String version = DataUtils.key2CodingSchemeVersion(value);
                     String display_name = DataUtils.getMetadataValue(scheme, "display_name");
@@ -97,17 +95,11 @@
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <%
-                      //for (int i = 0; i < ontology_list.size(); i++) {
-                      //  SelectItem item = (SelectItem) ontology_list.get(i);
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         String display_name = (String) display_name_vec.elementAt(i);
                         String value = (String)  display_name_hmap.get(display_name);
                         String label = (String)  display_name_hmap.get(display_name);
-                        //String value = (String) item.getValue();
-                        //String label = (String) item.getLabel();
-
                         String label2 = "|" + label + "|";
-
                         String scheme = DataUtils.key2CodingSchemeName(value);
                         String version = DataUtils.key2CodingSchemeVersion(value);
                         String http_label = null;
@@ -236,5 +228,6 @@
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().removeAttribute("matchText");
 %>
+<br/>
 </body>
 </html>
