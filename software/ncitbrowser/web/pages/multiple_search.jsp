@@ -44,9 +44,9 @@
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.jsp" %>
-    <!-- Main box -->
     <form name="searchTerm">
+    <%@ include file="/pages/templates/sub-header.jsp" %>
+    <!-- Main box -->    
     <div id="main-area">
         <input type="hidden" name="initial_search" value="true" />
         <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
