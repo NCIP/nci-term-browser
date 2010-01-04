@@ -1586,6 +1586,9 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 
     //[#24809] Missing relas
     private String replaceAssociationNameByRela(AssociatedConcept ac, String associationName) {
+		if (ac.getAssociationQualifiers() == null) return associationName;
+		if (ac.getAssociationQualifiers().getNameAndValue() == null) return associationName;
+
 		for(NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()){
 			String qualifier_name = qual.getName();
 			String qualifier_value = qual.getContent();
