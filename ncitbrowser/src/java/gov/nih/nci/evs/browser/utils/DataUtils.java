@@ -113,7 +113,7 @@ public class DataUtils {
     private static org.LexGrid.LexBIG.LexBIGService.LexBIGService lbSvc = null;
     public org.LexGrid.LexBIG.Utility.ConvenienceMethods lbConvMethods = null;
     public CodingSchemeRenderingList csrl = null;
-    
+
     private static HashSet codingSchemeHashSet = null;
     private static HashMap csnv2codingSchemeNameMap = null;
     private static HashMap csnv2VersionMap = null;
@@ -1584,10 +1584,20 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
     }
 */
 
+    //[#24809] Missing relas
+    private String replaceAssociationNameByRela(AssociatedConcept ac, String associationName) {
+		for(NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()){
+			String qualifier_name = qual.getName();
+			String qualifier_value = qual.getContent();
+			if (qualifier_name.compareToIgnoreCase("rela") == 0) {
+				return qualifier_value; // replace associationName by Rela value
+			}
+		}
+		return associationName;
+	}
 
 
-    public HashMap getRelationshipHashMap(String scheme, String version,
-            String code) {
+    public HashMap getRelationshipHashMap(String scheme, String version, String code) {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		LexBIGServiceConvenienceMethods lbscm = createLexBIGServiceConvenienceMethods(lbSvc);
 
@@ -1714,7 +1724,10 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 									if (associationName.compareToIgnoreCase("equivalentClass") != 0 &&
 									    ac.getConceptCode().indexOf("@") == -1) {
 										if (!w.contains(associationName)) {
-											String s = associationName + "|" + pt + "|" + ac.getConceptCode();
+											//String s = associationName + "|" + pt + "|" + ac.getConceptCode();
+											String relaValue = replaceAssociationNameByRela(ac, associationName);
+											String s = relaValue + "|" + pt + "|" + ac.getConceptCode();
+
 											if (isRole) {
 												//if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
 													// System.out.println("Adding role: " +
@@ -1806,7 +1819,10 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 									    ac.getConceptCode().indexOf("@") == -1) {
 
 										if (!w.contains(associationName)) {
-											String s = associationName + "|" + pt + "|" + ac.getConceptCode();
+											//String s = associationName + "|" + pt + "|" + ac.getConceptCode();
+											String relaValue = replaceAssociationNameByRela(ac, associationName);
+											String s = relaValue + "|" + pt + "|" + ac.getConceptCode();
+
 											if (isRole) {
 												inverse_roleList.add(s);
 											} else {
@@ -2233,7 +2249,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
         }
 
         return NCITAppVersion;
-    }    
+    }
 
     public String getNCITAnthillBuildTagBuilt() {
         if (NCITAnthillBuildTagBuilt != null) {
@@ -2253,8 +2269,8 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
         }
 
         return NCITAnthillBuildTagBuilt;
-    }    
-        
+    }
+
     public String getNCImURL() {
         if (NCImURL != null) {
             return NCImURL;
