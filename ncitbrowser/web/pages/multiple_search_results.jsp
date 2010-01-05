@@ -186,10 +186,27 @@
               }
               String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
               String tooltip_str = "";
+              
+              HashMap display_name_hmap = null;
+              Vector display_name_vec = null;
+              display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
+              display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+              
               if (ontologiesToSearchOnStr != null) {
                 Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
                 for (int k=0; k<ontologies_to_search_on.size(); k++) {
                   String s = (String) ontologies_to_search_on.elementAt(k);
+                  String t1 = DataUtils.key2CodingSchemeName(s);
+                  String term_browser_version = DataUtils.getMetadataValue(t1, "term_browser_version");
+                  for (int i=0; i<display_name_vec.size(); i++) {
+                      String nm = (String) display_name_vec.elementAt(i);
+                      String val = (String) display_name_hmap.get(nm);
+                      if (val.compareTo(s) == 0) {
+                          s = nm;
+                          break;
+                      }
+                  }
+                  s = s + " (" + term_browser_version + ")";
                   tooltip_str = tooltip_str + s + "<br/>";
                 }
               }
