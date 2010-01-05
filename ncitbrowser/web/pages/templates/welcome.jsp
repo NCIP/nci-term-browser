@@ -17,7 +17,17 @@
   <hr/>
   
 <% 
+Vector from_vec = new Vector();
+Vector to_vec = new Vector();
+from_vec.add("ncim_url");
+to_vec.add(nci_meta_url);
+
 String html_compatable_description_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "html_compatable_description");
+
+String contextPath = request.getContextPath();
+html_compatable_description_value = DataUtils.replaceContextPath(html_compatable_description_value, contextPath);
+html_compatable_description_value = DataUtils.replaceInnerEvalExpressions(html_compatable_description_value, from_vec, to_vec);
+
 String version_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "version");
 String source_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "source_url");
 String download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "download_url");
