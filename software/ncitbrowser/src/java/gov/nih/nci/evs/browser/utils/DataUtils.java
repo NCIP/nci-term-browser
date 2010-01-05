@@ -2862,4 +2862,79 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 		return null;
 	}
 
+
+   public static String replaceInnerEvalExpressions(String s, Vector from_vec, Vector to_vec) {
+	   String openExp = "<%=";
+	   String closeExp = "%>";
+	   String t = "";
+
+	   int idx = s.indexOf(openExp);
+	   if (idx == -1) return s;
+
+	   while (idx != -1) {
+		   String lhs = s.substring(0, idx);
+		   t = t + lhs;
+
+		   String res = s.substring(idx+3, s.length());
+		   int idx2 = s.indexOf(closeExp);
+
+		   String expression = s.substring(idx, idx2+2);
+
+		   String expressionValue = s.substring(idx+3, idx2);
+
+		   for (int i=0; i<from_vec.size(); i++) {
+			   String from = (String) from_vec.elementAt(i);
+			   String to = (String) to_vec.elementAt(i);
+			   if (expressionValue.compareTo(from) == 0) {
+				   expression = to;
+				   break;
+			   }
+		   }
+
+		   t = t + expression;
+
+		   String rhs = s.substring(idx2+2, s.length());
+
+		   s = rhs;
+		   idx = s.indexOf(openExp);
+	   }
+	   t = t + s;
+	   return t;
+   }
+
+
+
+   public static String replaceContextPath(String s, String contextPath)
+   {
+	   String openExp = "<%=";
+	   String closeExp = "%>";
+	   String t = "";
+
+	   int idx = s.indexOf(openExp);
+	   if (idx == -1) return s;
+
+	   while (idx != -1) {
+		   String lhs = s.substring(0, idx);
+		   t = t + lhs;
+
+		   String res = s.substring(idx+3, s.length());
+		   int idx2 = s.indexOf(closeExp);
+
+		   String expression = s.substring(idx, idx2+2);
+		   String expressionValue = s.substring(idx+3, idx2);
+
+		   if (expression.indexOf("request.getContextPath()") != -1) {
+				expression = contextPath;
+		   }
+
+		   t = t + expression;
+
+		   String rhs = s.substring(idx2+2, s.length());
+
+		   s = rhs;
+		   idx = s.indexOf(openExp);
+	   }
+	   t = t + s;
+	   return t;
+   }
 }
