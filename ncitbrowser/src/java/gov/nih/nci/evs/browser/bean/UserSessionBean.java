@@ -654,7 +654,6 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
 		request.getSession().setAttribute("algorithm", matchAlgorithm);
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
-        System.out.println("searchTarget: " + searchTarget);
 
 	    String initial_search = (String) request.getParameter("initial_search");
         String[] ontology_list = request.getParameterValues("ontology_list");
@@ -812,6 +811,11 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
             return "multiple_search";
         } else {
             request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
+
+//[#25270] Set "all but NCIm selected" as the default for the TB home page.
+String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
+request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntologiesToSearchOnStr);
+
             for (int k=0; k<ontologiesToSearchOn.size(); k++) {
                 String key = (String) list.get(k);
                 if (key != null) {

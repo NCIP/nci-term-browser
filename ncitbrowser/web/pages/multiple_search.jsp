@@ -27,10 +27,20 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
+<!--
+<body onload="checkVisited();">
+-->
 <body>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+  <script language="JavaScript">
+     function checkVisited() {
+       var test = '<%= request.getSession().getAttribute("visited") %>';
+       if (test == "" || test == "null") 
+    	   checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus');
+     }  
+  </script>
 <%
     request.getSession().removeAttribute("dictionary");
 %>
@@ -66,10 +76,16 @@
               <tr>
               <%
                 List ontology_list = DataUtils.getOntologyList();
-                if (ontology_list == null)
-                  System.out.println("??????????? ontology_list == null");
+                if (ontology_list == null) System.out.println("??????????? ontology_list == null");
                 int num_vocabularies = ontology_list.size();
-                String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+
+//KLO 010610                
+//String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+
+String ontologiesToSearchOn = (String) request.getSession().getAttribute("defaultOntologiesToSearchOnStr");
+if (ontologiesToSearchOn == null) {
+	ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
+}
 
                 HashMap display_name_hmap = null;
                 Vector display_name_vec = null;
@@ -230,6 +246,7 @@
     request.getSession().removeAttribute("dictionary");
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().removeAttribute("matchText");
+    request.getSession().putValue("visited","true");
 %>
 <br/>
 </body>
