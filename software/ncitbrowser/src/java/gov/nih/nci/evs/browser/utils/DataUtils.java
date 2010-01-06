@@ -169,6 +169,8 @@ public class DataUtils {
 
     public static Vector nonConcept2ConceptAssociations = null;
 
+    public static String defaultOntologiesToSearchOnStr = null;
+
     // ==================================================================================
 
     public DataUtils() {
@@ -179,6 +181,22 @@ public class DataUtils {
         if (_ontologies == null)
             setCodingSchemeMap();
         return _ontologies;
+    }
+
+
+    public static String getDefaultOntologiesToSearchOnStr() {
+        if (_ontologies == null)
+            setCodingSchemeMap();
+
+        defaultOntologiesToSearchOnStr = "|";
+	    for (int i = 0; i < _ontologies.size(); i++) {
+			SelectItem item = (SelectItem) _ontologies.get(i);
+			String value = (String) item.getValue();
+			if (value.indexOf("Metathesaurus") == -1) {
+				defaultOntologiesToSearchOnStr = defaultOntologiesToSearchOnStr + value + "|";
+			}
+		}
+        return defaultOntologiesToSearchOnStr;
     }
 
 
