@@ -678,8 +678,8 @@ public class UserSessionBean extends Object {
 				request.getSession().removeAttribute("ontologiesToSearchOn");
 
 
-String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
-request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntologiesToSearchOnStr);
+//String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
+request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 
 				return "multiple_search";
 			} else {
@@ -768,8 +768,8 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 				request.getSession().setAttribute("hide_ontology_list", "true");
 	            request.getSession().removeAttribute("ontologiesToSearchOn");
 
-String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
-request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntologiesToSearchOnStr);
+//String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
+request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 
 
 				return "multiple_search";
