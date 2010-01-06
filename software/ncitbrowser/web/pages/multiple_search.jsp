@@ -86,6 +86,9 @@ String ontologiesToSearchOn = (String) request.getSession().getAttribute("defaul
 if (ontologiesToSearchOn == null) {
 	ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
 }
+if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
+   ontologiesToSearchOn = "|";
+} 
 
                 HashMap display_name_hmap = null;
                 Vector display_name_vec = null;
