@@ -612,7 +612,6 @@ public class UserSessionBean extends Object {
 
    public String multipleSearchAction() {
 
-
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		String scheme = (String) request.getParameter("scheme");
 		String version = (String) request.getParameter("version");
@@ -626,19 +625,9 @@ public class UserSessionBean extends Object {
 			}
 			licenseBean.addLicenseAgreement(scheme);
 			request.getSession().setAttribute("licenseBean", licenseBean);
-			//request.getSession().removeAttribute("scheme");
-			//request.getSession().removeAttribute("version");
 		}
 
-String matchText = (String) request.getParameter("matchText");
-/*
-String calledFromLicense = (String) request.getParameter("calledFromLicense");
-if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
-	matchText = (String) request.getSession().getAttribute("matchText");
-} else {
-	matchText = (String) request.getParameter("matchText");
-}
-*/
+		String matchText = (String) request.getParameter("matchText");
 
         if (matchText != null) {
 			matchText = matchText.trim();
@@ -687,6 +676,11 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
 				request.getSession().setAttribute("warning", message);
 				request.getSession().setAttribute("message", message);
 				request.getSession().removeAttribute("ontologiesToSearchOn");
+
+
+String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
+request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntologiesToSearchOnStr);
+
 				return "multiple_search";
 			} else {
 				ontologiesToSearchOn = new ArrayList<String>();
@@ -773,6 +767,11 @@ if (calledFromLicense != null && calledFromLicense.compareTo("true") == 0) {
 				request.getSession().setAttribute("message", message);
 				request.getSession().setAttribute("hide_ontology_list", "true");
 	            request.getSession().removeAttribute("ontologiesToSearchOn");
+
+String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
+request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntologiesToSearchOnStr);
+
+
 				return "multiple_search";
 			}
         }
