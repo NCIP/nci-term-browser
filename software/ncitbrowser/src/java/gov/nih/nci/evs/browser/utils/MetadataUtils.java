@@ -327,8 +327,10 @@ public class MetadataUtils {
     public static String getMetadataValue(String codingSchemeName, String version,
         String urn, String propertyName) {
         Vector v = getMetadataValues(codingSchemeName, version, urn, propertyName);
-        if (v == null)
+        if (v == null) {
+			System.out.println("getMetadataValue returns null??? " + codingSchemeName);
             return "";
+		}
         int n = v.size();
         if (n <= 0)
             return "";
