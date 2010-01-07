@@ -27,9 +27,10 @@ String html_compatable_description_value = DataUtils.getMetadataValue(Constants.
 String contextPath = request.getContextPath();
 if (html_compatable_description_value == null) {
     html_compatable_description_value = "WARNING: html_compatable_description metadata element not found.";
+} else {
+    html_compatable_description_value = DataUtils.replaceContextPath(html_compatable_description_value, contextPath);
+    html_compatable_description_value = DataUtils.replaceInnerEvalExpressions(html_compatable_description_value, from_vec, to_vec);
 }
-html_compatable_description_value = DataUtils.replaceContextPath(html_compatable_description_value, contextPath);
-html_compatable_description_value = DataUtils.replaceInnerEvalExpressions(html_compatable_description_value, from_vec, to_vec);
 
 String version_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "version");
 String source_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "source_url");
@@ -47,41 +48,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
   <table border="0">
     <tr>
       <td class="textbody">
-      <%
-        if (html_compatable_description_value == null) {
-      %>  
-
-		NCI Thesaurus (NCIt) provides reference terminology for many NCI and
-		other systems. It covers vocabulary for clinical care, translational
-		and basic research, and public information and administrative activities.
-		<br><br>
-		<b>NCIt features:</b>
-		<ul>
-		  <li>Stable, unique codes for biomedical concepts;
-		  <li>Preferred terms, synonyms, definitions, research codes,
-		    external source codes, and other information;
-		  <li>Links to
-		    <a href="<%=nci_meta_url%>" target="_blank"
-		      alt="NCI Metathesaurus">NCI Metathesaurus</a>
-		    and other information sources;
-		  <li>Over 200,000 cross-links between concepts, providing formal
-		    logic-based definition of many concepts;
-		  <li>Extensive content integrated from NCI and other partners, much
-		    available as separate NCIt
-		    <a href="<%= request.getContextPath() %>/pages/subset.jsf">subsets</a>
-		  <li>Updated frequently by a team of subject matter experts.
-		</ul>
-		NCIt is a widely recognized standard for biomedical coding and reference,
-		used by a broad variety of public and private partners both nationally
-		and internationally.
-        <%
-        } else {
-        %>
-            <%=html_compatable_description_value%>
-        <%    
-        }
-        %>
-        
+        <%=html_compatable_description_value%>
         <%
         if (source_url_value != null) {
         %>

@@ -288,7 +288,6 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 						String displayName = getMetadataValue(formalname, "display_name");
 						displayName2FormalNameHashMap.put(displayName, formalname);
 
-
 						String value = formalname + " (version: " + representsVersion + ")";
 						nv_vec.add(value);
 						csnv2codingSchemeNameMap.put(value, formalname);
@@ -299,8 +298,15 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 						    //  so source_help_info.jsp and term_type_help_info.jsp
 						    //  will show up correctly.
 							Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl, false);
+							System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
 							formalName2MetadataHashMap.put(formalname, metadataProperties);
+						} else {
+							System.out.println("WARNING: MetadataUtils.getMetadataPropertyList returns null??? " + formalname);
+							System.out.println("\t\trepresentsVersion " + representsVersion);
 						}
+				} else {
+					System.out.println("\tWARNING: setCodingSchemeMap discards " + formalname);
+					System.out.println("\t\trepresentsVersion " + representsVersion);
 				}
 			}
 	    } catch (Exception e) {
@@ -323,10 +329,17 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
     }
 
     public static Vector getMetadataValues(String scheme, String propertyName) {
-		if (formalName2MetadataHashMap == null) setCodingSchemeMap();
-		if (!formalName2MetadataHashMap.containsKey(scheme)) return null;
+		if (formalName2MetadataHashMap == null) {
+			setCodingSchemeMap();
+		}
+
+		if (!formalName2MetadataHashMap.containsKey(scheme)) {
+			return null;
+		}
 		Vector metadata = (Vector) formalName2MetadataHashMap.get(scheme);
-		if (metadata == null || metadata.size() == 0) return null;
+		if (metadata == null || metadata.size() == 0) {
+			return null;
+		}
 		Vector v = MetadataUtils.getMetadataValues(metadata, propertyName);
 		return v;
     }
