@@ -3025,6 +3025,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 
    public static String replaceContextPath(String s, String contextPath)
    {
+	   if (s == null || contextPath == null) return s;
 	   String openExp = "<%=";
 	   String closeExp = "%>";
 	   String t = "";
