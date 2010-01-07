@@ -410,10 +410,21 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
       String primitive = null;
       String primitive_prop_name = "primitive";
       String primitive_label = "Defined Fully by Roles:";
-      Vector primitive_value_vec = (Vector) hmap.get(primitive_prop_name);
       
+      //Vector primitive_value_vec = (Vector) hmap.get(primitive_prop_name);
       String vocabulary_format = DataUtils.getMetadataValue(dict, "format");
-    
+      if (vocabulary_format != null && vocabulary_format.indexOf("OWL") != -1) {
+	      Boolean isDefined = curr_concept.getIsDefined();
+	      if (isDefined != null) {
+		  if (isDefined.equals(Boolean.TRUE)) {
+		      primitive = "No";
+		  } else {
+		      primitive = "Yes";
+		  }
+	      }
+      }    
+      // OWL
+      /*
       if (vocabulary_format != null && vocabulary_format.indexOf("OWL") != -1) {
 	      if (primitive_value_vec != null && primitive_value_vec.size() > 0) {
 		primitive = (String) primitive_value_vec.elementAt(0);
@@ -422,7 +433,8 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 		else primitive = "Yes";
 		
 	      }
-      } else if (vocabulary_format != null && vocabulary_format.indexOf("OWL") == -1) { 
+      } 
+      else if (vocabulary_format != null && vocabulary_format.indexOf("OWL") == -1) { 
               primitive_value_vec = (Vector) hmap.get("ISPRIMITIVE");
 	      if (primitive_value_vec != null && primitive_value_vec.size() > 0) {
 		primitive = (String) primitive_value_vec.elementAt(0);
@@ -430,6 +442,7 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 		else primitive = "Yes";
 	      }              
       }
+      */
       
       String kind = "not available";
       String kind_prop_name = "Kind";
