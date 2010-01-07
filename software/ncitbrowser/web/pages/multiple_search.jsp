@@ -95,10 +95,11 @@
              request.getSession().removeAttribute("hide_ontology_list");
              if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
              %>
-            <p class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.
+            <span class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.
             <br/>
             &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow; try NCI Metathesaurus separately.)
-            </p>
+            <br/><br/>
+            </span>
             <table class="termstable" border="0">
             
               <tr>
