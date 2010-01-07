@@ -26,7 +26,7 @@
     
 <%          
 String help_dictionary = (String) request.getSession().getAttribute("dictionary");
-if (help_dictionary == null) {
+if (help_dictionary == null || help_dictionary == "null") {
 %>
    <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
 <%   
