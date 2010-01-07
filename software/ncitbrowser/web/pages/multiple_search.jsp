@@ -56,6 +56,33 @@
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">
+          
+          <table class="termstable" border="0">
+                <tr>
+                  <td><img
+                    src="<%= request.getContextPath() %>/images/selectAll.gif"
+                    name="selectAll" alt="selectAll"
+                    onClick="checkAll(document.searchTerm.ontology_list)" />
+
+                  &nbsp;&nbsp; <img
+                    src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
+                    name="reset" alt="selectAllButNCIm"
+                    onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
+
+                  &nbsp;&nbsp; <img
+                    src="<%= request.getContextPath() %>/images/clear.gif"
+                    name="reset" alt="reset"
+                    onClick="uncheckAll(document.searchTerm.ontology_list)" />
+                    
+                  &nbsp;&nbsp; <h:commandButton id="search" value="Search"
+                    action="#{userSessionBean.multipleSearchAction}"
+                    image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+                    alt="Search">
+                  </h:commandButton></td>
+                </tr>   
+          </table>      
+                
+          
              <%
              String warning_msg = (String) request.getSession().getAttribute("warning");
              if (warning_msg != null) {
@@ -73,6 +100,7 @@
             &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow; try NCI Metathesaurus separately.)
             </p>
             <table class="termstable" border="0">
+            
               <tr>
               <%
                 List ontology_list = DataUtils.getOntologyList();
