@@ -152,6 +152,7 @@ public class DataUtils {
     public String NCITBuildInfo = null;
     public String NCITAppVersion = null;
     public String NCITAnthillBuildTagBuilt = null;
+    public String EVSServiceURL = null;
     public String NCImURL = null;
 
 	public static HashMap namespace2CodingScheme = null;
@@ -161,14 +162,9 @@ public class DataUtils {
 
     public static HashMap formalName2LocalNameHashMap = null;
     public static HashMap localName2FormalNameHashMap = null;
-
     public static HashMap formalName2MetadataHashMap = null;
-
     public static HashMap displayName2FormalNameHashMap = null;
-
-
     public static Vector nonConcept2ConceptAssociations = null;
-
     public static String defaultOntologiesToSearchOnStr = null;
 
     // ==================================================================================
@@ -2231,7 +2227,6 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
         return terminologySubsetDownloadURL;
     }
 
-
     public String getNCITBuildInfo() {
         if (NCITBuildInfo != null) {
             return NCITBuildInfo;
@@ -2311,6 +2306,26 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
         return NCImURL;
     }
 
+    public String getEVSServiceURL() {
+        if (EVSServiceURL != null) {
+            return EVSServiceURL;
+        }
+        String default_info = "Local LexEVS";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            EVSServiceURL = properties
+                    .getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+            if (EVSServiceURL == null) {
+            	EVSServiceURL = default_info;
+            }
+        } catch (Exception ex) {
+			ex.printStackTrace();
+        }
+
+        return EVSServiceURL;
+    }    
+    
     public String getTermSuggestionURL() {
         NCItBrowserProperties properties = null;
         try {
