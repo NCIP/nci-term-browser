@@ -25,6 +25,9 @@ to_vec.add(nci_meta_url);
 String html_compatable_description_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "html_compatable_description");
 
 String contextPath = request.getContextPath();
+if (html_compatable_description_value == null) {
+    html_compatable_description_value = "WARNING: html_compatable_description metadata element not found.";
+}
 html_compatable_description_value = DataUtils.replaceContextPath(html_compatable_description_value, contextPath);
 html_compatable_description_value = DataUtils.replaceInnerEvalExpressions(html_compatable_description_value, from_vec, to_vec);
 
