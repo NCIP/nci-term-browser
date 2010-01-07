@@ -215,6 +215,7 @@
               from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>.
             </td>
           </tr>
+          
           <tr>
             <td class="textbody">
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
@@ -260,9 +261,22 @@
               				</tr>
 		                  <%		      
                       } else {                  
-                      Concept con = DataUtils.getConceptByCode(vocabulary_name, null, null, code);
+                      
+                      //Concept con = DataUtils.getConceptByCode(vocabulary_name, null, null, code);
+                      
+                      Concept con = DataUtils.getConceptWithProperty(vocabulary_name, null, code, "Concept_Status");
+ 
                       if (con != null) {
-                      String con_status = con.getStatus();
+                      
+                      //String con_status = con.getStatus();
+                      
+                      Vector status_vec = DataUtils.getConceptPropertyValues(con, "Concept_Status");
+                      String con_status = null;
+                      if (status_vec == null || status_vec.size() == 0) {
+                          con_status = con.getStatus();
+                      } else {
+                          con_status = DataUtils.convertToCommaSeparatedValue(status_vec);
+                      }
 
                       if (con_status != null) {
                           con_status = con_status.replaceAll("_", " ");
@@ -311,7 +325,6 @@
                           <%
                           } else {
                           %>
-
 
                           <td class="dataCellText">
                           <%

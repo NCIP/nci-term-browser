@@ -2881,6 +2881,107 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 	}
 
 
+    public static Concept getConceptWithProperty(String scheme, String version, String code, String propertyName) {
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null)
+            {
+                System.out.println("lbSvc = null");
+                return null;
+            }
+
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			versionOrTag.setVersion(version);
+
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    new String[] { code }, scheme);
+			CodedNodeSet cns = null;
+
+			try {
+				cns = lbSvc.getCodingSchemeConcepts(scheme,
+						versionOrTag);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
+			cns = cns.restrictToCodes(crefs);
+
+		    try {
+                LocalNameList propertyNames = new LocalNameList();
+                propertyNames.addEntry(propertyName);
+                CodedNodeSet.PropertyType[] propertyTypes = null;
+
+				long ms = System.currentTimeMillis(), delay = 0;
+                SortOptionList sortOptions = null;
+                LocalNameList filterOptions = null;
+                boolean resolveObjects = true; // needs to be set to true
+                int maxToReturn = 1000;
+
+                ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames,
+                    propertyTypes, resolveObjects, maxToReturn);
+
+                System.out.println("resolveToList done");
+                HashMap hmap = new HashMap();
+
+				if (rcrl == null) {
+					System.out.println("Concep not found.");
+					return null;
+				}
+
+				if (rcrl.getResolvedConceptReferenceCount() > 0) {
+					//ResolvedConceptReference[] list = rcrl.getResolvedConceptReference();
+                    for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
+						ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+						System.out.println("(*) " + rcr.getCode());
+						Concept c = rcr.getReferencedEntry();
+						return c;
+					}
+				}
+
+                return null;
+
+			}  catch (Exception e) {
+				System.out.println("Method: SearchUtil.searchByProperties");
+				System.out.println("* ERROR: cns.resolve throws exceptions.");
+				System.out.println("* " + e.getClass().getSimpleName() + ": " +
+					e.getMessage());
+				e.printStackTrace();
+			}
+		} catch (Exception ex) {
+
+		}
+		return null;
+	}
+
+
+    public static Vector getConceptPropertyValues(Concept c, String propertyName) {
+		if (c == null) return null;
+		Vector v = new Vector();
+		Property[] properties = c.getProperty();
+		for (int j=0; j<properties.length; j++) {
+			Property prop = properties[j];
+			if (prop.getPropertyName().compareTo(propertyName) == 0) {
+				v.add(prop.getValue().getContent());
+			}
+		}
+		return v;
+	}
+
+    public static String convertToCommaSeparatedValue(Vector v) {
+		if (v == null) return null;
+		String s = "";
+		if (v.size() == 0) return s;
+		s = (String) v.elementAt(0);
+		for (int i=1; i<v.size(); i++) {
+			String next = (String) v.elementAt(i);
+			s = s + "; " + next;
+		}
+		return s;
+	}
+
+
+
    public static String replaceInnerEvalExpressions(String s, Vector from_vec, Vector to_vec) {
 	   String openExp = "<%=";
 	   String closeExp = "%>";
