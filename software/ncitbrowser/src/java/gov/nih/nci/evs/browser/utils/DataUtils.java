@@ -206,6 +206,7 @@ public class DataUtils {
 
     private static void setCodingSchemeMap()
 	{
+		System.out.println("Initializing ...");
 		codingSchemeHashSet = new HashSet();
         _ontologies = new ArrayList();
         //codingSchemeMap = new HashMap();
@@ -221,6 +222,9 @@ public class DataUtils {
 
         try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			if (lbSvc == null) {
+				System.out.println("WARNING: Unable to connect to instantiate LexBIGService ???");
+			}
             CodingSchemeRenderingList csrl = null;
             try {
 				csrl = lbSvc.getSupportedCodingSchemes();
