@@ -60,9 +60,6 @@ import java.util.Set;
 import java.util.Collections;
 import java.util.Map;
 
-
-import org.json.*;
-
 import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
 import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
 import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
@@ -83,8 +80,13 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.concepts.Presentation;
 
-//import gov.nih.nci.evs.browser.utils.DataUtils;
 
+import org.apache.jcs.access.exception.CacheException;
+import org.json.*;
+import org.lexevs.tree.model.LexEvsTree;
+import org.lexevs.tree.model.LexEvsTreeNode;
+import org.lexevs.tree.service.TreeService;
+import org.lexevs.tree.service.TreeServiceFactory;
 
 public class CacheController
 {
@@ -717,5 +719,73 @@ public class CacheController
 	}
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Tree Extension Code:
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static String getSubConcepts(String codingScheme, CodingSchemeVersionOrTag versionOrTag, String code){
+    	if(!CacheController.instance.containsKey(getSubConceptKey(codingScheme, code))){
+    		System.out.println("SubConcepts Not Found In Cache.");
+    		TreeService treeService = TreeServiceFactory.getInstance()
+				.getTreeService(RemoteServerUtil.createLexBIGService());
+
+    		LexEvsTreeNode node = TreeServiceFactory.getInstance()
+    			.getTreeService(RemoteServerUtil.createLexBIGService())
+    				.getSubConcepts(codingScheme, versionOrTag, code);
+
+    		String json = treeService.getJsonConverter().buildChildrenNodes(node);
+
+    		cache.put(new Element(getSubConceptKey(codingScheme, code),json));
+    		return json;
+    	}
+    	return (String)cache.get(getSubConceptKey(codingScheme, code)).getObjectValue();
+    }
+
+    public static String getTree(String codingScheme, CodingSchemeVersionOrTag versionOrTag, String code){
+    	if(!CacheController.instance.containsKey(getTreeKey(codingScheme, code))){
+    		System.out.println("Tree Not Found In Cache.");
+    		TreeService treeService = TreeServiceFactory.getInstance()
+				.getTreeService(RemoteServerUtil.createLexBIGService());
+
+    		LexEvsTree tree = treeService.getTree(codingScheme, versionOrTag, code);
+
+    		String json = treeService.getJsonConverter().buildJsonPathFromRootTree(tree.getCurrentFocus());
+
+    		cache.put(new Element(getTreeKey(tree),json));
+    		return json;
+    	}
+    	return (String)cache.get(getTreeKey(codingScheme, code)).getObjectValue();
+    }
+
+    public void activeCacheTree(ResolvedConceptReference ref){
+    	System.out.println("Actively caching tree.");
+
+    	String codingScheme = ref.getCodingSchemeName();
+    	String code = ref.getCode();
+
+    	if(!CacheController.instance.containsKey(getTreeKey(codingScheme, code))){
+    		System.out.println("Tree Not Found In Cache.");
+    		TreeService treeService = TreeServiceFactory.getInstance()
+				.getTreeService(RemoteServerUtil.createLexBIGService());
+
+    		LexEvsTree tree = treeService.getTree(codingScheme, null, code);
+
+    		String json = treeService.getJsonConverter().buildJsonPathFromRootTree(tree.getCurrentFocus());
+
+    		cache.put(new Element(getTreeKey(tree),json));
+    	}
+    }
+
+    private static String getTreeKey(LexEvsTree tree){
+    	return getTreeKey(tree.getCodingScheme(), tree.getCurrentFocus().getCode());
+    }
+
+   private static String getSubConceptKey(String codingScheme, String code){
+	   return String.valueOf("SubConcept".hashCode() + codingScheme.hashCode() + code.hashCode());
+   }
+
+   private static String getTreeKey(String codingScheme, String code){
+	   return String.valueOf("Tree".hashCode() + codingScheme.hashCode() + code.hashCode());
+   }
 }
 
