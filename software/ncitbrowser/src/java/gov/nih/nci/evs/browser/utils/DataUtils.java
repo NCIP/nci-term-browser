@@ -68,6 +68,8 @@ import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
 import org.LexGrid.concepts.Entity;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
 import org.LexGrid.LexBIG.DataModel.Collections.MetadataPropertyList;
+import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
+
 
 
 
@@ -227,36 +229,18 @@ public class DataUtils {
 				System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
                 return;
 			}
-
-
 			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
 			for (int i=0; i<csrs.length; i++)
 			{
 				int j = i+1;
 				CodingSchemeRendering csr = csrs[i];
-
 				CodingSchemeSummary css = csr.getCodingSchemeSummary();
 				String formalname = css.getFormalName();
 
 				if (!codingSchemeHashSet.contains(formalname)) {
 					codingSchemeHashSet.add(formalname);
 				}
-/*
 
-				String representsVersion = css.getRepresentsVersion();
-System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
-
-                String locallname = css.getLocalName();
-
-                formalName2LocalNameHashMap.put(formalname, locallname);
-                formalName2LocalNameHashMap.put(locallname, locallname);
-
-                localName2FormalNameHashMap.put(formalname, formalname);
-                localName2FormalNameHashMap.put(locallname, formalname);
-
-                String displayName = getMetadataValue(formalname, "display_name");
-                displayName2FormalNameHashMap.put(displayName, formalname);
-*/
 				Boolean isActive = null;
 				if (csr == null) {
 					System.out.println("\tcsr == null???");
@@ -292,6 +276,23 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 						nv_vec.add(value);
 						csnv2codingSchemeNameMap.put(value, formalname);
 						csnv2VersionMap.put(value, representsVersion);
+
+						//KLO 010810
+						CodingSchemeVersionOrTag vt = new CodingSchemeVersionOrTag();
+						vt.setVersion(representsVersion);
+						CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
+						NameAndValue[] nvList = MetadataUtils.getMetadataProperties(cs);
+						if (cs != null && nvList != null) {
+							Vector metadataProperties = new Vector();
+							for (int k=0; k<nvList.length; k++)
+							{
+								NameAndValue nv = (NameAndValue) nvList[k];
+								metadataProperties.add(nv.getName() + "|" + nv.getContent());
+							}
+							//System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
+							System.out.println("\t" + nvList.length + " MetadataProperties cached for " + formalname);
+							formalName2MetadataHashMap.put(formalname, metadataProperties);
+						/*
 						MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
 						if (mdpl != null) {
 						    //Note: Need to set sorting to false (in the following line)
@@ -300,10 +301,12 @@ System.out.println("(" + j + ") " + formalname + "  version: " + representsVersi
 							Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl, false);
 							System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
 							formalName2MetadataHashMap.put(formalname, metadataProperties);
+						*/
 						} else {
 							System.out.println("WARNING: MetadataUtils.getMetadataPropertyList returns null??? " + formalname);
 							System.out.println("\t\trepresentsVersion " + representsVersion);
 						}
+
 				} else {
 					System.out.println("\tWARNING: setCodingSchemeMap discards " + formalname);
 					System.out.println("\t\trepresentsVersion " + representsVersion);
