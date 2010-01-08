@@ -74,7 +74,7 @@
         </copy>
         <copy todir="${webapp.classes.dir}" flatten="true" includeEmptyDirs="no" filtering="true">
             <filterset>
-                <filter token="lex.evs.api.default.url" value="${lex.evs.api.default.url}"/>
+                <filter token="lex.evs.api.url" value="${lex.evs.api.url}"/>
             </filterset>
             <resources>
                 <file file="${conf.dir}/application-config-client.xml"/>
