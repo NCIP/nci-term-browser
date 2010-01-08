@@ -47,6 +47,12 @@ import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 import static gov.nih.nci.evs.browser.common.Constants.*;
 import gov.nih.nci.evs.browser.utils.DataUtils;
 
+import org.lexevs.tree.json.JsonConverterFactory;
+import org.lexevs.tree.model.LexEvsTree;
+import org.lexevs.tree.model.LexEvsTreeNode;
+import org.lexevs.tree.service.TreeService;
+import org.lexevs.tree.service.TreeServiceFactory;
+
 public final class AjaxServlet extends HttpServlet {
 
 	/**
@@ -154,59 +160,8 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 						+ (System.currentTimeMillis() - ms));
 			}
 		}
+
 /*
-		else if (action.equals("search_tree")) {
-
-			if (node_id != null && ontology_display_name != null) {
-				response.setContentType("text/html");
-				response.setHeader("Cache-Control", "no-cache");
-				JSONObject json = new JSONObject();
-				try {
-					// testing
-					// JSONArray rootsArray =
-					// CacheController.getInstance().getPathsToRoots(ontology_display_name,
-					// null, node_id, true);
-
-					String max_tree_level_str = null;
-					int maxLevel = -1;
-					try {
-						max_tree_level_str = NCItBrowserProperties
-								.getInstance()
-								.getProperty(
-										NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
-						maxLevel = Integer.parseInt(max_tree_level_str);
-
-					} catch (Exception ex) {
-
-					}
-
-					JSONArray rootsArray = CacheController.getInstance()
-							.getPathsToRoots(ontology_display_name, null,
-									node_id, true, maxLevel);
-					if (rootsArray.length() == 0) {
-						rootsArray = CacheController.getInstance()
-								.getRootConcepts(ontology_display_name, null);
-					}
-					json.put("root_nodes", rootsArray);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-
-System.out.println("AjaxServlet.java dumping json.toString() ");
-
-
-				response.getWriter().write(json.toString());
-//KLO
-				response.getWriter().flush();
-
-
-				System.out.println("Run time (milliseconds): "
-						+ (System.currentTimeMillis() - ms));
-				return;
-			}
-		}
-*/
 		else if (action.equals("search_tree")) {
 
 
@@ -253,6 +208,49 @@ System.out.println("AjaxServlet.java dumping json.toString() ");
 							return;
 						}
 					}
+					json.put("root_nodes", rootsArray);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				response.getWriter().write(json.toString());
+				response.getWriter().flush();
+
+				System.out.println("Run time (milliseconds): "
+						+ (System.currentTimeMillis() - ms));
+				return;
+			}
+		}
+*/
+		if (action.equals("search_tree")) {
+
+
+			if (node_id != null && ontology_display_name != null) {
+				response.setContentType("text/html");
+				response.setHeader("Cache-Control", "no-cache");
+				JSONObject json = new JSONObject();
+				try {
+					// testing
+					// JSONArray rootsArray =
+					// CacheController.getInstance().getPathsToRoots(ontology_display_name,
+					// null, node_id, true);
+
+					String max_tree_level_str = null;
+					int maxLevel = -1;
+					try {
+						max_tree_level_str = NCItBrowserProperties
+								.getInstance()
+								.getProperty(
+										NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
+						maxLevel = Integer.parseInt(max_tree_level_str);
+
+					} catch (Exception ex) {
+
+					}
+
+					String jsonString = CacheController.getInstance().getTree(ontology_display_name, null, node_id);
+					JSONArray rootsArray = new JSONArray(jsonString);
+
 					json.put("root_nodes", rootsArray);
 				} catch (Exception e) {
 					e.printStackTrace();
