@@ -284,31 +284,36 @@ public class DataUtils {
 						//KLO 010810
 						CodingSchemeVersionOrTag vt = new CodingSchemeVersionOrTag();
 						vt.setVersion(representsVersion);
-						CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
-						NameAndValue[] nvList = MetadataUtils.getMetadataProperties(cs);
-						if (cs != null && nvList != null) {
-							Vector metadataProperties = new Vector();
-							for (int k=0; k<nvList.length; k++)
-							{
-								NameAndValue nv = (NameAndValue) nvList[k];
-								metadataProperties.add(nv.getName() + "|" + nv.getContent());
+						try {
+							CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
+							NameAndValue[] nvList = MetadataUtils.getMetadataProperties(cs);
+							if (cs != null && nvList != null) {
+								Vector metadataProperties = new Vector();
+								for (int k=0; k<nvList.length; k++)
+								{
+									NameAndValue nv = (NameAndValue) nvList[k];
+									metadataProperties.add(nv.getName() + "|" + nv.getContent());
+								}
+								//System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
+								System.out.println("\t" + nvList.length + " MetadataProperties cached for " + formalname);
+								formalName2MetadataHashMap.put(formalname, metadataProperties);
+
+								//MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
+								//if (mdpl != null) {
+									//Note: Need to set sorting to false (in the following line)
+									//  so source_help_info.jsp and term_type_help_info.jsp
+									//  will show up correctly.
+								//	Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl, false);
+								//	System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
+								//	formalName2MetadataHashMap.put(formalname, metadataProperties);
+
+							} else {
+								System.out.println("WARNING: MetadataUtils.getMetadataPropertyList returns null??? " + formalname);
+								System.out.println("\t\trepresentsVersion " + representsVersion);
 							}
-							//System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
-							System.out.println("\t" + nvList.length + " MetadataProperties cached for " + formalname);
-							formalName2MetadataHashMap.put(formalname, metadataProperties);
-						/*
-						MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
-						if (mdpl != null) {
-						    //Note: Need to set sorting to false (in the following line)
-						    //  so source_help_info.jsp and term_type_help_info.jsp
-						    //  will show up correctly.
-							Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl, false);
-							System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
-							formalName2MetadataHashMap.put(formalname, metadataProperties);
-						*/
-						} else {
-							System.out.println("WARNING: MetadataUtils.getMetadataPropertyList returns null??? " + formalname);
-							System.out.println("\t\trepresentsVersion " + representsVersion);
+						} catch (Exception ex) {
+							System.out.println("\tWARNING: Unable to resolve coding scheme " + formalname + " possibly due to missing security token.");
+							System.out.println("\t\tAccess to " + formalname + " denied.");
 						}
 
 				} else {
