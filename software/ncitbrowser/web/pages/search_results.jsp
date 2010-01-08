@@ -143,7 +143,8 @@ if (iteratorBean == null){
                       code_vec.add(rcr.getConceptCode());
                   }
 
-                  Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);
+                  //Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);
+                  Vector status_vec = DataUtils.getConceptStatusByConceptCodes(search_results_dictionary, null, null, code_vec);
                   int i = -1;
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
