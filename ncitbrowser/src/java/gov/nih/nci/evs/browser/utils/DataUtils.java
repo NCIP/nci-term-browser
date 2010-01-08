@@ -277,13 +277,15 @@ public class DataUtils {
 						displayName2FormalNameHashMap.put(displayName, formalname);
 
 						String value = formalname + " (version: " + representsVersion + ")";
-						nv_vec.add(value);
-						csnv2codingSchemeNameMap.put(value, formalname);
-						csnv2VersionMap.put(value, representsVersion);
+
+						//nv_vec.add(value);
+						//csnv2codingSchemeNameMap.put(value, formalname);
+						//csnv2VersionMap.put(value, representsVersion);
 
 						//KLO 010810
 						CodingSchemeVersionOrTag vt = new CodingSchemeVersionOrTag();
 						vt.setVersion(representsVersion);
+
 						try {
 							CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
 							NameAndValue[] nvList = MetadataUtils.getMetadataProperties(cs);
@@ -306,6 +308,10 @@ public class DataUtils {
 								//	Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl, false);
 								//	System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
 								//	formalName2MetadataHashMap.put(formalname, metadataProperties);
+
+								nv_vec.add(value);
+								csnv2codingSchemeNameMap.put(value, formalname);
+								csnv2VersionMap.put(value, representsVersion);
 
 							} else {
 								System.out.println("WARNING: MetadataUtils.getMetadataPropertyList returns null??? " + formalname);
