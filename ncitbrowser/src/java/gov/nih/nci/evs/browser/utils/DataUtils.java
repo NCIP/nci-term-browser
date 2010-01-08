@@ -2337,8 +2337,8 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
         }
 
         return EVSServiceURL;
-    }    
-    
+    }
+
     public String getTermSuggestionURL() {
         NCItBrowserProperties properties = null;
         try {
@@ -2777,6 +2777,33 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 		return w;
 	}
 
+
+    public static Vector getConceptStatusByConceptCodes(String scheme, String version, String ltag, Vector codes) {
+		Vector w = new Vector();
+		long ms = System.currentTimeMillis();
+		for (int i=0; i<codes.size(); i++) {
+			String code = (String) codes.elementAt(i);
+			Concept c = getConceptWithProperty(scheme, version, code, "Concept_Status");
+			String con_status = null;
+			if (c != null) {
+				Vector status_vec = getConceptPropertyValues(c, "Concept_Status");
+				if (status_vec == null || status_vec.size() == 0) {
+				   con_status = c.getStatus();
+				} else {
+				   con_status = DataUtils.convertToCommaSeparatedValue(status_vec);
+				}
+				w.add(con_status);
+			} else {
+				System.out.println("WARNING: getConceptStatusByConceptCodes returns null on " + scheme + " code: "  + code );
+				w.add(null);
+			}
+		}
+        System.out.println("getConceptStatusByConceptCodes Run time (ms): "
+                    + (System.currentTimeMillis() - ms) + " number of concepts: " + codes.size());
+		return w;
+	}
+
+
     // for HL7 fix
     public static String searchFormalName(String s) {
 		if (formalName2LocalNameHashMap.containsKey(s)) return s;
@@ -2862,7 +2889,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
                 ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames,
                     propertyTypes, resolveObjects, maxToReturn);
 
-                System.out.println("resolveToList done");
+                //System.out.println("resolveToList done");
                 HashMap hmap = new HashMap();
 
 				if (rcrl == null) {
@@ -2874,7 +2901,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 					//ResolvedConceptReference[] list = rcrl.getResolvedConceptReference();
                     for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 						ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
-						System.out.println("(*) " + rcr.getCode());
+						//System.out.println("(*) " + rcr.getCode());
 						Concept c = rcr.getReferencedEntry();
 						if (c == null) {
 							System.out.println("Concept is null.");
