@@ -2567,9 +2567,8 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
                + c.getEntityCode()
                + "\\'>"
                + c.getEntityDescription().getContent()
-               + "</a><br>";
+               + "</a>&nbsp;&nbsp;<br></br>";
             strbuf.append(line);
-
             strbuf.append("</li>");
 		}
 
