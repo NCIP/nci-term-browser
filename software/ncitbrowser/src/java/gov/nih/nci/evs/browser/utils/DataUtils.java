@@ -3006,9 +3006,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
                 ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames,
                     propertyTypes, resolveObjects, maxToReturn);
 
-                System.out.println("resolveToList done");
                 HashMap hmap = new HashMap();
-
 				if (rcrl == null) {
 					System.out.println("Concep not found.");
 					return null;
@@ -3018,7 +3016,6 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 					//ResolvedConceptReference[] list = rcrl.getResolvedConceptReference();
                     for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 						ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
-						System.out.println("(*) " + rcr.getCode());
 						Concept c = rcr.getReferencedEntry();
 						return c;
 					}
