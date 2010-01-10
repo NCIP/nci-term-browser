@@ -162,8 +162,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 	propName_label = dictionary + " Code";
 }
-
-
     
     
     String propName_label2 = propName_label;
@@ -256,6 +254,7 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 
 <table class="datatable">
 <%
+  HashSet hset2 = new HashSet();
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
     String propName_label = (String) properties_to_display_label.elementAt(i);
@@ -264,30 +263,41 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
       Vector value_vec = (Vector) hmap.get(propName);
       value_vec = SortUtils.quickSort(value_vec);
       if (value_vec != null && value_vec.size() > 0) {
-        HashSet hset2 = new HashSet();
+        
         int row=0;
         for (int j=0; j<value_vec.size(); j++) {
           String value = (String) value_vec.elementAt(j);
           int n = value.indexOf("|");
-          if (n != -1) value = value.substring(0, n);
-          String valueLC = value.toLowerCase();
-          if (hset2.contains(valueLC))
-            continue;
-          hset2.add(valueLC);
-          if ((row++) % 2 == 0) {
-            %>
-              <tr class="dataRowDark">
-            <%
-          } else {
-            %>
-              <tr class="dataRowLight">
-            <%
+          //if (n != -1) value = value.substring(0, n);
+          
+          if (n != -1) {
+             Vector value_v = DataUtils.parseData(value, "|");
+             value = (String) value_v.elementAt(0);
           }
-            %>
-                <td><%=value%></td>
-              </tr>
-            <%
-        }
+         
+          //String valueLC = value.toLowerCase();
+          //if (hset2.contains(valueLC))
+          //  continue;
+          //hset2.add(valueLC);
+          
+          if (!hset2.contains(value)) {
+              System.out.println(value);
+              hset2.add(value);
+		  if ((row++) % 2 == 0) {
+		    %>
+		      <tr class="dataRowDark">
+		    <%
+		  } else {
+		    %>
+		      <tr class="dataRowLight">
+		    <%
+		  }
+		    %>
+			<td><%=value%></td>
+		      </tr>
+		    <%
+		 }
+         }
       }
     }
   }
