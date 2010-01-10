@@ -241,7 +241,6 @@ public class DataUtils {
 				CodingSchemeSummary css = csr.getCodingSchemeSummary();
 				String formalname = css.getFormalName();
 
-
 				Boolean isActive = null;
 				if (csr == null) {
 					System.out.println("\tcsr == null???");
@@ -261,8 +260,6 @@ public class DataUtils {
 				if ((includeInactive && isActive == null) || (isActive != null && isActive.equals(Boolean.TRUE))
 				     || (includeInactive && (isActive != null && isActive.equals(Boolean.FALSE))))
 				{
-
-
 						//nv_vec.add(value);
 						//csnv2codingSchemeNameMap.put(value, formalname);
 						//csnv2VersionMap.put(value, representsVersion);
@@ -306,12 +303,12 @@ public class DataUtils {
 								formalName2MetadataHashMap.put(formalname, metadataProperties);
 
 
-						String displayName = getMetadataValue(formalname, "display_name");
-						System.out.println("\tdisplay_name: " + displayName);
-						displayName2FormalNameHashMap.put(displayName, formalname);
+								String displayName = getMetadataValue(formalname, "display_name");
+								System.out.println("\tdisplay_name: " + displayName);
+								displayName2FormalNameHashMap.put(displayName, formalname);
 
-						String term_browser_version = getMetadataValue(formalname, "term_browser_version");
-						System.out.println("\tterm_browser_version: " + term_browser_version);
+								String term_browser_version = getMetadataValue(formalname, "term_browser_version");
+								System.out.println("\tterm_browser_version: " + term_browser_version);
 
 								//MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
 								//if (mdpl != null) {
@@ -323,8 +320,11 @@ public class DataUtils {
 								//	formalName2MetadataHashMap.put(formalname, metadataProperties);
 
 								nv_vec.add(value);
+								System.out.println("\tformal name: " + formalname);
 								csnv2codingSchemeNameMap.put(value, formalname);
+
 								csnv2VersionMap.put(value, representsVersion);
+								System.out.println("\trepresentsVersion: " + representsVersion);
 
 							} else {
 								System.out.println("WARNING: MetadataUtils.getMetadataPropertyList returns null??? " + formalname);
