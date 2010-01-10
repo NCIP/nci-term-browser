@@ -302,7 +302,6 @@ public class DataUtils {
 								System.out.println("\t" + nvList.length + " MetadataProperties cached for " + formalname);
 								formalName2MetadataHashMap.put(formalname, metadataProperties);
 
-
 								String displayName = getMetadataValue(formalname, "display_name");
 								System.out.println("\tdisplay_name: " + displayName);
 								displayName2FormalNameHashMap.put(displayName, formalname);
