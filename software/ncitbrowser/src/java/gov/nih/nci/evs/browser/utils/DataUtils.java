@@ -241,9 +241,6 @@ public class DataUtils {
 				CodingSchemeSummary css = csr.getCodingSchemeSummary();
 				String formalname = css.getFormalName();
 
-				if (!codingSchemeHashSet.contains(formalname)) {
-					codingSchemeHashSet.add(formalname);
-				}
 
 				Boolean isActive = null;
 				if (csr == null) {
@@ -257,26 +254,14 @@ public class DataUtils {
 					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
 				}
 
-				System.out.println("\tActive? " + isActive);
 				String representsVersion = css.getRepresentsVersion();
 				System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
+				System.out.println("\tActive? " + isActive);
 
 				if ((includeInactive && isActive == null) || (isActive != null && isActive.equals(Boolean.TRUE))
 				     || (includeInactive && (isActive != null && isActive.equals(Boolean.FALSE))))
 				{
 
-						String locallname = css.getLocalName();
-
-						formalName2LocalNameHashMap.put(formalname, locallname);
-						formalName2LocalNameHashMap.put(locallname, locallname);
-
-						localName2FormalNameHashMap.put(formalname, formalname);
-						localName2FormalNameHashMap.put(locallname, formalname);
-
-						String displayName = getMetadataValue(formalname, "display_name");
-						displayName2FormalNameHashMap.put(displayName, formalname);
-
-						String value = formalname + " (version: " + representsVersion + ")";
 
 						//nv_vec.add(value);
 						//csnv2codingSchemeNameMap.put(value, formalname);
@@ -290,6 +275,26 @@ public class DataUtils {
 							CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
 							NameAndValue[] nvList = MetadataUtils.getMetadataProperties(cs);
 							if (cs != null && nvList != null) {
+
+						String locallname = css.getLocalName();
+						String value = formalname + " (version: " + representsVersion + ")";
+						System.out.println("\tformalname & verson: " + value);
+
+
+						if (!codingSchemeHashSet.contains(formalname)) {
+							codingSchemeHashSet.add(formalname);
+						}
+
+						formalName2LocalNameHashMap.put(formalname, locallname);
+						formalName2LocalNameHashMap.put(locallname, locallname);
+
+						localName2FormalNameHashMap.put(formalname, formalname);
+						localName2FormalNameHashMap.put(locallname, formalname);
+
+//						String displayName = getMetadataValue(formalname, "display_name");
+//						System.out.println("\tdisplay_name: " + displayName);
+//						displayName2FormalNameHashMap.put(displayName, formalname);
+
 								Vector metadataProperties = new Vector();
 								for (int k=0; k<nvList.length; k++)
 								{
@@ -299,6 +304,14 @@ public class DataUtils {
 								//System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
 								System.out.println("\t" + nvList.length + " MetadataProperties cached for " + formalname);
 								formalName2MetadataHashMap.put(formalname, metadataProperties);
+
+
+						String displayName = getMetadataValue(formalname, "display_name");
+						System.out.println("\tdisplay_name: " + displayName);
+						displayName2FormalNameHashMap.put(displayName, formalname);
+
+						String term_browser_version = getMetadataValue(formalname, "term_browser_version");
+						System.out.println("\tterm_browser_version: " + term_browser_version);
 
 								//MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
 								//if (mdpl != null) {
