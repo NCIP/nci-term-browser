@@ -67,7 +67,14 @@
             <!-- form name="searchTerm" method="post" class="search-form-main-area" --> 
             <div class="searchbox">
               <div class="search-form">  
-              <input CLASS="searchbox-input" name="matchText" type="text" value="<%=match_text%>" />
+              <input CLASS="searchbox-input" 
+                name="matchText" 
+                type="text" 
+                value="<%=match_text%>"
+                onFocus="active = true"
+                onBlur="active = false"
+                onkeypress="return submitEnter('search',event)" 
+              />
               <h:commandButton
                 id="search"
                 value="Search"
