@@ -37,12 +37,12 @@
       %> | <a href="#"
       onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=hdr_dictionary0%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
     View Hierarchy </a> <%
-      if (menubar_dictionary != null && menubar_dictionary.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
+      if (hdr_dictionary0 != null && hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
       %> | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
     <%
       }
       %> | <a href="<%= request.getContextPath() %>/pages/help.jsf">Help</a>
-    </td>
+    </td>    
     <td align="right">
     <%
       Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
