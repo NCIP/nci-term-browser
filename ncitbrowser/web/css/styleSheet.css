@@ -121,6 +121,7 @@ h3
  background-image: url(../images/evs_browser_other_term_logo.gif);
  background-repeat: no-repeat;
  text-decoration: none;
+ cursor: pointer;
 }
 
 .vocabularynameshort
