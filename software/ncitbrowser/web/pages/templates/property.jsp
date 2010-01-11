@@ -281,7 +281,6 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
           //hset2.add(valueLC);
           
           if (!hset2.contains(value)) {
-              System.out.println(value);
               hset2.add(value);
 		  if ((row++) % 2 == 0) {
 		    %>
