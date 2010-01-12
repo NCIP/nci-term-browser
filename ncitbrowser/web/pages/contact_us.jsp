@@ -39,7 +39,7 @@
 String contact_dictionary = (String) request.getSession().getAttribute("dictionary");
 if (contact_dictionary == null) {
 %>
-   <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+   <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
 <%   
 }
 else if (contact_dictionary.compareTo("NCI Thesaurus") == 0) {
