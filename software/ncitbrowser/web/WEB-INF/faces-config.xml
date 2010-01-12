@@ -49,14 +49,14 @@
     </navigation-case>
 
     <navigation-case>
-       <description>Search</description>
+       <description>search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
 
     <navigation-case>
-       <description>Search</description>
+       <description>single_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>single_search_results</from-outcome>
        <to-view-id>/pages/single_search_results.jsp</to-view-id>
@@ -69,6 +69,14 @@
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
 
+    <navigation-case>
+       <description>error_message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+    
+    
     <navigation-case>
        <description>contact_us_message</description>
        <from-action>#{userSessionBean.contactUs}</from-action>

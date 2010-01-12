@@ -4,6 +4,7 @@
 <div class="bannerarea">
 <%
         String hdr_dictionary = (String) request.getSession().getAttribute("dictionary");
+       
         if (hdr_dictionary == null || hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
 <div class="banner"><a href="<%=basePath%>"><img

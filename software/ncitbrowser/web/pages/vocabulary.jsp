@@ -62,11 +62,14 @@
 
         String dictionary = null;
         if (scheme == null) {
-          scheme = (String) request.getAttribute("scheme");
+          //scheme = (String) request.getAttribute("scheme");
+            scheme = (String) request.getSession().getAttribute("scheme");
         }
         String version = (String) request.getParameter("version");
         if (version == null) {
-            version = (String) request.getAttribute("version");
+            //version = (String) request.getAttribute("version");
+            version = (String) request.getSession().getAttribute("version");
+            
         }
 
         String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
@@ -85,7 +88,11 @@
             version = version.replaceAll("%20", " ");
           }
         }
+        
+        
+        System.out.println("(**) dictionary.jsp setAttribute dictionary : " + scheme);
         request.getSession().setAttribute("dictionary", scheme);
+        
         menubar_scheme = scheme;
         menubar_version = version;
         menubar_scheme0 = menubar_scheme;
@@ -179,15 +186,16 @@
               <p>If and only if you agree to these terms and conditions, click the
               Accept button to proceed.</p>
               <p>
-              <form><h:commandButton id="accept" value="Accept"
+              <form>
+                <h:commandButton id="accept" value="Accept"
                 action="#{userSessionBean.acceptLicenseAgreement}"
                 image="#{facesContext.externalContext.requestContextPath}/images/accept.gif"
                 alt="Accept">
               </h:commandButton> &nbsp;&nbsp; <img
                 src="<%=request.getContextPath()%>/images/cancel.gif" name="cancel"
-                alt="reset" onClick="history.back()" /> <input type="hidden"
-                id="dictionary" name="dictionary" value="<%=scheme%>" /> <input
-                type="hidden" id="version" name="version" value="<%=version%>" /></form>
+                alt="reset" onClick="history.back()" /> 
+                <input type="hidden" id="dictionary" name="dictionary" value="<%=scheme%>" /> 
+                <input type="hidden" id="version" name="version" value="<%=version%>" /></form>
               </p>
               <%@ include file="/pages/templates/nciFooter.html" %>
             </div>
