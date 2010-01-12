@@ -95,8 +95,8 @@
       request.setAttribute("version", version);
     }
     if (dictionary != null) {
-      dictionary = dictionary.replaceAll("%20", " ");
-      request.setAttribute("dictionary", dictionary);
+        dictionary = dictionary.replaceAll("%20", " ");
+        request.setAttribute("dictionary", dictionary);
     }
   %>
   <!-- Thesaurus, banner search area -->

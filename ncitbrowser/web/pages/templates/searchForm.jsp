@@ -3,6 +3,13 @@
   <%
     String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
     String vocab_name = (String) request.getParameter("dictionary");
+
+if ( vocab_name == null) {
+    vocab_name = (String) request.getSession().getAttribute("dictionary");
+}
+
+System.out.println("(***) searchForm vocab_name: " + vocab_name);    
+    
     vocab_name = DataUtils.getCodingSchemeName(vocab_name);
 
     if (match_text == null) match_text = "";
@@ -66,6 +73,7 @@
   if (vocab_name != null) {
   %>
     <input type="hidden" id="vocabulary" name="vocabulary" value="<%=vocab_name%>" />
+    <input type="hidden" id="scheme" name="scheme" value="<%=vocab_name%>" />
   <%
   }
   %>

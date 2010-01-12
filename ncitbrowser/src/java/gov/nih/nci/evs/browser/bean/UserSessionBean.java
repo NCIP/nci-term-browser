@@ -129,6 +129,7 @@ public class UserSessionBean extends Object {
             String message = "Please enter a search string.";
             request.getSession().setAttribute("message", message);
             request.getSession().removeAttribute("matchText");
+
             return "message";
         }
         request.getSession().setAttribute("matchText", matchText);
@@ -141,6 +142,18 @@ public class UserSessionBean extends Object {
 
         boolean ranking = true;
 
+        String scheme = request.getParameter("scheme");
+        String searchaction_dictionary = request.getParameter("dictionary");
+
+        if (scheme == null) {
+            scheme = (String) request.getAttribute("scheme");
+        }
+        if (scheme == null) {
+            scheme = (String) request.getParameter("dictionary");
+        }
+        if (scheme == null) {
+			scheme = Constants.CODING_SCHEME_NAME;
+		}
         request.getSession().setAttribute("ranking", Boolean.toString(ranking));
         String source = (String) request.getParameter("source");
         if (source == null) {
@@ -158,17 +171,6 @@ public class UserSessionBean extends Object {
             } catch (Exception e) {
             }
         }
-
-        String scheme = request.getParameter("scheme");
-        if (scheme == null) {
-            scheme = (String) request.getAttribute("scheme");
-        }
-
-        if (scheme == null) {
-            scheme = (String) request.getParameter("dictionary");
-        }
-
-        if (scheme == null) scheme = Constants.CODING_SCHEME_NAME;
 
 		Vector schemes = new Vector();
 		schemes.add(scheme);
@@ -263,20 +265,6 @@ public class UserSessionBean extends Object {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-
-/*
-
-            IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
-                .getSessionMap().get("iteratorBean");
-
-            if (iteratorBean == null) {
-                iteratorBean = new IteratorBean(iterator);
-                FacesContext.getCurrentInstance().getExternalContext()
-                   .getSessionMap().put("iteratorBean", iteratorBean);
-            } else {
-                iteratorBean.setIterator(iterator);
-            }
-*/
             int size = iteratorBean.getSize();
             if (size > 1) {
                 request.getSession().setAttribute("search_results", v);
@@ -298,6 +286,8 @@ public class UserSessionBean extends Object {
                 if (ref == null) {
                     String msg = "Error: Null ResolvedConceptReference encountered.";
                     request.getSession().setAttribute("message", msg);
+
+                    request.getSession().setAttribute("dictionary", scheme);
                     return "message";
 
                 } else {
@@ -320,6 +310,9 @@ public class UserSessionBean extends Object {
 							System.out.println("WARNING: " + message);
 							request.getSession().setAttribute("message", message);
 							request.getSession().setAttribute("dictionary", scheme);
+
+							System.out.println("(*) searchAction setAttribute scheme " + scheme);
+
 							return "message";
 					    }
                     } else {
@@ -330,17 +323,6 @@ public class UserSessionBean extends Object {
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
-                /*
-                if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI%20Thesaurus") == 0) {
-                   return "concept_details";
-
-                } else if (scheme.indexOf("NCI Thesaurus") != -1 || scheme.indexOf("NCI%20Thesaurus") != -1 ) {
-                    return "concept_details";
-
-                } else {
-                    return "concept_details_other_term";
-                }
-                */
                 return "concept_details";
             }
         }
