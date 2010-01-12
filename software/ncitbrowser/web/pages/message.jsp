@@ -26,6 +26,7 @@
         <%
         //String msg_dictionary = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("dictionary"));
         String msg_dictionary = (String) request.getSession().getAttribute("dictionary");
+        
         if (msg_dictionary == null) {
         %>
           <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
