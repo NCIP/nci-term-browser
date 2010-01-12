@@ -7,8 +7,6 @@
 if ( vocab_name == null) {
     vocab_name = (String) request.getSession().getAttribute("dictionary");
 }
-
-System.out.println("(***) searchForm vocab_name: " + vocab_name);    
     
     vocab_name = DataUtils.getCodingSchemeName(vocab_name);
 
