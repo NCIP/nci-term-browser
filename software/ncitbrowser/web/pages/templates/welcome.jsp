@@ -15,8 +15,8 @@
     <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version_value %></div></td>
   </tr></table>
   <hr/>
-  
-<% 
+
+<%
 Vector from_vec = new Vector();
 Vector to_vec = new Vector();
 from_vec.add("ncim_url");
@@ -53,30 +53,30 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         if (source_url_value != null) {
         %>
             <p>
-            Source Home Page: 
+            Source Home Page:
               <a href="<%=source_url_value%>" target="_blank"><%=source_url_value%></a>
             </p>
-        <%    
+        <%
         }
 
         if (download_url_value != null) {
         %>
             <p>
-            Download: 
+            Download:
               <a href="<%=download_url_value%>" target="_blank"><%=download_url_value%></a>
             </p>
-        <%    
-        }       
-      
+        <%
+        }
+
         if (cabig_vkc_index_url_value != null) {
         %>
             <p>
             caBIG VKC Link:
               <a href="<%=cabig_vkc_index_url_value%>" target="_blank"><%=cabig_vkc_index_url_value%></a>
             </p>
-        <%    
-        }         
-          
+        <%
+        }
+
         if (license_statement_value != null) {
         %>
             <p>
@@ -85,10 +85,10 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         <%
         }
         %>
-        
+
       </td>
-      
-      
+
+
       <td valign="top">
         <table border="0">
           <tr valign="top">
@@ -133,7 +133,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
             <td class="textbody" valign="top">
               <a href="<%= request.getContextPath() %>/start.jsf" alt="NCI Term Browser">
                 NCI Term Browser</a>:
-              NCI and other terminologies in an integrated ontology environment.
+              NCI and other terminologies in an integrated environment.
             </td>
           </tr>
           <tr valign="top">
