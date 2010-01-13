@@ -14,8 +14,8 @@
     <!-- <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version_value %></div></td> -->
   </tr></table>
   <hr/>
-  
-<% 
+
+<%
 String html_compatable_description_value = DataUtils.getMetadataValue(scheme, "html_compatable_description");
 String version_value = DataUtils.getMetadataValue(scheme, "term_browser_version");
 if (version_value == null) version_value = DataUtils.getMetadataValue(scheme, "version");
@@ -37,33 +37,33 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
       <td class="textbody" width="388px" valign="top" align="left">
       <%
         if (html_compatable_description_value == null) {
-      %>  
+      %>
             <%=scheme%>
         <%
         } else {
         %>
             <%=html_compatable_description_value%>
-        <%    
+        <%
         }
         %>
-        
+
         <%
         if (source_url_value != null) {
         %>
             <p>
-            Source Home Page: 
+            Source Home Page:
               <a href="<%=source_url_value%>" target="_blank"><%=source_url_value%></a>
             </p>
-        <%    
+        <%
         }
 
         if (download_url_value != null) {
         %>
             <p>
-            Download: 
+            Download:
               <a href="<%=download_url_value%>" target="_blank"><%=download_url_value%></a>
             </p>
-        <%    
+        <%
         }
 
         if (cabig_vkc_index_url_value != null) {
@@ -72,9 +72,9 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
             caBIG VKC Link:
               <a href="<%=cabig_vkc_index_url_value%>" target="_blank"><%=cabig_vkc_index_url_value%></a>
             </p>
-        <%    
-        }       
-        
+        <%
+        }
+
         if (license_statement_value != null) {
         %>
             <p>
@@ -83,10 +83,10 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         <%
         }
         %>
-        
+
       </td>
-      
-      
+
+
       <td valign="top" align="right">
         <table border="0">
           <tr valign="top">
@@ -131,7 +131,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
             <td class="textbody" valign="top">
               <a href="<%= request.getContextPath() %>/start.jsf" alt="NCI Term Browser">
                 NCI Term Browser</a>:
-              NCI and other terminologies in an integrated ontology environment.
+              NCI and other terminologies in an integrated environment.
             </td>
           </tr>
           <tr valign="top">
