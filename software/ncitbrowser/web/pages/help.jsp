@@ -12,7 +12,7 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<body>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
@@ -31,9 +31,7 @@
 String help_dictionary = (String) request.getSession().getAttribute("dictionary");
 if (help_dictionary == null || help_dictionary == "null") {
 %>
-
    <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
-
 <%   
 }
 else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
@@ -46,7 +44,6 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
 <%   
 }
 %>
-
       <!-- Page content -->
       <div class="pagecontent">
         <!-- ======================================= -->
@@ -64,9 +61,9 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
           <A HREF="#additionalinfo">Additional Information</A>
         </p>
         <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="introduction">Introduction</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
           <b>NCI Term Browser</b> provides a consistent, user-friendly tool to 
           browse and search all of the biomedical terminologies hosted 
@@ -83,7 +80,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
           in this browser reflects this concept-based view of terminology. 
           For information on other EVS browsers, file formats, and computer 
           application access, see the 
-          <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS web site</a>. 
+          <a href="http://evs.nci.nih.gov/" target="_blank">EVS web site</a>. 
         </p>
         <p class="textbody">
           <b>Get in touch</b> to get help or offer suggestions using the 
@@ -96,16 +93,16 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
           are used for describing search and the browser interface: 
           
           <ul>
-            <li><b>Bold</b>: Browser links, buttons, page tabs, and drop-down boxes. 
-            <li><font face="courier">Fixed Width</font>: Search strings. 
-            <li><i>Italics</i>: Concept terms. 
+            <li><b>Bold</b>: Browser links, buttons, page tabs, and drop-down boxes.</li> 
+            <li><font face="courier">Fixed Width</font>: Search strings.</li> 
+            <li><i>Italics</i>: Concept terms.</li>
           </ul>
         </p>
 
         <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="sources">Sources</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
             The NCI Term Browser home page lists alphabetically the 
             terminology sources that are available.  Click on a source 
@@ -126,9 +123,9 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
         </p>
 
         <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="searchhelp">Search</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
 
           <b>The Search box</b>, in the upper right corner of most browser 
@@ -233,9 +230,9 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
         </p>
 
         <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="conceptdetails">Concept Details</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
           Detailed information on the selected concept is grouped
             and shown on several related pages: 
@@ -269,9 +266,9 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
         </p>
 
         <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="viewhierarchy">View Hierarchy</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
           Click on the <b>View Hierarchy</b> link, at the top of 
           pages for sources that support it, to bring up a separate
@@ -289,9 +286,9 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
         </p>
 
         <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="otherlinks">Other Links</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
           Several other browser links appear in the upper parts of
             pages to which they apply:
@@ -319,9 +316,9 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
         </p>
 
         <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="knownissues">Known Issues</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
           This browser addresses many of the issues identified in the
           NCIt Browser on which it is based. We are still working on
@@ -346,32 +343,31 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <li><b>Documentation</b>: Online and standalone documentation
               are still under development.</li>
             <li>For the latest updates of known issues, 
-              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+1.0+Release+Notes" target="_blank" alt="NCI Thesaurus Browser 1.0 Release Notes"> see NCI Term Browser 1.0 Release Notes</a>.</li>
+              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+1.0+Release+Notes" target="_blank"> see NCI Term Browser 1.0 Release Notes</a>.</li>
           </ul>
           Please report any bugs or suggestions using the browser's
           <a href="<%= contactUsUrl %>">Contact Us</a> page.
         </p>
 
         <p class="textbody">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="additionalinfo">Additional Information</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></td>
+            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
           Additional information about EVS can be found on the
-          <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">EVS Web</a> and
-          <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank" alt="EVS Wiki sites">EVS Wiki sites</a>.
+          <a href="http://evs.nci.nih.gov/" target="_blank">EVS Web</a> and
+          <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank">EVS Wiki sites</a>.
           Several journal articles describe some aspects in greater detail; these are listed in the 
-          <a href="http://evs.nci.nih.gov/aboutEVS" target="_blank" alt="About EVS">About EVS</a>
+          <a href="http://evs.nci.nih.gov/aboutEVS" target="_blank">About EVS</a>
           page on the EVS Web site. 
         </p>
         <br>
         <%@ include file="/pages/templates/nciFooter.html" %>
-      </div>
-      <!-- end Page content -->
-    </div>
+      </div> <!-- end pagecontent -->
+    </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
-  </div>
+  </div> <!-- end center-page -->
 </f:view>
 </body>
 </html>
