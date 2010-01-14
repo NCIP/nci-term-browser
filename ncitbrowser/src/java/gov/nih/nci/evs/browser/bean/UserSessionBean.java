@@ -842,7 +842,13 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
         boolean designationOnly = false;
         ResolvedConceptReferencesIterator iterator = null;
         if (searchTarget.compareTo("names") == 0) {
-       	    iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+			long ms = System.currentTimeMillis();
+			long delay = 0;
+			System.out.println("Calling SearchUtils().searchByName " + matchText);
+            iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+			delay = System.currentTimeMillis() - ms;
+			System.out.println("searchByName delay (millisec.): " + delay);
+
 		} else if (searchTarget.compareTo("properties") == 0) {
             iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
 		} else if (searchTarget.compareTo("relationships") == 0) {
@@ -923,6 +929,8 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 				request.getSession().setAttribute("page_string", "1");
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
 				//route to multiple_search_results.jsp
+
+				System.out.println("Start to render search_results ... ");
 				return "search_results";
 			}
         }
