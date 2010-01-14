@@ -96,13 +96,15 @@
               if (code == null) {
                 Concept con = (Concept) request.getSession().getAttribute(
                     "concept");
+                    
                 if (con != null) {
                   code = con.getEntityCode();
+                  
                   request.getSession().setAttribute("code", code);
 
                 } else {
-                  code = (String) request.getSession().getAttribute(
-                      "code");
+                  code = (String) request.getSession().getAttribute("code");
+                 
                 }
                 if (code == null) {
                   System.out
@@ -163,7 +165,7 @@
               String ltag = null;
 
               c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-
+              
               if (c != null) {
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("code", code);

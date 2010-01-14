@@ -1299,7 +1299,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
     }
 
 
-	public ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
+	public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
 		LexBIGService lbs = RemoteServerUtil.createLexBIGService();
 		Vector v = new Vector();
 		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -1343,6 +1343,79 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		}
         return iterator;
 	}
+
+
+	public static Concept matchConceptByCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
+		ResolvedConceptReferencesIterator iterator = matchConceptCode(scheme, version, matchText, source, matchAlgorithm);
+		if (iterator == null) return null;
+		try {
+			while(iterator.hasNext()){
+				ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
+				for(ResolvedConceptReference ref : refs){
+					return ref.getReferencedEntry();
+				}
+			}
+		}  catch (Exception e) {
+			System.out.println("Method: SearchUtil.matchConceptByCode");
+			System.out.println("* ERROR: cns.resolve throws exceptions.");
+			System.out.println("* " + e.getClass().getSimpleName() + ": " +
+				e.getMessage());
+		}
+		return null;
+	}
+
+		/*
+		LexBIGService lbs = RemoteServerUtil.createLexBIGService();
+		Vector v = new Vector();
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) versionOrTag.setVersion(version);
+		CodedNodeSet cns = null;
+		ResolvedConceptReferencesIterator iterator = null;
+		try {
+			cns = lbs.getNodeSet(scheme, versionOrTag, null);
+			if (source != null) cns = restrictToSource(cns, source);
+			CodedNodeSet.PropertyType[] propertyTypes = null;
+			LocalNameList sourceList = null;
+			LocalNameList contextList = null;
+			NameAndValueList qualifierList = null;
+			cns = cns.restrictToMatchingProperties(ConvenienceMethods.createLocalNameList(new String[]{"conceptCode"}),
+					  propertyTypes, sourceList, contextList,
+					  qualifierList,matchText, matchAlgorithm, null);
+
+            LocalNameList restrictToProperties = new LocalNameList();
+            SortOptionList sortCriteria = null;
+            try {
+                boolean resolveConcepts = true;
+                try {
+					long ms = System.currentTimeMillis(), delay = 0;
+                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+				    while(iterator.hasNext()){
+						ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
+						for(ResolvedConceptReference ref : refs){
+							return ref.getReferencedEntry();
+						}
+					}
+
+                }  catch (Exception e) {
+                    System.out.println("Method: SearchUtil.matchConceptByCode");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+
+		} catch (Exception ex) {
+			System.out.println("WARNING: searchByCode throws exception.");
+		}
+        return null;
+
+	}
+	*/
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
