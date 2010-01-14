@@ -1120,6 +1120,13 @@ public class SearchUtils {
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 
+long ms = System.currentTimeMillis(), delay = 0;
+long tnow = System.currentTimeMillis();
+long total_delay = 0;
+boolean debug_flag = false;
+
+if (debug_flag) System.out.println("Entering SearchUtils searchByName ...");
+
 		boolean preprocess = true;
         if (matchText == null || matchText.length() == 0)
         {
@@ -1150,9 +1157,13 @@ public class SearchUtils {
 
 			Vector cns_vec = new Vector();
 			for (int i=0; i<schemes.size(); i++) {
+
+
 				cns = null;
 				iterator = null;
 				scheme = (String) schemes.elementAt(i);
+
+ms = System.currentTimeMillis();
 
 				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 				version = (String) versions.elementAt(i);
@@ -1180,10 +1191,24 @@ public class SearchUtils {
 				if (cns != null) {
 					cns_vec.add(cns);
 				}
+
+delay = System.currentTimeMillis() - ms;
+if (debug_flag) System.out.println("Restricting CNS on " + scheme + " delay (millisec.): " + delay);
+if (debug_flag) System.out.flush();
+
 			}
 
 			iterator = null;
+ms = System.currentTimeMillis();
 			cns = union(cns_vec);
+delay = System.currentTimeMillis() - ms;
+if (debug_flag) System.out.println("CNS union " + "delay (millisec.): " + delay);
+
+
+delay = System.currentTimeMillis() - ms;
+if (debug_flag) System.out.println("Restricting CNS on " + scheme + " delay (millisec.): " + delay);
+
+
 			if (cns == null) return null;
 
             LocalNameList restrictToProperties = new LocalNameList();
@@ -1194,7 +1219,7 @@ public class SearchUtils {
             SortOptionList sortCriteria = null;
 
 		    if (ranking){
-				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
+				sortCriteria = null;//Constructors.createSortOptionList(new String[]{"matchToQuery"});
 
             } else {
                 sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
@@ -1203,8 +1228,13 @@ public class SearchUtils {
 			}
             try {
                try {
-					long ms = System.currentTimeMillis(), delay = 0;
+ms = System.currentTimeMillis();
+if (debug_flag) System.out.println("Calling  cns.resolve to resolve the union CNS ... ");
                     iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+
+delay = System.currentTimeMillis() - ms;
+if (debug_flag) System.out.println("Resolve CNS union " + "delay (millisec.): " + delay);
+
 					//Debug.println("cns.resolve delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms) + " -- matchAlgorithm " + matchAlgorithm);
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
@@ -1230,11 +1260,13 @@ public class SearchUtils {
 		if (iterator != null) {
 			try {
 				iterator_size = iterator.numberRemaining();
+				System.out.println("Number of matches: " + iterator_size);
 			} catch (Exception ex) {
 
 			}
 	    }
 
+ms = System.currentTimeMillis();
         while (iterator_size == 0 && lcv < schemes.size()) {
 			scheme = (String) schemes.elementAt(lcv);
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -1245,12 +1277,21 @@ public class SearchUtils {
 			if (iterator != null) {
 				try {
 					iterator_size = iterator.numberRemaining();
+					System.out.println("Number of matches: " + iterator_size);
 				} catch (Exception ex) {
 
 				}
 			}
 			lcv++;
 		}
+
+delay = System.currentTimeMillis() - ms;
+if (debug_flag) System.out.println("Match concept code " + "delay (millisec.): " + delay);
+
+total_delay = System.currentTimeMillis() - tnow;
+System.out.println("Total search delay: (millisec.): " + total_delay);
+
+
         return iterator;
     }
 

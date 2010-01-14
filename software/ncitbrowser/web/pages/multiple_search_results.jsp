@@ -32,6 +32,9 @@
       <!-- Main box -->
       <div id="main-area">
  <%
+
+long ms = System.currentTimeMillis(), delay = 0;
+ 
      //String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
      //  .cleanXSS((String) request.getSession().getAttribute("matchText"));
      String match_text = (String) request.getSession().getAttribute("matchText"); 
@@ -380,7 +383,19 @@
     <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div> <!-- end center-page -->
+  
+<%
+
+delay = System.currentTimeMillis() - ms;
+System.out.println("Total page rendering delay (millisec.): " + delay);
+
+%>
+
+  
 </f:view>
+
+
+
 <br/>
 </body>
 </html>

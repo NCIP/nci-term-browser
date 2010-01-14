@@ -2546,6 +2546,33 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
     }
 
 
+/*
+To convert a string to the URL-encoded form suitable for transmission as a query string (or, generally speaking, as part of a URL),
+use the escape function. This function works as follows: digits, Latin letters and the characters + - * / . _ @ remain unchanged;
+all other characters in the original string are replaced by escape-sequences %XX, where XX is the ASCII code of the original character. Example:
+escape("It's me!") // result: It%27s%20me%21
+*/
+
+   public static String htmlEntityEncode( String s )
+   {
+       StringBuilder buf = new StringBuilder(s.length());
+       for ( int i = 0; i < s.length(); i++ )
+       {
+           char c = s.charAt( i );
+           if ( c>='a' && c<='z' || c>='A' && c<='Z' || c>='0' && c<='9' )
+           {
+               buf.append( c );
+           }
+           else
+           {
+               buf.append("&#").append((int)c).append(";");
+           }
+       }
+       return buf.toString();
+   }
+
+
+
     public static String getVisitedConceptLink(String scheme, Vector concept_vec) {
 		StringBuffer strbuf = new StringBuffer();
 		String line = "<A href=\"#\" onmouseover=\"Tip('";
@@ -2560,13 +2587,15 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 
 			strbuf.append("<li>");
 
+            String name = c.getEntityDescription().getContent();
+            name = htmlEntityEncode(name);
             line =
                "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
                + scheme
                + "&code="
                + c.getEntityCode()
                + "\\'>"
-               + c.getEntityDescription().getContent()
+               + name
                + "</a>&nbsp;&nbsp;<br></br>";
             strbuf.append(line);
             strbuf.append("</li>");
@@ -2605,6 +2634,7 @@ if (associationName.compareTo("domain") == 0 || associationName.compareTo("range
 			String vocabulary_name = getMetadataValue(formalName, "display_name");
 			String code = (String) w.elementAt(1);
 			String name = (String) w.elementAt(2);
+			name = name = htmlEntityEncode(name);
             strbuf.append("<li>");
             line =
                "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
