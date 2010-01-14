@@ -618,79 +618,7 @@ public class DataUtils {
 
     public static Concept getConceptByCode(String codingSchemeName,
             String vers, String ltag, String code) {
-        try {
-			if (code == null) {
-				System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
-				return null;
-			}
-			if (code.indexOf("@") != -1) return null; // anonymous class
-
-			String formalname = (String) localName2FormalNameHashMap.get(codingSchemeName);
-
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
-            if (lbSvc == null) {
-                System.out.println("lbSvc == null???");
-                return null;
-            }
-            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-            if (vers != null) versionOrTag.setVersion(vers);
-
-            ConceptReferenceList crefs = createConceptReferenceList(
-                    new String[] { code }, codingSchemeName);
-
-            CodedNodeSet cns = null;
-            try {
-				try {
-					cns = lbSvc.getCodingSchemeConcepts(codingSchemeName,
-							versionOrTag);
-				} catch (Exception e) {
-					cns = lbSvc.getCodingSchemeConcepts(formalname,
-							versionOrTag);
-				}
-
-                if (cns == null) {
-					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
-					return null;
-				}
-
-                cns = cns.restrictToCodes(crefs);
-                //ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
- 				ResolvedConceptReferenceList matches = null;
-				try {
-					matches = cns.resolveToList(null, null, null, 1);
-				} catch (Exception e) {
-					System.out.println("cns.resolveToList failed???");
-				}
-
-                if (matches == null) {
-                    System.out.println("Concept not found.");
-                    return null;
-                }
-                int count = matches.getResolvedConceptReferenceCount();
-                // Analyze the result ...
-                if (count == 0)
-                    return null;
-                if (count > 0) {
-                    try {
-                        ResolvedConceptReference ref = (ResolvedConceptReference) matches
-                                .enumerateResolvedConceptReference()
-                                .nextElement();
-                        Concept entry = ref.getReferencedEntry();
-                        return entry;
-                    } catch (Exception ex1) {
-                        System.out.println("Exception entry == null");
-                        return null;
-                    }
-                }
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        return null;
+		return SearchUtils.matchConceptByCode(codingSchemeName, vers, code, null, "LuceneQuery");
     }
 
     public static NameAndValueList createNameAndValueList(String[] names,
@@ -2853,7 +2781,7 @@ escape("It's me!") // result: It%27s%20me%21
 				}
 				w.add(con_status);
 			} else {
-				System.out.println("WARNING: getConceptStatusByConceptCodes returns null on " + scheme + " code: "  + code );
+				//System.out.println("WARNING: getConceptStatusByConceptCodes returns null on " + scheme + " code: "  + code );
 				w.add(null);
 			}
 		}

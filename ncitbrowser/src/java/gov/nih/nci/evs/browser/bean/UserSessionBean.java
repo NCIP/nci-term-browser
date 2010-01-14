@@ -256,7 +256,6 @@ public class UserSessionBean extends Object {
         request.getSession().removeAttribute("type");
 
         if (iterator != null) {
-
 			request.getSession().setAttribute("key", key);
 
 			int numberRemaining = 0;
@@ -310,9 +309,6 @@ public class UserSessionBean extends Object {
 							System.out.println("WARNING: " + message);
 							request.getSession().setAttribute("message", message);
 							request.getSession().setAttribute("dictionary", scheme);
-
-							System.out.println("(*) searchAction setAttribute scheme " + scheme);
-
 							return "message";
 					    }
                     } else {
