@@ -1199,6 +1199,7 @@ if (debug_flag) System.out.flush();
 			}
 
 			iterator = null;
+/*
 ms = System.currentTimeMillis();
 			cns = union(cns_vec);
 delay = System.currentTimeMillis() - ms;
@@ -1210,6 +1211,7 @@ if (debug_flag) System.out.println("Restricting CNS on " + scheme + " delay (mil
 
 
 			if (cns == null) return null;
+*/
 
             LocalNameList restrictToProperties = new LocalNameList();
             //boolean resolveConcepts = true;
@@ -1230,7 +1232,8 @@ if (debug_flag) System.out.println("Restricting CNS on " + scheme + " delay (mil
                try {
 ms = System.currentTimeMillis();
 if (debug_flag) System.out.println("Calling  cns.resolve to resolve the union CNS ... ");
-                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    iterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
 delay = System.currentTimeMillis() - ms;
 if (debug_flag) System.out.println("Resolve CNS union " + "delay (millisec.): " + delay);
@@ -2476,8 +2479,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			}
 
 			iterator = null;
+			/*
 			cns = union(cns_vec);
 			if (cns == null) return null;
+			*/
 
             LocalNameList restrictToProperties = null;//new LocalNameList();
             boolean resolveConcepts = false;
@@ -2493,7 +2498,8 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             try {
                try {
 					long ms = System.currentTimeMillis(), delay = 0;
-                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    iterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
                 }  catch (Exception e) {
                     System.out.println("Method: SearchUtil.searchByProperties");
@@ -2687,8 +2693,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			}
 
 			iterator = null;
+			/*
 			cns = union(cns_vec);
 			if (cns == null) return null;
+			*/
 
             LocalNameList restrictToProperties = null;//new LocalNameList();
             //boolean resolveConcepts = true;
@@ -2710,7 +2718,8 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             try {
                try {
 					long ms = System.currentTimeMillis(), delay = 0;
-                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    iterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
                     // testing, KLO (work-around) failed
                     // iterator = filterOutAnonymousClasses(cns, iterator);
