@@ -294,7 +294,7 @@ public class MetadataUtils {
 	public static Vector getMetadataNameValuePairs(MetadataPropertyList mdpl){
 	    return getMetadataNameValuePairs(mdpl, true);
 	}
-
+	
 	public static Vector getMetadataValues(Vector metadata, String propertyName){
 		if (metadata == null) return null;
 		Vector w = new Vector();
@@ -408,6 +408,7 @@ public class MetadataUtils {
 	public static NameAndValue[] getMetadataProperties(CodingScheme cs)
 	{
         String formalName = cs.getFormalName();
+        String version = cs.getRepresentsVersion();
 		Vector<NameAndValue> v = new Vector<NameAndValue>();
 		try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -418,7 +419,8 @@ public class MetadataUtils {
 			{
 				AbsoluteCodingSchemeVersionReference acsvr = acdvra[i];
 				String urn = acsvr.getCodingSchemeURN();
-				if (urn.equals(formalName))
+				String ver = acsvr.getCodingSchemeVersion();
+				if (urn.equals(formalName) && ver.equals(version))
 				{
 					//100807 KLO
 					svc = svc.restrictToCodingScheme(acsvr);
