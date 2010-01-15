@@ -350,6 +350,23 @@
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
+       <DisplayItem>
+            <propertyName>Entry Term</propertyName>
+            <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+       
+       <DisplayItem>
+            <propertyName>Hierarchical Name</propertyName>
+            <itemLabel>Hierarchical Name</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+       
+       
     </DisplayItems>
 
     <ConfigurableItems>
