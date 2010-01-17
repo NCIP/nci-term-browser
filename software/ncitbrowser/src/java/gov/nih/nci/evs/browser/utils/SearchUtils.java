@@ -2765,8 +2765,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 							if (cns != null) {
 //KLO, testing
                                 cns = filterOutAnonymousClasses(lbSvc, scheme, cns);
-
-								cns_vec.add(cns);
+                                if (cns != null) {
+									cns_vec.add(cns);
+								}
 							}
 
 						} catch (Exception ex) {
@@ -2780,6 +2781,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			}
 
 			iterator = null;
+			if (cns_vec.size() == 0) return null;
 			/*
 			cns = union(cns_vec);
 			if (cns == null) return null;
@@ -2865,7 +2867,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 						codeList.addConceptReference(ref);
 						knt_concept++;
 					} else {
-						System.out.println("name: " + ref.getEntityDescription().getContent());
+						//System.out.println("name: " + ref.getEntityDescription().getContent());
 					}
 				}
 			}
@@ -2916,10 +2918,11 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 						codeList.addConceptReference(ref);
 						knt_concept++;
 					} else {
-						System.out.println("name: " + ref.getEntityDescription().getContent());
+						//System.out.println("name: " + ref.getEntityDescription().getContent());
 					}
 				}
 			}
+			if (knt_concept == 0) return null;
 
 			//System.out.println("(**) Number of concepts: " + knt_concept);
 
