@@ -170,11 +170,16 @@ public class IteratorBean extends Object {
 					lastResolved++;
 					this.list.set(lastResolved, ref);
 				}
+
+				System.out.println("Advancing iterator: " + lastResolved);
+
 				dt = System.currentTimeMillis() - ms;
 				ms = System.currentTimeMillis();
 				total_delay = total_delay + dt;
 				if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
 					timeout = true;
+
+					System.out.println("Time out at: " + lastResolved);
 					break;
 				}
 			}
