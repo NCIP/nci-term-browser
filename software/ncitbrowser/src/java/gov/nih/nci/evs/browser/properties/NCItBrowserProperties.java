@@ -72,6 +72,9 @@ public class NCItBrowserProperties {
         public static final String TERM_SUGGESTION_APPLICATION_URL= "TERM_SUGGESTION_APPLICATION_URL";
         public static final String LICENSE_PAGE_OPTION= "LICENSE_PAGE_OPTION";
 
+        public static final String PAGINATION_TIME_OUT= "PAGINATION_TIME_OUT";
+
+
         private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
         private static NCItBrowserProperties NCItBrowserProperties = null;
         private static Properties properties = new Properties();
@@ -90,6 +93,7 @@ public class NCItBrowserProperties {
 
         private static String license_page_option = null;
         private static String ncim_url = null;
+        private static int    pagination_time_out = 4;
 
         /**
          * Private constructor for singleton pattern.
@@ -132,6 +136,11 @@ public class NCItBrowserProperties {
                         term_suggestion_application_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
                         license_page_option = NCItBrowserProperties.getProperty(NCItBrowserProperties.LICENSE_PAGE_OPTION);
                         ncim_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCIM_URL);
+
+                        String pagination_time_out_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.PAGINATION_TIME_OUT);
+                        if (pagination_time_out_str != null) {
+                        	pagination_time_out = Integer.parseInt(pagination_time_out_str);
+					    }
                     }
                 }
             }
@@ -198,4 +207,8 @@ public class NCItBrowserProperties {
         public static String getNCIM_URL() {
             return ncim_url;
         }
+        public static int getPaginationTimeOut() {
+            return pagination_time_out;
+        }
+
     }
