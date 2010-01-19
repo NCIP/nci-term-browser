@@ -2975,7 +2975,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		return propertyNames;
     }
 
-
+/*
     public static Concept getConceptByCode_ICD(String codingSchemeName, String vers, String ltag, String code) {
         try {
 			if (code == null) {
@@ -3050,4 +3050,5 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         }
         return null;
     }
+*/
 }
