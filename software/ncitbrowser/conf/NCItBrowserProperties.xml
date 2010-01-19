@@ -357,7 +357,7 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
+
        <DisplayItem>
             <propertyName>Hierarchical Name</propertyName>
             <itemLabel>Hierarchical Name</itemLabel>
@@ -365,8 +365,8 @@
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-       
-       
+
+
     </DisplayItems>
 
     <ConfigurableItems>
@@ -452,9 +452,9 @@
 
         <ConfigurableItem>
                  <key>PAGINATION_TIME_OUT</key>
-                 <value>@pagination_time_out@<</value>
+                 <value>@pagination_time_out@</value>
         </ConfigurableItem>
-        
+
     </ConfigurableItems>
 
     <MetadataElements>
