@@ -13,7 +13,7 @@ IteratorBeanManager iteratorBeanMgr = (IteratorBeanManager) FacesContext.getCurr
 
 IteratorBean itrBean = iteratorBeanMgr.getIteratorBean(search_key);
 boolean page_timeout = false;
-if (iteratorBean != null) {
+if (itrBean != null) {
     page_timeout = itrBean.getTimeout();
 }
 if (!page_timeout) { 
