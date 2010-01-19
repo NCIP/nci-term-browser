@@ -292,6 +292,7 @@
             <filter token="term.suggestion.application.url" value="${term.suggestion.application.url}"/>
             <!-- Begin security token parameters -->
             <filter token="license_page_option" value="${license_page_option}"/>
+            <filter token="pagination_time_out" value="${pagination_time_out}"/>
             <filter token="meddra_security_token" value="${meddra_security_token}"/>
             <!-- End security token parameters -->
             <filter token="application.base.path" value="${application.base.path}"/>
