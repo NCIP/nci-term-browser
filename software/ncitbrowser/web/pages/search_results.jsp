@@ -90,15 +90,16 @@ if (iteratorBean == null){
           {
               page_size = Integer.parseInt(selectedResultsPerPage);
           }
+          
           int iend = page_num * page_size;
           int istart = iend - page_size;
+          iend = iend-1;
           int size = iteratorBean.getSize();
-
-          if (iend > size) iend = size;
+          if (iend > size-1) iend = size-1;
           int num_pages = size / page_size;
           if (num_pages * page_size < size) num_pages++;
           String istart_str = Integer.toString(istart+1);
-          String iend_str = Integer.toString(iend);
+          String iend_str = Integer.toString(iend+1);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
 

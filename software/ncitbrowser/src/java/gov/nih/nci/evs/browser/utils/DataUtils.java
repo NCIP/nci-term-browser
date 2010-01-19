@@ -2781,7 +2781,6 @@ escape("It's me!") // result: It%27s%20me%21
 				}
 				w.add(con_status);
 			} else {
-				//System.out.println("WARNING: getConceptStatusByConceptCodes returns null on " + scheme + " code: "  + code );
 				w.add(null);
 			}
 		}
