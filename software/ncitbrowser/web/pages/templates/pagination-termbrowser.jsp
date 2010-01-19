@@ -1,40 +1,8 @@
-<%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
-<%@ page import="gov.nih.nci.evs.browser.bean.IteratorBeanManager" %>
-
-
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/multiple_search_results.jsf?" >
   <table>
     <tr>
       <td class="textbody" align=left>
-      
-
-
-<%    
-String search_key = (String) request.getSession().getAttribute("key");
-IteratorBeanManager iteratorBeanMgr = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
-.getSessionMap().get("iteratorBeanManager");
-
-boolean page_timeout = false;
-IteratorBean itrBean = iteratorBeanMgr.getIteratorBean(search_key);
-if (itrBean != null) {
-	
-        page_timeout = itrBean.getTimeout();
-}
-	
-        if (!page_timeout) { 
-	%>
-	       <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%></b>
-	<%        
-	} else {
-	%>
-	       <b>Results</b>
-	<%
-	}
-
-%>
-
-  
-      
+        <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%></b>
       </td>
       <td>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
