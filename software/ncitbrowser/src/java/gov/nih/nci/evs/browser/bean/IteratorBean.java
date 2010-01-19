@@ -171,6 +171,7 @@ public class IteratorBean extends Object {
 					this.list.set(lastResolved, ref);
 				}
 				dt = System.currentTimeMillis() - ms;
+				ms = System.currentTimeMillis();
 				total_delay = total_delay + dt;
 				if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
 					timeout = true;
