@@ -1,8 +1,32 @@
+<%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.IteratorBeanManager" %>
+
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/search_results.jsf?" >
   <table>
     <tr>
       <td class="textbody" align=left>
-        <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%></b>
+    
+<%    
+String search_key = (String) request.getSession().getAttribute("key");
+IteratorBeanManager iteratorBeanMgr = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+.getSessionMap().get("iteratorBeanManager");
+
+IteratorBean itrBean = iteratorBeanMgr.getIteratorBean(search_key);
+boolean page_timeout = false;
+if (iteratorBean != null) {
+    page_timeout = itrBean.getTimeout();
+}
+if (!page_timeout) { 
+%>
+       <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%></b>
+<%        
+} else {
+%>
+       <b>Results</b>
+<%
+}
+%>
+        
       </td>
       <td>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

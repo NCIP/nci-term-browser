@@ -9,6 +9,7 @@ import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.concepts.Concept;
 
 import gov.nih.nci.evs.browser.common.Constants;
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -58,6 +59,7 @@ public class IteratorBean extends Object {
     int maxReturn = 100;
 
     String key = null;
+    boolean timeout = false;
 
 	public IteratorBean(ResolvedConceptReferencesIterator iterator) {
 		this.iterator = iterator;
@@ -85,6 +87,10 @@ public class IteratorBean extends Object {
 
     public ResolvedConceptReferencesIterator getIterator() {
 		return this.iterator;
+	}
+
+	public boolean getTimeout() {
+		return timeout;
 	}
 
 	public void initialize() {
@@ -126,6 +132,10 @@ public class IteratorBean extends Object {
 		return this.pageSize;
 	}
 
+	public int getLastResolved() {
+		return this.lastResolved;
+	}
+
 	public int getStartIndex(int pageNumber) {
 		startIndex = (pageNumber-1) * pageSize;
 		if (startIndex < 0) startIndex = 0;
@@ -148,14 +158,23 @@ public class IteratorBean extends Object {
 
 
 	public List getData(int idx1, int idx2) {
-		System.out.println("getData from: " + idx1 + " to: " + idx2);
+		System.out.println("Retrieving data (from: " + idx1 + " to: " + idx2 + ")");
 		long ms = System.currentTimeMillis();
+		long dt = 0;
+		long total_delay = 0;
+		timeout = false;
         try {
 			while(iterator != null && iterator.hasNext() && lastResolved < idx2) {
 				ResolvedConceptReference[] refs = iterator.next(maxReturn).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs) {
 					lastResolved++;
 					this.list.set(lastResolved, ref);
+				}
+				dt = System.currentTimeMillis() - ms;
+				total_delay = total_delay + dt;
+				if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+					timeout = true;
+					break;
 				}
 			}
 		} catch (Exception ex) {
@@ -166,6 +185,7 @@ public class IteratorBean extends Object {
 		for (int i=idx1; i<=idx2; i++) {
 			ResolvedConceptReference rcr = (ResolvedConceptReference) this.list.get(i);
 			rcr_list.add(rcr);
+			if (i > lastResolved) break;
 		}
 
 		System.out.println("getData Run time (ms): "

@@ -65,9 +65,9 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
                 
           IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
           
-if (iteratorBean == null){
-    System.out.println("iteratorBean NOT FOUND???" + key);  
-}
+	  if (iteratorBean == null){
+	    System.out.println("iteratorBean NOT FOUND???" + key);  
+	  }
 
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
@@ -103,6 +103,14 @@ if (iteratorBean == null){
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
 
+	  List list = iteratorBean.getData(istart, iend);
+	  boolean timeout = iteratorBean.getTimeout();
+	  if (timeout) {
+		  %>
+		  <p class="textbodyred">WARNING: System times out. Please advance fewer pages at one time.</p>
+		  <%
+	  } else {
+                  
         %>
 
         <table width="700px">
@@ -136,8 +144,7 @@ if (iteratorBean == null){
             <td class="textbody">
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <%
-
-                  List list = iteratorBean.getData(istart, iend);
+                  
                   Vector code_vec = new Vector();
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
@@ -214,6 +221,12 @@ if (iteratorBean == null){
             </td>
           </tr>
         </table>
+        
+               <%
+               }
+               %>
+               
+               
         <%@ include file="/pages/templates/pagination.jsp" %>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
