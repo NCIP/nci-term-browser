@@ -18,33 +18,34 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <%
-  // Determine which sub app the message or error came from in order to 
-  //   display the correct banner. 
-  
-  String dictionary = (String) request.getSession().getAttribute("dictionary");  
+  // Determine which sub app the message or error came from in order to
+  //   display the correct banner.
+
+  String dictionary = (String) request.getSession().getAttribute("dictionary");
   String display_name = null;
-  final int TB=0, NCIT=1, NCIO=2;    
+  final int TB=0, NCIT=1, NCIO=2;
   int subApp = TB;
   String version = null;
-  
-  if (dictionary != null) {  	
+
+  if (dictionary != null) {
     display_name = DataUtils.getFormalName(dictionary);
-  	version = DataUtils.getMetadataValue(display_name, "term_browser_version");
+    version = DataUtils.getMetadataValue(display_name, "term_browser_version");
     if (display_name == null) subApp = TB;
-    else if (dictionary == "NCI Thesaurus")
-    	subApp = NCIT;
+    else if (dictionary == "NCI Thesaurus" || dictionary == "NCI_Thesaurus")
+      subApp = NCIT;
     else
       subApp = NCIO;
   }
 %>
 <body>
+<!-- dictionary = <%=dictionary%> -->
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-      <div class="bannerarea">      
+      <div class="bannerarea">
         <% if (subApp == TB) {%>
           <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" alt="NCI Term Browser" border="0"/></a></div>
         <% } else if (subApp == NCIO) { %>
@@ -53,10 +54,10 @@
               <div class="vocabularynameshort"><%=dictionary%></div>
               <div class="vocabularynamelong">Version: <%=version%></div>
             </div>
-          </a>     
+          </a>
         <% } else { %>
           <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="97" alt="Thesaurus Browser Logo" border="0"/></a></div>
-        <% } %>      
+        <% } %>
       </div> <!-- end bannerarea -->
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
