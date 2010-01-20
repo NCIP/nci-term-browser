@@ -285,21 +285,7 @@ long ms = System.currentTimeMillis(), delay = 0;
 		                  <%		      
                       } else {                  
                       
-                      //Concept con = DataUtils.getConceptByCode(vocabulary_name, null, null, code);
-                      
-                      Concept con = DataUtils.getConceptWithProperty(vocabulary_name, null, code, "Concept_Status");
- 
-                      if (con != null) {
-                      
-                      //String con_status = con.getStatus();
-                      
-                      Vector status_vec = DataUtils.getConceptPropertyValues(con, "Concept_Status");
-                      String con_status = null;
-                      if (status_vec == null || status_vec.size() == 0) {
-                          con_status = con.getStatus();
-                      } else {
-                          con_status = DataUtils.convertToCommaSeparatedValue(status_vec);
-                      }
+                      String con_status = DataUtils.getConceptStatus(vocabulary_name, null, null, code);
 
                       if (con_status != null) {
                           con_status = con_status.replaceAll("_", " ");
@@ -380,7 +366,6 @@ long ms = System.currentTimeMillis(), delay = 0;
                       <%
                           }
                       }
-                  }
                   }
                 %>
               </table>
