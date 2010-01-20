@@ -169,6 +169,8 @@ public class DataUtils {
     public static Vector nonConcept2ConceptAssociations = null;
     public static String defaultOntologiesToSearchOnStr = null;
 
+    public static HashSet vocabulariesWithConceptStatusHashSet = null;
+
     // ==================================================================================
 
     public DataUtils() {
@@ -204,6 +206,7 @@ public class DataUtils {
 	}
 
 
+//static Vector<String> getPropertyNameListData(
     private static void setCodingSchemeMap()
 	{
 		System.out.println("Initializing ...");
@@ -216,6 +219,7 @@ public class DataUtils {
         localName2FormalNameHashMap = new HashMap();
         formalName2MetadataHashMap = new HashMap();
         displayName2FormalNameHashMap = new HashMap();
+        vocabulariesWithConceptStatusHashSet = new HashSet();
 
         Vector nv_vec = new Vector();
 		boolean includeInactive = false;
@@ -273,24 +277,30 @@ public class DataUtils {
 							NameAndValue[] nvList = MetadataUtils.getMetadataProperties(cs);
 							if (cs != null && nvList != null) {
 
-						String locallname = css.getLocalName();
-						String value = formalname + " (version: " + representsVersion + ")";
-						System.out.println("\tformalname & verson: " + value);
+								String locallname = css.getLocalName();
+								String value = formalname + " (version: " + representsVersion + ")";
+								System.out.println("\tformalname & verson: " + value);
 
 
-						if (!codingSchemeHashSet.contains(formalname)) {
-							codingSchemeHashSet.add(formalname);
-						}
+                                Vector<String> propertyNames = getPropertyNameListData(formalname, representsVersion);
+                                if (propertyNames.contains("Concept_Status")) {
+									vocabulariesWithConceptStatusHashSet.add(formalname);
+									System.out.println("\tConcept_Status property supported.");
+								}
 
-						formalName2LocalNameHashMap.put(formalname, locallname);
-						formalName2LocalNameHashMap.put(locallname, locallname);
+								if (!codingSchemeHashSet.contains(formalname)) {
+									codingSchemeHashSet.add(formalname);
+								}
 
-						localName2FormalNameHashMap.put(formalname, formalname);
-						localName2FormalNameHashMap.put(locallname, formalname);
+								formalName2LocalNameHashMap.put(formalname, locallname);
+								formalName2LocalNameHashMap.put(locallname, locallname);
 
-//						String displayName = getMetadataValue(formalname, "display_name");
-//						System.out.println("\tdisplay_name: " + displayName);
-//						displayName2FormalNameHashMap.put(displayName, formalname);
+								localName2FormalNameHashMap.put(formalname, formalname);
+								localName2FormalNameHashMap.put(locallname, formalname);
+
+	//						String displayName = getMetadataValue(formalname, "display_name");
+	//						System.out.println("\tdisplay_name: " + displayName);
+	//						displayName2FormalNameHashMap.put(displayName, formalname);
 
 								Vector metadataProperties = new Vector();
 								for (int k=0; k<nvList.length; k++)
@@ -2747,15 +2757,22 @@ escape("It's me!") // result: It%27s%20me%21
 
 
     public static Vector getStatusByConceptCodes(String scheme, String version, String ltag, Vector codes) {
+		boolean conceptStatusSupported = false;
+		if (vocabulariesWithConceptStatusHashSet.contains(scheme)) conceptStatusSupported = true;
+
 		Vector w = new Vector();
 		long ms = System.currentTimeMillis();
 		for (int i=0; i<codes.size(); i++) {
-			String code = (String) codes.elementAt(i);
-			Concept c = getConceptByCode(scheme, version, ltag, code);
-			if (c != null) {
-				w.add(c.getStatus());
-			} else {
-				System.out.println("WARNING: getStatusByConceptCode returns null on " + scheme + " code: "  + code );
+			if (conceptStatusSupported) {
+				String code = (String) codes.elementAt(i);
+				Concept c = getConceptByCode(scheme, version, ltag, code);
+				if (c != null) {
+					w.add(c.getStatus());
+				} else {
+					System.out.println("WARNING: getStatusByConceptCode returns null on " + scheme + " code: "  + code );
+					w.add(null);
+				}
+		    } else {
 				w.add(null);
 			}
 		}
@@ -2765,24 +2782,51 @@ escape("It's me!") // result: It%27s%20me%21
 	}
 
 
+    public static String getConceptStatus(String scheme, String version, String ltag, String code) {
+		boolean conceptStatusSupported = false;
+		if (vocabulariesWithConceptStatusHashSet.contains(scheme)) conceptStatusSupported = true;
+		if (!conceptStatusSupported) return null;
+
+    	Concept c = getConceptWithProperty(scheme, version, code, "Concept_Status");
+		String con_status = null;
+		if (c != null) {
+			Vector status_vec = getConceptPropertyValues(c, "Concept_Status");
+			if (status_vec == null || status_vec.size() == 0) {
+			   con_status = c.getStatus();
+			} else {
+			   con_status = DataUtils.convertToCommaSeparatedValue(status_vec);
+			}
+			return con_status;
+		}
+		return null;
+	}
+
+
     public static Vector getConceptStatusByConceptCodes(String scheme, String version, String ltag, Vector codes) {
+		boolean conceptStatusSupported = false;
+		if (vocabulariesWithConceptStatusHashSet.contains(scheme)) conceptStatusSupported = true;
+
 		Vector w = new Vector();
 		long ms = System.currentTimeMillis();
 		for (int i=0; i<codes.size(); i++) {
-			String code = (String) codes.elementAt(i);
-			Concept c = getConceptWithProperty(scheme, version, code, "Concept_Status");
-			String con_status = null;
-			if (c != null) {
-				Vector status_vec = getConceptPropertyValues(c, "Concept_Status");
-				if (status_vec == null || status_vec.size() == 0) {
-				   con_status = c.getStatus();
+			if (conceptStatusSupported) {
+				String code = (String) codes.elementAt(i);
+				Concept c = getConceptWithProperty(scheme, version, code, "Concept_Status");
+				String con_status = null;
+				if (c != null) {
+					Vector status_vec = getConceptPropertyValues(c, "Concept_Status");
+					if (status_vec == null || status_vec.size() == 0) {
+					   con_status = c.getStatus();
+					} else {
+					   con_status = DataUtils.convertToCommaSeparatedValue(status_vec);
+					}
+					w.add(con_status);
 				} else {
-				   con_status = DataUtils.convertToCommaSeparatedValue(status_vec);
+					w.add(null);
 				}
-				w.add(con_status);
-			} else {
-				w.add(null);
-			}
+		   } else {
+			    w.add(null);
+		   }
 		}
         System.out.println("getConceptStatusByConceptCodes Run time (ms): "
                     + (System.currentTimeMillis() - ms) + " number of concepts: " + codes.size());
