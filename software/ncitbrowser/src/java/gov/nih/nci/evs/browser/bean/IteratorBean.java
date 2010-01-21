@@ -164,13 +164,13 @@ public class IteratorBean extends Object {
 		long total_delay = 0;
 		timeout = false;
         try {
+
 			while(iterator != null && iterator.hasNext() && lastResolved < idx2) {
 				ResolvedConceptReference[] refs = iterator.next(maxReturn).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs) {
 					lastResolved++;
 					this.list.set(lastResolved, ref);
 				}
-
 				System.out.println("Advancing iterator: " + lastResolved);
 
 				dt = System.currentTimeMillis() - ms;
@@ -178,13 +178,13 @@ public class IteratorBean extends Object {
 				total_delay = total_delay + dt;
 				if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
 					timeout = true;
-
 					System.out.println("Time out at: " + lastResolved);
 					break;
 				}
 			}
-		} catch (Exception ex) {
 
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 		List rcr_list = new ArrayList();
