@@ -98,8 +98,6 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
           
           String match_size = new Integer(size).toString();
           
-System.out.println("Number of matches: " + size);
-          
           if (iend > size-1) iend = size-1;
           int num_pages = size / page_size;
           if (num_pages * page_size < size) num_pages++;

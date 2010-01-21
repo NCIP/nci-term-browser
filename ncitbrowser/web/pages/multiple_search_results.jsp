@@ -134,7 +134,7 @@ long ms = System.currentTimeMillis(), delay = 0;
               .getSessionMap().get("iteratorBean");
 
         String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
-        String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
+        //String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
         String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
         Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
         
@@ -161,6 +161,8 @@ long ms = System.currentTimeMillis(), delay = 0;
           int istart = iend - page_size;
           iend = iend-1;
           int size = iteratorBean.getSize();
+          String match_size = new Integer(size).toString();
+          
           if (iend > size-1) iend = size-1;
           int num_pages = size / page_size;
           if (num_pages * page_size < size) num_pages++;
