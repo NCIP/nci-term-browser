@@ -2751,7 +2751,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 							cns = restrictToSource(cns, source);
 							String associationName = null;
 							int direction = RESTRICT_TARGET;
-							CodedNodeGraph cng = getRestrictedCodedNodeGraph(lbSvc, scheme, version, associationName, cns, direction);
+							//CodedNodeGraph cng = getRestrictedCodedNodeGraph(lbSvc, scheme, version, associationName, cns, direction);
 							// toNode
 							boolean resolveForward = false;
 							boolean resolveBackward = true;
@@ -2759,9 +2759,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 							int resolveAssociationDepth = 1;
 							//int maxToReturn = -1;
 							ConceptReference graphFocus = null;
-							CodedNodeSet cns2 = cng.toNodeList(graphFocus, resolveForward, resolveBackward, resolveAssociationDepth, maxToReturn);
+							//CodedNodeSet cns2 = cng.toNodeList(graphFocus, resolveForward, resolveBackward, resolveAssociationDepth, maxToReturn);
 							//CodedNodeSet 	difference(CodedNodeSet codesToRemove)
-							cns = cns2.difference(cns);
+							//cns = cns2.difference(cns);
 							if (cns != null) {
 //KLO, testing
                                 cns = filterOutAnonymousClasses(lbSvc, scheme, cns);
@@ -2806,10 +2806,16 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			resolveConcepts = true;
             try {
                try {
+            	   boolean resolveForward = false;
+            	   boolean resolveBackward = true;
+
+            	   int resolveAssociationDepth = 1;
+
+
 					long ms = System.currentTimeMillis(), delay = 0;
                     //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
-                    iterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
-
+                    ResolvedConceptReferencesIterator quickUnionIterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    iterator = new SearchByAssociationIteratorDecorator(quickUnionIterator, resolveForward, resolveBackward, resolveAssociationDepth, maxToReturn);
                     // testing, KLO (work-around) failed
                     // iterator = filterOutAnonymousClasses(cns, iterator);
 
