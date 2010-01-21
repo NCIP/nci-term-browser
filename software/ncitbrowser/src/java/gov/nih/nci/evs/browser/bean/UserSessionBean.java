@@ -836,6 +836,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
             // Do nothing
         }
         boolean designationOnly = false;
+        boolean excludeDesignation = true;
         ResolvedConceptReferencesIterator iterator = null;
         if (searchTarget.compareTo("names") == 0) {
 			long ms = System.currentTimeMillis();
@@ -846,7 +847,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 			System.out.println("searchByName delay (millisec.): " + delay);
 
 		} else if (searchTarget.compareTo("properties") == 0) {
-            iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+            iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
 		} else if (searchTarget.compareTo("relationships") == 0) {
 			designationOnly = true;
             iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
