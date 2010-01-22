@@ -242,7 +242,14 @@ long ms = System.currentTimeMillis(), delay = 0;
                   List list = iteratorBean.getData(istart, iend);
                   
 	  boolean timeout = iteratorBean.getTimeout();
-	  if (timeout) {
+	  String message = iteratorBean.getMessage();
+
+	  if (message != null) {
+		  %>
+		  <p class="textbodyred"><%=message%></p>
+		  <%
+		  
+	  } else if (timeout) {
 		  %>
 		  <p class="textbodyred">WARNING: System times out. Please advance fewer pages at one time.</p>
 		  <%
@@ -257,7 +264,7 @@ System.out.println("multiple_search_results list.size(): " + list.size());
 System.out.println("multiple_search_results rcr: NULL: " + i);
                       }
                       
-                      if (rcr != null) {
+                      if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
 			      String code = rcr.getConceptCode();
 			      String name = rcr.getEntityDescription().getContent();
 			      String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());

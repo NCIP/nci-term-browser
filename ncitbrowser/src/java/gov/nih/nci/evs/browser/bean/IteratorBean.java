@@ -57,6 +57,7 @@ public class IteratorBean extends Object {
 
     int lastResolved;
     int maxReturn = 100;
+    String message = null;
 
     String key = null;
     boolean timeout = false;
@@ -248,6 +249,14 @@ public class IteratorBean extends Object {
 
     public String getKey() {
 		return this.key;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getMessage() {
+		return this.message;
 	}
 
 }
