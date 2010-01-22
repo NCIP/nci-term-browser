@@ -25,6 +25,8 @@ import gov.nih.nci.evs.browser.utils.SortOption;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 
+import gov.nih.nci.evs.browser.utils.ResolvedConceptReferencesIteratorWrapper;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -210,7 +212,9 @@ public class UserSessionBean extends Object {
 				iteratorBean = iteratorBeanManager.getIteratorBean(key);
 				iterator = iteratorBean.getIterator();
 			} else {
-       	    	iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+       	    	ResolvedConceptReferencesIteratorWrapper wrapper =
+       	    	    new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+       	    	iterator = wrapper.getIterator();
        	    	if (iterator != null) {
 					iteratorBean = new IteratorBean(iterator);
 					iteratorBean.setKey(key);
@@ -223,7 +227,8 @@ public class UserSessionBean extends Object {
 				iteratorBean = iteratorBeanManager.getIteratorBean(key);
 				iterator = iteratorBean.getIterator();
 			} else {
-                iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
+                ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
+       	    	iterator = wrapper.getIterator();
        	    	if (iterator != null) {
 					iteratorBean = new IteratorBean(iterator);
 					iteratorBean.setKey(key);
@@ -237,7 +242,8 @@ public class UserSessionBean extends Object {
 				iteratorBean = iteratorBeanManager.getIteratorBean(key);
 				iterator = iteratorBean.getIterator();
 			} else {
-                iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+                ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+       	    	iterator = wrapper.getIterator();
        	    	if (iterator != null) {
 					iteratorBean = new IteratorBean(iterator);
 					iteratorBean.setKey(key);
@@ -842,15 +848,18 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 			long ms = System.currentTimeMillis();
 			long delay = 0;
 			System.out.println("Calling SearchUtils().searchByName " + matchText);
-            iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+            ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+			iterator = wrapper.getIterator();
 			delay = System.currentTimeMillis() - ms;
 			System.out.println("searchByName delay (millisec.): " + delay);
 
 		} else if (searchTarget.compareTo("properties") == 0) {
-            iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
+            ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
+		    iterator = wrapper.getIterator();
 		} else if (searchTarget.compareTo("relationships") == 0) {
 			designationOnly = true;
-            iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+            ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+		    iterator = wrapper.getIterator();
 		}
 
         request.getSession().setAttribute("vocabulary", scheme);
