@@ -2632,7 +2632,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				total_delay = total_delay + dt;
 
 				if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
-					message = "Search is incomplete -- please enter more specific search criteria.";
+					message = "WARNING: Search is incomplete -- please enter more specific search criteria.";
 					//cont_flag = false;
 					break;
 				}
