@@ -50,6 +50,7 @@ public class SearchByAssociationIteratorDecorator implements ResolvedConceptRefe
 	/** The current children. */
 	private List<ResolvedConceptReference> currentChildren = new ArrayList<ResolvedConceptReference>();
 
+
 	/**
 	 * Instantiates a new search by association iterator decorator.
 	 *
