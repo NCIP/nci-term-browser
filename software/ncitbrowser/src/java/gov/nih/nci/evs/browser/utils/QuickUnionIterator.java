@@ -57,7 +57,17 @@ public class QuickUnionIterator implements ResolvedConceptReferencesIterator{
 			boolean resolve) throws LBException {
 
 		for(CodedNodeSet cns : codedNodeSets){
-			iterators.add(cns.resolve(sortOptions, filterOptions, restrictToProperties, restrictToPropertyTypes, resolve));
+			//KLO 012310
+			if (cns != null) {
+				try {
+					ResolvedConceptReferencesIterator iterator = cns.resolve(sortOptions, filterOptions, restrictToProperties, restrictToPropertyTypes, resolve);
+					if (iterator != null) {
+						iterators.add(iterator);
+					}
+				} catch (Exception ex) {
+					System.out.println("QuickUnionIterator constructor - cns.resolve throws exception???");
+				}
+		    }
 		}
 
 		Collections.sort(iterators, new IteratorSizeComparator());
