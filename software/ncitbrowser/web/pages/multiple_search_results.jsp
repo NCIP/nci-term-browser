@@ -248,6 +248,8 @@ long ms = System.currentTimeMillis(), delay = 0;
 		  %>
 		  <p class="textbodyred"><%=message%></p>
 		  <%
+		message = null;  
+		iteratorBean.setMessage(message);  
 		  
 	  } else if (timeout) {
 		  %>

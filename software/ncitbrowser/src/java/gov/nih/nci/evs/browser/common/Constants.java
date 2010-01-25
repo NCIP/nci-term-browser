@@ -30,7 +30,7 @@ public class Constants {
     static public final String ERROR_NO_VOCABULARY_SELECTED = "Please select at least one vocabulary.";
     static public final String ERROR_NO_SEARCH_STRING_ENTERED = "Please enter a search string.";
     static public final String ERROR_NO_MATCH_FOUND = "No match found.";
-    static public final String ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS = "No match found. Please try 'Beings With' or 'Contains' search instead.";
+    static public final String ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS = "No match found. Please try 'Begins With' or 'Contains' search instead.";
 
     static public final String ERROR_ENCOUNTERED_TRY_NARROW_QUERY = "Unable to perform search successfully. Please narrow your query.";
 
