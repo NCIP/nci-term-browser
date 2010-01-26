@@ -116,7 +116,7 @@ public class SearchByAssociationIteratorDecorator implements ResolvedConceptRefe
 				throw new RuntimeException(e);
 			}
 		}
-		System.out.println("Paged " + page + " concpets in: " + (System.currentTimeMillis() - startTime));
+		System.out.println("Paged " + page + " concepts in: " + (System.currentTimeMillis() - startTime));
 		return returnList;
 	}
 

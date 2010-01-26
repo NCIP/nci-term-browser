@@ -142,6 +142,7 @@ public class UserSessionBean extends Object {
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
+
         boolean ranking = true;
 
         String scheme = request.getParameter("scheme");
@@ -156,6 +157,21 @@ public class UserSessionBean extends Object {
         if (scheme == null) {
 			scheme = Constants.CODING_SCHEME_NAME;
 		}
+
+
+ //KLO, 012610
+		if (searchTarget.compareTo("relationships") == 0 && matchAlgorithm.compareTo("contains") == 0) {
+			String text = matchText.trim();
+			if (text.length() < NCItBrowserProperties.getMinimumSearchStringLength()) {
+				String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
+				request.getSession().setAttribute("message", msg);
+				request.getSession().setAttribute("vocabulary", scheme);
+
+				return "message";
+			}
+		}
+
+
         request.getSession().setAttribute("ranking", Boolean.toString(ranking));
         String source = (String) request.getParameter("source");
         if (source == null) {
@@ -628,6 +644,8 @@ public class UserSessionBean extends Object {
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
 
+
+
 	    String initial_search = (String) request.getParameter("initial_search");
         String[] ontology_list = request.getParameterValues("ontology_list");
 
@@ -703,6 +721,10 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 
 		}
 
+
+
+
+
         String hide_ontology_list = "false";
         //[#19965] Error message is not displayed when Search Criteria is not proivided
         if (matchText == null || matchText.length() == 0)
@@ -717,6 +739,19 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
             request.getSession().setAttribute("message", message);
             return "multiple_search";
         }
+
+
+ //KLO, 012610
+		else if (searchTarget.compareTo("relationships") == 0 && matchAlgorithm.compareTo("contains") == 0) {
+			String text = matchText.trim();
+			if (text.length() < NCItBrowserProperties.getMinimumSearchStringLength()) {
+				String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
+				request.getSession().setAttribute("warning", msg);
+				request.getSession().setAttribute("message", msg);
+				return "multiple_search";
+			}
+		}
+
 
         boolean ranking = true;
         String source = (String) request.getParameter("source");
@@ -865,6 +900,9 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
         request.getSession().setAttribute("vocabulary", scheme);
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
+
+
+
 
         request.getSession().removeAttribute("neighborhood_synonyms");
         request.getSession().removeAttribute("neighborhood_atoms");

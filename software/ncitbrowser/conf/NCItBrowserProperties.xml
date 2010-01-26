@@ -455,8 +455,14 @@
                  <value>@pagination_time_out@</value>
         </ConfigurableItem>
 
+        <ConfigurableItem>
+                 <key>MINIMUM_SEARCH_STRING_LENGTH</key>
+                 <value>@minimum_search_string_length@</value>
+        </ConfigurableItem>
+  
     </ConfigurableItems>
-
+   
+        
     <MetadataElements>
         <MetadataElement>
                  <name>html_compatable_description</name>
