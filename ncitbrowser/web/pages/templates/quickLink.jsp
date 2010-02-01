@@ -31,9 +31,11 @@
 <%
     String ncim_url = new DataUtils().getNCImURL();
     String quicklink_dictionary = (String) request.getSession().getAttribute("dictionary");
-    String term_suggestion_application_url2 = "", dictionary_encoded2 = "";
+    quicklink_dictionary = DataUtils.getFormalName(quicklink_dictionary);
+    String term_suggestion_application_url2 = "";
+    String dictionary_encoded2 = "";
     if (quicklink_dictionary != null) {
-        term_suggestion_application_url2 = new DataUtils().getTermSuggestionURL();
+        term_suggestion_application_url2 = DataUtils.getMetadataValue(quicklink_dictionary, "term_suggestion_application_url");    
         dictionary_encoded2 = DataUtils.replaceAll(quicklink_dictionary, " ", "%20");
     }
 %>
