@@ -99,11 +99,7 @@
                     
                 if (con != null) {
                   code = con.getEntityCode();
-                  
                   request.getSession().setAttribute("code", code);
-                  
-System.out.println("concept_details code: " + code);                  
-                  
 
                 } else {
                   code = (String) request.getSession().getAttribute("code");
@@ -167,14 +163,7 @@ System.out.println("concept_details code: " + code);
               String vers = null;
               String ltag = null;
 
-
-System.out.println("****** code: " + code);
-
               c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
-              
-System.out.println("****** getConceptByCode: " + c.getEntityCode());
-
-              
               
               if (c != null) {
                 request.getSession().setAttribute("concept", c);
