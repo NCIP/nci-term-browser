@@ -287,6 +287,7 @@ public class UserSessionBean extends Object {
 				ex.printStackTrace();
 			}
             int size = iteratorBean.getSize();
+
             if (size > 1) {
                 request.getSession().setAttribute("search_results", v);
                 String match_size = Integer.toString(size);
@@ -325,6 +326,7 @@ public class UserSessionBean extends Object {
                     c = ref.getReferencedEntry();
 
                     if (c == null) {
+
                         c = DataUtils.getConceptByCode(scheme, null, null, ref.getConceptCode());
                         if (c == null) {
 							String message = "Unable to find the concept with a code '" + ref.getConceptCode() + "'";
@@ -333,11 +335,12 @@ public class UserSessionBean extends Object {
 							request.getSession().setAttribute("dictionary", scheme);
 							return "message";
 					    }
+
                     } else {
 						request.getSession().setAttribute("code", c.getEntityCode());
-
 					}
                 }
+
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
