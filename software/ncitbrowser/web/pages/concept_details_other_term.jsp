@@ -56,17 +56,8 @@
           }
 
           String shortName = DataUtils.getLocalName(dictionary);
-          
-System.out.println("concept_details_other_term.jsp  shortName: " + shortName);
-
-          
-          
           String term_suggestion_application_url = new DataUtils()
               .getTermSuggestionURL();
-              
-              
-System.out.println("concept_details_other_term.jsp  term_suggestion_application_url: " + term_suggestion_application_url);
-              
               
        %>
           <!-- Thesaurus, banner search area -->
