@@ -216,7 +216,7 @@
           %>
       <td align="right" valign="bottom" class="texttitle-blue-rightJust"
         nowrap><a
-        href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>"
+        href="<%=term_suggestion_application_url%>?dictionary=<%=cd_dictionary%>&code=<%=code%>"
         target="_blank" alt="Term Suggestion">Suggest changes to
       this concept</a></td>
       <%
