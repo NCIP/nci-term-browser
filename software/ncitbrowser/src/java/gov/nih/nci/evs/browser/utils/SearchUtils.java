@@ -1419,9 +1419,17 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		if (iterator == null) return null;
 		try {
 			while(iterator.hasNext()){
+				/*
 				ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs){
 					return ref.getReferencedEntry();
+				}
+				*/
+				ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
+				for(ResolvedConceptReference ref : refs){
+					if (ref.getReferencedEntry().getEntityCode().equals(matchText)) {
+						return ref.getReferencedEntry();
+					}
 				}
 			}
 		}  catch (Exception e) {
