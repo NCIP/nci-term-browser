@@ -134,7 +134,7 @@ long ms = System.currentTimeMillis(), delay = 0;
               .getSessionMap().get("iteratorBean");
 
         String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
-        String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
+        //String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
         String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
         Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
         
@@ -161,6 +161,8 @@ long ms = System.currentTimeMillis(), delay = 0;
           int istart = iend - page_size;
           iend = iend-1;
           int size = iteratorBean.getSize();
+          String match_size = new Integer(size).toString();
+          
           if (iend > size-1) iend = size-1;
           int num_pages = size / page_size;
           if (num_pages * page_size < size) num_pages++;
@@ -240,131 +242,148 @@ long ms = System.currentTimeMillis(), delay = 0;
                   List list = iteratorBean.getData(istart, iend);
                   
 	  boolean timeout = iteratorBean.getTimeout();
-	  if (timeout) {
+	  String message = iteratorBean.getMessage();
+
+	  if (message != null) {
+		  %>
+		  <p class="textbodyred"><%=message%></p>
+		  <%
+		message = null;  
+		iteratorBean.setMessage(message);  
+		  
+	  } else if (timeout) {
 		  %>
 		  <p class="textbodyred">WARNING: System times out. Please advance fewer pages at one time.</p>
 		  <%
 	  } else {
-            
+
+System.out.println("multiple_search_results list.size(): " + list.size());
+
+
                   for (int i=0; i<list.size(); i++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
-
-                      String code = rcr.getConceptCode();
-                      String name = rcr.getEntityDescription().getContent();
-                      String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
-                      String short_vocabulary_name = null;
-
-                      if (name_hmap.containsKey(vocabulary_name)) {
-                          short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
-                      } else {
-                          short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
-                          if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
-                              short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-                          }
-                          name_hmap.put(vocabulary_name, short_vocabulary_name);
+                      if (rcr == null) {
+System.out.println("multiple_search_results rcr: NULL: " + i);
                       }
-
-                      if (code == null || code.indexOf("@") != -1) {
-              				if (i % 2 == 0) {
-              				%>
-              				  <tr class="dataRowDark">
-              				<%
-              				    } else {
-              				%>
-              				  <tr class="dataRowLight">
-              				<%
-              				    }
-              				    %>
-              				  <td class="dataCellText">
-              				     <%=name%>
-              				  </td>              
-              				  <td class="dataCellText">
-              				     <%=short_vocabulary_name%>
-              				  </td>              				  
-              				</tr>
-		                  <%		      
-                      } else {                  
                       
-                      String con_status = DataUtils.getConceptStatus(vocabulary_name, null, null, code);
+                      if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
+			      String code = rcr.getConceptCode();
+			      String name = rcr.getEntityDescription().getContent();
+			      String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+			      String short_vocabulary_name = null;
 
-                      if (con_status != null) {
-                          con_status = con_status.replaceAll("_", " ");
-                      }
+			      if (name_hmap.containsKey(vocabulary_name)) {
+				  short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
+			      } else {
+				  short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
+				  if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+				      short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+				  }
+				  name_hmap.put(vocabulary_name, short_vocabulary_name);
+			      }
 
-                      String vocabulary_name_encoded = null;
-                      if (vocabulary_name != null) vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
+			      if (code == null || code.indexOf("@") != -1) {
+						if (i % 2 == 0) {
+						%>
+						  <tr class="dataRowDark">
+						<%
+						    } else {
+						%>
+						  <tr class="dataRowLight">
+						<%
+						    }
+						    %>
+						  <td class="dataCellText">
+						     <%=name%>
+						  </td>              
+						  <td class="dataCellText">
+						     <%=short_vocabulary_name%>
+						  </td>              				  
+						</tr>
+					  <%		      
+			      } else {                  
 
-                      if (i % 2 == 0) {
-                        %>
-                          <tr class="dataRowDark">
-                        <%
-                      } else {
-                        %>
-                          <tr class="dataRowLight">
-                        <%
-                      }
-                      %>
-                          <%
-                          if (con_status == null) {
-                          %>
+			      String con_status = DataUtils.getConceptStatus(vocabulary_name, null, null, code);
 
-                          <td class="dataCellText">
-                          <%
-                          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
-                          %>
-                               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
-                          <%
-                          } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
-                               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
-                          %>
-                               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>
-                          <%
-                          } else {
-                          %>
-                               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
-                          <%
-                          }
-                          %>
-                          </td>
-                          <td class="dataCellText">
-                            <%=short_vocabulary_name%>
-                          </td>
+			      if (con_status != null) {
+				  con_status = con_status.replaceAll("_", " ");
+			      }
 
+			      String vocabulary_name_encoded = null;
+			      if (vocabulary_name != null) vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
 
-                          <%
-                          } else {
-                          %>
+			      if (i % 2 == 0) {
+				%>
+				  <tr class="dataRowDark">
+				<%
+			      } else {
+				%>
+				  <tr class="dataRowLight">
+				<%
+			      }
+			      %>
+				  <%
+				  if (con_status == null) {
+				  %>
 
-                          <td class="dataCellText">
-                          <%
-                          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
-                          %>
-                               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
-                          <%
-                          } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
-                               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
-                          %>
-                               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>&nbsp;(<%=con_status%>)
-                          <%
-                          } else {
-                          %>
-                               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
-                          <%
-                          }
-                          %>
-                          </td>
-                          <td class="dataCellText">
-                            <%=short_vocabulary_name%>
-                          </td>
-
-                          <%
-                          }
-                          %>
+				  <td class="dataCellText">
+				  <%
+				  if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
+				  %>
+				       <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
+				  <%
+				  } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
+				       String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
+				  %>
+				       <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>
+				  <%
+				  } else {
+				  %>
+				       <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
+				  <%
+				  }
+				  %>
+				  </td>
+				  <td class="dataCellText">
+				    <%=short_vocabulary_name%>
+				  </td>
 
 
-                        </tr>
-                      <%
-                          }
+				  <%
+				  } else {
+				  %>
+
+				  <td class="dataCellText">
+				  <%
+				  if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
+				  %>
+				       <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+				  <%
+				  } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
+				       String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
+				  %>
+				       <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>&nbsp;(<%=con_status%>)
+				  <%
+				  } else {
+				  %>
+				       <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+				  <%
+				  }
+				  %>
+				  </td>
+				  <td class="dataCellText">
+				    <%=short_vocabulary_name%>
+				  </td>
+
+				  <%
+				  }
+				  %>
+
+
+				</tr>
+			      <%
+				  }
+			  }
                       }
                   }
                 %>

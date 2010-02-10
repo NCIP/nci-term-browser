@@ -58,6 +58,7 @@
           String shortName = DataUtils.getLocalName(dictionary);
           String term_suggestion_application_url = new DataUtils()
               .getTermSuggestionURL();
+              
        %>
           <!-- Thesaurus, banner search area -->
           <div class="bannerarea">

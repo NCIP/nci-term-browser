@@ -99,7 +99,6 @@
                     
                 if (con != null) {
                   code = con.getEntityCode();
-                  
                   request.getSession().setAttribute("code", code);
 
                 } else {
@@ -153,10 +152,8 @@
                 }
               }
 
-              //String term_suggestion_application_url = new DataUtils()
-              //    .getTermSuggestionURL();
-
-              String term_suggestion_application_url = DataUtils.getMetadataValue(dictionary, "term_suggestion_application_url");
+              String cd_dictionary = DataUtils.getFormalName(dictionary);
+              String term_suggestion_application_url = DataUtils.getMetadataValue(cd_dictionary, "term_suggestion_application_url");
 
               String name = "";
               Concept c = null;
@@ -219,7 +216,7 @@
           %>
       <td align="right" valign="bottom" class="texttitle-blue-rightJust"
         nowrap><a
-        href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>"
+        href="<%=term_suggestion_application_url%>?dictionary=<%=cd_dictionary%>&code=<%=code%>"
         target="_blank" alt="Term Suggestion">Suggest changes to
       this concept</a></td>
       <%

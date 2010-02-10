@@ -25,6 +25,8 @@ import gov.nih.nci.evs.browser.utils.SortOption;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 
+import gov.nih.nci.evs.browser.utils.ResolvedConceptReferencesIteratorWrapper;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -140,6 +142,7 @@ public class UserSessionBean extends Object {
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
+
         boolean ranking = true;
 
         String scheme = request.getParameter("scheme");
@@ -154,6 +157,21 @@ public class UserSessionBean extends Object {
         if (scheme == null) {
 			scheme = Constants.CODING_SCHEME_NAME;
 		}
+
+
+ //KLO, 012610
+		if (searchTarget.compareTo("relationships") == 0 && matchAlgorithm.compareTo("contains") == 0) {
+			String text = matchText.trim();
+			if (text.length() < NCItBrowserProperties.getMinimumSearchStringLength()) {
+				String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
+				request.getSession().setAttribute("message", msg);
+				request.getSession().setAttribute("vocabulary", scheme);
+
+				return "message";
+			}
+		}
+
+
         request.getSession().setAttribute("ranking", Boolean.toString(ranking));
         String source = (String) request.getParameter("source");
         if (source == null) {
@@ -210,7 +228,9 @@ public class UserSessionBean extends Object {
 				iteratorBean = iteratorBeanManager.getIteratorBean(key);
 				iterator = iteratorBean.getIterator();
 			} else {
-       	    	iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+       	    	ResolvedConceptReferencesIteratorWrapper wrapper =
+       	    	    new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+       	    	iterator = wrapper.getIterator();
        	    	if (iterator != null) {
 					iteratorBean = new IteratorBean(iterator);
 					iteratorBean.setKey(key);
@@ -223,7 +243,8 @@ public class UserSessionBean extends Object {
 				iteratorBean = iteratorBeanManager.getIteratorBean(key);
 				iterator = iteratorBean.getIterator();
 			} else {
-                iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
+                ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
+       	    	iterator = wrapper.getIterator();
        	    	if (iterator != null) {
 					iteratorBean = new IteratorBean(iterator);
 					iteratorBean.setKey(key);
@@ -237,7 +258,8 @@ public class UserSessionBean extends Object {
 				iteratorBean = iteratorBeanManager.getIteratorBean(key);
 				iterator = iteratorBean.getIterator();
 			} else {
-                iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+                ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+       	    	iterator = wrapper.getIterator();
        	    	if (iterator != null) {
 					iteratorBean = new IteratorBean(iterator);
 					iteratorBean.setKey(key);
@@ -265,6 +287,7 @@ public class UserSessionBean extends Object {
 				ex.printStackTrace();
 			}
             int size = iteratorBean.getSize();
+
             if (size > 1) {
                 request.getSession().setAttribute("search_results", v);
                 String match_size = Integer.toString(size);
@@ -303,6 +326,7 @@ public class UserSessionBean extends Object {
                     c = ref.getReferencedEntry();
 
                     if (c == null) {
+
                         c = DataUtils.getConceptByCode(scheme, null, null, ref.getConceptCode());
                         if (c == null) {
 							String message = "Unable to find the concept with a code '" + ref.getConceptCode() + "'";
@@ -311,11 +335,12 @@ public class UserSessionBean extends Object {
 							request.getSession().setAttribute("dictionary", scheme);
 							return "message";
 					    }
+
                     } else {
 						request.getSession().setAttribute("code", c.getEntityCode());
-
 					}
                 }
+
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
@@ -622,6 +647,8 @@ public class UserSessionBean extends Object {
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
 
+
+
 	    String initial_search = (String) request.getParameter("initial_search");
         String[] ontology_list = request.getParameterValues("ontology_list");
 
@@ -697,6 +724,10 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 
 		}
 
+
+
+
+
         String hide_ontology_list = "false";
         //[#19965] Error message is not displayed when Search Criteria is not proivided
         if (matchText == null || matchText.length() == 0)
@@ -711,6 +742,19 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
             request.getSession().setAttribute("message", message);
             return "multiple_search";
         }
+
+
+ //KLO, 012610
+		else if (searchTarget.compareTo("relationships") == 0 && matchAlgorithm.compareTo("contains") == 0) {
+			String text = matchText.trim();
+			if (text.length() < NCItBrowserProperties.getMinimumSearchStringLength()) {
+				String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
+				request.getSession().setAttribute("warning", msg);
+				request.getSession().setAttribute("message", msg);
+				return "multiple_search";
+			}
+		}
+
 
         boolean ranking = true;
         String source = (String) request.getParameter("source");
@@ -836,25 +880,32 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
             // Do nothing
         }
         boolean designationOnly = false;
+        boolean excludeDesignation = true;
         ResolvedConceptReferencesIterator iterator = null;
         if (searchTarget.compareTo("names") == 0) {
 			long ms = System.currentTimeMillis();
 			long delay = 0;
 			System.out.println("Calling SearchUtils().searchByName " + matchText);
-            iterator = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+            ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
+			iterator = wrapper.getIterator();
 			delay = System.currentTimeMillis() - ms;
 			System.out.println("searchByName delay (millisec.): " + delay);
 
 		} else if (searchTarget.compareTo("properties") == 0) {
-            iterator = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+            ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
+		    iterator = wrapper.getIterator();
 		} else if (searchTarget.compareTo("relationships") == 0) {
 			designationOnly = true;
-            iterator = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+            ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+		    iterator = wrapper.getIterator();
 		}
 
         request.getSession().setAttribute("vocabulary", scheme);
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
+
+
+
 
         request.getSession().removeAttribute("neighborhood_synonyms");
         request.getSession().removeAttribute("neighborhood_atoms");

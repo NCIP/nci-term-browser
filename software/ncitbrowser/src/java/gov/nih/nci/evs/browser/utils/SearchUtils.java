@@ -1002,16 +1002,16 @@ public class SearchUtils {
 // 5.1 implementation
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public ResolvedConceptReferencesIterator searchByName(String scheme, String version, String matchText, String matchAlgorithm, boolean ranking, int maxToReturn) {
+    public ResolvedConceptReferencesIteratorWrapper searchByName(String scheme, String version, String matchText, String matchAlgorithm, boolean ranking, int maxToReturn) {
 		return searchByName(scheme, version, matchText, null, matchAlgorithm, ranking, maxToReturn);
 	}
 
-    public ResolvedConceptReferencesIterator searchByName(String scheme, String version, String matchText, String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
+    public ResolvedConceptReferencesIteratorWrapper searchByName(String scheme, String version, String matchText, String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 
-		boolean preprocess = true;
+		//boolean preprocess = true;
         if (matchText == null || matchText.length() == 0)
         {
 			return null;
@@ -1105,15 +1105,16 @@ public class SearchUtils {
                 e.printStackTrace();
 			}
 		}
-        return iterator;
+
+        return new ResolvedConceptReferencesIteratorWrapper(iterator);
     }
 
-    public ResolvedConceptReferencesIterator searchByName(Vector schemes, Vector versions, String matchText, String matchAlgorithm, boolean ranking, int maxToReturn) {
+    public ResolvedConceptReferencesIteratorWrapper searchByName(Vector schemes, Vector versions, String matchText, String matchAlgorithm, boolean ranking, int maxToReturn) {
 		return searchByName(schemes, versions, matchText, null, matchAlgorithm, ranking, maxToReturn);
 	}
 
 
-    public ResolvedConceptReferencesIterator searchByName(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
+    public ResolvedConceptReferencesIteratorWrapper searchByName(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
@@ -1295,7 +1296,9 @@ total_delay = System.currentTimeMillis() - tnow;
 System.out.println("Total search delay: (millisec.): " + total_delay);
 
 
-        return iterator;
+        //return iterator;
+        return new ResolvedConceptReferencesIteratorWrapper(iterator);
+
     }
 
 
@@ -1416,9 +1419,17 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		if (iterator == null) return null;
 		try {
 			while(iterator.hasNext()){
+				/*
 				ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs){
 					return ref.getReferencedEntry();
+				}
+				*/
+				ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
+				for(ResolvedConceptReference ref : refs){
+					if (ref.getReferencedEntry().getEntityCode().equals(matchText)) {
+						return ref.getReferencedEntry();
+					}
 				}
 			}
 		}  catch (Exception e) {
@@ -2307,177 +2318,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		}
 	}
 
-/*
-    public ResolvedConceptReferencesIterator searchByProperties(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm, boolean designationOnly, boolean ranking, int maxToReturn) {
-		String matchText0 = matchText;
-		String matchAlgorithm0 = matchAlgorithm;
-		matchText0 = matchText0.trim();
-
-		//boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0)
-        {
-			return null;
-		}
-
-        matchText = matchText.trim();
-        if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
-		{
-			//matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM; // to be replaced by literalSubString
-			matchAlgorithm = findBestContainsAlgorithm(matchText);
-		}
-
-        CodedNodeSet cns = null;
-        ResolvedConceptReferencesIterator iterator = null;
-
-        String scheme = null;
-        String version = null;
-
-        try {
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
-
-            if (lbSvc == null)
-            {
-                System.out.println("lbSvc = null");
-                return null;
-            }
-
-			Vector cns_vec = new Vector();
-			for (int i=0; i<schemes.size(); i++) {
-				cns = null;
-				iterator = null;
-				scheme = (String) schemes.elementAt(i);
-				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-				version = (String) versions.elementAt(i);
-				if (version != null) versionOrTag.setVersion(version);
-
-				try {
-					if (lbSvc == null)
-					{
-						System.out.println("lbSvc = null");
-						return null;
-					}
-
-					cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
-
-					if (cns != null)
-					{
-						try {
-							if (designationOnly) {
-								cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
-							}
-
-							LocalNameList propertyNames = null;
-							try {
-								propertyNames = getPropertyLocalNameList(scheme);//getAllPropertyNames(scheme);
-								int entryCount = propertyNames.getEntryCount();
-								System.out.println("Number of properties: " + entryCount);
-							} catch (Exception ex) {
-								propertyNames = new LocalNameList();
-							}
-							CodedNodeSet.PropertyType[] propertyTypes = null;//getAllPropertypes();
-
-							String language = null;
-							try {
-                            	cns = cns.restrictToMatchingProperties(propertyNames, propertyTypes, matchText, matchAlgorithm, language);
-							} catch (Exception e) {
-								System.out.println("\t(*) restrictToMatchingProperties throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
-								e.printStackTrace();
-							}
-							try {
-                            	cns = restrictToSource(cns, source);
-							} catch (Exception e) {
-								System.out.println("\t(*) restrictToSource throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
-								e.printStackTrace();
-							}
-
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					//return null;
-				}
-				if (cns != null) {
-					cns_vec.add(cns);
-				}
-			}
-
-			iterator = null;
-			cns = union(cns_vec);
-			if (cns == null) return null;
-
-            LocalNameList restrictToProperties = null;//new LocalNameList();
-            //boolean resolveConcepts = true;
-            //if (!ranking) resolveConcepts = false;
-            boolean resolveConcepts = false;
-
-            SortOptionList sortCriteria = null;
-
-		    if (ranking){
-				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
-
-            } else {
-                sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
-                System.out.println("*** Sort alphabetically...");
-                resolveConcepts = false;
-			}
-            try {
-               try {
-					long ms = System.currentTimeMillis(), delay = 0;
-                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
-					//Debug.println("cns.resolve delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms) + " -- matchAlgorithm " + matchAlgorithm);
-                    //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
-
-                }  catch (Exception e) {
-                    System.out.println("Method: SearchUtil.searchByProperties");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
-                        e.getMessage());
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return null;
-            }
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		int lcv = 0;
-		int iterator_size = 0;
-		if (iterator != null) {
-			try {
-				iterator_size = iterator.numberRemaining();
-			} catch (Exception ex) {
-
-			}
-	    }
-
-        while (iterator_size == 0 && lcv < schemes.size()) {
-			scheme = (String) schemes.elementAt(lcv);
-			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-			version = (String) versions.elementAt(lcv);
-			if (version != null) versionOrTag.setVersion(version);
-
-			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
-			if (iterator != null) {
-				try {
-					iterator_size = iterator.numberRemaining();
-				} catch (Exception ex) {
-
-				}
-			}
-			lcv++;
-		}
-        return iterator;
-
-    }
-*/
-
-    public ResolvedConceptReferencesIterator searchByProperties(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm,
+    public ResolvedConceptReferencesIteratorWrapper searchByProperties(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm,
                                                                 boolean excludeDesignation, boolean ranking, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
@@ -2633,7 +2474,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				lcv++;
 			}
 	    }
-        return iterator;
+       // return iterator;
+        return new ResolvedConceptReferencesIteratorWrapper(iterator);
+
     }
 
 
@@ -2691,10 +2534,16 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
 
 
-    public ResolvedConceptReferencesIterator searchByAssociations(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm, boolean designationOnly, boolean ranking, int maxToReturn) {
+    public ResolvedConceptReferencesIteratorWrapper searchByAssociations(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm, boolean designationOnly, boolean ranking, int maxToReturn) {
 		String matchText0 = matchText;
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
+
+		System.out.println("searchByAssociations...");
+		long ms = System.currentTimeMillis();
+		long dt = 0;
+		long total_delay = 0;
+		boolean timeout = false;
 
 		boolean preprocess = true;
         if (matchText == null || matchText.length() == 0)
@@ -2715,6 +2564,8 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         String scheme = null;
         String version = null;
 
+        String message = null;
+
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 
@@ -2725,13 +2576,19 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             }
 
 			Vector cns_vec = new Vector();
+
 			for (int i=0; i<schemes.size(); i++) {
 				cns = null;
 				iterator = null;
 				scheme = (String) schemes.elementAt(i);
+				System.out.println("\tsearching " + scheme);
+
+				ms = System.currentTimeMillis();
 				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 				version = (String) versions.elementAt(i);
 				if (version != null) versionOrTag.setVersion(version);
+
+				//i++;
 
 				try {
 					if (lbSvc == null)
@@ -2751,7 +2608,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 							cns = restrictToSource(cns, source);
 							String associationName = null;
 							int direction = RESTRICT_TARGET;
-							CodedNodeGraph cng = getRestrictedCodedNodeGraph(lbSvc, scheme, version, associationName, cns, direction);
+							//CodedNodeGraph cng = getRestrictedCodedNodeGraph(lbSvc, scheme, version, associationName, cns, direction);
 							// toNode
 							boolean resolveForward = false;
 							boolean resolveBackward = true;
@@ -2759,11 +2616,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 							int resolveAssociationDepth = 1;
 							//int maxToReturn = -1;
 							ConceptReference graphFocus = null;
-							CodedNodeSet cns2 = cng.toNodeList(graphFocus, resolveForward, resolveBackward, resolveAssociationDepth, maxToReturn);
+							//CodedNodeSet cns2 = cng.toNodeList(graphFocus, resolveForward, resolveBackward, resolveAssociationDepth, maxToReturn);
 							//CodedNodeSet 	difference(CodedNodeSet codesToRemove)
-							cns = cns2.difference(cns);
+							//cns = cns2.difference(cns);
 							if (cns != null) {
-//KLO, testing
                                 cns = filterOutAnonymousClasses(lbSvc, scheme, cns);
                                 if (cns != null) {
 									cns_vec.add(cns);
@@ -2777,6 +2633,16 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				} catch (Exception e) {
 					e.printStackTrace();
 					//return null;
+				}
+
+				dt = System.currentTimeMillis() - ms;
+				ms = System.currentTimeMillis();
+				total_delay = total_delay + dt;
+
+				if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+					message = "WARNING: Search is incomplete -- please enter more specific search criteria.";
+					//cont_flag = false;
+					break;
 				}
 			}
 
@@ -2806,10 +2672,13 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			resolveConcepts = true;
             try {
                try {
-					long ms = System.currentTimeMillis(), delay = 0;
-                    //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
-                    iterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
+            	   boolean resolveForward = false;
+            	   boolean resolveBackward = true;
 
+            	   int resolveAssociationDepth = 1;
+                    //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    ResolvedConceptReferencesIterator quickUnionIterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    iterator = new SearchByAssociationIteratorDecorator(quickUnionIterator, resolveForward, resolveBackward, resolveAssociationDepth, maxToReturn);
                     // testing, KLO (work-around) failed
                     // iterator = filterOutAnonymousClasses(cns, iterator);
 
@@ -2830,7 +2699,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			return null;
 		}
 
-        return iterator;
+        // Pending LexEVS fix:
+        // if (iterator != null) iterator.setMessage(message);
+        //return iterator;
+        return new ResolvedConceptReferencesIteratorWrapper(iterator, message);
     }
 
 
