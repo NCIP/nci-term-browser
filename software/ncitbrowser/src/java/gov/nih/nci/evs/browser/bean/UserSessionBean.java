@@ -230,11 +230,13 @@ public class UserSessionBean extends Object {
 			} else {
        	    	ResolvedConceptReferencesIteratorWrapper wrapper =
        	    	    new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
-       	    	iterator = wrapper.getIterator();
-       	    	if (iterator != null) {
-					iteratorBean = new IteratorBean(iterator);
-					iteratorBean.setKey(key);
-					iteratorBeanManager.addIteratorBean(iteratorBean);
+       	    	if (wrapper != null) {
+					iterator = wrapper.getIterator();
+					if (iterator != null) {
+						iteratorBean = new IteratorBean(iterator);
+						iteratorBean.setKey(key);
+						iteratorBeanManager.addIteratorBean(iteratorBean);
+					}
 				}
 			}
 
@@ -244,12 +246,14 @@ public class UserSessionBean extends Object {
 				iterator = iteratorBean.getIterator();
 			} else {
                 ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
-       	    	iterator = wrapper.getIterator();
-       	    	if (iterator != null) {
-					iteratorBean = new IteratorBean(iterator);
-					iteratorBean.setKey(key);
-					iteratorBeanManager.addIteratorBean(iteratorBean);
-				}
+       	    	if (wrapper != null) {
+					iterator = wrapper.getIterator();
+					if (iterator != null) {
+						iteratorBean = new IteratorBean(iterator);
+						iteratorBean.setKey(key);
+						iteratorBeanManager.addIteratorBean(iteratorBean);
+					}
+			    }
 			}
 
 		} else if (searchTarget.compareTo("relationships") == 0) {
@@ -259,12 +263,14 @@ public class UserSessionBean extends Object {
 				iterator = iteratorBean.getIterator();
 			} else {
                 ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
-       	    	iterator = wrapper.getIterator();
-       	    	if (iterator != null) {
-					iteratorBean = new IteratorBean(iterator);
-					iteratorBean.setKey(key);
-					iteratorBeanManager.addIteratorBean(iteratorBean);
-				}
+       	    	if (wrapper != null) {
+					iterator = wrapper.getIterator();
+					if (iterator != null) {
+						iteratorBean = new IteratorBean(iterator);
+						iteratorBean.setKey(key);
+						iteratorBeanManager.addIteratorBean(iteratorBean);
+					}
+			    }
 			}
 		}
 
@@ -349,11 +355,13 @@ public class UserSessionBean extends Object {
         }
 
         String message = "No match found.";
+        int minimumSearchStringLength = NCItBrowserProperties.getMinimumSearchStringLength();
+
         if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
             message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
         }
 
-        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0 && matchText.length() <= 2) {
+        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0 && matchText.length() < minimumSearchStringLength) {
             message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
         }
 
@@ -887,25 +895,28 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 			long delay = 0;
 			System.out.println("Calling SearchUtils().searchByName " + matchText);
             ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
-			iterator = wrapper.getIterator();
+			if (wrapper != null) {
+				iterator = wrapper.getIterator();
+		    }
 			delay = System.currentTimeMillis() - ms;
 			System.out.println("searchByName delay (millisec.): " + delay);
 
 		} else if (searchTarget.compareTo("properties") == 0) {
             ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
-		    iterator = wrapper.getIterator();
+			if (wrapper != null) {
+				iterator = wrapper.getIterator();
+		    }
 		} else if (searchTarget.compareTo("relationships") == 0) {
 			designationOnly = true;
             ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByAssociations(schemes, versions, matchText, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
-		    iterator = wrapper.getIterator();
+		    if (wrapper != null) {
+		    	iterator = wrapper.getIterator();
+			}
 		}
 
         request.getSession().setAttribute("vocabulary", scheme);
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
-
-
-
 
         request.getSession().removeAttribute("neighborhood_synonyms");
         request.getSession().removeAttribute("neighborhood_atoms");
@@ -982,6 +993,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 			}
         }
 
+        int minimumSearchStringLength = NCItBrowserProperties.getMinimumSearchStringLength();
         if (ontologiesToSearchOn.size() == 0) {
 			request.getSession().removeAttribute("vocabulary");
 		} else if (ontologiesToSearchOn.size() == 1) {
@@ -996,7 +1008,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
             message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
         }
 
-        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0 && matchText.length() <= 2) {
+        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0 && matchText.length() < minimumSearchStringLength) {
             message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
         }
 
