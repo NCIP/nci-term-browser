@@ -68,7 +68,7 @@ public class HistoryUtils {
 			hs = lbSvc.getHistoryService(codingSchemeName);
 			if (hs != null) return true;
 		} catch (Exception ex) {
-			System.out.println("Unable to getHistoryService for " + codingSchemeName);
+			//System.out.println("Unable to getHistoryService for " + codingSchemeName);
 		}
 		return false;
 	}
