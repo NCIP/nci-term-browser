@@ -34,6 +34,8 @@ if (!page_timeout) {
       <td class="textbody" align=right>
         <%
           if (page_num > 1) {
+          
+          
         %>
         &nbsp;
         <i>
@@ -42,7 +44,21 @@ if (!page_timeout) {
         <%
           }
           if (num_pages > 1) {
-		  for (int idx=1; idx<=num_pages; idx++) {
+          
+          
+          int sliding_window_start = 1;
+          int sliding_window_end = num_pages;
+          int sliding_window_half_width = 5;
+          
+          sliding_window_start = page_num - sliding_window_half_width;
+          if (sliding_window_start < 1) sliding_window_start = 1;
+          
+          sliding_window_end = sliding_window_start + sliding_window_half_width * 2 - 1;
+          if (sliding_window_end > num_pages) sliding_window_end = num_pages;
+       
+          
+		  //for (int idx=1; idx<=num_pages; idx++) {
+		 for (int idx=sliding_window_start; idx<=sliding_window_end; idx++) { 
 		    String idx_str = Integer.toString(idx);
 		    if (page_num != idx) {
 		      %>
