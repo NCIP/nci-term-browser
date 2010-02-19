@@ -1,3 +1,5 @@
+<%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
+
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/multiple_search_results.jsf?" >
   <table>
     <tr>
@@ -21,7 +23,7 @@
           
           int sliding_window_start = 1;
           int sliding_window_end = num_pages;
-          int sliding_window_half_width = 5;
+          int sliding_window_half_width = NCItBrowserProperties.getSlidingWindowHalfWidth();
           
           sliding_window_start = page_num - sliding_window_half_width;
           if (sliding_window_start < 1) sliding_window_start = 1;

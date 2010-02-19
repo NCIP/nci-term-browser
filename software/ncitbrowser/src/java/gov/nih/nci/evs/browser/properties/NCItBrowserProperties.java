@@ -74,7 +74,7 @@ public class NCItBrowserProperties {
 
         public static final String PAGINATION_TIME_OUT= "PAGINATION_TIME_OUT";
         public static final String MINIMUM_SEARCH_STRING_LENGTH = "MINIMUM_SEARCH_STRING_LENGTH";
-
+        public static final String SLIDING_WINDOW_HALF_WIDTH = "SLIDING_WINDOW_HALF_WIDTH";
 
 
         private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
@@ -97,6 +97,8 @@ public class NCItBrowserProperties {
         private static String ncim_url = null;
         private static int    pagination_time_out = 4;
         private static int    minimum_search_string_length = 1;
+
+        private static int    sliding_window_half_width = 5;
 
         /**
          * Private constructor for singleton pattern.
@@ -147,9 +149,19 @@ public class NCItBrowserProperties {
 
                         String minimum_search_string_length_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MINIMUM_SEARCH_STRING_LENGTH);
                         if (minimum_search_string_length_str != null) {
-                        	minimum_search_string_length = Integer.parseInt(minimum_search_string_length_str);
+							int min_search_string_length = Integer.parseInt(minimum_search_string_length_str);
+							if (min_search_string_length > 1) {
+                        	    minimum_search_string_length = min_search_string_length;
+						    }
 					    }
-                    }
+                        String sliding_window_half_width_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.SLIDING_WINDOW_HALF_WIDTH);
+                        if (sliding_window_half_width_str != null) {
+                        	int sliding_window_halfwidth = Integer.parseInt(sliding_window_half_width_str);
+							if (sliding_window_halfwidth > 1) {
+                        	    sliding_window_half_width = sliding_window_halfwidth;
+						    }
+					    }
+                   }
                 }
             }
 
@@ -222,6 +234,10 @@ public class NCItBrowserProperties {
 
         public static int getMinimumSearchStringLength() {
             return minimum_search_string_length;
+        }
+
+        public static int getSlidingWindowHalfWidth() {
+            return sliding_window_half_width;
         }
 
     }
