@@ -1119,13 +1119,14 @@ public class SearchUtils {
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 
+System.out.println("searchByName ..." + matchText);
 
 long ms = System.currentTimeMillis(), delay = 0;
 long tnow = System.currentTimeMillis();
 long total_delay = 0;
 boolean debug_flag = false;
 
-if (debug_flag) System.out.println("Entering SearchUtils searchByName ...");
+//if (debug_flag) System.out.println("Entering SearchUtils searchByName ...");
 
 		boolean preprocess = true;
         if (matchText == null || matchText.length() == 0)
@@ -2324,6 +2325,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 
+
+		System.out.println("searchByProperties..." + matchText);
+
+
         if (matchText == null || matchText.length() == 0)
         {
 			return null;
@@ -2539,7 +2544,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 
-		System.out.println("searchByAssociations...");
+		System.out.println("searchByAssociations..." + matchText);
 		long ms = System.currentTimeMillis();
 		long dt = 0;
 		long total_delay = 0;
