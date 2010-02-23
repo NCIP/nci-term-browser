@@ -1356,7 +1356,6 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         return iterator;
 	}
 
-
 	public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String code) {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		Vector v = new Vector();
