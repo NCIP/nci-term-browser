@@ -70,6 +70,7 @@ import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
 
 import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
+import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
 
 //import static gov.nih.nci.evs.browser.common.Constants.*;
 
@@ -620,15 +621,11 @@ public class TreeUtils {
 
 
 
+
 	public static HashMap getSubconcepts(String scheme, String version, String code) {
 		if (scheme.compareTo("NCI Thesaurus") == 0) {
 		    return getAssociatedConcepts(scheme, version, code,	"subClassOf", false);
 		}
-        /*
-		else if (scheme.indexOf("MedDRA") != -1) {
-		    return getAssociatedConcepts(scheme, version, code,	"CHD", true);
-		}
-		*/
 
 		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
 		if (version != null)
@@ -1928,6 +1925,92 @@ public class TreeUtils {
 
 		}
 		return null;
+	}
+
+
+//ArrayList subconceptList = new ArrayList();
+
+    public static ArrayList getSubconceptNamesAndCodes(String scheme, String version, String code) {
+		// eturned bar delimited name|code
+		ArrayList list = new ArrayList();
+
+		CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+		if (version != null) csvt.setVersion(version);
+        long ms = System.currentTimeMillis();
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+					.getGenericExtension("LexBIGServiceConvenienceMethods");
+			lbscm.setLexBIGService(lbSvc);
+
+			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+			if (cs == null) return null;
+			Mappings mappings = cs.getMappings();
+			SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
+			if (hierarchies == null || hierarchies.length == 0) return null;
+
+		    SupportedHierarchy hierarchyDefn = hierarchies[0];
+			String hier_id = hierarchyDefn.getLocalId();
+
+			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
+			boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
+
+			NameAndValueList nameAndValueList = createNameAndValueList(associationsToNavigate, null);
+
+			ResolvedConceptReferenceList matches = null;
+			try {
+				CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+				NameAndValueList nameAndValueList_qualifier = null;
+				cng = cng.restrictToAssociations(nameAndValueList,
+						nameAndValueList_qualifier);
+				ConceptReference graphFocus = ConvenienceMethods
+						.createConceptReference(code, scheme);
+				matches = cng.resolveAsList(graphFocus, associationsNavigatedFwd, !associationsNavigatedFwd, 1, 1, new LocalNameList(), null, null, -1);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+			// Analyze the result ...
+			if (matches != null && matches.getResolvedConceptReferenceCount() > 0) {
+				ResolvedConceptReference ref =
+					(ResolvedConceptReference) matches.enumerateResolvedConceptReference().nextElement();
+                if (ref != null) {
+					AssociationList sourceof = ref.getSourceOf();
+					if (!associationsNavigatedFwd) sourceof = ref.getTargetOf();
+
+					if (sourceof != null) {
+						Association[] associations = sourceof.getAssociation();
+						if (associations != null) {
+							for (int i = 0; i < associations.length; i++) {
+								Association assoc = associations[i];
+								if (assoc != null) {
+									if (assoc.getAssociatedConcepts() != null) {
+										AssociatedConcept[] acl = assoc.getAssociatedConcepts().getAssociatedConcept();
+										if (acl != null) {
+											for (int j = 0; j < acl.length; j++) {
+												AssociatedConcept ac = acl[j];
+												if (ac != null) {
+													EntityDescription ed = ac.getEntityDescription();
+													if (ed != null) {
+														list.add(ed.getContent() + "|" + ac.getConceptCode());
+													}
+											    }
+											}
+										}
+								    }
+							    }
+							}
+						}
+					}
+			    }
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		System.out.println("Run time (milliseconds) getSubconcepts: "
+				+ (System.currentTimeMillis() - ms) + " to resolve ");
+		SortUtils.quickSort(list);
+		return list;
 	}
 
 

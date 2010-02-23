@@ -1429,6 +1429,7 @@ public class DataUtils {
 		Collections.sort(superconceptList);
 		map.put(TYPE_SUPERCONCEPT, superconceptList);
 
+/*
 		HashMap hmap_sub = TreeUtils.getSubconcepts(scheme, version, code);
 		if (hmap_sub != null) {
 			TreeItem ti = (TreeItem) hmap_sub.get(code);
@@ -1441,8 +1442,10 @@ public class DataUtils {
 				}
 		    }
 		}
+*/
 
-		Collections.sort(subconceptList);
+        subconceptList = TreeUtils.getSubconceptNamesAndCodes(scheme, version, code);
+		//Collections.sort(subconceptList);
 		map.put(TYPE_SUBCONCEPT, subconceptList);
 
         try {
