@@ -1277,7 +1277,6 @@ ms = System.currentTimeMillis();
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 			version = (String) versions.elementAt(lcv);
 			if (version != null) versionOrTag.setVersion(version);
-
 			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
 			if (iterator != null) {
 				try {
@@ -1301,6 +1300,66 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         return new ResolvedConceptReferencesIteratorWrapper(iterator);
 
     }
+
+
+
+    public static ResolvedConceptReferencesIterator filterIterator(ResolvedConceptReferencesIterator iterator, String scheme, String version, String code) {
+		if (iterator == null) return null;
+		try {
+			int num = iterator.numberRemaining();
+			if (num <= 1) return iterator;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+        try {
+			while(iterator.hasNext()){
+				try {
+					ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
+					for(ResolvedConceptReference ref : refs){
+						if (ref.getConceptCode().compareTo(code) == 0) {
+							long ms0 = System.currentTimeMillis(), delay0 = 0;
+							LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+							if (lbSvc == null)
+							{
+								System.out.println("lbSvc = null");
+								return null;
+							}
+							CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+							if (version != null) versionOrTag.setVersion(version);
+
+							ConceptReferenceList crefs = createConceptReferenceList(
+									new String[] { code }, scheme);
+
+							CodedNodeSet cns = null;
+							try {
+								try {
+									cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+								} catch (Exception e) {
+									e.printStackTrace();
+									return null;
+								}
+
+								if (cns == null) {
+									System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
+									return null;
+								}
+
+								cns = cns.restrictToCodes(crefs);
+								return cns.resolve(null, null, null);
+							} catch (Exception ex) {
+
+							}
+						}
+					}
+				} catch (Exception ex) {
+					break;
+				}
+			}
+		} catch (Exception ex) {
+
+		}
+		return null;
+	}
 
 
 	public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
@@ -1353,7 +1412,11 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		} catch (Exception ex) {
 			System.out.println("WARNING: searchByCode throws exception.");
 		}
-        return iterator;
+        //return iterator;
+        if (source == null || source.compareToIgnoreCase("ALL") == 0) {
+        	return filterIterator(iterator, scheme, version, matchText);
+		}
+		return iterator;
 	}
 
 	public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String code) {
@@ -1409,7 +1472,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		} catch (Exception ex) {
 			System.out.println("WARNING: searchByCode throws exception.");
 		}
-        return iterator;
+		//[#26386] Need app to be able to distinguish/prioritize/display matching code vrs. matching name results
+
+		return filterIterator(iterator, scheme, version, code);
+        //return iterator;
 	}
 
 
