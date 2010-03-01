@@ -1270,7 +1270,7 @@ if (debug_flag) System.out.println("Resolve CNS union " + "delay (millisec.): " 
 			}
 	    }
 
-ms = System.currentTimeMillis();
+        ms = System.currentTimeMillis();
         while (iterator_size == 0 && lcv < schemes.size()) {
 			scheme = (String) schemes.elementAt(lcv);
 
@@ -1288,6 +1288,10 @@ ms = System.currentTimeMillis();
 			}
 			lcv++;
 		}
+
+
+
+
 
 delay = System.currentTimeMillis() - ms;
 if (debug_flag) System.out.println("Match concept code " + "delay (millisec.): " + delay);
@@ -1412,6 +1416,8 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		} catch (Exception ex) {
 			System.out.println("WARNING: searchByCode throws exception.");
 		}
+
+
         //return iterator;
         if (source == null || source.compareToIgnoreCase("ALL") == 0) {
         	return filterIterator(iterator, scheme, version, matchText);
@@ -2667,7 +2673,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 						return null;
 					}
 
+                    //KLO, 022410 change failed
 					cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+					//cns = getNodeSetByEntityType(scheme, versionOrTag, "concept");
+
 					if (cns != null)
 					{
 						try {
@@ -2695,7 +2704,6 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 									cns_vec.add(cns);
 								}
 							}
-
 						} catch (Exception ex) {
 							//return null;
 						}
@@ -2815,8 +2823,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			}
 
 			//System.out.println("(**) Number of concepts: " + knt_concept);
-
+            //KLO 022410 changed failed.
             cns = lbSvc.getNodeSet(scheme, null, null);
+            //cns = getNodeSetByEntityType(scheme, null, "concept");
 
 			cns = cns.restrictToCodes(codeList);
 			SortOptionList sortCriteria = null;
@@ -2916,6 +2925,28 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		}
 		return propertyNames;
     }
+
+	public static CodedNodeSet getNodeSetByEntityType(String scheme, CodingSchemeVersionOrTag versionOrTag, String vEntry) {
+
+		LocalNameList list = new LocalNameList();
+		if (vEntry != null) list.addEntry(vEntry);
+
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null)
+            {
+                System.out.println("lbSvc = null");
+                return null;
+            }
+
+            return lbSvc.getNodeSet(scheme, versionOrTag, list);
+		} catch (Exception ex) {
+
+		}
+		return null;
+	}
+
 
 /*
     public static Concept getConceptByCode_ICD(String codingSchemeName, String vers, String ltag, String code) {

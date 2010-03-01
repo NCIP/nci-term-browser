@@ -1989,7 +1989,8 @@ public class TreeUtils {
 										if (acl != null) {
 											for (int j = 0; j < acl.length; j++) {
 												AssociatedConcept ac = acl[j];
-												if (ac != null) {
+												//KLO, 030110
+												if (ac != null && ac.getConceptCode().indexOf("@") == -1) {
 													EntityDescription ed = ac.getEntityDescription();
 													if (ed != null) {
 														list.add(ed.getContent() + "|" + ac.getConceptCode());
