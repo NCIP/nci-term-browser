@@ -116,7 +116,7 @@ public class SearchByAssociationIteratorDecorator implements ResolvedConceptRefe
 				throw new RuntimeException(e);
 			}
 		}
-		System.out.println("Paged " + page + " concepts in: " + (System.currentTimeMillis() - startTime));
+		//System.out.println("Paged " + page + " concepts in: " + (System.currentTimeMillis() - startTime));
 		return returnList;
 	}
 
@@ -186,7 +186,11 @@ public class SearchByAssociationIteratorDecorator implements ResolvedConceptRefe
 		if(position == this.currentChildren.size()){
 			currentChildren.clear();
 			this.position = 0;
-			if(this.quickIterator.hasNext()){
+
+			boolean cont_flag = true;
+
+			//if (this.quickIterator.hasNext()) {
+			while (this.quickIterator.hasNext() && this.currentChildren.size() == 0) {
 				ResolvedConceptReference ref = this.quickIterator.next();
 				if (ref != null) {
 					//KLO
@@ -205,35 +209,46 @@ public class SearchByAssociationIteratorDecorator implements ResolvedConceptRefe
 								null,
 								this.maxToReturn);
 
-					populateCurrentChildren(list.getResolvedConceptReference());
+					populateCurrentChildren(list.getResolvedConceptReference(), false);
 
 			    }
 			}
-			//System.out.println("Paged " + this.currentChildren.size() + " children.");
 		}
 	}
+
+
+	protected void displayRef(ResolvedConceptReference ref){
+		System.out.println(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+	}
+
 
 	/**
 	 * Populate current children.
 	 *
 	 * @param list the list
 	 */
-	public void populateCurrentChildren(ResolvedConceptReference[] list){
+	public void populateCurrentChildren(ResolvedConceptReference[] list, boolean addRoot){
 		if (list == null) return;
 
 		for(ResolvedConceptReference ref : list){
-			this.currentChildren.add(ref);
+
+			//displayRef(ref);
+
+			if(addRoot) {
+				this.currentChildren.add(ref);
+			}
 			if(ref.getSourceOf() != null){
 				if (ref.getSourceOf().getAssociation() != null) {
 					for(Association assoc : ref.getSourceOf().getAssociation()){
-						populateCurrentChildren(assoc.getAssociatedConcepts().getAssociatedConcept());
+						populateCurrentChildren(assoc.getAssociatedConcepts().getAssociatedConcept(), true);
 					}
 			    }
 			}
+
 			if(ref.getTargetOf() != null){
 				if (ref.getTargetOf().getAssociation() != null) {
 					for(Association assoc : ref.getTargetOf().getAssociation()){
-						populateCurrentChildren(assoc.getAssociatedConcepts().getAssociatedConcept());
+						populateCurrentChildren(assoc.getAssociatedConcepts().getAssociatedConcept(), true);
 					}
 			    }
 			}

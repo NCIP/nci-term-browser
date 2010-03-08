@@ -81,11 +81,13 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
           {
               page_string = page_number;
           }
+          
           request.getSession().setAttribute("new_search", Boolean.FALSE);
           int page_num = Integer.parseInt(page_string);
           int next_page_num = page_num + 1;
           int prev_page_num = page_num - 1;
           int page_size = 50;
+          
           if (selectedResultsPerPage != null)
           {
               page_size = Integer.parseInt(selectedResultsPerPage);
@@ -97,6 +99,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
           int size = iteratorBean.getSize();
           
           String match_size = new Integer(size).toString();
+
           
           if (iend > size-1) iend = size-1;
           int num_pages = size / page_size;
@@ -151,17 +154,35 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
                   Vector code_vec = new Vector();
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
-                      code_vec.add(rcr.getConceptCode());
+                      if (rcr != null) {
+                      	  code_vec.add(rcr.getConceptCode());
+                      } else {
+                          code_vec.add(null);
+                      }
                   }
+
 
                   //Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);
                   Vector status_vec = DataUtils.getConceptStatusByConceptCodes(search_results_dictionary, null, null, code_vec);
                   int i = -1;
+                 
                   for (int k=0; k<list.size(); k++) {
-                      ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
-                      String code = rcr.getConceptCode();
-                      String name = rcr.getEntityDescription().getContent();
+                      Object obj = list.get(k);
+                      ResolvedConceptReference rcr = null;
 
+if (obj == null) {
+   System.out.println("rcr == null???????????????????");
+} else {
+   rcr = (ResolvedConceptReference) obj;
+}
+                      
+                      if (rcr != null) {
+                      String code = rcr.getConceptCode();
+                      
+                      String name = "null";
+                      if (rcr.getEntityDescription() != null) {
+                          name = rcr.getEntityDescription().getContent();
+                      }
                       if (code == null || code.indexOf("@") != -1) {
                           i++;
 				if (i % 2 == 0) {
@@ -216,6 +237,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 				  </td>
 				</tr>
 				    <%
+                        }
                      }
                   }
 
