@@ -165,15 +165,13 @@ public class IteratorBean extends Object {
 		long total_delay = 0;
 		timeout = false;
         try {
-
 			while(iterator != null && iterator.hasNext() && lastResolved < idx2) {
 				ResolvedConceptReference[] refs = iterator.next(maxReturn).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs) {
+					//displayRef(ref);
 					lastResolved++;
 					this.list.set(lastResolved, ref);
 				}
-				System.out.println("Advancing iterator: " + lastResolved);
-
 				dt = System.currentTimeMillis() - ms;
 				ms = System.currentTimeMillis();
 				total_delay = total_delay + dt;
@@ -188,16 +186,33 @@ public class IteratorBean extends Object {
 			//ex.printStackTrace();
 		}
 
-		List rcr_list = new ArrayList();
+
+		/*
 		for (int i=idx1; i<=idx2; i++) {
 			ResolvedConceptReference rcr = (ResolvedConceptReference) this.list.get(i);
 			rcr_list.add(rcr);
 			if (i > lastResolved) break;
 		}
+		*/
+
+		Vector temp_vec = new Vector();
+		for (int i=idx1; i<=idx2; i++) {
+			ResolvedConceptReference rcr = (ResolvedConceptReference) this.list.get(i);
+			temp_vec.add(rcr);
+			if (i > lastResolved) break;
+		}
+		List rcr_list = new ArrayList();
+		for (int i=0; i<temp_vec.size(); i++) {
+			rcr_list.add(null);
+		}
+
+		for (int i=0; i<temp_vec.size(); i++) {
+			ResolvedConceptReference rcr = (ResolvedConceptReference) temp_vec.elementAt(i);
+			rcr_list.set(i, rcr);
+		}
 
 		System.out.println("getData Run time (ms): "
 					+ (System.currentTimeMillis() - ms));
-
 		return rcr_list;
 	}
 

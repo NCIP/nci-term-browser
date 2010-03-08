@@ -256,16 +256,9 @@ long ms = System.currentTimeMillis(), delay = 0;
 		  <p class="textbodyred">WARNING: System times out. Please advance fewer pages at one time.</p>
 		  <%
 	  } else {
-
-System.out.println("multiple_search_results list.size(): " + list.size());
-
-
                   for (int i=0; i<list.size(); i++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
-                      if (rcr == null) {
-System.out.println("multiple_search_results rcr: NULL: " + i);
-                      }
-                      
+                     
                       if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
 			      String code = rcr.getConceptCode();
 			      String name = rcr.getEntityDescription().getContent();
