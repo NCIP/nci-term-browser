@@ -189,6 +189,7 @@ public class SearchByAssociationIteratorDecorator implements ResolvedConceptRefe
 
 			boolean cont_flag = true;
 
+            //[#26965] Contains Relationship search returns invalid result
 			//if (this.quickIterator.hasNext()) {
 			while (this.quickIterator.hasNext() && this.currentChildren.size() == 0) {
 				ResolvedConceptReference ref = this.quickIterator.next();
@@ -227,6 +228,7 @@ public class SearchByAssociationIteratorDecorator implements ResolvedConceptRefe
 	 *
 	 * @param list the list
 	 */
+	//[#26965] Contains Relationship search returns invalid result
 	public void populateCurrentChildren(ResolvedConceptReference[] list, boolean addRoot){
 		if (list == null) return;
 
