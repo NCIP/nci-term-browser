@@ -16,7 +16,7 @@
    Build info: <%=ncit_build_info%>
  Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
-   LexEVS URL: <%=evs_service_url%>                    
+   LexEVS URL: <%=evs_service_url%>
   -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -39,9 +39,9 @@
   <script language="JavaScript">
      function checkVisited() {
        var test = '<%= request.getSession().getAttribute("visited") %>';
-       if (test == "" || test == "null") 
-    	   checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus');
-     }  
+       if (test == "" || test == "null")
+         checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus');
+     }
   </script>
 <%
     request.getSession().removeAttribute("dictionary");
@@ -51,14 +51,14 @@
   <div class="center-page">
     <form name="searchTerm">
     <%@ include file="/pages/templates/sub-header.jsp" %>
-    <!-- Main box -->    
+    <!-- Main box -->
     <div id="main-area">
         <input type="hidden" name="initial_search" value="true" />
         <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">
-          
+
           <table class="termstable" border="0">
                 <tr>
                   <td><img
@@ -75,16 +75,16 @@
                     src="<%= request.getContextPath() %>/images/clear.gif"
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
-                    
+
                   &nbsp;&nbsp; <h:commandButton id="search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
                     alt="Search">
                   </h:commandButton></td>
-                </tr>   
-          </table>      
-                
-          
+                </tr>
+          </table>
+
+
              <%
              String warning_msg = (String) request.getSession().getAttribute("warning");
              if (warning_msg != null) {
@@ -103,23 +103,23 @@
             <br/><br/>
             </span>
             <table class="termstable" border="0">
-            
+
               <tr>
               <%
                 List ontology_list = DataUtils.getOntologyList();
                 if (ontology_list == null) System.out.println("??????????? ontology_list == null");
                 int num_vocabularies = ontology_list.size();
 
-//KLO 010610                
+//KLO 010610
 //String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 
 String ontologiesToSearchOn = (String) request.getSession().getAttribute("defaultOntologiesToSearchOnStr");
 if (ontologiesToSearchOn == null) {
-	ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
+  ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
 }
 if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
    ontologiesToSearchOn = "|";
-} 
+}
 
                 HashMap display_name_hmap = null;
                 Vector display_name_vec = null;
@@ -171,6 +171,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                           <td>
                         <%
                         if (scheme.compareTo("NCI Thesaurus") == 0) {
+                           String nciturl = NCItBrowserProperties.getNCIT_URL();
                            if (ontologiesToSearchOn != null
                               && ontologiesToSearchOn.indexOf(label2) != -1) {
                            %>
@@ -181,7 +182,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                               <input type="checkbox" name="ontology_list" value="<%=label%>" /> <%
                            }
                            %>
-                              <a href="<%= request.getContextPath() %>"><%=label%></a>
+                              <a href="<%=nciturl %>"><%=label%></a>
                            <%
                         } else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
                               String ncimurl = NCItBrowserProperties.getNCIM_URL();
