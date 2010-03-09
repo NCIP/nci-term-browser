@@ -441,6 +441,11 @@
         </ConfigurableItem>
 
         <ConfigurableItem>
+                 <key>NCIT_URL</key>
+                 <value>@ncit.url@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
                  <key>TERM_SUGGESTION_APPLICATION_URL</key>
                  <value>@term.suggestion.application.url@</value>
         </ConfigurableItem>
@@ -459,16 +464,16 @@
                  <key>MINIMUM_SEARCH_STRING_LENGTH</key>
                  <value>@minimum_search_string_length@</value>
         </ConfigurableItem>
-        
+
         <ConfigurableItem>
                  <key>SLIDING_WINDOW_HALF_WIDTH</key>
                  <value>@sliding_window_half_width@</value>
         </ConfigurableItem>
-       
-  
+
+
     </ConfigurableItems>
-   
-        
+
+
     <MetadataElements>
         <MetadataElement>
                  <name>html_compatable_description</name>
