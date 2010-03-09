@@ -50,8 +50,8 @@ public class NCItBrowserProperties {
         private static List metadataElementList;
         private static List defSourceMappingList;
         private static HashMap defSourceMappingHashMap;
-	    private static List securityTokenList;
-	    private static HashMap securityTokenHashMap;
+        private static List securityTokenList;
+        private static HashMap securityTokenHashMap;
         private static HashMap configurableItemMap;
 
         // KLO
@@ -69,6 +69,7 @@ public class NCItBrowserProperties {
         public static final String NCIT_APP_VERSION = "APPLICATION_VERSION";
         public static final String ANTHILL_BUILD_TAG_BUILT = "ANTHILL_BUILD_TAG_BUILT";
         public static final String NCIM_URL = "NCIM_URL";
+        public static final String NCIT_URL = "NCIT_URL";
         public static final String TERM_SUGGESTION_APPLICATION_URL= "TERM_SUGGESTION_APPLICATION_URL";
         public static final String LICENSE_PAGE_OPTION= "LICENSE_PAGE_OPTION";
 
@@ -95,6 +96,7 @@ public class NCItBrowserProperties {
 
         private static String license_page_option = null;
         private static String ncim_url = null;
+        private static String ncit_url = null;
         private static int    pagination_time_out = 4;
         private static int    minimum_search_string_length = 1;
 
@@ -141,26 +143,27 @@ public class NCItBrowserProperties {
                         term_suggestion_application_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
                         license_page_option = NCItBrowserProperties.getProperty(NCItBrowserProperties.LICENSE_PAGE_OPTION);
                         ncim_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCIM_URL);
+                        ncit_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCIT_URL);
 
                         String pagination_time_out_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.PAGINATION_TIME_OUT);
                         if (pagination_time_out_str != null) {
-                        	pagination_time_out = Integer.parseInt(pagination_time_out_str);
-					    }
+                            pagination_time_out = Integer.parseInt(pagination_time_out_str);
+                        }
 
                         String minimum_search_string_length_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.MINIMUM_SEARCH_STRING_LENGTH);
                         if (minimum_search_string_length_str != null) {
-							int min_search_string_length = Integer.parseInt(minimum_search_string_length_str);
-							if (min_search_string_length > 1) {
-                        	    minimum_search_string_length = min_search_string_length;
-						    }
-					    }
+                            int min_search_string_length = Integer.parseInt(minimum_search_string_length_str);
+                            if (min_search_string_length > 1) {
+                                minimum_search_string_length = min_search_string_length;
+                            }
+                        }
                         String sliding_window_half_width_str = NCItBrowserProperties.getProperty(NCItBrowserProperties.SLIDING_WINDOW_HALF_WIDTH);
                         if (sliding_window_half_width_str != null) {
-                        	int sliding_window_halfwidth = Integer.parseInt(sliding_window_half_width_str);
-							if (sliding_window_halfwidth > 1) {
-                        	    sliding_window_half_width = sliding_window_halfwidth;
-						    }
-					    }
+                            int sliding_window_halfwidth = Integer.parseInt(sliding_window_half_width_str);
+                            if (sliding_window_halfwidth > 1) {
+                                sliding_window_half_width = sliding_window_halfwidth;
+                            }
+                        }
                    }
                 }
             }
@@ -226,6 +229,10 @@ public class NCItBrowserProperties {
 
         public static String getNCIM_URL() {
             return ncim_url;
+        }
+
+        public static String getNCIT_URL() {
+            return ncit_url;
         }
 
         public static int getPaginationTimeOut() {
