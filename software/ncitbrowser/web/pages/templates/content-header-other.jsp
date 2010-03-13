@@ -1,5 +1,5 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
-
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <!-- Thesaurus, banner search area -->
 <div class="bannerarea">
 <%
@@ -33,10 +33,10 @@
             }
 
 %>
-<a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=hdr_dictionary%>">
+<a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary)%>">
   <div class="vocabularynamebanner">
-    <div class="vocabularynameshort"><%=display_name%></div>
-    <div class="vocabularynamelong">Version:&nbsp;<%=term_browser_version%></div>
+    <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
+    <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(term_browser_version)%></div>
   </div>
 </a>
 <%

@@ -2,7 +2,7 @@
 <%@ page import="gov.nih.nci.evs.browser.common.Constants"%>
 <%
   String dictionaryName0 = null;
-  String dictionaryName = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+  String dictionaryName = (String) request.getParameter("dictionary");
   if (dictionaryName == null) dictionaryName = Constants.CODING_SCHEME_NAME;
 
   dictionaryName0 = dictionaryName;
@@ -26,16 +26,16 @@
          } else {
             if (menubar_version == null) {
       %> <a
-      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=hdr_dictionary0%>">Home</a>
+      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>">Home</a>
     <%
             } else {
       %> <a
-      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>">Home</a>
+      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">Home</a>
     <%
             }
          }
       %> | <a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=hdr_dictionary0%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
     View Hierarchy </a> <%
       if (hdr_dictionary0 != null && hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
       %> | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
