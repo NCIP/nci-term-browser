@@ -5,6 +5,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.MetadataElement" %>
@@ -102,13 +103,13 @@
   <!-- Thesaurus, banner search area -->
   <div class="bannerarea">
     <% if (menubar_version == null) { %>
-      <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">
+      <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&scheme=<%=HTTPUtils.cleanXSS(menubar_scheme)%>">
     <% } else { %>
-      <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">
+      <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&scheme=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">
     <% } %>
         <div class="vocabularynamebanner">
-          <div class="vocabularynameshort"><%=shortName%></div>
-          <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
+          <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(shortName)%></div>
+          <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
         </div>
       </a>
       <div class="search-globalnav">
@@ -150,9 +151,9 @@
       <tr>
         <td>
           <% if (menubar_version == null) { %>
-          <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>">Home</a>
+          <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&scheme=<%=HTTPUtils.cleanXSS(menubar_scheme)%>">Home</a>
           <% } else { %>
-          <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=dictionary%>&scheme=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
+          <a href="<%= request.getContextPath() %>/pages/vocabulary_home.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&scheme=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">Home</a>
           <% }
           if (download_site != null) {
            %>
@@ -160,7 +161,7 @@
               Download
             </a>
           <% } %>
-          | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+          | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
               View Hierarchy
             </a>
           <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>

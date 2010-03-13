@@ -10,6 +10,7 @@
 <%@ page import="java.util.Set"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.PropertyFileParser"%>
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties"%>
 <%@ page import="gov.nih.nci.evs.browser.bean.DisplayItem"%>
@@ -81,8 +82,7 @@
   <%
             String code = null;
               String type = null;
-              String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils
-                  .cleanXSS((String) request.getAttribute("singleton"));
+              String singleton = (String) request.getAttribute("singleton");
 
               if (singleton != null && singleton.compareTo("true") == 0) {
                 if (dictionary != null
@@ -139,8 +139,7 @@
               }
 
               if (type == null) {
-                type = gov.nih.nci.evs.browser.utils.HTTPUtils
-                    .cleanXSS((String) request.getParameter("type"));
+                type = (String) request.getParameter("type");
 
                 if (type == null) {
                   type = "properties";
@@ -191,7 +190,7 @@
   <div class="pagecontent">
   <table border="0" width="700px">
     <tr>
-      <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
+      <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
 
       <%
             Vector visitedConcepts = (Vector) request.getSession()
@@ -216,7 +215,7 @@
           %>
       <td align="right" valign="bottom" class="texttitle-blue-rightJust"
         nowrap><a
-        href="<%=term_suggestion_application_url%>?dictionary=<%=cd_dictionary%>&code=<%=code%>"
+        href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
         target="_blank" alt="Term Suggestion">Suggest changes to
       this concept</a></td>
       <%
@@ -240,7 +239,7 @@
   <%
             } else {
           %>
-  <div class="textbody"><%=name%></div>
+  <div class="textbody"><%=HTTPUtils.cleanXSS(name)%></div>
   <%
       }
     %> <%@ include file="/pages/templates/nciFooter.html"%>

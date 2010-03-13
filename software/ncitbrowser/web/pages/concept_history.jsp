@@ -2,8 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page import="java.util.Vector" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%
@@ -20,9 +20,8 @@
   </head>
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
   <%
-    String code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
-    String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-    dictionary = HTTPUtils.cleanXSS(dictionary);
+    String code = (String) request.getParameter("code");
+    String dictionary = (String) request.getParameter("dictionary");
     String vers = null;
     String ltag = null;
     Concept concept = (Concept) request.getSession().getAttribute("concept");
@@ -43,7 +42,7 @@
     if (concept == null) {
    %>
       <div class="textbody">
-          <%=msg%>
+          <%=HTTPUtils.cleanXSS(msg)%>
       </div>
   <%
     } else {
@@ -72,7 +71,7 @@
         <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
         <div id="popupContentArea">
           <!-- History content -->
-          <div class="pageTitle"><b><%=concept_name%> (Code <%=code%>)</b></div>
+          <div class="pageTitle"><b><%=HTTPUtils.cleanXSS(concept_name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</b></div>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
               <td align="left" class="texttitle-gray">
