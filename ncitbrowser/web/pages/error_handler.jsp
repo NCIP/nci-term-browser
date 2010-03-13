@@ -4,6 +4,7 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -38,7 +39,7 @@
   }
 %>
 <body>
-<!-- dictionary = <%=dictionary%> -->
+<!-- dictionary = <%=HTTPUtils.cleanXSS(dictionary)%> -->
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
@@ -49,10 +50,10 @@
         <% if (subApp == TB) {%>
           <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" alt="NCI Term Browser" border="0"/></a></div>
         <% } else if (subApp == NCIO) { %>
-          <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=dictionary%>">
+          <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">
             <div class="vocabularynamebanner">
-              <div class="vocabularynameshort"><%=dictionary%></div>
-              <div class="vocabularynamelong">Version: <%=version%></div>
+              <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(dictionary)%></div>
+              <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(version)%></div>
             </div>
           </a>
         <% } else { %>
@@ -66,9 +67,9 @@
       <!-- Page content -->
       <div class="pagecontent">
         <%
-          String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute(Constants.ERROR_MESSAGE));
+          String message = (String) request.getSession().getAttribute(Constants.ERROR_MESSAGE);
         %>
-        <b><%=message%></b>
+        <b><%=HTTPUtils.cleanXSS(message)%></b>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->

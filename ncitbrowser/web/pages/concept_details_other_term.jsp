@@ -10,6 +10,7 @@
 <%@ page import="java.util.Set"%>
 <%@ page import="java.util.Iterator"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.PropertyFileParser" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.DisplayItem" %>
@@ -90,10 +91,10 @@
                     || display_name.compareTo("null") == 0)
                   display_name = shortName;
           %>
-    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=dictionary%>">
+    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">
       <div class="vocabularynamebanner">
-        <div class="vocabularynameshort"><%=display_name%></div>
-        <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
+        <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
+        <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
       </div>
     </a>
         <%
@@ -109,8 +110,8 @@
               <table class="global-nav" border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td>
-                    <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=dictionary%>">Home</a>
-                    | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=dictionary%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                    <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">Home</a>
+                    | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                     View Hierarchy </a>
                     | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
                   </td>
@@ -143,17 +144,12 @@
             String code = null;
               String type = null;
 
-              String singleton = gov.nih.nci.evs.browser.utils.HTTPUtils
-                  .cleanXSS((String) request.getSession().getAttribute(
-                      "singleton"));
+              String singleton = (String) request.getSession().getAttribute("singleton");
               if (singleton != null && singleton.compareTo("true") == 0) {
-                //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("code"));
                 code = (String) request.getSession().getAttribute("code");
-              } else {
-                //code = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("code"));
+              } else {                
                 code = (String) request.getSession().getAttribute("code");
-                type = gov.nih.nci.evs.browser.utils.HTTPUtils
-                    .cleanXSS((String) request.getParameter("type"));
+                type = (String) request.getParameter("type");
               }
               if (dictionary == null) {
                 dictionary = Constants.CODING_SCHEME_NAME;
@@ -207,7 +203,7 @@
           %>
           <table border="0" width="700px">
             <tr>
-              <td class="texttitle-blue"><%=name%> (Code <%=code%>)</td>
+              <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
               <%
                 visitedConcepts = (Vector) request.getSession()
                         .getAttribute("visitedConcepts");
@@ -229,7 +225,7 @@
                         && term_suggestion_application_url.compareTo("") != 0) {
               %>
               <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
-                 <a href="<%=term_suggestion_application_url%>?dictionary=<%=tg_dictionary%>&code=<%=code%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
+                 <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(tg_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
               </td>
               <%
                 }
@@ -248,7 +244,7 @@
                 } else {
               %>
           <div class="textbody">
-              <%=name%>
+              <%=HTTPUtils.cleanXSS(name)%>
           </div>
            <%
             }
