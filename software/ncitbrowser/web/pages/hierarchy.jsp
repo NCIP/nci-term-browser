@@ -4,9 +4,9 @@
 
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -470,7 +470,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 %>
     <div>
       <img src="<%=basePath%>/images/other_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
-      <div class="vocabularynamepopupshort"><%=display_name%></div>
+      <div class="vocabularynamepopupshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
     </div>
 <%
 }
@@ -480,7 +480,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
               <td class="pageTitle" align="left">
-                <%=display_name%> Hierarchy
+                <%=HTTPUtils.cleanXSS(display_name)%> Hierarchy
               </td>
               <td class="pageTitle" align="right">
                 <font size="1" color="red" align="right">
@@ -504,7 +504,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 
           <form id="pg_form">
             <%
-              String ontology_node_id = HTTPUtils.cleanXSS((String)request.getParameter("code"));
+              String ontology_node_id = (String)request.getParameter("code");
 
               //String ontology_display_name = hierarchy_dictionary;
         //String schema = hierarchy_schema;
@@ -518,10 +518,10 @@ if (ontology_display_name == null) {
 }
 
             %>
-            <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=ontology_node_id%>" />
-            <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=ontology_display_name%>" />
-            <input type="hidden" id="schema" name="schema" value="<%=schema%>" />
-            <input type="hidden" id="version" name="version" value="<%=version%>" />
+            <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
+            <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=HTTPUtils.cleanXSS(ontology_display_name)%>" />
+            <input type="hidden" id="schema" name="schema" value="<%=HTTPUtils.cleanXSS(schema)%>" />
+            <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" />
 
           </form>
           <!-- End of Tree control content -->

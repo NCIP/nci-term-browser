@@ -5,6 +5,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="org.LexGrid.concepts.Concept"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils"%>
 <%@ page
   import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties"%>
@@ -175,12 +176,8 @@
             <div class="pagecontent">
 
         <p>
-        <%
-          //String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-        %>
-          To access <b><%=display_name%></b>, please review and accept the copyright/license statement below:
+          To access <b><%=HTTPUtils.cleanXSS(display_name)%></b>, please review and accept the copyright/license statement below:
         </p>
-
 
               <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>
               <p>If and only if you agree to these terms and conditions, click the
@@ -194,8 +191,8 @@
               </h:commandButton> &nbsp;&nbsp; <img
                 src="<%=request.getContextPath()%>/images/cancel.gif" name="cancel"
                 alt="reset" onClick="history.back()" /> 
-                <input type="hidden" id="dictionary" name="dictionary" value="<%=scheme%>" /> 
-                <input type="hidden" id="version" name="version" value="<%=version%>" /></form>
+                <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(scheme)%>" /> 
+                <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" /></form>
               </p>
               <%@ include file="/pages/templates/nciFooter.html" %>
             </div>
@@ -213,13 +210,13 @@
               <!-- Thesaurus, banner search area -->
               <div class="bannerarea">
                 <% if (menubar_version == null) { %>
-                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>">
+                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>">
                 <% } else { %>
-                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>">
+                  <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">
                 <% } %>
                     <div class="vocabularynamebanner">
-                      <div class="vocabularynameshort"><%=display_name%></div>
-                      <div class="vocabularynamelong">Version: <%=term_browser_version%></div>
+                      <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
+                      <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
                     </div>
                   </a>
                 <div class="search-globalnav">
@@ -237,15 +234,15 @@
                     <tr>
                       <td>
                         <% if (menubar_version == null) { %>
-                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>">Home</a>
+                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>">Home</a>
                         <% } else { %>
-                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>">Home</a>
+                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">Home</a>
                         <% }
                            if (download_site != null) {
                         %>    | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               Download </a>
                         <% } %>
-                        | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=menubar_scheme%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                        | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                         View Hierarchy </a>
                         <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
                               | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>
