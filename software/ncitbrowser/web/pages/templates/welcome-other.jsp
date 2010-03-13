@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
 
 <%
@@ -11,7 +12,7 @@
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
-    <!-- <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version_value %></div></td> -->
+    <!-- <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(vocablary_version_value) %></div></td> -->
   </tr></table>
   <hr/>
 
@@ -38,7 +39,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
       <%
         if (html_compatable_description_value == null) {
       %>
-            <%=scheme%>
+            <%=HTTPUtils.cleanXSS(scheme)%>
         <%
         } else {
         %>
