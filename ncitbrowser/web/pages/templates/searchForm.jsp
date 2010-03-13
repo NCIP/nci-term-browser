@@ -1,7 +1,8 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <form name="searchTerm" class="search-form" >
   <%
-    String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
+    String match_text = (String) request.getSession().getAttribute("matchText");
     String vocab_name = (String) request.getParameter("dictionary");
 
 if ( vocab_name == null) {
@@ -14,7 +15,7 @@ if ( vocab_name == null) {
   %>
   <input class="searchbox-input"
     name="matchText"
-    value="<%=match_text%>"
+    value="<%=HTTPUtils.cleanXSS(match_text)%>"
     onFocus="active = true" onBlur="active = false" onkeypress="return submitEnter('search',event)"
   />
   <h:commandButton
@@ -70,8 +71,8 @@ if ( vocab_name == null) {
   <%
   if (vocab_name != null) {
   %>
-    <input type="hidden" id="vocabulary" name="vocabulary" value="<%=vocab_name%>" />
-    <input type="hidden" id="scheme" name="scheme" value="<%=vocab_name%>" />
+    <input type="hidden" id="vocabulary" name="vocabulary" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
+    <input type="hidden" id="scheme" name="scheme" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
   <%
   }
   %>
