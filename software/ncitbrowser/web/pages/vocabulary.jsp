@@ -57,6 +57,10 @@
         /* ------------------------ */
 
         String scheme = (String) request.getParameter("dictionary");
+        
+//KLO, testing        
+if (scheme != null) scheme = DataUtils.getFormalName(scheme);        
+        
         scheme = DataUtils.searchFormalName(scheme);
 
         String shortName = DataUtils.getLocalName(scheme);
@@ -95,6 +99,11 @@
         request.getSession().setAttribute("dictionary", scheme);
         
         menubar_scheme = scheme;
+        //KLO tesing
+        if (menubar_scheme != null) {
+            menubar_scheme = DataUtils.getFormalName(menubar_scheme); 
+        }
+
         menubar_version = version;
         menubar_scheme0 = menubar_scheme;
 
