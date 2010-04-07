@@ -57,6 +57,7 @@
     <div id="main-area">
   <%
     String dictionary = (String) request.getParameter("dictionary");
+    
     String scheme = (String) request.getParameter("scheme");
     String shortName = "Vocabulary";
     if (scheme == null) {
@@ -95,7 +96,10 @@
       version = version.replaceAll("%20", " ");
       request.setAttribute("version", version);
     }
+       
+    
     if (dictionary != null) {
+        dictionary = DataUtils.getFormalName(dictionary);    
         dictionary = dictionary.replaceAll("%20", " ");
         request.setAttribute("dictionary", dictionary);
     }
