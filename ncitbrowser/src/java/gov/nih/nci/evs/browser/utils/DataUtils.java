@@ -399,13 +399,13 @@ public class DataUtils {
 	}
 
     public static String getFormalName(String key) {
-		System.out.println("getFormalName: " + key);
 		if (key == null) {
 			return null;
 		}
 		if (localName2FormalNameHashMap == null) {
 			setCodingSchemeMap();
 		}
+		if (!localName2FormalNameHashMap.containsKey(key)) return null;
 		return (String) localName2FormalNameHashMap.get(key);
 	}
 
