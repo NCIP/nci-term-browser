@@ -392,6 +392,10 @@ public class DataUtils {
 	}
 
     public static String getFormalName(String key) {
+		System.out.println("getFormalName: " + key);
+		if (key == null) {
+			return null;
+		}
 		if (localName2FormalNameHashMap == null) {
 			setCodingSchemeMap();
 		}
@@ -2630,6 +2634,12 @@ escape("It's me!") // result: It%27s%20me%21
 
     // for HL7 fix
     public static String searchFormalName(String s) {
+		if (s == null) return null;
+
+		if (formalName2LocalNameHashMap == null) {
+			setCodingSchemeMap();
+		}
+
 		if (formalName2LocalNameHashMap.containsKey(s)) return s;
 		Iterator it = formalName2LocalNameHashMap.keySet().iterator();
 		while (it.hasNext()) {
