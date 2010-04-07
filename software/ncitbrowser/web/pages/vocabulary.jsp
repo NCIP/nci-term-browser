@@ -57,24 +57,21 @@
         /* ------------------------ */
 
         String scheme = (String) request.getParameter("dictionary");
-        
+        String shortName = null;
 //KLO, testing        
-if (scheme != null) scheme = DataUtils.getFormalName(scheme);        
-        
+if (scheme != null) {
+        scheme = DataUtils.getFormalName(scheme);        
         scheme = DataUtils.searchFormalName(scheme);
-
-        String shortName = DataUtils.getLocalName(scheme);
+        shortName = DataUtils.getLocalName(scheme);
+}
 
         String dictionary = null;
         if (scheme == null) {
-          //scheme = (String) request.getAttribute("scheme");
             scheme = (String) request.getSession().getAttribute("scheme");
         }
         String version = (String) request.getParameter("version");
         if (version == null) {
-            //version = (String) request.getAttribute("version");
             version = (String) request.getSession().getAttribute("version");
-            
         }
 
         String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
