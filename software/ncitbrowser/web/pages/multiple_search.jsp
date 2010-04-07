@@ -45,6 +45,7 @@
   </script>
 <%
     request.getSession().removeAttribute("dictionary");
+    
 %>
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
@@ -58,6 +59,9 @@
         <!-- Page content -->
         <div class="pagecontent">
           <div class="tabTableContentContainer">
+
+
+
 
           <table class="termstable" border="0">
                 <tr>
@@ -92,6 +96,15 @@
                 <p class="textbodyred">&nbsp;<%=warning_msg%></p>
              <%
              }
+    
+             String redirect_ncim_message = (String) request.getSession().getAttribute("redirect_ncim_message");
+	     if (redirect_ncim_message != null && redirect_ncim_message.compareTo("null") != 0) {
+	        request.getSession().removeAttribute("redirect_ncim_message"); 
+             %>
+                <p class="textbodyred">&nbsp;<%=redirect_ncim_message%></p>
+             <%
+	     }             
+             
              request.getSession().removeAttribute("warning");
              String hide_ontology_list = (String) request.getSession().getAttribute("hide_ontology_list");
              request.getSession().removeAttribute("hide_ontology_list");
