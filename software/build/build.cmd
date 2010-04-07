@@ -17,6 +17,7 @@ if "%1" == "" (
     echo   upgrade      -- Build and upgrade application
     echo   install      -- Builds, installs JBoss locally
     echo   dev          -- Builds, upgrades JBoss on DEV
+    echo   ci           -- Builds, upgrades JBoss on CI
     echo   qa           -- Builds, upgrades JBoss on QA
     echo   data-qa      -- Builds, upgrades JBoss on Data QA
     echo   deploy       -- Redeploy application
