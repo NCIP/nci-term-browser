@@ -57,10 +57,11 @@
         /* ------------------------ */
 
         String scheme = (String) request.getParameter("dictionary");
+        String vocabulary_home_str = (String) request.getParameter("home");
         String shortName = null;
 //KLO, testing        
 if (scheme != null) {
-        scheme = DataUtils.getFormalName(scheme);        
+        scheme = DataUtils.getFormalName(scheme);  
         scheme = DataUtils.searchFormalName(scheme);
         shortName = DataUtils.getLocalName(scheme);
 }
@@ -92,7 +93,7 @@ if (scheme != null) {
         }
         
         
-        System.out.println("(**) dictionary.jsp setAttribute dictionary : " + scheme);
+        System.out.println("(**) vocabulary.jsp setAttribute dictionary : " + scheme);
         request.getSession().setAttribute("dictionary", scheme);
         
         menubar_scheme = scheme;
@@ -250,7 +251,7 @@ if (scheme != null) {
                         <% } %>
                         | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                         View Hierarchy </a>
-                        <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
+                        <% if (menubar_scheme0 != null && menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
                               | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>
                         <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
                       </td>

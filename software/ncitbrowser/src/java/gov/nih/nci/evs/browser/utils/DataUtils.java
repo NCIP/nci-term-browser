@@ -274,13 +274,20 @@ public class DataUtils {
 
 						try {
 							CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
+
+							String [] localnames = cs.getLocalName();
+							for (int m=0; m<localnames.length; m++) {
+								String localname = localnames[m];
+								System.out.println("\tlocal name: " + localname);
+								localName2FormalNameHashMap.put(localname, formalname);
+							}
+
 							NameAndValue[] nvList = MetadataUtils.getMetadataProperties(cs);
 							if (cs != null && nvList != null) {
 
 								String locallname = css.getLocalName();
 								String value = formalname + " (version: " + representsVersion + ")";
 								System.out.println("\tformalname & verson: " + value);
-
 
                                 Vector<String> propertyNames = getPropertyNameListData(formalname, representsVersion);
                                 if (propertyNames.contains("Concept_Status")) {
@@ -296,7 +303,7 @@ public class DataUtils {
 								formalName2LocalNameHashMap.put(locallname, locallname);
 
 								localName2FormalNameHashMap.put(formalname, formalname);
-								localName2FormalNameHashMap.put(locallname, formalname);
+								//localName2FormalNameHashMap.put(locallname, formalname);
 
 	//						String displayName = getMetadataValue(formalname, "display_name");
 	//						System.out.println("\tdisplay_name: " + displayName);
