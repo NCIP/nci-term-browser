@@ -11,6 +11,8 @@ public class Constants {
     static public final int MINOR_VER = 0;
     static public final String CONFIG_FILE = "NCItBrowserProperties.xml";
     static public final String CODING_SCHEME_NAME = "NCI Thesaurus";
+    static public final String NCI_THESAURUS = "NCI Thesaurus";
+    static public final String NCI_METATHESAURUS = "NCI Metathesaurus";
 
 	// Application constants
 	static public final String NA = "N/A";

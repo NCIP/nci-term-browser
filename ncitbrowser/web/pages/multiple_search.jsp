@@ -97,11 +97,11 @@
              <%
              }
     
-             String redirect_ncim_message = (String) request.getSession().getAttribute("redirect_ncim_message");
-	     if (redirect_ncim_message != null && redirect_ncim_message.compareTo("null") != 0) {
-	        request.getSession().removeAttribute("redirect_ncim_message"); 
+             String unsupported_vocabulary_message = (String) request.getSession().getAttribute("unsupported_vocabulary_message");
+	     if (unsupported_vocabulary_message != null && unsupported_vocabulary_message.compareTo("null") != 0) {
+	        request.getSession().removeAttribute("unsupported_vocabulary_message"); 
              %>
-                <p class="textbodyred">&nbsp;<%=redirect_ncim_message%></p>
+                <p class="textbodyred">&nbsp;<%=unsupported_vocabulary_message%></p>
              <%
 	     }             
              
