@@ -93,7 +93,6 @@ if (scheme != null) {
         }
         
         
-        System.out.println("(**) vocabulary.jsp setAttribute dictionary : " + scheme);
         request.getSession().setAttribute("dictionary", scheme);
         
         menubar_scheme = scheme;
