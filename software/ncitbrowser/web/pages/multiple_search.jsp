@@ -60,9 +60,6 @@
         <div class="pagecontent">
           <div class="tabTableContentContainer">
 
-
-
-
           <table class="termstable" border="0">
                 <tr>
                   <td><img

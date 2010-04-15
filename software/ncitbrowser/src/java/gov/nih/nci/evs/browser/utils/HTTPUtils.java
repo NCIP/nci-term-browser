@@ -49,7 +49,7 @@ public class HTTPUtils {
 		return string;
 
 	}
-	
+
     public static void printRequestSessionAttributes() {
         System.out.println(" ");
         System.out.println(Utils.SEPARATOR);
@@ -58,7 +58,7 @@ public class HTTPUtils {
         try {
             HttpServletRequest request = (HttpServletRequest)FacesContext.
                 getCurrentInstance().getExternalContext().getRequest();
-    
+
             HttpSession session = request.getSession();
             Enumeration<?> enumeration = SortUtils.sort(session.getAttributeNames());
             int i=0;
@@ -82,7 +82,7 @@ public class HTTPUtils {
         try {
             HttpServletRequest request = (HttpServletRequest)FacesContext.
                 getCurrentInstance().getExternalContext().getRequest();
-    
+
             Enumeration<?> enumeration = SortUtils.sort(request.getAttributeNames());
             int i=0;
             while (enumeration.hasMoreElements()) {
@@ -96,7 +96,7 @@ public class HTTPUtils {
                 e.getMessage());
         }
 	}
-    
+
     public static void printRequestParameters() {
         System.out.println(" ");
         System.out.println(Utils.SEPARATOR);
@@ -119,11 +119,34 @@ public class HTTPUtils {
                 e.getMessage());
         }
     }
-    
+
 	public static void printAttributes() {
 	    printRequestSessionAttributes();
 	    printRequestAttributes();
         printRequestParameters();
         System.out.println(" ");
+	}
+
+	public static String convertJSPString(String t) {
+	// Convert problem characters to JavaScript Escaped values
+	  if (t == null) {
+		return "";
+	  }
+
+	  if (t.compareTo("") == 0) {
+		return "";
+	  }
+
+	  String sigleQuoteChar = "'";
+	  String doubleQuoteChar = "\"";
+
+	  String dq = "&quot;";
+
+	  t = t.replaceAll(sigleQuoteChar,"\\" + sigleQuoteChar);
+	  t = t.replaceAll(doubleQuoteChar,"\\" + dq);
+	  t = t.replaceAll("\r","\\r");  // replace CR with \r;
+	  t = t.replaceAll("\n","\\n");  // replace LF with \n;
+
+	  return t;
 	}
 }
