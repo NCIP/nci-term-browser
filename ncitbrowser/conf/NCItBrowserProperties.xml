@@ -342,6 +342,16 @@
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
+
+       <DisplayItem>
+            <propertyName>NCI_THESAURUS_CODE</propertyName>
+            <itemLabel>NCI Thesaurus Code</itemLabel>
+            <url>@ncit.url@/ConceptReport.jsp?dictionary=NCI%20Thesaurus&amp;code=</url>
+            <hyperlinkText>see NCI Thesaurus info</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+
+
        <DisplayItem>
             <propertyName>MedDRA_Code</propertyName>
             <itemLabel>MedDRA Code</itemLabel>
