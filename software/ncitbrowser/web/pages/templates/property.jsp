@@ -155,13 +155,14 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 }
 %>
 <%
+
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
     String propName_label = (String) properties_to_display_label.elementAt(i);
     
     
  
-if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
+if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
 	propName_label = dictionary + " Code";
 }
     
