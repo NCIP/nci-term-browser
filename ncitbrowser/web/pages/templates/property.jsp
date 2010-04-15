@@ -1,3 +1,5 @@
+<%@ page import="gov.nih.nci.evs.browser.utils.FormatUtils" %>
+
 <%
   HashMap def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
   
@@ -163,12 +165,13 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 	propName_label = dictionary + " Code";
 }
     
-    
     String propName_label2 = propName_label;
     String url = (String) properties_to_display_url.elementAt(i);
+    
     String linktext = (String) properties_to_display_linktext.elementAt(i);
     String qualifier = "";
     if (url != null) {
+    
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
 
@@ -180,13 +183,16 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
         if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 || propName_label.indexOf("definition") != -1)) {
           value_wo_qualifier = value.substring(0, n);
           qualifier = value.substring(n+1, value.length());
+          
           if (def_map != null && def_map.containsKey(qualifier)) {
               String def_source_display_value = (String) def_map.get(qualifier);
               value = value_wo_qualifier + " (" + qualifier + ")";
               propName_label = def_source_display_value + " " + propName_label2;
           } else {
-         
-		  if (qualifier.compareTo("NCI") != 0) {
+
+		  if (qualifier.indexOf("PDQ") != -1) {
+			value = FormatUtils.reformatPDQDefinition(value);
+		  } else if (qualifier.compareTo("NCI") != 0) {
 		      value = value_wo_qualifier;
 		      propName_label = qualifier + " " + propName_label2;
 		  } else
@@ -203,7 +209,6 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 <%
       }
     } else if (propName_label.indexOf("Synonyms") == -1) {
-    
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
 
@@ -211,12 +216,18 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
         int k = 0;  
         for (int j=0; j<value_vec.size(); j++) {
           String value = (String) value_vec.elementAt(j);
+if(propName_label.compareTo("Definition") == 0) {
+    value = FormatUtils.reformatPDQDefinition(value);
+}
+          
           String value_wo_qualifier = value;
           int n = value.indexOf("|");
 
           if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 || propName_label.indexOf("definition") != -1)) {
+
               value_wo_qualifier = value.substring(0, n);
               qualifier = value.substring(n+1, value.length());
+              
               if (def_map != null && def_map.containsKey(qualifier)) {
 	          String def_source_display_value = (String) def_map.get(qualifier);
 	          value = value_wo_qualifier + " (" + qualifier + ")";
@@ -224,7 +235,10 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
                   
                   
               } else {
-		    if (qualifier.compareTo("NCI") != 0) {
+              
+		    if (qualifier.indexOf("PDQ") != -1) {
+			value = FormatUtils.reformatPDQDefinition(value);
+		    } else if (qualifier.compareTo("NCI") != 0) {
 		      value = value_wo_qualifier;
 		      propName_label = qualifier + " " + propName_label2;
 		      
@@ -233,6 +247,8 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0) {
 		    }
               }
           }
+          
+          
           if (k == 0) {
 %>
             <p><b><%=propName_label%>:&nbsp;</b><%=value%></p>
