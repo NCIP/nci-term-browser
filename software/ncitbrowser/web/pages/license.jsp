@@ -1,5 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
@@ -20,6 +22,10 @@
   String version = (String) request.getAttribute("version");
   String ontology_list_str = (String) request.getAttribute("ontology_list_str");
   String matchText = (String) request.getAttribute("matchText");
+  
+    if (matchText == null) matchText = "";
+    String license_page__match_text = HTTPUtils.convertJSPString(matchText); 
+  
   
   String searchTarget = (String) request.getAttribute("searchTarget");
   String matchAlgorithm = (String) request.getAttribute("algorithm");
@@ -77,7 +83,7 @@
               <img src="<%= request.getContextPath() %>/images/cancel.gif" border="0" alt="Cancel"/>
             </a>
 
-            <input type="hidden" id="matchText" name="matchText" value="<%=matchText%>" />
+            <input type="hidden" id="matchText" name="matchText" value="<%=license_page__match_text%>" />
             <input type="hidden" id="algorithm" name="algorithm" value="<%=matchAlgorithm%>" />
             <input type="hidden" id="ontology_list_str" name="ontology_list_str" value="<%=ontology_list_str%>" />
             <input type="hidden" id="scheme" name="scheme" value="<%=scheme0%>" />

@@ -125,6 +125,7 @@ public class UserSessionBean extends Object {
 
         String matchText = (String) request.getParameter("matchText");
         if (matchText != null) matchText = matchText.trim();
+
         //[#19965] Error message is not displayed when Search Criteria is not proivded
         if (matchText == null || matchText.length() == 0)
         {
@@ -639,12 +640,13 @@ public class UserSessionBean extends Object {
 		}
 
 		String matchText = (String) request.getParameter("matchText");
-
         if (matchText != null) {
 			matchText = matchText.trim();
-			request.getSession().setAttribute("matchText", matchText);
+			//request.getSession().setAttribute("matchText", matchText);
+			request.setAttribute("matchText", matchText);
 		} else {
-			matchText = (String) request.getSession().getAttribute("matchText");
+			//matchText = (String) request.getSession().getAttribute("matchText");
+			matchText = (String) request.getAttribute("matchText");
 		}
 
 		String multiple_search_error = (String) request.getSession().getAttribute("multiple_search_no_match_error");
@@ -864,6 +866,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
                         boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
                         if (isLicensed && !accepted) {
                             request.setAttribute("matchText", matchText);
+
                             request.setAttribute("searchTarget", searchTarget);
                             request.setAttribute("algorithm", matchAlgorithm);
                             request.setAttribute("ontology_list_str", ontology_list_str);

@@ -1,5 +1,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+
 <form name="searchTerm" class="search-form" >
   <%
     String match_text = (String) request.getSession().getAttribute("matchText");
@@ -12,10 +14,12 @@ if ( vocab_name == null) {
     vocab_name = DataUtils.getCodingSchemeName(vocab_name);
 
     if (match_text == null) match_text = "";
+    String displayed_match_text = HTTPUtils.convertJSPString(match_text); 
+    
   %>
   <input class="searchbox-input"
     name="matchText"
-    value="<%=HTTPUtils.cleanXSS(match_text)%>"
+    value="<%=displayed_match_text%>"
     onFocus="active = true" onBlur="active = false" onkeypress="return submitEnter('search',event)"
   />
   <h:commandButton
