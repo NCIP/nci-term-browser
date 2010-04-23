@@ -206,7 +206,6 @@ public class DataUtils {
 	}
 
 
-//static Vector<String> getPropertyNameListData(
     private static void setCodingSchemeMap()
 	{
 		System.out.println("Initializing ...");
@@ -285,7 +284,19 @@ public class DataUtils {
 							NameAndValue[] nvList = MetadataUtils.getMetadataProperties(cs);
 							if (cs != null && nvList != null) {
 
-								String locallname = css.getLocalName();
+								String css_local_name = css.getLocalName();
+								boolean localname_exist = false;
+								for (int lcv=0; lcv<localnames.length; lcv++) {
+									String local_nm = (String) localnames[lcv];
+									if (local_nm.compareTo(css_local_name) == 0) {
+										localname_exist = true;
+										break;
+									}
+								}
+								if (!localname_exist) {
+									System.out.println("\tlocal name (*): " + css_local_name);
+								}
+
 								String value = formalname + " (version: " + representsVersion + ")";
 								System.out.println("\tformalname & verson: " + value);
 
@@ -299,11 +310,11 @@ public class DataUtils {
 									codingSchemeHashSet.add(formalname);
 								}
 
-								formalName2LocalNameHashMap.put(formalname, locallname);
-								formalName2LocalNameHashMap.put(locallname, locallname);
+								formalName2LocalNameHashMap.put(formalname, css_local_name);
+								formalName2LocalNameHashMap.put(css_local_name, css_local_name);
 
 								localName2FormalNameHashMap.put(formalname, formalname);
-								//localName2FormalNameHashMap.put(locallname, formalname);
+								localName2FormalNameHashMap.put(css_local_name, formalname);
 
 	//						String displayName = getMetadataValue(formalname, "display_name");
 	//						System.out.println("\tdisplay_name: " + displayName);
@@ -368,6 +379,8 @@ public class DataUtils {
 			}
 		}
 	}
+
+
 
     public static String getMetadataValue(String scheme, String propertyName) {
 		Vector v = getMetadataValues(scheme, propertyName);
@@ -2377,7 +2390,7 @@ escape("It's me!") // result: It%27s%20me%21
 			String vocabulary_name = getMetadataValue(formalName, "display_name");
 			String code = (String) w.elementAt(1);
 			String name = (String) w.elementAt(2);
-			name = name = htmlEntityEncode(name);
+			name = htmlEntityEncode(name);
             strbuf.append("<li>");
             line =
                "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
