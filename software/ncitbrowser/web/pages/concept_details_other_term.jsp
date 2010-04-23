@@ -210,8 +210,11 @@
                     if (visitedConcepts == null) {
                       visitedConcepts = new Vector();
                     }
-                    String localCodingSchemeName = DataUtils
-                        .getLocalName(dictionary);
+                    String localCodingSchemeName = DataUtils.getLocalName(dictionary);
+                    
+System.out.println("concept_details_other_term.jsp  dictionary: " + dictionary);
+System.out.println("concept_details_other_term.jsp  localCodingSchemeName: " + localCodingSchemeName);
+                    
                     String visitedConceptStr = localCodingSchemeName + "|"
                         + code + "|" + name;
                     if (!visitedConcepts.contains(visitedConceptStr)) {
