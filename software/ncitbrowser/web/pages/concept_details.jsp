@@ -181,6 +181,7 @@
   <%
           }
             String tg_dictionary_0 = dictionary;
+            
             String tg_dictionary = DataUtils.replaceAll(dictionary, " ",
                 "%20");
             if (c != null) {
@@ -201,6 +202,8 @@
 
                 String localCodingSchemeName = DataUtils
                     .getLocalName(tg_dictionary_0);
+                   
+                    
                 String visitedConceptStr = localCodingSchemeName + "|"
                     + code + "|" + name;
                 if (!visitedConcepts.contains(visitedConceptStr)) {
