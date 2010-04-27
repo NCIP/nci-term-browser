@@ -1414,7 +1414,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             }
 
 		} catch (Exception ex) {
-			System.out.println("WARNING: searchByCode throws exception.");
+			//System.out.println("WARNING: searchByCode throws exception.");
 		}
 
 

@@ -972,6 +972,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 				if (ref == null) {
 					String msg = "Error: Null ResolvedConceptReference encountered.";
 					request.getSession().setAttribute("message", msg);
+					request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 					return "message";
 
 				} else {
@@ -1036,8 +1037,6 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 		request.getSession().setAttribute("multiple_search_no_match_error", "true");
 
 		request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
-
-
 		return "multiple_search";
     }
 
