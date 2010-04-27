@@ -8,8 +8,8 @@
 //  String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
 //    .cleanXSS((String) request.getAttribute("matchText"));
 
-String match_text = (String) request.getSession().getAttribute("matchText");
- 
+//String match_text = (String) request.getSession().getAttribute("matchText");
+String match_text = (String) request.getAttribute("matchText");
   
   if (match_text == null) match_text = "";
  

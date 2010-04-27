@@ -5,6 +5,10 @@
 <form name="searchTerm" class="search-form" >
   <%
     String match_text = (String) request.getSession().getAttribute("matchText");
+    
+System.out.println("searchForm.jsp match_text: " + match_text);    
+    
+    
     String vocab_name = (String) request.getParameter("dictionary");
 
 if ( vocab_name == null) {
