@@ -200,7 +200,12 @@
         <condition property="os.temp.dir" value="c:/temp/${project.name}">
             <os family="windows" />
         </condition>
+
+        <mkdir dir="${os.temp.dir}"/>
+        <chmod file="${os.temp.dir}" perm="777"/>
+
         <!-- Copy files to ensure values containing variables are expanded, such properties are stored in embedded.filterset and then copy with filter files -->
+
         <copy todir="${common.dir.dest}" filtering="true">
             <fileset dir="${common.dir.src}">
                 <include name="**/*"/>
