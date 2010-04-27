@@ -27,6 +27,8 @@ import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 
 import gov.nih.nci.evs.browser.utils.ResolvedConceptReferencesIteratorWrapper;
 
+import gov.nih.nci.evs.browser.utils.HTTPUtils;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -692,9 +694,9 @@ public class UserSessionBean extends Object {
 				request.getSession().setAttribute("message", message);
 				request.getSession().removeAttribute("ontologiesToSearchOn");
 
-
 //String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
 request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
+request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 
 				return "multiple_search";
 			} else {
@@ -734,10 +736,6 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 
 		}
 
-
-
-
-
         String hide_ontology_list = "false";
         //[#19965] Error message is not displayed when Search Criteria is not proivided
         if (matchText == null || matchText.length() == 0)
@@ -750,6 +748,10 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 			request.getSession().setAttribute("hide_ontology_list", hide_ontology_list);
             request.getSession().setAttribute("warning", message);
             request.getSession().setAttribute("message", message);
+
+            request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
+
+
             return "multiple_search";
         }
 
@@ -761,6 +763,9 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 				String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
 				request.getSession().setAttribute("warning", msg);
 				request.getSession().setAttribute("message", msg);
+
+				request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
+
 				return "multiple_search";
 			}
 		}
@@ -802,7 +807,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 
 //String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
 request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
-
+request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 
 				return "multiple_search";
 			}
@@ -839,6 +844,9 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
             request.getSession().setAttribute("warning", message);
             request.getSession().setAttribute("message", message);
             request.getSession().removeAttribute("ontologiesToSearchOn");
+
+request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
+
             return "multiple_search";
         } else {
             request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
@@ -1026,6 +1034,9 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 		request.getSession().setAttribute("message", message);
 		request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
 		request.getSession().setAttribute("multiple_search_no_match_error", "true");
+
+		request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
+
 
 		return "multiple_search";
     }
