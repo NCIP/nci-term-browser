@@ -36,8 +36,12 @@
 long ms = System.currentTimeMillis(), delay = 0;
  
      //String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
-     //  .cleanXSS((String) request.getSession().getAttribute("matchText"));
-     String match_text = (String) request.getSession().getAttribute("matchText"); 
+     //   .cleanXSS((String) request.getSession().getAttribute("matchText"));
+     
+     String match_text = (String) request.getAttribute("matchText"); 
+     
+match_text = HTTPUtils.convertJSPString(match_text); 
+request.getSession().setAttribute("matchText", match_text); 
     
      if (match_text == null) match_text = "";
     
@@ -191,11 +195,11 @@ long ms = System.currentTimeMillis(), delay = 0;
             <%
               if (contains_warning_msg != null) {
              %>
-              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>&nbsp;<%=contains_warning_msg%>
+              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=match_text%></b>&nbsp;<%=contains_warning_msg%>
              <%
               } else {
               %>
-              Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
+              Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=match_text%></b>
               <%
               }
               String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
