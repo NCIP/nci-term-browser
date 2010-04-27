@@ -8,12 +8,12 @@
 //  String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
 //    .cleanXSS((String) request.getAttribute("matchText"));
 
-String match_text = (String) request.getAttribute("matchText");
+String match_text = (String) request.getSession().getAttribute("matchText");
+ 
   
   if (match_text == null) match_text = "";
  
   String termbrowser_displayed_match_text = HTTPUtils.convertJSPString(match_text); 
-
 
 %>
 <div class="search-form">
