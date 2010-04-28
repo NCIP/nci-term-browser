@@ -1182,7 +1182,7 @@ ms = System.currentTimeMillis();
 							cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
 							cns = restrictToSource(cns, source);
 						} catch (Exception ex) {
-							//return null;
+							return null;
 						}
 					}
 				} catch (Exception e) {
@@ -2682,7 +2682,11 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 						try {
 							// find cns
 							if (designationOnly) {
-								cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
+								try {
+									cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
+								} catch (Exception ex) {
+									return null;
+								}
 							}
 							cns = restrictToSource(cns, source);
 							String associationName = null;
