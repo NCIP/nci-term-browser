@@ -107,7 +107,6 @@
         <mkdir dir="${dist.dir}/deploy" />
         <copy todir="${dist.dir}/deploy" flatten="true" includeEmptyDirs="no" filtering="false">
             <resources>
-                <file file="${conf.dir}/cache.ccf"/>
                 <file file="${conf.dir}/ehcache.xml"/>
             </resources>
         </copy>
