@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<!-- bda-build-template version 1.5.13 -->
+<!-- bda-build-template version 1.6.1 -->
 
 <project name="ncitbrowser-installer" default="upgrade" basedir="."
     xmlns:ivy="antlib:org.apache.ivy.ant"
@@ -457,7 +457,10 @@
         <if>
             <isset property="jboss.exists"/>
             <then>
-                <jboss-stop-jboss jboss.server.jndi.port="${jboss.server.jndi.port}"/>
+                <jboss-stop-jboss
+                    jboss.server.jndi.port="${jboss.server.jndi.port}"
+                    sleep.time="15"
+                />
             </then>
         </if>
     </target>
