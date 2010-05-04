@@ -2195,13 +2195,10 @@ public class DataUtils {
 					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
 				}
 
-				//System.out.println("\nActive? " + isActive);
-
 				//if (isActive != null && isActive.equals(Boolean.TRUE))
 				{
 					CodingSchemeSummary css = csr.getCodingSchemeSummary();
 					String formalname = css.getFormalName();
-
 					 java.lang.String version = css.getRepresentsVersion();
 					 CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 					 if (version != null) versionOrTag.setVersion(version);
@@ -2220,7 +2217,10 @@ public class DataUtils {
 										 java.lang.String ns_id = ns.getContent() ;
 										 //System.out.println("\tns_name: " + ns_name + " ns_id:" + ns_id);
 										 if (ns_id != null && ns_id.compareTo("") != 0) {
+
 											 hmap.put(ns_id, formalname);
+											 System.out.println("ns_id: " + ns_id + " -> " + formalname);
+
 										 }
 									 }
 								 }
