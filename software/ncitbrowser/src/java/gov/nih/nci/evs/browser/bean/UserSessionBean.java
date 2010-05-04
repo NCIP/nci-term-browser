@@ -133,11 +133,14 @@ public class UserSessionBean extends Object {
         {
             String message = "Please enter a search string.";
             request.getSession().setAttribute("message", message);
-            request.getSession().removeAttribute("matchText");
+            //request.getSession().removeAttribute("matchText");
+
+            request.removeAttribute("matchText");
 
             return "message";
         }
-        request.getSession().setAttribute("matchText", matchText);
+        //request.getSession().setAttribute("matchText", matchText);
+        request.setAttribute("matchText", matchText);
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
         String searchTarget = (String) request.getParameter("searchTarget");
@@ -625,7 +628,6 @@ public class UserSessionBean extends Object {
 
 
    public String multipleSearchAction() {
-
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		String scheme = (String) request.getParameter("scheme");
 		String version = (String) request.getParameter("version");
@@ -658,7 +660,6 @@ public class UserSessionBean extends Object {
 		request.getSession().setAttribute("algorithm", matchAlgorithm);
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
-
 
 
 	    String initial_search = (String) request.getParameter("initial_search");
@@ -952,6 +953,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 
 			int size = iteratorBean.getSize();
 			if (size == 1) {
+
 				int pageNumber = 1;
 				list = iteratorBean.getData(1);
 				ResolvedConceptReference ref = (ResolvedConceptReference) list.get(0);
@@ -990,6 +992,9 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 				request.setAttribute("algorithm", matchAlgorithm);
 				coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme);
 
+String convertJSPString = HTTPUtils.convertJSPString(matchText);
+request.setAttribute("matchText", convertJSPString);
+
 				request.setAttribute("dictionary", coding_scheme);
 				return "concept_details";
 			}
@@ -999,6 +1004,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 				request.getSession().setAttribute("page_string", "1");
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
 				//route to multiple_search_results.jsp
+request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 
 				System.out.println("Start to render search_results ... ");
 				return "search_results";
