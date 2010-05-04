@@ -20,12 +20,17 @@
    String dictionary = (String) request.getParameter("dictionary");
    String code = (String) request.getParameter("code");
    
+   String match_text = (String) request.getAttribute("matchText");
+
+if (match_text != null) {
+    request.setAttribute("matchText", match_text);
+}
+   
    LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
    if (licenseBean == null) {
        licenseBean = new LicenseBean();
        request.getSession().setAttribute("licenseBean", licenseBean);
    }
-   
   
    if (LicenseBean.isLicensed(dictionary, null) && !licenseBean.licenseAgreementAccepted(dictionary)) {
    %>  
