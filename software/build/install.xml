@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<!-- bda-build-template version 1.5.13 -->
+<!-- bda-build-template version 1.6.1 -->
 
 <project name="ncitbrowser-installer" default="upgrade" basedir="."
     xmlns:ivy="antlib:org.apache.ivy.ant"
@@ -200,7 +200,9 @@
         <condition property="os.temp.dir" value="c:/temp/${project.name}">
             <os family="windows" />
         </condition>
+
         <!-- Copy files to ensure values containing variables are expanded, such properties are stored in embedded.filterset and then copy with filter files -->
+
         <copy todir="${common.dir.dest}" filtering="true">
             <fileset dir="${common.dir.src}">
                 <include name="**/*"/>
@@ -455,7 +457,10 @@
         <if>
             <isset property="jboss.exists"/>
             <then>
-                <jboss-stop-jboss jboss.server.jndi.port="${jboss.server.jndi.port}"/>
+                <jboss-stop-jboss
+                    jboss.server.jndi.port="${jboss.server.jndi.port}"
+                    sleep.time="30"
+                />
             </then>
         </if>
     </target>

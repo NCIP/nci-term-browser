@@ -20,7 +20,8 @@
   String display_name = DataUtils.getMetadataValue(dictionary, "display_name");
   String code = (String) request.getParameter("code");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(dictionary, null);
-
+  
+  String matchText_licensedPage = (String) request.getSession().getAttribute("matchText");
   if (dictionary != null) dictionary = dictionary.replaceAll("%20", " ");
 %>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -63,6 +64,8 @@
             
             <input type="hidden" id="dictionary" name="dictionary" value="<%=dictionary%>" />
             <input type="hidden" id="code" name="code" value="<%=code%>" />
+            <input type="hidden" id="matchText" name="code" value="<%=matchText_licensedPage%>" />
+            
           </form>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>

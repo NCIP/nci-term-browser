@@ -35,9 +35,13 @@
 
 long ms = System.currentTimeMillis(), delay = 0;
  
-     //String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
-     //  .cleanXSS((String) request.getSession().getAttribute("matchText"));
-     String match_text = (String) request.getSession().getAttribute("matchText"); 
+String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
+      .cleanXSS((String) request.getAttribute("matchText"));
+     
+//String match_text = (String) request.getAttribute("matchText"); 
+     
+match_text = HTTPUtils.convertJSPString(match_text); 
+request.setAttribute("matchText", match_text); 
     
      if (match_text == null) match_text = "";
     
@@ -178,7 +182,7 @@ long ms = System.currentTimeMillis(), delay = 0;
               <table>
                 <tr>
                   <td class="texttitle-blue">Result for:</td>
-                  <td class="texttitle-gray"><%=matchText%></td>
+                  <td class="texttitle-gray"><%=match_text%></td>
                 </tr>
               </table>
             </td>
@@ -191,11 +195,11 @@ long ms = System.currentTimeMillis(), delay = 0;
             <%
               if (contains_warning_msg != null) {
              %>
-              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>&nbsp;<%=contains_warning_msg%>
+              <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=match_text%></b>&nbsp;<%=contains_warning_msg%>
              <%
               } else {
               %>
-              Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%></b>
+              Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=match_text%></b>
               <%
               }
               String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
@@ -210,6 +214,7 @@ long ms = System.currentTimeMillis(), delay = 0;
                 Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
                 for (int k=0; k<ontologies_to_search_on.size(); k++) {
                   String s = (String) ontologies_to_search_on.elementAt(k);
+                 
                   String t1 = DataUtils.key2CodingSchemeName(s);
                   String term_browser_version = DataUtils.getMetadataValue(t1, "term_browser_version");
                   if (term_browser_version == null) {
@@ -262,9 +267,13 @@ long ms = System.currentTimeMillis(), delay = 0;
                       if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
 			      String code = rcr.getConceptCode();
 			      String name = rcr.getEntityDescription().getContent();
-			      String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+			      
+			      String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+			      if (vocabulary_name == null) {
+			          vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+			      }
+			      
 			      String short_vocabulary_name = null;
-
 			      if (name_hmap.containsKey(vocabulary_name)) {
 				  short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
 			      } else {

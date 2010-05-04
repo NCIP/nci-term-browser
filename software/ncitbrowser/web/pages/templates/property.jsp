@@ -1,4 +1,5 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.FormatUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 
 <%
   HashMap def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
@@ -163,7 +164,10 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     
  
 if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
-	propName_label = dictionary + " Code";
+    String formalName = DataUtils.getFormalName(dictionary);
+    if (formalName == null)
+        formalName = dictionary;
+	propName_label = formalName + " Code";
 }
     
     String propName_label2 = propName_label;

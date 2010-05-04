@@ -27,6 +27,8 @@ import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 
 import gov.nih.nci.evs.browser.utils.ResolvedConceptReferencesIteratorWrapper;
 
+import gov.nih.nci.evs.browser.utils.HTTPUtils;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
@@ -125,16 +127,20 @@ public class UserSessionBean extends Object {
 
         String matchText = (String) request.getParameter("matchText");
         if (matchText != null) matchText = matchText.trim();
+
         //[#19965] Error message is not displayed when Search Criteria is not proivded
         if (matchText == null || matchText.length() == 0)
         {
             String message = "Please enter a search string.";
             request.getSession().setAttribute("message", message);
-            request.getSession().removeAttribute("matchText");
+            //request.getSession().removeAttribute("matchText");
+
+            request.removeAttribute("matchText");
 
             return "message";
         }
-        request.getSession().setAttribute("matchText", matchText);
+        //request.getSession().setAttribute("matchText", matchText);
+        request.setAttribute("matchText", matchText);
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
         String searchTarget = (String) request.getParameter("searchTarget");
@@ -622,7 +628,6 @@ public class UserSessionBean extends Object {
 
 
    public String multipleSearchAction() {
-
         HttpServletRequest request = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		String scheme = (String) request.getParameter("scheme");
 		String version = (String) request.getParameter("version");
@@ -639,12 +644,13 @@ public class UserSessionBean extends Object {
 		}
 
 		String matchText = (String) request.getParameter("matchText");
-
         if (matchText != null) {
 			matchText = matchText.trim();
-			request.getSession().setAttribute("matchText", matchText);
+			//request.getSession().setAttribute("matchText", matchText);
+			request.setAttribute("matchText", matchText);
 		} else {
-			matchText = (String) request.getSession().getAttribute("matchText");
+			//matchText = (String) request.getSession().getAttribute("matchText");
+			matchText = (String) request.getAttribute("matchText");
 		}
 
 		String multiple_search_error = (String) request.getSession().getAttribute("multiple_search_no_match_error");
@@ -654,7 +660,6 @@ public class UserSessionBean extends Object {
 		request.getSession().setAttribute("algorithm", matchAlgorithm);
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
-
 
 
 	    String initial_search = (String) request.getParameter("initial_search");
@@ -690,9 +695,9 @@ public class UserSessionBean extends Object {
 				request.getSession().setAttribute("message", message);
 				request.getSession().removeAttribute("ontologiesToSearchOn");
 
-
 //String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
 request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
+request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 
 				return "multiple_search";
 			} else {
@@ -732,10 +737,6 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 
 		}
 
-
-
-
-
         String hide_ontology_list = "false";
         //[#19965] Error message is not displayed when Search Criteria is not proivided
         if (matchText == null || matchText.length() == 0)
@@ -748,6 +749,10 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 			request.getSession().setAttribute("hide_ontology_list", hide_ontology_list);
             request.getSession().setAttribute("warning", message);
             request.getSession().setAttribute("message", message);
+
+            request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
+
+
             return "multiple_search";
         }
 
@@ -759,6 +764,9 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 				String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
 				request.getSession().setAttribute("warning", msg);
 				request.getSession().setAttribute("message", msg);
+
+				request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
+
 				return "multiple_search";
 			}
 		}
@@ -800,7 +808,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
 
 //String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
 request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
-
+request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 
 				return "multiple_search";
 			}
@@ -837,6 +845,9 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
             request.getSession().setAttribute("warning", message);
             request.getSession().setAttribute("message", message);
             request.getSession().removeAttribute("ontologiesToSearchOn");
+
+request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
+
             return "multiple_search";
         } else {
             request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
@@ -864,6 +875,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
                         boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
                         if (isLicensed && !accepted) {
                             request.setAttribute("matchText", matchText);
+
                             request.setAttribute("searchTarget", searchTarget);
                             request.setAttribute("algorithm", matchAlgorithm);
                             request.setAttribute("ontology_list_str", ontology_list_str);
@@ -941,6 +953,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 
 			int size = iteratorBean.getSize();
 			if (size == 1) {
+
 				int pageNumber = 1;
 				list = iteratorBean.getData(1);
 				ResolvedConceptReference ref = (ResolvedConceptReference) list.get(0);
@@ -961,6 +974,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 				if (ref == null) {
 					String msg = "Error: Null ResolvedConceptReference encountered.";
 					request.getSession().setAttribute("message", msg);
+					request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 					return "message";
 
 				} else {
@@ -978,6 +992,9 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 				request.setAttribute("algorithm", matchAlgorithm);
 				coding_scheme = (String) DataUtils.localName2FormalNameHashMap.get(coding_scheme);
 
+String convertJSPString = HTTPUtils.convertJSPString(matchText);
+request.setAttribute("matchText", convertJSPString);
+
 				request.setAttribute("dictionary", coding_scheme);
 				return "concept_details";
 			}
@@ -987,6 +1004,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 				request.getSession().setAttribute("page_string", "1");
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
 				//route to multiple_search_results.jsp
+request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 
 				System.out.println("Start to render search_results ... ");
 				return "search_results";
@@ -1024,6 +1042,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
 		request.getSession().setAttribute("ontologiesToSearchOn", ontologiesToSearchOnStr);
 		request.getSession().setAttribute("multiple_search_no_match_error", "true");
 
+		request.setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 		return "multiple_search";
     }
 

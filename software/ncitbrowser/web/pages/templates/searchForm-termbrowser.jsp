@@ -1,15 +1,25 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%
+
+//  String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
+//    .cleanXSS((String) request.getSession().getAttribute("matchText"));
+
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
-    .cleanXSS((String) request.getSession().getAttribute("matchText"));
+    .cleanXSS((String) request.getAttribute("matchText"));
+
+//String match_text = (String) request.getSession().getAttribute("matchText");
+//String match_text = (String) request.getAttribute("matchText");
   
   if (match_text == null) match_text = "";
  
+  String termbrowser_displayed_match_text = HTTPUtils.convertJSPString(match_text); 
+
 %>
 <div class="search-form">
   <input CLASS="searchbox-input"
     name="matchText"
-    value="<%=match_text%>"
+    value="<%=termbrowser_displayed_match_text%>"
     onFocus="active = true"
     onBlur="active = false"
     onkeypress="return submitEnter('search',event)"

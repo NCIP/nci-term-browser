@@ -60,9 +60,6 @@
         <div class="pagecontent">
           <div class="tabTableContentContainer">
 
-
-
-
           <table class="termstable" border="0">
                 <tr>
                   <td><img
@@ -293,7 +290,6 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
 <%
     request.getSession().removeAttribute("dictionary");
     request.getSession().removeAttribute("ontologiesToSearchOn");
-    //request.getSession().removeAttribute("matchText");
     request.getSession().putValue("visited","true");
 %>
 <br/>
