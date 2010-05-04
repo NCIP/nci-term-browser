@@ -35,10 +35,10 @@
 
 long ms = System.currentTimeMillis(), delay = 0;
  
-//String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
-//      .cleanXSS((String) request.getSession().getAttribute("matchText"));
+String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
+      .cleanXSS((String) request.getAttribute("matchText"));
      
-String match_text = (String) request.getAttribute("matchText"); 
+//String match_text = (String) request.getAttribute("matchText"); 
      
 match_text = HTTPUtils.convertJSPString(match_text); 
 request.setAttribute("matchText", match_text); 
@@ -267,7 +267,12 @@ request.setAttribute("matchText", match_text);
                       if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
 			      String code = rcr.getConceptCode();
 			      String name = rcr.getEntityDescription().getContent();
-			      String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+			      
+			      String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+			      if (vocabulary_name == null) {
+			          vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+			      }
+			      
 			      String short_vocabulary_name = null;
 			      if (name_hmap.containsKey(vocabulary_name)) {
 				  short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
