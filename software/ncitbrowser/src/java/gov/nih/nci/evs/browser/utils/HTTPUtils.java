@@ -147,6 +147,6 @@ public class HTTPUtils {
 	  t = t.replaceAll("\r","\\r");  // replace CR with \r;
 	  t = t.replaceAll("\n","\\n");  // replace LF with \n;
 
-	  return t;
+	  return cleanXSS(t);
 	}
 }
