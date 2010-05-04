@@ -2219,7 +2219,7 @@ public class DataUtils {
 										 if (ns_id != null && ns_id.compareTo("") != 0) {
 
 											 hmap.put(ns_id, formalname);
-											 System.out.println("ns_id: " + ns_id + " -> " + formalname);
+											 //System.out.println("ns_id: " + ns_id + " -> " + formalname);
 
 										 }
 									 }
