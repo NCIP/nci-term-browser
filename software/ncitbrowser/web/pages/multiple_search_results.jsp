@@ -214,10 +214,7 @@ request.setAttribute("matchText", match_text);
                 Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
                 for (int k=0; k<ontologies_to_search_on.size(); k++) {
                   String s = (String) ontologies_to_search_on.elementAt(k);
-                  
-                  
- System.out.println(s);                 
-                  
+                 
                   String t1 = DataUtils.key2CodingSchemeName(s);
                   String term_browser_version = DataUtils.getMetadataValue(t1, "term_browser_version");
                   if (term_browser_version == null) {
@@ -272,11 +269,6 @@ request.setAttribute("matchText", match_text);
 			      String name = rcr.getEntityDescription().getContent();
 			      String vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
 			      String short_vocabulary_name = null;
-
-
-System.out.println(name + " rcr.getCodingSchemeName(): " + vocabulary_name + " --> short_vocabulary_name " + short_vocabulary_name);
-
-
 			      if (name_hmap.containsKey(vocabulary_name)) {
 				  short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
 			      } else {

@@ -677,11 +677,6 @@ public class UserSessionBean extends Object {
 				ontologiesToSearchOn = new ArrayList<String>();
 				ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 
-
-System.out.println("ontologiesToSearchOnStr: " + ontologiesToSearchOnStr);
-
-
-
 				if (ontologiesToSearchOnStr != null) {
 					Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
 					ontology_list = new String[ontologies_to_search_on.size()];
