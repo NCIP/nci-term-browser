@@ -4,11 +4,7 @@
 
 <form name="searchTerm" class="search-form" >
   <%
-    String match_text = (String) request.getSession().getAttribute("matchText");
-    
-System.out.println("searchForm.jsp match_text: " + match_text);    
-    
-    
+    String match_text = (String) request.getAttribute("matchText");
     String vocab_name = (String) request.getParameter("dictionary");
 
 if ( vocab_name == null) {
@@ -19,6 +15,7 @@ if ( vocab_name == null) {
 
     if (match_text == null) match_text = "";
     String displayed_match_text = HTTPUtils.convertJSPString(match_text); 
+   
     
   %>
   <input class="searchbox-input"
