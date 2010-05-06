@@ -34,7 +34,7 @@
          System.out.println("single search results: v is NULL???");
     }
 
-          String matchText = HTTPUtils.cleanXSS((String) request.getAttribute("matchText"));
+          String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           String match_size = HTTPUtils.cleanXSS((String) request.getAttribute("match_size"));
           String page_string = HTTPUtils.cleanXSS((String) request.getAttribute("page_string"));
           Boolean new_search = (Boolean) request.getAttribute("new_search");
