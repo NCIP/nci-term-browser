@@ -21,7 +21,7 @@
   String scheme = (String) request.getAttribute("scheme");
   String version = (String) request.getAttribute("version");
   String ontology_list_str = (String) request.getAttribute("ontology_list_str");
-  String matchText = (String) request.getAttribute("matchText");
+  String matchText = (String) request.getSession().getAttribute("matchText");
   
     if (matchText == null) matchText = "";
     String license_page__match_text = HTTPUtils.convertJSPString(matchText); 

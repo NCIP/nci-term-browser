@@ -69,8 +69,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 	    System.out.println("iteratorBean NOT FOUND???" + key);  
 	  }
 
-          //String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
-          String matchText = HTTPUtils.cleanXSS((String) request.getAttribute("matchText"));
+          String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
           //String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
           String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
           Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
