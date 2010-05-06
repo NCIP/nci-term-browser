@@ -250,7 +250,7 @@ public class CacheController
             try {
 				//list = new DataUtils().getHierarchyRoots(scheme, version, null);
 				list = new TreeUtils().getHierarchyRoots(scheme, version, null);
-				nodeArray = list2JSONArray(list);
+				nodeArray = list2JSONArray(scheme, list);
 
 				if (fromCache)
 				{
@@ -269,7 +269,7 @@ public class CacheController
     }
 
 
-    private JSONArray list2JSONArray(List list) {
+    private JSONArray list2JSONArray(String scheme, List list) {
         List newlist = new ArrayList();
         JSONArray nodesArray = null;
         try {
@@ -319,6 +319,10 @@ public class CacheController
 					  String name = node.getEntityDescription().getContent();
 
 					  int childCount = 1;
+
+					  ArrayList sub_list = TreeUtils.getSubconceptNamesAndCodes(scheme, null, code);
+					  if (sub_list.size() == 0) childCount = 0;
+
 					  try {
 						  JSONObject nodeObject = new JSONObject();
 						  nodeObject.put(ONTOLOGY_NODE_ID, code);
@@ -515,7 +519,7 @@ public class CacheController
 				String code = (String) objs[0];
 				TreeItem ti = (TreeItem) hmap.get(code);
 				List list = util.getTopNodes(ti);
-				rootsArray = list2JSONArray(list);
+				rootsArray = list2JSONArray(ontology_display_name, list);
 				/*
 				Set keyset = hmap.keySet();
 				Object[] objs = keyset.toArray();
