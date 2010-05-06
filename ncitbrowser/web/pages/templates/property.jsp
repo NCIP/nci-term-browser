@@ -441,6 +441,8 @@ if(propName_label.compareTo("Definition") == 0) {
       String primitive_prop_name = "primitive";
       String primitive_label = "Defined Fully by Roles:";
       
+      dict = DataUtils.getFormalName(dict);
+      
       //Vector primitive_value_vec = (Vector) hmap.get(primitive_prop_name);
       String vocabulary_format = DataUtils.getMetadataValue(dict, "format");
       if (vocabulary_format != null && vocabulary_format.indexOf("OWL") != -1) {
@@ -453,6 +455,8 @@ if(propName_label.compareTo("Definition") == 0) {
 		  }
 	      }
       }    
+      
+     
       // OWL
       /*
       if (vocabulary_format != null && vocabulary_format.indexOf("OWL") != -1) {

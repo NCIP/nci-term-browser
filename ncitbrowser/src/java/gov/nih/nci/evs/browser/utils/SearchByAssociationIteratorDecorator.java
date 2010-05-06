@@ -152,6 +152,13 @@ public class SearchByAssociationIteratorDecorator implements ResolvedConceptRefe
 		} catch (Exception e) {
 			throw new LBResourceUnavailableException(e.getMessage());
 		}
+int n = this.quickIterator.numberRemaining() + this.currentChildren.size();
+//System.out.println("SearchByAssociationIteratorDecorator numberRemaining(): " + n);
+
+System.out.println("SearchByAssociationIteratorDecorator this.quickIterator.numberRemaining(): " + this.quickIterator.numberRemaining());
+System.out.println("SearchByAssociationIteratorDecorator this.currentChildren.size(): " + this.currentChildren.size());
+System.out.println("SearchByAssociationIteratorDecorator numberRemaining() total: " + n);
+
 		return this.quickIterator.numberRemaining() + this.currentChildren.size();
 	}
 
