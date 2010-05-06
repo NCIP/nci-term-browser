@@ -19,12 +19,7 @@
    <%
    String dictionary = (String) request.getParameter("dictionary");
    String code = (String) request.getParameter("code");
-   
-   String match_text = (String) request.getAttribute("matchText");
-
-if (match_text != null) {
-    request.setAttribute("matchText", match_text);
-}
+   String match_text = (String) request.getSession().getAttribute("matchText");
    
    LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
    if (licenseBean == null) {

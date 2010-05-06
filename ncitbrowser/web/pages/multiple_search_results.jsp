@@ -36,12 +36,10 @@
 long ms = System.currentTimeMillis(), delay = 0;
  
 String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
-      .cleanXSS((String) request.getAttribute("matchText"));
-     
-//String match_text = (String) request.getAttribute("matchText"); 
+      .cleanXSS((String) request.getSession().getAttribute("matchText"));
      
 match_text = HTTPUtils.convertJSPString(match_text); 
-request.setAttribute("matchText", match_text); 
+request.getSession().setAttribute("matchText", match_text); 
     
      if (match_text == null) match_text = "";
     
