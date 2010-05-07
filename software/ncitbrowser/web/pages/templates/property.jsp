@@ -181,7 +181,11 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("
       Vector value_vec = (Vector) hmap.get(propName);
 
       if (value_vec != null && value_vec.size() > 0) {
-        String value = (String) value_vec.elementAt(0);
+      
+        //[#28262] Only one "NCI Meta CUI" displays
+        for (int lcv=0; lcv<value_vec.size(); lcv++) {
+         
+        String value = (String) value_vec.elementAt(lcv);
         String value_wo_qualifier = value;
 
         int n = value.indexOf("|");
@@ -212,6 +216,7 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("
           <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
         </p>
 <%
+        }
       }
     } else if (propName_label.indexOf("Synonyms") == -1) {
       displayed_properties.add(propName);
