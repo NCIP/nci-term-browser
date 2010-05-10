@@ -179,45 +179,82 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("
     
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
+      int row3=0;
+      
+      if (value_vec != null && value_vec.size() > 1) {
+          %>
+          <b><%=propName_label%></b>:
+          <table class="datatable">
+          <%
+          
+      }
+      
 
       if (value_vec != null && value_vec.size() > 0) {
       
         //[#28262] Only one "NCI Meta CUI" displays
         for (int lcv=0; lcv<value_vec.size(); lcv++) {
          
-        String value = (String) value_vec.elementAt(lcv);
-        String value_wo_qualifier = value;
+		String value = (String) value_vec.elementAt(lcv);
+		String value_wo_qualifier = value;
 
-        int n = value.indexOf("|");
-        if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 || propName_label.indexOf("definition") != -1)) {
-          value_wo_qualifier = value.substring(0, n);
-          qualifier = value.substring(n+1, value.length());
-          
-          if (def_map != null && def_map.containsKey(qualifier)) {
-              String def_source_display_value = (String) def_map.get(qualifier);
-              value = value_wo_qualifier + " (" + qualifier + ")";
-              propName_label = def_source_display_value + " " + propName_label2;
-          } else {
+		int n = value.indexOf("|");
+		if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 
+		         || propName_label.indexOf("definition") != -1)) {
+			  value_wo_qualifier = value.substring(0, n);
+			  qualifier = value.substring(n+1, value.length());
 
-		  if (qualifier.indexOf("PDQ") != -1) {
-			value = FormatUtils.reformatPDQDefinition(value);
-		  } else if (qualifier.compareTo("NCI") != 0) {
-		      value = value_wo_qualifier;
-		      propName_label = qualifier + " " + propName_label2;
-		  } else
-		      value = value_wo_qualifier;
-	  }
-        }
+			  if (def_map != null && def_map.containsKey(qualifier)) {
+			      String def_source_display_value = (String) def_map.get(qualifier);
+			      value = value_wo_qualifier + " (" + qualifier + ")";
+			      propName_label = def_source_display_value + " " + propName_label2;
+			  } else {
 
-        String url_str = url + value;
-%>
-        <p>
-          <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
-          <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
-        </p>
-<%
-        }
+				  if (qualifier.indexOf("PDQ") != -1) {
+					value = FormatUtils.reformatPDQDefinition(value);
+				  } else if (qualifier.compareTo("NCI") != 0) {
+				      value = value_wo_qualifier;
+				      propName_label = qualifier + " " + propName_label2;
+				  } else
+				      value = value_wo_qualifier;
+			          }
+			  }
+
+			String url_str = url + value;
+                        if (value_vec.size() == 1) {
+			%> 
+			  <p>
+			  <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
+			  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
+			  </p>
+			<%  
+			  } else {
+				  if ((row3++) % 2 == 0) {
+				    %>
+				      <tr class="dataRowDark">
+				    <%
+				  } else {
+				    %>
+				      <tr class="dataRowLight">
+				    <%
+				  }
+			    %>
+			          <i>
+				  &nbsp;<%=value%>&nbsp;
+				  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
+				  </i>
+			    <%
+			  }
+		}
       }
+      
+      
+      if (value_vec != null && value_vec.size() > 1) {
+          %>
+          </table>
+          <%
+      }      
+      
     } else if (propName_label.indexOf("Synonyms") == -1) {
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
