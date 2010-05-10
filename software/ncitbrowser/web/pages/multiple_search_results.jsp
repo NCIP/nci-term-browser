@@ -215,7 +215,9 @@ request.getSession().setAttribute("matchText", match_text);
                  
                   String t1 = DataUtils.key2CodingSchemeName(s);
                   String term_browser_version = DataUtils.getMetadataValue(t1, "term_browser_version");
-                  if (term_browser_version == null) {
+                  if (term_browser_version == null ||
+                      t1.compareTo("NCI Thesaurus") == 0 ||
+                      t1.compareToIgnoreCase("NCI Metathesaurus") == 0) {
                      term_browser_version = DataUtils.key2CodingSchemeVersion(s);
                   }
                   for (int i=0; i<display_name_vec.size(); i++) {
