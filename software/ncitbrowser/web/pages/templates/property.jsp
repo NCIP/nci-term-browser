@@ -1,5 +1,6 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.FormatUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.SortUtils" %>
 
 <%
   HashMap def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
@@ -420,15 +421,27 @@ if(propName_label.compareTo("Definition") == 0) {
   <b>Other Properties:</b>
   <table class="datatable">
     <%
+      Vector prop_name_value_vec = new Vector();
       Set keyset = hmap.keySet();
       Iterator iterator = keyset.iterator();
+      while (iterator.hasNext()) {
+         String prop_name = (String) iterator.next();
+         Vector value_vec = (Vector) hmap.get(prop_name);
+         for (int k=0; k<value_vec.size(); k++) {
+             String value = (String) value_vec.elementAt(k);
+             prop_name_value_vec.add(prop_name + "|" + value);
+         }
+      }
+      prop_name_value_vec = SortUtils.quickSort(prop_name_value_vec);
+      iterator = keyset.iterator();
       n = 0;
 
-      while (iterator.hasNext()) {
-        String prop_name = (String) iterator.next();
+      for (int k=0; k<prop_name_value_vec.size(); k++) {
+        String prop_name_value = (String) prop_name_value_vec.elementAt(k);
+        Vector w = DataUtils.parseData( prop_name_value );
+        String prop_name = (String) w.elementAt(0);
         if (!displayed_properties.contains(prop_name) && !additionalproperties.contains(prop_name) ) {
-          Vector value_vec = (Vector) hmap.get(prop_name);
-          if (value_vec == null || value_vec.size() == 0) {
+          if (w.size() == 1) {
             if (n % 2 == 0) {
               %>
                 <tr class="dataRowDark">
@@ -445,8 +458,7 @@ if(propName_label.compareTo("Definition") == 0) {
                 </tr>
             <%
           } else {
-            for (int j=0; j<value_vec.size(); j++) {
-              String value = (String) value_vec.elementAt(j);
+              String value = (String) w.elementAt(1);
               if (n % 2 == 0) {
                 %>
                   <tr class="dataRowDark">
@@ -463,15 +475,12 @@ if(propName_label.compareTo("Definition") == 0) {
                 </tr>
               <%
             }
-          }
         }
       }
     %>
   </table>
 </p>
 <p>
-  <b>Additional Concept Data:&nbsp;</b>
-  <table class="datatable">
     <%
       String concept_name = curr_concept.getEntityDescription().getContent();
       concept_name = concept_name.replaceAll(" ", "_");
@@ -498,28 +507,6 @@ if(propName_label.compareTo("Definition") == 0) {
 	      }
       }    
       
-     
-      // OWL
-      /*
-      if (vocabulary_format != null && vocabulary_format.indexOf("OWL") != -1) {
-	      if (primitive_value_vec != null && primitive_value_vec.size() > 0) {
-		primitive = (String) primitive_value_vec.elementAt(0);
-		
-		if (primitive.compareTo("true") == 0) primitive = "No";
-		else primitive = "Yes";
-		
-	      }
-      } 
-      else if (vocabulary_format != null && vocabulary_format.indexOf("OWL") == -1) { 
-              primitive_value_vec = (Vector) hmap.get("ISPRIMITIVE");
-	      if (primitive_value_vec != null && primitive_value_vec.size() > 0) {
-		primitive = (String) primitive_value_vec.elementAt(0);
-		if (primitive.compareTo("true") == 0) primitive = "No";
-		else primitive = "Yes";
-	      }              
-      }
-      */
-      
       String kind = "not available";
       String kind_prop_name = "Kind";
       String kind_label = "Kind:";
@@ -529,15 +516,20 @@ if(propName_label.compareTo("Definition") == 0) {
     <%
     if (primitive != null) {
     %>
-    <tr class="dataRowLight">
-      <td><i><%=primitive_label%></i>&nbsp;<i><%=primitive%></i></td>
-      <td><i>&nbsp;</i></td>
-    </tr>
+	  <b>Additional Concept Data:</b>&nbsp;
+	  <table class="datatable">
+	    <tr class="dataRowLight">
+	      <td><i><%=primitive_label%></i>&nbsp;<i><%=primitive%></i></td>
+	      <td><i>&nbsp;</i></td>
+	    </tr>
+	  </table>  
     <%
-    }
+    } else {
     %>
-    
-  </table>
+	  <b>Additional Concept Data:</b>&nbsp;<i>None</i>
+    <%
+    } 
+    %>	  
 </p>
 <%
   String requestURL = request.getRequestURL().toString();
