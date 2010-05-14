@@ -212,14 +212,11 @@ request.getSession().setAttribute("matchText", match_text);
                 Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
                 for (int k=0; k<ontologies_to_search_on.size(); k++) {
                   String s = (String) ontologies_to_search_on.elementAt(k);
-                 
                   String t1 = DataUtils.key2CodingSchemeName(s);
                   String term_browser_version = DataUtils.getMetadataValue(t1, "term_browser_version");
-                  if (term_browser_version == null ||
-                      t1.compareTo("NCI Thesaurus") == 0 ||
-                      t1.compareToIgnoreCase("NCI Metathesaurus") == 0) {
+
+                  if (term_browser_version == null)
                      term_browser_version = DataUtils.key2CodingSchemeVersion(s);
-                  }
                   for (int i=0; i<display_name_vec.size(); i++) {
                       String nm = (String) display_name_vec.elementAt(i);
                       String val = (String) display_name_hmap.get(nm);
