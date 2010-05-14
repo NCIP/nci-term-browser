@@ -180,61 +180,36 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                           <td width="25px"></td>
                           <td>
                         <%
+                        boolean checked = ontologiesToSearchOn != null
+                            && ontologiesToSearchOn.indexOf(label2) != -1;
+                        String checkedStr = checked ? "checked" : "";
+                        %>
+                           <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
+                        <%
+                        
                         if (scheme.compareTo("NCI Thesaurus") == 0) {
                            String nciturl = NCItBrowserProperties.getNCIT_URL();
-                           if (ontologiesToSearchOn != null
-                              && ontologiesToSearchOn.indexOf(label2) != -1) {
-                           %>
-                              <input type="checkbox" name="ontology_list" value="<%=label%>" checked />
-                           <%
-                           } else {
-                            %>
-                              <input type="checkbox" name="ontology_list" value="<%=label%>" /> <%
-                           }
-                           %>
-                              <a href="<%=nciturl %>"><%=label%></a>
-                           <%
+                        %>
+                           <a href="<%=nciturl %>"><%=label%></a>
+                        <%
                         } else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
-                              String ncimurl = NCItBrowserProperties.getNCIM_URL();
-                            if (ontologiesToSearchOn != null
-                               && ontologiesToSearchOn.indexOf(label2) != -1) {
-                           %>
-                              <input type="checkbox" name="ontology_list"
-                                      value="<%=label%>" checked />
-                           <%
-                            } else {
-                            %>
-                              <input type="checkbox" name="ontology_list" value="<%=label%>" />
-                           <%
-                            }
-                            %>
-                              <a href="<%=ncimurl%>" target="_blank"><%=label%>
-                                <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=label%>" />
-                              </a>
-                           <%
+                            String ncimurl = NCItBrowserProperties.getNCIM_URL();
+                        %>
+                            <a href="<%=ncimurl%>" target="_blank"><%=label%>
+                              <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=label%>" />
+                            </a>
+                        <%
                         } else {
-                           if (ontologiesToSearchOn != null
-                              && ontologiesToSearchOn.indexOf(label2) != -1) {
-                            %>
-                              <input type="checkbox" name="ontology_list" value="<%=label%>" checked />
-                           <%
-                           } else {
-                            %>
-                              <input type="checkbox" name="ontology_list" value="<%=label%>" />
-                           <%
-                           }
-
                            String full_name = DataUtils.getMetadataValue(scheme, "full_name");
                            if (full_name == null || full_name.compareTo("null") == 0) full_name = scheme;
                            String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
                            if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;
-
                            label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
-                            %>
-                              <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
-                                <%=label%>
-                              </a>
+                           %>
+                             <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
+                               <%=label%>
+                             </a>
                            <%
                         }
                       %>
