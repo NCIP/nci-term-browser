@@ -927,13 +927,17 @@ public class DataUtils {
 		return getVersion(CODING_SCHEME_NAME);
 	}
 
-    public static String getVersion(String coding_scheme_name) {
-        String info = getReleaseDate(coding_scheme_name);
+    public static String getVersion(String scheme) {
+        String info = getReleaseDate(scheme);
+        // String version = getVocabularyVersionByTag(scheme, "PRODUCTION"); 
 
-        String version = getVocabularyVersionByTag(coding_scheme_name,
-                "PRODUCTION");
+        String full_name = DataUtils.getMetadataValue(scheme, "full_name");
+        if (full_name == null || full_name.compareTo("null") == 0) 
+            full_name = scheme;
+        String version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+        
         if (version == null)
-            version = getVocabularyVersionByTag(coding_scheme_name, null);
+            version = getVocabularyVersionByTag(scheme, null);
 
         if (version != null && version.length() > 0)
             info += " (" + version + ")";
