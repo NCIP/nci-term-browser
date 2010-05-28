@@ -1,0 +1,449 @@
+package gov.nih.nci.evs.browser.test;
+
+import java.io.*;
+import java.util.*;
+
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+
+
+import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
+import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
+
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+
+import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
+
+
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
+
+import org.LexGrid.LexBIG.Utility.Constructors;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
+
+import org.LexGrid.naming.Mappings;
+
+import org.LexGrid.LexBIG.Exceptions.LBResourceUnavailableException;
+
+import org.LexGrid.LexBIG.DataModel.Collections.ModuleDescriptionList;
+
+
+import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.ModuleDescription;
+
+import org.LexGrid.concepts.Definition;
+import org.LexGrid.concepts.Concept;
+import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.commonTypes.Property;
+import org.LexGrid.commonTypes.Source;
+
+
+import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
+import org.LexGrid.codingSchemes.CodingScheme;
+import org.LexGrid.naming.SupportedProperty;
+
+import org.LexGrid.concepts.Presentation;
+
+import org.LexGrid.commonTypes.PropertyQualifier;
+
+
+
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.Exceptions.LBException;
+import org.LexGrid.LexBIG.History.HistoryService;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.Utility.Constructors;
+import org.LexGrid.concepts.Concept;
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
+import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
+import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
+import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
+import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
+import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
+import org.LexGrid.LexBIG.DataModel.Core.Association;
+import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
+import org.LexGrid.codingSchemes.CodingScheme;
+import org.LexGrid.concepts.Presentation;
+import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
+import org.LexGrid.commonTypes.EntityDescription;
+import org.LexGrid.commonTypes.Property;
+import org.LexGrid.relations.Relations;
+import org.LexGrid.versions.SystemRelease;
+import org.LexGrid.commonTypes.PropertyQualifier;
+import org.LexGrid.commonTypes.Source;
+import org.LexGrid.naming.SupportedSource;
+import org.LexGrid.naming.SupportedPropertyQualifier;
+import org.LexGrid.LexBIG.DataModel.Core.types.CodingSchemeVersionStatus;
+import org.LexGrid.naming.SupportedAssociation;
+import org.LexGrid.naming.SupportedProperty;
+import org.LexGrid.naming.SupportedRepresentationalForm;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
+import org.LexGrid.naming.Mappings;
+import org.LexGrid.naming.SupportedHierarchy;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
+
+//import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+//import static gov.nih.nci.evs.browser.common.Constants.*;
+
+import org.LexGrid.naming.SupportedNamespace;
+import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
+import org.LexGrid.concepts.Entity;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
+import org.LexGrid.LexBIG.DataModel.Collections.MetadataPropertyList;
+import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
+
+
+import org.LexGrid.concepts.Concept;
+
+
+public class MatchConceptByCode {
+
+
+    public MatchConceptByCode() {
+    }
+
+
+    public static LocalNameList vector2LocalNameList(Vector<String> v)
+    {
+        if (v == null) return null;
+        LocalNameList list = new LocalNameList();
+        for (int i=0; i<v.size(); i++)
+        {
+            String vEntry = (String) v.elementAt(i);
+            list.addEntry(vEntry);
+        }
+        return list;
+    }
+
+
+    public static CodedNodeSet restrictToSource(CodedNodeSet cns, String source) {
+        if (cns == null) return cns;
+        if (source == null || source.compareTo("*") == 0 || source.compareTo("") == 0 || source.compareTo("ALL") == 0) return cns;
+
+        LocalNameList contextList = null;
+        LocalNameList sourceLnL = null;
+        NameAndValueList qualifierList = null;
+
+        Vector<String> w2 = new Vector<String>();
+        w2.add(source);
+        sourceLnL = vector2LocalNameList(w2);
+        LocalNameList propertyLnL = null;
+        CodedNodeSet.PropertyType[] types = new PropertyType[] {PropertyType.PRESENTATION};
+        try {
+            cns = cns.restrictToProperties(propertyLnL, types, sourceLnL, contextList, qualifierList);
+        } catch (Exception ex) {
+            System.out.println("restrictToSource throws exceptions.");
+            return null;
+        }
+        return cns;
+    }
+
+    public static ConceptReferenceList createConceptReferenceList(
+            String[] codes, String codingSchemeName) {
+        if (codes == null) {
+            return null;
+        }
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.length; i++) {
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(codes[i]);
+            list.addConceptReference(cr);
+        }
+        return list;
+    }
+
+
+    protected void displayRef(ResolvedConceptReference ref){
+        System.out.println(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+    }
+
+
+
+    public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
+
+System.out.println("Calling matchConceptCode " + matchText);
+System.out.println("matchConceptCode scheme " + scheme);
+System.out.println("matchConceptCode matchText " + matchText);
+System.out.println("matchConceptCode matchAlgorithm " + matchAlgorithm);
+
+        LexBIGService lbs = RemoteServerUtilTest.createLexBIGService();
+        Vector v = new Vector();
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (version != null) versionOrTag.setVersion(version);
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
+        try {
+            cns = lbs.getNodeSet(scheme, versionOrTag, null);
+            if (source != null) cns = restrictToSource(cns, source);
+            CodedNodeSet.PropertyType[] propertyTypes = null;
+            LocalNameList sourceList = null;
+            LocalNameList contextList = null;
+            NameAndValueList qualifierList = null;
+            cns = cns.restrictToMatchingProperties(ConvenienceMethods.createLocalNameList(new String[]{"conceptCode"}),
+                      propertyTypes, sourceList, contextList,
+                      qualifierList,matchText, matchAlgorithm, null);
+
+            LocalNameList restrictToProperties = new LocalNameList();
+            SortOptionList sortCriteria = null;
+            try {
+                boolean resolveConcepts = true;
+                try {
+                    long ms = System.currentTimeMillis(), delay = 0;
+                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    if (iterator == null) {
+                        return matchConceptCode(scheme, version, matchText);
+                    }
+
+                    int size = iterator.numberRemaining();
+                    System.out.println("size: " + size);
+
+                    // test
+                    if (size == 0) {
+                        return matchConceptCode(scheme, version, matchText);
+                    }
+
+                }  catch (Exception e) {
+                    System.out.println("Method: SearchUtils.matchConceptCode");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+
+        } catch (Exception ex) {
+            //System.out.println("WARNING: searchByCode throws exception.");
+            ex.printStackTrace();
+        }
+
+
+        //return iterator;
+        if (source == null || source.compareToIgnoreCase("ALL") == 0) {
+            return filterIterator(iterator, scheme, version, matchText);
+        }
+        return iterator;
+    }
+
+
+    public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String code) {
+
+System.out.println("matchConceptCode scheme " + scheme);
+System.out.println("matchConceptCode code " + code);
+
+
+        LexBIGService lbSvc = RemoteServerUtilTest.createLexBIGService();
+        Vector v = new Vector();
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (version != null) versionOrTag.setVersion(version);
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
+        try {
+            cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+            CodedNodeSet.PropertyType[] propertyTypes = null;
+            //LocalNameList sourceList = null;
+            //LocalNameList contextList = null;
+            //NameAndValueList qualifierList = null;
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    new String[] { code }, scheme);
+
+            try {
+                cns = lbSvc.getCodingSchemeConcepts(scheme,
+                        versionOrTag);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            if (cns == null) {
+                System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
+                return null;
+            }
+
+            cns = cns.restrictToCodes(crefs);
+            LocalNameList restrictToProperties = new LocalNameList();
+            SortOptionList sortCriteria = null;
+            try {
+                boolean resolveConcepts = true;
+                try {
+                    long ms = System.currentTimeMillis(), delay = 0;
+                    iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+
+                    int size = iterator.numberRemaining();
+                }  catch (Exception e) {
+                    System.out.println("Method: SearchUtil.matchConceptCode");
+                    System.out.println("* ERROR: cns.resolve throws exceptions.");
+                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+
+        } catch (Exception ex) {
+            System.out.println("WARNING: searchByCode throws exception.");
+        }
+        //[#26386] Need app to be able to distinguish/prioritize/display matching code vrs. matching name results
+
+        return filterIterator(iterator, scheme, version, code);
+        //return iterator;
+    }
+
+
+    public static ResolvedConceptReferencesIterator filterIterator(ResolvedConceptReferencesIterator iterator, String scheme, String version, String code) {
+        if (iterator == null) return null;
+        try {
+            int num = iterator.numberRemaining();
+            if (num <= 1) {
+                return iterator;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        try {
+            while(iterator.hasNext()){
+                try {
+                    ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
+                    for(ResolvedConceptReference ref : refs){
+                        if (ref.getConceptCode().compareTo(code) == 0) {
+                            long ms0 = System.currentTimeMillis(), delay0 = 0;
+                            LexBIGService lbSvc = new RemoteServerUtilTest().createLexBIGService();
+                            if (lbSvc == null)
+                            {
+                                System.out.println("lbSvc = null");
+                                return null;
+                            }
+                            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+                            if (version != null) versionOrTag.setVersion(version);
+
+                            ConceptReferenceList crefs = createConceptReferenceList(
+                                    new String[] { code }, scheme);
+
+                            CodedNodeSet cns = null;
+                            try {
+                                try {
+                                    cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    return null;
+                                }
+
+                                if (cns == null) {
+                                    System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
+                                    return null;
+                                }
+
+                                cns = cns.restrictToCodes(crefs);
+                                return cns.resolve(null, null, null);
+                            } catch (Exception ex) {
+
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
+
+
+    public static Concept matchConceptByCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
+
+System.out.println("searchUtils matchConceptByCode scheme: " + scheme);
+System.out.println("searchUtils matchConceptByCode version: " + version);
+System.out.println("searchUtils matchConceptByCode matchText: " + matchText);
+System.out.println("searchUtils matchConceptByCode source: " + source);
+System.out.println("searchUtils matchConceptByCode matchAlgorithm: " + matchAlgorithm);
+
+
+        ResolvedConceptReferencesIterator iterator = matchConceptCode(scheme, version, matchText, source, matchAlgorithm);
+        if (iterator == null) {
+            System.out.println("searchUtils matchConceptCode returns null??? " + matchText);
+            return null;
+        }
+        try {
+            while(iterator.hasNext()){
+                ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
+                for(ResolvedConceptReference ref : refs){
+
+                    if (ref == null) {
+                        System.out.println("(***) matchConceptByCode ref == null??");
+                    }
+
+                    else if (ref.getReferencedEntry() == null) {
+                        System.out.println("(***) matchConceptByCode ref.getReferencedEntry() == null??");
+                    }
+
+                    else if (ref.getReferencedEntry().getEntityCode() == null) {
+                        System.out.println("(***) matchConceptByCode ref.getReferencedEntry().getEntityCode() == null??");
+                    }
+
+                    else {
+                        if (ref.getReferencedEntry().getEntityCode().equals(matchText)) {
+                            System.out.println("(RESULT) matchConceptByCode ref.getReferencedEntry().getEntityCode() == " + ref.getReferencedEntry().getEntityCode());
+                            return ref.getReferencedEntry();
+                        }
+                    }
+
+                }
+            }
+        }  catch (Exception e) {
+            System.out.println("Method: SearchUtila.matchConceptByCode");
+            System.out.println("* ERROR: cns.resolve throws exceptions.");
+            System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                e.getMessage());
+        }
+        return null;
+    }
+
+
+    public static void main(String[] args) throws Exception {
+        MatchConceptByCode test = new MatchConceptByCode();
+
+        String scheme = "Gene Ontology";
+        String code = "GO:0000018";
+        String version = null;
+
+        System.out.println("==================matchConceptByCode=========================" + code);
+
+        Concept c = test.matchConceptByCode(scheme, version, code, null, "LuceneQuery");
+
+        if (c == null) {
+            System.out.println("Concept is null???");
+        } else {
+            System.out.println("Concept is NOT null -- " + c.getEntityCode());
+        }
+
+    }
+
+
+}
+
