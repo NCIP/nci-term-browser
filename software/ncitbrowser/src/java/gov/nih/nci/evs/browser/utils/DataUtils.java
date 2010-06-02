@@ -1230,7 +1230,6 @@ public class DataUtils {
 			properties = concept.getDefinition();
 		}
 
-
         if (properties == null || properties.length == 0)
             return v;
         for (int i = 0; i < properties.length; i++) {
@@ -1285,6 +1284,9 @@ public class DataUtils {
 	}
 
 
+
+
+
     // =====================================================================================
 
     public List getSupportedRoleNames(LexBIGService lbSvc, String scheme,
@@ -1300,7 +1302,12 @@ public class DataUtils {
 			Relations[] relations = cs.getRelations();
 			for (int i = 0; i < relations.length; i++) {
 				Relations relation = relations[i];
-				if (relation.getContainerName().compareToIgnoreCase("roles") == 0) {
+
+				System.out.println("** getSupportedRoleNames containerName: " + relation.getContainerName());
+
+
+				if (relation.getContainerName().compareToIgnoreCase("roles") == 0 ||
+				    relation.getContainerName().compareToIgnoreCase("relations") == 0) {
 					org.LexGrid.relations.Association[] asso_array = relation
 							.getAssociation();
 					for (int j = 0; j < asso_array.length; j++) {
@@ -1905,6 +1912,7 @@ public class DataUtils {
 		return getSynonyms(scheme, concept);
 	}
 
+/*
 	public static Vector getSynonyms(Concept concept) {
 		if (concept == null)
 			return null;
@@ -1944,6 +1952,47 @@ public class DataUtils {
 		SortUtils.quickSort(v);
 		return v;
 	}
+*/
+
+	public static Vector getSynonyms(Concept concept) {
+		if (concept == null)
+			return null;
+		Vector v = new Vector();
+		Presentation[] properties = concept.getPresentation();
+		int n = 0;
+		for (int i = 0; i < properties.length; i++) {
+			Presentation p = properties[i];
+			String term_name = p.getValue().getContent();
+			String term_type = "null";
+			String term_source = "null";
+			String term_source_code = "null";
+
+			PropertyQualifier[] qualifiers = p.getPropertyQualifier();
+			if (qualifiers != null) {
+				for (int j = 0; j < qualifiers.length; j++) {
+					PropertyQualifier q = qualifiers[j];
+					String qualifier_name = q.getPropertyQualifierName();
+					String qualifier_value = q.getValue().getContent();
+					if (qualifier_name.compareTo("source-code") == 0) {
+						term_source_code = qualifier_value;
+						break;
+					}
+				}
+			}
+			term_type = p.getRepresentationalForm();
+			Source[] sources = p.getSource();
+			if (sources != null && sources.length > 0) {
+				Source src = sources[0];
+				term_source = src.getContent();
+			}
+			v.add(term_name + "|" + term_type + "|" + term_source + "|"
+					+ term_source_code);
+
+		}
+		SortUtils.quickSort(v);
+		return v;
+	}
+
 
 
 	public static Vector getSynonyms(String scheme, Concept concept) {
@@ -2967,4 +3016,23 @@ escape("It's me!") // result: It%27s%20me%21
 	   t = t + s;
 	   return t;
    }
+
+    public static Vector getPresentationProperties(Concept concept) {
+        Vector v = new Vector();
+        org.LexGrid.commonTypes.Property[] properties = concept.getPresentation();
+        //name$value$isPreferred
+
+		if (properties == null || properties.length == 0)
+			return v;
+		for (int i = 0; i < properties.length; i++) {
+			Presentation p = (Presentation) properties[i];
+			String name = p.getPropertyName();
+			String value = p.getValue().getContent();
+			String isPreferred = p.getIsPreferred().toString();
+			String t = name + "$" + value + "$" + isPreferred;
+			v.add(t);
+		}
+		return v;
+	}
+
 }

@@ -79,10 +79,29 @@
     Vector properties_to_display_label = new Vector();
     Vector properties_to_display_url = new Vector();
     Vector properties_to_display_linktext = new Vector();
+    
+    Vector presentation_vec = DataUtils.getPresentationProperties(curr_concept);
+    presentation_vec = SortUtils.quickSort(presentation_vec);
+    
+    //Vector preferred_name_vec = new Vector();
+    for (int i=0; i<presentation_vec.size(); i++) {
+        //name$value$isPreferred
+        String t = (String) presentation_vec.elementAt(i);
+        Vector w = DataUtils.parseData(t, "$");
+        String presentaion_name = (String) w.elementAt(0);
+        String presentaion_value = (String) w.elementAt(1);
+        String isPreferred = (String) w.elementAt(2);
+        if (isPreferred.compareTo("true") == 0) {
+		properties_to_display.add(presentaion_name);
+		properties_to_display_label.add(presentaion_name.replaceAll("_", " "));
+		properties_to_display_url.add(null);
+		properties_to_display_linktext.add(null);
+        }
+    }
 
     for (int i=0; i<displayItemList.size(); i++) {
       DisplayItem displayItem = (DisplayItem) displayItemList.get(i);
-      if (!displayItem.getIsExternalCode()) {
+      if (!displayItem.getIsExternalCode() && !properties_to_display.contains( displayItem.getPropertyName() )) {
         properties_to_display.add(displayItem.getPropertyName());
         properties_to_display_label.add(displayItem.getItemLabel());
         properties_to_display_url.add(displayItem.getUrl());
@@ -107,7 +126,7 @@
     }
   }
 %>
-<p class="textsubtitle-blue">Terms and Properties</p>
+<p class="textsubtitle-blue">Terms & Properties</p>
 <%
 if (!bool_obj.equals(Boolean.TRUE) ||
   (concept_status != null &&
@@ -161,15 +180,13 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
     String propName_label = (String) properties_to_display_label.elementAt(i);
-    
-    
  
-if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
-    String formalName = DataUtils.getFormalName(dictionary);
-    if (formalName == null)
-        formalName = dictionary;
+    if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
+        String formalName = DataUtils.getFormalName(dictionary);
+        if (formalName == null)
+        	formalName = dictionary;
 	propName_label = formalName + " Code";
-}
+    }
     
     String propName_label2 = propName_label;
     String url = (String) properties_to_display_url.elementAt(i);
@@ -187,10 +204,8 @@ if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("
           <b><%=propName_label%></b>:
           <table class="datatable">
           <%
-          
       }
       
-
       if (value_vec != null && value_vec.size() > 0) {
       
         //[#28262] Only one "NCI Meta CUI" displays
@@ -312,58 +327,51 @@ if(propName_label.compareTo("Definition") == 0) {
   }
 }
 %>
+
+
+
 <p>
 <b>Synonyms &amp; Abbreviations:</b>
 <a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=synonym">(see Synonym Details)</a>
 
 <table class="datatable">
 <%
-  HashSet hset2 = new HashSet();
-  for (int i=0; i<properties_to_display.size(); i++) {
-    String propName = (String) properties_to_display.elementAt(i);
-    String propName_label = (String) properties_to_display_label.elementAt(i);
-    if (propName_label.indexOf("Synonyms") != -1) {
-      displayed_properties.add(propName);
-      Vector value_vec = (Vector) hmap.get(propName);
-      value_vec = SortUtils.quickSort(value_vec);
-      if (value_vec != null && value_vec.size() > 0) {
-        
-        int row=0;
-        for (int j=0; j<value_vec.size(); j++) {
-          String value = (String) value_vec.elementAt(j);
-          int n = value.indexOf("|");
-          //if (n != -1) value = value.substring(0, n);
-          
-          if (n != -1) {
-             Vector value_v = DataUtils.parseData(value, "|");
-             value = (String) value_v.elementAt(0);
-          }
-         
-          //String valueLC = value.toLowerCase();
-          //if (hset2.contains(valueLC))
-          //  continue;
-          //hset2.add(valueLC);
-          
-          if (!hset2.contains(value)) {
-              hset2.add(value);
-		  if ((row++) % 2 == 0) {
-		    %>
-		      <tr class="dataRowDark">
-		    <%
-		  } else {
-		    %>
-		      <tr class="dataRowLight">
-		    <%
-		  }
-		    %>
-			<td><%=value%></td>
-		      </tr>
-		    <%
-		 }
-         }
-      }
+    HashSet hset2 = new HashSet();
+    Vector synonym_values = new Vector();
+    for (int i=0; i<presentation_vec.size(); i++) {
+        String t = (String) presentation_vec.elementAt(i);
+        Vector w = DataUtils.parseData(t, "$");
+        String presentaion_name = (String) w.elementAt(0);
+        String presentaion_value = (String) w.elementAt(1);
+        String isPreferred = (String) w.elementAt(2);
+
+        displayed_properties.add(presentaion_name);
+        if (!hset2.contains(presentaion_value)) {
+	    synonym_values.add(presentaion_value);
+	    hset2.add(presentaion_value);
+        }
+
+        synonym_values = SortUtils.quickSort(synonym_values);
     }
-  }
+
+    int row=0;
+    for (int j=0; j<synonym_values.size(); j++) {
+        String value = (String) synonym_values.elementAt(j);
+	if ((row++) % 2 == 0) {
+%>
+	      <tr class="dataRowDark">
+<%
+	} else {
+%>
+	      <tr class="dataRowLight">
+<%
+	}
+%>
+		   <td><%=value%></td>
+	      </tr>
+        <%
+    }
+
 %>
 </table>
 </p>

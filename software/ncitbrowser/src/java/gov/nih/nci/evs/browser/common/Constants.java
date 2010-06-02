@@ -42,6 +42,10 @@ public class Constants {
 	public static final String CONTAIN_SEARCH_ALGORITHM = "nonLeadingWildcardLiteralSubString";// "literalSubString";//"subString";
 	public static final String LICENSE_STATEMENT = "license_statement";// "literalSubString";//"subString";
 
+    static public final int SEARCH_BOTH_DIRECTION = 0;
+    static public final int SEARCH_SOURCE = 1;
+    static public final int SEARCH_TARGET = 2;
+
 	/**
 	 * Constructor
 	 */

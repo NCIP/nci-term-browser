@@ -21,6 +21,9 @@ import org.LexGrid.concepts.Concept;
 
 import gov.nih.nci.evs.browser.utils.DataUtils;
 import gov.nih.nci.evs.browser.utils.SortOption;
+import gov.nih.nci.evs.browser.utils.SearchFields;
+import gov.nih.nci.evs.searchlog.SearchLog;
+
 
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
@@ -28,6 +31,8 @@ import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import gov.nih.nci.evs.browser.utils.ResolvedConceptReferencesIteratorWrapper;
 
 import gov.nih.nci.evs.browser.utils.HTTPUtils;
+
+import org.apache.log4j.Logger;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -66,9 +71,10 @@ public class UserSessionBean extends Object {
     private String selectedQuickLink = null;
     private List quickLinkList = null;
 
-
     public List<SelectItem> ontologyList = null;
     public List<String> ontologiesToSearchOn = null;
+
+    private static Logger _logger = Logger.getLogger(UserSessionBean.class);
 
     public UserSessionBean() {
         ontologiesToSearchOn = new ArrayList<String>();
@@ -163,6 +169,7 @@ public class UserSessionBean extends Object {
 			scheme = Constants.CODING_SCHEME_NAME;
 		}
 
+System.out.println("UserSessionBean scheme: " + scheme);
 
  //KLO, 012610
 		if (searchTarget.compareTo("relationships") == 0 && matchAlgorithm.compareTo("contains") == 0) {
@@ -289,7 +296,8 @@ public class UserSessionBean extends Object {
         request.getSession().removeAttribute("type");
 
         if (iterator != null) {
-			request.getSession().setAttribute("key", key);
+			//request.getSession().setAttribute("key", key);
+			request.setAttribute("key", key);
 
 			int numberRemaining = 0;
 			try {
@@ -306,7 +314,12 @@ public class UserSessionBean extends Object {
                 request.getSession().setAttribute("page_string", "1");
 
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
+
                 request.getSession().setAttribute("dictionary", scheme);
+
+                System.out.println("UserSessionBean request.getSession().setAttribute dictionary: " + scheme);
+
+
                 return "search_results";
 
             } else if (size == 1) {
@@ -1057,4 +1070,401 @@ request.getSession().setAttribute("matchText", HTTPUtils.convertJSPString(matchT
         request.getSession().setAttribute("version", version);
         return "vocabulary_home";
     }
+
+
+    public String advancedSearchAction() {
+        ResolvedConceptReferencesIteratorWrapper wrapper = null;
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String scheme = (String) request.getParameter("dictionary");
+        SearchStatusBean bean =
+            (SearchStatusBean) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequestMap().get("searchStatusBean");
+
+        if (bean == null) {
+            bean = new SearchStatusBean(scheme);
+            request.setAttribute("searchStatusBean", bean);
+        }
+
+        String matchType =
+            (String) request.getParameter("adv_search_type");
+
+        bean.setSearchType(matchType);
+
+        String matchAlgorithm =
+            (String) request.getParameter("adv_search_algorithm");
+        bean.setAlgorithm(matchAlgorithm);
+
+        String source = (String) request.getParameter("adv_search_source");
+        bean.setSelectedSource(source);
+
+        String selectSearchOption =
+            (String) request.getParameter("selectSearchOption");
+        bean.setSelectedSearchOption(selectSearchOption);
+
+        String selectProperty = (String) request.getParameter("selectProperty");
+        bean.setSelectedProperty(selectProperty);
+
+        String rel_search_association =
+            (String) request.getParameter("rel_search_association");
+        bean.setSelectedAssociation(rel_search_association);
+
+        String rel_search_rela =
+            (String) request.getParameter("rel_search_rela");
+        bean.setSelectedRELA(rel_search_rela);
+
+        FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
+            .put("searchStatusBean", bean);
+        request.setAttribute("searchStatusBean", bean);
+
+        String searchTarget = (String) request.getParameter("searchTarget");
+
+        String matchText = (String) request.getParameter("matchText");
+        if (matchText == null || matchText.length() == 0) {
+            String message = "Please enter a search string.";
+            //request.getSession().setAttribute("message", message);
+            request.setAttribute("message", message);
+            return "message";
+        }
+        matchText = matchText.trim();
+        bean.setMatchText(matchText);
+
+        if (NCItBrowserProperties.debugOn) {
+            _logger.debug(Utils.SEPARATOR);
+            _logger.debug("* criteria: " + matchText);
+            _logger.debug("* source: " + source);
+        }
+
+
+        //String scheme = Constants.CODING_SCHEME_NAME;
+        Vector schemes = new Vector();
+        schemes.add(scheme);
+
+        String version = null;
+        String max_str = null;
+        int maxToReturn = -1;// 1000;
+        try {
+            max_str =
+                NCItBrowserProperties.getInstance().getProperty(
+                    NCItBrowserProperties.MAXIMUM_RETURN);
+            maxToReturn = Integer.parseInt(max_str);
+        } catch (Exception ex) {
+        }
+        Utils.StopWatch stopWatch = new Utils.StopWatch();
+        Vector<org.LexGrid.concepts.Concept> v = null;
+
+        boolean excludeDesignation = true;
+        boolean designationOnly = false;
+
+        // check if this search has been performance previously through
+        // IteratorBeanManager
+        IteratorBeanManager iteratorBeanManager =
+            (IteratorBeanManager) FacesContext.getCurrentInstance()
+                .getExternalContext().getSessionMap()
+                .get("iteratorBeanManager");
+
+        if (iteratorBeanManager == null) {
+            iteratorBeanManager = new IteratorBeanManager();
+            FacesContext.getCurrentInstance().getExternalContext()
+                .getSessionMap()
+                .put("iteratorBeanManager", iteratorBeanManager);
+        }
+
+        IteratorBean iteratorBean = null;
+        ResolvedConceptReferencesIterator iterator = null;
+        boolean ranking = true;
+
+        SearchFields searchFields = null;
+        String key = null;
+
+        String searchType = (String) request.getParameter("selectSearchOption");
+        _logger.debug("SearchUtils.java searchType: " + searchType);
+
+        if (searchType != null && searchType.compareTo("Property") == 0) {
+            /*
+             * _logger.debug("Advanced Search: "); _logger.debug("searchType: "
+             * + searchType); _logger.debug("matchText: " + matchText);
+             * _logger.debug("adv_search_algorithm: " + adv_search_algorithm);
+             * _logger.debug("adv_search_source: " + adv_search_source);
+             */
+
+            String property_type =
+                (String) request.getParameter("selectPropertyType");
+            if (property_type != null && property_type.compareTo("ALL") == 0) {
+                property_type = null;
+            }
+
+            String property_name = selectProperty;
+            if (property_name != null) {
+                property_name = property_name.trim();
+                // if (property_name.length() == 0) property_name = null;
+                if (property_name.compareTo("ALL") == 0)
+                    property_name = null;
+            }
+
+            searchFields =
+                SearchFields.setProperty(schemes, matchText, searchTarget,
+                    property_type, property_name, source, matchAlgorithm,
+                    maxToReturn);
+            key = searchFields.getKey();
+
+System.out.println("advancedSearchAction " + key);
+
+
+            if (iteratorBeanManager.containsIteratorBean(key)) {
+                iteratorBean = iteratorBeanManager.getIteratorBean(key);
+                iterator = iteratorBean.getIterator();
+            } else {
+                String[] property_types = null;
+                if (property_type != null)
+                    property_types = new String[] { property_type };
+                String[] property_names = null;
+                if (property_name != null)
+                    property_names = new String[] { property_name };
+                excludeDesignation = false;
+                wrapper =
+                    new SearchUtils().searchByProperties(scheme, version,
+                        matchText, property_types, property_names, source,
+                        matchAlgorithm, excludeDesignation, ranking,
+                        maxToReturn);
+                if (wrapper != null) {
+                    iterator = wrapper.getIterator();
+                }
+                if (iterator != null) {
+                    iteratorBean = new IteratorBean(iterator);
+                    iteratorBean.setKey(key);
+                    iteratorBean.setMatchText(matchText);
+                    iteratorBeanManager.addIteratorBean(iteratorBean);
+                }
+            }
+
+        } else if (searchType != null
+            && searchType.compareTo("Relationship") == 0) {
+            if (rel_search_association != null
+                && rel_search_association.compareTo("ALL") == 0)
+                rel_search_association = null;
+
+            if (rel_search_rela != null) {
+                rel_search_rela = rel_search_rela.trim();
+                if (rel_search_rela.length() == 0)
+                    rel_search_rela = null;
+            }
+
+            /*
+             * String rel_search_direction = (String)
+             * request.getParameter("rel_search_direction");
+             *
+             * //boolean direction = false; int search_direction =
+             * Constants.SEARCH_BOTH_DIRECTION; if (rel_search_direction != null
+             * && rel_search_direction.compareTo("source") == 0) {
+             * search_direction = Constants.SEARCH_SOURCE; //direction = true; }
+             * else if (rel_search_direction != null &&
+             * rel_search_direction.compareTo("target") == 0) { search_direction
+             * = Constants.SEARCH_TARGET; //direction = true; }
+             */
+
+            int search_direction = Constants.SEARCH_SOURCE;
+
+            _logger.debug("AdvancedSearchAction search_direction "
+                + search_direction);
+
+            searchFields =
+                SearchFields.setRelationship(schemes, matchText, searchTarget,
+                    rel_search_association, rel_search_rela, source,
+                    matchAlgorithm, maxToReturn);
+            key = searchFields.getKey();
+
+            _logger.debug("AdvancedSearchAction key " + key);
+
+            if (iteratorBeanManager.containsIteratorBean(key)) {
+                iteratorBean = iteratorBeanManager.getIteratorBean(key);
+                iterator = iteratorBean.getIterator();
+            } else {
+
+                String[] associationsToNavigate = null;
+                String[] association_qualifier_names = null;
+                String[] association_qualifier_values = null;
+
+                if (rel_search_association != null) {
+                    associationsToNavigate =
+                        new String[] { rel_search_association };
+                } else {
+                    _logger.debug("(*) associationsToNavigate == null");
+                }
+
+                if (rel_search_rela != null) {
+                    association_qualifier_names = new String[] { "rela" };
+                    association_qualifier_values =
+                        new String[] { rel_search_rela };
+
+                    if (associationsToNavigate == null) {
+                        Vector w = OntologyBean.getAssociationNames(scheme);
+                        if (w == null || w.size() == 0) {
+                            _logger
+                                .warn("OntologyBean.getAssociationNames() returns null, or nothing???");
+                        } else {
+                            associationsToNavigate = new String[w.size()];
+                            for (int i = 0; i < w.size(); i++) {
+                                String nm = (String) w.elementAt(i);
+                                associationsToNavigate[i] = nm;
+                            }
+                        }
+                    }
+
+                } else {
+                    _logger.warn("(*) qualifiers == null");
+                }
+
+                wrapper =
+                    new SearchUtils().searchByAssociations(scheme, version,
+                        matchText, associationsToNavigate,
+                        association_qualifier_names,
+                        association_qualifier_values, search_direction, source,
+                        matchAlgorithm, excludeDesignation, ranking,
+                        maxToReturn);
+                if (wrapper != null) {
+                    iterator = wrapper.getIterator();
+                }
+                if (iterator != null) {
+                    iteratorBean = new IteratorBean(iterator);
+                    iteratorBean.setKey(key);
+                    iteratorBean.setMatchText(matchText);
+                    iteratorBeanManager.addIteratorBean(iteratorBean);
+                }
+            }
+
+        } else if (searchType != null && searchType.compareTo("Name") == 0) {
+            searchFields =
+                SearchFields.setName(schemes, matchText, searchTarget, source,
+                    matchAlgorithm, maxToReturn);
+            key = searchFields.getKey();
+            if (iteratorBeanManager.containsIteratorBean(key)) {
+                iteratorBean = iteratorBeanManager.getIteratorBean(key);
+                iterator = iteratorBean.getIterator();
+            } else {
+                wrapper =
+                    new SearchUtils().searchByName(scheme, version, matchText,
+                        source, matchAlgorithm, ranking, maxToReturn,
+                        SearchUtils.NameSearchType.Name);
+                if (wrapper != null) {
+                    iterator = wrapper.getIterator();
+                    if (iterator != null) {
+                        iteratorBean = new IteratorBean(iterator);
+                        iteratorBean.setKey(key);
+                        iteratorBean.setMatchText(matchText);
+                        iteratorBeanManager.addIteratorBean(iteratorBean);
+                    }
+                }
+            }
+
+        } else if (searchType != null && searchType.compareTo("Code") == 0) {
+            searchFields =
+                SearchFields.setCode(schemes, matchText, searchTarget, source,
+                    matchAlgorithm, maxToReturn);
+            key = searchFields.getKey();
+            if (iteratorBeanManager.containsIteratorBean(key)) {
+                iteratorBean = iteratorBeanManager.getIteratorBean(key);
+                iterator = iteratorBean.getIterator();
+            } else {
+                /*
+                 * wrapper = new SearchUtils().searchByName(scheme, version,
+                 * matchText, source, matchAlgorithm, ranking, maxToReturn,
+                 * SearchUtils.NameSearchType.Code);
+                 */
+
+                wrapper =
+                    new SearchUtils().searchByCode(scheme, version, matchText,
+                        source, matchAlgorithm, ranking, maxToReturn);
+
+                if (wrapper != null) {
+                    iterator = wrapper.getIterator();
+                    if (iterator != null) {
+                        iteratorBean = new IteratorBean(iterator);
+                        iteratorBean.setKey(key);
+                        iteratorBean.setMatchText(matchText);
+                        iteratorBeanManager.addIteratorBean(iteratorBean);
+                    }
+                }
+            }
+        }
+
+        request.setAttribute("key", key);
+
+        request.getSession().setAttribute("matchText", matchText);
+
+        request.getSession().removeAttribute("neighborhood_synonyms");
+        request.getSession().removeAttribute("neighborhood_atoms");
+        request.getSession().removeAttribute("concept");
+        request.getSession().removeAttribute("code");
+        request.getSession().removeAttribute("codeInNCI");
+        request.getSession().removeAttribute("AssociationTargetHashMap");
+        request.getSession().removeAttribute("type");
+
+        if (iterator != null) {
+            int size = iteratorBean.getSize();
+
+            _logger.debug("AdvancedSearchActon size: " + size);
+
+            // Write a search log entry
+            SearchLog.writeEntry(searchFields, size, HTTPUtils
+                .getRefererParmDecode(request));
+
+            if (size > 1) {
+                request.getSession().setAttribute("search_results", v);
+
+                String match_size = Integer.toString(size);
+                ;// Integer.toString(v.size());
+                request.getSession().setAttribute("match_size", match_size);
+                request.getSession().setAttribute("page_string", "1");
+
+                request.getSession().setAttribute("new_search", Boolean.TRUE);
+                return "search_results";
+            } else if (size == 1) {
+                request.getSession().setAttribute("singleton", "true");
+                request.getSession().setAttribute("dictionary",
+                    scheme);
+                // Concept c = (Concept) v.elementAt(0);
+                int pageNumber = 1;
+                List list = iteratorBean.getData(1);
+                ResolvedConceptReference ref =
+                    (ResolvedConceptReference) list.get(0);
+
+                Concept c = null;
+                if (ref == null) {
+                    String msg =
+                        "Error: Null ResolvedConceptReference encountered.";
+                    request.getSession().setAttribute("message", msg);
+                    return "message";
+
+                } else {
+                    c = ref.getReferencedEntry();
+                    if (c == null) {
+                        c =
+                            DataUtils.getConceptByCode(
+                                scheme, null, null, ref.getConceptCode());
+                    }
+                }
+
+                request.getSession().setAttribute("code", ref.getConceptCode());
+                request.getSession().setAttribute("concept", c);
+                request.getSession().setAttribute("type", "properties");
+
+                request.getSession().setAttribute("new_search", Boolean.TRUE);
+                return "concept_details";
+            }
+        }
+
+        String message = "No match found.";
+        if (matchAlgorithm.compareTo("exactMatch") == 0) {
+            message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
+        }
+        request.setAttribute("message", message);
+        return "no_match";
+
+    }
+
+
+
 }

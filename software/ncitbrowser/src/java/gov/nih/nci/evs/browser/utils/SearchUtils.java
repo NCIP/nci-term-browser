@@ -59,6 +59,8 @@ import org.LexGrid.LexBIG.Utility.Constructors;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
 import org.LexGrid.naming.SupportedProperty;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -93,6 +95,8 @@ import org.LexGrid.naming.SupportedProperty;
  */
 
 public class SearchUtils {
+    private static Logger _logger = Logger.getLogger(SearchUtils.class);
+
 	private DoubleMetaphone doubleMetaphone = null;
 
 	private int max_str_length = 1000;
@@ -135,6 +139,8 @@ public class SearchUtils {
 			"with" });
 
     static HashMap propertyLocalNameListHashMap = null;
+
+    public enum NameSearchType { All, Name, Code };
 
 	public SearchUtils() {
 		initializeSortParameters();
@@ -2207,7 +2213,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		return cns;
 	}
 
-
+/*
    public Vector findConceptWithSourceCodeMatching(String scheme, String version,
 												   String sourceAbbr, String code,
 												   int maxToReturn, boolean searchInactive)
@@ -2282,6 +2288,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		return null;
     }
 
+*/
    private CodedNodeSet restrictToActiveStatus(CodedNodeSet cns, boolean activeOnly)
    {
 		 if (cns == null) return null;
@@ -2389,6 +2396,14 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
 		}
 	}
+
+/*
+                    new SearchUtils().searchByProperties(scheme, version,
+                        matchText, property_types, property_names, source,
+                        matchAlgorithm, excludeDesignation, ranking,
+                        maxToReturn);
+
+*/
 
     public ResolvedConceptReferencesIteratorWrapper searchByProperties(Vector schemes, Vector versions, String matchText, String source, String matchAlgorithm,
                                                                 boolean excludeDesignation, boolean ranking, int maxToReturn) {
@@ -2952,80 +2967,710 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 	}
 
 
-/*
-    public static Concept getConceptByCode_ICD(String codingSchemeName, String vers, String ltag, String code) {
+
+    public ResolvedConceptReferencesIteratorWrapper searchByProperties(String scheme, String version, String matchText,
+                                                                String[] property_types,
+                                                                String[] property_names, String source, String matchAlgorithm,
+                                                                boolean excludeDesignation, boolean ranking, int maxToReturn) {
+		boolean restrictToProperties = false;
+		CodedNodeSet.PropertyType[] propertyTypes = null;
+		LocalNameList propertyNames = null;
+		LocalNameList sourceList = null;
+		if (property_types != null || property_names != null) {
+			_logger.debug("Case #1 -- property_types != null || property_names != null");
+
+			restrictToProperties = true;
+		    if (property_types != null) propertyTypes = createPropertyTypes(property_types);
+		    if (property_names != null) propertyNames = ConvenienceMethods.createLocalNameList(property_names);
+		} else {
+			_logger.debug("Case #2 ");
+			propertyNames = new LocalNameList();
+			propertyTypes = getAllPropertyTypes();
+			if (excludeDesignation) {
+				_logger.debug("Case #3 ");
+				propertyTypes = getAllNonPresentationPropertyTypes();
+			}
+		}
+		_logger.debug("searchByProperties scheme: " + scheme);
+		_logger.debug("searchByProperties matchAlgorithm: " + matchAlgorithm);
+		_logger.debug("searchByProperties source: " + source);
+		_logger.debug("searchByProperties excludeDesignation: " + excludeDesignation);
+
+		if (source != null) sourceList = ConvenienceMethods.createLocalNameList(new String[] {source});
+		NameAndValueList qualifierList = null;
+
+		String matchText0 = matchText;
+		String matchAlgorithm0 = matchAlgorithm;
+		matchText0 = matchText0.trim();
+        if (matchText == null || matchText.length() == 0)
+        {
+			return null;
+		}
+        matchText = matchText.trim();
+        if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+		{
+			matchAlgorithm = findBestContainsAlgorithm(matchText);
+		}
+
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
         try {
-			if (code == null) {
-				System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null)
+            {
+                _logger.warn("lbSvc = null");
+                return null;
+            }
+
+			cns = null;
+			iterator = null;
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null) versionOrTag.setVersion(version);
+
+			try {
+				if (lbSvc == null)
+				{
+					_logger.warn("lbSvc = null");
+					return null;
+				}
+
+				cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+
+				if (cns != null)
+				{
+					try {
+						String language = null;
+						try {
+							_logger.debug("*** restrictToMatchingProperties ...matchText " + matchText + " matchAlgorithm " + matchAlgorithm);
+                            cns = cns.restrictToMatchingProperties(propertyNames, propertyTypes, matchText, matchAlgorithm, language);
+
+						} catch (Exception e) {
+							_logger.debug("\t(*) restrictToMatchingProperties throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
+							//e.printStackTrace();
+						}
+						try {
+							_logger.debug("restrictToSource ...source " + source);
+							cns = restrictToSource(cns, source);
+						} catch (Exception e) {
+							_logger.error("\t(*) restrictToSource throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
+							//e.printStackTrace();
+						}
+
+					} catch (Exception ex) {
+						//ex.printStackTrace();
+						_logger.error("\t(*) searchByProperties2 throws exceptions.");
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				//return null;
+			}
+			iterator = null;
+			if (cns == null) {
 				return null;
 			}
-			if (code.indexOf("@") != -1) return null; // anonymous class
 
-//			String formalname = (String) localName2FormalNameHashMap.get(codingSchemeName);
+            //LocalNameList restrictToProperties = null;//new LocalNameList();
+            boolean resolveConcepts = false;
+            SortOptionList sortCriteria = null;
+		    if (ranking){
+				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
 
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
-            if (lbSvc == null) {
-                System.out.println("lbSvc == null???");
-                return null;
-            }
-            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-            if (vers != null) versionOrTag.setVersion(vers);
-
-            ConceptReferenceList crefs = createConceptReferenceList(
-                    new String[] { code }, codingSchemeName);
-
-            CodedNodeSet cns = null;
+            } else {
+                sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
+                _logger.debug("*** Sort alphabetically...");
+                resolveConcepts = false;
+			}
             try {
-				try {
-					cns = lbSvc.getCodingSchemeConcepts(codingSchemeName,
-							versionOrTag);
-				} catch (Exception e) {
-					e.printStackTrace();
-					return null;
-				}
+               try {
+					long ms = System.currentTimeMillis(), delay = 0;
+					cns = restrictToSource(cns, source);
+					_logger.debug("cns.resolve ...");
+                    iterator = cns.resolve(sortCriteria, null, null, null, resolveConcepts);
 
-                if (cns == null) {
-					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
-					return null;
-				}
-
-                cns = cns.restrictToCodes(crefs);
- 				ResolvedConceptReferenceList matches = null;
-				try {
-					matches = cns.resolveToList(null, null, null, 1);
-				} catch (Exception e) {
-					System.out.println("cns.resolveToList failed???");
-				}
-
-                if (matches == null) {
-                    System.out.println("Concept not found.");
-                    return null;
+                }  catch (Exception e) {
+                    _logger.error("Method: SearchUtil.searchByProperties");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
+                    e.printStackTrace();
                 }
-                int count = matches.getResolvedConceptReferenceCount();
-                // Analyze the result ...
-                if (count == 0)
-                    return null;
-                if (count > 0) {
-                    try {
-                        ResolvedConceptReference ref = (ResolvedConceptReference) matches
-                                .enumerateResolvedConceptReference()
-                                .nextElement();
-                        Concept entry = ref.getReferencedEntry();
-                        return entry;
-                    } catch (Exception ex1) {
-                        System.out.println("Exception entry == null");
-                        return null;
-                    }
-                }
-            } catch (Exception e1) {
-                e1.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
                 return null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		if (!excludeDesignation) {
+			int lcv = 0;
+			int iterator_size = 0;
+			if (iterator != null) {
+				try {
+					iterator_size = iterator.numberRemaining();
+
+					_logger.debug("Number of matches: " + iterator_size);
+				} catch (Exception ex) {
+
+				}
+			}
+
+			if (iterator_size == 0) {
+				iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
+				if (iterator != null) {
+					try {
+						iterator_size = iterator.numberRemaining();
+					} catch (Exception ex) {
+
+					}
+				}
+			}
+	    }
+        return new ResolvedConceptReferencesIteratorWrapper(iterator);
+    }
+
+    public ResolvedConceptReferencesIteratorWrapper searchByProperties(String scheme, String version, String matchText, String source, String matchAlgorithm,
+                                                                boolean excludeDesignation, boolean ranking, int maxToReturn) {
+		return searchByProperties(scheme, version, matchText, null, null, source, matchAlgorithm,
+		                          excludeDesignation, ranking, maxToReturn);
+
+	}
+
+    public static CodedNodeSet.PropertyType[] createPropertyTypes(String[] types) {
+		if (types == null || types.length == 0) return null;
+		CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[types.length];
+		int knt = -1;
+        for (int i=0; i<types.length; i++) {
+			String type = (String) types[i];
+			if (type.compareToIgnoreCase("PRESENTATION") == 0) {
+				knt++;
+				propertyTypes[knt] = PropertyType.PRESENTATION;
+			} else if (type.compareToIgnoreCase("DEFINITION") == 0) {
+				knt++;
+				propertyTypes[knt] = PropertyType.DEFINITION;
+			} else if (type.compareToIgnoreCase("GENERIC") == 0) {
+				knt++;
+				propertyTypes[knt] = PropertyType.GENERIC;
+			} else if (type.compareToIgnoreCase("COMMENT") == 0) {
+				knt++;
+				propertyTypes[knt] = PropertyType.COMMENT;
+			}
         }
-        return null;
+		return propertyTypes;
+	}
+
+/*
+    public ResolvedConceptReferencesIteratorWrapper searchByName(String scheme, String version, String matchText, String source,
+        String matchAlgorithm, boolean ranking, int maxToReturn) {
+        return searchByName(scheme, version, matchText, source,
+            matchAlgorithm, ranking, maxToReturn, NameSearchType.All);
     }
 */
+
+    public ResolvedConceptReferencesIteratorWrapper searchByName(
+        String scheme, String version, String matchText, String source,
+        String matchAlgorithm, boolean ranking, int maxToReturn,
+        NameSearchType nameSearchType) {
+        if (matchText == null || matchText.length() == 0)
+            return null;
+
+        matchText = matchText.trim();
+        if (matchAlgorithm.compareToIgnoreCase("startsWith") == 0) {
+			//No literalStartsWith support
+		} else if (matchAlgorithm.compareToIgnoreCase("contains") == 0) { //p11.1-q11.1  /100{WBC}
+			//matchAlgorithm = CONTAIN_SEARCH_ALGORITHM;
+			matchAlgorithm = findBestContainsAlgorithm(matchText);
+			//_logger.debug("algorithm: " + matchAlgorithm);
+		}
+
+        ResolvedConceptReferencesIterator iterator = null;
+        if (nameSearchType == NameSearchType.All || nameSearchType == NameSearchType.Name) {
+            CodedNodeSet cns = null;
+    		CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
+    		propertyTypes[0] = PropertyType.PRESENTATION;
+
+            try {
+                LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+                if (lbSvc == null)
+                {
+                    _logger.warn("lbSvc = null");
+                    return null;
+                }
+                CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+                if (version != null) versionOrTag.setVersion(version);
+
+                cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                if (cns == null)
+                {
+                    _logger.warn("cns = null");
+                    return null;
+                }
+
+                //LocalNameList contextList = null;
+                try {
+    				LocalNameList sourceList = null;
+    				if (source != null && source.compareToIgnoreCase("ALL") != 0) {
+    					sourceList = new LocalNameList();
+    					sourceList.addEntry(source);
+    				}
+
+    				cns = cns.restrictToMatchingDesignations(matchText,
+    				    SearchDesignationOption.ALL, matchAlgorithm, null);
+    				cns = cns.restrictToProperties(null, propertyTypes,
+    				    sourceList, null, null);
+
+                } catch (Exception ex) {
+                    return null;
+                }
+
+                LocalNameList restrictToProperties = null;//new LocalNameList();
+                LocalNameList propertyNames = Constructors.createLocalNameList("Semantic_Type");
+                //boolean resolveConcepts = true; // Semantic_Type is no longer required.
+
+                SortOptionList sortCriteria = null;
+    			boolean resolveConcepts = true;
+    			LocalNameList filterOptions = null;
+    			propertyTypes = null;
+                try {
+                    try {
+    					long ms = System.currentTimeMillis(), delay = 0;
+    					cns = restrictToSource(cns, source);
+                        //iterator = cns.resolve(sortCriteria, propertyNames,
+    					//    restrictToProperties, null, resolveConcepts);
+                        iterator = cns.resolve(sortCriteria, filterOptions,
+                            propertyNames, propertyTypes, resolveConcepts);
+                        /*
+    					Debug.println("cns.resolve delay ---- Run time (ms): "
+    					    + (delay = System.currentTimeMillis() - ms)
+    					    + " -- matchAlgorithm " + matchAlgorithm);
+    					*/
+                        //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
+
+                    }  catch (Exception e) {
+                        _logger.error("ERROR: cns.resolve throws exceptions.");
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    return null;
+                }
+
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    			return null;
+    		}
+        }
+
+        if (nameSearchType == NameSearchType.All || nameSearchType == NameSearchType.Code) {
+			try {
+				int size = iterator != null ? iterator.numberRemaining() : 0;
+				if (size == 0) {
+					iterator = matchConceptCode(scheme, version, matchText,
+					    source, "LuceneQuery");
+				}
+				size = iterator.numberRemaining();
+				if (size == 0) {
+			        iterator = findConceptWithSourceCodeMatching(scheme, version,
+			            source, matchText, maxToReturn, true);
+				}
+				// Find ICD9CM concepts by code
+				size = iterator.numberRemaining();
+				if (size < 20) {
+				    // heuristic rule (if the number of matches is large,
+				    //    then it's less likely that the matchText is a code)
+					Vector w = new Vector();
+					w.add(iterator);
+					ResolvedConceptReferencesIterator itr1 = matchConceptCode(
+					    scheme, version, matchText, source, "LuceneQuery");
+			        if (itr1 != null) w.add(itr1);
+			        ResolvedConceptReferencesIterator itr2 =
+			            findConceptWithSourceCodeMatching(scheme, version,
+			                source, matchText, maxToReturn, true);
+					if (itr2 != null) w.add(itr2);
+                    iterator = getResolvedConceptReferencesIteratorUnion(
+                        scheme, version, w);
+				}
+			} catch (Exception e) {
+			}
+        }
+        return new ResolvedConceptReferencesIteratorWrapper(iterator);
+    }
+
+    ResolvedConceptReferencesIterator getResolvedConceptReferencesIteratorUnion(String scheme, String version, Vector<ResolvedConceptReferencesIterator> v) {
+		if (v == null) return null;
+		int maxReturn = 100;
+		Vector w = new Vector();
+		HashSet hset = new HashSet();
+		ResolvedConceptReferencesIterator matchIterator = null;
+
+		for (int i=0; i<v.size(); i++) {
+			ResolvedConceptReferencesIterator iterator = (ResolvedConceptReferencesIterator) v.elementAt(i);
+			try {
+				while(iterator != null && iterator.hasNext()) {
+					ResolvedConceptReferenceList rcrl = iterator.next(maxReturn);
+					if (rcrl != null) {
+						ResolvedConceptReference[] refs = rcrl.getResolvedConceptReference();
+
+						if (refs != null) {
+							for(ResolvedConceptReference ref : refs) {
+								if (ref != null) {
+									if (!hset.contains(ref.getConceptCode())) {
+										w.add(ref.getConceptCode());
+										hset.add(ref.getConceptCode());
+									}
+								}
+							}
+						}
+				    }
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+    	}
+
+   	    if (w.size() > 0) {
+			String[] codes = new String[w.size()];
+			for (int i=0; i<w.size(); i++) {
+				String code = (String) w.elementAt(i);
+				codes[i] = code;
+			}
+
+			try {
+				LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+				if (lbSvc == null)
+				{
+					_logger.warn("lbSvc == null???");
+					return null;
+				}
+
+				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+				if (version != null) versionOrTag.setVersion(version);
+
+				ConceptReferenceList crefs = createConceptReferenceList(codes, scheme);
+				CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, null);
+				cns = cns.restrictToCodes(crefs);
+				CodedNodeSet.PropertyType[] types = new PropertyType[] {PropertyType.PRESENTATION};
+				cns = cns.restrictToProperties(null, types, null, null, null);
+
+				try {
+					matchIterator = cns.resolve(null,null,null);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			hset.clear();
+	    }
+        return matchIterator;
+
+	}
+
+   public ResolvedConceptReferencesIterator findConceptWithSourceCodeMatching(String scheme, String version,
+												   String sourceAbbr, String code,
+												   int maxToReturn, boolean searchInactive)
+   {
+	    if (sourceAbbr == null || code == null) return null;
+        ResolvedConceptReferencesIterator matchIterator = null;
+
+		LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		versionOrTag.setVersion(version);
+
+		if (lbSvc == null)
+		{
+			_logger.warn("lbSvc = null");
+			return null;
+		}
+
+	    LocalNameList contextList = null;
+        NameAndValueList qualifierList = null;
+
+ 		Vector<String> v = null;
+
+		if (code != null && code.compareTo("") != 0)
+		{
+			qualifierList = new NameAndValueList();
+			NameAndValue nv = new NameAndValue();
+			nv.setName("source-code");
+			nv.setContent(code);
+			qualifierList.addNameAndValue(nv);
+		}
+
+        LocalNameList propertyLnL = null;
+     // sourceLnL
+        Vector<String> w2 = new Vector<String>();
+        w2.add(sourceAbbr);
+        LocalNameList sourceLnL = vector2LocalNameList(w2);
+        if (sourceAbbr.compareTo("*") == 0 || sourceAbbr.compareToIgnoreCase("ALL") == 0)
+        {
+			sourceLnL = null;
+		}
+
+		SortOptionList sortCriteria = null;//Constructors.createSortOptionList(new String[]{"matchToQuery", "code"});
+		try {
+			CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, null);
+			if (cns == null)
+			{
+				_logger.warn("lbSvc.getCodingSchemeConceptsd returns null");
+				return null;
+			}
+			CodedNodeSet.PropertyType[] types = new PropertyType[] {PropertyType.PRESENTATION};
+			cns = cns.restrictToProperties(propertyLnL, types, sourceLnL, contextList, qualifierList);
+
+            if (cns != null) {
+				boolean activeOnly = !searchInactive;
+				cns = restrictToActiveStatus(cns, activeOnly);
+
+				try {
+					matchIterator = cns.resolve(sortCriteria, null,null);//ConvenienceMethods.createLocalNameList(getPropertyForCodingScheme(cs)),null);
+				} catch (Exception ex) {
+
+				}
+		    }
+
+		} catch (Exception e) {
+			 return null;
+		}
+		return matchIterator;
+    }
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchByCode(String scheme, String version, String matchText, String source,
+        String matchAlgorithm, boolean ranking, int maxToReturn) {
+
+        ResolvedConceptReferencesIterator iterator = null;
+
+		iterator = matchConceptCode(scheme, version, matchText, source, "LuceneQuery");
+		try {
+			int size = iterator.numberRemaining();
+			if (size == 0) {
+				iterator = findConceptWithSourceCodeMatching(scheme, version,
+					source, matchText, maxToReturn, true);
+			}
+			return new ResolvedConceptReferencesIteratorWrapper(iterator);
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+		return null;
+
+	}
+
+    public ResolvedConceptReferencesIteratorWrapper searchByAssociations(String scheme, String version, String matchText, String source, String matchAlgorithm, boolean designationOnly, boolean ranking, int maxToReturn) {
+        return searchByAssociations(scheme, version, matchText, null, null, null, Constants.SEARCH_SOURCE, source, matchAlgorithm, designationOnly, ranking, maxToReturn);
+	}
+
+/*
+String[] associationsToNavigate,
+                                                   String[] association_qualifier_names, String[] association_qualifier_values
+*/
+    public ResolvedConceptReferencesIteratorWrapper searchByAssociations(String scheme, String version, String matchText,
+                                                                         String[] associationsToNavigate,
+                                                                         String[] association_qualifier_names, String[] association_qualifier_values,
+                                                                         int search_direction,
+                                                                         String source, String matchAlgorithm, boolean designationOnly,
+                                                                         boolean ranking, int maxToReturn) {
+/*
+_logger.debug("searchByAssociations scheme: " + scheme);
+_logger.debug("searchByAssociations matchText: " + matchText);
+_logger.debug("searchByAssociations resolve_direction: " + search_direction);
+_logger.debug("searchByAssociations source: " + source);
+_logger.debug("searchByAssociations search_direction: " + search_direction);
+_logger.debug("searchByAssociations matchAlgorithm: " + matchAlgorithm);
+
+if (associationsToNavigate != null) {
+	for (int lcv=0; lcv<associationsToNavigate.length; lcv++) {
+		String str = (String) associationsToNavigate[lcv];
+		_logger.debug("searchByAssociations associationsToNavigate: " + str);
+	}
+}
+
+if (association_qualifier_names != null) {
+	for (int lcv=0; lcv<association_qualifier_names.length; lcv++) {
+		String str = (String) association_qualifier_names[lcv];
+		_logger.debug("searchByAssociations association_qualifier_names: " + str);
+	}
+}
+
+if (association_qualifier_values != null) {
+	for (int lcv=0; lcv<association_qualifier_values.length; lcv++) {
+		String str = (String) association_qualifier_values[lcv];
+		_logger.debug("searchByAssociations association_qualifier_values: " + str);
+	}
+}
+*/
+		NameAndValueList associationList = null;
+		if (associationsToNavigate != null) {
+			associationList = createNameAndValueList(associationsToNavigate, null);
+		}
+		NameAndValueList qualifiers = null;
+		if (association_qualifier_names != null) {
+			qualifiers = createNameAndValueList(association_qualifier_names, association_qualifier_values);
+		}
+
+		String matchText0 = matchText;
+		String matchAlgorithm0 = matchAlgorithm;
+		matchText0 = matchText0.trim();
+		String message = null;
+
+		long ms = System.currentTimeMillis();
+		long dt = 0;
+		long total_delay = 0;
+		boolean timeout = false;
+
+		boolean preprocess = true;
+        if (matchText == null || matchText.length() == 0)
+        {
+			return null;
+		}
+
+        matchText = matchText.trim();
+        if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+		{
+			matchAlgorithm = findBestContainsAlgorithm(matchText);
+		}
+
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
+
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null)
+            {
+                _logger.warn("lbSvc = null");
+                return null;
+            }
+
+			Vector cns_vec = new Vector();
+
+			cns = null;
+			iterator = null;
+			_logger.debug("\tsearching " + scheme);
+
+			ms = System.currentTimeMillis();
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null) versionOrTag.setVersion(version);
+
+			try {
+				if (lbSvc == null)
+				{
+					_logger.warn("lbSvc = null");
+					return null;
+				}
+
+				//KLO, 022410 change failed
+				cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+				//cns = getNodeSetByEntityType(scheme, versionOrTag, "concept");
+
+				if (cns != null)
+				{
+					try {
+						// find cns
+						if (designationOnly) {
+							cns = cns.restrictToMatchingDesignations(matchText, null, matchAlgorithm, null);
+						}
+						cns = restrictToSource(cns, source);
+						int resolveAssociationDepth = 1;
+						//int maxToReturn = -1;
+						ConceptReference graphFocus = null;
+						//CodedNodeSet cns2 = cng.toNodeList(graphFocus, resolveForward, resolveBackward, resolveAssociationDepth, maxToReturn);
+						//CodedNodeSet 	difference(CodedNodeSet codesToRemove)
+						//cns = cns2.difference(cns);
+						//if (cns != null) {
+						//	cns = filterOutAnonymousClasses(lbSvc, scheme, cns);
+							if (cns != null) {
+								cns_vec.add(cns);
+							}
+						//}
+					} catch (Exception ex) {
+						//return null;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				//return null;
+			}
+
+			dt = System.currentTimeMillis() - ms;
+			ms = System.currentTimeMillis();
+			total_delay = total_delay + dt;
+
+			if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+				message = "WARNING: Search is incomplete -- please enter more specific search criteria.";
+			}
+
+			iterator = null;
+			if (cns_vec.size() == 0) return null;
+
+            LocalNameList restrictToProperties = null;//new LocalNameList();
+            //boolean resolveConcepts = true;
+            //if (!ranking) resolveConcepts = false;
+            boolean resolveConcepts = false;
+
+            SortOptionList sortCriteria = null;
+
+		    if (ranking){
+				sortCriteria = Constructors.createSortOptionList(new String[]{"matchToQuery"});
+
+            } else {
+                sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
+                //resolveConcepts = false;
+			}
+			resolveConcepts = false;
+            try {
+               try {
+            	   boolean resolveForward = true;
+            	   boolean resolveBackward = true;
+
+				   if (search_direction == Constants.SEARCH_SOURCE) {
+            	    	resolveForward = false;
+            	    	resolveBackward = true;
+				   }
+				   else if (search_direction == Constants.SEARCH_TARGET) {
+            	    	resolveForward = true;
+            	    	resolveBackward = false;
+				   }
+
+            	   int resolveAssociationDepth = 1;
+                    //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    ResolvedConceptReferencesIterator quickUnionIterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
+                    if (associationsToNavigate == null && qualifiers == null) {
+                        iterator = new SearchByAssociationIteratorDecorator(quickUnionIterator, resolveForward, resolveBackward, resolveAssociationDepth, maxToReturn);
+				    } else {
+                        iterator = new SearchByAssociationIteratorDecorator(quickUnionIterator, resolveForward, resolveBackward, associationList, qualifiers, resolveAssociationDepth, maxToReturn);
+				    }
+                }  catch (Exception e) {
+                    _logger.error("Method: SearchUtil.searchByAssociations");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
+                        e.getMessage());
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+        } finally {
+            _logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
+        }
+        // Pending LexEVS fix:
+        // if (iterator != null) iterator.setMessage(message);
+
+        if (iterator == null) {
+			_logger.warn("=================== searchByAssociations returns iterator == null???");
+		}
+
+        return new ResolvedConceptReferencesIteratorWrapper(iterator, message);
+    }
+
 }

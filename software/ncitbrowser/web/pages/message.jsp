@@ -31,7 +31,7 @@
         %>
           <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
         <%
-        } else if (msg_dictionary.compareTo("NCI Thesaurus") == 0) {
+        } else if (msg_dictionary.compareTo("NCI Thesaurus") == 0 || msg_dictionary.compareTo("NCI%20Thesaurus") == 0) {
         %>
           <%@ include file="/pages/templates/content-header.jsp" %>
         <%
