@@ -36,6 +36,8 @@
 <%
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
 
+System.out.println("search_results.jsp dictionary: " + search_results_dictionary);
+
 if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
 
@@ -59,7 +61,11 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
                 .getSessionMap().get("iteratorBean");
 */
           
-          String key = (String) request.getSession().getAttribute("key");
+          //String key = (String) request.getSession().getAttribute("key");
+          String key = (String) request.getAttribute("key");
+          
+System.out.println("search_result.jsp " + key);          
+          
           IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBeanManager");
                 

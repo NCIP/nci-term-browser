@@ -189,4 +189,56 @@ public class RemoteServerUtil {
     public static String getServiceURL() {
         return serviceURL;
     }
+
+    public static LexBIGService createLexBIGService(boolean registerSecurityTokens)
+    {
+        String url = "http://ncias-d177-v.nci.nih.gov:19480/lexevsapi51";
+
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            url = properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+            return createLexBIGService(url, registerSecurityTokens);
+        } catch (Exception ex) {
+            // Do nothing
+            //_logger.error("WARNING: NCItBrowserProperties loading error...");
+            //_logger.error("\t-- trying to connect to " + url + " instead.");
+            ex.printStackTrace();
+        }
+        return null;//createLexBIGService(url);
+	}
+
+
+    public static LexBIGService createLexBIGService(String serviceUrl, boolean registerSecurityTokens)
+    {
+        try {
+
+// To be evaluated:
+/*
+            NCItBrowserProperties properties = null;
+            properties = NCItBrowserProperties.getInstance();
+
+            if (serviceUrl == null || serviceUrl.compareTo("") == 0)
+            {
+                String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
+                System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
+                LexBIGService lbSvc = new LexBIGServiceImpl();
+                return lbSvc;
+            }
+            if (debug) {
+                _logger.debug(Utils.SEPARATOR);
+                _logger.debug("LexBIGService(remote): " + serviceUrl);
+            }
+*/
+            LexEVSApplicationService lexevsService = (LexEVSApplicationService)ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
+            if (registerSecurityTokens) lexevsService = registerAllSecurityTokens(lexevsService);
+            return (LexBIGService) lexevsService;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

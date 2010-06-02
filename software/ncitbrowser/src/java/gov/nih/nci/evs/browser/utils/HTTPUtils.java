@@ -6,12 +6,23 @@ import java.util.regex.*;
 import javax.faces.context.*;
 import javax.servlet.http.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * HTTP Utility methods
  * @author garciawa2
  *
  */
 public class HTTPUtils {
+
+  private static String REFERER = "referer";
+
 
     /**
 	 * Remove potentially bad XSS syntax
@@ -149,4 +160,51 @@ public class HTTPUtils {
 
 	  return cleanXSS(t);
 	}
+
+  /**
+   * @param request
+   * @return
+   */
+  public static String getRefererParmEncode(HttpServletRequest request) {
+    String iref = request.getHeader(REFERER);
+    String referer = "N/A";
+    if (iref != null)
+      try {
+        referer = URLEncoder.encode(iref,"UTF-8");
+      } catch (UnsupportedEncodingException e) {
+        // return N/A if encoding is not supported.
+      }
+    return cleanXSS(referer);
+  }
+
+  /**
+   * @param request
+   * @return
+   */
+  public static String getRefererParmDecode(HttpServletRequest request) {
+    String refurl = "N/A";
+    try {
+      String iref = request.getParameter(REFERER);
+      if (iref != null)
+        refurl = URLDecoder.decode(request.getParameter(REFERER),
+            "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      // return N/A if encoding is not supported.
+    }
+    return cleanXSS(refurl);
+  }
+
+  /**
+   * @param request
+   */
+  public static void clearRefererParm(HttpServletRequest request) {
+    request.setAttribute(REFERER, null);
+  }
+
+  /**
+   * @return
+   */
+  public static HttpServletRequest getRequest() {
+    return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+  }
 }
