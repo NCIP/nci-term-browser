@@ -69,6 +69,7 @@ import org.LexGrid.concepts.Entity;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
 import org.LexGrid.LexBIG.DataModel.Collections.MetadataPropertyList;
 import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
+import org.apache.log4j.Logger;
 
 
 
@@ -104,6 +105,7 @@ import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
  *
  */
 public class DataUtils {
+    private static Logger _logger = Logger.getLogger(DataUtils.class);
     static LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
     int maxReturn = 5000;
     Connection con;
@@ -208,7 +210,7 @@ public class DataUtils {
 
     private static void setCodingSchemeMap()
 	{
-		System.out.println("Initializing ...");
+		_logger.debug("Initializing ...");
 		codingSchemeHashSet = new HashSet();
         _ontologies = new ArrayList();
         //codingSchemeMap = new HashMap();
@@ -226,14 +228,14 @@ public class DataUtils {
         try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			if (lbSvc == null) {
-				System.out.println("WARNING: Unable to connect to instantiate LexBIGService ???");
+				_logger.warn("WARNING: Unable to connect to instantiate LexBIGService ???");
 			}
             CodingSchemeRenderingList csrl = null;
             try {
 				csrl = lbSvc.getSupportedCodingSchemes();
 			} catch (LBInvocationException ex) {
 				ex.printStackTrace();
-				System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
+				_logger.error("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
                 return;
 			}
 			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
@@ -246,19 +248,19 @@ public class DataUtils {
 
 				Boolean isActive = null;
 				if (csr == null) {
-					System.out.println("\tcsr == null???");
+					_logger.warn("\tcsr == null???");
 				} else if (csr.getRenderingDetail() == null) {
-					System.out.println("\tcsr.getRenderingDetail() == null");
+					_logger.warn("\tcsr.getRenderingDetail() == null");
 				} else if (csr.getRenderingDetail().getVersionStatus() == null) {
-					System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
+					_logger.warn("\tcsr.getRenderingDetail().getVersionStatus() == null");
 				} else {
 
 					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
 				}
 
 				String representsVersion = css.getRepresentsVersion();
-				System.out.println("(" + j + ") " + formalname + "  version: " + representsVersion);
-				System.out.println("\tActive? " + isActive);
+				_logger.debug("(" + j + ") " + formalname + "  version: " + representsVersion);
+				_logger.debug("\tActive? " + isActive);
 
 				if ((includeInactive && isActive == null) || (isActive != null && isActive.equals(Boolean.TRUE))
 				     || (includeInactive && (isActive != null && isActive.equals(Boolean.FALSE))))
@@ -277,7 +279,7 @@ public class DataUtils {
 							String [] localnames = cs.getLocalName();
 							for (int m=0; m<localnames.length; m++) {
 								String localname = localnames[m];
-								System.out.println("\tlocal name: " + localname);
+								_logger.debug("\tlocal name: " + localname);
 								localName2FormalNameHashMap.put(localname, formalname);
 							}
 
@@ -294,16 +296,16 @@ public class DataUtils {
 									}
 								}
 								if (!localname_exist) {
-									System.out.println("\tlocal name (*): " + css_local_name);
+									_logger.debug("\tlocal name (*): " + css_local_name);
 								}
 
 								String value = formalname + " (version: " + representsVersion + ")";
-								System.out.println("\tformalname & verson: " + value);
+								_logger.debug("\tformalname & verson: " + value);
 
                                 Vector<String> propertyNames = getPropertyNameListData(formalname, representsVersion);
                                 if (propertyNames.contains("Concept_Status")) {
 									vocabulariesWithConceptStatusHashSet.add(formalname);
-									System.out.println("\tConcept_Status property supported.");
+									_logger.debug("\tConcept_Status property supported.");
 								}
 
 								if (!codingSchemeHashSet.contains(formalname)) {
@@ -317,7 +319,7 @@ public class DataUtils {
 								localName2FormalNameHashMap.put(css_local_name, formalname);
 
 	//						String displayName = getMetadataValue(formalname, "display_name");
-	//						System.out.println("\tdisplay_name: " + displayName);
+	//						_logger.debug("\tdisplay_name: " + displayName);
 	//						displayName2FormalNameHashMap.put(displayName, formalname);
 
 								Vector metadataProperties = new Vector();
@@ -326,16 +328,16 @@ public class DataUtils {
 									NameAndValue nv = (NameAndValue) nvList[k];
 									metadataProperties.add(nv.getName() + "|" + nv.getContent());
 								}
-								//System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
-								System.out.println("\t" + nvList.length + " MetadataProperties cached for " + formalname);
+								//_logger.debug("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
+								_logger.debug("\t" + nvList.length + " MetadataProperties cached for " + formalname);
 								formalName2MetadataHashMap.put(formalname, metadataProperties);
 
 								String displayName = getMetadataValue(formalname, "display_name");
-								System.out.println("\tdisplay_name: " + displayName);
+								_logger.debug("\tdisplay_name: " + displayName);
 								displayName2FormalNameHashMap.put(displayName, formalname);
 
 								String term_browser_version = getMetadataValue(formalname, "term_browser_version");
-								System.out.println("\tterm_browser_version: " + term_browser_version);
+								_logger.debug("\tterm_browser_version: " + term_browser_version);
 
 								//MetadataPropertyList mdpl = MetadataUtils.getMetadataPropertyList(lbSvc, formalname, representsVersion, null);
 								//if (mdpl != null) {
@@ -343,28 +345,28 @@ public class DataUtils {
 									//  so source_help_info.jsp and term_type_help_info.jsp
 									//  will show up correctly.
 								//	Vector metadataProperties = MetadataUtils.getMetadataNameValuePairs(mdpl, false);
-								//	System.out.println("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
+								//	_logger.debug("\t" + mdpl.getMetadataPropertyCount() + " MetadataProperties cached for " + formalname);
 								//	formalName2MetadataHashMap.put(formalname, metadataProperties);
 
 								nv_vec.add(value);
-								System.out.println("\tformal name: " + formalname);
+								_logger.debug("\tformal name: " + formalname);
 								csnv2codingSchemeNameMap.put(value, formalname);
 
 								csnv2VersionMap.put(value, representsVersion);
-								System.out.println("\trepresentsVersion: " + representsVersion);
+								_logger.debug("\trepresentsVersion: " + representsVersion);
 
 							} else {
-								System.out.println("WARNING: MetadataUtils.getMetadataPropertyList returns null??? " + formalname);
-								System.out.println("\t\trepresentsVersion " + representsVersion);
+								_logger.error("WARNING: MetadataUtils.getMetadataPropertyList returns null??? " + formalname);
+								_logger.error("\t\trepresentsVersion " + representsVersion);
 							}
 						} catch (Exception ex) {
-							System.out.println("\tWARNING: Unable to resolve coding scheme " + formalname + " possibly due to missing security token.");
-							System.out.println("\t\tAccess to " + formalname + " denied.");
+							_logger.error("\tWARNING: Unable to resolve coding scheme " + formalname + " possibly due to missing security token.");
+							_logger.error("\t\tAccess to " + formalname + " denied.");
 						}
 
 				} else {
-					System.out.println("\tWARNING: setCodingSchemeMap discards " + formalname);
-					System.out.println("\t\trepresentsVersion " + representsVersion);
+					_logger.error("\tWARNING: setCodingSchemeMap discards " + formalname);
+					_logger.error("\t\trepresentsVersion " + representsVersion);
 				}
 			}
 	    } catch (Exception e) {
@@ -451,7 +453,7 @@ public class DataUtils {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             scheme = lbSvc.resolveCodingScheme(codingSchemeName, vt);
             if (scheme == null) {
-                System.out.println("scheme is NULL");
+                _logger.warn("scheme is NULL");
                 return null;
             }
 
@@ -821,7 +823,7 @@ public class DataUtils {
                     associations = lbscm.getHierarchyLevelNext(scheme, csvt,
                             hierarchyID, code, false, null);
                 } catch (Exception e) {
-                    System.out.println("getSubconceptCodes - Exception lbscm.getHierarchyLevelNext  ");
+                    _logger.error("getSubconceptCodes - Exception lbscm.getHierarchyLevelNext  ");
                     return v;
                 }
 
@@ -887,7 +889,7 @@ public class DataUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            System.out.println("Run time (ms): "
+            _logger.debug("Run time (ms): "
                     + (System.currentTimeMillis() - ms));
         }
         return v;
@@ -957,7 +959,7 @@ public class DataUtils {
             try {
             	hs = lbSvc.getHistoryService(coding_scheme_name);
 			} catch (Exception ex) {
-				System.out.println("WARNING: HistoryService is not available for " + coding_scheme_name);
+				_logger.error("WARNING: HistoryService is not available for " + coding_scheme_name);
 			}
 			if (hs != null) {
 				SystemRelease release = hs.getLatestBaseline();
@@ -996,7 +998,7 @@ public class DataUtils {
                 }
             }
         } catch (Exception e) {
-			System.out.println("Version corresponding to tag " + ltag
+			_logger.error("Version corresponding to tag " + ltag
 					+ " is not found " + " in " + codingSchemeName);
 
             //e.printStackTrace();
@@ -1046,9 +1048,9 @@ public class DataUtils {
          } catch (Exception e) {
              e.printStackTrace();
          }
-         System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
+         _logger.warn("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
          if (ltag != null && ltag.compareToIgnoreCase("PRODUCTION") == 0 & knt == 1) {
-			 System.out.println("\tUse " + version + " as default.");
+			 _logger.warn("\tUse " + version + " as default.");
 			 return version;
 		 }
          return null;
@@ -1063,7 +1065,7 @@ public class DataUtils {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
             if (csrl == null)
-                System.out.println("csrl is NULL");
+                _logger.warn("csrl is NULL");
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
             for (int i = 0; i < csrs.length; i++) {
@@ -1258,7 +1260,7 @@ public class DataUtils {
 			properties = concept.getDefinition();
 		} else {
 
-            System.out.println("WARNING: property_type not found -- "
+            _logger.warn("WARNING: property_type not found -- "
                     + property_type);
 
         }
@@ -1303,7 +1305,7 @@ public class DataUtils {
 			for (int i = 0; i < relations.length; i++) {
 				Relations relation = relations[i];
 
-				System.out.println("** getSupportedRoleNames containerName: " + relation.getContainerName());
+				_logger.debug("** getSupportedRoleNames containerName: " + relation.getContainerName());
 
 
 				if (relation.getContainerName().compareToIgnoreCase("roles") == 0 ||
@@ -1496,7 +1498,7 @@ public class DataUtils {
 						true, false, 0, 1, null, null, null, null, -1, false);
 
 			} catch (Exception e) {
-                System.out.println("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
+                _logger.error("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
 			}
 
             if (matches != null && matches.getResolvedConceptReferenceCount() > 0) {
@@ -1546,12 +1548,12 @@ public class DataUtils {
 												String s = relaValue + "|" + pt + "|" + ac.getConceptCode();
 												if (isRole) {
 													//if (associationName.compareToIgnoreCase("hasSubtype") != 0) {
-														// System.out.println("Adding role: " +
+														// _logger.debug("Adding role: " +
 														// s);
 														roleList.add(s);
 													//}
 												} else {
-													// System.out.println("Adding association: "
+													// _logger.debug("Adding association: "
 													// + s);
 													associationList.add(s);
 												}
@@ -1592,7 +1594,7 @@ public class DataUtils {
 
 
 			} catch (Exception e) {
-                System.out.println("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
+                _logger.error("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions." + code);
 			}
 
             if (matches != null && matches.getResolvedConceptReferenceCount() > 0) {
@@ -1808,7 +1810,7 @@ public class DataUtils {
                     resolveAssociationDepth, maxToReturn);
 
             if (cns == null) {
-                System.out.println("cng.toNodeList returns null???");
+                _logger.warn("cng.toNodeList returns null???");
                 return null;
             }
 
@@ -1827,7 +1829,7 @@ public class DataUtils {
             }
 
             if (iterator == null) {
-                System.out.println("cns.resolve returns null???");
+                _logger.warn("cns.resolve returns null???");
             }
             return iterator;
 
@@ -1847,7 +1849,7 @@ public class DataUtils {
 			int maxToReturn, String code) {
 		Vector v = new Vector();
 		if (iterator == null) {
-			System.out.println("No match.");
+			_logger.warn("No match.");
 			return v;
 		}
 		try {
@@ -1861,7 +1863,7 @@ public class DataUtils {
 				for (int i = 0; i < rcra.length; i++) {
 					ResolvedConceptReference rcr = rcra[i];
 					org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
-					// System.out.println("Iteration " + iteration + " " +
+					// _logger.debug("Iteration " + iteration + " " +
 					// ce.getEntityCode() + " " +
 					// ce.getEntityDescription().getContent());
 					if (code == null) {
@@ -2063,7 +2065,7 @@ public class DataUtils {
 
         }
 
-        //System.out.println("getNCICBContactURL returns " + NCICBContactURL);
+        //_logger.debug("getNCICBContactURL returns " + NCICBContactURL);
         return NCICBContactURL;
     }
 
@@ -2197,8 +2199,8 @@ public class DataUtils {
 			CodingScheme cs = lbSvc.resolveCodingScheme(formalname, versionOrTag);
 			return cs;
 		} catch (Exception ex) {
-			System.out.println("(*) Unable to resolveCodingScheme " +  formalname);
-			System.out.println("(*) \tMay require security token. " );
+			_logger.error("(*) Unable to resolveCodingScheme " +  formalname);
+			_logger.error("(*) \tMay require security token. " );
 
 	    }
         return null;
@@ -2217,7 +2219,7 @@ public class DataUtils {
         LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 		if (lbSvc == null)
 		{
-			System.out.println("ERROR: setCodingSchemeMap RemoteServerUtil().createLexBIGService() returns null." );
+			_logger.error("ERROR: setCodingSchemeMap RemoteServerUtil().createLexBIGService() returns null." );
 			return null;
 		}
 
@@ -2228,7 +2230,7 @@ public class DataUtils {
 			csrl = lbSvc.getSupportedCodingSchemes();
 			csrs = csrl.getCodingSchemeRendering();
 		} catch (LBInvocationException ex) {
-			System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
+			_logger.error("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
 			return null;
 		}
 
@@ -2238,11 +2240,11 @@ public class DataUtils {
 			if (csr != null && csr.getRenderingDetail() != null) {
 				Boolean isActive = null;
 				if (csr == null) {
-					System.out.println("\tcsr == null???");
+					_logger.warn("\tcsr == null???");
 				} else if (csr.getRenderingDetail() == null) {
-					System.out.println("\tcsr.getRenderingDetail() == null");
+					_logger.warn("\tcsr.getRenderingDetail() == null");
 				} else if (csr.getRenderingDetail().getVersionStatus() == null) {
-					System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
+					_logger.warn("\tcsr.getRenderingDetail().getVersionStatus() == null");
 				} else {
 
 					isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
@@ -2268,11 +2270,11 @@ public class DataUtils {
 									 if (ns != null) {
 										 java.lang.String ns_name = ns.getEquivalentCodingScheme();
 										 java.lang.String ns_id = ns.getContent() ;
-										 //System.out.println("\tns_name: " + ns_name + " ns_id:" + ns_id);
+										 //_logger.debug("\tns_name: " + ns_name + " ns_id:" + ns_id);
 										 if (ns_id != null && ns_id.compareTo("") != 0) {
 
 											 hmap.put(ns_id, formalname);
-											 //System.out.println("ns_id: " + ns_id + " -> " + formalname);
+											 //_logger.debug("ns_id: " + ns_id + " -> " + formalname);
 
 										 }
 									 }
@@ -2280,7 +2282,7 @@ public class DataUtils {
 							 }
 						 }
 					 } else {
-						 System.out.println("??? Unable to resolveCodingScheme " + formalname);
+						 _logger.warn("??? Unable to resolveCodingScheme " + formalname);
 					 }
 				}
 		    }
@@ -2303,7 +2305,7 @@ public class DataUtils {
 			return null;
 		}
 		if (csnv2codingSchemeNameMap == null) {
-			System.out.println("setCodingSchemeMap");
+			_logger.debug("setCodingSchemeMap");
 			setCodingSchemeMap();
 		}
 
@@ -2312,13 +2314,13 @@ public class DataUtils {
 		}
 
 		if (csnv2codingSchemeNameMap == null) {
-			System.out.println("csnv2codingSchemeNameMap == NULL???");
+			_logger.warn("csnv2codingSchemeNameMap == NULL???");
 			return key;
 		}
 
 		String value = (String) csnv2codingSchemeNameMap.get(key);
 		if (value == null) {
-			//System.out.println("key2CodingSchemeName returns " + key);
+			//_logger.debug("key2CodingSchemeName returns " + key);
 			return key;
 		}
 		return value;
@@ -2334,7 +2336,7 @@ public class DataUtils {
 		}
 
 		if (csnv2VersionMap == null) {
-			System.out.println("csnv2VersionMap == NULL???");
+			_logger.warn("csnv2VersionMap == NULL???");
 			return key;
 		}
 
@@ -2487,22 +2489,22 @@ escape("It's me!") // result: It%27s%20me%21
 
         if (concepts == null || concepts.size() <= 0)
         {
-            System.out.println(label + "(none)");
+            _logger.debug(label + "(none)");
         } else if (concepts != null && concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
-            System.out.println(label + " " + cName + "(" + cCode + ")");
+            _logger.debug(label + " " + cName + "(" + cCode + ")");
         } else if (concepts != null) {
-            System.out.println(label);
+            _logger.debug(label);
             for (int i=0; i<concepts.size(); i++) {
                String s = (String) concepts.get(i);
                Vector ret_vec = DataUtils.parseData(s, "|");
                String cName = (String) ret_vec.elementAt(0);
                String cCode = (String) ret_vec.elementAt(1);
-               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+               _logger.debug("\t" + " " + cName + "(" + cCode + ")");
 		    }
 		}
 
@@ -2511,22 +2513,22 @@ escape("It's me!") // result: It%27s%20me%21
 
         if (concepts == null || concepts.size() <= 0)
         {
-            System.out.println(label + "(none)");
+            _logger.debug(label + "(none)");
         } else if (concepts != null && concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
-            System.out.println(label + " " + cName + "(" + cCode + ")");
+            _logger.debug(label + " " + cName + "(" + cCode + ")");
         } else if (concepts != null) {
-            System.out.println(label);
+            _logger.debug(label);
             for (int i=0; i<concepts.size(); i++) {
                String s = (String) concepts.get(i);
                Vector ret_vec = DataUtils.parseData(s, "|");
                String cName = (String) ret_vec.elementAt(0);
                String cCode = (String) ret_vec.elementAt(1);
-               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+               _logger.debug("\t" + " " + cName + "(" + cCode + ")");
 		    }
 		}
 
@@ -2535,22 +2537,22 @@ escape("It's me!") // result: It%27s%20me%21
 
         if (concepts == null || concepts.size() <= 0)
         {
-            System.out.println(label + "(none)");
+            _logger.debug(label + "(none)");
         } else if (concepts != null && concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
-            System.out.println(label + " " + cName + "(" + cCode + ")");
+            _logger.debug(label + " " + cName + "(" + cCode + ")");
         } else if (concepts != null) {
-            System.out.println(label);
+            _logger.debug(label);
             for (int i=0; i<concepts.size(); i++) {
                String s = (String) concepts.get(i);
                Vector ret_vec = DataUtils.parseData(s, "|");
                String cName = (String) ret_vec.elementAt(0);
                String cCode = (String) ret_vec.elementAt(1);
-               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+               _logger.debug("\t" + " " + cName + "(" + cCode + ")");
 		    }
 		}
         concepts = associations;
@@ -2558,22 +2560,22 @@ escape("It's me!") // result: It%27s%20me%21
 
         if (concepts == null || concepts.size() <= 0)
         {
-            System.out.println(label + "(none)");
+            _logger.debug(label + "(none)");
         } else if (concepts != null && concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
-            System.out.println(label + " " + cName + "(" + cCode + ")");
+            _logger.debug(label + " " + cName + "(" + cCode + ")");
         } else if (concepts != null) {
-            System.out.println(label);
+            _logger.debug(label);
             for (int i=0; i<concepts.size(); i++) {
                String s = (String) concepts.get(i);
                Vector ret_vec = DataUtils.parseData(s, "|");
                String cName = (String) ret_vec.elementAt(0);
                String cCode = (String) ret_vec.elementAt(1);
-               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+               _logger.debug("\t" + " " + cName + "(" + cCode + ")");
 		    }
 		}
 
@@ -2582,22 +2584,22 @@ escape("It's me!") // result: It%27s%20me%21
 
         if (concepts == null || concepts.size() <= 0)
         {
-            System.out.println(label + "(none)");
+            _logger.debug(label + "(none)");
         } else if (concepts != null && concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
-            System.out.println(label + " " + cName + "(" + cCode + ")");
+            _logger.debug(label + " " + cName + "(" + cCode + ")");
         } else if (concepts != null) {
-            System.out.println(label);
+            _logger.debug(label);
             for (int i=0; i<concepts.size(); i++) {
                String s = (String) concepts.get(i);
                Vector ret_vec = DataUtils.parseData(s, "|");
                String cName = (String) ret_vec.elementAt(0);
                String cCode = (String) ret_vec.elementAt(1);
-               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+               _logger.debug("\t" + " " + cName + "(" + cCode + ")");
 		    }
 		}
         concepts = inverse_associations;
@@ -2605,22 +2607,22 @@ escape("It's me!") // result: It%27s%20me%21
 
         if (concepts == null || concepts.size() <= 0)
         {
-            System.out.println(label + "(none)");
+            _logger.debug(label + "(none)");
         } else if (concepts != null && concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
-            System.out.println(label + " " + cName + "(" + cCode + ")");
+            _logger.debug(label + " " + cName + "(" + cCode + ")");
         } else if (concepts != null) {
-            System.out.println(label);
+            _logger.debug(label);
             for (int i=0; i<concepts.size(); i++) {
                String s = (String) concepts.get(i);
                Vector ret_vec = DataUtils.parseData(s, "|");
                String cName = (String) ret_vec.elementAt(0);
                String cCode = (String) ret_vec.elementAt(1);
-               System.out.println("\t" + " " + cName + "(" + cCode + ")");
+               _logger.debug("\t" + " " + cName + "(" + cCode + ")");
 		    }
 		}
 
@@ -2640,14 +2642,14 @@ escape("It's me!") // result: It%27s%20me%21
 				if (c != null) {
 					w.add(c.getStatus());
 				} else {
-					System.out.println("WARNING: getStatusByConceptCode returns null on " + scheme + " code: "  + code );
+					_logger.warn("WARNING: getStatusByConceptCode returns null on " + scheme + " code: "  + code );
 					w.add(null);
 				}
 		    } else {
 				w.add(null);
 			}
 		}
-        System.out.println("getStatusByConceptCodes Run time (ms): "
+        _logger.debug("getStatusByConceptCodes Run time (ms): "
                     + (System.currentTimeMillis() - ms) + " number of concepts: " + codes.size());
 		return w;
 	}
@@ -2699,7 +2701,7 @@ escape("It's me!") // result: It%27s%20me%21
 			    w.add(null);
 		   }
 		}
-        System.out.println("getConceptStatusByConceptCodes Run time (ms): "
+        _logger.debug("getConceptStatusByConceptCodes Run time (ms): "
                     + (System.currentTimeMillis() - ms) + " number of concepts: " + codes.size());
 		return w;
 	}
@@ -2762,7 +2764,7 @@ escape("It's me!") // result: It%27s%20me%21
 
             if (lbSvc == null)
             {
-                System.out.println("lbSvc = null");
+                _logger.warn("lbSvc = null");
                 return null;
             }
 
@@ -2796,11 +2798,11 @@ escape("It's me!") // result: It%27s%20me%21
                 ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames,
                     propertyTypes, resolveObjects, maxToReturn);
 
-                //System.out.println("resolveToList done");
+                //_logger.debug("resolveToList done");
                 HashMap hmap = new HashMap();
 
 				if (rcrl == null) {
-					System.out.println("Concep not found.");
+					_logger.debug("Concept not found.");
 					return null;
 				}
 
@@ -2808,12 +2810,12 @@ escape("It's me!") // result: It%27s%20me%21
 					//ResolvedConceptReference[] list = rcrl.getResolvedConceptReference();
                     for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 						ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
-						//System.out.println("(*) " + rcr.getCode());
+						//_logger.debug("(*) " + rcr.getCode());
 						Concept c = rcr.getReferencedEntry();
 						if (c == null) {
-							System.out.println("Concept is null.");
+							_logger.debug("Concept is null.");
 						} else {
-							System.out.println(c.getEntityDescription().getContent());
+							_logger.debug(c.getEntityDescription().getContent());
 							Property[] properties = c.getProperty();
 							String values = "";
 							for (int j=0; j<properties.length; j++) {
@@ -2830,9 +2832,9 @@ escape("It's me!") // result: It%27s%20me%21
                 return hmap;
 
 			}  catch (Exception e) {
-				System.out.println("Method: SearchUtil.searchByProperties");
-				System.out.println("* ERROR: cns.resolve throws exceptions.");
-				System.out.println("* " + e.getClass().getSimpleName() + ": " +
+				_logger.error("Method: SearchUtil.searchByProperties");
+				_logger.error("* ERROR: cns.resolve throws exceptions.");
+				_logger.error("* " + e.getClass().getSimpleName() + ": " +
 					e.getMessage());
 				e.printStackTrace();
 			}
@@ -2849,7 +2851,7 @@ escape("It's me!") // result: It%27s%20me%21
 
             if (lbSvc == null)
             {
-                System.out.println("lbSvc = null");
+                _logger.warn("lbSvc = null");
                 return null;
             }
 
@@ -2885,7 +2887,7 @@ escape("It's me!") // result: It%27s%20me%21
 
                 HashMap hmap = new HashMap();
 				if (rcrl == null) {
-					System.out.println("Concep not found.");
+					_logger.warn("Concep not found.");
 					return null;
 				}
 
@@ -2901,9 +2903,9 @@ escape("It's me!") // result: It%27s%20me%21
                 return null;
 
 			}  catch (Exception e) {
-				System.out.println("Method: SearchUtil.searchByProperties");
-				System.out.println("* ERROR: cns.resolve throws exceptions.");
-				System.out.println("* " + e.getClass().getSimpleName() + ": " +
+				_logger.error("Method: SearchUtil.searchByProperties");
+				_logger.error("* ERROR: cns.resolve throws exceptions.");
+				_logger.error("* " + e.getClass().getSimpleName() + ": " +
 					e.getMessage());
 				e.printStackTrace();
 			}

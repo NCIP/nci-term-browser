@@ -184,7 +184,7 @@ public class SearchUtils {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
 			if (csrl == null)
-				System.out.println("csrl is NULL");
+				_logger.warn("csrl is NULL");
 
 			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
 			for (int i = 0; i < csrs.length; i++) {
@@ -208,7 +208,7 @@ public class SearchUtils {
 
 							String value = formalname + " (version: "
 									+ representsVersion + ")";
-							//System.out.println(value);
+							//_logger.debug(value);
 
 							csnv2codingSchemeNameMap.put(value, formalname);
 							csnv2VersionMap.put(value, representsVersion);
@@ -225,7 +225,7 @@ public class SearchUtils {
 
 								String value = formalname + " (version: "
 										+ representsVersion + ")";
-								//System.out.println(value);
+								//_logger.debug(value);
 
 								csnv2codingSchemeNameMap.put(value, formalname);
 								csnv2VersionMap.put(value, representsVersion);
@@ -244,7 +244,7 @@ public class SearchUtils {
 
 									String value = formalname + " (version: "
 											+ representsVersion + ")";
-									//System.out.println(value);
+									//_logger.debug(value);
 
 									csnv2codingSchemeNameMap.put(value,
 											formalname);
@@ -308,7 +308,7 @@ public class SearchUtils {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			System.out.println("Run time (ms): "
+			_logger.debug("Run time (ms): "
 					+ (System.currentTimeMillis() - ms));
 		}
 		return v;
@@ -356,7 +356,7 @@ public class SearchUtils {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			System.out.println("Run time (ms): "
+			_logger.debug("Run time (ms): "
 					+ (System.currentTimeMillis() - ms));
 		}
 		return v;
@@ -418,7 +418,7 @@ public class SearchUtils {
 			}
 		} catch (Exception e) {
 			//e.printStackTrace();
-			System.out.println("Version corresponding to tag " + ltag
+			_logger.error("Version corresponding to tag " + ltag
 				+ " is not found " + " in " + codingSchemeName);
 		}
 		return null;
@@ -463,7 +463,7 @@ public class SearchUtils {
              e.printStackTrace();
          }
          if (ltag == null || (ltag.compareToIgnoreCase("PRODUCTION") == 0 & knt == 1)) {
-			 System.out.println("\tUse " + version + " as default version.");
+			 _logger.warn("\tUse " + version + " as default version.");
 			 return version;
 		 }
          return null;
@@ -479,7 +479,7 @@ public class SearchUtils {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
 			if (csrl == null)
-				System.out.println("csrl is NULL");
+				_logger.warn("csrl is NULL");
 
 			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
 			for (int i = 0; i < csrs.length; i++) {
@@ -618,13 +618,13 @@ public class SearchUtils {
 			if (version != null) versionOrTag.setVersion(version);
 
 			if (lbSvc == null) {
-				System.out.println("lbSvc = null");
+				_logger.warn("lbSvc = null");
 				return null;
 			}
 
 			cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
 			if (cns == null) {
-				System.out.println("cns = null");
+				_logger.debug("cns = null");
 				return null;
 			}
 
@@ -653,9 +653,9 @@ public class SearchUtils {
 					iterator = cns.resolve(sortCriteria, null,
 							restrictToProperties, null, resolveConcepts);
 				} catch (Exception e) {
-                    System.out.println("Method: SearchUtil.restrictToMatchingProperty");
-					System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtil.restrictToMatchingProperty");
+					_logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
 				}
 
@@ -689,7 +689,7 @@ public class SearchUtils {
 		try {
 			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			if (lbSvc == null) {
-				System.out.println("lbSvc == null???");
+				_logger.warn("lbSvc == null???");
 				return null;
 			}
 
@@ -713,7 +713,7 @@ public class SearchUtils {
 					null, null, null, false, 1);
 
 			if (matches == null) {
-				System.out.println("Concep not found.");
+				_logger.warn("Concept not found.");
 				return null;
 			}
 
@@ -790,7 +790,7 @@ public class SearchUtils {
 			String code) {
 		Vector v = new Vector();
 		if (iterator == null) {
-			System.out.println("No match.");
+			_logger.debug("No match.");
 			return v;
 		}
 		try {
@@ -833,7 +833,7 @@ public class SearchUtils {
 					resolveAssociationDepth, maxToReturn);
 
 			if (cns == null) {
-				System.out.println("cng.toNodeList returns null???");
+				_logger.warn("cng.toNodeList returns null???");
 				return null;
 			}
 
@@ -851,7 +851,7 @@ public class SearchUtils {
 			}
 
 			if (iterator == null) {
-				System.out.println("cns.resolve returns null???");
+				_logger.warn("cns.resolve returns null???");
 			}
 			return iterator;
 
@@ -1037,7 +1037,7 @@ public class SearchUtils {
 
             if (lbSvc == null)
             {
-                System.out.println("lbSvc = null");
+                _logger.warn("lbSvc = null");
                 return null;
             }
 
@@ -1047,7 +1047,7 @@ public class SearchUtils {
 
             if (cns == null)
             {
-                System.out.println("cns = null");
+                _logger.warn("cns = null");
                 return null;
             }
 
@@ -1071,7 +1071,7 @@ public class SearchUtils {
 
             } else {
                 sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
-                System.out.println("*** Sort alphabetically...");
+                _logger.debug("*** Sort alphabetically...");
                 resolveConcepts = false;
 			}
             try {
@@ -1082,9 +1082,9 @@ public class SearchUtils {
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtil.searchByName");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtil.searchByName");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
                 }
 
@@ -1099,7 +1099,7 @@ public class SearchUtils {
 		}
 
         if (iterator == null) {
-			System.out.println("*** WARNING: iterator == null.." + scheme);
+			_logger.warn("*** WARNING: iterator == null.." + scheme);
 			iterator = matchConceptCode(scheme, version, matchText0, source, "LuceneQuery");
 		} else {
 			try {
@@ -1125,14 +1125,14 @@ public class SearchUtils {
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 
-System.out.println("searchByName ..." + matchText);
+_logger.debug("searchByName ..." + matchText);
 
 long ms = System.currentTimeMillis(), delay = 0;
 long tnow = System.currentTimeMillis();
 long total_delay = 0;
 boolean debug_flag = false;
 
-//if (debug_flag) System.out.println("Entering SearchUtils searchByName ...");
+//if (debug_flag) _logger.debug("Entering SearchUtils searchByName ...");
 
 		boolean preprocess = true;
         if (matchText == null || matchText.length() == 0)
@@ -1158,7 +1158,7 @@ boolean debug_flag = false;
 
             if (lbSvc == null)
             {
-                System.out.println("lbSvc = null");
+                _logger.warn("lbSvc = null");
                 return null;
             }
 
@@ -1178,7 +1178,7 @@ ms = System.currentTimeMillis();
 				try {
 					if (lbSvc == null)
 					{
-						System.out.println("lbSvc = null");
+						_logger.warn("lbSvc = null");
 						return null;
 					}
 					cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
@@ -1200,7 +1200,7 @@ ms = System.currentTimeMillis();
 				}
 
 delay = System.currentTimeMillis() - ms;
-if (debug_flag) System.out.println("Restricting CNS on " + scheme + " delay (millisec.): " + delay);
+if (debug_flag) _logger.debug("Restricting CNS on " + scheme + " delay (millisec.): " + delay);
 if (debug_flag) System.out.flush();
 
 			}
@@ -1210,11 +1210,11 @@ if (debug_flag) System.out.flush();
 ms = System.currentTimeMillis();
 			cns = union(cns_vec);
 delay = System.currentTimeMillis() - ms;
-if (debug_flag) System.out.println("CNS union " + "delay (millisec.): " + delay);
+if (debug_flag) _logger.debug("CNS union " + "delay (millisec.): " + delay);
 
 
 delay = System.currentTimeMillis() - ms;
-if (debug_flag) System.out.println("Restricting CNS on " + scheme + " delay (millisec.): " + delay);
+if (debug_flag) _logger.debug("Restricting CNS on " + scheme + " delay (millisec.): " + delay);
 
 
 			if (cns == null) return null;
@@ -1232,26 +1232,26 @@ if (debug_flag) System.out.println("Restricting CNS on " + scheme + " delay (mil
 
             } else {
                 sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
-                System.out.println("*** Sort alphabetically...");
+                _logger.debug("*** Sort alphabetically...");
                 resolveConcepts = false;
 			}
             try {
                try {
 ms = System.currentTimeMillis();
-if (debug_flag) System.out.println("Calling  cns.resolve to resolve the union CNS ... ");
+if (debug_flag) _logger.debug("Calling  cns.resolve to resolve the union CNS ... ");
                     //iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
                     iterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
 delay = System.currentTimeMillis() - ms;
-if (debug_flag) System.out.println("Resolve CNS union " + "delay (millisec.): " + delay);
+if (debug_flag) _logger.debug("Resolve CNS union " + "delay (millisec.): " + delay);
 
 					//Debug.println("cns.resolve delay ---- Run time (ms): " + (delay = System.currentTimeMillis() - ms) + " -- matchAlgorithm " + matchAlgorithm);
                     //DBG.debugDetails(delay, "cns.resolve", "searchByName, CodedNodeSet.resolve");
 
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtils.searchByName 2");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtils.searchByName 2");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
                 }
 
@@ -1270,7 +1270,7 @@ if (debug_flag) System.out.println("Resolve CNS union " + "delay (millisec.): " 
 		if (iterator != null) {
 			try {
 				iterator_size = iterator.numberRemaining();
-				System.out.println("Number of matches: " + iterator_size);
+				_logger.debug("Number of matches: " + iterator_size);
 			} catch (Exception ex) {
 
 			}
@@ -1287,7 +1287,7 @@ if (debug_flag) System.out.println("Resolve CNS union " + "delay (millisec.): " 
 			if (iterator != null) {
 				try {
 					iterator_size = iterator.numberRemaining();
-					System.out.println("Number of matches: " + iterator_size);
+					_logger.debug("Number of matches: " + iterator_size);
 				} catch (Exception ex) {
 
 				}
@@ -1300,10 +1300,10 @@ if (debug_flag) System.out.println("Resolve CNS union " + "delay (millisec.): " 
 
 
 delay = System.currentTimeMillis() - ms;
-if (debug_flag) System.out.println("Match concept code " + "delay (millisec.): " + delay);
+if (debug_flag) _logger.debug("Match concept code " + "delay (millisec.): " + delay);
 
 total_delay = System.currentTimeMillis() - tnow;
-System.out.println("Total search delay: (millisec.): " + total_delay);
+_logger.debug("Total search delay: (millisec.): " + total_delay);
 
 
         //return iterator;
@@ -1331,7 +1331,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 							LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 							if (lbSvc == null)
 							{
-								System.out.println("lbSvc = null");
+								_logger.warn("lbSvc = null");
 								return null;
 							}
 							CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -1350,7 +1350,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 								}
 
 								if (cns == null) {
-									System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
+									_logger.warn("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
 									return null;
 								}
 
@@ -1408,9 +1408,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 					}
 
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtil.matchConceptCode");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtil.matchConceptCode");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
                 }
 
@@ -1420,7 +1420,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             }
 
 		} catch (Exception ex) {
-			//System.out.println("WARNING: searchByCode throws exception.");
+			//_logger.error("WARNING: searchByCode throws exception.");
 		}
 
 
@@ -1455,7 +1455,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			}
 
 			if (cns == null) {
-				System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
+				_logger.warn("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
 				return null;
 			}
 
@@ -1470,9 +1470,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
                     int size = iterator.numberRemaining();
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtil.matchConceptCode");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtil.matchConceptCode");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
                 }
 
@@ -1482,7 +1482,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             }
 
 		} catch (Exception ex) {
-			System.out.println("WARNING: searchByCode throws exception.");
+			_logger.error("WARNING: searchByCode throws exception.");
 		}
 		//[#26386] Need app to be able to distinguish/prioritize/display matching code vrs. matching name results
 
@@ -1511,9 +1511,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				}
 			}
 		}  catch (Exception e) {
-			System.out.println("Method: SearchUtil.matchConceptByCode");
-			System.out.println("* ERROR: cns.resolve throws exceptions.");
-			System.out.println("* " + e.getClass().getSimpleName() + ": " +
+			_logger.error("Method: SearchUtil.matchConceptByCode");
+			_logger.error("* ERROR: cns.resolve throws exceptions.");
+			_logger.error("* " + e.getClass().getSimpleName() + ": " +
 				e.getMessage());
 		}
 		return null;
@@ -1778,7 +1778,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				String word = (String) compareWords.get(k);
 				String doubleMetaphonecode = doubleMetaphoneEncode(word);
 				compareCodes.add(doubleMetaphonecode);
-				//System.out.println("*** DoubleMetaphoneLuceneQuery word " + word + " code: " + doubleMetaphone.encode(word));
+				//_logger.debug("*** DoubleMetaphoneLuceneQuery word " + word + " code: " + doubleMetaphone.encode(word));
 				target = target + doubleMetaphonecode;
 				if (k < compareWords.size()-1) target = target + " ";
 			}
@@ -1894,7 +1894,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             long ms = System.currentTimeMillis();
 
             ResolvedConceptReferenceList refs = toSort.next(500); // slow why???
-            //System.out.println("Run time (ms): toSort.next() took " + (System.currentTimeMillis() - ms) + " millisec.");
+            //_logger.debug("Run time (ms): toSort.next() took " + (System.currentTimeMillis() - ms) + " millisec.");
 
             ms = System.currentTimeMillis();
             for (int i = 0; i < refs.getResolvedConceptReferenceCount(); i++) {
@@ -1922,7 +1922,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
                 	scoredResult.put(code, new ScoredTerm(ref, score));
 			    }
             }
-            //System.out.println("Run time (ms): assigning scores took " + (System.currentTimeMillis() - ms) + " millisec.");
+            //_logger.debug("Run time (ms): assigning scores took " + (System.currentTimeMillis() - ms) + " millisec.");
         }
         // Return an iterator that will sort the scored result.
         return new ScoredIterator(scoredResult.values(), maxToReturn);
@@ -2050,7 +2050,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         Vector v = new Vector();
         if (iterator == null)
         {
-            System.out.println("No match.");
+            _logger.warn("No match.");
             return v;
         }
 
@@ -2084,7 +2084,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 								} else {
 									Concept ce = rcr.getReferencedEntry();
 									if (ce == null) {
-										System.out.println("rcr.getReferencedEntry() returns null???");
+										_logger.debug("rcr.getReferencedEntry() returns null???");
 									} else {
 										if (code == null) v.add(ce);
 										else if (ce.getEntityCode().compareTo(code) != 0) v.add(ce);
@@ -2108,7 +2108,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 		if (lbSvc == null)
 		{
-			System.out.println("setCodingSchemeMap..??????????????" );
+			_logger.warn("setCodingSchemeMap..??????????????" );
 			return null;
 		}
         try {
@@ -2117,7 +2117,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				csrl = lbSvc.getSupportedCodingSchemes();
 			} catch (LBInvocationException ex) {
 				ex.printStackTrace();
-				System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
+				_logger.error("lbSvc.getSupportedCodingSchemes() FAILED..." + ex.getCause() );
 				return null;
 			}
 
@@ -2126,22 +2126,22 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			{
 				CodingSchemeRendering csr = csrs[i];
             	Boolean isActive = csr.getRenderingDetail().getVersionStatus().equals(CodingSchemeVersionStatus.ACTIVE);
-				//System.out.println("\nActive? " + isActive);
+				//_logger.debug("\nActive? " + isActive);
 
 				//if (isActive != null && isActive.equals(Boolean.TRUE))
 				{
 					CodingSchemeSummary css = csr.getCodingSchemeSummary();
 					String formalname = css.getFormalName();
 
-					 System.out.println("\tformalname: " + formalname);
+					 _logger.debug("\tformalname: " + formalname);
 					 EntityDescription ed = css.getCodingSchemeDescription();
-					 System.out.println("\tcodingSchemeDescription: " + ed.getContent());
+					 _logger.debug("\tcodingSchemeDescription: " + ed.getContent());
 					 java.lang.String uri = css.getCodingSchemeURI();
-					 System.out.println("\tURI: " + uri);
+					 _logger.debug("\tURI: " + uri);
 					 java.lang.String localName = css.getLocalName();
-					 System.out.println("\tlocalName: " + localName);
+					 _logger.debug("\tlocalName: " + localName);
 					 java.lang.String version = css.getRepresentsVersion();
-					 System.out.println("\tversion: " + version + "\n");
+					 _logger.debug("\tversion: " + version + "\n");
 					 CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 					 CodingScheme cs = lbSvc.resolveCodingScheme(formalname, versionOrTag);
 					 SupportedNamespace[] namespaces = cs.getMappings().getSupportedNamespace();
@@ -2149,7 +2149,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
                          SupportedNamespace ns =  namespaces[j];
                          java.lang.String ns_name = ns.getEquivalentCodingScheme();
                          java.lang.String ns_id = ns.getContent() ;
-                         System.out.println("\tns_name: " + ns_name + " ns_id:" + ns_id);
+                         _logger.debug("\tns_name: " + ns_name + " ns_id:" + ns_id);
                          if (ns_id != null && ns_id.compareTo("") != 0) {
 							 hmap.put(ns_id, formalname);
 						 }
@@ -2188,10 +2188,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 					v.add(ref.getReferencedEntry());
 				}
 			} catch (Exception ex) {
-				System.out.println("WARNING: searchByCode throws exception.");
+				_logger.error("WARNING: searchByCode throws exception.");
 			}
 		} catch (Exception ex) {
-			System.out.println("WARNING: searchByCode throws exception.");
+			_logger.error("WARNING: searchByCode throws exception.");
 		}
         return v;
 	}
@@ -2207,7 +2207,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			try {
 				cns = cns.union(next_cns);
 			} catch (Exception ex) {
-				System.out.println("WARNING: cns.union throws exception.");
+				_logger.error("WARNING: cns.union throws exception.");
 			}
 		}
 		return cns;
@@ -2226,7 +2226,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
 		if (lbSvc == null)
 		{
-			System.out.println("lbSvc = null");
+			_logger.warn("lbSvc = null");
 			return null;
 		}
 
@@ -2260,7 +2260,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, null);
 			if (cns == null)
 			{
-				System.out.println("lbSvc.getCodingSchemeConceptsd returns null");
+				_logger.warn("lbSvc.getCodingSchemeConceptsd returns null");
 				return null;
 			}
 			CodedNodeSet.PropertyType[] types = new CodedNodeSet.PropertyType[] {CodedNodeSet.PropertyType.PRESENTATION};
@@ -2319,7 +2319,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		try {
 			cns = cns.restrictToProperties(propertyLnL, types, sourceLnL, contextList, qualifierList);
 		} catch (Exception ex) {
-			System.out.println("restrictToSource throws exceptions.");
+			_logger.error("restrictToSource throws exceptions.");
 			return null;
 		}
 		return cns;
@@ -2377,7 +2377,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	protected void displayRef(ResolvedConceptReference ref){
-		System.out.println(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+		_logger.debug(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
 	}
 
     public void dumpIterator(ResolvedConceptReferencesIterator itr) {
@@ -2412,7 +2412,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		matchText0 = matchText0.trim();
 
 
-		System.out.println("searchByProperties..." + matchText);
+		_logger.debug("searchByProperties..." + matchText);
 
 
         if (matchText == null || matchText.length() == 0)
@@ -2437,7 +2437,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             if (lbSvc == null)
             {
-                System.out.println("lbSvc = null");
+                _logger.warn("lbSvc = null");
                 return null;
             }
 
@@ -2453,7 +2453,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				try {
 					if (lbSvc == null)
 					{
-						System.out.println("lbSvc = null");
+						_logger.warn("lbSvc = null");
 						return null;
 					}
 
@@ -2473,19 +2473,19 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 							try {
                             	cns = cns.restrictToMatchingProperties(propertyNames, propertyTypes, matchText, matchAlgorithm, language);
 							} catch (Exception e) {
-								System.out.println("\t(*) restrictToMatchingProperties throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
+								_logger.error("\t(*) restrictToMatchingProperties throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
 								//e.printStackTrace();
 							}
 							try {
                             	cns = restrictToSource(cns, source);
 							} catch (Exception e) {
-								System.out.println("\t(*) restrictToSource throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
+								_logger.error("\t(*) restrictToSource throws exceptions???: " + matchText + " matchAlgorithm: " + matchAlgorithm );
 								//e.printStackTrace();
 							}
 
 						} catch (Exception ex) {
-							//ex.printStackTrace();
-							System.out.println("\t(*) searchByProperties2 throws exceptions.");
+							_logger.error("\t(*) searchByProperties2 throws exceptions.");
+                            //ex.printStackTrace();
 						}
 					}
 				} catch (Exception e) {
@@ -2511,7 +2511,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             } else {
                 sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
-                System.out.println("*** Sort alphabetically...");
+                _logger.debug("*** Sort alphabetically...");
                 resolveConcepts = false;
 			}
             try {
@@ -2521,9 +2521,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
                     iterator = new QuickUnionIterator(cns_vec, sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtil.searchByProperties");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtil.searchByProperties");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
                     e.printStackTrace();
                 }
@@ -2630,7 +2630,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 		String matchAlgorithm0 = matchAlgorithm;
 		matchText0 = matchText0.trim();
 
-		System.out.println("searchByAssociations..." + matchText);
+		_logger.debug("searchByAssociations..." + matchText);
 		long ms = System.currentTimeMillis();
 		long dt = 0;
 		long total_delay = 0;
@@ -2662,7 +2662,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             if (lbSvc == null)
             {
-                System.out.println("lbSvc = null");
+                _logger.warn("lbSvc = null");
                 return null;
             }
 
@@ -2672,7 +2672,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				cns = null;
 				iterator = null;
 				scheme = (String) schemes.elementAt(i);
-				System.out.println("\tsearching " + scheme);
+				_logger.debug("\tsearching " + scheme);
 
 				ms = System.currentTimeMillis();
 				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -2684,7 +2684,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 				try {
 					if (lbSvc == null)
 					{
-						System.out.println("lbSvc = null");
+						_logger.warn("lbSvc = null");
 						return null;
 					}
 
@@ -2762,7 +2762,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             } else {
                 sortCriteria = Constructors.createSortOptionList(new String[] { "entityDescription" }); //code
-                System.out.println("*** Sort alphabetically...");
+                _logger.debug("*** Sort alphabetically...");
                 //resolveConcepts = false;
 			}
 			//Need to set to true to retrieve concept name
@@ -2780,9 +2780,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
                     // iterator = filterOutAnonymousClasses(cns, iterator);
 
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtil.searchByAssociations");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtil.searchByAssociations");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
                 }
 
@@ -2824,24 +2824,24 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         try {
 			if (iterator == null || iterator.numberRemaining() == 0) return iterator;
 
-			//System.out.println("iterator.numberRemaining(): " + iterator.numberRemaining());
+			//_logger.debug("iterator.numberRemaining(): " + iterator.numberRemaining());
 
 			while(iterator.hasNext()) {
 				ResolvedConceptReference[] refs = iterator.next(maxReturn).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs) {
 					String code = ref.getConceptCode();
 					knt++;
-					System.out.println("(" + knt + ") code: " + code);
+					_logger.debug("(" + knt + ") code: " + code);
 					if (code.indexOf("@") == -1) {
 						codeList.addConceptReference(ref);
 						knt_concept++;
 					} else {
-						//System.out.println("name: " + ref.getEntityDescription().getContent());
+						//_logger.debug("name: " + ref.getEntityDescription().getContent());
 					}
 				}
 			}
 
-			//System.out.println("(**) Number of concepts: " + knt_concept);
+			//_logger.debug("(**) Number of concepts: " + knt_concept);
             //KLO 022410 changed failed.
             cns = lbSvc.getNodeSet(scheme, null, null);
             //cns = getNodeSetByEntityType(scheme, null, "concept");
@@ -2852,7 +2852,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 			boolean resolveConcepts = false;
 			iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
 
-			//System.out.println("New iterator.numberRemaining(): " + iterator.numberRemaining());
+			//_logger.debug("New iterator.numberRemaining(): " + iterator.numberRemaining());
 
 			return iterator;
 		} catch (Exception ex) {
@@ -2876,25 +2876,25 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
         try {
 		    ResolvedConceptReferencesIterator iterator = cns.resolve(sortCriteria, null, restrictToProperties, null, resolveConcepts);
-			//System.out.println("iterator.numberRemaining(): " + iterator.numberRemaining());
+			//_logger.debug("iterator.numberRemaining(): " + iterator.numberRemaining());
 
 			while(iterator.hasNext()) {
 				ResolvedConceptReference[] refs = iterator.next(maxReturn).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs) {
 					String code = ref.getConceptCode();
 					knt++;
-					//System.out.println("(" + knt + ") code: " + code);
+					//_logger.debug("(" + knt + ") code: " + code);
 					if (code.indexOf("@") == -1) {
 						codeList.addConceptReference(ref);
 						knt_concept++;
 					} else {
-						//System.out.println("name: " + ref.getEntityDescription().getContent());
+						//_logger.debug("name: " + ref.getEntityDescription().getContent());
 					}
 				}
 			}
 			if (knt_concept == 0) return null;
 
-			//System.out.println("(**) Number of concepts: " + knt_concept);
+			//_logger.debug("(**) Number of concepts: " + knt_concept);
 
             cns = lbSvc.getNodeSet(scheme, null, null);
 			cns = cns.restrictToCodes(codeList);
@@ -2955,7 +2955,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             if (lbSvc == null)
             {
-                System.out.println("lbSvc = null");
+                _logger.warn("lbSvc = null");
                 return null;
             }
 

@@ -12,6 +12,7 @@ import java.util.Comparator;
 import org.LexGrid.concepts.Concept;
 import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.apache.log4j.Logger;
 
 //import gov.nih.nci.evs.browser.utils.TreeItem;
 
@@ -48,7 +49,7 @@ import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
  */
 
 public class SortComparator implements Comparator<Object>{
-
+    private static Logger _logger = Logger.getLogger(SortComparator.class);
     private static int SORT_BY_NAME = 1;
     private static int SORT_BY_CODE = 2;
     private int sort_option = SORT_BY_NAME;
@@ -89,7 +90,7 @@ public class SortComparator implements Comparator<Object>{
 			if (sort_option == SORT_BY_CODE) return ac.getConceptCode();
 
 			if (ac.getEntityDescription() == null) {
-				System.out.println("WARNING: ac.getEntityDescription() == null");
+				_logger.warn("WARNING: ac.getEntityDescription() == null");
 				return null;
 			}
 			return ac.getEntityDescription().getContent();
