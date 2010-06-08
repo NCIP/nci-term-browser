@@ -14,13 +14,15 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 /**
  * HTTP Utility methods
  * @author garciawa2
  *
  */
 public class HTTPUtils {
-
+    private static Logger _logger = Logger.getLogger(HTTPUtils.class);
   private static String REFERER = "referer";
 
 
@@ -62,9 +64,9 @@ public class HTTPUtils {
 	}
 
     public static void printRequestSessionAttributes() {
-        System.out.println(" ");
-        System.out.println(Utils.SEPARATOR);
-        System.out.println("Request Session Attribute(s):");
+        _logger.debug(" ");
+        _logger.debug(Utils.SEPARATOR);
+        _logger.debug("Request Session Attribute(s):");
 
         try {
             HttpServletRequest request = (HttpServletRequest)FacesContext.
@@ -76,19 +78,19 @@ public class HTTPUtils {
             while (enumeration.hasMoreElements()) {
                 String name = (String) enumeration.nextElement();
                 Object value = session.getAttribute(name);
-                System.out.println("  " + i + ") " + name + ": " + value);
+                _logger.debug("  " + i + ") " + name + ": " + value);
                 ++i;
             }
         } catch (Exception e) {
-            System.out.println(e.getClass().getSimpleName() + ": " +
+            _logger.error(e.getClass().getSimpleName() + ": " +
                 e.getMessage());
         }
     }
 
     public static void printRequestAttributes() {
-        System.out.println(" ");
-        System.out.println(Utils.SEPARATOR);
-        System.out.println("Request Attribute(s):");
+        _logger.debug(" ");
+        _logger.debug(Utils.SEPARATOR);
+        _logger.debug("Request Attribute(s):");
 
         try {
             HttpServletRequest request = (HttpServletRequest)FacesContext.
@@ -99,19 +101,19 @@ public class HTTPUtils {
             while (enumeration.hasMoreElements()) {
                 String name = (String) enumeration.nextElement();
                 Object value = request.getAttribute(name);
-                System.out.println("  " + i + ") " + name + ": " + value);
+                _logger.debug("  " + i + ") " + name + ": " + value);
                 ++i;
             }
         } catch (Exception e) {
-            System.out.println(e.getClass().getSimpleName() + ": " +
+            _logger.error(e.getClass().getSimpleName() + ": " +
                 e.getMessage());
         }
 	}
 
     public static void printRequestParameters() {
-        System.out.println(" ");
-        System.out.println(Utils.SEPARATOR);
-        System.out.println("Request Parameter(s):");
+        _logger.debug(" ");
+        _logger.debug(Utils.SEPARATOR);
+        _logger.debug("Request Parameter(s):");
 
         try {
             HttpServletRequest request = (HttpServletRequest)FacesContext.
@@ -122,11 +124,11 @@ public class HTTPUtils {
             while (enumeration.hasMoreElements()) {
                 String name = (String) enumeration.nextElement();
                 Object value = request.getParameter(name);
-                System.out.println("  " + i + ") " + name + ": " + value);
+                _logger.debug("  " + i + ") " + name + ": " + value);
                 ++i;
             }
         } catch (Exception e) {
-            System.out.println(e.getClass().getSimpleName() + ": " +
+            _logger.error(e.getClass().getSimpleName() + ": " +
                 e.getMessage());
         }
     }
@@ -135,7 +137,7 @@ public class HTTPUtils {
 	    printRequestSessionAttributes();
 	    printRequestAttributes();
         printRequestParameters();
-        System.out.println(" ");
+        _logger.debug(" ");
 	}
 
 	public static String convertJSPString(String t) {

@@ -71,6 +71,7 @@ import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
 import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
 import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
+import org.apache.log4j.Logger;
 
 //import static gov.nih.nci.evs.browser.common.Constants.*;
 
@@ -95,6 +96,7 @@ import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
  * assumed.
  */
 public class TreeUtils {
+    private static Logger _logger = Logger.getLogger(TreeUtils.class);
 	static LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
 
 	public TreeUtils() {
@@ -174,7 +176,7 @@ public class TreeUtils {
 			}
 
 		} finally {
-			System.out.println("Run time (milliseconds): "
+			_logger.debug("Run time (milliseconds): "
 					+ (System.currentTimeMillis() - ms) + " to resolve "
 					+ pathsResolved + " paths from root.");
 		}
@@ -196,7 +198,7 @@ public class TreeUtils {
 
 	public static void printTree(HashMap hmap) {
 		if (hmap == null) {
-			System.out.println("ERROR printTree -- hmap is null.");
+			_logger.error("ERROR printTree -- hmap is null.");
 			return;
 		}
 		Object[] objs = hmap.keySet().toArray();
@@ -379,11 +381,11 @@ public class TreeUtils {
 						ti.text.length() > 64 ? ti.text.substring(0, 62)
 								+ "..." : ti.text).append(
 						ti.expandable ? " [+]" : "");
-		System.out.println(codeAndText.toString());
+		_logger.debug(codeAndText.toString());
 
 		indent.append("| ");
 		for (String association : ti.assocToChildMap.keySet()) {
-			System.out.println(indent.toString() + association);
+			_logger.debug(indent.toString() + association);
 			List<TreeItem> children = ti.assocToChildMap.get(association);
 			Collections.sort(children);
 			for (TreeItem childItem : children)
@@ -408,7 +410,7 @@ public class TreeUtils {
 		try {
 			rcrl = cns.resolveToList(null, noopList_, null, 1);
 		} catch (Exception ex) {
-			System.out.println("WARNING: TreeUtils getCodeDescription cns.resolveToList throws exceptions");
+			_logger.error("WARNING: TreeUtils getCodeDescription cns.resolveToList throws exceptions");
 			return "null";
 		}
 
@@ -648,7 +650,7 @@ public class TreeUtils {
 
 			String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
 			//for (int i=0; i<associationsToNavigate.length; i++) {
-			//	System.out.println("(*) associationsToNavigate: " + associationsToNavigate[i]);
+			//	_logger.debug("(*) associationsToNavigate: " + associationsToNavigate[i]);
 			//}
 			//String assocName = hier_id;//associationsToNavigate[0];
 			//String assocName = associationsToNavigate[0];
@@ -708,7 +710,7 @@ public class TreeUtils {
 			//String assocName = associationsToNavigate[0];
 
 			for (int i=0; i<associationsToNavigate.length; i++) {
-				System.out.println("(*) associationsToNavigate: " + associationsToNavigate[i]);
+				_logger.debug("(*) associationsToNavigate: " + associationsToNavigate[i]);
 			}
 			//if (assocName.compareTo("part_of") == 0) assocName = "is_a";
 
@@ -781,11 +783,11 @@ public class TreeUtils {
 
 /*
             if (assoc.getAssociatedConcepts().getAssociatedConcept(i).getReferencedEntry() != null) {
-				System.out.println(assoc.getAssociatedConcepts().getAssociatedConcept(i)
+				_logger.debug(assoc.getAssociatedConcepts().getAssociatedConcept(i)
                     .getReferencedEntry().getEntityDescription().getContent() + " === IsAnonymous? " + assoc.getAssociatedConcepts().getAssociatedConcept(i)
                     .getReferencedEntry().getIsAnonymous());
 			} else {
-				System.out.println("assoc.getAssociatedConcepts().getAssociatedConcept(i).getReferencedEntry() == null");
+				_logger.debug("assoc.getAssociatedConcepts().getAssociatedConcept(i).getReferencedEntry() == null");
 			}
 */
 /*
@@ -855,7 +857,7 @@ public class TreeUtils {
 					!associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1, false);
 
 			} catch (Exception e) {
-				System.out.println("TreeUtils getAssociatedConcepts throws exceptions.");
+				_logger.error("TreeUtils getAssociatedConcepts throws exceptions.");
 				return null;
 			}
 
@@ -922,14 +924,14 @@ public class TreeUtils {
 						}
 					}
 				} else {
-					System.out.println("WARNING: childAssociationList == null.");
+					_logger.warn("WARNING: childAssociationList == null.");
 				}
 			}
 			hmap.put(code, ti);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("Run time (milliseconds) getSubconcepts: "
+		_logger.debug("Run time (milliseconds) getSubconcepts: "
 				+ (System.currentTimeMillis() - ms) + " to resolve ");
 		return hmap;
 	}
@@ -985,7 +987,7 @@ public class TreeUtils {
 					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
 
 			} catch (Exception e) {
-				System.out.println("TreeUtils getAssociatedConcepts throws exceptions.");
+				_logger.error("TreeUtils getAssociatedConcepts throws exceptions.");
 				return null;
 			}
 
@@ -1061,14 +1063,14 @@ public class TreeUtils {
 						}
 					}
 				} else {
-					System.out.println("WARNING: childAssociationList == null.");
+					_logger.warn("WARNING: childAssociationList == null.");
 				}
 			}
 			hmap.put(code, ti);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("Run time (milliseconds) getSubconcepts: "
+		_logger.debug("Run time (milliseconds) getSubconcepts: "
 				+ (System.currentTimeMillis() - ms) + " to resolve ");
 		return hmap;
 	}
@@ -1122,7 +1124,7 @@ public class TreeUtils {
 					!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1, false);
 
 			} catch (Exception e) {
-				System.out.println("TreeUtils getAssociatedConcepts throws exceptions.");
+				_logger.error("TreeUtils getAssociatedConcepts throws exceptions.");
 				return null;
 			}
 
@@ -1198,14 +1200,14 @@ public class TreeUtils {
 						}
 					}
 				} else {
-					System.out.println("WARNING: childAssociationList == null.");
+					_logger.warn("WARNING: childAssociationList == null.");
 				}
 			}
 			hmap.put(code, ti);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("Run time (milliseconds) getSubconcepts: "
+		_logger.debug("Run time (milliseconds) getSubconcepts: "
 				+ (System.currentTimeMillis() - ms) + " to resolve ");
 		return hmap;
 	}
@@ -1247,7 +1249,7 @@ public class TreeUtils {
 		try {
 			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			if (lbSvc == null) {
-				System.out.println("lbSvc == null???");
+				_logger.warn("lbSvc == null???");
 				return null;
 			}
 
@@ -1271,7 +1273,7 @@ public class TreeUtils {
 					null, null, 1);
 
 			if (matches == null) {
-				System.out.println("Concep not found.");
+				_logger.warn("Concept not found.");
 				return null;
 			}
 
@@ -1447,7 +1449,7 @@ public class TreeUtils {
 				EntityDescription entityDescription = new EntityDescription();
 				entityDescription.setContent(ti.text);
 				rcr.setEntityDescription(entityDescription);
-				//System.out.println("Root: " + ti.text);
+				//_logger.debug("Root: " + ti.text);
 				list.add(rcr);
 			}
 		}
@@ -1469,15 +1471,15 @@ public class TreeUtils {
             String code = (String) objs[0];
             TreeItem ti = (TreeItem) hmap.get(code);
             for (String association : ti.assocToChildMap.keySet()) {
-				System.out.println("\nassociation: " + association);
+				_logger.debug("\nassociation: " + association);
                 List<TreeItem> children = ti.assocToChildMap.get(association);
                 for (TreeItem childItem : children) {
-                    System.out.println(childItem.text + "(" + childItem.code + ")");
+                    _logger.debug(childItem.text + "(" + childItem.code + ")");
                     int knt = 0;
                     if (childItem.expandable)
                     {
                         knt = 1;
-                        System.out.println("\tnode.expandable");
+                        _logger.debug("\tnode.expandable");
 
                         printTree(childItem, focusCode, level);
 
@@ -1497,13 +1499,13 @@ public class TreeUtils {
 								  nd_code = node.getEntityCode();
 								  nd_name = node.getEntityDescription().getContent();
 							  }
-							  System.out.println("TOP NODE: " + nd_name + " (" + nd_code + ")" );
+							  _logger.debug("TOP NODE: " + nd_name + " (" + nd_code + ")" );
 						}
 
 
 
                     } else {
-						System.out.println("\tnode.NOT expandable");
+						_logger.debug("\tnode.NOT expandable");
 					}
                 }
             }
@@ -1636,7 +1638,7 @@ public class TreeUtils {
 						String link = conceptCode + "|" + parentCode;
                         if (!visited_links.contains(link)) {
 							visited_links.add(link);
-							//System.out.println(	getCodeDescription(concept) + "(" + parentCode + ")");
+							//_logger.debug(	getCodeDescription(concept) + "(" + parentCode + ")");
 							TreeItem branchItem = null;
 							if (visited_nodes.containsKey(parentCode)) {
 								branchItem = (TreeItem) visited_nodes.get(parentCode);
@@ -1722,13 +1724,13 @@ public class TreeUtils {
 			//ti.expandable = false;
 			ti.expandable = hasSubconcepts(scheme, version, code);
 
-			System.out.println(name + "(" + code + ")");
+			_logger.debug(name + "(" + code + ")");
 
 			traverseUp(lbSvc, lbscm, scheme, csvt, hierarchyID, code, root, ti, codesToExclude, associationsToNavigate, associationsNavigatedFwd, visited_links, visited_nodes, maxLevel, 0);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			System.out.println("Run time (milliseconds): "
+			_logger.debug("Run time (milliseconds): "
 					+ (System.currentTimeMillis() - ms) + " to resolve "
 					//+ pathsResolved + " paths from root.");
 					+ " paths from root.");
@@ -1769,24 +1771,24 @@ public class TreeUtils {
 
         for (int i = 0; i < roots.getResolvedConceptReferenceCount(); i++) {
 			 ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
-			 //System.out.println("getHierarchyRoots rcr.getConceptCode(): " + rcr.getConceptCode());
+			 //_logger.debug("getHierarchyRoots rcr.getConceptCode(): " + rcr.getConceptCode());
 
 			 Concept c = rcr.getReferencedEntry();
 			 if (c != null) {
 				 rcr.setConceptCode(c.getEntityCode());
 			 } else {
-				 System.out.println("getHierarchyRoots rcr.getReferencedEntry() returns null.");
+				 _logger.debug("getHierarchyRoots rcr.getReferencedEntry() returns null.");
 			 }
 
              if (rcr.getEntityDescription() == null) {
-				 System.out.println("getHierarchyRoots rcr.getEntityDescription() == null.");
+				 _logger.debug("getHierarchyRoots rcr.getEntityDescription() == null.");
 				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
 				 if (name == null) name = rcr.getConceptCode();//HL7
 				 EntityDescription e = new EntityDescription();
 				 e.setContent(name);
 				 rcr.setEntityDescription(e);
 			 } else if (rcr.getEntityDescription().getContent() == null) {
-				 System.out.println("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
+				 _logger.debug("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
 				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
 				 if (name == null) name = rcr.getConceptCode();//HL7
 				 EntityDescription e = new EntityDescription();
@@ -1814,8 +1816,9 @@ public class TreeUtils {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		if (knt == 0) System.out.println("No match.");
-		System.out.println("\n\n");
+		if (knt == 0) 
+		    _logger.debug("No match.");
+		_logger.debug("\n\n");
 		return new ArrayList();
 	}
 
@@ -1835,13 +1838,13 @@ public class TreeUtils {
         int knt = 0;
         for (int i = 0; i < roots.getResolvedConceptReferenceCount(); i++) {
 			 ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
-			 //System.out.println("getHierarchyRoots rcr.getConceptCode(): " + rcr.getConceptCode());
+			 //_logger.debug("getHierarchyRoots rcr.getConceptCode(): " + rcr.getConceptCode());
 
 			 Concept c = rcr.getReferencedEntry();
 			 if (c != null) {
 				 rcr.setConceptCode(c.getEntityCode());
 			 } else {
-				 System.out.println("WARNING: getHierarchyRoots rcr.getReferencedEntry() returns null.");
+				 _logger.debug("WARNING: getHierarchyRoots rcr.getReferencedEntry() returns null.");
 			 }
 
              if (rcr.getEntityDescription() == null) {
@@ -1855,7 +1858,7 @@ public class TreeUtils {
 				 e.setContent(name);
 				 rcr.setEntityDescription(e);
 			 } else if (rcr.getEntityDescription().getContent() == null) {
-				 System.out.println("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
+				 _logger.debug("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
 				 String name = TreeUtils.getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
 				 if (name == null) {
 					 name = "<Not Assigned> (code: " + rcr.getConceptCode() + ")";//HL7
@@ -2008,7 +2011,7 @@ public class TreeUtils {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("Run time (milliseconds) getSubconcepts: "
+		_logger.debug("Run time (milliseconds) getSubconcepts: "
 				+ (System.currentTimeMillis() - ms) + " to resolve ");
 		SortUtils.quickSort(list);
 		return list;
@@ -2034,31 +2037,31 @@ public class TreeUtils {
 		code = "C9335";
 
 		String hierarchyID = test.getHierarchyID(scheme, null);
-		System.out.println("(*) " + scheme + " Hierarchy ID: " + hierarchyID);
+		_logger.debug("(*) " + scheme + " Hierarchy ID: " + hierarchyID);
 
 		hmap = test.getSubconcepts(scheme, version, code);
 		test.printTree(hmap);
 
-System.out.println("=============================================================");
+_logger.debug("=============================================================");
 
 		scheme = "Gene Ontology";
 		code = "GO:0008150";
 
 		hierarchyID = test.getHierarchyID(scheme, null);
-		System.out.println("Hierarchy ID: " + hierarchyID);
+		_logger.debug("Hierarchy ID: " + hierarchyID);
 
 		hmap = test.getSubconcepts(scheme, version, code);
 		test.printTree(hmap);
 
 
-System.out.println("=============================================================");
+_logger.debug("=============================================================");
 
 
 		scheme = "HL7 Reference Information Model        ";
 		code = "AcknowledgementType";
 
 		hierarchyID = test.getHierarchyID(scheme, null);
-		System.out.println("Hierarchy ID: " + hierarchyID);
+		_logger.debug("Hierarchy ID: " + hierarchyID);
 
 		hmap = test.getSubconcepts(scheme, version, code);
 		test.printTree(hmap);

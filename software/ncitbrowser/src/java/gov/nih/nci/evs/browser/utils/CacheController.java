@@ -82,6 +82,7 @@ import org.LexGrid.concepts.Presentation;
 
 
 import org.apache.jcs.access.exception.CacheException;
+import org.apache.log4j.Logger;
 import org.json.*;
 import org.lexevs.tree.model.LexEvsTree;
 import org.lexevs.tree.model.LexEvsTreeNode;
@@ -90,6 +91,7 @@ import org.lexevs.tree.service.TreeServiceFactory;
 
 public class CacheController
 {
+    private static Logger _logger = Logger.getLogger(CacheController.class);
   public static final String ONTOLOGY_ADMINISTRATORS = "ontology_administrators";
   public static final String ONTOLOGY_FILE = "ontology_file";
   public static final String ONTOLOGY_FILE_ID = "ontology_file_id";
@@ -115,7 +117,7 @@ public class CacheController
             cacheManager.addCache(cacheName);
         }
 
-        System.out.println("cache added");
+        _logger.debug("cache added");
         this.cache = cacheManager.getCache(cacheName);
     }
 
@@ -196,7 +198,7 @@ public class CacheController
         }
         if (nodeArray == null)
         {
-			System.out.println("Not in cache -- calling getSubconcepts " );
+			_logger.debug("Not in cache -- calling getSubconcepts " );
             map = new TreeUtils().getSubconcepts(scheme, version, code);
             nodeArray = HashMap2JSONArray(map);
 
@@ -211,7 +213,7 @@ public class CacheController
         }
         else
         {
-			System.out.println("Retrieved from cache." );
+			_logger.debug("Retrieved from cache." );
 		}
         return nodeArray;
     }
@@ -239,14 +241,14 @@ public class CacheController
         {
             Element element = cache.get(key);
             if (element != null) {
-				//System.out.println("getRootConcepts fromCache element != null returning list" );
+				//_logger.debug("getRootConcepts fromCache element != null returning list" );
 	            nodeArray = (JSONArray) element.getValue();
 			}
         }
 
         if (nodeArray == null)
         {
-			System.out.println("Not in cache -- calling getHierarchyRoots " );
+			_logger.debug("Not in cache -- calling getHierarchyRoots " );
             try {
 				//list = new DataUtils().getHierarchyRoots(scheme, version, null);
 				list = new TreeUtils().getHierarchyRoots(scheme, version, null);
@@ -263,7 +265,7 @@ public class CacheController
         }
         else
         {
-			System.out.println("Retrieved from cache." );
+			_logger.debug("Retrieved from cache." );
 		}
         return nodeArray;
     }
@@ -377,7 +379,7 @@ public class CacheController
 					  }
 
 					  int j = i+1;
-					  System.out.println("( " + j + ") code: " + code + " name: " + name);
+					  _logger.debug("( " + j + ") code: " + code + " name: " + name);
 
 					  if (name.compareTo("<Not assigned>") == 0) name = code;
 
@@ -452,7 +454,7 @@ public class CacheController
 
         if (nodeArray == null)
         {
-			System.out.println("Not in cache -- calling getHierarchyRoots " );
+			_logger.debug("Not in cache -- calling getHierarchyRoots " );
             try {
 				nodeArray = getPathsToRoots(scheme, version, code, true);
 				element = new Element(key, nodeArray);
@@ -463,7 +465,7 @@ public class CacheController
         }
         else
         {
-			System.out.println("Retrieved from cache." );
+			_logger.debug("Retrieved from cache." );
 		}
         return nodeArray;
     }
@@ -492,7 +494,7 @@ public class CacheController
 			try {
 				TreeUtils util = new TreeUtils();
 				HashMap hmap = util.getTreePathData(ontology_display_name, null, null, node_id);
-				//System.out.println("Calling util.getTreePathData2...");
+				//_logger.debug("Calling util.getTreePathData2...");
 				//HashMap hmap = util.getTreePathData2(ontology_display_name, null, node_id, maxLevel);
 				//util.printTree(hmap);
 
@@ -729,7 +731,7 @@ public class CacheController
 
     public static String getSubConcepts(String codingScheme, CodingSchemeVersionOrTag versionOrTag, String code){
     	if(!CacheController.instance.containsKey(getSubConceptKey(codingScheme, code))){
-    		System.out.println("SubConcepts Not Found In Cache.");
+    		_logger.debug("SubConcepts Not Found In Cache.");
     		TreeService treeService = TreeServiceFactory.getInstance()
 				.getTreeService(RemoteServerUtil.createLexBIGService());
 
@@ -747,7 +749,7 @@ public class CacheController
 
     public static String getTree(String codingScheme, CodingSchemeVersionOrTag versionOrTag, String code){
     	if(!CacheController.instance.containsKey(getTreeKey(codingScheme, code))){
-    		System.out.println("Tree Not Found In Cache.");
+    		_logger.debug("Tree Not Found In Cache.");
     		TreeService treeService = TreeServiceFactory.getInstance()
 				.getTreeService(RemoteServerUtil.createLexBIGService());
 
@@ -762,13 +764,13 @@ public class CacheController
     }
 
     public void activeCacheTree(ResolvedConceptReference ref){
-    	System.out.println("Actively caching tree.");
+    	_logger.debug("Actively caching tree.");
 
     	String codingScheme = ref.getCodingSchemeName();
     	String code = ref.getCode();
 
     	if(!CacheController.instance.containsKey(getTreeKey(codingScheme, code))){
-    		System.out.println("Tree Not Found In Cache.");
+    		_logger.debug("Tree Not Found In Cache.");
     		TreeService treeService = TreeServiceFactory.getInstance()
 				.getTreeService(RemoteServerUtil.createLexBIGService());
 

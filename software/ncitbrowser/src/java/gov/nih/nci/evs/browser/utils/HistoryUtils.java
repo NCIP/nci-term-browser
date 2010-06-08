@@ -15,6 +15,7 @@ import org.LexGrid.LexBIG.History.HistoryService;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.LexBIG.Utility.Constructors;
 import org.LexGrid.concepts.Concept;
+import org.apache.log4j.Logger;
 
 import static gov.nih.nci.evs.browser.common.Constants.*;
 
@@ -48,7 +49,7 @@ import static gov.nih.nci.evs.browser.common.Constants.*;
  */
 
 public class HistoryUtils {
-
+    private static Logger _logger = Logger.getLogger(HistoryUtils.class);
 	private static DateFormat _dataFormatter = new SimpleDateFormat(
 			"yyyy-MM-dd");
 
@@ -68,7 +69,7 @@ public class HistoryUtils {
 			hs = lbSvc.getHistoryService(codingSchemeName);
 			if (hs != null) return true;
 		} catch (Exception ex) {
-			//System.out.println("Unable to getHistoryService for " + codingSchemeName);
+			//_logger.error("Unable to getHistoryService for " + codingSchemeName);
 		}
 		return false;
 	}
@@ -168,7 +169,7 @@ public class HistoryUtils {
         try {
 			hs = lbSvc.getHistoryService(codingSchemeName);
 		} catch (Exception ex) {
-			System.out.println("Unable to getHistoryService for " + codingSchemeName);
+			_logger.error("Unable to getHistoryService for " + codingSchemeName);
 			return null;
 		}
 
@@ -190,7 +191,7 @@ public class HistoryUtils {
         try {
 			hs = lbSvc.getHistoryService(codingSchemeName);
 		} catch (Exception ex) {
-			System.out.println("Unable to getHistoryService for " + codingSchemeName);
+			_logger.error("Unable to getHistoryService for " + codingSchemeName);
 			return null;
 		}
 
@@ -212,7 +213,7 @@ public class HistoryUtils {
         try {
 			hs = lbSvc.getHistoryService(codingSchemeName);
 		} catch (Exception ex) {
-			System.out.println("Unable to getHistoryService for " + codingSchemeName);
+			_logger.error("Unable to getHistoryService for " + codingSchemeName);
 			return null;
 		}
 
@@ -268,16 +269,16 @@ C18438|Proto-Oncogene_Growth_Factor|retire|12-AUG-03|(null)|(null)
 			String rCode = event.getReferencecode();
 			if (rCode.compareTo(code) == 0) {
 
-				System.out.println("rCode." + rCode + " == code == " + code);
+				_logger.debug("rCode." + rCode + " == code == " + code);
 
 				try {
 					HistoryService hs = lbSvc.getHistoryService(codingSchemeName);
 					if (hs == null) {
-						System.out.println("Unable to getHistoryService for " + codingSchemeName);
+						_logger.warn("Unable to getHistoryService for " + codingSchemeName);
 						return null;
 					}
 					try {
-						System.out.println("\tcheck Ancestors");
+						_logger.debug("\tcheck Ancestors");
 
 						NCIChangeEventList list = hs.getAncestors(Constructors.createConceptReference(code, null));
 						Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
@@ -288,15 +289,15 @@ C18438|Proto-Oncogene_Growth_Factor|retire|12-AUG-03|(null)|(null)
 							String con_code = event2.getConceptcode();
 							String ref_code = event2.getReferencecode();
 
-							System.out.println("\tAncestor -- con_code " + con_code + "; ref_code == " + ref_code);
+							_logger.debug("\tAncestor -- con_code " + con_code + "; ref_code == " + ref_code);
 
 							Date date2 = event2.getEditDate();
 							ChangeType type2 = event2.getEditaction();
 							String type_str2 = type2.toString();
 							if (type_str.compareTo("merge") == 0 && ref_code.compareTo(con_code) != 0 && ref_code.compareTo(code) == 0 && date.toString().compareTo(date2.toString()) == 0) {
-								//System.out.println("(***) con_code: " + con_code + " ref_code: " + ref_code);
+								//_logger.debug("(***) con_code: " + con_code + " ref_code: " + ref_code);
 
-								System.out.println("\tsubstituting...");
+								_logger.debug("\tsubstituting...");
 							    event2.setConceptcode(ref_code);
 							    event2.setReferencecode(con_code);
 							    return event2;
@@ -304,11 +305,11 @@ C18438|Proto-Oncogene_Growth_Factor|retire|12-AUG-03|(null)|(null)
 						}
 					} catch (Exception ex) {
 						//ex.printStackTrace();
-						System.out.println("getAncestors throws exception.");
+						_logger.error("getAncestors throws exception.");
 					}
 
 					try {
-						System.out.println("\tcheck Descendants");
+						_logger.debug("\tcheck Descendants");
 
 						NCIChangeEventList list = hs.getDescendants(Constructors.createConceptReference(code, null));
 						Enumeration<NCIChangeEvent> enumeration = list.enumerateEntry();
@@ -319,15 +320,15 @@ C18438|Proto-Oncogene_Growth_Factor|retire|12-AUG-03|(null)|(null)
 							String con_code = event2.getConceptcode();
 							String ref_code = event2.getReferencecode();
 
-							System.out.println("\tDescendant con_code " + con_code + "; ref_code == " + ref_code);
+							_logger.debug("\tDescendant con_code " + con_code + "; ref_code == " + ref_code);
 
 							Date date2 = event2.getEditDate();
 							ChangeType type2 = event2.getEditaction();
 							String type_str2 = type2.toString();
 							if (type_str.compareTo("merge") == 0 && ref_code.compareTo(con_code) != 0 && ref_code.compareTo(code) == 0 && date.toString().compareTo(date2.toString()) == 0) {
-								//System.out.println("(***) con_code: " + con_code + " ref_code: " + ref_code);
+								//_logger.debug("(***) con_code: " + con_code + " ref_code: " + ref_code);
 
-								System.out.println("\tsubstituting...");
+								_logger.debug("\tsubstituting...");
 							    event2.setConceptcode(ref_code);
 							    event2.setReferencecode(con_code);
 							    return event2;
@@ -335,12 +336,12 @@ C18438|Proto-Oncogene_Growth_Factor|retire|12-AUG-03|(null)|(null)
 						}
 					} catch (Exception ex) {
 						//ex.printStackTrace();
-						System.out.println("getAncestors throws exception.");
+						_logger.error("getAncestors throws exception.");
 					}
 
 				} catch (Exception ex) {
 					//ex.printStackTrace();
-					System.out.println("getAncestors throws exception.");
+					_logger.error("getAncestors throws exception.");
 				}
 			}
 
