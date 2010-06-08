@@ -80,10 +80,11 @@ import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 
 import javax.faces.model.SelectItem;
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
+import org.apache.log4j.*;
 
 
 public class MetadataUtils {
-
+    private static Logger _logger = Logger.getLogger(MetadataUtils.class);
 	private static final String CODING_SCHEME_NAME_PROPERTY = "codingScheme";
 
 	private static Vector getMetadataCodingSchemeNames(MetadataPropertyList mdpl){
@@ -144,7 +145,7 @@ public class MetadataUtils {
 				smd = smd.restrictToCodingScheme(acsvr);
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				System.out.println("smd.restrictToCodingScheme(acsvr) failed???");
+				_logger.error("smd.restrictToCodingScheme(acsvr) failed???");
 				return null;
 			}
 
@@ -152,7 +153,7 @@ public class MetadataUtils {
 				mdpl = smd.resolve();
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				System.out.println("smd.resolve() failed???");
+				_logger.error("smd.resolve() failed???");
 				return null;
 			}
 
@@ -221,7 +222,7 @@ public class MetadataUtils {
 		Vector v = new Vector();
 		Vector codingSchemeNames = getMetadataCodingSchemeNames(mdpl);
 
-		System.out.println("getMetadataCodingSchemeNames returns " + codingSchemeNames.size() );
+		_logger.debug("getMetadataCodingSchemeNames returns " + codingSchemeNames.size() );
 
 		int knt = 0;
 		for (int k=0; k<codingSchemeNames.size(); k++) {
@@ -245,14 +246,14 @@ public class MetadataUtils {
 			//'codingSchemeURI', 'representsVersion', etc... so you can pick out which ones
 			//you'd like to use.
 			for(MetadataProperty prop : properties){
-				//System.out.println("\tProperty Name: " + prop.getName() + "\n\tProperty Value: " + prop.getValue());
+				//_logger.debug("\tProperty Name: " + prop.getName() + "\n\tProperty Value: " + prop.getValue());
 				if (prop.getName().compareTo(propertyName) == 0) {
 					return prop.getValue();
 				}
 			}
 		} catch (Exception ex) {
-			//System.out.println("getEntityDescriptionForCodingScheme throws exception???? " );
-			System.out.println("WARNING: Unable to retrieve metadata for source " + codingSchemeName + " please consult your system administrator." );
+			//_logger.error("getEntityDescriptionForCodingScheme throws exception???? " );
+			_logger.error("WARNING: Unable to retrieve metadata for source " + codingSchemeName + " please consult your system administrator." );
 			//ex.printStackTrace();
 		}
 		return null;
@@ -332,7 +333,7 @@ public class MetadataUtils {
         String urn, String propertyName) {
         Vector v = getMetadataValues(codingSchemeName, version, urn, propertyName);
         if (v == null) {
-			System.out.println("getMetadataValue returns null??? " + codingSchemeName);
+			_logger.warn("getMetadataValue returns null??? " + codingSchemeName);
             return "";
 		}
         int n = v.size();
@@ -473,10 +474,10 @@ public class MetadataUtils {
 		//LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
 		if (lbSvc == null) {
-			System.out.println("Unable to connect to " + serviceUrl);
+			_logger.error("Unable to connect to " + serviceUrl);
 			System.exit(1);
 		} else {
-			System.out.println("Connected to " + serviceUrl);
+			_logger.debug("Connected to " + serviceUrl);
 		}
 /*
 		String codingSchemeName = "NCI MetaThesaurus";
@@ -490,12 +491,12 @@ public class MetadataUtils {
 
         Vector v = test.getMetadataNameValuePairs(codingSchemeName, version, null);
         if (v == null || v.size() == 0) {
-			System.out.println("Metadata not found.");
+			_logger.warn("Metadata not found.");
 		}
 		else {
 			for (int i=0; i<v.size(); i++) {
 				String t = (String) v.elementAt(i);
-				System.out.println(t);
+				_logger.debug(t);
 			}
 	    }
 
@@ -506,12 +507,12 @@ public class MetadataUtils {
         //Vector v = test.getMetadataNameValuePairs(codingSchemeName, version, urn);
         v = test.getMetadataNameValuePairs(codingSchemeName, version, null);
         if (v == null || v.size() == 0) {
-			System.out.println("Metadata not found.");
+			_logger.warn("Metadata not found.");
 		}
 		else {
 			for (int i=0; i<v.size(); i++) {
 				String t = (String) v.elementAt(i);
-				System.out.println(t);
+				_logger.debug(t);
 			}
 	    }
 

@@ -5,12 +5,11 @@
 
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<!--      <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>-->
-		<param name="Target" value="System.out" />
-		<param name="Threshold" value="INFO" />
+		<param name="Threshold" value="DEBUG" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<!-- The default pattern: Date Priority [Category] Message\n -->
 			<param name="ConversionPattern"
-				value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
+                value="%-5p [%c{1}:%L] %m%n" />
 		</layout>
 	</appender>
 
@@ -25,6 +24,11 @@
 		</layout>
 	</appender>
 
+    <logger name="org.apache">
+        <level value="warn" />
+    </logger>
+
+<!-- 
 	<category name="org.apache.dbcp">
 		<level value="INFO" />
 		<appender-ref ref="CONSOLE" />
@@ -35,16 +39,10 @@
 		<appender-ref ref="CONSOLE" />
 	</category>
 
-
 	<logger name="org.hibernate">
 		<level value="info" />
 	</logger>
 
-	<logger name="org.apache">
-		<level value="warn" />
-	</logger>
-
-<!-- 
 	<logger name="org.hibernate.SQL">
 		<level value="debug" />
 	</logger>
@@ -68,15 +66,15 @@
 	<logger	name="org.hibernate.connection.DriverManagerConnectionProvider">
 		<level value="trace" />
 	</logger>
+
+    <logger name="org.springframework">
+        <level value="error" />
+    </logger>
 -->
-	<logger name="gov.nih.nci">
-		<level value="error" />
+	<logger name="gov.nih.nci.evs">
+		<level value="debug" />
 	</logger>
 	
-	<logger name="org.springframework">
-		<level value="error" />
-	</logger>
-
 	<root>
 		<priority value="error" />
 		<appender-ref ref="CONSOLE" />
