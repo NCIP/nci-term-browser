@@ -321,7 +321,7 @@
        <DisplayItem>
             <propertyName>Swiss_Prot</propertyName>
             <itemLabel>Swiss Prot</itemLabel>
-            <url>http://us.expasy.org/cgi-bin/sprot-search-ac?</url>
+            <url>http://www.uniprot.org/entry/</url>
             <hyperlinkText>see UniProt/Swiss-Prot info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
