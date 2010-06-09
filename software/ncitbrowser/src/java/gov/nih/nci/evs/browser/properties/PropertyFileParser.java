@@ -1,25 +1,15 @@
 package gov.nih.nci.evs.browser.properties;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
 
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.apache.log4j.*;
+import org.w3c.dom.*;
+import org.xml.sax.*;
 
-import gov.nih.nci.evs.browser.bean.DisplayItem;
-import gov.nih.nci.evs.browser.bean.MetadataElement;
-import gov.nih.nci.evs.browser.bean.DefSourceMapping;
-import gov.nih.nci.evs.browser.bean.SecurityTokenHolder;
+import gov.nih.nci.evs.browser.bean.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
