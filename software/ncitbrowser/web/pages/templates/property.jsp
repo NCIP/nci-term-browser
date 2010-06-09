@@ -391,7 +391,12 @@ if(propName_label.compareTo("Definition") == 0) {
         if (value_vec != null && value_vec.size() > 0) {
           for (int j=0; j<value_vec.size(); j++) {
             String value = (String) value_vec.elementAt(j);
-            
+            /*
+            if (value.endsWith("|")) {
+                value = value.substring(0, value.length()-1);
+            }
+            */
+             
             if (n % 2 == 0) {
               %>
                 <tr class="dataRowDark">

@@ -931,13 +931,13 @@ public class DataUtils {
 
     public static String getVersion(String scheme) {
         String info = getReleaseDate(scheme);
-        // String version = getVocabularyVersionByTag(scheme, "PRODUCTION"); 
+        // String version = getVocabularyVersionByTag(scheme, "PRODUCTION");
 
         String full_name = DataUtils.getMetadataValue(scheme, "full_name");
-        if (full_name == null || full_name.compareTo("null") == 0) 
+        if (full_name == null || full_name.compareTo("null") == 0)
             full_name = scheme;
         String version = DataUtils.getMetadataValue(scheme, "term_browser_version");
-        
+
         if (version == null)
             version = getVocabularyVersionByTag(scheme, null);
 
@@ -1242,6 +1242,7 @@ public class DataUtils {
         return v;
     }
 
+/*
     public static Vector getPropertyValues(Concept concept,
             String property_type, String property_name) {
         Vector v = new Vector();
@@ -1285,6 +1286,77 @@ public class DataUtils {
 		return v;
 	}
 
+*/
+
+    public static String getPropertyQualfierValues(org.LexGrid.commonTypes.Property p) {
+
+        String s = "";
+		PropertyQualifier[] qualifiers =
+			p.getPropertyQualifier();
+		if (qualifiers != null && qualifiers.length > 0) {
+			for (int j = 0; j < qualifiers.length; j++) {
+				PropertyQualifier q = qualifiers[j];
+				String qualifier_name =
+					q.getPropertyQualifierName();
+				String qualifier_value =
+					q.getValue().getContent();
+
+                s = s + qualifier_name + ": " + qualifier_value;
+                if (j < qualifiers.length -1) s = s + "; ";
+			}
+		}
+		return s;
+    }
+
+    public static Vector getPropertyValues(Concept concept,
+            String property_type, String property_name) {
+        Vector v = new Vector();
+        org.LexGrid.commonTypes.Property[] properties = null;
+
+        boolean addQualifiers = false;
+		if (property_type.compareToIgnoreCase("GENERIC") == 0) {
+			properties = concept.getProperty();
+			addQualifiers = true;
+		} else if (property_type.compareToIgnoreCase("PRESENTATION") == 0) {
+			properties = concept.getPresentation();
+		//} else if (property_type.compareToIgnoreCase("INSTRUCTION") == 0) {
+		//	properties = concept.getInstruction();
+		} else if (property_type.compareToIgnoreCase("COMMENT") == 0) {
+			properties = concept.getComment();
+			addQualifiers = true;
+		} else if (property_type.compareToIgnoreCase("DEFINITION") == 0) {
+			properties = concept.getDefinition();
+
+		} else {
+
+            System.out.println("WARNING: property_type not found -- "
+                    + property_type);
+        }
+
+		if (properties == null || properties.length == 0)
+			return v;
+		for (int i = 0; i < properties.length; i++) {
+			Property p = (Property) properties[i];
+			if (property_name.compareTo(p.getPropertyName()) == 0) {
+				String t = p.getValue().getContent();
+				Source[] sources = p.getSource();
+				if (sources != null && sources.length > 0) {
+					Source src = sources[0];
+					t = t + "|" + src.getContent();
+
+				}
+				// #27034
+				if (addQualifiers) {
+					String qualifiers = getPropertyQualfierValues(p);
+					if (qualifiers.compareTo("") != 0) {
+						t = t + "|" + getPropertyQualfierValues(p);
+					}
+				}
+				v.add(t);
+			}
+		}
+		return v;
+	}
 
 
 
