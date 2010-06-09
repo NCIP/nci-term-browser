@@ -45,6 +45,7 @@ import org.apache.log4j.Logger;
  *      POSSIBILITY OF SUCH DAMAGE.
  * <!-- LICENSE_TEXT_END -->
  */
+
 /**
  * @author garciawa2 AccessLog class
  */
