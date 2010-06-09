@@ -24,13 +24,8 @@ package org.json;
  SOFTWARE.
  */
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-
-import java.io.Serializable;
+import java.io.*;
+import java.util.*;
 
 /**
  * A JSONArray is an ordered sequence of values. Its external text form is a
