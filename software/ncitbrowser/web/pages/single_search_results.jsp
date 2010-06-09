@@ -4,7 +4,9 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="org.apache.log4j.*" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -16,6 +18,9 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<%!
+  private static Logger _logger = Utils.getJspLogger("single_search_results.jsp");
+%>
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
@@ -29,9 +34,9 @@
           Vector v = (Vector) request.getAttribute("search_results");
 
     if (v != null) {
-         System.out.println("single search results: " + v.size());
+         _logger.debug("single search results: " + v.size());
     } else {
-         System.out.println("single search results: v is NULL???");
+         _logger.warn("single search results: v is NULL???");
     }
 
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));

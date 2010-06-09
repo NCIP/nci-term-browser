@@ -4,11 +4,11 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
 <%@ page import="javax.faces.context.FacesContext" %>
+<%@ page import="org.apache.log4j.*" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -25,7 +25,9 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
-
+<%!
+  private static Logger _logger = Utils.getJspLogger("search_results.jsp");
+%>
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
@@ -36,7 +38,7 @@
 <%
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
 
-System.out.println("search_results.jsp dictionary: " + search_results_dictionary);
+_logger.debug("search_results.jsp dictionary: " + search_results_dictionary);
 
 if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
@@ -64,7 +66,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
           //String key = (String) request.getSession().getAttribute("key");
           String key = (String) request.getAttribute("key");
           
-System.out.println("search_result.jsp " + key);          
+_logger.debug("search_result.jsp " + key);          
           
           IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBeanManager");
@@ -72,7 +74,7 @@ System.out.println("search_result.jsp " + key);
           IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
           
 	  if (iteratorBean == null){
-	    System.out.println("iteratorBean NOT FOUND???" + key);  
+	    _logger.warn("iteratorBean NOT FOUND???" + key);  
 	  }
 
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
@@ -177,7 +179,7 @@ System.out.println("search_result.jsp " + key);
                       ResolvedConceptReference rcr = null;
 
 if (obj == null) {
-   System.out.println("rcr == null???????????????????");
+   _logger.warn("rcr == null???????????????????");
 } else {
    rcr = (ResolvedConceptReference) obj;
 }

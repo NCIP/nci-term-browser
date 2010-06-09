@@ -28,6 +28,8 @@
 <%@ page import="org.LexGrid.commonTypes.Property" %>
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+<%@ page import="org.apache.log4j.*" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -42,6 +44,10 @@
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
+
+  <%!
+    private static Logger _logger = Utils.getJspLogger("concept_details_other_term.jsp");
+  %>
   <f:view>
     <%@ include file="/pages/templates/header.jsp" %>
     <div class="center-page">
@@ -212,8 +218,8 @@
                     }
                     String localCodingSchemeName = DataUtils.getLocalName(dictionary);
                     
-System.out.println("concept_details_other_term.jsp  dictionary: " + dictionary);
-System.out.println("concept_details_other_term.jsp  localCodingSchemeName: " + localCodingSchemeName);
+_logger.debug("concept_details_other_term.jsp  dictionary: " + dictionary);
+_logger.debug("concept_details_other_term.jsp  localCodingSchemeName: " + localCodingSchemeName);
                     
                     String visitedConceptStr = localCodingSchemeName + "|"
                         + code + "|" + name;

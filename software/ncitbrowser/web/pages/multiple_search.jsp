@@ -4,8 +4,12 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+<%@ page import="org.apache.log4j.*" %>
+<%!
+  private static Logger _logger = Utils.getJspLogger("multiple_search.jsp");
+%>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
@@ -117,7 +121,8 @@
               <tr>
               <%
                 List ontology_list = DataUtils.getOntologyList();
-                if (ontology_list == null) System.out.println("??????????? ontology_list == null");
+                if (ontology_list == null) 
+                    _logger.warn("??????????? ontology_list == null");
                 int num_vocabularies = ontology_list.size();
 
 //KLO 010610
