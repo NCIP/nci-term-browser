@@ -87,7 +87,7 @@ public class OntologyBean {
     private static Vector _property_type_vec = null;
     private static Vector _source_vec = null;
 
-    //private static String codingSchemeName = "NCI Metathesaurus";
+    // private static String codingSchemeName = "NCI Metathesaurus";
 
     // NameAndValueList associationNameAndValueList = null;
 
@@ -346,7 +346,8 @@ public class OntologyBean {
         return SortUtils.quickSort(v);
     }
 
-    public static Vector<String> getSupportedPropertyNames(String codingSchemeName) {
+    public static Vector<String> getSupportedPropertyNames(
+        String codingSchemeName) {
         CodingScheme cs = getCodingScheme(codingSchemeName, null);
         return getSupportedPropertyNames(cs);
     }
@@ -370,7 +371,8 @@ public class OntologyBean {
         return SortUtils.quickSort(v);
     }
 
-    public static Vector<String> getSupportedAssociationNames(String codingSchemeName) {
+    public static Vector<String> getSupportedAssociationNames(
+        String codingSchemeName) {
         CodingScheme cs = getCodingScheme(codingSchemeName, null);
         return getSupportedAssociationNames(cs);
     }

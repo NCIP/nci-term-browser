@@ -72,9 +72,9 @@ import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 /**
  * @author EVS Team
  * @version 1.0
- *
+ * 
  *          Modification history Initial implementation kim.ong@ngc.com
- *
+ * 
  */
 
 /*
@@ -257,7 +257,8 @@ public class SearchStatusBean extends Object {
 
     public List getPropertyTypeList() {
         if (propertyTypeList == null) {
-            propertyTypeList = OntologyBean.getPropertyTypeList(codingSchemeName);
+            propertyTypeList =
+                OntologyBean.getPropertyTypeList(codingSchemeName);
             if (propertyTypeList != null && propertyTypeList.size() > 0) {
                 this.selectedPropertyType =
                     ((SelectItem) propertyTypeList.get(0)).getLabel();
@@ -289,7 +290,8 @@ public class SearchStatusBean extends Object {
 
     public List getAssociationList() {
         if (associationList == null) {
-            associationList = OntologyBean.getAssociationNameList(codingSchemeName);
+            associationList =
+                OntologyBean.getAssociationNameList(codingSchemeName);
             if (associationList != null && associationList.size() > 0) {
                 this.selectedAssociation =
                     ((SelectItem) associationList.get(0)).getLabel();
@@ -322,7 +324,8 @@ public class SearchStatusBean extends Object {
 
     public List getRelationshipList() {
         if (relationshipList == null) {
-            relationshipList = OntologyBean.getAssociationNameList(codingSchemeName);
+            relationshipList =
+                OntologyBean.getAssociationNameList(codingSchemeName);
             relationshipList.add(0, new SelectItem("ALL", "ALL"));
             if (relationshipList != null && relationshipList.size() > 0) {
                 this.selectedRelationship =
