@@ -3,13 +3,12 @@ package gov.nih.nci.evs.browser.bean;
 import java.io.*;
 import java.util.*;
 
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.concepts.Concept;
-import org.apache.log4j.Logger;
+import org.LexGrid.LexBIG.Utility.Iterators.*;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.apache.log4j.*;
 
-import gov.nih.nci.evs.browser.common.Constants;
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import gov.nih.nci.evs.browser.common.*;
+import gov.nih.nci.evs.browser.properties.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->

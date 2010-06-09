@@ -1,31 +1,15 @@
 package gov.nih.nci.evs.browser.bean;
 
-import gov.nih.nci.evs.browser.utils.MailUtils;
-import gov.nih.nci.evs.browser.utils.SearchUtils;
-import gov.nih.nci.evs.browser.utils.Utils;
+import java.util.*;
 
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import javax.faces.context.*;
+import javax.faces.event.*;
+import javax.faces.model.*;
+import javax.servlet.http.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-
-import org.LexGrid.concepts.Concept;
+import org.apache.log4j.*;
 
 import gov.nih.nci.evs.browser.utils.*;
-import gov.nih.nci.evs.browser.common.Constants;
-import gov.nih.nci.evs.searchlog.SearchLog;
-
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 
 /**
  * <!-- LICENSE_TEXT_START -->

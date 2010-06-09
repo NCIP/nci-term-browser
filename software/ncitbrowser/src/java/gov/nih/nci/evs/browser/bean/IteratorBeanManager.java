@@ -1,13 +1,6 @@
 package gov.nih.nci.evs.browser.bean;
 
-import java.io.*;
 import java.util.*;
-
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.concepts.Concept;
-
-//import gov.nih.nci.evs.browser.common.Constants;
 
 /**
  * <!-- LICENSE_TEXT_START -->
