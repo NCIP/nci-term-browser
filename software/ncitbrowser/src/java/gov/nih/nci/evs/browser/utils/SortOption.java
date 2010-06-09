@@ -45,7 +45,10 @@ import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
  */
 
 public class SortOption {
-    public enum Type { FALSE, TRUE, ALL };
+    public enum Type {
+        FALSE, TRUE, ALL
+    };
+
     private Type type = Type.TRUE;
     private boolean sort_by_pt_only = true;
     private boolean apply_sort_score = true;
@@ -56,7 +59,8 @@ public class SortOption {
     public SortOption(boolean isRanking) {
         if (isRanking)
             setType(Type.ALL);
-        else setType(Type.FALSE);
+        else
+            setType(Type.FALSE);
     }
 
     public SortOption(SortOption.Type type) {
@@ -71,8 +75,7 @@ public class SortOption {
         return apply_sort_score;
     }
 
-    public Type getType()
-    {
+    public Type getType() {
         return type;
     }
 
@@ -87,7 +90,7 @@ public class SortOption {
             sort_by_pt_only = false;
             apply_sort_score = true;
             break;
-        default: //TRUE
+        default: // TRUE
             sort_by_pt_only = true;
             apply_sort_score = true;
             break;
@@ -96,14 +99,15 @@ public class SortOption {
 
     public void setType(String value) {
         if (value == null)
-            return;  // Use default values
+            return; // Use default values
         setType(Type.valueOf(value.toUpperCase()));
     }
 
     public void setTypeByPropertyFile() {
         try {
-            String value = NCItBrowserProperties.getProperty(
-                NCItBrowserProperties.SORT_BY_SCORE);
+            String value =
+                NCItBrowserProperties
+                    .getProperty(NCItBrowserProperties.SORT_BY_SCORE);
             setType(value);
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,9 +115,7 @@ public class SortOption {
     }
 
     public String toString() {
-        return type.name().toLowerCase() + " (" +
-            "sort_by_pt_only: " + sort_by_pt_only +
-            ", apply_sort_score: " + apply_sort_score + ")";
+        return type.name().toLowerCase() + " (" + "sort_by_pt_only: "
+            + sort_by_pt_only + ", apply_sort_score: " + apply_sort_score + ")";
     }
 }
-

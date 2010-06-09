@@ -56,48 +56,48 @@ import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
  */
 
 /**
- * The Class ResolvedConceptReferencesIteratorWrapper.
- * Decorates a ResolvedConceptReferencesIterator to provide
- * paging support for Associated Concept-type searches. As the iterator
- * advances, subconcepts are queried from the decorated iterator on
- * demand, rather than all at once. This elminates the need to resolve
- * large CodedNodeGraphs.
+ * The Class ResolvedConceptReferencesIteratorWrapper. Decorates a
+ * ResolvedConceptReferencesIterator to provide paging support for Associated
+ * Concept-type searches. As the iterator advances, subconcepts are queried from
+ * the decorated iterator on demand, rather than all at once. This elminates the
+ * need to resolve large CodedNodeGraphs.
  */
 public class ResolvedConceptReferencesIteratorWrapper {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 4126716487618136771L;
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = 4126716487618136771L;
 
-	/** The lbs. */
-	private ResolvedConceptReferencesIterator iterator;
+    /** The lbs. */
+    private ResolvedConceptReferencesIterator iterator;
 
-	/** The quick iterator. */
-	private String message = null;
+    /** The quick iterator. */
+    private String message = null;
 
+    public ResolvedConceptReferencesIteratorWrapper(
+        ResolvedConceptReferencesIterator iterator) {
+        this.iterator = iterator;
+        this.message = null;
+    }
 
-	public ResolvedConceptReferencesIteratorWrapper(ResolvedConceptReferencesIterator iterator) {
-		this.iterator = iterator;
-		this.message = null;
-	}
+    public ResolvedConceptReferencesIteratorWrapper(
+        ResolvedConceptReferencesIterator iterator, String message) {
+        this.iterator = iterator;
+        this.message = message;
+    }
 
-	public ResolvedConceptReferencesIteratorWrapper(ResolvedConceptReferencesIterator iterator, String message) {
-		this.iterator = iterator;
-		this.message = message;
-	}
+    public void setIterator(ResolvedConceptReferencesIterator iterator) {
+        this.iterator = iterator;
+    }
 
-	public void setIterator(ResolvedConceptReferencesIterator iterator) {
-		this.iterator = iterator;
-	}
+    public ResolvedConceptReferencesIterator getIterator() {
+        return this.iterator;
+    }
 
-	public ResolvedConceptReferencesIterator getIterator() {
-		return this.iterator;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getMessage() {
-		return this.message;
-	}
+    public String getMessage() {
+        return this.message;
+    }
 }

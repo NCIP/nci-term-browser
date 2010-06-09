@@ -67,27 +67,25 @@ import java.util.List;
  */
 
 /**
-  * @author EVS Team
-  * @version 1.0
-  *
-  * Modification history
-  *     Initial implementation kim.ong@ngc.com
-  *
+ * @author EVS Team
+ * @version 1.0
+ * 
+ *          Modification history Initial implementation kim.ong@ngc.com
+ * 
  */
 
 public class RemoteServerUtil {
     private static Logger _logger = Logger.getLogger(RemoteServerUtil.class);
     private static boolean debug = false;
     private static String _serviceInfo = "EvsServiceInfo";
-    //private Properties systemProperties = null;
+    // private Properties systemProperties = null;
     private static String serviceURL = null;
 
     public RemoteServerUtil() {
         // Do nothing
     }
 
-    public static LexBIGService createLexBIGService()
-    {
+    public static LexBIGService createLexBIGService() {
         String url = "http://ncias-d177-v.nci.nih.gov:19480/lexevsapi51";
 
         NCItBrowserProperties properties = null;
@@ -97,24 +95,24 @@ public class RemoteServerUtil {
             return createLexBIGService(url);
         } catch (Exception ex) {
             // Do nothing
-            //_logger.error("WARNING: NCItBrowserProperties loading error...");
-            //_logger.error("\t-- trying to connect to " + url + " instead.");
+            // _logger.error("WARNING: NCItBrowserProperties loading error...");
+            // _logger.error("\t-- trying to connect to " + url + " instead.");
             ex.printStackTrace();
         }
-        return null;//createLexBIGService(url);
+        return null;// createLexBIGService(url);
     }
 
-
-    public static LexBIGService createLexBIGService(String serviceUrl)
-    {
+    public static LexBIGService createLexBIGService(String serviceUrl) {
         try {
             NCItBrowserProperties properties = null;
             properties = NCItBrowserProperties.getInstance();
 
-            if (serviceUrl == null || serviceUrl.compareTo("") == 0)
-            {
-                String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
-                System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
+            if (serviceUrl == null || serviceUrl.compareTo("") == 0) {
+                String lg_config_file =
+                    properties
+                        .getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
+                System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,
+                    lg_config_file);
                 LexBIGService lbSvc = new LexBIGServiceImpl();
                 return lbSvc;
             }
@@ -122,96 +120,101 @@ public class RemoteServerUtil {
                 _logger.debug(Utils.SEPARATOR);
                 _logger.debug("LexBIGService(remote): " + serviceUrl);
             }
-            LexEVSApplicationService lexevsService = (LexEVSApplicationService)ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
+            LexEVSApplicationService lexevsService =
+                (LexEVSApplicationService) ApplicationServiceProvider
+                    .getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
             lexevsService = registerAllSecurityTokens(lexevsService);
             return (LexBIGService) lexevsService;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    //KLO 100709
-    public static LexEVSApplicationService registerAllSecurityTokens(LexEVSApplicationService lexevsService) {
-		List list = NCItBrowserProperties.getSecurityTokenList();
-		if (list == null || list.size() == 0) return lexevsService;
-		for (int i=0; i<list.size(); i++) {
+    // KLO 100709
+    public static LexEVSApplicationService registerAllSecurityTokens(
+        LexEVSApplicationService lexevsService) {
+        List list = NCItBrowserProperties.getSecurityTokenList();
+        if (list == null || list.size() == 0)
+            return lexevsService;
+        for (int i = 0; i < list.size(); i++) {
             SecurityTokenHolder holder = (SecurityTokenHolder) list.get(i);
-            lexevsService = registerSecurityToken(lexevsService, holder.getName(), holder.getValue());
-		}
-		return lexevsService;
-	}
+            lexevsService =
+                registerSecurityToken(lexevsService, holder.getName(), holder
+                    .getValue());
+        }
+        return lexevsService;
+    }
 
-    //KLO 100709
-    public static LexEVSApplicationService registerSecurityToken(LexEVSApplicationService lexevsService, String codingScheme, String token) {
-		SecurityToken securityToken = new SecurityToken();
-		securityToken.setAccessToken(token);
-		Boolean retval = null;
-		try {
-			retval = lexevsService.registerSecurityToken(codingScheme, securityToken);
-			if(retval != null && retval.equals(Boolean.TRUE))	{
-				//_logger.debug("Registration of SecurityToken was successful.");
-			}
-			else {
-				_logger.error("WARNING: Registration of SecurityToken failed.");
-			}
-		} catch (Exception e) {
-			_logger.error("WARNING: Registration of SecurityToken failed.");
-		}
-		return lexevsService;
-	}
-
-
-    //KLO 100709
-    public static LexBIGService createLexBIGService(String serviceUrl, String codingScheme, String token) {
-		SecurityToken securityToken = new SecurityToken();
-		securityToken.setAccessToken(token);
-		return createLexBIGService(serviceUrl, codingScheme, securityToken);
-	}
-
-    //KLO 100709
-    public static LexBIGService createLexBIGService(String serviceUrl, String codingScheme, SecurityToken securityToken)
-    {
+    // KLO 100709
+    public static LexEVSApplicationService registerSecurityToken(
+        LexEVSApplicationService lexevsService, String codingScheme,
+        String token) {
+        SecurityToken securityToken = new SecurityToken();
+        securityToken.setAccessToken(token);
+        Boolean retval = null;
         try {
-            if (serviceUrl == null || serviceUrl.compareTo("") == 0)
-            {
+            retval =
+                lexevsService
+                    .registerSecurityToken(codingScheme, securityToken);
+            if (retval != null && retval.equals(Boolean.TRUE)) {
+                // _logger.debug("Registration of SecurityToken was successful.");
+            } else {
+                _logger.error("WARNING: Registration of SecurityToken failed.");
+            }
+        } catch (Exception e) {
+            _logger.error("WARNING: Registration of SecurityToken failed.");
+        }
+        return lexevsService;
+    }
+
+    // KLO 100709
+    public static LexBIGService createLexBIGService(String serviceUrl,
+        String codingScheme, String token) {
+        SecurityToken securityToken = new SecurityToken();
+        securityToken.setAccessToken(token);
+        return createLexBIGService(serviceUrl, codingScheme, securityToken);
+    }
+
+    // KLO 100709
+    public static LexBIGService createLexBIGService(String serviceUrl,
+        String codingScheme, SecurityToken securityToken) {
+        try {
+            if (serviceUrl == null || serviceUrl.compareTo("") == 0) {
                 LexBIGService lbSvc = new LexBIGServiceImpl();
                 return lbSvc;
             }
 
-            LexEVSApplicationService lexevsService = (LexEVSApplicationService)ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
+            LexEVSApplicationService lexevsService =
+                (LexEVSApplicationService) ApplicationServiceProvider
+                    .getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
 
-			Boolean retval = false;
-			retval = lexevsService.registerSecurityToken(codingScheme, securityToken);
+            Boolean retval = false;
+            retval =
+                lexevsService
+                    .registerSecurityToken(codingScheme, securityToken);
 
-			if(retval.equals(Boolean.TRUE))	{
-				//_logger.debug("Registration of SecurityToken was successful.");
-			}
-			else {
-				_logger.error("WARNING: Registration of SecurityToken failed.");
-			}
+            if (retval.equals(Boolean.TRUE)) {
+                // _logger.debug("Registration of SecurityToken was successful.");
+            } else {
+                _logger.error("WARNING: Registration of SecurityToken failed.");
+            }
 
             _logger.debug("Connected to " + serviceUrl);
             return (LexBIGService) lexevsService;
-        }
-        catch (Exception e)
-        {
-			_logger.error("Unable to connected to " + serviceUrl);
+        } catch (Exception e) {
+            _logger.error("Unable to connected to " + serviceUrl);
             e.printStackTrace();
         }
         return null;
     }
-
-
 
     public static String getServiceURL() {
         return serviceURL;
     }
 
-    public static LexBIGService createLexBIGService(boolean registerSecurityTokens)
-    {
+    public static LexBIGService createLexBIGService(
+        boolean registerSecurityTokens) {
         String url = "http://ncias-d177-v.nci.nih.gov:19480/lexevsapi51";
 
         NCItBrowserProperties properties = null;
@@ -221,41 +224,38 @@ public class RemoteServerUtil {
             return createLexBIGService(url, registerSecurityTokens);
         } catch (Exception ex) {
             // Do nothing
-            //_logger.error("WARNING: NCItBrowserProperties loading error...");
-            //_logger.error("\t-- trying to connect to " + url + " instead.");
+            // _logger.error("WARNING: NCItBrowserProperties loading error...");
+            // _logger.error("\t-- trying to connect to " + url + " instead.");
             ex.printStackTrace();
         }
-        return null;//createLexBIGService(url);
-	}
+        return null;// createLexBIGService(url);
+    }
 
-
-    public static LexBIGService createLexBIGService(String serviceUrl, boolean registerSecurityTokens)
-    {
+    public static LexBIGService createLexBIGService(String serviceUrl,
+        boolean registerSecurityTokens) {
         try {
 
-// To be evaluated:
-/*
-            NCItBrowserProperties properties = null;
-            properties = NCItBrowserProperties.getInstance();
-
-            if (serviceUrl == null || serviceUrl.compareTo("") == 0)
-            {
-                String lg_config_file = properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
-                System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file);
-                LexBIGService lbSvc = new LexBIGServiceImpl();
-                return lbSvc;
-            }
-            if (debug) {
-                _logger.debug(Utils.SEPARATOR);
-                _logger.debug("LexBIGService(remote): " + serviceUrl);
-            }
-*/
-            LexEVSApplicationService lexevsService = (LexEVSApplicationService)ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
-            if (registerSecurityTokens) lexevsService = registerAllSecurityTokens(lexevsService);
+            // To be evaluated:
+            /*
+             * NCItBrowserProperties properties = null; properties =
+             * NCItBrowserProperties.getInstance();
+             * 
+             * if (serviceUrl == null || serviceUrl.compareTo("") == 0) { String
+             * lg_config_file =
+             * properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
+             * System
+             * .setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file
+             * ); LexBIGService lbSvc = new LexBIGServiceImpl(); return lbSvc; }
+             * if (debug) { _logger.debug(Utils.SEPARATOR);
+             * _logger.debug("LexBIGService(remote): " + serviceUrl); }
+             */
+            LexEVSApplicationService lexevsService =
+                (LexEVSApplicationService) ApplicationServiceProvider
+                    .getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
+            if (registerSecurityTokens)
+                lexevsService = registerAllSecurityTokens(lexevsService);
             return (LexBIGService) lexevsService;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

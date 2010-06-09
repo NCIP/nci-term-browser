@@ -68,9 +68,10 @@ public class ScoredIterator implements ResolvedConceptReferencesIterator {
     int scrolled = 0;
 
     /**
-     * Construct from a map of ScoredTerms, ordered from high to low score.
-     * If > 0, the maximum items parameter sets an upper limit on the number
-     * of top-scored items to maintain and return.
+     * Construct from a map of ScoredTerms, ordered from high to low score. If >
+     * 0, the maximum items parameter sets an upper limit on the number of
+     * top-scored items to maintain and return.
+     * 
      * @param scoredTerms
      * @param maxItems
      */
@@ -81,15 +82,19 @@ public class ScoredIterator implements ResolvedConceptReferencesIterator {
         Collections.sort(temp);
 
         // Maintain only as many items as the specified maximum ...
-        int limit = maxItems > 0 ? Math.min(maxItems, scoredTerms.size()) : scoredTerms.size();
+        int limit =
+            maxItems > 0 ? Math.min(maxItems, scoredTerms.size()) : scoredTerms
+                .size();
         int count = 0;
         this.scoredTerms = new ScoredTerm[limit];
-        for (Iterator<ScoredTerm> terms = temp.listIterator(); terms.hasNext() && count < limit; count++)
+        for (Iterator<ScoredTerm> terms = temp.listIterator(); terms.hasNext()
+            && count < limit; count++)
             this.scoredTerms[count] = terms.next();
     }
 
     /**
      * Construct from a pre-sorted array of ScoredTerms.
+     * 
      * @param scoredTerms
      */
     public ScoredIterator(ScoredTerm[] scoredTerms) {
@@ -99,10 +104,12 @@ public class ScoredIterator implements ResolvedConceptReferencesIterator {
     /**
      * Returns a specific range of items without altering cursor position.
      */
-    public ResolvedConceptReferenceList get(int start, int end) throws LBResourceUnavailableException,
-            LBInvocationException, LBParameterException {
+    public ResolvedConceptReferenceList get(int start, int end)
+            throws LBResourceUnavailableException, LBInvocationException,
+            LBParameterException {
         verifyResources();
-        ResolvedConceptReferenceList result = new ResolvedConceptReferenceList();
+        ResolvedConceptReferenceList result =
+            new ResolvedConceptReferenceList();
         int stop = Math.max(0, Math.min(scoredTerms.length, end));
         if (start < 0 || stop < start)
             throw new LBParameterException("Index out of bounds.");
@@ -128,7 +135,8 @@ public class ScoredIterator implements ResolvedConceptReferencesIterator {
     /**
      * Returns the next item and advances the cursor.
      */
-    public ResolvedConceptReference next() throws LBResourceUnavailableException, LBInvocationException {
+    public ResolvedConceptReference next()
+            throws LBResourceUnavailableException, LBInvocationException {
         verifyResources();
         return hasNext() ? scoredTerms[position++].ref : null;
     }
@@ -136,12 +144,13 @@ public class ScoredIterator implements ResolvedConceptReferencesIterator {
     /**
      * Returns the next 'n' items and advances the cursor.
      */
-    public ResolvedConceptReferenceList next(int maxToReturn) throws LBResourceUnavailableException,
-            LBInvocationException {
+    public ResolvedConceptReferenceList next(int maxToReturn)
+            throws LBResourceUnavailableException, LBInvocationException {
         verifyResources();
         ResolvedConceptReferenceList result = null;
         try {
-            int pageSize = Math.max(0, Math.min(maxToReturn, numberRemaining()));
+            int pageSize =
+                Math.max(0, Math.min(maxToReturn, numberRemaining()));
             result = get(position, position + pageSize);
             position += pageSize;
         } catch (LBParameterException e) {
@@ -155,8 +164,8 @@ public class ScoredIterator implements ResolvedConceptReferencesIterator {
      * Skips 'n' items which are available via getNext() until a call to next(),
      * returning self.
      */
-    public ResolvedConceptReferencesIterator scroll(int maxToReturn) throws LBResourceUnavailableException,
-            LBInvocationException {
+    public ResolvedConceptReferencesIterator scroll(int maxToReturn)
+            throws LBResourceUnavailableException, LBInvocationException {
         verifyResources();
         scrolled = Math.max(0, Math.min(maxToReturn, numberRemaining()));
         position += scrolled;
@@ -191,6 +200,7 @@ public class ScoredIterator implements ResolvedConceptReferencesIterator {
      */
     protected void verifyResources() throws LBResourceUnavailableException {
         if (scoredTerms == null)
-            throw new LBResourceUnavailableException("Iterator resources released.");
+            throw new LBResourceUnavailableException(
+                "Iterator resources released.");
     }
 }
