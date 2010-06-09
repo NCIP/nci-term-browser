@@ -1,16 +1,8 @@
 package gov.nih.nci.evs.browser.properties;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.HashMap;
-
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
