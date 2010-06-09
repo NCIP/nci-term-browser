@@ -7,10 +7,12 @@
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+<%@ page import="org.apache.log4j.*" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
@@ -25,6 +27,11 @@
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+
+  <%!
+    private static Logger _logger = Utils.getJspLogger("multiple_search_results.jsp");
+  %>
+
   <f:view>
     <%@ include file="/pages/templates/header.jsp" %>
     <div class="center-page">
@@ -401,7 +408,7 @@ request.getSession().setAttribute("matchText", match_text);
 <%
 
 delay = System.currentTimeMillis() - ms;
-System.out.println("Total page rendering delay (millisec.): " + delay);
+_logger.debug("Total page rendering delay (millisec.): " + delay);
 
 %>
 

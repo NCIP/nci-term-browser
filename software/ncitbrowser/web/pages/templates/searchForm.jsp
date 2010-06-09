@@ -1,7 +1,9 @@
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.Utils" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.LicenseBean" %>
+<%@ page import="org.apache.log4j.*" %>
 
 <script type="text/javascript">
   function cursor_wait() {
@@ -30,9 +32,9 @@
   }
 </script>
 
-  
 <%
-System.out.println("********************** searchForm.jsp: "); 
+Logger logger = Utils.getJspLogger("searchForm.jsp");
+logger.debug("********************** searchForm.jsp: "); 
 
 
     String userAgent = request.getHeader("user-agent");
@@ -50,7 +52,7 @@ System.out.println("********************** searchForm.jsp: ");
     
     vocab_name = DataUtils.getCodingSchemeName(vocab_name);
     
-System.out.println("searchForm.jsp vocab_name: " + vocab_name);
+logger.debug("searchForm.jsp vocab_name: " + vocab_name);
 
 
 
