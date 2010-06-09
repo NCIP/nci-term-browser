@@ -1,19 +1,13 @@
 package gov.nih.nci.evs.browser.bean;
 
-import java.io.*;
-import java.util.HashSet;
-import java.util.Vector;
+import java.util.*;
 
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-import org.apache.log4j.Logger;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.apache.log4j.*;
 
-//import gov.nih.nci.evs.browser.utils.RemoteServerUtil;
 import gov.nih.nci.evs.browser.utils.*;
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
-import gov.nih.nci.evs.browser.common.Constants;
+import gov.nih.nci.evs.browser.properties.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->

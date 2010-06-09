@@ -1,35 +1,17 @@
 package gov.nih.nci.evs.browser.bean;
 
 import gov.nih.nci.evs.browser.utils.*;
+import java.util.*;
+import javax.faces.model.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-
-import javax.faces.model.SelectItem;
-
-import org.LexGrid.LexBIG.DataModel.Collections.MetadataPropertyList;
-import org.LexGrid.LexBIG.DataModel.Core.AbsoluteCodingSchemeVersionReference;
-import org.LexGrid.LexBIG.DataModel.Core.MetadataProperty;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGServiceMetadata;
-import org.LexGrid.LexBIG.Utility.Constructors;
-
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.commonTypes.PropertyQualifier;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.Utility.*;
+import org.LexGrid.codingSchemes.*;
 import org.LexGrid.naming.*;
-import org.LexGrid.LexBIG.Extensions.Generic.*;
-import org.LexGrid.LexBIG.DataModel.NCIHistory.NCIChangeEvent;
-
 import org.LexGrid.LexBIG.Impl.Extensions.GenericExtensions.*;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
