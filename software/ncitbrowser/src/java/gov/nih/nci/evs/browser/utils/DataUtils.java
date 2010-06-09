@@ -1,75 +1,32 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
-import java.util.Arrays;
-import javax.faces.model.SelectItem;
+import java.sql.*;
+import javax.faces.model.*;
 
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-import org.LexGrid.LexBIG.History.HistoryService;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.Utility.Constructors;
-import org.LexGrid.concepts.Concept;
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
-import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
-import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
-import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
-import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
-import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
-import org.LexGrid.LexBIG.DataModel.Core.Association;
-import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.concepts.Presentation;
-import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
-import org.LexGrid.commonTypes.EntityDescription;
-import org.LexGrid.commonTypes.Property;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.LexBIG.Exceptions.*;
+import org.LexGrid.LexBIG.History.*;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.Utility.*;
+import org.LexGrid.concepts.*;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.*;
+import org.LexGrid.LexBIG.Utility.Iterators.*;
+import org.LexGrid.codingSchemes.*;
+import org.LexGrid.commonTypes.*;
 import org.LexGrid.relations.Relations;
-import org.LexGrid.versions.SystemRelease;
-import org.LexGrid.commonTypes.PropertyQualifier;
-import org.LexGrid.commonTypes.Source;
-import org.LexGrid.naming.SupportedSource;
-import org.LexGrid.naming.SupportedPropertyQualifier;
-import org.LexGrid.LexBIG.DataModel.Core.types.CodingSchemeVersionStatus;
-import org.LexGrid.naming.SupportedAssociation;
-import org.LexGrid.naming.SupportedProperty;
-import org.LexGrid.naming.SupportedRepresentationalForm;
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
-import org.LexGrid.naming.Mappings;
-import org.LexGrid.naming.SupportedHierarchy;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
+import org.LexGrid.versions.*;
+import org.LexGrid.naming.*;
+import org.LexGrid.LexBIG.DataModel.Core.types.*;
+import org.LexGrid.LexBIG.Extensions.Generic.*;
 
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import gov.nih.nci.evs.browser.properties.*;
 import static gov.nih.nci.evs.browser.common.Constants.*;
 
-import org.LexGrid.naming.SupportedNamespace;
-import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
-import org.LexGrid.concepts.Entity;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
-import org.LexGrid.LexBIG.DataModel.Collections.MetadataPropertyList;
-import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -1034,7 +991,7 @@ public class DataUtils {
             }
             if (hs != null) {
                 SystemRelease release = hs.getLatestBaseline();
-                Date date = release.getReleaseDate();
+                java.util.Date date = release.getReleaseDate();
                 return formatter.format(date);
             }
         } catch (Exception e) {

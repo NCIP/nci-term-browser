@@ -1,23 +1,17 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Vector;
+import java.text.*;
+import java.util.*;
 
-import org.LexGrid.LexBIG.DataModel.Collections.NCIChangeEventList;
-import org.LexGrid.LexBIG.DataModel.NCIHistory.NCIChangeEvent;
-import org.LexGrid.LexBIG.DataModel.NCIHistory.types.ChangeType;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-import org.LexGrid.LexBIG.History.HistoryService;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.Utility.Constructors;
-import org.LexGrid.concepts.Concept;
-import org.apache.log4j.Logger;
-
-import static gov.nih.nci.evs.browser.common.Constants.*;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.NCIHistory.*;
+import org.LexGrid.LexBIG.DataModel.NCIHistory.types.*;
+import org.LexGrid.LexBIG.Exceptions.*;
+import org.LexGrid.LexBIG.History.*;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.Utility.*;
+import org.LexGrid.concepts.*;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
