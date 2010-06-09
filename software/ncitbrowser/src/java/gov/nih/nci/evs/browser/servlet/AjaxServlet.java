@@ -54,7 +54,7 @@ import org.lexevs.tree.service.TreeService;
 import org.lexevs.tree.service.TreeServiceFactory;
 
 public final class AjaxServlet extends HttpServlet {
-
+    private static Logger _logger = Logger.getLogger(AjaxServlet.class);
 	/**
 	 * local constants
 	 */
@@ -156,7 +156,7 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 				} catch (Exception e) {
 				}
 				response.getWriter().write(json.toString());
-				System.out.println("Run time (milliseconds): "
+				_logger.debug("Run time (milliseconds): "
 						+ (System.currentTimeMillis() - ms));
 			}
 		}
@@ -203,7 +203,7 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 							response.getWriter().write(json.toString());
 							response.getWriter().flush();
 
-							System.out.println("Run time (milliseconds): "
+							_logger.debug("Run time (milliseconds): "
 									+ (System.currentTimeMillis() - ms));
 							return;
 						}
@@ -216,7 +216,7 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 				response.getWriter().write(json.toString());
 				response.getWriter().flush();
 
-				System.out.println("Run time (milliseconds): "
+				_logger.debug("Run time (milliseconds): "
 						+ (System.currentTimeMillis() - ms));
 				return;
 			}
@@ -259,7 +259,7 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 				response.getWriter().write(json.toString());
 				response.getWriter().flush();
 
-				System.out.println("Run time (milliseconds): "
+				_logger.debug("Run time (milliseconds): "
 						+ (System.currentTimeMillis() - ms));
 				return;
 			}
@@ -287,7 +287,7 @@ ontology_display_name = DataUtils.searchFormalName(ontology_display_name);
 			response.getWriter().write(json.toString());
 			//response.getWriter().flush();
 
-			System.out.println("Run time (milliseconds): "
+			_logger.debug("Run time (milliseconds): "
 					+ (System.currentTimeMillis() - ms));
 			return;
 		}
