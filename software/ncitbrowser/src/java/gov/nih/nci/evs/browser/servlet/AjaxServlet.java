@@ -1,5 +1,17 @@
 package gov.nih.nci.evs.browser.servlet;
 
+import org.json.*;
+import gov.nih.nci.evs.browser.utils.*;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+import org.apache.log4j.*;
+
+import gov.nih.nci.evs.browser.properties.*;
+import static gov.nih.nci.evs.browser.common.Constants.*;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction 
@@ -50,27 +62,6 @@ package gov.nih.nci.evs.browser.servlet;
  *     Initial implementation kim.ong@ngc.com
  *
  */
-
-import org.json.*;
-import gov.nih.nci.evs.browser.utils.CacheController;
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
-import static gov.nih.nci.evs.browser.common.Constants.*;
-import gov.nih.nci.evs.browser.utils.DataUtils;
-
-import org.lexevs.tree.json.JsonConverterFactory;
-import org.lexevs.tree.model.LexEvsTree;
-import org.lexevs.tree.model.LexEvsTreeNode;
-import org.lexevs.tree.service.TreeService;
-import org.lexevs.tree.service.TreeServiceFactory;
 
 public final class AjaxServlet extends HttpServlet {
     private static Logger _logger = Logger.getLogger(AjaxServlet.class);
