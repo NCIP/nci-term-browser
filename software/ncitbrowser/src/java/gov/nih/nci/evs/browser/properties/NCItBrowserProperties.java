@@ -45,7 +45,7 @@ import org.apache.log4j.Logger;
  */
 
 public class NCItBrowserProperties {
-
+    private static Logger _logger = Logger.getLogger(NCItBrowserProperties.class);
         private static List displayItemList;
         private static List metadataElementList;
         private static List defSourceMappingList;
@@ -131,10 +131,10 @@ public class NCItBrowserProperties {
                         maxTreeLevel = Integer.parseInt(max_tree_level_str);
 
                         service_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-                        //System.out.println("EVS_SERVICE_URL: " + service_url);
+                        //_logger.info("EVS_SERVICE_URL: " + service_url);
 
                         lg_config_file = NCItBrowserProperties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
-                        //System.out.println("LG_CONFIG_FILE: " + lg_config_file);
+                        //_logger.info("LG_CONFIG_FILE: " + lg_config_file);
 
                         sort_by_score = NCItBrowserProperties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
                         ncicb_contact_url = NCItBrowserProperties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
