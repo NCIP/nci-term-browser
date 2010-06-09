@@ -7,6 +7,7 @@ import java.util.*;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.concepts.Concept;
+import org.apache.log4j.Logger;
 
 import gov.nih.nci.evs.browser.common.Constants;
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
@@ -44,6 +45,7 @@ import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
  */
 
 public class IteratorBean extends Object {
+    private static Logger _logger = Logger.getLogger(IteratorBean.class);
     static int DEFAULT_MAX_RETURN = 100;
     ResolvedConceptReferencesIterator iterator = null;
     int size = 0;
@@ -161,7 +163,7 @@ public class IteratorBean extends Object {
 
 
 	public List getData(int idx1, int idx2) {
-		System.out.println("Retrieving data (from: " + idx1 + " to: " + idx2 + ")");
+		_logger.debug("Retrieving data (from: " + idx1 + " to: " + idx2 + ")");
 		long ms = System.currentTimeMillis();
 		long dt = 0;
 		long total_delay = 0;
@@ -179,7 +181,7 @@ public class IteratorBean extends Object {
 				total_delay = total_delay + dt;
 				if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
 					timeout = true;
-					System.out.println("Time out at: " + lastResolved);
+					_logger.debug("Time out at: " + lastResolved);
 					break;
 				}
 			}
@@ -213,18 +215,18 @@ public class IteratorBean extends Object {
 			rcr_list.set(i, rcr);
 		}
 
-		System.out.println("getData Run time (ms): "
+		_logger.debug("getData Run time (ms): "
 					+ (System.currentTimeMillis() - ms));
 		return rcr_list;
 	}
 
 
 	protected void displayRef(ResolvedConceptReference ref){
-		System.out.println(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+		_logger.debug(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
 	}
 
 	protected void displayRef(int k, ResolvedConceptReference ref){
-		System.out.println("(" + k + ") " + ref.getCodingSchemeName() + " " + ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+		_logger.debug("(" + k + ") " + ref.getCodingSchemeName() + " " + ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
 	}
 
 	protected void displayRef(OutputStreamWriter osWriter, int k, ResolvedConceptReference ref){
@@ -237,7 +239,7 @@ public class IteratorBean extends Object {
 
 	public void dumpData(List list) {
 		if (list == null) {
-			System.out.println("WARNING: dumpData list = null???");
+			_logger.warn("WARNING: dumpData list = null???");
 			return;
 		}
 		for (int i=0; i<list.size(); i++) {
@@ -249,7 +251,7 @@ public class IteratorBean extends Object {
 
 	public void dumpData(OutputStreamWriter osWriter, List list) {
 		if (list == null) {
-			System.out.println("WARNING: dumpData list = null???");
+			_logger.warn("WARNING: dumpData list = null???");
 			return;
 		}
 		for (int i=0; i<list.size(); i++) {
