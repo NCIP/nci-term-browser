@@ -50,49 +50,49 @@ import org.apache.log4j.Logger;
 
 public class Utils {
     private static Logger _logger = Logger.getLogger(Utils.class);
-	public static final String SEPARATOR = 
-		"----------------------------------------" +
-		"----------------------------------------";
+    public static final String SEPARATOR =
+        "----------------------------------------"
+            + "----------------------------------------";
     private static DecimalFormat _doubleFormatter = new DecimalFormat("0.00");
 
     public static Logger getJspLogger(String fileName) {
         String name = fileName;
         int i = fileName.lastIndexOf('.');
         if (i > 0)
-            name = fileName.substring(0, i) + "_" + fileName.substring(i+1);
+            name = fileName.substring(0, i) + "_" + fileName.substring(i + 1);
         return Logger.getLogger("gov.nih.nci.evs.browser.jsp." + name);
     }
-    
+
     public static class StopWatch {
         private long _startMS = 0;
-        
+
         public StopWatch() {
             start();
         }
-    
+
         public void start() {
             _startMS = System.currentTimeMillis();
         }
-        
+
         public long duration() {
             return System.currentTimeMillis() - _startMS;
         }
-        
+
         public String getResult() {
             long time = duration();
-            double timeSec = time/1000.0;
-            double timeMin = timeSec/60.0;
-            
-            return "Run time: " + time + " ms, " + 
-                _doubleFormatter.format(timeSec) + " sec, " + 
-                _doubleFormatter.format(timeMin) + " min";
+            double timeSec = time / 1000.0;
+            double timeMin = timeSec / 60.0;
+
+            return "Run time: " + time + " ms, "
+                + _doubleFormatter.format(timeSec) + " sec, "
+                + _doubleFormatter.format(timeMin) + " min";
         }
     }
-    
-    public static String[] toStrings(String value, String delimiter, 
+
+    public static String[] toStrings(String value, String delimiter,
         boolean includeDelimiter, boolean trim) {
-        StringTokenizer tokenizer = new StringTokenizer(
-            value, delimiter, includeDelimiter);
+        StringTokenizer tokenizer =
+            new StringTokenizer(value, delimiter, includeDelimiter);
         ArrayList<String> list = new ArrayList<String>();
         while (tokenizer.hasMoreElements()) {
             String s = tokenizer.nextToken();
@@ -103,22 +103,22 @@ public class Utils {
         }
         return list.toArray(new String[list.size()]);
     }
-    
-    public static String[] toStrings(String value, String delimiter, 
+
+    public static String[] toStrings(String value, String delimiter,
         boolean includeDelimiter) {
         return toStrings(value, delimiter, includeDelimiter, true);
     }
-    
+
     public static void debug(String msg, String[] list) {
         if (msg != null && msg.length() > 0)
             _logger.debug(msg);
         if (list == null)
             return;
-        for (int i=0; i<list.length; ++i) {
-            _logger.debug("  " + (i+1) + ") " + list[i]);
+        for (int i = 0; i < list.length; ++i) {
+            _logger.debug("  " + (i + 1) + ") " + list[i]);
         }
     }
-    
+
     public static String toHtml(String text) {
         text = text.replaceAll("\n", "<br/>");
         text = text.replaceAll("  ", "&nbsp;&nbsp;");

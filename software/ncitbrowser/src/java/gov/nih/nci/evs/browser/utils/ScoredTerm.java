@@ -54,7 +54,7 @@ class ScoredTerm implements Comparable<ScoredTerm> {
 
     /**
      * Construct a ScoredTerm based on the given concept reference and score.
-     *
+     * 
      * @param ref
      * @param score
      */
