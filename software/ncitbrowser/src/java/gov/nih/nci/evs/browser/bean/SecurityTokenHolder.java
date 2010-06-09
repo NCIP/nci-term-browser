@@ -43,53 +43,52 @@ package gov.nih.nci.evs.browser.bean;
  */
 
 /**
-  * @author EVS Team
-  * @version 1.0
-  *
-  * Modification history
-  *     Initial implementation kim.ong@ngc.com
-  *
+ * @author EVS Team
+ * @version 1.0
+ * 
+ *          Modification history Initial implementation kim.ong@ngc.com
+ * 
  */
 
 public class SecurityTokenHolder {
 
-	private String name;
-	private String value;
+    private String name;
+    private String value;
 
-	public SecurityTokenHolder(){
+    public SecurityTokenHolder() {
 
-	}
+    }
 
-	public SecurityTokenHolder(String name, String value) {
-		this.name = name;
-		this.value = value;
-	}
+    public SecurityTokenHolder(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public String getValue() {
-		return this.value;
-	}
+    public String getValue() {
+        return this.value;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("SecurityTokenHolder ");
-		sb.append("\n");
-		sb.append("\tname: " + name);
-		sb.append("\tvalue: " + value);
-		sb.append("\n");
-		sb.append("\n");
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("SecurityTokenHolder ");
+        sb.append("\n");
+        sb.append("\tname: " + name);
+        sb.append("\tvalue: " + value);
+        sb.append("\n");
+        sb.append("\n");
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 }
