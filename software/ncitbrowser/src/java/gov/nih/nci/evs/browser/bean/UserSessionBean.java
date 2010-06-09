@@ -67,14 +67,14 @@ import org.apache.log4j.Logger;
  */
 
 public class UserSessionBean extends Object {
+    private static Logger _logger = Logger.getLogger(UserSessionBean.class);
+
     private static String contains_warning_msg = "(WARNING: Only a subset of results may appear due to current limits in the terminology server (see Known Issues on the Help page).)";
     private String selectedQuickLink = null;
     private List quickLinkList = null;
 
     public List<SelectItem> ontologyList = null;
     public List<String> ontologiesToSearchOn = null;
-
-    private static Logger _logger = Logger.getLogger(UserSessionBean.class);
 
     public UserSessionBean() {
         ontologiesToSearchOn = new ArrayList<String>();
@@ -98,7 +98,7 @@ public class UserSessionBean extends Object {
             return;
         String newValue = (String) event.getNewValue();
 
-        //System.out.println("quickLinkChanged; " + newValue);
+        //_logger.debug("quickLinkChanged; " + newValue);
         setSelectedQuickLink(newValue);
 
         HttpServletResponse response = (HttpServletResponse) FacesContext
@@ -169,7 +169,7 @@ public class UserSessionBean extends Object {
 			scheme = Constants.CODING_SCHEME_NAME;
 		}
 
-System.out.println("UserSessionBean scheme: " + scheme);
+_logger.debug("UserSessionBean scheme: " + scheme);
 
  //KLO, 012610
 		if (searchTarget.compareTo("relationships") == 0 && matchAlgorithm.compareTo("contains") == 0) {
@@ -192,12 +192,12 @@ System.out.println("UserSessionBean scheme: " + scheme);
 
         if (NCItBrowserProperties.debugOn) {
             try {
-                System.out.println(Utils.SEPARATOR);
-                System.out.println("* criteria: " + matchText);
-                //System.out.println("* matchType: " + matchtype);
-                System.out.println("* source: " + source);
-                System.out.println("* ranking: " + ranking);
-               // System.out.println("* sortOption: " + sortOption);
+                _logger.debug(Utils.SEPARATOR);
+                _logger.debug("* criteria: " + matchText);
+                //_logger.debug("* matchType: " + matchtype);
+                _logger.debug("* source: " + source);
+                _logger.debug("* ranking: " + ranking);
+               // _logger.debug("* sortOption: " + sortOption);
             } catch (Exception e) {
             }
         }
@@ -317,7 +317,7 @@ System.out.println("UserSessionBean scheme: " + scheme);
 
                 request.getSession().setAttribute("dictionary", scheme);
 
-                System.out.println("UserSessionBean request.getSession().setAttribute dictionary: " + scheme);
+                _logger.debug("UserSessionBean request.getSession().setAttribute dictionary: " + scheme);
 
 
                 return "search_results";
@@ -339,7 +339,7 @@ System.out.println("UserSessionBean scheme: " + scheme);
                 } else {
 					if (ref.getConceptCode() == null) {
 						String message = "Code has not been assigned to the concept matches with '" + matchText + "'";
-						System.out.println("WARNING: " + message);
+						_logger.warn("WARNING: " + message);
 						request.getSession().setAttribute("message", message);
 						request.getSession().setAttribute("dictionary", scheme);
 						return "message";
@@ -354,7 +354,7 @@ System.out.println("UserSessionBean scheme: " + scheme);
                         c = DataUtils.getConceptByCode(scheme, null, null, ref.getConceptCode());
                         if (c == null) {
 							String message = "Unable to find the concept with a code '" + ref.getConceptCode() + "'";
-							System.out.println("WARNING: " + message);
+							_logger.warn("WARNING: " + message);
 							request.getSession().setAttribute("message", message);
 							request.getSession().setAttribute("dictionary", scheme);
 							return "message";
@@ -569,7 +569,7 @@ System.out.println("UserSessionBean scheme: " + scheme);
     public void ontologySelectionChanged(ValueChangeEvent event) {
 
         if (event.getNewValue() == null) {
-            //System.out.println("ontologySelectionChanged; event.getNewValue() == null ");
+            //_logger.warn("ontologySelectionChanged; event.getNewValue() == null ");
             return;
         }
         String newValue = (String) event.getNewValue();
@@ -785,13 +785,13 @@ request.getSession().setAttribute("matchText", HTTPUtils.convertJSPString(matchT
 
         if (NCItBrowserProperties.debugOn) {
             try {
-                System.out.println(Utils.SEPARATOR);
-                System.out.println("* criteria: " + matchText);
-                System.out.println("* source: " + source);
-                System.out.println("* ranking: " + ranking);
-                System.out.println("* ontology_list: ");
+                _logger.debug(Utils.SEPARATOR);
+                _logger.debug("* criteria: " + matchText);
+                _logger.debug("* source: " + source);
+                _logger.debug("* ranking: " + ranking);
+                _logger.debug("* ontology_list: ");
                 for (int i=0; i<ontology_list.length; ++i) {
-                    System.out.println("  " + i + ") " + ontology_list[i]);
+                    _logger.debug("  " + i + ") " + ontology_list[i]);
                 }
             } catch (Exception e) {
             }
@@ -889,7 +889,7 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
                             return "license";
                         }
                     } else {
-                        System.out.println("Unable to identify " + key);
+                        _logger.warn("Unable to identify " + key);
                     }
                 }
             }
@@ -910,13 +910,13 @@ request.getSession().setAttribute("defaultOntologiesToSearchOnStr", defaultOntol
         if (searchTarget.compareTo("names") == 0) {
 			long ms = System.currentTimeMillis();
 			long delay = 0;
-			System.out.println("Calling SearchUtils().searchByName " + matchText);
+			_logger.debug("Calling SearchUtils().searchByName " + matchText);
             ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByName(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn);
 			if (wrapper != null) {
 				iterator = wrapper.getIterator();
 		    }
 			delay = System.currentTimeMillis() - ms;
-			System.out.println("searchByName delay (millisec.): " + delay);
+			_logger.debug("searchByName delay (millisec.): " + delay);
 
 		} else if (searchTarget.compareTo("properties") == 0) {
             ResolvedConceptReferencesIteratorWrapper wrapper = new SearchUtils().searchByProperties(schemes, versions, matchText, source, matchAlgorithm, excludeDesignation, ranking, maxToReturn);
@@ -1011,7 +1011,7 @@ request.getSession().setAttribute("matchText", convertJSPString);
 				//route to multiple_search_results.jsp
 request.getSession().setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
 
-				System.out.println("Start to render search_results ... ");
+				_logger.debug("Start to render search_results ... ");
 				return "search_results";
 			}
         }
@@ -1210,7 +1210,7 @@ request.getSession().setAttribute("matchText", HTTPUtils.convertJSPString(matchT
                     maxToReturn);
             key = searchFields.getKey();
 
-System.out.println("advancedSearchAction " + key);
+_logger.debug("advancedSearchAction " + key);
 
 
             if (iteratorBeanManager.containsIteratorBean(key)) {
