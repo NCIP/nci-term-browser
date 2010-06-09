@@ -167,6 +167,7 @@ import org.LexGrid.LexBIG.Exceptions.LBParameterException;
  */
 
 public class SearchUtils {
+    private static Logger _logger = Logger.getLogger(SearchUtils.class);
     //int maxReturn = 5000;
     private boolean apply_sort_score = false;
 	Connection con;
@@ -265,7 +266,7 @@ public class SearchUtils {
 			//EVSApplicationService lbSvc = rsu.createLexBIGService();
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-			if(csrl == null) System.out.println("csrl is NULL");
+			if(csrl == null) _logger.debug("csrl is NULL");
 
 			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
 			for (int i=0; i<csrs.length; i++)
@@ -289,7 +290,7 @@ public class SearchUtils {
 							codingSchemeMap.put((Object) formalname, (Object) scheme);
 
 							String value = formalname + " (version: " + representsVersion + ")";
-							System.out.println(value);
+							_logger.debug(value);
 
 							csnv2codingSchemeNameMap.put(value, formalname);
 							csnv2VersionMap.put(value, representsVersion);
@@ -305,7 +306,7 @@ public class SearchUtils {
 								codingSchemeMap.put((Object) formalname, (Object) scheme);
 
 								String value = formalname + " (version: " + representsVersion + ")";
-								System.out.println(value);
+								_logger.debug(value);
 
 								csnv2codingSchemeNameMap.put(value, formalname);
 								csnv2VersionMap.put(value, representsVersion);
@@ -322,7 +323,7 @@ public class SearchUtils {
 									codingSchemeMap.put((Object) formalname, (Object) scheme);
 
 									String value = formalname + " (version: " + representsVersion + ")";
-									System.out.println(value);
+									_logger.debug(value);
 
 									csnv2codingSchemeNameMap.put(value, formalname);
 									csnv2VersionMap.put(value, representsVersion);
@@ -380,7 +381,7 @@ public class SearchUtils {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+			_logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
 		}
 		return v;
 	}
@@ -423,7 +424,7 @@ public class SearchUtils {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
-			System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+			_logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
 		}
 		return v;
 	}
@@ -487,7 +488,7 @@ public class SearchUtils {
 	     } catch (Exception e) {
 			 e.printStackTrace();
 		 }
-		 System.out.println("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
+		 _logger.debug("Version corresponding to tag " + ltag + " is not found " + " in " + codingSchemeName);
 		 return null;
 	 }
 
@@ -499,7 +500,7 @@ public class SearchUtils {
 			//EVSApplicationService lbSvc = rsu.createLexBIGService();
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-			if(csrl == null) System.out.println("csrl is NULL");
+			if(csrl == null) _logger.debug("csrl is NULL");
 
 			CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
 			for (int i=0; i<csrs.length; i++)
@@ -662,14 +663,14 @@ public class SearchUtils {
              
 			if (lbSvc == null)
 			{
-				System.out.println("lbSvc = null");
+				_logger.warn("lbSvc = null");
 				return null;
 			}
 
 			cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
 			if (cns == null)
 			{
-				System.out.println("cns = null");
+				_logger.warn("cns = null");
 				return null;
 			}
 
@@ -731,7 +732,7 @@ public class SearchUtils {
 
 			if (lbSvc == null)
 			{
-				System.out.println("lbSvc == null???");
+				_logger.warn("lbSvc == null???");
 				return null;
 			}
 
@@ -755,7 +756,7 @@ public class SearchUtils {
 
 			if (matches == null)
 			{
-				System.out.println("Concep not found.");
+				_logger.warn("Concep not found.");
 				return null;
 			}
 
@@ -828,7 +829,7 @@ public class SearchUtils {
 		Vector v = new Vector();
 		if (iterator == null)
 		{
-			System.out.println("No match.");
+			_logger.debug("No match.");
 			return v;
 		}
 		try {
@@ -886,7 +887,7 @@ public class SearchUtils {
 
 			 if (cns == null)
 			 {
-				 System.out.println("cng.toNodeList returns null???");
+				 _logger.warn("cng.toNodeList returns null???");
 				 return null;
 			 }
 
@@ -905,7 +906,7 @@ public class SearchUtils {
 
 	 		 if(iterator == null)
 	 		 {
-				 System.out.println("cns.resolve returns null???");
+				 _logger.warn("cns.resolve returns null???");
 			 }
 	 		 return iterator;
 
@@ -1089,7 +1090,7 @@ public class SearchUtils {
 				} catch (Exception ex) {
 
 				}
-				System.out.println("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
+				_logger.debug("Sorting delay ---- Run time (ms): " + (System.currentTimeMillis() - ms));
 		}
 
 
@@ -1140,17 +1141,17 @@ public class SearchUtils {
         long ms = System.currentTimeMillis();
         Util.StopWatch stopWatch = new Util.StopWatch();
 		Vector<org.LexGrid.concepts.Concept> v = searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
-		//DYEE: System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+		//DYEE: _logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
 		int j = 0;
 		if (v != null)
 		{
-			//DYEE: System.out.println("v.size() = " + v.size());
+			//DYEE: _logger.debug("v.size() = " + v.size());
 			for (int i=0; i<v.size(); i++)
 			{
 				j = i + 1;
 				Concept ce = (Concept) v.elementAt(i);
 				if (displayConcepts)
-				    System.out.println("(" + j + ")" + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
+				    _logger.debug("(" + j + ")" + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
 			}
 		}
 		
@@ -1163,9 +1164,9 @@ public class SearchUtils {
         _excelBuffer.insert(0, matchText + "\t");
         //_excelBuffer.insert(0, "Excel: ");
         if (_printDebug)
-            System.out.print(_debugBuffer.toString());
+            _logger.debug(_debugBuffer.toString());
         if (_printExcel)
-            System.out.println(_excelBuffer.toString());
+            _logger.debug(_excelBuffer.toString());
 	}
 
 	protected static List<String> toWords(String s, String delimitRegex, boolean removeStopWords, boolean removeDuplicates) {
@@ -1404,8 +1405,8 @@ public class SearchUtils {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void prompt() {
         while (true) {
-            System.out.println();
-            System.out.println(Util.SEPARATOR);
+            _logger.debug();
+            _logger.debug(Util.SEPARATOR);
             _matchText = Prompt.prompt("text (q to Quit)", _matchText);
             if (_matchText.equalsIgnoreCase("q"))
                 break;
@@ -1430,14 +1431,14 @@ public class SearchUtils {
         
         for (String algorithm : algorithms) {
             for (String keyword : keywords) {
-                //System.out.println();
-                //System.out.println(Util.SEPARATOR);
+                //_logger.debug();
+                //_logger.debug(Util.SEPARATOR);
                 testSearchByName(keyword, algorithm, _displayConcepts);
             }
         }
-        System.out.println();
-        System.out.println(Util.SEPARATOR);
-        System.out.println("Done.");
+        _logger.debug();
+        _logger.debug(Util.SEPARATOR);
+        _logger.debug("Done.");
     }
     
 
@@ -1447,7 +1448,7 @@ public class SearchUtils {
 		 if (args.length == 1)
 		 {
 			 url = args[0];
-			 //DYEE: System.out.println(url);
+			 //DYEE: _logger.debug(url);
 		 }
 
          SearchUtils test = new SearchUtils(url);

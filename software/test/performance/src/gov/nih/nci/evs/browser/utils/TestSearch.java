@@ -165,7 +165,7 @@ import org.LexGrid.LexBIG.Exceptions.LBParameterException;
  */
 
 public class TestSearch {
-
+    private static Logger _logger = Logger.getLogger(TestSearch.class);
     int maxReturn = 5000;
 	Connection con;
 	Statement stmt;
@@ -229,7 +229,7 @@ public class TestSearch {
     {
         //setCodingSchemeMap();
         this.url = url;
-        System.out.println("server URL: " + url);
+        _logger.debug("server URL: " + url);
 	}
 
 
@@ -339,14 +339,14 @@ public class TestSearch {
 
 			if (lbSvc == null)
 			{
-				System.out.println("lbSvc = null");
+				_logger.warn("lbSvc = null");
 				return null;
 			}
 
 			cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, versionOrTag);
 			if (cns == null)
 			{
-				System.out.println("cns = null");
+				_logger.warn("cns = null");
 				return null;
 			}
 
@@ -420,7 +420,7 @@ public class TestSearch {
 		Vector v = new Vector();
 		if (iterator == null)
 		{
-			System.out.println("No match.");
+			_logger.debug("No match.");
 			return v;
 		}
 		try {
@@ -435,7 +435,7 @@ public class TestSearch {
 				{
 					ResolvedConceptReference rcr = rcra[i];
 					org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
-					//System.out.println("Iteration " + iteration + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
+					//_logger.debug("Iteration " + iteration + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
 					if (code == null)
 					{
 						v.add(ce);
@@ -502,23 +502,23 @@ public class TestSearch {
 
 		int maxToReturn = 10000;
 
-System.out.println("************* scheme " + scheme);
-System.out.println("************* version " + version);
-System.out.println("************* matchText " + matchText);
-System.out.println("************* matchAlgorithm " + matchAlgorithm);
+_logger.debug("************* scheme " + scheme);
+_logger.debug("************* version " + version);
+_logger.debug("************* matchText " + matchText);
+_logger.debug("************* matchAlgorithm " + matchAlgorithm);
 
         long ms = System.currentTimeMillis();
 		Vector<org.LexGrid.concepts.Concept> v = searchByName(scheme, version, matchText, matchAlgorithm, maxToReturn);
 
-		System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+		_logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
 		if (v != null)
 		{
-			System.out.println("v.size() = " + v.size());
+			_logger.debug("v.size() = " + v.size());
 			for (int i=0; i<v.size(); i++)
 			{
 				int j = i + 1;
 				Concept ce = (Concept) v.elementAt(i);
-				System.out.println("(" + j + ")" + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
+				_logger.debug("(" + j + ")" + " " + ce.getId() + " " + ce.getEntityDescription().getContent());
 			}
 		}
 
@@ -560,12 +560,12 @@ System.out.println("************* matchAlgorithm " + matchAlgorithm);
 		 if (args.length >= 1)
 		 {
 			 matchText = args[0];
-			 System.out.println(matchText);
+			 _logger.debug(matchText);
 		 }
 		 if (args.length >= 2)
 		 {
 			 matchAlgorithm = args[1];
-			 System.out.println(matchAlgorithm);
+			 _logger.debug(matchAlgorithm);
 		 }
 
 		 //url = null;
@@ -573,7 +573,7 @@ System.out.println("************* matchAlgorithm " + matchAlgorithm);
          String scheme = "NCI Thesaurus";
          String version = null;//"08.06d";
 
-		 System.out.print("Calling LexBIG -- please wait...\n");
+         _logger.debug("Calling LexBIG -- please wait...");
 		 long ms = System.currentTimeMillis();
 
 		 Vector matchText_vec = new Vector();
@@ -601,12 +601,12 @@ System.out.println("************* matchAlgorithm " + matchAlgorithm);
          {
 			 matchText = (String) matchText_vec.elementAt(i);
 
-System.out.println("matchText: " + matchText);
+_logger.debug("matchText: " + matchText);
 
 			 matchAlgorithm = (String) matchAlgorithm_vec.elementAt(i);
 			 test.testSearchByName(scheme, version, matchText, matchAlgorithm);
 		 }
-		 System.out.println("\n--------------------------------------------------------------------------------------");
+		 _logger.debug("\n--------------------------------------------------------------------------------------");
 
     }
 
