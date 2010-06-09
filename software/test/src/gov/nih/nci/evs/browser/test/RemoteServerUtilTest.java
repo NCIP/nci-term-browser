@@ -20,6 +20,7 @@ import java.util.Properties;
 
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
+import org.apache.log4j.Logger;
 
 //KLO 100709
 import gov.nih.nci.evs.security.SecurityToken;
@@ -59,6 +60,7 @@ import java.util.List;
 */
 
 public class RemoteServerUtilTest {
+    private static Logger _logger = Logger.getLogger(RemoteServerUtilTest.class);
 private static boolean debug = false;
 private static String _serviceInfo = "EvsServiceInfo";
 //private Properties systemProperties = null;
@@ -76,7 +78,7 @@ public static LexBIGService createLexBIGService()
 
 
     //url = "http://ncias-p208-v.nci.nih.gov:19480/lexevsapi51";
-    System.out.println("DYEE: url: " + url);
+    _logger.debug("DYEE: url: " + url);
 
 
     //NCItBrowserProperties properties = null;
@@ -86,8 +88,8 @@ public static LexBIGService createLexBIGService()
         return createLexBIGService(url);
     } catch (Exception ex) {
         // Do nothing
-        //System.out.println("WARNING: NCItBrowserProperties loading error...");
-        //System.out.println("\t-- trying to connect to " + url + " instead.");
+        //_logger.error("WARNING: NCItBrowserProperties loading error...");
+        //_logger.error("\t-- trying to connect to " + url + " instead.");
         ex.printStackTrace();
     }
     return null;//createLexBIGService(url);
@@ -109,8 +111,8 @@ public static LexBIGService createLexBIGService(String serviceUrl)
         }
         /*
         if (debug) {
-            System.out.println(Utils.SEPARATOR);
-            System.out.println("LexBIGService(remote): " + serviceUrl);
+            _logger.debug(Utils.SEPARATOR);
+            _logger.debug("LexBIGService(remote): " + serviceUrl);
         }
         */
         LexEVSApplicationService lexevsService = (LexEVSApplicationService)ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
@@ -149,13 +151,13 @@ public static LexEVSApplicationService registerSecurityToken(LexEVSApplicationSe
     try {
         retval = lexevsService.registerSecurityToken(codingScheme, securityToken);
         if(retval != null && retval.equals(Boolean.TRUE))   {
-            System.out.println("Registration of SecurityToken was successful.");
+            _logger.debug("Registration of SecurityToken was successful.");
         }
         else {
-            System.out.println("WARNING: Registration of SecurityToken failed.");
+            _logger.warn("WARNING: Registration of SecurityToken failed.");
         }
     } catch (Exception e) {
-        System.out.println("WARNING: Registration of SecurityToken failed.");
+        _logger.error("WARNING: Registration of SecurityToken failed.");
     }
     return lexevsService;
 }
@@ -184,18 +186,18 @@ public static LexBIGService createLexBIGService(String serviceUrl, String coding
         retval = lexevsService.registerSecurityToken(codingScheme, securityToken);
 
         if(retval.equals(Boolean.TRUE)) {
-            //System.out.println("Registration of SecurityToken was successful.");
+            //_logger.debug("Registration of SecurityToken was successful.");
         }
         else {
-            System.out.println("WARNING: Registration of SecurityToken failed.");
+            _logger.warn("WARNING: Registration of SecurityToken failed.");
         }
 
-        System.out.println("Connected to " + serviceUrl);
+        _logger.error("Connected to " + serviceUrl);
         return (LexBIGService) lexevsService;
     }
     catch (Exception e)
     {
-        System.out.println("Unable to connected to " + serviceUrl);
+        _logger.error("Unable to connected to " + serviceUrl);
         e.printStackTrace();
     }
     return null;

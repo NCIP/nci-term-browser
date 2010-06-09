@@ -112,10 +112,11 @@ import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 
 
 import org.LexGrid.concepts.Concept;
+import org.apache.log4j.Logger;
 
 
 public class MatchConceptByCode {
-
+    private static Logger _logger = Logger.getLogger(MatchConceptByCode.class);
 
     public MatchConceptByCode() {
     }
@@ -150,7 +151,7 @@ public class MatchConceptByCode {
         try {
             cns = cns.restrictToProperties(propertyLnL, types, sourceLnL, contextList, qualifierList);
         } catch (Exception ex) {
-            System.out.println("restrictToSource throws exceptions.");
+            _logger.error("restrictToSource throws exceptions.");
             return null;
         }
         return cns;
@@ -173,17 +174,17 @@ public class MatchConceptByCode {
 
 
     protected void displayRef(ResolvedConceptReference ref){
-        System.out.println(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+        _logger.debug(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
     }
 
 
 
     public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
 
-System.out.println("Calling matchConceptCode " + matchText);
-System.out.println("matchConceptCode scheme " + scheme);
-System.out.println("matchConceptCode matchText " + matchText);
-System.out.println("matchConceptCode matchAlgorithm " + matchAlgorithm);
+_logger.debug("Calling matchConceptCode " + matchText);
+_logger.debug("matchConceptCode scheme " + scheme);
+_logger.debug("matchConceptCode matchText " + matchText);
+_logger.debug("matchConceptCode matchAlgorithm " + matchAlgorithm);
 
         LexBIGService lbs = RemoteServerUtilTest.createLexBIGService();
         Vector v = new Vector();
@@ -214,7 +215,7 @@ System.out.println("matchConceptCode matchAlgorithm " + matchAlgorithm);
                     }
 
                     int size = iterator.numberRemaining();
-                    System.out.println("size: " + size);
+                    _logger.debug("size: " + size);
 
                     // test
                     if (size == 0) {
@@ -222,9 +223,9 @@ System.out.println("matchConceptCode matchAlgorithm " + matchAlgorithm);
                     }
 
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtils.matchConceptCode");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtils.matchConceptCode");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
                 }
 
@@ -234,7 +235,7 @@ System.out.println("matchConceptCode matchAlgorithm " + matchAlgorithm);
             }
 
         } catch (Exception ex) {
-            //System.out.println("WARNING: searchByCode throws exception.");
+            //_logger.error("WARNING: searchByCode throws exception.");
             ex.printStackTrace();
         }
 
@@ -249,8 +250,8 @@ System.out.println("matchConceptCode matchAlgorithm " + matchAlgorithm);
 
     public static ResolvedConceptReferencesIterator matchConceptCode(String scheme, String version, String code) {
 
-System.out.println("matchConceptCode scheme " + scheme);
-System.out.println("matchConceptCode code " + code);
+_logger.debug("matchConceptCode scheme " + scheme);
+_logger.debug("matchConceptCode code " + code);
 
 
         LexBIGService lbSvc = RemoteServerUtilTest.createLexBIGService();
@@ -277,7 +278,7 @@ System.out.println("matchConceptCode code " + code);
             }
 
             if (cns == null) {
-                System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
+                _logger.warn("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
                 return null;
             }
 
@@ -292,9 +293,9 @@ System.out.println("matchConceptCode code " + code);
 
                     int size = iterator.numberRemaining();
                 }  catch (Exception e) {
-                    System.out.println("Method: SearchUtil.matchConceptCode");
-                    System.out.println("* ERROR: cns.resolve throws exceptions.");
-                    System.out.println("* " + e.getClass().getSimpleName() + ": " +
+                    _logger.error("Method: SearchUtil.matchConceptCode");
+                    _logger.error("* ERROR: cns.resolve throws exceptions.");
+                    _logger.error("* " + e.getClass().getSimpleName() + ": " +
                         e.getMessage());
                 }
 
@@ -304,7 +305,7 @@ System.out.println("matchConceptCode code " + code);
             }
 
         } catch (Exception ex) {
-            System.out.println("WARNING: searchByCode throws exception.");
+            _logger.error("WARNING: searchByCode throws exception.");
         }
         //[#26386] Need app to be able to distinguish/prioritize/display matching code vrs. matching name results
 
@@ -333,7 +334,7 @@ System.out.println("matchConceptCode code " + code);
                             LexBIGService lbSvc = new RemoteServerUtilTest().createLexBIGService();
                             if (lbSvc == null)
                             {
-                                System.out.println("lbSvc = null");
+                                _logger.warn("lbSvc = null");
                                 return null;
                             }
                             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -352,7 +353,7 @@ System.out.println("matchConceptCode code " + code);
                                 }
 
                                 if (cns == null) {
-                                    System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
+                                    _logger.warn("getConceptByCode getCodingSchemeConcepts returns null??? " + scheme);
                                     return null;
                                 }
 
@@ -377,16 +378,16 @@ System.out.println("matchConceptCode code " + code);
 
     public static Concept matchConceptByCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
 
-System.out.println("searchUtils matchConceptByCode scheme: " + scheme);
-System.out.println("searchUtils matchConceptByCode version: " + version);
-System.out.println("searchUtils matchConceptByCode matchText: " + matchText);
-System.out.println("searchUtils matchConceptByCode source: " + source);
-System.out.println("searchUtils matchConceptByCode matchAlgorithm: " + matchAlgorithm);
+_logger.debug("searchUtils matchConceptByCode scheme: " + scheme);
+_logger.debug("searchUtils matchConceptByCode version: " + version);
+_logger.debug("searchUtils matchConceptByCode matchText: " + matchText);
+_logger.debug("searchUtils matchConceptByCode source: " + source);
+_logger.debug("searchUtils matchConceptByCode matchAlgorithm: " + matchAlgorithm);
 
 
         ResolvedConceptReferencesIterator iterator = matchConceptCode(scheme, version, matchText, source, matchAlgorithm);
         if (iterator == null) {
-            System.out.println("searchUtils matchConceptCode returns null??? " + matchText);
+            _logger.warn("searchUtils matchConceptCode returns null??? " + matchText);
             return null;
         }
         try {
@@ -395,20 +396,20 @@ System.out.println("searchUtils matchConceptByCode matchAlgorithm: " + matchAlgo
                 for(ResolvedConceptReference ref : refs){
 
                     if (ref == null) {
-                        System.out.println("(***) matchConceptByCode ref == null??");
+                        _logger.warn("(***) matchConceptByCode ref == null??");
                     }
 
                     else if (ref.getReferencedEntry() == null) {
-                        System.out.println("(***) matchConceptByCode ref.getReferencedEntry() == null??");
+                        _logger.warn("(***) matchConceptByCode ref.getReferencedEntry() == null??");
                     }
 
                     else if (ref.getReferencedEntry().getEntityCode() == null) {
-                        System.out.println("(***) matchConceptByCode ref.getReferencedEntry().getEntityCode() == null??");
+                        _logger.warn("(***) matchConceptByCode ref.getReferencedEntry().getEntityCode() == null??");
                     }
 
                     else {
                         if (ref.getReferencedEntry().getEntityCode().equals(matchText)) {
-                            System.out.println("(RESULT) matchConceptByCode ref.getReferencedEntry().getEntityCode() == " + ref.getReferencedEntry().getEntityCode());
+                            _logger.debug("(RESULT) matchConceptByCode ref.getReferencedEntry().getEntityCode() == " + ref.getReferencedEntry().getEntityCode());
                             return ref.getReferencedEntry();
                         }
                     }
@@ -416,9 +417,9 @@ System.out.println("searchUtils matchConceptByCode matchAlgorithm: " + matchAlgo
                 }
             }
         }  catch (Exception e) {
-            System.out.println("Method: SearchUtila.matchConceptByCode");
-            System.out.println("* ERROR: cns.resolve throws exceptions.");
-            System.out.println("* " + e.getClass().getSimpleName() + ": " +
+            _logger.error("Method: SearchUtila.matchConceptByCode");
+            _logger.error("* ERROR: cns.resolve throws exceptions.");
+            _logger.error("* " + e.getClass().getSimpleName() + ": " +
                 e.getMessage());
         }
         return null;
@@ -432,14 +433,14 @@ System.out.println("searchUtils matchConceptByCode matchAlgorithm: " + matchAlgo
         String code = "GO:0000018";
         String version = null;
 
-        System.out.println("==================matchConceptByCode=========================" + code);
+        _logger.debug("==================matchConceptByCode=========================" + code);
 
         Concept c = test.matchConceptByCode(scheme, version, code, null, "LuceneQuery");
 
         if (c == null) {
-            System.out.println("Concept is null???");
+            _logger.debug("Concept is null???");
         } else {
-            System.out.println("Concept is NOT null -- " + c.getEntityCode());
+            _logger.debug("Concept is NOT null -- " + c.getEntityCode());
         }
 
     }
