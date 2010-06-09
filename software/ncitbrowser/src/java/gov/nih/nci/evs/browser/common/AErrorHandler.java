@@ -1,14 +1,12 @@
 package gov.nih.nci.evs.browser.common;
 
-import static gov.nih.nci.evs.browser.common.Constants.ERROR_MESSAGE;
-import static gov.nih.nci.evs.browser.common.Constants.ERROR_UNEXPECTED;
+import static gov.nih.nci.evs.browser.common.Constants.*;
 
-import java.io.IOException;
+import java.io.*;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.faces.context.*;
+import javax.faces.event.*;
+import javax.servlet.http.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
