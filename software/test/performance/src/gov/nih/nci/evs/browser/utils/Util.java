@@ -3,8 +3,10 @@ package gov.nih.nci.evs.browser.utils;
 import java.text.DecimalFormat;
 
 import org.LexGrid.LexBIG.util.Prompt;
+import org.apache.log4j.Logger;
 
 public class Util {
+    private static Logger _logger = Logger.getLogger(Util.class);
 	public static final String SEPARATOR = 
 		"----------------------------------------" +
 		"----------------------------------------";
@@ -61,7 +63,7 @@ public class Util {
                 algorithm = "contains";
                 break;
             }
-            System.out.println("  Valid values: exactMatch, startsWith, contains");
+            _logger.debug("  Valid values: exactMatch, startsWith, contains");
         }
         return algorithm;
     }

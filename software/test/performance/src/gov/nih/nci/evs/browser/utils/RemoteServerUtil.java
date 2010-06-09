@@ -30,6 +30,7 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
 * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   * <!-- LICENSE_TEXT_END -->
   */
+import org.apache.log4j.Logger;
 
 /**
   * @author EVS Team
@@ -41,6 +42,7 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
  */
 
 public class RemoteServerUtil {
+    private static Logger _logger = Logger.getLogger(RemoteServerUtil.class);
 	private static String _serviceInfo = "EvsServiceInfo";
 	private Properties systemProperties = null;
 
@@ -74,15 +76,15 @@ public class RemoteServerUtil {
 	public static LexBIGService createLexBIGService(String serviceUrl)
     {
         try{
-	        System.out.println(Util.SEPARATOR);
+	        _logger.debug(Util.SEPARATOR);
 			if (serviceUrl == null || serviceUrl.compareTo("") == 0)
 			{
-		        System.out.println("LexBIGService(local): new LexBIGServiceImpl();");
-		        System.out.println("LG_CONFIG_FILE: " + System.getProperty("LG_CONFIG_FILE"));
+		        _logger.debug("LexBIGService(local): new LexBIGServiceImpl();");
+		        _logger.debug("LG_CONFIG_FILE: " + System.getProperty("LG_CONFIG_FILE"));
 				LexBIGService lbSvc = new LexBIGServiceImpl();
 				return lbSvc;
 			}
-            System.out.println("LexBIGService(remote): " + serviceUrl);
+            _logger.debug("LexBIGService(remote): " + serviceUrl);
 //            try {
 //                throw new Exception("Not an exception.  Used to trace where this method was called.");
 //            } catch (Exception e) {
