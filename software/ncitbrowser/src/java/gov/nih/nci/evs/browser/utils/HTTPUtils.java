@@ -1,20 +1,15 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.util.*;
-import java.util.regex.*;
 
 import javax.faces.context.*;
 import javax.servlet.http.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.net.*;
+import java.util.regex.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->

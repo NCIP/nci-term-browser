@@ -51,10 +51,9 @@ package gov.nih.nci.evs.browser.utils;
  *
  */
 
-import java.io.*;
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 public class FormatUtils {
     private static Logger _logger = Logger.getLogger(FormatUtils.class);

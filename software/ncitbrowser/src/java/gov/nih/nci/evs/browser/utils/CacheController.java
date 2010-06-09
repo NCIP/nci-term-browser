@@ -1,5 +1,22 @@
 package gov.nih.nci.evs.browser.utils;
 
+import java.util.*;
+
+import net.sf.ehcache.*;
+
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.commonTypes.*;
+import org.LexGrid.concepts.*;
+
+import org.json.*;
+import org.lexevs.tree.model.*;
+import org.lexevs.tree.service.*;
+
+import gov.nih.nci.evs.browser.properties.*;
+import gov.nih.nci.evs.browser.common.*;
+import org.apache.log4j.*;
+
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction 
@@ -50,60 +67,6 @@ package gov.nih.nci.evs.browser.utils;
  *     Initial implementation kim.ong@ngc.com
  *
  */
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import java.util.Vector;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
-//import gov.nih.nci.evs.browser.utils.TreeItem;
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
-import gov.nih.nci.evs.browser.common.Constants;
-
-import java.util.List;
-import java.util.Collection;
-import java.util.ArrayList;
-
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.Set;
-import java.util.Collections;
-import java.util.Map;
-
-import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
-import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
-import org.LexGrid.LexBIG.DataModel.Core.Association;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
-import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.commonTypes.EntityDescription;
-import org.LexGrid.concepts.Concept;
-import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
-
-import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.concepts.Presentation;
-
-import org.apache.jcs.access.exception.CacheException;
-import org.apache.log4j.Logger;
-import org.json.*;
-import org.lexevs.tree.model.LexEvsTree;
-import org.lexevs.tree.model.LexEvsTreeNode;
-import org.lexevs.tree.service.TreeService;
-import org.lexevs.tree.service.TreeServiceFactory;
 
 public class CacheController {
     private static Logger _logger = Logger.getLogger(CacheController.class);
