@@ -1,6 +1,6 @@
 package gov.nih.nci.evs.searchlog;
 
-import org.apache.log4j.Level;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
