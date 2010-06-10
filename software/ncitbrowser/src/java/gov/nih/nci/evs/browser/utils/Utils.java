@@ -1,10 +1,9 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.text.*;
+import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->

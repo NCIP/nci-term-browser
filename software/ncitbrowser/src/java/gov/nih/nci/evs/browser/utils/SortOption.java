@@ -1,6 +1,6 @@
 package gov.nih.nci.evs.browser.utils;
 
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import gov.nih.nci.evs.browser.properties.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
