@@ -69,7 +69,6 @@ public final class AjaxServlet extends HttpServlet {
      * local constants
      */
     private static final long serialVersionUID = 1L;
-    protected final Logger logger = Logger.getLogger(this.getClass());
 
     /**
      * Validates the Init and Context parameters, configures authentication URL
