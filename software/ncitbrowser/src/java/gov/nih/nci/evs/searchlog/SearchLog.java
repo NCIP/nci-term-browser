@@ -50,8 +50,7 @@ import org.apache.log4j.*;
  * @author garciawa2 AccessLog class
  */
 public class SearchLog {
-    private static Logger _logger = Logger.getLogger(SearchLog.class);
-    static Logger logger = null;
+    private static Logger _logger = null;
     public static final char SEPARATOR = '|';
     public static final String UK = "Unknown";
 
@@ -66,18 +65,18 @@ public class SearchLog {
      * Destructor - called to release logger
      */
     public static void destroy() {
-        if (logger != null) {
-            logger = null;
+        if (_logger != null) {
+            _logger.debug("Search log is shutdown.");
+            _logger = null;
         }
-        _logger.debug("Search log is shutdown.");
     }
 
     /**
      * Initializer
      */
     public static void init() {
-        if (logger == null) {
-            logger = Logger.getLogger(SearchLog.class);
+        if (_logger == null) {
+            _logger = Logger.getLogger(SearchLog.class);
         }
     }
 
@@ -92,7 +91,7 @@ public class SearchLog {
         // SEARCH_TYPE|TERM|ALGORITHM|TARGET|SOURCE|COUNT|PROPERTY_NAME|PROPERTY_TYPE
         // RELATIONSHIP|REL_ASSOCICATION|REL_RELA|REFERRER
 
-        logger.log(SearchLevel.SEARCH_LOG_LEVEL, fields.getType().toString()
+        _logger.log(SearchLevel.SEARCH_LOG_LEVEL, fields.getType().toString()
             + SEPARATOR + fields.getMatchText() + SEPARATOR
             + fields.getMatchAlgorithm() + SEPARATOR + fields.getSearchTarget()
             + SEPARATOR + fields.getSource() + SEPARATOR + maxReturn
