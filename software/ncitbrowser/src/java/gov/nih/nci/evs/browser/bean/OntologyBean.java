@@ -69,10 +69,6 @@ public class OntologyBean {
     private static Vector _property_type_vec = null;
     private static Vector _source_vec = null;
 
-    // private static String codingSchemeName = "NCI Metathesaurus";
-
-    // NameAndValueList associationNameAndValueList = null;
-
     public static List getRELAList(String codingSchemeName) {
         if (_rela_list != null)
             return _rela_list;

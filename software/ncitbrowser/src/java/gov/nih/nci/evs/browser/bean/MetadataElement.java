@@ -51,26 +51,24 @@ package gov.nih.nci.evs.browser.bean;
  */
 
 public class MetadataElement {
-
-    private String name;
+    private String _name;
 
     public MetadataElement() {
-
     }
 
     public MetadataElement(String name) {
-        this.name = name;
+        _name = name;
     }
 
     public String getName() {
-        return this.name;
+        return _name;
     }
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("MetadataElement ");
         sb.append("\n");
-        sb.append("\tname: " + name);
+        sb.append("\tname: " + _name);
         sb.append("\n");
         sb.append("\n");
 
