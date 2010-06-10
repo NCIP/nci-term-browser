@@ -108,18 +108,21 @@ subject to the conditions specified at
           <br/>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <%
-              //String propertyName = "description";
               String propertyName = "html_compatable_description";
+              Vector from_vec = new Vector();
+              Vector to_vec = new Vector();
+              from_vec.add("ncim_url"); to_vec.add(new DataUtils().getNCImURL());
               Vector abbr_vec = (Vector) request.getSession().getAttribute("source_descriptions");
               if (abbr_vec == null) {
                   abbr_vec = new MetadataUtils().getSupportedVocabularyMetadataValues(propertyName);
                   request.getSession().setAttribute("source_descriptions", abbr_vec);
-              }
+              }              
               for (int n=0; n<abbr_vec.size(); n++) {
                  String t = (String) abbr_vec.elementAt(n);
                  Vector w = DataUtils.parseData(t, "|");
                  String abbr = (String) w.elementAt(0);
                  String def = (String) w.elementAt(1);
+                 def = DataUtils.replaceInnerEvalExpressions(def, from_vec, to_vec);
                  String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
             %>
               <tr class="<%=rowColor%>">
