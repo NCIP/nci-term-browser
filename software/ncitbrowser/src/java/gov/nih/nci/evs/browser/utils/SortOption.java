@@ -49,9 +49,9 @@ public class SortOption {
         FALSE, TRUE, ALL
     };
 
-    private Type type = Type.TRUE;
-    private boolean sort_by_pt_only = true;
-    private boolean apply_sort_score = true;
+    private Type _type = Type.TRUE;
+    private boolean _sort_by_pt_only = true;
+    private boolean _apply_sort_score = true;
 
     public SortOption() {
     }
@@ -68,31 +68,31 @@ public class SortOption {
     }
 
     public boolean isSortByPtOnly() {
-        return sort_by_pt_only;
+        return _sort_by_pt_only;
     }
 
     public boolean isApplySortScore() {
-        return apply_sort_score;
+        return _apply_sort_score;
     }
 
     public Type getType() {
-        return type;
+        return _type;
     }
 
     public void setType(SortOption.Type type) {
-        this.type = type;
+        _type = type;
         switch (type) {
         case FALSE:
-            sort_by_pt_only = true;
-            apply_sort_score = false;
+            _sort_by_pt_only = true;
+            _apply_sort_score = false;
             break;
         case ALL:
-            sort_by_pt_only = false;
-            apply_sort_score = true;
+            _sort_by_pt_only = false;
+            _apply_sort_score = true;
             break;
         default: // TRUE
-            sort_by_pt_only = true;
-            apply_sort_score = true;
+            _sort_by_pt_only = true;
+            _apply_sort_score = true;
             break;
         }
     }
@@ -115,7 +115,7 @@ public class SortOption {
     }
 
     public String toString() {
-        return type.name().toLowerCase() + " (" + "sort_by_pt_only: "
-            + sort_by_pt_only + ", apply_sort_score: " + apply_sort_score + ")";
+        return _type.name().toLowerCase() + " (" + "sort_by_pt_only: "
+            + _sort_by_pt_only + ", apply_sort_score: " + _apply_sort_score + ")";
     }
 }

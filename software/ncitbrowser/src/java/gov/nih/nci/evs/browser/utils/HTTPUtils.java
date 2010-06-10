@@ -61,7 +61,7 @@ import org.apache.log4j.*;
  */
 public class HTTPUtils {
     private static Logger _logger = Logger.getLogger(HTTPUtils.class);
-    private static String REFERER = "referer";
+    private static final String REFERER = "referer";
 
     /**
      * Remove potentially bad XSS syntax

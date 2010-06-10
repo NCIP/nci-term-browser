@@ -1091,7 +1091,7 @@ public class UserSessionBean extends Object {
 
                 request.setAttribute("algorithm", matchAlgorithm);
                 coding_scheme =
-                    (String) DataUtils.localName2FormalNameHashMap
+                    (String) DataUtils._localName2FormalNameHashMap
                         .get(coding_scheme);
 
                 String convertJSPString = HTTPUtils.convertJSPString(matchText);

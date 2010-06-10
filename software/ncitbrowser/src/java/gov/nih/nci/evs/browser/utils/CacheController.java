@@ -89,40 +89,40 @@ public class CacheController {
         "ontology_node_definition";
     public static final String CHILDREN_NODES = "children_nodes";
 
-    private static CacheController instance = null;
-    private static Cache cache = null;
-    private static CacheManager cacheManager = null;
+    private static CacheController _instance = null;
+    private static Cache _cache = null;
+    private static CacheManager _cacheManager = null;
 
     public CacheController(String cacheName) {
-        cacheManager = getCacheManager();
-        if (!cacheManager.cacheExists(cacheName)) {
-            cacheManager.addCache(cacheName);
+        _cacheManager = getCacheManager();
+        if (!_cacheManager.cacheExists(cacheName)) {
+            _cacheManager.addCache(cacheName);
         }
 
         _logger.debug("cache added");
-        this.cache = cacheManager.getCache(cacheName);
+        _cache = _cacheManager.getCache(cacheName);
     }
 
     public static CacheController getInstance() {
         synchronized (CacheController.class) {
-            if (instance == null) {
-                instance = new CacheController("treeCache");
+            if (_instance == null) {
+                _instance = new CacheController("treeCache");
             }
         }
-        return instance;
+        return _instance;
     }
 
     private static CacheManager getCacheManager() {
-        if (cacheManager != null)
-            return cacheManager;
+        if (_cacheManager != null)
+            return _cacheManager;
         try {
             NCItBrowserProperties properties =
                 NCItBrowserProperties.getInstance();
             String ehcache_xml_pathname =
                 properties
                     .getProperty(NCItBrowserProperties.EHCACHE_XML_PATHNAME);
-            cacheManager = new CacheManager(ehcache_xml_pathname);
-            return cacheManager;
+            _cacheManager = new CacheManager(ehcache_xml_pathname);
+            return _cacheManager;
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -135,20 +135,20 @@ public class CacheController {
     }
 
     public void clear() {
-        cache.removeAll();
+        _cache.removeAll();
         // cache.flush();
     }
 
     public boolean containsKey(Object key) {
-        return cache.isKeyInCache(key);
+        return _cache.isKeyInCache(key);
     }
 
     public boolean containsValue(Object value) {
-        return cache.isValueInCache(value);
+        return _cache.isValueInCache(value);
     }
 
     public boolean isEmpty() {
-        return cache.getSize() > 0;
+        return _cache.getSize() > 0;
     }
 
     public JSONArray getSubconcepts(String scheme, String version, String code) {
@@ -170,7 +170,7 @@ public class CacheController {
         String key = scheme + "$" + version + "$" + code;
         JSONArray nodeArray = null;
         if (fromCache) {
-            Element element = cache.get(key);
+            Element element = _cache.get(key);
             if (element != null) {
                 nodeArray = (JSONArray) element.getValue();
             }
@@ -183,7 +183,7 @@ public class CacheController {
             if (fromCache) {
                 try {
                     Element element = new Element(key, nodeArray);
-                    cache.put(element);
+                    _cache.put(element);
                 } catch (Exception ex) {
 
                 }
@@ -213,7 +213,7 @@ public class CacheController {
         }
 
         if (fromCache) {
-            Element element = cache.get(key);
+            Element element = _cache.get(key);
             if (element != null) {
                 // _logger.debug("getRootConcepts fromCache element != null returning list"
                 // );
@@ -231,7 +231,7 @@ public class CacheController {
 
                 if (fromCache) {
                     Element element = new Element(key, nodeArray);
-                    cache.put(element);
+                    _cache.put(element);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -363,16 +363,16 @@ public class CacheController {
             Object[] objs = keyset.toArray();
             String code = (String) objs[0];
             TreeItem ti = (TreeItem) hmap.get(code);
-            for (String association : ti.assocToChildMap.keySet()) {
-                List<TreeItem> children = ti.assocToChildMap.get(association);
+            for (String association : ti._assocToChildMap.keySet()) {
+                List<TreeItem> children = ti._assocToChildMap.get(association);
                 // Collections.sort(children);
                 for (TreeItem childItem : children) {
                     // printTree(childItem, focusCode, depth + 1);
                     JSONObject nodeObject = new JSONObject();
-                    nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
-                    nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+                    nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                    nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                     int knt = 0;
-                    if (childItem.expandable) {
+                    if (childItem._expandable) {
                         knt = 1;
                     }
                     nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
@@ -389,7 +389,7 @@ public class CacheController {
         List list = null;// new ArrayList();
         String key = scheme + "$" + version + "$" + code + "$path";
         JSONArray nodeArray = null;
-        Element element = cache.get(key);
+        Element element = _cache.get(key);
         if (element != null) {
             nodeArray = (JSONArray) element.getValue();
         }
@@ -399,7 +399,7 @@ public class CacheController {
             try {
                 nodeArray = getPathsToRoots(scheme, version, code, true);
                 element = new Element(key, nodeArray);
-                cache.put(element);
+                _cache.put(element);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -542,7 +542,7 @@ public class CacheController {
     private int findFocusNodePosition(String node_id, List<TreeItem> children) {
         for (int i = 0; i < children.size(); i++) {
             TreeItem childItem = (TreeItem) children.get(i);
-            if (node_id.compareTo(childItem.code) == 0)
+            if (node_id.compareTo(childItem._code) == 0)
                 return i;
         }
         return -1;
@@ -550,8 +550,8 @@ public class CacheController {
 
     private JSONArray getNodesArray(String node_id, TreeItem ti) {
         JSONArray nodesArray = new JSONArray();
-        for (String association : ti.assocToChildMap.keySet()) {
-            List<TreeItem> children = ti.assocToChildMap.get(association);
+        for (String association : ti._assocToChildMap.keySet()) {
+            List<TreeItem> children = ti._assocToChildMap.get(association);
             SortUtils.quickSort(children);
 
             int cut_off = 200;
@@ -562,13 +562,13 @@ public class CacheController {
                 for (int i = 0; i < children.size(); i++) {
                     TreeItem childItem = (TreeItem) children.get(i);
                     int knt = 0;
-                    if (childItem.expandable) {
+                    if (childItem._expandable) {
                         knt = 1;
                     }
                     JSONObject nodeObject = new JSONObject();
                     try {
-                        nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
-                        nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+                        nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                        nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                         nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                         nodeObject.put(CHILDREN_NODES, getNodesArray(node_id,
                             childItem));
@@ -586,13 +586,13 @@ public class CacheController {
                     for (int i = 0; i < children.size(); i++) {
                         TreeItem childItem = (TreeItem) children.get(i);
                         int knt = 0;
-                        if (childItem.expandable) {
+                        if (childItem._expandable) {
                             knt = 1;
                         }
                         JSONObject nodeObject = new JSONObject();
                         try {
-                            nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
-                            nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+                            nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                            nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                             nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                             nodeObject.put(CHILDREN_NODES, getNodesArray(
                                 node_id, childItem));
@@ -618,13 +618,13 @@ public class CacheController {
                     for (int i = min; i < max; i++) {
                         TreeItem childItem = (TreeItem) children.get(i);
                         int knt = 0;
-                        if (childItem.expandable) {
+                        if (childItem._expandable) {
                             knt = 1;
                         }
                         nodeObject = new JSONObject();
                         try {
-                            nodeObject.put(ONTOLOGY_NODE_ID, childItem.code);
-                            nodeObject.put(ONTOLOGY_NODE_NAME, childItem.text);
+                            nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                            nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                             nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                             nodeObject.put(CHILDREN_NODES, getNodesArray(
                                 node_id, childItem));
@@ -658,7 +658,7 @@ public class CacheController {
 
     public static String getSubConcepts(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
-        if (!CacheController.instance.containsKey(getSubConceptKey(
+        if (!CacheController._instance.containsKey(getSubConceptKey(
             codingScheme, code))) {
             _logger.debug("SubConcepts Not Found In Cache.");
             TreeService treeService =
@@ -673,16 +673,16 @@ public class CacheController {
             String json =
                 treeService.getJsonConverter().buildChildrenNodes(node);
 
-            cache.put(new Element(getSubConceptKey(codingScheme, code), json));
+            _cache.put(new Element(getSubConceptKey(codingScheme, code), json));
             return json;
         }
-        return (String) cache.get(getSubConceptKey(codingScheme, code))
+        return (String) _cache.get(getSubConceptKey(codingScheme, code))
             .getObjectValue();
     }
 
     public static String getTree(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
-        if (!CacheController.instance
+        if (!CacheController._instance
             .containsKey(getTreeKey(codingScheme, code))) {
             _logger.debug("Tree Not Found In Cache.");
             TreeService treeService =
@@ -696,10 +696,10 @@ public class CacheController {
                 treeService.getJsonConverter().buildJsonPathFromRootTree(
                     tree.getCurrentFocus());
 
-            cache.put(new Element(getTreeKey(tree), json));
+            _cache.put(new Element(getTreeKey(tree), json));
             return json;
         }
-        return (String) cache.get(getTreeKey(codingScheme, code))
+        return (String) _cache.get(getTreeKey(codingScheme, code))
             .getObjectValue();
     }
 
@@ -709,7 +709,7 @@ public class CacheController {
         String codingScheme = ref.getCodingSchemeName();
         String code = ref.getCode();
 
-        if (!CacheController.instance
+        if (!CacheController._instance
             .containsKey(getTreeKey(codingScheme, code))) {
             _logger.debug("Tree Not Found In Cache.");
             TreeService treeService =
@@ -722,7 +722,7 @@ public class CacheController {
                 treeService.getJsonConverter().buildJsonPathFromRootTree(
                     tree.getCurrentFocus());
 
-            cache.put(new Element(getTreeKey(tree), json));
+            _cache.put(new Element(getTreeKey(tree), json));
         }
     }
 

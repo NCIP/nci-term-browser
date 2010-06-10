@@ -79,21 +79,21 @@ import org.apache.log4j.*;
  */
 public class DataUtils {
     private static Logger _logger = Logger.getLogger(DataUtils.class);
-    static LocalNameList noopList_ = Constructors.createLocalNameList("_noop_");
-    int maxReturn = 5000;
-    Connection con;
-    Statement stmt;
-    ResultSet rs;
+    private static LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
+    private int _maxReturn = 5000;
+    private Connection _con;
+    private Statement _stmt;
+    private ResultSet _rs;
 
     private static List _ontologies = null;
 
-    private static org.LexGrid.LexBIG.LexBIGService.LexBIGService lbSvc = null;
-    public org.LexGrid.LexBIG.Utility.ConvenienceMethods lbConvMethods = null;
-    public CodingSchemeRenderingList csrl = null;
+    private static org.LexGrid.LexBIG.LexBIGService.LexBIGService _lbSvc = null;
+    public org.LexGrid.LexBIG.Utility.ConvenienceMethods _lbConvMethods = null;
+    public CodingSchemeRenderingList _csrl = null;
 
-    private static HashSet codingSchemeHashSet = null;
-    private static HashMap csnv2codingSchemeNameMap = null;
-    private static HashMap csnv2VersionMap = null;
+    private static HashSet _codingSchemeHashSet = null;
+    private static HashMap _csnv2codingSchemeNameMap = null;
+    private static HashMap _csnv2VersionMap = null;
 
     // ==================================================================================
     // For customized query use
@@ -102,10 +102,10 @@ public class DataUtils {
     public static int PREFERRED_ONLY = 1;
     public static int NON_PREFERRED_ONLY = 2;
 
-    static int RESOLVE_SOURCE = 1;
-    static int RESOLVE_TARGET = -1;
-    static int RESTRICT_SOURCE = -1;
-    static int RESTRICT_TARGET = 1;
+    private static int RESOLVE_SOURCE = 1;
+    private static int RESOLVE_TARGET = -1;
+    private static int RESTRICT_SOURCE = -1;
+    private static int RESTRICT_TARGET = 1;
 
     public static final int SEARCH_NAME_CODE = 1;
     public static final int SEARCH_DEFINITION = 2;
@@ -114,7 +114,7 @@ public class DataUtils {
     public static final int SEARCH_ROLE_VALUE = 6;
     public static final int SEARCH_ASSOCIATION_VALUE = 7;
 
-    static final List<String> STOP_WORDS =
+    private static final List<String> STOP_WORDS =
         Arrays.asList(new String[] { "a", "an", "and", "by", "for", "of", "on",
             "in", "nos", "the", "to", "with" });
 
@@ -123,28 +123,28 @@ public class DataUtils {
     public static String TYPE_SUPERCONCEPT = "type_superconcept";
     public static String TYPE_SUBCONCEPT = "type_subconcept";
 
-    public String NCICBContactURL = null;
-    public String terminologySubsetDownloadURL = null;
-    public String term_suggestion_application_url = null;
-    public String NCITBuildInfo = null;
-    public String NCITAppVersion = null;
-    public String NCITAnthillBuildTagBuilt = null;
-    public String EVSServiceURL = null;
-    public String NCImURL = null;
+    public String _ncicbContactURL = null;
+    public String _terminologySubsetDownloadURL = null;
+    public String _term_suggestion_application_url = null;
+    public String _ncitBuildInfo = null;
+    public String _ncitAppVersion = null;
+    public String _ncitAnthillBuildTagBuilt = null;
+    public String _evsServiceURL = null;
+    public String _ncimURL = null;
 
-    public static HashMap namespace2CodingScheme = null;
+    public static HashMap _namespace2CodingScheme = null;
 
     public static String TYPE_INVERSE_ROLE = "type_inverse_role";
     public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
-    public static HashMap formalName2LocalNameHashMap = null;
-    public static HashMap localName2FormalNameHashMap = null;
-    public static HashMap formalName2MetadataHashMap = null;
-    public static HashMap displayName2FormalNameHashMap = null;
-    public static Vector nonConcept2ConceptAssociations = null;
-    public static String defaultOntologiesToSearchOnStr = null;
+    public static HashMap _formalName2LocalNameHashMap = null;
+    public static HashMap _localName2FormalNameHashMap = null;
+    public static HashMap _formalName2MetadataHashMap = null;
+    public static HashMap _displayName2FormalNameHashMap = null;
+    public static Vector _nonConcept2ConceptAssociations = null;
+    public static String _defaultOntologiesToSearchOnStr = null;
 
-    public static HashSet vocabulariesWithConceptStatusHashSet = null;
+    public static HashSet _vocabulariesWithConceptStatusHashSet = null;
 
     // ==================================================================================
 
@@ -162,36 +162,36 @@ public class DataUtils {
         if (_ontologies == null)
             setCodingSchemeMap();
 
-        defaultOntologiesToSearchOnStr = "|";
+        _defaultOntologiesToSearchOnStr = "|";
         for (int i = 0; i < _ontologies.size(); i++) {
             SelectItem item = (SelectItem) _ontologies.get(i);
             String value = (String) item.getValue();
             if (value.indexOf("Metathesaurus") == -1) {
-                defaultOntologiesToSearchOnStr =
-                    defaultOntologiesToSearchOnStr + value + "|";
+                _defaultOntologiesToSearchOnStr =
+                    _defaultOntologiesToSearchOnStr + value + "|";
             }
         }
-        return defaultOntologiesToSearchOnStr;
+        return _defaultOntologiesToSearchOnStr;
     }
 
     private static boolean isCodingSchemeSupported(String codingSchemeName) {
-        if (codingSchemeHashSet == null)
+        if (_codingSchemeHashSet == null)
             setCodingSchemeMap();
-        return codingSchemeHashSet.contains(codingSchemeName);
+        return _codingSchemeHashSet.contains(codingSchemeName);
     }
 
     private static void setCodingSchemeMap() {
         _logger.debug("Initializing ...");
-        codingSchemeHashSet = new HashSet();
+        _codingSchemeHashSet = new HashSet();
         _ontologies = new ArrayList();
         // codingSchemeMap = new HashMap();
-        csnv2codingSchemeNameMap = new HashMap();
-        csnv2VersionMap = new HashMap();
-        formalName2LocalNameHashMap = new HashMap();
-        localName2FormalNameHashMap = new HashMap();
-        formalName2MetadataHashMap = new HashMap();
-        displayName2FormalNameHashMap = new HashMap();
-        vocabulariesWithConceptStatusHashSet = new HashSet();
+        _csnv2codingSchemeNameMap = new HashMap();
+        _csnv2VersionMap = new HashMap();
+        _formalName2LocalNameHashMap = new HashMap();
+        _localName2FormalNameHashMap = new HashMap();
+        _formalName2MetadataHashMap = new HashMap();
+        _displayName2FormalNameHashMap = new HashMap();
+        _vocabulariesWithConceptStatusHashSet = new HashSet();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -259,7 +259,7 @@ public class DataUtils {
                         for (int m = 0; m < localnames.length; m++) {
                             String localname = localnames[m];
                             _logger.debug("\tlocal name: " + localname);
-                            localName2FormalNameHashMap.put(localname,
+                            _localName2FormalNameHashMap.put(localname,
                                 formalname);
                         }
 
@@ -290,24 +290,24 @@ public class DataUtils {
                                 getPropertyNameListData(formalname,
                                     representsVersion);
                             if (propertyNames.contains("Concept_Status")) {
-                                vocabulariesWithConceptStatusHashSet
+                                _vocabulariesWithConceptStatusHashSet
                                     .add(formalname);
                                 _logger
                                     .debug("\tConcept_Status property supported.");
                             }
 
-                            if (!codingSchemeHashSet.contains(formalname)) {
-                                codingSchemeHashSet.add(formalname);
+                            if (!_codingSchemeHashSet.contains(formalname)) {
+                                _codingSchemeHashSet.add(formalname);
                             }
 
-                            formalName2LocalNameHashMap.put(formalname,
+                            _formalName2LocalNameHashMap.put(formalname,
                                 css_local_name);
-                            formalName2LocalNameHashMap.put(css_local_name,
+                            _formalName2LocalNameHashMap.put(css_local_name,
                                 css_local_name);
 
-                            localName2FormalNameHashMap.put(formalname,
+                            _localName2FormalNameHashMap.put(formalname,
                                 formalname);
-                            localName2FormalNameHashMap.put(css_local_name,
+                            _localName2FormalNameHashMap.put(css_local_name,
                                 formalname);
 
                             // String displayName = getMetadataValue(formalname,
@@ -328,13 +328,13 @@ public class DataUtils {
                             _logger.debug("\t" + nvList.length
                                 + " MetadataProperties cached for "
                                 + formalname);
-                            formalName2MetadataHashMap.put(formalname,
+                            _formalName2MetadataHashMap.put(formalname,
                                 metadataProperties);
 
                             String displayName =
                                 getMetadataValue(formalname, "display_name");
                             _logger.debug("\tdisplay_name: " + displayName);
-                            displayName2FormalNameHashMap.put(displayName,
+                            _displayName2FormalNameHashMap.put(displayName,
                                 formalname);
 
                             String term_browser_version =
@@ -363,9 +363,9 @@ public class DataUtils {
 
                             nv_vec.add(value);
                             _logger.debug("\tformal name: " + formalname);
-                            csnv2codingSchemeNameMap.put(value, formalname);
+                            _csnv2codingSchemeNameMap.put(value, formalname);
 
-                            csnv2VersionMap.put(value, representsVersion);
+                            _csnv2VersionMap.put(value, representsVersion);
                             _logger.debug("\trepresentsVersion: "
                                 + representsVersion);
 
@@ -412,14 +412,14 @@ public class DataUtils {
     }
 
     public static Vector getMetadataValues(String scheme, String propertyName) {
-        if (formalName2MetadataHashMap == null) {
+        if (_formalName2MetadataHashMap == null) {
             setCodingSchemeMap();
         }
 
-        if (!formalName2MetadataHashMap.containsKey(scheme)) {
+        if (!_formalName2MetadataHashMap.containsKey(scheme)) {
             return null;
         }
-        Vector metadata = (Vector) formalName2MetadataHashMap.get(scheme);
+        Vector metadata = (Vector) _formalName2MetadataHashMap.get(scheme);
         if (metadata == null || metadata.size() == 0) {
             return null;
         }
@@ -428,33 +428,33 @@ public class DataUtils {
     }
 
     public static String getLocalName(String key) {
-        if (formalName2LocalNameHashMap == null) {
+        if (_formalName2LocalNameHashMap == null) {
             setCodingSchemeMap();
         }
-        return (String) formalName2LocalNameHashMap.get(key);
+        return (String) _formalName2LocalNameHashMap.get(key);
     }
 
     public static String getFormalName(String key) {
         if (key == null) {
             return null;
         }
-        if (localName2FormalNameHashMap == null) {
+        if (_localName2FormalNameHashMap == null) {
             setCodingSchemeMap();
         }
-        if (!localName2FormalNameHashMap.containsKey(key))
+        if (!_localName2FormalNameHashMap.containsKey(key))
             return null;
-        return (String) localName2FormalNameHashMap.get(key);
+        return (String) _localName2FormalNameHashMap.get(key);
     }
 
     public static Vector<String> getSupportedAssociationNames(String key) {
-        if (csnv2codingSchemeNameMap == null) {
+        if (_csnv2codingSchemeNameMap == null) {
             setCodingSchemeMap();
             return getSupportedAssociationNames(key);
         }
-        String codingSchemeName = (String) csnv2codingSchemeNameMap.get(key);
+        String codingSchemeName = (String) _csnv2codingSchemeNameMap.get(key);
         if (codingSchemeName == null)
             return null;
-        String version = (String) csnv2VersionMap.get(key);
+        String version = (String) _csnv2VersionMap.get(key);
         if (version == null)
             return null;
         return getSupportedAssociationNames(codingSchemeName, version);
@@ -493,15 +493,15 @@ public class DataUtils {
     }
 
     public static Vector<String> getPropertyNameListData(String key) {
-        if (csnv2codingSchemeNameMap == null) {
+        if (_csnv2codingSchemeNameMap == null) {
             setCodingSchemeMap();
         }
 
-        String codingSchemeName = (String) csnv2codingSchemeNameMap.get(key);
+        String codingSchemeName = (String) _csnv2codingSchemeNameMap.get(key);
         if (codingSchemeName == null) {
             return null;
         }
-        String version = (String) csnv2VersionMap.get(key);
+        String version = (String) _csnv2VersionMap.get(key);
         if (version == null) {
             return null;
         }
@@ -538,10 +538,10 @@ public class DataUtils {
     }
 
     public static Vector<String> getRepresentationalFormListData(String key) {
-        String codingSchemeName = (String) csnv2codingSchemeNameMap.get(key);
+        String codingSchemeName = (String) _csnv2codingSchemeNameMap.get(key);
         if (codingSchemeName == null)
             return null;
-        String version = (String) csnv2VersionMap.get(key);
+        String version = (String) _csnv2VersionMap.get(key);
         if (version == null)
             return null;
         return getRepresentationalFormListData(codingSchemeName, version);
@@ -578,10 +578,10 @@ public class DataUtils {
     }
 
     public static Vector<String> getPropertyQualifierListData(String key) {
-        String codingSchemeName = (String) csnv2codingSchemeNameMap.get(key);
+        String codingSchemeName = (String) _csnv2codingSchemeNameMap.get(key);
         if (codingSchemeName == null)
             return null;
-        String version = (String) csnv2VersionMap.get(key);
+        String version = (String) _csnv2VersionMap.get(key);
         if (version == null)
             return null;
         return getPropertyQualifierListData(codingSchemeName, version);
@@ -617,14 +617,14 @@ public class DataUtils {
     }
 
     public static Vector<String> getSourceListData(String key) {
-        if (csnv2codingSchemeNameMap == null) {
+        if (_csnv2codingSchemeNameMap == null) {
             setCodingSchemeMap();
             return getSourceListData(key);
         }
-        String codingSchemeName = (String) csnv2codingSchemeNameMap.get(key);
+        String codingSchemeName = (String) _csnv2codingSchemeNameMap.get(key);
         if (codingSchemeName == null)
             return null;
-        String version = (String) csnv2VersionMap.get(key);
+        String version = (String) _csnv2VersionMap.get(key);
         if (version == null)
             return null;
         return getSourceListData(codingSchemeName, version);
@@ -743,7 +743,7 @@ public class DataUtils {
             matches =
                 cng.resolveAsList(ConvenienceMethods.createConceptReference(
                     code, scheme), false, true, 1, 1, new LocalNameList(),
-                    null, null, maxReturn);
+                    null, null, _maxReturn);
 
             if (matches.getResolvedConceptReferenceCount() > 0) {
                 Enumeration<ResolvedConceptReference> refEnum =
@@ -1533,12 +1533,12 @@ public class DataUtils {
         if (hmap_super != null) {
             TreeItem ti = (TreeItem) hmap_super.get(code);
             if (ti != null) {
-                for (String association : ti.assocToChildMap.keySet()) {
+                for (String association : ti._assocToChildMap.keySet()) {
                     List<TreeItem> children =
-                        ti.assocToChildMap.get(association);
+                        ti._assocToChildMap.get(association);
                     for (TreeItem childItem : children) {
-                        superconceptList.add(childItem.text + "|"
-                            + childItem.code);
+                        superconceptList.add(childItem._text + "|"
+                            + childItem._code);
                     }
                 }
             }
@@ -2162,149 +2162,149 @@ public class DataUtils {
     }
 
     public String getNCICBContactURL() {
-        if (NCICBContactURL != null) {
-            return NCICBContactURL;
+        if (_ncicbContactURL != null) {
+            return _ncicbContactURL;
         }
         String default_url = "ncicb@pop.nci.nih.gov";
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
-            NCICBContactURL =
+            _ncicbContactURL =
                 properties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
-            if (NCICBContactURL == null) {
-                NCICBContactURL = default_url;
+            if (_ncicbContactURL == null) {
+                _ncicbContactURL = default_url;
             }
         } catch (Exception ex) {
 
         }
 
         // _logger.debug("getNCICBContactURL returns " + NCICBContactURL);
-        return NCICBContactURL;
+        return _ncicbContactURL;
     }
 
     public String getTerminologySubsetDownloadURL() {
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
-            terminologySubsetDownloadURL =
+            _terminologySubsetDownloadURL =
                 properties
                     .getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
         } catch (Exception ex) {
 
         }
-        return terminologySubsetDownloadURL;
+        return _terminologySubsetDownloadURL;
     }
 
     public String getNCITBuildInfo() {
-        if (NCITBuildInfo != null) {
-            return NCITBuildInfo;
+        if (_ncitBuildInfo != null) {
+            return _ncitBuildInfo;
         }
         String default_info = "N/A";
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
-            NCITBuildInfo =
+            _ncitBuildInfo =
                 properties.getProperty(NCItBrowserProperties.NCIT_BUILD_INFO);
-            if (NCITBuildInfo == null) {
-                NCITBuildInfo = default_info;
+            if (_ncitBuildInfo == null) {
+                _ncitBuildInfo = default_info;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return NCITBuildInfo;
+        return _ncitBuildInfo;
     }
 
     public String getApplicationVersion() {
-        if (NCITAppVersion != null) {
-            return NCITAppVersion;
+        if (_ncitAppVersion != null) {
+            return _ncitAppVersion;
         }
         String default_info = "1.0";
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
-            NCITAppVersion =
+            _ncitAppVersion =
                 properties.getProperty(NCItBrowserProperties.NCIT_APP_VERSION);
-            if (NCITAppVersion == null) {
-                NCITAppVersion = default_info;
+            if (_ncitAppVersion == null) {
+                _ncitAppVersion = default_info;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return NCITAppVersion;
+        return _ncitAppVersion;
     }
 
     public String getNCITAnthillBuildTagBuilt() {
-        if (NCITAnthillBuildTagBuilt != null) {
-            return NCITAnthillBuildTagBuilt;
+        if (_ncitAnthillBuildTagBuilt != null) {
+            return _ncitAnthillBuildTagBuilt;
         }
         String default_info = "N/A";
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
-            NCITAnthillBuildTagBuilt =
+            _ncitAnthillBuildTagBuilt =
                 properties
                     .getProperty(NCItBrowserProperties.ANTHILL_BUILD_TAG_BUILT);
-            if (NCITAnthillBuildTagBuilt == null) {
-                NCITAnthillBuildTagBuilt = default_info;
+            if (_ncitAnthillBuildTagBuilt == null) {
+                _ncitAnthillBuildTagBuilt = default_info;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return NCITAnthillBuildTagBuilt;
+        return _ncitAnthillBuildTagBuilt;
     }
 
     public String getNCImURL() {
-        if (NCImURL != null) {
-            return NCImURL;
+        if (_ncimURL != null) {
+            return _ncimURL;
         }
         String default_info = "N/A";
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
-            NCImURL = properties.getProperty(NCItBrowserProperties.NCIM_URL);
-            if (NCImURL == null) {
-                NCImURL = default_info;
+            _ncimURL = properties.getProperty(NCItBrowserProperties.NCIM_URL);
+            if (_ncimURL == null) {
+                _ncimURL = default_info;
             }
         } catch (Exception ex) {
 
         }
-        return NCImURL;
+        return _ncimURL;
     }
 
     public String getEVSServiceURL() {
-        if (EVSServiceURL != null) {
-            return EVSServiceURL;
+        if (_evsServiceURL != null) {
+            return _evsServiceURL;
         }
         String default_info = "Local LexEVS";
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
-            EVSServiceURL =
+            _evsServiceURL =
                 properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-            if (EVSServiceURL == null) {
-                EVSServiceURL = default_info;
+            if (_evsServiceURL == null) {
+                _evsServiceURL = default_info;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return EVSServiceURL;
+        return _evsServiceURL;
     }
 
     public String getTermSuggestionURL() {
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
-            term_suggestion_application_url =
+            _term_suggestion_application_url =
                 properties
                     .getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
         } catch (Exception ex) {
 
         }
-        return term_suggestion_application_url;
+        return _term_suggestion_application_url;
     }
 
     // /////////////////////////////////////////////////////////////////////////////
@@ -2324,8 +2324,8 @@ public class DataUtils {
     }
 
     public static HashMap getNamespaceId2CodingSchemeFormalNameMapping() {
-        if (namespace2CodingScheme != null) {
-            return namespace2CodingScheme;
+        if (_namespace2CodingScheme != null) {
+            return _namespace2CodingScheme;
         }
 
         HashMap hmap = new HashMap();
@@ -2413,7 +2413,7 @@ public class DataUtils {
             }
         }
 
-        namespace2CodingScheme = hmap;
+        _namespace2CodingScheme = hmap;
         return hmap;
     }
 
@@ -2429,7 +2429,7 @@ public class DataUtils {
         if (key == null) {
             return null;
         }
-        if (csnv2codingSchemeNameMap == null) {
+        if (_csnv2codingSchemeNameMap == null) {
             _logger.debug("setCodingSchemeMap");
             setCodingSchemeMap();
         }
@@ -2438,12 +2438,12 @@ public class DataUtils {
             key.replaceAll("%20", " ");
         }
 
-        if (csnv2codingSchemeNameMap == null) {
+        if (_csnv2codingSchemeNameMap == null) {
             _logger.warn("csnv2codingSchemeNameMap == NULL???");
             return key;
         }
 
-        String value = (String) csnv2codingSchemeNameMap.get(key);
+        String value = (String) _csnv2codingSchemeNameMap.get(key);
         if (value == null) {
             // _logger.debug("key2CodingSchemeName returns " + key);
             return key;
@@ -2455,18 +2455,18 @@ public class DataUtils {
         if (key == null) {
             return null;
         }
-        if (csnv2VersionMap == null)
+        if (_csnv2VersionMap == null)
             setCodingSchemeMap();
         if (key.indexOf("%20") != -1) {
             key.replaceAll("%20", " ");
         }
 
-        if (csnv2VersionMap == null) {
+        if (_csnv2VersionMap == null) {
             _logger.warn("csnv2VersionMap == NULL???");
             return key;
         }
 
-        String value = (String) csnv2VersionMap.get(key);
+        String value = (String) _csnv2VersionMap.get(key);
         return value;
     }
 
@@ -2515,7 +2515,7 @@ public class DataUtils {
 
         strbuf.append("<ul>");
 
-        scheme = (String) formalName2LocalNameHashMap.get(scheme);
+        scheme = (String) _formalName2LocalNameHashMap.get(scheme);
         for (int i = 0; i < concept_vec.size(); i++) {
             int j = concept_vec.size() - i - 1;
             Concept c = (Concept) concept_vec.elementAt(j);
@@ -2560,8 +2560,8 @@ public class DataUtils {
             Vector w = parseData(concept_data);
             String scheme = (String) w.elementAt(0);
             String formalName =
-                (String) localName2FormalNameHashMap.get(scheme);
-            String localName = (String) formalName2LocalNameHashMap.get(scheme);
+                (String) _localName2FormalNameHashMap.get(scheme);
+            String localName = (String) _formalName2LocalNameHashMap.get(scheme);
             String vocabulary_name =
                 getMetadataValue(formalName, "display_name");
             String code = (String) w.elementAt(1);
@@ -2746,7 +2746,7 @@ public class DataUtils {
     public static Vector getStatusByConceptCodes(String scheme, String version,
         String ltag, Vector codes) {
         boolean conceptStatusSupported = false;
-        if (vocabulariesWithConceptStatusHashSet.contains(scheme))
+        if (_vocabulariesWithConceptStatusHashSet.contains(scheme))
             conceptStatusSupported = true;
 
         Vector w = new Vector();
@@ -2776,7 +2776,7 @@ public class DataUtils {
     public static String getConceptStatus(String scheme, String version,
         String ltag, String code) {
         boolean conceptStatusSupported = false;
-        if (vocabulariesWithConceptStatusHashSet.contains(scheme))
+        if (_vocabulariesWithConceptStatusHashSet.contains(scheme))
             conceptStatusSupported = true;
         if (!conceptStatusSupported)
             return null;
@@ -2799,7 +2799,7 @@ public class DataUtils {
     public static Vector getConceptStatusByConceptCodes(String scheme,
         String version, String ltag, Vector codes) {
         boolean conceptStatusSupported = false;
-        if (vocabulariesWithConceptStatusHashSet.contains(scheme))
+        if (_vocabulariesWithConceptStatusHashSet.contains(scheme))
             conceptStatusSupported = true;
 
         Vector w = new Vector();
@@ -2839,13 +2839,13 @@ public class DataUtils {
         if (s == null)
             return null;
 
-        if (formalName2LocalNameHashMap == null) {
+        if (_formalName2LocalNameHashMap == null) {
             setCodingSchemeMap();
         }
 
-        if (formalName2LocalNameHashMap.containsKey(s))
+        if (_formalName2LocalNameHashMap.containsKey(s))
             return s;
-        Iterator it = formalName2LocalNameHashMap.keySet().iterator();
+        Iterator it = _formalName2LocalNameHashMap.keySet().iterator();
         while (it.hasNext()) {
             String t = (String) it.next();
             String t0 = t;
@@ -2857,9 +2857,9 @@ public class DataUtils {
     }
 
     public static String getFormalNameByDisplayName(String s) {
-        if (displayName2FormalNameHashMap == null)
+        if (_displayName2FormalNameHashMap == null)
             setCodingSchemeMap();
-        return (String) displayName2FormalNameHashMap.get(s);
+        return (String) _displayName2FormalNameHashMap.get(s);
     }
 
     public static void main(String[] args) {
@@ -2878,15 +2878,15 @@ public class DataUtils {
     // [#25034] Remove hyperlink from instances on the Relationship tab. (KLO,
     // 121709)
     public static boolean isNonConcept2ConceptAssociation(String associationName) {
-        if (nonConcept2ConceptAssociations == null) {
-            nonConcept2ConceptAssociations = new Vector();
-            nonConcept2ConceptAssociations.add("domain");
-            nonConcept2ConceptAssociations.add("range");
-            nonConcept2ConceptAssociations.add("instance");
+        if (_nonConcept2ConceptAssociations == null) {
+            _nonConcept2ConceptAssociations = new Vector();
+            _nonConcept2ConceptAssociations.add("domain");
+            _nonConcept2ConceptAssociations.add("range");
+            _nonConcept2ConceptAssociations.add("instance");
         }
         if (associationName == null)
             return false;
-        return nonConcept2ConceptAssociations.contains(associationName);
+        return _nonConcept2ConceptAssociations.contains(associationName);
     }
 
     // [#25027] Encountering "Service Temporarily Unavailable" on display of

@@ -57,16 +57,16 @@ import org.apache.log4j.*;
 
 public class SortComparator implements Comparator<Object> {
     private static Logger _logger = Logger.getLogger(SortComparator.class);
-    private static int SORT_BY_NAME = 1;
-    private static int SORT_BY_CODE = 2;
-    private int sort_option = SORT_BY_NAME;
+    private static final int SORT_BY_NAME = 1;
+    private static final int SORT_BY_CODE = 2;
+    private int _sort_option = SORT_BY_NAME;
 
     public SortComparator() {
 
     }
 
     public SortComparator(int sort_option) {
-        this.sort_option = sort_option;
+        _sort_option = sort_option;
     }
 
     private String getKey(Object c, int sort_option) {
@@ -106,8 +106,8 @@ public class SortComparator implements Comparator<Object> {
         else if (c instanceof TreeItem) {
             TreeItem ti = (TreeItem) c;
             if (sort_option == SORT_BY_CODE)
-                return ti.code;
-            return ti.text;
+                return ti._code;
+            return ti._text;
         }
 
         else if (c instanceof String) {
@@ -120,13 +120,13 @@ public class SortComparator implements Comparator<Object> {
 
     public int compare(Object object1, Object object2) {
         // case insensitive sort
-        String key1 = getKey(object1, sort_option);
-        String key2 = getKey(object2, sort_option);
+        String key1 = getKey(object1, _sort_option);
+        String key2 = getKey(object2, _sort_option);
 
         if (key1 == null || key2 == null)
             return 0;
-        key1 = getKey(object1, sort_option).toLowerCase();
-        key2 = getKey(object2, sort_option).toLowerCase();
+        key1 = getKey(object1, _sort_option).toLowerCase();
+        key2 = getKey(object2, _sort_option).toLowerCase();
 
         return key1.compareTo(key2);
     }
