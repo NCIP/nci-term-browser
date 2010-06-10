@@ -1,119 +1,15 @@
 package gov.nih.nci.evs.browser.test;
 
-import java.io.*;
 import java.util.*;
-
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-
-
-import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
-import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
-
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-
-import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
-
-
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
-
-import org.LexGrid.LexBIG.Utility.Constructors;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
-
-import org.LexGrid.naming.Mappings;
-
-import org.LexGrid.LexBIG.Exceptions.LBResourceUnavailableException;
-
-import org.LexGrid.LexBIG.DataModel.Collections.ModuleDescriptionList;
-
-
-import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.ModuleDescription;
-
-import org.LexGrid.concepts.Definition;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.LexBIG.LexBIGService.*;
 import org.LexGrid.concepts.Concept;
-import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
-import org.LexGrid.commonTypes.Property;
-import org.LexGrid.commonTypes.Source;
+import org.LexGrid.LexBIG.Utility.Iterators.*;
+import org.LexGrid.LexBIG.Utility.*;
 
-
-import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.naming.SupportedProperty;
-
-import org.LexGrid.concepts.Presentation;
-
-import org.LexGrid.commonTypes.PropertyQualifier;
-
-
-
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-import org.LexGrid.LexBIG.History.HistoryService;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.Utility.Constructors;
-import org.LexGrid.concepts.Concept;
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
-import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
-import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
-import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
-import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
-import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
-import org.LexGrid.LexBIG.DataModel.Core.Association;
-import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.concepts.Presentation;
-import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
-import org.LexGrid.commonTypes.EntityDescription;
-import org.LexGrid.commonTypes.Property;
-import org.LexGrid.relations.Relations;
-import org.LexGrid.versions.SystemRelease;
-import org.LexGrid.commonTypes.PropertyQualifier;
-import org.LexGrid.commonTypes.Source;
-import org.LexGrid.naming.SupportedSource;
-import org.LexGrid.naming.SupportedPropertyQualifier;
-import org.LexGrid.LexBIG.DataModel.Core.types.CodingSchemeVersionStatus;
-import org.LexGrid.naming.SupportedAssociation;
-import org.LexGrid.naming.SupportedProperty;
-import org.LexGrid.naming.SupportedRepresentationalForm;
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
-import org.LexGrid.naming.Mappings;
-import org.LexGrid.naming.SupportedHierarchy;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
-
-//import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
-//import static gov.nih.nci.evs.browser.common.Constants.*;
-
-import org.LexGrid.naming.SupportedNamespace;
-import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
-import org.LexGrid.concepts.Entity;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
-import org.LexGrid.LexBIG.DataModel.Collections.MetadataPropertyList;
-import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
-
-
-import org.LexGrid.concepts.Concept;
-import org.apache.log4j.Logger;
-
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.*;
+import org.apache.log4j.*;
 
 public class MatchConceptByCode {
     private static Logger _logger = Logger.getLogger(MatchConceptByCode.class);

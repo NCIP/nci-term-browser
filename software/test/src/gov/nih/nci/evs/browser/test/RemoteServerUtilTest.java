@@ -1,31 +1,14 @@
 package gov.nih.nci.evs.browser.test;
 
-//package gov.nih.nci.evs.browser.utils;
+import gov.nih.nci.system.client.*;
+import org.LexGrid.LexBIG.caCore.interfaces.*;
 
-//v5.0
-import gov.nih.nci.system.applicationservice.ApplicationException;
-import gov.nih.nci.system.client.ApplicationServiceProvider;
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
-import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
-import org.LexGrid.LexBIG.caCore.interfaces.LexEVSApplicationService;
-import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDataService;
-import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
-import org.LexGrid.LexBIG.caCore.interfaces.LexEVSService;
-import org.LexGrid.codingSchemes.CodingScheme;
 
-//import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
-import java.util.Hashtable;
-import java.util.Properties;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.Impl.*;
+import org.apache.log4j.*;
 
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
-import org.apache.log4j.Logger;
-
-//KLO 100709
-import gov.nih.nci.evs.security.SecurityToken;
-//import gov.nih.nci.evs.browser.bean.SecurityTokenHolder;
-import java.util.List;
+import gov.nih.nci.evs.security.*;
 
 /**
 * <!-- LICENSE_TEXT_START -->
