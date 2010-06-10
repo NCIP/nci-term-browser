@@ -53,13 +53,12 @@ import java.util.*;
  */
 
 public class IteratorBeanManager extends Object {
-
-    HashMap iteratorBeanHashMap = null;
-    Random random = null;
+    private HashMap _iteratorBeanHashMap = null;
+    private Random _random = null;
 
     public IteratorBeanManager() {
-        this.iteratorBeanHashMap = new HashMap();
-        random = new Random();
+        _iteratorBeanHashMap = new HashMap();
+        _random = new Random();
     }
 
     public String createIteratorKey(Vector schemes, String matchText,
@@ -72,7 +71,7 @@ public class IteratorBeanManager extends Object {
             key = key + "|" + scheme;
         }
         key = key + "|" + maxReturn_str;
-        int randomNumber = random.nextInt();
+        int randomNumber = _random.nextInt();
         String randomNumber_str = Integer.toString(randomNumber);
         key = key + "|" + randomNumber_str;
         return key;
@@ -80,9 +79,9 @@ public class IteratorBeanManager extends Object {
 
     public boolean addIteratorBean(IteratorBean bean) {
         String key = bean.getKey();
-        if (iteratorBeanHashMap.containsKey(key))
+        if (_iteratorBeanHashMap.containsKey(key))
             return false;
-        iteratorBeanHashMap.put(key, bean);
+        _iteratorBeanHashMap.put(key, bean);
         return true;
     }
 
@@ -91,23 +90,23 @@ public class IteratorBeanManager extends Object {
             return null;
         if (!containsIteratorBean(key))
             return null;
-        return (IteratorBean) iteratorBeanHashMap.get(key);
+        return (IteratorBean) _iteratorBeanHashMap.get(key);
     }
 
     public boolean containsIteratorBean(String key) {
         if (key == null)
             return false;
-        return iteratorBeanHashMap.containsKey(key);
+        return _iteratorBeanHashMap.containsKey(key);
     }
 
     public Vector getKeys() {
-        if (iteratorBeanHashMap == null)
+        if (_iteratorBeanHashMap == null)
             return null;
         Vector key_vec = new Vector();
-        Iterator iterator = iteratorBeanHashMap.keySet().iterator();
+        Iterator iterator = _iteratorBeanHashMap.keySet().iterator();
         while (iterator.hasNext()) {
             String key = (String) iterator.next();
-            IteratorBean bean = (IteratorBean) iteratorBeanHashMap.get(key);
+            IteratorBean bean = (IteratorBean) _iteratorBeanHashMap.get(key);
             key_vec.add(bean.getKey());
         }
         return key_vec;

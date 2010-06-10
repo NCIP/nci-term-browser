@@ -61,15 +61,15 @@ import gov.nih.nci.evs.browser.properties.*;
 
 public class LicenseBean extends Object {
     private static Logger _logger = Logger.getLogger(LicenseBean.class);
-    HashSet licenseAgreementHashSet = null;
+    private HashSet _licenseAgreementHashSet = null;
 
     public LicenseBean() {
-        licenseAgreementHashSet = new HashSet();
+        _licenseAgreementHashSet = new HashSet();
     }
 
     public void addLicenseAgreement(String scheme) {
         _logger.debug("LicenseBean addLicenseAgreement " + scheme);
-        licenseAgreementHashSet.add(scheme);
+        _licenseAgreementHashSet.add(scheme);
     }
 
     public boolean licenseAgreementAccepted(String scheme) {
@@ -79,7 +79,7 @@ public class LicenseBean extends Object {
         if (license_page_option.compareToIgnoreCase("true") != 0)
             return true;
 
-        boolean retval = licenseAgreementHashSet.contains(scheme);
+        boolean retval = _licenseAgreementHashSet.contains(scheme);
         return (retval);
     }
 

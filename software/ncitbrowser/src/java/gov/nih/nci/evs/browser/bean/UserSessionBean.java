@@ -69,20 +69,20 @@ import org.apache.log4j.*;
 public class UserSessionBean extends Object {
     private static Logger _logger = Logger.getLogger(UserSessionBean.class);
 
-    private static String contains_warning_msg =
+    private static String _contains_warning_msg =
         "(WARNING: Only a subset of results may appear due to current limits in the terminology server (see Known Issues on the Help page).)";
-    private String selectedQuickLink = null;
-    private List quickLinkList = null;
+    private String _selectedQuickLink = null;
+    private List _quickLinkList = null;
 
-    public List<SelectItem> ontologyList = null;
-    public List<String> ontologiesToSearchOn = null;
+    public List<SelectItem> _ontologyList = null;
+    public List<String> _ontologiesToSearchOn = null;
 
     public UserSessionBean() {
-        ontologiesToSearchOn = new ArrayList<String>();
+        _ontologiesToSearchOn = new ArrayList<String>();
     }
 
     public void setSelectedQuickLink(String selectedQuickLink) {
-        this.selectedQuickLink = selectedQuickLink;
+        _selectedQuickLink = selectedQuickLink;
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -91,7 +91,7 @@ public class UserSessionBean extends Object {
     }
 
     public String getSelectedQuickLink() {
-        return this.selectedQuickLink;
+        return _selectedQuickLink;
     }
 
     public void quickLinkChanged(ValueChangeEvent event) {
@@ -107,7 +107,7 @@ public class UserSessionBean extends Object {
                 .getExternalContext().getResponse();
 
         String targetURL = null;// "http://nciterms.nci.nih.gov/";
-        if (selectedQuickLink.compareTo("NCI Terminology Browser") == 0) {
+        if (_selectedQuickLink.compareTo("NCI Terminology Browser") == 0) {
             targetURL = "http://nciterms.nci.nih.gov/";
         }
         try {
@@ -120,13 +120,13 @@ public class UserSessionBean extends Object {
     }
 
     public List getQuickLinkList() {
-        quickLinkList = new ArrayList();
-        quickLinkList.add(new SelectItem("Quick Links"));
-        quickLinkList.add(new SelectItem("NCI Terminology Browser"));
-        quickLinkList.add(new SelectItem("NCI MetaThesaurus"));
-        quickLinkList.add(new SelectItem("EVS Home"));
-        quickLinkList.add(new SelectItem("NCI Terminology Resources"));
-        return quickLinkList;
+        _quickLinkList = new ArrayList();
+        _quickLinkList.add(new SelectItem("Quick Links"));
+        _quickLinkList.add(new SelectItem("NCI Terminology Browser"));
+        _quickLinkList.add(new SelectItem("NCI MetaThesaurus"));
+        _quickLinkList.add(new SelectItem("EVS Home"));
+        _quickLinkList.add(new SelectItem("NCI Terminology Resources"));
+        return _quickLinkList;
     }
 
     public String searchAction() {
@@ -424,29 +424,29 @@ public class UserSessionBean extends Object {
         return "message";
     }
 
-    private String selectedResultsPerPage = null;
-    private List resultsPerPageList = null;
+    private String _selectedResultsPerPage = null;
+    private List _resultsPerPageList = null;
 
     public List getResultsPerPageList() {
-        resultsPerPageList = new ArrayList();
-        resultsPerPageList.add(new SelectItem("10"));
-        resultsPerPageList.add(new SelectItem("25"));
-        resultsPerPageList.add(new SelectItem("50"));
-        resultsPerPageList.add(new SelectItem("75"));
-        resultsPerPageList.add(new SelectItem("100"));
-        resultsPerPageList.add(new SelectItem("250"));
-        resultsPerPageList.add(new SelectItem("500"));
+        _resultsPerPageList = new ArrayList();
+        _resultsPerPageList.add(new SelectItem("10"));
+        _resultsPerPageList.add(new SelectItem("25"));
+        _resultsPerPageList.add(new SelectItem("50"));
+        _resultsPerPageList.add(new SelectItem("75"));
+        _resultsPerPageList.add(new SelectItem("100"));
+        _resultsPerPageList.add(new SelectItem("250"));
+        _resultsPerPageList.add(new SelectItem("500"));
 
-        selectedResultsPerPage =
-            ((SelectItem) resultsPerPageList.get(2)).getLabel(); // default to
+        _selectedResultsPerPage =
+            ((SelectItem) _resultsPerPageList.get(2)).getLabel(); // default to
                                                                  // 50
-        return resultsPerPageList;
+        return _resultsPerPageList;
     }
 
     public void setSelectedResultsPerPage(String selectedResultsPerPage) {
         if (selectedResultsPerPage == null)
             return;
-        this.selectedResultsPerPage = selectedResultsPerPage;
+        _selectedResultsPerPage = selectedResultsPerPage;
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -462,12 +462,12 @@ public class UserSessionBean extends Object {
             (String) request.getSession()
                 .getAttribute("selectedResultsPerPage");
         if (s != null) {
-            this.selectedResultsPerPage = s;
+            _selectedResultsPerPage = s;
         } else {
-            this.selectedResultsPerPage = "50";
+            _selectedResultsPerPage = "50";
             request.getSession().setAttribute("selectedResultsPerPage", "50");
         }
-        return this.selectedResultsPerPage;
+        return _selectedResultsPerPage;
     }
 
     public void resultsPerPageChanged(ValueChangeEvent event) {
@@ -485,16 +485,16 @@ public class UserSessionBean extends Object {
         return "";
     }
 
-    private String selectedAlgorithm = null;
-    private List algorithmList = null;
+    private String _selectedAlgorithm = null;
+    private List _algorithmList = null;
 
     public List getAlgorithmList() {
-        algorithmList = new ArrayList();
-        algorithmList.add(new SelectItem("exactMatch", "exactMatch"));
-        algorithmList.add(new SelectItem("startsWith", "Begins With"));
-        algorithmList.add(new SelectItem("contains", "Contains"));
-        selectedAlgorithm = ((SelectItem) algorithmList.get(0)).getLabel();
-        return algorithmList;
+        _algorithmList = new ArrayList();
+        _algorithmList.add(new SelectItem("exactMatch", "exactMatch"));
+        _algorithmList.add(new SelectItem("startsWith", "Begins With"));
+        _algorithmList.add(new SelectItem("contains", "Contains"));
+        _selectedAlgorithm = ((SelectItem) _algorithmList.get(0)).getLabel();
+        return _algorithmList;
     }
 
     public void algorithmChanged(ValueChangeEvent event) {
@@ -505,7 +505,7 @@ public class UserSessionBean extends Object {
     }
 
     public void setSelectedAlgorithm(String selectedAlgorithm) {
-        this.selectedAlgorithm = selectedAlgorithm;
+        _selectedAlgorithm = selectedAlgorithm;
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -513,7 +513,7 @@ public class UserSessionBean extends Object {
     }
 
     public String getSelectedAlgorithm() {
-        return this.selectedAlgorithm;
+        return _selectedAlgorithm;
     }
 
     public String contactUs() throws Exception {
@@ -552,29 +552,29 @@ public class UserSessionBean extends Object {
     // ontologies
 
     public List getOntologiesToSearchOn() {
-        if (ontologyList == null) {
-            ontologyList = DataUtils.getOntologyList();
-            SelectItem item = (SelectItem) ontologyList.get(0);
-            ontologiesToSearchOn.add(item.getLabel());
-        } else if (ontologiesToSearchOn.size() == 0) {
-            SelectItem item = (SelectItem) ontologyList.get(0);
-            ontologiesToSearchOn.add(item.getLabel());
+        if (_ontologyList == null) {
+            _ontologyList = DataUtils.getOntologyList();
+            SelectItem item = (SelectItem) _ontologyList.get(0);
+            _ontologiesToSearchOn.add(item.getLabel());
+        } else if (_ontologiesToSearchOn.size() == 0) {
+            SelectItem item = (SelectItem) _ontologyList.get(0);
+            _ontologiesToSearchOn.add(item.getLabel());
         }
-        return ontologiesToSearchOn;
+        return _ontologiesToSearchOn;
     }
 
     public List getOntologyList() {
-        if (ontologyList == null) {
-            ontologyList = DataUtils.getOntologyList();
+        if (_ontologyList == null) {
+            _ontologyList = DataUtils.getOntologyList();
         }
-        return ontologyList;
+        return _ontologyList;
     }
 
     public void setOntologiesToSearchOn(List<String> newValue) {
-        ontologiesToSearchOn = new ArrayList<String>();
+        _ontologiesToSearchOn = new ArrayList<String>();
         for (int i = 0; i < newValue.size(); i++) {
             Object obj = newValue.get(i);
-            ontologiesToSearchOn.add((String) obj);
+            _ontologiesToSearchOn.add((String) obj);
         }
     }
 
@@ -587,21 +587,21 @@ public class UserSessionBean extends Object {
         setOntologiesToSearchOn(newValue);
     }
 
-    public List<SelectItem> ontologySelectionList = null;
-    public String ontologyToSearchOn = null;
+    public List<SelectItem> _ontologySelectionList = null;
+    public String _ontologyToSearchOn = null;
 
     public List getOntologySelectionList() {
-        if (ontologySelectionList != null)
-            return ontologySelectionList;
+        if (_ontologySelectionList != null)
+            return _ontologySelectionList;
         List ontologies = getOntologyList();
-        ontologySelectionList = new ArrayList<SelectItem>();
+        _ontologySelectionList = new ArrayList<SelectItem>();
         String label = "Switch to another vocabulary (select one)";
-        ontologySelectionList.add(new SelectItem(label, label));
+        _ontologySelectionList.add(new SelectItem(label, label));
         for (int i = 0; i < ontologies.size(); i++) {
-            SelectItem item = (SelectItem) ontologyList.get(i);
-            ontologySelectionList.add(item);
+            SelectItem item = (SelectItem) _ontologyList.get(i);
+            _ontologySelectionList.add(item);
         }
-        return ontologySelectionList;
+        return _ontologySelectionList;
     }
 
     public void ontologySelectionChanged(ValueChangeEvent event) {
@@ -626,16 +626,16 @@ public class UserSessionBean extends Object {
     }
 
     public String getOntologyToSearchOn() {
-        if (ontologySelectionList == null) {
-            ontologySelectionList = getOntologySelectionList();
-            SelectItem item = (SelectItem) ontologyList.get(1);
-            ontologyToSearchOn = item.getLabel();
+        if (_ontologySelectionList == null) {
+            _ontologySelectionList = getOntologySelectionList();
+            SelectItem item = (SelectItem) _ontologyList.get(1);
+            _ontologyToSearchOn = item.getLabel();
         }
-        return ontologyToSearchOn;
+        return _ontologyToSearchOn;
     }
 
     public void setOntologyToSearchOn(String newValue) {
-        ontologyToSearchOn = newValue;
+        _ontologyToSearchOn = newValue;
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////
