@@ -50,40 +50,40 @@ package gov.nih.nci.evs.browser.common;
 public class Constants {
 
     // Application version
-    static public final int MAJOR_VER = 1;
-    static public final int MINOR_VER = 0;
-    static public final String CONFIG_FILE = "NCItBrowserProperties.xml";
-    static public final String CODING_SCHEME_NAME = "NCI Thesaurus";
-    static public final String NCI_THESAURUS = "NCI Thesaurus";
-    static public final String NCI_METATHESAURUS = "NCI Metathesaurus";
+    public static final int MAJOR_VER = 1;
+    public static final int MINOR_VER = 0;
+    public static final String CONFIG_FILE = "NCItBrowserProperties.xml";
+    public static final String CODING_SCHEME_NAME = "NCI Thesaurus";
+    public static final String NCI_THESAURUS = "NCI Thesaurus";
+    public static final String NCI_METATHESAURUS = "NCI Metathesaurus";
 
     // Application constants
-    static public final String NA = "N/A";
-    static public final String TRUE = "true";
-    static public final String FALSE = "false";
-    static public final String EMPTY = "";
+    public static final String NA = "N/A";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+    public static final String EMPTY = "";
 
-    static public final String ALL = "ALL";
+    public static final String ALL = "ALL";
 
     // Application error constants
-    static public final String INIT_PARAM_ERROR_PAGE = "errorPage";
-    static public final String ERROR_MESSAGE = "systemMessage";
-    static public final String ERROR_UNEXPECTED =
+    public static final String INIT_PARAM_ERROR_PAGE = "errorPage";
+    public static final String ERROR_MESSAGE = "systemMessage";
+    public static final String ERROR_UNEXPECTED =
         "Warning: An unexpected processing error has occurred.";
 
-    static public final int DEFAULT_PAGE_SIZE = 50;
+    public static final int DEFAULT_PAGE_SIZE = 50;
 
-    static public final String ERROR_NO_VOCABULARY_SELECTED =
+    public static final String ERROR_NO_VOCABULARY_SELECTED =
         "Please select at least one vocabulary.";
-    static public final String ERROR_NO_SEARCH_STRING_ENTERED =
+    public static final String ERROR_NO_SEARCH_STRING_ENTERED =
         "Please enter a search string.";
-    static public final String ERROR_NO_MATCH_FOUND = "No match found.";
-    static public final String ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS =
+    public static final String ERROR_NO_MATCH_FOUND = "No match found.";
+    public static final String ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS =
         "No match found. Please try 'Begins With' or 'Contains' search instead.";
 
-    static public final String ERROR_ENCOUNTERED_TRY_NARROW_QUERY =
+    public static final String ERROR_ENCOUNTERED_TRY_NARROW_QUERY =
         "Unable to perform search successfully. Please narrow your query.";
-    static public final String ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING =
+    public static final String ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING =
         "Please provide a more specific search criteria.";
 
     public static final String EXACT_SEARCH_ALGORITHM = "exactMatch";// "literalSubString";//"subString";
@@ -92,9 +92,9 @@ public class Constants {
         "nonLeadingWildcardLiteralSubString";// "literalSubString";//"subString";
     public static final String LICENSE_STATEMENT = "license_statement";// "literalSubString";//"subString";
 
-    static public final int SEARCH_BOTH_DIRECTION = 0;
-    static public final int SEARCH_SOURCE = 1;
-    static public final int SEARCH_TARGET = 2;
+    public static final int SEARCH_BOTH_DIRECTION = 0;
+    public static final int SEARCH_SOURCE = 1;
+    public static final int SEARCH_TARGET = 2;
 
     /**
      * Constructor
