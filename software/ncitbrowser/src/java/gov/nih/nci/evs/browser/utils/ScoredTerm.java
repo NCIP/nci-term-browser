@@ -1,7 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
 
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.commonTypes.EntityDescription;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.commonTypes.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->

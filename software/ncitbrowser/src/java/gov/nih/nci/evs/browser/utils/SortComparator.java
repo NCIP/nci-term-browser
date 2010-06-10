@@ -1,20 +1,9 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-import java.util.Collections;
+import java.util.*;
 
-import java.util.Comparator;
-
-import org.LexGrid.concepts.Concept;
-import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.apache.log4j.Logger;
-
-//import gov.nih.nci.evs.browser.utils.TreeItem;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->

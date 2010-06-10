@@ -1,24 +1,14 @@
-//package org.lexevs.codednodeset;
 package gov.nih.nci.evs.browser.utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
-import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
-import org.LexGrid.LexBIG.Exceptions.LBParameterException;
-import org.LexGrid.LexBIG.Exceptions.LBResourceUnavailableException;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.apache.log4j.Logger;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.LexBIG.Exceptions.*;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.*;
+import org.LexGrid.LexBIG.Utility.Iterators.*;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->

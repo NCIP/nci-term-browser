@@ -1,62 +1,29 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.util.*;
+import java.sql.*;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
-import java.util.Arrays;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.*;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.LexBIG.Exceptions.*;
+import org.LexGrid.LexBIG.Impl.*;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.concepts.*;
+import org.LexGrid.LexBIG.Utility.Iterators.*;
+import org.LexGrid.codingSchemes.*;
+import org.LexGrid.LexBIG.Utility.*;
+import org.LexGrid.LexBIG.DataModel.Core.types.*;
+import org.LexGrid.LexBIG.Extensions.Generic.*;
+import org.LexGrid.naming.*;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.*;
+import org.LexGrid.commonTypes.*;
 
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.concepts.Concept;
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
-import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
-import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
-import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
-import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
-import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
-import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
-import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
-import org.LexGrid.LexBIG.DataModel.Core.Association;
-import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.concepts.Presentation;
-import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
-import org.LexGrid.LexBIG.DataModel.Core.types.CodingSchemeVersionStatus;
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
-import org.LexGrid.naming.Mappings;
-import org.LexGrid.naming.SupportedHierarchy;
-import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
-import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
+import gov.nih.nci.evs.browser.properties.*;
+import gov.nih.nci.evs.browser.common.*;
 
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties; //import static gov.nih.nci.evs.browser.common.Constants.*;
-import gov.nih.nci.evs.browser.common.Constants;
-import org.LexGrid.naming.SupportedNamespace;
-import org.LexGrid.LexBIG.Exceptions.LBInvocationException;
-import org.LexGrid.commonTypes.EntityDescription; //import org.LexGrid.LexBIG.DataModel.enums.SearchDesignationOption;
-import org.apache.commons.codec.language.DoubleMetaphone;
-
-import org.LexGrid.LexBIG.Utility.Constructors; //import org.LexGrid.LexBIG.DataModel.enums.PropertyType;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
-import org.LexGrid.naming.SupportedProperty;
-
-import org.apache.log4j.Logger;
+import org.apache.commons.codec.language.*;
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->

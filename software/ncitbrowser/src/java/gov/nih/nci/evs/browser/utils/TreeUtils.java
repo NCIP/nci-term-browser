@@ -1,49 +1,21 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.Vector;
-import java.io.Serializable;
+import java.util.*;
 
-import org.LexGrid.LexBIG.DataModel.Collections.AssociatedConceptList;
-import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
-import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
-import org.LexGrid.LexBIG.DataModel.Core.Association;
-import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.Exceptions.LBException;
-import org.LexGrid.LexBIG.Exceptions.LBResourceUnavailableException;
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods.HierarchyPathResolveOption;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.Utility.Constructors;
-import org.LexGrid.codingSchemes.CodingScheme;
-import org.LexGrid.commonTypes.EntityDescription;
-import org.LexGrid.naming.SupportedHierarchy;
-import org.LexGrid.naming.Mappings;
-import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
-import org.LexGrid.concepts.Concept;
-import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
-import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Core.*;
+import org.LexGrid.LexBIG.Exceptions.*;
+import org.LexGrid.LexBIG.Extensions.Generic.*;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods.*;
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.Utility.*;
+import org.LexGrid.codingSchemes.*;
+import org.LexGrid.commonTypes.*;
+import org.LexGrid.naming.*;
+import org.LexGrid.concepts.*;
 
-import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
-import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
-import org.apache.log4j.Logger;
-
-//import static gov.nih.nci.evs.browser.common.Constants.*;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.*;
+import org.apache.log4j.*;
 
 /**
  * Copyright: (c) 2004-2009 Mayo Foundation for Medical Education and
