@@ -78,35 +78,35 @@ import org.apache.log4j.*;
 public class SearchUtils {
     private static Logger _logger = Logger.getLogger(SearchUtils.class);
 
-    private DoubleMetaphone doubleMetaphone = null;
+    private DoubleMetaphone _doubleMetaphone = null;
 
-    private int max_str_length = 1000;
-    private int penalty_multiplier_1 = 1;
-    private int penalty_multiplier_2 = 2;
+    private int _max_str_length = 1000;
+    private int _penalty_multiplier_1 = 1;
+    private int _penalty_multiplier_2 = 2;
 
-    private boolean apply_sort_score = false;
-    private boolean sort_by_pt_only = true;
+    private boolean _apply_sort_score = false;
+    private boolean _sort_by_pt_only = true;
 
-    Connection con;
-    Statement stmt;
-    ResultSet rs;
+    private Connection _con;
+    private Statement _stmt;
+    private ResultSet _rs;
 
-    private static org.LexGrid.LexBIG.LexBIGService.LexBIGService lbSvc = null;
-    public org.LexGrid.LexBIG.Utility.ConvenienceMethods lbConvMethods = null;
-    public CodingSchemeRenderingList csrl = null;
-    private static HashMap codingSchemeMap = null;
-    private static HashMap csnv2codingSchemeNameMap = null;
-    private static HashMap csnv2VersionMap = null;
-    private static String url = null;
+    private static org.LexGrid.LexBIG.LexBIGService.LexBIGService _lbSvc = null;
+    public org.LexGrid.LexBIG.Utility.ConvenienceMethods _lbConvMethods = null;
+    public CodingSchemeRenderingList _csrl = null;
+    private static HashMap _codingSchemeMap = null;
+    private static HashMap _csnv2codingSchemeNameMap = null;
+    private static HashMap _csnv2VersionMap = null;
+    private static String _url = null;
 
     public static int ALL = 0;
     public static int PREFERRED_ONLY = 1;
     public static int NON_PREFERRED_ONLY = 2;
 
-    static int RESOLVE_SOURCE = 1;
-    static int RESOLVE_TARGET = -1;
-    static int RESTRICT_SOURCE = -1;
-    static int RESTRICT_TARGET = 1;
+    private static int RESOLVE_SOURCE = 1;
+    private static int RESOLVE_TARGET = -1;
+    private static int RESTRICT_SOURCE = -1;
+    private static int RESTRICT_TARGET = 1;
 
     public static final int SEARCH_NAME_CODE = 1;
     public static final int SEARCH_DEFINITION = 2;
@@ -115,11 +115,11 @@ public class SearchUtils {
     public static final int SEARCH_ROLE_VALUE = 6;
     public static final int SEARCH_ASSOCIATION_VALUE = 7;
 
-    static final List<String> STOP_WORDS =
+    private static final List<String> STOP_WORDS =
         Arrays.asList(new String[] { "a", "an", "and", "by", "for", "of", "on",
             "in", "nos", "the", "to", "with" });
 
-    static HashMap propertyLocalNameListHashMap = null;
+    private static HashMap _propertyLocalNameListHashMap = null;
 
     public enum NameSearchType {
         All, Name, Code
@@ -130,24 +130,24 @@ public class SearchUtils {
     }
 
     public SearchUtils(String url) {
-        SearchUtils.url = url;
+        SearchUtils._url = url;
         initializeSortParameters();
     }
 
     private void initializeSortParameters() {
-        propertyLocalNameListHashMap = new HashMap();
+        _propertyLocalNameListHashMap = new HashMap();
         try {
             NCItBrowserProperties properties =
                 NCItBrowserProperties.getInstance();
             String sort_str =
                 properties.getProperty(NCItBrowserProperties.SORT_BY_SCORE);
-            sort_by_pt_only = true;
-            apply_sort_score = true;
+            _sort_by_pt_only = true;
+            _apply_sort_score = true;
             if (sort_str != null) {
                 if (sort_str.compareTo("false") == 0) {
-                    apply_sort_score = false;
+                    _apply_sort_score = false;
                 } else if (sort_str.compareToIgnoreCase("all") == 0) {
-                    sort_by_pt_only = false;
+                    _sort_by_pt_only = false;
                 }
             }
 
@@ -157,9 +157,9 @@ public class SearchUtils {
     }
 
     private static void setCodingSchemeMap() {
-        codingSchemeMap = new HashMap();
-        csnv2codingSchemeNameMap = new HashMap();
-        csnv2VersionMap = new HashMap();
+        _codingSchemeMap = new HashMap();
+        _csnv2codingSchemeNameMap = new HashMap();
+        _csnv2VersionMap = new HashMap();
 
         try {
             // RemoteServerUtil rsu = new RemoteServerUtil();
@@ -188,7 +188,7 @@ public class SearchUtils {
                     try {
                         scheme = lbSvc.resolveCodingScheme(formalname, vt);
                         if (scheme != null) {
-                            codingSchemeMap.put((Object) formalname,
+                            _codingSchemeMap.put((Object) formalname,
                                 (Object) scheme);
 
                             String value =
@@ -196,8 +196,8 @@ public class SearchUtils {
                                     + ")";
                             // _logger.debug(value);
 
-                            csnv2codingSchemeNameMap.put(value, formalname);
-                            csnv2VersionMap.put(value, representsVersion);
+                            _csnv2codingSchemeNameMap.put(value, formalname);
+                            _csnv2VersionMap.put(value, representsVersion);
 
                         }
 
@@ -206,7 +206,7 @@ public class SearchUtils {
                         try {
                             scheme = lbSvc.resolveCodingScheme(urn, vt);
                             if (scheme != null) {
-                                codingSchemeMap.put((Object) formalname,
+                                _codingSchemeMap.put((Object) formalname,
                                     (Object) scheme);
 
                                 String value =
@@ -214,8 +214,8 @@ public class SearchUtils {
                                         + representsVersion + ")";
                                 // _logger.debug(value);
 
-                                csnv2codingSchemeNameMap.put(value, formalname);
-                                csnv2VersionMap.put(value, representsVersion);
+                                _csnv2codingSchemeNameMap.put(value, formalname);
+                                _csnv2VersionMap.put(value, representsVersion);
 
                             }
 
@@ -226,7 +226,7 @@ public class SearchUtils {
                                 scheme =
                                     lbSvc.resolveCodingScheme(localname, vt);
                                 if (scheme != null) {
-                                    codingSchemeMap.put((Object) formalname,
+                                    _codingSchemeMap.put((Object) formalname,
                                         (Object) scheme);
 
                                     String value =
@@ -234,9 +234,9 @@ public class SearchUtils {
                                             + representsVersion + ")";
                                     // _logger.debug(value);
 
-                                    csnv2codingSchemeNameMap.put(value,
+                                    _csnv2codingSchemeNameMap.put(value,
                                         formalname);
-                                    csnv2VersionMap.put(value,
+                                    _csnv2VersionMap.put(value,
                                         representsVersion);
 
                                 }
@@ -259,7 +259,7 @@ public class SearchUtils {
         Vector v = new Vector();
         try {
             // EVSApplicationService lbSvc = new
-            // RemoteServerUtil().createLexBIGService(this.url);
+            // RemoteServerUtil().createLexBIGService(_url);
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             LexBIGServiceConvenienceMethods lbscm =
                 (LexBIGServiceConvenienceMethods) lbSvc
@@ -633,7 +633,7 @@ public class SearchUtils {
             try {
                 // resolve nothing unless sort_by_pt_only is set to false
                 boolean resolveConcepts = false;
-                if (apply_sort_score && !sort_by_pt_only)
+                if (_apply_sort_score && !_sort_by_pt_only)
                     resolveConcepts = true;
                 try {
 
@@ -1779,7 +1779,7 @@ public class SearchUtils {
                     if (scoredResult.containsKey(code)) {
                         ScoredTerm scoredTerm =
                             (ScoredTerm) scoredResult.get(code);
-                        if (scoredTerm.score > score)
+                        if (scoredTerm._score > score)
                             continue;
                     }
                     scoredResult.put(code, new ScoredTerm(ref, score));
@@ -1825,11 +1825,11 @@ public class SearchUtils {
         String target_lower = target.toLowerCase();
         int n = text_lower.indexOf(target_lower);
         if (n == -1)
-            return -1 * max_str_length;
+            return -1 * _max_str_length;
         int m1 = n;
         int m2 = text.length() - (n + target.length());
         int score =
-            max_str_length - penalty_multiplier_2 * m2 - penalty_multiplier_1
+            _max_str_length - _penalty_multiplier_2 * m2 - _penalty_multiplier_1
                 * m1;
         return Math.max(0, score);
     }
@@ -1924,7 +1924,7 @@ public class SearchUtils {
                         if (scoredResult.containsKey(code)) {
                             ScoredTerm scoredTerm =
                                 (ScoredTerm) scoredResult.get(code);
-                            if (scoredTerm.score > score)
+                            if (scoredTerm._score > score)
                                 continue;
                         }
                         scoredResult.put(code, new ScoredTerm(ref, score));
@@ -2460,7 +2460,7 @@ public class SearchUtils {
         if (containsDigit(word))
             return word;
 
-        return doubleMetaphone.encode(word);
+        return _doubleMetaphone.encode(word);
     }
 
     protected float score(String text, List<String> keywords) {
@@ -3088,19 +3088,19 @@ public class SearchUtils {
     }
 
     public static LocalNameList getPropertyLocalNameList(String codingSchemeName) {
-        if (propertyLocalNameListHashMap == null) {
-            propertyLocalNameListHashMap = new HashMap();
+        if (_propertyLocalNameListHashMap == null) {
+            _propertyLocalNameListHashMap = new HashMap();
         }
-        if (!propertyLocalNameListHashMap.containsKey(codingSchemeName)) {
+        if (!_propertyLocalNameListHashMap.containsKey(codingSchemeName)) {
             try {
                 LocalNameList lnl = getAllPropertyNames(codingSchemeName);
-                propertyLocalNameListHashMap.put(codingSchemeName, lnl);
+                _propertyLocalNameListHashMap.put(codingSchemeName, lnl);
                 return lnl;
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         } else {
-            return (LocalNameList) propertyLocalNameListHashMap
+            return (LocalNameList) _propertyLocalNameListHashMap
                 .get(codingSchemeName);
         }
         return null;
