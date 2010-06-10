@@ -63,80 +63,80 @@ import gov.nih.nci.evs.browser.bean.*;
 
 public class PropertyFileParser {
     private static Logger _logger = Logger.getLogger(PropertyFileParser.class);
-    List displayItemList;
-    HashMap configurableItemMap;
+    private List _displayItemList;
+    private HashMap _configurableItemMap;
 
-    List metadataElementList;
-    List defSourceMappingList;
-    HashMap defSourceMappingHashMap;
+    private List _metadataElementList;
+    private List _defSourceMappingList;
+    private HashMap _defSourceMappingHashMap;
 
-    List securityTokenList;
-    HashMap securityTokenHashMap;
+    private List _securityTokenList;
+    private HashMap _securityTokenHashMap;
 
-    String xmlfile;
+    private String _xmlfile;
 
-    Document dom;
+    private Document _dom;
 
     public PropertyFileParser() {
-        displayItemList = new ArrayList();
-        metadataElementList = new ArrayList();
-        defSourceMappingList = new ArrayList();
-        defSourceMappingHashMap = new HashMap();
-        securityTokenList = new ArrayList();
-        securityTokenHashMap = new HashMap();
-        configurableItemMap = new HashMap();
+        _displayItemList = new ArrayList();
+        _metadataElementList = new ArrayList();
+        _defSourceMappingList = new ArrayList();
+        _defSourceMappingHashMap = new HashMap();
+        _securityTokenList = new ArrayList();
+        _securityTokenHashMap = new HashMap();
+        _configurableItemMap = new HashMap();
     }
 
     public PropertyFileParser(String xmlfile) {
-        displayItemList = new ArrayList();
-        metadataElementList = new ArrayList();
-        defSourceMappingList = new ArrayList();
-        defSourceMappingHashMap = new HashMap();
-        securityTokenList = new ArrayList();
-        securityTokenHashMap = new HashMap();
-        configurableItemMap = new HashMap();
-        this.xmlfile = xmlfile;
+        _displayItemList = new ArrayList();
+        _metadataElementList = new ArrayList();
+        _defSourceMappingList = new ArrayList();
+        _defSourceMappingHashMap = new HashMap();
+        _securityTokenList = new ArrayList();
+        _securityTokenHashMap = new HashMap();
+        _configurableItemMap = new HashMap();
+        _xmlfile = xmlfile;
     }
 
     public void run() {
-        parseXmlFile(this.xmlfile);
+        parseXmlFile(_xmlfile);
         parseDocument();
         // printData();
     }
 
     public List getDisplayItemList() {
-        return this.displayItemList;
+        return _displayItemList;
     }
 
     public List getMetadataElementList() {
-        return this.metadataElementList;
+        return _metadataElementList;
     }
 
     public List getDefSourceMappingList() {
-        return this.defSourceMappingList;
+        return _defSourceMappingList;
     }
 
     public HashMap getDefSourceMappingHashMap() {
-        return defSourceMappingHashMap;
+        return _defSourceMappingHashMap;
     }
 
     public List getSecurityTokenList() {
-        return this.securityTokenList;
+        return _securityTokenList;
     }
 
     public HashMap getSecurityTokenHashMap() {
-        return securityTokenHashMap;
+        return _securityTokenHashMap;
     }
 
     public HashMap getConfigurableItemMap() {
-        return this.configurableItemMap;
+        return _configurableItemMap;
     }
 
     private void parseXmlFile(String xmlfile) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
-            dom = db.parse(xmlfile);
+            _dom = db.parse(xmlfile);
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
         } catch (SAXException se) {
@@ -147,13 +147,13 @@ public class PropertyFileParser {
     }
 
     private void parseDocument() {
-        Element docEle = dom.getDocumentElement();
+        Element docEle = _dom.getDocumentElement();
         NodeList list1 = docEle.getElementsByTagName("DisplayItem");
         if (list1 != null && list1.getLength() > 0) {
             for (int i = 0; i < list1.getLength(); i++) {
                 Element el = (Element) list1.item(i);
                 DisplayItem e = getDisplayItem(el);
-                displayItemList.add(e);
+                _displayItemList.add(e);
             }
         }
 
@@ -170,7 +170,7 @@ public class PropertyFileParser {
             for (int i = 0; i < list3.getLength(); i++) {
                 Element el = (Element) list3.item(i);
                 MetadataElement e = getMetadataElement(el);
-                metadataElementList.add(e);
+                _metadataElementList.add(e);
             }
         }
 
@@ -179,8 +179,8 @@ public class PropertyFileParser {
             for (int i = 0; i < list4.getLength(); i++) {
                 Element el = (Element) list4.item(i);
                 DefSourceMapping e = getDefSourceMapping(el);
-                defSourceMappingList.add(e);
-                defSourceMappingHashMap.put(e.getName(), e.getValue());
+                _defSourceMappingList.add(e);
+                _defSourceMappingHashMap.put(e.getName(), e.getValue());
             }
         }
 
@@ -191,8 +191,8 @@ public class PropertyFileParser {
                 SecurityTokenHolder e = getSecurityTokenHolder(el);
 
                 if (e.getValue().indexOf("token") == -1) {
-                    securityTokenList.add(e);
-                    securityTokenHashMap.put(e.getName(), e.getValue());
+                    _securityTokenList.add(e);
+                    _securityTokenHashMap.put(e.getName(), e.getValue());
                 }
             }
         }
@@ -244,7 +244,7 @@ public class PropertyFileParser {
     private void getConfigurableItem(Element displayItemElement) {
         String key = getTextValue(displayItemElement, "key");
         String value = getTextValue(displayItemElement, "value");
-        configurableItemMap.put(key, value);
+        _configurableItemMap.put(key, value);
     }
 
     private String getTextValue(Element ele, String tagName) {
@@ -265,7 +265,7 @@ public class PropertyFileParser {
     }
 
     private void printData() {
-        Iterator it = displayItemList.iterator();
+        Iterator it = _displayItemList.iterator();
         while (it.hasNext()) {
             _logger.debug(it.next().toString());
         }

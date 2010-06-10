@@ -57,13 +57,13 @@ import org.apache.log4j.*;
 public class NCItBrowserProperties {
     private static Logger _logger =
         Logger.getLogger(NCItBrowserProperties.class);
-    private static List displayItemList;
-    private static List metadataElementList;
-    private static List defSourceMappingList;
-    private static HashMap defSourceMappingHashMap;
-    private static List securityTokenList;
-    private static HashMap securityTokenHashMap;
-    private static HashMap configurableItemMap;
+    private static List _displayItemList;
+    private static List _metadataElementList;
+    private static List _defSourceMappingList;
+    private static HashMap _defSourceMappingHashMap;
+    private static List _securityTokenList;
+    private static HashMap _securityTokenHashMap;
+    private static HashMap _configurableItemMap;
 
     // KLO
     public static final String DEBUG_ON = "DEBUG_ON";
@@ -93,29 +93,28 @@ public class NCItBrowserProperties {
     public static final String SLIDING_WINDOW_HALF_WIDTH =
         "SLIDING_WINDOW_HALF_WIDTH";
 
-    private static Logger log = Logger.getLogger(NCItBrowserProperties.class);
-    private static NCItBrowserProperties NCItBrowserProperties = null;
-    private static Properties properties = new Properties();
+    private static NCItBrowserProperties _browserProperties = null;
+    private static Properties _properties = new Properties();
 
-    public static boolean debugOn = false;
-    private static int maxToReturn = 1000;
-    private static int maxTreeLevel = 1000;
-    private static String service_url = null;
-    private static String lg_config_file = null;
+    public static boolean _debugOn = false;
+    private static int _maxToReturn = 1000;
+    private static int _maxTreeLevel = 1000;
+    private static String _service_url = null;
+    private static String _lg_config_file = null;
 
-    private static String sort_by_score = null;
-    private static String mail_smtp_server = null;
-    private static String ncicb_contact_url = null;
-    private static String terminology_subset_download_url = null;
-    private static String term_suggestion_application_url = null;
+    private static String _sort_by_score = null;
+    private static String _mail_smtp_server = null;
+    private static String _ncicb_contact_url = null;
+    private static String _terminology_subset_download_url = null;
+    private static String _term_suggestion_application_url = null;
 
-    private static String license_page_option = null;
-    private static String ncim_url = null;
-    private static String ncit_url = null;
-    private static int pagination_time_out = 4;
-    private static int minimum_search_string_length = 1;
+    private static String _license_page_option = null;
+    private static String _ncim_url = null;
+    private static String _ncit_url = null;
+    private static int _pagination_time_out = 4;
+    private static int _minimum_search_string_length = 1;
 
-    private static int sliding_window_half_width = 5;
+    private static int _sliding_window_half_width = 5;
 
     /**
      * Private constructor for singleton pattern.
@@ -131,87 +130,87 @@ public class NCItBrowserProperties {
      * @throws Exception the exception
      */
     public static NCItBrowserProperties getInstance() throws Exception {
-        if (NCItBrowserProperties == null) {
+        if (_browserProperties == null) {
             synchronized (NCItBrowserProperties.class) {
 
-                if (NCItBrowserProperties == null) {
-                    NCItBrowserProperties = new NCItBrowserProperties();
+                if (_browserProperties == null) {
+                    _browserProperties = new NCItBrowserProperties();
                     loadProperties();
 
-                    debugOn = Boolean.parseBoolean(getProperty(DEBUG_ON));
+                    _debugOn = Boolean.parseBoolean(getProperty(DEBUG_ON));
 
                     String max_str =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.MAXIMUM_RETURN);
-                    maxToReturn = Integer.parseInt(max_str);
+                        _browserProperties
+                            .getProperty(_browserProperties.MAXIMUM_RETURN);
+                    _maxToReturn = Integer.parseInt(max_str);
 
                     String max_tree_level_str =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
-                    maxTreeLevel = Integer.parseInt(max_tree_level_str);
+                        _browserProperties
+                            .getProperty(_browserProperties.MAXIMUM_TREE_LEVEL);
+                    _maxTreeLevel = Integer.parseInt(max_tree_level_str);
 
-                    service_url =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+                    _service_url =
+                        _browserProperties
+                            .getProperty(_browserProperties.EVS_SERVICE_URL);
                     // _logger.info("EVS_SERVICE_URL: " + service_url);
 
-                    lg_config_file =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
+                    _lg_config_file =
+                        _browserProperties
+                            .getProperty(_browserProperties.LG_CONFIG_FILE);
                     // _logger.info("LG_CONFIG_FILE: " + lg_config_file);
 
-                    sort_by_score =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.SORT_BY_SCORE);
-                    ncicb_contact_url =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
-                    mail_smtp_server =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.MAIL_SMTP_SERVER);
-                    terminology_subset_download_url =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
-                    term_suggestion_application_url =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
-                    license_page_option =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.LICENSE_PAGE_OPTION);
-                    ncim_url =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.NCIM_URL);
-                    ncit_url =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.NCIT_URL);
+                    _sort_by_score =
+                        _browserProperties
+                            .getProperty(_browserProperties.SORT_BY_SCORE);
+                    _ncicb_contact_url =
+                        _browserProperties
+                            .getProperty(_browserProperties.NCICB_CONTACT_URL);
+                    _mail_smtp_server =
+                        _browserProperties
+                            .getProperty(_browserProperties.MAIL_SMTP_SERVER);
+                    _terminology_subset_download_url =
+                        _browserProperties
+                            .getProperty(_browserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
+                    _term_suggestion_application_url =
+                        _browserProperties
+                            .getProperty(_browserProperties.TERM_SUGGESTION_APPLICATION_URL);
+                    _license_page_option =
+                        _browserProperties
+                            .getProperty(_browserProperties.LICENSE_PAGE_OPTION);
+                    _ncim_url =
+                        _browserProperties
+                            .getProperty(_browserProperties.NCIM_URL);
+                    _ncit_url =
+                        _browserProperties
+                            .getProperty(_browserProperties.NCIT_URL);
 
                     String pagination_time_out_str =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.PAGINATION_TIME_OUT);
+                        _browserProperties
+                            .getProperty(_browserProperties.PAGINATION_TIME_OUT);
                     if (pagination_time_out_str != null) {
-                        pagination_time_out =
+                        _pagination_time_out =
                             Integer.parseInt(pagination_time_out_str);
                     }
 
                     String minimum_search_string_length_str =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.MINIMUM_SEARCH_STRING_LENGTH);
+                        _browserProperties
+                            .getProperty(_browserProperties.MINIMUM_SEARCH_STRING_LENGTH);
                     if (minimum_search_string_length_str != null) {
                         int min_search_string_length =
                             Integer.parseInt(minimum_search_string_length_str);
                         if (min_search_string_length > 1) {
-                            minimum_search_string_length =
+                            _minimum_search_string_length =
                                 min_search_string_length;
                         }
                     }
                     String sliding_window_half_width_str =
-                        NCItBrowserProperties
-                            .getProperty(NCItBrowserProperties.SLIDING_WINDOW_HALF_WIDTH);
+                        _browserProperties
+                            .getProperty(_browserProperties.SLIDING_WINDOW_HALF_WIDTH);
                     if (sliding_window_half_width_str != null) {
                         int sliding_window_halfwidth =
                             Integer.parseInt(sliding_window_half_width_str);
                         if (sliding_window_halfwidth > 1) {
-                            sliding_window_half_width =
+                            _sliding_window_half_width =
                                 sliding_window_halfwidth;
                         }
                     }
@@ -219,13 +218,13 @@ public class NCItBrowserProperties {
             }
         }
 
-        return NCItBrowserProperties;
+        return _browserProperties;
     }
 
     // public String getProperty(String key) throws Exception{
     public static String getProperty(String key) throws Exception {
         // return properties.getProperty(key);
-        String ret_str = (String) configurableItemMap.get(key);
+        String ret_str = (String) _configurableItemMap.get(key);
         if (ret_str == null)
             return null;
         if (ret_str.compareToIgnoreCase("null") == 0)
@@ -234,69 +233,69 @@ public class NCItBrowserProperties {
     }
 
     public static List getDisplayItemList() {
-        return displayItemList;
+        return _displayItemList;
     }
 
     public static List getMetadataElementList() {
-        return metadataElementList;
+        return _metadataElementList;
     }
 
     public static List getDefSourceMappingList() {
-        return defSourceMappingList;
+        return _defSourceMappingList;
     }
 
     public static HashMap getDefSourceMappingHashMap() {
-        return defSourceMappingHashMap;
+        return _defSourceMappingHashMap;
     }
 
     public static List getSecurityTokenList() {
-        return securityTokenList;
+        return _securityTokenList;
     }
 
     public static HashMap getSecurityTokenHashMap() {
-        return securityTokenHashMap;
+        return _securityTokenHashMap;
     }
 
     private static void loadProperties() throws Exception {
         String propertyFile =
             System.getProperty("gov.nih.nci.evs.browser.NCItBrowserProperties");
-        log.info("NCItBrowserProperties File Location= " + propertyFile);
+        _logger.info("NCItBrowserProperties File Location= " + propertyFile);
         PropertyFileParser parser = new PropertyFileParser(propertyFile);
         parser.run();
 
-        displayItemList = parser.getDisplayItemList();
-        metadataElementList = parser.getMetadataElementList();
-        defSourceMappingList = parser.getDefSourceMappingList();
-        defSourceMappingHashMap = parser.getDefSourceMappingHashMap();
-        securityTokenList = parser.getSecurityTokenList();
-        securityTokenHashMap = parser.getSecurityTokenHashMap();
+        _displayItemList = parser.getDisplayItemList();
+        _metadataElementList = parser.getMetadataElementList();
+        _defSourceMappingList = parser.getDefSourceMappingList();
+        _defSourceMappingHashMap = parser.getDefSourceMappingHashMap();
+        _securityTokenList = parser.getSecurityTokenList();
+        _securityTokenHashMap = parser.getSecurityTokenHashMap();
 
-        configurableItemMap = parser.getConfigurableItemMap();
+        _configurableItemMap = parser.getConfigurableItemMap();
 
     }
 
     public static String getLicensePageOption() {
-        return license_page_option;
+        return _license_page_option;
     }
 
     public static String getNCIM_URL() {
-        return ncim_url;
+        return _ncim_url;
     }
 
     public static String getNCIT_URL() {
-        return ncit_url;
+        return _ncit_url;
     }
 
     public static int getPaginationTimeOut() {
-        return pagination_time_out;
+        return _pagination_time_out;
     }
 
     public static int getMinimumSearchStringLength() {
-        return minimum_search_string_length;
+        return _minimum_search_string_length;
     }
 
     public static int getSlidingWindowHalfWidth() {
-        return sliding_window_half_width;
+        return _sliding_window_half_width;
     }
 
 }

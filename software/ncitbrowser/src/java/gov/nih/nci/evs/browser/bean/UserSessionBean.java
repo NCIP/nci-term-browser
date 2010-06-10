@@ -194,7 +194,7 @@ public class UserSessionBean extends Object {
             source = "ALL";
         }
 
-        if (NCItBrowserProperties.debugOn) {
+        if (NCItBrowserProperties._debugOn) {
             try {
                 _logger.debug(Utils.SEPARATOR);
                 _logger.debug("* criteria: " + matchText);
@@ -844,7 +844,7 @@ public class UserSessionBean extends Object {
             source = "ALL";
         }
 
-        if (NCItBrowserProperties.debugOn) {
+        if (NCItBrowserProperties._debugOn) {
             try {
                 _logger.debug(Utils.SEPARATOR);
                 _logger.debug("* criteria: " + matchText);
@@ -1234,7 +1234,7 @@ public class UserSessionBean extends Object {
         matchText = matchText.trim();
         bean.setMatchText(matchText);
 
-        if (NCItBrowserProperties.debugOn) {
+        if (NCItBrowserProperties._debugOn) {
             _logger.debug(Utils.SEPARATOR);
             _logger.debug("* criteria: " + matchText);
             _logger.debug("* source: " + source);
