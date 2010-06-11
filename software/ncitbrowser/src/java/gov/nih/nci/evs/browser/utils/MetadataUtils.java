@@ -330,8 +330,11 @@ public class MetadataUtils {
             return "";
         }
         int n = v.size();
-        if (n <= 0)
+        if (n <= 0) {
+            _logger.warn("WARNING: getMetadataValue(\"" + propertyName + "\"): returns no value.");
+            _logger.warn("  * Note: This metadata might not be loaded.");
             return "";
+        }
         if (v.size() == 1)
             return v.elementAt(0).toString();
 
