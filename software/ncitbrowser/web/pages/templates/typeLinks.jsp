@@ -11,7 +11,7 @@
     //scheme = DataUtils.getCodingSchemeName( scheme );
       //}
 
-scheme = (String) DataUtils.localName2FormalNameHashMap.get(scheme);
+scheme = DataUtils.getFormalName(scheme);
 
       String jsp_page_name = "concept_details.jsf";
       //if (scheme.compareTo("NCI Thesaurus") != 0) jsp_page_name = "concept_details_other_term.jsf";
