@@ -431,6 +431,45 @@ if(propName_label.compareTo("Definition") == 0) {
     </table>
 </p>
 <p>
+
+
+    <%
+      boolean hasOtherProperties = false;
+      Vector prop_name_value_vec0 = new Vector();
+      Set keyset0 = hmap.keySet();
+      Iterator iterator0 = keyset0.iterator();
+      while (iterator0.hasNext()) {
+         String prop_name = (String) iterator0.next();
+         Vector value_vec = (Vector) hmap.get(prop_name);
+         for (int k=0; k<value_vec.size(); k++) {
+             String value = (String) value_vec.elementAt(k);
+             prop_name_value_vec0.add(prop_name + "|" + value);
+         }
+      }
+      iterator0 = keyset0.iterator();
+      n = 0;
+
+      for (int k=0; k<prop_name_value_vec0.size(); k++) {
+        String prop_name_value = (String) prop_name_value_vec0.elementAt(k);
+        Vector w = DataUtils.parseData( prop_name_value );
+        String prop_name = (String) w.elementAt(0);
+        if (!displayed_properties.contains(prop_name) && !additionalproperties.contains(prop_name)) {
+           if (w.size() > 0) {
+               hasOtherProperties = true;
+               break;
+           }
+        }
+      }
+
+if (!hasOtherProperties) {
+%>
+<b>Other Properties</b>:&nbsp;<i>None</i>
+<%
+} else {
+%>
+
+
+
   <b>Other Properties:</b>
   <table class="datatable">
     <%
@@ -453,7 +492,7 @@ if(propName_label.compareTo("Definition") == 0) {
         String prop_name_value = (String) prop_name_value_vec.elementAt(k);
         Vector w = DataUtils.parseData( prop_name_value );
         String prop_name = (String) w.elementAt(0);
-        if (!displayed_properties.contains(prop_name) && !additionalproperties.contains(prop_name) ) {
+        if (!displayed_properties.contains(prop_name) && !additionalproperties.contains(prop_name)) {
           if (w.size() == 1) {
             if (n % 2 == 0) {
               %>
@@ -472,6 +511,12 @@ if(propName_label.compareTo("Definition") == 0) {
             <%
           } else {
               String value = (String) w.elementAt(1);
+              /*
+              String source = "";
+              if (w.size() > 2) {
+                  source = (String) w.elementAt(2);
+              }
+              */
               if (n % 2 == 0) {
                 %>
                   <tr class="dataRowDark">
@@ -492,6 +537,11 @@ if(propName_label.compareTo("Definition") == 0) {
       }
     %>
   </table>
+ 
+ <%
+ }
+ %>
+  
 </p>
 <p>
     <%
