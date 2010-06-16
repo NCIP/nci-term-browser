@@ -380,6 +380,13 @@ if(propName_label.compareTo("Definition") == 0) {
   <table class="datatable">
     <%
       int n = 0;
+      boolean display_UMLS_CUI = true;
+      String dict_name = (String) request.getSession().getAttribute("dictionary");
+      String vocab_format = DataUtils.getMetadataValue(dict_name, "format");
+      if (vocab_format != null && vocab_format.compareTo("RRF") == 0) {
+         display_UMLS_CUI= false;
+      }
+
       for (int i=0; i<external_source_codes.size(); i++) {
         String propName = (String) external_source_codes.elementAt(i);
         String propName_label = (String) external_source_codes_label.elementAt(i);
@@ -387,15 +394,13 @@ if(propName_label.compareTo("Definition") == 0) {
         String prop_linktext = (String) external_source_codes_linktext.elementAt(i);
 
         displayed_properties.add(propName);
+        
+        if (propName.compareTo("UMLS_CUI") != 0 || display_UMLS_CUI) {
+        
         Vector value_vec = (Vector) hmap.get(propName);
         if (value_vec != null && value_vec.size() > 0) {
           for (int j=0; j<value_vec.size(); j++) {
             String value = (String) value_vec.elementAt(j);
-            /*
-            if (value.endsWith("|")) {
-                value = value.substring(0, value.length()-1);
-            }
-            */
              
             if (n % 2 == 0) {
               %>
@@ -424,6 +429,7 @@ if(propName_label.compareTo("Definition") == 0) {
               </td>
             </tr>
           <%
+          }
           }
        }
     }
