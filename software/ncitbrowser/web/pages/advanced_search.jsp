@@ -80,10 +80,6 @@
         <%@ include file="/pages/templates/content-header-alt.jsp" %>
 <%
     String adv_search_vocabulary = request.getParameter("dictionary");
-    
-    _logger.debug("advanced_search.jsp " + adv_search_vocabulary);
-
-
     String refresh = request.getParameter("refresh");
     boolean refresh_page = false;
     if (refresh != null) {
