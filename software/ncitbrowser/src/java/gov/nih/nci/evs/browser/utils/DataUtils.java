@@ -146,6 +146,8 @@ public class DataUtils {
 
     public static HashSet _vocabulariesWithConceptStatusHashSet = null;
 
+    public static HashMap _formalName2NCImSABHashMap = null;
+
     // ==================================================================================
 
     public DataUtils() {
@@ -402,6 +404,8 @@ public class DataUtils {
                 _ontologies.add(new SelectItem(value, value));
             }
         }
+        _formalName2NCImSABHashMap = createFormalName2NCImSABHashMap();
+        dumpHashMap(_formalName2NCImSABHashMap);
     }
 
     public static String getMetadataValue(String scheme, String propertyName) {
@@ -3179,4 +3183,67 @@ public class DataUtils {
         return v;
     }
 
+    private static Vector getSupportedSources(String codingScheme, String version)
+    {
+		Vector v = new Vector();
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+                _logger
+                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+            }
+
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (version != null) versionOrTag.setVersion(version);
+
+            CodingScheme cs = null;
+			try {
+			    cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
+			} catch (Exception ex2) {
+				cs = null;
+			}
+			if (cs != null)
+			{
+				SupportedSource[] sources = cs.getMappings().getSupportedSource();
+				for (int i=0; i<sources.length; i++)
+				{
+					v.add(sources[i].getLocalId());
+				}
+		    }
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return v;
+	}
+
+	public static String getNCImSAB(String formalName) {
+		if (_formalName2NCImSABHashMap.containsKey(formalName)) {
+			String value = (String) _formalName2NCImSABHashMap.get(formalName);
+			return value;
+		}
+		return null;
+	}
+
+	private static HashMap createFormalName2NCImSABHashMap() {
+		HashMap hmap = new HashMap();
+		Vector sab_vec = getSupportedSources("NCI Metathesaurus", null);
+		for (int i=0; i<sab_vec.size(); i++) {
+			String sab = (String) sab_vec.elementAt(i);
+			if (_localName2FormalNameHashMap.containsKey(sab)) {
+				String value = (String) _localName2FormalNameHashMap.get(sab);
+				hmap.put(value, sab);
+			}
+		}
+		return hmap;
+	}
+
+    private static void dumpHashMap(HashMap hmap) {
+		_logger.warn("\n\n");
+		if (hmap == null) return;
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			String value = (String) hmap.get(key);
+		}
+	}
 }

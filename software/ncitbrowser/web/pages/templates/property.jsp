@@ -1,10 +1,20 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.FormatUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.SortUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.SearchUtils" %>
+<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
 
 <%
   HashMap def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
   
+  String ncim_cui_propName = "NCI_META_CUI";
+  String umls_cui_propName = "UMLS_CUI";
+  String ncim_cui_propName_label = null;
+  String ncim_cui_prop_url = null;
+  String ncim_cui_prop_linktext = null;
+  Vector ncim_cui_code_vec = new Vector();
+    
   List displayItemList = null;
   Concept curr_concept = null;
   Boolean bool_obj = null;
@@ -177,8 +187,14 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 %>
 <%
 
+
+//[#26722] Support cross-linking of individual source vocabularies with NCI Metathesaurus.
+
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
+    
+    System.out.println("properties_to_display propName: " + propName);
+    
     String propName_label = (String) properties_to_display_label.elementAt(i);
  
     if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
@@ -188,10 +204,33 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 	propName_label = formalName + " Code";
     }
     
+    
     String propName_label2 = propName_label;
     String url = (String) properties_to_display_url.elementAt(i);
     
     String linktext = (String) properties_to_display_linktext.elementAt(i);
+
+    if (propName.compareTo(ncim_cui_propName) == 0 || propName.compareTo(umls_cui_propName) == 0) {
+    
+        System.out.println("ncim_cui_propName: " + ncim_cui_propName);
+        ncim_cui_propName_label = propName_label;
+        ncim_cui_prop_url = url;
+        ncim_cui_prop_linktext = linktext;
+        
+        Vector ncim_cui_code_vec_temp = DataUtils.getPropertyValues(
+            curr_concept, "GENERIC", propName);
+        System.out.println("ncim_cui_code_vec: " + ncim_cui_code_vec_temp.size());  
+        if (ncim_cui_code_vec_temp != null) {
+           for (int lcv=0; lcv<ncim_cui_code_vec_temp.size(); lcv++) {
+               String t = (String) ncim_cui_code_vec_temp.elementAt(lcv);
+               ncim_cui_code_vec.add(t);
+           }
+        } else {
+           System.out.println("No " + ncim_cui_propName + " found in " + curr_concept.getEntityCode());
+        }
+            
+    }
+    
     String qualifier = "";
     if (url != null) {
     
@@ -207,7 +246,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       }
       
       if (value_vec != null && value_vec.size() > 0) {
-      
+          
         //[#28262] Only one "NCI Meta CUI" displays
         for (int lcv=0; lcv<value_vec.size(); lcv++) {
          
@@ -279,6 +318,11 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         int k = 0;  
         for (int j=0; j<value_vec.size(); j++) {
           String value = (String) value_vec.elementAt(j);
+          
+          if (propName.compareTo("NCI_META_CUI") == 0) {
+              ncim_cui_code_vec.add(value);
+          }
+          
 if(propName_label.compareTo("Definition") == 0) {
     value = FormatUtils.reformatPDQDefinition(value);
 }
@@ -598,6 +642,55 @@ if (!hasOtherProperties) {
 	  <b>Additional Concept Data:</b>&nbsp;<i>None</i>
     <%
     } 
+    
+
+    
+    
+    String vocab = (String) request.getSession().getAttribute("dictionary");
+    String NCIm_sab = DataUtils.getNCImSAB(vocab);
+    System.out.println("NCIm_sab: " + NCIm_sab);
+    
+    if (NCIm_sab != null) {
+	ResolvedConceptReferencesIterator iterator = new SearchUtils().findConceptWithSourceCodeMatching("NCI Metathesaurus", null,
+	    NCIm_sab, curr_concept.getEntityCode(), 100, true);
+	if (iterator != null) {
+	    try {
+	        int nummatches = iterator.numberRemaining();
+	        System.out.println("Number of matched NCIm CUIs: " + nummatches);
+
+		while(iterator.hasNext()) {
+			ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
+			if (refs != null) {
+				for (int k=0; k<refs.length; k++) {
+				    ResolvedConceptReference ref = refs[k];
+				    String ref_code = ref.getCode();
+				    if (!ncim_cui_code_vec.contains(ref_code)) {
+					System.out.println("Add a link to NCIm code: " + ref_code);
+
+					String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
+					%>
+			  <p>
+			  <b><%=ncim_cui_propName_label%>:&nbsp;</b><%=ref_code%>&nbsp;
+			  <a href="javascript:redirect_site('<%= _ncim_cui_prop_url %>')">(<%=ncim_cui_prop_linktext%>)</a>
+			  </p>
+			                <%
+			  
+				    } else {
+					System.out.println("Link to NCIm code: " + ref_code + " has already been displayed.");
+				    }
+				}
+			}
+		}
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	    }
+	}
+    }
+    
+    
+    
+	    
+   
     %>	  
 </p>
 <%

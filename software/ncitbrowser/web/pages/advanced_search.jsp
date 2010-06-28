@@ -32,6 +32,7 @@
     src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
   <script type="text/javascript">
     function refresh() {
+    
       var dictionary = document.forms["advancedSearchForm"].dictionary.value;
     
       var text = document.forms["advancedSearchForm"].matchText.value;
@@ -55,14 +56,15 @@
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
       var rel_search_rela = document.forms["advancedSearchForm"].rel_search_rela.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
-      window.location.href="/ncimbrowser/pages/advanced_search.jsf?refresh=1"
+      
+      window.location.href="/ncitbrowser/pages/advanced_search.jsf?refresh=1"
           + "&opt="+ selectSearchOption
           + "&text="+ text
           + "&algorithm="+ algorithm
           + "&sab="+ adv_search_source
           + "&prop="+ selectProperty
           + "&rel="+ rel_search_association
-          + "&rela="+ rel_search_rela;
+          + "&rela="+ rel_search_rela
           + "&dictionary="+ dictionary;
     }
   </script>
@@ -108,6 +110,9 @@
         rel_search_association = (String) request.getParameter("rel");
         rel_search_rela = (String) request.getParameter("rela");
         selectProperty = (String) request.getParameter("prop");
+        
+        
+        
     } else {
         selectSearchOption = (String) request.getAttribute("selectSearchOption");
         search_string = (String) request.getSession().getAttribute("matchText");
@@ -237,6 +242,8 @@
                           <option value="<%=t%>"><%=t%></option>
                     <%
                        }
+
+
 
                        for (int i=0; i<src_vec.size(); i++) {
                          t = (String) src_vec.elementAt(i);
