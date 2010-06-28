@@ -34,8 +34,6 @@
 
 <%
 Logger logger = Utils.getJspLogger("searchForm.jsp");
-logger.debug("********************** searchForm.jsp: "); 
-
 
     String userAgent = request.getHeader("user-agent");
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");

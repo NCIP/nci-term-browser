@@ -214,7 +214,21 @@ if (scheme != null) {
               }
         %>
               <!-- Thesaurus, banner search area -->
+              
               <div class="bannerarea">
+<%   
+
+System.out.println("vocabulary.jsp basePath " + basePath);
+
+if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
+    (scheme != null && scheme.compareTo("NCI Thesaurus") == 0)
+    ) {
+%>
+    <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="97" alt="Thesaurus Browser Logo" border="0"/></a></div>
+<%
+} else {
+%>
+              
                 <% if (menubar_version == null) { %>
                   <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>">
                 <% } else { %>
@@ -225,6 +239,11 @@ if (scheme != null) {
                       <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
                     </div>
                   </a>
+                  
+<%
+}  
+%>
+                  
                 <div class="search-globalnav">
                   <!-- Search box -->
                   <div class="searchbox-top"><img
