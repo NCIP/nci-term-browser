@@ -26,6 +26,8 @@ import org.LexGrid.LexBIG.Extensions.Generic.*;
 import gov.nih.nci.evs.browser.properties.*;
 import static gov.nih.nci.evs.browser.common.Constants.*;
 
+import gov.nih.nci.evs.browser.common.Constants;
+
 import org.apache.log4j.*;
 
 /**
@@ -145,6 +147,7 @@ public class DataUtils {
     public static String _defaultOntologiesToSearchOnStr = null;
 
     public static HashSet _vocabulariesWithConceptStatusHashSet = null;
+    public static HashSet _vocabulariesWithoutTreeAccessHashSet = null;
 
     public static HashMap _formalName2NCImSABHashMap = null;
 
@@ -194,6 +197,7 @@ public class DataUtils {
         _formalName2MetadataHashMap = new HashMap();
         _displayName2FormalNameHashMap = new HashMap();
         _vocabulariesWithConceptStatusHashSet = new HashSet();
+        _vocabulariesWithoutTreeAccessHashSet = new HashSet();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -323,7 +327,15 @@ public class DataUtils {
                                 NameAndValue nv = (NameAndValue) nvList[k];
                                 metadataProperties.add(nv.getName() + "|"
                                     + nv.getContent());
+
+                                // to be modified
+                                //_vocabulariesWithoutTreeAccessHashSet
+                                if (nv.getName().compareTo(Constants.TREE_ACCESS_ALLOWED) == 0 && nv.getContent().compareTo("false") == 0) {
+									_vocabulariesWithoutTreeAccessHashSet.add(formalname);
+									_logger.debug("\t" + "Tree not accessible.");
+								}
                             }
+
                             // _logger.debug("\t" +
                             // mdpl.getMetadataPropertyCount() +
                             // " MetadataProperties cached for " + formalname);

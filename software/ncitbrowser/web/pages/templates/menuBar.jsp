@@ -1,5 +1,8 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils"%>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+
+
 <%
   String dictionaryName0 = null;
   String dictionaryName = (String) request.getParameter("dictionary");
@@ -15,12 +18,22 @@
   
   String hdr_dictionary0 = (String) request.getSession().getAttribute("dictionary");
   if (hdr_dictionary0 == null) hdr_dictionary0 = ""; // Set to empty string
+  
+ boolean tree_access_allowed = true;
+ if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(hdr_dictionary0)) {
+     tree_access_allowed = false;
+ }
+ 
+  
 %>
 <table class="global-nav" border="0" width="100%" cellpadding="0"
   cellspacing="0">
   <tr>
     <td align="left">
     <%
+ 
+         
+         
          if (hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
       %> <a href="<%= request.getContextPath()%>">Home</a> <%
          } else {
@@ -34,9 +47,20 @@
     <%
             }
          }
-      %> | <a href="#"
+      %> 
+      <%
+      if (tree_access_allowed) {
+      %>
+      
+      | <a href="#"
       onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-    View Hierarchy </a> <%
+      View Hierarchy 
+      </a> 
+      <%
+      }
+      %>
+    
+    <%
       if (hdr_dictionary0 != null && hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
       %> | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
     <%
