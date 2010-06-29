@@ -1,4 +1,6 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+
 <table width="700px" cellspacing="0" cellpadding="0" border="0" class="tabTable">
   <tr>
     <%
@@ -13,6 +15,11 @@
 
 scheme = DataUtils.getFormalName(scheme);
 
+ boolean tree_access = true;
+ if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
+     tree_access = false;
+ }
+ 
       String jsp_page_name = "concept_details.jsf";
       //if (scheme.compareTo("NCI Thesaurus") != 0) jsp_page_name = "concept_details_other_term.jsf";
 
@@ -125,11 +132,19 @@ scheme = DataUtils.getFormalName(scheme);
           %>
     </td>
     <td align="right" valign="top">
+         <%
+          if (tree_access) {
+         %>       
+    
         <input onClick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');"
                   type="button"
                  class="redButton"
                  value="View in Hierarchy"
         />
+        
+	 <% } 
+	 %>    
+	 
         <%
         String link_scheme = scheme.replaceAll("%20", " ");
         if (HistoryUtils.isHistoryServiceAvailable(link_scheme)) {

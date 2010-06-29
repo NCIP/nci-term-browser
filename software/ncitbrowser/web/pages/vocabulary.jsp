@@ -7,6 +7,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils"%>
+
 <%@ page
   import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties"%>
 <%@ page import="gov.nih.nci.evs.browser.bean.MetadataElement"%>
@@ -70,6 +71,12 @@ if (scheme != null) {
         if (scheme == null) {
             scheme = (String) request.getSession().getAttribute("scheme");
         }
+ 
+ boolean tree_access_allowed = true;
+ if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
+     tree_access_allowed = false;
+ } 
+
         String version = (String) request.getParameter("version");
         if (version == null) {
             version = (String) request.getSession().getAttribute("version");
@@ -266,9 +273,17 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                            if (download_site != null) {
                         %>    | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               Download </a>
-                        <% } %>
+                        <% } 
+                        %>
+
+         <%
+          if (tree_access_allowed) {
+         %>                        
                         | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                         View Hierarchy </a>
+
+	 <% } 
+	 %>                        
                         <% if (menubar_scheme0 != null && menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
                               | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>
                         <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>

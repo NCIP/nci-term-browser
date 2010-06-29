@@ -216,11 +216,10 @@
                 if (term_suggestion_application_url != null
                     && term_suggestion_application_url.compareTo("") != 0) {
           %>
-      <td align="right" valign="bottom" class="texttitle-blue-rightJust"
-        nowrap><a
-        href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
-        target="_blank" alt="Term Suggestion">Suggest changes to
-      this concept</a></td>
+      <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
+        <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
+        target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
+      </td>
       <%
             }
           %>

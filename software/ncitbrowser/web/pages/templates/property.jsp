@@ -192,9 +192,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
-    
-    System.out.println("properties_to_display propName: " + propName);
-    
+   
     String propName_label = (String) properties_to_display_label.elementAt(i);
  
     if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
@@ -211,23 +209,18 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     String linktext = (String) properties_to_display_linktext.elementAt(i);
 
     if (propName.compareTo(ncim_cui_propName) == 0 || propName.compareTo(umls_cui_propName) == 0) {
-    
-        System.out.println("ncim_cui_propName: " + ncim_cui_propName);
         ncim_cui_propName_label = propName_label;
         ncim_cui_prop_url = url;
         ncim_cui_prop_linktext = linktext;
         
         Vector ncim_cui_code_vec_temp = DataUtils.getPropertyValues(
             curr_concept, "GENERIC", propName);
-        System.out.println("ncim_cui_code_vec: " + ncim_cui_code_vec_temp.size());  
         if (ncim_cui_code_vec_temp != null) {
            for (int lcv=0; lcv<ncim_cui_code_vec_temp.size(); lcv++) {
                String t = (String) ncim_cui_code_vec_temp.elementAt(lcv);
                ncim_cui_code_vec.add(t);
            }
-        } else {
-           System.out.println("No " + ncim_cui_propName + " found in " + curr_concept.getEntityCode());
-        }
+        } 
             
     }
     
@@ -648,7 +641,6 @@ if (!hasOtherProperties) {
     
     String vocab = (String) request.getSession().getAttribute("dictionary");
     String NCIm_sab = DataUtils.getNCImSAB(vocab);
-    System.out.println("NCIm_sab: " + NCIm_sab);
     
     if (NCIm_sab != null) {
 	ResolvedConceptReferencesIterator iterator = new SearchUtils().findConceptWithSourceCodeMatching("NCI Metathesaurus", null,
@@ -656,7 +648,6 @@ if (!hasOtherProperties) {
 	if (iterator != null) {
 	    try {
 	        int nummatches = iterator.numberRemaining();
-	        System.out.println("Number of matched NCIm CUIs: " + nummatches);
 
 		while(iterator.hasNext()) {
 			ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
@@ -665,7 +656,6 @@ if (!hasOtherProperties) {
 				    ResolvedConceptReference ref = refs[k];
 				    String ref_code = ref.getCode();
 				    if (!ncim_cui_code_vec.contains(ref_code)) {
-					System.out.println("Add a link to NCIm code: " + ref_code);
 
 					String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
 					%>
@@ -675,9 +665,7 @@ if (!hasOtherProperties) {
 			  </p>
 			                <%
 			  
-				    } else {
-					System.out.println("Link to NCIm code: " + ref_code + " has already been displayed.");
-				    }
+				    } 
 				}
 			}
 		}
