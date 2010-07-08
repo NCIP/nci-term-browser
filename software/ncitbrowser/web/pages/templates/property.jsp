@@ -316,9 +316,9 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
               ncim_cui_code_vec.add(value);
           }
           
-if(propName_label.compareTo("Definition") == 0) {
-    value = FormatUtils.reformatPDQDefinition(value);
-}
+	  if(propName_label.compareTo("Definition") == 0) {
+	      value = FormatUtils.reformatPDQDefinition(value);
+	  }
           
           String value_wo_qualifier = value;
           int n = value.indexOf("|");
@@ -365,6 +365,43 @@ if(propName_label.compareTo("Definition") == 0) {
 }
 %>
 
+<%
+    String vocab = (String) request.getSession().getAttribute("dictionary");
+    String NCIm_sab = DataUtils.getNCImSAB(vocab);
+    
+    if (NCIm_sab != null) {
+	ResolvedConceptReferencesIterator iterator = new SearchUtils().findConceptWithSourceCodeMatching("NCI Metathesaurus", null,
+	    NCIm_sab, curr_concept.getEntityCode(), 100, true);
+	if (iterator != null) {
+	    try {
+	        int nummatches = iterator.numberRemaining();
+
+		while(iterator.hasNext()) {
+			ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
+			if (refs != null) {
+				for (int k=0; k<refs.length; k++) {
+				    ResolvedConceptReference ref = refs[k];
+				    String ref_code = ref.getCode();
+				    if (!ncim_cui_code_vec.contains(ref_code)) {
+
+					String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
+					%>
+			  <p>
+			  <b><%=ncim_cui_propName_label%>:&nbsp;</b><%=ref_code%>&nbsp;
+			  <a href="javascript:redirect_site('<%= _ncim_cui_prop_url %>')">(<%=ncim_cui_prop_linktext%>)</a>
+			  </p>
+			                <%
+			  
+				    } 
+				}
+			}
+		}
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	    }
+	}
+    }
+%>
 
 
 <p>
@@ -474,7 +511,6 @@ if(propName_label.compareTo("Definition") == 0) {
     </table>
 </p>
 <p>
-
 
     <%
       boolean hasOtherProperties = false;
@@ -635,50 +671,7 @@ if (!hasOtherProperties) {
 	  <b>Additional Concept Data:</b>&nbsp;<i>None</i>
     <%
     } 
-    
 
-    
-    
-    String vocab = (String) request.getSession().getAttribute("dictionary");
-    String NCIm_sab = DataUtils.getNCImSAB(vocab);
-    
-    if (NCIm_sab != null) {
-	ResolvedConceptReferencesIterator iterator = new SearchUtils().findConceptWithSourceCodeMatching("NCI Metathesaurus", null,
-	    NCIm_sab, curr_concept.getEntityCode(), 100, true);
-	if (iterator != null) {
-	    try {
-	        int nummatches = iterator.numberRemaining();
-
-		while(iterator.hasNext()) {
-			ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
-			if (refs != null) {
-				for (int k=0; k<refs.length; k++) {
-				    ResolvedConceptReference ref = refs[k];
-				    String ref_code = ref.getCode();
-				    if (!ncim_cui_code_vec.contains(ref_code)) {
-
-					String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
-					%>
-			  <p>
-			  <b><%=ncim_cui_propName_label%>:&nbsp;</b><%=ref_code%>&nbsp;
-			  <a href="javascript:redirect_site('<%= _ncim_cui_prop_url %>')">(<%=ncim_cui_prop_linktext%>)</a>
-			  </p>
-			                <%
-			  
-				    } 
-				}
-			}
-		}
-	    } catch (Exception ex) {
-	        ex.printStackTrace();
-	    }
-	}
-    }
-    
-    
-    
-	    
-   
     %>	  
 </p>
 <%
