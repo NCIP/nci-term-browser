@@ -327,7 +327,8 @@
                           <%} %>
                   
                           <%
-                            Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary);
+                            //Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary);
+                            Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary, null);
                             for (int i=0; i<association_vec.size(); i++) {
                               t = (String) association_vec.elementAt(i);
                               if (t.compareTo(rel_search_association) == 0) {

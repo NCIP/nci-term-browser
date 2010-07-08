@@ -90,8 +90,13 @@ public class OntologyBean {
         }
         CodingScheme cs = getCodingScheme(codingSchemeName, null);
         _association_name_vec = getSupportedAssociationNames(cs);
+
         return _association_name_vec;
     }
+
+
+
+
 
     public static List getAssociationNameList(String codingSchemeName) {
         if (_association_name_list != null)
@@ -368,6 +373,8 @@ public class OntologyBean {
             SupportedAssociation sa = (SupportedAssociation) assos[i];
             v.add(sa.getLocalId());
         }
+
+
         return SortUtils.quickSort(v);
     }
 
@@ -403,6 +410,82 @@ public class OntologyBean {
         return SortUtils.quickSort(w);
     }
 
+
+    public static String convertAssociationName(String codingScheme,
+        String version, String association) {
+        LexBIGServiceConvenienceMethodsImpl lbscm = null;
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (version != null)
+            versionOrTag.setVersion(version);
+        Vector w = new Vector();
+
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            lbscm =
+                (LexBIGServiceConvenienceMethodsImpl) lbSvc
+                    .getGenericExtension("LexBIGServiceConvenienceMethods");
+            lbscm.setLexBIGService(lbSvc);
+
+			try {
+				String asscName =
+					lbscm.getAssociationCodeFromAssociationName(
+						codingScheme, versionOrTag, association);
+				return asscName;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return association;
+    }
+
+
+
+    public static Vector getSupportedAssociationNames(String codingSchemeName, String version) {
+		/*
+        if (_association_name_vec != null) {
+            return _association_name_vec;
+        }
+        */
+
+        _association_name_vec = new Vector();
+
+        LexBIGServiceConvenienceMethodsImpl lbscm = null;
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            lbscm =
+                (LexBIGServiceConvenienceMethodsImpl) lbSvc
+                    .getGenericExtension("LexBIGServiceConvenienceMethods");
+            lbscm.setLexBIGService(lbSvc);
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null)
+				versionOrTag.setVersion(version);
+
+			CodingScheme cs = getCodingScheme(codingSchemeName, version);
+			if (cs == null) return null;
+			SupportedAssociation[] assos =
+				cs.getMappings().getSupportedAssociation();
+			for (int i = 0; i < assos.length; i++) {
+				SupportedAssociation sa = (SupportedAssociation) assos[i];
+				String name =
+					lbscm.getAssociationNameFromAssociationCode(
+						codingSchemeName, versionOrTag, sa.getLocalId());
+
+				_association_name_vec.add(name);
+
+			}
+			_association_name_vec = SortUtils.quickSort(_association_name_vec);
+			return _association_name_vec;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+    }
+
+
+
     public static void dumpVector(String label, Vector v) {
         _logger.debug("\n" + label);
         if (v == null)
@@ -413,6 +496,10 @@ public class OntologyBean {
             _logger.debug("(" + j + "): " + t);
         }
     }
+
+
+
+
 
     public static void main(String[] args) throws Exception {
         String scheme = "NCI Metathesaurus";
