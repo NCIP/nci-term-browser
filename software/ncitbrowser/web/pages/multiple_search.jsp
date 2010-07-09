@@ -148,13 +148,18 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                     SelectItem item = (SelectItem) ontology_list.get(i);
                     String value = (String) item.getValue();
                     String label = (String) item.getLabel();
+                    
                     String scheme = DataUtils.key2CodingSchemeName(value);
                     String version = DataUtils.key2CodingSchemeVersion(value);
-                    String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+                    
+                    //String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+                    String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
+                    
                     if (display_name == null || display_name.compareTo("null") == 0) display_name = DataUtils.getLocalName(scheme);
-                    display_name_hmap.put(display_name, value);
-                    display_name_vec.add(display_name);
+                    display_name_hmap.put(display_name+"$"+version, value);
+                    display_name_vec.add(display_name+"$"+version);
                   }
+                  
                   display_name_vec = SortUtils.quickSort(display_name_vec);
                   request.getSession().setAttribute("display_name_hmap", display_name_hmap);
                   request.getSession().setAttribute("display_name_vec", display_name_vec);
@@ -163,13 +168,18 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <%
+                     
                       for (int i = 0; i < display_name_vec.size(); i++) {
-                        String display_name = (String) display_name_vec.elementAt(i);
-                        String value = (String)  display_name_hmap.get(display_name);
-                        String label = (String)  display_name_hmap.get(display_name);
+                        String display_name_version = (String) display_name_vec.elementAt(i);
+                        int n = display_name_version.indexOf("$");
+                        String display_name = display_name_version.substring(0, n);
+                        String value = (String)  display_name_hmap.get(display_name_version);
+                        String label = (String)  display_name_hmap.get(display_name_version);
+                       
                         String label2 = "|" + label + "|";
                         String scheme = DataUtils.key2CodingSchemeName(value);
                         String version = DataUtils.key2CodingSchemeVersion(value);
+                       
                         String http_label = null;
                         String http_scheme = null;
                         String http_version = null;
@@ -192,18 +202,21 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                            <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
                         <%
 
-                        String full_name = DataUtils.getMetadataValue(scheme, "full_name");
+                        String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
                         if (full_name == null || full_name.compareTo("null") == 0) 
                             full_name = scheme;
-                        String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
-                        if (term_browser_version == null || term_browser_version.compareTo("null") == 0) 
+                        //String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+                        String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
+                        if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
                             term_browser_version = version;
+                        }     
                         String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
                         if (scheme.compareTo("NCI Thesaurus") == 0) {
-                           String nciturl = NCItBrowserProperties.getNCIT_URL();
+                            String nciturl = NCItBrowserProperties.getNCIT_URL();
+                            nciturl = nciturl + "?version=" + version;
                           %>
-                            <a href="<%=nciturl %>"><%=display_label%></a>
+                            <a href="<%=nciturl%>"><%=display_label%></a>
                           <%
                         } else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
                             String ncimurl = NCItBrowserProperties.getNCIM_URL();

@@ -32,16 +32,23 @@ if (html_compatable_description_value == null) {
     html_compatable_description_value = DataUtils.replaceInnerEvalExpressions(html_compatable_description_value, from_vec, to_vec);
 }
 
-String version_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "version");
-String source_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "source_url");
-String download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "download_url");
-String copyright_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "copyright");
-String cabig_vkc_index_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "cabig_vkc_index_url");
+String _version = request.getParameter("version");
+System.out.println("(welcome.jsp: ) vocabulary_version: " + _version);
+if (vocabulary_version != null) {
+	request.getSession().setAttribute("version", _version);
+}
+
+
+String version_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, _version, "version");
+String source_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, _version, "source_url");
+String download_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, _version, "download_url");
+String copyright_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, _version, "copyright");
+String cabig_vkc_index_url_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, _version, "cabig_vkc_index_url");
 
 String license_statement_value = null;
-String license_display_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "license_display");
+String license_display_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, _version, "license_display");
 if (license_display_value != null && (license_display_value.compareTo("show") == 0 || license_display_value.compareTo("accept") == 0)) {
-    license_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, "license_statement");
+    license_statement_value = DataUtils.getMetadataValue(Constants.CODING_SCHEME_NAME, _version, "license_statement");
 }
 
 %>

@@ -35,6 +35,14 @@
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
   <%
+  
+String vocabulary_version = request.getParameter("version");
+System.out.println("(***** vocabulary_home.jsp) vocabulary_version: " + vocabulary_version);
+if (vocabulary_version != null) {
+	request.getSession().setAttribute("version", vocabulary_version);
+}
+     
+     
     String menubar_scheme = null;
     String menubar_scheme0 = null;
     String menubar_version = null;

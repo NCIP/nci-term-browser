@@ -47,6 +47,16 @@
       src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
     <f:view>
       <%
+      
+      
+String vocabulary_version = request.getParameter("version");
+System.out.println("(***** vocabulary.jsp) vocabulary_version: " + vocabulary_version);
+if (vocabulary_version != null) {
+	request.getSession().setAttribute("version", vocabulary_version);
+}
+     
+      
+      
         String menubar_scheme = null;
         String menubar_scheme0 = null;
         String menubar_version = null;
