@@ -22,7 +22,7 @@
 String _version = request.getParameter("vesion");
 System.out.println("(*****welcome-other.jsp) vocabulary_version: " + _version);
 if (vocabulary_version != null) {
-	request.getSession().setAttribute("version", _version);
+	request.setAttribute("version", _version);
 }
 
 

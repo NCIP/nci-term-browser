@@ -35,7 +35,7 @@ if (html_compatable_description_value == null) {
 String _version = request.getParameter("version");
 System.out.println("(welcome.jsp: ) vocabulary_version: " + _version);
 if (vocabulary_version != null) {
-	request.getSession().setAttribute("version", _version);
+	request.setAttribute("version", _version);
 }
 
 

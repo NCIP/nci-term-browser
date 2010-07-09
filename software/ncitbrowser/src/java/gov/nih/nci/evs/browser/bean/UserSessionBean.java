@@ -134,6 +134,11 @@ public class UserSessionBean extends Object {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+
+        String version = (String) request.getParameter("version");
+System.out.println("searchAction version: " + version);
+
+
         String matchText = (String) request.getParameter("matchText");
         if (matchText != null)
             matchText = matchText.trim();
@@ -209,7 +214,7 @@ public class UserSessionBean extends Object {
         Vector schemes = new Vector();
         schemes.add(scheme);
 
-        String version = null;
+        //String version = null;
         Vector versions = new Vector();
         versions.add(version);
 
