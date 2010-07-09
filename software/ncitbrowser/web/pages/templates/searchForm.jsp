@@ -146,9 +146,18 @@ logger.debug("searchForm.jsp vocab_name: " + vocab_name);
     <input type="hidden" id="scheme" name="scheme" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
   <%
   }
-  %>
   
-
+  String srchform_version = (String) request.getAttribute("version");
+  if (srchform_version == null) {
+      srchform_version = (String) request.getParameter("version");
+  }
+  System.out.println("searchForm.jsp version: " + srchform_version);
+  if (srchform_version != null) {
+  %>
+    <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(srchform_version)%>" />
+  <%
+  } 
+  %>
 </h:form>
 
           
