@@ -143,6 +143,12 @@ public class DataUtils {
     public static HashMap _localName2FormalNameHashMap = null;
     public static HashMap _formalName2MetadataHashMap = null;
     public static HashMap _displayName2FormalNameHashMap = null;
+
+    public static HashMap _formalNameVersion2LocalNameHashMap = null;
+    public static HashMap _localNameVersion2FormalNameVersionHashMap = null;
+    public static HashMap _formalNameVersion2MetadataHashMap = null;
+    public static HashMap _displayNameVersion2FormalNameVersionHashMap = null;
+
     public static Vector _nonConcept2ConceptAssociations = null;
     public static String _defaultOntologiesToSearchOnStr = null;
 
@@ -198,6 +204,11 @@ public class DataUtils {
         _displayName2FormalNameHashMap = new HashMap();
         _vocabulariesWithConceptStatusHashSet = new HashSet();
         _vocabulariesWithoutTreeAccessHashSet = new HashSet();
+
+        _formalNameVersion2LocalNameHashMap = new HashMap();
+        _localNameVersion2FormalNameVersionHashMap = new HashMap();
+        _formalNameVersion2MetadataHashMap = new HashMap();
+        _displayNameVersion2FormalNameVersionHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -308,11 +319,19 @@ public class DataUtils {
 
                             _formalName2LocalNameHashMap.put(formalname,
                                 css_local_name);
+
+                            _formalNameVersion2LocalNameHashMap.put(formalname + "$" + representsVersion,
+                                 css_local_name);
+
                             _formalName2LocalNameHashMap.put(css_local_name,
                                 css_local_name);
 
                             _localName2FormalNameHashMap.put(formalname,
                                 formalname);
+
+                            _localNameVersion2FormalNameVersionHashMap.put(css_local_name +"$" + representsVersion,
+                                                                           formalname + "$" + representsVersion);
+
                             _localName2FormalNameHashMap.put(css_local_name,
                                 formalname);
 
@@ -345,11 +364,17 @@ public class DataUtils {
                             _formalName2MetadataHashMap.put(formalname,
                                 metadataProperties);
 
+                            _formalNameVersion2MetadataHashMap.put(formalname + "$" + representsVersion,
+                                metadataProperties);
+
                             String displayName =
                                 getMetadataValue(formalname, "display_name");
                             _logger.debug("\tdisplay_name: " + displayName);
                             _displayName2FormalNameHashMap.put(displayName,
                                 formalname);
+
+                            _displayNameVersion2FormalNameVersionHashMap.put(displayName + "$" + representsVersion,
+                                formalname + "$" + representsVersion);
 
                             String term_browser_version =
                                 getMetadataValue(formalname,
@@ -442,6 +467,34 @@ public class DataUtils {
         Vector v = MetadataUtils.getMetadataValues(metadata, propertyName);
         return v;
     }
+
+
+
+    public static String getMetadataValue(String scheme, String version, String propertyName) {
+        Vector v = getMetadataValues(scheme, version, propertyName);
+        if (v == null || v.size() == 0)
+            return null;
+        return (String) v.elementAt(0);
+    }
+
+    public static Vector getMetadataValues(String scheme, String version, String propertyName) {
+        if (_formalName2MetadataHashMap == null) {
+            setCodingSchemeMap();
+        }
+
+        if (!_formalNameVersion2MetadataHashMap.containsKey(scheme + "$" + version)) {
+            return null;
+        }
+        Vector metadata = (Vector) _formalName2MetadataHashMap.get(scheme + "$" + version);
+        if (metadata == null || metadata.size() == 0) {
+            return null;
+        }
+        Vector v = MetadataUtils.getMetadataValues(metadata, propertyName);
+        return v;
+    }
+
+
+
 
     public static String getLocalName(String key) {
         if (_formalName2LocalNameHashMap == null) {

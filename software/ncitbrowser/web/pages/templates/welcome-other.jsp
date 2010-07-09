@@ -17,6 +17,16 @@
   <hr/>
 
 <%
+
+
+String _version = request.getParameter("vesion");
+System.out.println("(*****welcome-other.jsp) vocabulary_version: " + _version);
+if (vocabulary_version != null) {
+	request.getSession().setAttribute("version", _version);
+}
+
+
+
 String html_compatable_description_value = DataUtils.getMetadataValue(scheme, "html_compatable_description");
 String version_value = DataUtils.getMetadataValue(scheme, "term_browser_version");
 if (version_value == null) version_value = DataUtils.getMetadataValue(scheme, "version");
