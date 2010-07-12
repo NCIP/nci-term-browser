@@ -1190,12 +1190,13 @@ public class UserSessionBean extends Object {
                 .getExternalContext().getRequest();
 
         String scheme = (String) request.getParameter("dictionary");
+        String version = (String) request.getParameter("version");
         SearchStatusBean bean =
             (SearchStatusBean) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequestMap().get("searchStatusBean");
 
         if (bean == null) {
-            bean = new SearchStatusBean(scheme);
+            bean = new SearchStatusBean(scheme, version);
             request.setAttribute("searchStatusBean", bean);
         }
 
@@ -1251,7 +1252,6 @@ public class UserSessionBean extends Object {
         Vector schemes = new Vector();
         schemes.add(scheme);
 
-        String version = null;
         String max_str = null;
         int maxToReturn = -1;// 1000;
         try {

@@ -84,6 +84,22 @@ public class OntologyBean {
         return _rela_list;
     }
 
+    public static List getRELAList(String codingSchemeName, String version) {
+        if (_rela_list != null)
+            return _rela_list;
+        _rela_list = new ArrayList();
+        if (_rela_vec == null) {
+            _rela_vec = getRELAs(codingSchemeName, version);
+        }
+        _rela_list.add(new SelectItem("", ""));
+        for (int k = 0; k < _rela_vec.size(); k++) {
+            String value = (String) _rela_vec.elementAt(k);
+            _rela_list.add(new SelectItem(value, value));
+        }
+        return _rela_list;
+    }
+
+
     public static Vector getAssociationNames(String codingSchemeName) {
         if (_association_name_vec != null) {
             return _association_name_vec;
@@ -95,14 +111,26 @@ public class OntologyBean {
     }
 
 
+    public static Vector getAssociationNames(String codingSchemeName, String version) {
+        if (_association_name_vec != null) {
+            return _association_name_vec;
+        }
+        CodingScheme cs = getCodingScheme(codingSchemeName, version);
+        _association_name_vec = getSupportedAssociationNames(cs);
 
-
+        return _association_name_vec;
+    }
 
     public static List getAssociationNameList(String codingSchemeName) {
+		return getAssociationNameList(codingSchemeName, null);
+	}
+
+
+    public static List getAssociationNameList(String codingSchemeName, String version) {
         if (_association_name_list != null)
             return _association_name_list;
         _association_name_list = new ArrayList();
-        CodingScheme cs = getCodingScheme(codingSchemeName, null);
+        CodingScheme cs = getCodingScheme(codingSchemeName, version);
         if (_association_name_vec == null) {
             _association_name_vec = getSupportedAssociationNames(cs);
         }
@@ -128,6 +156,21 @@ public class OntologyBean {
         return _property_name_list;
     }
 
+    public static List getPropertyNameList(String codingSchemeName, String version) {
+        if (_property_name_list != null)
+            return _property_name_list;
+        _property_name_list = new ArrayList();
+        _property_name_list.add(new SelectItem("ALL", "ALL"));
+
+        CodingScheme cs = getCodingScheme(codingSchemeName, version);
+        Vector<String> properties = getSupportedPropertyNames(cs);
+        for (int k = 0; k < properties.size(); k++) {
+            String value = (String) properties.elementAt(k);
+            _property_name_list.add(new SelectItem(value, value));
+        }
+        return _property_name_list;
+    }
+
     public static List getSourceList(String codingSchemeName) {
         if (_source_list != null)
             return _source_list;
@@ -143,7 +186,27 @@ public class OntologyBean {
         return _source_list;
     }
 
+    public static List getSourceList(String codingSchemeName, String version) {
+        if (_source_list != null)
+            return _source_list;
+        _source_list = new ArrayList();
+        CodingScheme cs = getCodingScheme(codingSchemeName, version);
+        _source_list.add(new SelectItem("ALL", "ALL"));
+
+        Vector<String> sources = getSupportedSources(cs);
+        for (int k = 0; k < sources.size(); k++) {
+            String value = (String) sources.elementAt(k);
+            _source_list.add(new SelectItem(value, value));
+        }
+        return _source_list;
+    }
+
     public static List getPropertyTypeList(String codingSchemeName) {
+		return getPropertyTypeList(codingSchemeName, null);
+	}
+
+
+    public static List getPropertyTypeList(String codingSchemeName, String version) {
         if (_property_type_list != null)
             return _property_type_list;
         _property_type_list = new ArrayList();
@@ -338,6 +401,12 @@ public class OntologyBean {
         return getSupportedPropertyNames(cs);
     }
 
+    public static Vector<String> getSupportedPropertyNames(
+        String codingSchemeName, String version) {
+        CodingScheme cs = getCodingScheme(codingSchemeName, version);
+        return getSupportedPropertyNames(cs);
+    }
+
     public static Vector<String> getSupportedAssociationQualifier(
         CodingScheme cs) {
         Vector<String> v = new Vector<String>();
@@ -362,7 +431,13 @@ public class OntologyBean {
         CodingScheme cs = getCodingScheme(codingSchemeName, null);
         return getSupportedAssociationNames(cs);
     }
-
+/*
+    public static Vector<String> getSupportedAssociationNames(
+        String codingSchemeName, String version) {
+        CodingScheme cs = getCodingScheme(codingSchemeName, version);
+        return getSupportedAssociationNames(cs);
+    }
+*/
     public static Vector<String> getSupportedAssociationNames(CodingScheme cs) {
         if (cs == null)
             return null;
@@ -444,12 +519,6 @@ public class OntologyBean {
 
 
     public static Vector getSupportedAssociationNames(String codingSchemeName, String version) {
-		/*
-        if (_association_name_vec != null) {
-            return _association_name_vec;
-        }
-        */
-
         _association_name_vec = new Vector();
 
         LexBIGServiceConvenienceMethodsImpl lbscm = null;
