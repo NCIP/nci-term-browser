@@ -13,8 +13,15 @@
 
   dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#40;", "(");
   dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#41;", ")");
+   
   String menubar_dictionary = DataUtils.getCodingSchemeName( dictionaryName0 );
   String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );    
+  
+if (menubar_version == null) {
+    menubar_version = (String) request.getAttribute("version");
+}
+System.out.println("menuBar.jsp menubar_version: " + menubar_version);
+
   
   String hdr_dictionary0 = (String) request.getSession().getAttribute("dictionary");
   if (hdr_dictionary0 == null) hdr_dictionary0 = ""; // Set to empty string
@@ -53,7 +60,7 @@
       %>
       
       | <a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
       View Hierarchy 
       </a> 
       <%

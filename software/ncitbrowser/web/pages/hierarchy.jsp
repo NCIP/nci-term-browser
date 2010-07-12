@@ -450,12 +450,13 @@
 
 <%
 String hierarchy_dictionary = request.getParameter("dictionary");
+String hierarchy_version = request.getParameter("version");
 String hierarchy_schema = request.getParameter("schema");
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
 
 String hierarchy_version = request.getParameter("version");
-String term_browser_version = DataUtils.getMetadataValue(hierarchy_schema, "term_browser_version");
-String display_name = DataUtils.getMetadataValue(hierarchy_schema, "display_name");
+String term_browser_version = DataUtils.getMetadataValue(hierarchy_schema, hierarchy_version, "term_browser_version");
+String display_name = DataUtils.getMetadataValue(hierarchy_schema, hierarchy_version, "display_name");
 
 
 if (display_name == null || display_name.compareTo("null") == 0) {
