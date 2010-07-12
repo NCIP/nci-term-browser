@@ -164,23 +164,12 @@
     }
 
     function onClickTreeNode(ontology_node_id) {
-      //document.pg_form.ontology_node_id.value = ontology_node_id;
-      //var ontology_display_name = document.pg_form.ontology_display_name.value;
-      //var graph_type = document.pg_form.graph_type.options[document.pg_form.graph_type.selectedIndex].value;
-      //setNodeDetails(ontology_node_id, ontology_display_name);
-      //buildGraph(ontology_node_id, ontology_display_name, graph_type);
-
-      //var ontology_display_name = document.pg_form.ontology_display_name.value;
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
-
-      //load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=' + ontology_node_id,top.opener);
-
-      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&code=' + ontology_node_id,top.opener);
-
+      var ontology_version = document.forms["pg_form"].ontology_version.value;
+      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id,top.opener);
     }
 
     function onClickViewEntireOntology(ontology_display_name) {
-      //var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";//document.pg_form.ontology_display_name.value;
       var ontology_display_name = document.pg_form.ontology_display_name.value;
       tree = new YAHOO.widget.TreeView("treecontainer");
       tree.draw();
@@ -192,9 +181,6 @@
 
       tree = new YAHOO.widget.TreeView("treecontainer");
       var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
-      //var ontology_display_name = "<%=Constants.CODING_SCHEME_NAME%>";
-      //var ontology_display_name = document.pg_form.ontology_display_name.value;
-
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
 
       if (ontology_node_id == null || ontology_node_id == "null")
@@ -328,7 +314,7 @@
 
     function searchTree(ontology_node_id, ontology_display_name) {
 
-      var handleBuildTreeSuccess = function(o) {
+        var handleBuildTreeSuccess = function(o) {
 
         var respTxt = o.responseText;
         var respObj = eval('(' + respTxt + ')');
@@ -513,7 +499,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
         //String version = hierarchy_version;
 
 String schema = request.getParameter("schema");
-String version = request.getParameter("version");
+String ontology_version = request.getParameter("version");
 String ontology_display_name = request.getParameter("schema");
 if (ontology_display_name == null) {
     ontology_display_name = request.getParameter("dictionary");
@@ -523,7 +509,7 @@ if (ontology_display_name == null) {
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=HTTPUtils.cleanXSS(ontology_display_name)%>" />
             <input type="hidden" id="schema" name="schema" value="<%=HTTPUtils.cleanXSS(schema)%>" />
-            <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" />
+            <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
 
           </form>
           <!-- End of Tree control content -->
