@@ -80,6 +80,7 @@
         <%@ include file="/pages/templates/content-header-alt.jsp" %>
 <%
     String adv_search_vocabulary = request.getParameter("dictionary");
+    String adv_search_version = request.getParameter("version");
     String refresh = request.getParameter("refresh");
     boolean refresh_page = false;
     if (refresh != null) {
@@ -226,7 +227,7 @@
                   <h:outputLabel id="rel_search_source_Label" value="Source" styleClass="textbody">
                     <select id="adv_search_source" name="adv_search_source" size="1">
                     <%
-                      Vector src_vec = OntologyBean.getSupportedSources(adv_search_vocabulary);
+                      Vector src_vec = OntologyBean.getSupportedSources(adv_search_vocabulary, adv_search_version);
                       t = "ALL";
                       if (adv_search_source == null) adv_search_source = "ALL";
                         if (t.compareTo(adv_search_source) == 0) {
@@ -293,7 +294,7 @@
                           <%}%>
                   
                           <%
-                            Vector property_vec = OntologyBean.getSupportedPropertyNames(adv_search_vocabulary);
+                            Vector property_vec = OntologyBean.getSupportedPropertyNames(adv_search_vocabulary, adv_search_version);
                             for (int i=0; i<property_vec.size(); i++) {
                               t = (String) property_vec.elementAt(i);
                               if (t.compareTo(selectProperty) == 0) {
@@ -327,8 +328,7 @@
                           <%} %>
                   
                           <%
-                            //Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary);
-                            Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary, null);
+                            Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary, adv_search_version);
                             for (int i=0; i<association_vec.size(); i++) {
                               t = (String) association_vec.elementAt(i);
                               if (t.compareTo(rel_search_association) == 0) {
@@ -360,7 +360,7 @@
                           <%}%>
                           
                           <%
-                            Vector rela_vec = OntologyBean.getRELAs(adv_search_vocabulary);
+                            Vector rela_vec = OntologyBean.getRELAs(adv_search_vocabulary, adv_search_version);
                             for (int i=0; i<rela_vec.size(); i++) {
                               t = (String) rela_vec.elementAt(i);
                               //_logger.debug("rela: " + t);

@@ -13,42 +13,42 @@ import gov.nih.nci.evs.browser.utils.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
- * Copyright 2008,2009 NGIT. This software was developed in conjunction 
- * with the National Cancer Institute, and so to the extent government 
- * employees are co-authors, any rights in such works shall be subject 
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
  * to Title 17 of the United States Code, section 105.
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
  * are met:
- *   1. Redistributions of source code must retain the above copyright 
- *      notice, this list of conditions and the disclaimer of Article 3, 
- *      below. Redistributions in binary form must reproduce the above 
- *      copyright notice, this list of conditions and the following 
- *      disclaimer in the documentation and/or other materials provided 
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
  *      with the distribution.
- *   2. The end-user documentation included with the redistribution, 
+ *   2. The end-user documentation included with the redistribution,
  *      if any, must include the following acknowledgment:
- *      "This product includes software developed by NGIT and the National 
+ *      "This product includes software developed by NGIT and the National
  *      Cancer Institute."   If no such end-user documentation is to be
  *      included, this acknowledgment shall appear in the software itself,
  *      wherever such third-party acknowledgments normally appear.
- *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must 
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
  *      not be used to endorse or promote products derived from this software.
  *   4. This license does not authorize the incorporation of this software
- *      into any third party proprietary programs. This license does not 
- *      authorize the recipient to use any trademarks owned by either NCI 
- *      or NGIT 
- *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED 
- *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE 
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
  *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
- *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, 
- *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
- *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
- *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *      POSSIBILITY OF SUCH DAMAGE.
  * <!-- LICENSE_TEXT_END -->
  */
@@ -56,9 +56,9 @@ import gov.nih.nci.evs.browser.utils.*;
 /**
  * @author EVS Team
  * @version 1.0
- * 
+ *
  *          Modification history Initial implementation kim.ong@ngc.com
- * 
+ *
  */
 
 /*
@@ -71,12 +71,18 @@ import gov.nih.nci.evs.browser.utils.*;
 public class SearchStatusBean extends Object {
     private static Logger _logger = Logger.getLogger(SearchStatusBean.class);
     private String _codingSchemeName = null;
+    private String _version = null;
 
     public SearchStatusBean() {
     }
 
     public SearchStatusBean(String codingSchemeName) {
         _codingSchemeName = codingSchemeName;
+    }
+
+    public SearchStatusBean(String codingSchemeName, String version) {
+        _codingSchemeName = codingSchemeName;
+        _version = version;
     }
 
     public String setSessionAttribute(String attributeName, String value) {
@@ -174,7 +180,7 @@ public class SearchStatusBean extends Object {
 
     public List getPropertyList() {
         if (_propertyList == null) {
-            _propertyList = OntologyBean.getPropertyNameList(_codingSchemeName);
+            _propertyList = OntologyBean.getPropertyNameList(_codingSchemeName, _version);
             if (_propertyList != null && _propertyList.size() > 0) {
                 _selectedProperty =
                     ((SelectItem) _propertyList.get(0)).getLabel();
@@ -206,7 +212,7 @@ public class SearchStatusBean extends Object {
 
     public List getSourceList() {
         if (_sourceList == null) {
-            _sourceList = OntologyBean.getSourceList(_codingSchemeName);
+            _sourceList = OntologyBean.getSourceList(_codingSchemeName, _version);
             if (_sourceList != null && _sourceList.size() > 0) {
                 _selectedSource =
                     ((SelectItem) _sourceList.get(0)).getLabel();
@@ -239,7 +245,7 @@ public class SearchStatusBean extends Object {
     public List getPropertyTypeList() {
         if (_propertyTypeList == null) {
             _propertyTypeList =
-                OntologyBean.getPropertyTypeList(_codingSchemeName);
+                OntologyBean.getPropertyTypeList(_codingSchemeName, _version);
             if (_propertyTypeList != null && _propertyTypeList.size() > 0) {
                 _selectedPropertyType =
                     ((SelectItem) _propertyTypeList.get(0)).getLabel();
@@ -272,7 +278,7 @@ public class SearchStatusBean extends Object {
     public List getAssociationList() {
         if (_associationList == null) {
             _associationList =
-                OntologyBean.getAssociationNameList(_codingSchemeName);
+                OntologyBean.getAssociationNameList(_codingSchemeName, _version);
             if (_associationList != null && _associationList.size() > 0) {
                 _selectedAssociation =
                     ((SelectItem) _associationList.get(0)).getLabel();
@@ -306,7 +312,7 @@ public class SearchStatusBean extends Object {
     public List getRelationshipList() {
         if (_relationshipList == null) {
             _relationshipList =
-                OntologyBean.getAssociationNameList(_codingSchemeName);
+                OntologyBean.getAssociationNameList(_codingSchemeName, _version);
             _relationshipList.add(0, new SelectItem("ALL", "ALL"));
             if (_relationshipList != null && _relationshipList.size() > 0) {
                 _selectedRelationship =
@@ -340,7 +346,7 @@ public class SearchStatusBean extends Object {
 
     public List getRELAList() {
         if (_RELAList == null) {
-            _RELAList = OntologyBean.getRELAList(_codingSchemeName);
+            _RELAList = OntologyBean.getRELAList(_codingSchemeName, _version);
             if (_RELAList != null && _RELAList.size() > 0) {
                 _selectedRELA = ((SelectItem) _RELAList.get(0)).getLabel();
             }
