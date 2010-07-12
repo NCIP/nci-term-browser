@@ -287,7 +287,7 @@ public class OntologyBean {
     private static CodingScheme getCodingScheme(String codingScheme,
         String version) {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-        if (version != null)
+        if (version != null && version.compareTo("null") != 0)
             versionOrTag.setVersion(version);
         CodingScheme cs = null;
         try {
@@ -296,6 +296,7 @@ public class OntologyBean {
                 cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
             } catch (Exception ex2) {
                 cs = null;
+                System.out.println("ERROR: Unable to resolve coding scheme -- " + codingScheme + "(version: " + version + ")");
             }
 
         } catch (Exception ex) {
@@ -337,7 +338,14 @@ public class OntologyBean {
     }
 
     public static Vector getSupportedSources(String codingSchemeName) {
-        CodingScheme cs = getCodingScheme(codingSchemeName, null);
+        return getSupportedSources(codingSchemeName, null);
+    }
+
+    public static Vector getSupportedSources(String codingSchemeName, String version) {
+		System.out.println("OntologyBean getSupportedSources codingSchemeName:" + codingSchemeName);
+		System.out.println("OntologyBean getSupportedSources version:" + version);
+
+        CodingScheme cs = getCodingScheme(codingSchemeName, version);
         return getSupportedSources(cs);
     }
 
