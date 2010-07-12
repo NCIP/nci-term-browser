@@ -14,7 +14,14 @@
   String ncim_cui_prop_url = null;
   String ncim_cui_prop_linktext = null;
   Vector ncim_cui_code_vec = new Vector();
+  
+  String prop_version = null;
+
+  String prop_dictionary = (String) request.getSession().getAttribute("dictionary");
+  prop_version = (String) request.getAttribute("version");
     
+  System.out.println("property.jsp prop_version: " + prop_version);    
+
   List displayItemList = null;
   Concept curr_concept = null;
   Boolean bool_obj = null;
@@ -145,7 +152,7 @@ if (!bool_obj.equals(Boolean.TRUE) ||
 %>
     <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i>
 <%
-    String prop_dictionary = (String) request.getSession().getAttribute("dictionary");
+
     
     Vector descendantCodes = HistoryUtils.getDescendantCodes(dictionary, null, null, curr_concept.getEntityCode());
     if (descendantCodes != null) {
@@ -679,12 +686,19 @@ if (!hasOtherProperties) {
   int idx = requestURL.indexOf("pages");
   requestURL = requestURL.substring(0, idx);
   
-  String prop_dictionary = dictionary.replace(" ", "%20");
+  prop_dictionary = dictionary.replace(" ", "%20");
   
   
   String url = requestURL + "ConceptReport.jsp?dictionary=" + prop_dictionary + "&code=" + concept_id;
   String url_text = "ConceptReport.jsp?dictionary=" + prop_dictionary + "&code=" + concept_id;
+  
+  if (prop_version != null) {
+      url = requestURL + "ConceptReport.jsp?dictionary=" + prop_dictionary + "&version=" + prop_version + "&code=" + concept_id;
+      url_text = "ConceptReport.jsp?dictionary=" + prop_dictionary + "&version=" + prop_version + "&code=" + concept_id;
+  }
   String bookmark_title = prop_dictionary + "%20" + concept_id;
+  
+  
 %>
 <p>
   <b>URL to Bookmark</b>:

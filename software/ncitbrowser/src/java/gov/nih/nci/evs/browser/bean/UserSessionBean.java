@@ -134,11 +134,6 @@ public class UserSessionBean extends Object {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-
-        String version = (String) request.getParameter("version");
-System.out.println("searchAction version: " + version);
-
-
         String matchText = (String) request.getParameter("matchText");
         if (matchText != null)
             matchText = matchText.trim();
@@ -177,7 +172,15 @@ System.out.println("searchAction version: " + version);
             scheme = Constants.CODING_SCHEME_NAME;
         }
 
+        String version = (String) request.getParameter("version");
+        if (version == null) {
+            version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
+		}
+
+	    request.setAttribute("version", version);
+
         _logger.debug("UserSessionBean scheme: " + scheme);
+        _logger.debug("searchAction version: " + version);
 
         // KLO, 012610
         if (searchTarget.compareTo("relationships") == 0
@@ -188,7 +191,6 @@ System.out.println("searchAction version: " + version);
                 String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
                 request.getSession().setAttribute("message", msg);
                 request.getSession().setAttribute("vocabulary", scheme);
-
                 return "message";
             }
         }

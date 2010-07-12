@@ -28,12 +28,17 @@
 <%@ page import="org.LexGrid.commonTypes.Property"%>
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier"%>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants"%>
+
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <%
   String dictionary = null;
+  String version = null;
   dictionary = (String) request.getParameter("dictionary");
+  version = (String) request.getParameter("version");
+
 
   if (dictionary != null) {
     dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
@@ -41,9 +46,15 @@
     dictionary = DataUtils.getCodingSchemeName(dictionary);
     request.getSession().setAttribute("dictionary", dictionary);
   } else {
-    dictionary = (String) request.getSession().getAttribute(
-        "dictionary");
+    dictionary = (String) request.getSession().getAttribute("dictionary");
   }
+
+  if (version == null) {
+      version = (String) request.getAttribute("version");
+  }
+  
+System.out.println("concept_details.jsp version: " + version);  
+request.setAttribute("version", version);
 
   if (dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
@@ -157,7 +168,7 @@
               String name = "";
               Concept c = null;
 
-              String vers = null;
+              String vers = version;
               String ltag = null;
 
               c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
@@ -231,7 +242,10 @@
 
   <%
   request.getSession().setAttribute("concept", c);
-      request.getSession().setAttribute("code", code);
+  request.getSession().setAttribute("code", code);
+  request.setAttribute("version", version);    
+            
+      
 %> <%@ include file="/pages/templates/typeLinks.jsp"%>
   <div class="tabTableContentContainer"><%@ include
     file="/pages/templates/property.jsp"%> <%@ include
