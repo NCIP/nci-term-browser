@@ -7,11 +7,11 @@
  String scheme = (String) request.getSession().getAttribute("dictionary");
  scheme = DataUtils.getFormalName(scheme);
 
- String tab_version = (String) request.getSession().getAttribute("version");
- System.out.println("typeLink.jsp version: " + version);
+ String tab_version = (String) request.getAttribute("version");
  if (tab_version == null ) {
      tab_version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
  }
+ System.out.println("typeLink.jsp tab_version: " + version);
 
  boolean tree_access = true;
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
