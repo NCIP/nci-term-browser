@@ -11,6 +11,8 @@ import org.apache.log4j.*;
 
 import gov.nih.nci.evs.browser.properties.*;
 import static gov.nih.nci.evs.browser.common.Constants.*;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -128,6 +130,9 @@ public final class AjaxServlet extends HttpServlet {
             request.getParameter("ontology_display_name");// DataConstants.ONTOLOGY_DISPLAY_NAME);
 
         String ontology_version = request.getParameter("version");
+        if (ontology_version == null) {
+			ontology_version = DataUtils.getVocabularyVersionByTag(ontology_display_name, "PRODUCTION");
+		}
 
         long ms = System.currentTimeMillis();
 
@@ -145,7 +150,7 @@ public final class AjaxServlet extends HttpServlet {
 
                     nodesArray =
                         CacheController.getInstance().getSubconcepts(
-                            ontology_display_name, null, node_id);
+                            ontology_display_name, ontology_version, node_id);
                     if (nodesArray != null) {
                         json.put("nodes", nodesArray);
                     }
@@ -225,10 +230,12 @@ public final class AjaxServlet extends HttpServlet {
                     } catch (Exception ex) {
 
                     }
+                    CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+                    if (ontology_version != null) versionOrTag.setVersion(ontology_version);
 
                     String jsonString =
                         CacheController.getInstance().getTree(
-                            ontology_display_name, null, node_id);
+                            ontology_display_name, versionOrTag, node_id);
                     JSONArray rootsArray = new JSONArray(jsonString);
 
                     json.put("root_nodes", rootsArray);
