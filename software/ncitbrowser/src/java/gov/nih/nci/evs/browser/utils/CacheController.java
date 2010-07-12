@@ -19,42 +19,42 @@ import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
- * Copyright 2008,2009 NGIT. This software was developed in conjunction 
- * with the National Cancer Institute, and so to the extent government 
- * employees are co-authors, any rights in such works shall be subject 
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
  * to Title 17 of the United States Code, section 105.
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
  * are met:
- *   1. Redistributions of source code must retain the above copyright 
- *      notice, this list of conditions and the disclaimer of Article 3, 
- *      below. Redistributions in binary form must reproduce the above 
- *      copyright notice, this list of conditions and the following 
- *      disclaimer in the documentation and/or other materials provided 
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
  *      with the distribution.
- *   2. The end-user documentation included with the redistribution, 
+ *   2. The end-user documentation included with the redistribution,
  *      if any, must include the following acknowledgment:
- *      "This product includes software developed by NGIT and the National 
+ *      "This product includes software developed by NGIT and the National
  *      Cancer Institute."   If no such end-user documentation is to be
  *      included, this acknowledgment shall appear in the software itself,
  *      wherever such third-party acknowledgments normally appear.
- *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must 
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
  *      not be used to endorse or promote products derived from this software.
  *   4. This license does not authorize the incorporation of this software
- *      into any third party proprietary programs. This license does not 
- *      authorize the recipient to use any trademarks owned by either NCI 
- *      or NGIT 
- *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED 
- *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE 
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
  *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
- *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, 
- *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
- *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
- *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *      POSSIBILITY OF SUCH DAMAGE.
  * <!-- LICENSE_TEXT_END -->
  */
@@ -332,12 +332,12 @@ public class CacheController {
      * obj; code = node.getEntityCode(); try { name =
      * node.getEntityDescription().getContent(); } catch (Exception e) { name =
      * code; } }
-     * 
+     *
      * int j = i+1; _logger.debug("( " + j + ") code: " + code + " name: " +
      * name);
-     * 
+     *
      * if (name.compareTo("<Not assigned>") == 0) name = code;
-     * 
+     *
      * ResolvedConceptReference node = (ResolvedConceptReference) list.get(i);
      * int childCount = 1; try { JSONObject nodeObject = new JSONObject();
      * nodeObject.put(ONTOLOGY_NODE_ID, code);
@@ -345,12 +345,12 @@ public class CacheController {
      * nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
      * nodeObject.put(CHILDREN_NODES, new JSONArray());
      * nodesArray.put(nodeObject);
-     * 
+     *
      * } catch (Exception ex) { ex.printStackTrace(); } } }
-     * 
-     * 
+     *
+     *
      * } catch (Exception ex) {
-     * 
+     *
      * } return nodesArray; }
      */
 
@@ -535,7 +535,7 @@ public class CacheController {
      * nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
      * nodeObject.put(CHILDREN_NODES, getNodesArray(node_id, childItem));
      * nodesArray.put(nodeObject); } catch (Exception ex) {
-     * 
+     *
      * } } } return nodesArray; }
      */
 
@@ -680,6 +680,7 @@ public class CacheController {
             .getObjectValue();
     }
 
+/*
     public static String getTree(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
         if (!CacheController._instance
@@ -702,11 +703,37 @@ public class CacheController {
         return (String) _cache.get(getTreeKey(codingScheme, code))
             .getObjectValue();
     }
+*/
+
+    public static String getTree(String codingScheme,
+        CodingSchemeVersionOrTag versionOrTag, String code) {
+        if (!CacheController._instance
+            .containsKey(getTreeKey(codingScheme, code))) {
+            _logger.debug("Tree Not Found In Cache.");
+            TreeService treeService =
+                TreeServiceFactory.getInstance().getTreeService(
+                    RemoteServerUtil.createLexBIGService());
+
+            LexEvsTree tree =
+                treeService.getTree(codingScheme, versionOrTag, code);
+
+            String json =
+                treeService.getJsonConverter().buildJsonPathFromRootTree(
+                    tree.getCurrentFocus());
+
+            _cache.put(new Element(getTreeKey(tree, versionOrTag.getVersion()), json));
+            return json;
+        }
+        return (String) _cache.get(getTreeKey(codingScheme, versionOrTag.getVersion(), code))
+            .getObjectValue();
+    }
+
 
     public void activeCacheTree(ResolvedConceptReference ref) {
         _logger.debug("Actively caching tree.");
 
         String codingScheme = ref.getCodingSchemeName();
+        String codingSchemeVersion = ref.getCodingSchemeVersion();
         String code = ref.getCode();
 
         if (!CacheController._instance
@@ -716,18 +743,28 @@ public class CacheController {
                 TreeServiceFactory.getInstance().getTreeService(
                     RemoteServerUtil.createLexBIGService());
 
-            LexEvsTree tree = treeService.getTree(codingScheme, null, code);
+            //LexEvsTree tree = treeService.getTree(codingScheme, null, code);
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (codingSchemeVersion != null) versionOrTag.setVersion(codingSchemeVersion);
+            LexEvsTree tree = treeService.getTree(codingScheme, versionOrTag, code);
 
             String json =
                 treeService.getJsonConverter().buildJsonPathFromRootTree(
                     tree.getCurrentFocus());
 
-            _cache.put(new Element(getTreeKey(tree), json));
+           // _cache.put(new Element(getTreeKey(tree), json));
+
+           _cache.put(new Element(getTreeKey(tree, codingSchemeVersion), json));
         }
     }
 
     private static String getTreeKey(LexEvsTree tree) {
         return getTreeKey(tree.getCodingScheme(), tree.getCurrentFocus()
+            .getCode());
+    }
+
+    private static String getTreeKey(LexEvsTree tree, String version) {
+        return getTreeKey(tree.getCodingScheme(), version, tree.getCurrentFocus()
             .getCode());
     }
 
@@ -738,6 +775,18 @@ public class CacheController {
 
     private static String getTreeKey(String codingScheme, String code) {
         return String.valueOf("Tree".hashCode() + codingScheme.hashCode()
+            + code.hashCode());
+    }
+
+    private static String getSubConceptKey(String codingScheme, String version, String code) {
+        return String.valueOf("SubConcept".hashCode() + codingScheme.hashCode()
+            + version.hashCode()
+            + code.hashCode());
+    }
+
+    private static String getTreeKey(String codingScheme, String version, String code) {
+        return String.valueOf("Tree".hashCode() + codingScheme.hashCode()
+            + version.hashCode()
             + code.hashCode());
     }
 }
