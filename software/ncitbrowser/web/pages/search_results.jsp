@@ -37,8 +37,14 @@
 
 <%
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
+String search_results_version = (String) request.getAttribute("version");
 
 _logger.debug("search_results.jsp dictionary: " + search_results_dictionary);
+_logger.debug("search_results.jsp version: " + search_results_version);
+
+if (search_results_version != null) {
+    request.setAttribute("version", search_results_version);
+}
 
 if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
@@ -170,8 +176,8 @@ _logger.debug("search_result.jsp " + key);
                   }
 
 
-                  //Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, null, null, code_vec);
-                  Vector status_vec = DataUtils.getConceptStatusByConceptCodes(search_results_dictionary, null, null, code_vec);
+                  //Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, search_results_version, null, code_vec);
+                  Vector status_vec = DataUtils.getConceptStatusByConceptCodes(search_results_dictionary, search_results_version, null, code_vec);
                   int i = -1;
                  
                   for (int k=0; k<list.size(); k++) {
@@ -234,11 +240,11 @@ if (obj == null) {
 				  <%
 				  if (con_status == null) {
 				  %>
-				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>
 				  <%
 				  } else {
 				  %>
-				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
 				  <%
 				  }
 				  %>
