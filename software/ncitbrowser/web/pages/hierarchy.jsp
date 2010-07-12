@@ -443,7 +443,6 @@ String hierarchy_version = request.getParameter("version");
 String hierarchy_schema = request.getParameter("schema");
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
 
-String hierarchy_version = request.getParameter("version");
 String term_browser_version = DataUtils.getMetadataValue(hierarchy_schema, hierarchy_version, "term_browser_version");
 String display_name = DataUtils.getMetadataValue(hierarchy_schema, hierarchy_version, "display_name");
 
