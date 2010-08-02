@@ -396,12 +396,8 @@
     </target>
 
     <target name="install:jboss:configure:log4j" description="Configure custom entries in system wide log4j" unless="exclude.jboss" depends="common:jboss:init, common:init">
-      <echo message="DYEE: Disable: Configuring Log4J"/>
-    </target>
-      	
-    <target name="install:jboss:configure:log4j:DYEE" description="Configure custom entries in system wide log4j" unless="exclude.jboss" depends="common:jboss:init, common:init">
         <echo message="Configuring Log4J"/>
-        <property name="log4j.file.name" value="log4j.xml"/>
+        <property name="log4j.file.name" value="jboss-log4j.xml"/>
         <copy file="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}" tofile="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}.pre"/>
         <replaceregexp file="${jboss.home}/server/${jboss.server.name}/conf/${log4j.file.name}"
             byline="true"
@@ -523,7 +519,7 @@
             <then>
                 <jboss-stop-jboss
                     jboss.server.jndi.port="${jboss.server.jndi.port}"
-                    sleep.time="30"
+                    sleep.time="5"
                 />
             </then>
         </if>
