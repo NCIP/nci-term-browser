@@ -192,6 +192,8 @@ if (vocabulary_version != null) {
          <% } 
 	  %>            
             
+          
+            
           <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
           | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
           <% } %>

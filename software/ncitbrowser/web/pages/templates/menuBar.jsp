@@ -66,7 +66,10 @@ System.out.println("menuBar.jsp menubar_version: " + menubar_version);
       <%
       }
       %>
-    
+
+
+
+      
     <%
       if (hdr_dictionary0 != null && hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
       %> | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>

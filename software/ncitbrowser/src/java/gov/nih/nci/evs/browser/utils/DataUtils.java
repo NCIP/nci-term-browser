@@ -3316,4 +3316,11 @@ public class DataUtils {
 			String value = (String) hmap.get(key);
 		}
 	}
+
+
+    // To be implemented based on metadata
+	public static boolean isMapping(String codingScheme, String version) {
+		if (codingScheme.indexOf("Z") != -1) return true;
+		return false;
+	}
 }

@@ -179,58 +179,62 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                         String label2 = "|" + label + "|";
                         String scheme = DataUtils.key2CodingSchemeName(value);
                         String version = DataUtils.key2CodingSchemeVersion(value);
-                       
-                        String http_label = null;
-                        String http_scheme = null;
-                        String http_version = null;
+ 
+                        boolean isMapping = DataUtils.isMapping(scheme, version);
+                        if (!isMapping) {
+ 
+				String http_label = null;
+				String http_scheme = null;
+				String http_version = null;
 
-                        if (label != null)
-                          http_label = label.replaceAll(" ", "%20");
-                        if (scheme != null)
-                          http_scheme = scheme.replaceAll(" ", "%20");
-                        if (version != null)
-                          http_version = version.replaceAll(" ", "%20");
-                        %>
-                        <tr>
-                          <td width="25px"></td>
-                          <td>
-                        <%
-                        boolean checked = ontologiesToSearchOn != null
-                            && ontologiesToSearchOn.indexOf(label2) != -1;
-                        String checkedStr = checked ? "checked" : "";
-                        %>
-                           <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
-                        <%
+				if (label != null)
+				  http_label = label.replaceAll(" ", "%20");
+				if (scheme != null)
+				  http_scheme = scheme.replaceAll(" ", "%20");
+				if (version != null)
+				  http_version = version.replaceAll(" ", "%20");
+				%>
+				<tr>
+				  <td width="25px"></td>
+				  <td>
+				<%
+				boolean checked = ontologiesToSearchOn != null
+				    && ontologiesToSearchOn.indexOf(label2) != -1;
+				String checkedStr = checked ? "checked" : "";
+				%>
+				   <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
+				<%
 
-                        String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
-                        if (full_name == null || full_name.compareTo("null") == 0) 
-                            full_name = scheme;
-                        //String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
-                        String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
-                        if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
-                            term_browser_version = version;
-                        }     
-                        String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
+				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
+				if (full_name == null || full_name.compareTo("null") == 0) 
+				    full_name = scheme;
+				//String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+				String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
+				if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
+				    term_browser_version = version;
+				}     
+				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
-                        if (scheme.compareTo("NCI Thesaurus") == 0) {
-                            String nciturl = NCItBrowserProperties.getNCIT_URL();
-                            nciturl = nciturl + "?version=" + version;
-                          %>
-                            <a href="<%=nciturl%>"><%=display_label%></a>
-                          <%
-                        } else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
-                            String ncimurl = NCItBrowserProperties.getNCIM_URL();
-                          %>
-                            <a href="<%=ncimurl%>" target="_blank"><%=display_label%>
-                              <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=display_label%>" />
-                            </a>
-                          <%
-                        } else {
-                          %>
-                            <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
-                              <%=display_label%>
-                            </a>
-                          <%
+				if (scheme.compareTo("NCI Thesaurus") == 0) {
+				    String nciturl = NCItBrowserProperties.getNCIT_URL();
+				    nciturl = nciturl + "?version=" + version;
+				  %>
+				    <a href="<%=nciturl%>"><%=display_label%></a>
+				  <%
+				} else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
+				    String ncimurl = NCItBrowserProperties.getNCIM_URL();
+				  %>
+				    <a href="<%=ncimurl%>" target="_blank"><%=display_label%>
+				      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=display_label%>" />
+				    </a>
+				  <%
+				} else {
+				  %>
+				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
+				      <%=display_label%>
+				    </a>
+				  <%
+				}
                         }
                       %>
                         </td>
@@ -241,7 +245,95 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                     </table>
                   </td>
                 </tr>
+                
+                <tr><td height="20"><HR></HR></td></tr>
+                <tr><td class="textbody">Mappings:</td></tr>
+                
+                <tr>
+                  <td class="textbody">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                      <%
+                     
+                      for (int i = 0; i < display_name_vec.size(); i++) {
+                        String display_name_version = (String) display_name_vec.elementAt(i);
+                        int n = display_name_version.indexOf("$");
+                        String display_name = display_name_version.substring(0, n);
+                        String value = (String)  display_name_hmap.get(display_name_version);
+                        String label = (String)  display_name_hmap.get(display_name_version);
+                       
+                        String label2 = "|" + label + "|";
+                        String scheme = DataUtils.key2CodingSchemeName(value);
+                        String version = DataUtils.key2CodingSchemeVersion(value);
+                        
+                        boolean isMapping = DataUtils.isMapping(scheme, version);
+                        if (isMapping) {
+                       
+				String http_label = null;
+				String http_scheme = null;
+				String http_version = null;
+
+				if (label != null)
+				  http_label = label.replaceAll(" ", "%20");
+				if (scheme != null)
+				  http_scheme = scheme.replaceAll(" ", "%20");
+				if (version != null)
+				  http_version = version.replaceAll(" ", "%20");
+				%>
+				<tr>
+				  <td width="25px"></td>
+				  <td>
+				<%
+				boolean checked = ontologiesToSearchOn != null
+				    && ontologiesToSearchOn.indexOf(label2) != -1;
+				String checkedStr = checked ? "checked" : "";
+				%>
+				   <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
+				<%
+
+				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
+				if (full_name == null || full_name.compareTo("null") == 0) 
+				    full_name = scheme;
+				//String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+				String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
+				if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
+				    term_browser_version = version;
+				}     
+				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
+
+				if (scheme.compareTo("NCI Thesaurus") == 0) {
+				    String nciturl = NCItBrowserProperties.getNCIT_URL();
+				    nciturl = nciturl + "?version=" + version;
+				  %>
+				    <a href="<%=nciturl%>"><%=display_label%></a>
+				  <%
+				} else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
+				    String ncimurl = NCItBrowserProperties.getNCIM_URL();
+				  %>
+				    <a href="<%=ncimurl%>" target="_blank"><%=display_label%>
+				      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=display_label%>" />
+				    </a>
+				  <%
+				} else {
+				  %>
+				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
+				      <%=display_label%>
+				    </a>
+				  <%
+				}
+                        }
+                      %>
+                        </td>
+                      </tr>
+                     <%
+                      }
+                     %>
+                    </table>
+                  </td>
+                </tr>                
+                
+                
                 <tr><td height="20"></td></tr>
+                
                 <tr>
                   <td><img
                     src="<%= request.getContextPath() %>/images/selectAll.gif"
