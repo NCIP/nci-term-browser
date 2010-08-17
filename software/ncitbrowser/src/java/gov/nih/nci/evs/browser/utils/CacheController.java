@@ -267,8 +267,8 @@ public class CacheController {
                         ed.setContent(name);
                         node.setEntityDescription(ed);
                         newlist.add(node);
-                    } else if (obj instanceof Concept) {
-                        Concept node = (Concept) obj;
+                    } else if (obj instanceof Entity) {
+                        Entity node = (Entity) obj;
                         code = node.getEntityCode();
                         try {
                             name = node.getEntityDescription().getContent();

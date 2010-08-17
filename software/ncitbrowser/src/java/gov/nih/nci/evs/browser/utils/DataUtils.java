@@ -742,7 +742,7 @@ public class DataUtils {
 
     // ==================================================================================================================================
 
-    public static Concept getConceptByCode(String codingSchemeName,
+    public static Entity getConceptByCode(String codingSchemeName,
         String vers, String ltag, String code) {
         return SearchUtils.matchConceptByCode(codingSchemeName, vers, code,
             null, "LuceneQuery");
@@ -816,11 +816,16 @@ public class DataUtils {
                     null, null, _maxReturn);
 
             if (matches.getResolvedConceptReferenceCount() > 0) {
-                Enumeration<ResolvedConceptReference> refEnum =
-                    matches.enumerateResolvedConceptReference();
-
+				/*
+                Enumeration<ResolvedConceptReference> refEnum = matches.enumerateResolvedConceptReference();
                 while (refEnum.hasMoreElements()) {
                     ResolvedConceptReference ref = refEnum.nextElement();
+                */
+
+                java.util.Enumeration<? extends ResolvedConceptReference> refEnum = matches.enumerateResolvedConceptReference();
+                while (refEnum.hasMoreElements()) {
+                    ResolvedConceptReference ref = (ResolvedConceptReference) refEnum.nextElement();
+
                     AssociationList targetof = ref.getTargetOf();
                     Association[] associations = targetof.getAssociation();
 
@@ -1302,7 +1307,7 @@ public class DataUtils {
         return null;
     }
 
-    public static Vector getPropertyNamesByType(Concept concept,
+    public static Vector getPropertyNamesByType(Entity concept,
         String property_type) {
         Vector v = new Vector();
         org.LexGrid.commonTypes.Property[] properties = null;
@@ -1382,7 +1387,7 @@ public class DataUtils {
         return s;
     }
 
-    public static Vector getPropertyValues(Concept concept,
+    public static Vector getPropertyValues(Entity concept,
         String property_type, String property_name) {
         Vector v = new Vector();
         org.LexGrid.commonTypes.Property[] properties = null;
@@ -1452,14 +1457,16 @@ public class DataUtils {
                 if (relation.getContainerName().compareToIgnoreCase("roles") == 0
                     || relation.getContainerName().compareToIgnoreCase(
                         "relations") == 0) {
-                    org.LexGrid.relations.Association[] asso_array =
-                        relation.getAssociation();
+                    //org.LexGrid.relations.Association[] asso_array =
+                    org.LexGrid.relations.AssociationPredicate[] asso_array =
+                        relation.getAssociationPredicate();
                     for (int j = 0; j < asso_array.length; j++) {
-                        org.LexGrid.relations.Association association =
-                            (org.LexGrid.relations.Association) asso_array[j];
+                        org.LexGrid.relations.AssociationPredicate association =
+                            (org.LexGrid.relations.AssociationPredicate) asso_array[j];
                         // list.add(association.getAssociationName());
                         // KLO, 092209
-                        list.add(association.getForwardName());
+                        //list.add(association.getForwardName());
+                        list.add(association.getAssociationName());
                     }
                 }
             }
@@ -1517,7 +1524,7 @@ public class DataUtils {
         return names;
     }
 
-    public String getPreferredName(Concept c) {
+    public String getPreferredName(Entity c) {
 
         Presentation[] presentations = c.getPresentation();
         for (int i = 0; i < presentations.length; i++) {
@@ -1653,11 +1660,11 @@ public class DataUtils {
 
             if (matches != null
                 && matches.getResolvedConceptReferenceCount() > 0) {
-                Enumeration<ResolvedConceptReference> refEnum =
+                Enumeration<? extends ResolvedConceptReference> refEnum =
                     matches.enumerateResolvedConceptReference();
 
                 while (refEnum.hasMoreElements()) {
-                    ResolvedConceptReference ref = refEnum.nextElement();
+                    ResolvedConceptReference ref = (ResolvedConceptReference) refEnum.nextElement();
                     AssociationList sourceof = ref.getSourceOf();
                     if (sourceof != null) {
                         Association[] associations = sourceof.getAssociation();
@@ -1772,7 +1779,7 @@ public class DataUtils {
 
             if (matches != null
                 && matches.getResolvedConceptReferenceCount() > 0) {
-                Enumeration<ResolvedConceptReference> refEnum =
+                Enumeration<? extends ResolvedConceptReference> refEnum =
                     matches.enumerateResolvedConceptReference();
 
                 while (refEnum.hasMoreElements()) {
@@ -2065,7 +2072,7 @@ public class DataUtils {
                     rcrl.getResolvedConceptReference();
                 for (int i = 0; i < rcra.length; i++) {
                     ResolvedConceptReference rcr = rcra[i];
-                    org.LexGrid.concepts.Concept ce = rcr.getReferencedEntry();
+                    org.LexGrid.concepts.Entity ce = rcr.getReferencedEntry();
                     // _logger.debug("Iteration " + iteration + " " +
                     // ce.getEntityCode() + " " +
                     // ce.getEntityDescription().getContent());
@@ -2112,7 +2119,7 @@ public class DataUtils {
     public static Vector getSynonyms(String scheme, String version, String tag,
         String code) {
         Vector v = new Vector();
-        Concept concept = getConceptByCode(scheme, version, tag, code);
+        Entity concept = getConceptByCode(scheme, version, tag, code);
         // KLO, 091009
         // getSynonyms(concept);
         return getSynonyms(scheme, concept);
@@ -2140,7 +2147,7 @@ public class DataUtils {
      * return v; }
      */
 
-    public static Vector getSynonyms(Concept concept) {
+    public static Vector getSynonyms(Entity concept) {
         if (concept == null)
             return null;
         Vector v = new Vector();
@@ -2179,7 +2186,7 @@ public class DataUtils {
         return v;
     }
 
-    public static Vector getSynonyms(String scheme, Concept concept) {
+    public static Vector getSynonyms(String scheme, Entity concept) {
         if (concept == null)
             return null;
         Vector v = new Vector();
@@ -2586,7 +2593,7 @@ public class DataUtils {
         scheme = (String) _formalName2LocalNameHashMap.get(scheme);
         for (int i = 0; i < concept_vec.size(); i++) {
             int j = concept_vec.size() - i - 1;
-            Concept c = (Concept) concept_vec.elementAt(j);
+            Entity c = (Entity) concept_vec.elementAt(j);
 
             strbuf.append("<li>");
 
@@ -2822,7 +2829,7 @@ public class DataUtils {
         for (int i = 0; i < codes.size(); i++) {
             if (conceptStatusSupported) {
                 String code = (String) codes.elementAt(i);
-                Concept c = getConceptByCode(scheme, version, ltag, code);
+                Entity c = getConceptByCode(scheme, version, ltag, code);
                 if (c != null) {
                     w.add(c.getStatus());
                 } else {
@@ -2849,7 +2856,7 @@ public class DataUtils {
         if (!conceptStatusSupported)
             return null;
 
-        Concept c =
+        Entity c =
             getConceptWithProperty(scheme, version, code, "Concept_Status");
         String con_status = null;
         if (c != null) {
@@ -2875,7 +2882,7 @@ public class DataUtils {
         for (int i = 0; i < codes.size(); i++) {
             if (conceptStatusSupported) {
                 String code = (String) codes.elementAt(i);
-                Concept c =
+                Entity c =
                     getConceptWithProperty(scheme, version, code,
                         "Concept_Status");
                 String con_status = null;
@@ -3017,7 +3024,7 @@ public class DataUtils {
                         ResolvedConceptReference rcr =
                             rcrl.getResolvedConceptReference(i);
                         // _logger.debug("(*) " + rcr.getCode());
-                        Concept c = rcr.getReferencedEntry();
+                        Entity c = rcr.getReferencedEntry();
                         if (c == null) {
                             _logger.debug("Concept is null.");
                         } else {
@@ -3051,7 +3058,7 @@ public class DataUtils {
         return null;
     }
 
-    public static Concept getConceptWithProperty(String scheme, String version,
+    public static Entity getConceptWithProperty(String scheme, String version,
         String code, String propertyName) {
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -3105,7 +3112,7 @@ public class DataUtils {
                     for (int i = 0; i < rcrl.getResolvedConceptReferenceCount(); i++) {
                         ResolvedConceptReference rcr =
                             rcrl.getResolvedConceptReference(i);
-                        Concept c = rcr.getReferencedEntry();
+                        Entity c = rcr.getReferencedEntry();
                         return c;
                     }
                 }
@@ -3125,7 +3132,7 @@ public class DataUtils {
         return null;
     }
 
-    public static Vector getConceptPropertyValues(Concept c, String propertyName) {
+    public static Vector getConceptPropertyValues(Entity c, String propertyName) {
         if (c == null)
             return null;
         Vector v = new Vector();
@@ -3230,7 +3237,7 @@ public class DataUtils {
         return t;
     }
 
-    public static Vector getPresentationProperties(Concept concept) {
+    public static Vector getPresentationProperties(Entity concept) {
         Vector v = new Vector();
         org.LexGrid.commonTypes.Property[] properties =
             concept.getPresentation();

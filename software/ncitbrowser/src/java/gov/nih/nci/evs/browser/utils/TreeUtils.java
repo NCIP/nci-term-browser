@@ -38,42 +38,42 @@ import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
- * Copyright 2008,2009 NGIT. This software was developed in conjunction 
- * with the National Cancer Institute, and so to the extent government 
- * employees are co-authors, any rights in such works shall be subject 
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
  * to Title 17 of the United States Code, section 105.
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
  * are met:
- *   1. Redistributions of source code must retain the above copyright 
- *      notice, this list of conditions and the disclaimer of Article 3, 
- *      below. Redistributions in binary form must reproduce the above 
- *      copyright notice, this list of conditions and the following 
- *      disclaimer in the documentation and/or other materials provided 
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
  *      with the distribution.
- *   2. The end-user documentation included with the redistribution, 
+ *   2. The end-user documentation included with the redistribution,
  *      if any, must include the following acknowledgment:
- *      "This product includes software developed by NGIT and the National 
+ *      "This product includes software developed by NGIT and the National
  *      Cancer Institute."   If no such end-user documentation is to be
  *      included, this acknowledgment shall appear in the software itself,
  *      wherever such third-party acknowledgments normally appear.
- *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must 
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
  *      not be used to endorse or promote products derived from this software.
  *   4. This license does not authorize the incorporation of this software
- *      into any third party proprietary programs. This license does not 
- *      authorize the recipient to use any trademarks owned by either NCI 
- *      or NGIT 
- *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED 
- *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE 
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
  *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
- *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, 
- *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
- *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
- *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *      POSSIBILITY OF SUCH DAMAGE.
  * <!-- LICENSE_TEXT_END -->
  */
@@ -92,19 +92,19 @@ import org.apache.log4j.*;
 /**
  * Attempts to provide a tree, based on a focus code, that includes the
  * following information:
- * 
+ *
  * <pre>
  * - All paths from the hierarchy root to one or more focus codes.
  * - Immediate children of every node in path to root
  * - Indicator to show whether any unexpanded node can be further expanded
  * </pre>
- * 
+ *
  * This example accepts two parameters... The first parameter is required, and
  * must contain at least one code in a comma-delimited list. A tree is produced
  * for each code. Time to produce the tree for each code is printed in
  * milliseconds. In order to factor out costs of startup and shutdown, resolving
  * multiple codes may offer a better overall estimate performance.
- * 
+ *
  * The second parameter is optional, and can indicate a hierarchy ID to navigate
  * when resolving child nodes. If not provided, "is_a" is assumed.
  */
@@ -183,7 +183,7 @@ public class TreeUtils {
             // printed, along with an indication of whether those nodes can
             // be expanded.
 
-            for (Iterator<Association> paths =
+            for (Iterator<? extends Association> paths =
                 pathsFromRoot.iterateAssociation(); paths.hasNext();) {
                 addPathFromRoot(ti, lbsvc, lbscm, scheme, csvt, paths.next(),
                     associationsToNavigate, associationsNavigatedFwd,
@@ -336,7 +336,7 @@ public class TreeUtils {
         // the resolved list. The node will be subdivided by source or
         // target associations (depending on direction). The associated
         // nodes define the children.
-        for (Iterator<ResolvedConceptReference> nodes =
+        for (Iterator<? extends ResolvedConceptReference> nodes =
             branch.iterateResolvedConceptReference(); nodes.hasNext();) {
             ResolvedConceptReference node = nodes.next();
             AssociationList childAssociationList =
@@ -348,7 +348,7 @@ public class TreeUtils {
                 return;
 
             // Process each association defining children ...
-            for (Iterator<Association> pathsToChildren =
+            for (Iterator<? extends Association> pathsToChildren =
                 childAssociationList.iterateAssociation(); pathsToChildren
                 .hasNext();) {
                 Association child = pathsToChildren.next();
@@ -359,7 +359,7 @@ public class TreeUtils {
                 // Each association may have multiple children ...
                 AssociatedConceptList branchItemList =
                     child.getAssociatedConcepts();
-                for (Iterator<AssociatedConcept> branchNodes =
+                for (Iterator<? extends AssociatedConcept> branchNodes =
                     branchItemList.iterateAssociatedConcept(); branchNodes
                     .hasNext();) {
                     AssociatedConcept branchItemNode = branchNodes.next();
@@ -392,7 +392,7 @@ public class TreeUtils {
 
     /**
      * Prints the given tree item, recursing through all branches.
-     * 
+     *
      * @param ti
      */
 
@@ -566,73 +566,73 @@ public class TreeUtils {
      * public static HashMap getSubconcepts(String scheme, String version,
      * String code) { if (scheme.compareTo("NCI Thesaurus") == 0) { return
      * getAssociatedConcepts(scheme, version, code, "subClassOf", false); }
-     * 
+     *
      * else if (scheme.indexOf("MedDRA") != -1) { return
      * getAssociatedConcepts(scheme, version, code, "CHD", true); }
-     * 
+     *
      * CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag(); if
      * (version != null) csvt.setVersion(version);
-     * 
+     *
      * try { LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
      * LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods)
      * lbSvc .getGenericExtension("LexBIGServiceConvenienceMethods");
      * lbscm.setLexBIGService(lbSvc);
-     * 
+     *
      * CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt); if (cs ==
      * null) return null; Mappings mappings = cs.getMappings();
      * SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy(); if
      * (hierarchies == null || hierarchies.length == 0) return null;
-     * 
+     *
      * SupportedHierarchy hierarchyDefn = hierarchies[0]; String hier_id =
      * hierarchyDefn.getLocalId();
-     * 
+     *
      * String[] associationsToNavigate = hierarchyDefn.getAssociationNames();
      * //String assocName = hier_id;//associationsToNavigate[0]; String
      * assocName = associationsToNavigate[0];
-     * 
+     *
      * if (assocName.compareTo("part_of") == 0) assocName = "is_a";
-     * 
+     *
      * boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
-     * 
+     *
      * if (assocName.compareTo("PAR") == 0) associationsNavigatedFwd = false;
      * //if (assocName.compareTo("subClassOf") == 0) associationsNavigatedFwd =
      * false; //return getAssociatedConcepts(scheme, version, code, assocName,
      * associationsNavigatedFwd); return getAssociatedConcepts(lbSvc, lbscm,
      * scheme, version, code, assocName, associationsNavigatedFwd); } catch
      * (Exception ex) { return null; } }
-     * 
-     * 
+     *
+     *
      * public static HashMap getSuperconcepts(String scheme, String version,
      * String code) { if (scheme.compareTo("NCI Thesaurus") == 0) { return
      * getAssociatedConcepts(scheme, version, code, "subClassOf", true); }
-     * 
+     *
      * else if (scheme.indexOf("MedDRA") != -1) { return
      * getAssociatedConcepts(scheme, version, code, "CHD", false); }
-     * 
+     *
      * CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag(); if
      * (version != null) csvt.setVersion(version);
-     * 
+     *
      * try { LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
      * LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods)
      * lbSvc .getGenericExtension("LexBIGServiceConvenienceMethods");
      * lbscm.setLexBIGService(lbSvc);
-     * 
+     *
      * CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt); if (cs ==
      * null) return null; Mappings mappings = cs.getMappings();
      * SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy(); if
      * (hierarchies == null || hierarchies.length == 0) return null;
-     * 
+     *
      * SupportedHierarchy hierarchyDefn = hierarchies[0]; String[]
      * associationsToNavigate = hierarchyDefn.getAssociationNames(); //String
      * assocName = hier_id;//associationsToNavigate[0]; String assocName =
      * associationsToNavigate[0];
-     * 
+     *
      * if (assocName.compareTo("part_of") == 0) assocName = "is_a";
-     * 
+     *
      * boolean associationsNavigatedFwd = hierarchyDefn.getIsForwardNavigable();
-     * 
+     *
      * if (assocName.compareTo("PAR") == 0) associationsNavigatedFwd = false;
-     * 
+     *
      * return getAssociatedConcepts(scheme, version, code, assocName,
      * !associationsNavigatedFwd); } catch (Exception ex) { return null; } }
      */
@@ -772,12 +772,12 @@ public class TreeUtils {
      * String code) { CodingSchemeVersionOrTag csvt = new
      * CodingSchemeVersionOrTag(); if (version != null)
      * csvt.setVersion(version);
-     * 
+     *
      * try { LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
      * LexBIGServiceConvenienceMethods lbscm = (LexBIGServiceConvenienceMethods)
      * lbSvc .getGenericExtension("LexBIGServiceConvenienceMethods");
      * lbscm.setLexBIGService(lbSvc);
-     * 
+     *
      * CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt); if (cs ==
      * null) return null; Mappings mappings = cs.getMappings();
      * SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy(); if
@@ -854,9 +854,9 @@ public class TreeUtils {
      * version, String code, String assocName, boolean direction) { HashMap hmap
      * = new HashMap(); TreeItem ti = null; long ms =
      * System.currentTimeMillis();
-     * 
+     *
      * Set<String> codesToExclude = Collections.EMPTY_SET;
-     * 
+     *
      * CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag(); if
      * (version != null) csvt.setVersion(version); ResolvedConceptReferenceList
      * matches = null; Vector v = new Vector(); try { LexBIGService lbSvc =
@@ -864,64 +864,64 @@ public class TreeUtils {
      * lbscm = (LexBIGServiceConvenienceMethods) lbSvc
      * .getGenericExtension("LexBIGServiceConvenienceMethods");
      * lbscm.setLexBIGService(lbSvc);
-     * 
+     *
      * String name = getCodeDescription(lbSvc, scheme, csvt, code); ti = new
      * TreeItem(code, name); ti.expandable = false;
-     * 
+     *
      * CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
      * ConceptReference focus = Constructors.createConceptReference(code,
      * scheme); cng = cng.restrictToAssociations(Constructors
      * .createNameAndValueList(assocName), null); boolean
      * associationsNavigatedFwd = direction;
-     * 
+     *
      * // To remove anonymous classes (KLO, 091009), the resolveCodedEntryDepth
      * parameter cannot be set to -1.
-     * 
+     *
      * ResolvedConceptReferenceList branch = null; try { branch =
      * cng.resolveAsList(focus, associationsNavigatedFwd,
      * //!associationsNavigatedFwd, -1, 2, noopList_, null, null, null, -1,
      * true); !associationsNavigatedFwd, 1, 2, noopList_, null, null, null, -1,
      * false);
-     * 
+     *
      * } catch (Exception e) {
      * _logger.error("TreeUtils getAssociatedConcepts throws exceptions.");
      * return null; }
-     * 
+     *
      * for (Iterator<ResolvedConceptReference> nodes = branch
      * .iterateResolvedConceptReference(); nodes.hasNext();) {
      * ResolvedConceptReference node = nodes.next(); AssociationList
      * childAssociationList = null;
-     * 
+     *
      * //AssociationList childAssociationList = associationsNavigatedFwd ?
      * node.getSourceOf(): node.getTargetOf();
-     * 
+     *
      * if (associationsNavigatedFwd) { childAssociationList =
      * node.getSourceOf(); } else { childAssociationList = node.getTargetOf(); }
-     * 
+     *
      * if (childAssociationList != null) { // Process each association defining
      * children ... for (Iterator<Association> pathsToChildren =
      * childAssociationList .iterateAssociation(); pathsToChildren.hasNext();) {
      * Association child = pathsToChildren.next(); //KLO 091009 remove anonymous
      * nodes
-     * 
+     *
      * child = processForAnonomousNodes(child);
-     * 
-     * 
+     *
+     *
      * String childNavText = getDirectionalLabel(lbscm, scheme, csvt, child,
      * associationsNavigatedFwd);
-     * 
+     *
      * // Each association may have multiple children ... AssociatedConceptList
      * branchItemList = child .getAssociatedConcepts();
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * List child_list = new ArrayList(); for (Iterator<AssociatedConcept>
      * branchNodes = branchItemList .iterateAssociatedConcept();
      * branchNodes.hasNext();) { AssociatedConcept branchItemNode =
      * branchNodes.next(); child_list.add(branchItemNode); }
-     * 
+     *
      * SortUtils.quickSort(child_list);
-     * 
+     *
      * for (int i = 0; i < child_list.size(); i++) { AssociatedConcept
      * branchItemNode = (AssociatedConcept) child_list .get(i); String
      * branchItemCode = branchItemNode.getConceptCode(); // Add here if not in
@@ -1004,7 +1004,7 @@ public class TreeUtils {
                 return null;
             }
 
-            for (Iterator<ResolvedConceptReference> nodes =
+            for (Iterator<? extends ResolvedConceptReference> nodes =
                 branch.iterateResolvedConceptReference(); nodes.hasNext();) {
                 ResolvedConceptReference node = nodes.next();
                 AssociationList childAssociationList = null;
@@ -1022,7 +1022,7 @@ public class TreeUtils {
 
                 if (childAssociationList != null) {
                     // Process each association defining children ...
-                    for (Iterator<Association> pathsToChildren =
+                    for (Iterator<? extends Association> pathsToChildren =
                         childAssociationList.iterateAssociation(); pathsToChildren
                         .hasNext();) {
                         Association child = pathsToChildren.next();
@@ -1046,7 +1046,7 @@ public class TreeUtils {
                          */
 
                         List child_list = new ArrayList();
-                        for (Iterator<AssociatedConcept> branchNodes =
+                        for (Iterator<? extends AssociatedConcept> branchNodes =
                             branchItemList.iterateAssociatedConcept(); branchNodes
                             .hasNext();) {
                             AssociatedConcept branchItemNode =
@@ -1166,7 +1166,7 @@ public class TreeUtils {
                 return null;
             }
 
-            for (Iterator<ResolvedConceptReference> nodes =
+            for (Iterator<? extends ResolvedConceptReference> nodes =
                 branch.iterateResolvedConceptReference(); nodes.hasNext();) {
                 ResolvedConceptReference node = nodes.next();
                 AssociationList childAssociationList = null;
@@ -1184,7 +1184,7 @@ public class TreeUtils {
 
                 if (childAssociationList != null) {
                     // Process each association defining children ...
-                    for (Iterator<Association> pathsToChildren =
+                    for (Iterator<? extends Association> pathsToChildren =
                         childAssociationList.iterateAssociation(); pathsToChildren
                         .hasNext();) {
                         Association child = pathsToChildren.next();
@@ -1208,7 +1208,7 @@ public class TreeUtils {
                          */
 
                         List child_list = new ArrayList();
-                        for (Iterator<AssociatedConcept> branchNodes =
+                        for (Iterator<? extends AssociatedConcept> branchNodes =
                             branchItemList.iterateAssociatedConcept(); branchNodes
                             .hasNext();) {
                             AssociatedConcept branchItemNode =
@@ -1293,7 +1293,7 @@ public class TreeUtils {
         return list;
     }
 
-    public static Concept getConceptByCode(String codingSchemeName,
+    public static Entity getConceptByCode(String codingSchemeName,
         String vers, String ltag, String code) {
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -1335,7 +1335,7 @@ public class TreeUtils {
                     (ResolvedConceptReference) matches
                         .enumerateResolvedConceptReference().nextElement();
 
-                Concept entry = ref.getReferencedEntry();
+                Entity entry = ref.getReferencedEntry();
                 return entry;
             }
         } catch (Exception e) {
@@ -1547,8 +1547,8 @@ public class TreeUtils {
                                 nd_code = node.getConceptCode();
                                 nd_name =
                                     node.getEntityDescription().getContent();
-                            } else if (obj instanceof Concept) {
-                                Concept node = (Concept) list.get(i);
+                            } else if (obj instanceof Entity) {
+                                Entity node = (Entity) list.get(i);
                                 nd_code = node.getEntityCode();
                                 nd_name =
                                     node.getEntityDescription().getContent();
@@ -1849,7 +1849,7 @@ public class TreeUtils {
             // _logger.debug("getHierarchyRoots rcr.getConceptCode(): " +
             // rcr.getConceptCode());
 
-            Concept c = rcr.getReferencedEntry();
+            Entity c = rcr.getReferencedEntry();
             if (c != null) {
                 rcr.setConceptCode(c.getEntityCode());
             } else {
@@ -1934,7 +1934,7 @@ public class TreeUtils {
             // _logger.debug("getHierarchyRoots rcr.getConceptCode(): " +
             // rcr.getConceptCode());
 
-            Concept c = rcr.getReferencedEntry();
+            Entity c = rcr.getReferencedEntry();
             if (c != null) {
                 rcr.setConceptCode(c.getEntityCode());
             } else {
