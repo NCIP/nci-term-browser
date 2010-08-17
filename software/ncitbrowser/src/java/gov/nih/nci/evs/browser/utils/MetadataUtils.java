@@ -71,9 +71,9 @@ public class MetadataUtils {
         // List<MetadataProperty> metaDataProperties = new
         // ArrayList<MetadataProperty>();
         Vector v = new Vector();
-        Iterator<MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
+        Iterator<? extends MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
         while (metaItr.hasNext()) {
-            MetadataProperty property = metaItr.next();
+            MetadataProperty property = (MetadataProperty) metaItr.next();
             if (property.getName().equals(CODING_SCHEME_NAME_PROPERTY)) {
                 v.add(property.getValue());
             }
@@ -94,9 +94,9 @@ public class MetadataUtils {
         List<MetadataProperty> metaDataProperties =
             new ArrayList<MetadataProperty>();
 
-        Iterator<MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
+        Iterator<? extends MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
         while (metaItr.hasNext()) {
-            MetadataProperty property = metaItr.next();
+            MetadataProperty property = (MetadataProperty) metaItr.next();
             if (property.getName().equals(CODING_SCHEME_NAME_PROPERTY)
                 && property.getValue().equals(codingScheme)) {
                 metaDataProperties.add(property);
@@ -275,9 +275,9 @@ public class MetadataUtils {
         if (mdpl == null)
             return null;
         Vector v = new Vector();
-        Iterator<MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
+        Iterator<? extends MetadataProperty> metaItr = mdpl.iterateMetadataProperty();
         while (metaItr.hasNext()) {
-            MetadataProperty property = metaItr.next();
+            MetadataProperty property = (MetadataProperty) metaItr.next();
             String t = property.getName() + "|" + property.getValue();
             v.add(t);
         }

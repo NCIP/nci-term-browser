@@ -27,42 +27,42 @@ import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
- * Copyright 2008,2009 NGIT. This software was developed in conjunction 
- * with the National Cancer Institute, and so to the extent government 
- * employees are co-authors, any rights in such works shall be subject 
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
  * to Title 17 of the United States Code, section 105.
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
  * are met:
- *   1. Redistributions of source code must retain the above copyright 
- *      notice, this list of conditions and the disclaimer of Article 3, 
- *      below. Redistributions in binary form must reproduce the above 
- *      copyright notice, this list of conditions and the following 
- *      disclaimer in the documentation and/or other materials provided 
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
  *      with the distribution.
- *   2. The end-user documentation included with the redistribution, 
+ *   2. The end-user documentation included with the redistribution,
  *      if any, must include the following acknowledgment:
- *      "This product includes software developed by NGIT and the National 
+ *      "This product includes software developed by NGIT and the National
  *      Cancer Institute."   If no such end-user documentation is to be
  *      included, this acknowledgment shall appear in the software itself,
  *      wherever such third-party acknowledgments normally appear.
- *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must 
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
  *      not be used to endorse or promote products derived from this software.
  *   4. This license does not authorize the incorporation of this software
- *      into any third party proprietary programs. This license does not 
- *      authorize the recipient to use any trademarks owned by either NCI 
- *      or NGIT 
- *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED 
- *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE 
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
  *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
- *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, 
- *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
- *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
- *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *      POSSIBILITY OF SUCH DAMAGE.
  * <!-- LICENSE_TEXT_END -->
  */
@@ -70,9 +70,9 @@ import org.apache.log4j.*;
 /**
  * @author EVS Team
  * @version 1.0
- * 
+ *
  *          Modification history Initial implementation kim.ong@ngc.com
- * 
+ *
  */
 
 public class SearchUtils {
@@ -673,7 +673,7 @@ public class SearchUtils {
         return false;
     }
 
-    public static Concept getConceptByCode(String codingSchemeName,
+    public static Entity getConceptByCode(String codingSchemeName,
         String vers, String ltag, String code) {
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -715,8 +715,8 @@ public class SearchUtils {
                     (ResolvedConceptReference) matches
                         .enumerateResolvedConceptReference().nextElement();
 
-                org.LexGrid.concepts.Concept entry =
-                    new org.LexGrid.concepts.Concept();
+                org.LexGrid.concepts.Entity entry =
+                    new org.LexGrid.concepts.Entity();
                 entry.setEntityCode(ref.getConceptCode());
                 entry.setEntityDescription(ref.getEntityDescription());
 
@@ -770,7 +770,7 @@ public class SearchUtils {
 
     /**
      * Dump_matches to output, for debug purposes
-     * 
+     *
      * @param iterator the iterator
      * @param maxToReturn the max to return
      */
@@ -799,8 +799,8 @@ public class SearchUtils {
                     ResolvedConceptReference rcr = rcra[i];
                     // org.LexGrid.concepts.Concept ce =
                     // rcr.getReferencedEntry();
-                    org.LexGrid.concepts.Concept ce =
-                        new org.LexGrid.concepts.Concept();
+                    org.LexGrid.concepts.Entity ce =
+                        new org.LexGrid.concepts.Entity();
                     ce.setEntityCode(rcr.getConceptCode());
                     ce.setEntityDescription(rcr.getEntityDescription());
 
@@ -1240,13 +1240,13 @@ public class SearchUtils {
              * ms = System.currentTimeMillis(); cns = union(cns_vec); delay =
              * System.currentTimeMillis() - ms; if (debug_flag)
              * _logger.debug("CNS union " + "delay (millisec.): " + delay);
-             * 
-             * 
+             *
+             *
              * delay = System.currentTimeMillis() - ms; if (debug_flag)
              * _logger.debug("Restricting CNS on " + scheme +
              * " delay (millisec.): " + delay);
-             * 
-             * 
+             *
+             *
              * if (cns == null) return null;
              */
 
@@ -1556,7 +1556,7 @@ public class SearchUtils {
         // return iterator;
     }
 
-    public static Concept matchConceptByCode(String scheme, String version,
+    public static Entity matchConceptByCode(String scheme, String version,
         String matchText, String source, String matchAlgorithm) {
         ResolvedConceptReferencesIterator iterator =
             matchConceptCode(scheme, version, matchText, source, matchAlgorithm);
@@ -1731,7 +1731,7 @@ public class SearchUtils {
      * Sorts the given concept references based on a scoring algorithm designed
      * to provide a more natural ordering. Scores are determined by comparing
      * each reference against a provided search term.
-     * 
+     *
      * @param searchTerm The term used for comparison; single or multi-word.
      * @param toSort The iterator containing references to sort.
      * @param maxToReturn Sets upper limit for number of top-scored items
@@ -1759,7 +1759,7 @@ public class SearchUtils {
                     refs.getResolvedConceptReference(i);
 
                 String code = ref.getConceptCode();
-                Concept ce = ref.getReferencedEntry();
+                Entity ce = ref.getReferencedEntry();
                 ce.setEntityCodeNamespace(ref.getCodingSchemeName());
 
                 // Note: Preferred descriptions carry more weight,
@@ -1885,7 +1885,7 @@ public class SearchUtils {
                     refs.getResolvedConceptReference(i);
 
                 String code = ref.getConceptCode();
-                Concept ce = ref.getReferencedEntry();
+                Entity ce = ref.getReferencedEntry();
                 ce.setEntityCodeNamespace(ref.getCodingSchemeName());
 
                 // Note: Preferred descriptions carry more weight,
@@ -2042,7 +2042,7 @@ public class SearchUtils {
      * <p>
      * Ranking from the original search is available but not currently used in
      * the heuristic (tends to throw-off desired alphabetic groupings later).
-     * 
+     *
      * @param text
      * @param keywords
      * @param isPreferred
@@ -2113,7 +2113,7 @@ public class SearchUtils {
      * Return words from the given string to be used in scoring algorithms, in
      * order of occurrence and ignoring duplicates, stop words, whitespace and
      * common separators.
-     * 
+     *
      * @param s
      * @return List
      */
@@ -2171,8 +2171,8 @@ public class SearchUtils {
                             ResolvedConceptReference rcr = rcra[i];
                             if (rcr != null) {
                                 if (sortLight) {
-                                    org.LexGrid.concepts.Concept ce =
-                                        new org.LexGrid.concepts.Concept();
+                                    org.LexGrid.concepts.Entity ce =
+                                        new org.LexGrid.concepts.Entity();
                                     ce.setEntityCode(rcr.getConceptCode());
                                     ce.setEntityDescription(rcr
                                         .getEntityDescription());
@@ -2183,7 +2183,7 @@ public class SearchUtils {
                                             v.add(ce);
                                     }
                                 } else {
-                                    Concept ce = rcr.getReferencedEntry();
+                                    Entity ce = rcr.getReferencedEntry();
                                     if (ce == null) {
                                         _logger
                                             .debug("rcr.getReferencedEntry() returns null???");
@@ -2339,27 +2339,27 @@ public class SearchUtils {
      * version, String sourceAbbr, String code, int maxToReturn, boolean
      * searchInactive) { if (sourceAbbr == null || code == null) return new
      * Vector();
-     * 
+     *
      * LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
      * CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
      * versionOrTag.setVersion(version);
-     * 
+     *
      * if (lbSvc == null) { _logger.warn("lbSvc = null"); return null; }
-     * 
+     *
      * LocalNameList contextList = null; NameAndValueList qualifierList = null;
-     * 
+     *
      * Vector<String> v = null;
-     * 
+     *
      * if (code != null && code.compareTo("") != 0) { qualifierList = new
      * NameAndValueList(); NameAndValue nv = new NameAndValue();
      * nv.setName("source-code"); nv.setContent(code);
      * qualifierList.addNameAndValue(nv); }
-     * 
+     *
      * LocalNameList propertyLnL = null; // sourceLnL Vector<String> w2 = new
      * Vector<String>(); w2.add(sourceAbbr); LocalNameList sourceLnL =
      * vector2LocalNameList(w2); if (sourceAbbr.compareTo("*") == 0 ||
      * sourceAbbr.compareToIgnoreCase("ALL") == 0) { sourceLnL = null; }
-     * 
+     *
      * ResolvedConceptReferencesIterator matchIterator = null; SortOptionList
      * sortCriteria = null;//Constructors.createSortOptionList(new
      * String[]{"matchToQuery", "code"}); try { CodedNodeSet cns =
@@ -2369,18 +2369,18 @@ public class SearchUtils {
      * {CodedNodeSet.PropertyType.PRESENTATION}; cns =
      * cns.restrictToProperties(propertyLnL, types, sourceLnL, contextList,
      * qualifierList);
-     * 
+     *
      * if (cns != null) { boolean activeOnly = !searchInactive; cns =
      * restrictToActiveStatus(cns, activeOnly);
-     * 
+     *
      * try { matchIterator = cns.resolve(sortCriteria,
      * null,null);//ConvenienceMethods
      * .createLocalNameList(getPropertyForCodingScheme(cs)),null); } catch
      * (Exception ex) {
-     * 
+     *
      * } if (matchIterator != null) { v = resolveIterator( matchIterator,
      * maxToReturn); return v; } }
-     * 
+     *
      * } catch (Exception e) {
      * //getLogger().error("ERROR: Exception in findConceptWithSourceCodeMatching."
      * ); return null; } return null; }
@@ -3724,19 +3724,19 @@ public class SearchUtils {
          * search_direction);
          * _logger.debug("searchByAssociations matchAlgorithm: " +
          * matchAlgorithm);
-         * 
+         *
          * if (associationsToNavigate != null) { for (int lcv=0;
          * lcv<associationsToNavigate.length; lcv++) { String str = (String)
          * associationsToNavigate[lcv];
          * _logger.debug("searchByAssociations associationsToNavigate: " + str);
          * } }
-         * 
+         *
          * if (association_qualifier_names != null) { for (int lcv=0;
          * lcv<association_qualifier_names.length; lcv++) { String str =
          * (String) association_qualifier_names[lcv];
          * _logger.debug("searchByAssociations association_qualifier_names: " +
          * str); } }
-         * 
+         *
          * if (association_qualifier_values != null) { for (int lcv=0;
          * lcv<association_qualifier_values.length; lcv++) { String str =
          * (String) association_qualifier_values[lcv];

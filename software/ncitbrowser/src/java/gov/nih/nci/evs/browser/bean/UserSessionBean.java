@@ -231,7 +231,7 @@ public class UserSessionBean extends Object {
 
         }
         Utils.StopWatch stopWatch = new Utils.StopWatch();
-        Vector<org.LexGrid.concepts.Concept> v = null;
+        Vector<org.LexGrid.concepts.Entity> v = null;
 
         boolean excludeDesignation = true;
         boolean designationOnly = false;
@@ -358,7 +358,7 @@ public class UserSessionBean extends Object {
                 List list = iteratorBean.getData(1);
                 ResolvedConceptReference ref =
                     (ResolvedConceptReference) list.get(0);
-                Concept c = null;
+                Entity c = null;
                 if (ref == null) {
                     String msg =
                         "Error: Null ResolvedConceptReference encountered.";
@@ -673,7 +673,7 @@ public class UserSessionBean extends Object {
             licenseBean.addLicenseAgreement(dictionary);
             request.getSession().setAttribute("licenseBean", licenseBean);
 
-            Concept c =
+            Entity c =
                 DataUtils.getConceptByCode(dictionary, null, null, code);
             request.getSession().setAttribute("code", code);
             request.getSession().setAttribute("concept", c);
@@ -1073,7 +1073,7 @@ public class UserSessionBean extends Object {
 
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", coding_scheme);
-                Concept c = null;
+                Entity c = null;
                 if (ref == null) {
                     String msg =
                         "Error: Null ResolvedConceptReference encountered.";
@@ -1271,7 +1271,7 @@ public class UserSessionBean extends Object {
         } catch (Exception ex) {
         }
         Utils.StopWatch stopWatch = new Utils.StopWatch();
-        Vector<org.LexGrid.concepts.Concept> v = null;
+        Vector<org.LexGrid.concepts.Entity> v = null;
 
         boolean excludeDesignation = true;
         boolean designationOnly = false;
@@ -1557,7 +1557,7 @@ public class UserSessionBean extends Object {
                 ResolvedConceptReference ref =
                     (ResolvedConceptReference) list.get(0);
 
-                Concept c = null;
+                Entity c = null;
                 if (ref == null) {
                     String msg =
                         "Error: Null ResolvedConceptReference encountered.";
