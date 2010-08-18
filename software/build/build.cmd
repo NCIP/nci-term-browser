@@ -7,6 +7,11 @@ set DEVPROPFILE=C:\NCI-Projects\ncit-properties\properties\dev-upgrade.propertie
 set CIPROPFILE=C:\NCI-Projects\ncit-properties\properties\ci-upgrade.properties
 set QAPROPFILE=C:\NCI-Projects\ncit-properties\properties\qa-upgrade.properties
 set DATAQAPROPFILE=C:\NCI-Projects\ncit-properties\properties\data-qa-upgrade.properties
+set DEBUG=-Denable.upgrade.debug=false
+set TAG=-Danthill.build.tag_built=desktop
+if "%2" == "debug" (
+    set DEBUG=-Denable.upgrade.debug=true
+)
 cls
 if "%1" == "" (
     echo.
@@ -24,19 +29,19 @@ if "%1" == "" (
     goto DONE
 )
 if "%1" == "all" (
-    ant -Danthill.build.tag_built=desktop build:all
+    ant %TAG% build:all
     goto DONE
 )
 if "%1" == "upgrade" (
-    ant -Danthill.build.tag_built=desktop deploy:local:upgrade
+    ant %TAG% %DEBUG% deploy:local:upgrade
     goto DONE
 )
 if "%1" == "install" (
-    ant -Danthill.build.tag_built=desktop deploy:local:install
+    ant %TAG% %DEBUG% deploy:local:install
     goto DONE
 )
 if "%1" == "deploy" (
-    ant -Danthill.build.tag_built=desktop deploy:hot
+    ant %TAG% %DEBUG% deploy:hot
     goto DONE
 )
 if "%1" == "clean" (
@@ -47,19 +52,19 @@ if "%1" == "clean" (
     goto DONE
 )
 if "%1" == "dev" (
-    ant -Dproperties.file=%DEVPROPFILE% -Danthill.build.tag_built=desktop deploy:remote:upgrade
+    ant -Dproperties.file=%DEVPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
 if "%1" == "ci" (
-    ant -Dproperties.file=%CIPROPFILE% -Danthill.build.tag_built=desktop deploy:remote:upgrade
+    ant -Dproperties.file=%CIPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
 if "%1" == "qa" (
-    ant -Dproperties.file=%QAPROPFILE% -Danthill.build.tag_built=desktop deploy:remote:upgrade
+    ant -Dproperties.file=%QAPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
 if "%1" == "data-qa" (
-    ant -Dproperties.file=%DATAQAPROPFILE% -Danthill.build.tag_built=desktop deploy:remote:upgrade
+    ant -Dproperties.file=%DATAQAPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
 
