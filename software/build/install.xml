@@ -813,7 +813,7 @@
             />
         <jboss-read-bindings-file-location
             />
-        <jboss51-read-ports
+        <jboss51-read-ports-nci
             />
         <!-- Setting this variable will cause install to copy it into place if using CM/DAC, not modified in NCM -->
         <var name="jboss.ssl.keystore.dir" value="${working.dir}/keys/jboss"/>
