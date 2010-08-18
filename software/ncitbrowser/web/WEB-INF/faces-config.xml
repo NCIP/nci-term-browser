@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<!DOCTYPE faces-config PUBLIC
-  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
-  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-<faces-config>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
 
   <application>
     <message-bundle>gov.nih.nci.evs.browser.bean.Resources</message-bundle>
@@ -15,7 +15,13 @@
     </locale-config>
   </application>
 
- 
+  <factory>
+    <application-factory>com.sun.faces.application.ApplicationFactoryImpl</application-factory>
+    <faces-context-factory>com.sun.faces.context.FacesContextFactoryImpl</faces-context-factory>
+    <lifecycle-factory>com.sun.faces.lifecycle.LifecycleFactoryImpl</lifecycle-factory>
+    <render-kit-factory>com.sun.faces.renderkit.RenderKitFactoryImpl</render-kit-factory>
+  </factory>
+
   <navigation-rule>
     <from-view-id>/pages/accept_license.jsp</from-view-id>
     <navigation-case>
@@ -29,10 +35,10 @@
        <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
        <from-outcome>concept_details</from-outcome>
        <to-view-id>/pages/concept_details.jsp</to-view-id>
-    </navigation-case>    
-  
-  </navigation-rule> 
-    
+    </navigation-case>
+
+  </navigation-rule>
+
   <navigation-rule>
     <from-view-id>/pages/vocabulary.jsp</from-view-id>
     <navigation-case>
@@ -76,15 +82,15 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
-    
-    
+
+
     <navigation-case>
        <description>contact_us_message</description>
        <from-action>#{userSessionBean.contactUs}</from-action>
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
-    
+
    </navigation-rule>
 
   <navigation-rule>
@@ -351,8 +357,8 @@
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
-  
-  
+
+
   <navigation-rule>
     <from-view-id>/pages/multiple_search_results.jsp</from-view-id>
 
@@ -362,8 +368,8 @@
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+
+
     <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -428,12 +434,12 @@
        <from-outcome>error</from-outcome>
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>
-    
+
      <navigation-case>
        <description>advanced_search</description>
        <to-view-id>/pages/advanced_search.jsp</to-view-id>
-    </navigation-case>   
-    
+    </navigation-case>
+
   </navigation-rule>
 
   <navigation-rule>
@@ -548,7 +554,7 @@
        <from-outcome>multiple_search</from-outcome>
        <to-view-id>/pages/multiple_search.jsp</to-view-id>
     </navigation-case>
-     
+
     <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.multipleSearchAction}</from-action>
@@ -583,7 +589,7 @@
        <from-outcome>concept_details</from-outcome>
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
-    
+
   </navigation-rule>
 
 
@@ -610,7 +616,7 @@
        <from-outcome>concept_details</from-outcome>
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
-    
+
     <navigation-case>
        <description>concept_details</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -738,20 +744,20 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
-  </navigation-rule>  
+  </navigation-rule>
 
 
   <navigation-rule>
     <from-view-id>/pages/advanced_search.jsp</from-view-id>
-    
+
     <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.advancedSearchAction}</from-action>
        <from-outcome>no_match</from-outcome>
        <to-view-id>/pages/advanced_search.jsp</to-view-id>
     </navigation-case>
-    
-    
+
+
     <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.advancedSearchAction}</from-action>
@@ -773,7 +779,7 @@
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
 
-    
+
     <navigation-case>
        <description>contact_us_message</description>
        <from-action>#{userSessionBean.contactUs}</from-action>
@@ -789,8 +795,8 @@
     </navigation-case>
 
   </navigation-rule>
-    
-    
+
+
   <managed-bean>
     <managed-bean-name>userSessionBean</managed-bean-name>
     <managed-bean-class>gov.nih.nci.evs.browser.bean.UserSessionBean</managed-bean-class>
