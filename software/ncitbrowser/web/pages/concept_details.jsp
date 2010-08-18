@@ -16,7 +16,7 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.DisplayItem"%>
 <%@ page import="gov.nih.nci.evs.browser.bean.*"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.*"%>
-<%@ page import="org.LexGrid.concepts.Concept"%>
+<%@ page import="org.LexGrid.concepts.Entity"%>
 <%@ page import="org.LexGrid.concepts.Presentation"%>
 <%@ page import="org.LexGrid.commonTypes.Source"%>
 <%@ page import="org.LexGrid.commonTypes.EntityDescription"%>
@@ -105,7 +105,7 @@ request.setAttribute("version", version);
 
               code = (String) request.getParameter("code");
               if (code == null) {
-                Concept con = (Concept) request.getSession().getAttribute(
+                Entity con = (Concept) request.getSession().getAttribute(
                     "concept");
                     
                 if (con != null) {
@@ -166,7 +166,7 @@ request.setAttribute("version", version);
               String term_suggestion_application_url = DataUtils.getMetadataValue(cd_dictionary, "term_suggestion_application_url");
 
               String name = "";
-              Concept c = null;
+              Entity c = null;
 
               String vers = version;
               String ltag = null;

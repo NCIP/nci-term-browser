@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.List"%>
-<%@ page import="org.LexGrid.concepts.Concept"%>
+<%@ page import="org.LexGrid.concepts.Entity"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils"%>

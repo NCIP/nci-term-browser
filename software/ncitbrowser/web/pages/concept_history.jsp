@@ -4,7 +4,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
-<%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%
   String basePath = request.getContextPath();
@@ -24,7 +24,7 @@
     String dictionary = (String) request.getParameter("dictionary");
     String vers = null;
     String ltag = null;
-    Concept concept = (Concept) request.getSession().getAttribute("concept");
+    Entity concept = (Entity) request.getSession().getAttribute("concept");
     if (concept == null) {
         concept = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
     } else {

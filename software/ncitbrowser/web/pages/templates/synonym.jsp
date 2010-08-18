@@ -33,7 +33,7 @@
 
         <%
         
-          Concept concept_syn = (Concept) request.getSession().getAttribute("concept");
+          Entity concept_syn = (Entity) request.getSession().getAttribute("concept");
           //Vector synonyms = new DataUtils().getSynonyms(dictionary, concept_syn);
           Vector synonyms = new DataUtils().getSynonyms(concept_syn);
           HashSet hset = new HashSet();

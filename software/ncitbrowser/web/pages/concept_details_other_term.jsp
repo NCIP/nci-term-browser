@@ -16,7 +16,7 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.DisplayItem" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
-<%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="org.LexGrid.concepts.Presentation" %>
 <%@ page import="org.LexGrid.commonTypes.Source" %>
 <%@ page import="org.LexGrid.commonTypes.EntityDescription" %>
@@ -170,7 +170,7 @@
               }
 
               String name = "";
-              Concept c = null;
+              Entity c = null;
 
               String vers = null;
               String ltag = null;
