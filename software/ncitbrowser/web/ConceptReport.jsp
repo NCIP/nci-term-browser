@@ -11,7 +11,7 @@
 <%@ page import="java.util.Iterator"%>
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
-<%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="org.LexGrid.concepts.Entity" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
