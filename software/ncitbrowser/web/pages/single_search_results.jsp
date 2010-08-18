@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
-<%@ page import="org.LexGrid.concepts.Concept" %>
+<%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="org.apache.log4j.*" %>
@@ -93,7 +93,7 @@
                 <%
                   for (int i=istart; i<iend; i++) {
                     if (i >= 0 && i<v.size()) {
-                      Concept c = (Concept) v.elementAt(i);
+                      Entity c = (Entity) v.elementAt(i);
                       String code = c.getEntityCode();
                       String name = c.getEntityDescription().getContent();
 
