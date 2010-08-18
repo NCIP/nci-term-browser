@@ -81,7 +81,7 @@
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
 
-                  &nbsp;&nbsp; <h:commandButton id="search" value="Search"
+                  &nbsp;&nbsp; <h:commandButton id="multiple_search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
                     alt="Search">
@@ -350,7 +350,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
 
-                  &nbsp;&nbsp; <h:commandButton id="search" value="Search"
+                  &nbsp;&nbsp; <h:commandButton id="multiplesearch" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
                     alt="Search">

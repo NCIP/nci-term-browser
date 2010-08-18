@@ -3327,7 +3327,7 @@ public class DataUtils {
 
     // To be implemented based on metadata
 	public static boolean isMapping(String codingScheme, String version) {
-		if (codingScheme.indexOf("Z") != -1) return true;
+		if (codingScheme.indexOf("Mapping") != -1) return true;
 		return false;
 	}
 }
