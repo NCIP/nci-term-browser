@@ -7,10 +7,10 @@ set DEVPROPFILE=C:\NCI-Projects\ncit-properties\properties\dev-upgrade.propertie
 set CIPROPFILE=C:\NCI-Projects\ncit-properties\properties\ci-upgrade.properties
 set QAPROPFILE=C:\NCI-Projects\ncit-properties\properties\qa-upgrade.properties
 set DATAQAPROPFILE=C:\NCI-Projects\ncit-properties\properties\data-qa-upgrade.properties
-set DEBUG=-Denable.upgrade.debug=false
+set DEBUG=-Denable.install.debug=false
 set TAG=-Danthill.build.tag_built=desktop
 if "%2" == "debug" (
-    set DEBUG=-Denable.upgrade.debug=true
+    set DEBUG=-Denable.install.debug=true
 )
 cls
 if "%1" == "" (
