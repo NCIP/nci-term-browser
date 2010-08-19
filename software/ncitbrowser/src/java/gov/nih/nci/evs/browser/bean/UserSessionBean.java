@@ -77,9 +77,25 @@ public class UserSessionBean extends Object {
     public List<SelectItem> _ontologyList = null;
     public List<String> _ontologiesToSearchOn = null;
 
+    public String contextPath = null;
+
     public UserSessionBean() {
         _ontologiesToSearchOn = new ArrayList<String>();
+        contextPath = getContextPath();
     }
+
+
+    public String getContextPath() {
+        if (contextPath == null) {
+			HttpServletRequest request =
+				(HttpServletRequest) FacesContext.getCurrentInstance()
+					.getExternalContext().getRequest();
+
+			contextPath = request.getContextPath();
+		}
+		return contextPath;
+    }
+
 
     public void setSelectedQuickLink(String selectedQuickLink) {
         _selectedQuickLink = selectedQuickLink;

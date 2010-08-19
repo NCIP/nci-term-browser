@@ -8,18 +8,39 @@
   String nci_meta_url = new DataUtils().getNCImURL();
   String vocablary_version_value = version;
   if (vocablary_version_value == null) vocablary_version_value = "";
+  
+  boolean isMapping = DataUtils.isMapping(scheme, null);
+  System.out.println("*** welcome-other.jsp isMapping: " + isMapping);
+
+
 %>
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
+    
     <!-- <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(vocablary_version_value) %></div></td> -->
+<%   
+    if (isMapping) {
+%>
+      <td>
+      <a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(scheme)%>&version=<%=vocablary_version_value%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <img src="<%=basePath%>/images/ViewMapping.gif" alt="View Mapping" /> 
+      </a> 
+      </td>
+      
+<%    
+    }
+%>    
+    
+    
   </tr></table>
   <hr/>
 
 <%
 
 
-String _version = request.getParameter("vesion");
+String _version = request.getParameter("version");
 System.out.println("(*****welcome-other.jsp) vocabulary_version: " + _version);
 if (vocabulary_version != null) {
 	request.setAttribute("version", _version);
