@@ -83,7 +83,7 @@
 
                   &nbsp;&nbsp; <h:commandButton id="multiple_search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
-                    image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+                    image="#{userSessionBean.contextPath}/images/search.gif"
                     alt="Search">
                   </h:commandButton></td>
                 </tr>
