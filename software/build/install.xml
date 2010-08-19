@@ -486,10 +486,9 @@
                     jboss.server.bindingfile.location="${jboss.home}/server/${jboss.server.name}/conf/bindingservice.beans/META-INF/bindings-jboss-beans.xml"
                     jboss.server.binding.template.location="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/bindings-jboss-beans.xml"
                     jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
-                    jboss.server.ports.name="PortsDefaultBindings"
+                    jboss.server.ports.name="ports-default"
                     proxy.update.connector.port.ssl="${jboss.ssl.port}"
                     />
-                <!-- jboss51-encrypt-messaging-passwd / -->
             </then>
         </if>
     </target>
