@@ -27,6 +27,7 @@ import gov.nih.nci.evs.browser.properties.*;
 import static gov.nih.nci.evs.browser.common.Constants.*;
 
 import gov.nih.nci.evs.browser.common.Constants;
+import gov.nih.nci.evs.browser.bean.MappingData;
 
 
 import org.apache.log4j.*;
@@ -3325,9 +3326,167 @@ public class DataUtils {
 	}
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Mapping
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+
     // To be implemented based on metadata
 	public static boolean isMapping(String codingScheme, String version) {
 		if (codingScheme.indexOf("Mapping") != -1) return true;
 		return false;
 	}
+
+    public Vector getMappingData(String scheme, String version) {
+        Vector v = new Vector();
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        try {
+			CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, null, null);
+			//System.out.println();
+			//System.out.println("mapping=====================================================");
+			//PrintUtility.print(cng);
+
+			ResolvedConceptReferenceList rcrl;
+			ResolvedConceptReference[] rcrArray;
+			try {
+				// to be modified (using container isMapping???)
+                NameAndValueList association = createNameAndValueList(new String[] {"mapsTo"}, null);
+                NameAndValueList associationQualifiers = null;
+                cng = cng.restrictToAssociations(association, associationQualifiers);
+
+ 				rcrl = cng.resolveAsList(null, true, false, 0, -1, null, null, null, -1);
+				rcrArray = rcrl.getResolvedConceptReference();
+				//System.out.println("-----------------");
+				//System.out.println("Resolving Forward " + rcrl.getResolvedConceptReferenceCount());
+				//System.out.println("-----------------");
+
+				String sourceCode = null;
+				String sourceName = null;
+				String sourceCodingScheme = null;
+				String sourceCodingSchemeVesion = null;
+				String sourceCodeNamespace = null;
+				String associationName = null;
+				String rel = null;
+				int score = 0;
+				String targetCode = null;
+				String targetName = null;
+				String targetCodingScheme = null;
+				String targetCodingSchemeVesion = null;
+				String targetCodeNamespace = null;
+
+				int knt = 0;
+
+				for (ResolvedConceptReference ref : rcrArray) {
+                    int depth = 0;
+					String description;
+					if(ref.getEntityDescription() == null) {
+						description = "NOT AVAILABLE";
+					} else {
+						description = ref.getEntityDescription().getContent();
+					}
+					//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
+					//    + ", Namespace: " + ref.getCodeNamespace());
+
+                    sourceCode = ref.getCode();
+                    sourceName = description;
+                    sourceCodingScheme = ref.getCodingSchemeName();
+                    sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
+                    sourceCodeNamespace = ref.getCodeNamespace();
+
+
+                    AssociationList assocs = ref.getSourceOf();
+					if(assocs != null){
+
+						//PrintUtility.print(ref.getSourceOf(), depth+1);
+
+						for(Association assoc : assocs.getAssociation()){
+							//System.out.println(buildPrefix(depth) + "Association: " + assoc.getAssociationName() + " Container: " + assoc.getRelationsContainerName());
+
+							associationName = assoc.getAssociationName();
+
+							for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+								//print(concept, depth+1);
+
+								if(ac.getEntityDescription() == null) {
+									description = "NOT AVAILABLE";
+								} else {
+									description = ac.getEntityDescription().getContent();
+								}
+								//System.out.println(buildPrefix(depth) + "Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+								//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+
+								targetCode = ac.getCode();
+								targetName = description;
+								targetCodingScheme = ac.getCodingSchemeName();
+								targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+								targetCodeNamespace = ac.getCodeNamespace();
+
+								for (NameAndValue qual : ac.getAssociationQualifiers()
+									.getNameAndValue()) {
+									String qualifier_name = qual.getName();
+									String qualifier_value = qual.getContent();
+									if (qualifier_name.compareTo("rel") == 0) {
+                                        rel = qualifier_value;
+									} else if (qualifier_name.compareTo("score") == 0) {
+										score = Integer.parseInt(qualifier_value);
+ 								    }
+								}
+
+								MappingData mappingData = new MappingData(
+									sourceCode,
+									sourceName,
+									sourceCodingScheme,
+									sourceCodingSchemeVesion,
+									sourceCodeNamespace,
+									associationName,
+									rel,
+									score,
+									targetCode,
+									targetName,
+									targetCodingScheme,
+									targetCodingSchemeVesion,
+									targetCodeNamespace);
+								v.add(mappingData);
+							}
+						}
+
+					}
+
+					knt++;
+					if (knt > 10) break;
+					//PrintUtility.print(rcr);
+				}
+			} catch (Exception ex) {
+
+			}
+
+		} catch (Exception ex) {
+
+		}
+		return v;
+	}
+
+
+    public void dumpMappingData(Vector v) {
+	    for (int i=0; i<v.size(); i++) {
+			MappingData mappingData = (MappingData) v.elementAt(i);
+			System.out.println(mappingData.getSourceCode() + "|"
+			                 + mappingData.getSourceName() + "|"
+			                 + mappingData.getSourceCodingScheme() + "|"
+			                 + mappingData.getSourceCodingSchemeVesion() + "|"
+			                 + mappingData.getSourceCodeNamespace() + "|"
+			                 + mappingData.getAssociationName() + "|"
+			                 + mappingData.getRel() + "|"
+			                 + mappingData.getScore() + "|"
+			                 + mappingData.getTargetCode() + "|"
+			                 + mappingData.getTargetName() + "|"
+			                 + mappingData.getTargetCodingScheme() + "|"
+			                 + mappingData.getTargetCodingSchemeVesion() + "|"
+			                 + mappingData.getTargetCodeNamespace());
+		}
+
+	}
+
+
 }
