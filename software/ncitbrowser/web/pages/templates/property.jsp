@@ -23,7 +23,7 @@
   System.out.println("property.jsp prop_version: " + prop_version);    
 
   List displayItemList = null;
-  Concept curr_concept = null;
+  Entity curr_concept = null;
   Boolean bool_obj = null;
   //String isActive = null;
 
