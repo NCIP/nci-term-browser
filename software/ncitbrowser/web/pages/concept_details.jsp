@@ -105,7 +105,7 @@ request.setAttribute("version", version);
 
               code = (String) request.getParameter("code");
               if (code == null) {
-                Entity con = (Concept) request.getSession().getAttribute(
+                Entity con = (Entity) request.getSession().getAttribute(
                     "concept");
                     
                 if (con != null) {
