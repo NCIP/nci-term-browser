@@ -29,7 +29,7 @@
 
   try {
     displayItemList = NCItBrowserProperties.getInstance().getDisplayItemList();
-    curr_concept = (Concept) request.getSession().getAttribute("concept");
+    curr_concept = (Entity) request.getSession().getAttribute("concept");
     request.getSession().setAttribute("code", curr_concept.getEntityCode());
     
     bool_obj = curr_concept.isIsActive();
