@@ -15,6 +15,10 @@
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
   String evs_service_url = new DataUtils().getEVSServiceURL();
+  
+  String requestContextPath = request.getContextPath();
+  requestContextPath = requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
+
 %>
 <!--
    Build info: <%=ncit_build_info%>
@@ -83,7 +87,7 @@
 
                   &nbsp;&nbsp; <h:commandButton id="multiple_search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
-                    image="#{userSessionBean.contextPath}/images/search.gif"
+                    image="#{requestContextPath}/images/search.gif"
                     alt="Search">
                   </h:commandButton></td>
                 </tr>
@@ -352,7 +356,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
 
                   &nbsp;&nbsp; <h:commandButton id="multiplesearch" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
-                    image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+                    image="#{requestContextPath}/images/search.gif"
                     alt="Search">
                   </h:commandButton></td>
                    <%
