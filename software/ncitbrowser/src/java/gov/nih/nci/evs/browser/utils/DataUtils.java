@@ -3343,8 +3343,6 @@ public class DataUtils {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         try {
 			CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, null, null);
-			//System.out.println();
-			//System.out.println("mapping=====================================================");
 			//PrintUtility.print(cng);
 
 			ResolvedConceptReferenceList rcrl;
@@ -3357,9 +3355,6 @@ public class DataUtils {
 
  				rcrl = cng.resolveAsList(null, true, false, 0, -1, null, null, null, -1);
 				rcrArray = rcrl.getResolvedConceptReference();
-				//System.out.println("-----------------");
-				//System.out.println("Resolving Forward " + rcrl.getResolvedConceptReferenceCount());
-				//System.out.println("-----------------");
 
 				String sourceCode = null;
 				String sourceName = null;
@@ -3374,8 +3369,6 @@ public class DataUtils {
 				String targetCodingScheme = null;
 				String targetCodingSchemeVesion = null;
 				String targetCodeNamespace = null;
-
-				int knt = 0;
 
 				for (ResolvedConceptReference ref : rcrArray) {
                     int depth = 0;
@@ -3393,7 +3386,6 @@ public class DataUtils {
                     sourceCodingScheme = ref.getCodingSchemeName();
                     sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
                     sourceCodeNamespace = ref.getCodeNamespace();
-
 
                     AssociationList assocs = ref.getSourceOf();
 					if(assocs != null){
@@ -3452,10 +3444,6 @@ public class DataUtils {
 						}
 
 					}
-
-					knt++;
-					if (knt > 10) break;
-					//PrintUtility.print(rcr);
 				}
 			} catch (Exception ex) {
 
