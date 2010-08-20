@@ -35,6 +35,10 @@
 <%
 Logger logger = Utils.getJspLogger("searchForm.jsp");
 
+  String form_requestContextPath = request.getContextPath();
+  form_requestContextPath = form_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
+
+
     String userAgent = request.getHeader("user-agent");
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");
 
@@ -103,7 +107,7 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
     <h:commandButton id="search" value="Search" action="#{userSessionBean.searchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"
-      image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+      image="#{form_requestContextPath}/images/search.gif"
       alt="Search">
     </h:commandButton>
     

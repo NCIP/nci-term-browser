@@ -8,6 +8,9 @@
   if (match_text == null) match_text = "";
  
   String termbrowser_displayed_match_text = HTTPUtils.convertJSPString(match_text); 
+  String searchform_requestContextPath = request.getContextPath();
+  searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
+
 
 %>
 <div class="search-form">
@@ -22,7 +25,7 @@
     id="search"
     value="Search"
     action="#{userSessionBean.multipleSearchAction}"
-    image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+    image="#{searchform_requestContextPath}/images/search.gif"
     alt="Search">
   </h:commandButton>
   <h:outputLink
