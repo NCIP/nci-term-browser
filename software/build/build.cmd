@@ -3,12 +3,14 @@
 @rem **** Command file to invoke build.xml ****
 @rem ******************************************
 setlocal
+@rem Environment settings here...
 set DEVPROPFILE=C:\NCI-Projects\ncit-properties\properties\dev-upgrade.properties
 set CIPROPFILE=C:\NCI-Projects\ncit-properties\properties\ci-upgrade.properties
 set QAPROPFILE=C:\NCI-Projects\ncit-properties\properties\qa-upgrade.properties
 set DATAQAPROPFILE=C:\NCI-Projects\ncit-properties\properties\data-qa-upgrade.properties
 set DEBUG=-Denable.install.debug=false
 set TAG=-Danthill.build.tag_built=desktop
+@rem Test is debug has been set
 if "%2" == "debug" (
     set DEBUG=-Denable.install.debug=true
 )
