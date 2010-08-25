@@ -1,7 +1,7 @@
 <%
   if (type.compareTo("relationship") == 0 || type.compareTo("all") == 0)
   {
-    Concept concept_curr = (Entity) request.getSession().getAttribute("concept");
+    Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
     String scheme_curr = (String) request.getSession().getAttribute("dictionary");
     String rel_display_name = DataUtils.getMetadataValue(scheme_curr, "display_name");
     if (rel_display_name == null) rel_display_name = DataUtils.getLocalName(scheme_curr);

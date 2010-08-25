@@ -79,6 +79,11 @@
       <div id="main-area">
         <%@ include file="/pages/templates/content-header-alt.jsp" %>
 <%
+
+  String advSearch_requestContextPath = request.getContextPath();
+  advSearch_requestContextPath = advSearch_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
+
+
     String adv_search_vocabulary = request.getParameter("dictionary");
     String adv_search_version = request.getParameter("version");
     String refresh = request.getParameter("refresh");
@@ -209,7 +214,7 @@
                     <input CLASS="searchbox-input" name="matchText" value="<%=search_string%>">
                     <h:commandButton id="adv_search" value="Search" action="#{userSessionBean.advancedSearchAction}"
                       onclick="javascript:cursor_wait();"
-                      image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+                      image="#{advSearch_requestContextPath}/images/search.gif"
                       alt="Search">
                     </h:commandButton>
                   </td></tr>

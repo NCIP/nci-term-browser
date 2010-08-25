@@ -103,7 +103,7 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
                 String source_scheme = "NCI_Thesaurus";
                 String source_version = "10.06e";
                 
-                String target_scheme = "ICD-9-CM";
+                String target_scheme = "ICD_9_CM";
                 String target_version = "2010";
 
                 
