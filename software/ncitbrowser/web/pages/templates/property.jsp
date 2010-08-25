@@ -36,6 +36,7 @@
 
   } catch (Exception ex) {
     // Do nothing
+    System.out.println("(*) property.jsp curr_concept.isIsActive() throws exception.");
   }
 
   if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) &&
@@ -145,7 +146,7 @@
 %>
 <p class="textsubtitle-blue">Terms & Properties</p>
 <%
-if (!bool_obj.equals(Boolean.TRUE) ||
+if (bool_obj != null && !bool_obj.equals(Boolean.TRUE) ||
   (concept_status != null &&
     concept_status.compareToIgnoreCase("Retired Concept") == 0)) // non-active
 {

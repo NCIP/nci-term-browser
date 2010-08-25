@@ -3250,7 +3250,10 @@ public class DataUtils {
             Presentation p = (Presentation) properties[i];
             String name = p.getPropertyName();
             String value = p.getValue().getContent();
-            String isPreferred = p.getIsPreferred().toString();
+            String isPreferred = "false";
+            if (p.getIsPreferred() != null) {
+                isPreferred = p.getIsPreferred().toString();
+			}
             String t = name + "$" + value + "$" + isPreferred;
             v.add(t);
         }

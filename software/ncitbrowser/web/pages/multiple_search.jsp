@@ -58,7 +58,10 @@
 <f:view>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <form name="searchTerm">
+    
+    <h:form id="searchTerm" styleClass="search-form" > 
+    
+    
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
@@ -374,7 +377,9 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
         </div> <!-- end Page content -->
     </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-  </form>
+
+</h:form>
+
   </div> <!-- end center-page -->
   <br>
 </f:view>

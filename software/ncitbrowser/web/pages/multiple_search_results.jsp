@@ -40,6 +40,9 @@
       <div id="main-area">
  <%
 
+String requestContextPath = request.getContextPath();
+requestContextPath = requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
+
 long ms = System.currentTimeMillis(), delay = 0;
  
 String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
@@ -91,7 +94,7 @@ request.getSession().setAttribute("matchText", match_text);
                 id="search"
                 value="Search"
                 action="#{userSessionBean.multipleSearchAction}"
-                image="#{facesContext.externalContext.requestContextPath}/images/search.gif"
+                image="#{requestContextPath}/images/search.gif"
                 alt="Search">
               </h:commandButton>
               <h:outputLink
