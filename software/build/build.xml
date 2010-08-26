@@ -674,8 +674,20 @@
         <util-dot-on-dir dot-file.dir="target/reports/ivy" />
     </target>
 
-    <target name="deploy:hot" depends="build:all" description="Hot deploys the deployment artifact">
-        <copy file="${ncitbrowser-webapp.dist.dir}/${ncitbrowser-webapp.file.name}" todir="${jboss.deploy.dir}" />
+    <target name="deploy:hot" description="Hot deploys the deployment artifact">
+        <echo message="Deploying: ${ncitbrowser-webapp.file.name}" />
+        <echo message="       To: ${jboss.deploy.dir}"/>
+        <delete file="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}" quiet="true" />
+        <delete file="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}.bak" quiet="true" />
+        <copy
+            file="${ncitbrowser-webapp.dist.dir}/${ncitbrowser-webapp.file.name}"
+            tofile="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}.bak"
+            overwrite="true"
+            />
+        <move
+            file="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}.bak"
+            tofile="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}"
+            />
     </target>
 
     <target name="deploy:hot:jsp" description="Copies all current JSP code to the deployed application for quick update">
