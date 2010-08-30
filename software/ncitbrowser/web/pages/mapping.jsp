@@ -3,10 +3,14 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 
 <%@ page import="java.util.Vector"%>
+<%@ page import="java.util.HashMap"%>
+
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+
+<%@ page import="gov.nih.nci.evs.browser.bean.MappingIteratorBean" %>
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -62,11 +66,28 @@
         </table>
 
 <%
+
+Object scheme2MappingIteratorBean = request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
+HashMap scheme2MappingIteratorBeanMap = null;
+if (scheme2MappingIteratorBean != null) {
+    scheme2MappingIteratorBeanMap = (HashMap) scheme2MappingIteratorBean;
+} else {
+    scheme2MappingIteratorBeanMap = new HashMap();
+    request.getSession().setAttribute("scheme2MappingIteratorBeanMap", scheme2MappingIteratorBeanMap);
+}
+
 String mapping_dictionary = request.getParameter("dictionary");
 String mapping_version = request.getParameter("version");
 
 String mapping_schema = request.getParameter("schema");
 if (mapping_dictionary != null && mapping_schema == null) mapping_schema = mapping_dictionary;
+
+MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
+if (bean == null) {
+    bean = new MappingIteratorBean();
+    // initialization
+    scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
+}
 
 String term_browser_version = DataUtils.getMetadataValue(mapping_schema, mapping_version, "term_browser_version");
 String display_name = DataUtils.getMetadataValue(mapping_schema, mapping_version, "display_name");
