@@ -11,6 +11,8 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 
 <%@ page import="gov.nih.nci.evs.browser.bean.MappingIteratorBean" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -86,6 +88,17 @@ MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.g
 if (bean == null) {
     bean = new MappingIteratorBean();
     // initialization
+    java.util.Iterator<? extends ResolvedConceptReference> iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version);
+    if (iterator != null) {
+	bean = new MappingIteratorBean(
+		iterator,
+		1000, // number remaining (not supported by LexEVS 6.0 API)
+		0,    // istart
+		50,   // iend,
+		1000, // size,
+		0,    // pageNumber,
+		1);   // numberPages    
+    }
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
 }
 
