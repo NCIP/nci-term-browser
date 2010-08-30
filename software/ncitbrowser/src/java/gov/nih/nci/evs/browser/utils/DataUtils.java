@@ -3341,6 +3341,38 @@ public class DataUtils {
 		return false;
 	}
 
+
+    public static java.util.Iterator<? extends ResolvedConceptReference> getMappingDataIterator(String scheme, String version) {
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        try {
+			CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, null, null);
+			//PrintUtility.print(cng);
+
+			ResolvedConceptReferenceList rcrl;
+			ResolvedConceptReference[] rcrArray;
+			try {
+				// to be modified (using container isMapping???)
+                NameAndValueList association = createNameAndValueList(new String[] {"mapsTo"}, null);
+                NameAndValueList associationQualifiers = null;
+                cng = cng.restrictToAssociations(association, associationQualifiers);
+
+ 				rcrl = cng.resolveAsList(null, true, false, 0, -1, null, null, null, -1);
+ 				java.util.Iterator<? extends ResolvedConceptReference> iterator = rcrl.iterateResolvedConceptReference();
+ 				return iterator;
+
+			} catch (Exception ex) {
+
+			}
+		} catch (Exception ex) {
+
+		}
+		return null;
+	}
+
+
+
+
     public Vector getMappingData(String scheme, String version) {
         Vector v = new Vector();
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -3357,6 +3389,8 @@ public class DataUtils {
                 cng = cng.restrictToAssociations(association, associationQualifiers);
 
  				rcrl = cng.resolveAsList(null, true, false, 0, -1, null, null, null, -1);
+
+
 				rcrArray = rcrl.getResolvedConceptReference();
 
 				String sourceCode = null;
