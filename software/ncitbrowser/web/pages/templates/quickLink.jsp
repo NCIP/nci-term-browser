@@ -60,7 +60,7 @@
             if (quicklink_dictionary == null || quicklink_dictionary.compareTo("NCI Thesaurus") != 0) {
             %>
 
-            <li><a href="<%= request.getContextPath() %>/index.jsf"
+            <li><a href="<%= request.getContextPath() %>/index.jsp"
               alt="NCI Thesaurus Browser">NCI Thesaurus Browser</a></li>
 
             <%
