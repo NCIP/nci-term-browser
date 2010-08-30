@@ -850,11 +850,10 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
 
 
 
-
-
           </table>
 
-          <!-- End of Tree control content -->
+          <%@ include file="/pages/templates/pagination-mapping.jsp" %>
+          
         </div>
       </div>
     </div>
