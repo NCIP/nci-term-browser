@@ -4,6 +4,7 @@
 
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashMap"%>
+<%@ page import="java.util.List"%>
 
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
@@ -11,6 +12,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 
 <%@ page import="gov.nih.nci.evs.browser.bean.MappingIteratorBean" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.MappingData" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
 
 
@@ -102,6 +104,23 @@ if (bean == null) {
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
 }
 
+
+String page_number = request.getParameter("page_number");
+int pageNum = 0;
+if (page_number != null) {
+    pageNum = Integer.parseInt(page_number);
+}
+
+int pageSize = bean.getPageSize();
+//int istart = bean.getIstart();
+//int iend = bean.getIend();
+
+int istart = pageNum * pageSize;
+int iend = istart + pageSize - 1;
+
+List list = bean.getData(istart, iend);
+	
+	
 String term_browser_version = DataUtils.getMetadataValue(mapping_schema, mapping_version, "term_browser_version");
 String display_name = DataUtils.getMetadataValue(mapping_schema, mapping_version, "display_name");
 
@@ -132,22 +151,39 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
             <th>Map Rank</th>
             <th>Target Code</th>
             <th>Target Name</th>
-            <tr>
+            
             <%
                 String source_scheme = "NCI_Thesaurus";
                 String source_version = "10.06e";
-                
                 String target_scheme = "ICD_9_CM";
                 String target_version = "2010";
-
                 
-                String source_code = "C25765";
-                String source_name = "Secondary Acute Myeloid Leukemia";
-                String rel = "RN";
-                String score = "6";
-                String target_code = "205";
-                String target_name = "Myeloid leukemia, acute";
+                String source_code = null;
+                String source_name = null;
+                String rel = null;
+                String score = null;
+                String target_code = null;
+                String target_name = null;
+                MappingData mappingData = null;
+                
+                for (int lcv=0; lcv<list.size(); lcv++) {
+                    mappingData = (MappingData) list.get(lcv);
+		    source_code = mappingData.getSourceCode();
+		    source_name = mappingData.getSourceName();
+		    rel = mappingData.getRel();
+		    score = new Integer(mappingData.getScore()).toString();
+		    target_code = mappingData.getTargetCode();
+		    target_name = mappingData.getTargetName();
+		    
+		    source_scheme = mappingData.getSourceCodingScheme();
+		    source_version = mappingData.getSourceCodingSchemeVersion();
+		    target_scheme = mappingData.getTargetCodingScheme();
+		    target_version = mappingData.getTargetCodingSchemeVersion();
+		    
             %>
+           
+<tr>
+           
 		    <td>
 <a href="#"
       onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
@@ -176,713 +212,12 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
 </a> 		    
                     </td>
 		    <td><%=target_name%></td>
-</tr> 
-
-
-<tr>
-		    <%
-		    source_code = "C26913";
-		    source_name = "Verruca Plantaris";
-		    rel = "SY";
-		    score = "6";
-		    target_code = "78.12";
-		    target_name = "Plantar wart";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C26919";
-		    source_name = "Lymphosarcoma";
-		    rel = "SY";
-		    score = "6";
-		    target_code = "200.1";
-		    target_name = "Lymphosarcoma";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C26959";
-		    source_name = "Reticulosarcoma Involving Spleen";
-		    rel = "SY";
-		    score = "6";
-		    target_code = "200.07";
-		    target_name = "Reticulosarcoma involving spleen";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C26960";
-		    source_name = "Lymphosarcoma Involving Spleen";
-		    rel = "SY";
-		    score = "6";
-		    target_code = "200.17";
-		    target_name = "Lymphosarcoma involving spleen";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C26961";
-		    source_name = "Hodgkin's Paragranuloma Involving Spleen";
-		    rel = "SY";
-		    score = "6";
-		    target_code = "201.07";
-		    target_name = "Hodgkin's paragranuloma involving spleen";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27031";
-		    source_name = "Pancreatic Endocrine Tumor";
-		    rel = "RB";
-		    score = "6";
-		    target_code = "157.4";
-		    target_name = "Malignant neoplasm of islets of Langerhans";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27087";
-		    source_name = "Verruca Vulgaris";
-		    rel = "SY";
-		    score = "6";
-		    target_code = "78.1";
-		    target_name = "Viral warts";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27093";
-		    source_name = "Stage 0 Squamous Cell Carcinoma";
-		    rel = "RB";
-		    score = "6";
-		    target_code = "231.1";
-		    target_name = "Carcinoma in situ of trachea";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27093";
-		    source_name = "Stage 0 Squamous Cell Carcinoma";
-		    rel = "RB";
-		    score = "6";
-		    target_code = "233.5";
-		    target_name = "Carcinoma in situ of penis";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27209";
-		    source_name = "Radiation-Related Malignant Neoplasm";
-		    rel = "RN";
-		    score = "6";
-		    target_code = "199";
-		    target_name = "Malignant neoplasm without specification of site";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27236";
-		    source_name = "Tobacco-Related Carcinoma";
-		    rel = "RN";
-		    score = "6";
-		    target_code = "305.1";
-		    target_name = "Tobacco use disorder";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27246";
-		    source_name = "Uterine Corpus Choriocarcinoma";
-		    rel = "RN";
-		    score = "6";
-		    target_code = "182";
-		    target_name = "Malignant neoplasm of body of uterus";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27250";
-		    source_name = "Uterine Corpus Adenomatoid Tumor";
-		    rel = "RN";
-		    score = "6";
-		    target_code = "219.1";
-		    target_name = "Benign neoplasm of corpus uteri";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27262";
-		    source_name = "Myelodysplastic/Myeloproliferative Neoplasm";
-		    rel = "RB";
-		    score = "6";
-		    target_code = "205.2";
-		    target_name = "Myeloid leukemia, subacute";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27280";
-		    source_name = "Secondary Myelodysplastic Syndrome";
-		    rel = "RN";
-		    score = "6";
-		    target_code = "238.75";
-		    target_name = "Myelodysplastic syndrome, unspecified";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27358";
-		    source_name = "Recurrent Hematologic Malignancy";
-		    rel = "RB";
-		    score = "6";
-		    target_code = "204.12";
-		    target_name = "Lymphoid leukemia, chronic in relapse";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27359";
-		    source_name = "Unresectable Malignant Neoplasm";
-		    rel = "RN";
-		    score = "6";
-		    target_code = "199";
-		    target_name = "Malignant neoplasm without specification of site";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-<tr>
-		    <%
-		    source_code = "C27367";
-		    source_name = "Adult Anaplastic Large Cell Lymphoma";
-		    rel = "RN";
-		    score = "6";
-		    target_code = "200.6";
-		    target_name = "Anaplastic large cell lymphoma";
-		    %>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <%=source_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a>
-
-		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
-
-<a href="#"
-      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-     <%=target_code%>
-</a>
-
-<a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a>
-                    </td>
-		    <td><%=target_name%></td>
-</tr>
-
-
+</tr>                
+                
+               <% 
+               }
+               %>
+               
 
           </table>
 
