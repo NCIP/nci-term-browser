@@ -31,9 +31,31 @@
              if (prev_page_num > 0) {
           %>   
           <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=prev_page_num_str%>">Prev</a>
+          &nbsp;
           <%
              }
           %>
+        
+<%
+                 int maxPageNumber = 5;
+                 if (prev_page_num > maxPageNumber) maxPageNumber = prev_page_num;
+
+		 for (int idx=1; idx<=maxPageNumber; idx++) { 
+
+		    String idx_str = Integer.toString(idx);
+		    if (prev_page_num != idx) {
+		      %>
+			<a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=idx_str%>"><%=idx_str%></a>
+			&nbsp;
+		      <%
+		    } else {
+		      %>
+			<%=idx_str%>&nbsp;
+		      <%
+		    }
+		 }
+%>		  
+        
         
           &nbsp;&nbsp;
           <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=next_page_num_str%>">Next</a>
