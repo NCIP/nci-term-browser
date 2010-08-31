@@ -730,7 +730,7 @@
 
 
   <navigation-rule>
-    <from-view-id>ConceptReport.jsp</from-view-id>
+    <from-view-id>/ConceptReport.jsp</from-view-id>
     <navigation-case>
        <description>Concept Report</description>
        <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
