@@ -3396,7 +3396,7 @@ public class DataUtils {
 				String sourceCode = null;
 				String sourceName = null;
 				String sourceCodingScheme = null;
-				String sourceCodingSchemeVesion = null;
+				String sourceCodingSchemeVersion = null;
 				String sourceCodeNamespace = null;
 				String associationName = null;
 				String rel = null;
@@ -3404,7 +3404,7 @@ public class DataUtils {
 				String targetCode = null;
 				String targetName = null;
 				String targetCodingScheme = null;
-				String targetCodingSchemeVesion = null;
+				String targetCodingSchemeVersion = null;
 				String targetCodeNamespace = null;
 
 				for (ResolvedConceptReference ref : rcrArray) {
@@ -3421,7 +3421,7 @@ public class DataUtils {
                     sourceCode = ref.getCode();
                     sourceName = description;
                     sourceCodingScheme = ref.getCodingSchemeName();
-                    sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
+                    sourceCodingSchemeVersion = ref.getCodingSchemeVersion();
                     sourceCodeNamespace = ref.getCodeNamespace();
 
                     AssociationList assocs = ref.getSourceOf();
@@ -3448,7 +3448,7 @@ public class DataUtils {
 								targetCode = ac.getCode();
 								targetName = description;
 								targetCodingScheme = ac.getCodingSchemeName();
-								targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+								targetCodingSchemeVersion = ac.getCodingSchemeVersion();
 								targetCodeNamespace = ac.getCodeNamespace();
 
 								for (NameAndValue qual : ac.getAssociationQualifiers()
@@ -3466,7 +3466,7 @@ public class DataUtils {
 									sourceCode,
 									sourceName,
 									sourceCodingScheme,
-									sourceCodingSchemeVesion,
+									sourceCodingSchemeVersion,
 									sourceCodeNamespace,
 									associationName,
 									rel,
@@ -3474,7 +3474,7 @@ public class DataUtils {
 									targetCode,
 									targetName,
 									targetCodingScheme,
-									targetCodingSchemeVesion,
+									targetCodingSchemeVersion,
 									targetCodeNamespace);
 								v.add(mappingData);
 							}
@@ -3499,7 +3499,7 @@ public class DataUtils {
 			System.out.println(mappingData.getSourceCode() + "|"
 			                 + mappingData.getSourceName() + "|"
 			                 + mappingData.getSourceCodingScheme() + "|"
-			                 + mappingData.getSourceCodingSchemeVesion() + "|"
+			                 + mappingData.getSourceCodingSchemeVersion() + "|"
 			                 + mappingData.getSourceCodeNamespace() + "|"
 			                 + mappingData.getAssociationName() + "|"
 			                 + mappingData.getRel() + "|"
@@ -3507,7 +3507,7 @@ public class DataUtils {
 			                 + mappingData.getTargetCode() + "|"
 			                 + mappingData.getTargetName() + "|"
 			                 + mappingData.getTargetCodingScheme() + "|"
-			                 + mappingData.getTargetCodingSchemeVesion() + "|"
+			                 + mappingData.getTargetCodingSchemeVersion() + "|"
 			                 + mappingData.getTargetCodeNamespace());
 		}
 

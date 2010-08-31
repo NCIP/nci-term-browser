@@ -10,7 +10,7 @@ public class MappingData
 	private String sourceCode;
 	private String sourceName;
 	private String sourceCodingScheme;
-	private String sourceCodingSchemeVesion;
+	private String sourceCodingSchemeVersion;
 	private String sourceCodeNamespace;
 	private String associationName;
 	private String rel;
@@ -18,7 +18,7 @@ public class MappingData
 	private String targetCode;
 	private String targetName;
 	private String targetCodingScheme;
-	private String targetCodingSchemeVesion;
+	private String targetCodingSchemeVersion;
 	private String targetCodeNamespace;
 
 // Default constructor
@@ -30,7 +30,7 @@ public class MappingData
 		String sourceCode,
 		String sourceName,
 		String sourceCodingScheme,
-		String sourceCodingSchemeVesion,
+		String sourceCodingSchemeVersion,
 		String sourceCodeNamespace,
 		String associationName,
 		String rel,
@@ -38,13 +38,13 @@ public class MappingData
 		String targetCode,
 		String targetName,
 		String targetCodingScheme,
-		String targetCodingSchemeVesion,
+		String targetCodingSchemeVersion,
 		String targetCodeNamespace) {
 
 		this.sourceCode = sourceCode;
 		this.sourceName = sourceName;
 		this.sourceCodingScheme = sourceCodingScheme;
-		this.sourceCodingSchemeVesion = sourceCodingSchemeVesion;
+		this.sourceCodingSchemeVersion = sourceCodingSchemeVersion;
 		this.sourceCodeNamespace = sourceCodeNamespace;
 		this.associationName = associationName;
 		this.rel = rel;
@@ -52,7 +52,7 @@ public class MappingData
 		this.targetCode = targetCode;
 		this.targetName = targetName;
 		this.targetCodingScheme = targetCodingScheme;
-		this.targetCodingSchemeVesion = targetCodingSchemeVesion;
+		this.targetCodingSchemeVersion = targetCodingSchemeVersion;
 		this.targetCodeNamespace = targetCodeNamespace;
 	}
 
@@ -69,8 +69,8 @@ public class MappingData
 		this.sourceCodingScheme = sourceCodingScheme;
 	}
 
-	public void setSourceCodingSchemeVesion(String sourceCodingSchemeVesion) {
-		this.sourceCodingSchemeVesion = sourceCodingSchemeVesion;
+	public void setSourceCodingSchemeVersion(String sourceCodingSchemeVersion) {
+		this.sourceCodingSchemeVersion = sourceCodingSchemeVersion;
 	}
 
 	public void setSourceCodeNamespace(String sourceCodeNamespace) {
@@ -101,8 +101,8 @@ public class MappingData
 		this.targetCodingScheme = targetCodingScheme;
 	}
 
-	public void setTargetCodingSchemeVesion(String targetCodingSchemeVesion) {
-		this.targetCodingSchemeVesion = targetCodingSchemeVesion;
+	public void setTargetCodingSchemeVersion(String targetCodingSchemeVersion) {
+		this.targetCodingSchemeVersion = targetCodingSchemeVersion;
 	}
 
 	public void setTargetCodeNamespace(String targetCodeNamespace) {
@@ -123,8 +123,8 @@ public class MappingData
 		return this.sourceCodingScheme;
 	}
 
-	public String getSourceCodingSchemeVesion() {
-		return this.sourceCodingSchemeVesion;
+	public String getSourceCodingSchemeVersion() {
+		return this.sourceCodingSchemeVersion;
 	}
 
 	public String getSourceCodeNamespace() {
@@ -155,8 +155,8 @@ public class MappingData
 		return this.targetCodingScheme;
 	}
 
-	public String getTargetCodingSchemeVesion() {
-		return this.targetCodingSchemeVesion;
+	public String getTargetCodingSchemeVersion() {
+		return this.targetCodingSchemeVersion;
 	}
 
 	public String getTargetCodeNamespace() {

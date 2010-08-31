@@ -27,6 +27,7 @@ public class MappingIteratorBean
 	private int iend;
 	private int size;
 	private int pageNumber;
+	private int pageSize;
 	private int numberPages;
 	private List list;
 
@@ -51,6 +52,7 @@ public class MappingIteratorBean
 		this.size = size;
 		this.pageNumber = pageNumber;
 		this.numberPages = numberPages;
+		this.pageSize = 50;
 		this.list = new ArrayList();
 	}
 
@@ -71,6 +73,7 @@ public class MappingIteratorBean
 		this.size = size;
 		this.pageNumber = pageNumber;
 		this.numberPages = numberPages;
+		this.pageSize = 50;
 		this.list = list;
 	}
 
@@ -107,6 +110,9 @@ public class MappingIteratorBean
 		this.list = list;
 	}
 
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
 
 // Get methods
 	public Iterator getIterator() {
@@ -137,10 +143,14 @@ public class MappingIteratorBean
 		return this.numberPages;
 	}
 
+	public int getPageSize() {
+		return this.pageSize;
+	}
+
 	public List getList() {
 		return this.list;
 	}
-
+
 
     public List copyData(int idx1, int idx2) {
 		List arrayList = new ArrayList();
@@ -191,8 +201,8 @@ public class MappingIteratorBean
 				} else {
 					description = ref.getEntityDescription().getContent();
 				}
-				System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
-					+ ", Namespace: " + ref.getCodeNamespace());
+				//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
+				//	+ ", Namespace: " + ref.getCodeNamespace());
 
 				sourceCode = ref.getCode();
 				sourceName = description;
@@ -210,8 +220,8 @@ public class MappingIteratorBean
 							} else {
 								description = ac.getEntityDescription().getContent();
 							}
-							System.out.println("Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
-							   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+							//System.out.println("Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+							//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
 
 							targetCode = ac.getCode();
 							targetName = description;
