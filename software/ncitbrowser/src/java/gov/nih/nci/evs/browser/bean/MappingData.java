@@ -5,6 +5,13 @@ import java.util.*;
 
 public class MappingData
 {
+    public static int COL_SOURCE_CODE = 1;
+    public static int COL_SOURCE_NAME = 2;
+    public static int COL_REL = 3;
+    public static int COL_SCORE = 4;
+    public static int COL_TARGET_CODE = 5;
+    public static int COL_TARGET_NAME = 6;
+
 
 // Variable declaration
 	private String sourceCode;
