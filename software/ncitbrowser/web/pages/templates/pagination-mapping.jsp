@@ -9,11 +9,10 @@
     
     String istart_str = Integer.toString(istart);
     String iend_str = Integer.toString(iend);
+    String match_size = Integer.toString(iend+1);
     
     String prev_page_num_str = Integer.toString(pageNum);
     String next_page_num_str = Integer.toString(pageNum+1);
-    
-    String match_size = Integer.toString(50);
     
 %>
 

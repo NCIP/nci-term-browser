@@ -70,6 +70,18 @@
         </table>
 
 <%
+    //public static int COL_SOURCE_CODE = 1;
+    //public static int COL_SOURCE_NAME = 2;
+    //public static int COL_REL = 3;
+    //public static int COL_SCORE = 4;
+    //public static int COL_TARGET_CODE = 5;
+    //public static int COL_TARGET_CODE = 6;
+
+int sortBy = MappingData.COL_SOURCE_CODE;
+String sortByStr = request.getParameter("sortBy");
+if (sortByStr != null) {
+    sortBy = Integer.parseInt(sortByStr);
+}
 
 Object scheme2MappingIteratorBean = request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
 HashMap scheme2MappingIteratorBeanMap = null;
@@ -145,18 +157,128 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
 %>
         <div id="popupContentArea">
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
-            <th>Source Code</th>
-            <th>Source Name</th>
-            <th>REL</th>
-            <th>Map Rank</th>
-            <th>Target Code</th>
-            <th>Target Name</th>
+          
+          <th class="dataTableHeader" scope="col" align="left">
+              <%
+              if (sortBy == MappingData.COL_SOURCE_CODE) {
+              %>
+                 Source Code
+              <%
+              } else {
+                  String s = new Integer(MappingData.COL_SOURCE_CODE).toString();
+              %>
+              
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                   Source Code
+                </a>              
+
+              <%
+              }
+              %>
+          </th>          
+
+          <th class="dataTableHeader" scope="col" align="left">
+              <%
+              if (sortBy == MappingData.COL_SOURCE_NAME) {
+              %>
+                 Source Name
+              <%
+              } else {
+                  String s = new Integer(MappingData.COL_SOURCE_NAME).toString();
+              %>
+              
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                   Source Name
+                </a>              
+
+              <%
+              }
+              %>
+          </th>   
+
+          <th class="dataTableHeader" scope="col" align="left">
+              <%
+              if (sortBy == MappingData.COL_REL) {
+              %>
+                 REL
+              <%
+              } else {
+                  String s = new Integer(MappingData.COL_REL).toString();
+              %>
+              
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                   REL
+                </a>              
+
+              <%
+              }
+              %>
+          </th>   
+          
+
+          <th class="dataTableHeader" scope="col" align="left">
+              <%
+              if (sortBy == MappingData.COL_SCORE) {
+              %>
+                 Map Rank
+              <%
+              } else {
+                  String s = new Integer(MappingData.COL_SCORE).toString();
+              %>
+              
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                   Map Rank
+                </a>              
+
+              <%
+              }
+              %>
+          </th>   
+ 
+          <th class="dataTableHeader" scope="col" align="left">
+              <%
+              if (sortBy == MappingData.COL_TARGET_CODE) {
+              %>
+                 Target Code
+              <%
+              } else {
+                  String s = new Integer(MappingData.COL_TARGET_CODE).toString();
+              %>
+              
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                   Target Code
+                </a>              
+
+              <%
+              }
+              %>
+          </th>          
+
+          <th class="dataTableHeader" scope="col" align="left">
+              <%
+              if (sortBy == MappingData.COL_TARGET_NAME) {
+              %>
+                 Target Name
+              <%
+              } else {
+                  String s = new Integer(MappingData.COL_TARGET_NAME).toString();
+              %>
+              
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                   Target Name
+                </a>              
+
+              <%
+              }
+              %>
+          </th>    
+
             
             <%
-                String source_scheme = "NCI_Thesaurus";
-                String source_version = "10.06e";
-                String target_scheme = "ICD_9_CM";
-                String target_version = "2010";
+                String source_scheme = null;//"NCI_Thesaurus";
+                String source_version = null;// "10.06e";
+                String target_scheme = null;// "ICD_9_CM";
+                String target_version = null;// "2010";
                 
                 String source_code = null;
                 String source_name = null;
