@@ -168,7 +168,9 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
 
           
           <td valign="middle" align="right">
-            <a class="global-nav" href="<%=request.getContextPath() %>/pages/advanced_search.jsf?dictionary=<%=vocab_name%>&version=<%=srchform_version%>">Advanced Search</a>
+            <a class="global-nav" href="<%=request.getContextPath() %>/pages/advanced_search.jsf?dictionary=<%=vocab_name%>&version=<%=srchform_version%>">
+               Advanced Search
+            </a>
           </td>
           
         </tr>
