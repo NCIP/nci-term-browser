@@ -62,6 +62,12 @@
             dictionary = DataUtils.getCodingSchemeName(dictionary);
           }
 
+ boolean cdo_isMapping = DataUtils.isMapping(dictionary, null);
+ boolean tree_access_allowed = true;
+ if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(hdr_dictionary0)) {
+     tree_access_allowed = false;
+ }
+
           String shortName = DataUtils.getLocalName(dictionary);
           String term_suggestion_application_url = new DataUtils()
               .getTermSuggestionURL();
@@ -116,11 +122,33 @@
               <table class="global-nav" border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td>
+                 
                     <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">Home</a>
+                    
+      <%              
+      if (cdo_isMapping) {
+      %> 
+      
+      <a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      </a>       
+      
+      <%
+      } else if (tree_access_allowed) {
+      %> 
+                    
                     | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                     View Hierarchy </a>
+      <%              
+      } 
+      %>
+                    
+                    
                     | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
                   </td>
+                  
+                  
+                  
                   <td align="right">
                     <%
                                                       Vector visitedConcepts = (Vector) request.getSession()

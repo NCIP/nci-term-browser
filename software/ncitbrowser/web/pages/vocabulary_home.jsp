@@ -37,7 +37,7 @@
   <%
   
 String vocabulary_version = request.getParameter("version");
-System.out.println("(***** vocabulary_home.jsp) vocabulary_version: " + vocabulary_version);
+//System.out.println("(***** vocabulary_home.jsp) vocabulary_version: " + vocabulary_version);
 if (vocabulary_version != null) {
 	request.setAttribute("version", vocabulary_version);
 }
@@ -80,7 +80,12 @@ if (vocabulary_version != null) {
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
      tree_access_allowed = false;
  }     
-    
+ 
+ boolean vocabulary_home_isMapping = DataUtils.isMapping(scheme, null);
+ System.out.println("menubar scheme: " + scheme);
+ System.out.println("vocabulary_home_isMapping: " + vocabulary_home_isMapping);
+
+
     String version = (String) request.getParameter("version");
     if (version == null) {
       version = (String) request.getAttribute("version");
@@ -182,7 +187,19 @@ if (vocabulary_version != null) {
           <% } %>
           
           <%
-          if (tree_access_allowed) {
+          
+      if (vocabulary_home_isMapping) {
+      %> 
+      
+      | <a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      | View Mapping
+      </a>       
+      
+      <%
+      }
+      
+      else if (tree_access_allowed) {
          %>           
           
           | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
