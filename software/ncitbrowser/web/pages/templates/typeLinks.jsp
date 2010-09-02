@@ -17,6 +17,8 @@
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
      tree_access = false;
  }
+ boolean typeLink_isMapping = DataUtils.isMapping(scheme, null);
+
  
       String jsp_page_name = "concept_details.jsf";
       String id = null;
@@ -125,16 +127,21 @@
     </td>
     <td align="right" valign="top">
          <%
-          if (tree_access) {
+          // hide View In Hierarchy button for mapping coding schemes
+          if (tree_access && !typeLink_isMapping) {
          %>       
     
         <input onClick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');"
                   type="button"
                  class="redButton"
                  value="View in Hierarchy"
-        />
+         />
         
-	 <% } 
+	 <% } else {
+	 %>
+	    &nbsp;&nbsp;
+	 <%
+	 }
 	 %>    
 	 
         <%
