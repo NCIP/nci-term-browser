@@ -61,14 +61,7 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
       <!-- Page content -->
       <div class="pagecontent">
         <%
-
-          //HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
-
-/*
-          IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
-                .getSessionMap().get("iteratorBean");
-*/
-          
+         
           //String key = (String) request.getSession().getAttribute("key");
           String key = (String) request.getAttribute("key");
           

@@ -10,7 +10,7 @@
   if (vocablary_version_value == null) vocablary_version_value = "";
   
   boolean isMapping = DataUtils.isMapping(scheme, null);
-  System.out.println("*** welcome-other.jsp isMapping: " + isMapping);
+  //System.out.println("*** welcome-other.jsp isMapping: " + isMapping);
 
 
 %>
@@ -23,8 +23,7 @@
     if (isMapping) {
 %>
       <td align="right">
-      <a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(scheme)%>&version=<%=vocablary_version_value%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(scheme)%>&version=<%=vocablary_version_value%>">
       <img src="<%=basePath%>/images/ViewMapping.gif" alt="View Mapping" /> 
       </a> 
       </td>

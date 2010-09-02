@@ -2,6 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 
+<%@ page import="java.io.*" %>
+<%@ page import="java.util.*"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.List"%>
@@ -15,67 +17,75 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.MappingData" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
 
+<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="gov.nih.nci.evs.browser.properties.*" %>
+<%@ page import="javax.faces.context.FacesContext" %>
+<%@ page import="org.apache.log4j.*" %>
 
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/dom-min.js" ></script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/animation-min.js" ></script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/container-min.js" ></script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/connection-min.js" ></script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/autocomplete-min.js" ></script>
-<script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/treeview-min.js" ></script>
-<%
-  String basePath = request.getContextPath();
-%>
+
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-  <title>Mapping Vocabulary</title>
+<html>
+<head>
+  <title>NCI Thesaurus</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/fonts.css" />
-  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/grids.css" />
-  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/code.css" />
-  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/tree.css" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
-
-  <script language="JavaScript">
-
-  </script>
- 
-  
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body>
-  <f:view>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+<%!
+  private static Logger _logger = Utils.getJspLogger("mapping.jsp");
+%>
 
-    <div id="popupContainer">
-      <!-- nci popup banner -->
-      <div class="ncipopupbanner">
-        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/nci-banner-1.gif" width="440" height="39" border="0" alt="National Cancer Institute" /></a>
-        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/spacer.gif" width="48" height="39" border="0" alt="National Cancer Institute" class="print-header" /></a>
-      </div>
-      <!-- end nci popup banner -->
-      <div id="popupMainArea">
-        <table class="evsLogoBg" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-          <td valign="top">
-            <a href="http://evs.nci.nih.gov/" target="_blank" alt="Enterprise Vocabulary Services">
-              <img src="<%=basePath%>/images/evs-popup-logo.gif" width="213" height="26" alt="EVS: Enterprise Vocabulary Services" title="EVS: Enterprise Vocabulary Services" border="0" />
-            </a>
-          </td>
-          <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="<%=basePath%>/images/thesaurus_close_icon.gif" width="10" height="10" border="0" alt="Close Window" />&nbsp;CLOSE WINDOW</a></div></td>
-        </tr>
-        </table>
+<f:view>
+  <%@ include file="/pages/templates/header.jsp" %>
+  <div class="center-page">
+    <%@ include file="/pages/templates/sub-header.jsp" %>
+    <!-- Main box -->
+    <div id="main-area">
+
+
 
 <%
-    //public static int COL_SOURCE_CODE = 1;
-    //public static int COL_SOURCE_NAME = 2;
-    //public static int COL_REL = 3;
-    //public static int COL_SCORE = 4;
-    //public static int COL_TARGET_CODE = 5;
-    //public static int COL_TARGET_CODE = 6;
+String mapping_dictionary = request.getParameter("dictionary");
+String mapping_version = request.getParameter("version");
+
+String mapping_schema = request.getParameter("schema");
+if (mapping_dictionary != null && mapping_schema == null) mapping_schema = mapping_dictionary;
+
+
+_logger.debug("mapping.jsp dictionary: " + mapping_dictionary);
+_logger.debug("mapping.jsp version: " + mapping_version);
+
+if (mapping_version != null) {
+    request.setAttribute("version", mapping_version);
+}
+
+if (mapping_dictionary.compareTo("NCI Thesaurus") == 0) {
+%>
+
+      <%@ include file="/pages/templates/content-header.jsp" %>
+<%
+} else {
+%>
+      <%@ include file="/pages/templates/content-header-other.jsp" %>
+<%
+}
+%>
+
+      <!-- Page content -->
+      <div class="pagecontent">
+
+<%
+  String base_path = request.getContextPath();
+
 
 int sortBy = MappingData.COL_SOURCE_CODE;
 String sortByStr = request.getParameter("sortBy");
@@ -92,11 +102,6 @@ if (scheme2MappingIteratorBean != null) {
     request.getSession().setAttribute("scheme2MappingIteratorBeanMap", scheme2MappingIteratorBeanMap);
 }
 
-String mapping_dictionary = request.getParameter("dictionary");
-String mapping_version = request.getParameter("version");
-
-String mapping_schema = request.getParameter("schema");
-if (mapping_dictionary != null && mapping_schema == null) mapping_schema = mapping_dictionary;
 
 MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
 if (bean == null) {
@@ -132,30 +137,8 @@ int iend = istart + pageSize - 1;
 
 List list = bean.getData(istart, iend);
 	
-	
-String term_browser_version = DataUtils.getMetadataValue(mapping_schema, mapping_version, "term_browser_version");
-String display_name = DataUtils.getMetadataValue(mapping_schema, mapping_version, "display_name");
-
-
-if (display_name == null || display_name.compareTo("null") == 0) {
-   display_name = DataUtils.getLocalName(mapping_schema); 
-}
-
-if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
 %>
-    <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
-<%
-} else {
-     String mapping_shortName = DataUtils.getLocalName(mapping_schema);
-%>
-    <div>
-      <img src="<%=basePath%>/images/other_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
-      <div class="vocabularynamepopupshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
-    </div>
-<%
-}
-%>
-        <div id="popupContentArea">
+        
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
           
           <th class="dataTableHeader" scope="col" align="left">
@@ -306,7 +289,7 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
            
 <tr>
            
-		    <td>
+		    <td class="textbody">
 <a href="#"
       onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
       <%=source_code%>
@@ -318,10 +301,10 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
 </a> 
 		    
 		    </td>
-		    <td><%=source_name%></td>
-		    <td><%=rel%></td>
-		    <td><%=score%></td>
-		    <td>
+		    <td class="textbody"><%=source_name%></td>
+		    <td class="textbody"><%=rel%></td>
+		    <td class="textbody"><%=score%></td>
+		    <td class="textbody">
 		    
 <a href="#"
       onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
@@ -333,7 +316,7 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
       <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
 </a> 		    
                     </td>
-		    <td><%=target_name%></td>
+		    <td class="textbody"><%=target_name%></td>
 </tr>                
                 
                <% 
@@ -343,12 +326,15 @@ if (mapping_schema.compareTo("NCI Thesaurus") == 0) {
 
           </table>
 
-          <%@ include file="/pages/templates/pagination-mapping.jsp" %>
-          
-        </div>
+        <%@ include file="/pages/templates/pagination-mapping.jsp" %>
+        <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
+      <!-- end Page content -->
     </div>
-  </f:view>
+    <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    <!-- end Main box -->
+  </div>
+</f:view>
 </body>
 </html>
 
