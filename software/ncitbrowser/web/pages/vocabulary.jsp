@@ -50,7 +50,7 @@
       
       
 String vocabulary_version = request.getParameter("version");
-System.out.println("(***** vocabulary.jsp) vocabulary_version: " + vocabulary_version);
+//System.out.println("(***** vocabulary.jsp) vocabulary_version: " + vocabulary_version);
 if (vocabulary_version != null) {
 	request.setAttribute("version", vocabulary_version);
 }
@@ -86,6 +86,8 @@ if (scheme != null) {
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
      tree_access_allowed = false;
  } 
+ boolean vocabulary_isMapping = DataUtils.isMapping(scheme, null);
+ System.out.println("vocabulary_isMapping: " + vocabulary_isMapping);
 
         String version = (String) request.getParameter("version");
         if (version == null) {
@@ -287,29 +289,23 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                         %>
 
          <%
-          if (tree_access_allowed && !DataUtils.isMapping(menubar_scheme, null)) {
+      if (vocabulary_isMapping) {
+      %> 
+      
+      | <a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      View Mapping
+      </a>       
+      
+      <%
+      }         
+      else if (tree_access_allowed) {
          %>                        
                         | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                         View Hierarchy </a>
 
 	 <% } 
-	 %>  
-	 
-	 
-      <%
-     
-      if (DataUtils.isMapping(menubar_scheme, null)) {
-      %>
-      
-      | <a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      View Mapping 
-      </a> 
-      <%
-      }
-      %>	 
-	 
-	 
+       %>  
 	 
                         <% if (menubar_scheme0 != null && menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
                               | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>

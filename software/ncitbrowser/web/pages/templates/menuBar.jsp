@@ -6,6 +6,7 @@
 <%
   String dictionaryName0 = null;
   String dictionaryName = (String) request.getParameter("dictionary");
+  if (dictionaryName == null) dictionaryName = (String) request.getSession().getAttribute("dictionary");
   if (dictionaryName == null) dictionaryName = Constants.CODING_SCHEME_NAME;
 
   dictionaryName0 = dictionaryName;
@@ -15,7 +16,14 @@
   dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#41;", ")");
    
   String menubar_dictionary = DataUtils.getCodingSchemeName( dictionaryName0 );
-  String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );    
+  String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 ); 
+  
+  
+ boolean menubar_isMapping = DataUtils.isMapping(menubar_dictionary, null);
+ System.out.println("menubar_dictionary: " + menubar_dictionary);
+ System.out.println("menubar_isMapping: " + menubar_isMapping);
+
+
   
 if (menubar_version == null) {
     menubar_version = (String) request.getAttribute("version");
@@ -56,8 +64,22 @@ System.out.println("menuBar.jsp menubar_version: " + menubar_version);
          }
       %> 
       <%
-      if (tree_access_allowed) {
+      
+      if (menubar_isMapping) {
+      %> 
+      
+      <a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      View Mapping
+      </a>       
+      
+      <%
+      }
+      
+      else if (tree_access_allowed) {
       %>
+      
+      
       
       | <a href="#"
       onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
