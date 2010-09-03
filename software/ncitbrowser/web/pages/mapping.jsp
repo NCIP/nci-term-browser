@@ -88,11 +88,24 @@ if (mapping_dictionary.compareTo("NCI Thesaurus") == 0) {
 
 
 int sortBy = MappingData.COL_SOURCE_CODE;
+int prevSortBy = MappingData.COL_SOURCE_CODE;
+
 String sortByStr = request.getParameter("sortBy");
 if (sortByStr != null) {
     sortBy = Integer.parseInt(sortByStr);
-    
 }
+
+String prevSortByStr = (String) request.getSession().getAttribute("sortBy");
+if (prevSortByStr != null) {
+    prevSortBy = Integer.parseInt(prevSortByStr);
+} 
+
+if (sortByStr == null) {
+    request.getSession().setAttribute("sortBy", "1");
+} else {
+    request.getSession().setAttribute("sortBy", sortByStr);
+}
+
 
 Object scheme2MappingIteratorBean = request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
 HashMap scheme2MappingIteratorBeanMap = null;
@@ -118,6 +131,21 @@ if (bean == null) {
 		1000, // size,
 		0,    // pageNumber,
 		1);   // numberPages    
+    }
+    scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
+} else if (prevSortByStr != null && sortBy != prevSortBy) {
+    bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
+    bean.setList(new ArrayList());
+    ResolvedConceptReferencesIterator iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
+    if (iterator != null) {
+	bean.initialize(
+		iterator,
+		1000, // number remaining 
+		0,    // istart
+		50,   // iend,
+		1000, // size,
+		0,    // pageNumber,
+		1);   // numberPages     
     }
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
 }
