@@ -109,6 +109,27 @@ public class MappingIteratorBean
 		this.list = list;
 	}
 
+	public void initialize(
+		ResolvedConceptReferencesIterator iterator,
+		int numberRemaining,
+		int istart,
+		int iend,
+		int size,
+		int pageNumber,
+		int numberPages) {
+
+		this.iterator = iterator;
+		this.numberRemaining = numberRemaining;
+		this.istart = istart;
+		this.iend = iend;
+		this.size = size;
+		this.pageNumber = pageNumber;
+		this.numberPages = numberPages;
+		this.pageSize = 50;
+		this.list = new ArrayList();
+	}
+
+
 // Set methods
 	public void setIterator(ResolvedConceptReferencesIterator iterator) {
 		this.iterator = iterator;
@@ -268,8 +289,8 @@ Code: C4588, Description: Stage 0 Lip Cancer Hash: 5555373 Coding Scheme: NCI_Th
 				} else {
 					description = ref.getEntityDescription().getContent();
 				}
-				System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
-					+ ", Namespace: " + ref.getCodeNamespace());
+				//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
+				//	+ ", Namespace: " + ref.getCodeNamespace());
 
 				sourceCode = ref.getCode();
 				sourceName = description;
@@ -285,7 +306,7 @@ Code: C4588, Description: Stage 0 Lip Cancer Hash: 5555373 Coding Scheme: NCI_Th
 					for(Association assoc : assocs.getAssociation()){
 						associationName = assoc.getAssociationName();
 
-						System.out.println("\tassociationName: " + associationName);
+						//System.out.println("\tassociationName: " + associationName);
 						int lcv = 0;
 						for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
 							lcv++;
@@ -294,9 +315,9 @@ Code: C4588, Description: Stage 0 Lip Cancer Hash: 5555373 Coding Scheme: NCI_Th
 							} else {
 								description = ac.getEntityDescription().getContent();
 							}
-							System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
-							   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
-                            System.out.println("====================================================");
+							//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+							//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+                            //System.out.println("====================================================");
 							targetCode = ac.getCode();
 							targetName = description;
 							targetCodingScheme = ac.getCodingSchemeName();
@@ -313,13 +334,9 @@ Code: C4588, Description: Stage 0 Lip Cancer Hash: 5555373 Coding Scheme: NCI_Th
 										score = Integer.parseInt(qualifier_value);
 									}
 								}
+						    }
 
-
-						    } else {
-								System.out.println("ac.getAssociationQualifiers() == null???");
-							}
-
-							System.out.println("\t\tREL: " + rel + " score: " + score);
+							//System.out.println("\t\tREL: " + rel + " score: " + score);
 							mappingData = new MappingData(
 								sourceCode,
 								sourceName,
