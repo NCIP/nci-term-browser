@@ -16,6 +16,7 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.MappingIteratorBean" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.MappingData" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
 
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
@@ -79,7 +80,6 @@ if (mapping_dictionary.compareTo("NCI Thesaurus") == 0) {
 <%
 }
 %>
-
       <!-- Page content -->
       <div class="pagecontent">
 
@@ -91,6 +91,7 @@ int sortBy = MappingData.COL_SOURCE_CODE;
 String sortByStr = request.getParameter("sortBy");
 if (sortByStr != null) {
     sortBy = Integer.parseInt(sortByStr);
+    
 }
 
 Object scheme2MappingIteratorBean = request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
@@ -107,11 +108,11 @@ MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.g
 if (bean == null) {
     bean = new MappingIteratorBean();
     // initialization
-    java.util.Iterator<? extends ResolvedConceptReference> iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version);
+    ResolvedConceptReferencesIterator iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
     if (iterator != null) {
 	bean = new MappingIteratorBean(
 		iterator,
-		1000, // number remaining (not supported by LexEVS 6.0 API)
+		1000, // number remaining 
 		0,    // istart
 		50,   // iend,
 		1000, // size,

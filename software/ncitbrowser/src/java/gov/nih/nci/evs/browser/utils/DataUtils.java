@@ -29,6 +29,13 @@ import static gov.nih.nci.evs.browser.common.Constants.*;
 import gov.nih.nci.evs.browser.common.Constants;
 import gov.nih.nci.evs.browser.bean.MappingData;
 
+import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension;
+import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Direction;
+import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.MappingSortOption;
+import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.MappingSortOptionName;
+import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.QualifierSortOption;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 
 import org.apache.log4j.*;
 
@@ -3341,7 +3348,7 @@ public class DataUtils {
 		return false;
 	}
 
-
+/*
     public static java.util.Iterator<? extends ResolvedConceptReference> getMappingDataIterator(String scheme, String version) {
 
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -3369,7 +3376,7 @@ public class DataUtils {
 		}
 		return null;
 	}
-
+*/
 
 
 
@@ -3510,6 +3517,166 @@ public class DataUtils {
 			                 + mappingData.getTargetCodingSchemeVersion() + "|"
 			                 + mappingData.getTargetCodeNamespace());
 		}
+
+	}
+
+
+	public static List<MappingSortOption> createMappingSortOption(int sortBy) {
+        List<MappingSortOption> list = new ArrayList<MappingSortOption>();
+        MappingSortOption option = null;
+        QualifierSortOption qualifierOption = null;
+        switch (sortBy) {
+            case 1:
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                list.add(qualifierOption);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                break;
+
+            case 2:
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                list.add(qualifierOption);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                break;
+
+            case 3:
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                list.add(qualifierOption);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                break;
+
+            case 4:
+                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                list.add(qualifierOption);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                break;
+
+            case 5:
+				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                list.add(qualifierOption);
+                break;
+
+            case 6:
+				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+ 				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                list.add(qualifierOption);
+               break;
+
+            default:
+               return createMappingSortOption(1);
+		}
+		return list;
+	}
+
+
+    public static ResolvedConceptReferencesIterator getMappingDataIterator(String scheme, String version) {
+		return getMappingDataIterator(scheme, version, MappingData.COL_SOURCE_CODE);
+	}
+
+    public static ResolvedConceptReferencesIterator getMappingDataIterator(String scheme, String version, int sortBy) {
+		List<MappingSortOption> sortOptionList = createMappingSortOption(sortBy);
+		return getMappingDataIterator(scheme, version, sortOptionList);
+	}
+
+
+    public static ResolvedConceptReferencesIterator getMappingDataIterator(String scheme, String version, List<MappingSortOption> sortOptionList) {
+		CodingSchemeVersionOrTag versionOrTag =
+			new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+		String relationsContainerName = null;
+
+        LexBIGService distributed = RemoteServerUtil.createLexBIGService();
+        try {
+			CodingScheme cs = distributed.resolveCodingScheme(scheme, versionOrTag);
+			if (cs == null) return null;
+
+			java.util.Enumeration<? extends Relations> relations = cs.enumerateRelations();
+			while (relations.hasMoreElements()) {
+				Relations relation = (Relations) relations.nextElement();
+				Boolean isMapping = relation.getIsMapping();
+				System.out.println("isMapping: " + isMapping);
+				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
+ 					relationsContainerName = relation.getContainerName();
+					System.out.println(relationsContainerName);
+					break;
+				}
+			}
+			if (relationsContainerName == null) {
+				System.out.println("WARNING: Mapping container not found in " + scheme);
+				return null;
+			}
+
+			MappingExtension mappingExtension = (MappingExtension)
+				distributed.getGenericExtension("MappingExtension");
+
+			ResolvedConceptReferencesIterator itr = mappingExtension.resolveMapping(
+					scheme, //"NCIt_to_ICD9CM_Mapping",
+					versionOrTag,
+					relationsContainerName,//"NCIt_to_ICD9CM_Mappings",
+					sortOptionList);
+
+			return itr;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
 
 	}
 
