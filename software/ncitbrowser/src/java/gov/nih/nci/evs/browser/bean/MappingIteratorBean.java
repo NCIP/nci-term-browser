@@ -13,15 +13,47 @@ import org.LexGrid.relations.AssociationPredicate;
 import org.LexGrid.LexBIG.DataModel.Core.Association;
 import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
 import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 
+/**
+  * <!-- LICENSE_TEXT_START -->
+* Copyright 2008,2009 NGIT. This software was developed in conjunction with the National Cancer Institute,
+* and so to the extent government employees are co-authors, any rights in such works shall be subject to Title 17 of the United States Code, section 105.
+* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+* 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the disclaimer of Article 3, below. Redistributions
+* in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other
+* materials provided with the distribution.
+* 2. The end-user documentation included with the redistribution, if any, must include the following acknowledgment:
+* "This product includes software developed by NGIT and the National Cancer Institute."
+* If no such end-user documentation is to be included, this acknowledgment shall appear in the software itself,
+* wherever such third-party acknowledgments normally appear.
+* 3. The names "The National Cancer Institute", "NCI" and "NGIT" must not be used to endorse or promote products derived from this software.
+* 4. This license does not authorize the incorporation of this software into any third party proprietary programs. This license does not authorize
+* the recipient to use any trademarks owned by either NCI or NGIT
+* 5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
+* NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+* PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * <!-- LICENSE_TEXT_END -->
+  */
 
+/**
+  * @author EVS Team
+  * @version 1.0
+  *
+  * Modification history
+  *     Initial implementation kim.ong@ngc.com
+  *
+ */
 
 public class MappingIteratorBean
 {
     private static Logger _logger = Logger.getLogger(MappingIteratorBean.class);
 
 // Variable declaration
-	private Iterator iterator;
+	//private Iterator iterator;
+	private ResolvedConceptReferencesIterator iterator;
 	private int numberRemaining;
 	private int istart;
 	private int iend;
@@ -37,7 +69,7 @@ public class MappingIteratorBean
 
 // Constructor
 	public MappingIteratorBean(
-		Iterator iterator,
+		ResolvedConceptReferencesIterator iterator,
 		int numberRemaining,
 		int istart,
 		int iend,
@@ -57,7 +89,7 @@ public class MappingIteratorBean
 	}
 
 	public MappingIteratorBean(
-		Iterator iterator,
+		ResolvedConceptReferencesIterator iterator,
 		int numberRemaining,
 		int istart,
 		int iend,
@@ -78,7 +110,7 @@ public class MappingIteratorBean
 	}
 
 // Set methods
-	public void setIterator(Iterator iterator) {
+	public void setIterator(ResolvedConceptReferencesIterator iterator) {
 		this.iterator = iterator;
 	}
 
@@ -115,7 +147,7 @@ public class MappingIteratorBean
 	}
 
 // Get methods
-	public Iterator getIterator() {
+	public ResolvedConceptReferencesIterator getIterator() {
 		return this.iterator;
 	}
 
@@ -166,6 +198,34 @@ public class MappingIteratorBean
 	}
 
 
+/*
+Code: C3191, Description: Lip Neoplasm Hash: 22808536 Coding Scheme: NCI_Thesaurus, Version: 1.0, Namespace: NCI_Thesaurus
+ -> Association: mapsTo Container: null
+ ->  -> Code: 140, Description: Malignant neoplasm of lip Hash: 17244592 CodingScheme: ICD_9_CM, Version: 1.0, Namespace: ICD_9_CM
+
+Code: C3490, Description: Lip Carcinoma Hash: 20230270 Coding Scheme: NCI_Thesaurus, Version: 1.0, Namespace: NCI_Thesaurus
+ -> Association: mapsTo Container: null
+ ->  -> Code: 140, Description: Malignant neoplasm of lip Hash: 3098834 Coding Scheme: ICD_9_CM, Version: 1.0, Namespace: ICD_9_CM
+
+Code: C4042, Description: Lip Squamous Cell Carcinoma Hash: 5626173 Coding Scheme: NCI_Thesaurus, Version: 1.0, Namespace: NCI_Thesaurus
+ -> Association: mapsTo Container: null
+ ->  -> Code: 140, Description: Malignant neoplasm of lip Hash: 2715510 Coding Scheme: ICD_9_CM, Version: 1.0, Namespace: ICD_9_CM
+
+Code: C4588, Description: Stage 0 Lip Cancer Hash: 5555373 Coding Scheme: NCI_Thesaurus, Version: 1.0, Namespace: NCI_Thesaurus
+ -> Association: mapsTo Container: null
+ ->  -> Code: 140, Description: Malignant neoplasm of lip Hash: 20738936 CodingScheme: ICD_9_CM, Version: 1.0, Namespace: ICD_9_CM
+*/
+
+
+    public MappingData convertMappingData(ResolvedConceptReference rcr) {
+
+		return null;
+	}
+
+
+
+
+
     public List getData(int idx1, int idx2) {
 		MappingData mappingData = null;
         if (list.size() >= idx2) {
@@ -192,17 +252,24 @@ public class MappingIteratorBean
 		String targetCodeNamespace = null;
 
         try {
+			if (iterator == null) {
+				_logger.debug("iterator == null???");
+			} else if (!iterator.hasNext()) {
+				_logger.debug("iterator is empty???");
+			}
+
 			while (iterator.hasNext() && list.size() < idx2) {
 				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
 				int depth = 0;
 				String description;
+
 				if(ref.getEntityDescription() == null) {
 					description = "NOT AVAILABLE";
 				} else {
 					description = ref.getEntityDescription().getContent();
 				}
-				//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
-				//	+ ", Namespace: " + ref.getCodeNamespace());
+				System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
+					+ ", Namespace: " + ref.getCodeNamespace());
 
 				sourceCode = ref.getCode();
 				sourceName = description;
@@ -210,36 +277,49 @@ public class MappingIteratorBean
 				sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
 				sourceCodeNamespace = ref.getCodeNamespace();
 
+				rel = null;
+				score = 0;
+
 				AssociationList assocs = ref.getSourceOf();
 				if(assocs != null){
 					for(Association assoc : assocs.getAssociation()){
 						associationName = assoc.getAssociationName();
+
+						System.out.println("\tassociationName: " + associationName);
+						int lcv = 0;
 						for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+							lcv++;
 							if(ac.getEntityDescription() == null) {
 								description = "NOT AVAILABLE";
 							} else {
 								description = ac.getEntityDescription().getContent();
 							}
-							//System.out.println("Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
-							//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
-
+							System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+							   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+                            System.out.println("====================================================");
 							targetCode = ac.getCode();
 							targetName = description;
 							targetCodingScheme = ac.getCodingSchemeName();
 							targetCodingSchemeVesion = ac.getCodingSchemeVersion();
 							targetCodeNamespace = ac.getCodeNamespace();
 
-							for (NameAndValue qual : ac.getAssociationQualifiers()
-								.getNameAndValue()) {
-								String qualifier_name = qual.getName();
-								String qualifier_value = qual.getContent();
-								if (qualifier_name.compareTo("rel") == 0) {
-									rel = qualifier_value;
-								} else if (qualifier_name.compareTo("score") == 0) {
-									score = Integer.parseInt(qualifier_value);
+                            if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+								for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+									String qualifier_name = qual.getName();
+									String qualifier_value = qual.getContent();
+									if (qualifier_name.compareTo("rel") == 0) {
+										rel = qualifier_value;
+									} else if (qualifier_name.compareTo("score") == 0) {
+										score = Integer.parseInt(qualifier_value);
+									}
 								}
+
+
+						    } else {
+								System.out.println("ac.getAssociationQualifiers() == null???");
 							}
 
+							System.out.println("\t\tREL: " + rel + " score: " + score);
 							mappingData = new MappingData(
 								sourceCode,
 								sourceName,
@@ -255,6 +335,7 @@ public class MappingIteratorBean
 								targetCodingSchemeVesion,
 								targetCodeNamespace);
 							list.add(mappingData);
+
 						}
 					}
 				}
@@ -262,7 +343,7 @@ public class MappingIteratorBean
 
 
         } catch (Exception ex) {
-            // ex.printStackTrace();
+            ex.printStackTrace();
         }
 
         _logger.debug("getData Run time (ms): "
