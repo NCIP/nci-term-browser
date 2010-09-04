@@ -55,6 +55,7 @@
 
 
 <%
+ResolvedConceptReferencesIterator iterator = null;
 String mapping_dictionary = request.getParameter("dictionary");
 String mapping_version = request.getParameter("version");
 
@@ -121,7 +122,7 @@ MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.g
 if (bean == null) {
     bean = new MappingIteratorBean();
     // initialization
-    ResolvedConceptReferencesIterator iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
+    iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
     if (iterator != null) {
 	bean = new MappingIteratorBean(
 		iterator,
@@ -136,7 +137,7 @@ if (bean == null) {
 } else if (prevSortByStr != null && sortBy != prevSortBy) {
     bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
     bean.setList(new ArrayList());
-    ResolvedConceptReferencesIterator iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
+    iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
     if (iterator != null) {
 	bean.initialize(
 		iterator,

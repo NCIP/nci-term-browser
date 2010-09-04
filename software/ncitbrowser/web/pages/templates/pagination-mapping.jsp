@@ -9,7 +9,14 @@
     
     String istart_str = Integer.toString(istart);
     String iend_str = Integer.toString(iend);
-    String match_size = Integer.toString(iend+1);
+    int numRemaining = iend+1;
+    try {
+        numRemaining = iterator.numberRemaining();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    
+    String match_size = Integer.toString(numRemaining);
     
     String prev_page_num_str = Integer.toString(pageNum);
     String next_page_num_str = Integer.toString(pageNum+1);
