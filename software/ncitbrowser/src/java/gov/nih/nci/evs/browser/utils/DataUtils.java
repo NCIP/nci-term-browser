@@ -3533,7 +3533,7 @@ public class DataUtils {
                 list.add(option);
                 qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
                 list.add(qualifierOption);
-                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                qualifierOption = new QualifierSortOption(Direction.DESC, "score");
                 list.add(qualifierOption);
 				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
 				list.add(option);
@@ -3548,7 +3548,7 @@ public class DataUtils {
 				list.add(option);
                 qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
                 list.add(qualifierOption);
-                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                qualifierOption = new QualifierSortOption(Direction.DESC, "score");
                 list.add(qualifierOption);
 				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
 				list.add(option);
@@ -3559,7 +3559,7 @@ public class DataUtils {
             case 3:
                 qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
                 list.add(qualifierOption);
-                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                qualifierOption = new QualifierSortOption(Direction.DESC, "score");
                 list.add(qualifierOption);
 				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
 				list.add(option);
@@ -3572,7 +3572,7 @@ public class DataUtils {
                 break;
 
             case 4:
-                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                qualifierOption = new QualifierSortOption(Direction.DESC, "score");
                 list.add(qualifierOption);
 				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
 				list.add(option);
@@ -3597,7 +3597,7 @@ public class DataUtils {
                 list.add(option);
                 qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
                 list.add(qualifierOption);
-                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                qualifierOption = new QualifierSortOption(Direction.DESC, "score");
                 list.add(qualifierOption);
                 break;
 
@@ -3612,7 +3612,7 @@ public class DataUtils {
                 list.add(option);
                 qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
                 list.add(qualifierOption);
-                qualifierOption = new QualifierSortOption(Direction.ASC, "score");
+                qualifierOption = new QualifierSortOption(Direction.DESC, "score");
                 list.add(qualifierOption);
                break;
 
