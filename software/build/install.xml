@@ -150,7 +150,7 @@
                         <then>
                             <property name="jboss.server.bindingfile.location" value="${basedir}/${jboss-bindings.file}"/>
                             <property name="temp.ejb.file" value="${temp.dir}/ejb3-connectors-jboss-beans.xml"/>
-                            <copy tofile="${temp.ejb.file}" file="${bda-utils.dir}/resource/jboss-5.1.0.GA-nci/ejb3-connectors-jboss-beans.xml"/>
+                            <copy tofile="${temp.ejb.file}" file="${bda-utils.dir}/resource/${jboss.binaries.relative.dir}/ejb3-connectors-jboss-beans.xml"/>
                             <jboss51-bindings-nci
                                 jboss.server.bindingfile.location="${jboss.server.bindingfile.location}"
                                 />
