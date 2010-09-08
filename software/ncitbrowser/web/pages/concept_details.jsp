@@ -52,7 +52,8 @@
   if (version == null) {
       version = (String) request.getAttribute("version");
   }
-  
+
+ 
 System.out.println("concept_details.jsp version: " + version);  
 request.setAttribute("version", version);
 
