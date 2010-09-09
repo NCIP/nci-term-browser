@@ -4,7 +4,7 @@
 <div class="bannerarea">
 <%
         String hdr_dictionary = (String) request.getSession().getAttribute("dictionary");
-       
+
         if (hdr_dictionary == null || hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
 <div class="banner"><a href="<%=basePath%>"><img
@@ -35,7 +35,9 @@
 %>
 <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary)%>">
   <div class="vocabularynamebanner">
-    <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
+    <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(display_name)%>px; font-family : Arial">
+        <%=HTTPUtils.cleanXSS(display_name)%>
+    </div>
     <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(term_browser_version)%></div>
   </div>
 </a>
