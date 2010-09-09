@@ -71,7 +71,7 @@
           String shortName = DataUtils.getLocalName(dictionary);
           String term_suggestion_application_url = new DataUtils()
               .getTermSuggestionURL();
-              
+
        %>
           <!-- Thesaurus, banner search area -->
           <div class="bannerarea">
@@ -105,7 +105,9 @@
           %>
     <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">
       <div class="vocabularynamebanner">
-        <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
+        <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(display_name)%>px; font-family : Arial">
+            <%=HTTPUtils.cleanXSS(display_name)%>
+        </div>
         <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
       </div>
     </a>
@@ -122,33 +124,33 @@
               <table class="global-nav" border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td>
-                 
+
                     <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">Home</a>
-                    
-      <%              
+
+      <%
       if (cdo_isMapping) {
-      %> 
-      
+      %>
+
       <a href="#"
       onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      </a>       
-      
+      </a>
+
       <%
       } else if (tree_access_allowed) {
-      %> 
-                    
+      %>
+
                     | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                     View Hierarchy </a>
-      <%              
-      } 
+      <%
+      }
       %>
-                    
-                    
+
+
                     | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
                   </td>
-                  
-                  
-                  
+
+
+
                   <td align="right">
                     <%
                                                       Vector visitedConcepts = (Vector) request.getSession()
@@ -181,7 +183,7 @@
               String singleton = (String) request.getSession().getAttribute("singleton");
               if (singleton != null && singleton.compareTo("true") == 0) {
                 code = (String) request.getSession().getAttribute("code");
-              } else {                
+              } else {
                 code = (String) request.getSession().getAttribute("code");
                 type = (String) request.getParameter("type");
               }
@@ -245,10 +247,10 @@
                       visitedConcepts = new Vector();
                     }
                     String localCodingSchemeName = DataUtils.getLocalName(dictionary);
-                    
+
 _logger.debug("concept_details_other_term.jsp  dictionary: " + dictionary);
 _logger.debug("concept_details_other_term.jsp  localCodingSchemeName: " + localCodingSchemeName);
-                    
+
                     String visitedConceptStr = localCodingSchemeName + "|"
                         + code + "|" + name;
                     if (!visitedConcepts.contains(visitedConceptStr)) {
