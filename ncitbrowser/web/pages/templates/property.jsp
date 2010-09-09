@@ -510,10 +510,7 @@ if(propName_label.compareTo("Definition") == 0) {
   String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>
-  <b>URL to Bookmark</b>:
-  <a href=javascript:bookmark('<%= url %>','<%= bookmark_title %>')>
-    <i><%= requestURL %><%= url_text %></i>
-  </a>
+  <b>URL</b>: <i><%= requestURL %><%= url_text %></i>
 <%
 }
 %>
