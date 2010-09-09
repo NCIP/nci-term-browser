@@ -22,7 +22,7 @@
    Build info: <%=ncit_build_info%>
  Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
-   LexEVS URL: <%=evs_service_url%>                    
+   LexEVS URL: <%=evs_service_url%>
   -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -47,16 +47,16 @@
       src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
     <f:view>
       <%
-      
-      
+
+
 String vocabulary_version = request.getParameter("version");
 //System.out.println("(***** vocabulary.jsp) vocabulary_version: " + vocabulary_version);
 if (vocabulary_version != null) {
-	request.setAttribute("version", vocabulary_version);
+  request.setAttribute("version", vocabulary_version);
 }
-     
-      
-      
+
+
+
         String menubar_scheme = null;
         String menubar_scheme0 = null;
         String menubar_version = null;
@@ -70,9 +70,9 @@ if (vocabulary_version != null) {
         String scheme = (String) request.getParameter("dictionary");
         String vocabulary_home_str = (String) request.getParameter("home");
         String shortName = null;
-//KLO, testing        
+//KLO, testing
 if (scheme != null) {
-        scheme = DataUtils.getFormalName(scheme);  
+        scheme = DataUtils.getFormalName(scheme);
         scheme = DataUtils.searchFormalName(scheme);
         shortName = DataUtils.getLocalName(scheme);
 }
@@ -81,11 +81,11 @@ if (scheme != null) {
         if (scheme == null) {
             scheme = (String) request.getSession().getAttribute("scheme");
         }
- 
+
  boolean tree_access_allowed = true;
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
      tree_access_allowed = false;
- } 
+ }
  boolean vocabulary_isMapping = DataUtils.isMapping(scheme, null);
  System.out.println("vocabulary_isMapping: " + vocabulary_isMapping);
 
@@ -110,14 +110,14 @@ if (scheme != null) {
             version = version.replaceAll("%20", " ");
           }
         }
-        
-        
+
+
         request.getSession().setAttribute("dictionary", scheme);
-        
+
         menubar_scheme = scheme;
         //KLO tesing
         if (menubar_scheme != null) {
-            menubar_scheme = DataUtils.getFormalName(menubar_scheme); 
+            menubar_scheme = DataUtils.getFormalName(menubar_scheme);
         }
 
         menubar_version = version;
@@ -215,8 +215,8 @@ if (scheme != null) {
                 alt="Accept">
               </h:commandButton> &nbsp;&nbsp; <img
                 src="<%=request.getContextPath()%>/images/cancel.gif" name="cancel"
-                alt="reset" onClick="history.back()" /> 
-                <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(scheme)%>" /> 
+                alt="reset" onClick="history.back()" />
+                <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(scheme)%>" />
                 <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" /></form>
               </p>
               <%@ include file="/pages/templates/nciFooter.html" %>
@@ -233,9 +233,9 @@ if (scheme != null) {
               }
         %>
               <!-- Thesaurus, banner search area -->
-              
+
               <div class="bannerarea">
-<%   
+<%
 
 System.out.println("vocabulary.jsp basePath " + basePath);
 
@@ -247,22 +247,23 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
 <%
 } else {
 %>
-              
+
                 <% if (menubar_version == null) { %>
                   <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>">
                 <% } else { %>
                   <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">
                 <% } %>
                     <div class="vocabularynamebanner">
-                      <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
+                      <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(display_name)%>px; font-family : Arial">
+                          <%=HTTPUtils.cleanXSS(display_name)%>
+                      </div>
                       <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
                     </div>
                   </a>
-                  
 <%
-}  
+}
 %>
-                  
+
                 <div class="search-globalnav">
                   <!-- Search box -->
                   <div class="searchbox-top"><img
@@ -285,28 +286,28 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                            if (download_site != null) {
                         %>    | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               Download </a>
-                        <% } 
+                        <% }
                         %>
 
          <%
       if (vocabulary_isMapping) {
-      %> 
-      
+      %>
+
       | <a href="#"
       onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
       View Mapping
-      </a>       
-      
+      </a>
+
       <%
-      }         
+      }
       else if (tree_access_allowed) {
-         %>                        
+         %>
                         | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                         View Hierarchy </a>
 
-	 <% } 
-       %>  
-	 
+   <% }
+       %>
+
                         <% if (menubar_scheme0 != null && menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
                               | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>
                         <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
