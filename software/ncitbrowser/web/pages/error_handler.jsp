@@ -52,8 +52,10 @@
         <% } else if (subApp == NCIO) { %>
           <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">
             <div class="vocabularynamebanner">
-              <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(dictionary)%></div>
-              <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(version)%></div>
+              <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(dictionary)%>px; font-family : Arial">
+                  <%=HTTPUtils.cleanXSS(dictionary)%>
+              </div>
+               <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(version)%></div>
             </div>
           </a>
         <% } else { %>
