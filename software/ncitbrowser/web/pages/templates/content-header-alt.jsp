@@ -4,7 +4,7 @@
 <div class="bannerarea">
 <%
         String hdr_dictionary = (String) request.getSession().getAttribute("dictionary");
-       
+
         if (hdr_dictionary == null || hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
         %>
 <div class="banner"><a href="<%=basePath%>"><img
@@ -35,7 +35,9 @@
 %>
 <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary)%>">
   <div class="vocabularynamebanner">
-    <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
+    <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(display_name)%>px; font-family : Arial">
+        <%=HTTPUtils.cleanXSS(display_name)%>
+    </div>
     <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(term_browser_version)%></div>
   </div>
 </a>
@@ -46,27 +48,27 @@
 <div class="searchbox-top"><img
   src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
   alt="SearchBox Top" /></div>
-  
-  
+
+
     <div class="search-empty">
         <table border="0" height="105px" width="100%" class="global-nav">
           <tr>
             <td valign="middle" align="center">
-              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary)%>">Simple Search</a>        
+              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary)%>">Simple Search</a>
             </td>
-          </tr>         
+          </tr>
         </table>
     </div>
-    
-  
+
+
 
 <div class="searchbox-bottom"><img
   src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2"
   alt="SearchBox Bottom" /></div>
-  
-  
-  
-  
+
+
+
+
 <!-- end Search box --> <!-- Global Navigation --> <%@ include
   file="menuBar.jsp"%> <!-- end Global Navigation -->
 </div>
