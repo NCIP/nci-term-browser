@@ -12,7 +12,7 @@ set DEBUG=-Denable.install.debug=false
 set TAG=-Danthill.build.tag_built=desktop
 @rem Test is debug has been set
 if "%2" == "debug" (
-    set DEBUG=-Denable.install.debug=true
+    set DEBUG=-Denable.install.debug=true -debug
 )
 cls
 if "%1" == "" (
