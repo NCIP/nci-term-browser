@@ -62,6 +62,9 @@ import org.apache.log4j.*;
 public class HTTPUtils {
     private static Logger _logger = Logger.getLogger(HTTPUtils.class);
     private static final String REFERER = "referer";
+    private static final int MAX_FONT_SIZE = 29;
+    private static final int MIN_FONT_SIZE = 22;
+    private static final int MAX_STR_LEN = 18;    
 
     /**
      * Remove potentially bad XSS syntax
@@ -89,6 +92,21 @@ public class HTTPUtils {
 
     }
 
+    /**
+     * Calculate a max font size for the length of the text to be
+     * 	displayed.
+     * @param value
+     * @param width
+     * @return
+     */
+    public static int maxFontSize(String value) {
+    	if (value == null || value.length() <= MAX_STR_LEN)
+    		return MAX_FONT_SIZE;
+    	int size = MAX_FONT_SIZE - (value.length() - MAX_STR_LEN);
+    	if (size < MIN_FONT_SIZE) size = MIN_FONT_SIZE;
+    	return size;
+    }   
+    
     /**
      * @param string
      * @param regex
