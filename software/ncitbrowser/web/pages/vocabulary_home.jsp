@@ -20,7 +20,7 @@
    Build info: <%=ncit_build_info%>
  Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
-   LexEVS URL: <%=evs_service_url%>                             
+   LexEVS URL: <%=evs_service_url%>
   -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
@@ -35,14 +35,14 @@
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
   <%
-  
+
 String vocabulary_version = request.getParameter("version");
 //System.out.println("(***** vocabulary_home.jsp) vocabulary_version: " + vocabulary_version);
 if (vocabulary_version != null) {
-	request.setAttribute("version", vocabulary_version);
+  request.setAttribute("version", vocabulary_version);
 }
-     
-     
+
+
     String menubar_scheme = null;
     String menubar_scheme0 = null;
     String menubar_version = null;
@@ -66,7 +66,7 @@ if (vocabulary_version != null) {
     <div id="main-area">
   <%
     String dictionary = (String) request.getParameter("dictionary");
-    
+
     String scheme = (String) request.getParameter("scheme");
     String shortName = "Vocabulary";
     if (scheme == null) {
@@ -75,12 +75,12 @@ if (vocabulary_version != null) {
       shortName = DataUtils.getMetadataValue(scheme, "display_name");
       if (shortName == null) shortName = "Vocabulary";
     }
-    
+
  boolean tree_access_allowed = true;
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
      tree_access_allowed = false;
- }     
- 
+ }
+
  boolean vocabulary_home_isMapping = DataUtils.isMapping(scheme, null);
  System.out.println("menubar scheme: " + scheme);
  System.out.println("vocabulary_home_isMapping: " + vocabulary_home_isMapping);
@@ -116,10 +116,10 @@ if (vocabulary_version != null) {
       version = version.replaceAll("%20", " ");
       request.setAttribute("version", version);
     }
-       
-    
+
+
     if (dictionary != null) {
-        dictionary = DataUtils.getFormalName(dictionary);    
+        dictionary = DataUtils.getFormalName(dictionary);
         dictionary = dictionary.replaceAll("%20", " ");
         request.setAttribute("dictionary", dictionary);
     }
@@ -132,7 +132,9 @@ if (vocabulary_version != null) {
       <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&scheme=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">
     <% } %>
         <div class="vocabularynamebanner">
-          <div class="vocabularynameshort"><%=HTTPUtils.cleanXSS(shortName)%></div>
+          <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(shortName)%>px; font-family : Arial">
+              <%=HTTPUtils.cleanXSS(shortName)%>
+          </div>
           <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
         </div>
       </a>
@@ -185,31 +187,31 @@ if (vocabulary_version != null) {
               Download
             </a>
           <% } %>
-          
+
           <%
-          
+
       if (vocabulary_home_isMapping) {
-      %> 
-      
+      %>
+
       | <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=menubar_version%>">
         View Mapping
-      </a>       
-      
+      </a>
+
       <%
       }
-      
+
       else if (tree_access_allowed) {
-         %>           
-          
+         %>
+
           | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
               View Hierarchy
             </a>
-            
-         <% } 
-	  %>            
-            
-          
-            
+
+         <% }
+    %>
+
+
+
           <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
           | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
           <% } %>
