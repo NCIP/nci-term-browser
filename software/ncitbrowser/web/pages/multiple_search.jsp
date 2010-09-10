@@ -1,10 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page import="java.util.Collections"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="org.LexGrid.concepts.Concept" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.OntologyInfo" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
@@ -146,11 +148,14 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                     String scheme = DataUtils.key2CodingSchemeName(value);
                     String version = DataUtils.key2CodingSchemeVersion(value);
                     String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-                    if (display_name == null || display_name.compareTo("null") == 0) display_name = DataUtils.getLocalName(scheme);
+                    if (display_name == null || display_name.compareTo("null") == 0)
+                        display_name = DataUtils.getLocalName(scheme);
+                    String sort_category = DataUtils.getMetadataValue(
+                        scheme, "vocabulary_sort_category");
                     display_name_hmap.put(display_name, value);
-                    display_name_vec.add(display_name);
+                    display_name_vec.add(new OntologyInfo(display_name, sort_category));
                   }
-                  display_name_vec = SortUtils.quickSort(display_name_vec);
+                  Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
                   request.getSession().setAttribute("display_name_hmap", display_name_hmap);
                   request.getSession().setAttribute("display_name_vec", display_name_vec);
                 }
@@ -159,7 +164,8 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                     <table border="0" cellpadding="0" cellspacing="0">
                       <%
                       for (int i = 0; i < display_name_vec.size(); i++) {
-                        String display_name = (String) display_name_vec.elementAt(i);
+                        OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                        String display_name = info.getDisplayName();
                         String value = (String)  display_name_hmap.get(display_name);
                         String label = (String)  display_name_hmap.get(display_name);
                         String label2 = "|" + label + "|";
