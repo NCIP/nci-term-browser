@@ -13,6 +13,7 @@
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
   String evs_service_url = new DataUtils().getEVSServiceURL();
+  boolean display_cabig_approval_indicator_note = false;
 %>
 <!--
    Build info: <%=ncit_build_info%>
@@ -174,6 +175,12 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                         String http_label = null;
                         String http_scheme = null;
                         String http_version = null;
+                        String status = DataUtils.getMetadataValue(
+                          scheme, "cabig_approval_status");
+                        boolean display_status = status != null && 
+                          status.trim().length() > 0;
+                        String cabig_approval_indicator = display_status ? " <b>*</b>" : "";
+                        display_cabig_approval_indicator_note |= display_status;
 
                         if (label != null)
                           http_label = label.replaceAll(" ", "%20");
@@ -198,7 +205,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                               <input type="checkbox" name="ontology_list" value="<%=label%>" /> <%
                            }
                            %>
-                              <a href="<%=nciturl %>"><%=label%></a>
+                              <a href="<%=nciturl %>"><%=label%></a><%=cabig_approval_indicator%>
                            <%
                         } else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
                               String ncimurl = NCItBrowserProperties.getNCIM_URL();
@@ -216,7 +223,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                             %>
                               <a href="<%=ncimurl%>" target="_blank"><%=label%>
                                 <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=label%>" />
-                              </a>
+                              </a><%=cabig_approval_indicator%>
                            <%
                         } else {
                            if (ontologiesToSearchOn != null
@@ -240,7 +247,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                             %>
                               <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
                                 <%=label%>
-                              </a>
+                              </a><%=cabig_approval_indicator%>
                            <%
                         }
                       %>
@@ -252,6 +259,12 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                     </table>
                   </td>
                 </tr>
+                <% if (display_cabig_approval_indicator_note) { %>
+                  <tr><td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Note: * are caBIG approved terminologies.
+                  </td></tr>
+                <% } %>
                 <tr><td height="20"></td></tr>
                 <tr>
                   <td><img
