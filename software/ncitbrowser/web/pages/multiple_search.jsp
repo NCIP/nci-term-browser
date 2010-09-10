@@ -262,7 +262,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                 <% if (display_cabig_approval_indicator_note) { %>
                   <tr><td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    Note: * are caBIG approved terminologies.
+                    Note: (*) caBIG approved.
                   </td></tr>
                 <% } %>
                 <tr><td height="20"></td></tr>
