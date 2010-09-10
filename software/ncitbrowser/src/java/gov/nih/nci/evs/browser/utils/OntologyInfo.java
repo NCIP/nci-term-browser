@@ -50,7 +50,7 @@ public class OntologyInfo {
 
             String displayName1 = value1.getDisplayName();
             String displayName2 = value2.getDisplayName();
-            return displayName1.compareTo(displayName2);
+            return displayName1.compareToIgnoreCase(displayName2);
         }
     }
 }
