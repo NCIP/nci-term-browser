@@ -256,15 +256,15 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                      <%
                       }
                      %>
+                     <% if (display_cabig_approval_indicator_note) { %>
+                       <tr>
+                         <td width="25px"></td>
+                         <td class="termstable">&nbsp;Note: * caBIG approved.</td>
+                       </tr>
+                     <% } %>
                     </table>
                   </td>
                 </tr>
-                <% if (display_cabig_approval_indicator_note) { %>
-                  <tr><td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    Note: (*) caBIG approved.
-                  </td></tr>
-                <% } %>
                 <tr><td height="20"></td></tr>
                 <tr>
                   <td><img
