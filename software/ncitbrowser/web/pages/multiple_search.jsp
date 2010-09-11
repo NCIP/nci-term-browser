@@ -14,6 +14,7 @@
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
   String evs_service_url = new DataUtils().getEVSServiceURL();
   boolean display_cabig_approval_indicator_note = false;
+  Integer curr_sort_category = null;
 %>
 <!--
    Build info: <%=ncit_build_info%>
@@ -166,6 +167,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                       <%
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                        int sort_category = info.getSortCategory();
                         String display_name = info.getDisplayName();
                         String value = (String)  display_name_hmap.get(display_name);
                         String label = (String)  display_name_hmap.get(display_name);
@@ -189,6 +191,12 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                         if (version != null)
                           http_version = version.replaceAll(" ", "%20");
                         %>
+                        <% if (curr_sort_category != null && sort_category != curr_sort_category.intValue()) { %>
+                          <tr>
+                            <td width="25px"></td>
+                            <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="Shim" /></td>
+                          </tr>
+                        <% } curr_sort_category = new Integer(sort_category); %>
                         <tr>
                           <td width="25px"></td>
                           <td>
