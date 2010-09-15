@@ -4,10 +4,10 @@
 
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
     .cleanXSS((String) request.getSession().getAttribute("matchText"));
-  
+
   if (match_text == null) match_text = "";
- 
-  String termbrowser_displayed_match_text = HTTPUtils.convertJSPString(match_text); 
+
+  String termbrowser_displayed_match_text = HTTPUtils.convertJSPString(match_text);
   String searchform_requestContextPath = request.getContextPath();
   searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
@@ -49,7 +49,7 @@
       <td align="left" class="textbody">
         <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
         <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
-        <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains&nbsp;
+        <input type="radio" name="algorithm" value="contains" alt="Contains" <%=check_c%>>Contains&nbsp;
         <%
           String searchTarget = (String) request.getSession().getAttribute("searchTarget");
           String check_n = "", check_p = "" , check_r ="";
