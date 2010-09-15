@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page import="java.util.Collections"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
@@ -18,7 +19,8 @@
   
   String requestContextPath = request.getContextPath();
   requestContextPath = requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
-
+  boolean display_cabig_approval_indicator_note = false;
+  Integer curr_sort_category = null;
 %>
 <!--
    Build info: <%=ncit_build_info%>
@@ -162,12 +164,16 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                     //String display_name = DataUtils.getMetadataValue(scheme, "display_name");
                     String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
                     
-                    if (display_name == null || display_name.compareTo("null") == 0) display_name = DataUtils.getLocalName(scheme);
+                    if (display_name == null || display_name.compareTo("null") == 0)
+                        display_name = DataUtils.getLocalName(scheme);
+                    String sort_category = DataUtils.getMetadataValue(
+                        scheme, "vocabulary_sort_category");
+                    
                     display_name_hmap.put(display_name+"$"+version, value);
-                    display_name_vec.add(display_name+"$"+version);
+                    display_name_vec.add(new OntologyInfo(display_name+"$"+version, sort_category));
                   }
                   
-                  display_name_vec = SortUtils.quickSort(display_name_vec);
+                  Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
                   request.getSession().setAttribute("display_name_hmap", display_name_hmap);
                   request.getSession().setAttribute("display_name_vec", display_name_vec);
                 }
@@ -177,7 +183,10 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                       <%
                      
                       for (int i = 0; i < display_name_vec.size(); i++) {
-                        String display_name_version = (String) display_name_vec.elementAt(i);
+                        OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                        int sort_category = info.getSortCategory();
+                        String display_name_version = info.getDisplayName();
+                        
                         int n = display_name_version.indexOf("$");
                         String display_name = display_name_version.substring(0, n);
                         String value = (String)  display_name_hmap.get(display_name_version);
@@ -194,6 +203,13 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
 				String http_scheme = null;
 				String http_version = null;
 
+        String status = DataUtils.getMetadataValue(
+            scheme, "cabig_approval_status");
+        boolean display_status = status != null && 
+          status.trim().length() > 0;
+        String cabig_approval_indicator = display_status ? " <b>*</b>" : "";
+        display_cabig_approval_indicator_note |= display_status;
+        
 				if (label != null)
 				  http_label = label.replaceAll(" ", "%20");
 				if (scheme != null)
@@ -201,6 +217,14 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
 				if (version != null)
 				  http_version = version.replaceAll(" ", "%20");
 				%>
+
+        <% if (curr_sort_category != null && sort_category != curr_sort_category.intValue()) { %>
+          <tr>
+            <td width="25px"></td>
+            <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="Shim" /></td>
+          </tr>
+        <% } curr_sort_category = new Integer(sort_category); %>
+        
 				<tr>
 				  <td width="25px"></td>
 				  <td>
@@ -226,20 +250,20 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
 				    String nciturl = NCItBrowserProperties.getNCIT_URL();
 				    nciturl = nciturl + "?version=" + version;
 				  %>
-				    <a href="<%=nciturl%>"><%=display_label%></a>
+				    <a href="<%=nciturl%>"><%=display_label%></a><%=cabig_approval_indicator%>
 				  <%
 				} else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
 				    String ncimurl = NCItBrowserProperties.getNCIM_URL();
 				  %>
 				    <a href="<%=ncimurl%>" target="_blank"><%=display_label%>
 				      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=display_label%>" />
-				    </a>
+				    </a><%=cabig_approval_indicator%>
 				  <%
 				} else {
 				  %>
 				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
 				      <%=display_label%>
-				    </a>
+				    </a><%=cabig_approval_indicator%>
 				  <%
 				}
                         }
@@ -249,6 +273,12 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                      <%
                       }
                      %>
+                     <% if (display_cabig_approval_indicator_note) { %>
+                       <tr>
+                         <td width="25px"></td>
+                         <td class="termstable">&nbsp;Note: * caBIG approved.</td>
+                       </tr>
+                     <% } %>
                     </table>
                   </td>
                 </tr>
@@ -262,7 +292,9 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                       <%
                      
                       for (int i = 0; i < display_name_vec.size(); i++) {
-                        String display_name_version = (String) display_name_vec.elementAt(i);
+                        OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                        String display_name_version = info.getDisplayName();
+                        
                         int n = display_name_version.indexOf("$");
                         String display_name = display_name_version.substring(0, n);
                         String value = (String)  display_name_hmap.get(display_name_version);
