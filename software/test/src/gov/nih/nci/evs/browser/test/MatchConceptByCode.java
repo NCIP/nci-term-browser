@@ -4,7 +4,7 @@ import java.util.*;
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.LexBIGService.*;
-import org.LexGrid.concepts.Concept;
+import org.LexGrid.concepts.Entity;
 import org.LexGrid.LexBIG.Utility.Iterators.*;
 import org.LexGrid.LexBIG.Utility.*;
 
@@ -272,7 +272,7 @@ _logger.debug("matchConceptCode code " + code);
 
 
 
-    public static Concept matchConceptByCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
+    public static Entity matchConceptByCode(String scheme, String version, String matchText, String source, String matchAlgorithm) {
 
 _logger.debug("searchUtils matchConceptByCode scheme: " + scheme);
 _logger.debug("searchUtils matchConceptByCode version: " + version);
@@ -331,7 +331,7 @@ _logger.debug("searchUtils matchConceptByCode matchAlgorithm: " + matchAlgorithm
 
         _logger.debug("==================matchConceptByCode=========================" + code);
 
-        Concept c = test.matchConceptByCode(scheme, version, code, null, "LuceneQuery");
+        Entity c = test.matchConceptByCode(scheme, version, code, null, "LuceneQuery");
 
         if (c == null) {
             _logger.debug("Concept is null???");
