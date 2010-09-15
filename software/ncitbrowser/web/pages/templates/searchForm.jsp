@@ -51,7 +51,7 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
     if ( vocab_name == null) {
        vocab_name = (String) request.getSession().getAttribute("dictionary");
     }
-    
+
     vocab_name = DataUtils.getCodingSchemeName(vocab_name);
 
     String srchform_version = (String) request.getAttribute("version");
@@ -59,7 +59,7 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
         srchform_version = (String) request.getParameter("version");
     }
     System.out.println("searchForm.jsp version: " + srchform_version);
-  
+
     logger.debug("searchForm.jsp vocab_name: " + vocab_name);
 
 
@@ -87,31 +87,31 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
           check_p= "checked";
         else
           check_r = "checked";
-     
+
  %>
- 
+
  <!--
  <FORM NAME="searchTerm" METHOD="POST" CLASS="search-form" onsubmit="javascript:disableAnchor();">
   -->
  <h:form id="searchTerm" styleClass="search-form"  onsubmit="javascript:disableAnchor();" >
-  
+
   <label for="matchText" />
     <!--
     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=displayed_match_text%>" onFocus="active = true"
         onBlur="active = false" onkeypress="return submitEnter('search',event)" />
      -->
-     
+
      <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=displayed_match_text%>" onFocus="active=true"
-        onBlur="active=false"  onkeypress="return submitEnter('search',event)"  />   
-    
+        onBlur="active=false"  onkeypress="return submitEnter('search',event)"  />
+
     <h:commandButton id="search" value="Search" action="#{userSessionBean.searchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{form_requestContextPath}/images/search.gif"
       alt="Search">
     </h:commandButton>
-    
-    
+
+
     <h:outputLink value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp">
       <h:graphicImage value="/images/search-help.gif" style="border-width:0;" />
     </h:outputLink>
@@ -121,7 +121,7 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
       <td align="left" class="textbody" colspan="2">
         <input type="radio" name="algorithm" id="algorithm1" value="exactMatch" alt="Exact Match" <%=check_e%> /><label for="algorithm1">Exact Match&nbsp;</label>
         <input type="radio" name="algorithm" id="algorithm2" value="startsWith" alt="Begins With" <%=check_s%> /><label for="algorithm2">Begins With&nbsp;</label>
-        <input type="radio" name="algorithm" id="algorithm3" value="contains" alt="Containts" <%=check_c%> /><label for="algorithm3">Contains</label>
+        <input type="radio" name="algorithm" id="algorithm3" value="contains" alt="Contains" <%=check_c%> /><label for="algorithm3">Contains</label>
       </td>
     </tr>
     <tr align="left">
@@ -156,23 +156,23 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
     <input type="hidden" id="scheme" name="scheme" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
   <%
   }
-  
+
 
   if (srchform_version != null) {
   %>
     <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(srchform_version)%>" />
   <%
-  } 
+  }
   %>
 </h:form>
 
-          
+
           <td valign="middle" align="right">
             <a class="global-nav" href="<%=request.getContextPath() %>/pages/advanced_search.jsf?dictionary=<%=vocab_name%>&version=<%=srchform_version%>">
                Advanced Search
             </a>
           </td>
-          
+
         </tr>
       </table>
     </td></tr>

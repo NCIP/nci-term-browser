@@ -32,9 +32,9 @@
     src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
   <script type="text/javascript">
     function refresh() {
-    
+
       var dictionary = document.forms["advancedSearchForm"].dictionary.value;
-    
+
       var text = document.forms["advancedSearchForm"].matchText.value;
       algorithm = "exactMatch";
       var algorithmObj = document.forms["advancedSearchForm"].adv_search_algorithm;
@@ -49,14 +49,14 @@
       var selectSearchOptionObj = document.forms["advancedSearchForm"].selectSearchOption;
       for (var i=0; i<selectSearchOptionObj.length; i++) {
         if (selectSearchOptionObj[i].checked) {
-        	selectSearchOption = selectSearchOptionObj[i].value;
+          selectSearchOption = selectSearchOptionObj[i].value;
         }
       }
-      
+
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
       var rel_search_rela = document.forms["advancedSearchForm"].rel_search_rela.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
-      
+
       window.location.href="/ncitbrowser/pages/advanced_search.jsf?refresh=1"
           + "&opt="+ selectSearchOption
           + "&text="+ text
@@ -70,7 +70,7 @@
   </script>
   <%!
     private static Logger _logger = Utils.getJspLogger("advanced_search.jsp");
-  %>        
+  %>
   <f:view>
     <%@ include file="/pages/templates/header.jsp" %>
     <div class="center-page">
@@ -102,7 +102,7 @@
 
     String t = null;
     String selectSearchOption = null;
-    
+
     if (refresh_page) {
         // Note: Called when the user selects "Search By" fields.
         selectSearchOption = (String) request.getParameter("opt");
@@ -112,9 +112,9 @@
         rel_search_association = (String) request.getParameter("rel");
         rel_search_rela = (String) request.getParameter("rela");
         selectProperty = (String) request.getParameter("prop");
-        
-        
-        
+
+
+
     } else {
         selectSearchOption = (String) request.getAttribute("selectSearchOption");
         search_string = (String) request.getSession().getAttribute("matchText");
@@ -129,8 +129,8 @@
     if (message != null) {
         request.removeAttribute("message");
     }
-    
-    
+
+
     if (!refresh_page || message != null) {
         // Note: Called when search contains no match.
         Object bean_obj = FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("searchStatusBean");
@@ -193,18 +193,18 @@
       check_r2 = "checked";
     else check_n2 = "checked";
 
-       
+
 %>
         <div class="pagecontent">
           <table>
             <tr>
             <td class="texttitle-blue">Advanced Search</td>
-            </tr> 
+            </tr>
 
             <% if (message != null) { %>
-		    <tr class="textbodyred"><td>
-			<p class="textbodyred">&nbsp;<%=message%></p>
-		    </td></tr>
+        <tr class="textbodyred"><td>
+      <p class="textbodyred">&nbsp;<%=message%></p>
+        </td></tr>
             <% } %>
 
             <tr class="textbody"><td>
@@ -223,7 +223,7 @@
                     <tr valign="top" align="left"><td align="left" class="textbody">
                       <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%>>Exact Match&nbsp;
                       <input type="radio" name="adv_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%>>Begins With&nbsp;
-                      <input type="radio" name="adv_search_algorithm" value="contains" alt="Containts" <%=check__c%>>Contains
+                      <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%>>Contains
                     </td></tr>
                   </table>
                 </td></tr>
@@ -271,14 +271,14 @@
                 <tr valign="top" align="left"><td align="left" class="textbody">
                 Concepts with this value in:
                 </td></tr>
-                
+
                 <tr valign="top" align="left"><td align="left" class="textbody">
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Code" alt="Code" <%=check_c2%> onclick="javascript:refresh()">Code&nbsp;
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Name" alt="Name" <%=check_n2%> onclick="javascript:refresh()">Name&nbsp;
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()">Property&nbsp;
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()">Relationship
                 </td></tr>
- 
+
                 <tr><td>
                   <table>
                   <% if (selectSearchOption.equals("Property")) { %>
@@ -297,7 +297,7 @@
                           <%} else {%>
                               <option value="<%=t%>"><%=t%></option>
                           <%}%>
-                  
+
                           <%
                             Vector property_vec = OntologyBean.getSupportedPropertyNames(adv_search_vocabulary, adv_search_version);
                             for (int i=0; i<property_vec.size(); i++) {
@@ -331,7 +331,7 @@
                           <%} else {%>
                               <option value="<%=t%>"><%=t%></option>
                           <%} %>
-                  
+
                           <%
                             Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary, adv_search_version);
                             for (int i=0; i<association_vec.size(); i++) {
@@ -363,7 +363,7 @@
                           <%} else {%>
                               <option value="<%=t%>"><%=t%></option>
                           <%}%>
-                          
+
                           <%
                             Vector rela_vec = OntologyBean.getRELAs(adv_search_vocabulary, adv_search_version);
                             for (int i=0; i<rela_vec.size(); i++) {
@@ -386,7 +386,7 @@
                     <input type="hidden" name="selectProperty" id="selectProperty" value="<%=selectProperty%>">
                     <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=rel_search_association%>">
                     <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=rel_search_rela%>">
-                    
+
                   <% }%>
 
                   </table>
@@ -395,9 +395,9 @@
               </table>
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
               <input type="hidden" name="dictionary" id="dictionary" value="<%=adv_search_vocabulary%>">
-              
+
               <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=adv_search_type%>" />
-              
+
             </form>
           </td></tr>
         </table>
