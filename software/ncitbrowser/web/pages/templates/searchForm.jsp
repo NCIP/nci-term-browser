@@ -9,13 +9,13 @@
 if ( vocab_name == null) {
     vocab_name = (String) request.getSession().getAttribute("dictionary");
 }
-    
+
     vocab_name = DataUtils.getCodingSchemeName(vocab_name);
 
     if (match_text == null) match_text = "";
-    String displayed_match_text = HTTPUtils.convertJSPString(match_text); 
-   
-    
+    String displayed_match_text = HTTPUtils.convertJSPString(match_text);
+
+
   %>
   <input class="searchbox-input"
     name="matchText"
@@ -48,7 +48,7 @@ if ( vocab_name == null) {
       <td align="left" class="textbody">
         <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
         <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
-        <input type="radio" name="algorithm" value="contains" alt="Containts" <%=check_c%>>Contains
+        <input type="radio" name="algorithm" value="contains" alt="Contains" <%=check_c%>>Contains
       </td>
     </tr>
     <tr align="left">
