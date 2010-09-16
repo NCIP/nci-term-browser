@@ -34,7 +34,10 @@
     style="border-width:0;" />
   </h:outputLink>
   <%
-    String algorithm = (String) request.getSession().getAttribute("algorithm");
+//String algorithm = (String) request.getSession().getAttribute("algorithm");
+String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
+    
+System.out.println("searchForm-termbrowser algorithm: " + algorithm);    
 
     String check_e = "", check_s = "" , check_c ="";
     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)

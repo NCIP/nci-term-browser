@@ -63,12 +63,13 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
     logger.debug("searchForm.jsp vocab_name: " + vocab_name);
 
 
-
-
-
     String displayed_match_text = HTTPUtils.convertJSPString(match_text);
 
-    String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedAlgorithm"));
+    String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
+    
+System.out.println("searchForm algorithm: " + algorithm);    
+    
+    
     String check_e = "", check_b = "", check_s = "" , check_c ="";
     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
       check_e = "checked";
