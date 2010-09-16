@@ -56,7 +56,7 @@
           int next_page_num = page_num + 1;
           int prev_page_num = page_num - 1;
           int page_size = 50;
-          if (selectedResultsPerPage != null)
+          if (selectedResultsPerPage != null && selectedResultsPerPage.compareTo("") != 0)
           {
               page_size = Integer.parseInt(selectedResultsPerPage);
           }
