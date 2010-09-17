@@ -495,19 +495,17 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
             }
             n++;
             %>
-              <td><i><%=propName_label%></i></td>
+              <td><%=propName_label%></td>
               <td>
-                <i>
-                  <%=value%>
-                  <%
-                    if (prop_url != null && prop_url.compareTo("null") != 0) {
-                      String url_str = prop_url + value;
-                      %>
-                        <a href="javascript:redirect_site('<%= url_str %>')">(<%= prop_linktext %>)</a>
-                      <%
-                    }
-                  %>
-                </i>
+                <%=value%>
+                <%
+                  if (prop_url != null && prop_url.compareTo("null") != 0) {
+                    String url_str = prop_url + value;
+                    %>
+                      <a href="javascript:redirect_site('<%= url_str %>')">(<%= prop_linktext %>)</a>
+                    <%
+                  }
+                %>
               </td>
             </tr>
           <%
@@ -592,8 +590,8 @@ if (!hasOtherProperties) {
             }
             n++;
             %>
-                  <td><i><%=prop_name%></i></td>
-                  <td><i>None</i></td>
+                  <td><%=prop_name%></td>
+                  <td>None</td>
                 </tr>
             <%
           } else {
@@ -615,8 +613,8 @@ if (!hasOtherProperties) {
               }
               n++;
               %>
-                  <td><i><%=prop_name%></i></td>
-                  <td><i><%=value%></i></td>
+                  <td><%=prop_name%></td>
+                  <td><%=value%></td>
                 </tr>
               <%
             }
@@ -669,8 +667,8 @@ if (!hasOtherProperties) {
 	  <b>Additional Concept Data:</b>&nbsp;
 	  <table class="datatable">
 	    <tr class="dataRowLight">
-	      <td><i><%=primitive_label%></i>&nbsp;<i><%=primitive%></i></td>
-	      <td><i>&nbsp;</i></td>
+	      <td><%=primitive_label%>&nbsp;<%=primitive%></td>
+	      <td>&nbsp;</td>
 	    </tr>
 	  </table>  
     <%
@@ -702,7 +700,7 @@ if (!hasOtherProperties) {
   
 %>
 <p>
-  <b>URL</b>: <i><%= requestURL %><%= url_text %></i>
+  <b>URL</b>: <%= requestURL %><%= url_text %>
 <%
 }
 %>
