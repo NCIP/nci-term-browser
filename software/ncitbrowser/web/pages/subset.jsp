@@ -46,9 +46,9 @@
           some 10,000 association relationships.
         </p>
         <p>
-          Most of these subsets are federal and internatinal coding standards maintained in active collaboration with our FDA, CDISC, and other
-          partners. They are currently distributd largely as tab-delimited data and Excel spreadsheet files accessible
-          via FTP. Below are the four most important subset collections, curently presented on these Cancer.gov Web pages:
+          Most of these subsets are federal and international coding standards maintained in active collaboration with our FDA, CDISC, and other
+          partners. They are currently distributed largely as tab-delimited data and Excel spreadsheet files accessible
+          via FTP. Below are the four most important subset collections, currently presented on these Cancer.gov Web pages:
         </p>
         <table width="100%" border="0">
           <tr>
@@ -64,8 +64,8 @@
                   alt="Clinical Data Interchange Standards Consortium (CDISC) Terminology">
                 Clinical Data Interchange Standards Consortium Terminology:
               </a>
-              CDISC is an international, non-profit organization hat develops and supports global data standards for medical research.
-              CDISC is working actively with EVS to develop and support controlled terminology in several aras, notably CDISC's Study
+              CDISC is an international, non-profit organization that develops and supports global data standards for medical research.
+              CDISC is working actively with EVS to develop and support controlled terminology in several areas, notably CDISC's Study
               Data Tabulation Model (SDTM).
               <br/><br/>
             </td>
@@ -73,17 +73,17 @@
           <tr>
             <td>
               <a href="http://www.cancer.gov/cancertopics/terminologyresources/FDA" target="_blank"
-                  alt="U.S. Food ad Drug Administration Terminology">
+                  alt="U.S. Food and Drug Administration Terminology">
                 <img src="<%=basePath%>/images/FDA_Logo.jpg" border="0"
-                  alt="U.S. Food ad Drug Administration Terminology"/>
+                  alt="U.S. Food and Drug Administration Terminology"/>
               </a>
             </td>
             <td class="textbody" valign="top">
               <a href="http://www.cancer.gov/cancertopics/terminologyresources/FDA" target="_blank"
-                  alt="U.S. Food ad Drug Administration Terminology">
-                U.S. Food ad Drug Administration Terminology:
+                  alt="U.S. Food and Drug Administration Terminology">
+                U.S. Food and Drug Administration Terminology:
               </a>
-              The FDA is working with EVS to develop and supporyt controlled
+              The FDA is working with EVS to develop and support controlled
               terminology in several areas. More than 10,000 FDA terms and codes are stored in NCI Thesaurus (NCIt).
               <br/><br/>
             </td>
