@@ -9,7 +9,7 @@
         %>
 <div class="banner"><a href="<%=basePath%>"><img
   src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383"
-  height="97" alt="Thesaurus Browser Logo" border="0" /></a></div>
+  height="117" alt="Thesaurus Browser Logo" border="0" /></a></div>
 <%
         } else if (hdr_dictionary != null) {
             request.getSession().setAttribute("dictionary", hdr_dictionary);
