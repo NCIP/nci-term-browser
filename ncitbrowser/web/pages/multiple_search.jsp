@@ -267,7 +267,13 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                      <% if (display_cabig_approval_indicator_note) { %>
                        <tr>
                          <td width="25px"></td>
-                         <td class="termstable">&nbsp;Note: * caBIG approved.</td>
+                         <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="Shim" /></td>
+                       </tr>                     
+                       <tr>
+                         <td width="25px"></td>
+                         <td class="termstable">
+                           <img src="<%=basePath%>/images/shim.gif" width="20" height="1" alt="Shim" />
+                           <b class="textbody">*</b> caBIG approved.</td>
                        </tr>
                      <% } %>
                     </table>
