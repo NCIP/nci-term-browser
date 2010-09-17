@@ -119,7 +119,7 @@
             <td class="textbody" valign="top">
               <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/page7" target="_blank"
                   alt="Federal Medication Terminologies">
-                National Council for Prescription Drug Programs:
+                National Council for Prescription Drug Programs Terminology:
               </a>
               The NCPDP is a not-for-profit ANSI-Accredited Standards Development Organization 
               representing virtually every sector of the pharmacy services industry. NCPDP is
