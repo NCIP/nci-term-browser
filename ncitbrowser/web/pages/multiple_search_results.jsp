@@ -8,6 +8,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.OntologyInfo" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
@@ -219,7 +220,8 @@ request.getSession().setAttribute("matchText", match_text);
                      term_browser_version = DataUtils.key2CodingSchemeVersion(s);
                   }
                   for (int i=0; i<display_name_vec.size(); i++) {
-                      String nm = (String) display_name_vec.elementAt(i);
+                      OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                      String nm = info.getDisplayName();
                       String val = (String) display_name_hmap.get(nm);
                       if (val.compareTo(s) == 0) {
                           s = nm;
