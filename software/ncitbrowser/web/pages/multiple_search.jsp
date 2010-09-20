@@ -9,7 +9,21 @@
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="org.apache.log4j.*" %>
 <%!
+  private static final String CABIG_APPROVED_MSG = "caBIG approved";
   private static Logger _logger = Utils.getJspLogger("multiple_search.jsp");
+
+  private static String getCabigIndicator(boolean display, String basePath) {
+    if (! display)
+        return "";
+    
+    // Added shim.gif image next to the asterisk indicator so we can be
+    //   508 compliant.  This associates the alternate text from the shim
+    //   to the asterisk.
+    String cabig_msg = "<img src=\"" + basePath + "/images/shim.gif\""
+      // + " width=\"1\" height=\"1\""
+      + " alt=\"" + CABIG_APPROVED_MSG + "\"" + ">";
+    return " <b>*</b> " + cabig_msg;
+  }
 %>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
@@ -207,7 +221,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
             scheme, "cabig_approval_status");
         boolean display_status = status != null && 
           status.trim().length() > 0;
-        String cabig_approval_indicator = display_status ? " <b>*</b>" : "";
+        String cabig_approval_indicator = getCabigIndicator(display_status, basePath);
         display_cabig_approval_indicator_note |= display_status;
         
 				if (label != null)
@@ -282,7 +296,9 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                          <td width="25px"></td>
                          <td class="termstable">
                            <img src="<%=basePath%>/images/shim.gif" width="20" height="1" alt="Shim" />
-                           <b class="textbody">*</b> caBIG approved.</td>                       </tr>
+                           <b class="textbody">*</b> <%=CABIG_APPROVED_MSG%>.
+                         </td>
+                       </tr>
                      <% } %>
                     </table>
                   </td>
