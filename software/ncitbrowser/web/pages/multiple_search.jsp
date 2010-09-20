@@ -155,7 +155,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                 Vector display_name_vec = null;
                 display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
                 display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-                if (display_name_hmap == null || display_name_vec == null) { //DYEE
+                if (display_name_hmap == null || display_name_vec == null) {
                         display_name_hmap = new HashMap();
                         display_name_vec = new Vector();
 
@@ -217,6 +217,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                           <td width="25px"></td>
                           <td>
                         <%
+                        String displayLabel = scheme + " (" + version + ")";
                         if (scheme.compareTo("NCI Thesaurus") == 0) {
                            String nciturl = NCItBrowserProperties.getNCIT_URL();
                            if (ontologiesToSearchOn != null
@@ -229,10 +230,10 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                               <input type="checkbox" name="ontology_list" value="<%=label%>" /> <%
                            }
                            %>
-                              <a href="<%=nciturl %>"><%=label%></a><%=cabig_approval_indicator%>
+                              <a href="<%=nciturl %>"><%=displayLabel%></a><%=cabig_approval_indicator%>
                            <%
                         } else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
-                              String ncimurl = NCItBrowserProperties.getNCIM_URL();
+                            String ncimurl = NCItBrowserProperties.getNCIM_URL();
                             if (ontologiesToSearchOn != null
                                && ontologiesToSearchOn.indexOf(label2) != -1) {
                            %>
@@ -245,7 +246,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                            <%
                             }
                             %>
-                              <a href="<%=ncimurl%>" target="_blank"><%=label%>
+                              <a href="<%=ncimurl%>" target="_blank"><%=displayLabel%>
                                 <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=label%>" />
                               </a><%=cabig_approval_indicator%>
                            <%
@@ -289,7 +290,8 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                          <td width="25px"></td>
                          <td class="termstable">
                            <img src="<%=basePath%>/images/shim.gif" width="20" height="1" alt="Shim" />
-                           <b class="textbody">*</b> <%=CABIG_APPROVED_MSG%>.</td>
+                           <b class="textbody">*</b> <%=CABIG_APPROVED_MSG%>.
+                         </td>
                        </tr>
                      <% } %>
                     </table>
