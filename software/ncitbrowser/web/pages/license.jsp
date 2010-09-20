@@ -22,11 +22,11 @@
   String version = (String) request.getAttribute("version");
   String ontology_list_str = (String) request.getAttribute("ontology_list_str");
   String matchText = (String) request.getSession().getAttribute("matchText");
-  
+
     if (matchText == null) matchText = "";
-    String license_page__match_text = HTTPUtils.convertJSPString(matchText); 
-  
-  
+    String license_page__match_text = HTTPUtils.convertJSPString(matchText);
+
+
   String searchTarget = (String) request.getAttribute("searchTarget");
   String matchAlgorithm = (String) request.getAttribute("algorithm");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
@@ -42,7 +42,7 @@
     <div id="main-area">
       <!-- Thesaurus, banner search area -->
       <div class="bannerarea">
-        <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" border="0"/></a></div>
+        <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" border="0"/></a></div>
       </div>
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
@@ -53,7 +53,7 @@
         <p>
         <%
           String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-        %>  
+        %>
           To access <b><%=display_name%></b>, please review and accept the copyright/license statement below:
         </p>
         <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>
@@ -89,7 +89,7 @@
             <input type="hidden" id="scheme" name="scheme" value="<%=scheme0%>" />
             <input type="hidden" id="version" name="version" value="<%=version0%>" />
             <input type="hidden" id="searchTarget" name="searchTarget" value="<%=searchTarget%>" />
-           
+
           </form>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>

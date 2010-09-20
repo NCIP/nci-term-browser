@@ -191,7 +191,7 @@ if (scheme != null) {
             <!-- Thesaurus, banner search area -->
             <div class="bannerarea">
               <div class="banner"><a href="<%=basePath%>">
-                <img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" border="0"/>
+                <img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" border="0"/>
               </div>
             </div>
             <!-- end Thesaurus, banner search area -->
@@ -243,7 +243,7 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
     (scheme != null && scheme.compareTo("NCI Thesaurus") == 0)
     ) {
 %>
-    <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="97" alt="Thesaurus Browser Logo" border="0"/></a></div>
+    <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
 <%
 } else {
 %>
