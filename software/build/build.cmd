@@ -27,7 +27,10 @@ if "%1" == "" (
     echo   ci           -- Builds, upgrades JBoss on CI
     echo   qa           -- Builds, upgrades JBoss on QA
     echo   data-qa      -- Builds, upgrades JBoss on Data QA
-    echo   deploy       -- Redeploy application
+    echo   deploy       -- Hot deploy application
+    echo   jsp          -- Hot deploy JSP files
+    echo   stop         -- Stop war file
+    echo   start        -- Start war file
     goto DONE
 )
 if "%1" == "all" (
@@ -44,6 +47,18 @@ if "%1" == "install" (
 )
 if "%1" == "deploy" (
     ant %TAG% %DEBUG% deploy:hot
+    goto DONE
+)
+if "%1" == "stop" (
+    ant %TAG% %DEBUG% deploy:stop
+    goto DONE
+)
+if "%1" == "start" (
+    ant %TAG% %DEBUG% deploy:start
+    goto DONE
+)
+if "%1" == "jsp" (
+    ant %DEBUG% deploy:hot:jsp
     goto DONE
 )
 if "%1" == "clean" (
