@@ -48,7 +48,7 @@
         <p>
           Most of these subsets are federal and international coding standards maintained in active collaboration with our FDA, CDISC, and other
           partners. They are currently distributed largely as tab-delimited data and Excel spreadsheet files accessible
-          via FTP. Below are the four most important subset collections, currently presented on these Cancer.gov Web pages:
+          via FTP. Below are four important subset collections currently presented on these Cancer.gov Web pages:
         </p>
         <table width="100%" border="0">
           <tr>
@@ -103,7 +103,7 @@
               </a>
               The Federal Medication (FedMed) interagency collaboration is organizing
               an agreed set of standard, comprehensive, freely and easily accessible Federal Medication Terminologies (FMT)
-              to improve the exchange and public availability of medication information. FedMed is a joint effort of these Federal partner
+              to improve the exchange and public availability of medication information. FedMed is a joint effort of eight Federal partner
               agencies.
               <br/><br/>
             </td>
