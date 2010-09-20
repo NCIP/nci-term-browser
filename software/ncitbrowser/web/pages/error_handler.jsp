@@ -48,7 +48,7 @@
     <div id="main-area">
       <div class="bannerarea">
         <% if (subApp == TB) {%>
-          <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" alt="NCI Term Browser" border="0"/></a></div>
+          <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="NCI Term Browser" border="0"/></a></div>
         <% } else if (subApp == NCIO) { %>
           <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">
             <div class="vocabularynamebanner">
@@ -59,7 +59,7 @@
             </div>
           </a>
         <% } else { %>
-          <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="97" alt="Thesaurus Browser Logo" border="0"/></a></div>
+          <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
         <% } %>
       </div> <!-- end bannerarea -->
       <!-- end Thesaurus, banner search area -->
