@@ -43,7 +43,7 @@
           defining the nature of the subset, and these are hierarchically organized under the parent concept
           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
           Terminology Subset (C54443)</a>. These subset concepts are linked to subset-member concepts through
-          some 10,000 association relationships.
+          over 20,000 association relationships.
         </p>
         <p>
           Most of these subsets are federal and international coding standards maintained in active collaboration with our FDA, CDISC, and other
@@ -84,7 +84,7 @@
                 U.S. Food and Drug Administration Terminology:
               </a>
               The FDA is working with EVS to develop and support controlled
-              terminology in several areas. More than 10,000 FDA terms and codes are stored in NCI Thesaurus (NCIt).
+              terminology in several areas. Some 15,000 terms are stored in NCI Thesaurus (NCIt).
               <br/><br/>
             </td>
           </tr>
