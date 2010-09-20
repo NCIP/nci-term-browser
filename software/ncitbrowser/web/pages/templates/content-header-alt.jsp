@@ -50,8 +50,8 @@
   alt="SearchBox Top" /></div>
 
 
-    <div class="search-empty">
-        <table border="0" height="105px" width="100%" class="global-nav">
+    <div class="searchbox">
+        <table border="0" height="90px" width="100%" class="global-nav">
           <tr>
             <td valign="middle" align="center">
               <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary)%>">Simple Search</a>
