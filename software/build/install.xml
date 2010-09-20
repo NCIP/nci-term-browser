@@ -491,6 +491,13 @@
                     />
             </then>
         </if>
+
+        <!-- Turn off JBoss hot deploy. We will use twiddle.bat for hot deployments -->
+        <move
+            file="${jboss.home}/server/${jboss.server.name}/deploy/hdscanner-jboss-beans.xml"
+            tofile="${jboss.home}/server/${jboss.server.name}/deploy/hdscanner-jboss-beans.xml.bak"
+            />
+
     </target>
 
     <target name="-install:jboss:configure:jbossmq-dest" description="Configure MQ settings based on contents of software/common/resource/jboss-conf/jbossmq-destinations-service.block.xml" unless="exclude.jboss" depends="common:jboss:init,common:init">
