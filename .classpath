@@ -70,7 +70,6 @@
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/junit-4.4.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexbig.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-client-framework.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-core.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-tree-2.0.0.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevsapi60-beans.jar"/>
@@ -129,5 +128,10 @@
 	<classpathentry kind="lib" path="software/ncitbrowser/extlib/jsf-api.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/extlib/jsf-impl.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/extlib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevsapi60-client.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevsapi60-framework.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/sqlbuilder-2.0.6.jar"/>
 	<classpathentry kind="output" path="software/ncitbrowser/build/web/WEB-INF/classes"/>
 </classpath>
