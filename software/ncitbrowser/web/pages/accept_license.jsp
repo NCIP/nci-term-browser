@@ -20,7 +20,7 @@
   String display_name = DataUtils.getMetadataValue(dictionary, "display_name");
   String code = (String) request.getParameter("code");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(dictionary, null);
-  
+
   String matchText_licensedPage = (String) request.getSession().getAttribute("matchText");
   if (dictionary != null) dictionary = dictionary.replaceAll("%20", " ");
 %>
@@ -33,7 +33,7 @@
     <div id="main-area">
       <!-- Thesaurus, banner search area -->
       <div class="bannerarea">
-        <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="97" border="0"/></a></div>
+        <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" border="0"/></a></div>
       </div>
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
@@ -56,16 +56,16 @@
               image="#{facesContext.externalContext.requestContextPath}/images/accept.gif"
               alt="Accept">
             </h:commandButton>
-            
+
             &nbsp;&nbsp;
             <a href="<%= request.getContextPath() %>/start.jsf">
               <img src="<%= request.getContextPath() %>/images/cancel.gif" border="0" alt="Cancel"/>
             </a>
-            
+
             <input type="hidden" id="dictionary" name="dictionary" value="<%=dictionary%>" />
             <input type="hidden" id="code" name="code" value="<%=code%>" />
             <input type="hidden" id="matchText" name="code" value="<%=matchText_licensedPage%>" />
-            
+
           </form>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
