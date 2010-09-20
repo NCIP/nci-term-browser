@@ -2,7 +2,7 @@
 
 <!-- bda-build-templage verison 1.1.1 -->
 
-<project name="build-bda-template" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+<project name="build" default="usage" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
 
     <description>
         This build file is part of the bda-build-template project. This is the master build file for the project.
@@ -674,20 +674,71 @@
         <util-dot-on-dir dot-file.dir="target/reports/ivy" />
     </target>
 
-    <target name="deploy:hot" description="Hot deploys the deployment artifact">
-        <echo message="Deploying: ${ncitbrowser-webapp.file.name}" />
-        <echo message="       To: ${jboss.deploy.dir}"/>
-        <delete file="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}" quiet="true" />
-        <delete file="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}.bak" quiet="true" />
-        <copy
-            file="${ncitbrowser-webapp.dist.dir}/${ncitbrowser-webapp.file.name}"
-            tofile="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}.bak"
-            overwrite="true"
-            />
-        <move
-            file="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}.bak"
-            tofile="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}"
-            />
+    <target name="deploy:hot" description="Hot deploys the deployment artifact">
+
+        <echo message="       Bin: ${application.base.path}/${jboss.binaries.relative.dir}/bin"/>
+        <echo message="    Target: ${jboss.deploy.dir}"/>
+
+        <osfamily property="os.family"/>
+        <if>
+            <equals arg1="${os.family}" arg2="windows"/>
+            <then>
+
+            <!-- Locate JBoss temp war directory -->
+            <script language="javascript">
+                <![CDATA[
+                    importClass(java.io.File);
+                    echo = build.createTask("echo");
+                    path = project.getProperty("application.base.path")
+                        + "/" + project.getProperty("jboss.binaries.relative.dir")
+                        + "/server/" + project.getProperty("jboss.server.name")
+                        + "/tmp";
+
+                    dir = new File(path);
+                    srcFiles = dir.list();
+
+                    for (i=0; i<srcFiles.length; i++) {
+                        filename = dir + "/" + srcFiles[i] + "/" + project.getProperty("ncitbrowser-webapp.file.name");
+                        if (exists = (new File(filename)).exists()) {
+                            project.setProperty("jboss.war.temp.dir.location",filename);
+                        }
+                    }
+                ]]>
+            </script>
+
+            <fail unless="jboss.war.temp.dir.location" message="Unable to locate JBoss temp war directory!" />
+
+            <echo message="JBoss temp: ${jboss.war.temp.dir.location}"/>
+
+            <echo message="Stopping: ${ncitbrowser-webapp.file.name}" />
+            <exec executable="cmd" failonerror="true">
+                <arg value="/c"/>
+                <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/twiddle.bat -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.web.deployment:war=/${project.name}" stop'/>
+            </exec>
+
+            <antcall target="build:all" />
+
+            <copy
+                file="${ncitbrowser-webapp.dist.dir}/${ncitbrowser-webapp.file.name}"
+                tofile="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}"
+                overwrite="true"
+                />
+
+            <unzip src="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}"
+                   dest="${jboss.war.temp.dir.location}">
+            </unzip>
+
+            <echo message="Starting: ${ncitbrowser-webapp.file.name}" />
+            <exec executable="cmd" failonerror="true">
+                <arg value="/c"/>
+                <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/twiddle.bat -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.web.deployment:war=/${project.name}" start'/>
+            </exec>
+
+            </then>
+            <else>
+                <echo message="deploy:hot is not configured for Unix systems."/>
+            </else>
+        </if>
     </target>
 
     <target name="deploy:hot:jsp" description="Copies all current JSP code to the deployed application for quick update">
@@ -745,9 +796,9 @@
     </target>
 
     <target name="findfiles">
-            <exec executable="sh" failonerror="true">
-                    <arg line=" -c 'find /local/AnthillPro/work/ncit-autodeploy.trunk.dev/trunk/software/target/bda-utils  -maxdepth 2 -ls'"/>
-            </exec>
+        <exec executable="sh" failonerror="true">
+                <arg line=" -c 'find /local/AnthillPro/work/ncit-autodeploy.trunk.dev/trunk/software/target/bda-utils  -maxdepth 2 -ls'"/>
+        </exec>
     </target>
 
     <target name="printfile">
