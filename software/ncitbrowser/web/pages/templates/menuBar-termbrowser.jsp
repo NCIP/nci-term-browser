@@ -1,7 +1,7 @@
-<table class="global-nav" border="0" width="100%" cellpadding="0"
+<table class="global-nav" border="0" width="100%" height="33px" cellpadding="0"
   cellspacing="0">
   <tr>
-    <td align="left"><a
+    <td align="left" valign="bottom"><a
       href="<%= request.getContextPath() %>/start.jsf">Home</a> | <a
       href="#"
       onclick="javascript:window.open('<%=request.getContextPath() %>/pages/source_help_info-termbrowser.jsf',
