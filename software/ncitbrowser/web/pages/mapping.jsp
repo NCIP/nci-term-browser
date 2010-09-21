@@ -70,7 +70,7 @@ if (mapping_version != null) {
     request.setAttribute("version", mapping_version);
 }
 
-if (mapping_dictionary.compareTo("NCI Thesaurus") == 0) {
+if (mapping_dictionary != null && mapping_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
 
       <%@ include file="/pages/templates/content-header.jsp" %>

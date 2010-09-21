@@ -381,6 +381,11 @@ public class MetadataUtils {
 
     public static MetadataPropertyList getMetadataPropertyList(
         LexBIGService lbSvc, String codingSchemeName, String version, String urn) {
+
+        _logger.debug("getMetadataPropertyList codingSchemeName: "
+            + codingSchemeName);
+
+
         LexBIGServiceConvenienceMethods lbscm = null;
         MetadataPropertyList mdpl = null;
         try {
@@ -398,7 +403,15 @@ public class MetadataUtils {
 
             return mdpl;
         } catch (Exception ex) {
+
+            //_logger.debug("***************** ERROR: getMetadataPropertyList throws exception ... "
+            //+ codingSchemeName);
+
             ex.printStackTrace();
+
+            //_logger.debug("***************** ERROR: getMetadataPropertyList exception done.");
+
+
         }
         return mdpl;
     }
