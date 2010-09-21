@@ -31,6 +31,7 @@ if "%1" == "" (
     echo   jsp          -- Hot deploy JSP files
     echo   stop         -- Stop war file
     echo   start        -- Start war file
+    echo   cissh        -- Test SSH login in CI
     goto DONE
 )
 if "%1" == "all" (
@@ -84,6 +85,9 @@ if "%1" == "data-qa" (
     ant -Dproperties.file=%DATAQAPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
-
+if "%1" == "cissh" (
+    ssh jboss51a@ncias-c512-v.nci.nih.gov -i C:\NCI-Projects\ncit-properties\properties\ssh-keys\id_dsa_bda echo "Test worked!"
+    goto DONE
+)
 :DONE
 endlocal
