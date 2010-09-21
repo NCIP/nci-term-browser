@@ -346,7 +346,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <li><b>Documentation</b>: Online and standalone documentation
               are still under development.</li>
             <li>For the latest updates of known issues,
-              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+1.0+Release+Notes" target="_blank"> see NCI Term Browser 1.0 Release Notes</a>.</li>
+              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+1.2+Release+Notes" target="_blank"> see NCI Term Browser 1.2 Release Notes</a>.</li>
           </ul>
           Please report any bugs or suggestions using the browser's
           <a href="<%= contactUsUrl %>">Contact Us</a> page.
