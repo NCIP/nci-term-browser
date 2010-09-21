@@ -44,6 +44,8 @@
     <property name="log.dir" value="${basedir}/logs" />
     <property name="working.dir" value="${basedir}/working" />
     <property name="temp.dir" value="${working.dir}/temp" />
+    <property name="copied.jboss.log4j.dir" value="${working.dir}/copied-log4j"/>
+
 
     <!-- Install Time properties -->
     <!-- Source and target directories -->
@@ -679,8 +681,7 @@
         install:jboss:ncitbrowser-webapp:re-configure,
         install:jboss:ncitbrowser-webapp,
         install:jboss:ncitbrowser-webapp:configure,
-    upgrade:post:jboss,
-    install:post:jboss,
+install:post:jboss,
     install:jboss:start,
     install:jboss:validation:post-install
         ">
@@ -727,7 +728,7 @@
     <target name="upgrade:jboss:init" unless="install.running"
         depends="
         upgrade:jboss:init:prep,
-        upgrade:jboss:readers:bda,
+
         upgrade:jboss:readers:custom
         ">
         <properties-print
@@ -899,7 +900,7 @@
 
         <!-- will have to add code to install:post:jboss to copy this back if exists -->
 
-        <property name="copied.jboss.log4j.dir" value="${working.dir}/copied-log4j"/>
+
         <if>
             <equals arg1="${jboss.major.version}" arg2="4"/>
             <then>
