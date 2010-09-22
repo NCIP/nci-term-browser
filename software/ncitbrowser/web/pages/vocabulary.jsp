@@ -293,11 +293,10 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
       if (vocabulary_isMapping) {
       %>
 
-      | <a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      View Mapping
+      | <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>">
+        View Mapping
       </a>
-
+      
       <%
       }
       else if (tree_access_allowed) {
