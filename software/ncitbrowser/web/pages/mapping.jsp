@@ -59,8 +59,19 @@ ResolvedConceptReferencesIterator iterator = null;
 String mapping_dictionary = request.getParameter("dictionary");
 String mapping_version = request.getParameter("version");
 
+
+if (mapping_dictionary == null) {
+mapping_dictionary = (String) request.getSession().getAttribute("dictionary");
+}
+
+
+
 String mapping_schema = request.getParameter("schema");
+
 if (mapping_dictionary != null && mapping_schema == null) mapping_schema = mapping_dictionary;
+if (mapping_schema != null) {
+	request.getSession().setAttribute("dictionary", mapping_schema);
+}
 
 
 _logger.debug("mapping.jsp dictionary: " + mapping_dictionary);
@@ -117,6 +128,7 @@ if (scheme2MappingIteratorBean != null) {
     request.getSession().setAttribute("scheme2MappingIteratorBeanMap", scheme2MappingIteratorBeanMap);
 }
 
+System.out.println("mapping.jsp mapping_schema: " + mapping_schema);
 
 MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
 if (bean == null) {
@@ -152,6 +164,11 @@ if (bean == null) {
 }
 
 
+if (bean == null) {
+System.out.println("WARNING: mapping.jsp bean == null???");
+}
+
+
 String page_number = request.getParameter("page_number");
 int pageNum = 0;
 if (page_number != null) {
@@ -165,7 +182,14 @@ int pageSize = bean.getPageSize();
 int istart = pageNum * pageSize;
 int iend = istart + pageSize - 1;
 
-List list = bean.getData(istart, iend);
+List list = null;
+System.out.println("calling bean.getData ...");
+try {
+   list = bean.getData(istart, iend);
+} catch (Exception ex) {
+   System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+}
+System.out.println("exiting bean.getData ...");
 	
 %>
         
@@ -301,6 +325,11 @@ List list = bean.getData(istart, iend);
                 String target_name = null;
                 MappingData mappingData = null;
                 
+                
+ if (list == null) {     
+  System.out.println("list == null???");
+ } else {
+                
                 for (int lcv=0; lcv<list.size(); lcv++) {
                     mappingData = (MappingData) list.get(lcv);
 		    source_code = mappingData.getSourceCode();
@@ -351,6 +380,7 @@ List list = bean.getData(istart, iend);
                 
                <% 
                }
+}
                %>
                
 
