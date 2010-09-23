@@ -275,7 +275,7 @@
     <target name="install:jboss:binaries" description="Install JBoss binaries" unless="exclude.jboss" depends="common:jboss:init, common:init">
         <jboss-install-binaries/>
         <jboss-nci-customizations/>
-        <chmod file="${jboss.home}/server/${jboss.server.name}/bin/status_jboss" perm="+x"/>
+        <chmod file="${jboss.home}/bin/status_jboss" perm="+x"/>
     </target>
 
     <target name="install:jboss:ncitbrowser-webapp" description="Deploy ncitbrowser-webapp and common libraries to jboss installation" unless="exclude.jboss"
@@ -866,7 +866,6 @@ install:post:jboss,
                 <jboss-read-ssl
                     jboss.home="${read.jboss.home}"
                     jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
-                    jboss.server.ports.name="ports-default"
                     copied.keystore.dir="${jboss.ssl.keystore.dir}"
                     />
             </then>
@@ -886,7 +885,6 @@ install:post:jboss,
                 <jboss-read-external-hostname
                     jboss.home="${read.jboss.home}"
                     jboss.server-xml.file="${jboss.home}/server/${jboss.server.name}/deploy/jbossweb.sar/server.xml"
-                    jboss.server.ports.name="ports-default"
                     search.ssl.port="${jboss.ssl.port}"
                     />
             </then>
