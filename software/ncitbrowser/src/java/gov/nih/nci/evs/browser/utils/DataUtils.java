@@ -3344,7 +3344,15 @@ public class DataUtils {
 
     // To be implemented based on metadata
 	public static boolean isMapping(String codingScheme, String version) {
-		if (codingScheme.indexOf("Mapping") != -1 || codingScheme.indexOf("_TO_") != -1 || codingScheme.indexOf("_to_") != -1) return true;
+		String scheme = codingScheme.toLowerCase();
+		if (scheme.indexOf("mapping") != -1 || scheme.indexOf("_to_") != -1) return true;
+		return false;
+	}
+
+    // To be implemented based on metadata
+	public static boolean isExtension(String codingScheme, String version) {
+		String scheme = codingScheme.toLowerCase();
+		if (scheme.indexOf("extension") != -1) return true;
 		return false;
 	}
 
