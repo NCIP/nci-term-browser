@@ -37,7 +37,12 @@
 
 <%
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
+boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
 String search_results_version = (String) request.getAttribute("version");
+
+HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
+HashMap name_hmap = new HashMap();
+
 
 _logger.debug("search_results.jsp dictionary: " + search_results_dictionary);
 _logger.debug("search_results.jsp version: " + search_results_version);
@@ -156,6 +161,16 @@ _logger.debug("search_result.jsp " + key);
           <tr>
             <td class="textbody">
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+              
+<%              
+if (isMapping) {              
+%>              
+                <th class="dataTableHeader" scope="col" align="left">Concept</th>
+                <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>             
+<%              
+}              
+%>               
+             
                 <%
                   
                   Vector code_vec = new Vector();
@@ -229,6 +244,7 @@ if (obj == null) {
 				<%
 				    }
 				    %>
+				    
 				  <td class="dataCellText">
 				  <%
 				  if (con_status == null) {
@@ -242,6 +258,37 @@ if (obj == null) {
 				  }
 				  %>
 				  </td>
+				  
+<%              
+if (isMapping) {              
+    
+    vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+    if (vocabulary_name == null) {
+	vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+    }
+
+    String short_vocabulary_name = null;
+    if (name_hmap.containsKey(vocabulary_name)) {
+	short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
+    } else {
+	short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
+	if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+	    short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+	}
+	name_hmap.put(vocabulary_name, short_vocabulary_name);
+    }
+%> 				  
+
+    <td class="dataCellText">
+	 <%=short_vocabulary_name%>
+    </td>
+
+<%              
+}             
+%> 				  
+				  
+				  
+				  
 				</tr>
 				    <%
                         }
