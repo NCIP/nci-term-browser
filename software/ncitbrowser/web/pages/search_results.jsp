@@ -38,6 +38,7 @@
 <%
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
 boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
+boolean isExtension = DataUtils.isExtension(search_results_dictionary, null);
 String search_results_version = (String) request.getAttribute("version");
 
 HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
@@ -163,7 +164,7 @@ _logger.debug("search_result.jsp " + key);
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
               
 <%              
-if (isMapping) {              
+if (isMapping || isExtension) {              
 %>              
                 <th class="dataTableHeader" scope="col" align="left">Concept</th>
                 <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>             
@@ -260,7 +261,7 @@ if (obj == null) {
 				  </td>
 				  
 <%              
-if (isMapping) {              
+if (isMapping || isExtension) {              
     
     vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
     if (vocabulary_name == null) {
