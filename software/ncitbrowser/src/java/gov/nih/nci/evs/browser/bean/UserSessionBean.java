@@ -366,7 +366,6 @@ public class UserSessionBean extends Object {
                         + scheme);
 
                 return "search_results";
-
             } else if (size == 1) {
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", scheme);// Constants.CODING_SCHEME_NAME);

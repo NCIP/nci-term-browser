@@ -283,13 +283,13 @@ request.getSession().setAttribute("matchText", match_text);
 
             String short_vocabulary_name = null;
             if (name_hmap.containsKey(vocabulary_name)) {
-          short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
+                short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
             } else {
-          short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
-          if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
-              short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-          }
-          name_hmap.put(vocabulary_name, short_vocabulary_name);
+                short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
+                if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+                    short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+                }
+                name_hmap.put(vocabulary_name, short_vocabulary_name);
             }
 
             if (code == null || code.indexOf("@") != -1) {
