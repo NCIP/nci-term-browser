@@ -1137,6 +1137,7 @@ public class DataUtils {
                     if (tags != null && tags.length > 0) {
                         for (int j = 0; j < tags.length; j++) {
                             String version_tag = (String) tags[j];
+
                             if (version_tag.compareToIgnoreCase(ltag) == 0) {
                                 return version;
                             }
@@ -1680,12 +1681,18 @@ public class DataUtils {
                         if (associations != null) {
                             for (int i = 0; i < associations.length; i++) {
                                 Association assoc = associations[i];
+                                String associationName = null;
+                                try {
+									associationName =
+										lbscm
+											.getAssociationNameFromAssociationCode(
+												scheme, csvt, assoc
+													.getAssociationName());
+								} catch (Exception ex) {
+									associationName = assoc.getAssociationName();
+								}
 
-                                String associationName =
-                                    lbscm
-                                        .getAssociationNameFromAssociationCode(
-                                            scheme, csvt, assoc
-                                                .getAssociationName());
+
                                 boolean isRole = false;
                                 if (list.contains(associationName)) {
                                     isRole = true;
@@ -1804,11 +1811,17 @@ public class DataUtils {
                                 Association assoc = inv_associations[i];
                                 // String associationName =
                                 // assoc.getAssociationName();
-                                String associationName =
-                                    lbscm
+
+                                String associationName = null;
+                                try {
+                                    associationName = lbscm
                                         .getAssociationNameFromAssociationCode(
                                             scheme, csvt, assoc
                                                 .getAssociationName());
+							    } catch (Exception ex) {
+									associationName = assoc.getAssociationName();
+								}
+
                                 boolean isRole = false;
                                 if (list.contains(associationName)) {
                                     isRole = true;
