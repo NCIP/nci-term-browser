@@ -110,7 +110,8 @@ import org.apache.log4j.*;
  */
 public class TreeUtils {
     private static Logger _logger = Logger.getLogger(TreeUtils.class);
-    static LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
+    //static LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
+    private static LocalNameList _noopList = new LocalNameList();
 
     public TreeUtils() {
 
