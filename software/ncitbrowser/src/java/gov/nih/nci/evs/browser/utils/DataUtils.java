@@ -90,7 +90,8 @@ import org.apache.log4j.*;
  */
 public class DataUtils {
     private static Logger _logger = Logger.getLogger(DataUtils.class);
-    private static LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
+    //private static LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
+    private static LocalNameList _noopList = new LocalNameList();
     private int _maxReturn = 5000;
     private Connection _con;
     private Statement _stmt;
