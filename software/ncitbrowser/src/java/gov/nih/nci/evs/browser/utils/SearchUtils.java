@@ -1016,6 +1016,10 @@ public class SearchUtils {
             ranking, maxToReturn);
     }
 
+
+
+
+
     public ResolvedConceptReferencesIteratorWrapper searchByName(String scheme,
         String version, String matchText, String source, String matchAlgorithm,
         boolean ranking, int maxToReturn) {
@@ -1051,7 +1055,9 @@ public class SearchUtils {
                 new CodingSchemeVersionOrTag();
             if (version != null)
                 versionOrTag.setVersion(version);
-            cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+
+            //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+            cns = getNodeSet(lbSvc, scheme, versionOrTag);
 
             if (cns == null) {
                 _logger.warn("cns = null");
@@ -1436,7 +1442,9 @@ public class SearchUtils {
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
         try {
-            cns = lbs.getNodeSet(scheme, versionOrTag, null);
+            //cns = lbs.getNodeSet(scheme, versionOrTag, null);
+            cns = getNodeSet(lbs, scheme, versionOrTag);
+
             if (source != null)
                 cns = restrictToSource(cns, source);
             CodedNodeSet.PropertyType[] propertyTypes = null;
@@ -1501,7 +1509,9 @@ public class SearchUtils {
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
         try {
-            cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+            //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+            cns = getNodeSet(lbSvc, scheme, versionOrTag);
+
             CodedNodeSet.PropertyType[] propertyTypes = null;
             // LocalNameList sourceList = null;
             // LocalNameList contextList = null;
@@ -2283,7 +2293,9 @@ public class SearchUtils {
             versionOrTag.setVersion(version);
         CodedNodeSet cns = null;
         try {
-            cns = lbs.getNodeSet(scheme, versionOrTag, null);
+            //cns = lbs.getNodeSet(scheme, versionOrTag, null);
+            cns = getNodeSet(lbs, scheme, versionOrTag);
+
             if (source != null)
                 cns = restrictToSource(cns, source);
             CodedNodeSet.PropertyType[] propertyTypes = null;
@@ -2563,7 +2575,8 @@ public class SearchUtils {
                         return null;
                     }
 
-                    cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                    //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                    cns = getNodeSet(lbSvc, scheme, versionOrTag);
 
                     if (cns != null) {
                         try {
@@ -2816,7 +2829,8 @@ public class SearchUtils {
                     }
 
                     // KLO, 022410 change failed
-                    cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                    //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                    cns = getNodeSet(lbSvc, scheme, versionOrTag);
                     // cns = getNodeSetByEntityType(scheme, versionOrTag,
                     // "concept");
 
@@ -2997,7 +3011,8 @@ public class SearchUtils {
 
             // _logger.debug("(**) Number of concepts: " + knt_concept);
             // KLO 022410 changed failed.
-            cns = lbSvc.getNodeSet(scheme, null, null);
+            //cns = lbSvc.getNodeSet(scheme, null, null);
+            cns = getNodeSet(lbSvc, scheme, null);
             // cns = getNodeSetByEntityType(scheme, null, "concept");
 
             cns = cns.restrictToCodes(codeList);
@@ -3060,7 +3075,8 @@ public class SearchUtils {
 
             // _logger.debug("(**) Number of concepts: " + knt_concept);
 
-            cns = lbSvc.getNodeSet(scheme, null, null);
+            //cns = lbSvc.getNodeSet(scheme, null, null);
+            cns = getNodeSet(lbSvc, scheme, null);
             cns = cns.restrictToCodes(codeList);
 
             return cns;
@@ -3116,6 +3132,26 @@ public class SearchUtils {
         }
         return propertyNames;
     }
+
+
+    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag) {
+		CodedNodeSet cns = null;
+		try {
+			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+		/*
+		LocalNameList entityTypes = new LocalNameList();
+		entityTypes.addEntry("concept");
+		CodedNodeSet cns = null;
+        try {
+			cns = lbSvc.getNodeSet(scheme, versionOrTag, entityTypes);
+		*/
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return cns;
+	}
+
+
 
     public static CodedNodeSet getNodeSetByEntityType(String scheme,
         CodingSchemeVersionOrTag versionOrTag, String vEntry) {
@@ -3805,7 +3841,8 @@ public class SearchUtils {
                 }
 
                 // KLO, 022410 change failed
-                cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                cns = getNodeSet(lbSvc, scheme, versionOrTag);
                 // cns = getNodeSetByEntityType(scheme, versionOrTag,
                 // "concept");
 
