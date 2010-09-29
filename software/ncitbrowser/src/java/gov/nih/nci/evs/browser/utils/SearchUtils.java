@@ -1481,6 +1481,7 @@ public class SearchUtils {
                     _logger.error("* ERROR: cns.resolve throws exceptions.");
                     _logger.error("* " + e.getClass().getSimpleName() + ": "
                         + e.getMessage());
+                    e.printStackTrace();
                 }
 
             } catch (Exception ex) {
