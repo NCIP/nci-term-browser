@@ -152,6 +152,7 @@
         String role_name = (String) ret_vec.elementAt(0);
         String target_concept_name = (String) ret_vec.elementAt(1);
         String target_concept_code = (String) ret_vec.elementAt(2);
+        String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
         if (n1 % 2 == 0) {
           %>
@@ -166,7 +167,7 @@
         %>
               <td><%=role_name%></td>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               </td>
@@ -203,6 +204,7 @@
       String role_name = (String) ret_vec.elementAt(0);
       String target_concept_name = (String) ret_vec.elementAt(1);
       String target_concept_code = (String) ret_vec.elementAt(2);
+      String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
       if (n2 % 2 == 0) {
         %>
@@ -220,7 +222,7 @@
               <%
               if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
               %>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               <%  
@@ -271,6 +273,7 @@
         String role_name = (String) ret_vec.elementAt(0);
         String target_concept_name = (String) ret_vec.elementAt(1);
         String target_concept_code = (String) ret_vec.elementAt(2);
+        String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
         if (n1 % 2 == 0) {
           %>
@@ -288,7 +291,7 @@
               //if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
               if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
               %>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               <%  
@@ -333,6 +336,7 @@
       String role_name = (String) ret_vec.elementAt(0);
       String target_concept_name = (String) ret_vec.elementAt(1);
       String target_concept_code = (String) ret_vec.elementAt(2);
+      String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
       if (n2 % 2 == 0) {
         %>
@@ -351,7 +355,7 @@
               if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
               %>
               
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               <%  
