@@ -130,11 +130,9 @@
         </table>
         <p>
           EVS is developing extended methods to create, browse, download, and have direct computer API access to these and other NCIt subsets.
-<!-- 
           Click
-          <a <%=term_subset_link%>>here</a>
-          to see the new download page for Terminology Subset Reports (still under development).
--->          
+          <a href="<%= request.getContextPath() %>/pages/list_standard_reports.jsf">here</a>
+          to see the new download page for Terminology Subset Reports.
         </p>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
