@@ -1705,6 +1705,8 @@ public class DataUtils {
                                 for (int j = 0; j < acl.length; j++) {
                                     AssociatedConcept ac = acl[j];
 
+                                    String ac_csn = ac.getCodingSchemeName();
+
                                     // [#26283] Remove self-referential
                                     // relationships.
                                     boolean include = true;
@@ -1734,7 +1736,8 @@ public class DataUtils {
 
                                                 String s =
                                                     relaValue + "|" + pt + "|"
-                                                        + ac.getConceptCode();
+                                                        + ac.getConceptCode() + "|"
+                                                        + ac.getCodingSchemeName();
                                                 if (isRole) {
                                                     // if
                                                     // (associationName.compareToIgnoreCase("hasSubtype")
@@ -1877,7 +1880,8 @@ public class DataUtils {
                                                         ac, associationName);
                                                 String s =
                                                     relaValue + "|" + pt + "|"
-                                                        + ac.getConceptCode();
+                                                         + ac.getConceptCode() + "|"
+                                                         + ac.getCodingSchemeName();
 
                                                 if (isRole) {
                                                     inverse_roleList.add(s);
@@ -3701,6 +3705,5 @@ public class DataUtils {
 		return null;
 
 	}
-
 
 }
