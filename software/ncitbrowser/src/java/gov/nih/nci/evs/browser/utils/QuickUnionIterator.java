@@ -105,6 +105,7 @@ public class QuickUnionIterator implements ResolvedConceptReferencesIterator {
                 } catch (Exception ex) {
                     _logger
                         .error("QuickUnionIterator constructor - cns.resolve throws exception???");
+                    ex.printStackTrace();
                 }
             }
         }
