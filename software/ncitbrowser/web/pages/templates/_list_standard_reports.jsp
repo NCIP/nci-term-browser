@@ -4,7 +4,7 @@
   String page2 = request.getContextPath() + "/pages/display_standard_report.jsf";
 %>
 
-The following are reports found in the Terminology Subset Reports
+The following reports are found in the Terminology Subset Reports
 <a href="<%=FormatterConstant.FTP_URL%>">download</a> page:
 <ul>
   <li><a href="<%= page2 %>?report=CDISC_SDTM">CDISC SDTM Terminology</a></li>
