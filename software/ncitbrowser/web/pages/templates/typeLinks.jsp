@@ -11,7 +11,7 @@
  if (tab_version == null ) {
      tab_version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
  }
- System.out.println("typeLink.jsp tab_version: " + version);
+ //System.out.println("typeLink.jsp tab_version: " + version);
 
  boolean tree_access = true;
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {

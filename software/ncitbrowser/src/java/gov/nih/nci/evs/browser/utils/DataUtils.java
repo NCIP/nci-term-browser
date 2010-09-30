@@ -1591,7 +1591,6 @@ public class DataUtils {
 
 		Entity concept = getConceptByCode(scheme, version, null, code);
 		String entityCodeNamespace = concept.getEntityCodeNamespace();
-		System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 
 		ConceptReference cr = ConvenienceMethods.createConceptReference(code, scheme);
 		cr.setCodingSchemeName(entityCodeNamespace);
