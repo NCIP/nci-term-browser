@@ -20,15 +20,12 @@
   
   
  boolean menubar_isMapping = DataUtils.isMapping(menubar_dictionary, null);
- //System.out.println("menubar_dictionary: " + menubar_dictionary);
- //System.out.println("menubar_isMapping: " + menubar_isMapping);
-
 
   
 if (menubar_version == null) {
     menubar_version = (String) request.getAttribute("version");
 }
-System.out.println("menuBar.jsp menubar_version: " + menubar_version);
+//System.out.println("menuBar.jsp menubar_version: " + menubar_version);
 
   
   String hdr_dictionary0 = (String) request.getSession().getAttribute("dictionary");

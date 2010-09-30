@@ -54,7 +54,7 @@
   }
 
  
-System.out.println("concept_details.jsp version: " + version);  
+//System.out.println("concept_details.jsp version: " + version);  
 request.setAttribute("version", version);
 
   if (dictionary.compareTo("NCI Thesaurus") == 0) {

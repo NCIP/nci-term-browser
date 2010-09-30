@@ -20,7 +20,7 @@
   String prop_dictionary = (String) request.getSession().getAttribute("dictionary");
   prop_version = (String) request.getAttribute("version");
     
-  System.out.println("property.jsp prop_version: " + prop_version);    
+  //System.out.println("property.jsp prop_version: " + prop_version);    
 
   List displayItemList = null;
   Entity curr_concept = null;
@@ -457,18 +457,46 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 %>
 </table>
 </p>
+  
 <p>
+
+<%
+int n = 0;
+boolean hasExternalSourceCodes = false;
+boolean display_UMLS_CUI = true;
+String dict_name = (String) request.getSession().getAttribute("dictionary");
+String vocab_format = DataUtils.getMetadataValue(dict_name, "format");
+if (vocab_format != null && vocab_format.compareTo("RRF") == 0) {
+ display_UMLS_CUI= false;
+}
+      
+if (external_source_codes.size() == 0) {
+    for (int i=0; i<external_source_codes.size(); i++) {
+        String propName = (String) external_source_codes.elementAt(i);
+        String propName_label = (String) external_source_codes_label.elementAt(i);
+        String prop_url = (String) external_source_codes_url.elementAt(i);
+        String prop_linktext = (String) external_source_codes_linktext.elementAt(i);
+        
+        if (propName.compareTo("UMLS_CUI") != 0 || display_UMLS_CUI) {
+        
+            Vector value_vec = (Vector) hmap.get(propName);
+            if (value_vec != null && value_vec.size() > 0) {
+                hasExternalSourceCodes = true;
+                break;
+            }
+        }
+    }
+}
+if (!hasExternalSourceCodes) {
+%>
+<b>External Source Codes</b>:&nbsp;<i>None</i>
+<%
+} else {
+%>
   <b>External Source Codes:&nbsp;</b>
   <table class="datatable">
     <%
-      int n = 0;
-      boolean display_UMLS_CUI = true;
-      String dict_name = (String) request.getSession().getAttribute("dictionary");
-      String vocab_format = DataUtils.getMetadataValue(dict_name, "format");
-      if (vocab_format != null && vocab_format.compareTo("RRF") == 0) {
-         display_UMLS_CUI= false;
-      }
-
+      n = 0;
       for (int i=0; i<external_source_codes.size(); i++) {
         String propName = (String) external_source_codes.elementAt(i);
         String propName_label = (String) external_source_codes_label.elementAt(i);
@@ -515,6 +543,11 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     }
     %>
     </table>
+    
+<%    
+    }
+%>    
+    
 </p>
 <p>
 

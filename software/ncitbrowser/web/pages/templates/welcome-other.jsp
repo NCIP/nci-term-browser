@@ -10,7 +10,6 @@
   if (vocablary_version_value == null) vocablary_version_value = "";
   
   boolean isMapping = DataUtils.isMapping(scheme, null);
-  //System.out.println("*** welcome-other.jsp isMapping: " + isMapping);
 
 
 %>
@@ -40,7 +39,7 @@
 
 
 String _version = request.getParameter("version");
-System.out.println("(*****welcome-other.jsp) vocabulary_version: " + _version);
+//System.out.println("(*****welcome-other.jsp) vocabulary_version: " + _version);
 if (vocabulary_version != null) {
 	request.setAttribute("version", _version);
 }

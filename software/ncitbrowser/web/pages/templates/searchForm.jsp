@@ -58,7 +58,7 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
     if (srchform_version == null) {
         srchform_version = (String) request.getParameter("version");
     }
-    System.out.println("searchForm.jsp version: " + srchform_version);
+    //System.out.println("searchForm.jsp version: " + srchform_version);
 
     logger.debug("searchForm.jsp vocab_name: " + vocab_name);
 
@@ -66,9 +66,7 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
     String displayed_match_text = HTTPUtils.convertJSPString(match_text);
 
     String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
-    
-System.out.println("searchForm algorithm: " + algorithm);    
-    
+   
     
     String check_e = "", check_b = "", check_s = "" , check_c ="";
     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
