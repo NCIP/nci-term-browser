@@ -242,6 +242,12 @@
       String target_concept_code = (String) ret_vec.elementAt(2);
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
+	String qualifiers = null;
+	if (isMapping) {
+	    qualifiers = (String) ret_vec.elementAt(4);
+	    System.out.println(qualifiers);
+	}
+        
       if (n2 % 2 == 0) {
         %>
             <tr class="dataRowDark">
@@ -325,6 +331,12 @@
         String target_concept_code = (String) ret_vec.elementAt(2);
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
+	String qualifiers = null;
+	if (isMapping) {
+	    qualifiers = (String) ret_vec.elementAt(4);
+	    System.out.println(qualifiers);
+	}
+
         if (n1 % 2 == 0) {
           %>
             <tr class="dataRowDark">
@@ -400,6 +412,12 @@
       String target_concept_name = (String) ret_vec.elementAt(1);
       String target_concept_code = (String) ret_vec.elementAt(2);
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
+
+	String qualifiers = null;
+	if (isMapping) {
+	    qualifiers = (String) ret_vec.elementAt(4);
+	    System.out.println(qualifiers);
+	}
 
       if (n2 % 2 == 0) {
         %>
