@@ -1581,6 +1581,9 @@ public class DataUtils {
 
     public HashMap getRelationshipHashMap(String scheme, String version,
         String code) {
+
+        boolean isMapping = isMapping(scheme, version);
+
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         LexBIGServiceConvenienceMethods lbscm =
             createLexBIGServiceConvenienceMethods(lbSvc);
@@ -1743,6 +1746,22 @@ public class DataUtils {
                                                     relaValue + "|" + pt + "|"
                                                         + ac.getConceptCode() + "|"
                                                         + ac.getCodingSchemeName();
+
+                                                if (isMapping) {
+													if (ac.getAssociationQualifiers() != null) {
+														String qualifiers = "";
+														for (NameAndValue qual : ac
+																.getAssociationQualifiers()
+																.getNameAndValue()) {
+															String qualifier_name = qual.getName();
+															String qualifier_value = qual.getContent();
+															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+														}
+														s = s + "|" + qualifiers;
+													}
+												}
+
+
                                                 if (isRole) {
                                                     // if
                                                     // (associationName.compareToIgnoreCase("hasSubtype")
@@ -1885,6 +1904,21 @@ public class DataUtils {
                                                     relaValue + "|" + pt + "|"
                                                          + ac.getConceptCode() + "|"
                                                          + ac.getCodingSchemeName();
+
+
+                                                if (isMapping) {
+													if (ac.getAssociationQualifiers() != null) {
+														String qualifiers = "";
+														for (NameAndValue qual : ac
+																.getAssociationQualifiers()
+																.getNameAndValue()) {
+															String qualifier_name = qual.getName();
+															String qualifier_value = qual.getContent();
+															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+														}
+														s = s + "|" + qualifiers;
+													}
+												}
 
                                                 if (isRole) {
                                                     inverse_roleList.add(s);

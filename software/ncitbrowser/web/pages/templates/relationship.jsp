@@ -11,6 +11,9 @@
     }
     
     String version_curr = (String) request.getSession().getAttribute("version");
+    
+    boolean isMapping = DataUtils.isMapping(scheme_curr, version_curr);
+        
     String code_curr = (String) request.getSession().getAttribute("code");
     if (code_curr == null) {
         code_curr = (String) request.getParameter("code");
@@ -144,6 +147,19 @@
   <br/>
   <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
   <table class="dataTable">
+  
+ <%
+ if (isMapping) {
+ %>
+     <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
+     <th class="dataTableHeader" scope="col" align="left">Name</th> 
+     <th class="dataTableHeader" scope="col" align="left">REL</th>
+     <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
+ <%
+ }
+ %>
+  
+  
     <%
       int n1 = 0;
       for (int i=0; i<roles.size(); i++) {
@@ -153,6 +169,12 @@
         String target_concept_name = (String) ret_vec.elementAt(1);
         String target_concept_code = (String) ret_vec.elementAt(2);
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
+        String qualifiers = null;
+        if (isMapping) {
+            qualifiers = (String) ret_vec.elementAt(4);
+            System.out.println(qualifiers);
+        }
+        
 
         if (n1 % 2 == 0) {
           %>
@@ -195,6 +217,20 @@
 <br/>
 <i>(Associations are true only for the current concept.)</i>
 <table class="dataTable">
+
+
+<%
+ if (isMapping) {
+ %>
+     <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
+     <th class="dataTableHeader" scope="col" align="left">Name</th> 
+     <th class="dataTableHeader" scope="col" align="left">REL</th>
+     <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
+ <%
+ }
+ %>
+ 
+ 
   <%
     int n2 = 0;
 
@@ -265,6 +301,20 @@
   <br/>
   <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
   <table class="dataTable">
+  
+  
+  <%
+   if (isMapping) {
+   %>
+       <th class="dataTableHeader" scope="col" align="left">Name</th> 
+       <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
+       <th class="dataTableHeader" scope="col" align="left">REL</th>
+       <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
+   <%
+   }
+ %>
+ 
+ 
     <%
       int n1 = 0;
       for (int i=0; i<inverse_roles.size(); i++) {
@@ -327,6 +377,19 @@
 <br/>
 <i>(Associations are true only for the current concept.)</i>
 <table class="dataTable">
+
+  <%
+   if (isMapping) {
+   %>
+       <th class="dataTableHeader" scope="col" align="left">Name</th> 
+       <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
+       <th class="dataTableHeader" scope="col" align="left">REL</th>
+       <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
+   <%
+   }
+ %>
+
+
   <%
     int n2 = 0;
 
