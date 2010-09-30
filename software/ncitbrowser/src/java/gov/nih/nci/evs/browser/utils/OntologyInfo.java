@@ -5,22 +5,17 @@ import java.util.*;
 public class OntologyInfo {
     private String _displayName = "";
     private int _sortCategory = 0;
-    
+
     public OntologyInfo(String displayName, String sortCategory) {
         if (sortCategory == null || sortCategory.trim().length() <= 0) {
-            System.out.println("Warning: vocabulary_sort_category metadata value not set:");
-            System.out.println("Warning:   * Defaulting " + displayName + " to sort category 0.");
             init(displayName, 0);
             return;
         }
 
         try {
             int category = Integer.parseInt(sortCategory);
-            System.out.println("FYI: * " + displayName + " set to sort category " + category);
             init(displayName, category);
         } catch (Exception e) {
-            System.out.println("Error: " + e.getClass().getSimpleName() + ": " + e.getMessage());
-            System.out.println("Error:   * Defaulting " + displayName + " to sort category 0.");
             init(displayName, 0);
         }
     }
@@ -28,7 +23,7 @@ public class OntologyInfo {
     public OntologyInfo(String displayName, int sortCategory) {
         init(displayName, sortCategory);
     }
-    
+
     private void init(String displayName, int sortCategory) {
         _displayName = displayName;
         _sortCategory = sortCategory;
@@ -37,11 +32,11 @@ public class OntologyInfo {
     public String getDisplayName() {
         return _displayName;
     }
-    
+
     public int getSortCategory() {
         return _sortCategory;
     }
-    
+
     public static class ComparatorImpl implements Comparator<OntologyInfo> {
         public int compare(OntologyInfo value1, OntologyInfo value2) {
             int sortCategory1 = value1.getSortCategory();
