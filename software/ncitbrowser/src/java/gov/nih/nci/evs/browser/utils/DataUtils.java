@@ -1589,6 +1589,14 @@ public class DataUtils {
         if (version != null)
             csvt.setVersion(version);
 
+		Entity concept = getConceptByCode(scheme, version, null, code);
+		String entityCodeNamespace = concept.getEntityCodeNamespace();
+		System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
+
+		ConceptReference cr = ConvenienceMethods.createConceptReference(code, scheme);
+		cr.setCodingSchemeName(entityCodeNamespace);
+
+
         // Perform the query ...
         ResolvedConceptReferenceList matches = null;
         List list = getSupportedRoleNames(lbSvc, scheme, version);
@@ -1652,9 +1660,7 @@ public class DataUtils {
             try {
                 matches =
                     lbSvc.getNodeGraph(scheme, csvt, null)
-                        .resolveAsList(
-                            ConvenienceMethods.createConceptReference(code,
-                                scheme),
+                        .resolveAsList(cr,
                             // true, false, 0, 1, new LocalNameList(), null,
                             // null, 10000);
                             // true, false, 0, 1, null, new LocalNameList(),
@@ -1773,9 +1779,7 @@ public class DataUtils {
                  */
                 matches =
                     lbSvc.getNodeGraph(scheme, csvt, null)
-                        .resolveAsList(
-                            ConvenienceMethods.createConceptReference(code,
-                                scheme),
+                        .resolveAsList(cr,
                             // false, true, 0, 1, new LocalNameList(), null,
                             // null, 10000);
                             // false, true, 0, 1, null, new LocalNameList(),
