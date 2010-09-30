@@ -1138,7 +1138,7 @@ public class DataUtils {
                         for (int j = 0; j < tags.length; j++) {
                             String version_tag = (String) tags[j];
 
-                            if (version_tag.compareToIgnoreCase(ltag) == 0) {
+                            if (version_tag != null && version_tag.compareToIgnoreCase(ltag) == 0) {
                                 return version;
                             }
                         }
