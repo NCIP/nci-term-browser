@@ -441,7 +441,7 @@
 String hierarchy_dictionary = request.getParameter("dictionary");
 String hierarchy_version = request.getParameter("version");
 
-System.out.println("hierarchy.jsp hierarchy_version: " + hierarchy_version);
+//System.out.println("hierarchy.jsp hierarchy_version: " + hierarchy_version);
 
 String hierarchy_schema = request.getParameter("schema");
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
@@ -506,7 +506,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 String schema = request.getParameter("schema");
 String ontology_version = request.getParameter("version");
 
-System.out.println("hierarchy.jsp ontology_version: " + ontology_version);
+//System.out.println("hierarchy.jsp ontology_version: " + ontology_version);
 
 
 String ontology_display_name = request.getParameter("schema");

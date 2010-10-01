@@ -972,13 +972,20 @@ public class TreeUtils {
         Vector v = new Vector();
         try {
 
-            String name = getCodeDescription(lbSvc, scheme, csvt, code);
+			Entity concept = getConceptByCode(scheme, version, null, code);
+			String entityCodeNamespace = concept.getEntityCodeNamespace();
+			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
+			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
+			focus.setCodingSchemeName(entityCodeNamespace);
+            String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
+
+            //String name = getCodeDescription(lbSvc, scheme, csvt, code);
             ti = new TreeItem(code, name);
             ti._expandable = false;
 
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
-            ConceptReference focus =
-                Constructors.createConceptReference(code, scheme);
+            //ConceptReference focus =
+            //    Constructors.createConceptReference(code, scheme);
             cng =
                 cng.restrictToAssociations(Constructors
                     .createNameAndValueList(assocName), null);
@@ -2088,13 +2095,22 @@ public class TreeUtils {
             try {
                 CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
                 NameAndValueList nameAndValueList_qualifier = null;
+
                 cng =
                     cng.restrictToAssociations(nameAndValueList,
                         nameAndValueList_qualifier);
-                ConceptReference graphFocus =
-                    ConvenienceMethods.createConceptReference(code, scheme);
+
+				Entity concept = getConceptByCode(scheme, version, null, code);
+				String entityCodeNamespace = concept.getEntityCodeNamespace();
+				//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
+				ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
+				focus.setCodingSchemeName(entityCodeNamespace);
+				//String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
+
+                //ConceptReference graphFocus =
+                //    ConvenienceMethods.createConceptReference(code, scheme);
                 matches =
-                    cng.resolveAsList(graphFocus, associationsNavigatedFwd,
+                    cng.resolveAsList(focus, associationsNavigatedFwd,
                         !associationsNavigatedFwd, 1, 1, new LocalNameList(),
                         null, null, -1);
             } catch (Exception ex) {
