@@ -1134,13 +1134,20 @@ public class TreeUtils {
         Vector v = new Vector();
         try {
 
-            String name = getCodeDescription(lbSvc, scheme, csvt, code);
+			Entity concept = getConceptByCode(scheme, version, null, code);
+			String entityCodeNamespace = concept.getEntityCodeNamespace();
+			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
+			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
+			focus.setCodingSchemeName(entityCodeNamespace);
+            String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
+
+            //String name = getCodeDescription(lbSvc, scheme, csvt, code);
             ti = new TreeItem(code, name);
             ti._expandable = false;
 
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
-            ConceptReference focus =
-                Constructors.createConceptReference(code, scheme);
+            //ConceptReference focus =
+            //    Constructors.createConceptReference(code, scheme);
             cng =
                 cng.restrictToAssociations(Constructors
                     .createNameAndValueList(assocNames), null);
