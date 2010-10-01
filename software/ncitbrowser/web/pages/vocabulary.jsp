@@ -87,7 +87,7 @@ if (scheme != null) {
      tree_access_allowed = false;
  }
  boolean vocabulary_isMapping = DataUtils.isMapping(scheme, null);
- System.out.println("vocabulary_isMapping: " + vocabulary_isMapping);
+ //System.out.println("vocabulary_isMapping: " + vocabulary_isMapping);
 
         String version = (String) request.getParameter("version");
         if (version == null) {
@@ -237,7 +237,7 @@ if (scheme != null) {
               <div class="bannerarea">
 <%
 
-System.out.println("vocabulary.jsp basePath " + basePath);
+//System.out.println("vocabulary.jsp basePath " + basePath);
 
 if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
     (scheme != null && scheme.compareTo("NCI Thesaurus") == 0)

@@ -36,6 +36,8 @@
     
     ArrayList concepts = null;
     String label = "";
+    String rel = "";
+    String score = "";
     
     
 %>
@@ -170,10 +172,20 @@
         String target_concept_code = (String) ret_vec.elementAt(2);
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
         String qualifiers = null;
-        if (isMapping) {
-            qualifiers = (String) ret_vec.elementAt(4);
-            System.out.println(qualifiers);
-        }
+	rel = null;
+	score = null;
+        
+	if (isMapping) {
+	    qualifiers = (String) ret_vec.elementAt(4);
+	    System.out.println(qualifiers);
+	    Vector v = DataUtils.parseData(qualifiers, "$");
+	    String rel_str = (String) v.elementAt(0);
+	    int m1 = rel_str.indexOf(":");
+	    rel = rel_str.substring(m1+1, rel_str.length()); 
+	    String score_str = (String) v.elementAt(1);
+	    int m2 = score_str.indexOf(":");
+	    score = score_str.substring(m2+1, score_str.length()); 
+	}
         
 
         if (n1 % 2 == 0) {
@@ -193,6 +205,17 @@
                   <%=target_concept_name%>
                 </a>
               </td>
+              
+              <%
+              if (isMapping) {
+              %>
+              <td><%=rel%></td>
+              <td><%=score%></td>
+              <%
+              }
+              %>              
+              
+              
             </tr>
       <%
       }
@@ -243,9 +266,19 @@
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
 	String qualifiers = null;
+	rel = null;
+	score = null;
+	
 	if (isMapping) {
 	    qualifiers = (String) ret_vec.elementAt(4);
 	    System.out.println(qualifiers);
+	    Vector v = DataUtils.parseData(qualifiers, "$");
+	    String rel_str = (String) v.elementAt(0);
+	    int m1 = rel_str.indexOf(":");
+	    rel = rel_str.substring(m1+1, rel_str.length()); 
+	    String score_str = (String) v.elementAt(1);
+	    int m2 = score_str.indexOf(":");
+	    score = score_str.substring(m2+1, score_str.length()); 
 	}
         
       if (n2 % 2 == 0) {
@@ -274,7 +307,16 @@
               <%
               }
               %>
-              </td>              
+              </td> 
+              <%
+              if (isMapping) {
+              %>
+              <td><%=rel%></td>
+              <td><%=score%></td>
+              <%
+              }
+              %>
+              
             </tr>
         <%
         }
@@ -332,9 +374,19 @@
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
 	String qualifiers = null;
+	rel = null;
+	score = null;
+	
 	if (isMapping) {
 	    qualifiers = (String) ret_vec.elementAt(4);
 	    System.out.println(qualifiers);
+	    Vector v = DataUtils.parseData(qualifiers, "$");
+	    String rel_str = (String) v.elementAt(0);
+	    int m1 = rel_str.indexOf(":");
+	    rel = rel_str.substring(m1+1, rel_str.length()); 
+	    String score_str = (String) v.elementAt(1);
+	    int m2 = score_str.indexOf(":");
+	    score = score_str.substring(m2+1, score_str.length()); 
 	}
 
         if (n1 % 2 == 0) {
@@ -365,6 +417,15 @@
               %>
               </td>
               <td><%=role_name%></td>
+              <%
+              if (isMapping) {
+              %>
+              <td><%=rel%></td>
+              <td><%=score%></td>
+              <%
+              }
+              %>              
+              
            </tr>
       <%
       }
@@ -414,9 +475,19 @@
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
 	String qualifiers = null;
+	rel = null;
+	score = null;
+
 	if (isMapping) {
 	    qualifiers = (String) ret_vec.elementAt(4);
 	    System.out.println(qualifiers);
+	    Vector v = DataUtils.parseData(qualifiers, "$");
+	    String rel_str = (String) v.elementAt(0);
+	    int m1 = rel_str.indexOf(":");
+	    rel = rel_str.substring(m1+1, rel_str.length()); 
+	    String score_str = (String) v.elementAt(1);
+	    int m2 = score_str.indexOf(":");
+	    score = score_str.substring(m2+1, score_str.length()); 
 	}
 
       if (n2 % 2 == 0) {
@@ -449,6 +520,15 @@
                 
               </td>
               <td><%=role_name%></td>
+              <%
+               if (isMapping) {
+              %>
+              <td><%=rel%></td>
+              <td><%=score%></td>
+              <%
+              }
+              %>             
+              
             </tr>
         <%
         }
