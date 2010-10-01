@@ -36,7 +36,7 @@
     request.getSession().setAttribute("dictionary", "NCI Thesaurus");
     
 String vocabulary_version = request.getParameter("version");
-System.out.println("(***** home.jsp) vocabulary_version: " + vocabulary_version);
+//System.out.println("(***** home.jsp) vocabulary_version: " + vocabulary_version);
 if (vocabulary_version != null) {
 	request.setAttribute("version", vocabulary_version);
 }
