@@ -718,6 +718,7 @@ public class SearchUtils {
                 org.LexGrid.concepts.Entity entry =
                     new org.LexGrid.concepts.Entity();
                 entry.setEntityCode(ref.getConceptCode());
+                entry.setEntityCodeNamespace(ref.getCodeNamespace());
                 entry.setEntityDescription(ref.getEntityDescription());
 
                 // Concept entry = ref.getReferencedEntry();
