@@ -25,6 +25,8 @@ import gov.nih.nci.evs.browser.common.*;
 import org.apache.commons.codec.language.*;
 import org.apache.log4j.*;
 
+
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -2769,9 +2771,17 @@ public class SearchUtils {
         Vector schemes, Vector versions, String matchText, String source,
         String matchAlgorithm, boolean designationOnly, boolean ranking,
         int maxToReturn) {
+
+		Vector codingSchemeNames = new Vector();
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
         matchText0 = matchText0.trim();
+
+        boolean containsMapping = false;
+
+System.out.println("(*) searchByAssociations matchText0: " + matchText0);
+
+
 
         _logger.debug("searchByAssociations..." + matchText);
         long ms = System.currentTimeMillis();
@@ -2874,6 +2884,14 @@ public class SearchUtils {
                                         cns);
                                 if (cns != null) {
                                     cns_vec.add(cns);
+                                    codingSchemeNames.add(scheme);
+
+                                    if (!containsMapping) {
+                                        boolean isMapping = DataUtils.isMapping(scheme, null);
+                                        if (isMapping) {
+											containsMapping = true;
+										}
+								    }
                                 }
                             }
                         } catch (Exception ex) {
@@ -2933,14 +2951,31 @@ public class SearchUtils {
                     int resolveAssociationDepth = 1;
                     // iterator = cns.resolve(sortCriteria, null,
                     // restrictToProperties, null, resolveConcepts);
-                    ResolvedConceptReferencesIterator quickUnionIterator =
-                        new QuickUnionIterator(cns_vec, sortCriteria, null,
-                            restrictToProperties, null, resolveConcepts);
-                    iterator =
-                        new SearchByAssociationIteratorDecorator(
-                            quickUnionIterator, resolveForward,
-                            resolveBackward, resolveAssociationDepth,
-                            maxToReturn);
+
+                    if (!containsMapping) {
+						ResolvedConceptReferencesIterator quickUnionIterator =
+							new QuickUnionIterator(cns_vec, sortCriteria, null,
+								restrictToProperties, null, resolveConcepts);
+
+						iterator =
+							new SearchByAssociationIteratorDecorator(
+								quickUnionIterator, resolveForward,
+								resolveBackward, resolveAssociationDepth,
+								maxToReturn);
+					} else {
+
+						ResolvedConceptReferencesIterator QuickUnionIteratorWrapper =
+							new QuickUnionIteratorWrapper(codingSchemeNames, cns_vec, sortCriteria, null,
+								restrictToProperties, null, resolveConcepts);
+
+						iterator =
+							new SearchByAssociationIteratorDecorator(
+								QuickUnionIteratorWrapper, resolveForward,
+								resolveBackward, resolveAssociationDepth,
+								maxToReturn);
+
+					}
+
                     // testing, KLO (work-around) failed
                     // iterator = filterOutAnonymousClasses(cns, iterator);
 
@@ -3753,6 +3788,16 @@ public class SearchUtils {
         String[] association_qualifier_values, int search_direction,
         String source, String matchAlgorithm, boolean designationOnly,
         boolean ranking, int maxToReturn) {
+
+
+System.out.println("searchByAssociations scheme: " + scheme);
+System.out.println("searchByAssociations version: " + version);
+System.out.println("searchByAssociations matchText: " + matchText);
+
+System.out.println("searchByAssociations maxToReturn: " + maxToReturn);
+
+
+
         /*
          * _logger.debug("searchByAssociations scheme: " + scheme);
          * _logger.debug("searchByAssociations matchText: " + matchText);
@@ -3813,6 +3858,8 @@ public class SearchUtils {
             matchAlgorithm = findBestContainsAlgorithm(matchText);
         }
 
+System.out.println("searchByAssociations matchAlgorithm: " + matchAlgorithm);
+
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
 
@@ -3859,7 +3906,7 @@ public class SearchUtils {
                         cns = restrictToSource(cns, source);
                         int resolveAssociationDepth = 1;
                         // int maxToReturn = -1;
-                        ConceptReference graphFocus = null;
+                        // ConceptReference graphFocus = null;
                         // CodedNodeSet cns2 = cng.toNodeList(graphFocus,
                         // resolveForward, resolveBackward,
                         // resolveAssociationDepth, maxToReturn);
@@ -3890,8 +3937,12 @@ public class SearchUtils {
             }
 
             iterator = null;
-            if (cns_vec.size() == 0)
+            if (cns_vec.size() == 0) {
                 return null;
+			} else {
+System.out.println("cns_vec.size() == " + cns_vec.size());
+
+			}
 
             LocalNameList restrictToProperties = null;// new LocalNameList();
             // boolean resolveConcepts = true;
@@ -3918,26 +3969,47 @@ public class SearchUtils {
                     boolean resolveBackward = true;
 
                     if (search_direction == Constants.SEARCH_SOURCE) {
+
+System.out.println("SEARCH_SOURCE");
+
+
                         resolveForward = false;
                         resolveBackward = true;
                     } else if (search_direction == Constants.SEARCH_TARGET) {
+
+System.out.println("SEARCH_TARGET");
+
                         resolveForward = true;
                         resolveBackward = false;
                     }
 
+
+
                     int resolveAssociationDepth = 1;
                     // iterator = cns.resolve(sortCriteria, null,
                     // restrictToProperties, null, resolveConcepts);
+
+ System.out.println("quickUnionIterator");
+
+
                     ResolvedConceptReferencesIterator quickUnionIterator =
                         new QuickUnionIterator(cns_vec, sortCriteria, null,
                             restrictToProperties, null, resolveConcepts);
                     if (associationsToNavigate == null && qualifiers == null) {
+
+
+ System.out.println("SearchByAssociationIteratorDecorator 1");
+
                         iterator =
                             new SearchByAssociationIteratorDecorator(
                                 quickUnionIterator, resolveForward,
                                 resolveBackward, resolveAssociationDepth,
                                 maxToReturn);
                     } else {
+
+ System.out.println("SearchByAssociationIteratorDecorator 2");
+
+
                         iterator =
                             new SearchByAssociationIteratorDecorator(
                                 quickUnionIterator, resolveForward,

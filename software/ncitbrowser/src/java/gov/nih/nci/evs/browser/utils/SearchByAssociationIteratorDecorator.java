@@ -8,45 +8,46 @@ import org.LexGrid.LexBIG.Exceptions.*;
 import org.LexGrid.LexBIG.LexBIGService.*;
 import org.LexGrid.LexBIG.Utility.*;
 import org.LexGrid.LexBIG.Utility.Iterators.*;
+import org.LexGrid.concepts.Entity;
 
 /**
  * <!-- LICENSE_TEXT_START -->
- * Copyright 2008,2009 NGIT. This software was developed in conjunction 
- * with the National Cancer Institute, and so to the extent government 
- * employees are co-authors, any rights in such works shall be subject 
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
  * to Title 17 of the United States Code, section 105.
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
  * are met:
- *   1. Redistributions of source code must retain the above copyright 
- *      notice, this list of conditions and the disclaimer of Article 3, 
- *      below. Redistributions in binary form must reproduce the above 
- *      copyright notice, this list of conditions and the following 
- *      disclaimer in the documentation and/or other materials provided 
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
  *      with the distribution.
- *   2. The end-user documentation included with the redistribution, 
+ *   2. The end-user documentation included with the redistribution,
  *      if any, must include the following acknowledgment:
- *      "This product includes software developed by NGIT and the National 
+ *      "This product includes software developed by NGIT and the National
  *      Cancer Institute."   If no such end-user documentation is to be
  *      included, this acknowledgment shall appear in the software itself,
  *      wherever such third-party acknowledgments normally appear.
- *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must 
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
  *      not be used to endorse or promote products derived from this software.
  *   4. This license does not authorize the incorporation of this software
- *      into any third party proprietary programs. This license does not 
- *      authorize the recipient to use any trademarks owned by either NCI 
- *      or NGIT 
- *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED 
- *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE 
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
  *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
- *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, 
- *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
- *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
- *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *      POSSIBILITY OF SUCH DAMAGE.
  * <!-- LICENSE_TEXT_END -->
  */
@@ -93,9 +94,14 @@ public class SearchByAssociationIteratorDecorator implements
 
     private HashSet _hset = null;
 
+    private String _currentCodingScheme = null;
+
+    private boolean _search_namespace = false;
+
+
     /**
      * Instantiates a new search by association iterator decorator.
-     * 
+     *
      * @param quickIterator the quick iterator
      * @param resolveForward the resolve forward
      * @param resolveBackward the resolve backward
@@ -106,6 +112,7 @@ public class SearchByAssociationIteratorDecorator implements
         ResolvedConceptReferencesIterator quickIterator,
         boolean resolveForward, boolean resolveBackward,
         int resolveAssociationDepth, int maxToReturn) {
+
         _quickIterator = quickIterator;
         _resolveForward = resolveForward;
         _resolveBackward = resolveBackward;
@@ -115,6 +122,10 @@ public class SearchByAssociationIteratorDecorator implements
         _associationQualifierNameAndValueList = null;
 
         _hset = new HashSet();
+
+        if (quickIterator instanceof QuickUnionIteratorWrapper) {
+			_search_namespace = true;
+		}
 
         // _logger.debug("Type 1 SearchByAssociationIteratorDecorator ");
 
@@ -138,12 +149,17 @@ public class SearchByAssociationIteratorDecorator implements
 
         _hset = new HashSet();
 
+        if (quickIterator instanceof QuickUnionIteratorWrapper) {
+			_search_namespace = true;
+		}
         // _logger.debug("Type 2 SearchByAssociationIteratorDecorator ");
     }
 
+
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
      * #get(int, int)
@@ -156,7 +172,7 @@ public class SearchByAssociationIteratorDecorator implements
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
      * #getNext()
@@ -167,7 +183,7 @@ public class SearchByAssociationIteratorDecorator implements
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
      * #next()
@@ -184,7 +200,7 @@ public class SearchByAssociationIteratorDecorator implements
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
      * #next(int)
@@ -212,7 +228,7 @@ public class SearchByAssociationIteratorDecorator implements
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
      * #scroll(int)
@@ -224,7 +240,7 @@ public class SearchByAssociationIteratorDecorator implements
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.LexGrid.LexBIG.Utility.Iterators.EntityListIterator#hasNext()
      */
     public boolean hasNext() throws LBResourceUnavailableException {
@@ -238,7 +254,7 @@ public class SearchByAssociationIteratorDecorator implements
 
     /**
      * Gets the number remaining in this Iterator.
-     * 
+     *
      * NOTE: This is not an exact number. The Iterator is guarenteed to have AT
      * LEAST this amount remaining -- it may actually have more.
      */
@@ -268,7 +284,7 @@ public class SearchByAssociationIteratorDecorator implements
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.LexGrid.LexBIG.Utility.Iterators.EntityListIterator#release()
      */
     public void release() throws LBResourceUnavailableException {
@@ -277,9 +293,9 @@ public class SearchByAssociationIteratorDecorator implements
 
     /**
      * Do get next.
-     * 
+     *
      * @return the resolved concept reference
-     * 
+     *
      * @throws Exception the exception
      */
     protected ResolvedConceptReference doGetNext() throws Exception {
@@ -296,7 +312,7 @@ public class SearchByAssociationIteratorDecorator implements
 
     /**
      * Page if necessary.
-     * 
+     *
      * @throws Exception the exception
      */
     protected void pageIfNecessary() throws Exception {
@@ -319,9 +335,11 @@ public class SearchByAssociationIteratorDecorator implements
                 && _currentChildren.size() == 0) {
                 // while (quickIterator.hasNext()) {
                 ResolvedConceptReference ref = _quickIterator.next();
+
                 if (ref != null) {
                     // KLO
                     String formalName = ref.getCodingSchemeName();
+					// This needs to be the coding scheme name for the mapping - if the search is against a mapping coding scheme.");
                     CodedNodeGraph cng =
                         lbs.getNodeGraph(formalName, null, null);
 
@@ -332,11 +350,31 @@ public class SearchByAssociationIteratorDecorator implements
                                 _associationQualifierNameAndValueList);
                     }
 
+                    ConceptReference cr = null;
+                    if (_search_namespace) {
+						Entity entity = SearchUtils.getConceptByCode(formalName,
+					                                 null, null, ref.getCode());
+
+						String namespace = entity.getEntityCodeNamespace();
+						if (namespace != null) {
+							cr = Constructors.createConceptReference(ref.getCode(), namespace);
+							cr.setCodeNamespace(namespace);
+						} else {
+							cr = Constructors.createConceptReference(ref.getCode(), ref.getCodingSchemeName());
+						}
+				    } else {
+						cr = Constructors.createConceptReference(ref.getCode(), ref.getCodingSchemeName());
+					}
+
+					LocalNameList propertyNames = new LocalNameList();
+					CodedNodeSet.PropertyType[] propertyTypes = null;
+					SortOptionList sortCriteria = null;
+
                     ResolvedConceptReferenceList list =
-                        cng.resolveAsList(Constructors.createConceptReference(
-                            ref.getCode(), ref.getCodingSchemeName()),
+                        cng.resolveAsList(cr,
                             _resolveForward, _resolveBackward, 0,
-                            _resolveAssociationDepth, null, null, null,
+                            //_resolveForward, _resolveBackward, 1,
+                            _resolveAssociationDepth, propertyNames, propertyTypes, sortCriteria,
                             _maxToReturn);
 
                     // _logger.debug("Calling populateCurrentChildren ...");
@@ -356,19 +394,28 @@ public class SearchByAssociationIteratorDecorator implements
     protected void displayRef(ResolvedConceptReference ref) {
         // _logger.debug(ref.getConceptCode() + ":" +
         // ref.getEntityDescription().getContent());
+
+        //System.out.println(ref.getConceptCode() + ":" +
+        //   ref.getEntityDescription().getContent());
+
+
     }
 
     protected void displayRef(String msg, ResolvedConceptReference ref) {
         // _logger.debug(msg + " " + ref.getConceptCode() + ":" +
         // ref.getEntityDescription().getContent());
+        //System.out.println(msg + " " + ref.getConceptCode() + ":" +
+        //   ref.getEntityDescription().getContent());
     }
 
     /**
      * Populate current children.
-     * 
+     *
      * @param list the list
      */
     // [#26965] Contains Relationship search returns invalid result
+
+    /*
     public void populateCurrentChildren(ResolvedConceptReference[] list,
         boolean addRoot) {
         if (list == null)
@@ -384,6 +431,9 @@ public class SearchByAssociationIteratorDecorator implements
                     // _logger.debug("\tbefore addRoot currentChildren.size() "
                     // + currentChildren.size());
                     displayRef(ref);
+
+                    System.out.println("(*) add to _currentChildren ..." + ref.getConceptCode() );
+
                     _currentChildren.add(ref);
                     // _logger.debug("\tafter addRoot currentChildren.size() "
                     // + currentChildren.size());
@@ -418,5 +468,57 @@ public class SearchByAssociationIteratorDecorator implements
 
         // _logger.debug("\tExiting populateCurrentChildren");
     }
+    */
+
+
+
+
+    public void populateCurrentChildren(ResolvedConceptReference[] list,
+        boolean addRoot) {
+        if (list == null)
+            return;
+
+        for (ResolvedConceptReference ref : list) {
+
+            displayRef("Root: ", ref);
+
+            if (addRoot) {
+                if (!_hset.contains(ref.getConceptCode())) {
+                    _hset.add(ref.getConceptCode());
+                    // _logger.debug("\tbefore addRoot currentChildren.size() "
+                    // + currentChildren.size());
+                    displayRef(ref);
+                    _currentChildren.add(ref);
+
+                }
+            } else {
+                // _logger.debug("\tDO NOT add: ");
+                displayRef("discarded ", ref);
+            }
+
+            if (ref.getSourceOf() != null) {
+               if (ref.getSourceOf().getAssociation() != null) {
+                    for (Association assoc : ref.getSourceOf().getAssociation()) {
+                        populateCurrentChildren(assoc.getAssociatedConcepts()
+                            .getAssociatedConcept(), true);
+                    }
+                }
+            }
+
+            if (ref.getTargetOf() != null) {
+                if (ref.getTargetOf().getAssociation() != null) {
+                    for (Association assoc : ref.getTargetOf().getAssociation()) {
+						ResolvedConceptReference[] rcrlist = assoc.getAssociatedConcepts().getAssociatedConcept();
+                        populateCurrentChildren(rcrlist, true);
+                    }
+                }
+            }
+        }
+
+        // _logger.debug("\tExiting populateCurrentChildren");
+    }
+
+
+
 
 }
