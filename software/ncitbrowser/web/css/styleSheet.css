@@ -75,6 +75,16 @@ h3
  width: 612px;
 }
 
+#popupMainArea_Elastic
+{
+ padding-top: 0px;
+ padding-right: 0;
+ padding-bottom: 0px;
+ padding-left: 12px;
+ word-wrap: break-word;
+ width: 100%;
+}
+
 #popupContentArea
 {
  padding-top: 0px;
