@@ -21,18 +21,36 @@ if [ -z "$1" ]; then
     echo "  install      -- Builds, installs JBoss locally"
     echo "  deploy       -- Hot deploy application"
     echo "  jsp          -- Hot deploy JSP files"
-    echo "  stop         -- Stop war file"
-    echo "  start        -- Start war file"
     echo
     exit
 fi
 
 case $1 in
+    all)
+        ant $TAG build:all
+        ;;
+
+    upgrade)
+        ant $TAG $DEBUG deploy:local:upgrade
+        ;;
+
+    install)
+        ant $TAG $DEBUG deploy:local:install
+        ;;
+
+    deploy)
+        ant $TAG $DEBUG deploy:hot
+        ;;
+
+    jsp)
+        ant $DEBUG deploy:hot:jsp
+        ;;
 
     clean)
         ant clean
         ;;
+
     *)
-        echo "Invalid target $1"
+        echo "Invalid target '$1'."
         ;;
 esac
