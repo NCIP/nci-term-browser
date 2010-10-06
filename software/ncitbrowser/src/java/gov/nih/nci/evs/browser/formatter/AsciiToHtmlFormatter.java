@@ -79,15 +79,15 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         // Prints topmost report banner:
         Vector<String> headings = getColumnHeadings(textfile, delimiter);
         out.writeln_indent("<tr><td colspan=\"" + (headings.size() + 1)
-            + "\" class=\"dataTablePrimaryLabel\" height=\"20\">");
+            + "\" class=\"reportTablePrimaryLabel\" height=\"20\">");
         out.writeln_inden1("Report: " + getReportName(out.getFilename()));
         out.writeln_undent("</td></tr>");
 
         // Prints table heading:
         headings.add(0, "#");
-        out.writeln_indent("<tr class=\"dataTableHeader\">");
+        out.writeln_indent("<tr class=\"reportTableHeader\">");
         for (String heading : headings)
-            out.writeln_inden1("<th class=\"dataCellText\">" + heading
+            out.writeln_inden1("<th class=\"reportTableCellText\">" + heading
                 + "</th>");
         out.writeln_undent("</tr>");
 
@@ -109,7 +109,7 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
             for (int i = 0; i < numMissingCells; ++i)
                 v.add(null);
 
-            String rowColor = row % 2 == 1 ? "dataRowDark" : "dataRowLight";
+            String rowColor = row % 2 == 1 ? "reportTableRowDark" : "reportTableRowLight";
             out.writeln_indent("<tr class=\"" + rowColor + "\">");
             String bgColor = "";
             if (extensible_col >= 0) {
@@ -128,7 +128,7 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
                     value = "&nbsp;";
                 else if (_ncitCodeColumns.contains(col - 1)) // -1 from # column
                     value = getNCItCodeUrl(value);
-                out.writeln_inden1("<td class=\"dataCellText\"" + bgColor + ">"
+                out.writeln_inden1("<td class=\"reportTableCellText\"" + bgColor + ">"
                     + value + "</td>");
             }
             out.writeln_undent("</tr>");
@@ -145,7 +145,7 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         printStyles(out);
         out.writeln_undent("</head>");
         out.writeln_indent("<body>");
-        out.writeln_indent("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"dataTable\" width=\"100%\">");
+        out.writeln_indent("<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"reportTable\" width=\"100%\">");
     }
 
     protected void printFooter(TabFormatterInterface out) throws Exception {
@@ -160,7 +160,7 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         out.writeln_normal("    font-family: Helvetica, Geneva, Times, Verdana, sans-serif;");
         out.writeln_normal("    font-size: 7pt;");
         out.writeln_normal("  }");
-        out.writeln_normal("  .dataTablePrimaryLabel{ /* for the first row */");
+        out.writeln_normal("  .reportTablePrimaryLabel{ /* for the first row */");
         out.writeln_normal("    font-family:arial,helvetica,verdana,sans-serif;");
         out.writeln_normal("    font-size:0.9em;");
         out.writeln_normal("    font-weight:bold;");
@@ -171,14 +171,14 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         out.writeln_normal("    border-right:1px solid #5C5C5C; /* constant: dark gray */");
         out.writeln_normal("    padding-left:0.4em;");
         out.writeln_normal("  }");
-        out.writeln_normal("  .dataTable{ /* for the main table below the labels */");
+        out.writeln_normal("  .reportTable{ /* for the main table below the labels */");
         out.writeln_normal("    font-family:arial,helvetica,verdana,sans-serif;");
         out.writeln_normal("    font-size:0.9em;");
         out.writeln_normal("    color:#000000; /* constant: black */");
         out.writeln_normal("    border-top:1px solid #5C5C5C; /* constant: dark gray */");
         out.writeln_normal("    border-left:1px solid #5C5C5C; /* constant: dark gray */");
         out.writeln_normal("  }");
-        out.writeln_normal("  .dataTableHeader{ /* for the horizontal column headers */");
+        out.writeln_normal("  .reportTableHeader{ /* for the horizontal column headers */");
         out.writeln_normal("    font-family:arial,helvetica,verdana,sans-serif;");
         out.writeln_normal("    background-color:#CCCCCC; /* constant: medium gray */");
         out.writeln_normal("    color:#000000; /* constant: black */");
@@ -186,16 +186,16 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         out.writeln_normal("    border-right:1px solid #5C5C5C; /* constant: dark gray */");
         out.writeln_normal("    border-bottom:1px solid #5C5C5C; /* constant: dark gray */");
         out.writeln_normal("  }");
-        out.writeln_normal("  .dataCellText{ /* for text output cells */");
+        out.writeln_normal("  .reportTableCellText{ /* for text output cells */");
         out.writeln_normal("    border-right:1px solid #5C5C5C; /* constant: dark gray */");
         out.writeln_normal("    border-bottom:1px solid #5C5C5C; /* constant: dark gray */");
         out.writeln_normal("    text-align:left;");
         out.writeln_normal("  }");
-        out.writeln_normal("  .dataRowLight{ /* for the light color of alternating rows */");
+        out.writeln_normal("  .reportTableRowLight{ /* for the light color of alternating rows */");
         out.writeln_normal("    background-color:#FFFFFF; /* constant: white */");
         out.writeln_normal("    color:#000000; /* constant: black */");
         out.writeln_normal("  }");
-        out.writeln_normal("  .dataRowDark{ /* for the dark color of alternating rows */");
+        out.writeln_normal("  .reportTableRowDark{ /* for the dark color of alternating rows */");
         out.writeln_normal("    background-color:#F4F4F5; /* constant: light gray */");
         out.writeln_normal("    color:#000000; /* constant: black */");
         out.writeln_normal("  }");
