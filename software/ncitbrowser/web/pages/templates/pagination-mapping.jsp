@@ -21,6 +21,10 @@
     String prev_page_num_str = Integer.toString(pageNum);
     String next_page_num_str = Integer.toString(pageNum+1);
     
+    
+    //System.out.println("prev_page_num_str: " + prev_page_num_str);
+    //System.out.println("next_page_num_str: " + next_page_num_str);
+    
 %>
 
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping.jsf?" >
@@ -47,13 +51,18 @@
                  if (prev_page_num > maxPageNumber) maxPageNumber = prev_page_num;
 
 		 for (int idx=1; idx<=maxPageNumber; idx++) { 
-
 		    String idx_str = Integer.toString(idx);
 		    if (prev_page_num != idx) {
-		      %>
-			<a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=idx_str%>"><%=idx_str%></a>
-			&nbsp;
-		      <%
+		        if (prev_page_num == 0 && idx == 1) {
+		        %>
+			    <%=idx_str%>&nbsp;
+		        <%      
+		        } else {
+		        %>
+			    <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=idx_str%>"><%=idx_str%></a>
+			    &nbsp;
+		        <%
+		        }
 		    } else {
 		      %>
 			<%=idx_str%>&nbsp;
