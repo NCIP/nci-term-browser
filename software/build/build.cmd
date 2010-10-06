@@ -4,12 +4,13 @@
 @rem ******************************************
 setlocal
 @rem Environment settings here...
-set DEVPROPFILE=C:\NCI-Projects\ncit-properties\properties\dev-upgrade.properties
-set CIPROPFILE=C:\NCI-Projects\ncit-properties\properties\ci-upgrade.properties
-set QAPROPFILE=C:\NCI-Projects\ncit-properties\properties\qa-upgrade.properties
-set DATAQAPROPFILE=C:\NCI-Projects\ncit-properties\properties\data-qa-upgrade.properties
 set DEBUG=-Denable.install.debug=false
 set TAG=-Danthill.build.tag_built=desktop
+@rem Development servers
+set DEV_SERVER1=ncias-d488-v.nci.nih.gov
+set DEV_SERVER2=ncias-d499-v.nci.nih.gov
+set CI_SERVER=ncias-c512-v.nci.nih.gov
+set DEVPROPFILE=C:\NCI-Projects\ncit-dev-properties\dev-upgrade.properties
 @rem Test is debug has been set
 if "%2" == "debug" (
     set DEBUG=-Denable.install.debug=true -debug
@@ -23,15 +24,15 @@ if "%1" == "" (
     echo   all          -- Normal build of application
     echo   upgrade      -- Build and upgrade application
     echo   install      -- Builds, installs JBoss locally
-    echo   dev          -- Builds, upgrades JBoss on DEV
-    echo   ci           -- Builds, upgrades JBoss on CI
-    echo   qa           -- Builds, upgrades JBoss on QA
-    echo   data-qa      -- Builds, upgrades JBoss on Data QA
+    echo   dev1         -- Builds, upgrades JBoss on DEV - leg 1
+    echo   dev2         -- Builds, upgrades JBoss on DEV - leg 2
     echo   deploy       -- Hot deploy application
     echo   jsp          -- Hot deploy JSP files
     echo   stop         -- Stop war file
     echo   start        -- Start war file
     echo   cissh        -- Test SSH login in CI
+    echo   dev1ssh      -- Test SSH login in DEV1
+    echo   dev2ssh      -- Test SSH login in DEV2
     goto DONE
 )
 if "%1" == "all" (
@@ -69,25 +70,26 @@ if "%1" == "clean" (
     )
     goto DONE
 )
-if "%1" == "dev" (
-    ant -Dproperties.file=%DEVPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
+if "%1" == "dev1" (
+    ant -Dproperties.file=%DEVPROPFILE% -Djboss.server.hostname=%DEV_SERVER1% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
-if "%1" == "ci" (
-    ant -Dproperties.file=%CIPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
-    goto DONE
-)
-if "%1" == "qa" (
-    ant -Dproperties.file=%QAPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
-    goto DONE
-)
-if "%1" == "data-qa" (
-    ant -Dproperties.file=%DATAQAPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
+if "%1" == "dev2" (
+    ant -Dproperties.file=%DEVPROPFILE% -Djboss.server.hostname=%DEV_SERVER2% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
 if "%1" == "cissh" (
-    ssh jboss51a@ncias-c512-v.nci.nih.gov -i C:\NCI-Projects\ncit-properties\properties\ssh-keys\id_dsa_bda echo "Test worked!"
+    ssh jboss51a@%CI_SERVER% -i C:\NCI-Projects\ssh-keys\id_dsa_bda echo "Test connecting to CI worked!"
     goto DONE
 )
+if "%1" == "dev1ssh" (
+    ssh jboss51c@%DEV_SERVER1% -i C:\NCI-Projects\ssh-keys\id_dsa_bda echo "Test connecting to DEV1 worked!"
+    goto DONE
+)
+if "%1" == "dev2ssh" (
+    ssh jboss51c@%DEV_SERVER2% -i C:\NCI-Projects\ssh-keys\id_dsa_bda echo "Test connecting to DEV2 worked!"
+    goto DONE
+)
+echo Invalid target '%1'.
 :DONE
 endlocal
