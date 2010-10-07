@@ -65,10 +65,12 @@
           <table background="<%=basePath%>/images/termbrowser_popup_banner-middle.gif" cellspacing="0" cellpadding="0" border="0">
             <tr>
               <td width="1">
-                <% if (hierarchy_schema == null || hierarchy_schema.compareTo("NCI Thesaurus") == 0) { %>
-                  <img src="<%=basePath%>/images/termbrowser_popup_banner-left.gif" alt="NCI Thesaurus" title="" border="0" />
+                <% if (hierarchy_schema == null) { %>
+                  <img src="<%=basePath%>/images/termbrowser_popup_banner-left.gif" alt="NCI Term Browser Banner" title="" border="0" />
+                <% } else if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) { %>
+                  <img src="<%=basePath%>/images/thesaurus_popup_banner-left.gif" alt="NCI Thesaurus Banner" title="" border="0" />
                 <% } else { %>
-                  <img src="<%=basePath%>/images/other_popup_banner-left.gif" alt="NCI Thesaurus" title="" border="0" />
+                  <img src="<%=basePath%>/images/other_popup_banner-left.gif" alt="Other Banner" title="" border="0" />
                   <div class="vocabularynamepopupshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
                 <% } %>
               </td>
