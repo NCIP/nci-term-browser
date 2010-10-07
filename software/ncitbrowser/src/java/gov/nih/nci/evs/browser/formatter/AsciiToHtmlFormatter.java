@@ -158,11 +158,11 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         out.writeln_indent("<style>");
         out.writeln_normal("  * {");
         out.writeln_normal("    font-family: Helvetica, Geneva, Times, Verdana, sans-serif;");
-        out.writeln_normal("    font-size: 7pt;");
+        out.writeln_normal("    font-size: 8pt;");
         out.writeln_normal("  }");
         out.writeln_normal("  .reportTablePrimaryLabel{ /* for the first row */");
         out.writeln_normal("    font-family:arial,helvetica,verdana,sans-serif;");
-        out.writeln_normal("    font-size:0.9em;");
+        out.writeln_normal("    font-size:1.2em;");
         out.writeln_normal("    font-weight:bold;");
         out.writeln_normal("    background-color:#5C5C5C; /* constant: dark gray */");
         out.writeln_normal("    color:#FFFFFF; /* constant: white */");
