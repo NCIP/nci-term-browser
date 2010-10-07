@@ -24,8 +24,7 @@ if "%1" == "" (
     echo   all          -- Normal build of application
     echo   upgrade      -- Build and upgrade application
     echo   install      -- Builds, installs JBoss locally
-    echo   dev1         -- Builds, upgrades JBoss on DEV - leg 1
-    echo   dev2         -- Builds, upgrades JBoss on DEV - leg 2
+    echo   dev          -- Builds, upgrades JBoss on DEV
     echo   deploy       -- Hot deploy application
     echo   jsp          -- Hot deploy JSP files
     echo   stop         -- Stop war file
@@ -70,12 +69,8 @@ if "%1" == "clean" (
     )
     goto DONE
 )
-if "%1" == "dev1" (
-    ant -Dproperties.file=%DEVPROPFILE% -Djboss.server.hostname=%DEV_SERVER1% %TAG% %DEBUG% deploy:remote:upgrade
-    goto DONE
-)
-if "%1" == "dev2" (
-    ant -Dproperties.file=%DEVPROPFILE% -Djboss.server.hostname=%DEV_SERVER2% %TAG% %DEBUG% deploy:remote:upgrade
+if "%1" == "dev" (
+    ant -Dproperties.file=%DEVPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
 if "%1" == "cissh" (
