@@ -505,7 +505,7 @@
         <echoproperties  prefix="ssh"> <propertyset negate="yes" > <propertyref regex="passw" /> </propertyset> </echoproperties>
         <deploy-files dist.file="${ncitbrowser-webapp.upgrade.zip.file}" />
         <override-properties-prep
-            override.properties="@{override.properties}"
+            override.properties="${override.properties}"
             override.properties.string.property.name="override.properties.string"
             />
         <!-- SSH to machine ant run ant command line to install application -->
