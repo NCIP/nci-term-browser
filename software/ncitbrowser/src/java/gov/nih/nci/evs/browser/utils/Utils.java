@@ -107,6 +107,18 @@ public class Utils {
         boolean includeDelimiter) {
         return toStrings(value, delimiter, includeDelimiter, true);
     }
+    
+    public static int[] toInts(List<Integer> list) {
+        int[] values = new int[list.size()];
+        int i=0;
+
+        Iterator<Integer> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            Integer value = iterator.next();
+            values[i++] = value;
+        }
+        return values;
+    }
 
     public static void debug(String msg, String[] list) {
         if (msg != null && msg.length() > 0)

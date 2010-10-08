@@ -309,11 +309,11 @@ public class NCItBrowserProperties {
         return _sliding_window_half_width;
     }
 
-    public String getStandardFtpReportUrl() {
+    public static String getStandardFtpReportUrl() {
         return _standard_ftp_report_url;
     }
 
-    public Vector<StandardFtpReportInfo> getStandardFtpReportInfoList() {
+    public static Vector<StandardFtpReportInfo> getStandardFtpReportInfoList() {
         return _standard_ftp_report_info_list;
     }
 }
