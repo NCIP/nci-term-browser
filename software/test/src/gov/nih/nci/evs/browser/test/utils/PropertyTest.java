@@ -7,12 +7,13 @@ import gov.nih.nci.evs.browser.properties.*;
 public class PropertyTest {
     public static void main(String[] args) throws Exception {
         args = SetupEnv.getInstance().parse(args);
+        NCItBrowserProperties.getInstance();
         String value =
-            NCItBrowserProperties.getInstance().getStandardFtpReportUrl();
+            NCItBrowserProperties.getStandardFtpReportUrl();
         System.out.println("getStandardFtpReportUrl: " + value);
 
         Vector<StandardFtpReportInfo> list =
-            NCItBrowserProperties.getInstance().getStandardFtpReportInfoList();
+            NCItBrowserProperties.getStandardFtpReportInfoList();
         Iterator<StandardFtpReportInfo> iterator = list.iterator();
         System.out.println("getStandardFtpReportInfoList:");
         while (iterator.hasNext()) {

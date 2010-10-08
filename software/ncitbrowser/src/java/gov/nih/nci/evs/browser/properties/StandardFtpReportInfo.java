@@ -137,4 +137,15 @@ public class StandardFtpReportInfo {
             new StandardFtpReportInfo(name, url, ncitColumns);
         return report;
     }
+
+    public static StandardFtpReportInfo getByName(
+        Vector<StandardFtpReportInfo> list, String name) {
+        Iterator<StandardFtpReportInfo> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            StandardFtpReportInfo info = iterator.next();
+            if (info.getName().equals(name))
+                return info;
+        }
+        return null;
+    }
 }
