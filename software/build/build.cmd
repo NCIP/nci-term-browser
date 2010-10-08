@@ -11,6 +11,7 @@ set DEV_SERVER1=ncias-d488-v.nci.nih.gov
 set DEV_SERVER2=ncias-d499-v.nci.nih.gov
 set CI_SERVER=ncias-c512-v.nci.nih.gov
 set DEVPROPFILE=C:\NCI-Projects\ncit-dev-properties\dev-upgrade.properties
+set CIPROPFILE=C:\NCI-Projects\ncit-dev-properties\ci-upgrade.properties
 @rem Test is debug has been set
 if "%2" == "debug" (
     set DEBUG=-Denable.install.debug=true -debug
@@ -71,6 +72,10 @@ if "%1" == "clean" (
 )
 if "%1" == "dev" (
     ant -Dproperties.file=%DEVPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
+    goto DONE
+)
+if "%1" == "ci" (
+    ant -Dproperties.file=%CIPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
 if "%1" == "cissh" (
