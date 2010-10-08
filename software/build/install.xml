@@ -337,6 +337,27 @@
             <filter token="env.LOGNAME" value="${env.LOGNAME}"/>
             <filter token="env.JAVA_HOME" value="${env.JAVA_HOME}"/>
             <filter token="project.name" value="project.name"/>
+            <filter token="standard.ftp.report.url" value="${standard.ftp.report.url}"/>
+            <filter token="standard.ftp.report.info.0" value="${standard.ftp.report.info.0}"/>
+            <filter token="standard.ftp.report.info.1" value="${standard.ftp.report.info.1}"/>
+            <filter token="standard.ftp.report.info.2" value="${standard.ftp.report.info.2}"/>
+            <filter token="standard.ftp.report.info.3" value="${standard.ftp.report.info.3}"/>
+            <filter token="standard.ftp.report.info.4" value="${standard.ftp.report.info.4}"/>
+            <filter token="standard.ftp.report.info.5" value="${standard.ftp.report.info.5}"/>
+            <filter token="standard.ftp.report.info.6" value="${standard.ftp.report.info.6}"/>
+            <filter token="standard.ftp.report.info.7" value="${standard.ftp.report.info.7}"/>
+            <filter token="standard.ftp.report.info.8" value="${standard.ftp.report.info.8}"/>
+            <filter token="standard.ftp.report.info.9" value="${standard.ftp.report.info.9}"/>
+            <filter token="standard.ftp.report.info.10" value="${standard.ftp.report.info.10}"/>
+            <filter token="standard.ftp.report.info.11" value="${standard.ftp.report.info.11}"/>
+            <filter token="standard.ftp.report.info.12" value="${standard.ftp.report.info.12}"/>
+            <filter token="standard.ftp.report.info.13" value="${standard.ftp.report.info.13}"/>
+            <filter token="standard.ftp.report.info.14" value="${standard.ftp.report.info.14}"/>
+            <filter token="standard.ftp.report.info.15" value="${standard.ftp.report.info.15}"/>
+            <filter token="standard.ftp.report.info.16" value="${standard.ftp.report.info.16}"/>
+            <filter token="standard.ftp.report.info.17" value="${standard.ftp.report.info.17}"/>
+            <filter token="standard.ftp.report.info.18" value="${standard.ftp.report.info.18}"/>
+            <filter token="standard.ftp.report.info.19" value="${standard.ftp.report.info.19}"/>
         </filterset>
         <mkdir dir="${application.data.path}/${ncitbrowser.conf.path}" />
         <mkdir dir="${application.data.path}/${ehcache.cache.path}" />

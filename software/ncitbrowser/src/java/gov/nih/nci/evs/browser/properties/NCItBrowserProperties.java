@@ -92,6 +92,11 @@ public class NCItBrowserProperties {
         "MINIMUM_SEARCH_STRING_LENGTH";
     public static final String SLIDING_WINDOW_HALF_WIDTH =
         "SLIDING_WINDOW_HALF_WIDTH";
+    public static final String STANDARD_FTP_REPORT_URL = 
+        "STANDARD_FTP_REPORT_URL";
+    public static final String STANDARD_FTP_REPORT_INFO = 
+        "STANDARD_FTP_REPORT_INFO";
+    public static int STANDARD_FTP_REPORT_INFO_MAX = 20;
 
     private static NCItBrowserProperties _browserProperties = null;
     private static Properties _properties = new Properties();
@@ -115,6 +120,9 @@ public class NCItBrowserProperties {
     private static int _minimum_search_string_length = 1;
 
     private static int _sliding_window_half_width = 5;
+    private static String _standard_ftp_report_url = "";
+    private static Vector<StandardFtpReportInfo> _standard_ftp_report_info_list = 
+        new Vector<StandardFtpReportInfo>();
 
     /**
      * Private constructor for singleton pattern.
@@ -214,6 +222,9 @@ public class NCItBrowserProperties {
                                 sliding_window_halfwidth;
                         }
                     }
+                    _standard_ftp_report_url = getProperty(STANDARD_FTP_REPORT_URL);
+                    _standard_ftp_report_info_list = StandardFtpReportInfo.parse(
+                        STANDARD_FTP_REPORT_INFO, STANDARD_FTP_REPORT_INFO_MAX);
                 }
             }
         }
@@ -231,7 +242,7 @@ public class NCItBrowserProperties {
             return null;
         return ret_str;
     }
-
+    
     public static List getDisplayItemList() {
         return _displayItemList;
     }
@@ -298,4 +309,11 @@ public class NCItBrowserProperties {
         return _sliding_window_half_width;
     }
 
+    public String getStandardFtpReportUrl() {
+        return _standard_ftp_report_url;
+    }
+
+    public Vector<StandardFtpReportInfo> getStandardFtpReportInfoList() {
+        return _standard_ftp_report_info_list;
+    }
 }
