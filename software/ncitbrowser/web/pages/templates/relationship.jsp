@@ -479,15 +479,17 @@
 	score = null;
 
 	if (isMapping) {
-	    qualifiers = (String) ret_vec.elementAt(4);
-	    System.out.println(qualifiers);
-	    Vector v = DataUtils.parseData(qualifiers, "$");
-	    String rel_str = (String) v.elementAt(0);
-	    int m1 = rel_str.indexOf(":");
-	    rel = rel_str.substring(m1+1, rel_str.length()); 
-	    String score_str = (String) v.elementAt(1);
-	    int m2 = score_str.indexOf(":");
-	    score = score_str.substring(m2+1, score_str.length()); 
+	    if (ret_vec.size() > 4) {
+		    qualifiers = (String) ret_vec.elementAt(4);
+		    System.out.println(qualifiers);
+		    Vector v = DataUtils.parseData(qualifiers, "$");
+		    String rel_str = (String) v.elementAt(0);
+		    int m1 = rel_str.indexOf(":");
+		    rel = rel_str.substring(m1+1, rel_str.length()); 
+		    String score_str = (String) v.elementAt(1);
+		    int m2 = score_str.indexOf(":");
+		    score = score_str.substring(m2+1, score_str.length()); 
+	    }
 	}
 
       if (n2 % 2 == 0) {
