@@ -382,6 +382,18 @@ public class MetadataUtils {
     public static MetadataPropertyList getMetadataPropertyList(
         LexBIGService lbSvc, String codingSchemeName, String version, String urn) {
 
+
+        if (urn == null) {
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null) versionOrTag.setVersion(version);
+			try {
+				CodingScheme cs = DataUtils.getCodingScheme(codingSchemeName, versionOrTag);
+				urn = cs.getCodingSchemeURI();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
         _logger.debug("getMetadataPropertyList codingSchemeName: "
             + codingSchemeName);
 
@@ -398,7 +410,8 @@ public class MetadataUtils {
             lbsm =
                 lbsm.restrictToCodingScheme(Constructors
                     .createAbsoluteCodingSchemeVersionReference(
-                        codingSchemeName, version));
+                        //codingSchemeName, version));
+                        urn, version));
             mdpl = lbsm.resolve();
 
             return mdpl;
