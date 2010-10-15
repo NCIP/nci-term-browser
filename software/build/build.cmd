@@ -11,7 +11,6 @@ set DEV_SERVER1=ncias-d488-v.nci.nih.gov
 set DEV_SERVER2=ncias-d499-v.nci.nih.gov
 set CI_SERVER=ncias-c512-v.nci.nih.gov
 set DEVPROPFILE=C:\NCI-Projects\ncit-dev-properties\dev-upgrade.properties
-set CIPROPFILE=C:\NCI-Projects\ncit-dev-properties\ci-upgrade.properties
 @rem Test is debug has been set
 if "%2" == "debug" (
     set DEBUG=-Denable.install.debug=true -debug
@@ -25,7 +24,8 @@ if "%1" == "" (
     echo   all          -- Normal build of application
     echo   upgrade      -- Build and upgrade application
     echo   install      -- Builds, installs JBoss locally
-    echo   dev          -- Builds, upgrades JBoss on DEV
+    echo   dev1         -- Builds, upgrades JBoss on DEV - leg 1
+    echo   dev2         -- Builds, upgrades JBoss on DEV - leg 2
     echo   deploy       -- Hot deploy application
     echo   jsp          -- Hot deploy JSP files
     echo   stop         -- Stop war file
@@ -70,12 +70,12 @@ if "%1" == "clean" (
     )
     goto DONE
 )
-if "%1" == "dev" (
-    ant -Dproperties.file=%DEVPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
+if "%1" == "dev1" (
+    ant -Dproperties.file=%DEVPROPFILE% -Djboss.server.hostname=%DEV_SERVER1% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
-if "%1" == "ci" (
-    ant -Dproperties.file=%CIPROPFILE% %TAG% %DEBUG% deploy:remote:upgrade
+if "%1" == "dev2" (
+    ant -Dproperties.file=%DEVPROPFILE% -Djboss.server.hostname=%DEV_SERVER2% %TAG% %DEBUG% deploy:remote:upgrade
     goto DONE
 )
 if "%1" == "cissh" (
