@@ -38,12 +38,12 @@
       <div class="center-page">
         <%@ include file="/pages/templates/sub-header.jsp" %>
         <div id="main-area">
-<%          
+<%
 String contact_dictionary = (String) request.getSession().getAttribute("dictionary");
 if (contact_dictionary == null) {
 %>
    <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
-<%   
+<%
 }
 else if (contact_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
@@ -52,10 +52,10 @@ else if (contact_dictionary.compareTo("NCI Thesaurus") == 0) {
 } else {
 %>
    <%@ include file="/pages/templates/content-header-other.jsp" %>
-<%   
+<%
 }
 %>
-          
+
           <div class="pagecontent">
             <div class="texttitle-blue">Contact Us</div>
             <hr></hr>
@@ -123,7 +123,7 @@ else if (contact_dictionary.compareTo("NCI Thesaurus") == 0) {
                 }
               %>
             </p>
-            <form method="post">
+            <h:form>
               <p>
                 <% if (userError) %> <i style="color:#FF0000;">* Required)</i>
                 <i>Subject of your email:</i>
@@ -148,7 +148,7 @@ else if (contact_dictionary.compareTo("NCI Thesaurus") == 0) {
                 action="#{userSessionBean.contactUs}" >
               </h:commandButton>
               &nbsp;&nbsp;<INPUT type="reset" value="Clear" alt="Clear">
-            </form>
+            </h:form>
             <a href="http://www.cancer.gov/policies/page3" target="_blank"
                 alt="National Cancer Institute Policies">
               <i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i>
