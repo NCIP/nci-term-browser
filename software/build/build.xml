@@ -713,14 +713,16 @@
                 />
         </sequential>
 
-        <unzip src="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}"
-               dest="${jboss.war.temp.dir.location}">
-        </unzip>
-
         <echo message="Starting: ${ncitbrowser-webapp.file.name}" />
         <exec executable="${shell}" failonerror="true">
             <arg value="${option}"/>
             <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.web.deployment:war=/${project.name}" start'/>
+        </exec>
+
+        <echo message="Redeploying: ${ncitbrowser-webapp.file.name}" />
+        <exec executable="${shell}" failonerror="true">
+            <arg value="${option}"/>
+            <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.system:service=MainDeployer" redeploy file:${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}'/>
         </exec>
 
     </target>
