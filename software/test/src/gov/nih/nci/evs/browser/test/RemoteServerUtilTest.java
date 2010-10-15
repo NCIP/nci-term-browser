@@ -57,7 +57,7 @@ public static LexBIGService createLexBIGService()
 {
     // default URL (to be read from a property file)
     //String url = "http://lexevsapi.nci.nih.gov/lexevsapi42";
-    String url = "http://ncias-d177-v.nci.nih.gov:19480/lexevsapi51";
+    String url = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
 
 
     //url = "http://ncias-p208-v.nci.nih.gov:19480/lexevsapi51";
