@@ -16,9 +16,11 @@
     <property name="source.dir" value="src"/>
     <property name="bin.dir" value="bin"/>
     <property name="lib.dir" value="../ncitbrowser/lib"/>
+	<property name="lib2.dir" value="./lib"/>
     <property name="target.dir" value="target"/>
     <property name="script_list" value="**/*.sh,**/*.conf,**/*.properties"/>
     <property name="properties.file" value="build.properties"/>
+	<property name="project.jar" value="${lib2.dir}/x.jar"/>
 
     <!-- Get run time -->
     <tstamp>
@@ -38,6 +40,9 @@
     <path id="base.classpath">
         <fileset dir="${lib.dir}">
             <include name="*.jar" />
+        </fileset>
+        <fileset dir="${lib2.dir}">
+          <include name="*.jar" />
         </fileset>
     </path>
 
@@ -74,7 +79,7 @@
     <!-- build: assemble components                                         -->
     <!--====================================================================-->
 
-    <target name="build" description="Assemble components.">
+    <target name="build" depends="pre-build" description="Assemble components.">
 
         <antcall target="-mk.bin.dir"/>
         <javac srcdir="${source.dir}"
@@ -95,7 +100,18 @@
         </copy>
 
     </target>
-
+	
+	  <target name="pre-build">
+	    <jar destfile="${project.jar}"
+	        basedir="../ncitbrowser/build/web/WEB-INF/classes">
+	      <include name="org/**"/>
+	      <include name="gov/**"/>
+	      <manifest>
+	        <attribute name="Built-By" value="NCI"/>
+	      </manifest>
+	    </jar>
+	  </target>
+	
     <target name="-mk.bin.dir" description="Create target folder subtask.">
         <echo message="Building 'target' and 'bin' folders..." />
         <mkdir dir="${bin.dir}" />
@@ -124,7 +140,8 @@
       <!-- delete packaging products -->
       <delete dir="${bin.dir}" quiet="true" />
       <delete dir="${target.dir}" quiet="true" />
-
+      <delete file="${project.jar}" quiet="true" />
+    	
     </target>
 
     <!--====================================================================-->
