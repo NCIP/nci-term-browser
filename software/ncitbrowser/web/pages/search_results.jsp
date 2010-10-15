@@ -256,13 +256,6 @@ if (isMapping || isExtension) {
 			     con_status = con_status.replaceAll("_", " ");
 			  }
 
-                          //To be modified later:
-                          //IMPORTANT: If search_results_dictionary is a local extension, the browser should take
-                          //    the user to search_results_dictionary, instead of rcr.getCodingSchemeName() even though
-                          //    the concept is defined in the parent coding scheme (rcr.getCodingSchemeName()), not the extension.
-                          //
-                          //Note: Temporarily route the concept to rcr.getCodingSchemeName() -- due to code not found error in API
-                          //String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
 
 				if (i % 2 == 0) {
 				%>
@@ -279,11 +272,11 @@ if (isMapping || isExtension) {
 				  <%
 				  if (con_status == null) {
 				  %>
-				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&version=<%=coding_scheme_version%>&code=<%=code%>" ><%=name%></a>
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>
 				  <%
 				  } else {
 				  %>
-				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&version=<%=coding_scheme_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
 				  <%
 				  }
 				  %>
