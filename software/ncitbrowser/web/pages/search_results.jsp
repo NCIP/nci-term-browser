@@ -43,6 +43,9 @@ String search_results_version = (String) request.getAttribute("version");
 
 HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 HashMap name_hmap = new HashMap();
+String vocabulary_name = null;
+String short_vocabulary_name = null;
+String coding_scheme_version = null;
 
 
 _logger.debug("search_results.jsp dictionary: " + search_results_dictionary);
@@ -184,8 +187,7 @@ if (isMapping || isExtension) {
                       }
                   }
 
-
-                  //Vector status_vec = DataUtils.getStatusByConceptCodes(search_results_dictionary, search_results_version, null, code_vec);
+//to be modified: (if API does not support it)
                   Vector status_vec = DataUtils.getConceptStatusByConceptCodes(search_results_dictionary, search_results_version, null, code_vec);
                   int i = -1;
                  
@@ -201,6 +203,27 @@ if (obj == null) {
                       
                       if (rcr != null) {
                       String code = rcr.getConceptCode();
+                      coding_scheme_version = rcr.getCodingSchemeVersion();
+                      
+if (isMapping || isExtension) {              
+    
+    vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+    if (vocabulary_name == null) {
+	vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+    }
+
+    short_vocabulary_name = null;
+    if (name_hmap.containsKey(vocabulary_name)) {
+	short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
+    } else {
+	short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
+	if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+	    short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+	}
+	name_hmap.put(vocabulary_name, short_vocabulary_name);
+    }
+}
+                      
                       
                       String name = "null";
                       if (rcr.getEntityDescription() != null) {
@@ -233,9 +256,15 @@ if (obj == null) {
 			     con_status = con_status.replaceAll("_", " ");
 			  }
 
-                          String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
+                          //To be modified later:
+                          //IMPORTANT: If search_results_dictionary is a local extension, the browser should take
+                          //    the user to search_results_dictionary, instead of rcr.getCodingSchemeName() even though
+                          //    the concept is defined in the parent coding scheme (rcr.getCodingSchemeName()), not the extension.
+                          //
+                          //Note: Temporarily route the concept to rcr.getCodingSchemeName() -- due to code not found error in API
+                          //String vocabulary_name = search_results_dictionary;//(String) hmap.get(rcr.getCodingSchemeName());
 
-				    if (i % 2 == 0) {
+				if (i % 2 == 0) {
 				%>
 				  <tr class="dataRowDark">
 				<%
@@ -250,43 +279,22 @@ if (obj == null) {
 				  <%
 				  if (con_status == null) {
 				  %>
-				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&version=<%=coding_scheme_version%>&code=<%=code%>" ><%=name%></a>
 				  <%
 				  } else {
 				  %>
-				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name%>&version=<%=coding_scheme_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
 				  <%
 				  }
 				  %>
 				  </td>
 				  
-<%              
-if (isMapping || isExtension) {              
-    
-    vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
-    if (vocabulary_name == null) {
-	vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
-    }
+			  
 
-    String short_vocabulary_name = null;
-    if (name_hmap.containsKey(vocabulary_name)) {
-	short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
-    } else {
-	short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
-	if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
-	    short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-	}
-	name_hmap.put(vocabulary_name, short_vocabulary_name);
-    }
-%> 				  
+				    <td class="dataCellText">
+					 <%=short_vocabulary_name%>
+				    </td>
 
-    <td class="dataCellText">
-	 <%=short_vocabulary_name%>
-    </td>
-
-<%              
-}             
-%> 				  
 				  
 				  
 				  

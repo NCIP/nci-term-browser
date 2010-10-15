@@ -37,6 +37,9 @@ import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.QualifierSortOptio
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 
+import org.LexGrid.LexBIG.Utility.ServiceUtility;
+
+
 import org.apache.log4j.*;
 
 /**
@@ -3398,16 +3401,45 @@ public class DataUtils {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     // To be implemented based on metadata
+    /*
 	public static boolean isMapping(String codingScheme, String version) {
 		String scheme = codingScheme.toLowerCase();
 		if (scheme.indexOf("mapping") != -1 || scheme.indexOf("_to_") != -1) return true;
 		return false;
 	}
+	*/
 
-    // To be implemented based on metadata
+    public static boolean isMapping(String scheme, String version) {
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
+
+		List list = new ArrayList();
+		try {
+			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+			Relations[] relations = cs.getRelations();
+			if (relations.length == 0) return false;
+			for (int i = 0; i < relations.length; i++) {
+				Relations relation = relations[i];
+				Boolean bool_obj = relation.isIsMapping();
+				if (bool_obj == null || bool_obj.equals(Boolean.FALSE)) return false;
+			}
+		} catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+
+
 	public static boolean isExtension(String codingScheme, String version) {
-		String scheme = codingScheme.toLowerCase();
-		if (scheme.indexOf("extension") != -1) return true;
+		CodingSchemeVersionOrTag tagOrVersion = new CodingSchemeVersionOrTag();
+		if (version != null) tagOrVersion.setVersion(version);
+		try {
+			return ServiceUtility.isSupplement(codingScheme, tagOrVersion);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		return false;
 	}
 
@@ -3742,5 +3774,7 @@ public class DataUtils {
 		return null;
 
 	}
+
+
 
 }
