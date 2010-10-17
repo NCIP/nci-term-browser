@@ -215,24 +215,8 @@ if (obj == null) {
                       
 if (isMapping || isExtension) {              
     
-    vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
-    
-System.out.println("rcr.getCodingSchemeName(): " + rcr.getCodingSchemeName());
-System.out.println("rcr.getCodeNamespace(): " + rcr.getCodeNamespace());
-System.out.println("rcr.getConceptCode(): " + rcr.getConceptCode());
-
-
-
-
-
-
-if (rcr.getEntityDescription() != null) {
-System.out.println("rcr.getEntityDescription().getContent(): " + rcr.getEntityDescription().getContent());
-} else {
-System.out.println("rcr.getEntityDescription() == null???");
-}
-    
-    
+    //vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+    vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodeNamespace());
     if (vocabulary_name == null) {
 	vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
     }
@@ -249,13 +233,16 @@ System.out.println("rcr.getEntityDescription() == null???");
     }
 }
 
-
-System.out.println("vocabulary_name: " + vocabulary_name);
-
                       
                       String name = "null";
                       if (rcr.getEntityDescription() != null) {
                           name = rcr.getEntityDescription().getContent();
+                      } else {
+			Entity entity = SearchUtils.getConceptByCode(rcr.getCodeNamespace(),
+					 null, null, rcr.getConceptCode());
+			name = entity.getEntityDescription().getContent();
+                      
+                      
                       }
                       if (code == null || code.indexOf("@") != -1) {
                           i++;
