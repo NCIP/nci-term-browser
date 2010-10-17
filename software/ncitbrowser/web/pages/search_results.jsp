@@ -218,6 +218,13 @@ if (isMapping || isExtension) {
     vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
     
 System.out.println("rcr.getCodingSchemeName(): " + rcr.getCodingSchemeName());
+System.out.println("rcr.getCodeNamespace(): " + rcr.getCodeNamespace());
+System.out.println("rcr.getConceptCode(): " + rcr.getConceptCode());
+
+
+
+
+
 
 if (rcr.getEntityDescription() != null) {
 System.out.println("rcr.getEntityDescription().getContent(): " + rcr.getEntityDescription().getContent());
