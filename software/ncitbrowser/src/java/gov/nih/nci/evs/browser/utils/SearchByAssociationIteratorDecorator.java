@@ -391,14 +391,22 @@ public class SearchByAssociationIteratorDecorator implements
 
     }
 
-    protected void displayRef(ResolvedConceptReference ref) {
+    protected void displayRef(ResolvedConceptReference rcr) {
         // _logger.debug(ref.getConceptCode() + ":" +
         // ref.getEntityDescription().getContent());
 
         //System.out.println(ref.getConceptCode() + ":" +
         //   ref.getEntityDescription().getContent());
-
-
+/*
+System.out.println("SearchByAssociationIteratorDecorator rcr.getCodingSchemeName(): " + rcr.getCodingSchemeName());
+System.out.println("SearchByAssociationIteratorDecorator rcr.getCodeNamespace(): " + rcr.getCodeNamespace());
+System.out.println("SearchByAssociationIteratorDecorator rcr.getConceptCode(): " + rcr.getConceptCode());
+if (rcr.getEntityDescription() != null) {
+System.out.println("SearchByAssociationIteratorDecorator rcr.getEntityDescription().getContent(): " + rcr.getEntityDescription().getContent());
+} else {
+System.out.println("SearchByAssociationIteratorDecorator rcr.getEntityDescription() == null???");
+}
+*/
     }
 
     protected void displayRef(String msg, ResolvedConceptReference ref) {
