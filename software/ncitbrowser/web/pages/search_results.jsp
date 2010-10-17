@@ -38,7 +38,15 @@
 <%
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
 boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
+
+System.out.println("isMapping: " + isMapping);
+
 boolean isExtension = DataUtils.isExtension(search_results_dictionary, null);
+
+
+System.out.println("isExtension: " + isExtension);
+
+
 String search_results_version = (String) request.getAttribute("version");
 
 HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
@@ -187,7 +195,7 @@ if (isMapping || isExtension) {
                       }
                   }
 
-//to be modified: (if API does not support it)
+//to be modified: 
                   Vector status_vec = DataUtils.getConceptStatusByConceptCodes(search_results_dictionary, search_results_version, null, code_vec);
                   int i = -1;
                  
@@ -196,7 +204,7 @@ if (isMapping || isExtension) {
                       ResolvedConceptReference rcr = null;
 
 if (obj == null) {
-   _logger.warn("rcr == null???????????????????");
+   _logger.warn("rcr == null???");
 } else {
    rcr = (ResolvedConceptReference) obj;
 }
@@ -208,6 +216,16 @@ if (obj == null) {
 if (isMapping || isExtension) {              
     
     vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+    
+System.out.println("rcr.getCodingSchemeName(): " + rcr.getCodingSchemeName());
+
+if (rcr.getEntityDescription() != null) {
+System.out.println("rcr.getEntityDescription().getContent(): " + rcr.getEntityDescription().getContent());
+} else {
+System.out.println("rcr.getEntityDescription() == null???");
+}
+    
+    
     if (vocabulary_name == null) {
 	vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
     }
@@ -223,7 +241,10 @@ if (isMapping || isExtension) {
 	name_hmap.put(vocabulary_name, short_vocabulary_name);
     }
 }
-                      
+
+
+System.out.println("vocabulary_name: " + vocabulary_name);
+
                       
                       String name = "null";
                       if (rcr.getEntityDescription() != null) {
@@ -270,6 +291,10 @@ if (isMapping || isExtension) {
 				    
 				  <td class="dataCellText">
 				  <%
+
+System.out.println("name: " + name);
+				  
+				  
 				  if (con_status == null) {
 				  %>
 				     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>
@@ -282,14 +307,15 @@ if (isMapping || isExtension) {
 				  %>
 				  </td>
 				  
-			  
-
+<%
+if (isMapping || isExtension) {              
+%>
 				    <td class="dataCellText">
 					 <%=short_vocabulary_name%>
 				    </td>
-
-				  
-				  
+<%				  
+}				  
+%>				  
 				  
 				</tr>
 				    <%
