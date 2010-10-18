@@ -70,12 +70,12 @@
             version = version.replaceAll(" ", "%20");
           }
          %>
-          <form>
+          <h:form>
             <h:commandButton
               id="search"
               value="Search"
               action="#{userSessionBean.multipleSearchAction}"
-              image="#{facesContext.externalContext.requestContextPath}/images/accept.gif"
+              image="/images/accept.gif"
               alt="Search">
             </h:commandButton>
             &nbsp;&nbsp;
@@ -90,7 +90,7 @@
             <input type="hidden" id="version" name="version" value="<%=version0%>" />
             <input type="hidden" id="searchTarget" name="searchTarget" value="<%=searchTarget%>" />
 
-          </form>
+          </h:form>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->
