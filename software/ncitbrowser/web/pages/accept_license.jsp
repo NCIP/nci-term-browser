@@ -48,7 +48,7 @@
         <p>
           If and only if you agree to these terms and conditions, click the Accept button to proceed.
         </p>
-          <form>
+          <h:form>
             <h:commandButton
               id="accept"
               value="accept"
@@ -66,7 +66,7 @@
             <input type="hidden" id="code" name="code" value="<%=code%>" />
             <input type="hidden" id="matchText" name="code" value="<%=matchText_licensedPage%>" />
 
-          </form>
+          </h:form>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->
