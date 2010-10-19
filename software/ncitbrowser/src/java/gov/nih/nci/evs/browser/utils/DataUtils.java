@@ -813,6 +813,9 @@ public class DataUtils {
             // RemoteServerUtil().createLexBIGService();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+            Boolean restrictToAnonymous = Boolean.TRUE;
+            //6.0 mod (KLO, 101810)
+            cng = cng.restrictToAnonymous(restrictToAnonymous);
 
             NameAndValueList nameAndValueList =
                 createNameAndValueList(new String[] { assocName }, null);
@@ -843,8 +846,8 @@ public class DataUtils {
 
                     for (int i = 0; i < associations.length; i++) {
                         Association assoc = associations[i];
-                        // KLO
-                        assoc = processForAnonomousNodes(assoc);
+                        //6.0 mod (KLO, 101810)
+                        //assoc = processForAnonomousNodes(assoc);
                         AssociatedConcept[] acl =
                             assoc.getAssociatedConcepts()
                                 .getAssociatedConcept();
@@ -1199,6 +1202,7 @@ public class DataUtils {
         return filename;
     }
 
+/*
     protected static Association processForAnonomousNodes(Association assoc) {
         // clone Association except associatedConcepts
         Association temp = new Association();
@@ -1234,6 +1238,7 @@ public class DataUtils {
         }
         return temp;
     }
+*/
 
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
