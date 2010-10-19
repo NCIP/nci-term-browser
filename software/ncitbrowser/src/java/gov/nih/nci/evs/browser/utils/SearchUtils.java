@@ -487,6 +487,7 @@ public class SearchUtils {
         return v;
     }
 
+/*
     protected static Association processForAnonomousNodes(Association assoc) {
         // clone Association except associatedConcepts
         Association temp = new Association();
@@ -522,7 +523,7 @@ public class SearchUtils {
         }
         return temp;
     }
-
+*/
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static NameAndValueList createNameAndValueList(String[] names,
@@ -3175,6 +3176,10 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
 		CodedNodeSet cns = null;
 		try {
 			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+            CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.ANONYMOUS_ONLY;
+            //6.0 mod (KLO, 101810)
+            cns = cns.restrictToAnonymous(restrictToAnonymous);
+
 		/*
 		LocalNameList entityTypes = new LocalNameList();
 		entityTypes.addEntry("concept");
