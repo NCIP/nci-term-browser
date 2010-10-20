@@ -154,7 +154,8 @@
  if (isMapping) {
  %>
      <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
-     <th class="dataTableHeader" scope="col" align="left">Name</th> 
+     <th class="dataTableHeader" scope="col" align="left">Name</th>
+     <th class="dataTableHeader" scope="col" align="left">Code</th> 
      <th class="dataTableHeader" scope="col" align="left">REL</th>
      <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
  <%
@@ -205,10 +206,16 @@
                   <%=target_concept_name%>
                 </a>
               </td>
+
               
               <%
               if (isMapping) {
               %>
+              <td>
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                  <%=target_concept_code%>
+                </a>
+              </td>              
               <td><%=rel%></td>
               <td><%=score%></td>
               <%
@@ -247,6 +254,7 @@
  %>
      <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
      <th class="dataTableHeader" scope="col" align="left">Name</th> 
+     <th class="dataTableHeader" scope="col" align="left">Code</th> 
      <th class="dataTableHeader" scope="col" align="left">REL</th>
      <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
  <%
@@ -311,11 +319,16 @@
               <%
               if (isMapping) {
               %>
+              <td>
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                  <%=target_concept_code%>
+                </a>
+              </td>              
               <td><%=rel%></td>
               <td><%=score%></td>
               <%
               }
-              %>
+              %>     
               
             </tr>
         <%
@@ -355,6 +368,7 @@
    if (isMapping) {
    %>
        <th class="dataTableHeader" scope="col" align="left">Name</th> 
+       <th class="dataTableHeader" scope="col" align="left">Code</th> 
        <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
        <th class="dataTableHeader" scope="col" align="left">REL</th>
        <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
@@ -420,11 +434,16 @@
               <%
               if (isMapping) {
               %>
+              <td>
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                  <%=target_concept_code%>
+                </a>
+              </td>              
               <td><%=rel%></td>
               <td><%=score%></td>
               <%
               }
-              %>              
+              %>                
               
            </tr>
       <%
@@ -455,6 +474,7 @@
    if (isMapping) {
    %>
        <th class="dataTableHeader" scope="col" align="left">Name</th> 
+       <th class="dataTableHeader" scope="col" align="left">Code</th> 
        <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
        <th class="dataTableHeader" scope="col" align="left">REL</th>
        <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
@@ -523,13 +543,18 @@
               </td>
               <td><%=role_name%></td>
               <%
-               if (isMapping) {
+              if (isMapping) {
               %>
+              <td>
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                  <%=target_concept_code%>
+                </a>
+              </td>              
               <td><%=rel%></td>
               <td><%=score%></td>
               <%
               }
-              %>             
+              %>              
               
             </tr>
         <%
