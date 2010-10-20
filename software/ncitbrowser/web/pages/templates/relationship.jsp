@@ -45,6 +45,7 @@
   <p>
     <%
       scheme_curr = scheme_curr.replaceAll(" ", "%20");
+      
       label = "Parent Concepts:";
       concepts = superconcepts;
       if (concepts == null || concepts.size() <= 0)
@@ -430,7 +431,8 @@
               }
               %>
               </td>
-              <td><%=role_name%></td>
+              
+              
               <%
               if (isMapping) {
               %>
@@ -438,7 +440,16 @@
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
-              </td>              
+              </td>
+              <%
+              }
+              %>                   
+              
+              <td><%=role_name%></td>
+              <%
+              if (isMapping) {
+              %>
+            
               <td><%=rel%></td>
               <td><%=score%></td>
               <%
@@ -539,9 +550,8 @@
               <%
               }
               %>                
-                
               </td>
-              <td><%=role_name%></td>
+              
               <%
               if (isMapping) {
               %>
@@ -549,7 +559,15 @@
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
-              </td>              
+              </td>
+              <%
+              }
+              %>                
+              
+              <td><%=role_name%></td>
+              <%
+              if (isMapping) {
+              %>
               <td><%=rel%></td>
               <td><%=score%></td>
               <%

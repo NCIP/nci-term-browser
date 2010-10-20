@@ -672,20 +672,15 @@ if (!hasOtherProperties) {
       String primitive = null;
       String primitive_prop_name = "primitive";
       String primitive_label = "Defined Fully by Roles:";
+      String defined_label = "Defined Fully by Roles:";
       
       dict = DataUtils.getFormalName(dict);
       
       //Vector primitive_value_vec = (Vector) hmap.get(primitive_prop_name);
       String vocabulary_format = DataUtils.getMetadataValue(dict, "format");
+      Boolean isDefined = null;
       if (vocabulary_format != null && vocabulary_format.indexOf("OWL") != -1) {
-	      Boolean isDefined = curr_concept.getIsDefined();
-	      if (isDefined != null) {
-		  if (isDefined.equals(Boolean.TRUE)) {
-		      primitive = "No";
-		  } else {
-		      primitive = "Yes";
-		  }
-	      }
+	      isDefined = curr_concept.getIsDefined();
       }    
       
       String kind = "not available";
@@ -695,12 +690,12 @@ if (!hasOtherProperties) {
     
    
     <%
-    if (primitive != null) {
+    if (isDefined != null) {
     %>
 	  <b>Additional Concept Data:</b>&nbsp;
 	  <table class="datatable">
 	    <tr class="dataRowLight">
-	      <td><%=primitive_label%>&nbsp;<%=primitive%></td>
+	      <td><%=defined_label%>&nbsp;<%=isDefined%></td>
 	      <td>&nbsp;</td>
 	    </tr>
 	  </table>  
