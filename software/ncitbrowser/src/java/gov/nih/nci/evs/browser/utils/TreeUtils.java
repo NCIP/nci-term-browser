@@ -971,7 +971,6 @@ public class TreeUtils {
         ResolvedConceptReferenceList matches = null;
         Vector v = new Vector();
         try {
-
 			Entity concept = getConceptByCode(scheme, version, null, code);
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
 			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
