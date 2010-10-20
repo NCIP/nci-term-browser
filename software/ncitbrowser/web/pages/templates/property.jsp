@@ -679,9 +679,10 @@ if (!hasOtherProperties) {
       //Vector primitive_value_vec = (Vector) hmap.get(primitive_prop_name);
       String vocabulary_format = DataUtils.getMetadataValue(dict, "format");
       Boolean isDefined = null;
+      String is_defined = "No";
       if (vocabulary_format != null && vocabulary_format.indexOf("OWL") != -1) {
 	      isDefined = curr_concept.getIsDefined();
-      }    
+      }  
       
       String kind = "not available";
       String kind_prop_name = "Kind";
@@ -691,11 +692,12 @@ if (!hasOtherProperties) {
    
     <%
     if (isDefined != null) {
+          if (isDefined.equals(Boolean.TRUE)) is_defined = "Yes";
     %>
 	  <b>Additional Concept Data:</b>&nbsp;
 	  <table class="datatable">
 	    <tr class="dataRowLight">
-	      <td><%=defined_label%>&nbsp;<%=isDefined%></td>
+	      <td><%=defined_label%>&nbsp;<%=is_defined%></td>
 	      <td>&nbsp;</td>
 	    </tr>
 	  </table>  
