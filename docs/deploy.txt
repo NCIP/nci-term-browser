@@ -103,3 +103,8 @@ from a remote server because the ‘@’ symbol is used by SCP to designate a remote
 the ‘Remote to Remote’ error.
 Solution:
 Don’t use special character in paths.
+
+Lexevs60 hibernate exception fix
+--------------------------------
+Update run.conf as follows:
+-XX:ThreadStackSize=256
