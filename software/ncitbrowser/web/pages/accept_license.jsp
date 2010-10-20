@@ -53,7 +53,7 @@
               id="accept"
               value="accept"
               action="#{userSessionBean.acceptLicenseAction}"
-              image="#{facesContext.externalContext.requestContextPath}/images/accept.gif"
+              image="/images/accept.gif"
               alt="Accept">
             </h:commandButton>
 

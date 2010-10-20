@@ -208,16 +208,16 @@ if (scheme != null) {
               <p>If and only if you agree to these terms and conditions, click the
               Accept button to proceed.</p>
               <p>
-              <form>
+              <h:form>
                 <h:commandButton id="accept" value="Accept"
                 action="#{userSessionBean.acceptLicenseAgreement}"
-                image="#{facesContext.externalContext.requestContextPath}/images/accept.gif"
+                image="/images/accept.gif"
                 alt="Accept">
               </h:commandButton> &nbsp;&nbsp; <img
                 src="<%=request.getContextPath()%>/images/cancel.gif" name="cancel"
                 alt="reset" onClick="history.back()" />
                 <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(scheme)%>" />
-                <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" /></form>
+                <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" /></h:form>
               </p>
               <%@ include file="/pages/templates/nciFooter.html" %>
             </div>
@@ -296,7 +296,7 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
       | <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>">
         View Mapping
       </a>
-      
+
       <%
       }
       else if (tree_access_allowed) {
