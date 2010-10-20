@@ -435,7 +435,7 @@ if(propName_label.compareTo("Definition") == 0) {
       String concept_name_label = "Concept Name:";
       String dict = (String) request.getSession().getAttribute("dictionary");
       
-      String primitive = null;
+      String is_defined = null;
       String primitive_prop_name = "primitive";
       String primitive_label = "Defined Fully by Roles:";
       
@@ -447,9 +447,9 @@ if(propName_label.compareTo("Definition") == 0) {
 	      Boolean isDefined = curr_concept.getIsDefined();
 	      if (isDefined != null) {
 		  if (isDefined.equals(Boolean.TRUE)) {
-		      primitive = "No";
+		      is_defined = "Yes";
 		  } else {
-		      primitive = "Yes";
+		      is_defined = "No";
 		  }
 	      }
       }    
@@ -486,7 +486,7 @@ if(propName_label.compareTo("Definition") == 0) {
     if (primitive != null) {
     %>
     <tr class="dataRowLight">
-      <td><%=primitive_label%>&nbsp;<%=primitive%></td>
+      <td><%=primitive_label%>&nbsp;<%=is_defined%></td>
       <td>&nbsp;</td>
     </tr>
     <%
