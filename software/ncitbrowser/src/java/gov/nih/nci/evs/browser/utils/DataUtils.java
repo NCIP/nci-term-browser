@@ -1601,6 +1601,11 @@ public class DataUtils {
             csvt.setVersion(version);
 
 		Entity concept = getConceptByCode(scheme, version, null, code);
+		if (concept == null) {
+			System.out.println("WARNING: concept not found in: " + scheme + " code: + " + code);
+			return null;
+		}
+
 		String entityCodeNamespace = concept.getEntityCodeNamespace();
 
 		ConceptReference cr = ConvenienceMethods.createConceptReference(code, scheme);
