@@ -684,58 +684,81 @@
         <if>
             <equals arg1="${os.family}" arg2="windows"/>
             <then>
+                <property name="is.windows" value="true" />
                 <property name="shell" value="cmd" />
                 <property name="option" value="/c" />
                 <property name="twiddle" value="twiddle.bat" />
+                <property name="file" value="file:///" />
             </then>
             <else>
+                <property name="is.windows" value="false" />
                 <property name="shell" value="/bin/bash" />
                 <property name="option" value="-c" />
                 <property name="twiddle" value="twiddle.sh" />
+                <property name="file" value="file:" />
             </else>
         </if>
 
         <if>
-            <isset property="jboss.war.temp.dir.location" />
+            <!-- Hot deployment of classes does not work on Jboss 5.1 / Windows XP
+                   so we default to just deploying JSP files
+              -->
+            <equals arg1="${is.windows}" arg2="true"/>
             <then>
-                <echo message="JBoss temp: ${jboss.war.temp.dir.location}"/>
-                <echo message="Stopping: ${ncitbrowser-webapp.file.name}" />
-                <exec executable="${shell}" failonerror="true">
-                    <arg value="${option}"/>
-                    <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.web.deployment:war=/${project.name}" stop'/>
-                </exec>
-            </then>
-        </if>
-
-        <sequential>
-            <copy
-                file="${ncitbrowser-webapp.dist.dir}/${ncitbrowser-webapp.file.name}"
-                tofile="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}"
-                overwrite="true"
-                />
-        </sequential>
-
-        <if>
-            <isset property="jboss.war.temp.dir.location" />
-            <then>
-                <echo message="Starting: ${ncitbrowser-webapp.file.name}" />
-                <exec executable="${shell}" failonerror="true">
-                    <arg value="${option}"/>
-                    <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.web.deployment:war=/${project.name}" start'/>
-                </exec>
-
-                <echo message="Redeploying: ${ncitbrowser-webapp.file.name}" />
-                <exec executable="${shell}" failonerror="true">
-                    <arg value="${option}"/>
-                    <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.system:service=MainDeployer" redeploy file:${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}'/>
-                </exec>
+                <echo message=""/>
+                <echo message="*** Hot deployment of classes does not work on Jboss 5.1 and Windows. ***"/>
+                <echo message="*** Will use 'deploy:hot:jsp' instead. ***"/>
+                <echo message=""/>
+                <antcall target="deploy:hot:jsp" />
             </then>
             <else>
-                <echo message="Deploying: ${ncitbrowser-webapp.file.name}" />
-                <exec executable="${shell}" failonerror="true">
-                    <arg value="${option}"/>
-                    <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.system:service=MainDeployer" deploy file:${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}'/>
-                </exec>
+
+                <if>
+                    <isset property="jboss.war.temp.dir.location" />
+                    <then>
+                        <echo message="JBoss temp: ${jboss.war.temp.dir.location}"/>
+                        <echo message="Stopping: ${ncitbrowser-webapp.file.name}" />
+                        <exec executable="${shell}" failonerror="true">
+                            <arg value="${option}"/>
+                            <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.web.deployment:war=/${project.name}" stop'/>
+                        </exec>
+                    </then>
+                </if>
+
+                <!-- Copy the war file -->
+                <sequential>
+                    <copy
+                        file="${ncitbrowser-webapp.dist.dir}/${ncitbrowser-webapp.file.name}"
+                        tofile="${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}"
+                        overwrite="true"
+                        />
+                </sequential>
+
+                <!-- Restart or re-deploy the war -->
+                <if>
+                    <isset property="jboss.war.temp.dir.location" />
+                    <then>
+                        <echo message="Starting: ${ncitbrowser-webapp.file.name}" />
+                        <exec executable="${shell}" failonerror="true">
+                            <arg value="${option}"/>
+                            <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.web.deployment:war=/${project.name}" start'/>
+                        </exec>
+
+                        <echo message="Redeploying: ${ncitbrowser-webapp.file.name}" />
+                        <exec executable="${shell}" failonerror="true">
+                            <arg value="${option}"/>
+                            <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.system:service=MainDeployer" redeploy ${file}${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}'/>
+                        </exec>
+                    </then>
+                    <else>
+                        <echo message="Deploying: ${ncitbrowser-webapp.file.name}" />
+                        <exec executable="${shell}" failonerror="true">
+                            <arg value="${option}"/>
+                            <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.system:service=MainDeployer" deploy ${file}${jboss.deploy.dir}/${ncitbrowser-webapp.file.name}'/>
+                        </exec>
+                    </else>
+                </if>
+
             </else>
         </if>
 
