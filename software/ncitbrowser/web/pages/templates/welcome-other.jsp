@@ -8,7 +8,7 @@
   String nci_meta_url = new DataUtils().getNCImURL();
   String vocablary_version_value = version;
   if (vocablary_version_value == null) vocablary_version_value = "";
-  
+
   boolean isMapping = DataUtils.isMapping(scheme, null);
 
 
@@ -16,22 +16,22 @@
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
-    
+
     <!-- <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(vocablary_version_value) %></div></td> -->
-<%   
+<%
     if (isMapping) {
 %>
       <td align="right">
       <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(scheme)%>&version=<%=vocablary_version_value%>">
-      <img src="<%=basePath%>/images/ViewMapping.gif" alt="View Mapping" /> 
-      </a> 
+      <img src="<%=basePath%>/images/ViewMapping.gif" alt="View Mapping" style="border-style:none;"/>
+      </a>
       </td>
-      
-<%    
+
+<%
     }
-%>    
-    
-    
+%>
+
+
   </tr></table>
   <hr/>
 
@@ -41,7 +41,7 @@
 String _version = request.getParameter("version");
 //System.out.println("(*****welcome-other.jsp) vocabulary_version: " + _version);
 if (vocabulary_version != null) {
-	request.setAttribute("version", _version);
+  request.setAttribute("version", _version);
 }
 
 
