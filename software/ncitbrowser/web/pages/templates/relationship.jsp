@@ -23,8 +23,11 @@
     if (hmap == null) {
 	    DataUtils util = new DataUtils();
 	    hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
-	    if (hmap != null) request.getSession().setAttribute("RelationshipHashMap", hmap);
     } 
+    
+    if (hmap != null) {
+    
+    request.getSession().setAttribute("RelationshipHashMap", hmap);
     
     ArrayList superconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
     ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
@@ -592,5 +595,6 @@
 
 
 <%
+}
 }
 %>
