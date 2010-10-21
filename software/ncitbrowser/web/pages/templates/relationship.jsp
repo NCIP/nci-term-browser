@@ -12,6 +12,11 @@
     
     String version_curr = (String) request.getSession().getAttribute("version");
     
+System.out.println("*** relationship.jsp scheme_curr: " + scheme_curr);
+System.out.println("*** relationship.jsp version_curr: " + version_curr);
+
+    
+    
     boolean isMapping = DataUtils.isMapping(scheme_curr, version_curr);
         
     String code_curr = (String) request.getSession().getAttribute("code");

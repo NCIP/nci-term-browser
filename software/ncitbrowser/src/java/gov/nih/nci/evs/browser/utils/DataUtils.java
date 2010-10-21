@@ -1590,6 +1590,10 @@ public class DataUtils {
     public HashMap getRelationshipHashMap(String scheme, String version,
         String code) {
 
+System.out.println("getRelationshipHashMap scheme: " + scheme);
+System.out.println("getRelationshipHashMap version: " + version);
+System.out.println("getRelationshipHashMap code: " + code);
+
         boolean isMapping = isMapping(scheme, version);
 
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -1602,7 +1606,7 @@ public class DataUtils {
 
 		Entity concept = getConceptByCode(scheme, version, null, code);
 		if (concept == null) {
-			System.out.println("WARNING: concept not found in: " + scheme + " code: + " + code);
+			System.out.println("*** WARNING: concept not found in: " + scheme + " version: + " + version + " code: + " + code);
 			return null;
 		}
 
