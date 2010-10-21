@@ -8,6 +8,22 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.OntologyInfo" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+<%!
+  private static final String CABIG_APPROVED_MSG = "caBIG approved";
+
+  private static String getCabigIndicator(boolean display, String basePath) {
+    if (! display)
+        return "";
+    
+    // Added shim.gif image next to the asterisk indicator so we can be
+    //   508 compliant.  This associates the alternate text from the shim
+    //   to the asterisk.
+    String cabig_msg = "<img src=\"" + basePath + "/images/shim.gif\""
+      // + " width=\"1\" height=\"1\""
+      + " alt=\"" + CABIG_APPROVED_MSG + "\"" + ">";
+    return " <b>*</b> " + cabig_msg;
+  }
+%>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
@@ -181,7 +197,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                           scheme, "cabig_approval_status");
                         boolean display_status = status != null && 
                           status.trim().length() > 0;
-                        String cabig_approval_indicator = display_status ? " <b>*</b>" : "";
+                        String cabig_approval_indicator = getCabigIndicator(display_status, basePath);
                         display_cabig_approval_indicator_note |= display_status;
 
                         if (label != null)
@@ -201,6 +217,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                           <td width="25px"></td>
                           <td>
                         <%
+                        String displayLabel = scheme + " (" + version + ")";
                         if (scheme.compareTo("NCI Thesaurus") == 0) {
                            String nciturl = NCItBrowserProperties.getNCIT_URL();
                            if (ontologiesToSearchOn != null
@@ -213,10 +230,10 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                               <input type="checkbox" name="ontology_list" value="<%=label%>" /> <%
                            }
                            %>
-                              <a href="<%=nciturl %>"><%=label%></a><%=cabig_approval_indicator%>
+                              <a href="<%=nciturl %>"><%=displayLabel%></a><%=cabig_approval_indicator%>
                            <%
                         } else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
-                              String ncimurl = NCItBrowserProperties.getNCIM_URL();
+                            String ncimurl = NCItBrowserProperties.getNCIM_URL();
                             if (ontologiesToSearchOn != null
                                && ontologiesToSearchOn.indexOf(label2) != -1) {
                            %>
@@ -229,7 +246,7 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                            <%
                             }
                             %>
-                              <a href="<%=ncimurl%>" target="_blank"><%=label%>
+                              <a href="<%=ncimurl%>" target="_blank"><%=displayLabel%>
                                 <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=label%>" />
                               </a><%=cabig_approval_indicator%>
                            <%
@@ -267,7 +284,14 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                      <% if (display_cabig_approval_indicator_note) { %>
                        <tr>
                          <td width="25px"></td>
-                         <td class="termstable">&nbsp;Note: * caBIG approved.</td>
+                         <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="Shim" /></td>
+                       </tr>                     
+                       <tr>
+                         <td width="25px"></td>
+                         <td class="termstable">
+                           <img src="<%=basePath%>/images/shim.gif" width="20" height="1" alt="Shim" />
+                           <b class="textbody">*</b> <%=CABIG_APPROVED_MSG%>.
+                         </td>
                        </tr>
                      <% } %>
                     </table>

@@ -16,6 +16,7 @@ public class OntologyInfo {
 
         try {
             int category = Integer.parseInt(sortCategory);
+            System.out.println("FYI: * " + displayName + " set to sort category " + category);
             init(displayName, category);
         } catch (Exception e) {
             System.out.println("Error: " + e.getClass().getSimpleName() + ": " + e.getMessage());
