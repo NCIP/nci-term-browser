@@ -7,6 +7,7 @@
   List displayItemList = null;
   Concept curr_concept = null;
   Boolean bool_obj = null;
+  String primitive = null;
   //String isActive = null;
 
   try {
@@ -483,7 +484,7 @@ if(propName_label.compareTo("Definition") == 0) {
     
    
     <%
-    if (primitive != null) {
+    if (is_defined != null) {
     %>
     <tr class="dataRowLight">
       <td><%=primitive_label%>&nbsp;<%=is_defined%></td>
