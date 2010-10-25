@@ -37,8 +37,8 @@ import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.QualifierSortOptio
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 
-import org.LexGrid.LexBIG.Utility.ServiceUtility;
-
+//import org.LexGrid.LexBIG.Utility.ServiceUtility;
+import org.LexGrid.LexBIG.Extensions.Generic.SupplementExtension;
 
 import org.apache.log4j.*;
 
@@ -3450,9 +3450,15 @@ System.out.println("getRelationshipHashMap code: " + code);
 		CodingSchemeVersionOrTag tagOrVersion = new CodingSchemeVersionOrTag();
 		if (version != null) tagOrVersion.setVersion(version);
 		try {
-			return ServiceUtility.isSupplement(codingScheme, tagOrVersion);
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			SupplementExtension supplementExtension =
+				(SupplementExtension) lbSvc.getGenericExtension("SupplementExtension");
+
+			return supplementExtension.isSupplement(codingScheme, tagOrVersion);
+			//return ServiceUtility.isSupplement(codingScheme, tagOrVersion);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			System.out.println("DataUtils SupplementExtension.isSupplement throws exeption???");
 		}
 		return false;
 	}
