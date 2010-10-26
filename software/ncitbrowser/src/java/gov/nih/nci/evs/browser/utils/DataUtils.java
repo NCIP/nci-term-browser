@@ -39,6 +39,8 @@ import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 
 //import org.LexGrid.LexBIG.Utility.ServiceUtility;
 import org.LexGrid.LexBIG.Extensions.Generic.SupplementExtension;
+import org.LexGrid.relations.AssociationPredicate;
+
 
 import org.apache.log4j.*;
 
@@ -1595,6 +1597,8 @@ System.out.println("getRelationshipHashMap version: " + version);
 System.out.println("getRelationshipHashMap code: " + code);
 
         boolean isMapping = isMapping(scheme, version);
+        NameAndValueList navl = null;
+        if (isMapping) navl = getMappingAssociationNames(scheme, version);
 
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         LexBIGServiceConvenienceMethods lbscm =
@@ -1675,11 +1679,17 @@ System.out.println("getRelationshipHashMap code: " + code);
 
         try {
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+
+            if (isMapping) {
+                 if (navl != null) {
+					 cng = cng.restrictToAssociations(navl, null);
+ 				 }
+			}
+
             matches = null;
             try {
                 matches =
-                    lbSvc.getNodeGraph(scheme, csvt, null)
-                        .resolveAsList(cr,
+                    cng.resolveAsList(cr,
                             // true, false, 0, 1, new LocalNameList(), null,
                             // null, 10000);
                             // true, false, 0, 1, null, new LocalNameList(),
@@ -1805,6 +1815,13 @@ System.out.println("getRelationshipHashMap code: " + code);
             }
 
             cng = lbSvc.getNodeGraph(scheme, csvt, null);
+
+            if (isMapping) {
+                 if (navl != null) {
+					 cng = cng.restrictToAssociations(navl, null);
+ 				 }
+			}
+
             matches = null;
             try {
                 /*
@@ -1813,8 +1830,7 @@ System.out.println("getRelationshipHashMap code: " + code);
                  * PropertyType.PRESENTATION; int resolveCodedEntryDepth = 0;
                  */
                 matches =
-                    lbSvc.getNodeGraph(scheme, csvt, null)
-                        .resolveAsList(cr,
+                    cng.resolveAsList(cr,
                             // false, true, 0, 1, new LocalNameList(), null,
                             // null, 10000);
                             // false, true, 0, 1, null, new LocalNameList(),
@@ -3795,6 +3811,39 @@ System.out.println("getRelationshipHashMap code: " + code);
 
 	}
 
+    public static NameAndValueList getMappingAssociationNames(String scheme, String version) {
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
 
+		NameAndValueList navList = new NameAndValueList();
+		try {
+			LexBIGService lbSvc = null;
+			lbSvc = new RemoteServerUtil().createLexBIGService();
+			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+			Relations[] relations = cs.getRelations();
+			for (int i = 0; i < relations.length; i++) {
+				Relations relation = relations[i];
+				System.out.println(relation.getContainerName());
+                Boolean isMapping = relation.isIsMapping();
+                if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
+					AssociationPredicate[] associationPredicates = relation.getAssociationPredicate();
+					for (int j=0; j<associationPredicates.length; j++) {
+						AssociationPredicate associationPredicate = associationPredicates[j];
+						String name = associationPredicate.getAssociationName();
+						NameAndValue vNameAndValue = new NameAndValue();
+						vNameAndValue.setName(name);
+						navList.addNameAndValue(vNameAndValue);
+					}
+					return navList;
+				} else {
+					return null;
+				}
+			}
+		} catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
 }
