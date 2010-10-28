@@ -2895,10 +2895,9 @@ public class SearchUtils {
                     }
 
                     // KLO, 022410 change failed
-                    cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                    //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
 
-                    //cns = getNodeSet(lbSvc, scheme, versionOrTag);
-
+                    cns = getNodeSet(lbSvc, scheme, versionOrTag);
 
                     // cns = getNodeSetByEntityType(scheme, versionOrTag,
                     // "concept");
@@ -3278,7 +3277,7 @@ public class SearchUtils {
 		CodedNodeSet cns = null;
 		try {
 			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
-            CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.ANONYMOUS_ONLY;
+            CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
             //6.0 mod (KLO, 101810)
             cns = cns.restrictToAnonymous(restrictToAnonymous);
 
