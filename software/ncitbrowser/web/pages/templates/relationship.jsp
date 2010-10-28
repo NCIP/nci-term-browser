@@ -46,13 +46,19 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
     String label = "";
     String rel = "";
     String score = "";
-    
+    scheme_curr = scheme_curr.replaceAll(" ", "%20"); 
     
 %>
   <p class="textsubtitle-blue">Relationships with other <%=rel_display_name%> Concepts</p>
+  
+      
+<%      
+ if (!isMapping) {       
+%>  
+  
   <p>
     <%
-      scheme_curr = scheme_curr.replaceAll(" ", "%20");
+
       
       label = "Parent Concepts:";
       concepts = superconcepts;
@@ -147,6 +153,8 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
       }
     %>
   </p>
+
+
 
   <p>
   <%
@@ -247,6 +255,13 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
   <%
      }
   %>
+
+
+
+<%      
+ }      
+%>  
+
 
 <p>
 <%
@@ -363,6 +378,10 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
          display_inverse_relationships = false;
      }
   
+     
+if (!isMapping) {       
+
+
      if (inverse_roles != null && inverse_roles.size() > 0 && display_inverse_relationships)
      {
   %>
@@ -479,6 +498,12 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
   <%
      }
   %>
+
+
+<%      
+ }       
+%> 
+
 
 <p>
 <%
