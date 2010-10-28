@@ -299,8 +299,6 @@ public class QuickUnionIteratorWrapper implements ResolvedConceptReferencesItera
         for (ResolvedConceptReferencesIteratorWrapper itr : _iterators) {
 			lcv++;
 			int numberRemaining = itr.getIterator().numberRemaining();
-			System.out.println("(" + lcv + ") numberRemaining: " + numberRemaining);
-
             number += numberRemaining;
         }
         return number;
