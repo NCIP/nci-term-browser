@@ -1037,6 +1037,14 @@ public class UserSessionBean extends Object {
                     ranking, maxToReturn);
             if (wrapper != null) {
                 iterator = wrapper.getIterator();
+
+
+                try {
+					int iteratorNumberRemaining = iterator.numberRemaining();
+					System.out.println("================= iterationNumberRemaining: " + iteratorNumberRemaining);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
             }
         }
 

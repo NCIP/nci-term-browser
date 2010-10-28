@@ -2768,6 +2768,64 @@ public class SearchUtils {
         return cng;
     }
 
+
+    public SearchByAssociationIteratorDecorator createSearchByAssociationIteratorDecorator(
+								ResolvedConceptReferencesIterator quickUnionIterator,
+								boolean resolveForward,
+								boolean resolveBackward,
+								int resolveAssociationDepth,
+								int maxToReturn) {
+
+        return createSearchByAssociationIteratorDecorator(
+								quickUnionIterator,
+								resolveForward,
+								resolveBackward,
+								null,
+								null,
+								resolveAssociationDepth,
+								maxToReturn);
+
+    }
+
+    public SearchByAssociationIteratorDecorator createSearchByAssociationIteratorDecorator(
+								ResolvedConceptReferencesIterator quickUnionIterator,
+								boolean resolveForward,
+								boolean resolveBackward,
+
+								NameAndValueList associationNameAndValueList,
+								NameAndValueList associationQualifierNameAndValueList,
+								int resolveAssociationDepth,
+								int maxToReturn) {
+        try {
+			SearchByAssociationIteratorDecorator decorator = new SearchByAssociationIteratorDecorator(quickUnionIterator);
+			decorator.setResolveForward(resolveForward);
+			decorator.setResolveBackward(resolveBackward);
+			//decorator.setResolveForward(true);
+			//decorator.setResolveBackward(true);
+			decorator.setResolveAssociationDepth(resolveAssociationDepth);
+			if (associationNameAndValueList != null) {
+				decorator.setAssociationNameAndValueList(associationNameAndValueList);
+			}
+			if (associationQualifierNameAndValueList != null) {
+				decorator.setAssociationQualifierNameAndValueList(associationQualifierNameAndValueList);
+			}
+			decorator.setMaxToReturn(maxToReturn);
+
+
+			try {
+				int numberRemaining = decorator.numberRemaining();
+				System.out.println( "searchByAssociationIteratorDecorator NumberRemaining: " + numberRemaining);
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+			return decorator;
+		} catch (Exception ex) {
+			return null;
+		}
+    }
+
     public ResolvedConceptReferencesIteratorWrapper searchByAssociations(
         Vector schemes, Vector versions, String matchText, String source,
         String matchAlgorithm, boolean designationOnly, boolean ranking,
@@ -2779,11 +2837,6 @@ public class SearchUtils {
         matchText0 = matchText0.trim();
 
         boolean containsMapping = false;
-
-System.out.println("(*) searchByAssociations matchText0: " + matchText0);
-
-
-
         _logger.debug("searchByAssociations..." + matchText);
         long ms = System.currentTimeMillis();
         long dt = 0;
@@ -2807,7 +2860,6 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
 
         String scheme = null;
         String version = null;
-
         String message = null;
 
         try {
@@ -2824,6 +2876,7 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
                 cns = null;
                 iterator = null;
                 scheme = (String) schemes.elementAt(i);
+
                 _logger.debug("\tsearching " + scheme);
 
                 ms = System.currentTimeMillis();
@@ -2842,8 +2895,11 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
                     }
 
                     // KLO, 022410 change failed
-                    //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
-                    cns = getNodeSet(lbSvc, scheme, versionOrTag);
+                    cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+
+                    //cns = getNodeSet(lbSvc, scheme, versionOrTag);
+
+
                     // cns = getNodeSetByEntityType(scheme, versionOrTag,
                     // "concept");
 
@@ -2852,15 +2908,22 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
                             // find cns
                             if (designationOnly) {
                                 try {
+
                                     cns =
                                         cns.restrictToMatchingDesignations(
                                             matchText, null, matchAlgorithm,
                                             null);
+
                                 } catch (Exception ex) {
+									ex.printStackTrace();
+									 System.out.println("(*) searchByAssociations restrictToMatchingDesignations exedption???");
+
                                     return null;
                                 }
                             }
+
                             cns = restrictToSource(cns, source);
+
                             String associationName = null;
                             int direction = RESTRICT_TARGET;
                             // CodedNodeGraph cng =
@@ -2879,10 +2942,13 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
                             // CodedNodeSet difference(CodedNodeSet
                             // codesToRemove)
                             // cns = cns2.difference(cns);
+
                             if (cns != null) {
+								/*
                                 cns =
                                     filterOutAnonymousClasses(lbSvc, scheme,
                                         cns);
+                                */
                                 if (cns != null) {
                                     cns_vec.add(cns);
                                     codingSchemeNames.add(scheme);
@@ -2917,8 +2983,9 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
             }
 
             iterator = null;
-            if (cns_vec.size() == 0)
+            if (cns_vec.size() == 0) {
                 return null;
+			}
             /*
              * cns = union(cns_vec); if (cns == null) return null;
              */
@@ -2945,6 +3012,7 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
             // Need to set to true to retrieve concept name
             resolveConcepts = true;
             try {
+
                 try {
                     boolean resolveForward = false;
                     boolean resolveBackward = true;
@@ -2958,22 +3026,56 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
 							new QuickUnionIterator(cns_vec, sortCriteria, null,
 								restrictToProperties, null, resolveConcepts);
 
+						try {
+							int quickIteratorNumberRemaining = quickUnionIterator.numberRemaining();
+							System.out.println( "quickIteratorNumberRemaining: " + quickIteratorNumberRemaining);
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+
+/*
 						iterator =
 							new SearchByAssociationIteratorDecorator(
 								quickUnionIterator, resolveForward,
 								resolveBackward, resolveAssociationDepth,
 								maxToReturn);
+*/
+
+						iterator =
+							createSearchByAssociationIteratorDecorator(
+								quickUnionIterator, resolveForward,
+								resolveBackward, resolveAssociationDepth,
+								maxToReturn);
+
 					} else {
 
-						ResolvedConceptReferencesIterator QuickUnionIteratorWrapper =
+						ResolvedConceptReferencesIterator quickUnionIteratorWrapper =
 							new QuickUnionIteratorWrapper(codingSchemeNames, cns_vec, sortCriteria, null,
 								restrictToProperties, null, resolveConcepts);
 
+						try {
+							int quickIteratorNumberRemaining = quickUnionIteratorWrapper.numberRemaining();
+							System.out.println( "quickUnionIteratorWrapper NumberRemaining: " + quickIteratorNumberRemaining);
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+
+/*
 						iterator =
 							new SearchByAssociationIteratorDecorator(
 								QuickUnionIteratorWrapper, resolveForward,
 								resolveBackward, resolveAssociationDepth,
 								maxToReturn);
+*/
+
+						iterator =
+							createSearchByAssociationIteratorDecorator(
+								quickUnionIteratorWrapper, resolveForward,
+								resolveBackward, resolveAssociationDepth,
+								maxToReturn);
+
 
 					}
 
@@ -3794,15 +3896,6 @@ System.out.println("(*) searchByAssociations matchText0: " + matchText0);
         String source, String matchAlgorithm, boolean designationOnly,
         boolean ranking, int maxToReturn) {
 
-
-System.out.println("searchByAssociations scheme: " + scheme);
-System.out.println("searchByAssociations version: " + version);
-System.out.println("searchByAssociations matchText: " + matchText);
-
-System.out.println("searchByAssociations maxToReturn: " + maxToReturn);
-
-
-
         /*
          * _logger.debug("searchByAssociations scheme: " + scheme);
          * _logger.debug("searchByAssociations matchText: " + matchText);
@@ -3862,8 +3955,6 @@ System.out.println("searchByAssociations maxToReturn: " + maxToReturn);
         if (matchAlgorithm.compareToIgnoreCase("contains") == 0) {
             matchAlgorithm = findBestContainsAlgorithm(matchText);
         }
-
-System.out.println("searchByAssociations matchAlgorithm: " + matchAlgorithm);
 
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
@@ -3944,9 +4035,6 @@ System.out.println("searchByAssociations matchAlgorithm: " + matchAlgorithm);
             iterator = null;
             if (cns_vec.size() == 0) {
                 return null;
-			} else {
-System.out.println("cns_vec.size() == " + cns_vec.size());
-
 			}
 
             LocalNameList restrictToProperties = null;// new LocalNameList();
@@ -3974,52 +4062,51 @@ System.out.println("cns_vec.size() == " + cns_vec.size());
                     boolean resolveBackward = true;
 
                     if (search_direction == Constants.SEARCH_SOURCE) {
-
-System.out.println("SEARCH_SOURCE");
-
-
                         resolveForward = false;
                         resolveBackward = true;
                     } else if (search_direction == Constants.SEARCH_TARGET) {
-
-System.out.println("SEARCH_TARGET");
-
                         resolveForward = true;
                         resolveBackward = false;
                     }
 
-
-
                     int resolveAssociationDepth = 1;
                     // iterator = cns.resolve(sortCriteria, null,
                     // restrictToProperties, null, resolveConcepts);
-
- System.out.println("quickUnionIterator");
-
 
                     ResolvedConceptReferencesIterator quickUnionIterator =
                         new QuickUnionIterator(cns_vec, sortCriteria, null,
                             restrictToProperties, null, resolveConcepts);
                     if (associationsToNavigate == null && qualifiers == null) {
 
-
- System.out.println("SearchByAssociationIteratorDecorator 1");
-
+/*
                         iterator =
                             new SearchByAssociationIteratorDecorator(
                                 quickUnionIterator, resolveForward,
                                 resolveBackward, resolveAssociationDepth,
                                 maxToReturn);
+ */
+                         iterator =
+                             createSearchByAssociationIteratorDecorator(
+                                 quickUnionIterator, resolveForward,
+                                 resolveBackward, resolveAssociationDepth,
+                                maxToReturn);
+
                     } else {
 
- System.out.println("SearchByAssociationIteratorDecorator 2");
-
-
+/*
                         iterator =
                             new SearchByAssociationIteratorDecorator(
                                 quickUnionIterator, resolveForward,
                                 resolveBackward, associationList, qualifiers,
                                 resolveAssociationDepth, maxToReturn);
+*/
+
+                        iterator =
+                            createSearchByAssociationIteratorDecorator(
+                                quickUnionIterator, resolveForward,
+                                resolveBackward, associationList, qualifiers,
+                                resolveAssociationDepth, maxToReturn);
+
                     }
                 } catch (Exception e) {
                     _logger.error("Method: SearchUtil.searchByAssociations");

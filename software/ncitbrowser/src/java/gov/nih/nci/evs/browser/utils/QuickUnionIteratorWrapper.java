@@ -127,17 +127,21 @@ public class QuickUnionIteratorWrapper implements ResolvedConceptReferencesItera
         throws LBException {
 
 		for (int lcv=0; lcv<codedNodeSets.size(); lcv++) {
-            CodedNodeSet cns = (CodedNodeSet) codedNodeSets.elementAt(lcv);
+           CodedNodeSet cns = (CodedNodeSet) codedNodeSets.elementAt(lcv);
            if (cns != null) {
                 try {
                     ResolvedConceptReferencesIterator iterator =
                         cns.resolve(sortOptions, filterOptions,
                             restrictToProperties, restrictToPropertyTypes,
                             resolve);
+
+
                     if (iterator != null) {
 						ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(iterator);
 						String codingSchemeName = (String) codingSchemeNames.elementAt(lcv);
+
 						wrapper.setCodingSchemeName(codingSchemeName);
+
                         _iterators.add(wrapper);
 
                     }
@@ -148,7 +152,6 @@ public class QuickUnionIteratorWrapper implements ResolvedConceptReferencesItera
                 }
             }
         }
-
         //Collections.sort(_iterators, new IteratorSizeComparator());
         Collections.sort(_iterators, new IteratorWrapperSizeComparator());
 
@@ -292,8 +295,13 @@ public class QuickUnionIteratorWrapper implements ResolvedConceptReferencesItera
 
     public int numberRemaining() throws LBResourceUnavailableException {
         int number = 0;
+        int lcv = 0;
         for (ResolvedConceptReferencesIteratorWrapper itr : _iterators) {
-            number += itr.getIterator().numberRemaining();
+			lcv++;
+			int numberRemaining = itr.getIterator().numberRemaining();
+			System.out.println("(" + lcv + ") numberRemaining: " + numberRemaining);
+
+            number += numberRemaining;
         }
         return number;
     }
