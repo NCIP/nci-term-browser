@@ -1,14 +1,34 @@
 package gov.nih.nci.evs.browser.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import org.LexGrid.LexBIG.DataModel.Collections.*;
-import org.LexGrid.LexBIG.DataModel.Core.*;
-import org.LexGrid.LexBIG.Exceptions.*;
-import org.LexGrid.LexBIG.LexBIGService.*;
-import org.LexGrid.LexBIG.Utility.*;
-import org.LexGrid.LexBIG.Utility.Iterators.*;
-import org.LexGrid.concepts.Entity;
+import org.LexGrid.LexBIG.DataModel.Collections.AssociationList;
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.AssociatedConcept;
+import org.LexGrid.LexBIG.DataModel.Core.Association;
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.Exceptions.LBException;
+import org.LexGrid.LexBIG.Exceptions.LBResourceUnavailableException;
+import org.LexGrid.LexBIG.Impl.helpers.IteratorBackedResolvedConceptReferencesIterator;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.Utility.Constructors;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.lexevs.paging.AbstractPageableIterator;
+
+import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
+import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
+
+import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
+import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
+
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+
+
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -59,44 +79,32 @@ import org.LexGrid.concepts.Entity;
  * the decorated iterator on demand, rather than all at once. This elminates the
  * need to resolve large CodedNodeGraphs.
  */
-public class SearchByAssociationIteratorDecorator implements
-        ResolvedConceptReferencesIterator {
+public class SearchByAssociationIteratorDecorator extends
+        IteratorBackedResolvedConceptReferencesIterator {
     /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 4126716487618136771L;
 
     /** The lbs. */
-    private static LexBIGService _lbs = RemoteServerUtil.createLexBIGService();
+    private static LexBIGService lbs = RemoteServerUtil.createLexBIGService();
 
     /** The quick iterator. */
-    private ResolvedConceptReferencesIterator _quickIterator;
+    private static ResolvedConceptReferencesIterator _quickIterator;
 
     /** The resolve forward. */
-    private boolean _resolveForward;
+    private static boolean _resolveForward;
 
     /** The resolve backward. */
-    private boolean _resolveBackward;
+    private static boolean _resolveBackward;
 
     /** The resolve association depth. */
-    private int _resolveAssociationDepth;
+    private static int _resolveAssociationDepth;
 
     /** The max to return. */
-    private int _maxToReturn;
+    private static int _maxToReturn;
 
-    /** The position. */
-    private int _position = 0;
 
-    /** The current children. */
-    private List<ResolvedConceptReference> _currentChildren =
-        new ArrayList<ResolvedConceptReference>();
-
-    private NameAndValueList _associationNameAndValueList;
-    private NameAndValueList _associationQualifierNameAndValueList;
-
-    private HashSet _hset = null;
-
-    private String _currentCodingScheme = null;
-
-    private boolean _search_namespace = false;
+    private static NameAndValueList _associationNameAndValueList;
+    private static NameAndValueList _associationQualifierNameAndValueList;
 
 
     /**
@@ -107,426 +115,133 @@ public class SearchByAssociationIteratorDecorator implements
      * @param resolveBackward the resolve backward
      * @param resolveAssociationDepth the resolve association depth
      * @param maxToReturn the max to return
+     * @throws LBResourceUnavailableException
      */
     public SearchByAssociationIteratorDecorator(
-        ResolvedConceptReferencesIterator quickIterator,
-        boolean resolveForward, boolean resolveBackward,
-        int resolveAssociationDepth, int maxToReturn) {
+        ResolvedConceptReferencesIterator quickIterator) throws LBResourceUnavailableException {
 
+    	super(doBuildIterator(quickIterator), quickIterator.numberRemaining());
         _quickIterator = quickIterator;
-        _resolveForward = resolveForward;
-        _resolveBackward = resolveBackward;
-        _resolveAssociationDepth = resolveAssociationDepth;
-        _maxToReturn = maxToReturn;
-        _associationNameAndValueList = null;
-        _associationQualifierNameAndValueList = null;
+    }
 
-        _hset = new HashSet();
 
-        if (quickIterator instanceof QuickUnionIteratorWrapper) {
-			_search_namespace = true;
+    public void setQuickIterator(ResolvedConceptReferencesIterator quickIterator) {
+		_quickIterator = quickIterator;
+	}
+
+    public void setResolveForward(boolean resolveForward) {
+		_resolveForward = resolveForward;
+	}
+
+    public void setResolveBackward(boolean resolveBackward) {
+		_resolveBackward = resolveBackward;
+	}
+
+    public void setResolveAssociationDepth(int resolveAssociationDepth) {
+		_resolveAssociationDepth = resolveAssociationDepth;
+	}
+
+    public void setMaxToReturn(int maxToReturn) {
+		_maxToReturn = maxToReturn;
+	}
+
+    public void setAssociationNameAndValueList(NameAndValueList associationNameAndValueList) {
+		_associationNameAndValueList = associationNameAndValueList;
+	}
+
+    public void setAssociationQualifierNameAndValueList(NameAndValueList associationQualifierNameAndValueList) {
+		_associationQualifierNameAndValueList = associationQualifierNameAndValueList;
+	}
+
+	private static Iterator<ResolvedConceptReference> doBuildIterator(
+			ResolvedConceptReferencesIterator quickIterator) {
+		return new SearchAssociationResolvedConceptReference(quickIterator);
+	}
+
+	private static class SearchAssociationResolvedConceptReference extends
+		AbstractPageableIterator<ResolvedConceptReference> {
+
+		private static final long serialVersionUID = 2158463303566749525L;
+
+		private ResolvedConceptReferencesIterator quickIterator;
+
+		private SearchAssociationResolvedConceptReference(ResolvedConceptReferencesIterator quickIterator){
+			super();
+			this.quickIterator = quickIterator;
 		}
 
-        // _logger.debug("Type 1 SearchByAssociationIteratorDecorator ");
+		@Override
+		protected List<? extends ResolvedConceptReference> doPage(
+				int position,
+				int pageSize) {
 
-    }
+    	System.out.println("SearchByAssociationIteratorDecorator doPage ...");
 
-    public SearchByAssociationIteratorDecorator(
-        ResolvedConceptReferencesIterator quickIterator,
-        boolean resolveForward, boolean resolveBackward,
-        NameAndValueList associationNameAndValueList,
-        NameAndValueList associationQualifierNameAndValueList,
-        int resolveAssociationDepth, int maxToReturn) {
 
-        _quickIterator = quickIterator;
-        _resolveForward = resolveForward;
-        _resolveBackward = resolveBackward;
-        _resolveAssociationDepth = resolveAssociationDepth;
-        _maxToReturn = maxToReturn;
-        _associationNameAndValueList = associationNameAndValueList;
-        _associationQualifierNameAndValueList =
-            associationQualifierNameAndValueList;
-
-        _hset = new HashSet();
-
-        if (quickIterator instanceof QuickUnionIteratorWrapper) {
-			_search_namespace = true;
+			List<ResolvedConceptReference> returnList = new ArrayList<ResolvedConceptReference>();
+			try {
+				while(quickIterator.hasNext() && returnList.size() < pageSize){
+					returnList.addAll(this.resolveOneHit(quickIterator.next()));
+				}
+			} catch (LBException e) {
+				throw new RuntimeException(e);
+			}
+			return returnList;
 		}
-        // _logger.debug("Type 2 SearchByAssociationIteratorDecorator ");
-    }
+
+		protected List<? extends ResolvedConceptReference> resolveOneHit(ResolvedConceptReference hit) throws LBException{
+			List<ResolvedConceptReference> returnList = new ArrayList<ResolvedConceptReference>();
+
+			CodedNodeGraph cng = lbs.getNodeGraph(
+					hit.getCodingSchemeName(),
+					null,
+					null);
+
+// IMPORTANT: Apply restrictions to associations for supporting advanced search (to be implemented later)
+
+			ConceptReference focus = new ConceptReference();
+			focus.setCode(hit.getCode());
+			focus.setCodeNamespace(hit.getCodeNamespace());
+
+			/*
+			ResolvedConceptReferenceList list =
+				cng.resolveAsList(focus, true, true, 0, 1, null, null, null, -1);
+            */
+
+			LocalNameList propertyNames = new LocalNameList();
+			CodedNodeSet.PropertyType[] propertyTypes = null;
+			SortOptionList sortCriteria = null;
+
+			ResolvedConceptReferenceList list =
+				cng.resolveAsList(focus,
+					_resolveForward, _resolveBackward, 0,
+					_resolveAssociationDepth, propertyNames, propertyTypes, sortCriteria,
+					_maxToReturn);
+
+			for(ResolvedConceptReference ref : list.getResolvedConceptReference()){
+				if(ref.getSourceOf() != null){
+					returnList.addAll(this.getAssociations(ref.getSourceOf()));
+				}
+				if(ref.getTargetOf() != null){
+					returnList.addAll(this.getAssociations(ref.getTargetOf()));
+				}
+			}
+			return returnList;
+		}
+
+		protected List<? extends ResolvedConceptReference> getAssociations(AssociationList list){
+			List<ResolvedConceptReference> returnList = new ArrayList<ResolvedConceptReference>();
+
+			for(Association assoc : list.getAssociation()){
+				for(AssociatedConcept ac :
+					assoc.getAssociatedConcepts().getAssociatedConcept()){
+					returnList.add(ac);
+				}
+			}
+
+			return returnList;
+		}
 
 
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
-     * #get(int, int)
-     */
-    public ResolvedConceptReferenceList get(int arg0, int arg1)
-            throws LBResourceUnavailableException, LBInvocationException,
-            LBParameterException {
-        throw new UnsupportedOperationException();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
-     * #getNext()
-     */
-    public ResolvedConceptReferenceList getNext() {
-        throw new UnsupportedOperationException();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
-     * #next()
-     */
-    public ResolvedConceptReference next()
-            throws LBResourceUnavailableException, LBInvocationException {
-
-        try {
-            return doGetNext();
-        } catch (Exception e) {
-            throw new LBResourceUnavailableException(e.getMessage());
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
-     * #next(int)
-     */
-    public ResolvedConceptReferenceList next(int page)
-            throws LBResourceUnavailableException, LBInvocationException {
-        // long startTime = System.currentTimeMillis();
-        ResolvedConceptReferenceList returnList =
-            new ResolvedConceptReferenceList();
-
-        // _logger.debug("next method: getResolvedConceptReferenceCount() " +
-        // returnList.getResolvedConceptReferenceCount());
-        // _logger.debug("next method: page " + page);
-
-        while (returnList.getResolvedConceptReferenceCount() < page
-            && hasNext()) {
-            try {
-                returnList.addResolvedConceptReference(doGetNext());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return returnList;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator
-     * #scroll(int)
-     */
-    public ResolvedConceptReferencesIterator scroll(int arg0)
-            throws LBResourceUnavailableException, LBInvocationException {
-        throw new UnsupportedOperationException();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.LexGrid.LexBIG.Utility.Iterators.EntityListIterator#hasNext()
-     */
-    public boolean hasNext() throws LBResourceUnavailableException {
-        try {
-            pageIfNecessary();
-        } catch (Exception e) {
-            throw new LBResourceUnavailableException(e.getMessage());
-        }
-        return _currentChildren.size() > 0;
-    }
-
-    /**
-     * Gets the number remaining in this Iterator.
-     *
-     * NOTE: This is not an exact number. The Iterator is guarenteed to have AT
-     * LEAST this amount remaining -- it may actually have more.
-     */
-    public int numberRemaining() throws LBResourceUnavailableException {
-        // _logger.debug("SearchByAssociationIteratorDecorator: calling numberRemaining()	");
-        try {
-            pageIfNecessary();
-        } catch (Exception e) {
-            throw new LBResourceUnavailableException(e.getMessage());
-        }
-
-        // _logger.debug("SearchByAssociationIteratorDecorator: quickIterator.numberRemaining(): "
-        // + quickIterator.numberRemaining());
-        // _logger.debug("SearchByAssociationIteratorDecorator: currentChildren.size(): "
-        // + currentChildren.size());
-
-        // int total = quickIterator.numberRemaining() +
-        // currentChildren.size();
-        int total = _currentChildren.size();
-        // _logger.debug("SearchByAssociationIteratorDecorator: total: " +
-        // total);
-
-        // return quickIterator.numberRemaining() +
-        // currentChildren.size();
-        return _currentChildren.size();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.LexGrid.LexBIG.Utility.Iterators.EntityListIterator#release()
-     */
-    public void release() throws LBResourceUnavailableException {
-        _quickIterator.release();
-    }
-
-    /**
-     * Do get next.
-     *
-     * @return the resolved concept reference
-     *
-     * @throws Exception the exception
-     */
-    protected ResolvedConceptReference doGetNext() throws Exception {
-        pageIfNecessary();
-        ResolvedConceptReference returnRef =
-            _currentChildren.get(_position);
-
-        // _logger.debug("doGetNext() position: " + position);
-        displayRef(returnRef);
-
-        _position++;
-        return returnRef;
-    }
-
-    /**
-     * Page if necessary.
-     *
-     * @throws Exception the exception
-     */
-    protected void pageIfNecessary() throws Exception {
-
-        // _logger.debug("pageIfNecessary ...");
-
-        LexBIGService lbs = RemoteServerUtil.createLexBIGService();
-
-        // _logger.debug("position: " + position +
-        // " ----------- currentChildren.size: " + currentChildren.size());
-
-        if (_position == _currentChildren.size()) {
-            _currentChildren.clear();
-            _position = 0;
-
-            // [#26965] Contains Relationship search returns invalid result
-            // if (quickIterator.hasNext()) {
-
-            while (_quickIterator.hasNext()
-                && _currentChildren.size() == 0) {
-                // while (quickIterator.hasNext()) {
-                ResolvedConceptReference ref = _quickIterator.next();
-
-                if (ref != null) {
-                    // KLO
-                    String formalName = ref.getCodingSchemeName();
-					// This needs to be the coding scheme name for the mapping - if the search is against a mapping coding scheme.");
-                    CodedNodeGraph cng =
-                        lbs.getNodeGraph(formalName, null, null);
-
-                    if (_associationNameAndValueList != null) {
-                        cng =
-                            cng.restrictToAssociations(
-                                _associationNameAndValueList,
-                                _associationQualifierNameAndValueList);
-                    }
-
-                    ConceptReference cr = null;
-                    if (_search_namespace) {
-						Entity entity = SearchUtils.getConceptByCode(formalName,
-					                                 null, null, ref.getCode());
-
-						String namespace = entity.getEntityCodeNamespace();
-						if (namespace != null) {
-							cr = Constructors.createConceptReference(ref.getCode(), namespace);
-							cr.setCodeNamespace(namespace);
-						} else {
-							cr = Constructors.createConceptReference(ref.getCode(), ref.getCodingSchemeName());
-						}
-				    } else {
-						cr = Constructors.createConceptReference(ref.getCode(), ref.getCodingSchemeName());
-					}
-
-					LocalNameList propertyNames = new LocalNameList();
-					CodedNodeSet.PropertyType[] propertyTypes = null;
-					SortOptionList sortCriteria = null;
-
-                    ResolvedConceptReferenceList list =
-                        cng.resolveAsList(cr,
-                            _resolveForward, _resolveBackward, 0,
-                            //_resolveForward, _resolveBackward, 1,
-                            _resolveAssociationDepth, propertyNames, propertyTypes, sortCriteria,
-                            _maxToReturn);
-
-                    // _logger.debug("Calling populateCurrentChildren ...");
-                    // populateCurrentChildren(list.getResolvedConceptReference(),
-                    // false);
-                    populateCurrentChildren(list.getResolvedConceptReference(),
-                        false);
-
-                }
-            }
-        }
-        // _logger.debug("Exiting pageIfNecessary(): currentChildren.size() "
-        // + currentChildren.size());
-
-    }
-
-    protected void displayRef(ResolvedConceptReference rcr) {
-        // _logger.debug(ref.getConceptCode() + ":" +
-        // ref.getEntityDescription().getContent());
-
-        //System.out.println(ref.getConceptCode() + ":" +
-        //   ref.getEntityDescription().getContent());
-/*
-System.out.println("SearchByAssociationIteratorDecorator rcr.getCodingSchemeName(): " + rcr.getCodingSchemeName());
-System.out.println("SearchByAssociationIteratorDecorator rcr.getCodeNamespace(): " + rcr.getCodeNamespace());
-System.out.println("SearchByAssociationIteratorDecorator rcr.getConceptCode(): " + rcr.getConceptCode());
-if (rcr.getEntityDescription() != null) {
-System.out.println("SearchByAssociationIteratorDecorator rcr.getEntityDescription().getContent(): " + rcr.getEntityDescription().getContent());
-} else {
-System.out.println("SearchByAssociationIteratorDecorator rcr.getEntityDescription() == null???");
-}
-*/
-    }
-
-    protected void displayRef(String msg, ResolvedConceptReference ref) {
-        // _logger.debug(msg + " " + ref.getConceptCode() + ":" +
-        // ref.getEntityDescription().getContent());
-        //System.out.println(msg + " " + ref.getConceptCode() + ":" +
-        //   ref.getEntityDescription().getContent());
-    }
-
-    /**
-     * Populate current children.
-     *
-     * @param list the list
-     */
-    // [#26965] Contains Relationship search returns invalid result
-
-    /*
-    public void populateCurrentChildren(ResolvedConceptReference[] list,
-        boolean addRoot) {
-        if (list == null)
-            return;
-
-        for (ResolvedConceptReference ref : list) {
-
-            displayRef("Root: ", ref);
-
-            if (addRoot) {
-                if (!_hset.contains(ref.getConceptCode())) {
-                    _hset.add(ref.getConceptCode());
-                    // _logger.debug("\tbefore addRoot currentChildren.size() "
-                    // + currentChildren.size());
-                    displayRef(ref);
-
-                    System.out.println("(*) add to _currentChildren ..." + ref.getConceptCode() );
-
-                    _currentChildren.add(ref);
-                    // _logger.debug("\tafter addRoot currentChildren.size() "
-                    // + currentChildren.size());
-                }
-            } else {
-                // _logger.debug("\tDO NOT add: ");
-                displayRef("discarded ", ref);
-            }
-
-            if (ref.getSourceOf() != null) {
-                if (ref.getSourceOf().getAssociation() != null) {
-                    for (Association assoc : ref.getSourceOf().getAssociation()) {
-                        populateCurrentChildren(assoc.getAssociatedConcepts()
-                            .getAssociatedConcept(), true);
-                    }
-                }
-            } else {
-                // _logger.debug("\tref.getSourceOf() == null -- nothing done.");
-            }
-
-            if (ref.getTargetOf() != null) {
-                if (ref.getTargetOf().getAssociation() != null) {
-                    for (Association assoc : ref.getTargetOf().getAssociation()) {
-                        populateCurrentChildren(assoc.getAssociatedConcepts()
-                            .getAssociatedConcept(), true);
-                    }
-                }
-            } else {
-                // _logger.debug("\tref.getTargetOf() == null -- nothing done.");
-            }
-        }
-
-        // _logger.debug("\tExiting populateCurrentChildren");
-    }
-    */
-
-
-
-
-    public void populateCurrentChildren(ResolvedConceptReference[] list,
-        boolean addRoot) {
-        if (list == null)
-            return;
-
-        for (ResolvedConceptReference ref : list) {
-
-            displayRef("Root: ", ref);
-
-            if (addRoot) {
-                if (!_hset.contains(ref.getConceptCode())) {
-                    _hset.add(ref.getConceptCode());
-                    // _logger.debug("\tbefore addRoot currentChildren.size() "
-                    // + currentChildren.size());
-                    displayRef(ref);
-                    _currentChildren.add(ref);
-
-                }
-            } else {
-                // _logger.debug("\tDO NOT add: ");
-                displayRef("discarded ", ref);
-            }
-
-            if (ref.getSourceOf() != null) {
-               if (ref.getSourceOf().getAssociation() != null) {
-                    for (Association assoc : ref.getSourceOf().getAssociation()) {
-                        populateCurrentChildren(assoc.getAssociatedConcepts()
-                            .getAssociatedConcept(), true);
-                    }
-                }
-            }
-
-            if (ref.getTargetOf() != null) {
-                if (ref.getTargetOf().getAssociation() != null) {
-                    for (Association assoc : ref.getTargetOf().getAssociation()) {
-						ResolvedConceptReference[] rcrlist = assoc.getAssociatedConcepts().getAssociatedConcept();
-                        populateCurrentChildren(rcrlist, true);
-                    }
-                }
-            }
-        }
-
-        // _logger.debug("\tExiting populateCurrentChildren");
-    }
-
-
-
-
+	}
 }
