@@ -189,6 +189,8 @@ public class SearchByAssociationIteratorDecorator extends
 			return returnList;
 		}
 
+        // IMPORTANT: Apply restrictions to associations for supporting advanced search (to be implemented later)
+
 		protected List<? extends ResolvedConceptReference> resolveOneHit(ResolvedConceptReference hit) throws LBException{
 			List<ResolvedConceptReference> returnList = new ArrayList<ResolvedConceptReference>();
 
@@ -197,11 +199,37 @@ public class SearchByAssociationIteratorDecorator extends
 					null,
 					null);
 
-// IMPORTANT: Apply restrictions to associations for supporting advanced search (to be implemented later)
+            Boolean restrictToAnonymous = Boolean.FALSE;
+            cng = cng.restrictToAnonymous(restrictToAnonymous);
+			if (_associationNameAndValueList != null) {
+				cng =
+					cng.restrictToAssociations(
+						_associationNameAndValueList,
+						_associationQualifierNameAndValueList);
+			}
+			/*
+			else {
+				String scheme = hit.getCodingSchemeName();
+				boolean isMapping = DataUtils.isMapping(scheme, null);
+				if (isMapping) {
+					NameAndValueList navl = DataUtils.getMappingAssociationNames(scheme, null);
+					if (navl != null) {
+						cng = cng.restrictToAssociations(navl, null);
+					}
+				}
+			}
+			*/
 
 			ConceptReference focus = new ConceptReference();
 			focus.setCode(hit.getCode());
 			focus.setCodeNamespace(hit.getCodeNamespace());
+
+            /*
+            System.out.println("****** hit.getCodingSchemeName(): " + hit.getCodingSchemeName());
+            System.out.println("****** hit.getCodingSchemeVersion(): " + hit.getCodingSchemeVersion());
+			System.out.println("****** hit.getCode(): " + hit.getCode());
+			System.out.println("****** hit.getCodeNamespace(): " + hit.getCodeNamespace());
+			*/
 
 			/*
 			ResolvedConceptReferenceList list =
