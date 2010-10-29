@@ -175,8 +175,6 @@ public class SearchByAssociationIteratorDecorator extends
 				int position,
 				int pageSize) {
 
-    	System.out.println("SearchByAssociationIteratorDecorator doPage ...");
-
 
 			List<ResolvedConceptReference> returnList = new ArrayList<ResolvedConceptReference>();
 			try {
@@ -199,15 +197,18 @@ public class SearchByAssociationIteratorDecorator extends
 					null,
 					null);
 
+/*
             Boolean restrictToAnonymous = Boolean.FALSE;
             cng = cng.restrictToAnonymous(restrictToAnonymous);
+*/
+
 			if (_associationNameAndValueList != null) {
 				cng =
 					cng.restrictToAssociations(
 						_associationNameAndValueList,
 						_associationQualifierNameAndValueList);
 			}
-			/*
+
 			else {
 				String scheme = hit.getCodingSchemeName();
 				boolean isMapping = DataUtils.isMapping(scheme, null);
@@ -218,18 +219,15 @@ public class SearchByAssociationIteratorDecorator extends
 					}
 				}
 			}
-			*/
 
 			ConceptReference focus = new ConceptReference();
 			focus.setCode(hit.getCode());
 			focus.setCodeNamespace(hit.getCodeNamespace());
 
-            /*
             System.out.println("****** hit.getCodingSchemeName(): " + hit.getCodingSchemeName());
             System.out.println("****** hit.getCodingSchemeVersion(): " + hit.getCodingSchemeVersion());
 			System.out.println("****** hit.getCode(): " + hit.getCode());
 			System.out.println("****** hit.getCodeNamespace(): " + hit.getCodeNamespace());
-			*/
 
 			/*
 			ResolvedConceptReferenceList list =
