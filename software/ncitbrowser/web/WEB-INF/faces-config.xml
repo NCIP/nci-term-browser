@@ -426,12 +426,20 @@
 
 
     <navigation-case>
-       <description>Search</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>message</from-outcome>
-       <to-view-id>/pages/message.jsp</to-view-id>
+       <description>message</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
     </navigation-case>
 
+    <navigation-case>
+       <description>license</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>license</from-outcome>
+       <to-view-id>/pages/license.jsp</to-view-id>
+    </navigation-case>
+    
+    
     <navigation-case>
        <description>Match</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -694,6 +702,13 @@
        <to-view-id>/pages/license.jsp</to-view-id>
     </navigation-case>
 
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>
+    
     <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.multipleSearchAction}</from-action>

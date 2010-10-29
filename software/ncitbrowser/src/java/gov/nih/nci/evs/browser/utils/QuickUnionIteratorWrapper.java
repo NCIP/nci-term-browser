@@ -135,20 +135,20 @@ public class QuickUnionIteratorWrapper implements ResolvedConceptReferencesItera
                             restrictToProperties, restrictToPropertyTypes,
                             resolve);
 
-
                     if (iterator != null) {
 						ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(iterator);
 						String codingSchemeName = (String) codingSchemeNames.elementAt(lcv);
 
 						wrapper.setCodingSchemeName(codingSchemeName);
-
                         _iterators.add(wrapper);
 
                     }
                 } catch (Exception ex) {
                     _logger
                         .error("QuickUnionIteratorWrapper constructor - cns.resolve throws exception???");
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
+                    System.out.println("WARNING: QuickUnionIteratorWrapper constructor - cns.resolve throws exception???");
+
                 }
             }
         }
