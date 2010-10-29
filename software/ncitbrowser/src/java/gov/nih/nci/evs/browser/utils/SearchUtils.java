@@ -1031,6 +1031,8 @@ public class SearchUtils {
         String matchAlgorithm0 = matchAlgorithm;
         matchText0 = matchText0.trim();
 
+
+
         // boolean preprocess = true;
         if (matchText == null || matchText.length() == 0) {
             return null;
@@ -1217,7 +1219,9 @@ public class SearchUtils {
                         _logger.warn("lbSvc = null");
                         return null;
                     }
-                    cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+                    //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
+
+                    cns = getNodeSet(lbSvc, scheme, versionOrTag);
                     if (cns != null) {
                         try {
                             cns =
@@ -1286,6 +1290,8 @@ public class SearchUtils {
                             .debug("Calling  cns.resolve to resolve the union CNS ... ");
                     // iterator = cns.resolve(sortCriteria, null,
                     // restrictToProperties, null, resolveConcepts);
+
+
                     iterator =
                         new QuickUnionIterator(cns_vec, sortCriteria, null,
                             restrictToProperties, null, resolveConcepts);
@@ -2814,7 +2820,6 @@ public class SearchUtils {
 
 			try {
 				int numberRemaining = decorator.numberRemaining();
-				System.out.println( "searchByAssociationIteratorDecorator NumberRemaining: " + numberRemaining);
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -2915,9 +2920,7 @@ public class SearchUtils {
 
                                 } catch (Exception ex) {
 									ex.printStackTrace();
-									 System.out.println("(*) searchByAssociations restrictToMatchingDesignations exedption???");
-
-                                    return null;
+                                   return null;
                                 }
                             }
 
@@ -3027,7 +3030,6 @@ public class SearchUtils {
 
 						try {
 							int quickIteratorNumberRemaining = quickUnionIterator.numberRemaining();
-							System.out.println( "quickIteratorNumberRemaining: " + quickIteratorNumberRemaining);
 
 						} catch (Exception ex) {
 							ex.printStackTrace();
@@ -3053,13 +3055,6 @@ public class SearchUtils {
 							new QuickUnionIteratorWrapper(codingSchemeNames, cns_vec, sortCriteria, null,
 								restrictToProperties, null, resolveConcepts);
 
-						try {
-							int quickIteratorNumberRemaining = quickUnionIteratorWrapper.numberRemaining();
-							System.out.println( "quickUnionIteratorWrapper NumberRemaining: " + quickIteratorNumberRemaining);
-
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
 
 /*
 						iterator =

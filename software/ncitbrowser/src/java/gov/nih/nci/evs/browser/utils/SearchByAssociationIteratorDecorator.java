@@ -223,12 +223,12 @@ public class SearchByAssociationIteratorDecorator extends
 			ConceptReference focus = new ConceptReference();
 			focus.setCode(hit.getCode());
 			focus.setCodeNamespace(hit.getCodeNamespace());
-
+/*
             System.out.println("****** hit.getCodingSchemeName(): " + hit.getCodingSchemeName());
             System.out.println("****** hit.getCodingSchemeVersion(): " + hit.getCodingSchemeVersion());
 			System.out.println("****** hit.getCode(): " + hit.getCode());
 			System.out.println("****** hit.getCodeNamespace(): " + hit.getCodeNamespace());
-
+*/
 			/*
 			ResolvedConceptReferenceList list =
 				cng.resolveAsList(focus, true, true, 0, 1, null, null, null, -1);

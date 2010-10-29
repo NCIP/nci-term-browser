@@ -673,6 +673,7 @@ public class UserSessionBean extends Object {
     }
 
     public String acceptLicenseAction() {
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -728,7 +729,6 @@ public class UserSessionBean extends Object {
         } else {
             matchText = (String) request.getSession().getAttribute("matchText");
         }
-
         String multiple_search_error =
             (String) request.getSession().getAttribute(
                 "multiple_search_no_match_error");
@@ -842,6 +842,7 @@ public class UserSessionBean extends Object {
             request.getSession().setAttribute("message", message);
             request.getSession().setAttribute("matchText",
                 HTTPUtils.convertJSPString(matchText));
+
             return "multiple_search";
         }
 
@@ -879,6 +880,7 @@ public class UserSessionBean extends Object {
             } catch (Exception e) {
             }
         }
+
         if (ontology_list == null) {
             ontology_list_str =
                 (String) request.getParameter("ontology_list_str"); // from
@@ -934,7 +936,6 @@ public class UserSessionBean extends Object {
 
         scheme = null;
         version = null;
-
         String t = "";
         if (ontologiesToSearchOn.size() == 0) {
             String message = Constants.ERROR_NO_VOCABULARY_SELECTED;// "Please select at least one vocabulary.";
@@ -1037,15 +1038,7 @@ public class UserSessionBean extends Object {
                     ranking, maxToReturn);
             if (wrapper != null) {
                 iterator = wrapper.getIterator();
-
-
-                try {
-					int iteratorNumberRemaining = iterator.numberRemaining();
-					System.out.println("================= iterationNumberRemaining: " + iteratorNumberRemaining);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-            }
+           }
         }
 
         request.getSession().setAttribute("vocabulary", scheme);
