@@ -43,6 +43,7 @@ public class MappingData
     public static int COL_SCORE = 4;
     public static int COL_TARGET_CODE = 5;
     public static int COL_TARGET_NAME = 6;
+    public static int COL_TARGET_NAMESPACE = 7;
 
 
 // Variable declaration

@@ -310,7 +310,27 @@ System.out.println("exiting bean.getData ...");
               %>
           </th>    
 
-            
+
+          <th class="dataTableHeader" scope="col" align="left">
+              <%
+              if (sortBy == MappingData.COL_TARGET_NAMESPACE) {
+              %>
+                 Target Namespace
+              <%
+              } else {
+                  String s = new Integer(MappingData.COL_TARGET_NAME).toString();
+              %>
+              
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                   Target Namespace
+                </a>              
+
+              <%
+              }
+              %>
+          </th>  
+          
+          
             <%
                 String source_scheme = null;//"NCI_Thesaurus";
                 String source_version = null;// "10.06e";
@@ -323,6 +343,7 @@ System.out.println("exiting bean.getData ...");
                 String score = null;
                 String target_code = null;
                 String target_name = null;
+                String target_namespace = null;
                 MappingData mappingData = null;
                 
                 
@@ -338,6 +359,7 @@ System.out.println("exiting bean.getData ...");
 		    score = new Integer(mappingData.getScore()).toString();
 		    target_code = mappingData.getTargetCode();
 		    target_name = mappingData.getTargetName();
+		    target_namespace = mappingData.getTargetCodeNamespace();
 		    
 		    source_scheme = mappingData.getSourceCodingScheme();
 		    source_version = mappingData.getSourceCodingSchemeVersion();
@@ -376,6 +398,7 @@ System.out.println("exiting bean.getData ...");
 </a> 		    
                     </td>
 		    <td class="textbody"><%=target_name%></td>
+		    <td class="textbody"><%=target_namespace%></td>
 </tr>                
                 
                <% 
