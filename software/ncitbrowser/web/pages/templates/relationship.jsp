@@ -279,6 +279,7 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
      <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
      <th class="dataTableHeader" scope="col" align="left">Name</th> 
      <th class="dataTableHeader" scope="col" align="left">Code</th> 
+     <th class="dataTableHeader" scope="col" align="left">Namespace</th>
      <th class="dataTableHeader" scope="col" align="left">REL</th>
      <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
  <%
@@ -296,6 +297,7 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
       String target_concept_name = (String) ret_vec.elementAt(1);
       String target_concept_code = (String) ret_vec.elementAt(2);
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
+      String target_namespace = null;
 
 	String qualifiers = null;
 	rel = null;
@@ -311,6 +313,8 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
 	    String score_str = (String) v.elementAt(1);
 	    int m2 = score_str.indexOf(":");
 	    score = score_str.substring(m2+1, score_str.length()); 
+	    
+	    target_namespace = (String) ret_vec.elementAt(5);
 	}
         
       if (n2 % 2 == 0) {
@@ -347,7 +351,8 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
-              </td>              
+              </td>
+              <td><%=target_namespace%></td>
               <td><%=rel%></td>
               <td><%=score%></td>
               <%
@@ -519,6 +524,7 @@ if (!isMapping) {
    %>
        <th class="dataTableHeader" scope="col" align="left">Name</th> 
        <th class="dataTableHeader" scope="col" align="left">Code</th> 
+       <th class="dataTableHeader" scope="col" align="left">Namespace</th> 
        <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
        <th class="dataTableHeader" scope="col" align="left">REL</th>
        <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
@@ -537,7 +543,7 @@ if (!isMapping) {
       String target_concept_name = (String) ret_vec.elementAt(1);
       String target_concept_code = (String) ret_vec.elementAt(2);
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
-
+      String target_namespace = null;
 	String qualifiers = null;
 	rel = null;
 	score = null;
@@ -553,6 +559,9 @@ if (!isMapping) {
 		    String score_str = (String) v.elementAt(1);
 		    int m2 = score_str.indexOf(":");
 		    score = score_str.substring(m2+1, score_str.length()); 
+	    }
+	    if (ret_vec.size() > 5) {
+	        target_namespace = (String) ret_vec.elementAt(5);
 	    }
 	}
 
@@ -593,6 +602,7 @@ if (!isMapping) {
                   <%=target_concept_code%>
                 </a>
               </td>
+              <td><%=target_namespace%></td>
               <%
               }
               %>                

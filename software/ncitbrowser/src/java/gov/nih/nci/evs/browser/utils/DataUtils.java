@@ -1786,6 +1786,7 @@ System.out.println("getRelationshipHashMap code: " + code);
 														}
 														s = s + "|" + qualifiers;
 													}
+													s = s + "|" + ac.getCodeNamespace();
 												}
 
 
@@ -1951,6 +1952,7 @@ System.out.println("getRelationshipHashMap code: " + code);
 														}
 														s = s + "|" + qualifiers;
 													}
+													s = s + "|" + ac.getCodeNamespace();
 												}
 
                                                 if (isRole) {
