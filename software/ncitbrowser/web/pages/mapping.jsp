@@ -334,6 +334,7 @@ System.out.println("exiting bean.getData ...");
             <%
                 String source_scheme = null;//"NCI_Thesaurus";
                 String source_version = null;// "10.06e";
+                String source_namespace = null;
                 String target_scheme = null;// "ICD_9_CM";
                 String target_version = null;// "2010";
                 
@@ -355,6 +356,8 @@ System.out.println("exiting bean.getData ...");
                     mappingData = (MappingData) list.get(lcv);
 		    source_code = mappingData.getSourceCode();
 		    source_name = mappingData.getSourceName();
+		    source_namespace = mappingData.getSourceCodeNamespace();
+		    
 		    rel = mappingData.getRel();
 		    score = new Integer(mappingData.getScore()).toString();
 		    target_code = mappingData.getTargetCode();
@@ -370,7 +373,7 @@ System.out.println("exiting bean.getData ...");
            
 <tr>
            
-		    <td class="textbody">
+		    <td class="datacoldark">
 <a href="#"
       onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
       <%=source_code%>
@@ -382,10 +385,12 @@ System.out.println("exiting bean.getData ...");
 </a> 
 		    
 		    </td>
-		    <td class="textbody"><%=source_name%></td>
+		    <td class="datacoldark"><%=source_name%></td>
+		    <td class="datacoldark"><%=source_namespace%></td>
+		    
 		    <td class="textbody"><%=rel%></td>
 		    <td class="textbody"><%=score%></td>
-		    <td class="textbody">
+		    <td class="datacoldark">
 		    
 <a href="#"
       onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
@@ -397,8 +402,8 @@ System.out.println("exiting bean.getData ...");
       <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
 </a> 		    
                     </td>
-		    <td class="textbody"><%=target_name%></td>
-		    <td class="textbody"><%=target_namespace%></td>
+		    <td class="datacoldark"><%=target_name%></td>
+		    <td class="datacoldark"><%=target_namespace%></td>
 </tr>                
                 
                <% 
