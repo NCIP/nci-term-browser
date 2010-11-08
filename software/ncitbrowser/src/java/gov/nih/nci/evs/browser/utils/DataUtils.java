@@ -3653,6 +3653,16 @@ System.out.println("getRelationshipHashMap code: " + code);
 
 	}
 
+/*
+    public static int COL_SOURCE_CODE = 1;
+    public static int COL_SOURCE_NAME = 2;
+    public static int COL_SOURCE_NAMESPACE = 3;
+    public static int COL_REL = 4;
+    public static int COL_SCORE = 5;
+    public static int COL_TARGET_CODE = 6;
+    public static int COL_TARGET_NAME = 7;
+    public static int COL_TARGET_NAMESPACE = 8;
+*/
 
 	public static List<MappingSortOption> createMappingSortOption(int sortBy) {
         List<MappingSortOption> list = new ArrayList<MappingSortOption>();
@@ -3689,15 +3699,16 @@ System.out.println("getRelationshipHashMap code: " + code);
                 list.add(option);
                 break;
 
+            // to be modified
             case 3:
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
                 qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
                 list.add(qualifierOption);
                 qualifierOption = new QualifierSortOption(Direction.DESC, "score");
                 list.add(qualifierOption);
-				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
-				list.add(option);
-				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
-                list.add(option);
 				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
 				list.add(option);
 				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
@@ -3705,14 +3716,14 @@ System.out.println("getRelationshipHashMap code: " + code);
                 break;
 
             case 4:
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
                 qualifierOption = new QualifierSortOption(Direction.DESC, "score");
                 list.add(qualifierOption);
 				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
 				list.add(option);
 				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
                 list.add(option);
-                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
-                list.add(qualifierOption);
 				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
 				list.add(option);
 				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
@@ -3720,6 +3731,21 @@ System.out.println("getRelationshipHashMap code: " + code);
                 break;
 
             case 5:
+                qualifierOption = new QualifierSortOption(Direction.DESC, "score");
+                list.add(qualifierOption);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                break;
+
+            case 6:
 				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
 				list.add(option);
 				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
@@ -3734,7 +3760,25 @@ System.out.println("getRelationshipHashMap code: " + code);
                 list.add(qualifierOption);
                 break;
 
-            case 6:
+            case 7:
+				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+ 				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_CODE, Direction.ASC);
+				list.add(option);
+				option = new MappingSortOption(MappingSortOptionName.SOURCE_ENTITY_DESCRIPTION, Direction.ASC);
+                list.add(option);
+                qualifierOption = new QualifierSortOption(Direction.ASC, "rel");
+                list.add(qualifierOption);
+                qualifierOption = new QualifierSortOption(Direction.DESC, "score");
+                list.add(qualifierOption);
+               break;
+
+            // to be modified
+            case 8:
+ 				//option = new MappingSortOption(MappingSortOptionName.TARGET_NAMESPACE, Direction.ASC);
+                //list.add(option);
 				option = new MappingSortOption(MappingSortOptionName.TARGET_ENTITY_DESCRIPTION, Direction.ASC);
                 list.add(option);
  				option = new MappingSortOption(MappingSortOptionName.TARGET_CODE, Direction.ASC);
@@ -3754,6 +3798,10 @@ System.out.println("getRelationshipHashMap code: " + code);
 		}
 		return list;
 	}
+
+
+//MappingSortOptionName.RELATIONSHIP,
+//MappingSortOptionName.QUALIFIER
 
 
     public static ResolvedConceptReferencesIterator getMappingDataIterator(String scheme, String version) {
