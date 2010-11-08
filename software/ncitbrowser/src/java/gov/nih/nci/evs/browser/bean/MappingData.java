@@ -39,11 +39,12 @@ public class MappingData
 {
     public static int COL_SOURCE_CODE = 1;
     public static int COL_SOURCE_NAME = 2;
-    public static int COL_REL = 3;
-    public static int COL_SCORE = 4;
-    public static int COL_TARGET_CODE = 5;
-    public static int COL_TARGET_NAME = 6;
-    public static int COL_TARGET_NAMESPACE = 7;
+    public static int COL_SOURCE_NAMESPACE = 3;
+    public static int COL_REL = 4;
+    public static int COL_SCORE = 5;
+    public static int COL_TARGET_CODE = 6;
+    public static int COL_TARGET_NAME = 7;
+    public static int COL_TARGET_NAMESPACE = 8;
 
 
 // Variable declaration

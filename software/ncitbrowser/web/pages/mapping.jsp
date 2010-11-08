@@ -233,6 +233,8 @@ System.out.println("exiting bean.getData ...");
               %>
           </th>   
 
+          <th class="dataTableHeader" scope="col" align="left">Source Namespace</th>
+          
           <th class="dataTableHeader" scope="col" align="left">
               <%
               if (sortBy == MappingData.COL_REL) {
@@ -310,26 +312,7 @@ System.out.println("exiting bean.getData ...");
               %>
           </th>    
 
-
-          <th class="dataTableHeader" scope="col" align="left">
-              <%
-              if (sortBy == MappingData.COL_TARGET_NAMESPACE) {
-              %>
-                 Target Namespace
-              <%
-              } else {
-                  String s = new Integer(MappingData.COL_TARGET_NAME).toString();
-              %>
-              
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
-                   Target Namespace
-                </a>              
-
-              <%
-              }
-              %>
-          </th>  
-          
+          <th class="dataTableHeader" scope="col" align="left">Target Namespace</th>  
           
             <%
                 String source_scheme = null;//"NCI_Thesaurus";
