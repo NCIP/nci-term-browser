@@ -469,8 +469,9 @@ String vocab_format = DataUtils.getMetadataValue(dict_name, "format");
 if (vocab_format != null && vocab_format.compareTo("RRF") == 0) {
  display_UMLS_CUI= false;
 }
-      
-if (external_source_codes.size() == 0) {
+ 
+
+if (external_source_codes.size() != 0) {
     for (int i=0; i<external_source_codes.size(); i++) {
         String propName = (String) external_source_codes.elementAt(i);
         String propName_label = (String) external_source_codes_label.elementAt(i);
@@ -487,6 +488,8 @@ if (external_source_codes.size() == 0) {
         }
     }
 }
+
+
 if (!hasExternalSourceCodes) {
 %>
 <b>External Source Codes</b>:&nbsp;<i>None</i>
@@ -629,12 +632,6 @@ if (!hasOtherProperties) {
             <%
           } else {
               String value = (String) w.elementAt(1);
-              /*
-              String source = "";
-              if (w.size() > 2) {
-                  source = (String) w.elementAt(2);
-              }
-              */
               if (n % 2 == 0) {
                 %>
                   <tr class="dataRowDark">
