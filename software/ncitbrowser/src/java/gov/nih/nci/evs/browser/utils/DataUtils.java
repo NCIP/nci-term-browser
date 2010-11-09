@@ -1397,11 +1397,14 @@ public class DataUtils {
             for (int j = 0; j < qualifiers.length; j++) {
                 PropertyQualifier q = qualifiers[j];
                 String qualifier_name = q.getPropertyQualifierName();
-                String qualifier_value = q.getValue().getContent();
+                //KLO, 110910
+                if (qualifier_name.compareTo("label") != 0) {
+					String qualifier_value = q.getValue().getContent();
 
-                s = s + qualifier_name + ": " + qualifier_value;
-                if (j < qualifiers.length - 1)
-                    s = s + "; ";
+					s = s + qualifier_name + ": " + qualifier_value;
+					if (j < qualifiers.length - 1)
+						s = s + "; ";
+				}
             }
         }
         return s;
