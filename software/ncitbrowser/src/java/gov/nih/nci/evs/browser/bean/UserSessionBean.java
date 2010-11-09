@@ -474,6 +474,9 @@ public class UserSessionBean extends Object {
                 .getExternalContext().getRequest();
         request.getSession().setAttribute("selectedResultsPerPage",
             selectedResultsPerPage);
+
+
+        System.out.println("(*) request.getSession().setAttribute selectedResultsPerPage " + selectedResultsPerPage);
     }
 
     public String getSelectedResultsPerPage() {
@@ -497,6 +500,10 @@ public class UserSessionBean extends Object {
             return;
         }
         String newValue = (String) event.getNewValue();
+
+        System.out.println("(*) UserSessionBean resultsPerPageChanged newValue: " + newValue);
+
+
         setSelectedResultsPerPage(newValue);
     }
 
