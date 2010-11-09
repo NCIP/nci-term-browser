@@ -10,11 +10,21 @@
     String istart_str = Integer.toString(istart);
     String iend_str = Integer.toString(iend);
     int numRemaining = iend+1;
+    
+    
+System.out.println("(1) pagination-mapping.jsp numRemaining: " + numRemaining);    
+if (iterator != null) {    
+    
     try {
         numRemaining = iterator.numberRemaining();
     } catch (Exception ex) {
         ex.printStackTrace();
     }
+    
+}
+    
+System.out.println("(2) pagination-mapping.jsp numRemaining: " + numRemaining);    
+    
     
     String match_size = Integer.toString(numRemaining);
     
@@ -22,8 +32,8 @@
     String next_page_num_str = Integer.toString(pageNum+1);
     
     
-    //System.out.println("prev_page_num_str: " + prev_page_num_str);
-    //System.out.println("next_page_num_str: " + next_page_num_str);
+System.out.println("prev_page_num_str: " + prev_page_num_str);
+System.out.println("next_page_num_str: " + next_page_num_str);
     
 %>
 
@@ -50,8 +60,12 @@
                  int maxPageNumber = 5;
                  if (prev_page_num > maxPageNumber) maxPageNumber = prev_page_num;
 
+System.out.println("maxPageNumber: " + maxPageNumber);
+
+
 		 for (int idx=1; idx<=maxPageNumber; idx++) { 
 		    String idx_str = Integer.toString(idx);
+		    
 		    if (prev_page_num != idx) {
 		        if (prev_page_num == 0 && idx == 1) {
 		        %>
