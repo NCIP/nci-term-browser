@@ -466,8 +466,10 @@ public class UserSessionBean extends Object {
     }
 
     public void setSelectedResultsPerPage(String selectedResultsPerPage) {
-        if (selectedResultsPerPage == null)
+        if (selectedResultsPerPage == null) {
+			System.out.println("(*) selectedResultsPerPage == null ??? ");
             return;
+		}
         _selectedResultsPerPage = selectedResultsPerPage;
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -497,6 +499,7 @@ public class UserSessionBean extends Object {
 
     public void resultsPerPageChanged(ValueChangeEvent event) {
         if (event.getNewValue() == null) {
+			System.out.println("(*) UserSessionBean event.getNewValue() == null??? ");
             return;
         }
         String newValue = (String) event.getNewValue();
