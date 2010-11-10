@@ -97,7 +97,7 @@ if (mapping_dictionary != null && mapping_dictionary.compareTo("NCI Thesaurus") 
 
 <%
   String base_path = request.getContextPath();
-
+int numRemaining = 0;
 
 int sortBy = MappingData.COL_SOURCE_CODE;
 int prevSortBy = MappingData.COL_SOURCE_CODE;
@@ -136,12 +136,19 @@ if (bean == null) {
     // initialization
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
     if (iterator != null) {
+    
+        try {
+            numRemaining = iterator.numberRemaining();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    
 	bean = new MappingIteratorBean(
 		iterator,
 		1000, // number remaining 
 		0,    // istart
 		50,   // iend,
-		1000, // size,
+		numRemaining, // size,
 		0,    // pageNumber,
 		1);   // numberPages    
     }
@@ -150,22 +157,25 @@ if (bean == null) {
     bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
     bean.setList(new ArrayList());
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
+    
     if (iterator != null) {
+    
+        try {
+            numRemaining = iterator.numberRemaining();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }    
+    
 	bean.initialize(
 		iterator,
 		1000, // number remaining 
 		0,    // istart
 		50,   // iend,
-		1000, // size,
+		numRemaining, // size,
 		0,    // pageNumber,
 		1);   // numberPages     
     }
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
-}
-
-
-if (bean == null) {
-System.out.println("WARNING: mapping.jsp bean == null???");
 }
 
 

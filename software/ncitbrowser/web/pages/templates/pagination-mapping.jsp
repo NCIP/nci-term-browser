@@ -9,22 +9,15 @@
     
     String istart_str = Integer.toString(istart);
     String iend_str = Integer.toString(iend);
-    int numRemaining = iend+1;
-    
-    
-System.out.println("(1) pagination-mapping.jsp numRemaining: " + numRemaining);    
-if (iterator != null) {    
-    
-    try {
-        numRemaining = iterator.numberRemaining();
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    }
-    
-}
-    
-System.out.println("(2) pagination-mapping.jsp numRemaining: " + numRemaining);    
-    
+  
+
+String dictionary_map = (String) request.getSession().getAttribute("dictionary");
+System.out.println("(*) dictionary_map " + dictionary_map);
+bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
+numRemaining = bean.getSize();
+
+System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemaining);    
+   
     
     String match_size = Integer.toString(numRemaining);
     
