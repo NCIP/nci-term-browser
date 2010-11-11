@@ -195,6 +195,7 @@ if (page_number != null) {
 }
 
 int page_num = pageNum;
+if (page_num == 0) page_num++;
 
 
 //int pageSize = bean.getPageSize();

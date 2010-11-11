@@ -65,9 +65,11 @@ System.out.println("next_page_num_str: " + next_page_num_str);
           
           sliding_window_end = sliding_window_start + sliding_window_half_width * 2 - 1;
           if (sliding_window_end > num_pages) sliding_window_end = num_pages;
-       
-          
-		  //for (int idx=1; idx<=num_pages; idx++) {
+
+System.out.println("num_pages: " + num_pages);
+System.out.println("page_num: " + page_num);
+
+
 		 for (int idx=sliding_window_start; idx<=sliding_window_end; idx++) { 
 		    String idx_str = Integer.toString(idx);
 		    if (page_num != idx) {
