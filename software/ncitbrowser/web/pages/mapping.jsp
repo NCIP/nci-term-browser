@@ -95,7 +95,16 @@ if (mapping_dictionary != null && mapping_dictionary.compareTo("NCI Thesaurus") 
       <!-- Page content -->
       <div class="pagecontent">
 
+
 <%
+String resultsPerPage = request.getParameter("resultsPerPage");
+if (resultsPerPage == null) {
+    resultsPerPage = "50";
+}
+
+String selectedResultsPerPage = resultsPerPage;
+
+
   String base_path = request.getContextPath();
 int numRemaining = 0;
 
@@ -185,7 +194,11 @@ if (page_number != null) {
     pageNum = Integer.parseInt(page_number);
 }
 
-int pageSize = bean.getPageSize();
+//int pageSize = bean.getPageSize();
+
+int pageSize = Integer.parseInt(selectedResultsPerPage);
+
+
 //int istart = bean.getIstart();
 //int iend = bean.getIend();
 
