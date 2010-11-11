@@ -339,9 +339,13 @@ public class UserSessionBean extends Object {
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
 
+		request.setAttribute("key", key);
+		System.out.println("(*************) setAttribute key: " + key);
+
         if (iterator != null) {
             // request.getSession().setAttribute("key", key);
-            request.setAttribute("key", key);
+            //request.setAttribute("key", key);
+            //System.out.println("(*************) setAttribute key: " + key);
 
             int numberRemaining = 0;
             try {
@@ -448,6 +452,20 @@ public class UserSessionBean extends Object {
 
     private String _selectedResultsPerPage = null;
     private List _resultsPerPageList = null;
+
+
+    public static List getResultsPerPageValues() {
+        List resultsPerPageList = new ArrayList();
+        resultsPerPageList.add("10");
+        resultsPerPageList.add("25");
+        resultsPerPageList.add("50");
+        resultsPerPageList.add("75");
+        resultsPerPageList.add("100");
+        resultsPerPageList.add("250");
+        resultsPerPageList.add("500");
+        return resultsPerPageList;
+    }
+
 
     public List getResultsPerPageList() {
         _resultsPerPageList = new ArrayList();
@@ -1544,7 +1562,6 @@ public class UserSessionBean extends Object {
         }
 
         request.setAttribute("key", key);
-
         request.getSession().setAttribute("matchText", matchText);
 
         request.getSession().removeAttribute("neighborhood_synonyms");
