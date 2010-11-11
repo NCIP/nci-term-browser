@@ -188,15 +188,24 @@ if (bean == null) {
 }
 
 
-String page_number = request.getParameter("page_number");
+String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 int pageNum = 0;
 if (page_number != null) {
     pageNum = Integer.parseInt(page_number);
 }
 
+int page_num = pageNum;
+
+
 //int pageSize = bean.getPageSize();
 
 int pageSize = Integer.parseInt(selectedResultsPerPage);
+
+int size = bean.getNumberRemaining();
+
+int num_pages = size / pageSize;
+if (num_pages * pageSize < size) num_pages++;
+
 
 
 //int istart = bean.getIstart();

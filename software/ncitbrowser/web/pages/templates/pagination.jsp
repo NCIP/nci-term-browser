@@ -44,8 +44,6 @@ if (!page_timeout) {
       <td class="textbody" align=right>
         <%
           if (page_num > 1) {
-          
-          
         %>
         &nbsp;
         <i>
@@ -82,6 +80,7 @@ if (!page_timeout) {
 		    }
 		  }
           }
+          
           if (next_page_num < num_pages) {
         %>
           &nbsp;
