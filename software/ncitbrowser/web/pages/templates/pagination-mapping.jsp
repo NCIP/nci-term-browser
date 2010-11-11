@@ -7,8 +7,8 @@
     int prev_page_num = pageNum;
     int next_page_num = prev_page_num + 1;
     
-    String istart_str = Integer.toString(istart);
-    String iend_str = Integer.toString(iend);
+    String istart_str = Integer.toString(istart+1);
+    String iend_str = Integer.toString(iend+1);
   
 
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
@@ -86,11 +86,36 @@ System.out.println("maxPageNumber: " + maxPageNumber);
     <tr>
       <td class="textbody" align=left>
         Show
+        
+  <select name=resultsPerPage size=1 onChange="paginationForm.submit();">
+  <%
+    List resultsPerPageValues = UserSessionBean.getResultsPerPageValues();
+    for (int i=0; i<resultsPerPageValues.size(); i++) {
+        String resultsPerPageValue = (String) resultsPerPageValues.get(i);
+        
+        if (selectedResultsPerPage.compareTo(resultsPerPageValue) == 0) {
+  %>      
+        <option value="<%=resultsPerPageValue%>" selected><%=resultsPerPageValue%></option>
+  <%        
+        
+        } else {
+  %>      
+        <option value="<%=resultsPerPageValue%>"><%=resultsPerPageValue%></option>
+  <%        
+        }
+
+  }
+  %>
+  </select>
+  <!--
+        
         <h:selectOneMenu
           id="id" value="#{userSessionBean.selectedResultsPerPage}"
           valueChangeListener="#{userSessionBean.resultsPerPageChanged}" immediate="true" onchange="submit()"> 
           <f:selectItems value="#{userSessionBean.resultsPerPageList}"/>
         </h:selectOneMenu>
+        
+  -->        
         &nbsp;results per page
       </td>
       <td>
