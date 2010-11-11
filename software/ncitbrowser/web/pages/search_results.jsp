@@ -39,12 +39,12 @@
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
 boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
 
-System.out.println("isMapping: " + isMapping);
+//System.out.println("isMapping: " + isMapping);
 
 boolean isExtension = DataUtils.isExtension(search_results_dictionary, null);
 
 
-System.out.println("isExtension: " + isExtension);
+//System.out.println("isExtension: " + isExtension);
 
 
 String search_results_version = (String) request.getAttribute("version");
@@ -55,6 +55,11 @@ String vocabulary_name = null;
 String short_vocabulary_name = null;
 String coding_scheme_version = null;
 
+String key = (String) request.getAttribute("key");
+System.out.println("search results.jsp key: " + key);
+if (key == null) {
+    key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
+}
 
 _logger.debug("search_results.jsp dictionary: " + search_results_dictionary);
 _logger.debug("search_results.jsp version: " + search_results_version);
@@ -74,23 +79,32 @@ if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 <%
 }
 %>
-
       <!-- Page content -->
       <div class="pagecontent">
         <%
          
           //String key = (String) request.getSession().getAttribute("key");
-          String key = (String) request.getAttribute("key");
+
+String resultsPerPage = request.getParameter("resultsPerPage");
+if (resultsPerPage == null) {
+    resultsPerPage = "50";
+}
+
+String selectedResultsPerPage = resultsPerPage;
           
-_logger.debug("search_result.jsp " + key);          
+_logger.debug("search_result.jsp " + key);  
+request.setAttribute("key", key);
           
           IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBeanManager");
                 
+ 
+                
           IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
           
 	  if (iteratorBean == null){
-	    _logger.warn("iteratorBean NOT FOUND???" + key);  
+	    _logger.warn("iteratorBean NOT FOUND???" + key); 
+	    System.out.println("iteratorBean NOT FOUND???" + key); 
 	  }
 
           String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
@@ -98,7 +112,7 @@ _logger.debug("search_result.jsp " + key);
           String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
           Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
           String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
-          String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
+          //String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
 
           if (page_number != null && new_search == Boolean.FALSE)
@@ -120,9 +134,13 @@ _logger.debug("search_result.jsp " + key);
           int iend = page_num * page_size;
           int istart = iend - page_size;
           iend = iend-1;
-          int size = iteratorBean.getSize();
+          int size = 0;
+          String match_size = "0";
           
-          String match_size = new Integer(size).toString();
+          if (iteratorBean != null) {
+		  size = iteratorBean.getSize();
+		  match_size = new Integer(size).toString();
+          }
 
           
           if (iend > size-1) iend = size-1;
@@ -285,9 +303,6 @@ if (isMapping || isExtension) {
 				    
 				  <td class="dataCellText">
 				  <%
-
-System.out.println("name: " + name);
-				  
 				  
 				  if (con_status == null) {
 				  %>
