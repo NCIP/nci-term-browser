@@ -149,6 +149,15 @@ request.getSession().setAttribute("matchText", match_text);
     <!-- Page content -->
     <div class="pagecontent">
       <%
+      
+String resultsPerPage = request.getParameter("resultsPerPage");
+if (resultsPerPage == null) {
+    resultsPerPage = "50";
+}
+
+String selectedResultsPerPage = resultsPerPage;     
+      
+      
         request.getSession().removeAttribute("dictionary");
 
         HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
@@ -162,7 +171,7 @@ request.getSession().setAttribute("matchText", match_text);
         Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
 
         String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
-        String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
+        //String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
         String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
 
         if (page_number != null && new_search == Boolean.FALSE)

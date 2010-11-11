@@ -61,11 +61,36 @@
     <tr>
       <td class="textbody" align=left>
         Show
+        
+   <select name=resultsPerPage size=1 onChange="paginationForm.submit();">
+  <%
+    List resultsPerPageValues = UserSessionBean.getResultsPerPageValues();
+    for (int i=0; i<resultsPerPageValues.size(); i++) {
+        String resultsPerPageValue = (String) resultsPerPageValues.get(i);
+        
+        if (selectedResultsPerPage.compareTo(resultsPerPageValue) == 0) {
+  %>      
+        <option value="<%=resultsPerPageValue%>" selected><%=resultsPerPageValue%></option>
+  <%        
+        
+        } else {
+  %>      
+        <option value="<%=resultsPerPageValue%>"><%=resultsPerPageValue%></option>
+  <%        
+        }
+
+  }
+  %>
+  </select>
+  
+        
+        <!--
         <h:selectOneMenu
           id="id" value="#{userSessionBean.selectedResultsPerPage}"
           valueChangeListener="#{userSessionBean.resultsPerPageChanged}" immediate="true" onchange="submit()"> 
           <f:selectItems value="#{userSessionBean.resultsPerPageList}"/>
         </h:selectOneMenu>
+        -->
         &nbsp;results per page
       </td>
       <td>
