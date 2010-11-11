@@ -39,49 +39,63 @@ System.out.println("next_page_num_str: " + next_page_num_str);
       <td>
          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       </td>
+      <!-- ---------------------------------------------------------------------- -->
+      
       <td class="textbody" align=right>
-          <%
-             if (prev_page_num > 0) {
-          %>   
+
+       <%
+          if (page_num > 1) {
+        %>
+        &nbsp;
+        <i>
           <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=prev_page_num_str%>">Prev</a>
-          &nbsp;
-          <%
-             }
-          %>
-        
-<%
-                 int maxPageNumber = 5;
-                 if (prev_page_num > maxPageNumber) maxPageNumber = prev_page_num;
-
-System.out.println("maxPageNumber: " + maxPageNumber);
-
-
-		 for (int idx=1; idx<=maxPageNumber; idx++) { 
+          
+        </i>&nbsp;
+        <%
+          }
+          if (num_pages > 1) {
+          
+          
+          int sliding_window_start = 1;
+          int sliding_window_end = num_pages;
+          int sliding_window_half_width = NCItBrowserProperties.getSlidingWindowHalfWidth();
+          
+          sliding_window_start = page_num - sliding_window_half_width;
+          if (sliding_window_start < 1) sliding_window_start = 1;
+          
+          sliding_window_end = sliding_window_start + sliding_window_half_width * 2 - 1;
+          if (sliding_window_end > num_pages) sliding_window_end = num_pages;
+       
+          
+		  //for (int idx=1; idx<=num_pages; idx++) {
+		 for (int idx=sliding_window_start; idx<=sliding_window_end; idx++) { 
 		    String idx_str = Integer.toString(idx);
-		    
-		    if (prev_page_num != idx) {
-		        if (prev_page_num == 0 && idx == 1) {
-		        %>
-			    <%=idx_str%>&nbsp;
-		        <%      
-		        } else {
-		        %>
-			    <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=idx_str%>"><%=idx_str%></a>
-			    &nbsp;
-		        <%
-		        }
+		    if (page_num != idx) {
+		      %>
+		        <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=idx_str%>"><%=idx_str%></a>
+		
+			&nbsp;
+		      <%
 		    } else {
 		      %>
 			<%=idx_str%>&nbsp;
 		      <%
 		    }
-		 }
-%>		  
-        
-        
-          &nbsp;&nbsp;
-          <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=next_page_num_str%>">Next</a>
+		  }
+          }
+          
+          if (next_page_num < num_pages) {
+        %>
+          &nbsp;
+          <i>
+            <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=next_page_num_str%>">Next</a>
+
+          </i>
+        <%
+          }
+        %>
       </td>
+
     </tr>
     <tr>
       <td class="textbody" align=left>
