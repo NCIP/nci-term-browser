@@ -218,6 +218,9 @@ System.out.println("exiting bean.getData ...");
         
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
           
+          <th class="dataTableHeader" scope="col" align="left">Source</th>
+           
+          
           <th class="dataTableHeader" scope="col" align="left">
               <%
               if (sortBy == MappingData.COL_SOURCE_CODE) {
@@ -256,8 +259,7 @@ System.out.println("exiting bean.getData ...");
               %>
           </th>   
 
-          <th class="dataTableHeader" scope="col" align="left">Source Namespace</th>
-          
+         
           <th class="dataTableHeader" scope="col" align="left">
               <%
               if (sortBy == MappingData.COL_REL) {
@@ -295,7 +297,9 @@ System.out.println("exiting bean.getData ...");
               <%
               }
               %>
-          </th>   
+          </th>
+          
+          <th class="dataTableHeader" scope="col" align="left">Target</th>  
  
           <th class="dataTableHeader" scope="col" align="left">
               <%
@@ -335,7 +339,7 @@ System.out.println("exiting bean.getData ...");
               %>
           </th>    
 
-          <th class="dataTableHeader" scope="col" align="left">Target Namespace</th>  
+          
           
             <%
                 String source_scheme = null;//"NCI_Thesaurus";
@@ -364,11 +368,17 @@ System.out.println("exiting bean.getData ...");
 		    source_name = mappingData.getSourceName();
 		    source_namespace = mappingData.getSourceCodeNamespace();
 		    
+		    // To be modified through metadata
+		    if (source_namespace.compareTo("NCI_Thesaurus") == 0) source_namespace = "NCIt";
+		    
 		    rel = mappingData.getRel();
 		    score = new Integer(mappingData.getScore()).toString();
 		    target_code = mappingData.getTargetCode();
 		    target_name = mappingData.getTargetName();
 		    target_namespace = mappingData.getTargetCodeNamespace();
+		    
+		    // To be modified through metadata
+		    if (target_namespace.compareTo("NCI_Thesaurus") == 0) target_namespace = "NCIt";
 		    
 		    source_scheme = mappingData.getSourceCodingScheme();
 		    source_version = mappingData.getSourceCodingSchemeVersion();
@@ -378,7 +388,7 @@ System.out.println("exiting bean.getData ...");
             %>
            
 <tr>
-           
+                    <td class="datacoldark"><%=source_namespace%></td>           
 		    <td class="datacoldark">
 <a href="#"
       onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
@@ -392,10 +402,12 @@ System.out.println("exiting bean.getData ...");
 		    
 		    </td>
 		    <td class="datacoldark"><%=source_name%></td>
-		    <td class="datacoldark"><%=source_namespace%></td>
+		    
 		    
 		    <td class="textbody"><%=rel%></td>
 		    <td class="textbody"><%=score%></td>
+		    
+		    <td class="datacoldark"><%=target_namespace%></td>
 		    <td class="datacoldark">
 		    
 <a href="#"
@@ -409,7 +421,7 @@ System.out.println("exiting bean.getData ...");
 </a> 		    
                     </td>
 		    <td class="datacoldark"><%=target_name%></td>
-		    <td class="datacoldark"><%=target_namespace%></td>
+		    
 </tr>                
                 
                <% 
