@@ -154,7 +154,7 @@ if (bean == null) {
     
 	bean = new MappingIteratorBean(
 		iterator,
-		1000, // number remaining 
+		numRemaining, // number remaining 
 		0,    // istart
 		50,   // iend,
 		numRemaining, // size,
@@ -177,7 +177,7 @@ if (bean == null) {
     
 	bean.initialize(
 		iterator,
-		1000, // number remaining 
+		numRemaining, // number remaining 
 		0,    // istart
 		50,   // iend,
 		numRemaining, // size,
@@ -204,10 +204,14 @@ int pageSize = Integer.parseInt(selectedResultsPerPage);
 
 int size = bean.getNumberRemaining();
 
+System.out.println("\npage_num: " + page_num);
+System.out.println("size: " + size);
+System.out.println("pageSize: " + pageSize);
+
 int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 
-
+System.out.println("num_pages: " + num_pages + "\n");
 
 //int istart = bean.getIstart();
 //int iend = bean.getIend();
