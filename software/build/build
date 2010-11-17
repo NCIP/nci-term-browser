@@ -21,6 +21,7 @@ if [ -z "$1" ]; then
     echo "  install      -- Builds, installs JBoss locally"
     echo "  deploy       -- Hot deploy application"
     echo "  jsp          -- Hot deploy JSP files"
+    echo "  gc           -- Invoke garbage collector"
     echo
     exit
 fi
@@ -48,6 +49,10 @@ case $1 in
 
     clean)
         ant clean
+        ;;
+
+    gc)
+        ant invoke:garbagecollector
         ;;
 
     *)

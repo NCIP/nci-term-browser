@@ -33,6 +33,7 @@ if "%1" == "" (
     echo   cissh        -- Test SSH login in CI
     echo   dev1ssh      -- Test SSH login in DEV1
     echo   dev2ssh      -- Test SSH login in DEV2
+    echo   gc           -- Invoke garbage collector
     goto DONE
 )
 if "%1" == "all" (
@@ -68,6 +69,10 @@ if "%1" == "clean" (
     if exist ..\target\*.* (
        rmdir /Q /S ..\target
     )
+    goto DONE
+)
+if "%1" == "gc" (
+    ant invoke:garbagecollector
     goto DONE
 )
 if "%1" == "dev1" (
