@@ -674,7 +674,7 @@
         <util-dot-on-dir dot-file.dir="target/reports/ivy" />
     </target>
 
-    <target name="deploy:hot" depends="build:all, set:jboss.war.temp.dir.location" description="Hot deploys the deployment artifact">
+    <target name="deploy:hot" depends="build:all, set:jboss.war.temp.dir.location, invoke:garbagecollector" description="Hot deploys the deployment artifact">
 
         <echo message="       Bin: ${application.base.path}/${jboss.binaries.relative.dir}/bin"/>
         <echo message="    Target: ${jboss.deploy.dir}"/>
@@ -759,43 +759,12 @@
                     </else>
                 </if>
 
-                <!-- Run JBoss Garbage Collector -->
-                <antcall target="invoke:garbagecollector" />
             </else>
         </if>
 
     </target>
-
-    <target name="invoke:garbagecollector">
-        <echo message="Invoking JBoss garbage collector" />
 
-        <osfamily property="os.family"/>
-
-        <if>
-            <equals arg1="${os.family}" arg2="windows"/>
-            <then>
-                <property name="is.windows" value="true" />
-                <property name="shell" value="cmd" />
-                <property name="option" value="/c" />
-                <property name="twiddle" value="twiddle.bat" />
-                <property name="file" value="file:///" />
-            </then>
-            <else>
-                <property name="is.windows" value="false" />
-                <property name="shell" value="/bin/bash" />
-                <property name="option" value="-c" />
-                <property name="twiddle" value="twiddle.sh" />
-                <property name="file" value="file:" />
-            </else>
-        </if>
-
-        <exec executable="${shell}" failonerror="true">
-            <arg value="${option}"/>
-            <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.system:type=Server" runGarbageCollector'/>
-        </exec>
-    </target>
-
-    <target name="deploy:hot:jsp" depends="set:jboss.war.temp.dir.location">
+    <target name="deploy:hot:jsp" depends="set:jboss.war.temp.dir.location, invoke:garbagecollector">
 
         <osfamily property="os.family"/>
 
@@ -846,6 +815,35 @@
             <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.web.deployment:war=/${project.name}" start'/>
         </exec>
 
+    </target>
+
+    <target name="invoke:garbagecollector">
+        <echo message="Invoking JBoss garbage collector" />
+
+        <osfamily property="os.family"/>
+
+        <if>
+            <equals arg1="${os.family}" arg2="windows"/>
+            <then>
+                <property name="is.windows" value="true" />
+                <property name="shell" value="cmd" />
+                <property name="option" value="/c" />
+                <property name="twiddle" value="twiddle.bat" />
+                <property name="file" value="file:///" />
+            </then>
+            <else>
+                <property name="is.windows" value="false" />
+                <property name="shell" value="/bin/bash" />
+                <property name="option" value="-c" />
+                <property name="twiddle" value="twiddle.sh" />
+                <property name="file" value="file:" />
+            </else>
+        </if>
+
+        <exec executable="${shell}" failonerror="true">
+            <arg value="${option}"/>
+            <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.system:type=Server" runGarbageCollector'/>
+        </exec>
     </target>
 
     <target name="deploy:stop">
