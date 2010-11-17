@@ -759,9 +759,40 @@
                     </else>
                 </if>
 
+                <!-- Run JBoss Garbage Collector -->
+                <antcall target="invoke:garbagecollector" />
             </else>
         </if>
 
+    </target>
+
+    <target name="invoke:garbagecollector">
+        <echo message="Invoking JBoss garbage collector" />
+
+        <osfamily property="os.family"/>
+
+        <if>
+            <equals arg1="${os.family}" arg2="windows"/>
+            <then>
+                <property name="is.windows" value="true" />
+                <property name="shell" value="cmd" />
+                <property name="option" value="/c" />
+                <property name="twiddle" value="twiddle.bat" />
+                <property name="file" value="file:///" />
+            </then>
+            <else>
+                <property name="is.windows" value="false" />
+                <property name="shell" value="/bin/bash" />
+                <property name="option" value="-c" />
+                <property name="twiddle" value="twiddle.sh" />
+                <property name="file" value="file:" />
+            </else>
+        </if>
+
+        <exec executable="${shell}" failonerror="true">
+            <arg value="${option}"/>
+            <arg value='${application.base.path}/${jboss.binaries.relative.dir}/bin/${twiddle} -s ${jboss.server.hostname}:${jboss.server.jndi.port} invoke "jboss.system:type=Server" runGarbageCollector'/>
+        </exec>
     </target>
 
     <target name="deploy:hot:jsp" depends="set:jboss.war.temp.dir.location">
