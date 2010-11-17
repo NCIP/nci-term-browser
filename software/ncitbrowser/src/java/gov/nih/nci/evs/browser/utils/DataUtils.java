@@ -163,6 +163,7 @@ public class DataUtils {
     public static HashMap _localNameVersion2FormalNameVersionHashMap = null;
     public static HashMap _formalNameVersion2MetadataHashMap = null;
     public static HashMap _displayNameVersion2FormalNameVersionHashMap = null;
+    public static HashMap _uri2CodingSchemeNameHashMap = null;
 
     public static Vector _nonConcept2ConceptAssociations = null;
     public static String _defaultOntologiesToSearchOnStr = null;
@@ -224,6 +225,7 @@ public class DataUtils {
         _localNameVersion2FormalNameVersionHashMap = new HashMap();
         _formalNameVersion2MetadataHashMap = new HashMap();
         _displayNameVersion2FormalNameVersionHashMap = new HashMap();
+        _uri2CodingSchemeNameHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -286,6 +288,9 @@ public class DataUtils {
                     try {
                         CodingScheme cs =
                             lbSvc.resolveCodingScheme(formalname, vt);
+
+                        _uri2CodingSchemeNameHashMap.put(cs.getCodingSchemeURI(), cs.getCodingSchemeName());
+
 
                         String[] localnames = cs.getLocalName();
                         for (int m = 0; m < localnames.length; m++) {
@@ -3898,5 +3903,35 @@ System.out.println("getRelationshipHashMap code: " + code);
         }
         return null;
     }
+
+    //test case: C17014
+    public static Vector getMappingCodingSchemesEntityParticipatesIn(String code, String namespace) {
+        Vector v = new Vector();
+        try {
+			LexBIGService distributed = RemoteServerUtil.createLexBIGService();
+
+			MappingExtension mappingExtension =
+				(MappingExtension)distributed.getGenericExtension("MappingExtension");
+
+			AbsoluteCodingSchemeVersionReferenceList mappingSchemes =
+				mappingExtension.getMappingCodingSchemesEntityParticipatesIn(code, namespace);
+
+			//output is all of the mapping ontologies that this code participates in.
+			for(AbsoluteCodingSchemeVersionReference ref : mappingSchemes.getAbsoluteCodingSchemeVersionReference()){
+				System.out.println("URI: " + ref.getCodingSchemeURN());
+				System.out.println("Version: " + ref.getCodingSchemeVersion());
+				v.add(ref.getCodingSchemeURN() + "|" + ref.getCodingSchemeVersion());
+			}
+
+		} catch (Exception ex) {
+            ex.printStackTrace();
+        }
+		return v;
+	}
+
+	public static String uri2CodingSchemeName(String uri) {
+	    if (!_uri2CodingSchemeNameHashMap.containsKey(uri)) return null;
+	    return (String) _uri2CodingSchemeNameHashMap.get(uri);
+	}
 
 }

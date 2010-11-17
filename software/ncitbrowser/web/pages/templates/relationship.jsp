@@ -1,25 +1,22 @@
+
 <%
   if (type.compareTo("relationship") == 0 || type.compareTo("all") == 0)
   {
-    Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
-    String scheme_curr = (String) request.getSession().getAttribute("dictionary");
+
+
+Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
+String scheme_curr = (String) request.getSession().getAttribute("dictionary");
+if (scheme_curr == null) {
+scheme_curr = (String) request.getParameter("dictionary");
+}
+
+String version_curr = (String) request.getSession().getAttribute("version");
+boolean isMapping = DataUtils.isMapping(scheme_curr, version_curr);
+String code_curr = (String) request.getSession().getAttribute("code");  
+
     String rel_display_name = DataUtils.getMetadataValue(scheme_curr, "display_name");
     if (rel_display_name == null) rel_display_name = DataUtils.getLocalName(scheme_curr);
-    
-    if (scheme_curr == null) {
-        scheme_curr = (String) request.getParameter("dictionary");
-    }
-    
-    String version_curr = (String) request.getSession().getAttribute("version");
-    
-System.out.println("*** relationship.jsp scheme_curr: " + scheme_curr);
-System.out.println("*** relationship.jsp version_curr: " + version_curr);
-
-    
-    
-    boolean isMapping = DataUtils.isMapping(scheme_curr, version_curr);
-        
-    String code_curr = (String) request.getSession().getAttribute("code");
+   
     if (code_curr == null) {
         code_curr = (String) request.getParameter("code");
     }    
@@ -58,8 +55,7 @@ System.out.println("*** relationship.jsp version_curr: " + version_curr);
   
   <p>
     <%
-
-      
+     
       label = "Parent Concepts:";
       concepts = superconcepts;
       if (concepts == null || concepts.size() <= 0)
@@ -636,5 +632,53 @@ if (!isMapping) {
 
 <%
 }
+
+%>
+
+
+<%      
+ if (!isMapping) { 
+ 
+        Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
+        if (mapping_uri_version_vec != null && mapping_uri_version_vec.size() > 0) {
+%>
+
+<p>
+    <b>Mapping Relationships:</b>
+<br/>
+<table class="dataTable">
+<%
+
+	for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
+	     String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
+	     Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
+	     String mapping_cs_uri = (String) ret_vec.elementAt(0);
+	     String mapping_cs_version = (String) ret_vec.elementAt(1);
+	     
+	     String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
+
+%>		
+		   <tr>
+			   <td>
+			   <%=mapping_cs_uri%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%>&code=<%=code_curr%>&type=relationship">
+                   <i class="textbodyred">View Mapping</i>
+                </a>
+			   </td>
+	           </tr>
+<%   
+		
+	} 
+	
+%>	
+
+
+</table>
+</p>
+ 
+<%
+}
+}
 }
 %>
+
