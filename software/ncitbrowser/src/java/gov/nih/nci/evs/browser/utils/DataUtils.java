@@ -173,6 +173,8 @@ public class DataUtils {
 
     public static HashMap _formalName2NCImSABHashMap = null;
 
+    public static HashMap _isMappingHashMap = null;
+
     // ==================================================================================
 
     public DataUtils() {
@@ -226,6 +228,7 @@ public class DataUtils {
         _formalNameVersion2MetadataHashMap = new HashMap();
         _displayNameVersion2FormalNameVersionHashMap = new HashMap();
         _uri2CodingSchemeNameHashMap = new HashMap();
+        _isMappingHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -291,6 +294,8 @@ public class DataUtils {
 
                         _uri2CodingSchemeNameHashMap.put(cs.getCodingSchemeURI(), cs.getCodingSchemeName());
 
+                        boolean isMapping = isMapping(cs.getCodingSchemeName(), representsVersion);
+                        _isMappingHashMap.put(cs.getCodingSchemeName(), new Boolean(isMapping));
 
                         String[] localnames = cs.getLocalName();
                         for (int m = 0; m < localnames.length; m++) {
@@ -3450,6 +3455,14 @@ System.out.println("getRelationshipHashMap code: " + code);
 	*/
 
     public static boolean isMapping(String scheme, String version) {
+		if (_isMappingHashMap == null) {
+			setCodingSchemeMap();
+		}
+		if (_isMappingHashMap.containsKey(scheme)) {
+			Boolean is_mapping = (Boolean) _isMappingHashMap.get(scheme);
+			return is_mapping.booleanValue();
+		}
+
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         if (version != null)
             csvt.setVersion(version);
@@ -3459,15 +3472,23 @@ System.out.println("getRelationshipHashMap code: " + code);
 			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
 			Relations[] relations = cs.getRelations();
-			if (relations.length == 0) return false;
+			if (relations.length == 0) {
+				_isMappingHashMap.put(scheme, Boolean.FALSE);
+				return false;
+			}
 			for (int i = 0; i < relations.length; i++) {
 				Relations relation = relations[i];
 				Boolean bool_obj = relation.isIsMapping();
-				if (bool_obj == null || bool_obj.equals(Boolean.FALSE)) return false;
+				if (bool_obj == null || bool_obj.equals(Boolean.FALSE)) {
+					_isMappingHashMap.put(scheme, Boolean.FALSE);
+					return false;
+				}
 			}
 		} catch (Exception ex) {
+			_isMappingHashMap.put(scheme, Boolean.FALSE);
             return false;
         }
+        _isMappingHashMap.put(scheme, Boolean.TRUE);
         return true;
     }
 
