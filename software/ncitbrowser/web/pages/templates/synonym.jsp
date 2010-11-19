@@ -7,7 +7,18 @@
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
   {
     %>
-    <p class="textsubtitle-blue">Synonym Details</p>
+	<table border="0" width="708px">
+		<tr>
+			<td class="textsubtitle-blue" align="left">Synonym Details</td>
+			<td align="right" class="texttitle-blue-rightJust">	
+				<h:form>			
+					<h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">				
+						<f:setPropertyActionListener target="#{CartActionBean.codename}" value="concept" />
+					</h:commandLink>
+				</h:form>				
+			</td>
+		</tr>
+	</table>    
     <div>
       <table class="dataTable" border="0">
         <tr>
