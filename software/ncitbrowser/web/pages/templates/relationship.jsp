@@ -46,9 +46,18 @@ String code_curr = (String) request.getSession().getAttribute("code");
     scheme_curr = scheme_curr.replaceAll(" ", "%20"); 
     
 %>
-  <p class="textsubtitle-blue">Relationships with other <%=rel_display_name%> Concepts</p>
-  
-      
+	<table border="0" width="708px">
+		<tr>
+			<td class="textsubtitle-blue" align="left">Relationships with other <%=rel_display_name%> Concepts</td>
+			<td align="right" class="texttitle-blue-rightJust">	
+				<h:form>			
+					<h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">				
+						<f:setPropertyActionListener target="#{CartActionBean.codename}" value="concept" />
+					</h:commandLink>
+				</h:form>				
+			</td>
+		</tr>
+	</table>       
 <%      
  if (!isMapping) {       
 %>  
