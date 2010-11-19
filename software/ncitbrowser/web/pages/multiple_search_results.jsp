@@ -73,14 +73,14 @@ request.getSession().setAttribute("matchText", match_text);
       check_r = "checked";
 %>
       <!-- Thesaurus, banner search area -->
-      
+
       <!--
       <form class="search-form-main-area">
       -->
-      
+
       <h:form>
-      
-      
+
+
       <div class="bannerarea">
         <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
         <div class="search-globalnav">
@@ -140,7 +140,7 @@ request.getSession().setAttribute("matchText", match_text);
     <!--
     </form>
     -->
-    
+
     </h:form>
     <!-- end Thesaurus, banner search area -->
     <!-- Quick links bar -->
@@ -149,15 +149,15 @@ request.getSession().setAttribute("matchText", match_text);
     <!-- Page content -->
     <div class="pagecontent">
       <%
-      
+
 String resultsPerPage = request.getParameter("resultsPerPage");
 if (resultsPerPage == null) {
     resultsPerPage = "50";
 }
 
-String selectedResultsPerPage = resultsPerPage;     
-      
-      
+String selectedResultsPerPage = resultsPerPage;
+
+
         request.getSession().removeAttribute("dictionary");
 
         HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
@@ -239,11 +239,11 @@ String selectedResultsPerPage = resultsPerPage;
               display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 
               if (ontologiesToSearchOnStr != null) {
-              
+
                 Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
                 for (int k=0; k<ontologies_to_search_on.size(); k++) {
                   String s = (String) ontologies_to_search_on.elementAt(k);
-                  
+
                   String t1 = DataUtils.key2CodingSchemeName(s);
                   String term_browser_version = DataUtils.getMetadataValue(t1, "term_browser_version");
 
@@ -291,30 +291,30 @@ String selectedResultsPerPage = resultsPerPage;
       <p class="textbodyred">WARNING: System times out. Please advance fewer pages at one time.</p>
       <%
     } else {
-    
-	  for (int i=0; i<list.size(); i++) {
-	      ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
+
+    for (int i=0; i<list.size(); i++) {
+        ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
               if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
-		    String code = rcr.getConceptCode();
-		    String name = rcr.getEntityDescription().getContent();
+        String code = rcr.getConceptCode();
+        String name = rcr.getEntityDescription().getContent();
 
 
 
-		    String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
-		    if (vocabulary_name == null) {
-			vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
-		    }
+        String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+        if (vocabulary_name == null) {
+      vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+        }
 
-		    String short_vocabulary_name = null;
-		    if (name_hmap.containsKey(vocabulary_name)) {
-			short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
-		    } else {
-			short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
-			if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
-			    short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-			}
-			name_hmap.put(vocabulary_name, short_vocabulary_name);
-		    }
+        String short_vocabulary_name = null;
+        if (name_hmap.containsKey(vocabulary_name)) {
+      short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
+        } else {
+      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
+      if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+          short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+      }
+      name_hmap.put(vocabulary_name, short_vocabulary_name);
+        }
 
             if (code == null || code.indexOf("@") != -1) {
             if (i % 2 == 0) {
