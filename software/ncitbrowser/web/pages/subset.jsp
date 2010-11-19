@@ -1,9 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <%
   String terminology_subset_download_url = new DataUtils().getTerminologySubsetDownloadURL();
   String term_subset_link = null;
