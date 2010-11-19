@@ -3863,7 +3863,7 @@ System.out.println("getRelationshipHashMap code: " + code);
 				System.out.println("isMapping: " + isMapping);
 				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
  					relationsContainerName = relation.getContainerName();
-					System.out.println(relationsContainerName);
+					//System.out.println(relationsContainerName);
 					break;
 				}
 			}
