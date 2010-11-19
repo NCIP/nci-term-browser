@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.List"%>
@@ -23,7 +24,7 @@
    LexEVS URL: <%=evs_service_url%>
   -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Term Browser</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -209,9 +210,11 @@ if (vocabulary_version != null) {
 
          <% }
     %>
-
-
-
+	<c:choose>	
+		<c:when test="${sessionScope.CartActionBean.count>0}">
+		| <a href="<%= request.getContextPath() %>/pages/cart.jsf">Cart</a>
+	    </c:when>
+    </c:choose>
           <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
           | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
           <% } %>
