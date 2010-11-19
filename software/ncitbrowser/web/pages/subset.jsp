@@ -5,7 +5,6 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <%
   String terminology_subset_download_url = new DataUtils().getTerminologySubsetDownloadURL();
   String term_subset_link = null;
@@ -18,7 +17,7 @@
   }
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Thesaurus</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -123,7 +122,7 @@
                   alt="Federal Medication Terminologies">
                 National Council for Prescription Drug Programs Terminology:
               </a>
-              The NCPDP is a not-for-profit ANSI-Accredited Standards Development Organization 
+              The NCPDP is a not-for-profit ANSI-Accredited Standards Development Organization
               representing virtually every sector of the pharmacy services industry. NCPDP is
               working with NCI to provide terminology sets that can be easily used for transfer
               of data related to medications, supplies, and services within the healthcare system.

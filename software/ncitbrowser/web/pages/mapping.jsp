@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 
 <%@ page import="java.io.*" %>
@@ -24,10 +25,8 @@
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.apache.log4j.*" %>
 
-
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Thesaurus</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -70,7 +69,7 @@ String mapping_schema = request.getParameter("schema");
 
 if (mapping_dictionary != null && mapping_schema == null) mapping_schema = mapping_dictionary;
 if (mapping_schema != null) {
-	request.getSession().setAttribute("dictionary", mapping_schema);
+  request.getSession().setAttribute("dictionary", mapping_schema);
 }
 
 
@@ -119,7 +118,7 @@ if (sortByStr != null) {
 String prevSortByStr = (String) request.getSession().getAttribute("sortBy");
 if (prevSortByStr != null) {
     prevSortBy = Integer.parseInt(prevSortByStr);
-} 
+}
 
 if (sortByStr == null) {
     request.getSession().setAttribute("sortBy", "1");
@@ -145,44 +144,44 @@ if (bean == null) {
     // initialization
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
     if (iterator != null) {
-    
+
         try {
             numRemaining = iterator.numberRemaining();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    
-	bean = new MappingIteratorBean(
-		iterator,
-		numRemaining, // number remaining 
-		0,    // istart
-		50,   // iend,
-		numRemaining, // size,
-		0,    // pageNumber,
-		1);   // numberPages    
+
+  bean = new MappingIteratorBean(
+    iterator,
+    numRemaining, // number remaining
+    0,    // istart
+    50,   // iend,
+    numRemaining, // size,
+    0,    // pageNumber,
+    1);   // numberPages
     }
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
 } else if (prevSortByStr != null && sortBy != prevSortBy) {
     bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
     bean.setList(new ArrayList());
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
-    
+
     if (iterator != null) {
-    
+
         try {
             numRemaining = iterator.numberRemaining();
         } catch (Exception ex) {
             ex.printStackTrace();
-        }    
-    
-	bean.initialize(
-		iterator,
-		numRemaining, // number remaining 
-		0,    // istart
-		50,   // iend,
-		numRemaining, // size,
-		0,    // pageNumber,
-		1);   // numberPages     
+        }
+
+  bean.initialize(
+    iterator,
+    numRemaining, // number remaining
+    0,    // istart
+    50,   // iend,
+    numRemaining, // size,
+    0,    // pageNumber,
+    1);   // numberPages
     }
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
 }
@@ -227,14 +226,14 @@ try {
    System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
 System.out.println("exiting bean.getData ...");
-	
+
 %>
-        
+
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
-          
+
           <th class="dataTableHeader" scope="col" align="left">Source</th>
-           
-          
+
+
           <th class="dataTableHeader" scope="col" align="left">
               <%
               if (sortBy == MappingData.COL_SOURCE_CODE) {
@@ -244,15 +243,15 @@ System.out.println("exiting bean.getData ...");
               } else {
                   String s = new Integer(MappingData.COL_SOURCE_CODE).toString();
               %>
-              
+
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Source Code
-                </a>              
+                </a>
 
               <%
               }
               %>
-          </th>          
+          </th>
 
           <th class="dataTableHeader" scope="col" align="left">
               <%
@@ -263,17 +262,17 @@ System.out.println("exiting bean.getData ...");
               } else {
                   String s = new Integer(MappingData.COL_SOURCE_NAME).toString();
               %>
-              
+
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Source Name
-                </a>              
+                </a>
 
               <%
               }
               %>
-          </th>   
+          </th>
 
-         
+
           <th class="dataTableHeader" scope="col" align="left">
               <%
               if (sortBy == MappingData.COL_REL) {
@@ -283,16 +282,16 @@ System.out.println("exiting bean.getData ...");
               } else {
                   String s = new Integer(MappingData.COL_REL).toString();
               %>
-              
+
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    REL
-                </a>              
+                </a>
 
               <%
               }
               %>
-          </th>   
-          
+          </th>
+
 
           <th class="dataTableHeader" scope="col" align="left">
               <%
@@ -303,18 +302,18 @@ System.out.println("exiting bean.getData ...");
               } else {
                   String s = new Integer(MappingData.COL_SCORE).toString();
               %>
-              
+
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Map Rank
-                </a>              
+                </a>
 
               <%
               }
               %>
           </th>
-          
-          <th class="dataTableHeader" scope="col" align="left">Target</th>  
- 
+
+          <th class="dataTableHeader" scope="col" align="left">Target</th>
+
           <th class="dataTableHeader" scope="col" align="left">
               <%
               if (sortBy == MappingData.COL_TARGET_CODE) {
@@ -324,15 +323,15 @@ System.out.println("exiting bean.getData ...");
               } else {
                   String s = new Integer(MappingData.COL_TARGET_CODE).toString();
               %>
-              
+
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Target Code
-                </a>              
+                </a>
 
               <%
               }
               %>
-          </th>          
+          </th>
 
           <th class="dataTableHeader" scope="col" align="left">
               <%
@@ -343,25 +342,25 @@ System.out.println("exiting bean.getData ...");
               } else {
                   String s = new Integer(MappingData.COL_TARGET_NAME).toString();
               %>
-              
+
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Target Name
-                </a>              
+                </a>
 
               <%
               }
               %>
-          </th>    
+          </th>
 
-          
-          
+
+
             <%
                 String source_scheme = null;//"NCI_Thesaurus";
                 String source_version = null;// "10.06e";
                 String source_namespace = null;
                 String target_scheme = null;// "ICD_9_CM";
                 String target_version = null;// "2010";
-                
+
                 String source_code = null;
                 String source_name = null;
                 String rel = null;
@@ -370,79 +369,79 @@ System.out.println("exiting bean.getData ...");
                 String target_name = null;
                 String target_namespace = null;
                 MappingData mappingData = null;
-                
-                
- if (list == null) {     
+
+
+ if (list == null) {
   System.out.println("list == null???");
  } else {
-                
+
                 for (int lcv=0; lcv<list.size(); lcv++) {
                     mappingData = (MappingData) list.get(lcv);
-		    source_code = mappingData.getSourceCode();
-		    source_name = mappingData.getSourceName();
-		    source_namespace = mappingData.getSourceCodeNamespace();
-		    
-		    // To be modified through metadata
-		    if (source_namespace.compareTo("NCI_Thesaurus") == 0) source_namespace = "NCIt";
-		    
-		    rel = mappingData.getRel();
-		    score = new Integer(mappingData.getScore()).toString();
-		    target_code = mappingData.getTargetCode();
-		    target_name = mappingData.getTargetName();
-		    target_namespace = mappingData.getTargetCodeNamespace();
-		    
-		    // To be modified through metadata
-		    if (target_namespace.compareTo("NCI_Thesaurus") == 0) target_namespace = "NCIt";
-		    
-		    source_scheme = mappingData.getSourceCodingScheme();
-		    source_version = mappingData.getSourceCodingSchemeVersion();
-		    target_scheme = mappingData.getTargetCodingScheme();
-		    target_version = mappingData.getTargetCodingSchemeVersion();
-		    
+        source_code = mappingData.getSourceCode();
+        source_name = mappingData.getSourceName();
+        source_namespace = mappingData.getSourceCodeNamespace();
+
+        // To be modified through metadata
+        if (source_namespace.compareTo("NCI_Thesaurus") == 0) source_namespace = "NCIt";
+
+        rel = mappingData.getRel();
+        score = new Integer(mappingData.getScore()).toString();
+        target_code = mappingData.getTargetCode();
+        target_name = mappingData.getTargetName();
+        target_namespace = mappingData.getTargetCodeNamespace();
+
+        // To be modified through metadata
+        if (target_namespace.compareTo("NCI_Thesaurus") == 0) target_namespace = "NCIt";
+
+        source_scheme = mappingData.getSourceCodingScheme();
+        source_version = mappingData.getSourceCodingSchemeVersion();
+        target_scheme = mappingData.getTargetCodingScheme();
+        target_version = mappingData.getTargetCodingSchemeVersion();
+
             %>
-           
+
 <tr>
-                    <td class="datacoldark"><%=source_namespace%></td>           
-		    <td class="datacoldark">
+                    <td class="datacoldark"><%=source_namespace%></td>
+        <td class="datacoldark">
 <a href="#"
       onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
       <%=source_code%>
-</a> 
+</a>
 
 <a href="#"
       onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
       <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
-</a> 
-		    
-		    </td>
-		    <td class="datacoldark"><%=source_name%></td>
-		    
-		    
-		    <td class="textbody"><%=rel%></td>
-		    <td class="textbody"><%=score%></td>
-		    
-		    <td class="datacoldark"><%=target_namespace%></td>
-		    <td class="datacoldark">
-		    
+</a>
+
+        </td>
+        <td class="datacoldark"><%=source_name%></td>
+
+
+        <td class="textbody"><%=rel%></td>
+        <td class="textbody"><%=score%></td>
+
+        <td class="datacoldark"><%=target_namespace%></td>
+        <td class="datacoldark">
+
 <a href="#"
       onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
       <%=target_code%>
-</a> 
+</a>
 
 <a href="#"
       onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
       <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
-</a> 		    
+</a>
                     </td>
-		    <td class="datacoldark"><%=target_name%></td>
-		    
-</tr>                
-                
-               <% 
+        <td class="datacoldark"><%=target_name%></td>
+
+</tr>
+
+               <%
                }
 }
                %>
-               
+
 
           </table>
 

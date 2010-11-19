@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
@@ -8,31 +9,31 @@
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
-  String evs_service_url = new DataUtils().getEVSServiceURL();  
+  String evs_service_url = new DataUtils().getEVSServiceURL();
   String content_title = request.getParameter("content_title");
   String content_page = request.getParameter("content_page");
   String display_app_logo = request.getParameter("display_app_logo");
-  boolean is_display_app_logo = display_app_logo != null 
+  boolean is_display_app_logo = display_app_logo != null
     && display_app_logo.equalsIgnoreCase("true");
-  
+
   String hierarchy_dictionary = request.getParameter("dictionary");
   String hierarchy_version = request.getParameter("version");
   String hierarchy_schema = request.getParameter("schema");
-  if (hierarchy_dictionary != null && hierarchy_schema == null) 
+  if (hierarchy_dictionary != null && hierarchy_schema == null)
     hierarchy_schema = hierarchy_dictionary;
   String display_name = DataUtils.getMetadataValue(hierarchy_schema, hierarchy_version, "display_name");
   if (display_name == null || display_name.compareTo("null") == 0)
-     display_name = DataUtils.getLocalName(hierarchy_schema); 
+     display_name = DataUtils.getLocalName(hierarchy_schema);
 %>
 <!--
    Build info: <%=ncit_build_info%>
  Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
-   LexEVS URL: <%=evs_service_url%>          
+   LexEVS URL: <%=evs_service_url%>
   -->
-  
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html xmlns:c="http://java.sun.com/jsp/jstl/core">
   <head>
     <title><%=content_title%></title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
