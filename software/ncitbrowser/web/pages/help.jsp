@@ -1,8 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Thesaurus</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -346,7 +347,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
             <li><b>Documentation</b>: Online and standalone documentation
               are still under development.</li>
             <li>For the latest updates of known issues,
-              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+1.0+Release+Notes" target="_blank"> see NCI Term Browser 1.0 Release Notes</a>.</li>
+              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.0+Release+Notes" target="_blank"> see NCI Term Browser 2.0 Release Notes</a>.</li>
           </ul>
           Please report any bugs or suggestions using the browser's
           <a href="<%= contactUsUrl %>">Contact Us</a> page.
