@@ -144,7 +144,18 @@
     }
   }
 %>
-<p class="textsubtitle-blue">Terms & Properties</p>
+	<table border="0" width="708px">
+		<tr>
+			<td class="textsubtitle-blue" align="left">Terms & Properties</td>
+			<td align="right" class="texttitle-blue-rightJust">	
+				<h:form>			
+					<h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">				
+						<f:setPropertyActionListener target="#{CartActionBean.codename}" value="concept" />
+					</h:commandLink>
+				</h:form>				
+			</td>
+		</tr>
+	</table>
 <%
 if (bool_obj != null && !bool_obj.equals(Boolean.TRUE) ||
   (concept_status != null &&
