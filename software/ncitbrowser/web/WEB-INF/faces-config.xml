@@ -22,7 +22,6 @@
     <render-kit-factory>com.sun.faces.renderkit.RenderKitFactoryImpl</render-kit-factory>
   </factory>
 
-
   <navigation-rule>
     <from-view-id>/pages/mapping.jsp</from-view-id>
     <navigation-case>
@@ -67,7 +66,6 @@
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>contact_us_message</description>
        <from-action>#{userSessionBean.contactUs}</from-action>
@@ -75,8 +73,8 @@
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
-  
-  
+
+
   <navigation-rule>
     <from-view-id>/pages/accept_license.jsp</from-view-id>
     <navigation-case>
@@ -137,7 +135,6 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
-
 
     <navigation-case>
        <description>contact_us_message</description>
@@ -283,7 +280,6 @@
     </navigation-case>
   </navigation-rule>
 
-
   <navigation-rule>
     <from-view-id>/pages/vocabulary.jsp</from-view-id>
     <navigation-case>
@@ -374,7 +370,6 @@
     </navigation-case>
   </navigation-rule>
 
-
   <navigation-rule>
     <from-view-id>/pages/search_results.jsp</from-view-id>
     <navigation-case>
@@ -413,7 +408,6 @@
     </navigation-case>
   </navigation-rule>
 
-
   <navigation-rule>
     <from-view-id>/pages/multiple_search_results.jsp</from-view-id>
 
@@ -438,8 +432,7 @@
        <from-outcome>license</from-outcome>
        <to-view-id>/pages/license.jsp</to-view-id>
     </navigation-case>
-    
-    
+
     <navigation-case>
        <description>Match</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -655,7 +648,6 @@
 
   </navigation-rule>
 
-
   <navigation-rule>
     <from-view-id>/pages/license.jsp</from-view-id>
 
@@ -687,7 +679,6 @@
        <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.multipleSearchAction}</from-action>
@@ -708,7 +699,7 @@
        <from-outcome>multiple_search</from-outcome>
        <to-view-id>/pages/multiple_search.jsp</to-view-id>
     </navigation-case>
-    
+
     <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.multipleSearchAction}</from-action>
@@ -724,7 +715,6 @@
     </navigation-case>
 
   </navigation-rule>
-
 
    <navigation-rule>
      <from-view-id>/pages/vocabulary-home.jsp</from-view-id>
@@ -763,7 +753,6 @@
         <to-view-id>/pages/contact_us.jsp</to-view-id>
      </navigation-case>
    </navigation-rule>
-
 
   <navigation-rule>
     <from-view-id>/pages/message.jsp</from-view-id>
@@ -830,9 +819,8 @@
        <from-outcome>concept_details</from-outcome>
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
-    
-  </navigation-rule>
 
+  </navigation-rule>
 
   <navigation-rule>
     <from-view-id>/ConceptReport.jsp</from-view-id>
@@ -851,7 +839,6 @@
     </navigation-case>
   </navigation-rule>
 
-
   <navigation-rule>
     <from-view-id>/pages/advanced_search.jsp</from-view-id>
 
@@ -861,7 +848,6 @@
        <from-outcome>no_match</from-outcome>
        <to-view-id>/pages/advanced_search.jsp</to-view-id>
     </navigation-case>
-
 
     <navigation-case>
        <description>message</description>
@@ -884,7 +870,6 @@
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>contact_us_message</description>
        <from-action>#{userSessionBean.contactUs}</from-action>
@@ -901,6 +886,16 @@
 
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/pages/cart.jsp</from-view-id>
+    <navigation-case>
+       <description>add_to_cart</description>
+       <from-action>#{CartActionBean.addToCartAction}</from-action>
+
+    </navigation-case>
+
+
+  </navigation-rule>
 
   <managed-bean>
     <managed-bean-name>userSessionBean</managed-bean-name>
@@ -917,6 +912,12 @@
   <managed-bean>
     <managed-bean-name>licenseBean</managed-bean-name>
     <managed-bean-class>gov.nih.nci.evs.browser.bean.LicenseBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>CartActionBean</managed-bean-name>
+    <managed-bean-class>gov.nih.nci.evs.browser.bean.CartActionBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 
