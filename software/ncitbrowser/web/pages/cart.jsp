@@ -19,6 +19,11 @@
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 <f:view>
 	<h:form>
+	<script language="javascript" type="text/javascript">
+		function backButton() {
+			location.href = '<h:outputText value="#{CartActionBean.backurl}"/>';
+		}
+	</script>	
 	  <%
 	    String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
 	    String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
@@ -41,27 +46,30 @@
 						  </tr>
 						</table>
 					</td>
-					<td class="texttitle-blue-rightjust-large" align="right">
-						<h:commandLink onclick="history.go(-1);return false;" value="Back"/>
+					<td align="right">
+						<h:commandLink value="Remove" action="#{CartActionBean.removeFromCart}"/> |					
+						<h:commandLink onclick="backButton();return false;" value="Back"/>			
 					</td>
 				</tr>      
 			</table>	
 			<hr/>
 			<table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 		        <tr>
+		          <th class="dataTableHeader" scope="col" align="left" width="20px">&nbsp;</th>
 		          <th class="dataTableHeader" scope="col" align="left">Term</th>
 		          <th class="dataTableHeader" scope="col" align="left">Code</th>
 				  <th class="dataTableHeader" scope="col" align="left">Source</th>
-				</tr>  
-			    <c:forEach var="item" begin="0" items="${sessionScope.CartActionBean.concepts}" varStatus="status">	        
+				</tr>				
+			    <c:forEach var="item" begin="0" items="#{CartActionBean.concepts}" varStatus="status">	        
 					<c:choose>
 						<c:when test="${status.index % 2 == 0}">
 							<tr class="dataRowDark">
 						</c:when>
-						<c:when test="${status.index % 2 != 0}">	
-							<tr class="dataRowLight">		        	        
-				        </c:when>
+						<c:otherwise>
+							<tr class="dataRowLight">
+						</c:otherwise>
 				    </c:choose>   
+				    	<td><h:selectBooleanCheckbox value="#{item.selected}"/></td>
 				    	<td>${item.name}</td> 
 			            <td>${item.code}</td>
 			            <td>${item.dictionary}</td>
