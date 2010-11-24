@@ -47,8 +47,9 @@
 						</table>
 					</td>
 					<td align="right">
-						<h:commandLink value="Remove" action="#{CartActionBean.removeFromCart}"/> |					
-						<h:commandLink onclick="backButton();return false;" value="Back"/>			
+						<h:commandLink onclick="backButton();return false;" value="Back" styleClass="texttitle-blue-small"/> |					    
+						<h:commandLink value="Remove Concept" action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small"/> |					
+						<h:commandLink value="Export" action="#{CartActionBean.exportCart}" styleClass="texttitle-blue-small"/>				
 					</td>
 				</tr>      
 			</table>	
@@ -56,9 +57,8 @@
 			<table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 		        <tr>
 		          <th class="dataTableHeader" scope="col" align="left" width="20px">&nbsp;</th>
-		          <th class="dataTableHeader" scope="col" align="left">Term</th>
-		          <th class="dataTableHeader" scope="col" align="left">Code</th>
-				  <th class="dataTableHeader" scope="col" align="left">Source</th>
+		          <th class="dataTableHeader" scope="col" align="left">Concept</th>
+				  <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
 				</tr>				
 			    <c:forEach var="item" begin="0" items="#{CartActionBean.concepts}" varStatus="status">	        
 					<c:choose>
@@ -71,8 +71,7 @@
 				    </c:choose>   
 				    	<td><h:selectBooleanCheckbox value="#{item.selected}"/></td>
 				    	<td>${item.name}</td> 
-			            <td>${item.code}</td>
-			            <td>${item.dictionary}</td>
+			            <td>${item.codingScheme}</td>
 			        </tr>
 			    </c:forEach>
 			</table>
