@@ -90,7 +90,7 @@ if (associations != null) {
 				String score = null;
 
 if (ret_vec2.size() > 4) {
-				qualifiers = (String) ret_vec.elementAt(4);
+				qualifiers = (String) ret_vec2.elementAt(4);
 				System.out.println(qualifiers);
 				Vector v = DataUtils.parseData(qualifiers, "$");
 				String rel_str = (String) v.elementAt(0);
@@ -206,7 +206,7 @@ if (associations != null) {
 			        String rel = null;
 				String score = null;
 
-if (ret_vec.size() > 4) {
+if (ret_vec2.size() > 4) {
 				qualifiers = (String) ret_vec2.elementAt(4);
 				System.out.println(qualifiers);
 				Vector v = DataUtils.parseData(qualifiers, "$");
