@@ -163,6 +163,7 @@ request.setAttribute("version", version);
                 } else if (type.compareTo("properties") != 0
                     && type.compareTo("relationship") != 0
                     && type.compareTo("synonym") != 0
+                    && type.compareTo("mapping") != 0
                     && type.compareTo("all") != 0) {
                   type = "properties";
                 }
@@ -257,6 +258,7 @@ request.setAttribute("version", version);
     file="/pages/templates/property.jsp"%> <%@ include
     file="/pages/templates/relationship.jsp"%>
   <%@ include file="/pages/templates/synonym.jsp"%>
+  <%@ include file="/pages/templates/mappings.jsp"%>
   </div>
   <%
             } else {

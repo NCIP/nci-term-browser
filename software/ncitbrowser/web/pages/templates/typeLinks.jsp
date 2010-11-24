@@ -103,6 +103,36 @@
             }
           %>
           </td>
+          
+          
+          
+      <td width="85" height="21">
+        <%
+          if (data_type == null ||
+            (data_type != null && data_type.compareTo("mapping") != 0)) {
+        %>
+        <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=mapping">
+          <img name="mapTab"
+            src="<%=request.getContextPath() %>/images/tab_map.gif"
+            width="90" height="21" border="0" alt="Mapping"
+            title="Mappings" />
+        </a>
+        <%
+          } else {
+        %>
+          <img name="mapTab"
+            src="<%=request.getContextPath() %>/images/tab_map_clicked.gif"
+            width="85" height="21" border="0" alt="Mapping"
+            title="Mappings" />
+        <%
+          }
+        %>
+        </td>          
+                   
+          
+          
+          
+          
           <td width="71" height="21">
           <%
             if (data_type == null ||
@@ -139,7 +169,7 @@
         
 	 <% } else {
 	 %>
-	    &nbsp;&nbsp;
+	    &nbsp;
 	 <%
 	 }
 	 %>    
@@ -148,7 +178,7 @@
         String link_scheme = scheme.replaceAll("%20", " ");
         if (HistoryUtils.isHistoryServiceAvailable(link_scheme)) {
         %>
-        &nbsp;&nbsp;
+        &nbsp;
         <input onClick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_history.jsf?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');"
                   type="button"
                  class="redButton"
