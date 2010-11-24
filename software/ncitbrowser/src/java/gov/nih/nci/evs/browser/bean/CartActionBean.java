@@ -11,6 +11,9 @@ import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletOutputStream; 
+
 import org.LexGrid.concepts.Entity;
 import org.apache.log4j.Logger;
 
@@ -69,7 +72,9 @@ public class CartActionBean {
 	private String _entity = null;
 	private String _codingScheme = null;
 	private HashMap<String, Concept> _cart = null;
-	private String _backurl = null;
+	private String _backurl = null;	
+	static public final String EXPORT_FILE = "cart.txt";
+	static public final String CONTENT_TYPE = "text/txt";
 
 	// Getters & Setters
 
@@ -191,17 +196,48 @@ public class CartActionBean {
     public void exportCart() throws Exception {
     	
     	SearchCart search = new SearchCart();
+    	ResolvedConceptReference ref = null;
+    	StringBuffer sb = new StringBuffer();
 
-        if (_cart != null && _cart.size() > 0) {
+    	// Get Entities to be exported and build export file
+    	// in memory
+    	
+        if (_cart != null && _cart.size() > 0) {        	
+        	// Add header
+            sb.append("Concept\t");
+            sb.append("Vocabulary\t");   
+            sb.append("Code");
+            sb.append("\r\n");        	
+        	
+            // Add concepts
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
             	Concept item = (Concept)i.next();
-            	ResolvedConceptReference ref = search.getConceptByCode(item.codingScheme,item.code);
+            	ref = search.getConceptByCode(item.codingScheme,item.code);
             	if (ref != null) {
             		_logger.info("Exporting: " + ref.getCode());
+            		sb.append(item.name + "\t");
+            		sb.append(item.code + "\t");
+                    sb.append(item.codingScheme );                   
+                    sb.append("\r\n");            		
             	}	
-            }        	
-        }     	
-   	
+            }           	
+        
+	        // Send export file to browser
+	        
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType(CONTENT_TYPE);
+			response.setHeader("Content-Disposition", "attachment; filename="
+					+ EXPORT_FILE);
+			response.setContentLength(sb.length());
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();      
+	        
+			// Don't allow JSF to forward to cart.jsf
+			FacesContext.getCurrentInstance().responseComplete();
+        }	
     }
     
     /**
