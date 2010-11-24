@@ -7,18 +7,19 @@
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
   {
     %>
-	<table border="0" width="708px">
-		<tr>
-			<td class="textsubtitle-blue" align="left">Synonym Details</td>
-			<td align="right" class="texttitle-blue-rightJust">	
-				<h:form>			
-					<h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">				
-						<f:setPropertyActionListener target="#{CartActionBean.codename}" value="concept" />
-					</h:commandLink>
-				</h:form>				
-			</td>
-		</tr>
-	</table>    
+  <table border="0" width="708px">
+    <tr>
+      <td class="textsubtitle-blue" align="left">Synonym Details</td>
+      <td align="right" class="texttitle-blue-rightJust">
+        <h:form>
+          <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
+            <f:setPropertyActionListener target="#{CartActionBean.entity}" value="concept" />
+            <f:setPropertyActionListener target="#{CartActionBean.codingScheme}" value="dictionary" />
+          </h:commandLink>
+        </h:form>
+      </td>
+    </tr>
+  </table>
     <div>
       <table class="dataTable" border="0">
         <tr>
@@ -43,7 +44,7 @@
         </tr>
 
         <%
-        
+
           Entity concept_syn = (Entity) request.getSession().getAttribute("concept");
           //Vector synonyms = new DataUtils().getSynonyms(dictionary, concept_syn);
           Vector synonyms = new DataUtils().getSynonyms(concept_syn);
@@ -55,36 +56,36 @@
             if (!hset.contains(s)) {
                     hset.add(s);
                     n++;
-		    Vector synonym_data = DataUtils.parseData(s, "|");
-		    String term_name = (String) synonym_data.elementAt(0);
-		    String term_type = (String) synonym_data.elementAt(1);
-		    String term_source = (String) synonym_data.elementAt(2);
-		    String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
-		    
-		    if (term_source_formal_name == null)
-			term_source_formal_name = DataUtils.getFormalName(term_source);
-		    if (term_source.equalsIgnoreCase("nci"))
-			term_source_formal_name = "NCI Thesaurus";
-			
-		    String term_source_code = (String) synonym_data.elementAt(3);
-		    String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
-		%>
-		    <tr class="<%=rowColor%>">
-		      <td class="dataCellText"><%=term_name%></td>
-		      <td class="dataCellText"><%=term_source%></td>
-		      <td class="dataCellText"><%=term_type%></td>
+        Vector synonym_data = DataUtils.parseData(s, "|");
+        String term_name = (String) synonym_data.elementAt(0);
+        String term_type = (String) synonym_data.elementAt(1);
+        String term_source = (String) synonym_data.elementAt(2);
+        String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
+
+        if (term_source_formal_name == null)
+      term_source_formal_name = DataUtils.getFormalName(term_source);
+        if (term_source.equalsIgnoreCase("nci"))
+      term_source_formal_name = "NCI Thesaurus";
+
+        String term_source_code = (String) synonym_data.elementAt(3);
+        String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
+    %>
+        <tr class="<%=rowColor%>">
+          <td class="dataCellText"><%=term_name%></td>
+          <td class="dataCellText"><%=term_source%></td>
+          <td class="dataCellText"><%=term_type%></td>
               <%
                 if (term_source_formal_name != null && term_source_code != null) {
-                  String url_str = request.getContextPath() + 
-                      "/pages/concept_details.jsf?dictionary=" + 
+                  String url_str = request.getContextPath() +
+                      "/pages/concept_details.jsf?dictionary=" +
                       term_source_formal_name + "&code=" + term_source_code;
               %>
                 <td><a href="<%= url_str %>"><%= term_source_code %></a></td>
               <%} else {%>
-		        <td class="dataCellText"><%=term_source_code%></td>
+            <td class="dataCellText"><%=term_source_code%></td>
               <%}%>
-		    </tr>
-		<%
+        </tr>
+    <%
             }
           }
         %>

@@ -12,59 +12,60 @@ scheme_curr = (String) request.getParameter("dictionary");
 
 String version_curr = (String) request.getSession().getAttribute("version");
 boolean isMapping = DataUtils.isMapping(scheme_curr, version_curr);
-String code_curr = (String) request.getSession().getAttribute("code");  
+String code_curr = (String) request.getSession().getAttribute("code");
 
     String rel_display_name = DataUtils.getMetadataValue(scheme_curr, "display_name");
     if (rel_display_name == null) rel_display_name = DataUtils.getLocalName(scheme_curr);
-   
+
     if (code_curr == null) {
         code_curr = (String) request.getParameter("code");
-    }    
-    
+    }
+
     HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
     if (hmap == null) {
-	    DataUtils util = new DataUtils();
-	    hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
-    } 
-    
+      DataUtils util = new DataUtils();
+      hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
+    }
+
     if (hmap != null) {
-    
+
     request.getSession().setAttribute("RelationshipHashMap", hmap);
-    
+
     ArrayList superconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
     ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
     ArrayList roles = (ArrayList) hmap.get(DataUtils.TYPE_ROLE);
     ArrayList associations = (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
-    
+
     ArrayList inverse_roles = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ROLE);
     ArrayList inverse_associations = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
-    
+
     ArrayList concepts = null;
     String label = "";
     String rel = "";
     String score = "";
-    scheme_curr = scheme_curr.replaceAll(" ", "%20"); 
-    
+    scheme_curr = scheme_curr.replaceAll(" ", "%20");
+
 %>
-	<table border="0" width="708px">
-		<tr>
-			<td class="textsubtitle-blue" align="left">Relationships with other <%=rel_display_name%> Concepts</td>
-			<td align="right" class="texttitle-blue-rightJust">	
-				<h:form>			
-					<h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">				
-						<f:setPropertyActionListener target="#{CartActionBean.codename}" value="concept" />
-					</h:commandLink>
-				</h:form>				
-			</td>
-		</tr>
-	</table>       
-<%      
- if (!isMapping) {       
-%>  
-  
+  <table border="0" width="708px">
+    <tr>
+      <td class="textsubtitle-blue" align="left">Relationships with other <%=rel_display_name%> Concepts</td>
+      <td align="right" class="texttitle-blue-rightJust">
+        <h:form>
+          <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
+            <f:setPropertyActionListener target="#{CartActionBean.entity}" value="concept" />
+            <f:setPropertyActionListener target="#{CartActionBean.codingScheme}" value="dictionary" />
+          </h:commandLink>
+        </h:form>
+      </td>
+    </tr>
+  </table>
+<%
+ if (!isMapping) {
+%>
+
   <p>
     <%
-     
+
       label = "Parent Concepts:";
       concepts = superconcepts;
       if (concepts == null || concepts.size() <= 0)
@@ -167,24 +168,24 @@ String code_curr = (String) request.getSession().getAttribute("code");
      {
   %>
        <b>Role Relationships:</b>
-       
+
   <br/>
   <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
   <table class="dataTable">
-  
+
  <%
  if (isMapping) {
  %>
-     <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
+     <th class="dataTableHeader" scope="col" align="left">Relationship</th>
      <th class="dataTableHeader" scope="col" align="left">Name</th>
-     <th class="dataTableHeader" scope="col" align="left">Code</th> 
+     <th class="dataTableHeader" scope="col" align="left">Code</th>
      <th class="dataTableHeader" scope="col" align="left">REL</th>
      <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
  <%
  }
  %>
-  
-  
+
+
     <%
       int n1 = 0;
       for (int i=0; i<roles.size(); i++) {
@@ -195,21 +196,21 @@ String code_curr = (String) request.getSession().getAttribute("code");
         String target_concept_code = (String) ret_vec.elementAt(2);
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
         String qualifiers = null;
-	rel = null;
-	score = null;
-        
-	if (isMapping) {
-	    qualifiers = (String) ret_vec.elementAt(4);
-	    System.out.println(qualifiers);
-	    Vector v = DataUtils.parseData(qualifiers, "$");
-	    String rel_str = (String) v.elementAt(0);
-	    int m1 = rel_str.indexOf(":");
-	    rel = rel_str.substring(m1+1, rel_str.length()); 
-	    String score_str = (String) v.elementAt(1);
-	    int m2 = score_str.indexOf(":");
-	    score = score_str.substring(m2+1, score_str.length()); 
-	}
-        
+  rel = null;
+  score = null;
+
+  if (isMapping) {
+      qualifiers = (String) ret_vec.elementAt(4);
+      System.out.println(qualifiers);
+      Vector v = DataUtils.parseData(qualifiers, "$");
+      String rel_str = (String) v.elementAt(0);
+      int m1 = rel_str.indexOf(":");
+      rel = rel_str.substring(m1+1, rel_str.length());
+      String score_str = (String) v.elementAt(1);
+      int m2 = score_str.indexOf(":");
+      score = score_str.substring(m2+1, score_str.length());
+  }
+
 
         if (n1 % 2 == 0) {
           %>
@@ -229,7 +230,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
                 </a>
               </td>
 
-              
+
               <%
               if (isMapping) {
               %>
@@ -237,22 +238,22 @@ String code_curr = (String) request.getSession().getAttribute("code");
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
-              </td>              
+              </td>
               <td><%=rel%></td>
               <td><%=score%></td>
               <%
               }
-              %>              
-              
-              
+              %>
+
+
             </tr>
       <%
       }
       %>
   </table>
 </p>
-<p>     
-       
+<p>
+
   <%
      } else if (roles == null || roles.size() == 0) {
   %>
@@ -263,9 +264,9 @@ String code_curr = (String) request.getSession().getAttribute("code");
 
 
 
-<%      
- }      
-%>  
+<%
+ }
+%>
 
 
 <p>
@@ -281,17 +282,17 @@ String code_curr = (String) request.getSession().getAttribute("code");
 <%
  if (isMapping) {
  %>
-     <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
-     <th class="dataTableHeader" scope="col" align="left">Name</th> 
-     <th class="dataTableHeader" scope="col" align="left">Code</th> 
+     <th class="dataTableHeader" scope="col" align="left">Relationship</th>
+     <th class="dataTableHeader" scope="col" align="left">Name</th>
+     <th class="dataTableHeader" scope="col" align="left">Code</th>
      <th class="dataTableHeader" scope="col" align="left">Namespace</th>
      <th class="dataTableHeader" scope="col" align="left">REL</th>
      <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
  <%
  }
  %>
- 
- 
+
+
   <%
     int n2 = 0;
 
@@ -304,24 +305,24 @@ String code_curr = (String) request.getSession().getAttribute("code");
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
       String target_namespace = null;
 
-	String qualifiers = null;
-	rel = null;
-	score = null;
-	
-	if (isMapping) {
-	    qualifiers = (String) ret_vec.elementAt(4);
-	    System.out.println(qualifiers);
-	    Vector v = DataUtils.parseData(qualifiers, "$");
-	    String rel_str = (String) v.elementAt(0);
-	    int m1 = rel_str.indexOf(":");
-	    rel = rel_str.substring(m1+1, rel_str.length()); 
-	    String score_str = (String) v.elementAt(1);
-	    int m2 = score_str.indexOf(":");
-	    score = score_str.substring(m2+1, score_str.length()); 
-	    
-	    target_namespace = (String) ret_vec.elementAt(5);
-	}
-        
+  String qualifiers = null;
+  rel = null;
+  score = null;
+
+  if (isMapping) {
+      qualifiers = (String) ret_vec.elementAt(4);
+      System.out.println(qualifiers);
+      Vector v = DataUtils.parseData(qualifiers, "$");
+      String rel_str = (String) v.elementAt(0);
+      int m1 = rel_str.indexOf(":");
+      rel = rel_str.substring(m1+1, rel_str.length());
+      String score_str = (String) v.elementAt(1);
+      int m2 = score_str.indexOf(":");
+      score = score_str.substring(m2+1, score_str.length());
+
+      target_namespace = (String) ret_vec.elementAt(5);
+  }
+
       if (n2 % 2 == 0) {
         %>
             <tr class="dataRowDark">
@@ -341,14 +342,14 @@ String code_curr = (String) request.getSession().getAttribute("code");
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
-              <%  
+              <%
               } else {
               %>
-                <%=target_concept_name%> 
+                <%=target_concept_name%>
               <%
               }
               %>
-              </td> 
+              </td>
               <%
               if (isMapping) {
               %>
@@ -362,15 +363,15 @@ String code_curr = (String) request.getSession().getAttribute("code");
               <td><%=score%></td>
               <%
               }
-              %>     
-              
+              %>
+
             </tr>
         <%
         }
         %>
  </table>
-</p>    
-    
+</p>
+
 <%
   } else if (associations == null || associations.size() == 0) {
     %>
@@ -387,34 +388,34 @@ String code_curr = (String) request.getSession().getAttribute("code");
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;
      }
-  
-     
-if (!isMapping) {       
+
+
+if (!isMapping) {
 
 
      if (inverse_roles != null && inverse_roles.size() > 0 && display_inverse_relationships)
      {
   %>
        <b>Inverse Role Relationships:</b>
-       
+
   <br/>
   <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
   <table class="dataTable">
-  
-  
+
+
   <%
    if (isMapping) {
    %>
-       <th class="dataTableHeader" scope="col" align="left">Name</th> 
-       <th class="dataTableHeader" scope="col" align="left">Code</th> 
-       <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
+       <th class="dataTableHeader" scope="col" align="left">Name</th>
+       <th class="dataTableHeader" scope="col" align="left">Code</th>
+       <th class="dataTableHeader" scope="col" align="left">Relationship</th>
        <th class="dataTableHeader" scope="col" align="left">REL</th>
        <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
    <%
    }
  %>
- 
- 
+
+
     <%
       int n1 = 0;
       for (int i=0; i<inverse_roles.size(); i++) {
@@ -425,21 +426,21 @@ if (!isMapping) {
         String target_concept_code = (String) ret_vec.elementAt(2);
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
-	String qualifiers = null;
-	rel = null;
-	score = null;
-	
-	if (isMapping) {
-	    qualifiers = (String) ret_vec.elementAt(4);
-	    System.out.println(qualifiers);
-	    Vector v = DataUtils.parseData(qualifiers, "$");
-	    String rel_str = (String) v.elementAt(0);
-	    int m1 = rel_str.indexOf(":");
-	    rel = rel_str.substring(m1+1, rel_str.length()); 
-	    String score_str = (String) v.elementAt(1);
-	    int m2 = score_str.indexOf(":");
-	    score = score_str.substring(m2+1, score_str.length()); 
-	}
+  String qualifiers = null;
+  rel = null;
+  score = null;
+
+  if (isMapping) {
+      qualifiers = (String) ret_vec.elementAt(4);
+      System.out.println(qualifiers);
+      Vector v = DataUtils.parseData(qualifiers, "$");
+      String rel_str = (String) v.elementAt(0);
+      int m1 = rel_str.indexOf(":");
+      rel = rel_str.substring(m1+1, rel_str.length());
+      String score_str = (String) v.elementAt(1);
+      int m2 = score_str.indexOf(":");
+      score = score_str.substring(m2+1, score_str.length());
+  }
 
         if (n1 % 2 == 0) {
           %>
@@ -460,16 +461,16 @@ if (!isMapping) {
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
-              <%  
+              <%
               } else {
               %>
-                <%=target_concept_name%> 
+                <%=target_concept_name%>
               <%
               }
               %>
               </td>
-              
-              
+
+
               <%
               if (isMapping) {
               %>
@@ -480,27 +481,27 @@ if (!isMapping) {
               </td>
               <%
               }
-              %>                   
-              
+              %>
+
               <td><%=role_name%></td>
               <%
               if (isMapping) {
               %>
-            
+
               <td><%=rel%></td>
               <td><%=score%></td>
               <%
               }
-              %>                
-              
+              %>
+
            </tr>
       <%
       }
       %>
   </table>
 </p>
-<p>     
-       
+<p>
+
   <%
      } else if ((inverse_roles == null || inverse_roles.size() == 0) && display_inverse_relationships) {
   %>
@@ -510,9 +511,9 @@ if (!isMapping) {
   %>
 
 
-<%      
- }       
-%> 
+<%
+ }
+%>
 
 
 <p>
@@ -527,10 +528,10 @@ if (!isMapping) {
   <%
    if (isMapping) {
    %>
-       <th class="dataTableHeader" scope="col" align="left">Name</th> 
-       <th class="dataTableHeader" scope="col" align="left">Code</th> 
-       <th class="dataTableHeader" scope="col" align="left">Namespace</th> 
-       <th class="dataTableHeader" scope="col" align="left">Relationship</th> 
+       <th class="dataTableHeader" scope="col" align="left">Name</th>
+       <th class="dataTableHeader" scope="col" align="left">Code</th>
+       <th class="dataTableHeader" scope="col" align="left">Namespace</th>
+       <th class="dataTableHeader" scope="col" align="left">Relationship</th>
        <th class="dataTableHeader" scope="col" align="left">REL</th>
        <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
    <%
@@ -549,26 +550,26 @@ if (!isMapping) {
       String target_concept_code = (String) ret_vec.elementAt(2);
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
       String target_namespace = null;
-	String qualifiers = null;
-	rel = null;
-	score = null;
+  String qualifiers = null;
+  rel = null;
+  score = null;
 
-	if (isMapping) {
-	    if (ret_vec.size() > 4) {
-		    qualifiers = (String) ret_vec.elementAt(4);
-		    System.out.println(qualifiers);
-		    Vector v = DataUtils.parseData(qualifiers, "$");
-		    String rel_str = (String) v.elementAt(0);
-		    int m1 = rel_str.indexOf(":");
-		    rel = rel_str.substring(m1+1, rel_str.length()); 
-		    String score_str = (String) v.elementAt(1);
-		    int m2 = score_str.indexOf(":");
-		    score = score_str.substring(m2+1, score_str.length()); 
-	    }
-	    if (ret_vec.size() > 5) {
-	        target_namespace = (String) ret_vec.elementAt(5);
-	    }
-	}
+  if (isMapping) {
+      if (ret_vec.size() > 4) {
+        qualifiers = (String) ret_vec.elementAt(4);
+        System.out.println(qualifiers);
+        Vector v = DataUtils.parseData(qualifiers, "$");
+        String rel_str = (String) v.elementAt(0);
+        int m1 = rel_str.indexOf(":");
+        rel = rel_str.substring(m1+1, rel_str.length());
+        String score_str = (String) v.elementAt(1);
+        int m2 = score_str.indexOf(":");
+        score = score_str.substring(m2+1, score_str.length());
+      }
+      if (ret_vec.size() > 5) {
+          target_namespace = (String) ret_vec.elementAt(5);
+      }
+  }
 
       if (n2 % 2 == 0) {
         %>
@@ -582,23 +583,23 @@ if (!isMapping) {
         n2++;
         %>
               <td>
-              
+
               <%
               if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
               %>
-              
+
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
-              <%  
+              <%
               } else {
               %>
-                <%=target_concept_name%> 
+                <%=target_concept_name%>
               <%
               }
-              %>                
+              %>
               </td>
-              
+
               <%
               if (isMapping) {
               %>
@@ -610,8 +611,8 @@ if (!isMapping) {
               <td><%=target_namespace%></td>
               <%
               }
-              %>                
-              
+              %>
+
               <td><%=role_name%></td>
               <%
               if (isMapping) {
@@ -620,15 +621,15 @@ if (!isMapping) {
               <td><%=score%></td>
               <%
               }
-              %>              
-              
+              %>
+
             </tr>
         <%
         }
         %>
  </table>
-</p>    
-    
+</p>
+
 <%
   } else if ((inverse_associations == null || inverse_associations.size() == 0) && display_inverse_relationships) {
     %>
@@ -645,9 +646,9 @@ if (!isMapping) {
 %>
 
 
-<%      
- if (!isMapping) { 
- 
+<%
+ if (!isMapping) {
+
         Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
         if (mapping_uri_version_vec != null && mapping_uri_version_vec.size() > 0) {
 %>
@@ -658,33 +659,33 @@ if (!isMapping) {
 <table class="dataTable">
 <%
 
-	for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
-	     String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
-	     Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
-	     String mapping_cs_uri = (String) ret_vec.elementAt(0);
-	     String mapping_cs_version = (String) ret_vec.elementAt(1);
-	     
-	     String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
+  for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
+       String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
+       Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
+       String mapping_cs_uri = (String) ret_vec.elementAt(0);
+       String mapping_cs_version = (String) ret_vec.elementAt(1);
 
-%>		
-		   <tr>
-			   <td>
-			   <%=mapping_cs_uri%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
+       String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
+
+%>
+       <tr>
+         <td>
+         <%=mapping_cs_uri%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%>&code=<%=code_curr%>&type=relationship">
                    <i class="textbodyred">View Mapping</i>
                 </a>
-			   </td>
-	           </tr>
-<%   
-		
-	} 
-	
-%>	
+         </td>
+             </tr>
+<%
+
+  }
+
+%>
 
 
 </table>
 </p>
- 
+
 <%
 }
 }

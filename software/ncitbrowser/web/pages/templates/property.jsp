@@ -150,7 +150,8 @@
 			<td align="right" class="texttitle-blue-rightJust">	
 				<h:form>			
 					<h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">				
-						<f:setPropertyActionListener target="#{CartActionBean.codename}" value="concept" />
+						<f:setPropertyActionListener target="#{CartActionBean.entity}" value="concept" />
+						<f:setPropertyActionListener target="#{CartActionBean.codingScheme}" value="dictionary" />
 					</h:commandLink>
 				</h:form>				
 			</td>
