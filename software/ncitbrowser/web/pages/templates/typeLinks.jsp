@@ -103,9 +103,9 @@
             }
           %>
           </td>
-          
-          
-          
+<%          
+if (!typeLink_isMapping) {          
+%>          
       <td width="85" height="21">
         <%
           if (data_type == null ||
@@ -128,9 +128,9 @@
           }
         %>
         </td>          
-                   
-          
-          
+<%                   
+}          
+%>          
           
           
           <td width="71" height="21">

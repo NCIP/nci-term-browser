@@ -248,6 +248,11 @@ Code: C4588, Description: Stage 0 Lip Cancer Hash: 5555373 Coding Scheme: NCI_Th
 
 
     public List getData(int idx1, int idx2) {
+
+System.out.println("MappingIteratorBean idx1: " + idx1);
+System.out.println("MappingIteratorBean idx2: " + idx2);
+
+
 		MappingData mappingData = null;
         if (list.size() >= idx2) {
 			return copyData(idx1, idx2);
