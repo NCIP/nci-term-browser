@@ -1605,9 +1605,9 @@ public class DataUtils {
     public HashMap getRelationshipHashMap(String scheme, String version,
         String code) {
 
-System.out.println("getRelationshipHashMap scheme: " + scheme);
-System.out.println("getRelationshipHashMap version: " + version);
-System.out.println("getRelationshipHashMap code: " + code);
+System.out.println("DataUtils.getRelationshipHashMap scheme: " + scheme);
+System.out.println("DataUtils.getRelationshipHashMap version: " + version);
+System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 
         boolean isMapping = isMapping(scheme, version);
         NameAndValueList navl = null;
@@ -1621,17 +1621,22 @@ System.out.println("getRelationshipHashMap code: " + code);
         if (version != null)
             csvt.setVersion(version);
 
+        ConceptReference cr = ConvenienceMethods.createConceptReference(code, scheme);
+        String entityCodeNamespace = null;
+
 		Entity concept = getConceptByCode(scheme, version, null, code);
 		if (concept == null) {
-			System.out.println("*** WARNING: concept not found in: " + scheme + " version: + " + version + " code: + " + code);
-			return null;
+			if (!isMapping) {
+				System.out.println("*** WARNING: concept not found in: " + scheme + " version: " + version + " code: " + code);
+				return null;
+		    }
+		} else {
+			entityCodeNamespace = concept.getEntityCodeNamespace();
 		}
 
-		String entityCodeNamespace = concept.getEntityCodeNamespace();
-
-		ConceptReference cr = ConvenienceMethods.createConceptReference(code, scheme);
-		cr.setCodingSchemeName(entityCodeNamespace);
-
+        if (entityCodeNamespace != null) {
+			cr.setCodingSchemeName(entityCodeNamespace);
+		}
 
         // Perform the query ...
         ResolvedConceptReferenceList matches = null;
@@ -1658,6 +1663,7 @@ System.out.println("getRelationshipHashMap code: " + code);
             }
         }
 
+if (!isMapping) {
         HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
         if (hmap_super != null) {
             TreeItem ti = (TreeItem) hmap_super.get(code);
@@ -1673,6 +1679,7 @@ System.out.println("getRelationshipHashMap code: " + code);
             }
         }
         Collections.sort(superconceptList);
+}
         map.put(TYPE_SUPERCONCEPT, superconceptList);
 
         /*
@@ -1685,9 +1692,12 @@ System.out.println("getRelationshipHashMap code: " + code);
          * childItem.code); } } } }
          */
 
+
+if (!isMapping) {
         subconceptList =
             TreeUtils.getSubconceptNamesAndCodes(scheme, version, code);
         // Collections.sort(subconceptList);
+}
         map.put(TYPE_SUBCONCEPT, subconceptList);
 
         try {
@@ -1703,10 +1713,6 @@ System.out.println("getRelationshipHashMap code: " + code);
             try {
                 matches =
                     cng.resolveAsList(cr,
-                            // true, false, 0, 1, new LocalNameList(), null,
-                            // null, 10000);
-                            // true, false, 0, 1, null, new LocalNameList(),
-                            // null, null, -1, false);
                             true, false, 0, 1, null, null, null, null, -1,
                             false);
 
@@ -1796,6 +1802,9 @@ System.out.println("getRelationshipHashMap code: " + code);
 															String qualifier_name = qual.getName();
 															String qualifier_value = qual.getContent();
 															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+
+														System.out.println("qualifiers: " + qualifiers);
+
 														}
 														s = s + "|" + qualifiers;
 													}
@@ -1816,6 +1825,8 @@ System.out.println("getRelationshipHashMap code: " + code);
                                                     // _logger.debug("Adding association: "
                                                     // + s);
                                                     associationList.add(s);
+
+                                                    System.out.println("Add to association list: " + s);
                                                 }
 
                                             }
@@ -3913,6 +3924,9 @@ System.out.println("getRelationshipHashMap code: " + code);
 						NameAndValue vNameAndValue = new NameAndValue();
 						vNameAndValue.setName(name);
 						navList.addNameAndValue(vNameAndValue);
+
+
+						System.out.println("getMappingAssociationNames " + name);
 					}
 					return navList;
 				} else {

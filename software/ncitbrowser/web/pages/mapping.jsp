@@ -147,6 +147,9 @@ if (bean == null) {
 
         try {
             numRemaining = iterator.numberRemaining();
+            
+            System.out.println("numRemaining: " + numRemaining);
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -160,6 +163,9 @@ if (bean == null) {
     0,    // pageNumber,
     1);   // numberPages
     }
+    
+    System.out.println("bean = new MappingIteratorBean: " );
+    
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
 } else if (prevSortByStr != null && sortBy != prevSortBy) {
     bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
@@ -170,9 +176,12 @@ if (bean == null) {
 
         try {
             numRemaining = iterator.numberRemaining();
+            System.out.println("MappingIteratorBean: numRemaining " + numRemaining);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
+System.out.println("MappingIteratorBean: calling bean.initialize");
 
   bean.initialize(
     iterator,
