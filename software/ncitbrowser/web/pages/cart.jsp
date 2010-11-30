@@ -49,7 +49,7 @@
 					<td align="right">
 						<h:commandLink onclick="backButton();return false;" value="Back" styleClass="texttitle-blue-small"/> |					    
 						<h:commandLink value="Remove Concept" action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small"/> |					
-						<h:commandLink value="Export" action="#{CartActionBean.exportCart}" styleClass="texttitle-blue-small"/>				
+						<h:commandLink value="Export XML" action="#{CartActionBean.exportCartXML}" styleClass="texttitle-blue-small"/>				
 					</td>
 				</tr>      
 			</table>	

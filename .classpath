@@ -131,5 +131,6 @@
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-tree-2.0.1.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevsapi60-beans.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/extlib/xercesImpl.jar"/>
 	<classpathentry kind="output" path="software/ncitbrowser/build/web/WEB-INF/classes"/>
 </classpath>

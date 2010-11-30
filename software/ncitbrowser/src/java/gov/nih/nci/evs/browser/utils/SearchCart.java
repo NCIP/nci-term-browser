@@ -1,12 +1,25 @@
 package gov.nih.nci.evs.browser.utils;
 
+import java.util.Vector;
+
 import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Exceptions.LBException;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.LexGrid.codingSchemes.CodingScheme;
+import org.LexGrid.commonTypes.Property;
+import org.LexGrid.concepts.Entity;
+import org.LexGrid.naming.SupportedHierarchy;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -59,7 +72,9 @@ import org.apache.log4j.Logger;
 public class SearchCart {
 
 	private static Logger _logger = Logger.getLogger(SearchUtils.class);	
-	static LexBIGService lbSvc = null;
+	private static LexBIGService lbSvc = null;
+	private static int resolveAssociationDepth = 1;
+	private static int maxToReturn = 1000;	
 	
     /**
      * Constructor
@@ -85,7 +100,7 @@ public class SearchCart {
 			ConceptReferenceList crefs =
                 createConceptReferenceList(new String[] { code }, codingScheme);
 			cns.restrictToCodes(crefs);		
-			iterator = cns.resolve(null, null, null);			
+			iterator = cns.resolve(null, null, null);	
 			if (iterator.numberRemaining() > 0) {				
 				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
 				return ref;
@@ -96,11 +111,259 @@ public class SearchCart {
 		
 		return null;
 	}
-
-	//
-	// Internal utility methods
-	//
 	
+	/**
+	 * Return list of Presentations
+	 * @param ref
+	 * @return
+	 */
+	public Property[] getPresentationValues(ResolvedConceptReference ref) {
+		Property[] properties = ref.getReferencedEntry().getPresentation();
+        if (properties == null)
+        	return new Property[0]; // return empty list
+		return properties;
+	}	
+
+	/**
+	 * Return list of Definitions
+	 * @param ref
+	 * @return
+	 */
+	public Property[] getDefinitionValues(ResolvedConceptReference ref) {
+		Property[] properties = ref.getReferencedEntry().getDefinition();
+        if (properties == null)
+        	return new Property[0]; // return empty list
+		return properties;		
+	}
+
+	/**
+	 * Return list of Properties
+	 * @param ref
+	 * @return
+	 */
+	public Property[] getPropertyValues(ResolvedConceptReference ref) {
+		Property[] properties = ref.getReferencedEntry().getProperty();
+        if (properties == null)
+        	return new Property[0]; // return empty list
+		return properties;		
+	}
+	
+	/**
+	 * Returns list of Parent Concepts
+	 * @param ref
+	 * @return
+	 */
+	public Vector<Entity> getParentConcepts(ResolvedConceptReference ref) {
+		String scheme = ref.getCodingSchemeName();
+		String version = null;
+		String code = ref.getCode();
+		Vector<String> assoNames = getAssociationNames(scheme, version);
+		Vector<Entity> superconcepts = getAssociatedConcepts(scheme, version,
+				code, assoNames, true);
+		return superconcepts;
+	}
+
+	/**
+	 * Returns list of Child Concepts
+	 * @param ref
+	 * @return
+	 */
+	public Vector<Entity> getChildConcepts(ResolvedConceptReference ref) {
+		String scheme = ref.getCodingSchemeName();
+		String version = null;
+		String code = ref.getCode();
+		Vector<String> assoNames = getAssociationNames(scheme, version);
+		Vector<Entity> supconcepts = getAssociatedConcepts(scheme, version,
+				code, assoNames, false);
+		return supconcepts;
+	}	
+	
+    /**
+     * Returns Associated Concepts
+     * 
+     * @param scheme
+     * @param version
+     * @param code
+     * @param assocName
+     * @param forward
+     * @return
+     */
+    public Vector<Entity> getAssociatedConcepts(String scheme, String version,
+            String code, Vector<String> assocNames, boolean forward) {
+    	
+            CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+            if (version != null) csvt.setVersion(version);
+            boolean resolveForward = true;
+            boolean resolveBackward = false;            
+
+            // Set backward direction
+            if (!forward) {
+            	resolveForward = false;
+            	resolveBackward = true;
+            }
+            
+            Vector<Entity> v = new Vector<Entity>();
+            
+            try {
+
+				CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+				
+				// Restrict coded node graph to the given association
+				NameAndValueList nameAndValueList = createNameAndValueList(
+						assocNames, null);
+                cng = cng.restrictToAssociations(nameAndValueList, null); 
+                
+                ConceptReference graphFocus =
+                    ConvenienceMethods.createConceptReference(code, scheme);
+
+                ResolvedConceptReferencesIterator iterator =
+                    codedNodeGraph2CodedNodeSetIterator(cng, graphFocus,
+                        resolveForward, resolveBackward, resolveAssociationDepth,
+                        maxToReturn);
+                v = resolveIterator(iterator, maxToReturn, code);
+                
+            } catch (Exception ex) {
+                _logger.warn(ex.getMessage());
+            }
+            return v;
+        }
+
+	/**
+	 * Resolve the Iterator 
+	 * 
+	 * @param iterator
+	 * @param maxToReturn
+	 * @param code
+	 * @return
+	 */
+	public Vector<Entity> resolveIterator(
+			ResolvedConceptReferencesIterator iterator, int maxToReturn,
+			String code) {
+
+		Vector<Entity> v = new Vector<Entity>();
+
+		if (iterator == null) {
+			_logger.warn("No match.");
+			return v;
+		}
+		try {
+			int iteration = 0;
+			while (iterator.hasNext()) {
+				iteration++;
+				iterator = iterator.scroll(maxToReturn);
+				ResolvedConceptReferenceList rcrl = iterator.getNext();
+				ResolvedConceptReference[] rcra = rcrl
+						.getResolvedConceptReference();
+				for (int i = 0; i < rcra.length; i++) {
+					ResolvedConceptReference rcr = rcra[i];
+					Entity ce = rcr.getReferencedEntry();
+					if (code == null) {
+						v.add(ce);
+					} else {
+						if (ce.getEntityCode().compareTo(code) != 0)
+							v.add(ce);
+					}
+				}
+			}
+		} catch (Exception e) {
+			_logger.warn(e.getMessage());
+		}
+		return v;
+	}
+
+	/**
+	 * Return Iterator for codedNodeGraph
+	 * 
+	 * @param cng
+	 * @param graphFocus
+	 * @param resolveForward
+	 * @param resolveBackward
+	 * @param resolveAssociationDepth
+	 * @param maxToReturn
+	 * @return
+	 */
+	public ResolvedConceptReferencesIterator codedNodeGraph2CodedNodeSetIterator(
+			CodedNodeGraph cng, ConceptReference graphFocus,
+			boolean resolveForward, boolean resolveBackward,
+			int resolveAssociationDepth, int maxToReturn) {		
+		CodedNodeSet cns = null;
+		
+		try {
+			cns = cng.toNodeList(graphFocus, resolveForward, resolveBackward,
+					resolveAssociationDepth, maxToReturn);
+			if (cns == null) return null;
+			return cns.resolve(null, null, null);
+		} catch (Exception ex) {
+			_logger.warn(ex.getMessage());			
+		}
+		
+		return null;
+	}
+	
+    /**
+     * Return a list of Association names
+     * 
+     * @param scheme
+     * @param version
+     * @return
+     */
+    public Vector<String> getAssociationNames(String scheme, String version) {
+        Vector<String> association_vec = new Vector<String>();        
+        try {
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            versionOrTag.setVersion(version);            
+            CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);            
+            SupportedHierarchy[] hierarchies = cs.getMappings().getSupportedHierarchy();
+            String[] ids = hierarchies[0].getAssociationNames();
+            for (int i = 0; i < ids.length; i++) {
+                if (!association_vec.contains(ids[i])) {
+                    association_vec.add(ids[i]);
+                    _logger.debug("AssociationName: " + ids[i]);
+                }
+            }
+        } catch (Exception ex) {
+            _logger.warn(ex.getMessage());
+        }
+        return association_vec;
+    }		
+	
+	/**
+	 * Return list of Comments
+	 * @param ref
+	 * @return
+	 */
+	public Property[] getCommentValues(ResolvedConceptReference ref) {
+		Property[] properties = ref.getReferencedEntry().getComment();
+        if (properties == null)
+        	return new Property[0]; // return empty list
+		return properties;		
+	}
+
+	/**
+	 * Return a NameAndValueList from two vectors
+	 * @param names
+	 * @param values
+	 * @return
+	 */
+	private static NameAndValueList createNameAndValueList(Vector<String> names,
+			Vector<String> values) {
+		NameAndValueList nvList = new NameAndValueList();
+		
+		for (int i = 0; i < names.size(); i++) {
+			NameAndValue nv = new NameAndValue();
+			nv.setName(names.elementAt(i));
+			if (values != null) {
+				nv.setContent(values.elementAt(i));
+			}
+			nvList.addNameAndValue(nv);
+		}
+		return nvList;
+	}	
+	
+	// -----------------------------------------------------
+	// Internal utility methods
+	// -----------------------------------------------------
+
 	private ConceptReferenceList createConceptReferenceList(String[] codes,
 			String codingSchemeName) {
 		if (codes == null)

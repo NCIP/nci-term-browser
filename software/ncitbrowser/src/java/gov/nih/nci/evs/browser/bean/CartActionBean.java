@@ -2,10 +2,12 @@ package gov.nih.nci.evs.browser.bean;
 
 import gov.nih.nci.evs.browser.utils.SearchCart;
 import gov.nih.nci.evs.browser.utils.SearchUtils;
+import gov.nih.nci.evs.browser.utils.ExportCartXML;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Vector;
 
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletOutputStream; 
 
 import org.LexGrid.concepts.Entity;
+import org.LexGrid.commonTypes.Property;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -73,8 +77,8 @@ public class CartActionBean {
 	private String _codingScheme = null;
 	private HashMap<String, Concept> _cart = null;
 	private String _backurl = null;	
-	static public final String EXPORT_FILE = "cart.txt";
-	static public final String CONTENT_TYPE = "text/txt";
+	static public final String XML_FILE_NAME = "cart.xml";
+	static public final String XML_CONTENT_TYPE = "text/xml";
 
 	// Getters & Setters
 
@@ -140,7 +144,8 @@ public class CartActionBean {
      */
     public void addToCart() throws Exception {    	    	
     	String code = null;
-    	String codingScheme = null;  
+    	String codingScheme = null;
+    	String nameSpace = null;
     	String name = null;
     	
     	// Get concept information from the Entity item passed in
@@ -157,14 +162,18 @@ public class CartActionBean {
         // Get coding scheme
         codingScheme = (String)request.getSession().getAttribute(_codingScheme);
         
+        // Get concept name space
+        nameSpace = curr_concept.getEntityCodeNamespace();
+
         // Get concept name
-        name = curr_concept.getEntityDescription().getContent();
+        name = curr_concept.getEntityDescription().getContent();        
         
         // Add concept to cart        
         if (_cart == null) _init();
         Concept item = new Concept();
         item.setCode(code); 
         item.setCodingScheme(codingScheme);
+        item.setNameSpace(nameSpace);
         item.setName(name);
         
         if (!_cart.containsKey(code))
@@ -189,11 +198,72 @@ public class CartActionBean {
     }
     
     /**
-     * Export cart 
+     * Export cart in XML format 
      * @return
      * @throws Exception
      */
-    public void exportCart() throws Exception {
+    public void exportCartXML() throws Exception {
+    	
+    	SearchCart search = new SearchCart();
+    	ExportCartXML xml = new ExportCartXML();    	
+    	ResolvedConceptReference ref = null;    	
+    	String sb = null;
+
+    	// Get Entities to be exported and build export xml string
+    	// in memory
+    	
+        if (_cart != null && _cart.size() > 0) {        	
+
+        	xml.addCartTag();
+
+            // Add all terms from the cart
+			for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+				Concept item = (Concept) i.next();
+				ref = search.getConceptByCode(item.codingScheme, item.code);
+				if (ref != null) {
+					_logger.info("Exporting: " + ref.getCode());
+					
+					// Add parent concepts
+					Vector<Entity> parents = search.getParentConcepts(ref);
+					
+			        // Add child concepts
+					Vector<Entity> children = search.getChildConcepts(ref);
+
+					// Add terms and properties
+					Property[] pres = search.getPresentationValues(ref);
+					Property[] def = search.getDefinitionValues(ref);
+					Property[] prop = search.getPropertyValues(ref);
+					Property[] comm = search.getCommentValues(ref);
+					xml.addTermTag(item.name, item.code, item.codingScheme,
+							pres, def, prop, comm, parents, children);
+				}
+			}           	
+        
+	        // Send export XML string to browser
+	        
+            sb = xml.generateXMLString();
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType(XML_CONTENT_TYPE);
+			response.setHeader("Content-Disposition", "attachment; filename="
+					+ XML_FILE_NAME);
+			response.setContentLength(sb.length());
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();      
+	        
+			// Don't allow JSF to forward to cart.jsf
+			FacesContext.getCurrentInstance().responseComplete();
+        }	
+    }
+    
+    /**
+     * Export cart in Excel format 
+     * @return
+     * @throws Exception
+     */
+    public void exportCartEXCEL() throws Exception {
     	
     	SearchCart search = new SearchCart();
     	ResolvedConceptReference ref = null;
@@ -226,9 +296,9 @@ public class CartActionBean {
 	        
 			HttpServletResponse response = (HttpServletResponse) FacesContext
 					.getCurrentInstance().getExternalContext().getResponse();
-			response.setContentType(CONTENT_TYPE);
+			response.setContentType(XML_CONTENT_TYPE);
 			response.setHeader("Content-Disposition", "attachment; filename="
-					+ EXPORT_FILE);
+					+ XML_FILE_NAME);
 			response.setContentLength(sb.length());
 			ServletOutputStream ouputStream = response.getOutputStream();
 			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
@@ -238,7 +308,7 @@ public class CartActionBean {
 			// Don't allow JSF to forward to cart.jsf
 			FacesContext.getCurrentInstance().responseComplete();
         }	
-    }
+    }    
     
     /**
      * Subclass to hold contents of the cart
@@ -247,6 +317,7 @@ public class CartActionBean {
     public class Concept {
     	private String code = null;
     	private String codingScheme = null;
+    	private String nameSpace = null;
     	private String name = null;
     	private boolean selected = false;
     	
@@ -267,6 +338,14 @@ public class CartActionBean {
     	public void setCodingScheme(String codingScheme) {
     		this.codingScheme = codingScheme;
     	}   
+
+    	public String getNameSpace() {
+    		return this.nameSpace;
+    	}
+
+    	public void setNameSpace(String namespace) {
+    		this.nameSpace = namespace;
+    	}    	
     	
     	public String getName() {
     		return this.name;
@@ -305,6 +384,7 @@ public class CartActionBean {
             	Concept item = (Concept)i.next();
                 sb.append("\t         Code = " + item.code + "\n");
                 sb.append("\tCoding scheme = " + item.codingScheme + "\n");   
+                sb.append("\t   Name space = " + item.nameSpace + "\n");
                 sb.append("\t         Name = " + item.name + "\n");
                 sb.append("\t     Selected = " + item.selected + "\n");
             }        	
