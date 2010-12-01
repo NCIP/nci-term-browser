@@ -70,16 +70,19 @@ import org.apache.log4j.Logger;
  */
 public class CartActionBean {
 
-	// Local class variables
-	
+	// Local class variables	
 	private static Logger _logger = Logger.getLogger(SearchUtils.class);
 	private String _entity = null;
 	private String _codingScheme = null;
 	private HashMap<String, Concept> _cart = null;
-	private String _backurl = null;	
+	private String _backurl = null;
+	
+	// Local constants
 	static public final String XML_FILE_NAME = "cart.xml";
 	static public final String XML_CONTENT_TYPE = "text/xml";
-
+	static public final String CSV_FILE_NAME = "cart.csv";
+	static public final String CSV_CONTENT_TYPE = "text/csv";	
+	
 	// Getters & Setters
 
 	/**
@@ -263,7 +266,7 @@ public class CartActionBean {
      * @return
      * @throws Exception
      */
-    public void exportCartEXCEL() throws Exception {
+    public void exportCartCSV() throws Exception {
     	
     	SearchCart search = new SearchCart();
     	ResolvedConceptReference ref = null;
@@ -274,8 +277,8 @@ public class CartActionBean {
     	
         if (_cart != null && _cart.size() > 0) {        	
         	// Add header
-            sb.append("Concept\t");
-            sb.append("Vocabulary\t");   
+            sb.append("Concept,");
+            sb.append("Vocabulary,");   
             sb.append("Code");
             sb.append("\r\n");        	
         	
@@ -285,9 +288,9 @@ public class CartActionBean {
             	ref = search.getConceptByCode(item.codingScheme,item.code);
             	if (ref != null) {
             		_logger.info("Exporting: " + ref.getCode());
-            		sb.append(item.name + "\t");
-            		sb.append(item.code + "\t");
-                    sb.append(item.codingScheme );                   
+            		sb.append(clean(item.name) + ",");
+            		sb.append(clean(item.code) + ",");
+                    sb.append(clean(item.codingScheme));                   
                     sb.append("\r\n");            		
             	}	
             }           	
@@ -296,9 +299,9 @@ public class CartActionBean {
 	        
 			HttpServletResponse response = (HttpServletResponse) FacesContext
 					.getCurrentInstance().getExternalContext().getResponse();
-			response.setContentType(XML_CONTENT_TYPE);
+			response.setContentType(CSV_CONTENT_TYPE);
 			response.setHeader("Content-Disposition", "attachment; filename="
-					+ XML_FILE_NAME);
+					+ CSV_FILE_NAME);
 			response.setContentLength(sb.length());
 			ServletOutputStream ouputStream = response.getOutputStream();
 			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
@@ -394,5 +397,14 @@ public class CartActionBean {
 
         return sb.toString();
     }    
+    
+	/**
+	 * Clean a string for use in file type CSV
+	 * @param str
+	 * @return
+	 */
+	private String clean(String str) {
+		return str.replace('"', ' ');
+	}
     
 } // End of CartActionBean
