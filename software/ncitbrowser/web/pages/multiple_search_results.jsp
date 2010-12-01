@@ -74,14 +74,7 @@ request.getSession().setAttribute("matchText", match_text);
       check_r = "checked";
 %>
       <!-- Thesaurus, banner search area -->
-
-      <!--
-      <form class="search-form-main-area">
-      -->
-
-      <h:form>
-
-
+      <h:form styleClass="search-form-main-area">
       <div class="bannerarea">
         <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
         <div class="search-globalnav">
@@ -138,10 +131,6 @@ request.getSession().setAttribute("matchText", match_text);
           <!-- end Global Navigation -->
       </div> <!-- end search-globalnav -->
     </div> <!-- end bannerarea -->
-    <!--
-    </form>
-    -->
-
     </h:form>
     <!-- end Thesaurus, banner search area -->
     <!-- Quick links bar -->
@@ -156,11 +145,8 @@ if (resultsPerPage == null) {
     resultsPerPage = "50";
 }
 
-String selectedResultsPerPage = resultsPerPage;
-
-
+		String selectedResultsPerPage = resultsPerPage;
         request.getSession().removeAttribute("dictionary");
-
         HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 
         IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
@@ -429,7 +415,7 @@ String selectedResultsPerPage = resultsPerPage;
         <%@ include file="/pages/templates/pagination-termbrowser.jsp" %>
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div> <!-- end Page content -->
-    </div> <!-- end main-area -->
+    </div> <!-- end main-area -->    
     <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div> <!-- end center-page -->
@@ -440,12 +426,7 @@ delay = System.currentTimeMillis() - ms;
 _logger.debug("Total page rendering delay (millisec.): " + delay);
 
 %>
-
-
 </f:view>
-
-
-
 <br/>
 </body>
 </html>
