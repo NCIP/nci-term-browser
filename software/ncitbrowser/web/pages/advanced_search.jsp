@@ -247,18 +247,19 @@
                        }
 
 
-
-                       for (int i=0; i<src_vec.size(); i++) {
-                         t = (String) src_vec.elementAt(i);
-                         if (t.compareTo(adv_search_source) == 0) {
-                    %>
-                           <option value="<%=t%>" selected><%=t%></option>
-                    <%
-                         } else {
-                    %>
-                           <option value="<%=t%>"><%=t%></option>
-                    <%
-                         }
+                       if (src_vec != null) {
+			    for (int i=0; i<src_vec.size(); i++) {
+				 t = (String) src_vec.elementAt(i);
+				 if (t.compareTo(adv_search_source) == 0) {
+			    %>
+				   <option value="<%=t%>" selected><%=t%></option>
+			    <%
+				 } else {
+			    %>
+				   <option value="<%=t%>"><%=t%></option>
+			    <%
+				 }
+			    }
                        }
                     %>
                     </select>

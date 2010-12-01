@@ -100,7 +100,7 @@ if (ret_vec2.size() > 4) {
         String score_str = (String) v.elementAt(1);
         int m2 = score_str.indexOf(":");
         score = score_str.substring(m2+1, score_str.length());
-        target_namespace = (String) ret_vec.elementAt(5);
+        target_namespace = (String) ret_vec2.elementAt(5);
 }
 
               if (n2 % 2 == 0) {
