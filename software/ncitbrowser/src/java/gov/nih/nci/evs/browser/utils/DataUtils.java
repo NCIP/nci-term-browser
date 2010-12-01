@@ -1984,6 +1984,7 @@ if (!isMapping) {
                                                 } else {
                                                     inverse_associationList
                                                         .add(s);
+                                                    System.out.println("Add to inverse_associationList list: " + s);
                                                 }
                                             }
 

@@ -39,9 +39,11 @@
          <th class="dataTableHeader" scope="col" align="left">Relationship</th>
          <th class="dataTableHeader" scope="col" align="left">Name</th>
          <th class="dataTableHeader" scope="col" align="left">Code</th>
+         <th class="dataTableHeader" scope="col" align="left">Target</th>
+         
          <th class="dataTableHeader" scope="col" align="left">REL</th>
          <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
-         <th class="dataTableHeader" scope="col" align="left">Target</th>
+         
     <%
 
                         DataUtils util = new DataUtils();
