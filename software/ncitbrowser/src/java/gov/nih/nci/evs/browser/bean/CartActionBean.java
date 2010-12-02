@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.LexGrid.LexBIG.DataModel.Core.Association;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 
 import javax.faces.context.FacesContext;
@@ -224,8 +226,8 @@ public class CartActionBean {
 				Concept item = (Concept) i.next();
 				ref = search.getConceptByCode(item.codingScheme, item.code);
 				if (ref != null) {
-					_logger.info("Exporting: " + ref.getCode());
-					
+					_logger.debug("Exporting: " + ref.getCode());
+				
 					// Add parent concepts
 					Vector<Entity> parents = search.getParentConcepts(ref);
 					
@@ -287,10 +289,10 @@ public class CartActionBean {
             	Concept item = (Concept)i.next();
             	ref = search.getConceptByCode(item.codingScheme,item.code);
             	if (ref != null) {
-            		_logger.info("Exporting: " + ref.getCode());
-            		sb.append(clean(item.name) + ",");
-            		sb.append(clean(item.code) + ",");
-                    sb.append(clean(item.codingScheme));                   
+            		_logger.debug("Exporting: " + ref.getCode());
+            		sb.append("\"" + clean(item.name) + "\",");
+            		sb.append("\"" + clean(item.codingScheme) + "\","); 
+            		sb.append("\"" + clean(item.code) + "\"");                                      
                     sb.append("\r\n");            		
             	}	
             }           	
@@ -404,7 +406,8 @@ public class CartActionBean {
 	 * @return
 	 */
 	private String clean(String str) {
-		return str.replace('"', ' ');
+		String tmpStr = str.replace('"', ' ');
+		return tmpStr;
 	}
     
 } // End of CartActionBean

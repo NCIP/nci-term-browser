@@ -10,6 +10,7 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Exceptions.LBException;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
@@ -74,19 +75,34 @@ public class SearchCart {
     // Local variables
     private static Logger _logger = Logger.getLogger(SearchUtils.class);
     private static LexBIGService lbSvc = null;
+    private static LexBIGServiceConvenienceMethods lbscm = null;
 
     // Local constants
     private static final int RESOLVEASSOCIATIONDEPTH = 1;
     private static final int MAXTORETURN = 1000;
-
+    private static final String LB_EXTENSION = "LexBIGServiceConvenienceMethods";
+    private static enum Direction { 
+    	FORWARD, REVERSE;    	
+    	public boolean test() {
+    		if (ordinal() == FORWARD.ordinal()) return true;
+    		return false;
+    	}
+    }
+   
     /**
      * Constructor
+     * @throws LBException 
      */
-    public SearchCart() {
-        if (lbSvc == null) {
-            lbSvc = RemoteServerUtil.createLexBIGService();
-        }
-    }
+	public SearchCart() throws LBException {
+		// Setup lexevs service
+		if (lbSvc == null) {
+			lbSvc = RemoteServerUtil.createLexBIGService();
+		}
+		// Setup lexevs generic extension
+		lbscm = (LexBIGServiceConvenienceMethods) lbSvc
+				.getGenericExtension(LB_EXTENSION);
+		lbscm.setLexBIGService(lbSvc);
+	}
 
     /**
      * Get concept Entity by code
@@ -146,14 +162,16 @@ public class SearchCart {
      * Returns list of Parent Concepts
      * @param ref
      * @return
+     * @throws LBException 
      */
-    public Vector<Entity> getParentConcepts(ResolvedConceptReference ref) {
+    public Vector<Entity> getParentConcepts(ResolvedConceptReference ref) throws Exception {    	
         String scheme = ref.getCodingSchemeName();
-        String version = null;
-        String code = ref.getCode();
+        String version = ref.getCodingSchemeVersion();
+        String code = ref.getCode();        
+        Direction dir = getCodingSchemeDirection(ref);        
         Vector<String> assoNames = getAssociationNames(scheme, version);
         Vector<Entity> superconcepts = getAssociatedConcepts(scheme, version,
-                code, assoNames, true);
+                code, assoNames, dir.test());       
         return superconcepts;
     }
 
@@ -162,13 +180,14 @@ public class SearchCart {
      * @param ref
      * @return
      */
-    public Vector<Entity> getChildConcepts(ResolvedConceptReference ref) {
+    public Vector<Entity> getChildConcepts(ResolvedConceptReference ref) throws Exception {
         String scheme = ref.getCodingSchemeName();
-        String version = null;
+        String version = ref.getCodingSchemeVersion();
         String code = ref.getCode();
+        Direction dir = getCodingSchemeDirection(ref);
         Vector<String> assoNames = getAssociationNames(scheme, version);
         Vector<Entity> supconcepts = getAssociatedConcepts(scheme, version,
-                code, assoNames, false);
+                code, assoNames, !dir.test());
         return supconcepts;
     }
 
@@ -307,6 +326,7 @@ public class SearchCart {
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             versionOrTag.setVersion(version);
             CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);
+
             SupportedHierarchy[] hierarchies = cs.getMappings().getSupportedHierarchy();
             String[] ids = hierarchies[0].getAssociationNames();
             for (int i = 0; i < ids.length; i++) {
@@ -329,7 +349,45 @@ public class SearchCart {
     public Property[] getCommentValues(ResolvedConceptReference ref) {
         return returnProperties(ref.getReferencedEntry().getComment());
     }
+    
+    /**
+     * Determine direction of Coding Scheme
+     * 
+     * @param ref
+     * @return
+     * @throws LBException
+     */
+    public Direction getCodingSchemeDirection(ResolvedConceptReference ref)
+        throws Exception {
+    	
+    	Direction direction = Direction.FORWARD;
+    	
+    	// Create a version object
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        versionOrTag.setVersion(ref.getCodingSchemeVersion());    	
+    	
+        // Get Coding Scheme
+    	CodingScheme cs = lbSvc.resolveCodingScheme(ref.getCodingSchemeName(), versionOrTag);
+    	if (cs == null) {
+    		throw new Exception("getTreeDirection(): CodingScheme is null!");
+    	}
 
+    	// Get hierarchy
+        SupportedHierarchy[] hierarchies = cs.getMappings().getSupportedHierarchy();   	
+        if (hierarchies == null || hierarchies.length < 1) {
+        	throw new Exception("getTreeDirection(): hierarchies is null!");
+        }    
+        
+        if (hierarchies[0].isIsForwardNavigable())
+        	direction = Direction.REVERSE;
+        else
+        	direction = Direction.FORWARD;
+
+        _logger.debug("getTreeDirection() = " + direction);
+
+        return direction;
+    }    
+    
     // -----------------------------------------------------
     // Internal utility methods
     // -----------------------------------------------------
