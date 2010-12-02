@@ -242,13 +242,18 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
         
 				<tr>
 				  <td width="25px"></td>
+				  
+				  
 				  <td>
 				<%
 				boolean checked = ontologiesToSearchOn != null
 				    && ontologiesToSearchOn.indexOf(label2) != -1;
 				String checkedStr = checked ? "checked" : "";
 				%>
+				   
 				   <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
+				   
+				   
 				<%
 
 				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
@@ -304,6 +309,38 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                     </table>
                   </td>
                 </tr>
+
+
+                <tr><td height="20"></td></tr>
+                
+                <tr>
+                  <td><img
+                    src="<%= request.getContextPath() %>/images/selectAll.gif"
+                    name="selectAll" alt="selectAll"
+                    onClick="checkAll(document.searchTerm.ontology_list)" />
+
+                  &nbsp;&nbsp; <img
+                    src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
+                    name="reset" alt="selectAllButNCIm"
+                    onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
+
+                  &nbsp;&nbsp; <img
+                    src="<%= request.getContextPath() %>/images/clear.gif"
+                    name="reset" alt="reset"
+                    onClick="uncheckAll(document.searchTerm.ontology_list)" />
+
+                  &nbsp;&nbsp; <h:commandButton id="multiplesearch" value="Search"
+                    action="#{userSessionBean.multipleSearchAction}"
+                    image="#{requestContextPath}/images/search.gif"
+                    alt="Search">
+                  </h:commandButton></td>
+                   <%
+                   if (warning_msg != null) {
+                      request.getSession().removeAttribute("ontologiesToSearchOn");
+                   }
+                  %>
+                </tr>
+                
                 
                 <tr><td height="20"><HR></HR></td></tr>
                 <tr><td class="textbody">Mappings:</td></tr>
@@ -348,7 +385,9 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
 				    && ontologiesToSearchOn.indexOf(label2) != -1;
 				String checkedStr = checked ? "checked" : "";
 				%>
+				   <!--
 				   <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
+				   -->
 				<%
 
 				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
@@ -393,35 +432,9 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                 </tr>                
                 
                 
-                <tr><td height="20"></td></tr>
+
                 
-                <tr>
-                  <td><img
-                    src="<%= request.getContextPath() %>/images/selectAll.gif"
-                    name="selectAll" alt="selectAll"
-                    onClick="checkAll(document.searchTerm.ontology_list)" />
-
-                  &nbsp;&nbsp; <img
-                    src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
-                    name="reset" alt="selectAllButNCIm"
-                    onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
-
-                  &nbsp;&nbsp; <img
-                    src="<%= request.getContextPath() %>/images/clear.gif"
-                    name="reset" alt="reset"
-                    onClick="uncheckAll(document.searchTerm.ontology_list)" />
-
-                  &nbsp;&nbsp; <h:commandButton id="multiplesearch" value="Search"
-                    action="#{userSessionBean.multipleSearchAction}"
-                    image="#{requestContextPath}/images/search.gif"
-                    alt="Search">
-                  </h:commandButton></td>
-                   <%
-                   if (warning_msg != null) {
-                      request.getSession().removeAttribute("ontologiesToSearchOn");
-                   }
-                  %>
-                </tr>
+                
             </table>
 <%
 }
