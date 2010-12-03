@@ -32,34 +32,26 @@
             <b>Mapping Relationships:</b> <i>(none)</i>
 <%
         } else {
+              DataUtils util = new DataUtils();
+              
+        
 %>
-        <b>Maps To:</b>
-    <p>
-    <table class="dataTable">
-         <th class="dataTableHeader" scope="col" align="left">Relationship</th>
-         <th class="dataTableHeader" scope="col" align="left">Name</th>
-         <th class="dataTableHeader" scope="col" align="left">Code</th>
-         <th class="dataTableHeader" scope="col" align="left">Target</th>
-         
-         <th class="dataTableHeader" scope="col" align="left">REL</th>
-         <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
-         
-    <%
 
-                        DataUtils util = new DataUtils();
-      for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
+            
+
+        <b>Maps To:</b>
+<%        
+        for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
            String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
            Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
            String mapping_cs_uri = (String) ret_vec.elementAt(0);
            String mapping_cs_version = (String) ret_vec.elementAt(1);
            String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
-
-
+           
 System.out.println("mapping_cs_uri: " + mapping_cs_uri);
 System.out.println("mapping_cs_version: " + mapping_cs_version);
 System.out.println("mapping_cs_name: " + mapping_cs_name);
 System.out.println("code_curr: " + code_curr);
-
 
                        HashMap hmap = util.getRelationshipHashMap(mapping_cs_name, mapping_cs_version, code_curr);
                              ArrayList associations = null;
@@ -68,17 +60,25 @@ System.out.println("code_curr: " + code_curr);
                              }
 
 
-if (associations != null) {
-    System.out.println("associations.size(): " + associations.size());
-} else {
-    System.out.println("associations is NULL???");
-}
+if (associations != null && associations.size() > 0) {
+
+           
+%>        
+    <p></p>Mapping Source: <%=mapping_cs_name%>
+    <table class="dataTable">
+         <th class="dataTableHeader" scope="col" align="left">Relationship</th>
+         <th class="dataTableHeader" scope="col" align="left">Name</th>
+         <th class="dataTableHeader" scope="col" align="left">Code</th>
+         <th class="dataTableHeader" scope="col" align="left">Target</th>
+         
+         <th class="dataTableHeader" scope="col" align="left">REL</th>
+         <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
+    <%
 
 
 
-                int n2 = 0;
 
-
+          int n2 = 0;
           for (int i=0; i<associations.size(); i++) {
               String s = (String) associations.get(i);
               Vector ret_vec2 = DataUtils.parseData(s, "|");
@@ -146,12 +146,44 @@ if (ret_vec2.size() > 4) {
           </tr>
         <%
         }
-                 }
+
       %>
      </table>
-    </p>
-        <b>Mapped From:</b>
-    <p>
+<%
+    }
+}     
+%>     
+     
+     
+    <hr></hr>
+        <b>Maps From:</b>
+      
+<%      
+      for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
+           String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
+           Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
+           String mapping_cs_uri = (String) ret_vec.elementAt(0);
+           String mapping_cs_version = (String) ret_vec.elementAt(1);
+           String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
+           
+
+System.out.println("mapping_cs_uri: " + mapping_cs_uri);
+System.out.println("mapping_cs_version: " + mapping_cs_version);
+System.out.println("mapping_cs_name: " + mapping_cs_name);
+System.out.println("code_curr: " + code_curr);           
+
+                       HashMap hmap = util.getRelationshipHashMap(mapping_cs_name, mapping_cs_version, code_curr);
+                             ArrayList associations = null;
+                             if (hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION) != null) {
+                                associations = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
+                             }
+
+
+if (associations != null && associations.size() > 0) {
+
+%>
+      
+    <p></p>Mapping Source: <%=mapping_cs_name%>
     <table class="dataTable">
 
            <th class="dataTableHeader" scope="col" align="left">Name</th>
@@ -164,32 +196,10 @@ if (ret_vec2.size() > 4) {
 
     <%
 
-      for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
-           String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
-           Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
-           String mapping_cs_uri = (String) ret_vec.elementAt(0);
-           String mapping_cs_version = (String) ret_vec.elementAt(1);
-           String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
 
 
-System.out.println("mapping_cs_uri: " + mapping_cs_uri);
-System.out.println("mapping_cs_version: " + mapping_cs_version);
-System.out.println("mapping_cs_name: " + mapping_cs_name);
-System.out.println("code_curr: " + code_curr);
 
 
-                       HashMap hmap = util.getRelationshipHashMap(mapping_cs_name, mapping_cs_version, code_curr);
-                             ArrayList associations = null;
-                             if (hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION) != null) {
-                                associations = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
-                             }
-
-
-if (associations != null) {
-    System.out.println("associations.size(): " + associations.size());
-} else {
-    System.out.println("associations is NULL???");
-}
 
 
 
@@ -265,13 +275,13 @@ if (ret_vec2.size() > 4) {
           </tr>
         <%
         }
-                 }
+                 
       %>
      </table>
-    </p>
-
 
 <%
+                 }
+            }
         }
     }
 %>

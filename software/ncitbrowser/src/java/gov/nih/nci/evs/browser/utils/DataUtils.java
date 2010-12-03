@@ -1663,23 +1663,24 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
             }
         }
 
-if (!isMapping) {
-        HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
-        if (hmap_super != null) {
-            TreeItem ti = (TreeItem) hmap_super.get(code);
-            if (ti != null) {
-                for (String association : ti._assocToChildMap.keySet()) {
-                    List<TreeItem> children =
-                        ti._assocToChildMap.get(association);
-                    for (TreeItem childItem : children) {
-                        superconceptList.add(childItem._text + "|"
-                            + childItem._code);
-                    }
-                }
-            }
-        }
-        Collections.sort(superconceptList);
-}
+         // superconcepts:
+		if (!isMapping) {
+				HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
+				if (hmap_super != null) {
+					TreeItem ti = (TreeItem) hmap_super.get(code);
+					if (ti != null) {
+						for (String association : ti._assocToChildMap.keySet()) {
+							List<TreeItem> children =
+								ti._assocToChildMap.get(association);
+							for (TreeItem childItem : children) {
+								superconceptList.add(childItem._text + "|"
+									+ childItem._code);
+							}
+						}
+					}
+				}
+				Collections.sort(superconceptList);
+		}
         map.put(TYPE_SUPERCONCEPT, superconceptList);
 
         /*
@@ -1692,14 +1693,15 @@ if (!isMapping) {
          * childItem.code); } } } }
          */
 
-
-if (!isMapping) {
-        subconceptList =
-            TreeUtils.getSubconceptNamesAndCodes(scheme, version, code);
-        // Collections.sort(subconceptList);
-}
+        // subconcepts:
+		if (!isMapping) {
+				subconceptList =
+					TreeUtils.getSubconceptNamesAndCodes(scheme, version, code);
+				// Collections.sort(subconceptList);
+		}
         map.put(TYPE_SUBCONCEPT, subconceptList);
 
+        // associations:
         try {
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
 
