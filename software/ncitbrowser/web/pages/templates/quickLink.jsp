@@ -47,7 +47,7 @@
         onmouseover="document.quicklinksimg.src='<%=basePath%>/images/quicklinks-active.gif';"
         onmouseout="document.quicklinksimg.src='<%=basePath%>/images/quicklinks-inactive.gif';">
         <li>
-          <a href="#"><img src="<%=basePath%>/images/quicklinks-inactive.gif" width="162"
+          <a href="#" tabindex="20"><img src="<%=basePath%>/images/quicklinks-inactive.gif" width="162"
             height="18" border="0" name="quicklinksimg" alt="Quick Links" />
           </a>
           <ul>

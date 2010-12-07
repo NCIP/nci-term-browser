@@ -45,15 +45,15 @@ if (menubar_version == null) {
 
 
          if (hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
-      %> <a href="<%= request.getContextPath()%>">Home</a> <%
+      %> <a href="<%= request.getContextPath()%>" tabindex="10">Home</a> <%
          } else {
             if (menubar_version == null) {
       %> <a
-      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>">Home</a>
+      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>" tabindex="10">Home</a>
     <%
             } else {
       %> <a
-      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">Home</a>
+      href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="10">Home</a>
     <%
             }
          }
@@ -62,7 +62,7 @@ if (menubar_version == null) {
 
       if (menubar_isMapping) {
       %>
-      | <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=menubar_version%>">
+      | <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=menubar_version%>" tabindex="11">
       View Mapping
       </a>
 
@@ -73,7 +73,7 @@ if (menubar_version == null) {
       %>
 
       | <a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
       View Hierarchy 
       </a>
       <%
@@ -81,15 +81,15 @@ if (menubar_version == null) {
       %>
 	<c:choose>	
 		<c:when test="${sessionScope.CartActionBean.count>0}">
-		| <a href="<%= request.getContextPath() %>/pages/cart.jsf">Cart</a>
+		| <a href="<%= request.getContextPath() %>/pages/cart.jsf" tabindex="14">Cart</a>
 	    </c:when>
     </c:choose>    
     <%
       if (hdr_dictionary0 != null && hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
-      %> | <a href="<%= request.getContextPath() %>/pages/subset.jsf">Subsets</a>
+      %> | <a href="<%= request.getContextPath() %>/pages/subset.jsf" tabindex="15">Subsets</a>
     <%
       }
-      %> | <a href="<%= request.getContextPath() %>/pages/help.jsf">Help</a>
+      %> | <a href="<%= request.getContextPath() %>/pages/help.jsf" tabindex="16">Help</a>
     </td>
     <td align="right">
     <%

@@ -39,7 +39,7 @@
     <script type="text/javascript"
       src="<%=request.getContextPath()%>/js/dropdown.js"></script>
   </head>
-  <body>
+  <body onLoad="document.forms.searchTerm.matchText.focus();">
     <script type="text/javascript"
       src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
     <script type="text/javascript"
@@ -283,12 +283,12 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                     <tr>
                       <td>
                         <% if (menubar_version == null) { %>
-                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>">Home</a>
+                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>" tabindex="10">Home</a>
                         <% } else { %>
-                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>">Home</a>
+                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="10">Home</a>
                         <% }
                            if (download_site != null) {
-                        %>    | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                        %>    | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="17">
                               Download </a>
                         <% }
                         %>
@@ -305,19 +305,19 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
       }
       else if (tree_access_allowed) {
          %>
-                        | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                        | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
                         View Hierarchy </a>
    	<c:choose>	
 		<c:when test="${sessionScope.CartActionBean.count>0}">
-			| <a href="<%= request.getContextPath() %>/pages/cart.jsf">Cart</a>
+			| <a href="<%= request.getContextPath() %>/pages/cart.jsf" tabindex="14">Cart</a>
 	    </c:when>
     </c:choose> 
    <% }
        %>
 
                         <% if (menubar_scheme0 != null && menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
-                              | <a href="<%=request.getContextPath()%>/pages/subset.jsf">Subsets</a>
-                        <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
+                              | <a href="<%=request.getContextPath()%>/pages/subset.jsf" tabindex="15">Subsets</a>
+                        <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf" tabindex="16">Help</a>
                       </td>
                       <td align="right">
                         <%
