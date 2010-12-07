@@ -217,7 +217,8 @@ public class CartActionBean {
     	
         if (_cart != null && _cart.size() > 0) {        	
 
-        	xml.addCartTag();
+        	xml.addDocumentTag();
+        	xml.addCommentTag();
 
             // Add all terms from the cart
 			for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
