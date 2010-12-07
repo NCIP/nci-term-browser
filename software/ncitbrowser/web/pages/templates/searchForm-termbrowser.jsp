@@ -20,6 +20,7 @@
     onFocus="active = true"
     onBlur="active = false"
     onkeypress="return submitEnter('multiple_search',event)"
+    tabindex="1"
   />
   <h:commandButton
     id="search"
@@ -27,12 +28,14 @@
     action="#{userSessionBean.multipleSearchAction}"
     image="#{searchform_requestContextPath}/images/search.gif"
     alt="Search"
-    styleClass="searchbox-btn">
+    styleClass="searchbox-btn"
+    tabindex="2">
   </h:commandButton>
   <h:outputLink
-    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp">
+    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
+    tabindex="3">
     <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
-    style="border-width:0;" />
+    style="border-width:0;"/>
   </h:outputLink>
   <%
 //String algorithm = (String) request.getSession().getAttribute("algorithm");
@@ -49,9 +52,9 @@ String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) req
   <table border="0" cellspacing="0" cellpadding="0">
     <tr valign="top" align="left">
       <td align="left" class="textbody">
-        <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
-        <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
-        <input type="radio" name="algorithm" value="contains" alt="Contains" <%=check_c%>>Contains&nbsp;
+        <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4">Exact Match&nbsp;
+        <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4">Begins With&nbsp;
+        <input type="radio" name="algorithm" value="contains" alt="Contains" <%=check_c%> tabindex="4">Contains&nbsp;
         <%
           String searchTarget = (String) request.getSession().getAttribute("searchTarget");
           String check_n = "", check_p = "" , check_r ="";
@@ -69,9 +72,9 @@ String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) req
     </tr>
     <tr valign="top" align="left">
       <td align="left" class="textbody">
-        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name/Code&nbsp;
-        <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%>>Property&nbsp;
-        <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%>>Relationship&nbsp;
+        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%> tabindex="5">Name/Code&nbsp;
+        <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%> tabindex="5">Property&nbsp;
+        <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%> tabindex="5">Relationship&nbsp;
       </td>
     </tr>
   </table>

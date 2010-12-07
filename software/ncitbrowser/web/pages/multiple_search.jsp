@@ -57,7 +57,7 @@
 <!--
 <body onload="checkVisited();">
 -->
-<body>
+<body onLoad="document.forms.searchTerm.matchText.focus();">
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
