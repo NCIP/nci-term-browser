@@ -1237,13 +1237,6 @@ public class UserSessionBean extends Object {
         String scheme = (String) request.getParameter("dictionary");
         String version = (String) request.getParameter("version");
 
-        // to be removed:
-        if (scheme != null) {
-			String msg = "To be implemented.";
-			request.setAttribute("message", msg);
-			return "message";
-	    }
-
         SearchStatusBean bean =
             (SearchStatusBean) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequestMap().get("searchStatusBean");
