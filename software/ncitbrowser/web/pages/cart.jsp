@@ -47,10 +47,10 @@
 						</table>
 					</td>
 					<td align="right">
-						<h:commandLink onclick="backButton();return false;" value="Back" styleClass="texttitle-blue-small"/> |					    
-						<h:commandLink value="Remove Concept" action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small"/> |					
-						<h:commandLink value="Export XML" action="#{CartActionBean.exportCartXML}" styleClass="texttitle-blue-small"/> |
-						<h:commandLink value="Export CSV" action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small"/>				
+						<h:commandLink onclick="backButton();return false;" value="Back" styleClass="texttitle-blue-small" title="Return to search"/> |					    
+						<h:commandLink value="Remove Concept" action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small" title="Remove concepts from the cart"/> |					
+						<h:commandLink value="Export XML" action="#{CartActionBean.exportCartXML}" styleClass="texttitle-blue-small" title="Export cart contents in RDF/XML format"/> |
+						<h:commandLink value="Export CSV" action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small" title="Generate a list of cart concepts in CSV format readable from Excel"/>				
 					</td>
 				</tr>      
 			</table>	
