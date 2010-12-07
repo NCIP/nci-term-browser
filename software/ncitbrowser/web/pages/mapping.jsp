@@ -45,15 +45,16 @@
 %>
 
 <f:view>
+  <!-- Begin Skip Top Navigation -->
+    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+  <!-- End Skip Top Navigation -->
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-
-
-
 <%
+
 ResolvedConceptReferencesIterator iterator = null;
 String mapping_dictionary = request.getParameter("dictionary");
 String mapping_version = request.getParameter("version");
@@ -93,7 +94,7 @@ if (mapping_dictionary != null && mapping_dictionary.compareTo("NCI Thesaurus") 
 %>
       <!-- Page content -->
       <div class="pagecontent">
-
+	    <a name="evs-content" id="evs-content"></a>
 
 <%
 String resultsPerPage = request.getParameter("resultsPerPage");
