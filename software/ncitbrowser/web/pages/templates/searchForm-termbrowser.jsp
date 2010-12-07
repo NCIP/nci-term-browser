@@ -26,11 +26,12 @@
     value="Search"
     action="#{userSessionBean.multipleSearchAction}"
     image="#{searchform_requestContextPath}/images/search.gif"
-    alt="Search">
+    alt="Search"
+    styleClass="searchbox-btn">
   </h:commandButton>
   <h:outputLink
     value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp">
-    <h:graphicImage value="/images/search-help.gif"
+    <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
     style="border-width:0;" />
   </h:outputLink>
   <%
