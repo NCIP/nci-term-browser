@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.bean;
 
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 import gov.nih.nci.evs.browser.utils.SearchCart;
 import gov.nih.nci.evs.browser.utils.SearchUtils;
 import gov.nih.nci.evs.browser.utils.ExportCartXML;
@@ -150,6 +151,10 @@ public class CartActionBean {
     	String codingScheme = null;
     	String nameSpace = null;
     	String name = null;
+    	String url = null;
+    	String version = null;
+    	
+    	SearchCart search = new SearchCart();
     	
     	// Get concept information from the Entity item passed in
     	
@@ -169,8 +174,19 @@ public class CartActionBean {
         nameSpace = curr_concept.getEntityCodeNamespace();
 
         // Get concept name
-        name = curr_concept.getEntityDescription().getContent();        
+        name = curr_concept.getEntityDescription().getContent();  
+
+        // Get scheme version
+        ResolvedConceptReference ref = null;
+        ref = search.getConceptByCode(codingScheme, code);
+        version = ref.getCodingSchemeVersion();
         
+        // Get concept URL        
+        url = NCItBrowserProperties.getNCIT_URL()
+        	+ "/ConceptReport.jsp?dictionary=" + codingScheme
+        	+ "&version=" + version
+        	+ "&code=" + code;
+
         // Add concept to cart        
         if (_cart == null) _init();
         Concept item = new Concept();
@@ -178,6 +194,8 @@ public class CartActionBean {
         item.setCodingScheme(codingScheme);
         item.setNameSpace(nameSpace);
         item.setName(name);
+        item.setVersion(version);
+        item.setUrl(url);
         
         if (!_cart.containsKey(code))
         	_cart.put(code,item);        
@@ -280,7 +298,8 @@ public class CartActionBean {
         	// Add header
             sb.append("Concept,");
             sb.append("Vocabulary,");   
-            sb.append("Code");
+            sb.append("Code,");
+            sb.append("URL");
             sb.append("\r\n");        	
         	
             // Add concepts
@@ -291,7 +310,8 @@ public class CartActionBean {
             		_logger.debug("Exporting: " + ref.getCode());
             		sb.append("\"" + clean(item.name) + "\",");
             		sb.append("\"" + clean(item.codingScheme) + "\","); 
-            		sb.append("\"" + clean(item.code) + "\"");                                      
+            		sb.append("\"" + clean(item.code) + "\",");                                      
+            		sb.append("\"" + clean(item.url) + "\"");
                     sb.append("\r\n");            		
             	}	
             }           	
@@ -324,6 +344,8 @@ public class CartActionBean {
     	private String nameSpace = null;
     	private String name = null;
     	private boolean selected = false;
+    	private String version = null;
+    	private String url = null;
     	
     	// Getters & setters
     	
@@ -366,7 +388,23 @@ public class CartActionBean {
     	public Boolean getSelected() {
     		return this.selected;
     	}
- 	
+    	
+    	public String getVersion() {
+    		return this.version;
+    	}
+
+    	public void setVersion(String version) {
+    		this.version = version;
+    	}    	
+
+    	public String getUrl() {
+    		return this.url;
+    	}
+
+    	public void setUrl(String url) {
+    		this.url = url;
+    	}     	
+    	
     } // End of Concept
 
     //**
@@ -387,10 +425,12 @@ public class CartActionBean {
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
             	Concept item = (Concept)i.next();
                 sb.append("\t         Code = " + item.code + "\n");
-                sb.append("\tCoding scheme = " + item.codingScheme + "\n");   
+                sb.append("\tCoding scheme = " + item.codingScheme + "\n");
+                sb.append("\t      Version = " + item.version + "\n");
                 sb.append("\t   Name space = " + item.nameSpace + "\n");
                 sb.append("\t         Name = " + item.name + "\n");
-                sb.append("\t     Selected = " + item.selected + "\n");
+                sb.append("\t     Selected = " + item.selected + "\n");                
+                sb.append("\t          URL = " + item.url + "\n");
             }        	
         } else {
         	sb.append("Cart is empty.");       	

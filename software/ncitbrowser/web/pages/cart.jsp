@@ -71,7 +71,9 @@
 						</c:otherwise>
 				    </c:choose>   
 				    	<td><h:selectBooleanCheckbox value="#{item.selected}"/></td>
-				    	<td>${item.name}</td> 
+				    	<td>
+				    		<h:outputLink value="#{item.url}">${item.name}</h:outputLink>
+				    	</td> 
 			            <td>${item.codingScheme}</td>
 			        </tr>
 			    </c:forEach>
