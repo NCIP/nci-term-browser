@@ -35,6 +35,9 @@
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <f:view>
+    <!-- Begin Skip Top Navigation -->
+      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+    <!-- End Skip Top Navigation --> 
   <%
 
 String vocabulary_version = request.getParameter("version");
@@ -241,6 +244,7 @@ if (vocabulary_version != null) {
 <%@ include file="/pages/templates/quickLink.jsp" %>
 <!-- end Quick links bar -->
 <div class="pagecontent">
+      <a name="evs-content" id="evs-content"></a>
       <%@ include file="/pages/templates/welcome-other.jsp" %>
       <%@ include file="/pages/templates/nciFooter.html" %>
       <!-- end Page content -->
