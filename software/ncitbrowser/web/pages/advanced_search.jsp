@@ -24,7 +24,7 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<body onLoad="document.forms.advancedSearchForm.matchText.focus();">
   <script type="text/javascript"
     src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
   <script type="text/javascript"
@@ -233,26 +233,27 @@
                
                 <table>
                   <tr><td>
-                    <input CLASS="searchbox-input" name="matchText" value="<%=search_string%>">
+                    <input CLASS="searchbox-input" name="matchText" value="<%=search_string%>" tabindex="1">
                     <h:commandButton id="adv_search" value="Search" action="#{userSessionBean.advancedSearchAction}"
                       onclick="javascript:cursor_wait();"
                       image="#{advSearch_requestContextPath}/images/search.gif"
-                      alt="Search">
+                      alt="Search"
+                      tabindex="2">
                     </h:commandButton>
                   </td></tr>
                   <tr><td>
                      <table border="0" cellspacing="0" cellpadding="0">
                     <tr valign="top" align="left"><td align="left" class="textbody">
-                      <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%>>Exact Match&nbsp;
-                      <input type="radio" name="adv_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%>>Begins With&nbsp;
-                      <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%>>Contains
+                      <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
+                      <input type="radio" name="adv_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
+                      <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
                     </td></tr>
                   </table>
                 </td></tr>
 
                 <tr><td>
                   <h:outputLabel id="rel_search_source_Label" value="Source" styleClass="textbody">
-                    <select id="adv_search_source" name="adv_search_source" size="1">
+                    <select id="adv_search_source" name="adv_search_source" size="1" tabindex="4">
                     <%
                       Vector src_vec = OntologyBean.getSupportedSources(adv_search_vocabulary, adv_search_version);
                       t = "ALL";
@@ -296,10 +297,10 @@
                 </td></tr>
 
                 <tr valign="top" align="left"><td align="left" class="textbody">
-                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Code" alt="Code" <%=check_c2%> onclick="javascript:refresh()">Code&nbsp;
-                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Name" alt="Name" <%=check_n2%> onclick="javascript:refresh()">Name&nbsp;
-                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()">Property&nbsp;
-                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()">Relationship
+                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Code" alt="Code" <%=check_c2%> onclick="javascript:refresh()" tabindex="5">Code&nbsp;
+                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Name" alt="Name" <%=check_n2%> onclick="javascript:refresh()" tabindex="5">Name&nbsp;
+                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()" tabindex="5">Property&nbsp;
+                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()" tabindex="5">Relationship
                 </td></tr>
 
                 <tr><td>
@@ -311,7 +312,7 @@
                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                       <td>
                         <h:outputLabel id="selectPropertyLabel" value="Property" styleClass="textbody">
-                          <select id="selectProperty" name="selectProperty" size="1">
+                          <select id="selectProperty" name="selectProperty" size="1" tabindex="6">
                           <%
                             t = "ALL";
                             if (t.compareTo(selectProperty) == 0) {
