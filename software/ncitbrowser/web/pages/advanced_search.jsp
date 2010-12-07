@@ -209,7 +209,13 @@
             <% } %>
 
             <tr class="textbody"><td>
+            
+<!--            
                <FORM NAME="advancedSearchForm" METHOD="POST" CLASS="search-form" >
+-->
+ <h:form id="advancedSearchForm" styleClass="search-form">            
+               
+               
                 <table>
                   <tr><td>
                     <input CLASS="searchbox-input" name="matchText" value="<%=search_string%>">
@@ -399,8 +405,11 @@
               <input type="hidden" name="dictionary" id="dictionary" value="<%=adv_search_vocabulary%>">
 
               <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=adv_search_type%>" />
-
+<!--
             </form>
+ -->           
+            </h:form>
+            
           </td></tr>
         </table>
         <%@ include file="/pages/templates/nciFooter.jsp" %>
