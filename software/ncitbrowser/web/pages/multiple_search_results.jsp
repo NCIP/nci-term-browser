@@ -34,6 +34,9 @@
   %>
 
   <f:view>
+    <!-- Begin Skip Top Navigation -->
+      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+    <!-- End Skip Top Navigation -->  
     <%@ include file="/pages/templates/header.jsp" %>
     <div class="center-page">
       <%@ include file="/pages/templates/sub-header.jsp" %>
@@ -138,6 +141,7 @@ request.getSession().setAttribute("matchText", match_text);
     <!-- end Quick links bar -->
     <!-- Page content -->
     <div class="pagecontent">
+      <a name="evs-content" id="evs-content"></a>
       <%
 
 String resultsPerPage = request.getParameter("resultsPerPage");
