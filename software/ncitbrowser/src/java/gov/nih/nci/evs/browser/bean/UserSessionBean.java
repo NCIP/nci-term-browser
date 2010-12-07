@@ -1237,6 +1237,9 @@ public class UserSessionBean extends Object {
         String scheme = (String) request.getParameter("dictionary");
         String version = (String) request.getParameter("version");
 
+System.out.println("advancedSearchAction version: " + version);
+
+
         SearchStatusBean bean =
             (SearchStatusBean) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequestMap().get("searchStatusBean");
@@ -1582,6 +1585,8 @@ public class UserSessionBean extends Object {
                 request.getSession().setAttribute("match_size", match_size);
                 request.getSession().setAttribute("page_string", "1");
 
+                request.setAttribute("version", version);
+
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
                 return "search_results";
             } else if (size == 1) {
@@ -1612,6 +1617,9 @@ public class UserSessionBean extends Object {
                 request.getSession().setAttribute("code", ref.getConceptCode());
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
+
+                request.getSession().setAttribute("version", version);
+
 
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
                 return "concept_details";

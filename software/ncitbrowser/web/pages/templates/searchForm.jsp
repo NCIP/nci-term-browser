@@ -58,8 +58,16 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
     if (srchform_version == null) {
         srchform_version = (String) request.getParameter("version");
     }
-    //System.out.println("searchForm.jsp version: " + srchform_version);
+    
 
+if (srchform_version == null) {
+    srchform_version = DataUtils.getVocabularyVersionByTag(vocab_name, "PRODUCTION");
+}
+        
+System.out.println("********* searchForm.jsp version: " + srchform_version);
+        
+        
+        
     logger.debug("searchForm.jsp vocab_name: " + vocab_name);
 
 

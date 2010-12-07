@@ -87,7 +87,18 @@
 
     String adv_search_vocabulary = request.getParameter("dictionary");
     String adv_search_version = request.getParameter("version");
-    String refresh = request.getParameter("refresh");
+ 
+ System.out.println("advanced_search.jsp adv_search_version: " + adv_search_version);
+ 
+ if (adv_search_version == null) {
+     adv_search_version = (String) request.getAttribute("version");
+ }
+    
+ System.out.println("advanced_search.jsp adv_search_vocabulary: " + adv_search_vocabulary);
+ System.out.println("advanced_search.jsp adv_search_version: " + adv_search_version);
+     
+    
+    String refresh = (String) request.getParameter("refresh");
     boolean refresh_page = false;
     if (refresh != null) {
         refresh_page = true;
@@ -394,6 +405,9 @@
                     <input type="hidden" name="selectProperty" id="selectProperty" value="<%=selectProperty%>">
                     <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=rel_search_association%>">
                     <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=rel_search_rela%>">
+                    
+                    
+                    
 
                   <% }%>
 
@@ -403,6 +417,7 @@
               </table>
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
               <input type="hidden" name="dictionary" id="dictionary" value="<%=adv_search_vocabulary%>">
+              <input type="hidden" name="version" id="version" value="<%=adv_search_version%>">
 
               <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=adv_search_type%>" />
 <!--
