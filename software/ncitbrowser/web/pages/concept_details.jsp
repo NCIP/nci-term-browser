@@ -92,6 +92,9 @@ request.setAttribute("version", version);
   src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
 
 <f:view>
+  <!-- Begin Skip Top Navigation -->
+    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+  <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp"%>
   <div class="center-page"><%@ include
     file="/pages/templates/sub-header.jsp"%> <!-- Main box -->
@@ -207,6 +210,7 @@ request.setAttribute("version", version);
               request.getSession().setAttribute("singleton", "false");
         %> <!-- Page content -->
   <div class="pagecontent">
+  <a name="evs-content" id="evs-content"></a>
   <table border="0" width="700px">
     <tr>
       <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
