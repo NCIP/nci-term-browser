@@ -47,6 +47,9 @@
     <script type="text/javascript"
       src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
     <f:view>
+    <!-- Begin Skip Top Navigation -->
+      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+    <!-- End Skip Top Navigation -->     
       <%
 
 
@@ -200,7 +203,7 @@ if (scheme != null) {
             <%@ include file="/pages/templates/quickLink.jsp" %>
             <!-- end Quick links bar -->
             <div class="pagecontent">
-
+            <a name="evs-content" id="evs-content"></a>
         <p>
           To access <b><%=HTTPUtils.cleanXSS(display_name)%></b>, please review and accept the copyright/license statement below:
         </p>
