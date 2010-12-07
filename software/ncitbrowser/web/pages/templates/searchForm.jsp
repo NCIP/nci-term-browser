@@ -103,24 +103,17 @@ System.out.println("********* searchForm.jsp version: " + srchform_version);
  <h:form id="searchTerm" styleClass="search-form"  onsubmit="javascript:disableAnchor();" >
 
   <label for="matchText" />
-    <!--
-    <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=displayed_match_text%>" onFocus="active = true"
-        onBlur="active = false" onkeypress="return submitEnter('search',event)" />
-     -->
-
-     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=displayed_match_text%>" onFocus="active=true"
+    <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=displayed_match_text%>" onFocus="active=true"
         onBlur="active=false"  onkeypress="return submitEnter('search',event)"  />
-
     <h:commandButton id="search" value="Search" action="#{userSessionBean.searchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{form_requestContextPath}/images/search.gif"
-      alt="Search">
+      alt="Search"
+      styleClass="searchbox-btn">
     </h:commandButton>
-
-
     <h:outputLink value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp">
-      <h:graphicImage value="/images/search-help.gif" style="border-width:0;" />
+      <h:graphicImage value="/images/search-help.gif" style="border-width:0;" styleClass="searchbox-btn"/>
     </h:outputLink>
 
   <table border="0" cellspacing="0" cellpadding="0" width="340px">
