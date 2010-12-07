@@ -18,6 +18,9 @@
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 <f:view>
+  <!-- Begin Skip Top Navigation -->
+     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+  <!-- End Skip Top Navigation --> 
   <%
     String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
     String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
@@ -47,6 +50,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
       <!-- Page content -->
       <div class="pagecontent">
+        <a name="evs-content" id="evs-content"></a>
         <!-- ======================================= -->
         <!--                 HELP CONTENT            -->
         <!-- ======================================= -->
