@@ -63,7 +63,7 @@ public class HTTPUtils {
     private static Logger _logger = Logger.getLogger(HTTPUtils.class);
     private static final String REFERER = "referer";
     private static final int MAX_FONT_SIZE = 29;
-    private static final int MIN_FONT_SIZE = 22;
+    private static final int MIN_FONT_SIZE = 16;
     private static final int MAX_STR_LEN = 18;    
 
     /**
