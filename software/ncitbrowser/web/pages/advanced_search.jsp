@@ -357,7 +357,12 @@
                           <%} %>
 
                           <%
+                          
+System.out.println("adv_search_vocabulary: " + adv_search_vocabulary);
+System.out.println("adv_search_version: " + adv_search_version);
+                          
                             Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary, adv_search_version);
+                             
                             for (int i=0; i<association_vec.size(); i++) {
                               t = (String) association_vec.elementAt(i);
                               if (t.compareTo(rel_search_association) == 0) {
@@ -368,6 +373,7 @@
                           <%
                               }
                             }
+                            
                           %>
                           </select>
                         </h:outputLabel>
