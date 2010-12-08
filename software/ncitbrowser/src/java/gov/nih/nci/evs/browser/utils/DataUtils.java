@@ -1939,11 +1939,16 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
                                         if (associationName.compareTo("domain") == 0
                                             || associationName
                                                 .compareTo("range") == 0) {
-                                            pt =
-                                                lbscm
-                                                    .getAssociationNameFromAssociationCode(
-                                                        scheme, csvt, ac
-                                                            .getConceptCode());
+
+											try {
+												pt =
+													lbscm
+														.getAssociationNameFromAssociationCode(
+															scheme, csvt, ac
+																.getConceptCode());
+											} catch (Exception ex) {
+												pt = ac.getConceptCode();
+											}
                                         }
 
                                         // if

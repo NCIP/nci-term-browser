@@ -546,10 +546,13 @@ public class OntologyBean {
 				cs.getMappings().getSupportedAssociation();
 			for (int i = 0; i < assos.length; i++) {
 				SupportedAssociation sa = (SupportedAssociation) assos[i];
-				String name =
+				String name = sa.getLocalId();
+				try {
 					lbscm.getAssociationNameFromAssociationCode(
 						codingSchemeName, versionOrTag, sa.getLocalId());
-
+				} catch (Exception ex) {
+                    _logger.debug("lbscm.getAssociationNameFromAssociationCode threw exception.");
+				}
 				_association_name_vec.add(name);
 
 			}
