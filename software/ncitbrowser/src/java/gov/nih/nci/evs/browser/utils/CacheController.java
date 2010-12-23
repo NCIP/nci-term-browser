@@ -721,6 +721,9 @@ public class CacheController {
                 treeService.getJsonConverter().buildJsonPathFromRootTree(
                     tree.getCurrentFocus());
 
+
+System.out.println("cachController json: " + json);
+
             _cache.put(new Element(getTreeKey(tree, versionOrTag.getVersion()), json));
             return json;
         }

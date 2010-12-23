@@ -57,6 +57,7 @@
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
       var rel_search_rela = document.forms["advancedSearchForm"].rel_search_rela.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
+      var _version = document.forms["advancedSearchForm"].version.value;
 
       window.location.href="/ncitbrowser/pages/advanced_search.jsf?refresh=1"
           + "&opt="+ selectSearchOption
@@ -66,7 +67,8 @@
           + "&prop="+ selectProperty
           + "&rel="+ rel_search_association
           + "&rela="+ rel_search_rela
-          + "&dictionary="+ dictionary;
+          + "&dictionary="+ dictionary
+          + "&version="+ _version;
     }
   </script>
   <%!

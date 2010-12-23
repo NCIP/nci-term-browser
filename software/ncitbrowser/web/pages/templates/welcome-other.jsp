@@ -6,7 +6,15 @@
 
 <%
   String nci_meta_url = new DataUtils().getNCImURL();
+    
   String vocablary_version_value = version;
+  
+  String version_para_value = (String) request.getParameter("version");
+  if (version_para_value != null) {
+      vocablary_version_value = version_para_value;
+  }   
+  
+  
   if (vocablary_version_value == null) vocablary_version_value = "";
 
   boolean isMapping = DataUtils.isMapping(scheme, null);
