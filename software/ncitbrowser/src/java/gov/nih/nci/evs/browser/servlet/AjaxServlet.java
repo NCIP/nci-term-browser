@@ -236,6 +236,10 @@ public final class AjaxServlet extends HttpServlet {
                     String jsonString =
                         CacheController.getInstance().getTree(
                             ontology_display_name, versionOrTag, node_id);
+
+System.out.println("jsonString: " + jsonString);
+
+
                     JSONArray rootsArray = new JSONArray(jsonString);
 
                     json.put("root_nodes", rootsArray);

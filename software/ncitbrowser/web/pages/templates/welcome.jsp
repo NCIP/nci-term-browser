@@ -7,6 +7,12 @@
   String nci_meta_url = new DataUtils().getNCImURL();
   String vocablary_version = DataUtils.getVersion();
   String vocablary_version_value = DataUtils.getVersion();
+  
+  String version_para_value = (String) request.getParameter("version");
+  if (version_para_value != null) {
+      vocablary_version_value = version_para_value;
+  }
+  
   if (vocablary_version_value == null) vocablary_version_value = "";
 %>
 <div id="message" class="textbody">
