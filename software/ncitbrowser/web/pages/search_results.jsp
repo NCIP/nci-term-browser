@@ -41,6 +41,10 @@
 
 <%
 String search_results_dictionary = (String) request.getSession().getAttribute("dictionary");
+
+System.out.println("********* search_results.jsp search_results_dictionary: " + search_results_dictionary);
+
+
 boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
 
 //System.out.println("isMapping: " + isMapping);
@@ -75,7 +79,7 @@ if (search_results_version != null) {
     request.setAttribute("version", search_results_version);
 }
 
-if (search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
+if (search_results_dictionary == null || search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
 
       <%@ include file="/pages/templates/content-header.jsp" %>

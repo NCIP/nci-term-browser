@@ -197,10 +197,11 @@ public class SearchByAssociationIteratorDecorator extends
 					null,
 					null);
 
-/*
+// KLO, 010511
+
             Boolean restrictToAnonymous = Boolean.FALSE;
             cng = cng.restrictToAnonymous(restrictToAnonymous);
-*/
+
 
 			if (_associationNameAndValueList != null) {
 				cng =
