@@ -565,6 +565,54 @@ public class OntologyBean {
     }
 
 
+    public static Vector getSupportedAssociationIDsAndNames(String codingSchemeName, String version) {
+        _association_name_vec = new Vector();
+
+        LexBIGServiceConvenienceMethodsImpl lbscm = null;
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            lbscm =
+                (LexBIGServiceConvenienceMethodsImpl) lbSvc
+                    .getGenericExtension("LexBIGServiceConvenienceMethods");
+            lbscm.setLexBIGService(lbSvc);
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null)
+				versionOrTag.setVersion(version);
+
+			CodingScheme cs = getCodingScheme(codingSchemeName, version);
+			if (cs == null) return null;
+			SupportedAssociation[] assos =
+				cs.getMappings().getSupportedAssociation();
+			for (int i = 0; i < assos.length; i++) {
+				SupportedAssociation sa = (SupportedAssociation) assos[i];
+				String id = sa.getLocalId();
+				String name = sa.getContent();
+/*
+String content = sa.getContent();
+String entityCode = sa.getEntityCode();
+String namespace = sa.getEntityCodeNamespace();
+System.out.println("localId: " + name + " content: " + content + " entityCode " + entityCode + " getEntityCodeNamespace() " + namespace);
+
+				try {
+					lbscm.getAssociationNameFromAssociationCode(
+						codingSchemeName, versionOrTag, sa.getLocalId());
+				} catch (Exception ex) {
+                    _logger.debug("lbscm.getAssociationNameFromAssociationCode threw exception.");
+				}
+*/
+				//_association_name_vec.add(name);
+				_association_name_vec.add(id + "|" + name);
+
+			}
+			_association_name_vec = SortUtils.quickSort(_association_name_vec);
+			return _association_name_vec;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+    }
+
+
 
     public static void dumpVector(String label, Vector v) {
         _logger.debug("\n" + label);

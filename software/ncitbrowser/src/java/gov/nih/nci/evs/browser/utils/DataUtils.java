@@ -1738,6 +1738,8 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
                             for (int i = 0; i < associations.length; i++) {
                                 Association assoc = associations[i];
                                 String associationName = null;
+
+
                                 try {
 									associationName =
 										lbscm
@@ -1748,6 +1750,7 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 									associationName = assoc.getAssociationName();
 								}
 
+								//associationName = assoc.getDirectionalName();
 
                                 boolean isRole = false;
                                 if (list.contains(associationName)) {
@@ -1906,6 +1909,8 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 							    } catch (Exception ex) {
 									associationName = assoc.getAssociationName();
 								}
+
+								//associationName = assoc.getDirectionalName();
 
                                 boolean isRole = false;
                                 if (list.contains(associationName)) {

@@ -362,16 +362,23 @@
                           
 System.out.println("adv_search_vocabulary: " + adv_search_vocabulary);
 System.out.println("adv_search_version: " + adv_search_version);
-                          
-                            Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary, adv_search_version);
+//KLO, 010611                          
+//Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary, adv_search_version);
+                            
+                            Vector association_vec = OntologyBean.getSupportedAssociationIDsAndNames(adv_search_vocabulary, adv_search_version);
                              
                             for (int i=0; i<association_vec.size(); i++) {
                               t = (String) association_vec.elementAt(i);
-                              if (t.compareTo(rel_search_association) == 0) {
+                              
+                              Vector id_and_name_vec = DataUtils.parseData(t);
+                              String association_id = (String) id_and_name_vec.elementAt(0);
+                              String association_name = (String) id_and_name_vec.elementAt(1);
+                                                            
+                              if (association_id.compareTo(rel_search_association) == 0) {
                           %>
-                                <option value="<%=t%>" selected><%=t%></option>
+                                <option value="<%=association_id%>" selected><%=association_name%></option>
                           <%  } else { %>
-                                <option value="<%=t%>"><%=t%></option>
+                                <option value="<%=association_id%>"><%=association_name%></option>
                           <%
                               }
                             }
