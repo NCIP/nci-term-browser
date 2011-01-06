@@ -565,7 +565,7 @@ public class OntologyBean {
     }
 
 
-    public static Vector getSupportedAssociationIDsAndNames(String codingSchemeName, String version) {
+    public static Vector getSupportedAssociationNamesAndIDs(String codingSchemeName, String version) {
         _association_name_vec = new Vector();
 
         LexBIGServiceConvenienceMethodsImpl lbscm = null;
@@ -601,7 +601,7 @@ System.out.println("localId: " + name + " content: " + content + " entityCode " 
 				}
 */
 				//_association_name_vec.add(name);
-				_association_name_vec.add(id + "|" + name);
+				_association_name_vec.add(name + "|" + id);
 
 			}
 			_association_name_vec = SortUtils.quickSort(_association_name_vec);
