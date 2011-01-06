@@ -65,8 +65,10 @@ if (srchform_version == null) {
 }
         
 System.out.println("********* searchForm.jsp version: " + srchform_version);
-        
-        
+
+if (srchform_version != null) {
+    request.getSession().setAttribute("version", srchform_version);  
+}
         
     logger.debug("searchForm.jsp vocab_name: " + vocab_name);
 
