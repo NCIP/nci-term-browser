@@ -66,6 +66,10 @@ String sources = (String) u.elementAt(3);
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
+          
+ 
+ <h:form id="valueSetSearchResultsForm" styleClass="search-form"> 
+          
           <table>
             <tr>
             <!--
@@ -99,7 +103,7 @@ String sources = (String) u.elementAt(3);
 
             <tr class="textbody"><td>
 
- <h:form id="valueSetSearchResultsForm" styleClass="search-form">            
+            
                
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
              
@@ -157,7 +161,7 @@ concept_vec.add("Code #4|Name #4|Coding Scheme #2|Namespace #2");
              %>                 
                   
               </table>
-
+<!--
                   <tr><td>
                     <h:commandButton id="export" value="export" action="#{valueSetBean.exportValueSetAction}"
                       onclick="javascript:cursor_wait();"
@@ -167,6 +171,7 @@ concept_vec.add("Code #4|Name #4|Coding Scheme #2|Namespace #2");
                     </h:commandButton>
                   </td></tr>
               
+-->              
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
             

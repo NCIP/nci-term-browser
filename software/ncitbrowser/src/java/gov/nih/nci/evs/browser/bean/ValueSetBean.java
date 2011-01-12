@@ -359,6 +359,12 @@ public class ValueSetBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        String[] coding_scheme_ref = request.getParameterValues("coding_scheme_ref");
+        for (int i=0; i<coding_scheme_ref.length; i++) {
+			String t = coding_scheme_ref[i];
+			System.out.println("(*) " + t);
+		}
+
         return "resolved_value_set";
 
 	}

@@ -4113,4 +4113,32 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 		return uri + "|" + description + "|" + domain + "|" + src_str;
 	}
 
+	// AbsoluteCodingSchemeVersionReferenceList getCodingSchemesInValueSetDefinition(java.net.URI valueSetDefinitionURI)
+    public static Vector getCodingSchemesInValueSetDefinition(String uri) {
+		try {
+			java.net.URI valueSetDefinitionURI = new URI(uri);
+			Vector v = new Vector();
+			try {
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				AbsoluteCodingSchemeVersionReferenceList codingSchemes =
+					vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
+
+				//output is all of the mapping ontologies that this code participates in.
+				for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
+					System.out.println("URI: " + ref.getCodingSchemeURN());
+					System.out.println("Version: " + ref.getCodingSchemeVersion());
+					v.add(ref.getCodingSchemeURN() + "|" + ref.getCodingSchemeVersion());
+				}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
 }
