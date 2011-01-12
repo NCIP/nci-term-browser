@@ -1,6 +1,8 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.io.*;
+import java.net.URI;
+
 import java.text.*;
 import java.util.*;
 import java.sql.*;
@@ -40,6 +42,13 @@ import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 //import org.LexGrid.LexBIG.Utility.ServiceUtility;
 import org.LexGrid.LexBIG.Extensions.Generic.SupplementExtension;
 import org.LexGrid.relations.AssociationPredicate;
+
+
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
+import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
+
+import org.LexGrid.valueSets.ValueSetDefinition;
+import org.LexGrid.commonTypes.Source;
 
 
 import org.apache.log4j.*;
@@ -164,6 +173,7 @@ public class DataUtils {
     public static HashMap _formalNameVersion2MetadataHashMap = null;
     public static HashMap _displayNameVersion2FormalNameVersionHashMap = null;
     public static HashMap _uri2CodingSchemeNameHashMap = null;
+    public static HashMap _codingSchemeName2URIHashMap = null;
 
     public static Vector _nonConcept2ConceptAssociations = null;
     public static String _defaultOntologiesToSearchOnStr = null;
@@ -228,6 +238,8 @@ public class DataUtils {
         _formalNameVersion2MetadataHashMap = new HashMap();
         _displayNameVersion2FormalNameVersionHashMap = new HashMap();
         _uri2CodingSchemeNameHashMap = new HashMap();
+        _codingSchemeName2URIHashMap = new HashMap();
+
         _isMappingHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
@@ -293,6 +305,7 @@ public class DataUtils {
                             lbSvc.resolveCodingScheme(formalname, vt);
 
                         _uri2CodingSchemeNameHashMap.put(cs.getCodingSchemeURI(), cs.getCodingSchemeName());
+                        _codingSchemeName2URIHashMap.put(cs.getCodingSchemeName(), cs.getCodingSchemeURI());
 
                         boolean isMapping = isMapping(cs.getCodingSchemeName(), representsVersion);
                         _isMappingHashMap.put(cs.getCodingSchemeName(), new Boolean(isMapping));
@@ -3980,6 +3993,124 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 	public static String uri2CodingSchemeName(String uri) {
 	    if (!_uri2CodingSchemeNameHashMap.containsKey(uri)) return null;
 	    return (String) _uri2CodingSchemeNameHashMap.get(uri);
+	}
+
+	public static String codingSchemeName2URI(String name) {
+	    if (!_codingSchemeName2URIHashMap.containsKey(name)) return null;
+	    return (String) _codingSchemeName2URIHashMap.get(name);
+	}
+
+	public static Vector getConceptDomainNames() {
+		String scheme = "conceptDomainCodingScheme";
+		//scheme = "http://lexevs.org/codingscheme/conceptdomain";
+
+		String version = null;
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
+
+		Vector conceptDomainName_vec = new Vector();
+		try {
+			LexBIGService lbSvc = null;
+			lbSvc = new RemoteServerUtil().createLexBIGService();
+
+			LocalNameList entityTypes = new LocalNameList();
+			entityTypes.addEntry("conceptDomain");
+
+			//CodedNodeSet cns = lbSvc.getNodeSet(lbSvc, scheme, csvt);
+
+			CodedNodeSet cns = lbSvc.getNodeSet(scheme, csvt, entityTypes);
+
+			SortOptionList sortOptions = null;
+			LocalNameList filterOptions = null;
+			LocalNameList propertyNames = null;
+			CodedNodeSet.PropertyType[] propertyTypes = null;
+			boolean resolveObjects = true;
+			int maxToReturn = 1000;
+            ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects, maxToReturn);
+
+            System.out.println("Number of concept domains: " + rcrl.getResolvedConceptReferenceCount());
+            for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
+				ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+				Entity entity = rcr.getReferencedEntry();
+				conceptDomainName_vec.add(entity.getEntityDescription().getContent());
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		conceptDomainName_vec = SortUtils.quickSort(conceptDomainName_vec);
+		return conceptDomainName_vec;
+	}
+
+
+	public static Vector getCodingSchemeFormalNames() {
+        if (_codingSchemeHashSet == null)
+            setCodingSchemeMap();
+
+		Vector v = new Vector();
+		Set keyset = _formalName2LocalNameHashMap.keySet();
+		Iterator iterator = keyset.iterator();
+		while (iterator.hasNext()) {
+			String t = (String) iterator.next();
+			v.add(t);
+		}
+		return SortUtils.quickSort(v);
+	}
+
+
+	public static Vector getValueSetURIs() {
+		Vector v = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			v.add(t);
+		}
+		return SortUtils.quickSort(v);
+	}
+
+
+    public static ValueSetDefinition findValueSetDefinitionByURI(String uri) {
+		if (uri == null) return null;
+		String valueSetDefinitionRevisionId = null;
+		try {
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
+			return vsd;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+
+    public static String getValueSetDefinitionMetadata(ValueSetDefinition vsd) {
+		if (vsd== null) return null;
+		String uri = "";
+		String description = "";
+		String domain = "";
+		String src_str = "";
+
+		uri = vsd.getValueSetDefinitionURI();
+		description = vsd.getValueSetDefinitionName();
+		domain = vsd.getConceptDomain();
+
+		java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+		while (sourceEnum.hasMoreElements()) {
+			Source src = (Source) sourceEnum.nextElement();
+			src_str = src_str + src.getContent() + ";";
+		}
+		if (src_str.length() > 0) {
+			src_str = src_str.substring(0, src_str.length()-1);
+		}
+
+		if (vsd.getEntityDescription() != null) {
+			description = vsd.getEntityDescription().getContent();
+		}
+
+		return uri + "|" + description + "|" + domain + "|" + src_str;
 	}
 
 }

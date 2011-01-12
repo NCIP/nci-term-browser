@@ -1,6 +1,8 @@
 package gov.nih.nci.evs.browser.bean;
 
 import java.util.*;
+import java.net.URI;
+
 import javax.faces.context.*;
 import javax.faces.event.*;
 import javax.faces.model.*;
@@ -15,6 +17,14 @@ import gov.nih.nci.evs.browser.properties.*;
 import gov.nih.nci.evs.browser.common.*;
 import gov.nih.nci.evs.searchlog.*;
 import org.apache.log4j.*;
+
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
+import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
+import org.LexGrid.valueSets.ValueSetDefinition;
+import org.LexGrid.commonTypes.Source;
+
+
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -1634,5 +1644,40 @@ System.out.println("advancedSearchAction version: " + version);
         return "no_match";
 
     }
+
+
+	//resolveValueSetAction
+
+    public String resolveValueSetAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        return "resolve_value_set";
+
+	}
+
+
+    public String continueResolveValueSetAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+
+        return "resolved_value_set";
+
+	}
+
+
+    public String exportValueSetAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+
+        return "exported_value_set";
+
+	}
+
 
 }
