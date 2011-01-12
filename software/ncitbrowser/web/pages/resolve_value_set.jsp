@@ -58,6 +58,9 @@ System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_reques
 String message = (String) request.getSession().getAttribute("message");          
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 
+Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
+
+
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
@@ -82,9 +85,6 @@ String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
                 <th class="dataTableHeader" scope="col" align="left">Version</th>
 
 <%
-Vector coding_scheme_ref_vec = new Vector();
-coding_scheme_ref_vec.add("coding scheme #1|version #1");
-coding_scheme_ref_vec.add("coding scheme #2|version #2");
 
             for (int i=0; i<coding_scheme_ref_vec.size(); i++) {
             
@@ -107,9 +107,8 @@ coding_scheme_ref_vec.add("coding scheme #2|version #2");
 		    %>    
 
 		<td>
-		     <input type=checkbox name="coding_scheme_ref" value="<%=coding_scheme_name_version%>">&nbsp;</input>
+		     <input type=checkbox name="coding_scheme_ref" value="<%=coding_scheme_name_version%>" checked>&nbsp;</input>
 		</td>
-		
 		
 		      <td class="dataCellText">
 			 <%=cs_name%>
