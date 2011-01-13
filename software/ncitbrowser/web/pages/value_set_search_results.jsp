@@ -143,6 +143,14 @@ if (vsd_vec != null) {
                       alt="Resolve"
                       tabindex="2">
                     </h:commandButton>
+&nbsp;&nbsp;
+                    <h:commandButton id="export" value="export" action="#{valueSetBean.exportToXMLAction}"
+                      onclick="javascript:cursor_wait();"
+                      image="#{valueSetSearch_requestContextPath}/images/export.gif"
+                      alt="Export to LexGridXML"
+                      tabindex="3">
+                    </h:commandButton>
+                    
                   </td></tr>
               
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">

@@ -107,10 +107,13 @@ if (conceptDomain == null) conceptDomain = "";
           <a name="evs-content" id="evs-content"></a>
           <table>
             <tr>
-            <td class="texttitle-blue">Value Set Search</td>
+            <td class="texttitle-blue">Search Value Set</td>
             </tr>
 
             <% if (message != null) { %>
+            request.getSession().removeAttribute("message");
+            
+            
         <tr class="textbodyred"><td>
       <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>

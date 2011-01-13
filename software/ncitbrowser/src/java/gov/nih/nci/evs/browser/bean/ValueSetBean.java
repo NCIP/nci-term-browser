@@ -25,6 +25,10 @@ import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.commonTypes.Source;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.lexgrid.valuesets.dto.ResolvedValueSetDefinition;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -342,11 +346,17 @@ public class ValueSetBean {
 
 
     public String resolveValueSetAction() {
+
+ System.out.println("(************* ) resolveValueSetAction ");
+
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
         String selectedvalueset = (String) request.getParameter("valueset");
+
+
         System.out.println("resolveValueSetAction: selected value set " + selectedvalueset);
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
         return "resolve_value_set";
@@ -355,18 +365,83 @@ public class ValueSetBean {
 
 
     public String continueResolveValueSetAction() {
+
+ System.out.println("(************* ) continueResolveValueSetAction ");
+
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String[] coding_scheme_ref = request.getParameterValues("coding_scheme_ref");
-        for (int i=0; i<coding_scheme_ref.length; i++) {
-			String t = coding_scheme_ref[i];
-			System.out.println("(*) " + t);
+        String[] coding_scheme_ref = (String[]) request.getParameterValues("coding_scheme_ref");
+
+
+        String vsd_uri = (String) request.getParameter("vsd_uri");
+        if (vsd_uri == null) {
+			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
 
-        return "resolved_value_set";
+        request.getSession().setAttribute("vsd_uri", vsd_uri);
 
+
+ System.out.println("(*) continueResolveValueSetAction " + vsd_uri);
+
+
+        if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
+			String msg = "No coding scheme reference is selected.";
+			request.getSession().setAttribute("message", msg);
+			return "resolve_value_set";
+		}
+
+
+ System.out.println("(*) continueResolveValueSetAction #1 ");
+
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+		/*
+        for (int i=0; i<coding_scheme_ref.length; i++) {
+			String t = coding_scheme_ref[i];
+			System.out.println("(*) coding_scheme_ref: " + t);
+			Vector u = DataUtils.parseData(t);
+			String uri = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+			if (version == null || version.compareTo("null") == 0) {
+				//version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
+				version = "1.0";
+			}
+
+            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
+		}
+		*/
+
+
+		//csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("urn:oid:11.11.1.1", "1.0"));
+		csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("Automobiles", "1.0"));
+
+
+System.out.println("(*) continueResolveValueSetAction #2 ");
+
+        long time = System.currentTimeMillis();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		ResolvedValueSetDefinition rvsd = null;
+		try {
+			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
+			if(rvsd != null) {
+				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+				return "resolved_value_set";
+		    }
+
+		} catch (Exception ex) {
+			System.out.println("??? vds.resolveValueSetDefinition throws exception");
+		}
+
+System.out.println("(*) continueResolveValueSetAction #3 ");
+
+
+		String msg = "Unable to resolve the value set " + vsd_uri;
+		request.getSession().setAttribute("message", msg);
+        return "resolved_value_set";
 	}
 
 
