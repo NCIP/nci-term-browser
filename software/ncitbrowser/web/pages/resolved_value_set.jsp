@@ -11,7 +11,11 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
 <%@ page import="org.apache.log4j.*" %>
+
+
+
 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -89,11 +93,14 @@ String sources = (String) u.elementAt(3);
                 </td>
             </tr>
             
-            <% if (message != null) { %>
+            <% if (message != null) { 
+                request.getSession().removeAttribute("message"); 
+             %>
+             
         <tr class="textbodyred"><td>
       <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>
-            <% } %>
+            <% } else { %>
             <tr class="textbody"><td><b>Description</b>: <%=description%></td>
             <tr class="textbody"><td><b>Concept Domain</b>: <%=concept_domain%></td>
             <tr class="textbody"><td><b>Sources</b>: <%=sources%></td>
@@ -113,12 +120,26 @@ String sources = (String) u.elementAt(3);
                 <th class="dataTableHeader" scope="col" align="left">Namespace</th>
 
 <%
-Vector concept_vec = new Vector();
-concept_vec.add("Code #1|Name #1|Coding Scheme #1|Namespace #1");
-concept_vec.add("Code #2|Name #2|Coding Scheme #1|Namespace #1");
-concept_vec.add("Code #3|Name #3|Coding Scheme #1|Namespace #1");
-concept_vec.add("Code #4|Name #4|Coding Scheme #2|Namespace #2");
+                Vector concept_vec = new Vector();
+		ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("ResolvedConceptReferencesIterator");
 
+		if (itr != null) {
+		    while(itr.hasNext()){
+				ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
+				for(ResolvedConceptReference ref : refs){
+				     concept_vec.add(ref.getConceptCode()
+					+ "|" + ref.getEntityDescription().getContent()
+					+ "|" + ref.getCodingSchemeName()
+					+ "|" + ref.getCodeNamespace());
+				}
+			}
+		}
+
+
+if (concept_vec.size() == 0) {
+    concept_vec.add("code 1|name 1|coding scheme 1|namespace 1");
+    concept_vec.add("code 2|name 2|coding scheme 1|namespace 1");
+}
 
             for (int i=0; i<concept_vec.size(); i++) {
             
@@ -158,6 +179,7 @@ concept_vec.add("Code #4|Name #4|Coding Scheme #2|Namespace #2");
               
              <%
                 }
+            }    
              %>                 
                   
               </table>
@@ -172,6 +194,7 @@ concept_vec.add("Code #4|Name #4|Coding Scheme #2|Namespace #2");
                   </td></tr>
               
 -->              
+              <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
             

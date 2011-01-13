@@ -1152,8 +1152,9 @@ public class DataUtils {
                 CodingSchemeRendering csr = csra[i];
                 CodingSchemeSummary css = csr.getCodingSchemeSummary();
                 if (css.getFormalName().compareTo(codingSchemeName) == 0
-                    || css.getLocalName().compareTo(codingSchemeName) == 0) {
-                    version = css.getRepresentsVersion();
+                    || css.getLocalName().compareTo(codingSchemeName) == 0
+                    || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
+					version = css.getRepresentsVersion();
                     knt++;
 
                     if (ltag == null)
@@ -4139,6 +4140,24 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 		}
 		return null;
 	}
+
+
+
+/*
+org.LexGrid.LexBIG.Impl.exporters
+Class LexGridExport
+
+LexGridExport()
+
+exportValueSetDefinition
+public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
+                                     java.lang.String valueSetDefinitionRevisionId,
+                                     java.net.URI destination,
+                                     boolean overwrite,
+                                     boolean stopOnErros,
+                                     boolean async)
+                              throws LBException
+*/
 
 
 }

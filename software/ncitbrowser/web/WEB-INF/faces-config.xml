@@ -934,6 +934,15 @@
        <from-outcome>resolved_value_set</from-outcome>
        <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
     </navigation-case>
+
+    <navigation-case>
+       <description>resolve_value_set</description>
+       <from-action>#{valueSetBean.continueResolveValueSetAction}</from-action>
+       <from-outcome>resolve_value_set</from-outcome>
+       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+    </navigation-case>
+    
+    
   </navigation-rule>
   
   <navigation-rule>

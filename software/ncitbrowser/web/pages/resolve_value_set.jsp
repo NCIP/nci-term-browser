@@ -54,8 +54,9 @@ String valueSetSearch_requestContextPath = request.getContextPath();
 
 System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
 
+String message = (String) request.getSession().getAttribute("message");  
 
-String message = (String) request.getSession().getAttribute("message");          
+
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
@@ -69,7 +70,10 @@ Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vs
             <td class="texttitle-blue">Resolve Value Set:&nbsp;<%=vsd_uri%></td>
             </tr>
 
-            <% if (message != null) { %>
+            <% if (message != null)  { 
+                request.getSession().removeAttribute("message");
+            %>
+            
         <tr class="textbodyred"><td>
       <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>
@@ -89,7 +93,7 @@ Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vs
             for (int i=0; i<coding_scheme_ref_vec.size(); i++) {
             
 		    String coding_scheme_ref_str = (String) coding_scheme_ref_vec.elementAt(i);
-		    String coding_scheme_name_version = coding_scheme_ref_str.replaceAll("|", "__");
+		    String coding_scheme_name_version = coding_scheme_ref_str;//coding_scheme_ref_str.replaceAll("|", "__");
 		    
 		    Vector u = DataUtils.parseData(coding_scheme_ref_str);
 		    String cs_name = (String) u.elementAt(0);
@@ -133,7 +137,7 @@ Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vs
                     </h:commandButton>
                   </td></tr>
                   
-                  
+              <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">    
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
             
