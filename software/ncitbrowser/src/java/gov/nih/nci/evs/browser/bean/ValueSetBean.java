@@ -265,6 +265,13 @@ public class ValueSetBean {
 
 				try {
 					ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(selectURI), valueSetDefinitionRevisionId);
+					if (vsd == null) {
+						msg = "Unable to find any value set with URI " + selectURI + ".";
+						request.getSession().setAttribute("message", msg);
+						return "message";
+					}
+
+
 					String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
 					if (metadata != null) {
 						v.add(metadata);
@@ -272,7 +279,7 @@ public class ValueSetBean {
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					msg = "Unable to find any value set with URI " + selectURI;
+					msg = "Unable to find any value set with URI " + selectURI + ".";
 					request.getSession().setAttribute("message", msg);
 					return "message";
 				}
@@ -298,10 +305,16 @@ public class ValueSetBean {
 							v.add(metadata);
 						}
 					}
+					if(uri_list.size() == 0) {
+						msg = "Unable to find any value set in which the coding scheme " + selectCodingScheme + " participates.";
+						request.getSession().setAttribute("message", msg);
+						return "message";
+					}
+
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
-					msg = "Unable to find any value set with coding scheme " + selectCodingScheme;
+					msg = "Unable to find any value set in which the coding scheme " + selectCodingScheme + " participates.";
 					request.getSession().setAttribute("message", msg);
 					return "message";
 				}
@@ -319,14 +332,29 @@ public class ValueSetBean {
 				try {
                     List uri_list = vsd_service.getValueSetDefinitionURIsWithConceptDomain(selectConceptDomain,
                                                                            "http://lexevs.org/codingscheme/conceptdomain");
+
+System.out.println("(********) getValueSetDefinitionURIsWithConceptDomain returns " + uri_list.size());
+
+
 					for (int i=0; i<uri_list.size(); i++) {
 						String uri = (String) uri_list.get(i);
 						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
 						String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+
+System.out.println("(********) metadata " + metadata);
+
+
 						if (metadata != null) {
 							v.add(metadata);
 						}
 					}
+
+					if(uri_list.size() == 0) {
+						msg = "Unable to find any value set with concept domain " + selectConceptDomain;
+						request.getSession().setAttribute("message", msg);
+						return "message";
+					}
+
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
