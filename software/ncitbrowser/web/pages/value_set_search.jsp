@@ -83,7 +83,7 @@ if (conceptDomain == null) conceptDomain = "";
     String check_cs = "";
     String check_cd = null;
     
-    String message = null;
+    String message = (String) request.getSession().getAttribute("message");;
 
     String selectValueSetSearchOption = null;
     selectValueSetSearchOption = (String) request.getParameter("opt");
@@ -110,14 +110,15 @@ if (conceptDomain == null) conceptDomain = "";
             <td class="texttitle-blue">Search Value Set</td>
             </tr>
 
-            <% if (message != null) { %>
-            request.getSession().removeAttribute("message");
-            
-            
-        <tr class="textbodyred"><td>
-      <p class="textbodyred">&nbsp;<%=message%></p>
-        </td></tr>
-            <% } %>
+            <% if (message != null) { 
+                request.getSession().removeAttribute("message");
+            %>
+		<tr class="textbodyred"><td>
+	            <p class="textbodyred">&nbsp;<%=message%></p>
+		</td></tr>
+            <% 
+            } 
+            %>
 
             <tr class="textbody"><td>
 
@@ -193,7 +194,9 @@ if (conceptDomain == null) conceptDomain = "";
                       </td>
                     </tr>                     
                     
-                  <% }  %> 
+                  <% 
+                  } 
+                  %> 
                     
                  </table>
                 </td></tr>
