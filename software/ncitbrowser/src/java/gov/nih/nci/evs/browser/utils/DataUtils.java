@@ -4085,6 +4085,25 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 	}
 
 
+	public static Vector getValueSetNamesAndURIs() {
+		Vector v = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(t);
+			String name = vsd.getValueSetDefinitionName();
+			if (name == null) {
+				name = "<NOT ASSIGNED>";
+			}
+
+			v.add(name + "|" + t);
+		}
+		return SortUtils.quickSort(v);
+
+	}
+
+
 
     public static String getValueSetDefinitionMetadata(ValueSetDefinition vsd) {
 		if (vsd== null) return null;

@@ -72,6 +72,9 @@
     request.getSession().removeAttribute("dictionary");
     
     String navigation_type = (String) request.getParameter("nav_type");
+    if (navigation_type != null) {
+    	request.getSession().setAttribute("nav_type", navigation_type);
+    }
  
 
 HashMap display_name_hmap = null;
@@ -96,15 +99,16 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    
-    <h:form id="searchTerm" styleClass="search-form" > 
-    
+  
+    <h:form id="searchTerm" styleClass="search-form" >
     
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
         <input type="hidden" name="initial_search" value="true" />
+
         <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+        
         <!-- Page content -->
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>

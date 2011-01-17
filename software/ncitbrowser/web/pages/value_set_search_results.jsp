@@ -46,7 +46,7 @@
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
-        <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+        <%@ include file="/pages/templates/content-header-valueset.jsp" %>
         
 <%
 
@@ -60,6 +60,9 @@ String message = (String) request.getSession().getAttribute("message");
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
+          <%@ include file="/pages/templates/navigationTabs.jsp"%>
+          <div class="tabTableContentContainer">
+          
           <table>
             <tr>
             <td class="texttitle-blue">Matched Value Sets</td>
@@ -163,6 +166,8 @@ if (vsd_vec != null) {
           
           
         </table>
+        </div> <!-- end tabTableContentContainer -->
+        
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->

@@ -1,5 +1,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices" %>
+
 <%
 
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
@@ -14,68 +16,66 @@
 
 %>
 <div class="search-form">
-  <input CLASS="searchbox-input"
-    name="matchText"
-    value="<%=termbrowser_displayed_match_text%>"
-    onFocus="active = true"
-    onBlur="active = false"
-    onkeypress="return submitEnter('multiple_search',event)"
-    tabindex="1"
-  />
-  <h:commandButton
-    id="search"
-    value="Search"
-    action="#{userSessionBean.multipleSearchAction}"
-    image="#{searchform_requestContextPath}/images/search.gif"
-    alt="Search"
-    styleClass="searchbox-btn"
-    tabindex="2">
-  </h:commandButton>
-  <h:outputLink
-    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
-    tabindex="3">
-    <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
-    style="border-width:0;"/>
-  </h:outputLink>
-  <%
-//String algorithm = (String) request.getSession().getAttribute("algorithm");
-String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
 
-    String check_e = "", check_s = "" , check_c ="";
-    if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
-      check_e = "checked";
-    else if (algorithm.compareTo("startsWith") == 0)
-      check_s= "checked";
-    else
-      check_c = "checked";
-  %>
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr valign="top" align="left">
-      <td align="left" class="textbody">
-        <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4">Exact Match&nbsp;
-        <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4">Begins With&nbsp;
-        <input type="radio" name="algorithm" value="contains" alt="Contains" <%=check_c%> tabindex="4">Contains&nbsp;
-        <%
-          String searchTarget = (String) request.getSession().getAttribute("searchTarget");
-          String check_n = "", check_p = "" , check_r ="";
-          if (searchTarget == null || searchTarget.compareTo("names") == 0)
-            check_n = "checked";
-          else if (searchTarget.compareTo("properties") == 0)
-            check_p= "checked";
-          else
-            check_r = "checked";
-        %>
-      </td>
-    </tr>
-    <tr align="left">
-      <td height="1px" bgcolor="#2F2F5F"></td>
-    </tr>
-    <tr valign="top" align="left">
-      <td align="left" class="textbody">
-        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%> tabindex="5">Name/Code&nbsp;
-        <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%> tabindex="5">Property&nbsp;
-        <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%> tabindex="5">Relationship&nbsp;
-      </td>
-    </tr>
-  </table>
+                <table>
+
+                <tr valign="top" align="left">
+                <td align="left" class="textbody">
+                
+<table>
+<tr><td align="left" class="textbody">
+                  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" alt="Coding Scheme" tabindex="1">Vocabulary&nbsp;
+                  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="ConceptDomain" alt="Concept Domain" tabindex="2">Concept Domain&nbsp;
+</td>
+<td align="right">
+                    <h:commandButton id="adv_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
+                      onclick="javascript:cursor_wait();"
+                      image="#{valueSetSearch_requestContextPath}/images/search.gif"
+                      alt="Search"
+                      tabindex="2">
+                    </h:commandButton>
+                    
+		  <h:outputLink
+		    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
+		    tabindex="3">
+		    <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
+		    style="border-width:0;"/>
+		  </h:outputLink> 
+</td>
+</tr>
+</table>		  
+                </td>
+                </tr>
+                
+                <tr>
+  				<td class="dataCellText">
+  				        <h:outputLabel id="codingschemelabel" value="Vocabulary:" styleClass="textbody">
+					<h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
+					    immediate = "true"
+					    valueChangeListener="#{valueSetBean.ontologyChangedEvent}">
+									
+					     <f:selectItems value="#{valueSetBean.ontologyList}"/>
+					</h:selectOneMenu>
+					</h:outputLabel>
+				</td>                   
+                </tr>
+                <tr>
+                        
+ 				<td class="dataCellText">
+ 				        <h:outputLabel id="selectConceptDomainLabel" value="Domain:" styleClass="textbody">
+					<h:selectOneMenu id="selectedConceptDomain" value="#{valueSetBean.selectedConceptDomain}"
+					    immediate = "true"
+					    valueChangeListener="#{valueSetBean.conceptDomainChangedEvent}">
+					
+					     <f:selectItems value="#{valueSetBean.conceptDomainList}"/>
+					</h:selectOneMenu>
+					</h:outputLabel>  
+				</td>                       
+                         
+                                      
+                </tr>
+                  
+              </table>
+              <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
+              
 </div>

@@ -50,7 +50,7 @@
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
-        <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+        <%@ include file="/pages/templates/content-header-valueset.jsp" %>
         
 <%
 
@@ -70,6 +70,10 @@ String sources = (String) u.elementAt(3);
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
+          
+          <%@ include file="/pages/templates/navigationTabs.jsp"%>
+          <div class="tabTableContentContainer">
+          
           
  
  <h:form id="valueSetSearchResultsForm" styleClass="search-form"> 
@@ -200,6 +204,7 @@ if (concept_vec.size() == 0) {
             
           </td></tr>
         </table>
+        </div> <!-- end tabTableContentContainer -->
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
