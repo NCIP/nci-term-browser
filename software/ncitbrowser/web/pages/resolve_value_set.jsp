@@ -65,6 +65,11 @@ Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vs
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
+          
+          <%@ include file="/pages/templates/navigationTabs.jsp"%>
+          <div class="tabTableContentContainer">
+          
+          
           <table>
             <tr>
             <td class="texttitle-blue">Resolve Value Set:&nbsp;<%=vsd_uri%></td>
@@ -143,6 +148,7 @@ Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vs
             
           </td></tr>
         </table>
+        </div> <!-- end tabTableContentContainer -->
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
