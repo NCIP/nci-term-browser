@@ -71,6 +71,24 @@
 <%
     request.getSession().removeAttribute("dictionary");
     
+    String navigation_type = (String) request.getParameter("nav_type");
+ 
+
+HashMap display_name_hmap = null;
+Vector display_name_vec = null;
+display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
+display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+String warning_msg = (String) request.getSession().getAttribute("warning");
+String ontologiesToSearchOn = (String) request.getSession().getAttribute("defaultOntologiesToSearchOnStr");
+if (ontologiesToSearchOn == null) {
+  ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
+}
+if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
+   ontologiesToSearchOn = "|";
+}
+String unsupported_vocabulary_message = (String) request.getSession().getAttribute("unsupported_vocabulary_message");
+
+    
 %>
 <f:view>
   <!-- Begin Skip Top Navigation -->
@@ -90,7 +108,15 @@
         <!-- Page content -->
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
+          
+          <%@ include file="/pages/templates/navigationTabs.jsp"%>
+          
+          
           <div class="tabTableContentContainer">
+
+<%
+if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
+%>
 
           <table class="termstable" border="0">
                 <tr>
@@ -117,16 +143,17 @@
                 </tr>
           </table>
 
-
+            
+ <%
+ }
+ %>
              <%
-             String warning_msg = (String) request.getSession().getAttribute("warning");
              if (warning_msg != null) {
              %>
                 <p class="textbodyred">&nbsp;<%=warning_msg%></p>
              <%
              }
     
-             String unsupported_vocabulary_message = (String) request.getSession().getAttribute("unsupported_vocabulary_message");
 	     if (unsupported_vocabulary_message != null && unsupported_vocabulary_message.compareTo("null") != 0) {
 	        request.getSession().removeAttribute("unsupported_vocabulary_message"); 
              %>
@@ -139,12 +166,28 @@
              request.getSession().removeAttribute("hide_ontology_list");
              if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
              %>
+             
+             
+<%
+if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
+%>           
+             
             <span class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.
             <br/>
             &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow; try NCI Metathesaurus separately.)
             <br/><br/>
             </span>
+            
+<%
+}
+%>
+            
+            
             <table class="termstable" border="0">
+
+<%
+if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
+%>
 
               <tr>
               <%
@@ -153,21 +196,7 @@
                     _logger.warn("??????????? ontology_list == null");
                 int num_vocabularies = ontology_list.size();
 
-//KLO 010610
-//String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOn");
 
-String ontologiesToSearchOn = (String) request.getSession().getAttribute("defaultOntologiesToSearchOnStr");
-if (ontologiesToSearchOn == null) {
-  ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
-}
-if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
-   ontologiesToSearchOn = "|";
-}
-
-                HashMap display_name_hmap = null;
-                Vector display_name_vec = null;
-                display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
-                display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
                 if (display_name_hmap == null || display_name_vec == null) {
                         display_name_hmap = new HashMap();
                         display_name_vec = new Vector();
@@ -263,7 +292,6 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
 				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
 				if (full_name == null || full_name.compareTo("null") == 0) 
 				    full_name = scheme;
-				//String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
 				String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
 				if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
 				    term_browser_version = version;
@@ -315,6 +343,8 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                 </tr>
 
 
+
+
                 <tr><td height="20"></td></tr>
                 
                 <tr>
@@ -345,8 +375,15 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                   %>
                 </tr>
                 
+ <%
+ }
+ %>
+  
+  
+<%
+if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
+%> 
                 
-                <tr><td height="20"><HR></HR></td></tr>
                 <tr><td class="textbody">Mappings:</td></tr>
                 
                 <tr>
@@ -388,11 +425,6 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
 				boolean checked = ontologiesToSearchOn != null
 				    && ontologiesToSearchOn.indexOf(label2) != -1;
 				String checkedStr = checked ? "checked" : "";
-				%>
-				   <!--
-				   <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
-				   -->
-				<%
 
 				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
 				if (full_name == null || full_name.compareTo("null") == 0) 
@@ -435,7 +467,9 @@ if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_S
                   </td>
                 </tr>                
                 
-                
+ <%
+ }
+ %>                
 
                 
                 

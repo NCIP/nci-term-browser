@@ -12,7 +12,6 @@
 			| <a href="<%= request.getContextPath() %>/pages/cart.jsf" tabindex="14">Cart</a>
 	    </c:when>
     </c:choose> 
-     | <a href="<%= request.getContextPath() %>/pages/value_set_search.jsf" tabindex="16">Value Set</a>    
      | <a href="<%= request.getContextPath() %>/pages/help.jsf" tabindex="16">Help</a>
     </td>
     <td align="right" valign="bottom">

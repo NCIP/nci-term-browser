@@ -62,8 +62,7 @@
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
-        <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
-        
+      <%@ include file="/pages/templates/content-header-valueset.jsp" %> 
 <%
 
   String valueSetSearch_requestContextPath = request.getContextPath();
@@ -105,6 +104,10 @@ if (conceptDomain == null) conceptDomain = "";
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
+          
+          <%@ include file="/pages/templates/navigationTabs.jsp"%>
+          <div class="tabTableContentContainer">
+          
           <table>
             <tr>
             <td class="texttitle-blue">Search Value Set</td>
@@ -218,6 +221,8 @@ if (conceptDomain == null) conceptDomain = "";
             
           </td></tr>
         </table>
+        </div> <!-- end tabTableContentContainer -->
+        
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
