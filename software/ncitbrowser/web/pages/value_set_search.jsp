@@ -110,7 +110,7 @@ if (conceptDomain == null) conceptDomain = "";
           
           <table>
             <tr>
-            <td class="texttitle-blue">Search Value Set</td>
+            <td class="textbody">Value Sets</td>
             </tr>
 
             <% if (message != null) { 
@@ -123,101 +123,9 @@ if (conceptDomain == null) conceptDomain = "";
             } 
             %>
 
-            <tr class="textbody"><td>
+         <tr class="textbody"><td>
+            
 
- <h:form id="valueSetSearchForm" styleClass="search-form">            
-               
-                <table>
-
-                <tr valign="top" align="left"><td align="left" class="textbody">
-                  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="URI" alt="URI" <%=check_uri%> onclick="javascript:refresh()" tabindex="5">URI&nbsp;
-                  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" alt="Coding Scheme" <%=check_cs%> onclick="javascript:refresh()" tabindex="5">Vocabulary&nbsp;
-                  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="ConceptDomain" alt="Concept Domain" <%=check_cd%> onclick="javascript:refresh()" tabindex="5">Concept Domain&nbsp;
-                </td></tr>
-                <tr><td>
-                  <table>
-                  <% 
-                 
-                    if (selectValueSetSearchOption == null || selectValueSetSearchOption.equals("URI")) { %>
-                    <tr>
-                      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                      <td>
-                        <h:outputLabel id="selectURILabel" value="" styleClass="textbody">
-
-  				<td class="dataCellText">
-					<h:selectOneMenu id="selectedValueSetURI" value="#{valueSetBean.selectedValueSetURI}"
-					    immediate = "true"
-					    valueChangeListener="#{valueSetBean.valueSetURIChangedEvent}">
-					     <f:selectItems value="#{valueSetBean.valueSetURIList}"/>
-					</h:selectOneMenu>
-				</td>  
-				
-                   
-                        </h:outputLabel>
-                      </td>
-                    </tr>
-
-                  <% } else if (selectValueSetSearchOption.equals("CodingScheme")) { %>
-                     <tr>
-                      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                      <td>
-                        <h:outputLabel id="selectCodingSchemeLabel" value="" styleClass="textbody">
-                        
-  				<td class="dataCellText">
-					<h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
-					    immediate = "true"
-					    valueChangeListener="#{valueSetBean.ontologyChangedEvent}">
-									
-					     <f:selectItems value="#{valueSetBean.ontologyList}"/>
-					</h:selectOneMenu>
-				</td>                           
-                        
-                     
-                          
-                        </h:outputLabel>
-                      </td>
-                    </tr> 
-                    
-                  <% } else if (selectValueSetSearchOption.equals("ConceptDomain")) { %>
-                     <tr>
-                      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                      <td>
-                        <h:outputLabel id="selectConceptDomainLabel" value="" styleClass="textbody">
-                        
- 				<td class="dataCellText">
-					<h:selectOneMenu id="selectedConceptDomain" value="#{valueSetBean.selectedConceptDomain}"
-					    immediate = "true"
-					    valueChangeListener="#{valueSetBean.conceptDomainChangedEvent}">
-					
-					     <f:selectItems value="#{valueSetBean.conceptDomainList}"/>
-					</h:selectOneMenu>
-				</td>                       
-                         
-                        </h:outputLabel>
-                      </td>
-                    </tr>                     
-                    
-                  <% 
-                  } 
-                  %> 
-                    
-                 </table>
-                </td></tr>
-
-
-                  <tr><td>
-                    <h:commandButton id="adv_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
-                      onclick="javascript:cursor_wait();"
-                      image="#{valueSetSearch_requestContextPath}/images/search.gif"
-                      alt="Search"
-                      tabindex="2">
-                    </h:commandButton>
-                  </td></tr>
-                  
-                  
-              </table>
-              <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
-            </h:form>
             
           </td></tr>
         </table>
