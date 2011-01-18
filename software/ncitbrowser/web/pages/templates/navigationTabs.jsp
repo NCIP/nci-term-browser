@@ -62,7 +62,7 @@
           if (nav_type == null ||
             (nav_type != null && nav_type.compareTo("valuesets") != 0)) {
         %>
-        <a href="<%=request.getContextPath() %>/pages/value_set_search.jsf?nav_type=valuesets">
+        <a href="<%=request.getContextPath() %>/pages/value_set_search.jsf">
           <img name="tab_valuesets"
             src="<%=request.getContextPath() %>/images/tab_valuesets.gif"
             width="102" height="21" border="0" alt="Value Sets"

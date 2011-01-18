@@ -46,7 +46,7 @@
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
-        <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+        <%@ include file="/pages/templates/content-header-valueset.jsp" %>
         
 <%
 
