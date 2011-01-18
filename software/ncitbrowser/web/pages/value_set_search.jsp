@@ -125,9 +125,67 @@ if (conceptDomain == null) conceptDomain = "";
 
          <tr class="textbody"><td>
             
+              <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
+		<th class="dataTableHeader" scope="col" align="left">Name</th>
+                <th class="dataTableHeader" scope="col" align="left">URI</th>
+
+<%
+		Vector vsd_vec = (Vector) request.getSession().getAttribute("vsddata");
+		if (vsd_vec == null) {
+		     vsd_vec = DataUtils.getValueSetNamesAndURIs();
+		     request.getSession().setAttribute("vsddata", vsd_vec);
+		}
+
+                for (int i=0; i<vsd_vec.size(); i++) {
             
-          </td></tr>
+		    String vsd_str = (String) vsd_vec.elementAt(i);
+		    Vector u = DataUtils.parseData(vsd_str);
+		    String name = (String) u.elementAt(0);
+		    String uri = (String) u.elementAt(1);
+
+		    if (i % 2 == 0) {
+		    %>
+		      <tr class="dataRowDark">
+		    <%
+			} else {
+		    %>
+		      <tr class="dataRowLight">
+		    <%
+			}
+		    %>    
+
+				
+		      <td class="dataCellText">
+		      <%
+		         if (name.compareTo("<NOT ASSIGNED>") != 0) {
+		       %>   
+                             <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=name%></a>
+                      <%       
+                         } else {
+                       %>  
+                             <%=name%>
+                      <%       
+                         }
+                       %>  
+                         
+		      </td>
+		      <td class="dataCellText">
+			 <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=uri%></a>
+		      </td>
+
+
+		      </tr>
+              
+              
+             <%
+                }
+             %>                 
+                  
+              </table>
+            
+          </td>
+          </tr>
         </table>
         </div> <!-- end tabTableContentContainer -->
         

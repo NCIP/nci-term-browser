@@ -55,7 +55,9 @@ String valueSetSearch_requestContextPath = request.getContextPath();
 System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
 
 
-String message = (String) request.getSession().getAttribute("message");          
+String message = (String) request.getSession().getAttribute("message");     
+String vsd_uri = (String) request.getParameter("uri"); 
+Vector vsd_vec = null;
 
 %>
         <div class="pagecontent">
@@ -65,7 +67,24 @@ String message = (String) request.getSession().getAttribute("message");
           
           <table>
             <tr>
+<%           
+if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
+
+    String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
+    vsd_vec = new Vector();
+    vsd_vec.add(vsd_metadata);
+%>
+     
+            <td class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
+<%            
+} else {
+    vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
+%>
             <td class="texttitle-blue">Matched Value Sets</td>
+<%
+}
+%>
+            
             </tr>
 
             <% if (message != null) { %>
@@ -79,7 +98,6 @@ String message = (String) request.getSession().getAttribute("message");
  <h:form id="valueSetSearchResultsForm" styleClass="search-form">            
                
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-              
 
 		<th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
               
@@ -90,7 +108,6 @@ String message = (String) request.getSession().getAttribute("message");
 
 
 <%
-Vector vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
 if (vsd_vec != null) {
             for (int i=0; i<vsd_vec.size(); i++) {
             
@@ -113,7 +130,18 @@ if (vsd_vec != null) {
 		    %>    
 
 		<td>
-		     <input type=radio name="valueset" value="<%=uri%>">&nbsp;</input>
+<%		
+if (vsd_vec.size() == 1) {
+%>
+		<input type=radio name="valueset" value="<%=uri%>" checked>&nbsp;</input>
+<%
+} else {
+%>
+		<input type=radio name="valueset" value="<%=uri%>">&nbsp;</input>
+<%		
+}
+%>
+		     
 		</td>
 					
 		      <td class="dataCellText">
