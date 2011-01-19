@@ -28,6 +28,7 @@ import org.LexGrid.commonTypes.Source;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.lexgrid.valuesets.dto.ResolvedValueSetDefinition;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import javax.servlet.ServletOutputStream;
 
 
 /**
@@ -181,6 +182,21 @@ public class ValueSetBean {
 			setSelectedValueSetURI(((SelectItem) valueSetURIList.get(0)).getLabel());
 		}
 		return valueSetURIList;
+	}
+
+
+	public void selectValueSetSearchOptionChanged(ValueChangeEvent event) {
+        if (event.getNewValue() == null)
+            return;
+        String newValue = (String) event.getNewValue();
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+        request.getSession().setAttribute("selectValueSetSearchOption", newValue);
+        System.out.println("selectValueSetSearchOption: " + newValue);
+
+        //setSelectedValueSetURI(newValue);
 	}
 
     public void valueSetURIChangedEvent(ValueChangeEvent event) {
@@ -484,8 +500,56 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 	}
 
 
-    public String exportToXMLAction() {
-		return "xml";
+    public String valueSetDefinition2XMLString(String uri) {
+        LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        String s = null;
+        String valueSetDefinitionRevisionId = null;
+        try {
+			URI valueSetDefinitionURI = new URI(uri);
+			StringBuffer buf = vsd_service.exportValueSetDefinition(valueSetDefinitionURI, valueSetDefinitionRevisionId);
+            s = buf.toString();
+
+            System.out.println(s);
+
+        } catch (Exception ex) {
+           ex.printStackTrace();
+        }
+		return s;
+	}
+
+
+
+
+    public void exportToXMLAction() {
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String uri = (String) request.getParameter("valueset");
+
+        //request.getSession().setAttribute("vsd_uri", uri);
+       // return "xml";
+
+        try {
+            String sb = valueSetDefinition2XMLString(uri);
+            HttpServletResponse response = (HttpServletResponse) FacesContext
+                    .getCurrentInstance().getExternalContext().getResponse();
+            response.setContentType("text/xml");
+            /*
+            response.setHeader("Content-Disposition", "attachment; filename="
+                    + XML_FILE_NAME);
+            */
+            response.setContentLength(sb.length());
+            ServletOutputStream ouputStream = response.getOutputStream();
+            ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+            ouputStream.flush();
+            ouputStream.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+        FacesContext.getCurrentInstance().responseComplete();
 	}
 
 

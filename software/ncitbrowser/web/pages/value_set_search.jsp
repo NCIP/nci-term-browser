@@ -72,34 +72,8 @@ String conceptDomain = (String) request.getSession().getAttribute("conceptDomain
 System.out.println("subset_editor conceptDomain: " + conceptDomain);
 if (conceptDomain == null) conceptDomain = "";
 
-
-    String t = null;
-    String selected_uri = null;
-    String selected_cs = "";
-    String selected_cd = null;
-
-    String check_uri = null;
-    String check_cs = "";
-    String check_cd = null;
-    
     String message = (String) request.getSession().getAttribute("message");;
-
-    String selectValueSetSearchOption = null;
-    selectValueSetSearchOption = (String) request.getParameter("opt");
-               
-    if (selectValueSetSearchOption == null || selectValueSetSearchOption.compareTo("null") == 0) {
-        selectValueSetSearchOption = "URI";
-    }
-
-    String check__uri = "", check__cs = "", check__cd = "";
-    if (selectValueSetSearchOption == null || selectValueSetSearchOption.compareTo("URI") == 0)
-      check_uri = "checked";
-    else if (selectValueSetSearchOption.compareTo("CodingScheme") == 0)
-        check_cs = "checked";
-    else if (selectValueSetSearchOption.compareTo("ConceptDomain") == 0)
-      check_cd = "checked";
-    else check_uri = "checked";
-           
+    String t = null;
 
 %>
         <div class="pagecontent">

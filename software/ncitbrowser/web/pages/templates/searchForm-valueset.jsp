@@ -7,15 +7,35 @@
   String searchform_requestContextPath = request.getContextPath();
   searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
+    request.getSession().setAttribute("nav_type", "valuesets");
 
-request.getSession().setAttribute("nav_type", "valuesets");
+    String selected_cs = "";
+    String selected_cd = null;
 
+    String check_cs = "";
+    String check_cd = "";
 
+    String selectValueSetSearchOption = null;
+    selectValueSetSearchOption = (String) request.getParameter("opt");
+               
+    if (selectValueSetSearchOption == null || selectValueSetSearchOption.compareTo("null") == 0) {
+        selectValueSetSearchOption = "CodingScheme";
+    }
+
+    if (selectValueSetSearchOption.compareTo("CodingScheme") == 0)
+        check_cs = "checked";
+    else if (selectValueSetSearchOption.compareTo("ConceptDomain") == 0)
+        check_cd = "checked";
+    else check_cs = "checked";
+    
+    
 %>
 <h:form id="valueSetSearchForm" styleClass="search-form">   
-<!--
-<div class="search-form">
--->
+
+
+
+
+
 <table>
 
                 <tr valign="top" align="left">
@@ -24,8 +44,12 @@ request.getSession().setAttribute("nav_type", "valuesets");
 			<table>
 			<tr>
 			<td align="left" class="textbody">
-					  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" checked alt="Coding Scheme" tabindex="1">Vocabulary&nbsp;
-					  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="ConceptDomain" alt="Concept Domain" tabindex="2">Concept Domain&nbsp;
+
+ 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
+                                          alt="Coding Scheme" tabindex="1">Vocabulary&nbsp;
+					  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="ConceptDomain" <%=check_cd%> 
+					  alt="Concept Domain" tabindex="2">Concept Domain&nbsp;
+					  
 			</td>
 			<td align="right">
 					    <h:commandButton id="adv_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
@@ -48,6 +72,7 @@ request.getSession().setAttribute("nav_type", "valuesets");
                 </tr>
                 
                 <tr>
+                
   				<td class="dataCellText">
   				        <h:outputLabel id="codingschemelabel" value="Vocabulary:" styleClass="textbody">
 					<h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
@@ -59,6 +84,7 @@ request.getSession().setAttribute("nav_type", "valuesets");
 					</h:outputLabel>
 				</td>                   
                 </tr>
+
                 <tr>
                         
  				<td class="dataCellText">
@@ -74,6 +100,7 @@ request.getSession().setAttribute("nav_type", "valuesets");
                          
                                       
                 </tr>
+           
                   
 </table>
 <!--

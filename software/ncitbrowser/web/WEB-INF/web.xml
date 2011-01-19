@@ -33,6 +33,19 @@
          <url-pattern>/ajax</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>vsServlet</servlet-name>
+        <servlet-class>gov.nih.nci.evs.browser.servlet.ValueSetServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+         <servlet-name>vsServlet</servlet-name>
+         <url-pattern>/vsServlet</url-pattern>
+    </servlet-mapping>
+    
+    
     <!-- Faces Servlet -->
 
     <!-- servlet>

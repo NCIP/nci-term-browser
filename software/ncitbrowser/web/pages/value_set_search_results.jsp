@@ -96,7 +96,18 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
             <tr class="textbody"><td>
 
  <h:form id="valueSetSearchResultsForm" styleClass="search-form">            
-               
+ 
+ <%
+ if (vsd_uri != null) {
+ %>
+ 
+    <input type="hidden" name="valueset" value="<%=vsd_uri%>">&nbsp;</input>
+    
+<%
+ }
+ %>
+ 
+ 
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 		<th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
@@ -175,13 +186,14 @@ if (vsd_vec.size() == 1) {
                       tabindex="2">
                     </h:commandButton>
 &nbsp;&nbsp;
+
                     <h:commandButton id="export" value="export" action="#{valueSetBean.exportToXMLAction}"
                       onclick="javascript:cursor_wait();"
                       image="#{valueSetSearch_requestContextPath}/images/export.gif"
                       alt="Export to LexGridXML"
                       tabindex="3">
                     </h:commandButton>
-                    
+                  
                   </td></tr>
               
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
