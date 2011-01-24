@@ -46,8 +46,10 @@
 			<td align="left" class="textbody">
 
  				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
+ 				          onclick="javascript:show_coding_scheme_combo()"
                                           alt="Coding Scheme" tabindex="1">Vocabulary&nbsp;
 					  <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="ConceptDomain" <%=check_cd%> 
+					  onclick="javascript:show_concept_domain_combo()"
 					  alt="Concept Domain" tabindex="2">Concept Domain&nbsp;
 					  
 			</td>

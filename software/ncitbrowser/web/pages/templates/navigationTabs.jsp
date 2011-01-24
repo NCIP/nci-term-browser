@@ -8,6 +8,7 @@
       String nav_type = (String) gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("nav_type"));
       if (nav_type == null) {
           nav_type = (String) request.getSession().getAttribute("nav_type");
+          if (nav_type != null) request.getSession().removeAttribute("nav_type");
       }
       if (nav_type == null) nav_type = "terminologies";
      %>

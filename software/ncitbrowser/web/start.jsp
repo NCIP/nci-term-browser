@@ -29,7 +29,7 @@ if (home != null) {
 } else {
         redirect_url = context_path + "/pages/multiple_search.jsf";
 }
-
+request.getSession().removeAttribute("nav_type");
 String url = response.encodeRedirectURL(redirect_url);
 response.sendRedirect(url);
 

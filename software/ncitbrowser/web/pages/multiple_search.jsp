@@ -72,6 +72,10 @@
     request.getSession().removeAttribute("dictionary");
     
     String navigation_type = (String) request.getParameter("nav_type");
+    
+System.out.println("multiple_search.jsp  navigation_type: " + navigation_type);
+
+    
     if (navigation_type != null) {
     	request.getSession().setAttribute("nav_type", navigation_type);
     }
@@ -414,18 +418,7 @@ if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
 				String http_label = null;
 				String http_scheme = null;
 				String http_version = null;
-
-				if (label != null)
-				  http_label = label.replaceAll(" ", "%20");
-				if (scheme != null)
-				  http_scheme = scheme.replaceAll(" ", "%20");
-				if (version != null)
-				  http_version = version.replaceAll(" ", "%20");
-				%>
-				<tr>
-				  <td width="25px"></td>
-				  <td>
-				<%
+				
 				boolean checked = ontologiesToSearchOn != null
 				    && ontologiesToSearchOn.indexOf(label2) != -1;
 				String checkedStr = checked ? "checked" : "";
@@ -439,27 +432,29 @@ if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
 				    term_browser_version = version;
 				}     
 				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
+		
 
-				if (scheme.compareTo("NCI Thesaurus") == 0) {
-				    String nciturl = NCItBrowserProperties.getNCIT_URL();
-				    nciturl = nciturl + "?version=" + version;
-				  %>
-				    <a href="<%=nciturl%>"><%=display_label%></a>
-				  <%
-				} else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
-				    String ncimurl = NCItBrowserProperties.getNCIM_URL();
-				  %>
-				    <a href="<%=ncimurl%>" target="_blank"><%=display_label%>
-				      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=display_label%>" />
-				    </a>
-				  <%
-				} else {
-				  %>
+				if (label != null)
+				  http_label = label.replaceAll(" ", "%20");
+				if (scheme != null)
+				  http_scheme = scheme.replaceAll(" ", "%20");
+				if (version != null)
+				  http_version = version.replaceAll(" ", "%20");
+				%>
+				<tr>
+				  <td width="25px"></td>
+				  <td>
+				  <input type="radio" id="ontologyToSearchOn" name="ontologyToSearchOn" value="<%=label%>" tabinex="1" />
+
 				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
 				      <%=display_label%>
 				    </a>
-				  <%
-				}
+				  
+				  </td>
+				  
+				  <td>
+				<%
+
                         }
                       %>
                         </td>
@@ -487,6 +482,10 @@ if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
     </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
 
+    <input type="hidden" id="nav_type" name="nav_type" value="<%=navigation_type%>">
+
+
+
 </h:form>
 
   </div> <!-- end center-page -->
@@ -496,6 +495,8 @@ if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
     request.getSession().removeAttribute("dictionary");
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().putValue("visited","true");
+    
+    request.getSession().removeAttribute("nav_type");
 %>
 <br/>
 </body>
