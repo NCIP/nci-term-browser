@@ -4125,15 +4125,14 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 		String domain = "";
 		String src_str = "";
 
-
 		uri = vsd.getValueSetDefinitionURI();
 		name = vsd.getValueSetDefinitionName();
-		if (name == null) {
+		if (name == null || name.compareTo("") == 0) {
 			name = "<NOT ASSIGNED>";
 		}
 
 		domain = vsd.getConceptDomain();
-		if (domain == null) {
+		if (domain == null || domain.compareTo("") == 0) {
 			domain = "<NOT ASSIGNED>";
 		}
 
@@ -4145,6 +4144,10 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 		}
 		if (src_str.length() > 0) {
 			src_str = src_str.substring(0, src_str.length()-1);
+		}
+
+		if (src_str == null || src_str.compareTo("") == 0) {
+			src_str = "<NOT ASSIGNED>";
 		}
 
 		if (vsd.getEntityDescription() != null) {

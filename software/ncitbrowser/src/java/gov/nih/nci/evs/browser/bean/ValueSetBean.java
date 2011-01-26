@@ -138,12 +138,55 @@ public class ValueSetBean {
 
 	public List getOntologyList() {
 		if (ontologyList != null) return ontologyList;
+		/*
 		ontologyListData = DataUtils.getCodingSchemeFormalNames();
 
 		ontologyList = new ArrayList();
 		for (int i=0; i<ontologyListData.size(); i++) {
 			String t = (String) ontologyListData.elementAt(i);
-			ontologyList.add(new SelectItem(t));
+
+			//KLO 012611
+			//ontologyList.add(new SelectItem(t));
+			String display_name = DataUtils.getMetadataValue(t, null, "display_name");
+			ontologyList.add(new SelectItem(display_name));
+		}
+
+		if (ontologyList.size() > 0) {
+			setSelectedOntology(((SelectItem) ontologyList.get(0)).getLabel());
+		}
+		return ontologyList;
+		*/
+
+
+		List ontology_list = DataUtils.getOntologyList();
+		if (ontology_list == null) {
+			_logger.warn("??????????? ontology_list == null");
+		}
+		int num_vocabularies = ontology_list.size();
+
+		ontologyListData = DataUtils.getCodingSchemeFormalNames();
+		ontologyList = new ArrayList();
+		Vector v = new Vector();
+
+		for (int i = 0; i < ontology_list.size(); i++) {
+			SelectItem item = (SelectItem) ontology_list.get(i);
+			String value = (String) item.getValue();
+			String label = (String) item.getLabel();
+
+			String scheme = DataUtils.key2CodingSchemeName(value);
+			String version = DataUtils.key2CodingSchemeVersion(value);
+			String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
+
+			if (display_name == null || display_name.compareTo("null") == 0) {
+				display_name = DataUtils.getLocalName(scheme);
+			}
+			v.add(display_name);
+		}
+		v = SortUtils.quickSort(v);
+
+		for (int j = 0; j < v.size(); j++) {
+            String display_name = (String) v.elementAt(j);
+			ontologyList.add(new SelectItem(display_name));
 		}
 
 		if (ontologyList.size() > 0) {
