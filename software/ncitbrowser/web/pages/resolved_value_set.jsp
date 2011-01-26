@@ -59,7 +59,8 @@ String valueSetSearch_requestContextPath = request.getContextPath();
 System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
 
 
-String message = (String) request.getSession().getAttribute("message");          
+String message = (String) request.getSession().getAttribute("message");  
+request.getSession().removeAttribute("message");  
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 String metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
 Vector u = DataUtils.parseData(metadata);
@@ -107,6 +108,7 @@ String sources = (String) u.elementAt(4);
       <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>
             <% } else { %>
+            <tr class="textbody"><td><b>Name</b>: <%=name%></td>
             <tr class="textbody"><td><b>Description</b>: <%=description%></td>
             <tr class="textbody"><td><b>Concept Domain</b>: <%=concept_domain%></td>
             <tr class="textbody"><td><b>Sources</b>: <%=sources%></td>
@@ -133,12 +135,19 @@ String sources = (String) u.elementAt(4);
 		    while(itr.hasNext()){
 				ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs){
+				     String entityDescription = "<NOT ASSIGNED>";
+				     if (ref.getEntityDescription() != null) {
+				         entityDescription = ref.getEntityDescription().getContent();
+				     }
+				     
 				     concept_vec.add(ref.getConceptCode()
-					+ "|" + ref.getEntityDescription().getContent()
+					+ "|" + entityDescription
 					+ "|" + ref.getCodingSchemeName()
 					+ "|" + ref.getCodeNamespace());
 				}
 			}
+		} else {
+		    System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
 		}
 
 
@@ -152,7 +161,7 @@ if (concept_vec.size() == 0) {
 		    String concept_str = (String) concept_vec.elementAt(i);
 		    u = DataUtils.parseData(concept_str);
 		    String code = (String) u.elementAt(0);
-		    String name = (String) u.elementAt(1);
+		    String conceptname = (String) u.elementAt(1);
 		    String coding_scheme = (String) u.elementAt(2);
 		    String namespace = (String) u.elementAt(3);
 
@@ -171,7 +180,7 @@ if (concept_vec.size() == 0) {
 			 <%=code%>
 		      </td>
 		      <td class="dataCellText">
-			 <%=name%>
+			 <%=conceptname%>
 		      </td>
 		      <td class="dataCellText">
 			 <%=coding_scheme%>

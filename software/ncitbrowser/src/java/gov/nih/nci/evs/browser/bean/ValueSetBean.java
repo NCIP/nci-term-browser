@@ -484,25 +484,25 @@ System.out.println("(********) metadata " + metadata);
  System.out.println("(*) continueResolveValueSetAction #1 ");
 
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-		/*
+
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
+
 			System.out.println("(*) coding_scheme_ref: " + t);
 			Vector u = DataUtils.parseData(t);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
+			/*
 			if (version == null || version.compareTo("null") == 0) {
 				//version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
 				version = "1.0";
 			}
-
+			*/
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
-		*/
-
 
 		//csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("urn:oid:11.11.1.1", "1.0"));
-		csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("Automobiles", "1.0"));
+		//csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("Automobiles", "1.0"));
 
 
 System.out.println("(*) continueResolveValueSetAction #2 ");
@@ -510,6 +510,7 @@ System.out.println("(*) continueResolveValueSetAction #2 ");
         long time = System.currentTimeMillis();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 		ResolvedValueSetDefinition rvsd = null;
+		int lcv = 0;
 		try {
 			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
 			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
@@ -517,7 +518,10 @@ System.out.println("(*) continueResolveValueSetAction #2 ");
 				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
 				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
 				return "resolved_value_set";
-		    }
+		    } else {
+System.out.println("(*) rvsd.getResolvedConceptReferenceIterator returns NULL???");
+
+			}
 
 		} catch (Exception ex) {
 			System.out.println("??? vds.resolveValueSetDefinition throws exception");
