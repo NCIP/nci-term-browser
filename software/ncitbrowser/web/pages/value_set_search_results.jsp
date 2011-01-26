@@ -84,7 +84,6 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
 <%
 }
 %>
-            
             </tr>
 
             <% if (message != null) { %>
@@ -106,12 +105,12 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
 <%
  }
  %>
- 
+
  
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 		<th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
-              
+                <th class="dataTableHeader" scope="col" align="left">Name</th>
                 <th class="dataTableHeader" scope="col" align="left">URI</th>
                 <th class="dataTableHeader" scope="col" align="left">Description</th>
                 <th class="dataTableHeader" scope="col" align="left">Concept Domain</th>
@@ -123,11 +122,16 @@ if (vsd_vec != null) {
             for (int i=0; i<vsd_vec.size(); i++) {
             
 		    String vsd_str = (String) vsd_vec.elementAt(i);
+		    
+System.out.println(vsd_str);		    
+		    
 		    Vector u = DataUtils.parseData(vsd_str);
-		    String uri = (String) u.elementAt(0);
-		    String label = (String) u.elementAt(1);
-		    String cd = (String) u.elementAt(2);
-		    String sources = (String) u.elementAt(3);
+		    
+		    String name = (String) u.elementAt(0);
+		    String uri = (String) u.elementAt(1);
+		    String label = (String) u.elementAt(2);
+		    String cd = (String) u.elementAt(3);
+		    String sources = (String) u.elementAt(4);
 
 		    if (i % 2 == 0) {
 		    %>
@@ -154,7 +158,9 @@ if (vsd_vec.size() == 1) {
 %>
 		     
 		</td>
-					
+		      <td class="dataCellText">
+			 <%=name%>
+		      </td>					
 		      <td class="dataCellText">
 			 <%=uri%>
 		      </td>
@@ -175,26 +181,62 @@ if (vsd_vec.size() == 1) {
                 }
              }
              %>                 
-                  
               </table>
+              
+ 
+<%
+ int option = 2;
+ if (option == 1) {
+%>
 
-                  <tr><td>
+                  <tr><td class="dataCellText">
+                    <h:commandButton id="export" value="export" action="#{valueSetBean.exportToXMLAction}"
+                      onclick="javascript:cursor_wait();"
+                      image="#{valueSetSearch_requestContextPath}/images/export.gif"
+                      alt="Export to LexGridXML"
+                      tabindex="3">
+                    </h:commandButton>                  
+                  &nbsp;&nbsp;
                     <h:commandButton id="resolve" value="resolve" action="#{valueSetBean.resolveValueSetAction}"
                       onclick="javascript:cursor_wait();"
                       image="#{valueSetSearch_requestContextPath}/images/resolve.gif"
                       alt="Resolve"
                       tabindex="2">
                     </h:commandButton>
-&nbsp;&nbsp;
-
-                    <h:commandButton id="export" value="export" action="#{valueSetBean.exportToXMLAction}"
-                      onclick="javascript:cursor_wait();"
-                      image="#{valueSetSearch_requestContextPath}/images/export.gif"
-                      alt="Export to LexGridXML"
-                      tabindex="3">
-                    </h:commandButton>
-                  
+                    &nbsp;(
+                    <input type=checkbox name="production">&nbsp;Use PRODUCTION versions)
                   </td></tr>
+ <%             
+ } else {
+ %>
+ 
+ 
+                   <tr><td class="dataCellText">
+                     <h:commandButton id="Values" value="Values" action="#{valueSetBean.exportToXMLAction}"
+                       onclick="javascript:cursor_wait();"
+                       image="#{valueSetSearch_requestContextPath}/images/values.gif"
+                       alt="Values"
+                       tabindex="3">
+                     </h:commandButton>                  
+                   &nbsp;
+                     <h:commandButton id="versions" value="versions" action="#{valueSetBean.resolveValueSetAction}"
+                       onclick="javascript:cursor_wait();"
+                       image="#{valueSetSearch_requestContextPath}/images/versions.gif"
+                       alt="Versions"
+                       tabindex="2">
+                     </h:commandButton>
+                   &nbsp;
+                     <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.resolveValueSetAction}"
+                       onclick="javascript:cursor_wait();"
+                       image="#{valueSetSearch_requestContextPath}/images/xmldefinition.gif"
+                       alt="Export to LexGrid XML"
+                       tabindex="2">
+                     </h:commandButton>
+                  </td></tr>
+ 
+ <%
+ }
+ %>             
               
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>

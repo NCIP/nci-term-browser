@@ -122,9 +122,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
           
           <div class="tabTableContentContainer">
 
-<%
-if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
-%>
+
 
           <table class="termstable" border="0">
                 <tr>
@@ -133,11 +131,18 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                     name="selectAll" alt="selectAll"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
 
+<%
+if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
+%>
+
                   &nbsp;&nbsp; <img
                     src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
                     name="reset" alt="selectAllButNCIm"
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
 
+<%
+ }
+ %>
                   &nbsp;&nbsp; <img
                     src="<%= request.getContextPath() %>/images/clear.gif"
                     name="reset" alt="reset"
@@ -152,9 +157,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
           </table>
 
             
- <%
- }
- %>
+ 
              <%
              if (warning_msg != null) {
              %>
@@ -179,16 +182,25 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
 <%
 if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
 %>           
-             
             <span class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.
             <br/>
             &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow; try NCI Metathesaurus separately.)
             <br/><br/>
             </span>
-            
+<%
+} else if (navigation_type != null || navigation_type.compareTo("mappings") == 0) {
+%>           
+            <span class="textbody">&nbsp;Select mapping data sets to perform simultaneous search, or click on a specific mapping data set name to go to its home page
+            and perform search there.
+            &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow.)
+            <br/><br/>
+            </span>
 <%
 }
 %>
+
+
+
             
             
             <table class="termstable" border="0">
@@ -390,6 +402,9 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
   
 <%
 if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
+
+System.out.println("mappings tab clicked...");
+
 %> 
                 
                 <tr><td class="textbody">Mappings:</td></tr>
@@ -426,7 +441,6 @@ if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
 				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
 				if (full_name == null || full_name.compareTo("null") == 0) 
 				    full_name = scheme;
-				//String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
 				String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
 				if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
 				    term_browser_version = version;
@@ -443,34 +457,56 @@ if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
 				%>
 				<tr>
 				  <td width="25px"></td>
+				  
 				  <td>
-				  <input type="radio" id="ontologyToSearchOn" name="ontologyToSearchOn" value="<%=label%>" tabinex="1" />
+
+				     <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> tabinex="1" />
 
 				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
 				      <%=display_label%>
 				    </a>
 				  
 				  </td>
-				  
-				  <td>
-				<%
 
-                        }
-                      %>
-                        </td>
-                      </tr>
-                     <%
-                      }
-                     %>
+                               </tr>
+			     <%
+			      }
+			   }
+			 %>
                     </table>
                   </td>
-                </tr>                
+                </tr> 
+                
+                
+                
+                 <tr><td height="20"></td></tr>
+                
+                <tr>
+                  <td><img
+                    src="<%= request.getContextPath() %>/images/selectAll.gif"
+                    name="selectAll" alt="selectAll"
+                    onClick="checkAll(document.searchTerm.ontology_list)" />
+
+                  &nbsp;&nbsp; <img
+                    src="<%= request.getContextPath() %>/images/clear.gif"
+                    name="reset" alt="reset"
+                    onClick="uncheckAll(document.searchTerm.ontology_list)" />
+
+                  &nbsp;&nbsp; <h:commandButton id="multiplesearch" value="Search"
+                    action="#{userSessionBean.multipleSearchAction}"
+                    image="#{requestContextPath}/images/search.gif"
+                    alt="Search">
+                  </h:commandButton></td>
+                   <%
+                   if (warning_msg != null) {
+                      request.getSession().removeAttribute("ontologiesToSearchOn");
+                   }
+                  %>
+                </tr>               
                 
  <%
  }
  %>                
-
-                
                 
             </table>
 <%

@@ -60,7 +60,7 @@ String message = (String) request.getSession().getAttribute("message");
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
-
+String checked = "";
 
 %>
         <div class="pagecontent">
@@ -92,18 +92,27 @@ Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vs
                 <th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
                 <th class="dataTableHeader" scope="col" align="left">Coding Scheme</th>
                 <th class="dataTableHeader" scope="col" align="left">Version</th>
-
+                <th class="dataTableHeader" scope="col" align="left">Tag</th>
 <%
 
             for (int i=0; i<coding_scheme_ref_vec.size(); i++) {
             
 		    String coding_scheme_ref_str = (String) coding_scheme_ref_vec.elementAt(i);
-		    String coding_scheme_name_version = coding_scheme_ref_str;//coding_scheme_ref_str.replaceAll("|", "__");
+		    String coding_scheme_name_version = coding_scheme_ref_str;
 		    
 		    Vector u = DataUtils.parseData(coding_scheme_ref_str);
 		    String cs_name = (String) u.elementAt(0);
 		    String cs_version = (String) u.elementAt(1);
+		    String cs_tag = DataUtils.getVocabularyVersionTag(cs_name, cs_version);
+		    
+		    if (coding_scheme_ref_vec.size() == 1) {
+		        checked = "checked";
+		    } else if (cs_tag.compareToIgnoreCase("PRODUCTION") == 0) {
+		        checked = "checked";
+		    }
 
+		    
+        
 		    if (i % 2 == 0) {
 		    %>
 		      <tr class="dataRowDark">
@@ -116,7 +125,7 @@ Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vs
 		    %>    
 
 		<td>
-		     <input type=checkbox name="coding_scheme_ref" value="<%=coding_scheme_name_version%>" checked>&nbsp;</input>
+		     <input type=checkbox name="coding_scheme_ref" value="<%=coding_scheme_name_version%>" <%=checked%> >&nbsp;</input>
 		</td>
 		
 		      <td class="dataCellText">
@@ -125,6 +134,11 @@ Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vs
 		      <td class="dataCellText">
 			 <%=cs_version%>
 		      </td>
+		      <td class="dataCellText">
+			 <%=cs_tag%>
+		      </td>		      
+
+        
 		      </tr>
               
              <%
