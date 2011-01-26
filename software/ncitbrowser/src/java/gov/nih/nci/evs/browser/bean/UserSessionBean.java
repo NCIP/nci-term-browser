@@ -802,7 +802,7 @@ public class UserSessionBean extends Object {
 
         // process mappings
         if (initial_search != null) { // from home page
-
+/*
             if (navigation_type.compareTo("mappings") == 0) {
 				String ontologyToSearchOn = request.getParameter("ontologyToSearchOn");
 				ontologiesToSearchOn = new ArrayList<String>();
@@ -812,7 +812,9 @@ public class UserSessionBean extends Object {
 				ontologiesToSearchOn.add(ontologyToSearchOn);
 
 
-			} else {
+			} else
+*/
+			{
 
 				if (multiple_search_error != null) {
 					ontologiesToSearchOn = new ArrayList<String>();
@@ -875,7 +877,7 @@ public class UserSessionBean extends Object {
                     ontologiesToSearchOnStr);
             }
         } else {
-
+/*
             if (navigation_type.compareTo("mappings") == 0) {
 				String ontologyToSearchOn = request.getParameter("ontologyToSearchOn");
 				ontologiesToSearchOn = new ArrayList<String>();
@@ -883,7 +885,9 @@ public class UserSessionBean extends Object {
 				ontology_list[0] = ontologyToSearchOn;
 				ontologiesToSearchOn.add(ontologyToSearchOn);
 
-			} else {
+			} else
+*/
+			{
 
 				ontologiesToSearchOn = new ArrayList<String>();
 				ontologiesToSearchOnStr =

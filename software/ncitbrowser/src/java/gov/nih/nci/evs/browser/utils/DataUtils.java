@@ -4100,21 +4100,42 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 			v.add(name + "|" + t);
 		}
 		return SortUtils.quickSort(v);
-
 	}
 
+
+	public static Vector getValueSetDefinitionMetadata() {
+		Vector v = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			String metadata = getValueSetDefinitionMetadata(vsd);
+			v.add(metadata);
+		}
+		return SortUtils.quickSort(v);
+	}
 
 
     public static String getValueSetDefinitionMetadata(ValueSetDefinition vsd) {
 		if (vsd== null) return null;
+		String name = "";
 		String uri = "";
 		String description = "";
 		String domain = "";
 		String src_str = "";
 
+
 		uri = vsd.getValueSetDefinitionURI();
-		description = vsd.getValueSetDefinitionName();
+		name = vsd.getValueSetDefinitionName();
+		if (name == null) {
+			name = "<NOT ASSIGNED>";
+		}
+
 		domain = vsd.getConceptDomain();
+		if (domain == null) {
+			domain = "<NOT ASSIGNED>";
+		}
 
 		java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
 
@@ -4128,9 +4149,14 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 
 		if (vsd.getEntityDescription() != null) {
 			description = vsd.getEntityDescription().getContent();
+			if (description == null || description.compareTo("") == 0) {
+				description = "<NO DESCRIPTION>";
+			}
+		} else {
+			description = "<NO DESCRIPTION>";
 		}
 
-		return uri + "|" + description + "|" + domain + "|" + src_str;
+		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str;
 	}
 
 	// AbsoluteCodingSchemeVersionReferenceList getCodingSchemesInValueSetDefinition(java.net.URI valueSetDefinitionURI)
@@ -4178,5 +4204,43 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
                               throws LBException
 */
 
+
+
+    public static String getVocabularyVersionTag(String codingSchemeName,
+        String version) {
+
+        if (codingSchemeName == null)
+            return null;
+
+        if (version == null) return "PRODUCTION";
+        String ltag = null;
+        int knt = 0;
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
+            CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
+            for (int i = 0; i < csra.length; i++) {
+                CodingSchemeRendering csr = csra[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                if (css.getFormalName().compareTo(codingSchemeName) == 0
+                    || css.getLocalName().compareTo(codingSchemeName) == 0
+                    || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
+					if (css.getRepresentsVersion().compareTo(version) == 0) {
+						RenderingDetail rd = csr.getRenderingDetail();
+						CodingSchemeTagList cstl = rd.getVersionTags();
+						java.lang.String[] tags = cstl.getTag();
+
+                        if (tags == null) return "<NOT ASSIGNED>";
+						if (tags != null && tags.length > 0) {
+							return (String) tags[0];
+						}
+					}
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "<NOT AVAILABLE>";
+    }
 
 }

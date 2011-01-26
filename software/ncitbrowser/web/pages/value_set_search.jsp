@@ -72,7 +72,8 @@ String conceptDomain = (String) request.getSession().getAttribute("conceptDomain
 System.out.println("subset_editor conceptDomain: " + conceptDomain);
 if (conceptDomain == null) conceptDomain = "";
 
-    String message = (String) request.getSession().getAttribute("message");;
+    String message = (String) request.getSession().getAttribute("message");
+    request.getSession().removeAttribute("message");
     String t = null;
 
 %>
@@ -82,10 +83,17 @@ if (conceptDomain == null) conceptDomain = "";
           <%@ include file="/pages/templates/navigationTabs.jsp"%>
           <div class="tabTableContentContainer">
           
+            <span class="textbody">&nbsp;All value sets available on the server are listed below. 
+            You may search value sets by code, name, source, or coding scheme. Click on the Help (i.e., the question mark) icon above for instructions on
+            how to perform each type of search.
+            <br/>
+            (WARNING: <b>Code</b> and <b>Name</b> searches require resolving all value sets on the server; it can be slow.)
+            <br/><br/>
+            </span>
+            
+          
           <table>
-            <tr>
-            <td class="textbody">Value Sets</td>
-            </tr>
+          
 
             <% if (message != null) { 
                 request.getSession().removeAttribute("message");
@@ -102,12 +110,13 @@ if (conceptDomain == null) conceptDomain = "";
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 		<th class="dataTableHeader" scope="col" align="left">Name</th>
-                <th class="dataTableHeader" scope="col" align="left">URI</th>
+		<th class="dataTableHeader" scope="col" align="left">URI</th>
+                <th class="dataTableHeader" scope="col" align="left">Description</th>
 
 <%
 		Vector vsd_vec = (Vector) request.getSession().getAttribute("vsddata");
 		if (vsd_vec == null) {
-		     vsd_vec = DataUtils.getValueSetNamesAndURIs();
+		     vsd_vec = DataUtils.getValueSetDefinitionMetadata();
 		     request.getSession().setAttribute("vsddata", vsd_vec);
 		}
 
@@ -115,8 +124,12 @@ if (conceptDomain == null) conceptDomain = "";
             
 		    String vsd_str = (String) vsd_vec.elementAt(i);
 		    Vector u = DataUtils.parseData(vsd_str);
+		    
 		    String name = (String) u.elementAt(0);
 		    String uri = (String) u.elementAt(1);
+		    String description = (String) u.elementAt(2);
+		    //String domain = (String) u.elementAt(3);
+		    //String src_str = (String) u.elementAt(4);
 
 		    if (i % 2 == 0) {
 		    %>
@@ -131,23 +144,15 @@ if (conceptDomain == null) conceptDomain = "";
 
 				
 		      <td class="dataCellText">
-		      <%
-		         if (name.compareTo("<NOT ASSIGNED>") != 0) {
-		       %>   
-                             <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=name%></a>
-                      <%       
-                         } else {
-                       %>  
-                             <%=name%>
-                      <%       
-                         }
-                       %>  
-                         
+                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=name%></a>
 		      </td>
 		      <td class="dataCellText">
-			 <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=uri%></a>
+                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=uri%></a>
+		      </td>		      
+		      
+		      <td class="dataCellText">
+			 <%=description%>
 		      </td>
-
 
 		      </tr>
               

@@ -63,9 +63,11 @@ String message = (String) request.getSession().getAttribute("message");
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 String metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
 Vector u = DataUtils.parseData(metadata);
-String description = (String) u.elementAt(1);
-String concept_domain = (String) u.elementAt(2);
-String sources = (String) u.elementAt(3);
+String name = (String) u.elementAt(0);
+//String uri = (String) u.elementAt(1);
+String description = (String) u.elementAt(2);
+String concept_domain = (String) u.elementAt(3);
+String sources = (String) u.elementAt(4);
 
 %>
         <div class="pagecontent">

@@ -237,6 +237,13 @@ try {
 }
 System.out.println("exiting bean.getData ...");
 
+boolean show_rank_column = true;
+String map_rank_applicable = DataUtils.getMetadataValue(mapping_schema, mapping_version, "map_rank_applicable");
+if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) {
+    show_rank_column = false;
+}
+
+
 %>
 
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
@@ -302,12 +309,21 @@ System.out.println("exiting bean.getData ...");
               %>
           </th>
 
-
+<%
+if (show_rank_column) {
+%>
           <th class="dataTableHeader" scope="col" align="left">
               <%
               if (sortBy == MappingData.COL_SCORE) {
               %>
                  Map Rank
+                 
+        <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/rank_help_info.jsf',
+    '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+    <img src="<%= request.getContextPath() %>/images/help.gif" alt="Rank Definitions" title="Rank Definitions" border="0">
+        </a>                 
+                 
+                 
               <%
               } else {
                   String s = new Integer(MappingData.COL_SCORE).toString();
@@ -317,10 +333,23 @@ System.out.println("exiting bean.getData ...");
                    Map Rank
                 </a>
 
+
+        <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/rank_help_info.jsf',
+    '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+    <img src="<%= request.getContextPath() %>/images/help.gif" alt="Rank Definitions" title="Rank Definitions" border="0">
+        </a>
+        
               <%
               }
               %>
+              
+              
           </th>
+
+<%
+}
+%>
+
 
           <th class="dataTableHeader" scope="col" align="left">Target</th>
 
@@ -428,7 +457,16 @@ System.out.println("exiting bean.getData ...");
 
 
         <td class="textbody"><%=rel%></td>
+        
+<%
+if (show_rank_column) {
+%>        
         <td class="textbody"><%=score%></td>
+<%
+}
+%>
+
+
 
         <td class="datacoldark"><%=target_namespace%></td>
         <td class="datacoldark">
