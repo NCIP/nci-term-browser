@@ -212,7 +212,7 @@ if (vsd_vec.size() == 1) {
  
  
                    <tr><td class="dataCellText">
-                     <h:commandButton id="Values" value="Values" action="#{valueSetBean.exportToXMLAction}"
+                     <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
                        onclick="javascript:cursor_wait();"
                        image="#{valueSetSearch_requestContextPath}/images/values.gif"
                        alt="Values"
@@ -226,7 +226,7 @@ if (vsd_vec.size() == 1) {
                        tabindex="2">
                      </h:commandButton>
                    &nbsp;
-                     <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.resolveValueSetAction}"
+                     <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportToXMLAction}"
                        onclick="javascript:cursor_wait();"
                        image="#{valueSetSearch_requestContextPath}/images/xmldefinition.gif"
                        alt="XML Definition"
