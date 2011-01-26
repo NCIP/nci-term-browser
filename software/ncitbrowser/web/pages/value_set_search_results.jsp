@@ -229,7 +229,7 @@ if (vsd_vec.size() == 1) {
                      <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.resolveValueSetAction}"
                        onclick="javascript:cursor_wait();"
                        image="#{valueSetSearch_requestContextPath}/images/xmldefinition.gif"
-                       alt="Export to LexGrid XML"
+                       alt="XML Definition"
                        tabindex="2">
                      </h:commandButton>
                   </td></tr>
