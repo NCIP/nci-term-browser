@@ -94,7 +94,7 @@ String valueset_match_text = "";
  				              alt="Source" tabindex="1">Source&nbsp;
  				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
  				          onclick="javascript:show_coding_scheme_combo()"
-                                          alt="Coding Scheme" tabindex="1">Vocabulary
+                                          alt="Coding Scheme" tabindex="1">Terminology
                      </td></tr>
 
 
@@ -112,7 +112,7 @@ String valueset_match_text = "";
                 
                 <tr>
   				<td class="dataCellText">
-  				        <h:outputLabel id="codingschemelabel" value="Vocabulary:" styleClass="textbody">
+  				        <h:outputLabel id="codingschemelabel" value="Terminology:" styleClass="textbody">
 					<h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
 					    immediate = "true"
 					    valueChangeListener="#{valueSetBean.ontologyChangedEvent}">

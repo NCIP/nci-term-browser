@@ -316,7 +316,39 @@ public class ValueSetBean {
 
         LexEVSValueSetDefinitionServices vsd_service = null;
         Vector v = new Vector();
-		if (selectValueSetSearchOption.compareTo("URI") == 0) {
+
+
+		System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
+
+
+		if (selectValueSetSearchOption.compareTo("Code") == 0) {
+			String matchText = (String) request.getParameter("matchText");
+
+System.out.println("matchText: " + matchText);
+
+
+			try {
+
+System.out.println("listValueSetsWithEntityCode: " + matchText);
+
+
+				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
+
+System.out.println("list.size(): " + list.size());
+
+
+				if (list != null) {
+					for (int j=0; j<list.size(); j++) {
+						String uri = (String) list.get(j);
+						System.out.println(uri);
+						v.add(uri);
+					}
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+		} else if (selectValueSetSearchOption.compareTo("URI") == 0) {
 			vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 			System.out.println("valueSetSearchAction selectURI: " + selectURI);
 
