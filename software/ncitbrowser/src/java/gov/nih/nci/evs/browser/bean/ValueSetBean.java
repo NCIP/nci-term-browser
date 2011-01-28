@@ -606,4 +606,14 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		return "csv";
 	}
 
+	public String searchAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        System.out.println("valueSetBean.searchAction");
+
+		return "search_results";
+	}
+
 }
