@@ -46,8 +46,8 @@
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
-        <%@ include file="/pages/templates/content-header-valueset.jsp" %>
-        
+      
+
 <%
 
 String valueSetSearch_requestContextPath = request.getContextPath();
@@ -58,8 +58,31 @@ System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_reques
 String message = (String) request.getSession().getAttribute("message");     
 String vsd_uri = (String) request.getParameter("uri"); 
 Vector vsd_vec = null;
+          
+if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
+    String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
+    vsd_vec = new Vector();
+    vsd_vec.add(vsd_metadata);
+} else {
+    vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
+    if (vsd_vec.size() == 1) {
+        vsd_uri = (String) vsd_vec.elementAt(0);
+        request.getSession().setAttribute("selectedvalueset", vsd_uri);
+    }
+}
 
+
+if (vsd_vec.size() == 1) {
+%>      
+        <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp" %>
+<%
+} else {
 %>
+        <%@ include file="/pages/templates/content-header-valueset.jsp" %>
+<%
+}
+%>
+
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
           <%@ include file="/pages/templates/navigationTabs.jsp"%>
@@ -67,20 +90,15 @@ Vector vsd_vec = null;
           
           <table>
             <tr>
-<%           
-if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
 
-    String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
-    vsd_vec = new Vector();
-    vsd_vec.add(vsd_metadata);
-%>
-     
+<%
+if (vsd_vec.size() == 1) {
+%>     
             <td class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
 <%            
 } else {
-    vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
 %>
-            <td class="texttitle-blue">Matched Value Sets</td>
+    <td class="texttitle-blue">Matched Value Sets</td>
 <%
 }
 %>

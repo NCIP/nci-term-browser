@@ -945,6 +945,12 @@
        <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
     </navigation-case>
     
+     <navigation-case>
+       <description>resolve_value_set</description>
+       <from-action>#{valueSetBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+    </navigation-case>
     
   </navigation-rule>
   
