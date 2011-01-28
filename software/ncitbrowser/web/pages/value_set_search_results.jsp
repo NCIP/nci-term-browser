@@ -65,7 +65,7 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
     vsd_vec.add(vsd_metadata);
 } else {
     vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
-    if (vsd_vec.size() == 1) {
+    if (vsd_vec != null && vsd_vec.size() == 1) {
         vsd_uri = (String) vsd_vec.elementAt(0);
         request.getSession().setAttribute("selectedvalueset", vsd_uri);
     }
