@@ -99,9 +99,6 @@ if (srchform_version != null) {
 
  %>
 
- <!--
- <FORM NAME="searchTerm" METHOD="POST" CLASS="search-form" onsubmit="javascript:disableAnchor();">
-  -->
  <h:form id="searchTerm" styleClass="search-form"  onsubmit="javascript:disableAnchor();" >
 
   <label for="matchText" />

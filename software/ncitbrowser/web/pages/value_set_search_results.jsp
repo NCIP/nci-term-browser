@@ -92,13 +92,9 @@ if (vsd_vec.size() == 1) {
             <tr>
 
 <%
-if (vsd_vec.size() == 1) {
+if (vsd_vec.size() > 1) {
 %>     
-            <td class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
-<%            
-} else {
-%>
-    <td class="texttitle-blue">Matched Value Sets</td>
+    <td class="texttitle-blue">Matched Value Sets:</td>
 <%
 }
 %>
@@ -202,33 +198,6 @@ if (vsd_vec.size() == 1) {
               </table>
               
  
-<%
- int option = 2;
- if (option == 1) {
-%>
-
-                  <tr><td class="dataCellText">
-                    <h:commandButton id="export" value="export" action="#{valueSetBean.exportToXMLAction}"
-                      onclick="javascript:cursor_wait();"
-                      image="#{valueSetSearch_requestContextPath}/images/export.gif"
-                      alt="Export to LexGridXML"
-                      tabindex="3">
-                    </h:commandButton>                  
-                  &nbsp;&nbsp;
-                    <h:commandButton id="resolve" value="resolve" action="#{valueSetBean.resolveValueSetAction}"
-                      onclick="javascript:cursor_wait();"
-                      image="#{valueSetSearch_requestContextPath}/images/resolve.gif"
-                      alt="Resolve"
-                      tabindex="2">
-                    </h:commandButton>
-                    &nbsp;(
-                    <input type=checkbox name="production">&nbsp;Use PRODUCTION versions)
-                  </td></tr>
- <%             
- } else {
- %>
- 
- 
                    <tr><td class="dataCellText">
                      <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
                        onclick="javascript:cursor_wait();"
@@ -246,16 +215,13 @@ if (vsd_vec.size() == 1) {
                    &nbsp;
                      <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportToXMLAction}"
                        onclick="javascript:cursor_wait();"
-                       image="#{valueSetSearch_requestContextPath}/images/xmldefinition.gif"
+                       image="#{valueSetSearch_requestContextPath}/images/xmldefinitions.gif"
                        alt="XML Definition"
                        tabindex="2">
                      </h:commandButton>
                   </td></tr>
  
- <%
- }
- %>             
-              
+          
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
             
