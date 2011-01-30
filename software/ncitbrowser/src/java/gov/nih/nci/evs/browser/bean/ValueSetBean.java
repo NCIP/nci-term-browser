@@ -315,6 +315,8 @@ public class ValueSetBean {
         String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
 
         LexEVSValueSetDefinitionServices vsd_service = null;
+        vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
         Vector v = new Vector();
 
 
@@ -349,7 +351,6 @@ System.out.println("list.size(): " + list.size());
 			}
 
 		} else if (selectValueSetSearchOption.compareTo("URI") == 0) {
-			vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 			System.out.println("valueSetSearchAction selectURI: " + selectURI);
 
 			if (selectURI != null) {
@@ -380,7 +381,6 @@ System.out.println("list.size(): " + list.size());
 		}
 
 		else if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
-			vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 			System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
 
 			if (selectCodingScheme != null) {
@@ -415,7 +415,6 @@ System.out.println("list.size(): " + list.size());
 		}
 
 		else if (selectValueSetSearchOption.compareTo("ConceptDomain") == 0) {
-			vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 			System.out.println("valueSetSearchAction selectConceptDomain: " + selectConceptDomain);
 
 			if (selectConceptDomain != null) {
@@ -457,7 +456,7 @@ System.out.println("(********) metadata " + metadata);
 			request.getSession().setAttribute("matched_vsds", v);
 			return "value_set";
 		}
-		msg = "Unexpected error encountered.";
+		msg = "WARNING: Unexpected error encountered.";
 		request.getSession().setAttribute("message", msg);
 		request.getSession().setAttribute("selectValueSetSearchOption",  selectValueSetSearchOption);
         return "message";
