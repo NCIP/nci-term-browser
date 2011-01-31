@@ -752,7 +752,7 @@ public class UserSessionBean extends Object {
         String version = (String) request.getParameter("version");
 
 		String navigation_type = request.getParameter("nav_type");
-		if (navigation_type == null) {
+		if (navigation_type == null || navigation_type.equals("null")) {
 			navigation_type = "terminologies";
 		}
 
