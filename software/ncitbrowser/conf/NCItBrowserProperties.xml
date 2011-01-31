@@ -252,16 +252,6 @@
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
-<!--   Note: Locus_ID has been deprecated by EntrezGene_ID.
-       <DisplayItem>
-            <propertyName>Locus_ID</propertyName>
-            <itemLabel>Locus ID</itemLabel>
-            <url>http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=</url>
-            <hyperlinkText>see Locus ID info</hyperlinkText>
-            <isExternalCode>true</isExternalCode>
-       </DisplayItem>
- -->
-
        <DisplayItem>
             <propertyName>EntrezGene_ID</propertyName>
             <itemLabel>EntrezGene ID</itemLabel>
@@ -481,6 +471,7 @@
         </ConfigurableItem>
 
         <!-- Standard FTP Report List (Begin) ============================== -->
+
         <ConfigurableItem>
             <key>STANDARD_FTP_REPORT_URL</key>
             <value><![CDATA[@standard.ftp.report.url@]]></value>
@@ -504,86 +495,6 @@
         <ConfigurableItem>
             <key>STANDARD_FTP_REPORT_INFO_3</key>
             <value><![CDATA[@standard.ftp.report.info.3@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_4</key>
-            <value><![CDATA[@standard.ftp.report.info.4@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_5</key>
-            <value><![CDATA[@standard.ftp.report.info.5@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_6</key>
-            <value><![CDATA[@standard.ftp.report.info.6@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_7</key>
-            <value><![CDATA[@standard.ftp.report.info.7@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_8</key>
-            <value><![CDATA[@standard.ftp.report.info.8@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_9</key>
-            <value><![CDATA[@standard.ftp.report.info.9@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_10</key>
-            <value><![CDATA[@standard.ftp.report.info.10@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_11</key>
-            <value><![CDATA[@standard.ftp.report.info.11@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_12</key>
-            <value><![CDATA[@standard.ftp.report.info.12@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_13</key>
-            <value><![CDATA[@standard.ftp.report.info.13@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_14</key>
-            <value><![CDATA[@standard.ftp.report.info.14@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_15</key>
-            <value><![CDATA[@standard.ftp.report.info.15@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_16</key>
-            <value><![CDATA[@standard.ftp.report.info.16@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_17</key>
-            <value><![CDATA[@standard.ftp.report.info.17@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_18</key>
-            <value><![CDATA[@standard.ftp.report.info.18@]]></value>
-        </ConfigurableItem>
-
-        <ConfigurableItem>
-            <key>STANDARD_FTP_REPORT_INFO_19</key>
-            <value><![CDATA[@standard.ftp.report.info.19@]]></value>
         </ConfigurableItem>
 
         <!-- Standard FTP Report List (End) ================================ -->
