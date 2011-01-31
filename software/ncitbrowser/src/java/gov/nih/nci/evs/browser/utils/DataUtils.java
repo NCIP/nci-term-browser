@@ -4103,6 +4103,57 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 	}
 
 
+    public static HashMap getCodingSchemeURN2ValueSetMetadataHashMap(Vector vsd_vec) {
+        HashMap hmap = new HashMap();
+        for (int i=0; i<vsd_vec.size(); i++) {
+		    String vsd_str = (String) vsd_vec.elementAt(i);
+		    Vector u = parseData(vsd_str);
+		    String name = (String) u.elementAt(0);
+		    String uri = (String) u.elementAt(1);
+		    String description = (String) u.elementAt(2);
+		    Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
+		    for (int k=0; k<cs_vec.size(); k++) {
+				String cs_urn = (String) cs_vec.elementAt(k);
+				if (hmap.containsKey(cs_urn)) {
+					Vector v = (Vector) hmap.get(cs_urn);
+					v.add(vsd_str);
+					hmap.put(cs_urn, v);
+				}
+			}
+		}
+		return hmap;
+	}
+
+
+
+    public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
+		try {
+			java.net.URI valueSetDefinitionURI = new URI(uri);
+			Vector v = new Vector();
+			try {
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				AbsoluteCodingSchemeVersionReferenceList codingSchemes =
+					vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
+
+				//output is all of the mapping ontologies that this code participates in.
+				for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
+					System.out.println("URI: " + ref.getCodingSchemeURN());
+					v.add(ref.getCodingSchemeURN());
+				}
+				return SortUtils.quickSort(v);
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+
 	public static Vector getValueSetDefinitionMetadata() {
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
