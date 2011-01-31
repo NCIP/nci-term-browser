@@ -68,8 +68,15 @@
   String valueSetSearch_requestContextPath = request.getContextPath();
   valueSetSearch_requestContextPath = valueSetSearch_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
+String name = null;
+String uri = null;
+String description = null;
+String domain = null;
+String src_str = null;
+
+
 String conceptDomain = (String) request.getSession().getAttribute("conceptDomain");
-System.out.println("subset_editor conceptDomain: " + conceptDomain);
+System.out.println("value_set_search.jsp conceptDomain: " + conceptDomain);
 if (conceptDomain == null) conceptDomain = "";
 
     String message = (String) request.getSession().getAttribute("message");
@@ -95,6 +102,12 @@ if (conceptDomain == null) conceptDomain = "";
 <td align="left">
 
 <%
+Vector vsd_vec = (Vector) request.getSession().getAttribute("vsddata");
+if (vsd_vec == null) {
+     vsd_vec = DataUtils.getValueSetDefinitionMetadata();
+     request.getSession().setAttribute("vsddata", vsd_vec);
+}
+		
 String view = (String) request.getParameter("view");
 if (view == null) {
     view = "URI";
@@ -153,6 +166,10 @@ if (view.compareToIgnoreCase("source") == 0) {
 
          <tr class="textbody"><td>
             
+ <%           
+ if (view.compareToIgnoreCase("URI") == 0) {           
+ %>          
+            
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 		<th class="dataTableHeader" scope="col" align="left">Name</th>
@@ -160,22 +177,18 @@ if (view.compareToIgnoreCase("source") == 0) {
                 <th class="dataTableHeader" scope="col" align="left">Description</th>
 
 <%
-		Vector vsd_vec = (Vector) request.getSession().getAttribute("vsddata");
-		if (vsd_vec == null) {
-		     vsd_vec = DataUtils.getValueSetDefinitionMetadata();
-		     request.getSession().setAttribute("vsddata", vsd_vec);
-		}
+
 
                 for (int i=0; i<vsd_vec.size(); i++) {
             
 		    String vsd_str = (String) vsd_vec.elementAt(i);
 		    Vector u = DataUtils.parseData(vsd_str);
 		    
-		    String name = (String) u.elementAt(0);
-		    String uri = (String) u.elementAt(1);
-		    String description = (String) u.elementAt(2);
-		    //String domain = (String) u.elementAt(3);
-		    //String src_str = (String) u.elementAt(4);
+		    name = (String) u.elementAt(0);
+		    uri = (String) u.elementAt(1);
+		    description = (String) u.elementAt(2);
+		    //domain = (String) u.elementAt(3);
+		    //src_str = (String) u.elementAt(4);
 
 		    if (i % 2 == 0) {
 		    %>
@@ -208,6 +221,148 @@ if (view.compareToIgnoreCase("source") == 0) {
              %>                 
                   
               </table>
+            
+<%           
+ } else if (view.compareToIgnoreCase("terminology") == 0) { 
+     HashMap csURN2ValueSetMetadataHashMap = DataUtils.getCodingSchemeURN2ValueSetMetadataHashMap(vsd_vec); 
+     Iterator it = csURN2ValueSetMetadataHashMap.keySet().iterator();
+     
+     
+%>          
+             
+               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+                <th class="dataTableHeader" scope="col" align="left">Terminology</th>
+ 		<th class="dataTableHeader" scope="col" align="left">Name</th>
+ 		<th class="dataTableHeader" scope="col" align="left">URI</th>
+                <th class="dataTableHeader" scope="col" align="left">Description</th>
+ 
+ <%
+ 
+ 
+        while (it.hasNext()) {
+                String cs = (String) it.next();
+                
+ System.out.println("CS: " + cs);               
+                
+ 		Vector vsd_vector = (Vector) csURN2ValueSetMetadataHashMap.get(cs);
+                 
+                 for (int i=0; i<vsd_vector.size(); i++) {
+             
+ 		    String vsd_string = (String) vsd_vector.elementAt(i);
+ 		    Vector u = DataUtils.parseData(vsd_string);
+ 		    
+ 		    name = (String) u.elementAt(0);
+ 		    uri = (String) u.elementAt(1);
+ 		    description = (String) u.elementAt(2);
+ 
+ 		    if (i % 2 == 0) {
+ 		    %>
+ 		      <tr class="dataRowDark">
+ 		    <%
+ 			} else {
+ 		    %>
+ 		      <tr class="dataRowLight">
+ 		    <%
+ 			}
+ 		    %>    
+ 
+  		      <td class="dataCellText">
+  			 <%=cs%>
+ 		      </td>
+ 				
+ 		      <td class="dataCellText">
+                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=name%></a>
+ 		      </td>
+ 		      <td class="dataCellText">
+                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=uri%></a>
+ 		      </td>		      
+ 		      
+ 		      <td class="dataCellText">
+ 			 <%=description%>
+ 		      </td>
+ 
+ 		      </tr>
+               
+               
+              <%
+                 }
+         }
+              %>                 
+                   
+               </table>
+             
+ <%           
+  } else if (view.compareToIgnoreCase("source") == 0) { 
+     HashMap src2ValueSetMetadataHashMap = DataUtils.getSource2ValueSetMetadataHashMap(vsd_vec); 
+     Iterator it = src2ValueSetMetadataHashMap.keySet().iterator();
+     
+     
+%>          
+             
+               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+                <th class="dataTableHeader" scope="col" align="left">Resource</th>
+ 		<th class="dataTableHeader" scope="col" align="left">Name</th>
+ 		<th class="dataTableHeader" scope="col" align="left">URI</th>
+                <th class="dataTableHeader" scope="col" align="left">Description</th>
+ 
+ <%
+ 
+ 
+        while (it.hasNext()) {
+                String resource = (String) it.next();
+               
+ 		Vector vsd_vector = (Vector) src2ValueSetMetadataHashMap.get(resource);
+ 
+                 for (int i=0; i<vsd_vector.size(); i++) {
+             
+ 		    String vsd_string = (String) vsd_vector.elementAt(i);
+ 		    Vector u = DataUtils.parseData(vsd_string);
+ 		    
+ 		    name = (String) u.elementAt(0);
+ 		    uri = (String) u.elementAt(1);
+ 		    description = (String) u.elementAt(2);
+ 
+ 		    if (i % 2 == 0) {
+ 		    %>
+ 		      <tr class="dataRowDark">
+ 		    <%
+ 			} else {
+ 		    %>
+ 		      <tr class="dataRowLight">
+ 		    <%
+ 			}
+ 		    %>    
+ 
+  		      <td class="dataCellText">
+  			 <%=resource%>
+ 		      </td>
+ 				
+ 		      <td class="dataCellText">
+                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=name%></a>
+ 		      </td>
+ 		      <td class="dataCellText">
+                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=uri%></a>
+ 		      </td>		      
+ 		      
+ 		      <td class="dataCellText">
+ 			 <%=description%>
+ 		      </td>
+ 
+ 		      </tr>
+               
+               
+              <%
+                 }
+         }
+              %>                 
+                   
+               </table>
+             
+ <%           
+  }          
+ %>   
+ 
+            
             
           </td>
           </tr>

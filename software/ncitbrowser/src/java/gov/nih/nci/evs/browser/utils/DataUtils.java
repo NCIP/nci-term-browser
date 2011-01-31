@@ -4105,17 +4105,39 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 
     public static HashMap getCodingSchemeURN2ValueSetMetadataHashMap(Vector vsd_vec) {
         HashMap hmap = new HashMap();
+
+ System.out.println("DataUtils  getCodingSchemeURN2ValueSetMetadataHashMap vsd_vec.size(): " + vsd_vec.size());
+
+
         for (int i=0; i<vsd_vec.size(); i++) {
 		    String vsd_str = (String) vsd_vec.elementAt(i);
+
+System.out.println("vsd_str " + vsd_str);
+
 		    Vector u = parseData(vsd_str);
 		    String name = (String) u.elementAt(0);
 		    String uri = (String) u.elementAt(1);
+
+System.out.println("uri " + uri);
+
+
 		    String description = (String) u.elementAt(2);
+
 		    Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
+
+System.out.println("cs_vec.size: " + cs_vec.size());
+
+
 		    for (int k=0; k<cs_vec.size(); k++) {
 				String cs_urn = (String) cs_vec.elementAt(k);
 				if (hmap.containsKey(cs_urn)) {
 					Vector v = (Vector) hmap.get(cs_urn);
+					if (!v.contains(vsd_str)) {
+						v.add(vsd_str);
+						hmap.put(cs_urn, v);
+					}
+				} else {
+					Vector v = new Vector();
 					v.add(vsd_str);
 					hmap.put(cs_urn, v);
 				}
@@ -4123,6 +4145,61 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 		}
 		return hmap;
 	}
+
+
+    public static HashMap getSource2ValueSetMetadataHashMap(Vector vsd_vec) {
+        HashMap hmap = new HashMap();
+
+ System.out.println("DataUtils  getSource2ValueSetMetadataHashMap vsd_vec.size(): " + vsd_vec.size());
+
+
+        for (int i=0; i<vsd_vec.size(); i++) {
+		    String vsd_str = (String) vsd_vec.elementAt(i);
+
+System.out.println("vsd_str " + vsd_str);
+
+		    Vector u = parseData(vsd_str);
+		    String name = (String) u.elementAt(0);
+		    String uri = (String) u.elementAt(1);
+		    String description = (String) u.elementAt(2);
+		    String domain = (String) u.elementAt(3);
+		    String src_str = (String) u.elementAt(4);
+
+		    if (src_str == null || src_str.compareTo("<NOT ASSIGNED>") == 0) {
+				String key = "<NOT ASSIGNED>";
+				if (hmap.containsKey(key)) {
+					Vector v = (Vector) hmap.get(key);
+					if (!v.contains(vsd_str)) {
+						v.add(vsd_str);
+						hmap.put(key, v);
+					}
+				} else {
+					Vector v = new Vector();
+					v.add(vsd_str);
+					hmap.put(key, v);
+				}
+			} else {
+		    	Vector src_vec = parseData(src_str);
+		    	for (int j=0; j<src_vec.size(); j++) {
+					String src = (String) src_vec.elementAt(j);
+					if (hmap.containsKey(src)) {
+						Vector v = (Vector) hmap.get(src);
+						if (!v.contains(vsd_str)) {
+							v.add(vsd_str);
+							hmap.put(src, v);
+						}
+					} else {
+						Vector v = new Vector();
+						v.add(vsd_str);
+						hmap.put(src, v);
+					}
+
+			    }
+			}
+		}
+		return hmap;
+	}
+
 
 
 
