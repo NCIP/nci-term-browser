@@ -203,10 +203,10 @@ if (view.compareToIgnoreCase("source") == 0) {
 
 				
 		      <td class="dataCellText">
-                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=name%></a>
+                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&uri=<%=uri%>"><%=name%></a>
 		      </td>
 		      <td class="dataCellText">
-                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=uri%></a>
+                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&uri=<%=uri%>"><%=uri%></a>
 		      </td>		      
 		      
 		      <td class="dataCellText">
@@ -271,10 +271,10 @@ if (view.compareToIgnoreCase("source") == 0) {
  		      </td>
  				
  		      <td class="dataCellText">
-                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=name%></a>
+                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&uri=<%=uri%>"><%=name%></a>
  		      </td>
  		      <td class="dataCellText">
-                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=uri%></a>
+                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&uri=<%=uri%>"><%=uri%></a>
  		      </td>		      
  		      
  		      <td class="dataCellText">
@@ -338,10 +338,10 @@ if (view.compareToIgnoreCase("source") == 0) {
  		      </td>
  				
  		      <td class="dataCellText">
-                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=name%></a>
+                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&uri=<%=uri%>"><%=name%></a>
  		      </td>
  		      <td class="dataCellText">
-                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?uri=<%=uri%>"><%=uri%></a>
+                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&uri=<%=uri%>"><%=uri%></a>
  		      </td>		      
  		      
  		      <td class="dataCellText">

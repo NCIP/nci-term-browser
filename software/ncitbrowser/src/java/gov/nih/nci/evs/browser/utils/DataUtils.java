@@ -4118,6 +4118,9 @@ System.out.println("vsd_str " + vsd_str);
 		    String name = (String) u.elementAt(0);
 		    String uri = (String) u.elementAt(1);
 
+
+
+
 System.out.println("uri " + uri);
 
 
@@ -4130,16 +4133,19 @@ System.out.println("cs_vec.size: " + cs_vec.size());
 
 		    for (int k=0; k<cs_vec.size(); k++) {
 				String cs_urn = (String) cs_vec.elementAt(k);
-				if (hmap.containsKey(cs_urn)) {
-					Vector v = (Vector) hmap.get(cs_urn);
+
+				String cs_name = uri2CodingSchemeName(cs_urn);
+
+				if (hmap.containsKey(cs_name)) {
+					Vector v = (Vector) hmap.get(cs_name);
 					if (!v.contains(vsd_str)) {
 						v.add(vsd_str);
-						hmap.put(cs_urn, v);
+						hmap.put(cs_name, v);
 					}
 				} else {
 					Vector v = new Vector();
 					v.add(vsd_str);
-					hmap.put(cs_urn, v);
+					hmap.put(cs_name, v);
 				}
 			}
 		}
