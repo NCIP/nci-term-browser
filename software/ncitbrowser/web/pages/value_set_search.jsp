@@ -86,14 +86,60 @@ if (conceptDomain == null) conceptDomain = "";
             <span class="textbody">&nbsp;All value sets available on the server are listed below. 
             You may search value sets by code, name, source, or coding scheme. Click on the Help (i.e., the question mark) icon above for instructions on
             how to perform each type of search.
-            <br/>
-            (WARNING: <b>Code</b> and <b>Name</b> searches require resolving all value sets on the server; it can be slow.)
-            <br/><br/>
+            <br/><br/><br/>
             </span>
-            
           
           <table>
           
+<tr class="textbody">
+<td align="left">
+
+<%
+String view = (String) request.getParameter("view");
+if (view == null) {
+    view = "URI";
+}
+%>
+
+<%
+if (view.compareToIgnoreCase("URI") == 0) {
+%>
+    URI View
+<%    
+} else {
+%>
+    <a href="<%=request.getContextPath() %>/pages/value_set_search.jsf?view=uri">URI View</a>
+<%
+} 
+%>
+&nbsp; | 
+<%
+if (view.compareToIgnoreCase("terminology") == 0) {
+%>
+    Terminology View
+<%
+} else {
+%>
+    <a href="<%=request.getContextPath() %>/pages/value_set_search.jsf?view=terminology">Terminology View</a>
+<%
+} 
+%>
+&nbsp; | 
+<%
+if (view.compareToIgnoreCase("source") == 0) {
+%>
+    Bibliographic Resource View
+<%
+} else {
+%>
+    <a href="<%=request.getContextPath() %>/pages/value_set_search.jsf?view=source">Bibliographic Resource View</a>
+<%
+} 
+%>
+
+
+</td></tr>      
+			     
 
             <% if (message != null) { 
                 request.getSession().removeAttribute("message");
