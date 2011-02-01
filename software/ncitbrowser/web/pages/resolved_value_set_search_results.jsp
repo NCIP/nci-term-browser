@@ -2,37 +2,41 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
-<%@ page import="java.util.Vector"%>
-<%@ page import="java.util.HashMap"%>
+<%@ page import="java.io.*" %>
+<%@ page import="java.util.*"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
-<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
-
+<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
-<%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
+<%@ page import="gov.nih.nci.evs.browser.properties.*" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
 <%@ page import="org.apache.log4j.*" %>
 
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
-  <head>
-    <title>NCI Term Browser</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
-  </head>
-  <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+<head>
+  <title>NCI Thesaurus</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
+  <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
+  <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+</head>
+<body>
+  <script type="text/javascript"
+    src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
+  <script type="text/javascript"
+    src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
+  <script type="text/javascript"
+    src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
+
 
   <%!
-    private static Logger _logger = Utils.getJspLogger("multiple_search_results.jsp");
+    private static Logger _logger = Utils.getJspLogger("resolved_value_set_search_results.jsp");
   %>
-
   <f:view>
     <!-- Begin Skip Top Navigation -->
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
@@ -42,108 +46,30 @@
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
- <%
+        <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp" %>
+        
+<%
 
-String requestContextPath = request.getContextPath();
-requestContextPath = requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
+String valueSetSearch_requestContextPath = request.getContextPath();
 
-long ms = System.currentTimeMillis(), delay = 0;
+System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
 
-String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
-      .cleanXSS((String) request.getSession().getAttribute("matchText"));
+String message = (String) request.getSession().getAttribute("message");  
 
-match_text = HTTPUtils.convertJSPString(match_text);
-request.getSession().setAttribute("matchText", match_text);
 
-     if (match_text == null) match_text = "";
+String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 
-     String algorithm = (String) request.getSession().getAttribute("algorithm");
+Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
+String checked = "";
 
-     String check_e = "", check_s = "" , check_c ="";
-     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
-       check_e = "checked";
-     else if (algorithm.compareTo("startsWith") == 0)
-       check_s= "checked";
-     else
-       check_c = "checked";
-
-    String searchTarget = (String) request.getSession().getAttribute("searchTarget");
-    String check_n = "", check_p = "" , check_r ="";
-    if (searchTarget == null || searchTarget.compareTo("names") == 0)
-      check_n = "checked";
-    else if (searchTarget.compareTo("properties") == 0)
-      check_p= "checked";
-    else
-      check_r = "checked";
 %>
-      <!-- Thesaurus, banner search area -->
-      <h:form styleClass="search-form-main-area">
-      <div class="bannerarea">
-        <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
-        <div class="search-globalnav">
-          <!-- Search box -->
-          <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-            <!-- form name="searchTerm" method="post" class="search-form-main-area" -->
-            <div class="searchbox">
-              <div class="search-form">
-              <input CLASS="searchbox-input"
-                name="matchText"
-                type="text"
-                value="<%=match_text%>"
-                onFocus="active = true"
-                onBlur="active = false"
-                onkeypress="return submitEnter('search',event)"
-              />
-              <h:commandButton
-                id="search"
-                value="Search"
-                action="#{userSessionBean.multipleSearchAction}"
-                image="#{requestContextPath}/images/search.gif"
-                alt="Search">
-              </h:commandButton>
-              <h:outputLink
-                value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp">
-                <h:graphicImage value="/images/search-help.gif"
-                style="border-width:0;" />
-              </h:outputLink>
-              <table border="0" cellspacing="0" cellpadding="0">
-                <tr valign="top" align="left">
-                  <td align="left" class="textbody">
-                    <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%>>Exact Match&nbsp;
-                    <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%>>Begins With&nbsp;
-                    <input type="radio" name="algorithm" value="contains" alt="Contains" <%=check_c%>>Contains&nbsp;
-                  </td>
-                </tr>
-                <tr align="left">
-                  <td height="1px" bgcolor="#2F2F5F"></td>
-                </tr>
-                <tr valign="top" align="left">
-                  <td align="left" class="textbody">
-                    <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name/Code&nbsp;
-                    <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%>>Property&nbsp;
-                    <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%>>Relationship&nbsp;
-                  </td>
-                </tr>
-              </table>
-              </div> <!--  end search-form -->
-            </div> <!-- end searchbox -->
-          <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
-          <!-- end Search box -->
-          <!-- Global Navigation -->
-          <%@ include file="/pages/templates/menuBar-termbrowser.jsp" %>
-          <!-- end Global Navigation -->
-      </div> <!-- end search-globalnav -->
-    </div> <!-- end bannerarea -->
-    </h:form>
-    <!-- end Thesaurus, banner search area -->
-    <!-- Quick links bar -->
-    <%@ include file="/pages/templates/quickLink.jsp" %>
-    <!-- end Quick links bar -->
-    <!-- Page content -->
-    <div class="pagecontent">
-      <a name="evs-content" id="evs-content"></a>
-      
-      
+        <div class="pagecontent">
+          <a name="evs-content" id="evs-content"></a>
+          
+          
+          <%@ include file="/pages/templates/navigationTabs.jsp"%>
+          
+          
       <%
 
 String resultsPerPage = request.getParameter("resultsPerPage");
@@ -422,20 +348,16 @@ if (resultsPerPage == null) {
         
         
         
-        <%@ include file="/pages/templates/nciFooter.html" %>
-      </div> <!-- end Page content -->
-    </div> <!-- end main-area -->    
-    <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
+      </div>
+      <!-- end Page content -->
+    </div>
+    
+    
+    
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
-  </div> <!-- end center-page -->
-
-<%
-
-delay = System.currentTimeMillis() - ms;
-_logger.debug("Total page rendering delay (millisec.): " + delay);
-
-%>
+  </div>
 </f:view>
-<br/>
 </body>
 </html>
