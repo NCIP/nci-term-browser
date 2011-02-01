@@ -13,6 +13,15 @@
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");
 
 
+String uri_str = (String) request.getSession().getAttribute("vsd_uri");
+if (uri_str == null) {
+    uri_str = (String) request.getParameter("vsd_uri");
+}
+
+System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
+
+
+
   String termbrowser_displayed_match_text = HTTPUtils.convertJSPString(match_text);
   String searchform_requestContextPath = request.getContextPath();
   searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
@@ -86,9 +95,13 @@
         <tr valign="top">
 
     <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>" />
-    <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>" />
-
-
+<%
+if (uri_str != null) {
+%>
+<input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=uri_str%>" />
+<%
+}
+%>
 </h:form>
 
         </tr>

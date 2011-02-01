@@ -4,6 +4,14 @@
     String vsdUri = (String) request.getSession().getAttribute("selectedvalueset");
     if (vsdUri == null) vsdUri = (String) request.getParameter("selectedvalueset");
     if (vsdUri == null) vsdUri = (String) request.getParameter("uri");
+    
+    if (vsdUri == null) vsdUri = (String) request.getParameter("vsd_uri");
+    if (vsdUri == null) vsdUri = (String) request.getSession().getAttribute("vsd_uri");
+    
+    
+    request.getSession().setAttribute("nav_type", "valuesets");
+    
+    
 %>
 
 <div class="bannerarea">

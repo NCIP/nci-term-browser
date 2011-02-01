@@ -697,7 +697,7 @@ System.out.println("searchTarget: " + searchTarget);
 System.out.println("matchAlgorithm: " + matchAlgorithm);
 
 
-        Vector<org.LexGrid.concepts.Entity> v = null;
+        //Vector<org.LexGrid.concepts.Entity> v = null;
 
         boolean excludeDesignation = true;
         boolean designationOnly = false;
@@ -732,14 +732,10 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-				ResolvedConceptReferencesIterator iter = null;
-				ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(iter);
-				/*
                 ResolvedConceptReferencesIteratorWrapper wrapper =
-                    new SearchUtils()
-                        .searchByName(schemes, versions, matchText, source,
-                            matchAlgorithm, ranking, maxToReturn);
-                */
+                    new ValueSetSearchUtils().searchByName(
+				        vsd_uri, matchText, matchAlgorithm, maxToReturn);
+
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
                     if (iterator != null) {
@@ -776,11 +772,16 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
         }
 
 
-		request.setAttribute("key", key);
+		//request.setAttribute("key", key);
+
+		request.getSession().setAttribute("key", key);
+		request.getSession().setAttribute("nav_type", "valuesets");
+
+
 		System.out.println("(*************) setAttribute key: " + key);
 
         if (iterator != null) {
-            // request.getSession().setAttribute("key", key);
+            request.getSession().setAttribute("key", key);
             //request.setAttribute("key", key);
             //System.out.println("(*************) setAttribute key: " + key);
 
@@ -791,23 +792,12 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
                 ex.printStackTrace();
             }
             int size = iteratorBean.getSize();
-
+/*
             if (size > 1) {
                 request.getSession().setAttribute("search_results", v);
                 String match_size = Integer.toString(size);
                 request.getSession().setAttribute("match_size", match_size);
                 request.getSession().setAttribute("page_string", "1");
-                /*
-
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
-
-                request.getSession().setAttribute("dictionary", scheme);
-
-
-                _logger
-                    .debug("UserSessionBean request.getSession().setAttribute dictionary: "
-                        + scheme);
-*/
                 return "search_results";
 
             } else if (size == 1) {
@@ -817,6 +807,12 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
                 List list = iteratorBean.getData(1);
                 ResolvedConceptReference ref =
                     (ResolvedConceptReference) list.get(0);
+
+System.out.println("ref.getCodingSchemeURI(): " + ref.getCodingSchemeURI());
+System.out.println("ref.getCodingSchemeVersion(): " + ref.getCodingSchemeVersion());
+System.out.println("ref.getEntityDescription().getContent(): " + ref.getEntityDescription().getContent());
+System.out.println("ref.getConceptCode(): " + ref.getConceptCode());
+
                 Entity c = null;
                 if (ref == null) {
                     String msg =
@@ -845,10 +841,12 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
 
                     if (c == null) {
 
-                        c = null;
+System.out.println("ref.getConceptCode(): " + ref.getConceptCode());
+
+
                            // to be modified
-                           // DataUtils.getConceptByCode(scheme, null, null, ref
-                           //     .getConceptCode());
+                           c = DataUtils.getConceptByCode(ref.getCodingSchemeURI(), null, null,
+                               ref.getConceptCode());
                         if (c == null) {
                             String message =
                                 "Unable to find the concept with a code '"
@@ -872,6 +870,17 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
                 return "concept_details";
             }
+            */
+            if (size > 0) {
+                //request.getSession().setAttribute("search_results", v);
+                String match_size = Integer.toString(size);
+                request.getSession().setAttribute("match_size", match_size);
+                request.getSession().setAttribute("page_string", "1");
+                request.getSession().setAttribute("vsd_uri", vsd_uri);
+
+
+                return "search_results";
+			}
         }
 
         String message = "No match found.";
