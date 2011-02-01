@@ -10,6 +10,9 @@ import javax.faces.model.*;
 import javax.servlet.http.*;
 
 import gov.nih.nci.evs.browser.utils.*;
+import gov.nih.nci.evs.browser.utils.*;
+import gov.nih.nci.evs.browser.properties.*;
+import gov.nih.nci.evs.browser.common.*;
 
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
@@ -29,6 +32,7 @@ import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.lexgrid.valuesets.dto.ResolvedValueSetDefinition;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import javax.servlet.ServletOutputStream;
+import org.LexGrid.concepts.*;
 
 
 /**
@@ -184,8 +188,11 @@ public class ValueSetBean {
 		}
 		v = SortUtils.quickSort(v);
 
+		String display_name = "ALL";
+		ontologyList.add(new SelectItem(display_name));
+
 		for (int j = 0; j < v.size(); j++) {
-            String display_name = (String) v.elementAt(j);
+            display_name = (String) v.elementAt(j);
 			ontologyList.add(new SelectItem(display_name));
 		}
 
@@ -647,4 +654,241 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		return "search_results";
 	}
 
+
+
+    public String resolvedValueSetSearchAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String vsd_uri = (String) request.getParameter("vsd_uri");
+        if (vsd_uri == null) {
+			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+		}
+
+        request.getSession().setAttribute("vsd_uri", vsd_uri);
+
+System.out.println("resolvedValueSetSearchAction vsd_uri " + vsd_uri);
+
+        String matchText = (String) request.getParameter("matchText");
+        if (matchText != null)
+            matchText = matchText.trim();
+
+        // [#19965] Error message is not displayed when Search Criteria is not
+        // proivded
+        if (matchText == null || matchText.length() == 0) {
+            String message = "Please enter a search string.";
+            request.getSession().setAttribute("message", message);
+            // request.getSession().removeAttribute("matchText");
+
+            request.removeAttribute("matchText");
+
+            return "message";
+        }
+        request.getSession().setAttribute("matchText", matchText);
+
+        String matchAlgorithm = (String) request.getParameter("algorithm");
+        String searchTarget = (String) request.getParameter("searchTarget");
+
+        request.getSession().setAttribute("searchTarget", searchTarget);
+        request.getSession().setAttribute("algorithm", matchAlgorithm);
+
+System.out.println("searchTarget: " + searchTarget);
+System.out.println("matchAlgorithm: " + matchAlgorithm);
+
+
+        Vector<org.LexGrid.concepts.Entity> v = null;
+
+        boolean excludeDesignation = true;
+        boolean designationOnly = false;
+
+        // check if this search has been performance previously through
+        // IteratorBeanManager
+        IteratorBeanManager iteratorBeanManager =
+            (IteratorBeanManager) FacesContext.getCurrentInstance()
+                .getExternalContext().getSessionMap()
+                .get("iteratorBeanManager");
+
+        if (iteratorBeanManager == null) {
+            iteratorBeanManager = new IteratorBeanManager();
+            FacesContext.getCurrentInstance().getExternalContext()
+                .getSessionMap()
+                .put("iteratorBeanManager", iteratorBeanManager);
+        }
+
+        IteratorBean iteratorBean = null;
+        ResolvedConceptReferencesIterator iterator = null;
+
+        Vector schemes = new Vector();
+        schemes.add(vsd_uri);
+
+        int maxToReturn = -1;
+
+        String key =
+            iteratorBeanManager.createIteratorKey(schemes, matchText,
+                searchTarget, matchAlgorithm, maxToReturn);
+        if (searchTarget.compareTo("names") == 0) {
+            if (iteratorBeanManager.containsIteratorBean(key)) {
+                iteratorBean = iteratorBeanManager.getIteratorBean(key);
+                iterator = iteratorBean.getIterator();
+            } else {
+				ResolvedConceptReferencesIterator iter = null;
+				ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(iter);
+				/*
+                ResolvedConceptReferencesIteratorWrapper wrapper =
+                    new SearchUtils()
+                        .searchByName(schemes, versions, matchText, source,
+                            matchAlgorithm, ranking, maxToReturn);
+                */
+                if (wrapper != null) {
+                    iterator = wrapper.getIterator();
+                    if (iterator != null) {
+                        iteratorBean = new IteratorBean(iterator);
+                        iteratorBean.setKey(key);
+                        iteratorBeanManager.addIteratorBean(iteratorBean);
+                    }
+                }
+            }
+
+        } else if (searchTarget.compareTo("properties") == 0) {
+            if (iteratorBeanManager.containsIteratorBean(key)) {
+                iteratorBean = iteratorBeanManager.getIteratorBean(key);
+                iterator = iteratorBean.getIterator();
+            } else {
+				ResolvedConceptReferencesIterator iter = null;
+				ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(iter);
+				/*
+                ResolvedConceptReferencesIteratorWrapper wrapper =
+                    new SearchUtils().searchByProperties(schemes, versions,
+                        matchText, source, matchAlgorithm, excludeDesignation,
+                        ranking, maxToReturn);
+                */
+                if (wrapper != null) {
+                    iterator = wrapper.getIterator();
+                    if (iterator != null) {
+                        iteratorBean = new IteratorBean(iterator);
+                        iteratorBean.setKey(key);
+                        iteratorBeanManager.addIteratorBean(iteratorBean);
+                    }
+                }
+            }
+
+        }
+
+
+		request.setAttribute("key", key);
+		System.out.println("(*************) setAttribute key: " + key);
+
+        if (iterator != null) {
+            // request.getSession().setAttribute("key", key);
+            //request.setAttribute("key", key);
+            //System.out.println("(*************) setAttribute key: " + key);
+
+            int numberRemaining = 0;
+            try {
+                numberRemaining = iterator.numberRemaining();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            int size = iteratorBean.getSize();
+
+            if (size > 1) {
+                request.getSession().setAttribute("search_results", v);
+                String match_size = Integer.toString(size);
+                request.getSession().setAttribute("match_size", match_size);
+                request.getSession().setAttribute("page_string", "1");
+                /*
+
+                request.getSession().setAttribute("new_search", Boolean.TRUE);
+
+                request.getSession().setAttribute("dictionary", scheme);
+
+
+                _logger
+                    .debug("UserSessionBean request.getSession().setAttribute dictionary: "
+                        + scheme);
+*/
+                return "search_results";
+
+            } else if (size == 1) {
+                request.getSession().setAttribute("singleton", "true");
+//                request.getSession().setAttribute("dictionary", scheme);// Constants.CODING_SCHEME_NAME);
+                int pageNumber = 1;
+                List list = iteratorBean.getData(1);
+                ResolvedConceptReference ref =
+                    (ResolvedConceptReference) list.get(0);
+                Entity c = null;
+                if (ref == null) {
+                    String msg =
+                        "Error: Null ResolvedConceptReference encountered.";
+                    request.getSession().setAttribute("message", msg);
+
+//                    request.getSession().setAttribute("dictionary", scheme);
+                    return "message";
+
+                } else {
+                    if (ref.getConceptCode() == null) {
+                        String message =
+                            "Code has not been assigned to the concept matches with '"
+                                + matchText + "'";
+                        _logger.warn("WARNING: " + message);
+                        request.getSession().setAttribute("message", message);
+
+                       // request.getSession().setAttribute("dictionary", scheme);
+                        return "message";
+                    } else {
+                        request.getSession().setAttribute("code",
+                            ref.getConceptCode());
+                    }
+
+                    c = ref.getReferencedEntry();
+
+                    if (c == null) {
+
+                        c = null;
+                           // to be modified
+                           // DataUtils.getConceptByCode(scheme, null, null, ref
+                           //     .getConceptCode());
+                        if (c == null) {
+                            String message =
+                                "Unable to find the concept with a code '"
+                                    + ref.getConceptCode() + "'";
+                            _logger.warn("WARNING: " + message);
+                            request.getSession().setAttribute("message",
+                                message);
+                           // request.getSession().setAttribute("dictionary",
+                           //     scheme);
+                            return "message";
+                        }
+
+                    } else {
+                        request.getSession().setAttribute("code",
+                            c.getEntityCode());
+                    }
+                }
+
+                request.getSession().setAttribute("concept", c);
+                request.getSession().setAttribute("type", "properties");
+                request.getSession().setAttribute("new_search", Boolean.TRUE);
+                return "concept_details";
+            }
+        }
+
+        String message = "No match found.";
+        int minimumSearchStringLength =
+            NCItBrowserProperties.getMinimumSearchStringLength();
+
+        if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
+            message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
+        }
+
+        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
+            && matchText.length() < minimumSearchStringLength) {
+            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
+        }
+
+        request.getSession().setAttribute("message", message);
+//        request.getSession().setAttribute("dictionary", scheme);
+        return "message";
+    }
 }

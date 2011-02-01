@@ -44,7 +44,7 @@
   <label for="matchText" />
     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=match_text%>" onFocus="active=true"
         onBlur="active=false"  onkeypress="return submitEnter('search',event)" tabindex="1"/>
-    <h:commandButton id="search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
+    <h:commandButton id="search" value="Search" action="#{valueSetBean.resolvedValueSetSearchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{form_requestContextPath}/images/search.gif"
@@ -86,6 +86,7 @@
         <tr valign="top">
 
     <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>" />
+    <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>" />
 
 
 </h:form>

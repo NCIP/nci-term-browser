@@ -72,7 +72,7 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
 }
 
 
-if (vsd_vec.size() == 1) {
+if (vsd_vec != null && vsd_vec.size() == 1) {
 %>      
         <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp" %>
 <%
@@ -92,7 +92,7 @@ if (vsd_vec.size() == 1) {
             <tr>
 
 <%
-if (vsd_vec.size() > 1) {
+if (vsd_vec != null && vsd_vec.size() > 1) {
 %>     
     <td class="texttitle-blue">Matched Value Sets:</td>
 <%
