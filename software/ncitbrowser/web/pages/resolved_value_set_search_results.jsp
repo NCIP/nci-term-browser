@@ -49,7 +49,7 @@
         <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp" %>
         
 <%
-
+HashMap name_hmap = new HashMap();
 String valueSetSearch_requestContextPath = request.getContextPath();
 
 System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
@@ -58,6 +58,11 @@ String message = (String) request.getSession().getAttribute("message");
 
 
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
+if (vsd_uri == null) {
+vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+}
+
+System.out.println("results page -- vsd_uri " + vsd_uri);
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
 String checked = "";
@@ -78,11 +83,20 @@ if (resultsPerPage == null) {
 }
 
 		String selectedResultsPerPage = resultsPerPage;
+        
         request.getSession().removeAttribute("dictionary");
+        
         HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 
-        IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
-              .getSessionMap().get("iteratorBean");
+
+          IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+                .getSessionMap().get("iteratorBeanManager");
+
+String key = (String) request.getSession().getAttribute("key");
+
+          IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+          
+          
 
         String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
         //String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
@@ -149,41 +163,9 @@ if (resultsPerPage == null) {
               Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=match_text%></b>
               <%
               }
-              String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
-              String tooltip_str = "";
 
-              HashMap display_name_hmap = null;
-              Vector display_name_vec = null;
-              display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
-              display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-
-              if (ontologiesToSearchOnStr != null) {
-
-                Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
-                for (int k=0; k<ontologies_to_search_on.size(); k++) {
-                  String s = (String) ontologies_to_search_on.elementAt(k);
-
-                  String t1 = DataUtils.key2CodingSchemeName(s);
-                  String term_browser_version = DataUtils.getMetadataValue(t1, "term_browser_version");
-
-                  if (term_browser_version == null)
-                     term_browser_version = DataUtils.key2CodingSchemeVersion(s);
-                  for (int i=0; i<display_name_vec.size(); i++) {
-                      OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-                      String nm = info.getDisplayName();
-                      String val = (String) display_name_hmap.get(nm);
-                      if (val.compareTo(s) == 0) {
-                          s = nm;
-                          break;
-                      }
-                  }
-                  s = s + " (" + term_browser_version + ")";
-                  tooltip_str = tooltip_str + s + "<br/>";
-                }
-              }
-              HashMap name_hmap = new HashMap();
+              
               %>
-              from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>.
             </td>
           </tr>
 
@@ -196,7 +178,7 @@ if (resultsPerPage == null) {
                   List list = iteratorBean.getData(istart, iend);
 
     boolean timeout = iteratorBean.getTimeout();
-    String message = iteratorBean.getMessage();
+    message = iteratorBean.getMessage();
 
     if (message != null) {
       %>
@@ -217,22 +199,20 @@ if (resultsPerPage == null) {
         String code = rcr.getConceptCode();
         String name = rcr.getEntityDescription().getContent();
 
-
-
         String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
         if (vocabulary_name == null) {
-      vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+            vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
         }
 
         String short_vocabulary_name = null;
         if (name_hmap.containsKey(vocabulary_name)) {
-      short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
+           short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
         } else {
-      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
-      if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
-          short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-      }
-      name_hmap.put(vocabulary_name, short_vocabulary_name);
+            short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
+        if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+            short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+        }
+            name_hmap.put(vocabulary_name, short_vocabulary_name);
         }
 
             if (code == null || code.indexOf("@") != -1) {

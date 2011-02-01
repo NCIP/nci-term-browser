@@ -58,6 +58,7 @@ String message = (String) request.getSession().getAttribute("message");
 
 
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
+request.getSession().setAttribute("vsd_uri", vsd_uri);
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
 String checked = "";

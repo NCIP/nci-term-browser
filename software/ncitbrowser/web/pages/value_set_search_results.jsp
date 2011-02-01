@@ -60,14 +60,19 @@ String vsd_uri = (String) request.getParameter("uri");
 Vector vsd_vec = null;
           
 if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
+
     String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
     vsd_vec = new Vector();
     vsd_vec.add(vsd_metadata);
+    
+    request.getSession().setAttribute("vsd_uri", vsd_uri);
+    
 } else {
     vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
     if (vsd_vec != null && vsd_vec.size() == 1) {
         vsd_uri = (String) vsd_vec.elementAt(0);
         request.getSession().setAttribute("selectedvalueset", vsd_uri);
+        request.getSession().setAttribute("vsd_uri", vsd_uri);
     }
 }
 
