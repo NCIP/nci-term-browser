@@ -918,6 +918,12 @@
        <to-view-id>/pages/value_set_search.jsp</to-view-id>
     </navigation-case>    
     
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_search.jsp</to-view-id>
+    </navigation-case>    
     
   </navigation-rule>
    
@@ -937,6 +943,20 @@
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/resolved_value_set_search_results.jsp</to-view-id>
     </navigation-case>   
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.resolveValueSetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>    
+    
+     <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>      
     
   </navigation-rule>
 
@@ -971,6 +991,13 @@
        <to-view-id>/pages/resolved_value_set_search_results.jsp</to-view-id>
     </navigation-case>       
     
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.continueResolveValueSetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+    </navigation-case>      
+    
   </navigation-rule>
   
   <navigation-rule>
@@ -988,7 +1015,20 @@
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/resolved_value_set_search_results.jsp</to-view-id>
     </navigation-case>    
-    
+
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
+    </navigation-case>  
+
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.exportValueSetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
+    </navigation-case> 
     
   </navigation-rule>  
 

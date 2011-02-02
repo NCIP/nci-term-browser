@@ -918,7 +918,6 @@ System.out.println("ref.getConceptCode(): " + ref.getConceptCode());
         }
 
         request.getSession().setAttribute("message", message);
-//        request.getSession().setAttribute("dictionary", scheme);
         return "message";
     }
 }
