@@ -55,7 +55,8 @@ String valueSetSearch_requestContextPath = request.getContextPath();
 System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
 
 
-String message = (String) request.getSession().getAttribute("message");     
+String message = (String) request.getSession().getAttribute("message"); 
+request.getSession().removeAttribute("message"); 
 String vsd_uri = (String) request.getParameter("uri"); 
 Vector vsd_vec = null;
           

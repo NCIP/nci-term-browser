@@ -55,7 +55,7 @@ String valueSetSearch_requestContextPath = request.getContextPath();
 System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
 
 String message = (String) request.getSession().getAttribute("message");  
-
+request.getSession().removeAttribute("message");  
 
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 if (vsd_uri == null) {
@@ -138,6 +138,16 @@ String key = (String) request.getSession().getAttribute("key");
 
       %>
         <table width="700px">
+        
+      <%  
+      if (message != null) {
+      %>
+      <p class="textbodyred"><%=message%></p>
+      <% 
+      }
+      %>
+        
+        
           <tr>
             <td>
               <table>
