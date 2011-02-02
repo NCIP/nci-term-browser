@@ -699,9 +699,6 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
 
         //Vector<org.LexGrid.concepts.Entity> v = null;
 
-        boolean excludeDesignation = true;
-        boolean designationOnly = false;
-
         // check if this search has been performance previously through
         // IteratorBeanManager
         IteratorBeanManager iteratorBeanManager =
@@ -727,7 +724,27 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
         String key =
             iteratorBeanManager.createIteratorKey(schemes, matchText,
                 searchTarget, matchAlgorithm, maxToReturn);
-        if (searchTarget.compareTo("names") == 0) {
+
+        if (searchTarget.compareTo("code") == 0) {
+            if (iteratorBeanManager.containsIteratorBean(key)) {
+                iteratorBean = iteratorBeanManager.getIteratorBean(key);
+                iterator = iteratorBean.getIterator();
+            } else {
+                ResolvedConceptReferencesIteratorWrapper wrapper =
+                    new ValueSetSearchUtils().searchByCode(
+				        vsd_uri, matchText, maxToReturn);
+
+                if (wrapper != null) {
+                    iterator = wrapper.getIterator();
+                    if (iterator != null) {
+                        iteratorBean = new IteratorBean(iterator);
+                        iteratorBean.setKey(key);
+                        iteratorBeanManager.addIteratorBean(iteratorBean);
+                    }
+                }
+            }
+
+        } else if (searchTarget.compareTo("names") == 0) {
             if (iteratorBeanManager.containsIteratorBean(key)) {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
@@ -751,14 +768,11 @@ System.out.println("matchAlgorithm: " + matchAlgorithm);
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-				ResolvedConceptReferencesIterator iter = null;
-				ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(iter);
-				/*
+				boolean excludeDesignation = true;
                 ResolvedConceptReferencesIteratorWrapper wrapper =
-                    new SearchUtils().searchByProperties(schemes, versions,
-                        matchText, source, matchAlgorithm, excludeDesignation,
-                        ranking, maxToReturn);
-                */
+                    new ValueSetSearchUtils().searchByProperties(
+				        vsd_uri, matchText, excludeDesignation, matchAlgorithm, maxToReturn);
+
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
                     if (iterator != null) {
@@ -877,7 +891,6 @@ System.out.println("ref.getConceptCode(): " + ref.getConceptCode());
                 request.getSession().setAttribute("match_size", match_size);
                 request.getSession().setAttribute("page_string", "1");
                 request.getSession().setAttribute("vsd_uri", vsd_uri);
-
 
                 return "search_results";
 			}
