@@ -392,6 +392,12 @@ System.out.println("list.size(): " + list.size());
 
 			if (selectCodingScheme != null) {
 
+				if (selectCodingScheme.compareTo("ALL") == 0) {
+					request.getSession().setAttribute("view", "terminology");
+					return "all_value_sets";
+				}
+
+
 				try {
                     List uri_list = vsd_service.getValueSetDefinitionURIsWithCodingScheme(selectCodingScheme,
                                                                            DataUtils.codingSchemeName2URI(selectCodingScheme));

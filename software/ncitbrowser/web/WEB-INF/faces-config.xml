@@ -911,6 +911,13 @@
        <to-view-id>/pages/value_set_search.jsp</to-view-id>
     </navigation-case>
     
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>all_value_sets</from-outcome>
+       <to-view-id>/pages/value_set_search.jsp</to-view-id>
+    </navigation-case>    
+    
     
   </navigation-rule>
    

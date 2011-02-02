@@ -108,7 +108,14 @@ if (vsd_vec == null) {
      request.getSession().setAttribute("vsddata", vsd_vec);
 }
 		
-String view = (String) request.getParameter("view");
+String view = null;
+view = (String) request.getSession().getAttribute("view");
+if (view == null) {
+    view = (String) request.getParameter("view");
+} else {
+    request.getSession().removeAttribute("view");
+}
+
 if (view == null) {
     view = "URI";
 }
