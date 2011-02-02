@@ -38,13 +38,13 @@ System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
       
       
         String searchTarget = (String) request.getSession().getAttribute("searchTarget");
-        String check_n = "", check_p = "" , check_r ="";
+        String check_n = "", check_p = "" , check_cd ="";
         if (searchTarget == null || searchTarget.compareTo("names") == 0)
           check_n = "checked";
         else if (searchTarget.compareTo("properties") == 0)
           check_p= "checked";
         else
-          check_r = "checked";      
+          check_cd = "checked";      
       
 %>
   
@@ -85,8 +85,9 @@ System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
 
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
-        <input type="radio" name="searchTarget" id="searchTarget1" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="searchTarget1">Name/Code&nbsp;</label>
-        <input type="radio" name="searchTarget" id="searchTarget2" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="searchTarget2">Property&nbsp;</label>
+        <input type="radio" name="searchTarget" id="searchTarget0" value="code" alt="Code" <%=check_cd%> tabindex="5"/><label for="searchTarget0">Code&nbsp;</label>
+        <input type="radio" name="searchTarget" id="searchTarget1" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="searchTarget1">Name&nbsp;</label>
+        <input type="radio" name="searchTarget" id="searchTarget2" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="searchTarget2">Property</label>
       </td>
     </tr>
     <tr><td height="5px;"></td></tr>
