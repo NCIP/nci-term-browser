@@ -128,7 +128,14 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
  
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
+<%
+if (vsd_vec != null && vsd_vec.size() > 1) {
+%> 
 		<th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
+<%
+}
+%>		
+		
                 <th class="dataTableHeader" scope="col" align="left">Name</th>
                 <th class="dataTableHeader" scope="col" align="left">URI</th>
                 <th class="dataTableHeader" scope="col" align="left">Description</th>
@@ -163,20 +170,19 @@ System.out.println(vsd_str);
 			}
 		    %>    
 
-		<td>
+		
 <%		
-if (vsd_vec.size() == 1) {
-%>
-		<input type=radio name="valueset" value="<%=uri%>" checked>&nbsp;</input>
-<%
-} else {
-%>
+if (vsd_vec != null && vsd_vec.size() > 1) {
+%>		
+
+                <td>
 		<input type=radio name="valueset" value="<%=uri%>">&nbsp;</input>
+		</td>
 <%		
 }
 %>
 		     
-		</td>
+		
 		      <td class="dataCellText">
 			 <%=name%>
 		      </td>					
@@ -225,7 +231,16 @@ if (vsd_vec.size() == 1) {
                        tabindex="2">
                      </h:commandButton>
                   </td></tr>
- 
+
+
+<%		
+if (vsd_vec.size() == 1) {
+%>		
+    <input type="hidden" name="valueset" id="valueset" value="<%=vsd_uri%>">	
+<%
+}
+%>
+
           
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
