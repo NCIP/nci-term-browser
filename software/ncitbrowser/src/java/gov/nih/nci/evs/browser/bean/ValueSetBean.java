@@ -329,9 +329,10 @@ public class ValueSetBean {
 
 		System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
 
-
+        String matchText = (String) request.getParameter("matchText");
+        if (matchText != null) matchText = matchText.trim();
 		if (selectValueSetSearchOption.compareTo("Code") == 0) {
-			String matchText = (String) request.getParameter("matchText");
+
 
 System.out.println("matchText: " + matchText);
 
@@ -353,6 +354,7 @@ System.out.println("list.size(): " + list.size());
 						v.add(uri);
 					}
 				}
+
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -392,7 +394,7 @@ System.out.println("list.size(): " + list.size());
 
 			if (selectCodingScheme != null) {
 
-				if (selectCodingScheme.compareTo("ALL") == 0) {
+				if (selectCodingScheme.compareTo("ALL") == 0 && matchText.compareTo("") == 0) {
 					request.getSession().setAttribute("view", "terminology");
 					return "all_value_sets";
 				}

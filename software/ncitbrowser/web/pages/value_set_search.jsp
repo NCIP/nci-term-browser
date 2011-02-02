@@ -97,7 +97,19 @@ if (conceptDomain == null) conceptDomain = "";
             </span>
           
           <table>
-          
+ 
+ 
+             <% if (message != null) { 
+                 request.getSession().removeAttribute("message");
+             %>
+ 		<tr class="textbodyred"><td>
+ 	            <p class="textbodyred">&nbsp;<%=message%></p>
+ 		</td></tr>
+             <% 
+             } 
+             %>
+
+
 <tr class="textbody">
 <td align="left">
 
@@ -161,15 +173,6 @@ if (view.compareToIgnoreCase("source") == 0) {
 </td></tr>      
 			     
 
-            <% if (message != null) { 
-                request.getSession().removeAttribute("message");
-            %>
-		<tr class="textbodyred"><td>
-	            <p class="textbodyred">&nbsp;<%=message%></p>
-		</td></tr>
-            <% 
-            } 
-            %>
 
          <tr class="textbody"><td>
             
