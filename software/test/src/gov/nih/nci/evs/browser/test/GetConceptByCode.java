@@ -12,11 +12,12 @@ public class GetConceptByCode {
         String tag = null;
         Entity entity =
             DataUtils.getConceptByCode(codingScheme, version, tag, code);
-        String info = "[Could not find: " + code + "]";
+        String info = "";
         if (entity != null)
             info =
                 entity.getEntityDescription().getContent() + ":"
                     + entity.getEntityCode();
+        else info = "[Could not find: " + code + "]";
         System.out.println("Entity: " + info);
     }
 
@@ -26,7 +27,9 @@ public class GetConceptByCode {
 //        search("GO", "September2010", "GO:0000075");
 //        search("GO", "September2010", "GO:0005102");
 //        search("GO", "September2010", "GO:0006281");
-        search("GO_to_NCIt_Mapping", "1.0", "GO:0005102");
+//        search("GO_to_NCIt_Mapping", "1.0", "GO:0005102");
+        search("NCI Thesaurus", "10.12c", "C12434");
+        search("NCI Thesaurus", "10.11e", "C12434");
     }
 
     public static void main(String[] args) {
