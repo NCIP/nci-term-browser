@@ -3548,37 +3548,6 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 		return false;
 	}
 
-/*
-    public static java.util.Iterator<? extends ResolvedConceptReference> getMappingDataIterator(String scheme, String version) {
-
-		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        try {
-			CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, null, null);
-			//PrintUtility.print(cng);
-
-			ResolvedConceptReferenceList rcrl;
-			ResolvedConceptReference[] rcrArray;
-			try {
-				// to be modified (using container isMapping???)
-                NameAndValueList association = createNameAndValueList(new String[] {"mapsTo"}, null);
-                NameAndValueList associationQualifiers = null;
-                cng = cng.restrictToAssociations(association, associationQualifiers);
-
- 				rcrl = cng.resolveAsList(null, true, false, 0, -1, null, null, null, -1);
- 				java.util.Iterator<? extends ResolvedConceptReference> iterator = rcrl.iterateResolvedConceptReference();
- 				return iterator;
-
-			} catch (Exception ex) {
-
-			}
-		} catch (Exception ex) {
-
-		}
-		return null;
-	}
-*/
-
-
 
     public Vector getMappingData(String scheme, String version) {
         Vector v = new Vector();
@@ -3927,6 +3896,60 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 		return null;
 
 	}
+
+/*
+    To be activated after Mayo delivers the mapping extension.
+    mappin_search_results.jsp would also need to be modified
+
+    public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
+        List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator) {
+		CodingSchemeVersionOrTag versionOrTag =
+			new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+		String relationsContainerName = null;
+
+        LexBIGService distributed = RemoteServerUtil.createLexBIGService();
+        try {
+			CodingScheme cs = distributed.resolveCodingScheme(scheme, versionOrTag);
+			if (cs == null) return null;
+
+			java.util.Enumeration<? extends Relations> relations = cs.enumerateRelations();
+			while (relations.hasMoreElements()) {
+				Relations relation = (Relations) relations.nextElement();
+				Boolean isMapping = relation.getIsMapping();
+				System.out.println("isMapping: " + isMapping);
+				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
+ 					relationsContainerName = relation.getContainerName();
+					//System.out.println(relationsContainerName);
+					break;
+				}
+			}
+			if (relationsContainerName == null) {
+				System.out.println("WARNING: Mapping container not found in " + scheme);
+				return null;
+			}
+
+			MappingExtension mappingExtension = (MappingExtension)
+				distributed.getGenericExtension("MappingExtension");
+
+		    Mapping mapping =
+			    mappingExtension.getMapping(scheme, version, relationsContainerName);
+
+            //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
+            ConceptReferenceList codeList = new ConceptReferenceList();
+            mapping = mapping.restrictToCodes(codeList)
+            ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);
+			return itr;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+*/
+
 
     public static NameAndValueList getMappingAssociationNames(String scheme, String version) {
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
