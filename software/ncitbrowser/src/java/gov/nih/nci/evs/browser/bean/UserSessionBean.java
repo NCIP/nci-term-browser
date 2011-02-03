@@ -155,6 +155,8 @@ public class UserSessionBean extends Object {
         return _quickLinkList;
     }
 
+
+
     public String searchAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -186,6 +188,10 @@ public class UserSessionBean extends Object {
         boolean ranking = true;
 
         String scheme = request.getParameter("scheme");
+
+
+
+
         String searchaction_dictionary = request.getParameter("dictionary");
 
         if (scheme == null) {
@@ -202,6 +208,11 @@ public class UserSessionBean extends Object {
         if (version == null) {
             version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
 		}
+
+
+
+
+
 
 	    request.setAttribute("version", version);
 
@@ -353,6 +364,14 @@ public class UserSessionBean extends Object {
 		System.out.println("(*************) setAttribute key: " + key);
 
         if (iterator != null) {
+
+
+			boolean isMapping = DataUtils.isMapping(scheme, version);
+			if (isMapping) {
+				return "mapping_search_results";
+			}
+
+
             // request.getSession().setAttribute("key", key);
             //request.setAttribute("key", key);
             //System.out.println("(*************) setAttribute key: " + key);
