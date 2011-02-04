@@ -290,6 +290,7 @@ if (resultsPerPage == null) {
               if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
         String code = rcr.getConceptCode();
         String name = rcr.getEntityDescription().getContent();
+        String version = rcr.getCodingSchemeVersion();
 
 
 
@@ -357,7 +358,7 @@ if (resultsPerPage == null) {
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>&version=<%=version%>" ><%=name%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
@@ -366,7 +367,7 @@ if (resultsPerPage == null) {
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>&version=<%=version%>" ><%=name%></a>
           <%
           }
           %>
