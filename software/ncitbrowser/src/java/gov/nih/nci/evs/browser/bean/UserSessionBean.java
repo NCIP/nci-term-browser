@@ -807,9 +807,9 @@ public class UserSessionBean extends Object {
         String initial_search = (String) request.getParameter("initial_search");
 
         String[] ontology_list = null;
-        if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
+        //if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
             ontology_list = request.getParameterValues("ontology_list");
-		}
+		//}
 
         List list = new ArrayList<String>();
 
@@ -818,46 +818,30 @@ public class UserSessionBean extends Object {
         List<String> ontologiesToSearchOn = null;
         int knt = 0;
 
-
         // process mappings
         if (initial_search != null) { // from home page
-/*
-            if (navigation_type.compareTo("mappings") == 0) {
-				String ontologyToSearchOn = request.getParameter("ontologyToSearchOn");
+			if (multiple_search_error != null) {
 				ontologiesToSearchOn = new ArrayList<String>();
-				ontology_list = new String[1];
+				ontologiesToSearchOnStr =
+					(String) request.getSession().getAttribute(
+						"ontologiesToSearchOn");
 
-				ontology_list[0] = ontologyToSearchOn;
-				ontologiesToSearchOn.add(ontologyToSearchOn);
-
-
-			} else
-*/
-			{
-
-				if (multiple_search_error != null) {
-					ontologiesToSearchOn = new ArrayList<String>();
-					ontologiesToSearchOnStr =
-						(String) request.getSession().getAttribute(
-							"ontologiesToSearchOn");
-
-					if (ontologiesToSearchOnStr != null) {
-						Vector ontologies_to_search_on =
-							DataUtils.parseData(ontologiesToSearchOnStr);
-						ontology_list = new String[ontologies_to_search_on.size()];
-						knt = ontologies_to_search_on.size();
-						for (int k = 0; k < ontologies_to_search_on.size(); k++) {
-							String s =
-								(String) ontologies_to_search_on.elementAt(k);
-							ontology_list[k] = s;
-							ontologiesToSearchOn.add(s);
-						}
+				if (ontologiesToSearchOnStr != null) {
+					Vector ontologies_to_search_on =
+						DataUtils.parseData(ontologiesToSearchOnStr);
+					ontology_list = new String[ontologies_to_search_on.size()];
+					knt = ontologies_to_search_on.size();
+					for (int k = 0; k < ontologies_to_search_on.size(); k++) {
+						String s =
+							(String) ontologies_to_search_on.elementAt(k);
+						ontology_list[k] = s;
+						ontologiesToSearchOn.add(s);
 					}
 				}
-		    }
-
+			}
 
             if (ontology_list == null || ontology_list.length == 0) {
+
                 String message = Constants.ERROR_NO_VOCABULARY_SELECTED;// "Please select at least one vocabulary.";
                 request.getSession().setAttribute("warning", message);
                 request.getSession().setAttribute("message", message);
@@ -896,35 +880,25 @@ public class UserSessionBean extends Object {
                     ontologiesToSearchOnStr);
             }
         } else {
-/*
-            if (navigation_type.compareTo("mappings") == 0) {
-				String ontologyToSearchOn = request.getParameter("ontologyToSearchOn");
-				ontologiesToSearchOn = new ArrayList<String>();
-				ontology_list = new String[1];
-				ontology_list[0] = ontologyToSearchOn;
-				ontologiesToSearchOn.add(ontologyToSearchOn);
 
-			} else
-*/
-			{
-
-				ontologiesToSearchOn = new ArrayList<String>();
-				ontologiesToSearchOnStr =
-					(String) request.getSession().getAttribute(
-						"ontologiesToSearchOn");
-				if (ontologiesToSearchOnStr != null) {
-					Vector ontologies_to_search_on =
-						DataUtils.parseData(ontologiesToSearchOnStr);
-					ontology_list = new String[ontologies_to_search_on.size()];
-					knt = ontologies_to_search_on.size();
-					for (int k = 0; k < ontologies_to_search_on.size(); k++) {
-						String s = (String) ontologies_to_search_on.elementAt(k);
-						ontology_list[k] = s;
-						ontologiesToSearchOn.add(s);
-					}
+			ontologiesToSearchOn = new ArrayList<String>();
+			ontologiesToSearchOnStr =
+				(String) request.getSession().getAttribute(
+					"ontologiesToSearchOn");
+			if (ontologiesToSearchOnStr != null) {
+				Vector ontologies_to_search_on =
+					DataUtils.parseData(ontologiesToSearchOnStr);
+				ontology_list = new String[ontologies_to_search_on.size()];
+				knt = ontologies_to_search_on.size();
+				for (int k = 0; k < ontologies_to_search_on.size(); k++) {
+					String s = (String) ontologies_to_search_on.elementAt(k);
+					ontology_list[k] = s;
+					ontologiesToSearchOn.add(s);
 				}
 			}
+
         }
+
 
         String hide_ontology_list = "false";
         // [#19965] Error message is not displayed when Search Criteria is not
