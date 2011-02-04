@@ -13,6 +13,10 @@ import org.LexGrid.naming.*;
 import org.LexGrid.LexBIG.Impl.Extensions.GenericExtensions.*;
 import org.apache.log4j.*;
 
+import org.LexGrid.relations.AssociationPredicate;
+import org.LexGrid.relations.Relations;
+
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -625,6 +629,42 @@ System.out.println("localId: " + name + " content: " + content + " entityCode " 
         }
     }
 
+
+
+    public static Vector getSupportedMappingAssociationNamesAndIDs(String codingSchemeName, String version) {
+        Vector association_name_vec = new Vector();
+
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
+
+		List list = new ArrayList();
+		try {
+			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+			CodingScheme cs = lbSvc.resolveCodingScheme(codingSchemeName, csvt);
+			Relations[] relations = cs.getRelations();
+			if (relations.length == 0) {
+				return association_name_vec;
+			}
+			for (int i = 0; i < relations.length; i++) {
+				Relations relation = relations[i];
+				Boolean bool_obj = relation.isIsMapping();
+				if (bool_obj == null || bool_obj.equals(Boolean.FALSE)) {
+					return association_name_vec;
+				} else {
+                    AssociationPredicate[] asso_array = relation.getAssociationPredicate();
+                    for (int j=0; j<asso_array.length; j++) {
+						AssociationPredicate asso = asso_array[j];
+						association_name_vec.add(asso.getAssociationName() + "|" + asso.getAssociationName());
+					}
+
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+        }
+        return association_name_vec;
+	}
 
 
 
