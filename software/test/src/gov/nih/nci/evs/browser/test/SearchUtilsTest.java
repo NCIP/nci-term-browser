@@ -19,19 +19,18 @@ public class SearchUtilsTest {
         return Logger.getLogger(c);
     }
     
-    public void searchByName() throws Exception {
+    public void searchByName(String matchText) throws Exception {
         Vector<String> schemes = new Vector<String>();
         Vector<String> versions = new Vector<String>();
         schemes.add("NCI Thesaurus"); versions.add("10.11e");
         schemes.add("NCI Thesaurus"); versions.add("10.12c");
         schemes.add("NCI Thesaurus"); versions.add("11.01e");
-        String matchText = "C17410";
-        // matchText = "Zinc Finger Protein GLI3";
         String source = "ALL";
         String matchAlgorithm = "exactMatch";
         boolean ranking = true;
         int maxToReturn = 100000;
         
+        _logger.debug("------------------------------------------------------");
         _logger.debug("Method: SearchUtils().searchByName");
         _logger.debug("  * schemes: " + schemes);
         _logger.debug("  * versions: " + versions);
@@ -52,10 +51,12 @@ public class SearchUtilsTest {
             String desc = rcr.getEntityDescription().getContent();
             _logger.debug(code + ": " + desc);
         }
+        _logger.debug("");
     }
 
     public static void main(String[] args) throws Exception {
         args = SetupEnv.getInstance().parse(args);
-        new SearchUtilsTest().searchByName();
+        new SearchUtilsTest().searchByName("Zinc Finger Protein GLI3");
+        new SearchUtilsTest().searchByName("C17410");
     }
 }
