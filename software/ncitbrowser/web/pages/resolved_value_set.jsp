@@ -12,6 +12,8 @@
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
 <%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList" %>
+
 <%@ page import="org.apache.log4j.*" %>
 
 
@@ -128,10 +130,13 @@ String sources = (String) u.elementAt(4);
                 Vector concept_vec = new Vector();
 		ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("ResolvedConceptReferencesIterator");
 
+                ResolvedConceptReferenceList list = new ResolvedConceptReferenceList();
+
 		if (itr != null) {
 		    while(itr.hasNext()){
 				ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs){
+				     list.addResolvedConceptReference(ref);
 				     String entityDescription = "<NOT ASSIGNED>";
 				     if (ref.getEntityDescription() != null) {
 				         entityDescription = ref.getEntityDescription().getContent();
@@ -144,6 +149,9 @@ String sources = (String) u.elementAt(4);
 					+ "|" + ref.getCodingSchemeVersion());
 				}
 			}
+			
+			request.getSession().setAttribute("ResolvedConceptReferenceList", list);
+
 		} else {
 		    System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
 		}
