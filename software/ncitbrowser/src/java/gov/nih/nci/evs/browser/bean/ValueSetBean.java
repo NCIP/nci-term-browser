@@ -172,20 +172,30 @@ public class ValueSetBean {
 		ontologyList = new ArrayList();
 		Vector v = new Vector();
 
+		HashSet hset = new HashSet();
+
 		for (int i = 0; i < ontology_list.size(); i++) {
 			SelectItem item = (SelectItem) ontology_list.get(i);
 			String value = (String) item.getValue();
 			String label = (String) item.getLabel();
 
 			String scheme = DataUtils.key2CodingSchemeName(value);
-			String version = DataUtils.key2CodingSchemeVersion(value);
-			String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
+	        if (!hset.contains(scheme)) {
+				String version = DataUtils.key2CodingSchemeVersion(value);
+                boolean isMapping = DataUtils.isMapping(scheme, version);
+                if (!isMapping) {
+					String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
 
-			if (display_name == null || display_name.compareTo("null") == 0) {
-				display_name = DataUtils.getLocalName(scheme);
-			}
-			v.add(display_name);
+					if (display_name == null || display_name.compareTo("null") == 0) {
+						display_name = DataUtils.getLocalName(scheme);
+					}
+					v.add(display_name);
+					hset.add(scheme);
+			    }
+		    }
 		}
+
+
 		v = SortUtils.quickSort(v);
 
 		String display_name = "ALL";

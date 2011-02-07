@@ -60,7 +60,7 @@ request.getSession().removeAttribute("message");
 String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 request.getSession().setAttribute("vsd_uri", vsd_uri);
 
-Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
+Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri);
 String checked = "";
 
 %>
@@ -111,7 +111,6 @@ String checked = "";
 		    } else if (cs_tag.compareToIgnoreCase("PRODUCTION") == 0) {
 		        checked = "checked";
 		    }
-
 		    
         
 		    if (i % 2 == 0) {
