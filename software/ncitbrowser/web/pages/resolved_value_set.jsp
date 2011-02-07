@@ -81,23 +81,20 @@ String sources = (String) u.elementAt(4);
  
  <h:form id="valueSetSearchResultsForm" styleClass="search-form"> 
           
-          <table>
+          <table border="0" width="100%">
             <tr>
-            <!--
-                <td class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
-             -->
                 <td>
-                     <table>
+                     <table border="0">
                          <tr>
-                             <td class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
-                             
-			     <td align="right">
-				<h:commandLink value="Export XML" action="#{valueSetBean.exportToXMLAction}" styleClass="texttitle-blue-small" title="Export VSD in LexGrid XML format"/> |
-				<h:commandLink value="Export CSV" action="#{valueSetBean.exportToCSVAction}" styleClass="texttitle-blue-small" title="Export VSD in CSV format"/>				
-			     </td>                             
-                         </tr>
-                     </table>
-                </td>
+                             <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
+                             <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  			     <td align="right">
+				     <h:commandLink value="Export XML" action="#{valueSetBean.exportToXMLAction}" styleClass="texttitle-blue-small" title="Export VSD in LexGrid XML format"/> |
+				     <h:commandLink value="Export CSV" action="#{valueSetBean.exportToCSVAction}" styleClass="texttitle-blue-small" title="Export VSD in CSV format"/>				
+			     </td>  
+		         </tr>	
+		     </table>
+	        </td>	      
             </tr>
             
             <% if (message != null) { 
@@ -143,7 +140,8 @@ String sources = (String) u.elementAt(4);
 				     concept_vec.add(ref.getConceptCode()
 					+ "|" + entityDescription
 					+ "|" + ref.getCodingSchemeName()
-					+ "|" + ref.getCodeNamespace());
+					+ "|" + ref.getCodeNamespace() 
+					+ "|" + ref.getCodingSchemeVersion());
 				}
 			}
 		} else {
@@ -151,10 +149,6 @@ String sources = (String) u.elementAt(4);
 		}
 
 
-if (concept_vec.size() == 0) {
-    concept_vec.add("code 1|name 1|coding scheme 1|namespace 1");
-    concept_vec.add("code 2|name 2|coding scheme 1|namespace 1");
-}
 
             for (int i=0; i<concept_vec.size(); i++) {
             
@@ -164,6 +158,7 @@ if (concept_vec.size() == 0) {
 		    String conceptname = (String) u.elementAt(1);
 		    String coding_scheme = (String) u.elementAt(2);
 		    String namespace = (String) u.elementAt(3);
+		    String vsn = (String) u.elementAt(4);
 
 		    if (i % 2 == 0) {
 		    %>
@@ -177,7 +172,9 @@ if (concept_vec.size() == 0) {
 		    %>    
 		
 		      <td class="dataCellText">
-			 <%=code%>
+			  <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=coding_scheme%>&version=<%=vsn%>&code=<%=code%>">
+			    <%=code%>
+			  </a>		      
 		      </td>
 		      <td class="dataCellText">
 			 <%=conceptname%>
@@ -198,17 +195,7 @@ if (concept_vec.size() == 0) {
              %>                 
                   
               </table>
-<!--
-                  <tr><td>
-                    <h:commandButton id="export" value="export" action="#{valueSetBean.exportValueSetAction}"
-                      onclick="javascript:cursor_wait();"
-                      image="#{valueSetSearch_requestContextPath}/images/export.gif"
-                      alt="Export"
-                      tabindex="2">
-                    </h:commandButton>
-                  </td></tr>
-              
--->              
+           
               <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>

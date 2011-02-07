@@ -4319,6 +4319,7 @@ System.out.println("vsd_str " + vsd_str);
 		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str;
 	}
 
+/*
 	// AbsoluteCodingSchemeVersionReferenceList getCodingSchemesInValueSetDefinition(java.net.URI valueSetDefinitionURI)
     public static Vector getCodingSchemesInValueSetDefinition(String uri) {
 		try {
@@ -4340,6 +4341,106 @@ System.out.println("vsd_str " + vsd_str);
 				ex.printStackTrace();
 			}
 			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+*/
+	// AbsoluteCodingSchemeVersionReferenceList getCodingSchemesInValueSetDefinition(java.net.URI valueSetDefinitionURI)
+
+
+    public static Vector getCodingSchemesInValueSetDefinition(String uri) {
+		HashSet hset = new HashSet();
+		try {
+			java.net.URI valueSetDefinitionURI = new URI(uri);
+			Vector v = new Vector();
+			try {
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+				AbsoluteCodingSchemeVersionReferenceList codingSchemes =
+					vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
+
+				//output is all of the mapping ontologies that this code participates in.
+				for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
+					String urn = ref.getCodingSchemeURN();
+					System.out.println("URI: " + ref.getCodingSchemeURN());
+					if (!hset.contains(urn)) {
+					System.out.println("Version: " + ref.getCodingSchemeVersion());
+					    v.add(ref.getCodingSchemeURN());
+					    hset.add(urn);
+				    }
+				}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+
+    public static Vector getCodingSchemeVersionsByURN(String urn) {
+        try {
+			Vector v = new Vector();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+                _logger
+                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+            }
+            CodingSchemeRenderingList csrl = null;
+            try {
+                csrl = lbSvc.getSupportedCodingSchemes();
+            } catch (LBInvocationException ex) {
+                ex.printStackTrace();
+                _logger.error("lbSvc.getSupportedCodingSchemes() FAILED..."
+                    + ex.getCause());
+                return null;
+            }
+            CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+            for (int i = 0; i < csrs.length; i++) {
+                int j = i + 1;
+                CodingSchemeRendering csr = csrs[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                Boolean isActive =
+                        csr.getRenderingDetail().getVersionStatus().equals(
+                            CodingSchemeVersionStatus.ACTIVE);
+
+                if (isActive != null && isActive.equals(Boolean.TRUE)) {
+                	String uri = css.getCodingSchemeURI();
+                	if (uri.compareTo(urn) == 0) {
+						String representsVersion = css.getRepresentsVersion();
+						v.add(representsVersion);
+					}
+				}
+			}
+			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+    public static Vector getCodingSchemeReferencesInValueSetDefinition(String uri) {
+		try {
+			Vector w = new Vector();
+			Vector urn_vec = getCodingSchemeURNsInValueSetDefinition(uri);
+			for (int i=0; i<urn_vec.size(); i++) {
+				String urn = (String) urn_vec.elementAt(i);
+				Vector v = getCodingSchemeVersionsByURN(urn);
+				if (v != null) {
+					for (int j=0; j<v.size(); j++) {
+						String version = (String) v.elementAt(j);
+						w.add(urn + "|" + version);
+					}
+			    }
+			}
+            w = SortUtils.quickSort(w);
+            return w;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
