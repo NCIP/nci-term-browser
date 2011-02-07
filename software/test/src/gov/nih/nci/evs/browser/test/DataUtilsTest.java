@@ -13,8 +13,10 @@ public class DataUtilsTest {
     private static Logger _logger = getLogger(); 
 
     private static Logger getLogger() {
-        Logger.getLogger(DataUtilsTest.class).setLevel(Level.DEBUG);
-        return Logger.getLogger(DataUtilsTest.class);
+        Logger.getLogger("gov.nih.nci.evs").setLevel(Level.DEBUG);
+        Class<DataUtilsTest> c = DataUtilsTest.class;
+        Logger.getLogger(c).setLevel(Level.DEBUG);
+        return Logger.getLogger(c);
     }
     
     private static void debug(String text) {
