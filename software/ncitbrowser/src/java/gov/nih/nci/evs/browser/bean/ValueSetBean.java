@@ -487,6 +487,20 @@ System.out.println("(********) metadata " + metadata);
         return "message";
 	}
 
+    public String selectCSVersionAction() {
+
+ System.out.println("(************* ) selectCSVersionAction ");
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String selectedvalueset = (String) request.getParameter("valueset");
+
+        System.out.println("selectCSVersionAction: selected value set " + selectedvalueset);
+		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
+        return "select_value_set";
+	}
 
     public String resolveValueSetAction() {
 
@@ -499,11 +513,67 @@ System.out.println("(********) metadata " + metadata);
 
         String selectedvalueset = (String) request.getParameter("valueset");
 
-
         System.out.println("resolveValueSetAction: selected value set " + selectedvalueset);
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
-        return "resolve_value_set";
+        String vsd_uri = null;
+        if (selectedvalueset != null) {
+			vsd_uri = selectedvalueset;
+		} else {
+			vsd_uri = (String) request.getParameter("vsd_uri");
+			if (vsd_uri == null) {
+				vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+			}
+		}
 
+        request.getSession().setAttribute("vsd_uri", vsd_uri);
+        String[] coding_scheme_ref = null;
+
+        Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(selectedvalueset, "PRODUCTION");
+        if (w != null) {
+			coding_scheme_ref = new String[w.size()];
+			for (int i=0; i<w.size(); i++) {
+				String s = (String) w.elementAt(i);
+				coding_scheme_ref[i] = s;
+			}
+		}
+
+        if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
+			String msg = "No production version of coding scheme is available.";
+			request.getSession().setAttribute("message", msg);
+			return "resolve_value_set";
+		}
+
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+
+        for (int i=0; i<coding_scheme_ref.length; i++) {
+			String t = coding_scheme_ref[i];
+
+			System.out.println("(*) coding_scheme_ref: " + t);
+			Vector u = DataUtils.parseData(t);
+			String uri = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
+		}
+
+        long time = System.currentTimeMillis();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		ResolvedValueSetDefinition rvsd = null;
+		int lcv = 0;
+		try {
+			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
+			if(rvsd != null) {
+				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+				return "resolved_value_set";
+		    }
+		} catch (Exception ex) {
+			System.out.println("??? vds.resolveValueSetDefinition throws exception");
+		}
+
+		String msg = "Unable to resolve the value set " + vsd_uri;
+		request.getSession().setAttribute("message", msg);
+        return "resolved_value_set";
 	}
 
 

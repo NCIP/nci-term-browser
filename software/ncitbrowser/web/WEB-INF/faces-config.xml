@@ -1111,10 +1111,17 @@
   <navigation-rule>
     <from-view-id>/pages/value_set_search_results.jsp</from-view-id>
     <navigation-case>
+       <description>select_CSVersion</description>
+       <from-action>#{valueSetBean.selectCSVersionAction}</from-action>
+       <from-outcome>select_value_set</from-outcome>
+       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
        <description>resolve_value_set</description>
        <from-action>#{valueSetBean.resolveValueSetAction}</from-action>
-       <from-outcome>resolve_value_set</from-outcome>
-       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+       <from-outcome>resolved_value_set</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
     </navigation-case>
     
     <navigation-case>
@@ -1128,7 +1135,7 @@
        <description>error</description>
        <from-action>#{valueSetBean.resolveValueSetAction}</from-action>
        <from-outcome>message</from-outcome>
-       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
     </navigation-case>    
     
      <navigation-case>

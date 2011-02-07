@@ -58,6 +58,11 @@ System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_reques
 String message = (String) request.getSession().getAttribute("message"); 
 request.getSession().removeAttribute("message"); 
 String vsd_uri = (String) request.getParameter("uri"); 
+
+
+System.out.println("value_set_search_results.jsp vsd_uri: " + vsd_uri);
+
+
 Vector vsd_vec = null;
           
 if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
@@ -222,7 +227,6 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
              }
              %>                 
               </table>
-              
  
                    <tr><td class="dataCellText">
                      <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
@@ -232,7 +236,7 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
                        tabindex="3">
                      </h:commandButton>                  
                    &nbsp;
-                     <h:commandButton id="versions" value="versions" action="#{valueSetBean.resolveValueSetAction}"
+                     <h:commandButton id="versions" value="versions" action="#{valueSetBean.selectCSVersionAction}"
                        onclick="javascript:cursor_wait();"
                        image="#{valueSetSearch_requestContextPath}/images/versions.gif"
                        alt="Versions"
@@ -249,7 +253,7 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 
 
 <%		
-if (vsd_vec.size() == 1) {
+if (vsd_vec != null && vsd_vec.size() == 1) {
 %>		
     <input type="hidden" name="valueset" id="valueset" value="<%=vsd_uri%>">	
 <%
