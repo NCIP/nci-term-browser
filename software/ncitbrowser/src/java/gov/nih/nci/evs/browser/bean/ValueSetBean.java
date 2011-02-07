@@ -728,9 +728,69 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 	}
 
 
-    public String exportToCSVAction() {
-		return "csv";
+    public void exportToCSVAction() {
+ 		System.out.println("(************* ) exportToCSVAction ");
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String vsd_uri = (String) request.getParameter("vsd_uri");
+        if (vsd_uri == null) {
+			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+		}
+
+
+        ResolvedConceptReferenceList list = (ResolvedConceptReferenceList) request.getSession().getAttribute("ResolvedConceptReferenceList");
+        StringBuffer sb = new StringBuffer();
+
+		if(list != null) {
+			request.getSession().setAttribute("ResolvedConceptReferenceList", list);
+
+			sb.append("Code,");
+			sb.append("Name,");
+			sb.append("Coding Scheme,");
+			sb.append("Version,");
+			sb.append("Namespace");
+			sb.append("\r\n");
+
+			for (int i=0; i<list.getResolvedConceptReferenceCount(); i++) {
+				ResolvedConceptReference ref = list.getResolvedConceptReference(i);
+				String entityDescription = "<NOT ASSIGNED>";
+				if (ref.getEntityDescription() != null) {
+					entityDescription = ref.getEntityDescription().getContent();
+				}
+
+				sb.append("\"" + ref.getConceptCode() + "\",");
+				sb.append("\"" + entityDescription + "\",");
+				sb.append("\"" + ref.getCodingSchemeName() + "\",");
+				sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
+				sb.append("\"" + ref.getCodeNamespace() + "\"");
+				sb.append("\r\n");
+			}
+		} else {
+			sb.append("WARNING: Export to CVS action failed.");
+		}
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename="
+                    + vsd_uri);
+		response.setContentLength(sb.length());
+
+		try {
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		FacesContext.getCurrentInstance().responseComplete();
 	}
+
 
 	public String searchAction() {
         HttpServletRequest request =
