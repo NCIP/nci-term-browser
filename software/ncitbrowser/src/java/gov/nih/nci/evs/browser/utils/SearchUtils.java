@@ -1020,10 +1020,6 @@ public class SearchUtils {
             ranking, maxToReturn);
     }
 
-
-
-
-
     public ResolvedConceptReferencesIteratorWrapper searchByName(String scheme,
         String version, String matchText, String source, String matchAlgorithm,
         boolean ranking, int maxToReturn) {
@@ -1319,49 +1315,21 @@ public class SearchUtils {
                 return null;
             }
 
+            if (iterator.numberRemaining() <= 0) {
+                ms = System.currentTimeMillis();
+                iterator =
+                    matchConceptCode(schemes, versions, matchText0, source,
+                    "LuceneQuery");
+                delay = System.currentTimeMillis() - ms;
+                if (debug_flag)
+                    _logger
+                        .debug("Match concept code " + "delay (millisec.): " + delay);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        int lcv = 0;
-        int iterator_size = 0;
-        if (iterator != null) {
-            try {
-                iterator_size = iterator.numberRemaining();
-                _logger.debug("Number of matches: " + iterator_size);
-            } catch (Exception ex) {
-
-            }
-        }
-
-        ms = System.currentTimeMillis();
-        while (iterator_size == 0 && lcv < schemes.size()) {
-            scheme = (String) schemes.elementAt(lcv);
-
-            CodingSchemeVersionOrTag versionOrTag =
-                new CodingSchemeVersionOrTag();
-            version = (String) versions.elementAt(lcv);
-            if (version != null)
-                versionOrTag.setVersion(version);
-            iterator =
-                matchConceptCode(scheme, version, matchText0, source,
-                    "LuceneQuery");
-            if (iterator != null) {
-                try {
-                    iterator_size = iterator.numberRemaining();
-                    _logger.debug("Number of matches: " + iterator_size);
-                } catch (Exception ex) {
-
-                }
-            }
-            lcv++;
-        }
-
-        delay = System.currentTimeMillis() - ms;
-        if (debug_flag)
-            _logger
-                .debug("Match concept code " + "delay (millisec.): " + delay);
 
         total_delay = System.currentTimeMillis() - tnow;
         _logger.debug("Total search delay: (millisec.): " + total_delay);
@@ -1440,141 +1408,125 @@ public class SearchUtils {
         }
         return null;
     }
-
+    
     public static ResolvedConceptReferencesIterator matchConceptCode(
+        Vector<String> schemes, Vector<String> versions, String matchText, 
+        String source, String matchAlgorithm) {
+        try {
+            int n = schemes.size();
+            Vector<CodedNodeSet> cns_vec = new Vector<CodedNodeSet>();
+            for (int i=0; i<n; ++i) {
+                String scheme = schemes.get(i);
+                String version = versions.get(i);
+                CodedNodeSet cns = matchConceptCode_CNS(
+                    scheme, version, matchText, source, matchAlgorithm);
+                if (cns != null)
+                    cns_vec.add(cns);
+            }
+            
+            SortOptionList sortCriteria = null;
+            LocalNameList restrictToProperties = new LocalNameList();
+            boolean resolveConcepts = true;
+            ResolvedConceptReferencesIterator iterator =
+                new QuickUnionIterator(cns_vec, sortCriteria, null,
+                    restrictToProperties, null, resolveConcepts);
+            return iterator;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    private static CodedNodeSet matchConceptCode_CNS(
         String scheme, String version, String matchText, String source,
-        String matchAlgorithm) {
+        String matchAlgorithm) throws Exception {
         LexBIGService lbs = RemoteServerUtil.createLexBIGService();
         Vector v = new Vector();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
-        CodedNodeSet cns = null;
-        ResolvedConceptReferencesIterator iterator = null;
+        CodedNodeSet cns = getNodeSet(lbs, scheme, versionOrTag);
+
+        if (source != null)
+            cns = restrictToSource(cns, source);
+        CodedNodeSet.PropertyType[] propertyTypes = null;
+        LocalNameList sourceList = null;
+        LocalNameList contextList = null;
+        NameAndValueList qualifierList = null;
+        cns = cns.restrictToMatchingProperties(ConvenienceMethods
+            .createLocalNameList(new String[] { "conceptCode" }),
+            propertyTypes, sourceList, contextList, qualifierList,
+            matchText, matchAlgorithm, null);
+
+        SortOptionList sortCriteria = null;
+        LocalNameList restrictToProperties = new LocalNameList();
+        boolean resolveConcepts = true;
+        ResolvedConceptReferencesIterator iterator =
+            cns.resolve(sortCriteria, null, restrictToProperties,
+                null, resolveConcepts);
+        if (iterator == null || iterator.numberRemaining() <= 0) {
+            return matchConceptCode_CNS(scheme, version, matchText);
+        }
+        return cns;
+    }
+    
+    public static ResolvedConceptReferencesIterator matchConceptCode(
+        String scheme, String version, String matchText, String source,
+        String matchAlgorithm) {
         try {
-            //cns = lbs.getNodeSet(scheme, versionOrTag, null);
-            cns = getNodeSet(lbs, scheme, versionOrTag);
-
-            if (source != null)
-                cns = restrictToSource(cns, source);
-            CodedNodeSet.PropertyType[] propertyTypes = null;
-            LocalNameList sourceList = null;
-            LocalNameList contextList = null;
-            NameAndValueList qualifierList = null;
-            cns =
-                cns.restrictToMatchingProperties(ConvenienceMethods
-                    .createLocalNameList(new String[] { "conceptCode" }),
-                    propertyTypes, sourceList, contextList, qualifierList,
-                    matchText, matchAlgorithm, null);
-
-            LocalNameList restrictToProperties = new LocalNameList();
+            CodedNodeSet cns = matchConceptCode_CNS(
+                scheme, version, matchText, source,
+                matchAlgorithm);
+            
             SortOptionList sortCriteria = null;
-            try {
-                boolean resolveConcepts = true;
-                try {
-                    long ms = System.currentTimeMillis(), delay = 0;
-                    iterator =
-                        cns.resolve(sortCriteria, null, restrictToProperties,
-                            null, resolveConcepts);
-                    if (iterator == null) {
-                        return matchConceptCode(scheme, version, matchText);
-                    }
-
-                    int size = iterator.numberRemaining();
-                    // test
-                    if (size == 0) {
-                        return matchConceptCode(scheme, version, matchText);
-                    }
-
-                } catch (Exception e) {
-                    _logger.error("Method: SearchUtil.matchConceptCode");
-                    _logger.error("* ERROR: cns.resolve throws exceptions.");
-                    _logger.error("* " + e.getClass().getSimpleName() + ": "
-                        + e.getMessage());
-                    e.printStackTrace();
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return null;
+            LocalNameList restrictToProperties = new LocalNameList();
+            boolean resolveConcepts = true;
+            ResolvedConceptReferencesIterator iterator =
+                cns.resolve(sortCriteria, null, restrictToProperties,
+                    null, resolveConcepts);
+    
+            if (source == null || source.compareToIgnoreCase("ALL") == 0) {
+                return filterIterator(iterator, scheme, version, matchText);
             }
-
-        } catch (Exception ex) {
-            // _logger.error("WARNING: searchByCode throws exception.");
+            return iterator;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        // return iterator;
-        if (source == null || source.compareToIgnoreCase("ALL") == 0) {
-            return filterIterator(iterator, scheme, version, matchText);
-        }
-        return iterator;
     }
 
-    public static ResolvedConceptReferencesIterator matchConceptCode(
-        String scheme, String version, String code) {
+    public static CodedNodeSet matchConceptCode_CNS(
+        String scheme, String version, String code) throws Exception {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         Vector v = new Vector();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
-        CodedNodeSet cns = null;
-        ResolvedConceptReferencesIterator iterator = null;
+        CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);
+        CodedNodeSet.PropertyType[] propertyTypes = null;
+        ConceptReferenceList crefs =
+            createConceptReferenceList(new String[] { code }, scheme);
+        cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+        cns = cns.restrictToCodes(crefs);
+        return cns;
+    }
+
+    public static ResolvedConceptReferencesIterator matchConceptCode(
+        String scheme, String version, String code) {
         try {
-            //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
-            cns = getNodeSet(lbSvc, scheme, versionOrTag);
-
-            CodedNodeSet.PropertyType[] propertyTypes = null;
-            // LocalNameList sourceList = null;
-            // LocalNameList contextList = null;
-            // NameAndValueList qualifierList = null;
-            ConceptReferenceList crefs =
-                createConceptReferenceList(new String[] { code }, scheme);
-            try {
-                cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            if (cns == null) {
-                _logger
-                    .warn("getConceptByCode getCodingSchemeConcepts returns null??? "
-                        + scheme);
-                return null;
-            }
-
-            cns = cns.restrictToCodes(crefs);
-            LocalNameList restrictToProperties = new LocalNameList();
+            ResolvedConceptReferencesIterator iterator = null;
+            CodedNodeSet cns = matchConceptCode_CNS(scheme, version, code);
             SortOptionList sortCriteria = null;
-            try {
-                boolean resolveConcepts = true;
-                try {
-                    long ms = System.currentTimeMillis(), delay = 0;
-                    iterator =
-                        cns.resolve(sortCriteria, null, restrictToProperties,
-                            null, resolveConcepts);
-
-                    int size = iterator.numberRemaining();
-                } catch (Exception e) {
-                    _logger.error("Method: SearchUtil.matchConceptCode");
-                    _logger.error("* ERROR: cns.resolve throws exceptions.");
-                    _logger.error("* " + e.getClass().getSimpleName() + ": "
-                        + e.getMessage());
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return null;
-            }
-
-        } catch (Exception ex) {
-            _logger.error("WARNING: searchByCode throws exception.");
+            LocalNameList restrictToProperties = new LocalNameList();
+            boolean resolveConcepts = true;
+            iterator =
+                cns.resolve(sortCriteria, null, restrictToProperties,
+                    null, resolveConcepts);
+            return filterIterator(iterator, scheme, version, code);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        // [#26386] Need app to be able to distinguish/prioritize/display
-        // matching code vrs. matching name results
-
-        return filterIterator(iterator, scheme, version, code);
-        // return iterator;
     }
 
     public static Entity matchConceptByCode(String scheme, String version,
