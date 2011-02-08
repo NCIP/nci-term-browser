@@ -4151,26 +4151,28 @@ System.out.println("uri " + uri);
 
 		    Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
 
-System.out.println("cs_vec.size: " + cs_vec.size());
+            if (cs_vec != null) {
+	System.out.println("cs_vec.size: " + cs_vec.size());
 
 
-		    for (int k=0; k<cs_vec.size(); k++) {
-				String cs_urn = (String) cs_vec.elementAt(k);
+				for (int k=0; k<cs_vec.size(); k++) {
+					String cs_urn = (String) cs_vec.elementAt(k);
 
-				String cs_name = uri2CodingSchemeName(cs_urn);
+					String cs_name = uri2CodingSchemeName(cs_urn);
 
-				if (hmap.containsKey(cs_name)) {
-					Vector v = (Vector) hmap.get(cs_name);
-					if (!v.contains(vsd_str)) {
+					if (hmap.containsKey(cs_name)) {
+						Vector v = (Vector) hmap.get(cs_name);
+						if (!v.contains(vsd_str)) {
+							v.add(vsd_str);
+							hmap.put(cs_name, v);
+						}
+					} else {
+						Vector v = new Vector();
 						v.add(vsd_str);
 						hmap.put(cs_name, v);
 					}
-				} else {
-					Vector v = new Vector();
-					v.add(vsd_str);
-					hmap.put(cs_name, v);
 				}
-			}
+		    }
 		}
 		return hmap;
 	}
@@ -4241,12 +4243,14 @@ System.out.println("vsd_str " + vsd_str);
 				AbsoluteCodingSchemeVersionReferenceList codingSchemes =
 					vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
 
-				//output is all of the mapping ontologies that this code participates in.
-				for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
-					System.out.println("URI: " + ref.getCodingSchemeURN());
-					v.add(ref.getCodingSchemeURN());
-				}
-				return SortUtils.quickSort(v);
+                if (codingSchemes != null) {
+					//output is all of the mapping ontologies that this code participates in.
+					for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
+						System.out.println("URI: " + ref.getCodingSchemeURN());
+						v.add(ref.getCodingSchemeURN());
+					}
+					return SortUtils.quickSort(v);
+			    }
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -4431,18 +4435,20 @@ System.out.println("vsd_str " + vsd_str);
 		try {
 			Vector w = new Vector();
 			Vector urn_vec = getCodingSchemeURNsInValueSetDefinition(uri);
-			for (int i=0; i<urn_vec.size(); i++) {
-				String urn = (String) urn_vec.elementAt(i);
-				Vector v = getCodingSchemeVersionsByURN(urn);
-				if (v != null) {
-					for (int j=0; j<v.size(); j++) {
-						String version = (String) v.elementAt(j);
-						w.add(urn + "|" + version);
+			if (urn_vec != null) {
+				for (int i=0; i<urn_vec.size(); i++) {
+					String urn = (String) urn_vec.elementAt(i);
+					Vector v = getCodingSchemeVersionsByURN(urn);
+					if (v != null) {
+						for (int j=0; j<v.size(); j++) {
+							String version = (String) v.elementAt(j);
+							w.add(urn + "|" + version);
+						}
 					}
-			    }
-			}
-            w = SortUtils.quickSort(w);
-            return w;
+				}
+				w = SortUtils.quickSort(w);
+				return w;
+		    }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -4454,18 +4460,20 @@ System.out.println("vsd_str " + vsd_str);
 		try {
 			Vector w = new Vector();
 			Vector urn_vec = getCodingSchemeURNsInValueSetDefinition(uri);
-			for (int i=0; i<urn_vec.size(); i++) {
-				String urn = (String) urn_vec.elementAt(i);
-				Vector v = getCodingSchemeVersionsByURN(urn, tag);
-				if (v != null) {
-					for (int j=0; j<v.size(); j++) {
-						String version = (String) v.elementAt(j);
-						w.add(urn + "|" + version);
+			if (urn_vec != null) {
+				for (int i=0; i<urn_vec.size(); i++) {
+					String urn = (String) urn_vec.elementAt(i);
+					Vector v = getCodingSchemeVersionsByURN(urn, tag);
+					if (v != null) {
+						for (int j=0; j<v.size(); j++) {
+							String version = (String) v.elementAt(j);
+							w.add(urn + "|" + version);
+						}
 					}
-			    }
-			}
-            w = SortUtils.quickSort(w);
-            return w;
+				}
+				w = SortUtils.quickSort(w);
+				return w;
+		    }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

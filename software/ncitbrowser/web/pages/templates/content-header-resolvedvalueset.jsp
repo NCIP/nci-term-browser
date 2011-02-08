@@ -11,7 +11,16 @@
     
     request.getSession().setAttribute("nav_type", "valuesets");
     
-    
+  
+System.out.println("content-header-resolvedvalueset.jsp vsdUri: " + vsdUri);
+if (vsdUri.indexOf("|") != -1) {
+    Vector w = DataUtils.parseData(vsdUri);
+    vsdUri = (String) w.elementAt(1);
+    request.getSession().setAttribute("vsd_uri", vsdUri); 
+}
+
+  
+  
 %>
 
 <div class="bannerarea">

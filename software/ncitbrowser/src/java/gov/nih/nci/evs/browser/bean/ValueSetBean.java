@@ -351,7 +351,7 @@ System.out.println("matchText: " + matchText);
 
 System.out.println("listValueSetsWithEntityCode: " + matchText);
 
-
+/*
 				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
 
 System.out.println("list.size(): " + list.size());
@@ -368,6 +368,56 @@ System.out.println("list.size(): " + list.size());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+*/
+
+
+				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
+				if (list != null) {
+					System.out.println("list.size(): " + list.size());
+
+					if (list.size() == 1) {
+						String vsd_uri = (String) list.get(0);
+						request.getSession().setAttribute("vsd_uri", vsd_uri);
+					}
+
+					for (int j=0; j<list.size(); j++) {
+						String uri = (String) list.get(j);
+						System.out.println(uri);
+
+						try {
+							ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
+							if (vsd == null) {
+								msg = "Unable to find any value set with URI " + selectURI + ".";
+								request.getSession().setAttribute("message", msg);
+								return "message";
+							}
+
+
+							String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+							if (metadata != null) {
+								v.add(metadata);
+							}
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							msg = "Unable to find any value set with URI " + selectURI + ".";
+							request.getSession().setAttribute("message", msg);
+							return "message";
+						}
+
+					}
+				}
+
+				request.getSession().setAttribute("matched_vsds", v);
+				return "value_set";
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				System.out.println("vsd_service.listValueSetsWithEntityCode throws exceptions???");
+			}
+			return "message";
+
+
 
 		} else if (selectValueSetSearchOption.compareTo("URI") == 0) {
 			System.out.println("valueSetSearchAction selectURI: " + selectURI);
