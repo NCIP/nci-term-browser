@@ -152,7 +152,7 @@ if (iteratorBean == null){
    System.out.println("iteratorBean NOT FOUND???" + key);
 }
 
-ResolvedConceptReferencesIterator iterator = iteratorBean.getIterator();
+iterator = iteratorBean.getIterator();
 
 System.out.println("(*) Calling getRestrictedMappingDataIterator ...");
 iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, sortBy, iterator);

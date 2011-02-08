@@ -52,6 +52,7 @@ import org.LexGrid.commonTypes.Source;
 
 
 import org.apache.log4j.*;
+import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -3897,59 +3898,6 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 
 	}
 
-/*
-    To be activated after Mayo delivers the mapping extension.
-    mappin_search_results.jsp would also need to be modified
-
-    public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
-        List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator) {
-		CodingSchemeVersionOrTag versionOrTag =
-			new CodingSchemeVersionOrTag();
-		if (version != null) {
-			versionOrTag.setVersion(version);
-		}
-		String relationsContainerName = null;
-
-        LexBIGService distributed = RemoteServerUtil.createLexBIGService();
-        try {
-			CodingScheme cs = distributed.resolveCodingScheme(scheme, versionOrTag);
-			if (cs == null) return null;
-
-			java.util.Enumeration<? extends Relations> relations = cs.enumerateRelations();
-			while (relations.hasMoreElements()) {
-				Relations relation = (Relations) relations.nextElement();
-				Boolean isMapping = relation.getIsMapping();
-				System.out.println("isMapping: " + isMapping);
-				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
- 					relationsContainerName = relation.getContainerName();
-					//System.out.println(relationsContainerName);
-					break;
-				}
-			}
-			if (relationsContainerName == null) {
-				System.out.println("WARNING: Mapping container not found in " + scheme);
-				return null;
-			}
-
-			MappingExtension mappingExtension = (MappingExtension)
-				distributed.getGenericExtension("MappingExtension");
-
-		    Mapping mapping =
-			    mappingExtension.getMapping(scheme, version, relationsContainerName);
-
-            //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
-            ConceptReferenceList codeList = new ConceptReferenceList();
-            mapping = mapping.restrictToCodes(codeList)
-            ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);
-			return itr;
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
-*/
-
 
     public static NameAndValueList getMappingAssociationNames(String scheme, String version) {
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
@@ -4587,5 +4535,82 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
         }
         return "<NOT AVAILABLE>";
     }
+
+
+    public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
+        List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator) {
+		CodingSchemeVersionOrTag versionOrTag =
+			new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+		String relationsContainerName = null;
+
+        LexBIGService distributed = RemoteServerUtil.createLexBIGService();
+        try {
+			CodingScheme cs = distributed.resolveCodingScheme(scheme, versionOrTag);
+			if (cs == null) return null;
+
+			java.util.Enumeration<? extends Relations> relations = cs.enumerateRelations();
+			while (relations.hasMoreElements()) {
+				Relations relation = (Relations) relations.nextElement();
+				Boolean isMapping = relation.getIsMapping();
+				System.out.println("isMapping: " + isMapping);
+				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
+ 					relationsContainerName = relation.getContainerName();
+					//System.out.println(relationsContainerName);
+					break;
+				}
+			}
+			if (relationsContainerName == null) {
+				System.out.println("WARNING: Mapping container not found in " + scheme);
+				return null;
+			}
+
+			MappingExtension mappingExtension = (MappingExtension)
+				distributed.getGenericExtension("MappingExtension");
+
+		    Mapping mapping =
+			    mappingExtension.getMapping(scheme, versionOrTag, relationsContainerName);
+
+            //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
+            ConceptReferenceList codeList = new ConceptReferenceList();
+
+			if (searchResultsIterator != null) {
+				while(searchResultsIterator.hasNext()){
+					ResolvedConceptReference[] refs = searchResultsIterator.next(100).getResolvedConceptReference();
+					for(ResolvedConceptReference ref : refs){
+						/*
+						 list.addResolvedConceptReference(ref);
+						 String entityDescription = "<NOT ASSIGNED>";
+						 if (ref.getEntityDescription() != null) {
+							 entityDescription = ref.getEntityDescription().getContent();
+						 }
+
+						 concept_vec.add(ref.getConceptCode()
+						+ "|" + entityDescription
+						+ "|" + ref.getCodingSchemeName()
+						+ "|" + ref.getCodeNamespace()
+						+ "|" + ref.getCodingSchemeVersion());
+						*/
+						codeList.addConceptReference((ConceptReference) ref);
+					}
+				}
+
+			} else {
+				System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
+			}
+
+
+            mapping = mapping.restrictToCodes(codeList, null);
+            ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);
+			return itr;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
 
 }
