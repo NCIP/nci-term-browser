@@ -10,10 +10,18 @@
     String istart_str = Integer.toString(istart+1);
     String iend_str = Integer.toString(iend+1);
   
-
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
 System.out.println("(*) dictionary_map " + dictionary_map);
-bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
+
+
+bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
+
+if (bean == null) {
+        HashMap scheme2MappingIteratorBeanMap = (HashMap) request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
+	bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
+}
+
+
 numRemaining = bean.getSize();
 
 System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemaining);    

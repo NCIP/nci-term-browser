@@ -4539,12 +4539,18 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
 
     public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
         List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator) {
+
+System.out.println("getRestrictedMappingDataIterator Step 1");
+
+
 		CodingSchemeVersionOrTag versionOrTag =
 			new CodingSchemeVersionOrTag();
 		if (version != null) {
 			versionOrTag.setVersion(version);
 		}
 		String relationsContainerName = null;
+
+System.out.println("getRestrictedMappingDataIterator Step 2");
 
         LexBIGService distributed = RemoteServerUtil.createLexBIGService();
         try {
@@ -4562,10 +4568,16 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
 					break;
 				}
 			}
+
+System.out.println("getRestrictedMappingDataIterator Step 3");
+
 			if (relationsContainerName == null) {
 				System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
 			}
+
+System.out.println("getRestrictedMappingDataIterator Step 4");
+
 
 			MappingExtension mappingExtension = (MappingExtension)
 				distributed.getGenericExtension("MappingExtension");
@@ -4575,6 +4587,8 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
 
             //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
             ConceptReferenceList codeList = new ConceptReferenceList();
+
+System.out.println("getRestrictedMappingDataIterator Step 5");
 
 			if (searchResultsIterator != null) {
 				while(searchResultsIterator.hasNext()){
@@ -4601,6 +4615,8 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
 				System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
 			}
 
+
+System.out.println("getRestrictedMappingDataIterator Step 6");
 
             mapping = mapping.restrictToCodes(codeList, null);
             ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);
