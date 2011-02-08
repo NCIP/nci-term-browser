@@ -58,6 +58,7 @@
 ResolvedConceptReferencesIterator iterator = null;
 String mapping_dictionary = request.getParameter("dictionary");
 String mapping_version = request.getParameter("version");
+MappingIteratorBean bean = null;
 
 
 if (mapping_dictionary == null) {
@@ -155,7 +156,8 @@ if (iteratorBean == null){
 iterator = iteratorBean.getIterator();
 
 System.out.println("(*) Calling getRestrictedMappingDataIterator ...");
-iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, sortBy, iterator);
+iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, null, iterator);
+
     
 if (iterator != null) {
 
@@ -176,7 +178,6 @@ if (iterator != null) {
     numRemaining, // size,
     0,    // pageNumber,
     1);   // numberPages
-    }
    
   bean.initialize(
     iterator,
@@ -186,10 +187,10 @@ if (iterator != null) {
     numRemaining, // size,
     0,    // pageNumber,
     1);   // numberPages
-    }
-    scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
+    
+    
+    request.getSession().setAttribute("mapping_search_results", bean);
 }
-
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 int pageNum = 0;
