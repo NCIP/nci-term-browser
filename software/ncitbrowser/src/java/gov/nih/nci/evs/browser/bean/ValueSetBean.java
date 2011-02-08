@@ -33,6 +33,8 @@ import org.lexgrid.valuesets.dto.ResolvedValueSetDefinition;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import javax.servlet.ServletOutputStream;
 import org.LexGrid.concepts.*;
+import org.lexgrid.valuesets.dto.ResolvedValueSetCodedNodeSet;
+
 
 
 /**
@@ -340,6 +342,9 @@ public class ValueSetBean {
 		System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
 
         String matchText = (String) request.getParameter("matchText");
+        String algorithm = (String) request.getParameter("valueset_search_algorithm");
+
+
         if (matchText != null) matchText = matchText.trim();
 		if (selectValueSetSearchOption.compareTo("Code") == 0) {
 
@@ -350,26 +355,6 @@ System.out.println("matchText: " + matchText);
 			try {
 
 System.out.println("listValueSetsWithEntityCode: " + matchText);
-
-/*
-				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
-
-System.out.println("list.size(): " + list.size());
-
-
-				if (list != null) {
-					for (int j=0; j<list.size(); j++) {
-						String uri = (String) list.get(j);
-						System.out.println(uri);
-						v.add(uri);
-					}
-				}
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-*/
-
 
 				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
 				if (list != null) {
@@ -415,9 +400,75 @@ System.out.println("list.size(): " + list.size());
 				ex.printStackTrace();
 				System.out.println("vsd_service.listValueSetsWithEntityCode throws exceptions???");
 			}
+
+			msg = "Unexpected errors encountered; search by code failed.";
+			request.getSession().setAttribute("message", msg);
+
 			return "message";
 
+		} else if (selectValueSetSearchOption.compareTo("Name") == 0) {
 
+
+/*
+ ResolvedValueSetCodedNodeSet getValueSetDefinitionEntitiesForTerm(
+	 java.lang.String term,
+	 java.lang.String matchAlgorithm,
+	 java.net.URI valueSetDefinitionURI,
+	 AbsoluteCodingSchemeVersionReferenceList csVersionList,
+	 java.lang.String versionTag)
+*/
+
+
+System.out.println("matchText: " + matchText);
+
+			try {
+
+				Vector uri_vec = DataUtils.getValueSetURIs();
+                for (int i=0; i<uri_vec.size(); i++) {
+					String uri = (String) uri_vec.elementAt(i);
+
+System.out.println("uri: " + uri);
+
+					ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getValueSetDefinitionEntitiesForTerm(matchText, algorithm, null, null, null);
+
+                    if (rvs_cns != null) {
+						AbsoluteCodingSchemeVersionReferenceList ref_list = rvs_cns.getCodingSchemeVersionRefList();
+						if (ref_list.getAbsoluteCodingSchemeVersionReferenceCount() > 0) {
+							try {
+								ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
+								if (vsd == null) {
+									msg = "Unable to find any value set with URI " + selectURI + ".";
+									request.getSession().setAttribute("message", msg);
+									return "message";
+								}
+
+
+								String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+								if (metadata != null) {
+									v.add(metadata);
+								}
+
+							} catch (Exception ex) {
+								ex.printStackTrace();
+								msg = "Unable to find any value set with URI " + selectURI + ".";
+								request.getSession().setAttribute("message", msg);
+								return "message";
+							}
+						}
+				    }
+				}
+
+				request.getSession().setAttribute("matched_vsds", v);
+				return "value_set";
+
+			} catch (Exception ex) {
+				//ex.printStackTrace();
+				System.out.println("vsd_service.getValueSetDefinitionEntitiesForTerm throws exceptions???");
+			}
+
+			msg = "Unexpected errors encountered; search by name failed.";
+			request.getSession().setAttribute("message", msg);
+			return "message";
 
 		} else if (selectValueSetSearchOption.compareTo("URI") == 0) {
 			System.out.println("valueSetSearchAction selectURI: " + selectURI);
