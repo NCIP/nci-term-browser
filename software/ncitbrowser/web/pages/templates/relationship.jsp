@@ -11,8 +11,10 @@ scheme_curr = (String) request.getParameter("dictionary");
 }
 
 String version_curr = (String) request.getSession().getAttribute("version");
-
-System.out.println("(*) relationship.jsp version_curr: " + version_curr); 
+System.out.println("(*) relationship.jsp version_curr: " + version_curr);
+String version_parameter = "";
+if (version_curr != null && ! version_curr.equalsIgnoreCase("null"))
+    version_parameter = "&version=" + version_curr;
 
 
 boolean isMapping = DataUtils.isMapping(scheme_curr, version_curr);
@@ -84,7 +86,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
           String cCode = (String) ret_vec.elementAt(1);
     %>
           <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=cCode%>">
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%><%=version_parameter%>&code=<%=cCode%>">
             <%=cName%>
           </a>
     <%
@@ -102,7 +104,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=cCode%>">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%><%=version_parameter%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>
@@ -132,7 +134,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
           String cCode = (String) ret_vec.elementAt(1);
     %>
           <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=cCode%>">
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%><%=version_parameter%>&code=<%=cCode%>">
             <%=cName%>
           </a>
     <%
@@ -150,7 +152,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%>&code=<%=cCode%>">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%><%=version_parameter%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>
@@ -229,7 +231,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
         %>
               <td><%=role_name%></td>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               </td>
@@ -239,7 +241,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
               if (isMapping) {
               %>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
               </td>
@@ -343,7 +345,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
               <%
               if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
               %>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               <%
@@ -358,7 +360,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
               if (isMapping) {
               %>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
               </td>
@@ -462,7 +464,7 @@ if (!isMapping) {
               //if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
               if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
               %>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               <%
@@ -479,7 +481,7 @@ if (!isMapping) {
               if (isMapping) {
               %>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
               </td>
@@ -592,7 +594,7 @@ if (!isMapping) {
               if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {
               %>
 
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
                   <%=target_concept_name%>
                 </a>
               <%
@@ -608,7 +610,7 @@ if (!isMapping) {
               if (isMapping) {
               %>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
               </td>
@@ -675,7 +677,7 @@ if (!isMapping) {
        <tr>
          <td>
          <%=mapping_cs_uri%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%>&code=<%=code_curr%>&type=relationship">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%><%=version_parameter%>&code=<%=code_curr%>&type=relationship">
                    <i class="textbodyred">View Mapping</i>
                 </a>
          </td>

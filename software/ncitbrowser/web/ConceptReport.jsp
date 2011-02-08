@@ -19,6 +19,10 @@
    <%
    String dictionary = (String) request.getParameter("dictionary");
    String code = (String) request.getParameter("code");
+   String version = (String) request.getParameter("version");
+   String version_parameter = "";
+   if (version != null && ! version.equalsIgnoreCase("null"))
+       version_parameter = "&version=" + version;
    String match_text = (String) request.getSession().getAttribute("matchText");
    
    LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
@@ -26,16 +30,12 @@
        licenseBean = new LicenseBean();
        request.getSession().setAttribute("licenseBean", licenseBean);
    }
-  
-   if (LicenseBean.isLicensed(dictionary, null) && !licenseBean.licenseAgreementAccepted(dictionary)) {
-   %>  
-       <jsp:forward page="/pages/accept_license.jsf?dictionary=<%=dictionary%>&code=<%=code%>" />
-   <%
-   } else {
-   %> 
-       <jsp:forward page="/pages/concept_details.jsf?dictionary=<%=dictionary%>&code=<%=code%>" />
-   <%
-   }
-   %>   
+   
+   String jsfPage = "/pages/concept_details.jsf";
+   if (LicenseBean.isLicensed(dictionary, null) && !licenseBean.licenseAgreementAccepted(dictionary))
+       jsfPage = "/pages/accept_license.jsf";
+   String forwardPage = jsfPage + "?&dictionary=" + dictionary + version_parameter + "&code=" + code;
+   %>
+   <jsp:forward page="<%=forwardPage%>" />
  </body>
 </html>

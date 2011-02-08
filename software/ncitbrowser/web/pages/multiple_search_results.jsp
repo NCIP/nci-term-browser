@@ -358,7 +358,7 @@ if (resultsPerPage == null) {
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>&version=<%=version%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=version%>&code=<%=code%>" ><%=name%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
@@ -367,7 +367,7 @@ if (resultsPerPage == null) {
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>&version=<%=version%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=version%>&code=<%=code%>" ><%=name%></a>
           <%
           }
           %>
