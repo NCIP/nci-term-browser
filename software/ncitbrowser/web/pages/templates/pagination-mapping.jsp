@@ -17,7 +17,7 @@ System.out.println("(*) dictionary_map " + dictionary_map);
 bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
 
 if (bean == null) {
-        HashMap scheme2MappingIteratorBeanMap = (HashMap) request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
+        scheme2MappingIteratorBeanMap = (HashMap) request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
 	bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
 }
 
