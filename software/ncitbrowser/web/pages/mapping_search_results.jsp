@@ -55,6 +55,7 @@
     <div id="main-area">
 <%
 
+HashMap scheme2MappingIteratorBeanMap = null;
 ResolvedConceptReferencesIterator iterator = null;
 String mapping_dictionary = request.getParameter("dictionary");
 String mapping_version = request.getParameter("version");
@@ -88,17 +89,9 @@ if (mapping_version != null) {
     request.setAttribute("version", mapping_version);
 }
 
-if (mapping_dictionary != null && mapping_dictionary.compareTo("NCI Thesaurus") == 0) {
-%>
 
-      <%@ include file="/pages/templates/content-header.jsp" %>
-<%
-} else {
 %>
       <%@ include file="/pages/templates/content-header-other.jsp" %>
-<%
-}
-%>
       <!-- Page content -->
       <div class="pagecontent">
 	    <a name="evs-content" id="evs-content"></a>
@@ -190,7 +183,11 @@ if (iterator != null) {
     
     
     request.getSession().setAttribute("mapping_search_results", bean);
+
+} else {
+    System.out.println("(*) MappingIteratorBean is null??? ...");
 }
+
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 int pageNum = 0;
@@ -204,7 +201,12 @@ if (page_num == 0) page_num++;
 
 int pageSize = Integer.parseInt(selectedResultsPerPage);
 
-int size = bean.getNumberRemaining();
+int size = 0;
+List list = null;
+
+if (bean != null) {
+size = bean.getNumberRemaining();
+}
 
 System.out.println("\npage_num: " + page_num);
 System.out.println("size: " + size);
@@ -218,7 +220,7 @@ System.out.println("num_pages: " + num_pages + "\n");
 int istart = pageNum * pageSize;
 int iend = istart + pageSize - 1;
 
-List list = null;
+
 System.out.println("calling bean.getData ...");
 try {
    list = bean.getData(istart, iend);
