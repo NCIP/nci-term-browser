@@ -836,8 +836,15 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 
 
 
-
-
+/*
+java.net.URI exportValueSetResolution(java.net.URI valueSetDefinitionURI,
+                                      java.lang.String valueSetDefinitionRevisionId,
+                                      java.net.URI exportDestination,
+                                      AbsoluteCodingSchemeVersionReferenceList csVersionList,
+                                      java.lang.String csVersionTag,
+                                      boolean overwrite,
+                                      boolean failOnAllErrors)
+*/
 
     public void exportToXMLAction() {
 
