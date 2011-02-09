@@ -4404,6 +4404,27 @@ System.out.println("vsd_str " + vsd_str);
 	}
 
 
+    public static AbsoluteCodingSchemeVersionReferenceList vector2CodingSchemeVersionReferenceList(Vector v) {
+		if (v == null) return null;
+		AbsoluteCodingSchemeVersionReferenceList list = new AbsoluteCodingSchemeVersionReferenceList();
+		for (int i=0; i<v.size(); i++) {
+			String s = (String) v.elementAt(i);
+			Vector u = DataUtils.parseData(s);
+			String uri = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+
+System.out.println("(***) URI: " + uri + " version: " + version);
+
+			AbsoluteCodingSchemeVersionReference vAbsoluteCodingSchemeVersionReference
+			    = new AbsoluteCodingSchemeVersionReference();
+			vAbsoluteCodingSchemeVersionReference.setCodingSchemeURN(uri);
+			vAbsoluteCodingSchemeVersionReference.setCodingSchemeVersion(version);
+			list.addAbsoluteCodingSchemeVersionReference(vAbsoluteCodingSchemeVersionReference);
+		}
+		return list;
+	}
+
+
     public static Vector getCodingSchemeReferencesInValueSetDefinition(String uri, String tag) {
 		try {
 			Vector w = new Vector();

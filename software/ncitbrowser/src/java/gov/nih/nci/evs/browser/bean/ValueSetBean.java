@@ -394,6 +394,12 @@ System.out.println("listValueSetsWithEntityCode: " + matchText);
 				}
 
 				request.getSession().setAttribute("matched_vsds", v);
+				if (v.size() == 0) {
+					msg = "No match found.";
+					request.getSession().setAttribute("message", msg);
+					return "message";
+				}
+
 				return "value_set";
 
 			} catch (Exception ex) {
@@ -418,47 +424,72 @@ System.out.println("listValueSetsWithEntityCode: " + matchText);
 	 java.lang.String versionTag)
 */
 
-
-System.out.println("matchText: " + matchText);
-
 			try {
 
 				Vector uri_vec = DataUtils.getValueSetURIs();
                 for (int i=0; i<uri_vec.size(); i++) {
 					String uri = (String) uri_vec.elementAt(i);
+					AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+					Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
+					if (cs_ref_vec != null) {
+						csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
+					}
 
-System.out.println("uri: " + uri);
+					ResolvedValueSetCodedNodeSet rvs_cns = null;
+					SortOptionList sortOptions = null;
+					LocalNameList propertyNames = null;
+					CodedNodeSet.PropertyType[] propertyTypes = null;
 
-					ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getValueSetDefinitionEntitiesForTerm(matchText, algorithm, null, null, null);
+					try {
+						rvs_cns = vsd_service.getValueSetDefinitionEntitiesForTerm(matchText, algorithm, new URI(uri), csVersionList, null);
 
-                    if (rvs_cns != null) {
-						AbsoluteCodingSchemeVersionReferenceList ref_list = rvs_cns.getCodingSchemeVersionRefList();
-						if (ref_list.getAbsoluteCodingSchemeVersionReferenceCount() > 0) {
-							try {
-								ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
-								if (vsd == null) {
-									msg = "Unable to find any value set with URI " + selectURI + ".";
-									request.getSession().setAttribute("message", msg);
-									return "message";
+						if (rvs_cns != null) {
+							CodedNodeSet cns = rvs_cns.getCodedNodeSet();
+							ResolvedConceptReferencesIterator itr = cns.resolve(sortOptions, propertyNames, propertyTypes);
+							if (itr != null && itr.numberRemaining() > 0) {
+ 								AbsoluteCodingSchemeVersionReferenceList ref_list = rvs_cns.getCodingSchemeVersionRefList();
+								if (ref_list.getAbsoluteCodingSchemeVersionReferenceCount() > 0) {
+									try {
+										ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
+										if (vsd == null) {
+											msg = "Unable to find any value set with name " + matchText + ".";
+											request.getSession().setAttribute("message", msg);
+											return "message";
+										}
+
+
+										String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+										if (metadata != null) {
+											v.add(metadata);
+										}
+
+									} catch (Exception ex) {
+										ex.printStackTrace();
+										msg = "Unable to find any value set with name " + matchText + ".";
+										request.getSession().setAttribute("message", msg);
+										return "message";
+									}
 								}
-
-
-								String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-								if (metadata != null) {
-									v.add(metadata);
-								}
-
-							} catch (Exception ex) {
-								ex.printStackTrace();
-								msg = "Unable to find any value set with URI " + selectURI + ".";
-								request.getSession().setAttribute("message", msg);
-								return "message";
-							}
+						    }
 						}
-				    }
+
+
+				    } catch (Exception ex) {
+					    System.out.println("WARNING: getValueSetDefinitionEntitiesForTerm throws exception???");
+						msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed.";
+						request.getSession().setAttribute("message", msg);
+						return "message";
+					}
 				}
 
 				request.getSession().setAttribute("matched_vsds", v);
+
+				if (v.size() == 0) {
+					msg = "No match found.";
+					request.getSession().setAttribute("message", msg);
+					return "message";
+				}
+
 				return "value_set";
 
 			} catch (Exception ex) {
@@ -497,6 +528,12 @@ System.out.println("uri: " + uri);
 				}
 		    }
 			request.getSession().setAttribute("matched_vsds", v);
+			if (v.size() == 0) {
+				msg = "No match found.";
+				request.getSession().setAttribute("message", msg);
+				return "message";
+			}
+
 			return "value_set";
 		}
 
@@ -580,6 +617,12 @@ System.out.println("(********) metadata " + metadata);
 				}
 		    }
 			request.getSession().setAttribute("matched_vsds", v);
+			if (v.size() == 0) {
+				msg = "No match found.";
+				request.getSession().setAttribute("message", msg);
+				return "message";
+			}
+
 			return "value_set";
 		}
 		msg = "WARNING: Unexpected error encountered.";
