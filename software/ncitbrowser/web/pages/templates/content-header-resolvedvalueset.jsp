@@ -25,13 +25,16 @@ if (vsdUri.indexOf("|") != -1) {
 
 <div class="bannerarea">
     <div class="banner">
-	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/resolve_value_set.jsf?uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
-		<div class="vocabularynamebanner">
+	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?nav_type=valuesets&uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
+      
+	<div class="vocabularynamebanner">
 		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsdUri)%>px; font-family : Arial">
 		    <%=HTTPUtils.cleanXSS(vsdUri)%>
 		  </div>
-		</div>
+	</div>
+  
 	    </a>
+    
 
     </div>
 	
