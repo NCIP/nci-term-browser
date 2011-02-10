@@ -70,17 +70,20 @@ if (vocabulary_version != null) {
     <div id="main-area">
   <%
     String dictionary = (String) request.getParameter("dictionary");
+    String version = (String) request.getParameter("version");
+    if (version == null)
+      version = (String) request.getAttribute("version");
 
     String scheme = (String) request.getParameter("scheme");
     String shortName = "Vocabulary";
     if (scheme == null) {
       scheme = (String) request.getAttribute("scheme");
     } else {
-      shortName = DataUtils.getMetadataValue(scheme, "display_name");
+      shortName = DataUtils.getMetadataValue(scheme, version, "display_name");
       if (shortName == null) shortName = "Vocabulary";
     }
 
- boolean tree_access_allowed = true;
+    boolean tree_access_allowed = true;
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
      tree_access_allowed = false;
  }
@@ -89,11 +92,6 @@ if (vocabulary_version != null) {
  System.out.println("menubar scheme: " + scheme);
  System.out.println("vocabulary_home_isMapping: " + vocabulary_home_isMapping);
 
-
-    String version = (String) request.getParameter("version");
-    if (version == null) {
-      version = (String) request.getAttribute("version");
-    }
     String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
     if (term_browser_version == null) term_browser_version = "N/A";
 

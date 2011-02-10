@@ -54,18 +54,19 @@ if (vocabulary_version != null) {
 
 
 
-String html_compatable_description_value = DataUtils.getMetadataValue(scheme, "html_compatable_description");
-String version_value = DataUtils.getMetadataValue(scheme, "term_browser_version");
-if (version_value == null) version_value = DataUtils.getMetadataValue(scheme, "version");
-String source_url_value = DataUtils.getMetadataValue(scheme, "source_url");
-String download_url_value = DataUtils.getMetadataValue(scheme, "download_url");
-String copyright_statement_value = DataUtils.getMetadataValue(scheme, "copyright");
-String cabig_vkc_index_url_value = DataUtils.getMetadataValue(scheme, "cabig_vkc_index_url");
+String html_compatable_description_value = DataUtils.getMetadataValue(scheme, _version, "html_compatable_description");
+String version_value = DataUtils.getMetadataValue(scheme, _version, "term_browser_version");
+if (version_value == null)
+    version_value = DataUtils.getMetadataValue(scheme, _version, "version");
+String source_url_value = DataUtils.getMetadataValue(scheme, _version, "source_url");
+String download_url_value = DataUtils.getMetadataValue(scheme, _version, "download_url");
+String copyright_statement_value = DataUtils.getMetadataValue(scheme, _version, "copyright");
+String cabig_vkc_index_url_value = DataUtils.getMetadataValue(scheme, _version, "cabig_vkc_index_url");
 
 String license_statement_value = null;
-String license_display_value = DataUtils.getMetadataValue(scheme, "license_display");
+String license_display_value = DataUtils.getMetadataValue(scheme, _version, "license_display");
 if (license_display_value != null && (license_display_value.compareTo("show") == 0 || license_display_value.compareTo("accept") == 0)) {
-    license_statement_value = DataUtils.getMetadataValue(scheme, "license_statement");
+    license_statement_value = DataUtils.getMetadataValue(scheme, _version, "license_statement");
 }
 
 

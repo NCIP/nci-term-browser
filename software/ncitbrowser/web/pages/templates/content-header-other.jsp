@@ -19,7 +19,8 @@
             request.getSession().setAttribute("dictionary", hdr_dictionary);
             String content_hdr_shortName = DataUtils.getLocalName(hdr_dictionary);
             String content_hdr_formalName = DataUtils.getFormalName(content_hdr_shortName);
-            String display_name = DataUtils.getMetadataValue(content_hdr_formalName, "display_name");
+            String display_name = DataUtils.getMetadataValue(
+                content_hdr_formalName, hdr_version, "display_name");
             String term_browser_version = DataUtils.getMetadataValue(
                 content_hdr_formalName, hdr_version, "term_browser_version");
 

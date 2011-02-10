@@ -229,13 +229,12 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                     String scheme = DataUtils.key2CodingSchemeName(value);
                     String version = DataUtils.key2CodingSchemeVersion(value);
                     
-                    //String display_name = DataUtils.getMetadataValue(scheme, "display_name");
                     String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
                     
                     if (display_name == null || display_name.compareTo("null") == 0)
                         display_name = DataUtils.getLocalName(scheme);
                     String sort_category = DataUtils.getMetadataValue(
-                        scheme, "vocabulary_sort_category");
+                        scheme, version, "vocabulary_sort_category");
                     
                     display_name_hmap.put(display_name+"$"+version, value);
                     display_name_vec.add(new OntologyInfo(display_name+"$"+version, sort_category));
@@ -272,7 +271,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
 				String http_version = null;
 
         String status = DataUtils.getMetadataValue(
-            scheme, "cabig_approval_status");
+            scheme, version, "cabig_approval_status");
         boolean display_status = status != null && 
           status.trim().length() > 0;
         String cabig_approval_indicator = getCabigIndicator(display_status, basePath);

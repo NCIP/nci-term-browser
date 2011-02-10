@@ -27,11 +27,13 @@
   String display_name = null;
   final int TB=0, NCIT=1, NCIO=2;
   int subApp = TB;
-  String version = null;
-
+  String version = (String) request.getParameter("version");
+  if (version == null)
+    version = (String) request.getAttribute("version");
+  
   if (dictionary != null) {
     display_name = DataUtils.getFormalName(dictionary);
-    version = DataUtils.getMetadataValue(display_name, "term_browser_version");
+    version = DataUtils.getMetadataValue(display_name, version, "term_browser_version");
     if (display_name == null) subApp = TB;
     else if (dictionary == "NCI Thesaurus" || dictionary == "NCI_Thesaurus")
       subApp = NCIT;

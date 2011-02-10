@@ -238,10 +238,11 @@ if (resultsPerPage == null) {
                   String s = (String) ontologies_to_search_on.elementAt(k);
 
                   String t1 = DataUtils.key2CodingSchemeName(s);
-                  String term_browser_version = DataUtils.getMetadataValue(t1, "term_browser_version");
+                  String v1 = DataUtils.key2CodingSchemeVersion(s); //DYEE: Test
+                  String term_browser_version = DataUtils.getMetadataValue(t1, v1, "term_browser_version"); //DYEE: Test
 
                   if (term_browser_version == null)
-                     term_browser_version = DataUtils.key2CodingSchemeVersion(s);
+                     term_browser_version = v1;
                   for (int i=0; i<display_name_vec.size(); i++) {
                       OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                       String nm = info.getDisplayName();
@@ -303,7 +304,7 @@ if (resultsPerPage == null) {
         if (name_hmap.containsKey(vocabulary_name)) {
       short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
         } else {
-      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, "display_name");
+      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, version, "display_name"); //DYEE_Test
       if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
           short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
       }

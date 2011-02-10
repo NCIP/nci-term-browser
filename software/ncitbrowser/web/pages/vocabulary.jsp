@@ -103,7 +103,7 @@ if (scheme != null) {
 
         if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;//"N/A";
 
-        String display_name = DataUtils.getMetadataValue(scheme, "display_name");
+        String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
 
         if (display_name == null || display_name.compareTo("null") == 0) display_name = shortName;
 
@@ -140,7 +140,7 @@ if (scheme != null) {
         /* ------------------------ */
 
         v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
-        Vector u1 = MetadataUtils.getMetadataValues(v,
+        Vector u1 = MetadataUtils.getMetadataValues(v, 
             "html_compatable_description");
         voc_description = scheme;
         if (u1 != null && u1.size() > 0) {
