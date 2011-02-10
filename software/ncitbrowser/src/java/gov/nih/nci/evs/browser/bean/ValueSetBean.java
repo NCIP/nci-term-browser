@@ -354,11 +354,11 @@ System.out.println("matchText: " + matchText);
 
 			try {
 
-System.out.println("listValueSetsWithEntityCode: " + matchText);
+System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchText);
 
 				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
 				if (list != null) {
-					System.out.println("list.size(): " + list.size());
+					System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");
 
 					if (list.size() == 1) {
 						String vsd_uri = (String) list.get(0);
@@ -699,6 +699,8 @@ System.out.println("(********) metadata " + metadata);
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 
+        request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+
         long time = System.currentTimeMillis();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 		ResolvedValueSetDefinition rvsd = null;
@@ -762,12 +764,6 @@ System.out.println("(********) metadata " + metadata);
 			Vector u = DataUtils.parseData(t);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
-			/*
-			if (version == null || version.compareTo("null") == 0) {
-				//version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
-				version = "1.0";
-			}
-			*/
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 
@@ -787,6 +783,7 @@ System.out.println("(*) continueResolveValueSetAction #2 ");
 			if(rvsd != null) {
 				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
 				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+                request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 				return "resolved_value_set";
 		    } else {
 System.out.println("(*) rvsd.getResolvedConceptReferenceIterator returns NULL???");
