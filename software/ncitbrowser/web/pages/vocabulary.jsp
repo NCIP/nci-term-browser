@@ -98,7 +98,7 @@ if (scheme != null) {
             version = (String) request.getSession().getAttribute("version");
         }
 
-        String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+        String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
 
 
         if (term_browser_version == null || term_browser_version.compareTo("null") == 0) term_browser_version = version;//"N/A";

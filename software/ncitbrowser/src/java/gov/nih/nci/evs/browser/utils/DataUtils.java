@@ -510,7 +510,10 @@ public class DataUtils {
 
 
     public static String getMetadataValue(String scheme, String version, String propertyName) {
-        Vector v = getMetadataValues(scheme, version, propertyName);
+        Vector v;
+        if (version != null && ! version.equalsIgnoreCase("null"))
+            v = getMetadataValues(scheme, version, propertyName);
+        else v = getMetadataValues(scheme, propertyName);
         if (v == null || v.size() == 0)
             return null;
         return (String) v.elementAt(0);
@@ -524,7 +527,7 @@ public class DataUtils {
         if (!_formalNameVersion2MetadataHashMap.containsKey(scheme + "$" + version)) {
             return null;
         }
-        Vector metadata = (Vector) _formalName2MetadataHashMap.get(scheme + "$" + version);
+        Vector metadata = (Vector) _formalNameVersion2MetadataHashMap.get(scheme + "$" + version);
         if (metadata == null || metadata.size() == 0) {
             return null;
         }

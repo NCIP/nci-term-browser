@@ -94,7 +94,7 @@ if (vocabulary_version != null) {
     if (version == null) {
       version = (String) request.getAttribute("version");
     }
-    String term_browser_version = DataUtils.getMetadataValue(scheme, "term_browser_version");
+    String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
     if (term_browser_version == null) term_browser_version = "N/A";
 
     if (dictionary != null && scheme == null) {
