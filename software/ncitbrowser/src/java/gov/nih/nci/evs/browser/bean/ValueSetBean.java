@@ -414,16 +414,6 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 
 		} else if (selectValueSetSearchOption.compareTo("Name") == 0) {
 
-
-/*
- ResolvedValueSetCodedNodeSet getValueSetDefinitionEntitiesForTerm(
-	 java.lang.String term,
-	 java.lang.String matchAlgorithm,
-	 java.net.URI valueSetDefinitionURI,
-	 AbsoluteCodingSchemeVersionReferenceList csVersionList,
-	 java.lang.String versionTag)
-*/
-
 			try {
 
 				Vector uri_vec = DataUtils.getValueSetURIs();
@@ -575,9 +565,76 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 		    }
 			request.getSession().setAttribute("matched_vsds", v);
 			return "value_set";
-		}
 
-		else if (selectValueSetSearchOption.compareTo("ConceptDomain") == 0) {
+		} else if (selectValueSetSearchOption.compareTo("Source") == 0) {
+			try {
+				//String supportedTag = "supportedSource";
+
+				String supportedTag = "SupportedSource";
+				String value = matchText;
+				String source_uri = null;
+
+System.out.println("(*) supportedTag: " + supportedTag);
+
+System.out.println("(*) value: " + value);
+
+System.out.println("(*) calling getValueSetDefinitionURIsForSupportedTagAndValue ... ");
+
+
+				List<java.lang.String> list = vsd_service.getValueSetDefinitionURIsForSupportedTagAndValue(
+																		  supportedTag,
+																		  value,
+																		  source_uri);
+				if (list == null) {
+System.out.println("(*) getValueSetDefinitionURIsForSupportedTagAndValue returns null??? ");
+
+					return null;
+				}
+
+System.out.println("(*) list.size(): " + list.size());
+
+				for (int i=0; i<list.size(); i++) {
+					String uri = (String) list.get(i);
+					try {
+						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
+						if (vsd == null) {
+							msg = "Unable to find any value set with name " + matchText + ".";
+							request.getSession().setAttribute("message", msg);
+							return "message";
+						}
+
+						String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+						if (metadata != null) {
+							v.add(metadata);
+						}
+
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						msg = "Unable to find any value set with name " + matchText + ".";
+						request.getSession().setAttribute("message", msg);
+						return "message";
+					}
+				}
+
+
+			} catch (Exception ex) {
+				System.out.println("WARNING: getValueSetDefinitionURIsForSupportedTagAndValue throws exception???");
+				msg = "getValueSetDefinitionURIsForSupportedTagAndValue throws exception -- search by \"" + matchText + "\" failed.";
+				request.getSession().setAttribute("message", msg);
+				return "message";
+			}
+
+			request.getSession().setAttribute("matched_vsds", v);
+
+			if (v.size() == 0) {
+				msg = "No match found.";
+				request.getSession().setAttribute("message", msg);
+				return "message";
+			}
+
+			return "value_set";
+
+		} else if (selectValueSetSearchOption.compareTo("ConceptDomain") == 0) {
 			System.out.println("valueSetSearchAction selectConceptDomain: " + selectConceptDomain);
 
 			if (selectConceptDomain != null) {
@@ -625,6 +682,8 @@ System.out.println("(********) metadata " + metadata);
 
 			return "value_set";
 		}
+
+
 		msg = "WARNING: Unexpected error encountered.";
 		request.getSession().setAttribute("message", msg);
 		request.getSession().setAttribute("selectValueSetSearchOption",  selectValueSetSearchOption);
