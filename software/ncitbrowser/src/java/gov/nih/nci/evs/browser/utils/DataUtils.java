@@ -4649,5 +4649,10 @@ System.out.println("getRestrictedMappingDataIterator Step 6");
 		return null;
 	}
 
+    // To be implemented:
+    public static Vector filterValueSetMetadata(Vector metadata_vec, String codingSchemeName) {
+
+        return null;
+	}
 
 }

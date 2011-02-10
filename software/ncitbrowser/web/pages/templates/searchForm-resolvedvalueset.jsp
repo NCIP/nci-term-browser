@@ -39,12 +39,13 @@ System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
       
         String searchTarget = (String) request.getSession().getAttribute("searchTarget");
         String check_n = "", check_p = "" , check_cd ="";
-        if (searchTarget == null || searchTarget.compareTo("names") == 0)
+        if (searchTarget == null || searchTarget.compareTo("code") == 0)
+          check_cd = "checked";
+        else if (searchTarget.compareTo("names") == 0)
           check_n = "checked";
         else if (searchTarget.compareTo("properties") == 0)
           check_p= "checked";
-        else
-          check_cd = "checked";      
+  
       
 %>
   

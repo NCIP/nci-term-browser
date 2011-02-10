@@ -41,8 +41,6 @@
 
     if (selectValueSetSearchOption.compareTo("CodingScheme") == 0)
         check_cs = "checked";
-    //else if (selectValueSetSearchOption.compareTo("ConceptDomain") == 0)
-    //    check_cd = "checked";
     else if (selectValueSetSearchOption.compareTo("Code") == 0)
         check_code = "checked";
     else if (selectValueSetSearchOption.compareTo("Name") == 0)

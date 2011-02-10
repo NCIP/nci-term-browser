@@ -208,6 +208,7 @@ String key = (String) request.getSession().getAttribute("key");
               if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
         String code = rcr.getConceptCode();
         String name = rcr.getEntityDescription().getContent();
+        String cs_version = rcr.getCodingSchemeVersion();
 
         String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
         if (vocabulary_name == null) {
@@ -273,16 +274,16 @@ String key = (String) request.getSession().getAttribute("key");
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
-               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
+               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus" + "&version=" + cs_version + "&code=" + code;
           %>
                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
           <%
           }
           %>
@@ -300,16 +301,16 @@ String key = (String) request.getSession().getAttribute("key");
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
-               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
+               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus" + "&version=" + cs_version + "&code=" + code;
           %>
                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           }
           %>
