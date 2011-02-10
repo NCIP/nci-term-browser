@@ -288,6 +288,13 @@ a.hideLink
  font-weight: bold;
 }
 
+.textbodysmall
+{
+ font-size: 10px;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+ font-weight: bold;
+}
+
 .datarowdark
 {
  font-size: 12px;
