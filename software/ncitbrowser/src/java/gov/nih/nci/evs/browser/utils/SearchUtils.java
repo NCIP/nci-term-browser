@@ -3008,24 +3008,21 @@ public class SearchUtils {
     }
 
 
-    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag) {
+    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag) 
+        throws Exception {
 		CodedNodeSet cns = null;
-		try {
-			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
-            CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
-            //6.0 mod (KLO, 101810)
-            cns = cns.restrictToAnonymous(restrictToAnonymous);
+		cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+        CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
+        //6.0 mod (KLO, 101810)
+        cns = cns.restrictToAnonymous(restrictToAnonymous);
 
-		/*
-		LocalNameList entityTypes = new LocalNameList();
-		entityTypes.addEntry("concept");
-		CodedNodeSet cns = null;
+    	/*
+    	LocalNameList entityTypes = new LocalNameList();
+    	entityTypes.addEntry("concept");
+    	CodedNodeSet cns = null;
         try {
-			cns = lbSvc.getNodeSet(scheme, versionOrTag, entityTypes);
-		*/
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+    		cns = lbSvc.getNodeSet(scheme, versionOrTag, entityTypes);
+    	*/
 		return cns;
 	}
 

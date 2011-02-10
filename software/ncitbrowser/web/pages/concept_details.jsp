@@ -29,21 +29,17 @@
 <%@ page import="org.LexGrid.commonTypes.Property"%>
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier"%>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants"%>
-
-
 <%@ page import="org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods"%>
 <%@ page import="org.LexGrid.LexBIG.Extensions.Generic.MappingExtension"%>
-
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
-<%
+  <%
   String dictionary = null;
-  String version = null;
+  String version = null, deprecatedVersion = null;
   dictionary = (String) request.getParameter("dictionary");
   version = (String) request.getParameter("version");
-
 
   if (dictionary != null) {
     dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
@@ -55,23 +51,22 @@
   }
 
   if (version == null) {
-      version = (String) request.getAttribute("version");
+    version = (String) request.getAttribute("version");
   }
 
- 
-//System.out.println("concept_details.jsp version: " + version);  
-request.setAttribute("version", version);
+  //System.out.println("concept_details.jsp version: " + version);  
+  request.setAttribute("version", version);
 
   if (dictionary.compareTo("NCI Thesaurus") == 0) {
-%>
-<title>NCI Thesaurus</title>
-<%
-              } else {
-            %>
-<title>NCI Term Browser</title>
-<%
-              }
-            %>
+  %>
+    <title>NCI Thesaurus</title>
+  <%
+  } else {
+  %>
+    <title>NCI Term Browser</title>
+  <%
+  }
+  %>
 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css"
@@ -100,7 +95,7 @@ request.setAttribute("version", version);
     file="/pages/templates/sub-header.jsp"%> <!-- Main box -->
   <div id="main-area">
   <%
-            String code = null;
+              String code = null;
               String type = null;
               String singleton = (String) request.getAttribute("singleton");
 
@@ -178,10 +173,14 @@ request.setAttribute("version", version);
               String name = "";
               Entity c = null;
 
-              String vers = version;
               String ltag = null;
 
-              c = DataUtils.getConceptByCode(dictionary, vers, ltag, code);
+              c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
+              if (c == null) {
+                  deprecatedVersion = version;
+                  version = DataUtils.getVocabularyVersionByTag(dictionary, "PRODUCTION");
+                  c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
+              }
               
               if (c != null) {
                 request.getSession().setAttribute("concept", c);
@@ -238,14 +237,24 @@ request.setAttribute("version", version);
                 if (term_suggestion_application_url != null
                     && term_suggestion_application_url.compareTo("") != 0) {
           %>
-      <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
-        <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
-        target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
-      </td>
-      <%
-            }
+                  <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
+                    <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
+                    target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
+                  </td>
+          <%
+                }
           %>
+                <!-- <td align="right" valign="bottom" class="textbodysmall" nowrap><%= version %></td> -->
     </tr>
+    <% if (deprecatedVersion != null) { %>
+      <tr>
+        <td class="textbodysmall">
+          <font color="#A90101">Warning:</font>
+          Version <%=deprecatedVersion%> of this vocabulary is not accessible.
+          Displaying version <%=version%> of this concept instead.
+        </td>
+      </tr>
+    <% } %>
   </table>
 
   <hr>
