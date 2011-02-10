@@ -20,7 +20,7 @@ if (version_curr != null && ! version_curr.equalsIgnoreCase("null"))
 boolean isMapping = DataUtils.isMapping(scheme_curr, version_curr);
 String code_curr = (String) request.getSession().getAttribute("code");
 
-    String rel_display_name = DataUtils.getMetadataValue(scheme_curr, "display_name");
+    String rel_display_name = DataUtils.getMetadataValue(scheme_curr, version_curr, "display_name");
     if (rel_display_name == null) rel_display_name = DataUtils.getLocalName(scheme_curr);
 
     if (code_curr == null) {
@@ -389,7 +389,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
 
   <p>
   <%
-     String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr, "display_inverse_relationships");
+     String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr, version_curr, "display_inverse_relationships");
      boolean display_inverse_relationships = true;
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;

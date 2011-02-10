@@ -96,12 +96,12 @@
                 }
 
                 String term_browser_version = DataUtils.getMetadataValue(
-                    dictionary, "term_browser_version");
+                    dictionary, version, "term_browser_version");
                 if (term_browser_version == null
                     || term_browser_version.compareTo("null") == 0)
                   term_browser_version = version;
                 String display_name = DataUtils.getMetadataValue(
-                    dictionary, "display_name");
+                    dictionary, version, "display_name");
                 if (display_name == null
                     || display_name.compareTo("null") == 0)
                   display_name = shortName;
