@@ -282,9 +282,19 @@ String key = (String) request.getSession().getAttribute("key");
                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>
           <%
           } else {
-          %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
-          <%
+              if (code.indexOf("@") != -1) {
+              
+          %>    
+                   <%=code%>
+          <%         
+                   
+              } else {
+           %>
+                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
+           <%
+              
+              }
+
           }
           %>
           </td>
@@ -309,10 +319,21 @@ String key = (String) request.getSession().getAttribute("key");
                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           } else {
-          %>
+               if (code.indexOf("@") != -1) {
+               
+           %>    
+                    <%=code%>
+           <%         
+                    
+               } else {
+            %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
-          <%
+            <%
+               
+               }
+ 
           }
+         
           %>
           </td>
           <td class="dataCellText">

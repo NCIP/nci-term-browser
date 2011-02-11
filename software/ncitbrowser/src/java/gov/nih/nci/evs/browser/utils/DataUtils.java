@@ -2244,11 +2244,13 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
     }
 
     public static Vector<String> parseData(String line) {
+		if (line == null) return null;
         String tab = "|";
         return parseData(line, tab);
     }
 
     public static Vector<String> parseData(String line, String tab) {
+		if (line == null) return null;
         Vector data_vec = new Vector();
         StringTokenizer st = new StringTokenizer(line, tab);
         while (st.hasMoreTokens()) {
@@ -4046,7 +4048,16 @@ System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 
 
     public static ValueSetDefinition findValueSetDefinitionByURI(String uri) {
+
+System.out.println("findValueSetDefinitionByURI: " + uri);
+
+
 		if (uri == null) return null;
+	    if (uri.indexOf("|") != -1) {
+			Vector u = DataUtils.parseData(uri);
+			uri = (String) u.elementAt(1);
+		}
+
 		String valueSetDefinitionRevisionId = null;
 		try {
 			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -4224,6 +4235,7 @@ System.out.println("vsd_str " + vsd_str);
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
         List list = vsd_service.listValueSetDefinitionURIs();
+        if (list == null) return null;
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
 			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
@@ -4388,6 +4400,12 @@ System.out.println("vsd_str " + vsd_str);
 
 
     public static Vector getCodingSchemeReferencesInValueSetDefinition(String uri) {
+		System.out.println("getCodingSchemeReferencesInValueSetDefinition: " + uri);
+	    if (uri.indexOf("|") != -1) {
+			Vector u = DataUtils.parseData(uri);
+			uri = (String) u.elementAt(1);
+		}
+
 		try {
 			Vector w = new Vector();
 			Vector urn_vec = getCodingSchemeURNsInValueSetDefinition(uri);
