@@ -54,6 +54,8 @@
     
  
  
+ 
+ 
 String valueset_match_text = "";
 
 %>
@@ -62,13 +64,33 @@ String valueset_match_text = "";
 
 <table>
   <tr><td> 
+
+<%
+if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
+%>
+
+	  <input CLASS="searchbox-input"
+	    name="matchText"
+	    value=""
+	    disabled="true"
+	    onkeypress="return submitEnter('multiple_search',event)"
+	    tabindex="1"/>
+<%
+} else {
+%>
+
 	  <input CLASS="searchbox-input"
 	    name="matchText"
 	    value="<%=valueset_match_text%>"
 	    onFocus="active = true"
 	    onBlur="active = false"
+	    disabled="false"
 	    onkeypress="return submitEnter('multiple_search',event)"
 	    tabindex="1"/>
+<%
+}
+%>  
+	    
 	    
 	    <h:commandButton id="adv_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
 	      onclick="javascript:cursor_wait();"
@@ -89,30 +111,43 @@ String valueset_match_text = "";
    		  <table border="0" cellspacing="0" cellpadding="0">
    		     <tr valign="top" align="left"><td align="left" class="textbody">
  				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
- 				              alt="Code" tabindex="1">Code&nbsp;
+ 				              alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
  				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
- 				              alt="Name" tabindex="1">Name&nbsp;
+ 				              alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
  				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=check_src%> 
- 				              alt="Source" tabindex="1">Source&nbsp;
+ 				              alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
  				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
- 				          onclick="javascript:show_coding_scheme_combo()"
-                                          alt="Coding Scheme" tabindex="1">Terminology
+                                              alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
                      </td></tr>
 
 
+
+    
+    
+<%
+if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) {                
+%>    
 		    <tr align="left">
 		      <td height="1px" bgcolor="#2F2F5F"></td>
 		    </tr>
-    
+		    
 		    <tr valign="top" align="left"><td align="left" class="textbody">
 		      <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
 		      <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
 		      <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
 		    </td></tr>
+<%
+}                
+%>		    
+		    
 		  </table> 
 		  </td></tr>
-                
+
+<%
+if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) {                
+%>                
                 <tr>
+                
   				<td class="dataCellText">
   				        <h:outputLabel id="codingschemelabel" value="Terminology:" styleClass="textbody">
 					<h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
@@ -124,6 +159,11 @@ String valueset_match_text = "";
 					</h:outputLabel>
 				</td>                   
                 </tr>
+<%
+}                
+%>
+
+                
 <!--
                 <tr valign="top" align="left">
  				<td class="dataCellText">
@@ -137,8 +177,11 @@ String valueset_match_text = "";
 					</h:outputLabel>  
 				</td>                       
                          
- -->                                     
+                                     
                 </tr>
+-->
+
+
 </table>
 <!--
 </div>

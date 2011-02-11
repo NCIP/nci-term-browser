@@ -39,12 +39,13 @@
     function refresh() {
       
       var selectValueSetSearchOptionObj = document.forms["valueSetSearchForm"].selectValueSetSearchOption;
+      
+      
       for (var i=0; i<selectValueSetSearchOptionObj.length; i++) {
         if (selectValueSetSearchOptionObj[i].checked) {
             selectValueSetSearchOption = selectValueSetSearchOptionObj[i].value;
         }
       }
-
       window.location.href="/ncitbrowser/pages/value_set_search.jsf?refresh=1"
           + "&opt="+ selectValueSetSearchOption;
 
@@ -67,6 +68,15 @@
 
   String valueSetSearch_requestContextPath = request.getContextPath();
   valueSetSearch_requestContextPath = valueSetSearch_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
+
+
+String selected_ValueSetSearchOption = request.getParameter("opt");
+if (selected_ValueSetSearchOption == null) {
+    selected_ValueSetSearchOption = "Code";
+}
+
+System.out.println("selected_ValueSetSearchOption: " + selected_ValueSetSearchOption);
+
 
 String name = null;
 String uri = null;
