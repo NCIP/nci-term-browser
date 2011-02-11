@@ -18,6 +18,7 @@
 </head>
 <%
   String dictionary = (String) request.getParameter("dictionary");
+  String version = (String) request.getParameter("version");
   String display_name = DataUtils.getMetadataValue(dictionary, "display_name");
   String code = (String) request.getParameter("code");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(dictionary, null);
@@ -68,6 +69,7 @@
             </a>
 
             <input type="hidden" id="dictionary" name="dictionary" value="<%=dictionary%>" />
+            <input type="hidden" id="version" name="version" value="<%=version%>" />
             <input type="hidden" id="code" name="code" value="<%=code%>" />
             <input type="hidden" id="matchText" name="code" value="<%=matchText_licensedPage%>" />
 
