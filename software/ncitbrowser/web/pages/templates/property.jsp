@@ -723,23 +723,17 @@ if (!hasOtherProperties) {
   String requestURL = request.getRequestURL().toString();
   int idx = requestURL.indexOf("pages");
   requestURL = requestURL.substring(0, idx);
-  
   prop_dictionary = dictionary.replace(" ", "%20");
   
-  
-  String url = requestURL + "ConceptReport.jsp?dictionary=" + prop_dictionary + "&code=" + concept_id;
-  String url_text = "ConceptReport.jsp?dictionary=" + prop_dictionary + "&code=" + concept_id;
-  
-  if (prop_version != null) {
-      url = requestURL + "ConceptReport.jsp?dictionary=" + prop_dictionary + "&version=" + prop_version + "&code=" + concept_id;
-      url_text = "ConceptReport.jsp?dictionary=" + prop_dictionary + "&version=" + prop_version + "&code=" + concept_id;
-  }
+  String url_text = "ConceptReport.jsp" + 
+      "?dictionary=" + prop_dictionary + 
+      // "&version=" + prop_version + 
+      "&code=" + concept_id;
+  String url = requestURL + url_text;
   String bookmark_title = prop_dictionary + "%20" + concept_id;
-  
-  
 %>
 <p>
-  <b>URL</b>: <%= requestURL %><%= url_text %>
+  <b>URL</b>: <%=url%>
 <%
 }
 %>
