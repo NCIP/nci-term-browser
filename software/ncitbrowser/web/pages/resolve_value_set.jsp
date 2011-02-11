@@ -146,7 +146,7 @@ if (coding_scheme_ref_vec != null) {
 } else {
 %>
 <tr><td>
-<p class="textbodyred">&nbsp;WARNING: Unable to retrieve version data from the server.</p>
+<p class="textbodyred">&nbsp;WARNING: Unable to retrieve coding scheme reference data from the server.</p>
 </td></tr>
 <%
 }
