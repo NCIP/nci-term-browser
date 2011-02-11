@@ -301,9 +301,6 @@ function submitEnter(commandId,e)
 
 
 function show_coding_scheme_combo() {
-    var concept_domain_combo = document.getElementById("selectedConceptDomain");
-    concept_domain_combo.style.visibility = "hidden";  
-
     var coding_scheme_combo = document.getElementById("selectedOntology");
     coding_scheme_combo.style.visibility = "visible";  
 }
@@ -311,9 +308,6 @@ function show_coding_scheme_combo() {
 
 
 function show_concept_domain_combo() {
-    var concept_domain_combo = document.getElementById("selectedConceptDomain");
-    concept_domain_combo.style.visibility = "visible";  
-
     var coding_scheme_combo = document.getElementById("selectedOntology");
     coding_scheme_combo.style.visibility = "hidden";  
 }
