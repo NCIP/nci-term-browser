@@ -178,15 +178,13 @@ String sources = (String) u.elementAt(4);
 		    <%
 			}
 		    %>    
-		
+		      <td class="dataCellText">
 		    <%
 		      if (code.indexOf("@") == -1) {
 		     %> 
-		      <td class="dataCellText">
 			  <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=coding_scheme%>&version=<%=vsn%>&code=<%=code%>">
 			    <%=code%>
 			  </a>		      
-		      </td>
 		      <%
 		      } else {
 		      %>
@@ -194,7 +192,7 @@ String sources = (String) u.elementAt(4);
 		      <%
 		      }
 		      %>
-		      
+		      </td>
 		      
 		      <td class="dataCellText">
 			 <%=conceptname%>
