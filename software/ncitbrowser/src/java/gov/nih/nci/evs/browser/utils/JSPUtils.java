@@ -3,6 +3,10 @@ package gov.nih.nci.evs.browser.utils;
 import javax.servlet.http.*;
 
 public class JSPUtils {
+    public static boolean isNull(String text) {
+        return text == null || text.equalsIgnoreCase("null");
+    }
+
     public static class JSPHeaderInfo {
         public String hdr_dictionary;
         public String hdr_version;
@@ -11,10 +15,6 @@ public class JSPUtils {
         public String content_hdr_formalName;
         public String display_name;
         public String term_browser_version;
-    }
-
-    public static boolean isNull(String text) {
-        return text == null || text.equalsIgnoreCase("null");
     }
 
     public static JSPHeaderInfo getJSPHeaderInfo(HttpServletRequest request) {
@@ -37,24 +37,20 @@ public class JSPUtils {
             DataUtils.getLocalName(info.hdr_dictionary);
         info.content_hdr_formalName =
             DataUtils.getFormalName(info.content_hdr_shortName);
+
+        if (!DataUtils.isCodingSchemeLoaded(info.content_hdr_formalName,
+            info.hdr_version)) {
+            info.hdr_version_deprecated = info.hdr_version;
+            info.hdr_version =
+                DataUtils.getVocabularyVersionByTag(info.hdr_dictionary,
+                    "PRODUCTION");
+        }
         info.display_name =
             DataUtils.getMetadataValue(info.content_hdr_formalName,
                 info.hdr_version, "display_name");
         info.term_browser_version =
             DataUtils.getMetadataValue(info.content_hdr_formalName,
                 info.hdr_version, "term_browser_version");
-
-        if (isNull(info.display_name) && isNull(info.term_browser_version)) {
-            info.hdr_version_deprecated = info.hdr_version;
-            info.hdr_version = DataUtils.getVocabularyVersionByTag(
-                info.hdr_dictionary, "PRODUCTION");
-            info.display_name =
-                DataUtils.getMetadataValue(info.content_hdr_formalName,
-                    info.hdr_version, "display_name");
-            info.term_browser_version =
-                DataUtils.getMetadataValue(info.content_hdr_formalName,
-                    info.hdr_version, "term_browser_version");
-        }
 
         if (isNull(info.display_name))
             info.display_name = info.content_hdr_shortName;
@@ -65,6 +61,32 @@ public class JSPUtils {
             if (isNull(info.term_browser_version))
                 info.term_browser_version =
                     (String) request.getAttribute("version");
+        }
+        return info;
+    }
+
+    public static class SimpleJSPHeaderInfo {
+        public String dictionary;
+        public String version;
+        public String version_deprecated;
+    }
+
+    public static SimpleJSPHeaderInfo getSimpleJSPHeaderInfo(
+        HttpServletRequest request) {
+        SimpleJSPHeaderInfo info = new SimpleJSPHeaderInfo();
+
+        info.dictionary = request.getParameter("dictionary");
+        info.version = request.getParameter("version");
+
+        if (isNull(info.version))
+            info.version = (String) request.getAttribute("version");
+        
+        if (!DataUtils.isCodingSchemeLoaded(info.dictionary,
+            info.version)) {
+            info.version_deprecated = info.version;
+            info.version =
+                DataUtils.getVocabularyVersionByTag(info.dictionary,
+                    "PRODUCTION");
         }
         return info;
     }

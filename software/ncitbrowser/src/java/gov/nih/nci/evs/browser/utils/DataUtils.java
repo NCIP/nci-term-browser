@@ -535,7 +535,9 @@ public class DataUtils {
         return v;
     }
 
-
+    public static boolean isCodingSchemeLoaded(String scheme, String version) {
+        return _formalNameVersion2MetadataHashMap.containsKey(scheme + "$" + version);
+    }
 
 
     public static String getLocalName(String key) {
