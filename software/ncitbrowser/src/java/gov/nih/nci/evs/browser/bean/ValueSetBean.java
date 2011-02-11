@@ -584,9 +584,7 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 
 		} else if (selectValueSetSearchOption.compareTo("Source") == 0) {
 			try {
-				//String supportedTag = "supportedSource";
-
-				String supportedTag = "SupportedSource";
+				String supportedTag = "supportedSource";
 				String value = matchText;
 				String source_uri = null;
 

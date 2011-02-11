@@ -9,17 +9,44 @@
     if (vsdUri == null) vsdUri = (String) request.getSession().getAttribute("vsd_uri");
     
     
+    
     request.getSession().setAttribute("nav_type", "valuesets");
     
-  
+String vsd_name = null;  
 System.out.println("content-header-resolvedvalueset.jsp vsdUri: " + vsdUri);
 if (vsdUri.indexOf("|") != -1) {
+
+System.out.println("(1) vsdUri: " + vsdUri);
+
     Vector w = DataUtils.parseData(vsdUri);
+    
+    for (int k=0; k<w.size(); k++) {
+       String t = (String) w.elementAt(k);
+       System.out.println("(" + k + ") " + t);
+    }    
+    
     vsdUri = (String) w.elementAt(1);
+    vsd_name = (String) w.elementAt(0);
+    request.getSession().setAttribute("vsd_uri", vsdUri); 
+} else {
+    String metadata = DataUtils.getValueSetDefinitionMetadata(vsdUri);
+    
+System.out.println("(2) metadata: " + metadata);    
+    
+    Vector metadata_vec = DataUtils.parseData(metadata);
+    
+    
+    for (int k=0; k<metadata_vec.size(); k++) {
+       String t = (String) metadata_vec.elementAt(k);
+       System.out.println("(" + k + ") " + t);
+    }
+    vsd_name = (String) metadata_vec.elementAt(0);
     request.getSession().setAttribute("vsd_uri", vsdUri); 
 }
+ 
+System.out.println("vsd_name: " + vsd_name);
+System.out.println("vsdUri: " + vsdUri);
 
-  
   
 %>
 
@@ -28,8 +55,8 @@ if (vsdUri.indexOf("|") != -1) {
 	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?nav_type=valuesets&uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
       
 	<div class="vocabularynamebanner">
-		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsdUri)%>px; font-family : Arial">
-		    <%=HTTPUtils.cleanXSS(vsdUri)%>
+		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
+		    <%=HTTPUtils.cleanXSS(vsd_name)%>
 		  </div>
 	</div>
   
