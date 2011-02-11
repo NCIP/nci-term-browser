@@ -89,16 +89,10 @@
   String advSearch_requestContextPath = request.getContextPath();
   advSearch_requestContextPath = advSearch_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
-
-    String adv_search_vocabulary = request.getParameter("dictionary");
-    String adv_search_version = request.getParameter("version");
+    JSPUtils.SimpleJSPHeaderInfo info = JSPUtils.getSimpleJSPHeaderInfo(request);
+    String adv_search_vocabulary = info.dictionary;
+    String adv_search_version = info.version;
  
- System.out.println("advanced_search.jsp adv_search_version: " + adv_search_version);
- 
- if (adv_search_version == null) {
-     adv_search_version = (String) request.getAttribute("version");
- }
-    
  System.out.println("advanced_search.jsp adv_search_vocabulary: " + adv_search_vocabulary);
  System.out.println("advanced_search.jsp adv_search_version: " + adv_search_version);
      
