@@ -3,48 +3,30 @@
 <!-- Thesaurus, banner search area -->
 <div class="bannerarea">
 <%
-        String hdr_dictionary = (String) request.getSession().getAttribute("dictionary");
-        String hdr_version = (String) request.getParameter("version");
-        if (hdr_version == null || hdr_version.equalsIgnoreCase("null"))
-            hdr_version = (String) request.getAttribute("version");
-
-        if (hdr_dictionary == null || hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
-        %>
-<div class="banner"><a href="<%=basePath%>"><img
-  src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383"
-  height="117" alt="Thesaurus Browser Logo" border="0" /></a></div>
-<%
-        } else if (hdr_dictionary != null) {
-            request.getSession().setAttribute("dictionary", hdr_dictionary);
-            String content_hdr_shortName = DataUtils.getLocalName(hdr_dictionary);
-            String content_hdr_formalName = DataUtils.getFormalName(content_hdr_shortName);
-            String display_name = DataUtils.getMetadataValue(content_hdr_formalName, "display_name");
-            String term_browser_version = DataUtils.getMetadataValue(
-                content_hdr_formalName, hdr_version, "term_browser_version");
-
-            if (display_name == null || display_name.compareTo("null") == 0) {
-                display_name = content_hdr_shortName;
-            }
-
-            if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
-                term_browser_version = (String) request.getParameter("version");
-                if (term_browser_version == null) {
-                    term_browser_version = (String) request.getAttribute("version");
-                }
-            }
-
-%>
-<a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary)%>">
-  <div class="vocabularynamebanner">
-    <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(display_name)%>px; font-family : Arial">
-        <%=HTTPUtils.cleanXSS(display_name)%>
+  JSPUtils.JSPHeaderInfo info = JSPUtils.getJSPHeaderInfo(request);
+  if (info.hdr_dictionary == null || info.hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
+  %>
+    <div class="banner">
+      <a href="<%=basePath%>"><img
+        src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383"
+        height="117" alt="Thesaurus Browser Logo" border="0" />
+      </a>
     </div>
-    <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(term_browser_version)%></div>
-  </div>
-</a>
-<%
-        }
-        %>
+  <%
+  } else if (info.hdr_dictionary != null) {
+  %>
+    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(info.hdr_dictionary)%>">
+      <div class="vocabularynamebanner">
+        <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(info.display_name)%>px; font-family : Arial">
+            <%=HTTPUtils.cleanXSS(info.display_name)%>
+        </div>
+        <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(info.term_browser_version)%></div>
+      </div>
+    </a>
+  <%
+  }
+%>
+  
 <div class="search-globalnav"><!-- Search box -->
 <div class="searchbox-top"><img
   src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
@@ -55,7 +37,7 @@
         <table border="0" height="90px" width="100%" class="global-nav">
           <tr>
             <td valign="middle" align="center">
-              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary)%>">Simple Search</a>
+              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(info.hdr_dictionary)%>">Simple Search</a>
             </td>
           </tr>
         </table>
