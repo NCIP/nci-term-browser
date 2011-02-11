@@ -95,7 +95,7 @@ String checked = "";
                 <th class="dataTableHeader" scope="col" align="left">Version</th>
                 <th class="dataTableHeader" scope="col" align="left">Tag</th>
 <%
-
+if (coding_scheme_ref_vec != null) {
             for (int i=0; i<coding_scheme_ref_vec.size(); i++) {
             
 		    String coding_scheme_ref_str = (String) coding_scheme_ref_vec.elementAt(i);
@@ -143,6 +143,13 @@ String checked = "";
               
              <%
                 }
+} else {
+%>
+<tr><td>
+<p class="textbodyred">&nbsp;WARNING: Unable to retrieve version data from the server.</p>
+</td></tr>
+<%
+}
              %>                 
                   
               </table>
