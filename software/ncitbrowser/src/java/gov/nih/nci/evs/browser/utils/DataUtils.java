@@ -4247,6 +4247,12 @@ System.out.println("vsd_str " + vsd_str);
 		return SortUtils.quickSort(v);
 	}
 
+	public static String getValueSetDefinitionMetadata(String vsd_uri) {
+		ValueSetDefinition vsd = findValueSetDefinitionByURI(vsd_uri);
+		if (vsd == null) return null;
+		return getValueSetDefinitionMetadata(vsd);
+	}
+
 
     public static String getValueSetDefinitionMetadata(ValueSetDefinition vsd) {
 		if (vsd== null) return null;
@@ -4292,36 +4298,6 @@ System.out.println("vsd_str " + vsd_str);
 
 		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str;
 	}
-
-/*
-	// AbsoluteCodingSchemeVersionReferenceList getCodingSchemesInValueSetDefinition(java.net.URI valueSetDefinitionURI)
-    public static Vector getCodingSchemesInValueSetDefinition(String uri) {
-		try {
-			java.net.URI valueSetDefinitionURI = new URI(uri);
-			Vector v = new Vector();
-			try {
-				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-				AbsoluteCodingSchemeVersionReferenceList codingSchemes =
-					vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
-
-				//output is all of the mapping ontologies that this code participates in.
-				for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
-					System.out.println("URI: " + ref.getCodingSchemeURN());
-					System.out.println("Version: " + ref.getCodingSchemeVersion());
-					v.add(ref.getCodingSchemeURN() + "|" + ref.getCodingSchemeVersion());
-				}
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			return v;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
-*/
-	// AbsoluteCodingSchemeVersionReferenceList getCodingSchemesInValueSetDefinition(java.net.URI valueSetDefinitionURI)
 
 
     public static Vector getCodingSchemesInValueSetDefinition(String uri) {
