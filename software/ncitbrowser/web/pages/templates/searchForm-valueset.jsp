@@ -34,6 +34,10 @@
 
     String selectValueSetSearchOption = null;
     selectValueSetSearchOption = (String) request.getParameter("opt");
+    
+    if (selectValueSetSearchOption == null) {
+        selectValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption");
+    }
                
     if (selectValueSetSearchOption == null || selectValueSetSearchOption.compareTo("null") == 0) {
         selectValueSetSearchOption = "Code";

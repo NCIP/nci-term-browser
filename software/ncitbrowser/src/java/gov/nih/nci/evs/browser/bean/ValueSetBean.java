@@ -142,18 +142,30 @@ public class ValueSetBean {
 		this.selectedOntology = selectedOntology;
 	}
 
+
 	public List getOntologyList() {
 		if (ontologyList != null) return ontologyList;
-		/*
-		ontologyListData = DataUtils.getCodingSchemeFormalNames();
-
+		Vector v = new Vector();
+		HashSet hset = new HashSet();
 		ontologyList = new ArrayList();
-		for (int i=0; i<ontologyListData.size(); i++) {
-			String t = (String) ontologyListData.elementAt(i);
 
-			//KLO 012611
-			//ontologyList.add(new SelectItem(t));
-			String display_name = DataUtils.getMetadataValue(t, null, "display_name");
+		Vector vsd_vec = DataUtils.getValueSetDefinitionMetadata();
+		HashMap csURN2ValueSetMetadataHashMap = DataUtils.getCodingSchemeURN2ValueSetMetadataHashMap(vsd_vec);
+		Iterator it = csURN2ValueSetMetadataHashMap.keySet().iterator();
+        while (it.hasNext()) {
+           String cs = (String) it.next();
+           if (!hset.contains(cs)) {
+		   	   v.add(cs);
+			   hset.add(cs);
+		   }
+	    }
+		v = SortUtils.quickSort(v);
+
+		String display_name = "ALL";
+		ontologyList.add(new SelectItem(display_name));
+
+		for (int j = 0; j < v.size(); j++) {
+            display_name = (String) v.elementAt(j);
 			ontologyList.add(new SelectItem(display_name));
 		}
 
@@ -161,9 +173,12 @@ public class ValueSetBean {
 			setSelectedOntology(((SelectItem) ontologyList.get(0)).getLabel());
 		}
 		return ontologyList;
-		*/
 
+	}
 
+/*
+	public List getOntologyList() {
+		if (ontologyList != null) return ontologyList;
 		List ontology_list = DataUtils.getOntologyList();
 		if (ontology_list == null) {
 			_logger.warn("??????????? ontology_list == null");
@@ -213,7 +228,7 @@ public class ValueSetBean {
 		}
 		return ontologyList;
 	}
-
+*/
 
 
 	private String selectedValueSetURI = null;
@@ -338,8 +353,9 @@ public class ValueSetBean {
 
         Vector v = new Vector();
 
-
 		System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
+		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
+
 
         String matchText = (String) request.getParameter("matchText");
         String algorithm = (String) request.getParameter("valueset_search_algorithm");
