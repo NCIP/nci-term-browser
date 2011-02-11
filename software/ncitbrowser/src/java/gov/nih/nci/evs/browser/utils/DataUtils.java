@@ -4201,14 +4201,19 @@ System.out.println("vsd_str " + vsd_str);
 						v.add(ref.getCodingSchemeURN());
 					}
 					return SortUtils.quickSort(v);
-			    }
+			    } else {
+					System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition returns null (URI: "
+					   + uri + ").");
+				}
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
+				System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition throws exceptions.");
 			}
 			return v;
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition throws exceptions.");
 		}
 		return null;
 	}
@@ -4399,7 +4404,10 @@ System.out.println("vsd_str " + vsd_str);
 				}
 				w = SortUtils.quickSort(w);
 				return w;
-		    }
+		    } else {
+				System.out.println("WARNING: DataUtils.getCodingSchemeReferencesInValueSetDefinition returns null? (URI: "
+				   + uri + ").");
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
