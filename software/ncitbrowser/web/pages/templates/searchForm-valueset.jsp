@@ -2,6 +2,28 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices" %>
 
+
+
+  <script type="text/javascript">
+  
+    function refresh() {
+      
+      var selectValueSetSearchOptionObj = document.forms["valueSetSearchForm"].selectValueSetSearchOption;
+      
+      for (var i=0; i<selectValueSetSearchOptionObj.length; i++) {
+        if (selectValueSetSearchOptionObj[i].checked) {
+            selectValueSetSearchOption = selectValueSetSearchOptionObj[i].value;
+        }
+      }
+      
+      window.location.href="/ncitbrowser/pages/value_set_search.jsf?refresh=1"
+          + "&opt="+ selectValueSetSearchOption;
+
+    }
+  </script>
+  
+  
+  
 <%
 
   String searchform_requestContextPath = request.getContextPath();
@@ -72,7 +94,6 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	  <input CLASS="searchbox-input"
 	    name="matchText"
 	    value=""
-	    disabled="true"
 	    onkeypress="return submitEnter('multiple_search',event)"
 	    tabindex="1"/>
 <%
@@ -84,7 +105,6 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	    value="<%=valueset_match_text%>"
 	    onFocus="active = true"
 	    onBlur="active = false"
-	    disabled="false"
 	    onkeypress="return submitEnter('multiple_search',event)"
 	    tabindex="1"/>
 <%

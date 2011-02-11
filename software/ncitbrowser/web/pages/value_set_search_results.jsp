@@ -33,7 +33,7 @@
   <script type="text/javascript"
     src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
 
-
+  
   <%!
     private static Logger _logger = Utils.getJspLogger("value_set_search_results.jsp");
   %>
@@ -52,11 +52,15 @@
 
 String valueSetSearch_requestContextPath = request.getContextPath();
 
+String selected_ValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption"); 
+
+
 String message = (String) request.getSession().getAttribute("message"); 
 request.getSession().removeAttribute("message"); 
 Vector vsd_vec = null;
 
 String vsd_uri = (String) request.getParameter("uri"); 
+
 System.out.println("value_set_search_results.jsp vsd_uri: " + vsd_uri);
 
 if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
@@ -68,8 +72,12 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
     vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
     if (vsd_vec != null && vsd_vec.size() == 1) {
 	vsd_uri = (String) vsd_vec.elementAt(0);
-	request.getSession().setAttribute("selectedvalueset", vsd_uri);
-	request.getSession().setAttribute("vsd_uri", vsd_uri);
+	
+	Vector temp_vec = DataUtils.parseData(vsd_uri);
+	String selectedvalueset = (String) temp_vec.elementAt(1);
+	
+	request.getSession().setAttribute("selectedvalueset", selectedvalueset);
+	request.getSession().setAttribute("vsd_uri", selectedvalueset);
     }
 }   
 
@@ -115,6 +123,8 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
  
  <%
  if (vsd_uri != null) {
+ 
+ 
  %>
  
     <input type="hidden" name="valueset" value="<%=vsd_uri%>">&nbsp;</input>
@@ -146,9 +156,7 @@ if (vsd_vec != null) {
             for (int i=0; i<vsd_vec.size(); i++) {
             
 		    String vsd_str = (String) vsd_vec.elementAt(i);
-		    
-System.out.println(vsd_str);		    
-		    
+	    
 		    Vector u = DataUtils.parseData(vsd_str);
 		    
 		    String name = (String) u.elementAt(0);

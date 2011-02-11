@@ -343,6 +343,8 @@ System.out.println("Step 3");
 
         _logger.debug("searchByCode ..." + matchText);
 
+System.out.println("============================ searchByCode ====================================");
+
         long ms = System.currentTimeMillis(), delay = 0;
         long tnow = System.currentTimeMillis();
         long total_delay = 0;
@@ -355,6 +357,9 @@ System.out.println("Step 3");
 
         matchText = matchText.trim();
 
+System.out.println("matchText: " + matchText);
+System.out.println("vsd_uri: " + vsd_uri);
+
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
         try {
@@ -366,7 +371,12 @@ System.out.println("Step 3");
             java.lang.String valueSetDefinitionRevisionId = null;
             AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
             Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
-            if (cs_ref_vec != null) csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
+            if (cs_ref_vec != null) {
+				csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
+			} else {
+System.out.println("cs_ref_vec = null??? ");
+
+			}
 
             String csVersionTag = null;
 
@@ -396,11 +406,14 @@ System.out.println("Step 3");
             LocalNameList propertyNames = null;
             boolean resolveObjects = false;
             CodedNodeSet.PropertyType[] propertyTypes = null;
-System.out.println("Step 3 resolve");
+
             iterator = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
+
+System.out.println("ERROR: searchByCode throws exceptions.");
+
 			return null;
 		}
 

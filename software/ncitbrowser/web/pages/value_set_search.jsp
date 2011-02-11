@@ -34,6 +34,9 @@
     src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
   <script type="text/javascript"
     src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
+    
+    
+    
   <script type="text/javascript">
   
     function refresh() {
@@ -51,6 +54,9 @@
 
     }
   </script>
+  
+  
+  
   <%!
     private static Logger _logger = Utils.getJspLogger("value_set_search.jsp");
   %>
@@ -131,7 +137,9 @@ if (vsd_vec == null) {
 }
 		
 String view = null;
-view = (String) request.getSession().getAttribute("view");
+Object view_obj = request.getSession().getAttribute("view");
+if (view_obj != null) view = (String) view_obj;
+
 if (view == null) {
     view = (String) request.getParameter("view");
 } else {

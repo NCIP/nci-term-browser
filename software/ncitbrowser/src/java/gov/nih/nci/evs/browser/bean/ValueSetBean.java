@@ -731,8 +731,12 @@ System.out.println("(********) metadata " + metadata);
                 .getExternalContext().getRequest();
 
         String selectedvalueset = (String) request.getParameter("valueset");
-
+	    if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
+			Vector u = DataUtils.parseData(selectedvalueset);
+			selectedvalueset = (String) u.elementAt(1);
+		}
         System.out.println("resolveValueSetAction: selected value set " + selectedvalueset);
+
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
         String vsd_uri = null;
         if (selectedvalueset != null) {
@@ -744,10 +748,18 @@ System.out.println("(********) metadata " + metadata);
 			}
 		}
 
+
+ System.out.println("(************* ) resolveValueSetAction vsd_uri: " + vsd_uri);
+
+
         request.getSession().setAttribute("vsd_uri", vsd_uri);
         String[] coding_scheme_ref = null;
 
-        Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(selectedvalueset, "PRODUCTION");
+
+ System.out.println("(************* ) resolveValueSetAction selectedvalueset: " + selectedvalueset);
+
+
+        Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
         if (w != null) {
 			coding_scheme_ref = new String[w.size()];
 			for (int i=0; i<w.size(); i++) {
@@ -926,8 +938,11 @@ java.net.URI exportValueSetResolution(java.net.URI valueSetDefinitionURI,
 
         String uri = (String) request.getParameter("valueset");
 
-        //request.getSession().setAttribute("vsd_uri", uri);
-       // return "xml";
+	    if (uri.indexOf("|") != -1) {
+			Vector u = DataUtils.parseData(uri);
+			uri = (String) u.elementAt(1);
+		}
+
 
         try {
             String sb = valueSetDefinition2XMLString(uri);
@@ -963,6 +978,10 @@ java.net.URI exportValueSetResolution(java.net.URI valueSetDefinitionURI,
 			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
 
+	    if (vsd_uri.indexOf("|") != -1) {
+			Vector u = DataUtils.parseData(vsd_uri);
+			vsd_uri = (String) u.elementAt(1);
+		}
 
         ResolvedConceptReferenceList list = (ResolvedConceptReferenceList) request.getSession().getAttribute("ResolvedConceptReferenceList");
         StringBuffer sb = new StringBuffer();
