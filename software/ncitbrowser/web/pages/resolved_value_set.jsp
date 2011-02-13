@@ -75,8 +75,11 @@ String sources = (String) u.elementAt(4);
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
-          
+
+<!--          
           <%@ include file="/pages/templates/navigationTabs.jsp"%>
+-->          
+          
           <div class="tabTableContentContainer">
           
           
