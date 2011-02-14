@@ -53,6 +53,7 @@ import org.LexGrid.commonTypes.Source;
 
 import org.apache.log4j.*;
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping;
+import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -4568,8 +4569,6 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
     public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
         List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator) {
 
-System.out.println("getRestrictedMappingDataIterator Step 1");
-
 
 if (searchResultsIterator != null) {
 	try {
@@ -4589,7 +4588,6 @@ if (searchResultsIterator != null) {
 		}
 		String relationsContainerName = null;
 
-System.out.println("getRestrictedMappingDataIterator Step 2");
 
         LexBIGService distributed = RemoteServerUtil.createLexBIGService();
         try {
@@ -4608,22 +4606,13 @@ System.out.println("getRestrictedMappingDataIterator Step 2");
 				}
 			}
 
-System.out.println("getRestrictedMappingDataIterator Step 3");
-
 			if (relationsContainerName == null) {
 				System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
 			}
 
-System.out.println("getRestrictedMappingDataIterator Step 4 getMapping from " + scheme);
-
-
 			MappingExtension mappingExtension = (MappingExtension)
 				distributed.getGenericExtension("MappingExtension");
-
-
-System.out.println("getRestrictedMappingDataIterator relationsContainerName " + relationsContainerName);
-
 
 		    Mapping mapping =
 			    mappingExtension.getMapping(scheme, versionOrTag, relationsContainerName);
@@ -4658,19 +4647,13 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 				System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
 			}
 
-
-System.out.println("getRestrictedMappingDataIterator Step 6 restrictToCodes");
-
-            mapping = mapping.restrictToCodes(codeList, null);
-
-System.out.println("getRestrictedMappingDataIterator Step 7 resolveMapping");
-
+            mapping = mapping.restrictToCodes(codeList, SearchContext.BOTH);
             ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);
 			return itr;
 
 		} catch (Exception ex) {
 			//ex.printStackTrace();
-System.out.println("getRestrictedMappingDataIterator throws exceptions???");
+			System.out.println("getRestrictedMappingDataIterator throws exceptions???");
 
 		}
 		return null;
