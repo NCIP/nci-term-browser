@@ -16,18 +16,10 @@ System.out.println("(*) dictionary_map " + dictionary_map);
 
 bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
 
-if (bean == null) {
-        scheme2MappingIteratorBeanMap = (HashMap) request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
-        if (scheme2MappingIteratorBeanMap != null) {
-		bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
-	}
-}
-
-
 if (bean != null) {
 numRemaining = bean.getSize();
 
-System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemaining);    
+System.out.println("(2) pagination-mapping-results.jsp iterator.getSize(): " + numRemaining);    
    
     
     String match_size = Integer.toString(numRemaining);

@@ -4571,6 +4571,17 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
 System.out.println("getRestrictedMappingDataIterator Step 1");
 
 
+if (searchResultsIterator != null) {
+	try {
+		int numRemaining = searchResultsIterator.numberRemaining();
+		System.out.println("Number of matches: " + numRemaining);
+	} catch (Exception e) {
+		System.out.println("searchResultsIterator.numberRemaining() throws exception???");
+	}
+} else {
+	System.out.println("searchResultsIterator is NULL??? ");
+}
+
 		CodingSchemeVersionOrTag versionOrTag =
 			new CodingSchemeVersionOrTag();
 		if (version != null) {
@@ -4604,11 +4615,15 @@ System.out.println("getRestrictedMappingDataIterator Step 3");
 				return null;
 			}
 
-System.out.println("getRestrictedMappingDataIterator Step 4");
+System.out.println("getRestrictedMappingDataIterator Step 4 getMapping from " + scheme);
 
 
 			MappingExtension mappingExtension = (MappingExtension)
 				distributed.getGenericExtension("MappingExtension");
+
+
+System.out.println("getRestrictedMappingDataIterator relationsContainerName " + relationsContainerName);
+
 
 		    Mapping mapping =
 			    mappingExtension.getMapping(scheme, versionOrTag, relationsContainerName);
@@ -4616,7 +4631,7 @@ System.out.println("getRestrictedMappingDataIterator Step 4");
             //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
             ConceptReferenceList codeList = new ConceptReferenceList();
 
-System.out.println("getRestrictedMappingDataIterator Step 5");
+System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrieving refs");
 
 			if (searchResultsIterator != null) {
 				while(searchResultsIterator.hasNext()){
@@ -4644,14 +4659,19 @@ System.out.println("getRestrictedMappingDataIterator Step 5");
 			}
 
 
-System.out.println("getRestrictedMappingDataIterator Step 6");
+System.out.println("getRestrictedMappingDataIterator Step 6 restrictToCodes");
 
             mapping = mapping.restrictToCodes(codeList, null);
+
+System.out.println("getRestrictedMappingDataIterator Step 7 resolveMapping");
+
             ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);
 			return itr;
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
+System.out.println("getRestrictedMappingDataIterator throws exceptions???");
+
 		}
 		return null;
 	}
