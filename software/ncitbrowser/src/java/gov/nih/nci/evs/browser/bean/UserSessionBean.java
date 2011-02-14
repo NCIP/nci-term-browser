@@ -421,10 +421,10 @@ System.out.println("(*******************) SearchAction iterator == null???");
 
 					  MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
 						iterator,
-						numRemaining, // number remaining
+						numberRemaining, // number remaining
 						0,    // istart
 						50,   // iend,
-						numRemaining, // size,
+						numberRemaining, // size,
 						0,    // pageNumber,
 						1);   // numberPages
 
