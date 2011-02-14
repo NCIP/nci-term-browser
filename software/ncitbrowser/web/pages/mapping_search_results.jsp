@@ -148,7 +148,8 @@ if (iteratorBean == null){
 
 iterator = iteratorBean.getIterator();
 
-System.out.println("(*) Calling getRestrictedMappingDataIterator ...");
+System.out.println("(*) Calling getRestrictedMappingDataIterator ...mapping_schema "  + mapping_schema);
+System.out.println("(*) Calling getRestrictedMappingDataIterator ...mapping_version "  + mapping_version);
 iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, null, iterator);
 
     
@@ -240,7 +241,7 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 
 <table width="580px" cellpadding="3" cellspacing="0" border="0">
 <tr><td>
-<p class="textbodyred">This page is under construction.</p>
+<p class="textbodyred">(Note: This page is under construction.)</p>
 </td></tr>
 </table>
 
@@ -491,7 +492,9 @@ if (show_rank_column) {
 
           </table>
 
-        <%@ include file="/pages/templates/pagination-mapping.jsp" %>
+        <%@ include file="/pages/templates/pagination-mapping-results.jsp" %>
+        
+        
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->

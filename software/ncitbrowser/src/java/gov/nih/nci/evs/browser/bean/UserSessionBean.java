@@ -158,6 +158,10 @@ public class UserSessionBean extends Object {
 
 
     public String searchAction() {
+
+System.out.println("(*******************) SearchAction");
+
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -303,11 +307,21 @@ public class UserSessionBean extends Object {
                             matchAlgorithm, ranking, maxToReturn);
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
+
+
+ System.out.println("(**************** iterator = wrapper.getIterator()");
+
+
+
                     if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
-                    }
+                    } else {
+ System.out.println("(**************** iterator == null???");
+
+					}
+
                 }
             }
 
@@ -363,14 +377,14 @@ public class UserSessionBean extends Object {
 		request.setAttribute("key", key);
 		System.out.println("(*************) setAttribute key: " + key);
 
+
+        if (iterator == null) {
+System.out.println("(*******************) SearchAction iterator == null???");
+
+		}
+
+
         if (iterator != null) {
-
-
-			boolean isMapping = DataUtils.isMapping(scheme, version);
-			if (isMapping) {
-				return "mapping_search_results";
-			}
-
 
             // request.getSession().setAttribute("key", key);
             //request.setAttribute("key", key);
@@ -397,6 +411,32 @@ public class UserSessionBean extends Object {
                 _logger
                     .debug("UserSessionBean request.getSession().setAttribute dictionary: "
                         + scheme);
+
+
+				boolean isMapping = DataUtils.isMapping(scheme, version);
+				if (isMapping) {
+
+	System.out.println("(*************) creating mappingIteratorBean");
+
+
+					  MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
+						iterator,
+						numRemaining, // number remaining
+						0,    // istart
+						50,   // iend,
+						numRemaining, // size,
+						0,    // pageNumber,
+						1);   // numberPages
+
+
+request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
+
+	System.out.println("(*************) returning mapping_search_results");
+
+
+
+					return "mapping_search_results";
+				}
 
                 return "search_results";
             } else if (size == 1) {
