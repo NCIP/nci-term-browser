@@ -76,12 +76,12 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
 	Vector temp_vec = DataUtils.parseData(vsd_uri);
 	String selectedvalueset = (String) temp_vec.elementAt(1);
 	
-	request.getSession().setAttribute("selectedvalueset", selectedvalueset);
+	//request.getSession().setAttribute("selectedvalueset", selectedvalueset);
 	request.getSession().setAttribute("vsd_uri", selectedvalueset);
     }
 }   
 
-
+System.out.println("(************* vsd_uri: " + vsd_uri);
 
 if (vsd_vec != null && vsd_vec.size() == 1) {
 %>      
