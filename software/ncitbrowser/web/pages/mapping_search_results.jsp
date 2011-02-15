@@ -114,25 +114,6 @@ String selectedResultsPerPage = resultsPerPage;
   String base_path = request.getContextPath();
 int numRemaining = 0;
 
-int sortBy = MappingData.COL_SOURCE_CODE;
-int prevSortBy = MappingData.COL_SOURCE_CODE;
-
-String sortByStr = request.getParameter("sortBy");
-if (sortByStr != null) {
-    sortBy = Integer.parseInt(sortByStr);
-}
-
-String prevSortByStr = (String) request.getSession().getAttribute("sortBy");
-if (prevSortByStr != null) {
-    prevSortBy = Integer.parseInt(prevSortByStr);
-}
-
-if (sortByStr == null) {
-    request.getSession().setAttribute("sortBy", "1");
-} else {
-    request.getSession().setAttribute("sortBy", sortByStr);
-}
-
 
 String key = (String) request.getAttribute("key");
 System.out.println("(++++++++++++++++++++) search results.jsp key: " + key);
@@ -141,75 +122,11 @@ if (key == null) {
 }
 
 
-IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
-.getSessionMap().get("iteratorBeanManager");
+//IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+//.getSessionMap().get("iteratorBeanManager");
 
 
-IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
-
-if (iteratorBean == null){
-   _logger.warn("iteratorBean NOT FOUND???" + key);
-   System.out.println("iteratorBean NOT FOUND???" + key);
-} else {
-System.out.println("(++++++++++++++++++++) iteratorBean with key found: " + key);
-}
-
-iterator = iteratorBean.getIterator();
-
-System.out.println("(*) Calling getRestrictedMappingDataIterator ...mapping_schema "  + mapping_schema);
-System.out.println("(*) Calling getRestrictedMappingDataIterator ...mapping_version "  + mapping_version);
-
-
-//iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, null, iterator);
-
-/*
-if (searchTarget.compareTo("relationships") == 0) {
-	iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.TARGET_CODES);
-} else {
-	iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator);
-}
-*/
-iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, null, iterator, SearchContext.TARGET_CODES);
-
-if (iterator != null) {
-
-        try {
-            numRemaining = iterator.numberRemaining();
-            
-            System.out.println("numRemaining: " + numRemaining);
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-
-  int numberPages = numRemaining / 50 + 1;
-  
-  
-  bean = new MappingIteratorBean(
-    iterator,
-    numRemaining, // number remaining
-    0,    // istart
-    50,   // iend,
-    numRemaining, // size,
-    0,    // pageNumber,
-    numberPages);   // numberPages
-   
-  bean.initialize(
-    iterator,
-    numRemaining, // number remaining
-    0,    // istart
-    50,   // iend,
-    numRemaining, // size,
-    0,    // pageNumber,
-    numberPages);   // numberPages
-    
-    
-    request.getSession().setAttribute("mapping_search_results", bean);
-
-} else {
-    System.out.println("(*) MappingIteratorBean is null??? ...");
-}
+MappingIteratorBean mapping_bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
 
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
@@ -227,8 +144,8 @@ int pageSize = Integer.parseInt(selectedResultsPerPage);
 int size = 0;
 List list = null;
 
-if (bean != null) {
-size = bean.getNumberRemaining();
+if (mapping_bean != null) {
+size = mapping_bean.getNumberRemaining();
 }
 
 System.out.println("\npage_num: " + page_num);
@@ -246,7 +163,7 @@ int iend = istart + pageSize - 1;
 
 System.out.println("calling bean.getData ...");
 try {
-   list = bean.getData(istart, iend);
+   list = mapping_bean.getData(istart, iend);
 } catch (Exception ex) {
    System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
