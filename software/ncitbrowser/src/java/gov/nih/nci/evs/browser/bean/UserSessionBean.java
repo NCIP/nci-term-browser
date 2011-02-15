@@ -406,15 +406,24 @@ System.out.println("(*******************) SearchAction iterator == null???");
 
 			if (isMapping) {
 
-	System.out.println("(*************) calling getRestrictedMappingDataIterator ");
+	System.out.println("(*************) calling getRestrictedMappingDataIterator -- search by " + searchTarget);
 
-                    //iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.TARGET_CODES);
                     iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.BOTH);
+
+
 
 					int numberRemaining = 0;
 					try {
 						numberRemaining = iterator.numberRemaining();
 						System.out.println("getRestrictedMappingDataIterator returns " + numberRemaining);
+
+						if (numberRemaining == 0) {
+							String msg = "No match.";
+							request.getSession().setAttribute("message", msg);
+							request.getSession().setAttribute("dictionary", scheme);
+							return "message";
+						}
+
 
 					} catch (Exception ex) {
 						ex.printStackTrace();

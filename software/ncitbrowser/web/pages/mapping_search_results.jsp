@@ -175,16 +175,33 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
     show_rank_column = false;
 }
 
-
 %>
-
-
 <table>
 <tr><td>
 <p class="textbodyred">(Note: This page is under construction.)</p>
 </td>
 </tr>
 </table>
+
+
+<%
+
+String msg = (String) request.getSession().getAttribute("message");
+if (msg != null) {
+%>
+<table>
+<tr><td>
+    <p class="textbodyred">&nbsp;<%=msg%></p>
+</td>
+</tr>
+</table>    
+<%   
+     request.getSession().removeAttribute("message");
+}
+%>    
+             
+
+
 
 
 

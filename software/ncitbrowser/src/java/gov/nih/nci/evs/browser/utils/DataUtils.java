@@ -4638,19 +4638,6 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 				while(searchResultsIterator.hasNext()){
 					ResolvedConceptReference[] refs = searchResultsIterator.next(100).getResolvedConceptReference();
 					for(ResolvedConceptReference ref : refs){
-						/*
-						 list.addResolvedConceptReference(ref);
-						 String entityDescription = "<NOT ASSIGNED>";
-						 if (ref.getEntityDescription() != null) {
-							 entityDescription = ref.getEntityDescription().getContent();
-						 }
-
-						 concept_vec.add(ref.getConceptCode()
-						+ "|" + entityDescription
-						+ "|" + ref.getCodingSchemeName()
-						+ "|" + ref.getCodeNamespace()
-						+ "|" + ref.getCodingSchemeVersion());
-						*/
 						codeList.addConceptReference((ConceptReference) ref);
 					}
 				}

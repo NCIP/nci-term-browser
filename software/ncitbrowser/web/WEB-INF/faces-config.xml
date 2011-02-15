@@ -31,6 +31,14 @@
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
+    
+    <navigation-case>
+       <description>no_match</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>    
+    
   </navigation-rule>   
     
   <navigation-rule>
@@ -287,6 +295,15 @@
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+      
+    </navigation-case>
+
+
+    <navigation-case>
+       <description>no_match</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
     
