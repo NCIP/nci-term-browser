@@ -25,6 +25,12 @@
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.apache.log4j.*" %>
 
+
+<%@ page import="org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext" %>
+
+
+
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -129,7 +135,7 @@ if (sortByStr == null) {
 
 
 String key = (String) request.getAttribute("key");
-System.out.println("search results.jsp key: " + key);
+System.out.println("(++++++++++++++++++++) search results.jsp key: " + key);
 if (key == null) {
     key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 }
@@ -144,15 +150,27 @@ IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
 if (iteratorBean == null){
    _logger.warn("iteratorBean NOT FOUND???" + key);
    System.out.println("iteratorBean NOT FOUND???" + key);
+} else {
+System.out.println("(++++++++++++++++++++) iteratorBean with key found: " + key);
 }
 
 iterator = iteratorBean.getIterator();
 
 System.out.println("(*) Calling getRestrictedMappingDataIterator ...mapping_schema "  + mapping_schema);
 System.out.println("(*) Calling getRestrictedMappingDataIterator ...mapping_version "  + mapping_version);
-iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, null, iterator);
 
-    
+
+//iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, null, iterator);
+
+/*
+if (searchTarget.compareTo("relationships") == 0) {
+	iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.TARGET_CODES);
+} else {
+	iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator);
+}
+*/
+iterator = DataUtils.getRestrictedMappingDataIterator(mapping_schema, mapping_version, null, iterator, SearchContext.TARGET_CODES);
+
 if (iterator != null) {
 
         try {
@@ -242,6 +260,15 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 
 
 %>
+
+
+<table>
+<tr><td>
+<p class="textbodyred">(Note: This page is under construction.)</p>
+</td>
+</tr>
+</table>
+
 
 
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
