@@ -23,6 +23,10 @@ System.out.println("(2) pagination-mapping-results.jsp iterator.getSize(): " + n
    
     
     String match_size = Integer.toString(numRemaining);
+
+
+System.out.println("(3) pagination-mapping-results.jsp match_size: " + numRemaining);    
+
     
     String prev_page_num_str = Integer.toString(pageNum);
     String next_page_num_str = Integer.toString(pageNum+1);
@@ -32,6 +36,14 @@ System.out.println("prev_page_num_str: " + prev_page_num_str);
 System.out.println("next_page_num_str: " + next_page_num_str);
     
 %>
+
+<table>
+<tr><td>
+<p class="textbodyred">(Note: Pagination is under construction.)</p>
+</td>
+</tr>
+</table>
+
 
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping.jsf?" >
   <table>
