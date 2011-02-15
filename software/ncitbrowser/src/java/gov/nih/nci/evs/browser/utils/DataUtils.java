@@ -4619,6 +4619,8 @@ if (searchResultsIterator != null) {
 			if (relationsContainerName == null) {
 				System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
+			} else {
+				System.out.println("relationsContainerName " + relationsContainerName);
 			}
 
 			MappingExtension mappingExtension = (MappingExtension)
