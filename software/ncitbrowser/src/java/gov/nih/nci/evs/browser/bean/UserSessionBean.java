@@ -1278,6 +1278,7 @@ request.getSession().setAttribute("mapping_search_results", mappingIteratorBean)
                     (ResolvedConceptReference) list.get(0);
 
                 String coding_scheme = ref.getCodingSchemeName();
+                String ref_version = ref.getCodingSchemeVersion();
                 if (coding_scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
                     String match_size = Integer.toString(size);
                     ;// Integer.toString(v.size());
@@ -1291,7 +1292,7 @@ request.getSession().setAttribute("mapping_search_results", mappingIteratorBean)
 
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", coding_scheme);
-                request.getSession().setAttribute("version", version);
+                request.getSession().setAttribute("version", ref_version);
                 Entity c = null;
                 if (ref == null) {
                     String msg =
@@ -1325,7 +1326,7 @@ request.getSession().setAttribute("mapping_search_results", mappingIteratorBean)
                     .setAttribute("matchText", convertJSPString);
 
                 request.setAttribute("dictionary", coding_scheme);
-                request.setAttribute("version", version);
+                request.setAttribute("version", ref_version);
                 return "concept_details";
             } else if (size > 0) {
                 String match_size = Integer.toString(size);
