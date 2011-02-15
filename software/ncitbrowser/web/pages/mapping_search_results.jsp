@@ -184,27 +184,6 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 </table>
 
 
-<%
-
-String msg = (String) request.getSession().getAttribute("message");
-if (msg != null) {
-%>
-<table>
-<tr><td>
-    <p class="textbodyred">&nbsp;<%=msg%></p>
-</td>
-</tr>
-</table>    
-<%   
-     request.getSession().removeAttribute("message");
-}
-%>    
-             
-
-
-
-
-
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
 
           <th class="dataTableHeader" scope="col" align="left">Source</th>
