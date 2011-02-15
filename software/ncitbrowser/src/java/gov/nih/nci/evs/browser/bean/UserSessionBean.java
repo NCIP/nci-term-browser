@@ -1202,6 +1202,7 @@ request.getSession().setAttribute("mapping_search_results", mappingIteratorBean)
 
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", coding_scheme);
+                request.getSession().setAttribute("version", version);
                 Entity c = null;
                 if (ref == null) {
                     String msg =
@@ -1235,6 +1236,7 @@ request.getSession().setAttribute("mapping_search_results", mappingIteratorBean)
                     .setAttribute("matchText", convertJSPString);
 
                 request.setAttribute("dictionary", coding_scheme);
+                request.setAttribute("version", version);
                 return "concept_details";
             } else if (size > 0) {
                 String match_size = Integer.toString(size);
