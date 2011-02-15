@@ -411,6 +411,13 @@ System.out.println("(*******************) SearchAction iterator == null???");
                     iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.BOTH);
 
 
+						if (iterator == null) {
+							String msg = "No match.";
+							request.getSession().setAttribute("message", msg);
+							request.getSession().setAttribute("dictionary", scheme);
+							return "message";
+						}
+
 
 					int numberRemaining = 0;
 					try {
