@@ -164,6 +164,10 @@ if (iterator != null) {
             ex.printStackTrace();
         }
 
+
+  int numberPages = numRemaining / 50 + 1;
+  
+  
   bean = new MappingIteratorBean(
     iterator,
     numRemaining, // number remaining
@@ -171,7 +175,7 @@ if (iterator != null) {
     50,   // iend,
     numRemaining, // size,
     0,    // pageNumber,
-    1);   // numberPages
+    numberPages);   // numberPages
    
   bean.initialize(
     iterator,
@@ -180,7 +184,7 @@ if (iterator != null) {
     50,   // iend,
     numRemaining, // size,
     0,    // pageNumber,
-    1);   // numberPages
+    numberPages);   // numberPages
     
     
     request.getSession().setAttribute("mapping_search_results", bean);
