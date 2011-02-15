@@ -4566,8 +4566,18 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
     }
 
 
+
     public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
         List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator) {
+        return getRestrictedMappingDataIterator(scheme, version,
+        sortOptionList, searchResultsIterator, SearchContext.BOTH);
+
+    }
+
+
+
+    public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
+        List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator, SearchContext context) {
 
 
 if (searchResultsIterator != null) {
@@ -4647,7 +4657,7 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 				System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
 			}
 
-            mapping = mapping.restrictToCodes(codeList, SearchContext.BOTH);
+            mapping = mapping.restrictToCodes(codeList, context);
             ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);
 			return itr;
 

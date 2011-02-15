@@ -23,6 +23,7 @@ import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.commonTypes.Source;
 
+import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext;
 
 
 
@@ -214,10 +215,6 @@ System.out.println("(*******************) SearchAction");
 		}
 
 
-
-
-
-
 	    request.setAttribute("version", version);
 
         _logger.debug("UserSessionBean scheme: " + scheme);
@@ -345,6 +342,11 @@ System.out.println("(*******************) SearchAction");
             }
 
         } else if (searchTarget.compareTo("relationships") == 0) {
+
+
+System.out.println("Relationship search *************************************************");
+
+
             designationOnly = true;
             if (iteratorBeanManager.containsIteratorBean(key)) {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
@@ -357,6 +359,15 @@ System.out.println("(*******************) SearchAction");
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
                     if (iterator != null) {
+						try {
+							int numberOfMatches = iterator.numberRemaining();
+System.out.println("Relationship search numberOfMatches: " + numberOfMatches);
+
+						} catch (Exception ex) {
+
+						}
+
+
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
@@ -390,33 +401,27 @@ System.out.println("(*******************) SearchAction iterator == null???");
             //request.setAttribute("key", key);
             //System.out.println("(*************) setAttribute key: " + key);
 
-            int numberRemaining = 0;
-            try {
-                numberRemaining = iterator.numberRemaining();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            int size = iteratorBean.getSize();
 
-            if (size > 1) {
-                request.getSession().setAttribute("search_results", v);
-                String match_size = Integer.toString(size);
-                request.getSession().setAttribute("match_size", match_size);
-                request.getSession().setAttribute("page_string", "1");
+			boolean isMapping = DataUtils.isMapping(scheme, version);
 
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
-
-                request.getSession().setAttribute("dictionary", scheme);
-
-                _logger
-                    .debug("UserSessionBean request.getSession().setAttribute dictionary: "
-                        + scheme);
-
-
-				boolean isMapping = DataUtils.isMapping(scheme, version);
-				if (isMapping) {
+			if (isMapping) {
 
 	System.out.println("(*************) creating mappingIteratorBean");
+
+
+
+
+					int numberRemaining = 0;
+					try {
+						numberRemaining = iterator.numberRemaining();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+
+
+                        iteratorBean = new IteratorBean(iterator);
+                        iteratorBean.setKey(key);
+                        iteratorBeanManager.addIteratorBean(iteratorBean);
 
 
 					  MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
@@ -436,10 +441,38 @@ request.getSession().setAttribute("mapping_search_results", mappingIteratorBean)
 
 
 					return "mapping_search_results";
-				}
+			}
+
+
+
+
+
+
+
+
+            int size = iteratorBean.getSize();
+
+            if (size > 1) {
+                request.getSession().setAttribute("search_results", v);
+                String match_size = Integer.toString(size);
+                request.getSession().setAttribute("match_size", match_size);
+                request.getSession().setAttribute("page_string", "1");
+
+                request.getSession().setAttribute("new_search", Boolean.TRUE);
+
+                request.getSession().setAttribute("dictionary", scheme);
+
+                _logger
+                    .debug("UserSessionBean request.getSession().setAttribute dictionary: "
+                        + scheme);
+
+
+
 
                 return "search_results";
             } else if (size == 1) {
+
+
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", scheme);// Constants.CODING_SCHEME_NAME);
                 int pageNumber = 1;
@@ -497,6 +530,36 @@ request.getSession().setAttribute("mapping_search_results", mappingIteratorBean)
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
+/*
+                //KLO, 021511
+
+				isMapping = DataUtils.isMapping(scheme, version);
+
+				if (isMapping) {
+
+	System.out.println("(*************) creating mappingIteratorBean");
+
+
+					  MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
+						iterator,
+						numberRemaining, // number remaining
+						0,    // istart
+						50,   // iend,
+						numberRemaining, // size,
+						0,    // pageNumber,
+						1);   // numberPages
+
+
+request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
+
+	System.out.println("(*************) returning mapping_search_results");
+
+
+
+					return "mapping_search_results";
+				}
+*/
+
                 return "concept_details";
             }
         }

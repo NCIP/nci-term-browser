@@ -37,12 +37,7 @@ System.out.println("next_page_num_str: " + next_page_num_str);
     
 %>
 
-<table>
-<tr><td>
-<p class="textbodyred">(Note: Pagination is under construction.)</p>
-</td>
-</tr>
-</table>
+
 
 
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping.jsf?" >
