@@ -203,7 +203,7 @@ public class IteratorBean extends Object {
             }
 
         } catch (Exception ex) {
-            // ex.printStackTrace();
+            ex.printStackTrace();
         }
 
         /*
