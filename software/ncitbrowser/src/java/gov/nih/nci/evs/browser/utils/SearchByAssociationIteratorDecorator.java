@@ -29,6 +29,8 @@ import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
 
 
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -192,16 +194,17 @@ public class SearchByAssociationIteratorDecorator extends
 		protected List<? extends ResolvedConceptReference> resolveOneHit(ResolvedConceptReference hit) throws LBException{
 			List<ResolvedConceptReference> returnList = new ArrayList<ResolvedConceptReference>();
 
-			CodedNodeGraph cng = lbs.getNodeGraph(
-					hit.getCodingSchemeName(),
-					null,
-					null);
+			CodingSchemeVersionOrTag tagOrVersion = new CodingSchemeVersionOrTag();
+			if (hit.getCodingSchemeVersion() != null) tagOrVersion.setVersion(hit.getCodingSchemeVersion());
 
-// KLO, 010511
+            CodedNodeGraph cng = null;
+ 			cng = lbs.getNodeGraph(
+					hit.getCodingSchemeName(),
+					tagOrVersion,
+					null);
 
             Boolean restrictToAnonymous = Boolean.FALSE;
             cng = cng.restrictToAnonymous(restrictToAnonymous);
-
 
 			if (_associationNameAndValueList != null) {
 				cng =
@@ -223,6 +226,7 @@ public class SearchByAssociationIteratorDecorator extends
 
 			ConceptReference focus = new ConceptReference();
 			focus.setCode(hit.getCode());
+			focus.setCodingSchemeName(hit.getCodingSchemeName());
 			focus.setCodeNamespace(hit.getCodeNamespace());
 /*
             System.out.println("****** hit.getCodingSchemeName(): " + hit.getCodingSchemeName());

@@ -138,15 +138,7 @@ System.out.println("page_num: " + page_num);
   }
   %>
   </select>
-  <!--
-        
-        <h:selectOneMenu
-          id="id" value="#{userSessionBean.selectedResultsPerPage}"
-          valueChangeListener="#{userSessionBean.resultsPerPageChanged}" immediate="true" onchange="submit()"> 
-          <f:selectItems value="#{userSessionBean.resultsPerPageList}"/>
-        </h:selectOneMenu>
-        
-  -->        
+  
         &nbsp;results per page
       </td>
       <td>

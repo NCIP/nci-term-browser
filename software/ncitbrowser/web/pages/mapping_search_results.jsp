@@ -250,145 +250,36 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 
 
           <th class="dataTableHeader" scope="col" align="left">
-              <%
-              if (sortBy == MappingData.COL_SOURCE_CODE) {
-              %>
                  Source Code
-              <%
-              } else {
-                  String s = new Integer(MappingData.COL_SOURCE_CODE).toString();
-              %>
-
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
-                   Source Code
-                </a>
-
-              <%
-              }
-              %>
           </th>
 
           <th class="dataTableHeader" scope="col" align="left">
-              <%
-              if (sortBy == MappingData.COL_SOURCE_NAME) {
-              %>
                  Source Name
-              <%
-              } else {
-                  String s = new Integer(MappingData.COL_SOURCE_NAME).toString();
-              %>
-
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
-                   Source Name
-                </a>
-
-              <%
-              }
-              %>
           </th>
 
-
           <th class="dataTableHeader" scope="col" align="left">
-              <%
-              if (sortBy == MappingData.COL_REL) {
-              %>
                  REL
-              <%
-              } else {
-                  String s = new Integer(MappingData.COL_REL).toString();
-              %>
-
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
-                   REL
-                </a>
-
-              <%
-              }
-              %>
           </th>
 
 <%
 if (show_rank_column) {
 %>
           <th class="dataTableHeader" scope="col" align="left">
-              <%
-              if (sortBy == MappingData.COL_SCORE) {
-              %>
                  Map Rank
-                 
-        <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/rank_help_info.jsf',
-    '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-    <img src="<%= request.getContextPath() %>/images/help.gif" alt="Rank Definitions" title="Rank Definitions" border="0">
-        </a>                 
-                 
-                 
-              <%
-              } else {
-                  String s = new Integer(MappingData.COL_SCORE).toString();
-              %>
-
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
-                   Map Rank
-                </a>
-
-
-        <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/rank_help_info.jsf',
-    '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-    <img src="<%= request.getContextPath() %>/images/help.gif" alt="Rank Definitions" title="Rank Definitions" border="0">
-        </a>
-        
-              <%
-              }
-              %>
-              
-              
           </th>
-
 <%
 }
 %>
 
-
           <th class="dataTableHeader" scope="col" align="left">Target</th>
 
           <th class="dataTableHeader" scope="col" align="left">
-              <%
-              if (sortBy == MappingData.COL_TARGET_CODE) {
-              %>
                  Target Code
-              <%
-              } else {
-                  String s = new Integer(MappingData.COL_TARGET_CODE).toString();
-              %>
-
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
-                   Target Code
-                </a>
-
-              <%
-              }
-              %>
           </th>
 
           <th class="dataTableHeader" scope="col" align="left">
-              <%
-              if (sortBy == MappingData.COL_TARGET_NAME) {
-              %>
                  Target Name
-              <%
-              } else {
-                  String s = new Integer(MappingData.COL_TARGET_NAME).toString();
-              %>
-
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
-                   Target Name
-                </a>
-
-              <%
-              }
-              %>
           </th>
-
 
 
             <%
