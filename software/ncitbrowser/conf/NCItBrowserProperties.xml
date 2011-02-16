@@ -602,6 +602,10 @@
                  <name>MedDRA (Medical Dictionary for Regulatory Activities Terminology)</name>
                  <value>@meddra_security_token@</value>
         </SecurityTokenHolder>
+        <SecurityTokenHolder>
+                 <name>MedDRA</name>
+                 <value>@meddra_security_token@</value>
+        </SecurityTokenHolder>
     </SecurityTokenHolders>
 
 </root>
