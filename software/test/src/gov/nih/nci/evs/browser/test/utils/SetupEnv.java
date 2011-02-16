@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.browser.test.utils;
 
+import gov.nih.nci.evs.browser.properties.*;
+
 import java.util.*;
 
 public class SetupEnv {
@@ -21,6 +23,11 @@ public class SetupEnv {
     
     public void setup(String propertyFile) {
         System.setProperty(PROPERTY_FILE, propertyFile);
+        try {
+            NCItBrowserProperties.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String[] parse(String[] args) {
