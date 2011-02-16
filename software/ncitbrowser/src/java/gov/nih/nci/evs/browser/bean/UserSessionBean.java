@@ -161,6 +161,17 @@ public class UserSessionBean extends Object {
     public String searchAction() {
 
 System.out.println("(*******************) SearchAction");
+        String max_str = null;
+        int maxToReturn = -1;// 1000;
+        try {
+            max_str =
+                NCItBrowserProperties.getInstance().getProperty(
+                    NCItBrowserProperties.MAXIMUM_RETURN);
+            maxToReturn = Integer.parseInt(max_str);
+        } catch (Exception ex) {
+
+        }
+        ResolvedConceptReferencesIterator iterator = null;
 
 
         HttpServletRequest request =
@@ -217,8 +228,92 @@ System.out.println("(*******************) SearchAction");
 
 	    request.setAttribute("version", version);
 
+		boolean isMapping = DataUtils.isMapping(scheme, version);
+
         _logger.debug("UserSessionBean scheme: " + scheme);
         _logger.debug("searchAction version: " + version);
+
+
+		if (isMapping && searchTarget.compareTo("relationships") != 0) {
+
+System.out.println("(*************) calling getRestrictedMappingDataIterator -- search by " + searchTarget);
+//testing
+				if (searchTarget.compareTo("names") == 0) {
+					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByName(
+						scheme, version, matchText,
+						matchAlgorithm, maxToReturn);
+					if (wrapper != null) {
+						iterator = wrapper.getIterator();
+					} else {
+						iterator = null;
+					}
+				} else if (searchTarget.compareTo("properties") == 0) {
+
+					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByProperties(
+						scheme, version, matchText,
+						matchAlgorithm, maxToReturn);
+					if (wrapper != null) {
+						iterator = wrapper.getIterator();
+					} else {
+						iterator = null;
+					}
+				}
+
+
+				if (iterator == null) {
+					String msg = "No match.";
+					request.getSession().setAttribute("message", msg);
+					request.getSession().setAttribute("dictionary", scheme);
+					return "message";
+				}
+
+				int numberRemaining = 0;
+				try {
+					numberRemaining = iterator.numberRemaining();
+					if (numberRemaining == 0) {
+						String msg = "No match.";
+						request.getSession().setAttribute("message", msg);
+						request.getSession().setAttribute("dictionary", scheme);
+						return "message";
+					}
+
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					String msg = "An unexpected exception encountered.";
+					request.getSession().setAttribute("message", msg);
+					request.getSession().setAttribute("dictionary", scheme);
+					return "message";
+				}
+
+				//iteratorBean = new IteratorBean(iterator);
+				//iteratorBean.setKey(key);
+				//iteratorBeanManager.addIteratorBean(iteratorBean);
+
+				MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
+				iterator,
+				numberRemaining, // number remaining
+				0,    // istart
+				50,   // iend,
+				numberRemaining, // size,
+				0,    // pageNumber,
+				1);   // numberPages
+
+				mappingIteratorBean.initialize(
+				iterator,
+				numberRemaining, // number remaining
+				0,    // istart
+				50,   // iend,
+				numberRemaining, // size,
+				0,    // pageNumber,
+				1);   // numberPages
+
+				request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
+
+				System.out.println("(*************) returning mapping_search_results");
+
+				return "mapping_search_results";
+		}
 
         // KLO, 012610
         if (searchTarget.compareTo("relationships") == 0
@@ -258,16 +353,7 @@ System.out.println("(*******************) SearchAction");
         Vector versions = new Vector();
         versions.add(version);
 
-        String max_str = null;
-        int maxToReturn = -1;// 1000;
-        try {
-            max_str =
-                NCItBrowserProperties.getInstance().getProperty(
-                    NCItBrowserProperties.MAXIMUM_RETURN);
-            maxToReturn = Integer.parseInt(max_str);
-        } catch (Exception ex) {
 
-        }
         Utils.StopWatch stopWatch = new Utils.StopWatch();
         Vector<org.LexGrid.concepts.Entity> v = null;
 
@@ -289,7 +375,6 @@ System.out.println("(*******************) SearchAction");
         }
 
         IteratorBean iteratorBean = null;
-        ResolvedConceptReferencesIterator iterator = null;
         String key =
             iteratorBeanManager.createIteratorKey(schemes, matchText,
                 searchTarget, matchAlgorithm, maxToReturn);
@@ -401,23 +486,28 @@ System.out.println("(*******************) SearchAction iterator == null???");
             //request.setAttribute("key", key);
             //System.out.println("(*************) setAttribute key: " + key);
 
-
-			boolean isMapping = DataUtils.isMapping(scheme, version);
-
 			if (isMapping) {
-
 	System.out.println("(*************) calling getRestrictedMappingDataIterator -- search by " + searchTarget);
-
-                    iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.BOTH);
-
-
-						if (iterator == null) {
-							String msg = "No match.";
-							request.getSession().setAttribute("message", msg);
-							request.getSession().setAttribute("dictionary", scheme);
-							return "message";
+	//testing
+                    if (searchTarget.compareTo("names") == 0) {
+						ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByName(
+							scheme, version, matchText,
+							matchAlgorithm, maxToReturn);
+						if (wrapper != null) {
+							iterator = wrapper.getIterator();
+						} else {
+							iterator = null;
 						}
+					} else {
+                        iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.BOTH);
+				    }
 
+					if (iterator == null) {
+						String msg = "No match.";
+						request.getSession().setAttribute("message", msg);
+						request.getSession().setAttribute("dictionary", scheme);
+						return "message";
+					}
 
 					int numberRemaining = 0;
 					try {
@@ -436,44 +526,34 @@ System.out.println("(*******************) SearchAction iterator == null???");
 						ex.printStackTrace();
 					}
 
-                        iteratorBean = new IteratorBean(iterator);
-                        iteratorBean.setKey(key);
-                        iteratorBeanManager.addIteratorBean(iteratorBean);
+					//iteratorBean = new IteratorBean(iterator);
+					//iteratorBean.setKey(key);
+					//iteratorBeanManager.addIteratorBean(iteratorBean);
 
+				    MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
+					iterator,
+					numberRemaining, // number remaining
+					0,    // istart
+					50,   // iend,
+					numberRemaining, // size,
+					0,    // pageNumber,
+					1);   // numberPages
 
-					  MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
-						iterator,
-						numberRemaining, // number remaining
-						0,    // istart
-						50,   // iend,
-						numberRemaining, // size,
-						0,    // pageNumber,
-						1);   // numberPages
+				    mappingIteratorBean.initialize(
+					iterator,
+					numberRemaining, // number remaining
+					0,    // istart
+					50,   // iend,
+					numberRemaining, // size,
+					0,    // pageNumber,
+					1);   // numberPages
 
+                    request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
 
-					  mappingIteratorBean.initialize(
-						iterator,
-						numberRemaining, // number remaining
-						0,    // istart
-						50,   // iend,
-						numberRemaining, // size,
-						0,    // pageNumber,
-						1);   // numberPages
-
-
-request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
-
-	System.out.println("(*************) returning mapping_search_results");
-
+	                System.out.println("(*************) returning mapping_search_results");
 
 					return "mapping_search_results";
 			}
-
-
-
-
-
-
 
 
             int size = iteratorBean.getSize();
