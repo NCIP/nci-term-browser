@@ -199,8 +199,7 @@ public class SearchByAssociationIteratorDecorator extends
 
             CodedNodeGraph cng = null;
  			cng = lbs.getNodeGraph(
-					//hit.getCodingSchemeName(),
-					DataUtils.getFormalName(hit.getCodingSchemeName()),
+					hit.getCodingSchemeName(),
 					tagOrVersion,
 					null);
 
