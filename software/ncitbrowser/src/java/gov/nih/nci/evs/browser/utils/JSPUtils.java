@@ -73,10 +73,10 @@ public class JSPUtils {
             || info.hdr_version.equalsIgnoreCase("null"))
             info.hdr_version = (String) request.getAttribute("version");
 
-        if (info.hdr_dictionary == null
-            || info.hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
-            return info;
-        }
+//        if (info.hdr_dictionary == null
+//            || info.hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
+//            return info;
+//        }
 
         request.getSession().setAttribute("dictionary", info.hdr_dictionary);
         info.content_hdr_shortName =
