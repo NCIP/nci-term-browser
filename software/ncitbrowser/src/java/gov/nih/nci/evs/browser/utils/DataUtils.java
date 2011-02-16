@@ -4579,17 +4579,17 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
     public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
         List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator, SearchContext context) {
 
+System.out.println("(***********) getRestrictedMappingDataIterator ...");
+if (searchResultsIterator == null) return null;
 
-if (searchResultsIterator != null) {
-	try {
-		int numRemaining = searchResultsIterator.numberRemaining();
-		System.out.println("Number of matches: " + numRemaining);
-	} catch (Exception e) {
-		System.out.println("searchResultsIterator.numberRemaining() throws exception???");
-	}
-} else {
-	System.out.println("searchResultsIterator is NULL??? ");
-}
+		try {
+			int numRemaining = searchResultsIterator.numberRemaining();
+			System.out.println("(***********) searchResultsIterator passing number of matches: " + numRemaining);
+		} catch (Exception e) {
+			System.out.println("searchResultsIterator.numberRemaining() throws exception???");
+			return null;
+		}
+
 
 		CodingSchemeVersionOrTag versionOrTag =
 			new CodingSchemeVersionOrTag();
@@ -4597,7 +4597,6 @@ if (searchResultsIterator != null) {
 			versionOrTag.setVersion(version);
 		}
 		String relationsContainerName = null;
-
 
         LexBIGService distributed = RemoteServerUtil.createLexBIGService();
         try {
@@ -4611,7 +4610,6 @@ if (searchResultsIterator != null) {
 				System.out.println("isMapping: " + isMapping);
 				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
  					relationsContainerName = relation.getContainerName();
-					//System.out.println(relationsContainerName);
 					break;
 				}
 			}
@@ -4635,13 +4633,15 @@ if (searchResultsIterator != null) {
 System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrieving refs");
 
 			if (searchResultsIterator != null) {
+				int lcv = 0;
 				while(searchResultsIterator.hasNext()){
 					ResolvedConceptReference[] refs = searchResultsIterator.next(100).getResolvedConceptReference();
 					for(ResolvedConceptReference ref : refs){
+						lcv++;
+						System.out.println("(" + lcv + ") " + ref.getEntityDescription().getContent() + "(" + ref.getCode() + ")");
 						codeList.addConceptReference((ConceptReference) ref);
 					}
 				}
-
 			} else {
 				System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
 			}

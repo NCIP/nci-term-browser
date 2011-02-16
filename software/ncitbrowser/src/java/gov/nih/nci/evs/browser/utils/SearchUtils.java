@@ -1014,51 +1014,51 @@ public class SearchUtils {
     // /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public ResolvedConceptReferencesIteratorWrapper searchByName(
-        String scheme, String version, String matchText, 
+        String scheme, String version, String matchText,
         String matchAlgorithm, boolean ranking, int maxToReturn) {
         return searchByName(scheme, version, matchText, null, matchAlgorithm,
             ranking, maxToReturn);
     }
 
     public ResolvedConceptReferencesIteratorWrapper searchByName(
-        String scheme, String version, String matchText, String source, 
+        String scheme, String version, String matchText, String source,
         String matchAlgorithm, boolean ranking, int maxToReturn) {
-        Vector<String> schemes = new Vector<String>(); 
+        Vector<String> schemes = new Vector<String>();
         schemes.add(scheme);
         Vector<String> versions = new Vector<String>();
         versions.add(version);
-        return searchByName(schemes, versions, matchText, source, 
+        return searchByName(schemes, versions, matchText, source,
             matchAlgorithm, ranking, maxToReturn);
     }
 
     public ResolvedConceptReferencesIteratorWrapper searchByName(
         Vector<String> schemes, Vector<String> versions, String matchText,
         String matchAlgorithm, boolean ranking, int maxToReturn) {
-        return searchByName(schemes, versions, matchText, null, 
+        return searchByName(schemes, versions, matchText, null,
             matchAlgorithm, ranking, maxToReturn);
     }
 
     public ResolvedConceptReferencesIteratorWrapper searchByName(
-        Vector<String> schemes, Vector<String> versions, String matchText, 
+        Vector<String> schemes, Vector<String> versions, String matchText,
         String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
         try {
             if (matchText == null || matchText.trim().length() == 0)
                 return null;
-    
+
             Utils.StopWatch stopWatch = new Utils.StopWatch();
             Utils.StopWatch stopWatchTotal = new Utils.StopWatch();
             boolean debug_flag = false;
-    
+
             matchText = matchText.trim();
             _logger.debug("searchByName ... " + matchText);
-    
+
             // p11.1-q11.1  // /100{WBC}
-            if (matchAlgorithm.compareToIgnoreCase("contains") == 0) 
+            if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
             {
                 // matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM;
                 matchAlgorithm = findBestContainsAlgorithm(matchText);
             }
-    
+
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             Vector<CodedNodeSet> cns_vec = new Vector<CodedNodeSet>();
             for (int i = 0; i < schemes.size(); i++) {
@@ -1077,7 +1077,7 @@ public class SearchUtils {
                             null, matchAlgorithm, null);
                     cns = restrictToSource(cns, source);
                 }
-                    
+
                 if (cns != null)
                     cns_vec.add(cns);
                 if (debug_flag)
@@ -1105,7 +1105,7 @@ public class SearchUtils {
                 new QuickUnionIterator(cns_vec, sortCriteria, null,
                     restrictToProperties, null, resolveConcepts);
             if (debug_flag)
-                _logger.debug("Resolve CNS union delay (msec): " + 
+                _logger.debug("Resolve CNS union delay (msec): " +
                     stopWatch.duration());
 
             if (iterator.numberRemaining() <= 0) {
@@ -1114,11 +1114,11 @@ public class SearchUtils {
                     matchConceptCode(schemes, versions, matchText, source,
                     "LuceneQuery");
                 if (debug_flag)
-                    _logger.debug("Match concept code delay (msec): " + 
+                    _logger.debug("Match concept code delay (msec): " +
                         stopWatch.duration());
             }
 
-            _logger.debug("Total search delay (msec): " + 
+            _logger.debug("Total search delay (msec): " +
                 stopWatchTotal.duration());
             return new ResolvedConceptReferencesIteratorWrapper(iterator);
         } catch (Exception e) {
@@ -1196,9 +1196,9 @@ public class SearchUtils {
         }
         return null;
     }
-    
+
     public static ResolvedConceptReferencesIterator matchConceptCode(
-        Vector<String> schemes, Vector<String> versions, String matchText, 
+        Vector<String> schemes, Vector<String> versions, String matchText,
         String source, String matchAlgorithm) {
         try {
             int n = schemes.size();
@@ -1211,7 +1211,7 @@ public class SearchUtils {
                 if (cns != null)
                     cns_vec.add(cns);
             }
-            
+
             SortOptionList sortCriteria = null;
             LocalNameList restrictToProperties = new LocalNameList();
             boolean resolveConcepts = true;
@@ -1224,7 +1224,7 @@ public class SearchUtils {
             return null;
         }
     }
-    
+
     private static CodedNodeSet matchConceptCode_CNS(
         String scheme, String version, String matchText, String source,
         String matchAlgorithm) throws Exception {
@@ -1257,7 +1257,7 @@ public class SearchUtils {
         }
         return cns;
     }
-    
+
     public static ResolvedConceptReferencesIterator matchConceptCode(
         String scheme, String version, String matchText, String source,
         String matchAlgorithm) {
@@ -1265,14 +1265,14 @@ public class SearchUtils {
             CodedNodeSet cns = matchConceptCode_CNS(
                 scheme, version, matchText, source,
                 matchAlgorithm);
-            
+
             SortOptionList sortCriteria = null;
             LocalNameList restrictToProperties = new LocalNameList();
             boolean resolveConcepts = true;
             ResolvedConceptReferencesIterator iterator =
                 cns.resolve(sortCriteria, null, restrictToProperties,
                     null, resolveConcepts);
-    
+
             if (source == null || source.compareToIgnoreCase("ALL") == 0) {
                 return filterIterator(iterator, scheme, version, matchText);
             }
@@ -2960,7 +2960,7 @@ public class SearchUtils {
         return null;
     }
 
-    private String findBestContainsAlgorithm(String matchText) {
+    public String findBestContainsAlgorithm(String matchText) {
         if (matchText == null)
             return "nonLeadingWildcardLiteralSubString";
         matchText = matchText.trim();
@@ -3008,7 +3008,7 @@ public class SearchUtils {
     }
 
 
-    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag) 
+    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
         throws Exception {
 		CodedNodeSet cns = null;
 		cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
