@@ -351,10 +351,13 @@ public class MappingSearchUtils {
 										try {
 											numberRemaining = itr.numberRemaining();
 											System.out.println("Number of matches: " + numberRemaining);
+											if (numberRemaining > 0) break;
 										} catch (Exception ex) {
 											ex.printStackTrace();
 										}
 									}
+								} else {
+									break;
 								}
 
 							} catch (Exception ex) {
