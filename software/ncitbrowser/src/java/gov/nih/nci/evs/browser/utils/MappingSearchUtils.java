@@ -134,56 +134,7 @@ public class MappingSearchUtils {
 
 
 
-    public ResolvedConceptReferencesIteratorWrapper searchByName(
-        String scheme, String version, String matchText,
-        String matchAlgorithm, int maxToReturn) {
 
-	    String containerName = getMappingRelationsContainerName(scheme, version);
-	    if (containerName == null) return null;
-
-        try {
-            if (matchText == null || matchText.trim().length() == 0)
-                return null;
-
-            matchText = matchText.trim();
-            _logger.debug("searchByName ... " + matchText);
-
-            if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
-            {
-               matchAlgorithm = new SearchUtils().findBestContainsAlgorithm(matchText);
-            }
-
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-			MappingExtension mappingExtension =
-				(MappingExtension)lbSvc.getGenericExtension("MappingExtension");
-
-			Mapping mapping =
-				mappingExtension.getMapping(scheme, null, containerName);
-
-			if (mapping == null) {
-				System.out.println("mappping == null???");
-				return null;
-			}
-
-			mapping = mapping.restrictToMatchingDesignations(
-						matchText, SearchDesignationOption.ALL, matchAlgorithm, null, SearchContext.BOTH);
-
-				//Finally, resolve the Mapping.
-			ResolvedConceptReferencesIterator itr = mapping.resolveMapping();
-			try {
-				int numberRemaining = itr.numberRemaining();
-				System.out.println("Number of matches: " + numberRemaining);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				return null;
-			}
-
-            return new ResolvedConceptReferencesIteratorWrapper(itr);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
 
     private CodedNodeSet.PropertyType[] getAllNonPresentationPropertyTypes() {
@@ -195,6 +146,7 @@ public class MappingSearchUtils {
         return propertyTypes;
     }
 
+/*
     public ResolvedConceptReferencesIteratorWrapper searchByProperties(
         String scheme, String version, String matchText,
         String matchAlgorithm, int maxToReturn) {
@@ -264,8 +216,6 @@ public class MappingSearchUtils {
         }
     }
 
-
-/*
  MappingExtension.Mapping restrictToMatchingProperties(
 	               org.LexGrid.LexBIG.DataModel.Collections.LocalNameList propertyNames,
                    org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType[] propertyTypes,
@@ -277,5 +227,242 @@ public class MappingSearchUtils {
                    MappingExtension.Mapping.SearchContext searchContext)
  */
 
+/*
+    public ResolvedConceptReferencesIteratorWrapper searchByName(
+        String scheme, String version, String matchText,
+        String matchAlgorithm, int maxToReturn) {
 
+	    String containerName = getMappingRelationsContainerName(scheme, version);
+	    if (containerName == null) return null;
+
+        try {
+            if (matchText == null || matchText.trim().length() == 0)
+                return null;
+
+            matchText = matchText.trim();
+            _logger.debug("searchByName ... " + matchText);
+
+            if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+            {
+               matchAlgorithm = new SearchUtils().findBestContainsAlgorithm(matchText);
+            }
+
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			MappingExtension mappingExtension =
+				(MappingExtension)lbSvc.getGenericExtension("MappingExtension");
+
+			Mapping mapping =
+				mappingExtension.getMapping(scheme, null, containerName);
+
+			if (mapping == null) {
+				System.out.println("mappping == null???");
+				return null;
+			}
+
+			mapping = mapping.restrictToMatchingDesignations(
+						matchText, SearchDesignationOption.ALL, matchAlgorithm, null, SearchContext.BOTH);
+
+				//Finally, resolve the Mapping.
+			ResolvedConceptReferencesIterator itr = mapping.resolveMapping();
+			try {
+				int numberRemaining = itr.numberRemaining();
+				System.out.println("Number of matches: " + numberRemaining);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return null;
+			}
+
+            return new ResolvedConceptReferencesIteratorWrapper(itr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+*/
+
+    public ResolvedConceptReferencesIteratorWrapper searchByName(
+        String scheme, String version, String matchText,
+        String matchAlgorithm, int maxToReturn) {
+		Vector schemes = new Vector();
+		schemes.add(scheme);
+		Vector versions = new Vector();
+		versions.add(version);
+		return searchByName(schemes, versions, matchText, matchAlgorithm, maxToReturn);
+	}
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchByName(
+        Vector schemes, Vector versions, String matchText,
+        String matchAlgorithm, int maxToReturn) {
+
+		if (matchText == null || matchText.trim().length() == 0)
+			return null;
+
+		matchText = matchText.trim();
+		_logger.debug("searchByName ... " + matchText);
+
+		if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+		{
+		   matchAlgorithm = new SearchUtils().findBestContainsAlgorithm(matchText);
+		}
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		MappingExtension mappingExtension = null;
+		try {
+			mappingExtension = (MappingExtension)lbSvc.getGenericExtension("MappingExtension");
+		} catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+		}
+
+        ResolvedConceptReferencesIterator itr = null;
+        int lcv = 0;
+        String scheme = null;
+        String version = null;
+        int numberRemaining = -1;
+        while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
+            scheme = (String) schemes.elementAt(lcv);
+            version = (String) versions.elementAt(lcv);
+			String containerName = getMappingRelationsContainerName(scheme, version);
+			if (containerName != null) {
+				try {
+					Mapping mapping =
+						mappingExtension.getMapping(scheme, null, containerName);
+
+					if (mapping != null) {
+						mapping = mapping.restrictToMatchingDesignations(
+									matchText, SearchDesignationOption.ALL, matchAlgorithm, null, SearchContext.BOTH);
+
+							//Finally, resolve the Mapping.
+						itr = mapping.resolveMapping();
+						try {
+							numberRemaining = itr.numberRemaining();
+							System.out.println("Number of matches: " + numberRemaining);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					//return null;
+				}
+		    }
+		    lcv++;
+		}
+		if (itr != null) {
+			ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(itr);
+			wrapper.setCodingSchemeName(scheme);
+			wrapper.setCodingSchemeVersion(version);
+			return wrapper;
+		}
+		return null;
+    }
+
+    public ResolvedConceptReferencesIteratorWrapper searchByProperties(
+        String scheme, String version, String matchText,
+        String matchAlgorithm, int maxToReturn) {
+
+System.out.println("searchByProperties scheme: " + scheme);
+System.out.println("searchByProperties version: " + version);
+
+
+		Vector schemes = new Vector();
+		schemes.add(scheme);
+		Vector versions = new Vector();
+		versions.add(version);
+		return searchByProperties(schemes, versions, matchText, matchAlgorithm, maxToReturn);
+	}
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchByProperties(
+        Vector schemes, Vector versions, String matchText,
+        String matchAlgorithm, int maxToReturn) {
+
+		if (matchText == null || matchText.trim().length() == 0)
+			return null;
+
+		matchText = matchText.trim();
+		_logger.debug("searchByName ... " + matchText);
+
+		if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+		{
+		   matchAlgorithm = new SearchUtils().findBestContainsAlgorithm(matchText);
+		}
+
+        CodedNodeSet.PropertyType[] propertyTypes = null;
+        LocalNameList propertyNames = null;
+        LocalNameList sourceList = null;
+        propertyTypes = getAllNonPresentationPropertyTypes();
+
+        LocalNameList contextList = null;
+        NameAndValueList qualifierList = null;
+        String language = null;
+        // to be modified
+        SearchContext searchContext = SearchContext.BOTH;
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		MappingExtension mappingExtension = null;
+		try {
+			mappingExtension = (MappingExtension)lbSvc.getGenericExtension("MappingExtension");
+		} catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+		}
+
+        ResolvedConceptReferencesIterator itr = null;
+        int lcv = 0;
+        String scheme = null;
+        String version = null;
+
+        System.out.println("schemes.size(): " + schemes.size() + " lcv: " + lcv);
+        int numberRemaining = -1;
+        while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
+
+            scheme = (String) schemes.elementAt(lcv);
+            version = (String) versions.elementAt(lcv);
+
+			String containerName = getMappingRelationsContainerName(scheme, version);
+			if (containerName != null) {
+				try {
+					Mapping mapping =
+						mappingExtension.getMapping(scheme, null, containerName);
+
+					if (mapping != null) {
+						mapping = mapping.restrictToMatchingProperties(
+							   propertyNames,
+							   propertyTypes,
+							   sourceList,
+							   contextList,
+							   qualifierList,
+							   matchAlgorithm,
+							   language,
+							   null,
+							   searchContext);
+
+							//Finally, resolve the Mapping.
+						itr = mapping.resolveMapping();
+						try {
+							numberRemaining = itr.numberRemaining();
+							System.out.println("Number of matches: " + numberRemaining);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					//return null;
+				}
+		    }
+		    lcv++;
+		}
+		if (itr != null) {
+			ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(itr);
+			wrapper.setCodingSchemeName(scheme);
+			wrapper.setCodingSchemeVersion(version);
+			return wrapper;
+		}
+		return null;
+    }
 }

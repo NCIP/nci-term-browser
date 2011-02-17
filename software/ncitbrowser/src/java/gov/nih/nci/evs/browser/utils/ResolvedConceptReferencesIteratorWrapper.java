@@ -62,6 +62,7 @@ public class ResolvedConceptReferencesIteratorWrapper {
     /** The quick iterator. */
     private String _message = null;
     private String _codingSchemeName = null;
+    private String _codingSchemeVersion = null;
 
     public ResolvedConceptReferencesIteratorWrapper(
         ResolvedConceptReferencesIterator iterator) {
@@ -97,5 +98,13 @@ public class ResolvedConceptReferencesIteratorWrapper {
 
     public String getCodingSchemeName() {
         return _codingSchemeName;
+    }
+
+    public void setCodingSchemeVersion(String version) {
+        _codingSchemeVersion = version;
+    }
+
+    public String getCodingSchemeVersion() {
+        return _codingSchemeVersion;
     }
 }
