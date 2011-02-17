@@ -366,7 +366,7 @@ public class ValueSetBean {
 
 
 System.out.println("matchText: " + matchText);
-
+            String uri = null;
 
 			try {
 
@@ -382,7 +382,7 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 					}
 
 					for (int j=0; j<list.size(); j++) {
-						String uri = (String) list.get(j);
+						uri = (String) list.get(j);
 						System.out.println(uri);
 
 						try {
@@ -414,6 +414,8 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 					msg = "No match found.";
 					request.getSession().setAttribute("message", msg);
 					return "message";
+				} else if (v.size() == 1) {
+					request.getSession().setAttribute("vsd_uri", uri);
 				}
 
 				return "value_set";
@@ -429,12 +431,12 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 			return "message";
 
 		} else if (selectValueSetSearchOption.compareTo("Name") == 0) {
-
+            String uri = null;
 			try {
 
 				Vector uri_vec = DataUtils.getValueSetURIs();
                 for (int i=0; i<uri_vec.size(); i++) {
-					String uri = (String) uri_vec.elementAt(i);
+					uri = (String) uri_vec.elementAt(i);
 					AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
 					Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
 					if (cs_ref_vec != null) {
@@ -494,6 +496,8 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 					msg = "No match found.";
 					request.getSession().setAttribute("message", msg);
 					return "message";
+				} else if (v.size() == 1) {
+					request.getSession().setAttribute("vsd_uri", uri);
 				}
 
 				return "value_set";
@@ -545,7 +549,7 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 
 		else if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 			System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
-
+            String uri = null;
 			if (selectCodingScheme != null) {
 
 				if (selectCodingScheme.compareTo("ALL") == 0 && matchText.compareTo("") == 0) {
@@ -558,7 +562,7 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
                     List uri_list = vsd_service.getValueSetDefinitionURIsWithCodingScheme(selectCodingScheme,
                                                                            DataUtils.codingSchemeName2URI(selectCodingScheme));
 					for (int i=0; i<uri_list.size(); i++) {
-						String uri = (String) uri_list.get(i);
+						uri = (String) uri_list.get(i);
 						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
 						String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
 						if (metadata != null) {
@@ -579,12 +583,19 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 					return "message";
 				}
 		    }
+
+		    if (v.size() == 1) {
+				request.getSession().setAttribute("vsd_uri", uri);
+			}
+
 			request.getSession().setAttribute("matched_vsds", v);
 			return "value_set";
 
 		} else if (selectValueSetSearchOption.compareTo("Source") == 0) {
+			String uri = null;
 			try {
 				String supportedTag = "supportedSource";
+				supportedTag = "Source";
 				String value = matchText;
 				String source_uri = null;
 
@@ -608,7 +619,9 @@ System.out.println("(*) getValueSetDefinitionURIsForSupportedTagAndValue returns
 System.out.println("(*) list.size(): " + list.size());
 
 				for (int i=0; i<list.size(); i++) {
-					String uri = (String) list.get(i);
+					uri = (String) list.get(i);
+System.out.println("uri: " + uri);
+
 					try {
 						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
 						if (vsd == null) {
@@ -644,6 +657,8 @@ System.out.println("(*) list.size(): " + list.size());
 				msg = "No match found.";
 				request.getSession().setAttribute("message", msg);
 				return "message";
+			} else if (v.size() == 1) {
+				request.getSession().setAttribute("vsd_uri", uri);
 			}
 
 			return "value_set";
