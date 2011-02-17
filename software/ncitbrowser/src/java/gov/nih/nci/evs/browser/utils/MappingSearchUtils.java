@@ -280,6 +280,107 @@ public class MappingSearchUtils {
     }
 */
 
+    public ResolvedConceptReferencesIteratorWrapper searchByCode(
+        String scheme, String version, String matchText,
+        String matchAlgorithm, int maxToReturn) {
+		Vector schemes = new Vector();
+		schemes.add(scheme);
+		Vector versions = new Vector();
+		versions.add(version);
+		return searchByName(schemes, versions, matchText, matchAlgorithm, maxToReturn);
+	}
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchByCode(
+        Vector schemes, Vector versions, String matchText,
+        String matchAlgorithm, int maxToReturn) {
+
+		if (matchText == null || matchText.trim().length() == 0)
+			return null;
+
+		matchText = matchText.trim();
+		_logger.debug("searchByName ... " + matchText);
+
+		if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+		{
+		   matchAlgorithm = new SearchUtils().findBestContainsAlgorithm(matchText);
+		}
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		MappingExtension mappingExtension = null;
+		try {
+			mappingExtension = (MappingExtension)lbSvc.getGenericExtension("MappingExtension");
+		} catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+		}
+
+        ResolvedConceptReferencesIterator itr = null;
+        int lcv = 0;
+        String scheme = null;
+        String version = null;
+        int numberRemaining = -1;
+        while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
+            scheme = (String) schemes.elementAt(lcv);
+            version = (String) versions.elementAt(lcv);
+			String containerName = getMappingRelationsContainerName(scheme, version);
+			if (containerName != null) {
+				try {
+					Mapping mapping =
+						mappingExtension.getMapping(scheme, null, containerName);
+
+					if (mapping != null) {
+
+						ConceptReferenceList codeList = new ConceptReferenceList();
+						ConceptReference ref = new ConceptReference();
+						ref.setConceptCode(matchText);
+ 						codeList.addConceptReference(ref);
+
+                        mapping = mapping.restrictToCodes(codeList, SearchContext.TARGET_CODES);
+							//Finally, resolve the Mapping.
+						itr = mapping.resolveMapping();
+						if (itr != null) {
+							try {
+								numberRemaining = itr.numberRemaining();
+								System.out.println("Number of matches: " + numberRemaining);
+								if (numberRemaining == 0) {
+									mapping = mappingExtension.getMapping(scheme, null, containerName);
+                                    mapping = mapping.restrictToCodes(codeList, SearchContext.SOURCE_CODES);
+									itr = mapping.resolveMapping();
+									if (itr != null) {
+										try {
+											numberRemaining = itr.numberRemaining();
+											System.out.println("Number of matches: " + numberRemaining);
+										} catch (Exception ex) {
+											ex.printStackTrace();
+										}
+									}
+								}
+
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					//return null;
+				}
+		    }
+		    lcv++;
+		}
+		if (itr != null) {
+			ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(itr);
+			wrapper.setCodingSchemeName(scheme);
+			wrapper.setCodingSchemeVersion(version);
+			return wrapper;
+		}
+		return null;
+    }
+
+
+
     public ResolvedConceptReferencesIteratorWrapper searchByName(
         String scheme, String version, String matchText,
         String matchAlgorithm, int maxToReturn) {
