@@ -245,7 +245,15 @@ System.out.println("(*************) calling getRestrictedMappingDataIterator -- 
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
 					} else {
-						iterator = null;
+						wrapper = new MappingSearchUtils().searchByCode(
+							scheme, version, matchText,
+							matchAlgorithm, maxToReturn);
+
+					    if (wrapper != null) {
+						    iterator = wrapper.getIterator();
+						} else {
+						    iterator = null;
+						}
 					}
 				} else if (searchTarget.compareTo("properties") == 0) {
 
