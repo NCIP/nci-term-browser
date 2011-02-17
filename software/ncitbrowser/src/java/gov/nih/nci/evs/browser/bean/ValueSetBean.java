@@ -712,10 +712,31 @@ System.out.println("(********) metadata " + metadata);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+
+        String uri = (String) request.getParameter("valueset");
+
+	    if (uri.indexOf("|") != -1) {
+			Vector u = DataUtils.parseData(uri);
+			uri = (String) u.elementAt(1);
+		}
+
+        System.out.println("selectCSVersionAction: selected value set " + uri);
+		request.getSession().setAttribute("selectedvalueset", uri);
+
+
+/*
         String selectedvalueset = (String) request.getParameter("valueset");
+
+
+        String[] valuesets = (String[]) request.getParameterValues("valueset");
+        if (valuesets != null && valuesets.length > 0) {
+            selectedvalueset = valuesets[0];
+		}
 
         System.out.println("selectCSVersionAction: selected value set " + selectedvalueset);
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
+
+*/
         return "select_value_set";
 	}
 
