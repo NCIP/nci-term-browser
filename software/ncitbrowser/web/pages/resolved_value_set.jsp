@@ -57,20 +57,119 @@
 <%
 
 String valueSetSearch_requestContextPath = request.getContextPath();
-
+	
 System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
 
 
 String message = (String) request.getSession().getAttribute("message");  
 request.getSession().removeAttribute("message");  
-String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
+String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 String metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
 Vector u = DataUtils.parseData(metadata);
 String name = (String) u.elementAt(0);
-//String uri = (String) u.elementAt(1);
+String valueset_uri = (String) u.elementAt(1);
 String description = (String) u.elementAt(2);
 String concept_domain = (String) u.elementAt(3);
 String sources = (String) u.elementAt(4);
+
+
+
+IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+.getSessionMap().get("iteratorBeanManager");
+
+if (iteratorBeanManager == null) {
+    iteratorBeanManager = new IteratorBeanManager();
+    request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
+}
+
+String resolved_vs_key = (String) request.getSession().getAttribute("resolved_vs_key");
+IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(resolved_vs_key);
+if (iteratorBean == null) { 
+    System.out.println("(*) iteratorBean with key " + resolved_vs_key + " NOT found.");
+
+    ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("ResolvedConceptReferencesIterator");
+    iteratorBean = new IteratorBean(itr);
+    iteratorBean.initialize();
+    iteratorBean.setKey(resolved_vs_key);
+    request.getSession().setAttribute("resolved_vs_key", resolved_vs_key);
+    iteratorBeanManager.addIteratorBean(iteratorBean);
+    
+    int itr_size = iteratorBean.getSize();
+    System.out.println("itr_size: " + itr_size);
+    Integer obj = new Integer(itr_size);
+    String itr_size_str = obj.toString();
+    System.out.println("itr_size_str: " + itr_size_str);
+    request.getSession().setAttribute("itr_size_str", itr_size_str);
+    
+} else {
+    System.out.println("(*) iteratorBean with key " + resolved_vs_key + " found.");
+    int itr_size = iteratorBean.getSize();
+    System.out.println("itr_size: " + itr_size);
+    Integer obj = new Integer(itr_size);
+    String itr_size_str = obj.toString();
+    System.out.println("itr_size_str: " + itr_size_str);
+    //request.getSession().setAttribute("itr_size_str", itr_size_str);    
+}
+
+		
+String resultsPerPage = request.getParameter("resultsPerPage");
+if (resultsPerPage == null) {
+    resultsPerPage = "50";
+}
+
+String selectedResultsPerPage = resultsPerPage;
+String page_string = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+if (page_string == null) page_string = "0";
+int page_num = Integer.parseInt(page_string);
+
+System.out.println("(*) initial page_num: " + page_num);
+
+if (page_num <= 0) page_num = 1;
+
+int next_page_num = page_num + 1;
+int prev_page_num = page_num - 1;
+int page_size = 50;
+
+if (selectedResultsPerPage != null && selectedResultsPerPage.compareTo("") != 0)
+{
+    page_size = Integer.parseInt(selectedResultsPerPage);
+}
+
+System.out.println("(*) page_num: " + page_num);
+
+int iend = page_num * page_size;
+int istart = iend - page_size;
+iend = iend-1;
+
+
+System.out.println("(*) istart: " + istart);
+System.out.println("(*) iend: " + iend);
+
+
+int size = 0;
+String match_size = "0";
+
+if (iteratorBean != null) {
+size = iteratorBean.getSize();
+System.out.println("(*) size: " + size);
+match_size = new Integer(size).toString();
+}
+
+
+if (iend > size-1) iend = size-1;
+int num_pages = size / page_size;
+if (num_pages * page_size < size) num_pages++;
+String istart_str = Integer.toString(istart+1);
+String iend_str = Integer.toString(iend+1);
+
+System.out.println("(*) istart_str: " + istart_str);
+System.out.println("(*) iend_str: " + iend_str);
+
+
+String prev_page_num_str = Integer.toString(prev_page_num);
+String next_page_num_str = Integer.toString(next_page_num);
+
+
 
 %>
         <div class="pagecontent">
@@ -131,33 +230,33 @@ String sources = (String) u.elementAt(4);
 
 <%
                 Vector concept_vec = new Vector();
-		ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request.getSession().getAttribute("ResolvedConceptReferencesIterator");
 
-                ResolvedConceptReferenceList list = new ResolvedConceptReferenceList();
 
-		if (itr != null) {
-		    while(itr.hasNext()){
-				ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
-				for(ResolvedConceptReference ref : refs){
-				     list.addResolvedConceptReference(ref);
-				     String entityDescription = "<NOT ASSIGNED>";
-				     if (ref.getEntityDescription() != null) {
-				         entityDescription = ref.getEntityDescription().getContent();
-				     }
-				     
-				     concept_vec.add(ref.getConceptCode()
-					+ "|" + entityDescription
-					+ "|" + ref.getCodingSchemeName()
-					+ "|" + ref.getCodeNamespace() 
-					+ "|" + ref.getCodingSchemeVersion());
-				}
-			}
-			
-			request.getSession().setAttribute("ResolvedConceptReferenceList", list);
+          
+		//ResolvedConceptReferenceList list = new ResolvedConceptReferenceList();
+		List list = iteratorBean.getData(istart, iend);
 
-		} else {
-		    System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
-		}
+                for (int k=0; k<list.size(); k++) {
+                      Object obj = list.get(k);
+                      ResolvedConceptReference ref = null;
+		      if (obj == null) {
+			   _logger.warn("rcr == null???");
+		      } else {
+		         ref = (ResolvedConceptReference) obj;
+		      }
+
+		      String entityDescription = "<NOT ASSIGNED>";
+		      if (ref.getEntityDescription() != null) {
+			 entityDescription = ref.getEntityDescription().getContent();
+		      }
+
+		      concept_vec.add(ref.getConceptCode()
+			+ "|" + entityDescription
+			+ "|" + ref.getCodingSchemeName()
+			+ "|" + ref.getCodeNamespace() 
+			+ "|" + ref.getCodingSchemeVersion());
+				
+                }
 
 
 
@@ -224,6 +323,7 @@ String sources = (String) u.elementAt(4);
           </td></tr>
         </table>
         </div> <!-- end tabTableContentContainer -->
+        <%@ include file="/pages/templates/pagination-resolved-valueset.jsp" %>
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
