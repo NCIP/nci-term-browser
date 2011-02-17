@@ -1,10 +1,12 @@
 package gov.nih.nci.evs.browser.standAloneTest;
 
 import gov.nih.nci.evs.browser.test.utils.*;
-import gov.nih.nci.evs.browser.utils.*;
+import gov.nih.nci.evs.security.SecurityToken;
+import gov.nih.nci.system.client.*;
 
 import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.caCore.interfaces.*;
 import org.apache.log4j.*;
 
 public class MedDRASecurityTokenTest {
@@ -17,13 +19,14 @@ public class MedDRASecurityTokenTest {
         return Logger.getLogger(c);
     }
 
-    public CodedNodeSet getCNSTest(String lexevsURL, String scheme, String version)
-            throws Exception {
+    public CodedNodeSet getCNSTest(String lexevsURL, String scheme,
+        String version) throws Exception {
         _logger.debug("------------------------------------------------------");
         _logger.debug("lexevsURL: " + lexevsURL);
         _logger.debug("scheme: " + scheme);
         _logger.debug("version: " + version);
-        LexBIGService lbs = RemoteServerUtil.createLexBIGService(lexevsURL);
+        LexBIGService lbs =
+            MyRemoteServerUtil.createLexBIGService(lexevsURL, scheme, version);
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
@@ -50,7 +53,43 @@ public class MedDRASecurityTokenTest {
     }
 
     public static void main(String[] args) throws Exception {
-        args = SetupEnv.getInstance().parse(args);
         new MedDRASecurityTokenTest().test();
+    }
+
+    public static class MyRemoteServerUtil {
+        private static Logger _logger = Logger
+            .getLogger(MyRemoteServerUtil.class);
+
+        public static LexBIGService createLexBIGService(String serviceUrl,
+            String scheme, String version) throws Exception {
+            LexEVSApplicationService lexevsService =
+                (LexEVSApplicationService) ApplicationServiceProvider
+                    .getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
+            lexevsService =
+                registerSecurityToken(lexevsService, scheme, "10382");
+            return (LexBIGService) lexevsService;
+        }
+
+        public static LexEVSApplicationService registerSecurityToken(
+            LexEVSApplicationService lexevsService, String codingScheme,
+            String token) {
+            SecurityToken securityToken = new SecurityToken();
+            securityToken.setAccessToken(token);
+            Boolean retval = null;
+            try {
+                retval =
+                    lexevsService.registerSecurityToken(codingScheme,
+                        securityToken);
+                if (retval != null && retval.equals(Boolean.TRUE)) {
+                    // _logger.debug("Registration of SecurityToken was successful.");
+                } else {
+                    _logger
+                        .error("WARNING: Registration of SecurityToken failed.");
+                }
+            } catch (Exception e) {
+                _logger.error("WARNING: Registration of SecurityToken failed.");
+            }
+            return lexevsService;
+        }
     }
 }
