@@ -677,7 +677,7 @@ if (!isMapping) {
        <tr>
          <td>
          <%=mapping_cs_uri%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%><%=version_parameter%>&code=<%=code_curr%>&type=relationship">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%>&version=<%=mapping_cs_version%>&code=<%=code_curr%>&type=relationship">
                    <i class="textbodyred">View Mapping</i>
                 </a>
          </td>

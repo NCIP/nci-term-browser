@@ -1631,6 +1631,9 @@ System.out.println("DataUtils.getRelationshipHashMap version: " + version);
 System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 
         boolean isMapping = isMapping(scheme, version);
+
+System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
+
         NameAndValueList navl = null;
         if (isMapping) navl = getMappingAssociationNames(scheme, version);
 
