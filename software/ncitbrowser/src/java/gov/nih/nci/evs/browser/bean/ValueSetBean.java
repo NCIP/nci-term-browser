@@ -728,12 +728,16 @@ System.out.println("(********) metadata " + metadata);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+
+
         String selectedvalueset = (String) request.getParameter("valueset");
 	    if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
 			Vector u = DataUtils.parseData(selectedvalueset);
 			selectedvalueset = (String) u.elementAt(1);
 		}
         System.out.println("resolveValueSetAction: selected value set " + selectedvalueset);
+
+
 
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
         String vsd_uri = null;
@@ -746,6 +750,7 @@ System.out.println("(********) metadata " + metadata);
 			}
 		}
 
+String key = vsd_uri;
 
  System.out.println("(************* ) resolveValueSetAction vsd_uri: " + vsd_uri);
 
@@ -781,6 +786,7 @@ System.out.println("(********) metadata " + metadata);
 			Vector u = DataUtils.parseData(t);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
+			key = key + "|" + uri + "$" + version;
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 
@@ -795,7 +801,29 @@ System.out.println("(********) metadata " + metadata);
 			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
 			if(rvsd != null) {
 				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+
+
+				IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("iteratorBeanManager");
+
+				if (iteratorBeanManager == null) {
+					iteratorBeanManager = new IteratorBeanManager();
+					request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
+				}
+
 				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+
+				IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+				if (iteratorBean == null) {
+					iteratorBean = new IteratorBean(itr);
+					iteratorBean.initialize();
+					iteratorBean.setKey(key);
+					iteratorBeanManager.addIteratorBean(iteratorBean);
+				}
+
+
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+				request.getSession().setAttribute("resolved_vs_key", key);
 				return "resolved_value_set";
 		    }
 		} catch (Exception ex) {
@@ -840,8 +868,11 @@ System.out.println("(********) metadata " + metadata);
 
  System.out.println("(*) continueResolveValueSetAction #1 ");
 
-		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+String key = vsd_uri;
 
+
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+Vector ref_vec = new Vector();
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
 
@@ -849,6 +880,7 @@ System.out.println("(********) metadata " + metadata);
 			Vector u = DataUtils.parseData(t);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
+			key = key + "|" + uri + "$" + version;
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 
@@ -864,16 +896,34 @@ System.out.println("(*) continueResolveValueSetAction #2 ");
 		int lcv = 0;
 		try {
 			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+
 			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
 			if(rvsd != null) {
 				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
-                request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
-				return "resolved_value_set";
-		    } else {
-System.out.println("(*) rvsd.getResolvedConceptReferenceIterator returns NULL???");
 
+				IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("iteratorBeanManager");
+
+				if (iteratorBeanManager == null) {
+					iteratorBeanManager = new IteratorBeanManager();
+					request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
+				}
+
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+
+				IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+				if (iteratorBean == null) {
+					iteratorBean = new IteratorBean(itr);
+					iteratorBean.initialize();
+					iteratorBean.setKey(key);
+					iteratorBeanManager.addIteratorBean(iteratorBean);
+				}
+				//request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
 			}
+            request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+            request.getSession().setAttribute("resolved_vs_key", key);
+			return "resolved_value_set";
+
 
 		} catch (Exception ex) {
 			System.out.println("??? vds.resolveValueSetDefinition throws exception");
@@ -965,58 +1015,76 @@ java.net.URI exportValueSetResolution(java.net.URI valueSetDefinitionURI,
 
 
     public void exportToCSVAction() {
- 		System.out.println("(************* ) exportToCSVAction ");
 
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String vsd_uri = (String) request.getParameter("vsd_uri");
-        if (vsd_uri == null) {
-			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+        String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
+        String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+        if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
+			String msg = "No coding scheme reference is selected.";
+			request.getSession().setAttribute("message", msg);
+			return;// "resolve_value_set";
 		}
 
-	    if (vsd_uri.indexOf("|") != -1) {
-			Vector u = DataUtils.parseData(vsd_uri);
-			vsd_uri = (String) u.elementAt(1);
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+        for (int i=0; i<coding_scheme_ref.length; i++) {
+			String t = coding_scheme_ref[i];
+			System.out.println("(*) coding_scheme_ref: " + t);
+			Vector u = DataUtils.parseData(t);
+			String uri = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 
-        ResolvedConceptReferenceList list = (ResolvedConceptReferenceList) request.getSession().getAttribute("ResolvedConceptReferenceList");
-        StringBuffer sb = new StringBuffer();
+        long time = System.currentTimeMillis();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		ResolvedValueSetDefinition rvsd = null;
 
-		if(list != null) {
-			request.getSession().setAttribute("ResolvedConceptReferenceList", list);
+		StringBuffer sb = new StringBuffer();
+		try {
+			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
 
-			sb.append("Code,");
-			sb.append("Name,");
-			sb.append("Coding Scheme,");
-			sb.append("Version,");
-			sb.append("Namespace");
-			sb.append("\r\n");
+			if(rvsd != null) {
+				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
 
-			for (int i=0; i<list.getResolvedConceptReferenceCount(); i++) {
-				ResolvedConceptReference ref = list.getResolvedConceptReference(i);
-				String entityDescription = "<NOT ASSIGNED>";
-				if (ref.getEntityDescription() != null) {
-					entityDescription = ref.getEntityDescription().getContent();
-				}
-
-				sb.append("\"" + ref.getConceptCode() + "\",");
-				sb.append("\"" + entityDescription + "\",");
-				sb.append("\"" + ref.getCodingSchemeName() + "\",");
-				sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
-				sb.append("\"" + ref.getCodeNamespace() + "\"");
+				sb.append("Code,");
+				sb.append("Name,");
+				sb.append("Coding Scheme,");
+				sb.append("Version,");
+				sb.append("Namespace");
 				sb.append("\r\n");
-			}
-		} else {
+
+				while (itr != null && itr.hasNext()) {
+					ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
+					for (ResolvedConceptReference ref : refs) {
+						String entityDescription = "<NOT ASSIGNED>";
+						if (ref.getEntityDescription() != null) {
+							entityDescription = ref.getEntityDescription().getContent();
+						}
+
+						sb.append("\"" + ref.getConceptCode() + "\",");
+						sb.append("\"" + entityDescription + "\",");
+						sb.append("\"" + ref.getCodingSchemeName() + "\",");
+						sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
+						sb.append("\"" + ref.getCodeNamespace() + "\"");
+						sb.append("\r\n");
+					}
+				}
+			 } else {
+				sb.append("WARNING: Export to CVS action failed.");
+			 }
+		} catch (Exception ex)	{
 			sb.append("WARNING: Export to CVS action failed.");
 		}
 
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
 		response.setContentType("text/csv");
-        response.setHeader("Content-Disposition", "attachment; filename="
-                    + vsd_uri);
+		response.setHeader("Content-Disposition", "attachment; filename="
+					+ vsd_uri);
 		response.setContentLength(sb.length());
 
 		try {
@@ -1026,8 +1094,8 @@ java.net.URI exportValueSetResolution(java.net.URI valueSetDefinitionURI,
 			ouputStream.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			sb.append("WARNING: Export to CVS action failed.");
 		}
-
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
