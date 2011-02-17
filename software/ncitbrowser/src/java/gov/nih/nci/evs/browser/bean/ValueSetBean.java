@@ -721,7 +721,8 @@ System.out.println("(********) metadata " + metadata);
 		}
 
         System.out.println("selectCSVersionAction: selected value set " + uri);
-		request.getSession().setAttribute("selectedvalueset", uri);
+		//request.getSession().setAttribute("selectedvalueset", uri);
+		request.getSession().setAttribute("vsd_uri", uri);
 
 
 /*
