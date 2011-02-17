@@ -59,25 +59,25 @@ String message = (String) request.getSession().getAttribute("message");
 request.getSession().removeAttribute("message"); 
 Vector vsd_vec = null;
 
-String vsd_uri = (String) request.getParameter("uri"); 
+String vsd_uri = (String) request.getParameter("vsd_uri"); 
 
 System.out.println("value_set_search_results.jsp vsd_uri: " + vsd_uri);
-
+String selectedvalueset = null;
 if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
     String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
     vsd_vec = new Vector();
     vsd_vec.add(vsd_metadata);
-    request.getSession().setAttribute("vsd_uri", vsd_uri);
+    //request.getSession().setAttribute("vsd_uri", vsd_uri);
 } else {
     vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
     if (vsd_vec != null && vsd_vec.size() == 1) {
 	vsd_uri = (String) vsd_vec.elementAt(0);
 	
 	Vector temp_vec = DataUtils.parseData(vsd_uri);
-	String selectedvalueset = (String) temp_vec.elementAt(1);
+	selectedvalueset = (String) temp_vec.elementAt(1);
 	
 	//request.getSession().setAttribute("selectedvalueset", selectedvalueset);
-	request.getSession().setAttribute("vsd_uri", selectedvalueset);
+	//request.getSession().setAttribute("vsd_uri", selectedvalueset);
     }
 }   
 
@@ -217,10 +217,10 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 %>		      
 		      
 		      <td class="dataCellText">
-                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&uri=<%=uri%>"><%=name%></a>
+                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=<%=uri%>"><%=name%></a>
 		      </td>
 		      <td class="dataCellText">
-                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&uri=<%=uri%>"><%=uri%></a>
+                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=<%=uri%>"><%=uri%></a>
 		      </td>
 
 <%		
