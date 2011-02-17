@@ -1,7 +1,6 @@
 package gov.nih.nci.evs.browser.standAloneTest;
 
-import gov.nih.nci.evs.browser.test.utils.*;
-import gov.nih.nci.evs.security.SecurityToken;
+import gov.nih.nci.evs.security.*;
 import gov.nih.nci.system.client.*;
 
 import org.LexGrid.LexBIG.DataModel.Core.*;
