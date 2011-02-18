@@ -8,13 +8,7 @@
     int next_page_num = prev_page_num + 1;
     
     String istart_str = Integer.toString(istart+1);
-    String iend_str = Integer.toString(iend);
-  
-  
-System.out.println("istart_str: " + istart_str);
-System.out.println("iend_str: " + iend_str);
-  
-  
+    String iend_str = Integer.toString(iend+1);
   
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
 System.out.println("(*) dictionary_map " + dictionary_map);
@@ -24,13 +18,10 @@ bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_r
 
 if (bean == null) {
         scheme2MappingIteratorBeanMap = (HashMap) request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
-        if (scheme2MappingIteratorBeanMap != null) {
-		bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
-	}
+	bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
 }
 
 
-if (bean != null) {
 numRemaining = bean.getSize();
 
 System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemaining);    
@@ -140,7 +131,15 @@ System.out.println("page_num: " + page_num);
   }
   %>
   </select>
- 
+  <!--
+        
+        <h:selectOneMenu
+          id="id" value="#{userSessionBean.selectedResultsPerPage}"
+          valueChangeListener="#{userSessionBean.resultsPerPageChanged}" immediate="true" onchange="submit()"> 
+          <f:selectItems value="#{userSessionBean.resultsPerPageList}"/>
+        </h:selectOneMenu>
+        
+  -->        
         &nbsp;results per page
       </td>
       <td>
@@ -152,7 +151,3 @@ System.out.println("page_num: " + page_num);
     </tr>
   </table>
 </form>
-
-<%
-}
-%>
