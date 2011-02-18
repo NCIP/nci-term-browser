@@ -36,6 +36,7 @@ import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.MappingSortOption;
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.MappingSortOptionName;
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.QualifierSortOption;
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
 
 
 /**
@@ -426,6 +427,148 @@ System.out.println("searchByProperties version: " + version);
 		}
 		return null;
     }
+
+    public LocalNameList getSupportedAssociationNames(LexBIGService lbSvc, String scheme,
+        String version, String containerName) {
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
+
+        LocalNameList list = new LocalNameList();
+        try {
+            CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+            Relations[] relations = cs.getRelations();
+            for (int i = 0; i < relations.length; i++) {
+                Relations relation = relations[i];
+
+                _logger.debug("** getSupportedRoleNames containerName: "
+                    + relation.getContainerName());
+
+                if (relation.getContainerName().compareToIgnoreCase(containerName) == 0) {
+                    org.LexGrid.relations.AssociationPredicate[] asso_array =
+                        relation.getAssociationPredicate();
+                    for (int j = 0; j < asso_array.length; j++) {
+                        org.LexGrid.relations.AssociationPredicate association =
+                            (org.LexGrid.relations.AssociationPredicate) asso_array[j];
+                        // list.add(association.getAssociationName());
+                        // KLO, 092209
+                        //list.add(association.getForwardName());
+                        list.addEntry(association.getAssociationName());
+                    }
+                }
+            }
+        } catch (Exception ex) {
+
+        }
+        return list;
+    }
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchByRelationships(
+        String scheme, String version, String matchText,
+        String matchAlgorithm, int maxToReturn) {
+		Vector schemes = new Vector();
+		schemes.add(scheme);
+		Vector versions = new Vector();
+		versions.add(version);
+		return searchByRelationships(schemes, versions, matchText, matchAlgorithm, maxToReturn);
+	}
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchByRelationships(
+        Vector schemes, Vector versions, String matchText,
+        String matchAlgorithm, int maxToReturn) {
+
+		if (matchText == null || matchText.trim().length() == 0)
+			return null;
+
+		matchText = matchText.trim();
+		_logger.debug("searchByName ... " + matchText);
+
+		if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+		{
+		   matchAlgorithm = new SearchUtils().findBestContainsAlgorithm(matchText);
+		}
+
+		SearchDesignationOption option = SearchDesignationOption.ALL;
+		String language = null;
+
+
+        CodedNodeSet.PropertyType[] propertyTypes = null;
+        LocalNameList propertyNames = null;
+        LocalNameList sourceList = null;
+        propertyTypes = getAllNonPresentationPropertyTypes();
+
+        LocalNameList contextList = null;
+        NameAndValueList qualifierList = null;
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		MappingExtension mappingExtension = null;
+		try {
+			mappingExtension = (MappingExtension)lbSvc.getGenericExtension("MappingExtension");
+		} catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+		}
+
+        ResolvedConceptReferencesIterator itr = null;
+        int lcv = 0;
+        String scheme = null;
+        String version = null;
+
+        System.out.println("schemes.size(): " + schemes.size() + " lcv: " + lcv);
+        int numberRemaining = -1;
+        while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
+
+            scheme = (String) schemes.elementAt(lcv);
+            version = (String) versions.elementAt(lcv);
+
+			String containerName = getMappingRelationsContainerName(scheme, version);
+			if (containerName != null) {
+
+				LocalNameList relationshipList = getSupportedAssociationNames(lbSvc, scheme, version, containerName);
+
+				try {
+					Mapping mapping =
+						mappingExtension.getMapping(scheme, null, containerName);
+
+					if (mapping != null) {
+
+					    mapping = mapping.restrictToRelationship(
+							 matchText,
+							 option,
+							 matchAlgorithm,
+							 language,
+							 relationshipList);
+
+							//Finally, resolve the Mapping.
+						itr = mapping.resolveMapping();
+						try {
+							numberRemaining = itr.numberRemaining();
+							System.out.println("Number of matches: " + numberRemaining);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					//return null;
+				}
+		    }
+		    lcv++;
+		}
+		if (itr != null) {
+			ResolvedConceptReferencesIteratorWrapper wrapper = new ResolvedConceptReferencesIteratorWrapper(itr);
+			wrapper.setCodingSchemeName(scheme);
+			wrapper.setCodingSchemeVersion(version);
+			return wrapper;
+		}
+		return null;
+    }
+
+
+
 
      public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
         List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator) {

@@ -234,7 +234,7 @@ System.out.println("(*******************) SearchAction");
         _logger.debug("searchAction version: " + version);
 
 
-		if (isMapping && searchTarget.compareTo("relationships") != 0) {
+		if (isMapping) {
 
 System.out.println("(*************) calling MappingSearchUtils -- search by " + searchTarget);
 //testing
@@ -284,8 +284,20 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 					} else {
 						iterator = null;
 					}
-				}
 
+
+				} else if (searchTarget.compareTo("relationships") == 0) {
+
+					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByRelationships(
+						scheme, version, matchText,
+						matchAlgorithm, maxToReturn);
+					if (wrapper != null) {
+						iterator = wrapper.getIterator();
+					} else {
+						iterator = null;
+					}
+
+				}
 
 				if (iterator == null) {
 					String msg = "No match.";
@@ -500,92 +512,9 @@ System.out.println("Relationship search numberOfMatches: " + numberOfMatches);
 		request.setAttribute("key", key);
 		System.out.println("(*************) setAttribute key: " + key);
 
-
-        if (iterator == null) {
-System.out.println("(*******************) SearchAction iterator == null???");
-
-		}
-
-
         if (iterator != null) {
 
-            // request.getSession().setAttribute("key", key);
-            //request.setAttribute("key", key);
-            //System.out.println("(*************) setAttribute key: " + key);
-
-			if (isMapping) {
-	System.out.println("(*************) calling getRestrictedMappingDataIterator -- search by " + searchTarget);
-	//testing
-                    if (searchTarget.compareTo("names") == 0) {
-						ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByName(
-							scheme, version, matchText,
-							matchAlgorithm, maxToReturn);
-						if (wrapper != null) {
-							iterator = wrapper.getIterator();
-						} else {
-							iterator = null;
-						}
-					} else {
-                        iterator = MappingSearchUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.SOURCE_OR_TARGET_CODES
-);
-				    }
-
-					if (iterator == null) {
-						String msg = "No match.";
-						request.getSession().setAttribute("message", msg);
-						request.getSession().setAttribute("dictionary", scheme);
-						return "message";
-					}
-
-					int numberRemaining = 0;
-					try {
-						numberRemaining = iterator.numberRemaining();
-						System.out.println("getRestrictedMappingDataIterator returns " + numberRemaining);
-
-						if (numberRemaining == 0) {
-							String msg = "No match.";
-							request.getSession().setAttribute("message", msg);
-							request.getSession().setAttribute("dictionary", scheme);
-							return "message";
-						}
-
-
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
-
-					//iteratorBean = new IteratorBean(iterator);
-					//iteratorBean.setKey(key);
-					//iteratorBeanManager.addIteratorBean(iteratorBean);
-
-				    MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
-					iterator,
-					numberRemaining, // number remaining
-					0,    // istart
-					50,   // iend,
-					numberRemaining, // size,
-					0,    // pageNumber,
-					1);   // numberPages
-
-				    mappingIteratorBean.initialize(
-					iterator,
-					numberRemaining, // number remaining
-					0,    // istart
-					50,   // iend,
-					numberRemaining, // size,
-					0,    // pageNumber,
-					1);   // numberPages
-
-                    request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
-
-	                System.out.println("(*************) returning mapping_search_results");
-
-					return "mapping_search_results";
-			}
-
-
             int size = iteratorBean.getSize();
-
             if (size > 1) {
                 request.getSession().setAttribute("search_results", v);
                 String match_size = Integer.toString(size);
@@ -599,7 +528,6 @@ System.out.println("(*******************) SearchAction iterator == null???");
                 _logger
                     .debug("UserSessionBean request.getSession().setAttribute dictionary: "
                         + scheme);
-
 
 
 

@@ -168,12 +168,6 @@ System.out.println("size: " + size);
 System.out.println("pageSize: " + pageSize);
 
 
-System.out.println("mapping_search_results istart " + istart);
-System.out.println("mapping_search_results iend " + iend);
-
-
-
-System.out.println("calling bean.getData ...");
 try {
    list = mapping_bean.getData(istart, iend);
 } catch (Exception ex) {
@@ -188,14 +182,6 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 }
 
 %>
-<table>
-<tr><td>
-<p class="textbodyred">(Note: This page is under construction.)</p>
-</td>
-</tr>
-</table>
-
-
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
 
           <th class="dataTableHeader" scope="col" align="left">Source</th>
