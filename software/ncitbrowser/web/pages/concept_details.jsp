@@ -215,26 +215,8 @@
     <tr>
       <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
 
-      <%
-            Vector visitedConcepts = (Vector) request.getSession()
-                    .getAttribute("visitedConcepts");
-                if (visitedConcepts == null) {
-                  visitedConcepts = new Vector();
-                }
-
-                String localCodingSchemeName = DataUtils
-                    .getLocalName(tg_dictionary_0);
-                   
-                    
-                String visitedConceptStr = localCodingSchemeName + "|"
-                    + code + "|" + name;
-                if (!visitedConcepts.contains(visitedConceptStr)) {
-                  visitedConcepts.add(visitedConceptStr);
-                  request.getSession().removeAttribute("visitedConcepts");
-                  request.getSession().setAttribute("visitedConcepts",
-                      visitedConcepts);
-                }
-
+          <%
+                VisitedConceptUtils.add(request, tg_dictionary_0, code, name);
                 if (term_suggestion_application_url != null
                     && term_suggestion_application_url.compareTo("") != 0) {
           %>

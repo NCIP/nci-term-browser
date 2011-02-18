@@ -93,12 +93,9 @@ if (menubar_version == null) {
     </td>
     <td align="right">
     <%
-      Vector visitedConcepts = (Vector) request.getSession().getAttribute("visitedConcepts");
-      if (visitedConcepts != null && visitedConcepts.size() > 0) {
-          String visitedConceptsStr = DataUtils.getVisitedConceptLink(visitedConcepts);
-      %> <%=visitedConceptsStr%> <%
-      }
-      %>
+      String visitedConceptsStr = VisitedConceptUtils.getDisplayLink(request);
+      if (visitedConceptsStr != null) { %> <%=visitedConceptsStr%> <% }
+    %>
     </td>
     <td width="7"></td>
   </tr>
