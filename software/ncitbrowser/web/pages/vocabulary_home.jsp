@@ -222,10 +222,7 @@ if (vocabulary_version != null) {
           | <a href="<%= request.getContextPath() %>/pages/help.jsf" tabindex="16">Help</a>
         </td>
         <td align="right">
-          <%
-            String visitedConceptsStr = VisitedConceptUtils.getDisplayLink(request);
-            if (visitedConceptsStr != null) { %> <%=visitedConceptsStr%> <% }
-          %>
+          <%= VisitedConceptUtils.getDisplayLink(request) %>
         </td>
         <td width="7"></td>
       </tr>

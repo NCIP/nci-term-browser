@@ -33,7 +33,7 @@ public class VisitedConceptUtils {
             (Vector<String>) request.getSession().getAttribute(
                 "visitedConcepts");
         if (visitedConcepts == null || visitedConcepts.size() <= 0)
-            return null;
+            return "";
 
         String value = DataUtils.getVisitedConceptLink(visitedConcepts);
         return value;
