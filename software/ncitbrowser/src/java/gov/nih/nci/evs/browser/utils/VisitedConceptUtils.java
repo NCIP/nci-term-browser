@@ -57,56 +57,91 @@ import org.apache.log4j.*;
 public class VisitedConceptUtils {
     private static Logger _logger = Logger.getLogger(VisitedConceptUtils.class);
 
+    private static class VisitedConcept {
+        public String scheme = "";
+        public String version = "";
+        public String code = "";
+        public String name = "";
+        public String value = "";
+
+        public VisitedConcept(String scheme, String version, String code,
+            String name) {
+            this.scheme = scheme;
+            this.version = version;
+            this.code = code;
+            this.name = name;
+            this.value = name + " (" + scheme + " " + version + ")";
+        }
+
+        public String toString() {
+            return value;
+        }
+
+        public boolean exists(Vector<VisitedConcept> concepts) {
+            Iterator<VisitedConcept> iterator = concepts.iterator();
+            while (iterator.hasNext()) {
+                VisitedConcept info = iterator.next();
+                if (info.equals(value))
+                    return true;
+            }
+            return false;
+        }
+    }
+
     public static void add(HttpServletRequest request, String dictionary,
         String version, String code, String name) {
         @SuppressWarnings("unchecked")
-        Vector<String> visitedConcepts =
-            (Vector<String>) request.getSession().getAttribute(
+        Vector<VisitedConcept> visitedConcepts =
+            (Vector<VisitedConcept>) request.getSession().getAttribute(
                 "visitedConcepts");
         if (visitedConcepts == null)
-            visitedConcepts = new Vector<String>();
+            visitedConcepts = new Vector<VisitedConcept>();
 
         String localCodingSchemeName = DataUtils.getLocalName(dictionary);
-        String value =
-            localCodingSchemeName + "|" + version + "|" + code + "|" + name;
-        if (visitedConcepts.contains(value))
+        VisitedConcept visitedConcept =
+            new VisitedConcept(localCodingSchemeName, version, code, name);
+
+        if (visitedConcept.exists(visitedConcepts))
             return;
 
-        visitedConcepts.add(value);
-        _logger.debug("add: " + value);
+        visitedConcepts.add(visitedConcept);
+        _logger.debug("add: " + visitedConcept);
         request.getSession().removeAttribute("visitedConcepts");
         request.getSession().setAttribute("visitedConcepts", visitedConcepts);
     }
 
-    private static String getVisitedConceptLink(Vector<String> concept_vec) {
+    private static String getLink(Vector<VisitedConcept> visitedConcepts) {
         StringBuffer strbuf = new StringBuffer();
         String line = "<A href=\"#\" onmouseover=\"Tip('";
         strbuf.append(line);
         strbuf.append("<ul>");
-        for (int i = 0; i < concept_vec.size(); i++) {
-            int j = concept_vec.size() - i - 1;
-            String concept_data = (String) concept_vec.elementAt(j);
-            Vector<String> w = DataUtils.parseData(concept_data);
-            String scheme = (String) w.elementAt(0);
+        for (int i = 0; i < visitedConcepts.size(); i++) {
+            int j = visitedConcepts.size() - i - 1;
+            VisitedConcept visitedConcept = visitedConcepts.elementAt(j);
+            String scheme = visitedConcept.scheme;
             String formalName = DataUtils.getFormalName(scheme);
             // String localName = DataUtils.getLocalName(scheme);
+            String version = visitedConcept.version;
             String vocabulary_name =
-                DataUtils.getMetadataValue(formalName, "display_name");
-            String version = (String) w.elementAt(1);
-            String code = (String) w.elementAt(2);
-            String name = (String) w.elementAt(3);
+                DataUtils.getMetadataValue(formalName, version, "display_name");
+            String code = visitedConcept.code;
+            String name = visitedConcept.name;
             name = DataUtils.htmlEntityEncode(name);
             strbuf.append("<li>");
 
-            String version_parameter = "";
-            if (version != null && version.length() > 0)
-                version_parameter = "&version=" + version;
+            String versionParameter = "", versionParameterDisplay = "";
+            if (version != null && version.length() > 0) {
+                versionParameter = "&version=" + version;
+                versionParameterDisplay = " "
+                    + DataUtils.getMetadataValue(formalName, version,
+                        "term_browser_version");
+            }
 
             line =
                 "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
-                    + formalName + version_parameter + "&code=" + code + "\\'>"
-                    + name + " &#40;" + vocabulary_name + " " + version 
-                    + "&#41;" + "</a><br>";
+                    + formalName + versionParameter + "&code=" + code + "\\'>"
+                    + name + " &#40;" + vocabulary_name
+                    + versionParameterDisplay + "&#41;" + "</a><br>";
             strbuf.append(line);
             strbuf.append("</li>");
         }
@@ -130,13 +165,13 @@ public class VisitedConceptUtils {
 
     public static String getDisplayLink(HttpServletRequest request) {
         @SuppressWarnings("unchecked")
-        Vector<String> visitedConcepts =
-            (Vector<String>) request.getSession().getAttribute(
+        Vector<VisitedConcept> visitedConcepts =
+            (Vector<VisitedConcept>) request.getSession().getAttribute(
                 "visitedConcepts");
         if (visitedConcepts == null || visitedConcepts.size() <= 0)
             return "";
 
-        String value = getVisitedConceptLink(visitedConcepts);
+        String value = getLink(visitedConcepts);
         return value;
     }
 }
