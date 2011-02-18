@@ -49,16 +49,16 @@ import org.apache.log4j.*;
 /**
  * @author EVS Team
  * @version 1.0
- *
+ * 
  *          Modification history Initial implementation kim.ong@ngc.com
- *
+ * 
  */
 
 public class VisitedConceptUtils {
     private static Logger _logger = Logger.getLogger(VisitedConceptUtils.class);
 
     public static void add(HttpServletRequest request, String dictionary,
-        String code, String name) {
+        String version, String code, String name) {
         @SuppressWarnings("unchecked")
         Vector<String> visitedConcepts =
             (Vector<String>) request.getSession().getAttribute(
@@ -67,7 +67,8 @@ public class VisitedConceptUtils {
             visitedConcepts = new Vector<String>();
 
         String localCodingSchemeName = DataUtils.getLocalName(dictionary);
-        String value = localCodingSchemeName + "|" + code + "|" + name;
+        String value =
+            localCodingSchemeName + "|" + version + "|" + code + "|" + name;
         if (visitedConcepts.contains(value))
             return;
 
@@ -91,14 +92,21 @@ public class VisitedConceptUtils {
             // String localName = DataUtils.getLocalName(scheme);
             String vocabulary_name =
                 DataUtils.getMetadataValue(formalName, "display_name");
-            String code = (String) w.elementAt(1);
-            String name = (String) w.elementAt(2);
+            String version = (String) w.elementAt(1);
+            String code = (String) w.elementAt(2);
+            String name = (String) w.elementAt(3);
             name = DataUtils.htmlEntityEncode(name);
             strbuf.append("<li>");
+
+            String version_parameter = "";
+            if (version != null && version.length() > 0)
+                version_parameter = "&version=" + version;
+
             line =
                 "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
-                    + formalName + "&code=" + code + "\\'>" + name + " &#40;"
-                    + vocabulary_name + "&#41;" + "</a><br>";
+                    + formalName + version_parameter + "&code=" + code + "\\'>"
+                    + name + " &#40;" + vocabulary_name + " " + version 
+                    + "&#41;" + "</a><br>";
             strbuf.append(line);
             strbuf.append("</li>");
         }
