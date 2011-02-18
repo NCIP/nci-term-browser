@@ -223,39 +223,7 @@ if (resultsPerPage == null) {
               Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=match_text%></b>
               <%
               }
-              String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
-              String tooltip_str = "";
-
-              HashMap display_name_hmap = null;
-              Vector display_name_vec = null;
-              display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
-              display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-
-              if (ontologiesToSearchOnStr != null) {
-
-                Vector ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
-                for (int k=0; k<ontologies_to_search_on.size(); k++) {
-                  String s = (String) ontologies_to_search_on.elementAt(k);
-
-                  String t1 = DataUtils.key2CodingSchemeName(s);
-                  String v1 = DataUtils.key2CodingSchemeVersion(s); //DYEE: Test
-                  String term_browser_version = DataUtils.getMetadataValue(t1, v1, "term_browser_version"); //DYEE: Test
-
-                  if (term_browser_version == null)
-                     term_browser_version = v1;
-                  for (int i=0; i<display_name_vec.size(); i++) {
-                      OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-                      String nm = info.getDisplayName();
-                      String val = (String) display_name_hmap.get(nm);
-                      if (val.compareTo(s) == 0) {
-                          s = nm;
-                          break;
-                      }
-                  }
-                  s = s + " (" + term_browser_version + ")";
-                  tooltip_str = tooltip_str + s + "<br/>";
-                }
-              }
+              String tooltip_str = JSPUtils.getSelectedVocabularyTooltip(request);
               HashMap name_hmap = new HashMap();
               %>
               from <a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected vocabularies</a>.
