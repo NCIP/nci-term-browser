@@ -72,6 +72,10 @@ public class VisitedConceptUtils {
             this.name = name;
             this.value = name + " (" + scheme + " " + version + ")";
         }
+        
+        public String getValue() {
+            return value;
+        }
 
         public String toString() {
             return value;
@@ -80,8 +84,8 @@ public class VisitedConceptUtils {
         public boolean exists(Vector<VisitedConcept> concepts) {
             Iterator<VisitedConcept> iterator = concepts.iterator();
             while (iterator.hasNext()) {
-                VisitedConcept info = iterator.next();
-                if (info.equals(value))
+                VisitedConcept visitedConcept = iterator.next();
+                if (visitedConcept.getValue().equals(value))
                     return true;
             }
             return false;
