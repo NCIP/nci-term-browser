@@ -50,7 +50,7 @@ import org.apache.log4j.*;
 
 public class JSPUtils {
     private static Logger _logger = Logger.getLogger(JSPUtils.class);
-    
+
     public static boolean isNull(String text) {
         return text == null || text.equalsIgnoreCase("null");
     }
@@ -75,10 +75,10 @@ public class JSPUtils {
             || info.hdr_version.equalsIgnoreCase("null"))
             info.hdr_version = (String) request.getAttribute("version");
 
-//        if (info.hdr_dictionary == null
-//            || info.hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
-//            return info;
-//        }
+        // if (info.hdr_dictionary == null
+        // || info.hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
+        // return info;
+        // }
 
         request.getSession().setAttribute("dictionary", info.hdr_dictionary);
         info.content_hdr_shortName =
@@ -95,7 +95,8 @@ public class JSPUtils {
             _logger.debug(Utils.SEPARATOR);
             _logger.debug("hdr_dictionary: " + info.hdr_dictionary);
             _logger.debug("  * hdr_version: " + info.hdr_version);
-            _logger.debug("  * hdr_version_deprecated: " + info.hdr_version_deprecated);
+            _logger.debug("  * hdr_version_deprecated: "
+                + info.hdr_version_deprecated);
         }
         info.display_name =
             DataUtils.getMetadataValue(info.content_hdr_formalName,
@@ -132,9 +133,8 @@ public class JSPUtils {
 
         if (isNull(info.version))
             info.version = (String) request.getAttribute("version");
-        
-        if (!DataUtils.isCodingSchemeLoaded(info.dictionary,
-            info.version)) {
+
+        if (!DataUtils.isCodingSchemeLoaded(info.dictionary, info.version)) {
             info.version_deprecated = info.version;
             info.version =
                 DataUtils.getVocabularyVersionByTag(info.dictionary,
@@ -146,39 +146,49 @@ public class JSPUtils {
         }
         return info;
     }
-    
+
     public static String getSelectedVocabularyTooltip(HttpServletRequest request) {
-        String tooltip_str = "";
+        String ontologiesToSearchOn =
+            (String) request.getSession().getAttribute("ontologiesToSearchOn");
+        if (ontologiesToSearchOn == null)
+            return "";
 
-        String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
-        HashMap<String, String> display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
-        Vector<OntologyInfo> display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+        @SuppressWarnings("unchecked")
+        HashMap<String, String> display_name_hmap =
+            (HashMap<String, String>) request.getSession().getAttribute(
+                "display_name_hmap");
+        @SuppressWarnings("unchecked")
+        Vector<OntologyInfo> display_name_vec =
+            (Vector<OntologyInfo>) request.getSession().getAttribute(
+                "display_name_vec");
 
-        if (ontologiesToSearchOnStr != null) {
-
-          Vector<String> ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
-          for (int k=0; k<ontologies_to_search_on.size(); k++) {
-            String s = (String) ontologies_to_search_on.elementAt(k);
-
+        Vector<String> ontologies_to_search_on =
+            DataUtils.parseData(ontologiesToSearchOn);
+        String value = "";
+        for (int i = 0; i < ontologies_to_search_on.size(); i++) {
+            String s = ontologies_to_search_on.elementAt(i);
             String t1 = DataUtils.key2CodingSchemeName(s);
             String v1 = DataUtils.key2CodingSchemeVersion(s);
-            String term_browser_version = DataUtils.getMetadataValue(t1, v1, "term_browser_version");
+            String term_browser_version =
+                DataUtils.getMetadataValue(t1, v1, "term_browser_version");
 
             if (term_browser_version == null)
-               term_browser_version = v1;
-            for (int i=0; i<display_name_vec.size(); i++) {
-                OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                term_browser_version = v1;
+            for (int j = 0; j < display_name_vec.size(); j++) {
+                OntologyInfo info = display_name_vec.elementAt(j);
                 String nm = info.getDisplayName();
-                String val = (String) display_name_hmap.get(nm);
+                String val = display_name_hmap.get(nm);
                 if (val.compareTo(s) == 0) {
                     s = nm;
                     break;
                 }
             }
+            int k = s.lastIndexOf('$');
+            if (k >= 0)
+                s = s.substring(0, k);
             s = s + " (" + term_browser_version + ")";
-            tooltip_str = tooltip_str + s + "<br/>";
-          }
+            value = value + s + "<br/>";
         }
-        return tooltip_str;
+        return value;
     }
 }
