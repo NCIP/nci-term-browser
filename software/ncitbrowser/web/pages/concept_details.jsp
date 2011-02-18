@@ -249,7 +249,7 @@
     </tr>
     <% if (deprecatedVersion != null) { %>
       <tr>
-        <td class="textbodysmall">
+        <td class="textbodysmall" colspan="2">
           <font color="#A90101">Warning:</font>
           Version <%=deprecatedVersion%> of this vocabulary is not accessible.
           Displaying version <%=version%> of this concept instead.
