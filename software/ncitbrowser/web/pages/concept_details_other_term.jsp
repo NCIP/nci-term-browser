@@ -155,10 +155,7 @@
 
 
                   <td align="right">
-                    <%
-                      String visitedConceptsStr = VisitedConceptUtils.getDisplayLink(request);
-                      if (visitedConceptsStr != null) { %> <%=visitedConceptsStr%> <% }
-                    %>
+                    <%= VisitedConceptUtils.getDisplayLink(request) %>
                   </td>
                   <td width="7"></td>
                 </tr>
