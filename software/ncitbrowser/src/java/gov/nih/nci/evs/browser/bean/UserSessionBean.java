@@ -507,7 +507,8 @@ System.out.println("(*******************) SearchAction iterator == null???");
 							iterator = null;
 						}
 					} else {
-                        iterator = DataUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.BOTH);
+                        iterator = MappingSearchUtils.getRestrictedMappingDataIterator(scheme, version, null, iterator, SearchContext.SOURCE_OR_TARGET_CODES
+);
 				    }
 
 					if (iterator == null) {
