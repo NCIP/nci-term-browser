@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
 
+import java.util.*;
+
 import javax.servlet.http.*;
 
 import org.apache.log4j.*;
@@ -143,5 +145,40 @@ public class JSPUtils {
             _logger.debug("  * version_deprecated: " + info.version_deprecated);
         }
         return info;
+    }
+    
+    public static String getSelectedVocabularyTooltip(HttpServletRequest request) {
+        String tooltip_str = "";
+
+        String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOn");
+        HashMap<String, String> display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
+        Vector<OntologyInfo> display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+
+        if (ontologiesToSearchOnStr != null) {
+
+          Vector<String> ontologies_to_search_on = DataUtils.parseData(ontologiesToSearchOnStr);
+          for (int k=0; k<ontologies_to_search_on.size(); k++) {
+            String s = (String) ontologies_to_search_on.elementAt(k);
+
+            String t1 = DataUtils.key2CodingSchemeName(s);
+            String v1 = DataUtils.key2CodingSchemeVersion(s);
+            String term_browser_version = DataUtils.getMetadataValue(t1, v1, "term_browser_version");
+
+            if (term_browser_version == null)
+               term_browser_version = v1;
+            for (int i=0; i<display_name_vec.size(); i++) {
+                OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                String nm = info.getDisplayName();
+                String val = (String) display_name_hmap.get(nm);
+                if (val.compareTo(s) == 0) {
+                    s = nm;
+                    break;
+                }
+            }
+            s = s + " (" + term_browser_version + ")";
+            tooltip_str = tooltip_str + s + "<br/>";
+          }
+        }
+        return tooltip_str;
     }
 }
