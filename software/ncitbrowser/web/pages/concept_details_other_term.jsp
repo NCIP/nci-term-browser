@@ -235,7 +235,7 @@
             <tr>
               <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
               <%
-                    VisitedConceptUtils.add(request, dictionary, code, name);
+                    VisitedConceptUtils.add(request, dictionary, vers, code, name);
                     if (term_suggestion_application_url != null
                         && term_suggestion_application_url.compareTo("") != 0) {
               %>
