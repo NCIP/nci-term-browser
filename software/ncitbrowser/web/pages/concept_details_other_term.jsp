@@ -156,15 +156,8 @@
 
                   <td align="right">
                     <%
-                                                      Vector visitedConcepts = (Vector) request.getSession()
-                                                            .getAttribute("visitedConcepts");
-                                                        if (visitedConcepts != null && visitedConcepts.size() > 0) {
-                                                          String visitedConceptsStr = DataUtils
-                                                              .getVisitedConceptLink(visitedConcepts);
-                                                    %>
-                         <%=visitedConceptsStr%>
-                    <%
-                      }
+                      String visitedConceptsStr = VisitedConceptUtils.getDisplayLink(request);
+                      if (visitedConceptsStr != null) { %> <%=visitedConceptsStr%> <% }
                     %>
                   </td>
                   <td width="7"></td>
@@ -245,25 +238,7 @@
             <tr>
               <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
               <%
-                visitedConcepts = (Vector) request.getSession()
-                        .getAttribute("visitedConcepts");
-                    if (visitedConcepts == null) {
-                      visitedConcepts = new Vector();
-                    }
-                    String localCodingSchemeName = DataUtils.getLocalName(dictionary);
-
-_logger.debug("concept_details_other_term.jsp  dictionary: " + dictionary);
-_logger.debug("concept_details_other_term.jsp  localCodingSchemeName: " + localCodingSchemeName);
-
-                    String visitedConceptStr = localCodingSchemeName + "|"
-                        + code + "|" + name;
-                    if (!visitedConcepts.contains(visitedConceptStr)) {
-                      visitedConcepts.add(visitedConceptStr);
-                      request.getSession().removeAttribute("visitedConcepts");
-                      request.getSession().setAttribute("visitedConcepts",
-                          visitedConcepts);
-                    }
-
+                    VisitedConceptUtils.add(request, dictionary, code, name);
                     if (term_suggestion_application_url != null
                         && term_suggestion_application_url.compareTo("") != 0) {
               %>
