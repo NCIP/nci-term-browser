@@ -8,7 +8,13 @@
     int next_page_num = prev_page_num + 1;
     
     String istart_str = Integer.toString(istart+1);
-    String iend_str = Integer.toString(iend+1);
+    String iend_str = Integer.toString(iend);
+  
+  
+System.out.println("istart_str: " + istart_str);
+System.out.println("iend_str: " + iend_str);
+  
+  
   
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
 System.out.println("(*) dictionary_map " + dictionary_map);
@@ -134,15 +140,7 @@ System.out.println("page_num: " + page_num);
   }
   %>
   </select>
-  <!--
-        
-        <h:selectOneMenu
-          id="id" value="#{userSessionBean.selectedResultsPerPage}"
-          valueChangeListener="#{userSessionBean.resultsPerPageChanged}" immediate="true" onchange="submit()"> 
-          <f:selectItems value="#{userSessionBean.resultsPerPageList}"/>
-        </h:selectOneMenu>
-        
-  -->        
+ 
         &nbsp;results per page
       </td>
       <td>
