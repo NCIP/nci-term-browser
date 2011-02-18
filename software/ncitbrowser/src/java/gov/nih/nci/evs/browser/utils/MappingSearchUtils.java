@@ -152,7 +152,7 @@ public class MappingSearchUtils {
 		schemes.add(scheme);
 		Vector versions = new Vector();
 		versions.add(version);
-		return searchByName(schemes, versions, matchText, matchAlgorithm, maxToReturn);
+		return searchByCode(schemes, versions, matchText, matchAlgorithm, maxToReturn);
 	}
 
 
@@ -160,11 +160,14 @@ public class MappingSearchUtils {
         Vector schemes, Vector versions, String matchText,
         String matchAlgorithm, int maxToReturn) {
 
+System.out.println("==============================  MappingSearchUtils searchByCode");
+
+
 		if (matchText == null || matchText.trim().length() == 0)
 			return null;
 
 		matchText = matchText.trim();
-		_logger.debug("searchByName ... " + matchText);
+		_logger.debug("searchByCode ... " + matchText);
 
 		if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
@@ -188,7 +191,12 @@ public class MappingSearchUtils {
         while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
             scheme = (String) schemes.elementAt(lcv);
             version = (String) versions.elementAt(lcv);
+
+System.out.println(scheme + " (version: " +  version);
+
 			String containerName = getMappingRelationsContainerName(scheme, version);
+System.out.println("\tcontainer name: " +  containerName);
+
 			if (containerName != null) {
 				try {
 					Mapping mapping =
@@ -201,29 +209,12 @@ public class MappingSearchUtils {
 						ref.setConceptCode(matchText);
  						codeList.addConceptReference(ref);
 
-                        mapping = mapping.restrictToCodes(codeList, SearchContext.TARGET_CODES);
-							//Finally, resolve the Mapping.
+                        mapping = mapping.restrictToCodes(codeList, SearchContext.SOURCE_OR_TARGET_CODES);
 						itr = mapping.resolveMapping();
 						if (itr != null) {
 							try {
 								numberRemaining = itr.numberRemaining();
-								System.out.println("Number of matches: " + numberRemaining);
-								if (numberRemaining == 0) {
-									mapping = mappingExtension.getMapping(scheme, null, containerName);
-                                    mapping = mapping.restrictToCodes(codeList, SearchContext.SOURCE_CODES);
-									itr = mapping.resolveMapping();
-									if (itr != null) {
-										try {
-											numberRemaining = itr.numberRemaining();
-											System.out.println("Number of matches: " + numberRemaining);
-											if (numberRemaining > 0) break;
-										} catch (Exception ex) {
-											ex.printStackTrace();
-										}
-									}
-								} else {
-									break;
-								}
+								System.out.println("\tsearchByCode matches: " + numberRemaining);
 
 							} catch (Exception ex) {
 								ex.printStackTrace();
@@ -233,7 +224,6 @@ public class MappingSearchUtils {
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					//return null;
 				}
 		    }
 		    lcv++;

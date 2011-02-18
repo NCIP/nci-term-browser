@@ -111,7 +111,7 @@ if (resultsPerPage == null) {
 String selectedResultsPerPage = resultsPerPage;
 
 
-  String base_path = request.getContextPath();
+String base_path = request.getContextPath();
 int numRemaining = 0;
 
 
@@ -129,36 +129,48 @@ if (key == null) {
 MappingIteratorBean mapping_bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
 
 
-String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+int pageSize = Integer.parseInt(selectedResultsPerPage);
+int size = 0;
 int pageNum = 0;
+
+if (mapping_bean != null) {
+	size = mapping_bean.getNumberRemaining();
+}
+
+List list = null;
+int num_pages = size / pageSize;
+if (num_pages * pageSize < size) num_pages++;
+System.out.println("num_pages: " + num_pages);
+
+String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 if (page_number != null) {
     pageNum = Integer.parseInt(page_number);
 }
+System.out.println("pageNum: " + pageNum);
+
+int istart = pageNum * pageSize;
 
 int page_num = pageNum;
-if (page_num == 0) page_num++;
-
-
-int pageSize = Integer.parseInt(selectedResultsPerPage);
-
-int size = 0;
-List list = null;
-
-if (mapping_bean != null) {
-size = mapping_bean.getNumberRemaining();
+if (page_num == 0) {
+    page_num++;
+} else {
+    istart = (pageNum-1) * pageSize;
 }
+
+int iend = istart + pageSize - 1;
+if (iend > size) {
+    iend = size;
+}
+
 
 System.out.println("\npage_num: " + page_num);
 System.out.println("size: " + size);
 System.out.println("pageSize: " + pageSize);
 
-int num_pages = size / pageSize;
-if (num_pages * pageSize < size) num_pages++;
 
-System.out.println("num_pages: " + num_pages + "\n");
+System.out.println("mapping_search_results istart " + istart);
+System.out.println("mapping_search_results iend " + iend);
 
-int istart = pageNum * pageSize;
-int iend = istart + pageSize - 1;
 
 
 System.out.println("calling bean.getData ...");

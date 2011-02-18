@@ -236,25 +236,44 @@ System.out.println("(*******************) SearchAction");
 
 		if (isMapping && searchTarget.compareTo("relationships") != 0) {
 
-System.out.println("(*************) calling getRestrictedMappingDataIterator -- search by " + searchTarget);
+System.out.println("(*************) calling MappingSearchUtils -- search by " + searchTarget);
 //testing
 				if (searchTarget.compareTo("names") == 0) {
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByName(
+System.out.println("(*************) calling MappingSearchUtils -- searchByCode " + searchTarget);
+					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByCode(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn);
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
-					} else {
-						wrapper = new MappingSearchUtils().searchByCode(
+					}
+
+                    if (iterator != null) {
+						try {
+							int numberRemaining = iterator.numberRemaining();
+							if (numberRemaining == 0) {
+								iterator = null;
+							}
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+				    }
+
+					if (iterator == null) {
+
+System.out.println("(*************) calling MappingSearchUtils -- searchByName " + searchTarget);
+
+						wrapper = new MappingSearchUtils().searchByName(
 							scheme, version, matchText,
 							matchAlgorithm, maxToReturn);
-
-					    if (wrapper != null) {
-						    iterator = wrapper.getIterator();
+						if (wrapper != null) {
+							iterator = wrapper.getIterator();
 						} else {
-						    iterator = null;
+							iterator = null;
 						}
 					}
+
+
 				} else if (searchTarget.compareTo("properties") == 0) {
 
 					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByProperties(
