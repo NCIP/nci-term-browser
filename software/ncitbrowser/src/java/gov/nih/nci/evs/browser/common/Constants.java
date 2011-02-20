@@ -98,6 +98,13 @@ public class Constants {
 
     public static final String TREE_ACCESS_ALLOWED = "tree_access_allowed";
 
+    public static String TYPE_ROLE = "type_role";
+    public static String TYPE_ASSOCIATION = "type_association";
+    public static String TYPE_SUPERCONCEPT = "type_superconcept";
+    public static String TYPE_SUBCONCEPT = "type_subconcept";
+    public static String TYPE_INVERSE_ROLE = "type_inverse_role";
+    public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
+
 
     /**
      * Constructor

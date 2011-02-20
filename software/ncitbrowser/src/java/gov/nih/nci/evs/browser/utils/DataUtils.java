@@ -150,6 +150,9 @@ public class DataUtils {
     public static String TYPE_ASSOCIATION = "type_association";
     public static String TYPE_SUPERCONCEPT = "type_superconcept";
     public static String TYPE_SUBCONCEPT = "type_subconcept";
+    public static String TYPE_INVERSE_ROLE = "type_inverse_role";
+    public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
+
 
     public String _ncicbContactURL = null;
     public String _terminologySubsetDownloadURL = null;
@@ -161,9 +164,6 @@ public class DataUtils {
     public String _ncimURL = null;
 
     public static HashMap _namespace2CodingScheme = null;
-
-    public static String TYPE_INVERSE_ROLE = "type_inverse_role";
-    public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
     public static HashMap _formalName2LocalNameHashMap = null;
     public static HashMap _localName2FormalNameHashMap = null;
@@ -1626,9 +1626,11 @@ public class DataUtils {
     public HashMap getRelationshipHashMap(String scheme, String version,
         String code) {
 
+System.out.println("==================================================================");
 System.out.println("DataUtils.getRelationshipHashMap scheme: " + scheme);
 System.out.println("DataUtils.getRelationshipHashMap version: " + version);
 System.out.println("DataUtils.getRelationshipHashMap code: " + code);
+System.out.println("==================================================================");
 
         boolean isMapping = isMapping(scheme, version);
 
@@ -1661,6 +1663,9 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
         if (entityCodeNamespace != null) {
 			cr.setCodingSchemeName(entityCodeNamespace);
 		}
+
+System.out.println("querying relationship data ...");
+
 
         // Perform the query ...
         ResolvedConceptReferenceList matches = null;
