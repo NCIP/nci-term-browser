@@ -234,7 +234,7 @@ System.out.println("\tcontainer name: " +  containerName);
 						ref.setConceptCode(matchText);
  						codeList.addConceptReference(ref);
 
-                        mapping = mapping.restrictToCodes(codeList, SearchContext.SOURCE_OR_TARGET_CODES);
+                        mapping = mapping.restrictToCodes(codeList, searchContext);
 						itr = mapping.resolveMapping();
 						if (itr != null) {
 							try {
@@ -692,7 +692,7 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
         else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
 
         ResolvedConceptReferencesIteratorWrapper wrapper = searchByCode(
-         scheme, version, code, "exactmatch", searchContext, -1);
+         scheme, version, code, "exactMatch", searchContext, -1);
 
         if (wrapper == null) return null;
         ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
