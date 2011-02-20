@@ -12,6 +12,23 @@
   String code_curr = (String) request.getSession().getAttribute("code");
         Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
 
+
+                String source_scheme = null;//"NCI_Thesaurus";
+                String source_version = null;// "10.06e";
+                String source_namespace = null;
+                String target_scheme = null;// "ICD_9_CM";
+                String target_version = null;// "2010";
+
+                String source_code = null;
+                String source_name = null;
+                String rel = null;
+                String score = null;
+                String target_code = null;
+                String target_name = null;
+                String target_namespace = null;
+                MappingData mappingData = null;
+
+
  %>
   <table border="0" width="708px">
     <tr>
@@ -36,74 +53,105 @@
               
         
 %>
-
             
 
         <b>Maps To:</b>
 <%        
         for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
+        
+    
+        
            String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
            Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
            String mapping_cs_uri = (String) ret_vec.elementAt(0);
            String mapping_cs_version = (String) ret_vec.elementAt(1);
            String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
-           
+
+boolean show_rank_column = true;
+String map_rank_applicable = DataUtils.getMetadataValue(mapping_cs_name, mapping_cs_version, "map_rank_applicable");
+if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) {
+    show_rank_column = false;
+}   
+
 System.out.println("mapping_cs_uri: " + mapping_cs_uri);
 System.out.println("mapping_cs_version: " + mapping_cs_version);
 System.out.println("mapping_cs_name: " + mapping_cs_name);
 System.out.println("code_curr: " + code_curr);
 
-                       HashMap hmap = util.getRelationshipHashMap(mapping_cs_name, mapping_cs_version, code_curr);
-                             ArrayList associations = null;
-                             if (hmap.get(DataUtils.TYPE_ASSOCIATION) != null) {
-                                associations = (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
-                             }
+
+           List list = new MappingSearchUtils().getMappingRelationship(
+                       mapping_cs_uri, mapping_cs_version, code_curr, 1);
 
 
-if (associations != null && associations.size() > 0) {
+if (list != null && list.size() > 0) {
 
            
 %>        
     <p></p>Mapping Source: <%=mapping_cs_name%>
-    <table class="dataTable">
-         <th class="dataTableHeader" scope="col" align="left">Relationship</th>
-         <th class="dataTableHeader" scope="col" align="left">Name</th>
-         <th class="dataTableHeader" scope="col" align="left">Code</th>
-         <th class="dataTableHeader" scope="col" align="left">Target</th>
-         
-         <th class="dataTableHeader" scope="col" align="left">REL</th>
-         <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
+          <table width="580px" cellpadding="3" cellspacing="0" border="0">
+
+          <th class="dataTableHeader" scope="col" align="left">Source</th>
+
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 Source Code
+          </th>
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 Source Name
+          </th>
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 REL
+          </th>
+
+<%
+if (show_rank_column) {
+%>
+          <th class="dataTableHeader" scope="col" align="left">
+                 Map Rank
+          </th>
+<%
+}
+%>
+
+          <th class="dataTableHeader" scope="col" align="left">Target</th>
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 Target Code
+          </th>
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 Target Name
+          </th>
     <%
 
-
-
-
           int n2 = 0;
-          for (int i=0; i<associations.size(); i++) {
-              String s = (String) associations.get(i);
-              Vector ret_vec2 = DataUtils.parseData(s, "|");
-              String role_name = (String) ret_vec2.elementAt(0);
-              String target_concept_name = (String) ret_vec2.elementAt(1);
-              String target_concept_code = (String) ret_vec2.elementAt(2);
-              String target_coding_scheme_name = (String) ret_vec2.elementAt(3);
-              String target_namespace = null;
+          
+          
+          for (int k=0; k<list.size(); k++) {
+                mappingData = (MappingData) list.get(k);
+		source_code = mappingData.getSourceCode();
+		source_name = mappingData.getSourceName();
+		source_namespace = mappingData.getSourceCodeNamespace();
 
-              String qualifiers = null;
-              String rel = null;
-        String score = null;
+		// To be modified through metadata
+		if (source_namespace.compareTo("NCI_Thesaurus") == 0) source_namespace = "NCIt";
 
-if (ret_vec2.size() > 4) {
-        qualifiers = (String) ret_vec2.elementAt(4);
-        System.out.println(qualifiers);
-        Vector v = DataUtils.parseData(qualifiers, "$");
-        String rel_str = (String) v.elementAt(0);
-        int m1 = rel_str.indexOf(":");
-        rel = rel_str.substring(m1+1, rel_str.length());
-        String score_str = (String) v.elementAt(1);
-        int m2 = score_str.indexOf(":");
-        score = score_str.substring(m2+1, score_str.length());
-        target_namespace = (String) ret_vec2.elementAt(5);
-}
+		rel = mappingData.getRel();
+		score = new Integer(mappingData.getScore()).toString();
+		target_code = mappingData.getTargetCode();
+		target_name = mappingData.getTargetName();
+		target_namespace = mappingData.getTargetCodeNamespace();
+
+		// To be modified through metadata
+		if (target_namespace.compareTo("NCI_Thesaurus") == 0) target_namespace = "NCIt";
+
+		source_scheme = mappingData.getSourceCodingScheme();
+		source_version = mappingData.getSourceCodingSchemeVersion();
+		target_scheme = mappingData.getTargetCodingScheme();
+		target_version = mappingData.getTargetCodingSchemeVersion();         
+          
 
               if (n2 % 2 == 0) {
         %>
@@ -116,31 +164,48 @@ if (ret_vec2.size() > 4) {
         }
         n2++;
         %>
-            <td><%=role_name%></td>
-            <td>
-            <%
-            if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
-            %>
-        <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
-          <%=target_concept_name%>
-        </a>
-            <%
-            } else {
-            %>
-        <%=target_concept_name%>
-            <%
-            }
-            %>
-            </td>
+        <td class="datacoldark"><%=source_namespace%></td>
+        <td class="datacoldark">
+<a href="#"
+      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <%=source_code%>
+</a>
 
-            <td>
-        <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
-          <%=target_concept_code%>
-        </a>
-            </td>
-            <td><%=target_namespace%></td>
-            <td><%=rel%></td>
-            <td><%=score%></td>
+<a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
+</a>
+
+        </td>
+        <td class="datacoldark"><%=source_name%></td>
+
+
+        <td class="textbody"><%=rel%></td>
+        
+<%
+if (show_rank_column) {
+%>        
+        <td class="textbody"><%=score%></td>
+<%
+}
+%>
+
+
+
+        <td class="datacoldark"><%=target_namespace%></td>
+        <td class="datacoldark">
+
+<a href="#"
+      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <%=target_code%>
+</a>
+
+<a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
+</a>
+                    </td>
+        <td class="datacoldark"><%=target_name%></td>
 
 
           </tr>
@@ -153,7 +218,9 @@ if (ret_vec2.size() > 4) {
     }
 }     
 %>     
-     
+ 
+ 
+ 
      
     <hr></hr>
         <b>Maps From:</b>
@@ -166,72 +233,89 @@ if (ret_vec2.size() > 4) {
            String mapping_cs_version = (String) ret_vec.elementAt(1);
            String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
            
+boolean show_rank_column = true;
+String map_rank_applicable = DataUtils.getMetadataValue(mapping_cs_name, mapping_cs_version, "map_rank_applicable");
+if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) {
+    show_rank_column = false;
+}   
 
 System.out.println("mapping_cs_uri: " + mapping_cs_uri);
 System.out.println("mapping_cs_version: " + mapping_cs_version);
 System.out.println("mapping_cs_name: " + mapping_cs_name);
 System.out.println("code_curr: " + code_curr);           
 
-                       HashMap hmap = util.getRelationshipHashMap(mapping_cs_name, mapping_cs_version, code_curr);
-                             ArrayList associations = null;
-                             if (hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION) != null) {
-                                associations = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
-                             }
+           List list = new MappingSearchUtils().getMappingRelationship(
+                       mapping_cs_uri, mapping_cs_version, code_curr, -1);
 
 
-if (associations != null && associations.size() > 0) {
+if (list != null && list.size() > 0) {
 
 %>
       
     <p></p>Mapping Source: <%=mapping_cs_name%>
-    <table class="dataTable">
+          <table width="580px" cellpadding="3" cellspacing="0" border="0">
 
-           <th class="dataTableHeader" scope="col" align="left">Name</th>
-           <th class="dataTableHeader" scope="col" align="left">Code</th>
-           <th class="dataTableHeader" scope="col" align="left">Source</th>
-           <th class="dataTableHeader" scope="col" align="left">Relationship</th>
-           <th class="dataTableHeader" scope="col" align="left">REL</th>
-           <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
+          <th class="dataTableHeader" scope="col" align="left">Source</th>
+
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 Source Code
+          </th>
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 Source Name
+          </th>
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 REL
+          </th>
+
+<%
+if (show_rank_column) {
+%>
+          <th class="dataTableHeader" scope="col" align="left">
+                 Map Rank
+          </th>
+<%
+}
+%>
+
+          <th class="dataTableHeader" scope="col" align="left">Target</th>
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 Target Code
+          </th>
+
+          <th class="dataTableHeader" scope="col" align="left">
+                 Target Name
+          </th>
 
 
     <%
 
+          int n2 = 0;
+          for (int k=0; k<list.size(); k++) {
+                mappingData = (MappingData) list.get(k);
+		source_code = mappingData.getSourceCode();
+		source_name = mappingData.getSourceName();
+		source_namespace = mappingData.getSourceCodeNamespace();
 
+		// To be modified through metadata
+		if (source_namespace.compareTo("NCI_Thesaurus") == 0) source_namespace = "NCIt";
 
+		rel = mappingData.getRel();
+		score = new Integer(mappingData.getScore()).toString();
+		target_code = mappingData.getTargetCode();
+		target_name = mappingData.getTargetName();
+		target_namespace = mappingData.getTargetCodeNamespace();
 
+		// To be modified through metadata
+		if (target_namespace.compareTo("NCI_Thesaurus") == 0) target_namespace = "NCIt";
 
-
-
-
-                int n2 = 0;
-
-
-          for (int i=0; i<associations.size(); i++) {
-              String s = (String) associations.get(i);
-              Vector ret_vec2 = DataUtils.parseData(s, "|");
-              String role_name = (String) ret_vec2.elementAt(0);
-              String target_concept_name = (String) ret_vec2.elementAt(1);
-              String target_concept_code = (String) ret_vec2.elementAt(2);
-              String target_coding_scheme_name = (String) ret_vec2.elementAt(3);
-              String target_namespace = null;
-
-              String qualifiers = null;
-              String rel = null;
-        String score = null;
-
-if (ret_vec2.size() > 4) {
-        qualifiers = (String) ret_vec2.elementAt(4);
-        System.out.println(qualifiers);
-        Vector v = DataUtils.parseData(qualifiers, "$");
-        String rel_str = (String) v.elementAt(0);
-        int m1 = rel_str.indexOf(":");
-        rel = rel_str.substring(m1+1, rel_str.length());
-        String score_str = (String) v.elementAt(1);
-        int m2 = score_str.indexOf(":");
-        score = score_str.substring(m2+1, score_str.length());
-        target_namespace = (String) ret_vec2.elementAt(5);
-}
-
+		source_scheme = mappingData.getSourceCodingScheme();
+		source_version = mappingData.getSourceCodingSchemeVersion();
+		target_scheme = mappingData.getTargetCodingScheme();
+		target_version = mappingData.getTargetCodingSchemeVersion();  
 
               if (n2 % 2 == 0) {
         %>
@@ -244,33 +328,48 @@ if (ret_vec2.size() > 4) {
         }
         n2++;
         %>
+        <td class="datacoldark"><%=source_namespace%></td>
+        <td class="datacoldark">
+<a href="#"
+      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <%=source_code%>
+</a>
 
-            <td>
-            <%
-            if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
-            %>
-        <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
-          <%=target_concept_name%>
-        </a>
-            <%
-            } else {
-            %>
-        <%=target_concept_name%>
-            <%
-            }
-            %>
-            </td>
+<a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(source_scheme)%>&version=<%=source_version%>&code=<%=source_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=source_code%>" />
+</a>
 
-            <td>
-        <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
-          <%=target_concept_code%>
-        </a>
-            </td>
-            <td><%=target_namespace%></td>
-            <td><%=role_name%></td>
-            <td><%=rel%></td>
-            <td><%=score%></td>
+        </td>
+        <td class="datacoldark"><%=source_name%></td>
 
+
+        <td class="textbody"><%=rel%></td>
+        
+<%
+if (show_rank_column) {
+%>        
+        <td class="textbody"><%=score%></td>
+<%
+}
+%>
+
+
+
+        <td class="datacoldark"><%=target_namespace%></td>
+        <td class="datacoldark">
+
+<a href="#"
+      onclick="javascript:window.open('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <%=target_code%>
+</a>
+
+<a href="#"
+      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(target_scheme)%>&version=<%=target_version%>&code=<%=target_code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=target_code%>" />
+</a>
+                    </td>
+        <td class="datacoldark"><%=target_name%></td>
 
           </tr>
         <%
