@@ -38,6 +38,9 @@ import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.QualifierSortOptio
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.SearchDesignationOption;
 
+import static gov.nih.nci.evs.browser.common.Constants.*;
+import gov.nih.nci.evs.browser.bean.*;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -153,13 +156,34 @@ public class MappingSearchUtils {
 		schemes.add(scheme);
 		Vector versions = new Vector();
 		versions.add(version);
-		return searchByCode(schemes, versions, matchText, matchAlgorithm, maxToReturn);
+		return searchByCode(scheme, version, matchText, matchAlgorithm, SearchContext.SOURCE_OR_TARGET_CODES, maxToReturn);
 	}
 
 
     public ResolvedConceptReferencesIteratorWrapper searchByCode(
         Vector schemes, Vector versions, String matchText,
         String matchAlgorithm, int maxToReturn) {
+
+        return searchByCode(
+         schemes, versions, matchText,
+         matchAlgorithm, SearchContext.SOURCE_OR_TARGET_CODES, maxToReturn);
+    }
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchByCode(
+        String scheme, String version, String matchText,
+        String matchAlgorithm, SearchContext searchContext, int maxToReturn) {
+		Vector schemes = new Vector();
+		schemes.add(scheme);
+		Vector versions = new Vector();
+		versions.add(version);
+		return searchByCode(schemes, versions, matchText, matchAlgorithm, searchContext, maxToReturn);
+	}
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchByCode(
+        Vector schemes, Vector versions, String matchText,
+        String matchAlgorithm, SearchContext searchContext, int maxToReturn) {
 
 System.out.println("==============================  MappingSearchUtils searchByCode");
 
@@ -660,6 +684,53 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 		}
 		return null;
 	}
+
+    public List getMappingRelationship(
+        String scheme, String version, String code, int direction) {
+		SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES;
+		if (direction == 1) searchContext = SearchContext.SOURCE_CODES;
+        else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
+
+        ResolvedConceptReferencesIteratorWrapper wrapper = searchByCode(
+         scheme, version, code, "exactmatch", searchContext, -1);
+
+        if (wrapper == null) return null;
+        ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
+        if (iterator == null) return null;
+
+		int numberRemaining = 0;
+		try {
+			numberRemaining = iterator.numberRemaining();
+			if (numberRemaining == 0) {
+                return null;
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+
+
+		MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
+		iterator,
+		numberRemaining, // number remaining
+		0,    // istart
+		50,   // iend,
+		numberRemaining, // size,
+		0,    // pageNumber,
+		1);   // numberPages
+
+		mappingIteratorBean.initialize(
+		iterator,
+		numberRemaining, // number remaining
+		0,    // istart
+		50,   // iend,
+		numberRemaining, // size,
+		0,    // pageNumber,
+		1);   // numberPages
+
+		return mappingIteratorBean.getData(0, numberRemaining); // implement getAll
+    }
 
 
 }
