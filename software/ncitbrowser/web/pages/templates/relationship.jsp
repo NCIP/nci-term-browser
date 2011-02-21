@@ -26,11 +26,23 @@ String code_curr = (String) request.getSession().getAttribute("code");
     if (code_curr == null) {
         code_curr = (String) request.getParameter("code");
     }
+    
+System.out.println("(**********************************************************)");   
+System.out.println("(*) relationship tab scheme_curr: " + scheme_curr);
+System.out.println("(*) relationship tab version_curr: " + version_curr);
+System.out.println("(*) relationship tab code_curr: " + code_curr);
+System.out.println("(**********************************************************)");   
+  
 
-    HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
-    if (hmap == null) {
-      DataUtils util = new DataUtils();
-      hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
+    HashMap hmap = null;
+    if (isMapping) {
+            hmap = new MappingSearchUtils().getMappingRelationshipHashMap(scheme_curr, version_curr, code_curr);
+    } else {
+	    hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
+	    if (hmap == null) {
+	      DataUtils util = new DataUtils();
+	      hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
+	    }
     }
 
     if (hmap != null) {
@@ -41,9 +53,21 @@ String code_curr = (String) request.getSession().getAttribute("code");
     ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
     ArrayList roles = (ArrayList) hmap.get(DataUtils.TYPE_ROLE);
     ArrayList associations = (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
-
     ArrayList inverse_roles = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ROLE);
     ArrayList inverse_associations = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
+
+if (associations == null) {
+   System.out.println("TYPE_ASSOCIATION == null"); 
+} else {
+   System.out.println("TYPE_ASSOCIATION != null size:"  + associations.size()); 
+}
+
+if (inverse_associations == null) {
+   System.out.println("TYPE_INVERSE_ASSOCIATION == null"); 
+} else {
+   System.out.println("TYPE_INVERSE_ASSOCIATION != null size:"  + inverse_associations.size()); 
+}
+
 
     ArrayList concepts = null;
     String label = "";
@@ -179,19 +203,6 @@ String code_curr = (String) request.getSession().getAttribute("code");
   <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
   <table class="dataTable">
 
- <%
- if (isMapping) {
- %>
-     <th class="dataTableHeader" scope="col" align="left">Relationship</th>
-     <th class="dataTableHeader" scope="col" align="left">Name</th>
-     <th class="dataTableHeader" scope="col" align="left">Code</th>
-     <th class="dataTableHeader" scope="col" align="left">REL</th>
-     <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
- <%
- }
- %>
-
-
     <%
       int n1 = 0;
       for (int i=0; i<roles.size(); i++) {
@@ -204,19 +215,6 @@ String code_curr = (String) request.getSession().getAttribute("code");
         String qualifiers = null;
   rel = null;
   score = null;
-
-  if (isMapping) {
-      qualifiers = (String) ret_vec.elementAt(4);
-      System.out.println(qualifiers);
-      Vector v = DataUtils.parseData(qualifiers, "$");
-      String rel_str = (String) v.elementAt(0);
-      int m1 = rel_str.indexOf(":");
-      rel = rel_str.substring(m1+1, rel_str.length());
-      String score_str = (String) v.elementAt(1);
-      int m2 = score_str.indexOf(":");
-      score = score_str.substring(m2+1, score_str.length());
-  }
-
 
         if (n1 % 2 == 0) {
           %>
@@ -283,21 +281,6 @@ String code_curr = (String) request.getSession().getAttribute("code");
 <br/>
 <i>(Associations are true only for the current concept.)</i>
 <table class="dataTable">
-
-
-<%
- if (isMapping) {
- %>
-     <th class="dataTableHeader" scope="col" align="left">Relationship</th>
-     <th class="dataTableHeader" scope="col" align="left">Name</th>
-     <th class="dataTableHeader" scope="col" align="left">Code</th>
-     <th class="dataTableHeader" scope="col" align="left">Namespace</th>
-     <th class="dataTableHeader" scope="col" align="left">REL</th>
-     <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
- <%
- }
- %>
-
 
   <%
     int n2 = 0;
@@ -391,9 +374,12 @@ String code_curr = (String) request.getSession().getAttribute("code");
   <%
      String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr, version_curr, "display_inverse_relationships");
      boolean display_inverse_relationships = true;
+     
+     /*
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;
      }
+     */
 
 
 if (!isMapping) {
@@ -407,19 +393,6 @@ if (!isMapping) {
   <br/>
   <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
   <table class="dataTable">
-
-
-  <%
-   if (isMapping) {
-   %>
-       <th class="dataTableHeader" scope="col" align="left">Name</th>
-       <th class="dataTableHeader" scope="col" align="left">Code</th>
-       <th class="dataTableHeader" scope="col" align="left">Relationship</th>
-       <th class="dataTableHeader" scope="col" align="left">REL</th>
-       <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
-   <%
-   }
- %>
 
 
     <%
@@ -547,6 +520,9 @@ if (!isMapping) {
 
   <%
     int n2 = 0;
+
+System.out.println("relationship.jsp inverse_associations.size(): " + inverse_associations.size());
+
 
     for (int i=0; i<inverse_associations.size(); i++) {
       String s = (String) inverse_associations.get(i);
