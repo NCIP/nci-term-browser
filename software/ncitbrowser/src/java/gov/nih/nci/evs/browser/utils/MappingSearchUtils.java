@@ -820,11 +820,13 @@ System.out.println("knt: " + knt);
 System.out.println("ref.etCode(): " + ref.getCode());
 System.out.println("ref name: " + ref.getEntityDescription().getContent());
 System.out.println("ref coding scheme: " + ref.getCodingSchemeName());
-
+/*
 				AssociationList asso_of = ref.getTargetOf();
 				if (direction == -1) {
 					asso_of = ref.getSourceOf();
 				}
+*/
+AssociationList asso_of = ref.getSourceOf();
 
 				if (asso_of == null) {
 System.out.println("asso_of == null ??? " );
@@ -910,7 +912,11 @@ System.out.println("acl.length: " + acl.length);
 									}
 
 
-									s = s + "|" + ac.getCodeNamespace();
+                                    if (direction == -1) {
+									    s = s + "|" + ref.getCodeNamespace();
+									} else {
+										s = s + "|" + ac.getCodeNamespace();
+									}
 
 
 System.out.println(s);
