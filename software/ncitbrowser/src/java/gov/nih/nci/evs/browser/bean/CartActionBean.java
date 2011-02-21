@@ -75,6 +75,7 @@ public class CartActionBean {
     private static Logger _logger = Logger.getLogger(SearchUtils.class);
     private String _entity = null;
     private String _codingScheme = null;
+    private String _version = null;
     private HashMap<String, Concept> _cart = null;
     private String _backurl = null;
 
@@ -102,6 +103,14 @@ public class CartActionBean {
         this._codingScheme = codingScheme;
     }
 
+    /**
+     * Set name of parameter to use to acquire the coding scheme version parameter
+     * @param codingScheme
+     */
+    public void setVersion(String version) {
+        this._version = version;
+    }
+    
     /**
      * Return number of items in cart
      * @return
@@ -169,6 +178,8 @@ public class CartActionBean {
 
         // Get coding scheme
         codingScheme = (String)request.getSession().getAttribute(_codingScheme);
+        
+        version = (String)request.getSession().getAttribute(_version);
 
         // Get concept name space
         nameSpace = curr_concept.getEntityCodeNamespace();
@@ -178,7 +189,7 @@ public class CartActionBean {
 
         // Get scheme version
         ResolvedConceptReference ref = null;
-        ref = search.getConceptByCode(codingScheme, code);
+        ref = search.getConceptByCode(codingScheme, version, code);
         version = ref.getCodingSchemeVersion();
 
         // Get concept URL
@@ -197,8 +208,9 @@ public class CartActionBean {
         item.setVersion(version);
         item.setUrl(url);
 
-        if (!_cart.containsKey(code))
-            _cart.put(code,item);
+        String key = item.getKey();
+        if (!_cart.containsKey(key))
+            _cart.put(key,item);
     }
 
     /**
@@ -211,7 +223,7 @@ public class CartActionBean {
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
                 if (item.getSelected()) {
-                    if (_cart.containsKey(item.code))
+                    if (_cart.containsKey(item.getKey()))
                         i.remove();
                 }
             }
@@ -241,7 +253,7 @@ public class CartActionBean {
             // Add all terms from the cart
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept) i.next();
-                ref = search.getConceptByCode(item.codingScheme, item.code);
+                ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
                 if (ref != null) {
                     _logger.debug("Exporting: " + ref.getCode());
 
@@ -256,7 +268,7 @@ public class CartActionBean {
                     Property[] def = search.getDefinitionValues(ref);
                     Property[] prop = search.getPropertyValues(ref);
                     Property[] comm = search.getCommentValues(ref);
-                    xml.addTermTag(item.name, item.code, item.codingScheme,
+                    xml.addTermTag(item.name, item.code, item.codingScheme, /* DYEE item.version, */
                             pres, def, prop, comm, parents, children);
                 }
             }
@@ -298,6 +310,7 @@ public class CartActionBean {
             // Add header
             sb.append("Concept,");
             sb.append("Vocabulary,");
+            sb.append("Version");
             sb.append("Code,");
             sb.append("URL");
             sb.append("\r\n");
@@ -305,11 +318,12 @@ public class CartActionBean {
             // Add concepts
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
-                ref = search.getConceptByCode(item.codingScheme,item.code);
+                ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
                 if (ref != null) {
                     _logger.debug("Exporting: " + ref.getCode());
                     sb.append("\"" + clean(item.name) + "\",");
                     sb.append("\"" + clean(item.codingScheme) + "\",");
+                    sb.append("\"" + clean(item.version) + "\",");
                     sb.append("\"" + clean(item.code) + "\",");
                     sb.append("\"" + clean(item.url) + "\"");
                     sb.append("\r\n");
@@ -346,6 +360,7 @@ public class CartActionBean {
         private boolean selected = false;
         private String version = null;
         private String url = null;
+        private String key = null;
 
         // Getters & setters
 
@@ -403,6 +418,10 @@ public class CartActionBean {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+        
+        public String getKey() {
+        	return code + " (" + codingScheme + " " + version + ")"; 
         }
 
     } // End of Concept

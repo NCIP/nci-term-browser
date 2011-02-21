@@ -15,6 +15,7 @@
           <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
             <f:setPropertyActionListener target="#{CartActionBean.entity}" value="concept" />
             <f:setPropertyActionListener target="#{CartActionBean.codingScheme}" value="dictionary" />
+            <f:setPropertyActionListener target="#{CartActionBean.version}" value="version" />
           </h:commandLink>
         </h:form>
       </td>

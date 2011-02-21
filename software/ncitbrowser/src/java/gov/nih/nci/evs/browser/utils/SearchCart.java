@@ -110,12 +110,16 @@ public class SearchCart {
      * @param code
      * @return
      */
-    public ResolvedConceptReference getConceptByCode(String codingScheme, String code) {
+    public ResolvedConceptReference getConceptByCode(String codingScheme, String version,
+    		String code) {
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
 
         try {
-            cns = lbSvc.getCodingSchemeConcepts(codingScheme, null);
+            CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+            if (version != null) csvt.setVersion(version);
+        	
+            cns = lbSvc.getCodingSchemeConcepts(codingScheme, csvt);
             ConceptReferenceList crefs =
                 createConceptReferenceList(new String[] { code }, codingScheme);
             cns.restrictToCodes(crefs);
