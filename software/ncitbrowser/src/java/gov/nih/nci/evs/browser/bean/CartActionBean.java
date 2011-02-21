@@ -356,7 +356,7 @@ public class CartActionBean {
     public class Concept {
         private String code = null;
         private String codingScheme = null;
-        private String codingSchemeLocalName = null;
+        private String codingSchemeDisplayName = "[Not Set]";
         private String nameSpace = null;
         private String name = null;
         private boolean selected = false;
@@ -378,14 +378,22 @@ public class CartActionBean {
             return this.codingScheme;
         }
 
-        public String getCodingSchemeLocalName() {
-            return this.codingSchemeLocalName;
+        public String getCodingSchemeDisplayName() {
+            return this.codingSchemeDisplayName;
         }
         
         public void setCodingScheme(String codingScheme) {
             this.codingScheme = codingScheme;
-            this.codingSchemeLocalName =
-                DataUtils.getLocalName(codingScheme);
+            initCodingSchemeDisplayName();
+        }
+        
+        private void initCodingSchemeDisplayName() {
+        	if (this.codingScheme == null || this.version == null)
+        		return;
+        	codingSchemeDisplayName = DataUtils.getMetadataValue(
+        	    this.codingScheme, this.version, "display_name");
+            if (codingSchemeDisplayName == null)
+            	codingSchemeDisplayName = DataUtils.getLocalName(this.codingScheme);
         }
 
         public String getNameSpace() {
@@ -418,6 +426,7 @@ public class CartActionBean {
 
         public void setVersion(String version) {
             this.version = version;
+            initCodingSchemeDisplayName();
         }
 
         public String getUrl() {
@@ -429,7 +438,7 @@ public class CartActionBean {
         }
         
         public String getKey() {
-        	return code + " (" + codingSchemeLocalName + " " + version + ")"; 
+        	return code + " (" + codingSchemeDisplayName + " " + version + ")"; 
         }
 
     } // End of Concept
