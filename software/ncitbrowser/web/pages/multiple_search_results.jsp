@@ -277,9 +277,10 @@ if (resultsPerPage == null) {
       name_hmap.put(vocabulary_name, short_vocabulary_name);
         }
 		String version_parameter = DataUtils.getMetadataValue(vocabulary_name, version,
-        "term_browser_version");
+        	"term_browser_version");
 		if (version_parameter != null && version_parameter.length() > 0)
 			version_parameter = " (" + version_parameter + ")";
+		else version_parameter = "";
 
             if (code == null || code.indexOf("@") != -1) {
             if (i % 2 == 0) {
