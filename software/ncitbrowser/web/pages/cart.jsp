@@ -78,7 +78,7 @@
 				    	<td>
 				    		<h:outputLink value="#{item.url}">${item.name}</h:outputLink>
 				    	</td> 
-			            <td>${item.codingScheme}</td>
+			            <td>${item.codingSchemeLocalName} (${item.version})</td>
 			        </tr>
 			    </c:forEach>
 			</table>
