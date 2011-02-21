@@ -1,6 +1,7 @@
 package gov.nih.nci.evs.browser.bean;
 
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import gov.nih.nci.evs.browser.utils.DataUtils;
 import gov.nih.nci.evs.browser.utils.SearchCart;
 import gov.nih.nci.evs.browser.utils.SearchUtils;
 import gov.nih.nci.evs.browser.utils.ExportCartXML;
@@ -355,6 +356,7 @@ public class CartActionBean {
     public class Concept {
         private String code = null;
         private String codingScheme = null;
+        private String codingSchemeLocalName = null;
         private String nameSpace = null;
         private String name = null;
         private boolean selected = false;
@@ -376,8 +378,14 @@ public class CartActionBean {
             return this.codingScheme;
         }
 
+        public String getCodingSchemeLocalName() {
+            return this.codingSchemeLocalName;
+        }
+        
         public void setCodingScheme(String codingScheme) {
             this.codingScheme = codingScheme;
+            this.codingSchemeLocalName =
+                DataUtils.getLocalName(codingScheme);
         }
 
         public String getNameSpace() {
@@ -421,7 +429,7 @@ public class CartActionBean {
         }
         
         public String getKey() {
-        	return code + " (" + codingScheme + " " + version + ")"; 
+        	return code + " (" + codingSchemeLocalName + " " + version + ")"; 
         }
 
     } // End of Concept
