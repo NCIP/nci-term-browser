@@ -261,8 +261,6 @@ if (resultsPerPage == null) {
         String name = rcr.getEntityDescription().getContent();
         String version = rcr.getCodingSchemeVersion();
 
-
-
         String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
         if (vocabulary_name == null) {
       vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
@@ -278,6 +276,10 @@ if (resultsPerPage == null) {
       }
       name_hmap.put(vocabulary_name, short_vocabulary_name);
         }
+		String version_parameter = DataUtils.getMetadataValue(vocabulary_name, version,
+        "term_browser_version");
+		if (version_parameter != null && version_parameter.length() > 0)
+			version_parameter = " (" + version_parameter + ")";
 
             if (code == null || code.indexOf("@") != -1) {
             if (i % 2 == 0) {
@@ -294,7 +296,7 @@ if (resultsPerPage == null) {
                  <%=name%>
               </td>
               <td class="dataCellText">
-                 <%=short_vocabulary_name%>
+                 <%=short_vocabulary_name%><%=version_parameter%>
               </td>
             </tr>
             <%
@@ -342,7 +344,7 @@ if (resultsPerPage == null) {
           %>
           </td>
           <td class="dataCellText">
-            <%=short_vocabulary_name%>
+            <%=short_vocabulary_name%><%=version_parameter%>
           </td>
 
 
@@ -369,7 +371,7 @@ if (resultsPerPage == null) {
           %>
           </td>
           <td class="dataCellText">
-            <%=short_vocabulary_name%>
+            <%=short_vocabulary_name%><%=version_parameter%>
           </td>
 
           <%
