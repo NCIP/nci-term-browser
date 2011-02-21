@@ -1,7 +1,5 @@
 
 <%
-  if (type.compareTo("mapping") == 0 || type.compareTo("all") == 0) {
-
   Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
   String scheme_curr = (String) request.getSession().getAttribute("dictionary");
   if (scheme_curr == null) {
@@ -9,8 +7,19 @@
   }
 
   String version_curr = (String) request.getSession().getAttribute("version");
+  if (version_curr == null) {
+      version_curr = (String) request.getParameter("version");
+  }  
   String code_curr = (String) request.getSession().getAttribute("code");
-        Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
+  
+  
+  boolean isMappingCS = DataUtils.isMapping(scheme_curr, version_curr);
+
+  if (type.compareTo("mapping") == 0 || type.compareTo("all") == 0 && !isMappingCS) {
+
+ 
+  
+  Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
 
 
                 String source_scheme = null;//"NCI_Thesaurus";

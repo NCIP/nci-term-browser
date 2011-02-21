@@ -277,6 +277,7 @@ System.out.println("MappingIteratorBean idx2: " + idx2);
 		String targetCodingSchemeVesion = null;
 		String targetCodeNamespace = null;
 
+
         try {
 			if (iterator == null) {
 				_logger.debug("iterator == null???");

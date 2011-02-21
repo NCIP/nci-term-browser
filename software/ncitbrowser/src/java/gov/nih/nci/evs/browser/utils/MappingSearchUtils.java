@@ -732,5 +732,213 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 		return mappingIteratorBean.getData(0, numberRemaining); // implement getAll
     }
 
+/*
+    public static String TYPE_ROLE = "type_role";
+    public static String TYPE_ASSOCIATION = "type_association";
+    public static String TYPE_SUPERCONCEPT = "type_superconcept";
+    public static String TYPE_SUBCONCEPT = "type_subconcept";
+    public static String TYPE_INVERSE_ROLE = "type_inverse_role";
+    public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
+
+*/
+
+    private String replaceAssociationNameByRela(AssociatedConcept ac,
+        String associationName) {
+        if (ac.getAssociationQualifiers() == null)
+            return associationName;
+        if (ac.getAssociationQualifiers().getNameAndValue() == null)
+            return associationName;
+
+        for (NameAndValue qual : ac.getAssociationQualifiers()
+            .getNameAndValue()) {
+            String qualifier_name = qual.getName();
+            String qualifier_value = qual.getContent();
+            if (qualifier_name.compareToIgnoreCase("rela") == 0) {
+                return qualifier_value; // replace associationName by Rela value
+            }
+        }
+        return associationName;
+    }
+
+
+    public HashMap getMappingRelationshipHashMap(String scheme, String version, String code) {
+        HashMap hmap = new HashMap();
+		HashMap map1 = getMappingRelationshipHashMap(scheme, version, code, 1);
+        ArrayList list = (ArrayList) map1.get(TYPE_ASSOCIATION);
+        if (list != null) {
+			hmap.put(TYPE_ASSOCIATION, list);
+		}
+		HashMap map2 = getMappingRelationshipHashMap(scheme, version, code, -1);
+        list = (ArrayList) map2.get(TYPE_INVERSE_ASSOCIATION);
+        if (list != null) {
+			hmap.put(TYPE_INVERSE_ASSOCIATION, list);
+		}
+		return hmap;
+	}
+
+
+    public HashMap getMappingRelationshipHashMap(
+        String scheme, String version, String code, int direction) {
+
+System.out.println("========== Calling getMappingRelationshipHashMap direction " + direction);
+
+
+		SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES;
+		if (direction == 1) searchContext = SearchContext.SOURCE_CODES;
+        else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
+
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        LexBIGServiceConvenienceMethods lbscm =
+            new DataUtils().createLexBIGServiceConvenienceMethods(lbSvc);
+
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
+
+
+        ResolvedConceptReferencesIteratorWrapper wrapper = searchByCode(
+         scheme, version, code, "exactMatch", searchContext, -1);
+
+        if (wrapper == null) return null;
+        ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
+        if (iterator == null) return null;
+
+        HashMap hmap = new HashMap();
+        ArrayList list = new ArrayList();
+
+int knt = 0;
+
+        try {
+			while (iterator.hasNext()) {
+
+knt++;
+System.out.println("knt: " + knt);
+
+
+				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
+
+System.out.println("ref.etCode(): " + ref.getCode());
+System.out.println("ref name: " + ref.getEntityDescription().getContent());
+System.out.println("ref coding scheme: " + ref.getCodingSchemeName());
+
+				AssociationList asso_of = ref.getTargetOf();
+				if (direction == -1) {
+					asso_of = ref.getSourceOf();
+				}
+
+				if (asso_of == null) {
+System.out.println("asso_of == null ??? " );
+				}
+
+
+				if (asso_of != null) {
+					Association[] associations =
+						asso_of.getAssociation();
+				    if (associations == null) {
+System.out.println("associations == null??? " );
+
+					}
+					if (associations != null) {
+
+
+System.out.println("associations.length: " + associations.length);
+
+
+						for (int i = 0; i < associations.length; i++) {
+							Association assoc = associations[i];
+							String associationName = null;
+							try {
+								associationName = lbscm
+									.getAssociationNameFromAssociationCode(
+										scheme, csvt, assoc
+											.getAssociationName());
+							} catch (Exception ex) {
+								associationName = assoc.getAssociationName();
+							}
+
+System.out.println("associationName: " + associationName);
+
+
+							AssociatedConcept[] acl =
+								assoc.getAssociatedConcepts()
+									.getAssociatedConcept();
+
+System.out.println("acl.length: " + acl.length);
+
+
+
+							for (int j = 0; j < acl.length; j++) {
+								AssociatedConcept ac = acl[j];
+
+								EntityDescription ed =
+									ac.getEntityDescription();
+
+								String name = "No Description";
+								if (ed != null)
+									name = ed.getContent();
+								String pt = name;
+
+								if (associationName
+									.compareToIgnoreCase("equivalentClass") != 0
+									&& ac.getConceptCode().indexOf("@") == -1) {
+
+									String relaValue =
+										replaceAssociationNameByRela(
+											ac, associationName);
+
+									String s =
+										relaValue + "|" + pt + "|"
+											 + ac.getConceptCode() + "|"
+											 + ac.getCodingSchemeName();
+
+                                    if (direction == -1) {
+										s = relaValue + "|" + ref.getEntityDescription().getContent() + "|"
+											 + ref.getCode() + "|"
+											 + ref.getCodingSchemeName();
+									}
+
+									if (ac.getAssociationQualifiers() != null) {
+										String qualifiers = "";
+										for (NameAndValue qual : ac
+												.getAssociationQualifiers()
+												.getNameAndValue()) {
+											String qualifier_name = qual.getName();
+											String qualifier_value = qual.getContent();
+											qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+										}
+										s = s + "|" + qualifiers;
+									}
+
+
+									s = s + "|" + ac.getCodeNamespace();
+
+
+System.out.println(s);
+
+
+									list.add(s);
+
+								}
+							}
+						}
+					}
+				}
+			}
+			if (list.size() > 0) {
+				Collections.sort(list);
+			}
+
+			if (direction == 1) {
+				hmap.put(TYPE_ASSOCIATION, list);
+			} else {
+				hmap.put(TYPE_INVERSE_ASSOCIATION, list);
+			}
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return hmap;
+
+	}
+
 
 }
