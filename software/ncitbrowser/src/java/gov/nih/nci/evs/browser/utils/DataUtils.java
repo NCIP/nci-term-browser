@@ -4492,10 +4492,5 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
 
 
 
-    // To be implemented:
-    public static Vector filterValueSetMetadata(Vector metadata_vec, String codingSchemeName) {
-
-        return null;
-	}
 
 }

@@ -633,7 +633,31 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
     }
 
 
-	  public static void main(String[] args) {
+    public static Vector filterValueSetMetadata(Vector metadata_vec, String codingSchemeName) {
+		if (codingSchemeName.compareTo("ALL") == 0) return metadata_vec;
+		Vector w = new Vector();
+        for (int i=0; i<metadata_vec.size(); i++) {
+		    String vsd_str = (String) metadata_vec.elementAt(i);
+		    Vector u = DataUtils.parseData(vsd_str);
+		    String uri = (String) u.elementAt(1);
+		    Vector cs_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(uri);
+
+		    if (cs_vec.contains(codingSchemeName)) {
+				w.add(vsd_str);
+			}
+		}
+        return w;
+	}
+
+    public static boolean containsConceptInCodingScheme(String vsd_uri, String codingSchemeName) {
+		if (codingSchemeName.compareTo("ALL") == 0) return true;
+	    Vector cs_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(vsd_uri);
+        if (cs_vec.contains(codingSchemeName)) return true;
+        return false;
+	}
+
+
+	public static void main(String[] args) {
 
 		try {
 

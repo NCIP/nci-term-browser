@@ -346,6 +346,7 @@ public class ValueSetBean {
 		System.out.println("(*) valueSetSearchAction selectURI: " + selectURI);
 
         String selectCodingScheme = getSelectedOntology(); //(String) request.getParameter("selectedOntology");
+        System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
         String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
 
         LexEVSValueSetDefinitionServices vsd_service = null;
@@ -375,11 +376,12 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
 				if (list != null) {
 					System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");
-
+/*
 					if (list.size() == 1) {
 						String vsd_uri = (String) list.get(0);
 						request.getSession().setAttribute("vsd_uri", vsd_uri);
 					}
+*/
 
 					for (int j=0; j<list.size(); j++) {
 						uri = (String) list.get(j);
@@ -392,7 +394,6 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 								request.getSession().setAttribute("message", msg);
 								return "message";
 							}
-
 
 							String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
 							if (metadata != null) {
@@ -510,7 +511,7 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 			msg = "Unexpected errors encountered; search by name failed.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
-
+/*
 		} else if (selectValueSetSearchOption.compareTo("URI") == 0) {
 			System.out.println("valueSetSearchAction selectURI: " + selectURI);
 
@@ -545,18 +546,18 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 			}
 
 			return "value_set";
+*/
+
 		}
 
 		else if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
-			System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
             String uri = null;
 			if (selectCodingScheme != null) {
 
-				if (selectCodingScheme.compareTo("ALL") == 0 && matchText.compareTo("") == 0) {
+				if (selectCodingScheme.compareTo("ALL") == 0) {
 					request.getSession().setAttribute("view", "terminology");
 					return "all_value_sets";
 				}
-
 
 				try {
                     List uri_list = vsd_service.getValueSetDefinitionURIsWithCodingScheme(selectCodingScheme,
@@ -662,7 +663,7 @@ System.out.println("uri: " + uri);
 			}
 
 			return "value_set";
-
+/*
 		} else if (selectValueSetSearchOption.compareTo("ConceptDomain") == 0) {
 			System.out.println("valueSetSearchAction selectConceptDomain: " + selectConceptDomain);
 
@@ -710,6 +711,8 @@ System.out.println("(********) metadata " + metadata);
 			}
 
 			return "value_set";
+*/
+
 		}
 
 
