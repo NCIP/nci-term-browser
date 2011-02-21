@@ -780,9 +780,6 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
     public HashMap getMappingRelationshipHashMap(
         String scheme, String version, String code, int direction) {
 
-System.out.println("========== Calling getMappingRelationshipHashMap direction " + direction);
-
-
 		SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES;
 		if (direction == 1) searchContext = SearchContext.SOURCE_CODES;
         else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
@@ -805,46 +802,16 @@ System.out.println("========== Calling getMappingRelationshipHashMap direction "
 
         HashMap hmap = new HashMap();
         ArrayList list = new ArrayList();
-
-int knt = 0;
-
         try {
 			while (iterator.hasNext()) {
-
-knt++;
-System.out.println("knt: " + knt);
-
-
 				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
-
-System.out.println("ref.etCode(): " + ref.getCode());
-System.out.println("ref name: " + ref.getEntityDescription().getContent());
-System.out.println("ref coding scheme: " + ref.getCodingSchemeName());
-/*
-				AssociationList asso_of = ref.getTargetOf();
-				if (direction == -1) {
-					asso_of = ref.getSourceOf();
-				}
-*/
-AssociationList asso_of = ref.getSourceOf();
-
-				if (asso_of == null) {
-System.out.println("asso_of == null ??? " );
-				}
-
+				AssociationList asso_of = ref.getSourceOf();
 
 				if (asso_of != null) {
 					Association[] associations =
 						asso_of.getAssociation();
-				    if (associations == null) {
-System.out.println("associations == null??? " );
 
-					}
 					if (associations != null) {
-
-
-System.out.println("associations.length: " + associations.length);
-
 
 						for (int i = 0; i < associations.length; i++) {
 							Association assoc = associations[i];
@@ -858,16 +825,9 @@ System.out.println("associations.length: " + associations.length);
 								associationName = assoc.getAssociationName();
 							}
 
-System.out.println("associationName: " + associationName);
-
-
 							AssociatedConcept[] acl =
 								assoc.getAssociatedConcepts()
 									.getAssociatedConcept();
-
-System.out.println("acl.length: " + acl.length);
-
-
 
 							for (int j = 0; j < acl.length; j++) {
 								AssociatedConcept ac = acl[j];
@@ -917,10 +877,6 @@ System.out.println("acl.length: " + acl.length);
 									} else {
 										s = s + "|" + ac.getCodeNamespace();
 									}
-
-
-System.out.println(s);
-
 
 									list.add(s);
 
