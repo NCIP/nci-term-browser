@@ -657,7 +657,7 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
 			%>
 			       <tr>
 				 <td>
-				 <%=mapping_cs_uri%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
+				 <%=mapping_cs_name%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
 					<a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%>&version=<%=mapping_cs_version%>&code=<%=code_curr%>&type=relationship">
 					   <i class="textbodyred">View Mapping</i>
 					</a>
