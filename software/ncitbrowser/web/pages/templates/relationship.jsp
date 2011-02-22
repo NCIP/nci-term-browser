@@ -36,11 +36,19 @@ System.out.println("(**********************************************************)
 
     HashMap hmap = null;
     if (isMapping) {
+System.out.println("*** (MAPPING)");     
             hmap = new MappingSearchUtils().getMappingRelationshipHashMap(scheme_curr, version_curr, code_curr);
     } else {
+    
+System.out.println("*** (NOT MAPPING)");   
+    
 	    hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
 	    if (hmap == null) {
 	      DataUtils util = new DataUtils();
+System.out.println("*** Calling getRelationshipHashMap scheme_curr " + scheme_curr);   
+System.out.println("*** Calling getRelationshipHashMap version_curr " + version_curr);   
+System.out.println("*** Calling getRelationshipHashMap code_curr " + code_curr);   
+	      
 	      hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
 	    }
     }
