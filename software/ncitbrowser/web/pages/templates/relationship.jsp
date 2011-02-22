@@ -306,10 +306,13 @@ if (inverse_associations == null) {
       String rel_str = (String) v.elementAt(0);
       int m1 = rel_str.indexOf(":");
       rel = rel_str.substring(m1+1, rel_str.length());
-      String score_str = (String) v.elementAt(1);
-      int m2 = score_str.indexOf(":");
-      score = score_str.substring(m2+1, score_str.length());
-
+      String score_str = "0";
+      score = score_str;
+      if (v.size() > 1) {
+          score_str = (String) v.elementAt(1);
+          int m2 = score_str.indexOf(":");
+          score = score_str.substring(m2+1, score_str.length());
+      }
       target_namespace = (String) ret_vec.elementAt(5);
   }
 
@@ -417,9 +420,14 @@ if (!isMapping) {
       String rel_str = (String) v.elementAt(0);
       int m1 = rel_str.indexOf(":");
       rel = rel_str.substring(m1+1, rel_str.length());
-      String score_str = (String) v.elementAt(1);
-      int m2 = score_str.indexOf(":");
-      score = score_str.substring(m2+1, score_str.length());
+      
+      String score_str = "0";
+      score = score_str;
+      if (v.size() > 1) {
+          score_str = (String) v.elementAt(1);
+          int m2 = score_str.indexOf(":");
+          score = score_str.substring(m2+1, score_str.length());
+      }      
   }
 
         if (n1 % 2 == 0) {
@@ -545,9 +553,14 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
         String rel_str = (String) v.elementAt(0);
         int m1 = rel_str.indexOf(":");
         rel = rel_str.substring(m1+1, rel_str.length());
-        String score_str = (String) v.elementAt(1);
-        int m2 = score_str.indexOf(":");
-        score = score_str.substring(m2+1, score_str.length());
+        
+        String score_str = "0";
+        score = score_str;
+        if (v.size() > 1) {
+          score_str = (String) v.elementAt(1);
+          int m2 = score_str.indexOf(":");
+          score = score_str.substring(m2+1, score_str.length());
+        }        
       }
       if (ret_vec.size() > 5) {
           target_namespace = (String) ret_vec.elementAt(5);
