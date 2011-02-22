@@ -1837,7 +1837,7 @@ System.out.println("querying relationship data ...");
 															String qualifier_value = qual.getContent();
 															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
 
-														System.out.println("qualifiers: " + qualifiers);
+														    System.out.println("qualifiers: " + qualifiers);
 
 														}
 														s = s + "|" + qualifiers;
@@ -1860,7 +1860,7 @@ System.out.println("querying relationship data ...");
                                                     // + s);
                                                     associationList.add(s);
 
-                                                    System.out.println("Add to association list: " + s);
+                                                    //System.out.println("Add to association list: " + s);
                                                 }
 
                                             }
@@ -2025,7 +2025,7 @@ System.out.println("querying relationship data ...");
                                                 } else {
                                                     inverse_associationList
                                                         .add(s);
-                                                    System.out.println("Add to inverse_associationList list: " + s);
+                                                    //System.out.println("Add to inverse_associationList list: " + s);
                                                 }
                                             }
 
@@ -3153,7 +3153,7 @@ System.out.println("querying relationship data ...");
 
             CodingSchemeVersionOrTag versionOrTag =
                 new CodingSchemeVersionOrTag();
-            versionOrTag.setVersion(version);
+            if (version != null) versionOrTag.setVersion(version);
 
             ConceptReferenceList crefs =
                 createConceptReferenceList(new String[] { code }, scheme);
@@ -3169,7 +3169,7 @@ System.out.println("querying relationship data ...");
 
             try {
                 LocalNameList propertyNames = new LocalNameList();
-                propertyNames.addEntry(propertyName);
+                if (propertyName != null) propertyNames.addEntry(propertyName);
                 CodedNodeSet.PropertyType[] propertyTypes = null;
 
                 long ms = System.currentTimeMillis(), delay = 0;
@@ -3203,13 +3203,17 @@ System.out.println("querying relationship data ...");
                 return null;
 
             } catch (Exception e) {
-                _logger.error("Method: SearchUtil.searchByProperties");
-                _logger.error("* ERROR: cns.resolve throws exceptions.");
+                _logger.error("Method: SearchUtil.getConceptWithProperty");
+                _logger.error("* ERROR: getConceptWithProperty throws exceptions.");
                 _logger.error("* " + e.getClass().getSimpleName() + ": "
                     + e.getMessage());
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         } catch (Exception ex) {
+                _logger.error("Method: SearchUtil.getConceptWithProperty");
+                _logger.error("* ERROR: getConceptWithProperty throws exceptions.");
+                _logger.error("* " + ex.getClass().getSimpleName() + ": "
+                    + ex.getMessage());
 
         }
         return null;
@@ -3220,8 +3224,12 @@ System.out.println("querying relationship data ...");
             return null;
         Vector v = new Vector();
         Property[] properties = c.getProperty();
+
         for (int j = 0; j < properties.length; j++) {
             Property prop = properties[j];
+            //int i = j+1;
+            //System.out.println("(" + i + ")" + prop.getPropertyName());
+
             if (prop.getPropertyName().compareTo(propertyName) == 0) {
                 v.add(prop.getValue().getContent());
             }
@@ -4490,6 +4498,35 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
         return "<NOT AVAILABLE>";
     }
 
+
+    public static Vector getMatchedMetathesaurusCUIs(String scheme, String version,
+        String ltag, String code) {
+
+System.out.println("(*) getMatchedMetathesaurusCUIs scheme: " + scheme);
+System.out.println("(*) getMatchedMetathesaurusCUIs version: " + version);
+System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
+
+
+        Entity c = getConceptByCode(scheme, version, ltag, code);
+        //Entity c = getConceptWithProperty(scheme, version, code, "NCI_META_CUI");
+        if (c != null) {
+            Vector v = getConceptPropertyValues(c, "NCI_META_CUI");
+            if (v == null || v.size() == 0) {
+				return getConceptPropertyValues(c, "UMLS_CUI");
+			}        }
+        return null;
+    }
+
+
+    public static Vector getMatchedMetathesaurusCUIs(Entity c) {
+        if (c != null) {
+            Vector v = getConceptPropertyValues(c, "NCI_META_CUI");
+            if (v == null || v.size() == 0) {
+				return getConceptPropertyValues(c, "UMLS_CUI");
+			}
+        }
+        return null;
+    }
 
 
 
