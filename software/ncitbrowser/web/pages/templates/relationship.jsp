@@ -630,48 +630,78 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
 
 
 <%
- if (!isMapping) {
+      if (!isMapping) {
 
         Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
-        if (mapping_uri_version_vec != null && mapping_uri_version_vec.size() > 0) {
+        Entity con = (Entity) request.getSession().getAttribute("concept");
+	Vector meta_cui_vec = DataUtils.getMatchedMetathesaurusCUIs(con);//scheme_curr, version_curr, null, code_curr);
+        
+        if ((mapping_uri_version_vec != null && mapping_uri_version_vec.size() > 0) || (meta_cui_vec != null && meta_cui_vec.size() > 0))
+        {
+                String ncim_url = NCItBrowserProperties.getNCIM_URL();
 %>
+		<p>
+		    <b>Mapping Relationships:</b>
+		<br/>
+		<table class="dataTable">
+		<%
+                  if (mapping_uri_version_vec != null) {
+			  for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
+			       String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
+			       Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
+			       String mapping_cs_uri = (String) ret_vec.elementAt(0);
+			       String mapping_cs_version = (String) ret_vec.elementAt(1);
 
-<p>
-    <b>Mapping Relationships:</b>
-<br/>
-<table class="dataTable">
-<%
+			       String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
 
-  for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
-       String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
-       Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
-       String mapping_cs_uri = (String) ret_vec.elementAt(0);
-       String mapping_cs_version = (String) ret_vec.elementAt(1);
+			%>
+			       <tr>
+				 <td>
+				 <%=mapping_cs_uri%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
+					<a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%>&version=<%=mapping_cs_version%>&code=<%=code_curr%>&type=relationship">
+					   <i class="textbodyred">View Mapping</i>
+					</a>
+				 </td>
+			       </tr>
+			<%
 
-       String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
-
-%>
-       <tr>
-         <td>
-         <%=mapping_cs_uri%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%>&version=<%=mapping_cs_version%>&code=<%=code_curr%>&type=relationship">
-                   <i class="textbodyred">View Mapping</i>
-                </a>
-         </td>
-             </tr>
-<%
-
-  }
-
-%>
+			  }
+		  }
 
 
-</table>
-</p>
+                if (meta_cui_vec != null) {
+			for(int lcv=0; lcv<meta_cui_vec.size(); lcv++) {
+			       String meta_cui = (String) meta_cui_vec.elementAt(lcv);
+			       String ncim_cs_name = "NCI Metathesaurus";
 
-<%
-}
-}
+			%>
+			       <tr>
+				 <td>
+
+					  <%=ncim_cs_name%>&nbsp;
+
+					    <a href="<%= ncim_url %>/ConceptReport.jsp?dictionary=<%=ncim_cs_name%>&code=<%=meta_cui%>&type=synonym" target="_blank">
+					      <i class="textbody"><%=meta_cui%></i>
+					      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=ncim_cs_name%>" />
+					    </a>
+
+				 </td>
+			       </tr>
+			<%
+			}
+		}
+                %> 
+
+		</table>
+		</p>
+
+
+	  <%
+	}
+
+     } //ismapping
+
+
 }
 %>
 

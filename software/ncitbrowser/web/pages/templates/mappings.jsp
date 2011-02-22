@@ -1,5 +1,8 @@
 
 <%
+  if (type.compareTo("mapping") == 0 || type.compareTo("all") == 0) {
+
+
   Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
   String scheme_curr = (String) request.getSession().getAttribute("dictionary");
   if (scheme_curr == null) {
@@ -14,10 +17,8 @@
   
   
   boolean isMappingCS = DataUtils.isMapping(scheme_curr, version_curr);
-
-  if (type.compareTo("mapping") == 0 || type.compareTo("all") == 0 && !isMappingCS) {
-
- 
+  
+  if(!isMappingCS) {
   
   Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
 
@@ -392,5 +393,6 @@ if (show_rank_column) {
                  }
             }
         }
+      }
     }
 %>
