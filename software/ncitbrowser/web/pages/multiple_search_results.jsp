@@ -270,17 +270,20 @@ if (resultsPerPage == null) {
         if (name_hmap.containsKey(vocabulary_name)) {
       short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
         } else {
-      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, version, "display_name"); //DYEE_Test
+      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, version, "display_name");
       if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
           short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
       }
       name_hmap.put(vocabulary_name, short_vocabulary_name);
         }
-		String version_parameter = DataUtils.getMetadataValue(vocabulary_name, version,
+        String version_parameter = "";
+        if (version != null && version.length() > 0)
+            version_parameter = "&version=" + version;
+		String version_parameter_display = DataUtils.getMetadataValue(vocabulary_name, version,
         	"term_browser_version");
-		if (version_parameter != null && version_parameter.length() > 0)
-			version_parameter = " (" + version_parameter + ")";
-		else version_parameter = "";
+		if (version_parameter_display != null && version_parameter_display.length() > 0)
+			version_parameter_display = " (" + version_parameter_display + ")";
+		else version_parameter_display = "";
 
             if (code == null || code.indexOf("@") != -1) {
             if (i % 2 == 0) {
@@ -297,16 +300,15 @@ if (resultsPerPage == null) {
                  <%=name%>
               </td>
               <td class="dataCellText">
-                 <%=short_vocabulary_name%><%=version_parameter%>
+                 <%=short_vocabulary_name%><%=version_parameter_display%>
               </td>
             </tr>
             <%
             } else {
 
-            String con_status = DataUtils.getConceptStatus(vocabulary_name, null, null, code);
-
+            String con_status = DataUtils.getConceptStatus(vocabulary_name, version, null, code);
             if (con_status != null) {
-          con_status = con_status.replaceAll("_", " ");
+                con_status = con_status.replaceAll("_", " ");
             }
 
             String vocabulary_name_encoded = null;
@@ -330,7 +332,7 @@ if (resultsPerPage == null) {
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=version%>&code=<%=code%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>" ><%=name%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
@@ -339,13 +341,13 @@ if (resultsPerPage == null) {
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=version%>&code=<%=code%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>" ><%=name%></a>
           <%
           }
           %>
           </td>
           <td class="dataCellText">
-            <%=short_vocabulary_name%><%=version_parameter%>
+            <%=short_vocabulary_name%><%=version_parameter_display%>
           </td>
 
 
@@ -357,7 +359,7 @@ if (resultsPerPage == null) {
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
@@ -366,13 +368,13 @@ if (resultsPerPage == null) {
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           }
           %>
           </td>
           <td class="dataCellText">
-            <%=short_vocabulary_name%><%=version_parameter%>
+            <%=short_vocabulary_name%><%=version_parameter_display%>
           </td>
 
           <%
