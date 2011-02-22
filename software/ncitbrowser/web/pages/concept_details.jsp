@@ -36,11 +36,7 @@
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <%
-  String dictionary = null;
-  String version = null, deprecatedVersion = null;
-  dictionary = (String) request.getParameter("dictionary");
-  version = (String) request.getParameter("version");
-
+  String dictionary = (String) request.getParameter("dictionary");
   if (dictionary != null) {
     dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
     dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
@@ -50,12 +46,12 @@
     dictionary = (String) request.getSession().getAttribute("dictionary");
   }
 
-  if (version == null)
-    version = (String) request.getSession().getAttribute("version");
+  String deprecatedVersion = null;
+  String version = (String) request.getParameter("version");
   if (version == null)
     version = (String) request.getAttribute("version");
 
-  //System.out.println("concept_details.jsp version: " + version);  
+  System.out.println("concept_details.jsp version: " + version);  
   request.setAttribute("version", version);
 
   if (dictionary.compareTo("NCI Thesaurus") == 0) {
