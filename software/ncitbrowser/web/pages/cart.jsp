@@ -76,9 +76,9 @@
 				    </c:choose>   
 				    	<td><h:selectBooleanCheckbox value="#{item.selected}"/></td>
 				    	<td>
-				    		<h:outputLink value="#{item.url}">${item.name}</h:outputLink>
+				    		<h:outputLink value="#{item.url}">${item.name}</h:outputLink> ${item.displayStatus}
 				    	</td> 
-			            <td>${item.codingSchemeDisplayName} (${item.version})</td>
+			            <td>${item.displayCodingSchemeName} (${item.version})</td>
 			        </tr>
 			    </c:forEach>
 			</table>
