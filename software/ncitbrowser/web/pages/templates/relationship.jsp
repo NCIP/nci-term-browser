@@ -234,23 +234,6 @@ if (inverse_associations == null) {
                   <%=target_concept_name%>
                 </a>
               </td>
-
-
-              <%
-              if (isMapping) {
-              %>
-              <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
-                  <%=target_concept_code%>
-                </a>
-              </td>
-              <td><%=rel%></td>
-              <td><%=score%></td>
-              <%
-              }
-              %>
-
-
             </tr>
       <%
       }
@@ -283,11 +266,28 @@ if (inverse_associations == null) {
 <i>(Associations are true only for the current concept.)</i>
 <table class="dataTable">
 
+
+  <%
+   if (isMapping) {
+   %>
+       <th class="dataTableHeader" scope="col" align="left">Relationship</th>
+       <th class="dataTableHeader" scope="col" align="left">Name</th>
+       <th class="dataTableHeader" scope="col" align="left">Code</th>
+       <th class="dataTableHeader" scope="col" align="left">Target</th>
+       <th class="dataTableHeader" scope="col" align="left">REL</th>
+       <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
+   <%
+   }
+ %>
+
+
+
   <%
     int n2 = 0;
 
     for (int i=0; i<associations.size(); i++) {
       String s = (String) associations.get(i);
+     
       Vector ret_vec = DataUtils.parseData(s, "|");
       String role_name = (String) ret_vec.elementAt(0);
       String target_concept_name = (String) ret_vec.elementAt(1);
@@ -313,7 +313,10 @@ if (inverse_associations == null) {
           int m2 = score_str.indexOf(":");
           score = score_str.substring(m2+1, score_str.length());
       }
-      target_namespace = (String) ret_vec.elementAt(5);
+      target_namespace = "NOT AVAILABLE";
+      if(ret_vec.size() > 5) {
+           target_namespace = (String) ret_vec.elementAt(5);
+      }
   }
 
       if (n2 % 2 == 0) {
@@ -347,7 +350,7 @@ if (inverse_associations == null) {
               if (isMapping) {
               %>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
               </td>
@@ -463,7 +466,7 @@ if (!isMapping) {
               if (isMapping) {
               %>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
               </td>
@@ -518,7 +521,7 @@ if (!isMapping) {
    %>
        <th class="dataTableHeader" scope="col" align="left">Name</th>
        <th class="dataTableHeader" scope="col" align="left">Code</th>
-       <th class="dataTableHeader" scope="col" align="left">Namespace</th>
+       <th class="dataTableHeader" scope="col" align="left">Source</th>
        <th class="dataTableHeader" scope="col" align="left">Relationship</th>
        <th class="dataTableHeader" scope="col" align="left">REL</th>
        <th class="dataTableHeader" scope="col" align="left">Map Rank</th>
@@ -600,16 +603,19 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
               if (isMapping) {
               %>
               <td>
-                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
+                <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%>&code=<%=target_concept_code%>">
                   <%=target_concept_code%>
                 </a>
               </td>
               <td><%=target_namespace%></td>
               <%
-              }
+              } 
               %>
 
               <td><%=role_name%></td>
+              
+              
+              
               <%
               if (isMapping) {
               %>
