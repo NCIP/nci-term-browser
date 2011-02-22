@@ -119,6 +119,11 @@ public class IteratorBean extends Object {
                 _size = 0;
             } else {
                 _size = _iterator.numberRemaining();
+
+
+                System.out.println("(***) IteratorBean numberRemaining: " + _size);
+
+
             }
             _pageNumber = 1;
             /*

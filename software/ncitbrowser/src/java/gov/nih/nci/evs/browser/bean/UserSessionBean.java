@@ -485,7 +485,7 @@ System.out.println("Relationship search ****************************************
                     if (iterator != null) {
 						try {
 							int numberOfMatches = iterator.numberRemaining();
-System.out.println("Relationship search numberOfMatches: " + numberOfMatches);
+							System.out.println("Relationship search numberOfMatches: " + numberOfMatches);
 
 						} catch (Exception ex) {
 
@@ -592,35 +592,6 @@ System.out.println("Relationship search numberOfMatches: " + numberOfMatches);
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
-/*
-                //KLO, 021511
-
-				isMapping = DataUtils.isMapping(scheme, version);
-
-				if (isMapping) {
-
-	System.out.println("(*************) creating mappingIteratorBean");
-
-
-					  MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
-						iterator,
-						numberRemaining, // number remaining
-						0,    // istart
-						50,   // iend,
-						numberRemaining, // size,
-						0,    // pageNumber,
-						1);   // numberPages
-
-
-request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
-
-	System.out.println("(*************) returning mapping_search_results");
-
-
-
-					return "mapping_search_results";
-				}
-*/
 
                 return "concept_details";
             }
