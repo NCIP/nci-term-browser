@@ -73,7 +73,7 @@ import org.apache.log4j.Logger;
 public class CartActionBean {
 
     // Local class variables
-    private static Logger _logger = Logger.getLogger(SearchUtils.class);
+    private static Logger _logger = Logger.getLogger(CartActionBean.class);
     private String _entity = null;
     private String _codingScheme = null;
     private String _version = null;
@@ -210,8 +210,12 @@ public class CartActionBean {
         item.setUrl(url);
 
         String key = item.getKey();
-        if (!_cart.containsKey(key))
+        if (!_cart.containsKey(key)) {
             _cart.put(key,item);
+            _logger.debug("Added: " + key);
+        } else {
+            _logger.debug("Already exists: " + key);
+        }
     }
 
     /**
