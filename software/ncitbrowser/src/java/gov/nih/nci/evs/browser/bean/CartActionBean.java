@@ -3,7 +3,6 @@ package gov.nih.nci.evs.browser.bean;
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 import gov.nih.nci.evs.browser.utils.DataUtils;
 import gov.nih.nci.evs.browser.utils.SearchCart;
-import gov.nih.nci.evs.browser.utils.SearchUtils;
 import gov.nih.nci.evs.browser.utils.ExportCartXML;
 
 import java.util.Collection;
@@ -360,13 +359,13 @@ public class CartActionBean {
     public class Concept {
         private String code = null;
         private String codingScheme = null;
-        private String codingSchemeDisplayName = "[Not Set]";
         private String nameSpace = null;
         private String name = null;
         private boolean selected = false;
         private String version = null;
         private String url = null;
-        private String key = null;
+        private String displayStatus = "[Not Set]";
+        private String displayCodingSchemeName = "[Not Set]";
 
         // Getters & setters
 
@@ -376,30 +375,23 @@ public class CartActionBean {
 
         public void setCode(String code) {
             this.code = code;
+            initDisplayStatus();
         }
 
         public String getCodingScheme() {
             return this.codingScheme;
         }
 
-        public String getCodingSchemeDisplayName() {
-            return this.codingSchemeDisplayName;
+        public String getDisplayCodingSchemeName() {
+            return this.displayCodingSchemeName;
         }
         
         public void setCodingScheme(String codingScheme) {
             this.codingScheme = codingScheme;
-            initCodingSchemeDisplayName();
+            initDisplayStatus();
+            initDisplayCodingSchemeName();
         }
         
-        private void initCodingSchemeDisplayName() {
-        	if (this.codingScheme == null || this.version == null)
-        		return;
-        	codingSchemeDisplayName = DataUtils.getMetadataValue(
-        	    this.codingScheme, this.version, "display_name");
-            if (codingSchemeDisplayName == null)
-            	codingSchemeDisplayName = DataUtils.getLocalName(this.codingScheme);
-        }
-
         public String getNameSpace() {
             return this.nameSpace;
         }
@@ -410,6 +402,10 @@ public class CartActionBean {
 
         public String getName() {
             return this.name;
+        }
+
+        public String getDisplayStatus() {
+            return this.displayStatus;
         }
 
         public void setName(String name) {
@@ -430,7 +426,8 @@ public class CartActionBean {
 
         public void setVersion(String version) {
             this.version = version;
-            initCodingSchemeDisplayName();
+            initDisplayStatus();
+            initDisplayCodingSchemeName();
         }
 
         public String getUrl() {
@@ -442,7 +439,29 @@ public class CartActionBean {
         }
         
         public String getKey() {
-        	return code + " (" + codingSchemeDisplayName + " " + version + ")"; 
+        	return code + " (" + displayCodingSchemeName + " " + version + ")"; 
+        }
+        
+        private void initDisplayStatus() {
+            if (this.codingScheme == null || this.version == null || this.code == null)
+                return;
+            
+            String status = DataUtils.getConceptStatus(
+                this.codingScheme, this.version, null, this.code);
+            if (status == null || status.length() <= 0)
+                return;
+            status = status.replaceAll("_", " ");
+            displayStatus = "(" + status + ")";
+        }
+
+        private void initDisplayCodingSchemeName() {
+            if (this.codingScheme == null || this.version == null)
+                return;
+            displayCodingSchemeName = DataUtils.getMetadataValue(
+                this.codingScheme, this.version, "display_name");
+            if (displayCodingSchemeName == null)
+                displayCodingSchemeName = 
+                    DataUtils.getLocalName(this.codingScheme);
         }
 
     } // End of Concept
