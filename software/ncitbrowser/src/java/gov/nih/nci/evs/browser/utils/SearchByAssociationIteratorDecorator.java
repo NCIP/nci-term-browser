@@ -229,11 +229,6 @@ public class SearchByAssociationIteratorDecorator extends
 			focus.setCodingSchemeName(hit.getCodingSchemeName());
 			focus.setCodeNamespace(hit.getCodeNamespace());
 
-			/*
-			ResolvedConceptReferenceList list =
-				cng.resolveAsList(focus, true, true, 0, 1, null, null, null, -1);
-            */
-
 			LocalNameList propertyNames = new LocalNameList();
 			CodedNodeSet.PropertyType[] propertyTypes = null;
 			SortOptionList sortCriteria = null;
