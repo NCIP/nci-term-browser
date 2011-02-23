@@ -56,95 +56,77 @@ public class JSPUtils {
     }
 
     public static class JSPHeaderInfo {
-        public String hdr_dictionary;
-        public String hdr_version;
-        public String hdr_version_deprecated;
-        public String content_hdr_shortName;
-        public String content_hdr_formalName;
+        public String dictionary;
+        public String version;
+        public String version_deprecated;
+        public String short_name;
+        public String formal_name;
         public String display_name;
         public String term_browser_version;
-    }
 
-    public static JSPHeaderInfo getJSPHeaderInfo(HttpServletRequest request) {
-        JSPHeaderInfo info = new JSPHeaderInfo();
+        public JSPHeaderInfo(HttpServletRequest request) {
+            dictionary =
+                (String) request.getSession().getAttribute("dictionary");
+            version = (String) request.getParameter("version");
+            if (isNull(version))
+                version = (String) request.getAttribute("version");
 
-        info.hdr_dictionary =
-            (String) request.getSession().getAttribute("dictionary");
-        info.hdr_version = (String) request.getParameter("version");
-        if (info.hdr_version == null
-            || info.hdr_version.equalsIgnoreCase("null"))
-            info.hdr_version = (String) request.getAttribute("version");
+            request.getSession().setAttribute("dictionary", dictionary);
+            short_name = DataUtils.getLocalName(dictionary);
+            formal_name = DataUtils.getFormalName(short_name);
 
-        // if (info.hdr_dictionary == null
-        // || info.hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
-        // return info;
-        // }
+            if (!DataUtils.isCodingSchemeLoaded(formal_name, version)) {
+                version_deprecated = version;
+                version =
+                    DataUtils.getVocabularyVersionByTag(dictionary,
+                        "PRODUCTION");
+                _logger.debug(Utils.SEPARATOR);
+                _logger.debug("dictionary: " + dictionary);
+                _logger.debug("  * version: " + version);
+                _logger.debug("  * version_deprecated: " + version_deprecated);
+            }
+            display_name =
+                DataUtils
+                    .getMetadataValue(formal_name, version, "display_name");
+            term_browser_version =
+                DataUtils.getMetadataValue(formal_name, version,
+                    "term_browser_version");
 
-        request.getSession().setAttribute("dictionary", info.hdr_dictionary);
-        info.content_hdr_shortName =
-            DataUtils.getLocalName(info.hdr_dictionary);
-        info.content_hdr_formalName =
-            DataUtils.getFormalName(info.content_hdr_shortName);
+            if (isNull(display_name))
+                display_name = short_name;
 
-        if (!DataUtils.isCodingSchemeLoaded(info.content_hdr_formalName,
-            info.hdr_version)) {
-            info.hdr_version_deprecated = info.hdr_version;
-            info.hdr_version =
-                DataUtils.getVocabularyVersionByTag(info.hdr_dictionary,
-                    "PRODUCTION");
-            _logger.debug(Utils.SEPARATOR);
-            _logger.debug("hdr_dictionary: " + info.hdr_dictionary);
-            _logger.debug("  * hdr_version: " + info.hdr_version);
-            _logger.debug("  * hdr_version_deprecated: "
-                + info.hdr_version_deprecated);
+            if (isNull(term_browser_version)) {
+                term_browser_version = (String) request.getParameter("version");
+                if (isNull(term_browser_version))
+                    term_browser_version =
+                        (String) request.getAttribute("version");
+            }
         }
-        info.display_name =
-            DataUtils.getMetadataValue(info.content_hdr_formalName,
-                info.hdr_version, "display_name");
-        info.term_browser_version =
-            DataUtils.getMetadataValue(info.content_hdr_formalName,
-                info.hdr_version, "term_browser_version");
-
-        if (isNull(info.display_name))
-            info.display_name = info.content_hdr_shortName;
-
-        if (isNull(info.term_browser_version)) {
-            info.term_browser_version =
-                (String) request.getParameter("version");
-            if (isNull(info.term_browser_version))
-                info.term_browser_version =
-                    (String) request.getAttribute("version");
-        }
-        return info;
     }
 
     public static class SimpleJSPHeaderInfo {
         public String dictionary;
         public String version;
         public String version_deprecated;
-    }
 
-    public static SimpleJSPHeaderInfo getSimpleJSPHeaderInfo(
-        HttpServletRequest request) {
-        SimpleJSPHeaderInfo info = new SimpleJSPHeaderInfo();
+        public SimpleJSPHeaderInfo(HttpServletRequest request) {
+            dictionary = request.getParameter("dictionary");
+            version = request.getParameter("version");
 
-        info.dictionary = request.getParameter("dictionary");
-        info.version = request.getParameter("version");
+            if (isNull(version))
+                version = (String) request.getAttribute("version");
 
-        if (isNull(info.version))
-            info.version = (String) request.getAttribute("version");
-
-        if (!DataUtils.isCodingSchemeLoaded(info.dictionary, info.version)) {
-            info.version_deprecated = info.version;
-            info.version =
-                DataUtils.getVocabularyVersionByTag(info.dictionary,
-                    "PRODUCTION");
-            _logger.debug(Utils.SEPARATOR);
-            _logger.debug("dictionary: " + info.dictionary);
-            _logger.debug("  * version: " + info.version);
-            _logger.debug("  * version_deprecated: " + info.version_deprecated);
+            if (!DataUtils.isCodingSchemeLoaded(dictionary, version)) {
+                version_deprecated = version;
+                version =
+                    DataUtils.getVocabularyVersionByTag(dictionary,
+                        "PRODUCTION");
+                _logger.debug(Utils.SEPARATOR);
+                _logger.debug("dictionary: " + dictionary);
+                _logger.debug("  * version: " + version);
+                _logger.debug("  * version_deprecated: " + version_deprecated);
+            }
         }
-        return info;
     }
 
     public static String getSelectedVocabularyTooltip(HttpServletRequest request) {
