@@ -190,29 +190,65 @@ public class IteratorBean extends Object {
         long ms = System.currentTimeMillis();
         long dt = 0;
         long total_delay = 0;
+        int upper_bound = idx2;
         _timeout = false;
         try {
-            while (_iterator != null && _iterator.hasNext()
-                && _lastResolved < idx2) {
-                ResolvedConceptReference[] refs =
-                    _iterator.next(_maxReturn).getResolvedConceptReference();
-                for (ResolvedConceptReference ref : refs) {
-                    // displayRef(ref);
-                    _lastResolved++;
-                   // _list.set(_lastResolved, ref);
 
-                   _list.add(ref);
 
-                }
-                dt = System.currentTimeMillis() - ms;
-                ms = System.currentTimeMillis();
-                total_delay = total_delay + dt;
-                if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
-                    _timeout = true;
-                    _logger.debug("Time out at: " + _lastResolved);
-                    break;
-                }
-            }
+System.out.println("(****) idx2 " + idx2 + " _size: " + _size);
+
+
+			if (idx2 >= _size-1) {
+				while (_iterator != null && _iterator.hasNext()) {
+					ResolvedConceptReference[] refs =
+						_iterator.next(_maxReturn).getResolvedConceptReference();
+					for (ResolvedConceptReference ref : refs) {
+						// displayRef(ref);
+						_lastResolved++;
+						upper_bound = _lastResolved;
+						System.out.println("_lastResolved: " + _lastResolved);
+						System.out.println("upper_bound: " + upper_bound);
+
+					   // _list.set(_lastResolved, ref);
+
+					   _list.add(ref);
+
+					}
+					dt = System.currentTimeMillis() - ms;
+					ms = System.currentTimeMillis();
+					total_delay = total_delay + dt;
+					if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+						_timeout = true;
+						_logger.debug("Time out at: " + _lastResolved);
+						break;
+					}
+				}
+			} else {
+				while (_iterator != null && _iterator.hasNext()
+					&& _lastResolved < idx2) {
+					ResolvedConceptReference[] refs =
+						_iterator.next(_maxReturn).getResolvedConceptReference();
+					for (ResolvedConceptReference ref : refs) {
+						// displayRef(ref);
+						_lastResolved++;
+					   // _list.set(_lastResolved, ref);
+
+					   _list.add(ref);
+
+					}
+					dt = System.currentTimeMillis() - ms;
+					ms = System.currentTimeMillis();
+					total_delay = total_delay + dt;
+					if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+						_timeout = true;
+						_logger.debug("Time out at: " + _lastResolved);
+						break;
+					}
+				}
+		    }
+
+            // check if max is reached,
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -225,7 +261,14 @@ public class IteratorBean extends Object {
          */
 
         Vector temp_vec = new Vector();
-        for (int i = idx1; i <= idx2; i++) {
+        //upper_bound may be breached.
+
+        if (upper_bound > idx2) {
+			_size = _size + (upper_bound - idx2);
+		}
+
+        //for (int i = idx1; i <= idx2; i++) {
+	    for (int i = idx1; i <= upper_bound; i++) {
             ResolvedConceptReference rcr =
                 (ResolvedConceptReference) _list.get(i);
             temp_vec.add(rcr);

@@ -163,7 +163,14 @@ request.setAttribute("key", key);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
 
+    int numberRemaining_before = iteratorBean.getSize();
     List list = iteratorBean.getData(istart, iend);
+    int numberRemaining_after = iteratorBean.getSize();
+    if (numberRemaining_before != numberRemaining_after) {
+        iend_str = new Integer(numberRemaining_after).toString();
+        match_size = new Integer(numberRemaining_after).toString();
+    }
+    
     boolean timeout = iteratorBean.getTimeout();
     if (timeout) {
       %>
