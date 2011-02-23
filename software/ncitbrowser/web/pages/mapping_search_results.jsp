@@ -65,30 +65,29 @@ HashMap scheme2MappingIteratorBeanMap = null;
 ResolvedConceptReferencesIterator iterator = null;
 String mapping_dictionary = request.getParameter("dictionary");
 String mapping_version = request.getParameter("version");
-MappingIteratorBean bean = null;
-
-
 if (mapping_dictionary == null) {
-mapping_dictionary = (String) request.getSession().getAttribute("dictionary");
-}
+	mapping_dictionary = (String) request.getSession().getAttribute("dictionary");
+	mapping_version = (String) request.getSession().getAttribute("version");
+} 
 
 
-
+MappingIteratorBean bean = null;
 String mapping_schema = request.getParameter("schema");
 
-if (mapping_dictionary != null && mapping_schema == null) mapping_schema = mapping_dictionary;
+if (mapping_dictionary != null && mapping_schema == null) {
+    mapping_schema = mapping_dictionary;
+}
 if (mapping_schema != null) {
-  request.getSession().setAttribute("dictionary", mapping_schema);
+      request.getSession().setAttribute("dictionary", mapping_schema);
 }
 
 
-_logger.debug("mapping.jsp dictionary: " + mapping_dictionary);
-_logger.debug("mapping.jsp version: " + mapping_version);
+_logger.debug("mapping_search_results.jsp dictionary: " + mapping_dictionary);
+_logger.debug("mapping_search_results.jsp version: " + mapping_version);
 
 
 System.out.println("(*) mapping_search_results.jsp dictionary: " + mapping_dictionary);
 System.out.println("(*) mapping_search_results.jsp version: " + mapping_version);
-
 
 
 if (mapping_version != null) {

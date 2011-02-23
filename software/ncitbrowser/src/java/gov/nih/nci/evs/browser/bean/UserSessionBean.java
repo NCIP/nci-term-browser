@@ -202,33 +202,45 @@ System.out.println("(*******************) SearchAction");
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
         boolean ranking = true;
+        String scheme = null;
+        String version = null;
 
-        String scheme = request.getParameter("scheme");
+		String scheme_and_version = (String) request.getParameter("scheme_and_version");
+		if (scheme_and_version != null) {
+			Vector cs_version_vec = DataUtils.parseData(scheme_and_version, "$");
+			scheme = (String) cs_version_vec.elementAt(0);
+			version = (String) cs_version_vec.elementAt(1);
+		} else {
+			scheme = request.getParameter("scheme");
+
+			//String searchaction_dictionary = request.getParameter("dictionary");
+
+			if (scheme == null) {
+				scheme = (String) request.getAttribute("scheme");
+			}
+			if (scheme == null) {
+				scheme = (String) request.getParameter("dictionary");
+			}
+			if (scheme == null) {
+				scheme = Constants.CODING_SCHEME_NAME;
+			}
+
+			version = (String) request.getParameter("version");
+			if (version == null) {
+				version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
+			}
+	    }
 
 
-
-
-        String searchaction_dictionary = request.getParameter("dictionary");
-
-        if (scheme == null) {
-            scheme = (String) request.getAttribute("scheme");
-        }
-        if (scheme == null) {
-            scheme = (String) request.getParameter("dictionary");
-        }
-        if (scheme == null) {
-            scheme = Constants.CODING_SCHEME_NAME;
-        }
-
-        String version = (String) request.getParameter("version");
-        if (version == null) {
-            version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
-		}
+System.out.println("(***) Searching scheme " + scheme + " ...");
 
 
 	    request.setAttribute("version", version);
 
 		boolean isMapping = DataUtils.isMapping(scheme, version);
+
+
+System.out.println("(***) isMapping " + isMapping);
 
         _logger.debug("UserSessionBean scheme: " + scheme);
         _logger.debug("searchAction version: " + version);
@@ -350,7 +362,8 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 				request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
 
 				System.out.println("(*************) returning mapping_search_results");
-
+				request.getSession().setAttribute("dictionary", scheme);
+				request.getSession().setAttribute("version", version);
 				return "mapping_search_results";
 		}
 

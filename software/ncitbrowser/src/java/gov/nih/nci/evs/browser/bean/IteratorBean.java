@@ -206,9 +206,6 @@ System.out.println("(****) idx2 " + idx2 + " _size: " + _size);
 						// displayRef(ref);
 						_lastResolved++;
 						upper_bound = _lastResolved;
-						System.out.println("_lastResolved: " + _lastResolved);
-						System.out.println("upper_bound: " + upper_bound);
-
 					   // _list.set(_lastResolved, ref);
 
 					   _list.add(ref);
