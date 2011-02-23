@@ -4,8 +4,8 @@
 <!-- Thesaurus, banner search area -->
 <div class="bannerarea">
 <%
-  JSPUtils.JSPHeaderInfo info = JSPUtils.getJSPHeaderInfo(request);
-  if (info.hdr_dictionary == null || info.hdr_dictionary.compareTo("NCI Thesaurus") == 0) {
+  JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+  if (info.dictionary == null || info.dictionary.compareTo("NCI Thesaurus") == 0) {
   %>
     <div class="banner">
       <a href="<%=basePath%>"><img
@@ -14,9 +14,9 @@
       </a>
     </div>
   <%
-  } else if (info.hdr_dictionary != null) {
+  } else if (info.dictionary != null) {
   %>
-    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(info.hdr_dictionary)%>">
+    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(info.dictionary)%>">
       <div class="vocabularynamebanner">
           <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(info.display_name)%>px; font-family : Arial">
             <%=HTTPUtils.cleanXSS(info.display_name)%>
