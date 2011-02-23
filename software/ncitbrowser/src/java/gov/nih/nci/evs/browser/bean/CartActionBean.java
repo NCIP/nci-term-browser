@@ -364,7 +364,7 @@ public class CartActionBean {
         private boolean selected = false;
         private String version = null;
         private String url = null;
-        private String displayStatus = "[Not Set]";
+        private String displayStatus = "";
         private String displayCodingSchemeName = "[Not Set]";
 
         // Getters & setters
