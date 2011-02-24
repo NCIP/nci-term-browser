@@ -55,12 +55,12 @@ public class JSPUtils {
         return text == null || text.equalsIgnoreCase("null");
     }
 
-    public static class SimpleJSPHeaderInfo {
+    public static class JSPHeaderInfo {
         public String dictionary;
         public String version;
         public String version_deprecated;
 
-        public SimpleJSPHeaderInfo(HttpServletRequest request) {
+        public JSPHeaderInfo(HttpServletRequest request) {
             dictionary = request.getParameter("dictionary");
             version = request.getParameter("version");
             _logger.debug(Utils.SEPARATOR);
@@ -96,11 +96,11 @@ public class JSPUtils {
         }
     }
 
-    public static class JSPHeaderInfo extends SimpleJSPHeaderInfo {
+    public static class JSPHeaderInfoMore extends JSPHeaderInfo {
         public String display_name;
         public String term_browser_version;
 
-        public JSPHeaderInfo(HttpServletRequest request) {
+        public JSPHeaderInfoMore(HttpServletRequest request) {
             super(request);
             String short_name = DataUtils.getLocalName(dictionary);
             String formal_name = DataUtils.getFormalName(short_name);

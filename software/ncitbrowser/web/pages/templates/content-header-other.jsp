@@ -4,7 +4,7 @@
 <!-- Thesaurus, banner search area -->
 <div class="bannerarea">
 <%
-  JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+  JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
   if (info.dictionary == null || info.dictionary.compareTo("NCI Thesaurus") == 0) {
   %>
     <div class="banner">
