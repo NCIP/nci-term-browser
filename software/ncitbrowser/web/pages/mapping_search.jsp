@@ -27,6 +27,11 @@
   }
 %>
 <%
+  String mapping_scheme_and_version = (String) request.getSession().getAttribute("scheme_and_version");
+  if (mapping_scheme_and_version == null) {
+      mapping_scheme_and_version = "";
+  }
+
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
@@ -289,7 +294,7 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <%
-                     
+                      int mapping_cs_knt = 0;
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         String display_name_version = info.getDisplayName();
@@ -305,13 +310,14 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
                         
                         boolean isMapping = DataUtils.isMapping(scheme, version);
                         if (isMapping) {
+                                mapping_cs_knt++;
                        
 				String http_label = null;
 				String http_scheme = null;
 				String http_version = null;
 				
 				boolean checked = false;
-				String checkedStr = checked ? "checked" : "";
+				
 
 				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
 				if (full_name == null || full_name.compareTo("null") == 0) 
@@ -334,8 +340,20 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
 				  <td width="25px"></td>
 				  
 				  <td>
+<%
+String scheme_and_version_str = scheme + "$" + version;
+String checkedStr = "";
+if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
+     checkedStr = "checked";
+} else if (mapping_scheme_and_version.compareTo(scheme_and_version_str) == 0) {
+     checkedStr = "checked";
+}
+%>
 
-				     <input type="radio" name="scheme_and_version" value="<%=scheme%>$<%=version%>" <%=checkedStr%> tabinex="1" />
+    <input type="radio" name="scheme_and_version" value="<%=scheme%>$<%=version%>" <%=checkedStr%> tabinex="1" />
+
+
+
 
 				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
 				      <%=display_label%>
