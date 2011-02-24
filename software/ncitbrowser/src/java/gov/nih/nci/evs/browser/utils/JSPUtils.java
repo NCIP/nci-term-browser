@@ -55,55 +55,6 @@ public class JSPUtils {
         return text == null || text.equalsIgnoreCase("null");
     }
 
-    public static class JSPHeaderInfo {
-        public String dictionary;
-        public String version;
-        public String version_deprecated;
-        public String short_name;
-        public String formal_name;
-        public String display_name;
-        public String term_browser_version;
-
-        public JSPHeaderInfo(HttpServletRequest request) {
-            dictionary =
-                (String) request.getSession().getAttribute("dictionary");
-            version = (String) request.getParameter("version");
-            if (isNull(version))
-                version = (String) request.getAttribute("version");
-
-            request.getSession().setAttribute("dictionary", dictionary);
-            short_name = DataUtils.getLocalName(dictionary);
-            formal_name = DataUtils.getFormalName(short_name);
-
-            if (!DataUtils.isCodingSchemeLoaded(formal_name, version)) {
-                version_deprecated = version;
-                version =
-                    DataUtils.getVocabularyVersionByTag(dictionary,
-                        "PRODUCTION");
-                _logger.debug(Utils.SEPARATOR);
-                _logger.debug("dictionary: " + dictionary);
-                _logger.debug("  * version: " + version);
-                _logger.debug("  * version_deprecated: " + version_deprecated);
-            }
-            display_name =
-                DataUtils
-                    .getMetadataValue(formal_name, version, "display_name");
-            term_browser_version =
-                DataUtils.getMetadataValue(formal_name, version,
-                    "term_browser_version");
-
-            if (isNull(display_name))
-                display_name = short_name;
-
-            if (isNull(term_browser_version)) {
-                term_browser_version = (String) request.getParameter("version");
-                if (isNull(term_browser_version))
-                    term_browser_version =
-                        (String) request.getAttribute("version");
-            }
-        }
-    }
-
     public static class SimpleJSPHeaderInfo {
         public String dictionary;
         public String version;
@@ -112,9 +63,23 @@ public class JSPUtils {
         public SimpleJSPHeaderInfo(HttpServletRequest request) {
             dictionary = request.getParameter("dictionary");
             version = request.getParameter("version");
+            _logger.debug(Utils.SEPARATOR);
+            _logger.debug("Request Parameters: " + 
+                "dictionary=" + dictionary + ", version=" + version);
 
-            if (isNull(version))
+            if (isNull(dictionary) && isNull(version)) {
+                dictionary = (String) request.getAttribute("dictionary");
                 version = (String) request.getAttribute("version");
+                _logger.debug("Request Attributes: " + 
+                    "dictionary=" + dictionary + ", version=" + version);
+            }
+
+            if (isNull(dictionary) && isNull(version)) {
+                dictionary = (String) request.getSession().getAttribute("dictionary");
+                version = (String) request.getSession().getAttribute("version");
+                _logger.debug("Session Attributes: " + 
+                    "dictionary=" + dictionary + ", version=" + version);
+            }
 
             if (!DataUtils.isCodingSchemeLoaded(dictionary, version)) {
                 version_deprecated = version;
@@ -126,6 +91,31 @@ public class JSPUtils {
                 _logger.debug("  * version: " + version);
                 _logger.debug("  * version_deprecated: " + version_deprecated);
             }
+            request.getSession().setAttribute("dictionary", dictionary);
+            request.getSession().setAttribute("version", version);
+        }
+    }
+
+    public static class JSPHeaderInfo extends SimpleJSPHeaderInfo {
+        public String display_name;
+        public String term_browser_version;
+
+        public JSPHeaderInfo(HttpServletRequest request) {
+            super(request);
+            String short_name = DataUtils.getLocalName(dictionary);
+            String formal_name = DataUtils.getFormalName(short_name);
+
+            display_name =
+                DataUtils
+                    .getMetadataValue(formal_name, version, "display_name");
+            if (isNull(display_name))
+                display_name = short_name;
+
+            term_browser_version =
+                DataUtils.getMetadataValue(formal_name, version,
+                    "term_browser_version");
+            if (isNull(term_browser_version))
+                term_browser_version = version;
         }
     }
 
