@@ -220,6 +220,7 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 			Vector cs_version_vec = DataUtils.parseData(scheme_and_version, "$");
 			scheme = (String) cs_version_vec.elementAt(0);
 			version = (String) cs_version_vec.elementAt(1);
+			request.getSession().setAttribute("scheme_and_version", scheme_and_version);
 
 		} else {
 			scheme = request.getParameter("scheme");
