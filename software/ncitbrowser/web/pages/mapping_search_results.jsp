@@ -101,7 +101,20 @@ if (mapping_version != null) {
       <div class="pagecontent">
 	    <a name="evs-content" id="evs-content"></a>
 
+
 <%
+String mapping_results_msg = (String) request.getSession().getAttribute("message");
+if (mapping_results_msg != null) {
+    request.getSession().removeAttribute("message");
+    
+    
+      %>
+      <p class="textbodyred"><%=mapping_results_msg%></p>
+      <%
+      
+} else {    
+
+
 String resultsPerPage = request.getParameter("resultsPerPage");
 if (resultsPerPage == null) {
     resultsPerPage = "50";
@@ -320,6 +333,10 @@ if (show_rank_column) {
           </table>
 
         <%@ include file="/pages/templates/pagination-mapping-results.jsp" %>
+        
+ <%       
+ }       
+ %>       
         
         
         <%@ include file="/pages/templates/nciFooter.html" %>

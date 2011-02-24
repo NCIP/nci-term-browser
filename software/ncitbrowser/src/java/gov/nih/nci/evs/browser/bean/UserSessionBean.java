@@ -160,7 +160,20 @@ public class UserSessionBean extends Object {
 
     public String searchAction() {
 
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+
 System.out.println("(*******************) SearchAction");
+boolean mapping_search = false;
+
+String single_mapping_search = (String) request.getParameter("single_mapping_search");
+if (single_mapping_search != null && single_mapping_search.compareTo("true") == 0) {
+	mapping_search = true;
+}
+
+
         String max_str = null;
         int maxToReturn = -1;// 1000;
         try {
@@ -174,9 +187,6 @@ System.out.println("(*******************) SearchAction");
         ResolvedConceptReferencesIterator iterator = null;
 
 
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
 
         String matchText = (String) request.getParameter("matchText");
         if (matchText != null)
@@ -210,6 +220,7 @@ System.out.println("(*******************) SearchAction");
 			Vector cs_version_vec = DataUtils.parseData(scheme_and_version, "$");
 			scheme = (String) cs_version_vec.elementAt(0);
 			version = (String) cs_version_vec.elementAt(1);
+
 		} else {
 			scheme = request.getParameter("scheme");
 
@@ -221,14 +232,21 @@ System.out.println("(*******************) SearchAction");
 			if (scheme == null) {
 				scheme = (String) request.getParameter("dictionary");
 			}
-			if (scheme == null) {
-				scheme = Constants.CODING_SCHEME_NAME;
-			}
 
-			version = (String) request.getParameter("version");
-			if (version == null) {
-				version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
-			}
+            if (mapping_search) {
+				String msg = "No mapping data set is selected.";
+				request.getSession().setAttribute("message", msg);
+				return "return_to_mapping_home";
+
+			} else {
+				if (scheme == null) {
+					scheme = Constants.CODING_SCHEME_NAME;
+				}
+				version = (String) request.getParameter("version");
+				if (version == null) {
+					version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
+				}
+		    }
 	    }
 
 
@@ -286,6 +304,8 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 					}
 
 
+
+
 				} else if (searchTarget.compareTo("properties") == 0) {
 
 					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByProperties(
@@ -313,9 +333,20 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 
 				if (iterator == null) {
 					String msg = "No match.";
+					if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
+						msg = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
+					}
 					request.getSession().setAttribute("message", msg);
 					request.getSession().setAttribute("dictionary", scheme);
-					return "message";
+					request.getSession().setAttribute("version", version);
+
+					System.out.println("(******************) searchAction returns " + msg);
+
+					if (mapping_search) {
+						return "return_to_mapping_home";
+					} else {
+						return "message";
+				    }
 				}
 
 				int numberRemaining = 0;
@@ -323,9 +354,21 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 					numberRemaining = iterator.numberRemaining();
 					if (numberRemaining == 0) {
 						String msg = "No match.";
+						if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
+							msg = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
+						}
+
 						request.getSession().setAttribute("message", msg);
 						request.getSession().setAttribute("dictionary", scheme);
-						return "message";
+						request.getSession().setAttribute("version", version);
+
+						System.out.println("(******************) searchAction returns " + numberRemaining + " matches.");
+
+						if (mapping_search) {
+							return "return_to_mapping_home";
+						} else {
+							return "message";
+						}
 					}
 
 
@@ -334,12 +377,14 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 					String msg = "An unexpected exception encountered.";
 					request.getSession().setAttribute("message", msg);
 					request.getSession().setAttribute("dictionary", scheme);
-					return "message";
-				}
+					request.getSession().setAttribute("version", version);
 
-				//iteratorBean = new IteratorBean(iterator);
-				//iteratorBean.setKey(key);
-				//iteratorBeanManager.addIteratorBean(iteratorBean);
+					if (mapping_search) {
+						return "return_to_mapping_home";
+					} else {
+						return "message";
+					}
+				}
 
 				MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
 				iterator,

@@ -230,12 +230,23 @@ String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) req
           <div class="tabTableContentContainer">
 
 
+<%
+String mapping_error_msg = (String) request.getSession().getAttribute("message");
+if (mapping_error_msg != null) {
+    request.getSession().removeAttribute("message");
+    
+      %>
+      <p class="textbodyred"><%=mapping_error_msg%></p>
+      <%
+      
+} 
+%>
 
           <table class="termstable" border="0">
                 <tr>
                   <td>
 
-                  &nbsp;&nbsp; <h:commandButton id="Search" value="Search"
+                  <h:commandButton id="Search" value="Search"
                     action="#{userSessionBean.searchAction}"
                     image="#{requestContextPath}/images/search.gif"
                     alt="Search">
@@ -355,6 +366,7 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
 
     <input type="hidden" id="nav_type" name="nav_type" value="<%=navigation_type%>">
+    <input type="hidden" id="single_mapping_search" name="single_mapping_search" value="true">
 
 
 

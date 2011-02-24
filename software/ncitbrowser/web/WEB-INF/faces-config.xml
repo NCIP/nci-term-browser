@@ -38,6 +38,14 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>    
+
+    <navigation-case>
+       <description>return_to_mapping_home</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>return_to_mapping_home</from-outcome>
+       <to-view-id>/pages/mapping_search.jsp</to-view-id>
+    </navigation-case>    
+
     
   </navigation-rule>   
   
@@ -57,7 +65,15 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>    
-    
+
+    <navigation-case>
+       <description>return_to_mapping_home</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>return_to_mapping_home</from-outcome>
+       <to-view-id>/pages/mapping_search.jsp</to-view-id>
+    </navigation-case>    
+
+
   </navigation-rule>   
     
   <navigation-rule>
