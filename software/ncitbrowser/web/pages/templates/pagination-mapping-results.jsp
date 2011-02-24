@@ -55,7 +55,7 @@ if (iend >= numRemaining) {
         %>
         &nbsp;
         <i>
-          <a href="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?dictionary=<%=mapping_schema%>&page_number=<%=prev_page_num_str%>">Prev</a>
+          <a href="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?dictionary=<%=mapping_scheme%>&page_number=<%=prev_page_num_str%>">Prev</a>
           
         </i>&nbsp;
         <%
@@ -81,7 +81,7 @@ System.out.println("page_num: " + page_num);
 		    String idx_str = Integer.toString(idx);
 		    if (page_num != idx) {
 		      %>
-		        <a href="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?dictionary=<%=mapping_schema%>&page_number=<%=idx_str%>"><%=idx_str%></a>
+		        <a href="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?dictionary=<%=mapping_scheme%>&page_number=<%=idx_str%>"><%=idx_str%></a>
 		
 			&nbsp;
 		      <%
@@ -97,7 +97,7 @@ System.out.println("page_num: " + page_num);
         %>
           &nbsp;
           <i>
-            <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=next_page_num_str%>">Next</a>
+            <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_scheme%>&page_number=<%=next_page_num_str%>">Next</a>
 
           </i>
         <%

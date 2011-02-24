@@ -47,7 +47,7 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 <%!
-  private static Logger _logger = Utils.getJspLogger("mapping.jsp");
+  private static Logger _logger = Utils.getJspLogger("mapping-search_results.jsp");
 %>
 
 <f:view>
@@ -63,40 +63,83 @@
 
 HashMap scheme2MappingIteratorBeanMap = null;
 ResolvedConceptReferencesIterator iterator = null;
-String mapping_dictionary = request.getParameter("dictionary");
-String mapping_version = request.getParameter("version");
-if (mapping_dictionary == null) {
-	mapping_dictionary = (String) request.getSession().getAttribute("dictionary");
-	mapping_version = (String) request.getSession().getAttribute("version");
-} 
-
-
 MappingIteratorBean bean = null;
-String mapping_schema = request.getParameter("schema");
 
-if (mapping_dictionary != null && mapping_schema == null) {
-    mapping_schema = mapping_dictionary;
+String mapping_scheme = null;
+String mapping_dictionary = null;
+String mapping_version = null;
+
+mapping_dictionary = request.getParameter("dictionary");
+if (mapping_dictionary != null) {
+    mapping_scheme = mapping_dictionary;
+    mapping_version = request.getParameter("version");
+    if (mapping_version == null) {
+	mapping_version = DataUtils.getVocabularyVersionByTag(mapping_scheme, "PRODUCTION");
+    } 
+    request.getSession().setAttribute("version", mapping_version);
+    request.getSession().setAttribute("dictionary", mapping_scheme);
+
+} else {
+    mapping_dictionary = (String) request.getSession().getAttribute("dictionary");
+    mapping_scheme = mapping_dictionary;
+    mapping_version = (String) request.getSession().getAttribute("version");
+    if (mapping_version == null) {
+	mapping_version = DataUtils.getVocabularyVersionByTag(mapping_scheme, "PRODUCTION");
+    }        
 }
-if (mapping_schema != null) {
-      request.getSession().setAttribute("dictionary", mapping_schema);
-}
 
-
+System.out.println("(*) mapping_search_results.jsp dictionary: " + mapping_dictionary);
+System.out.println("(*) mapping_search_results.jsp version: " + mapping_version);
 _logger.debug("mapping_search_results.jsp dictionary: " + mapping_dictionary);
 _logger.debug("mapping_search_results.jsp version: " + mapping_version);
 
 
-System.out.println("(*) mapping_search_results.jsp dictionary: " + mapping_dictionary);
-System.out.println("(*) mapping_search_results.jsp version: " + mapping_version);
-
-
-if (mapping_version != null) {
-    request.setAttribute("version", mapping_version);
-}
-
-
+ String mapping_display_name =
+                DataUtils
+                    .getMetadataValue(mapping_dictionary, mapping_version, "display_name");
+                    
+ String mapping_term_browser_version =
+                DataUtils.getMetadataValue(mapping_dictionary, mapping_version,
+                    "term_browser_version");
 %>
-      <%@ include file="/pages/templates/content-header-other.jsp" %>
+
+
+ 
+ <div class="bannerarea">
+ 
+     <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_dictionary)%>">
+       <div class="vocabularynamebanner">
+           <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(mapping_display_name)%>px; font-family : Arial">
+             <%=HTTPUtils.cleanXSS(mapping_display_name)%>
+           </div>
+           <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(mapping_term_browser_version)%>
+           </div>
+        </div>
+     </a>
+
+         
+	 <div class="search-globalnav"><!-- Search box -->
+		 <div class="searchbox-top"><img
+		   src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
+		   alt="SearchBox Top" /></div>
+	 	<div class="searchbox"><%@ include file="/pages/templates/searchForm.jsp"%></div>
+	 
+		 <div class="searchbox-bottom"><img
+		   src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2"
+		   alt="SearchBox Bottom" /></div>
+		 <!-- end Search box --> <!-- Global Navigation --> <%@ include
+		   file="/pages/templates/menuBar.jsp"%> <!-- end Global Navigation -->
+	 </div>
+ </div>
+ <!-- end Thesaurus, banner search area -->
+ <!-- Quick links bar -->
+ <%@ include file="/pages/templates/quickLink.jsp"%>
+<!-- end Quick links bar -->
+
+
+
+      
+      
       <!-- Page content -->
       <div class="pagecontent">
 	    <a name="evs-content" id="evs-content"></a>
@@ -188,7 +231,7 @@ try {
 System.out.println("exiting bean.getData ...");
 
 boolean show_rank_column = true;
-String map_rank_applicable = DataUtils.getMetadataValue(mapping_schema, mapping_version, "map_rank_applicable");
+String map_rank_applicable = DataUtils.getMetadataValue(mapping_scheme, mapping_version, "map_rank_applicable");
 if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) {
     show_rank_column = false;
 }

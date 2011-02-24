@@ -222,13 +222,16 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 			version = (String) cs_version_vec.elementAt(1);
 			request.getSession().setAttribute("scheme_and_version", scheme_and_version);
 
+			request.getSession().setAttribute("dictionary", scheme);
+			request.getSession().setAttribute("version", version);
+
 		} else {
 			scheme = request.getParameter("scheme");
 
 			//String searchaction_dictionary = request.getParameter("dictionary");
 
 			if (scheme == null) {
-				scheme = (String) request.getAttribute("scheme");
+				scheme = (String) request.getSession().getAttribute("scheme");
 			}
 			if (scheme == null) {
 				scheme = (String) request.getParameter("dictionary");
@@ -409,6 +412,7 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 
 				System.out.println("(*************) returning mapping_search_results");
 				request.getSession().setAttribute("dictionary", scheme);
+				//request.getSession().setAttribute("scheme", scheme);
 				request.getSession().setAttribute("version", version);
 				return "mapping_search_results";
 		}
