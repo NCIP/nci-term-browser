@@ -186,6 +186,7 @@ public class DataUtils {
     public static HashMap _formalName2NCImSABHashMap = null;
 
     public static HashMap _isMappingHashMap = null;
+    public static HashMap _mappingDisplayNameHashMap = null;
 
     // ==================================================================================
 
@@ -221,6 +222,23 @@ public class DataUtils {
         return _codingSchemeHashSet.contains(codingSchemeName);
     }
 
+
+
+     private static void setMappingDisplayNameHashMap() {
+ 		_mappingDisplayNameHashMap = new HashMap();
+ 		Iterator it = _csnv2codingSchemeNameMap.keySet().iterator();
+ 		while (it.hasNext()) {
+ 			String value = (String) it.next();
+ 			String cs = (String) _csnv2codingSchemeNameMap.get(value);
+ 			String version = (String) _csnv2VersionMap.get(value);
+ 			HashMap hmap = MetadataUtils.getMappingDisplayHashMap(cs, version);
+ 			if (hmap != null) {
+ 				_mappingDisplayNameHashMap.put(cs, hmap);
+ 			}
+ 		}
+	}
+
+
     private static void setCodingSchemeMap() {
         _logger.debug("Initializing ...");
         _codingSchemeHashSet = new HashSet();
@@ -243,6 +261,7 @@ public class DataUtils {
         _codingSchemeName2URIHashMap = new HashMap();
 
         _isMappingHashMap = new HashMap();
+
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -483,6 +502,8 @@ public class DataUtils {
         }
         _formalName2NCImSABHashMap = createFormalName2NCImSABHashMap();
         dumpHashMap(_formalName2NCImSABHashMap);
+
+        setMappingDisplayNameHashMap();
     }
 
     public static String getMetadataValue(String scheme, String propertyName) {
@@ -4528,6 +4549,16 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
         return null;
     }
 
-
+    public static String getMappingDisplayName(String scheme, String name) {
+		HashMap hmap = (HashMap) _mappingDisplayNameHashMap.get(scheme);
+		if (hmap == null) {
+			return name;
+		}
+		Object obj = hmap.get(name);
+		if (obj == null) {
+			return name;
+		}
+		return obj.toString();
+	}
 
 }

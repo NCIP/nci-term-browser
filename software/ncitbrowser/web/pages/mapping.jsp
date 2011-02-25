@@ -55,6 +55,9 @@
     <div id="main-area">
 <%
 
+
+HashMap display_name_hmap = new HashMap();
+
 ResolvedConceptReferencesIterator iterator = null;
 String mapping_dictionary = request.getParameter("dictionary");
 String mapping_version = request.getParameter("version");
@@ -419,18 +422,30 @@ if (show_rank_column) {
         source_code = mappingData.getSourceCode();
         source_name = mappingData.getSourceName();
         source_namespace = mappingData.getSourceCodeNamespace();
+        
+        if (display_name_hmap.containsKey(source_namespace)) {
+            source_namespace = (String) display_name_hmap.get(source_namespace);
+        } else {
+            String short_name = DataUtils.getMappingDisplayName(mapping_dictionary, source_namespace);
+            display_name_hmap.put(source_namespace, short_name);
+            source_namespace = short_name;
+        }
 
-        // To be modified through metadata
-        if (source_namespace.compareTo("NCI_Thesaurus") == 0) source_namespace = "NCIt";
 
         rel = mappingData.getRel();
         score = new Integer(mappingData.getScore()).toString();
         target_code = mappingData.getTargetCode();
         target_name = mappingData.getTargetName();
         target_namespace = mappingData.getTargetCodeNamespace();
-
-        // To be modified through metadata
-        if (target_namespace.compareTo("NCI_Thesaurus") == 0) target_namespace = "NCIt";
+        
+        if (display_name_hmap.containsKey(target_namespace)) {
+            target_namespace = (String) display_name_hmap.get(target_namespace);
+        } else {
+            String short_name = DataUtils.getMappingDisplayName(mapping_dictionary, target_namespace);
+            display_name_hmap.put(target_namespace, short_name);
+            target_namespace = short_name;
+        }       
+        
 
         source_scheme = mappingData.getSourceCodingScheme();
         source_version = mappingData.getSourceCodingSchemeVersion();
