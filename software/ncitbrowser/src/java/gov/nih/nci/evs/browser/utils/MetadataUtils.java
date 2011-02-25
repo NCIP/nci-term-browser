@@ -193,12 +193,15 @@ public class MetadataUtils {
         MetadataPropertyList mdpl =
             getMetadataPropertyList(lbSvc, codingSchemeName, version, null);
         return getMetadataForCodingScheme(mdpl, propertyName);
+
+
     }
 
 
     public static Vector getMetadataForCodingScheme(MetadataPropertyList mdpl,
         String propertyName) {
         Vector v = new Vector();
+
         Vector codingSchemeNames = getMetadataCodingSchemeNames(mdpl);
 
         _logger.debug("getMetadataCodingSchemeNames returns "
@@ -382,7 +385,6 @@ public class MetadataUtils {
     public static MetadataPropertyList getMetadataPropertyList(
         LexBIGService lbSvc, String codingSchemeName, String version, String urn) {
 
-
         if (urn == null) {
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 			if (version != null) versionOrTag.setVersion(version);
@@ -483,6 +485,61 @@ public class MetadataUtils {
         return new NameAndValue[0];
 
     }
+
+
+
+    public static HashMap getMappingDisplayHashMap(String codingSchemeName, String version) {
+        String propertyName = "shortName";
+        try {
+			HashMap hmap = new HashMap();
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+			if (version == null) {
+				Vector versions =
+					getAvailableCodingSchemeVersions(lbSvc, codingSchemeName);
+				version = (String) versions.elementAt(0);
+			}
+
+			MetadataPropertyList mdpl =
+				getMetadataPropertyList(lbSvc, codingSchemeName, version, null);
+
+
+            MetadataProperty[] properties = mdpl.getMetadataProperty();
+
+            if (properties == null)
+                return null;
+
+            // Print out all of the Metadata Properties of the Coding Scheme.
+            // The propery names ('prop.getName()') are going to be things like
+            // 'formalName',
+            // 'codingSchemeURI', 'representsVersion', etc... so you can pick
+            // out which ones
+            // you'd like to use.
+            for (MetadataProperty prop : properties) {
+                // _logger.debug("\tProperty Name: " + prop.getName() +
+                // "\n\tProperty Value: " + prop.getValue());
+                if (prop.getName().compareTo(propertyName) == 0) {
+					Object[] context_array = prop.getContext();
+					int context_array_size = context_array.length;
+					String cs_name = context_array[context_array_size-1].toString();
+					hmap.put(cs_name, prop.getValue());
+
+					System.out.println(codingSchemeName + "   " + cs_name + " --> " + prop.getValue());
+                }
+            }
+            return hmap;
+        } catch (Exception ex) {
+            // _logger.error("getEntityDescriptionForCodingScheme throws exception???? "
+            // );
+            _logger.error("WARNING: Unable to retrieve metadata for source "
+                + codingSchemeName
+                + " please consult your system administrator.");
+            // ex.printStackTrace();
+        }
+        return null;
+    }
+
+
 
     /**
      * Simple example to demonstrate extracting a specific Coding Scheme's
