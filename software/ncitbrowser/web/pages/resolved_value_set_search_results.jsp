@@ -71,9 +71,9 @@ String checked = "";
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
           
-          
+          <!--
           <%@ include file="/pages/templates/navigationTabs.jsp"%>
-          
+          -->
           
       <%
 
@@ -152,7 +152,7 @@ String key = (String) request.getSession().getAttribute("key");
             <td>
               <table>
                 <tr>
-                  <td class="texttitle-blue">Result for:</td>
+                  <td class="texttitle-blue">Value Set Search Result for:</td>
                   <td class="texttitle-gray"><%=match_text%></td>
                 </tr>
               </table>

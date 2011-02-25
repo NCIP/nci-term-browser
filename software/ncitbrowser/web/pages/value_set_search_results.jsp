@@ -123,6 +123,54 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 
  <h:form id="valueSetSearchResultsForm" styleClass="search-form">            
  
+ 
+ <%
+ if (vsd_vec != null && vsd_vec.size() == 1) {
+ %>
+ <div id="message" class="textbody">
+    <table border="0" width="700px">
+     <tr>
+       <td>
+          <div class="texttitle-blue">Welcome</div>
+       </td>
+       
+       <td class="dataCellText" align="right">
+                      <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
+                        onclick="javascript:cursor_wait();"
+                        image="#{valueSetSearch_requestContextPath}/images/values.gif"
+                        alt="Values"
+                        tabindex="3">
+                      </h:commandButton>                  
+                    &nbsp;
+                      <h:commandButton id="versions" value="versions" action="#{valueSetBean.selectCSVersionAction}"
+                        onclick="javascript:cursor_wait();"
+                        image="#{valueSetSearch_requestContextPath}/images/versions.gif"
+                        alt="Versions"
+                        tabindex="2">
+                      </h:commandButton>
+                    &nbsp;
+                      <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportToXMLAction}"
+                        onclick="javascript:cursor_wait();"
+                        image="#{valueSetSearch_requestContextPath}/images/xmldefinitions.gif"
+                        alt="XML Definition"
+                        tabindex="2">
+                      </h:commandButton>
+       
+       </td>
+     </tr>
+   </table>  
+   <hr/>
+ </div>
+ 
+ <%
+ }
+ %> 
+ 
+ 
+ 
+ 
+ 
+ 
  <%
  if (vsd_uri != null) {
  
@@ -247,6 +295,13 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
              %>                 
               </table>
  
+ 
+ 
+ 
+ <%
+ if (vsd_vec != null && vsd_vec.size() > 1) {
+%>
+ 
                    <tr><td class="dataCellText">
                      <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
                        onclick="javascript:cursor_wait();"
@@ -269,6 +324,11 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
                        tabindex="2">
                      </h:commandButton>
                   </td></tr>
+
+
+<%
+}
+%>
 
 
 <%		
