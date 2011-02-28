@@ -902,16 +902,15 @@ String key = vsd_uri;
 
 
         if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
-			String msg = "No coding scheme reference is selected.";
+			String msg = "No reference is selected.";
 			request.getSession().setAttribute("message", msg);
 			return "resolve_value_set";
 		}
 
 
- System.out.println("(*) continueResolveValueSetAction #1 ");
 
 String key = vsd_uri;
-
+HashSet hset = new HashSet();
 
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
 Vector ref_vec = new Vector();
@@ -923,6 +922,18 @@ Vector ref_vec = new Vector();
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
 			key = key + "|" + uri + "$" + version;
+
+			if (hset.contains(uri)) {
+				String msg = "Please select exactly one reference (i.e., version) for " + uri;
+				request.getSession().setAttribute("message", msg);
+				return "resolve_value_set";
+
+			} else {
+				hset.add(uri);
+			}
+
+
+
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 
