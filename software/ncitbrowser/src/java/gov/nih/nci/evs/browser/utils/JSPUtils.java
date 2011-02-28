@@ -106,7 +106,7 @@ public class JSPUtils {
                 dictionary = "NCI Thesaurus";
             }
             
-            if (!DataUtils.isCodingSchemeLoaded(dictionary, version)) {
+            if (version != null && !DataUtils.isCodingSchemeLoaded(dictionary, version)) {
                 version_deprecated = version;
                 version =
                     DataUtils.getVocabularyVersionByTag(dictionary,
