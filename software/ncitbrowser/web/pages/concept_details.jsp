@@ -42,12 +42,9 @@
     dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
     dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
     dictionary = DataUtils.getCodingSchemeName(dictionary);
-    request.getSession().setAttribute("dictionary", dictionary);
-  } else {
-    dictionary = (String) request.getSession().getAttribute("dictionary");
   }
 
-  String deprecatedVersion = null;
+  String deprecatedVersion = info.version_deprecated;
   String version = info.version;
 
   System.out.println("concept_details.jsp version: " + version);  
@@ -172,12 +169,6 @@
               String ltag = null;
 
               c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
-              if (c == null) {
-                  deprecatedVersion = version;
-                  version = DataUtils.getVocabularyVersionByTag(dictionary, "PRODUCTION");
-                  c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
-              }
-              
               if (c != null) {
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("code", code);
