@@ -20,6 +20,8 @@
   JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
   String dictionary = info.dictionary;
   String version = info.version;
+  if (info.version_deprecated != null)  //Note: This change will display the version deprecation
+    version = info.version_deprecated;  //  message in the concept detail page.
   String display_name = info.display_name;
   String code = (String) request.getParameter("code");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(dictionary, null);
