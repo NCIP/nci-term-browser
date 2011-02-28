@@ -3,6 +3,8 @@ package gov.nih.nci.evs.browser.bean;
 
 import java.util.*;
 import java.net.URI;
+import java.io.*;
+
 
 import javax.faces.context.*;
 import javax.faces.event.*;
@@ -1007,45 +1009,70 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 	}
 
 
-
-/*
-java.net.URI exportValueSetResolution(java.net.URI valueSetDefinitionURI,
-                                      java.lang.String valueSetDefinitionRevisionId,
-                                      java.net.URI exportDestination,
-                                      AbsoluteCodingSchemeVersionReferenceList csVersionList,
-                                      java.lang.String csVersionTag,
-                                      boolean overwrite,
-                                      boolean failOnAllErrors)
-*/
-
     public void exportToXMLAction() {
 
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String uri = (String) request.getParameter("valueset");
+		String valueSetDefinitionRevisionId = null;
 
-	    if (uri.indexOf("|") != -1) {
-			Vector u = DataUtils.parseData(uri);
-			uri = (String) u.elementAt(1);
+        String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
+        String uri = (String) request.getSession().getAttribute("vsd_uri");
+        System.out.println("URI: " + uri);
+
+        if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
+			String msg = "No coding scheme reference is selected.";
+			request.getSession().setAttribute("message", msg);
+			return;// "resolve_value_set";
 		}
 
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+        for (int i=0; i<coding_scheme_ref.length; i++) {
+			String t = coding_scheme_ref[i];
+			System.out.println("(*) coding_scheme_ref: " + t);
+			Vector u = DataUtils.parseData(t);
+			String url = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
+		}
+
+		String csVersionTag = null;
+		boolean failOnAllErrors = false;
 
         try {
-            String sb = valueSetDefinition2XMLString(uri);
-            HttpServletResponse response = (HttpServletResponse) FacesContext
-                    .getCurrentInstance().getExternalContext().getResponse();
-            response.setContentType("text/xml");
-            /*
-            response.setHeader("Content-Disposition", "attachment; filename="
-                    + XML_FILE_NAME);
-            */
-            response.setContentLength(sb.length());
-            ServletOutputStream ouputStream = response.getOutputStream();
-            ouputStream.write(sb.toString().getBytes(), 0, sb.length());
-            ouputStream.flush();
-            ouputStream.close();
+        	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+			InputStream reader =  vsd_service.exportValueSetResolution(new URI(uri), valueSetDefinitionRevisionId,
+			   csvList, csVersionTag, failOnAllErrors);
+
+			if (reader != null) {
+				StringBuffer sb = new StringBuffer();
+				try {
+					for(int c = reader.read(); c != -1; c = reader.read()) {
+						sb.append((char)c);
+					}
+					//System.out.println(buf.toString());
+
+					HttpServletResponse response = (HttpServletResponse) FacesContext
+							.getCurrentInstance().getExternalContext().getResponse();
+					response.setContentType("text/xml");
+					response.setContentLength(sb.length());
+					ServletOutputStream ouputStream = response.getOutputStream();
+					ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+					ouputStream.flush();
+					ouputStream.close();
+
+				} catch(IOException e) {
+					throw e;
+				} finally {
+					try {
+						reader.close();
+					} catch(Exception e) {
+						// ignored
+					}
+			    }
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
