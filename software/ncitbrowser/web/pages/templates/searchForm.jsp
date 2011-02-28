@@ -132,6 +132,7 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
   if (vocab_name != null) {
   %>
     <input type="hidden" id="vocabulary" name="vocabulary" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
+    <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
     <input type="hidden" id="scheme" name="scheme" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
   <%
   }
