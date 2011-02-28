@@ -1,9 +1,10 @@
-<%@ page import="gov.nih.nci.evs.browser.utils.FormatUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.SortUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.SearchUtils" %>
-<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator" %>
-<%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+<%@ page import="java.util.*" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
+<%@ page import="gov.nih.nci.evs.browser.properties.*" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="org.LexGrid.concepts.*" %>
+<%@ page import="org.LexGrid.LexBIG.Utility.Iterators.*" %>
+<%@ page import="org.LexGrid.LexBIG.DataModel.Core.*" %>
 
 <%
   HashMap def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
@@ -15,10 +16,9 @@
   String ncim_cui_prop_linktext = null;
   Vector ncim_cui_code_vec = new Vector();
   
-  String prop_version = null;
-
-  String prop_dictionary = (String) request.getSession().getAttribute("dictionary");
-  prop_version = (String) request.getAttribute("version");
+  JSPUtils.JSPHeaderInfo prop_info = new JSPUtils.JSPHeaderInfo(request);
+  String prop_dictionary = prop_info.dictionary;
+  String prop_version = prop_info.version;
     
   //System.out.println("property.jsp prop_version: " + prop_version);    
 

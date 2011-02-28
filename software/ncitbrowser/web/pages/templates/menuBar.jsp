@@ -1,9 +1,9 @@
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils"%>
-<%@ page import="gov.nih.nci.evs.browser.common.Constants"%>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+<%@ page import="gov.nih.nci.evs.browser.common.*"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.*"%>
 <%
+  JSPUtils.JSPHeaderInfo menuBar_info = new JSPUtils.JSPHeaderInfo(request);
   String dictionaryName0 = null;
-  String dictionaryName = (String) request.getParameter("dictionary");
+  String dictionaryName = menuBar_info.dictionary;
   if (dictionaryName == null) dictionaryName = (String) request.getSession().getAttribute("dictionary");
   if (dictionaryName == null) dictionaryName = Constants.CODING_SCHEME_NAME;
 
@@ -21,12 +21,12 @@
 
 
 if (menubar_version == null) {
-    menubar_version = (String) request.getAttribute("version");
+    menubar_version = menuBar_info.version;
 }
 //System.out.println("menuBar.jsp menubar_version: " + menubar_version);
 
 
-  String hdr_dictionary0 = (String) request.getSession().getAttribute("dictionary");
+  String hdr_dictionary0 = menuBar_info.dictionary;
   if (hdr_dictionary0 == null) hdr_dictionary0 = ""; // Set to empty string
 
  boolean tree_access_allowed = true;

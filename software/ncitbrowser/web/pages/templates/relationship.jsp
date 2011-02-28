@@ -1,16 +1,16 @@
-
+<%@ page import="java.util.*" %>
+<%@ page import="gov.nih.nci.evs.browser.properties.*" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="org.LexGrid.concepts.*" %>
 <%
   if (type.compareTo("relationship") == 0 || type.compareTo("all") == 0)
   {
 
 
+JSPUtils.JSPHeaderInfo relationship_info = new JSPUtils.JSPHeaderInfo(request);
 Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
-String scheme_curr = (String) request.getSession().getAttribute("dictionary");
-if (scheme_curr == null) {
-scheme_curr = (String) request.getParameter("dictionary");
-}
-
-String version_curr = (String) request.getSession().getAttribute("version");
+String scheme_curr = relationship_info.dictionary;
+String version_curr = relationship_info.version;
 System.out.println("(*) relationship.jsp version_curr: " + version_curr);
 String version_parameter = "";
 if (version_curr != null && ! version_curr.equalsIgnoreCase("null"))
