@@ -2,11 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
-<%@ page import="java.util.Vector"%>
-<%@ page import="org.LexGrid.concepts.Entity" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+<%@ page import="java.util.*"%>
+<%@ page import="org.LexGrid.concepts.*" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
@@ -22,18 +20,16 @@
 <%
   // Determine which sub app the message or error came from in order to
   //   display the correct banner.
-
-  String dictionary = (String) request.getSession().getAttribute("dictionary");
+  JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
+  String dictionary = info.dictionary;
   String display_name = null;
   final int TB=0, NCIT=1, NCIO=2;
   int subApp = TB;
-  String version = (String) request.getParameter("version");
-  if (version == null)
-    version = (String) request.getAttribute("version");
+  String version = info.version;
   
   if (dictionary != null) {
-    display_name = DataUtils.getFormalName(dictionary);
-    version = DataUtils.getMetadataValue(display_name, version, "term_browser_version");
+    display_name = info.display_name;
+    version = info.term_browser_version;
     if (display_name == null) subApp = TB;
     else if (dictionary == "NCI Thesaurus" || dictionary == "NCI_Thesaurus")
       subApp = NCIT;

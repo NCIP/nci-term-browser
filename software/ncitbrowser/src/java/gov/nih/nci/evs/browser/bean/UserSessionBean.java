@@ -257,6 +257,7 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 System.out.println("(***) Searching scheme " + scheme + " ...");
 
 
+        request.setAttribute("dictionary", scheme);
 	    request.setAttribute("version", version);
 
 		boolean isMapping = DataUtils.isMapping(scheme, version);

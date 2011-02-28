@@ -59,28 +59,53 @@ public class JSPUtils {
         public String dictionary;
         public String version;
         public String version_deprecated;
+        
+        private void debugAllVersions(HttpServletRequest request) {
+            String dictionary = request.getParameter("dictionary");
+            String version = request.getParameter("version");
+            String prefix = "TESTING: ";
+            _logger.debug(Utils.SEPARATOR);
+            _logger.debug(prefix + "Request Parameters: " + 
+                "version=" + version + ", dictionary=" + dictionary);
+            
+            dictionary = (String) request.getAttribute("dictionary");
+            version = (String) request.getAttribute("version");
+            _logger.debug(prefix + "Request Attributes: " + 
+                "version=" + version + ", dictionary=" + dictionary);
+
+            dictionary = (String) request.getSession().getAttribute("dictionary");
+            version = (String) request.getSession().getAttribute("version");
+            _logger.debug(prefix + "Session Attributes: " + 
+                "version=" + version + ", dictionary=" + dictionary);
+        }
 
         public JSPHeaderInfo(HttpServletRequest request) {
+            // debugAllVersions(request);
             dictionary = request.getParameter("dictionary");
             version = request.getParameter("version");
             _logger.debug(Utils.SEPARATOR);
             _logger.debug("Request Parameters: " + 
-                "dictionary=" + dictionary + ", version=" + version);
+                "version=" + version + ", dictionary=" + dictionary);
 
             if (isNull(dictionary) && isNull(version)) {
                 dictionary = (String) request.getAttribute("dictionary");
                 version = (String) request.getAttribute("version");
                 _logger.debug("Request Attributes: " + 
-                    "dictionary=" + dictionary + ", version=" + version);
+                    "version=" + version + ", dictionary=" + dictionary);
             }
 
             if (isNull(dictionary) && isNull(version)) {
                 dictionary = (String) request.getSession().getAttribute("dictionary");
                 version = (String) request.getSession().getAttribute("version");
                 _logger.debug("Session Attributes: " + 
-                    "dictionary=" + dictionary + ", version=" + version);
+                    "version=" + version + ", dictionary=" + dictionary);
             }
 
+            if (isNull(dictionary) && ! isNull(version)) {
+                _logger.debug("Defaulting dictionary to: NCI Thesaurus");
+                dictionary = "NCI Thesaurus";
+            }
+            
             if (!DataUtils.isCodingSchemeLoaded(dictionary, version)) {
                 version_deprecated = version;
                 version =
@@ -89,7 +114,9 @@ public class JSPUtils {
                 _logger.debug(Utils.SEPARATOR);
                 _logger.debug("dictionary: " + dictionary);
                 _logger.debug("  * version: " + version);
-                _logger.debug("  * version_deprecated: " + version_deprecated);
+                if (version_deprecated != null)
+                    _logger.debug("  * version_deprecated: " + version_deprecated);
+                else _logger.debug("  * Note: Version was not specified.  Defaulting to producion.");
             }
             request.getSession().setAttribute("dictionary", dictionary);
             request.getSession().setAttribute("version", version);
@@ -102,17 +129,17 @@ public class JSPUtils {
 
         public JSPHeaderInfoMore(HttpServletRequest request) {
             super(request);
-            String short_name = DataUtils.getLocalName(dictionary);
-            String formal_name = DataUtils.getFormalName(short_name);
+            String localName = DataUtils.getLocalName(dictionary);
+            String formalName = DataUtils.getFormalName(localName);
 
             display_name =
                 DataUtils
-                    .getMetadataValue(formal_name, version, "display_name");
+                    .getMetadataValue(formalName, version, "display_name");
             if (isNull(display_name))
-                display_name = short_name;
+                display_name = localName;
 
             term_browser_version =
-                DataUtils.getMetadataValue(formal_name, version,
+                DataUtils.getMetadataValue(formalName, version,
                     "term_browser_version");
             if (isNull(term_browser_version))
                 term_browser_version = version;

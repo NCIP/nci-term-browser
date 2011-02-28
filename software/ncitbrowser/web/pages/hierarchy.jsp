@@ -5,8 +5,7 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -440,8 +439,9 @@
         </table>
 
 <%
-String hierarchy_dictionary = request.getParameter("dictionary");
-String hierarchy_version = request.getParameter("version");
+JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
+String hierarchy_dictionary = info.dictionary;
+String hierarchy_version = info.version;
 
 //System.out.println("hierarchy.jsp hierarchy_version: " + hierarchy_version);
 

@@ -1,8 +1,6 @@
-<%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.Utils" %>
-<%@ page import="gov.nih.nci.evs.browser.bean.LicenseBean" %>
+<%@ page import="gov.nih.nci.evs.browser.properties.*" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="org.apache.log4j.*" %>
 
 <script type="text/javascript">
@@ -45,33 +43,14 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
     String match_text = (String) request.getSession().getAttribute("matchText");
     if (match_text == null || match_text.compareTo("null") == 0) match_text = "";
 
-
-    String vocab_name = (String) request.getParameter("dictionary");
-
-    if ( vocab_name == null) {
-       vocab_name = (String) request.getSession().getAttribute("dictionary");
-    }
-
+    JSPUtils.JSPHeaderInfo vocab_info = new JSPUtils.JSPHeaderInfo(request);
+    String vocab_name = vocab_info.dictionary;
     vocab_name = DataUtils.getCodingSchemeName(vocab_name);
-
-    String srchform_version = (String) request.getAttribute("version");
-    if (srchform_version == null) {
-        srchform_version = (String) request.getParameter("version");
-    }
+    String srchform_version = vocab_info.version;
     
-
-if (srchform_version == null) {
-    srchform_version = DataUtils.getVocabularyVersionByTag(vocab_name, "PRODUCTION");
-}
-        
-System.out.println("********* searchForm.jsp version: " + srchform_version);
-
-if (srchform_version != null) {
-    request.getSession().setAttribute("version", srchform_version);  
-}
-        
+    logger.debug(Utils.SEPARATOR);
     logger.debug("searchForm.jsp vocab_name: " + vocab_name);
-
+    logger.debug("searchForm.jsp version: " + srchform_version);
 
     String displayed_match_text = HTTPUtils.convertJSPString(match_text);
 

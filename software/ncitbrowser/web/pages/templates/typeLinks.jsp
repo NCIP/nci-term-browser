@@ -1,16 +1,13 @@
-<%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <table width="700px" cellspacing="0" cellpadding="0" border="0" class="tabTable">
   <tr>
     <%
- String scheme = (String) request.getSession().getAttribute("dictionary");
+ JSPUtils.JSPHeaderInfo typeLinks_info = new JSPUtils.JSPHeaderInfo(request);
+ String scheme = typeLinks_info.dictionary;
  scheme = DataUtils.getFormalName(scheme);
 
- String tab_version = (String) request.getAttribute("version");
- if (tab_version == null ) {
-     tab_version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
- }
+ String tab_version = typeLinks_info.version;
  //System.out.println("typeLink.jsp tab_version: " + version);
 
  boolean tree_access = true;

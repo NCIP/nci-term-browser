@@ -2,14 +2,11 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
-<%@ page import="java.util.Vector"%>
-<%@ page import="java.util.List"%>
-<%@ page import="org.LexGrid.concepts.Entity" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
-<%@ page import="gov.nih.nci.evs.browser.bean.MetadataElement" %>
+<%@ page import="java.util.*"%>
+<%@ page import="org.LexGrid.concepts.*" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="gov.nih.nci.evs.browser.properties.*" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
@@ -39,13 +36,9 @@
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
     <!-- End Skip Top Navigation --> 
   <%
-
-String vocabulary_version = request.getParameter("version");
-//System.out.println("(***** vocabulary_home.jsp) vocabulary_version: " + vocabulary_version);
-if (vocabulary_version != null) {
-  request.setAttribute("version", vocabulary_version);
-}
-
+  JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
+  String vocabulary_version = info.version;
+  //System.out.println("(***** vocabulary_home.jsp) vocabulary_version: " + vocabulary_version);
 
     String menubar_scheme = null;
     String menubar_scheme0 = null;
@@ -69,17 +62,14 @@ if (vocabulary_version != null) {
     <!-- Main box -->
     <div id="main-area">
   <%
-    String dictionary = (String) request.getParameter("dictionary");
-    String version = (String) request.getParameter("version");
-    if (version == null)
-      version = (String) request.getAttribute("version");
-
+    String dictionary = info.dictionary;
+    String version = info.version;
     String scheme = (String) request.getParameter("scheme");
     String shortName = "Vocabulary";
     if (scheme == null) {
       scheme = (String) request.getAttribute("scheme");
     } else {
-      shortName = DataUtils.getMetadataValue(scheme, version, "display_name");
+      shortName = info.display_name;
       if (shortName == null) shortName = "Vocabulary";
     }
 
@@ -92,7 +82,7 @@ if (vocabulary_version != null) {
  System.out.println("menubar scheme: " + scheme);
  System.out.println("vocabulary_home_isMapping: " + vocabulary_home_isMapping);
 
-    String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
+    String term_browser_version = info.term_browser_version;
     if (term_browser_version == null) term_browser_version = "N/A";
 
     if (dictionary != null && scheme == null) {

@@ -36,7 +36,8 @@
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <%
-  String dictionary = (String) request.getParameter("dictionary");
+  JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+  String dictionary = info.dictionary;
   if (dictionary != null) {
     dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
     dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
@@ -47,9 +48,7 @@
   }
 
   String deprecatedVersion = null;
-  String version = (String) request.getParameter("version");
-  if (version == null)
-    version = (String) request.getAttribute("version");
+  String version = info.version;
 
   System.out.println("concept_details.jsp version: " + version);  
   request.setAttribute("version", version);

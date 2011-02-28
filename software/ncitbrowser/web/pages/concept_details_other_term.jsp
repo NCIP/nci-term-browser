@@ -58,12 +58,8 @@
       <!-- Main box -->
       <div id="main-area">
        <%
-        String dictionary = (String) request.getAttribute("dictionary");
-
-          if (dictionary == null) {
-            dictionary = (String) request.getParameter("dictionary");
-            dictionary = DataUtils.getCodingSchemeName(dictionary);
-          }
+          JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
+          String dictionary = info.dictionary;
 
  boolean cdo_isMapping = DataUtils.isMapping(dictionary, null);
  boolean tree_access_allowed = true;
@@ -71,7 +67,6 @@
      tree_access_allowed = false;
  }
 
-          String shortName = DataUtils.getLocalName(dictionary);
           String term_suggestion_application_url = new DataUtils()
               .getTermSuggestionURL();
 
@@ -90,21 +85,9 @@
 
 
  <%
-            String version = (String) request.getParameter("version");
-                if (version == null) {
-                  version = (String) request.getAttribute("version");
-                }
-
-                String term_browser_version = DataUtils.getMetadataValue(
-                    dictionary, version, "term_browser_version");
-                if (term_browser_version == null
-                    || term_browser_version.compareTo("null") == 0)
-                  term_browser_version = version;
-                String display_name = DataUtils.getMetadataValue(
-                    dictionary, version, "display_name");
-                if (display_name == null
-                    || display_name.compareTo("null") == 0)
-                  display_name = shortName;
+                String version = info.version;
+                String term_browser_version = info.term_browser_version;
+                String display_name = info.display_name;
           %>
     <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">
       <div class="vocabularynamebanner">

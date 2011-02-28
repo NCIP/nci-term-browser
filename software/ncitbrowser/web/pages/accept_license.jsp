@@ -17,9 +17,10 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <%
-  String dictionary = (String) request.getParameter("dictionary");
-  String version = (String) request.getParameter("version");
-  String display_name = DataUtils.getMetadataValue(dictionary, "display_name");
+  JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
+  String dictionary = info.dictionary;
+  String version = info.version;
+  String display_name = info.display_name;
   String code = (String) request.getParameter("code");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(dictionary, null);
 

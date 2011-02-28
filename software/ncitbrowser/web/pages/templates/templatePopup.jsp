@@ -16,14 +16,13 @@
   boolean is_display_app_logo = display_app_logo != null
     && display_app_logo.equalsIgnoreCase("true");
 
-  String hierarchy_dictionary = request.getParameter("dictionary");
-  String hierarchy_version = request.getParameter("version");
+  JSPUtils.JSPHeaderInfoMore hierarchy_info = new JSPUtils.JSPHeaderInfoMore(request);
+  String hierarchy_dictionary = hierarchy_info.dictionary;
+  String hierarchy_version = hierarchy_info.version;
   String hierarchy_schema = request.getParameter("schema");
   if (hierarchy_dictionary != null && hierarchy_schema == null)
     hierarchy_schema = hierarchy_dictionary;
-  String display_name = DataUtils.getMetadataValue(hierarchy_schema, hierarchy_version, "display_name");
-  if (display_name == null || display_name.compareTo("null") == 0)
-     display_name = DataUtils.getLocalName(hierarchy_schema);
+  String display_name = hierarchy_info.display_name;
 %>
 <!--
    Build info: <%=ncit_build_info%>
