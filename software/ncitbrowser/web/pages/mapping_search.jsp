@@ -361,12 +361,6 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
 				  </td>
 
                                </tr>
-                    <tr class="textbodysmall">
-                      <td>&nbsp;</td>
-                      <td>
-                        &nbsp;&nbsp;&nbsp;&nbsp;DEBUG: version = <%=version%>, Metadata(term_browser_version) = <%=term_browser_version%>
-                      </td>
-                    </tr>
 			     <%
 			      }
 			   }
