@@ -248,7 +248,7 @@
   <div class="textbody"><%=HTTPUtils.cleanXSS(name)%></div>
   <%
       }
-    %> <%@ include file="/pages/templates/nciFooter.html"%>
+    %> <%@ include file="/pages/templates/nciFooter.jsp"%>
   </div>
   </div>
   <!-- end Page content --></div>

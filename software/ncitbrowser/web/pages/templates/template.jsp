@@ -42,7 +42,7 @@
           <!-- Page content -->
           <div class="pagecontent">
             <jsp:include page="<%=content_page%>" />
-            <%@ include file="/pages/templates/nciFooter.html" %>
+            <%@ include file="/pages/templates/nciFooter.jsp" %>
           </div>
           <!-- end Page content -->
         </div>

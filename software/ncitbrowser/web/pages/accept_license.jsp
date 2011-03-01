@@ -77,7 +77,7 @@
             <input type="hidden" id="matchText" name="code" value="<%=matchText_licensedPage%>" />
 
           </h:form>
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>

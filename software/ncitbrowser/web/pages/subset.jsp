@@ -139,7 +139,7 @@
           <a href="<%= request.getContextPath() %>/pages/list_standard_reports.jsf">here</a>
           to see the new download page for Terminology Subset Reports.
         </p>
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>

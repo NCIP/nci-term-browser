@@ -200,7 +200,7 @@ if (scheme != null) {
                 <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(scheme)%>" />
                 <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" /></h:form>
               </p>
-              <%@ include file="/pages/templates/nciFooter.html" %>
+              <%@ include file="/pages/templates/nciFooter.jsp" %>
             </div>
         <% } else {
               if (scheme != null) {
@@ -310,7 +310,7 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
               <!-- end Quick links bar -->
               <div class="pagecontent">
                 <%@ include file="/pages/templates/welcome-other.jsp"%>
-                <%@ include file="/pages/templates/nciFooter.html" %>
+                <%@ include file="/pages/templates/nciFooter.jsp" %>
               </div>
         <% } %>
         </div><!-- end main-area -->

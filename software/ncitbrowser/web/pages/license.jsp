@@ -96,7 +96,7 @@
             <input type="hidden" id="searchTarget" name="searchTarget" value="<%=searchTarget%>" />
 
           </h:form>
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>

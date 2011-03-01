@@ -247,7 +247,7 @@
            <%
             }
            %>
-           <%@ include file="/pages/templates/nciFooter.html" %>
+           <%@ include file="/pages/templates/nciFooter.jsp" %>
           </div>
         </div>
         <!-- end Page content -->

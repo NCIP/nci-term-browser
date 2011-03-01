@@ -158,7 +158,7 @@ else if (contact_dictionary.compareTo("NCI Thesaurus") == 0) {
                 alt="National Cancer Institute Policies">
               <i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i>
             </a>
-            <%@ include file="/pages/templates/nciFooter.html" %>
+            <%@ include file="/pages/templates/nciFooter.jsp" %>
           </div>
           <!-- end Page content -->
         </div>

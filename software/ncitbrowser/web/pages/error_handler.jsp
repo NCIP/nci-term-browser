@@ -75,7 +75,7 @@
           String message = (String) request.getSession().getAttribute(Constants.ERROR_MESSAGE);
         %>
         <b><%=HTTPUtils.cleanXSS(message)%></b>
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>
