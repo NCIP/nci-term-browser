@@ -119,9 +119,10 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
         </td></tr>
             <% } else { %>
 
-            <tr class="textbody"><td>
 
  <h:form id="valueSetSearchResultsForm" styleClass="search-form">            
+
+            <tr class="textbody"><td>
  
  
  <%
@@ -165,16 +166,11 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
  <%
  }
  %> 
- 
- 
- 
- 
- 
+  
  
  <%
  if (vsd_uri != null) {
- 
- 
+  
  %>
  
     <input type="hidden" name="valueset" value="<%=vsd_uri%>">&nbsp;</input>
