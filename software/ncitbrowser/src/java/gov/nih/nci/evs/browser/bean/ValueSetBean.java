@@ -1020,6 +1020,39 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 	}
 
 
+
+    public void exportVSDToXMLAction() {
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String uri = (String) request.getSession().getAttribute("vsd_uri");
+        String xml_str = valueSetDefinition2XMLString(uri);
+
+		try {
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+			response.setContentType("text/xml");
+			response.setContentLength(xml_str.length());
+
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(xml_str.getBytes(), 0, xml_str.length());
+			ouputStream.flush();
+			ouputStream.close();
+
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+
+		FacesContext.getCurrentInstance().responseComplete();
+
+	}
+
+
+
+
+
     public void exportToXMLAction() {
 
         HttpServletRequest request =
