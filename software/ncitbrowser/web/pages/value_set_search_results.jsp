@@ -190,15 +190,19 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 if (vsd_vec != null && vsd_vec.size() > 1) {
 %> 
 		<th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
-<%
-}
-%>		
+		
 		
                 <th class="dataTableHeader" scope="col" align="left">Name</th>
                 <th class="dataTableHeader" scope="col" align="left">URI</th>
                 <th class="dataTableHeader" scope="col" align="left">Description</th>
                 <th class="dataTableHeader" scope="col" align="left">Concept Domain</th>
                 <th class="dataTableHeader" scope="col" align="left">Sources</th>
+		
+		
+<%
+}
+%>		
+		
 
 
 <%
@@ -215,6 +219,9 @@ if (vsd_vec != null) {
 		    String cd = (String) u.elementAt(3);
 		    String sources = (String) u.elementAt(4);
 
+
+if (vsd_vec.size() > 1)
+{
 		    if (i % 2 == 0) {
 		    %>
 		      <tr class="dataRowDark">
@@ -224,8 +231,15 @@ if (vsd_vec != null) {
 		      <tr class="dataRowLight">
 		    <%
 			}
-		    %>    
-
+		    %>  
+		    
+<%		    
+} else {
+%>
+    <tr>
+<%
+}
+%>
 		
 <%		
 if (vsd_vec != null && vsd_vec.size() > 1) {
@@ -253,13 +267,38 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 
 <%
 if (vsd_vec != null && vsd_vec.size() == 1) {
+    //if (sources == null || sources.compareTo("") == 0) sources = "not available";
 %>
 		      <td class="dataCellText">
-			 <%=name%>
+		      <p>
+			 <b><%=name%></b>
+		      </p>
+		      
+		      <p>
+			 Clicking on the Values button to find all concepts contained in this value set. The value set will be resolved
+			 using the production version of each participating terminology.
+			 Clicking on the Versions button to view available versions of each terminology participating in this value set.
+			 Clicking on XMLDefinition button to view the definition of the value set in LexGrid XML format.
+		      </p>
+		      
 		      </td>
+		      
+		      <!--
 		      <td class="dataCellText">
 			 <%=uri%>
 		      </td>
+		      <td class="dataCellText">
+			 <%=label%>
+		      </td>
+		      <td class="dataCellText">
+			 <%=cd%>
+		      </td>
+		      <td class="dataCellText">
+			 <%=sources%>
+		      </td>  
+		      -->
+		      
+		      
 <%		
 } else {
 %>		      
@@ -271,10 +310,6 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=<%=uri%>"><%=uri%></a>
 		      </td>
 
-<%		
-} 
-%>
-
 
 		      <td class="dataCellText">
 			 <%=label%>
@@ -285,6 +320,10 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 		      <td class="dataCellText">
 			 <%=sources%>
 		      </td>  
+
+<%		
+} 
+%>
 
 		      </tr>
               
