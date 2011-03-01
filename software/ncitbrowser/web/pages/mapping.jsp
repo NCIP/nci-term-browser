@@ -439,7 +439,6 @@ if (show_rank_column) {
             display_name_hmap.put(target_namespace, short_name);
             target_namespace = short_name;
         }       
-        
 
         source_scheme = mappingData.getSourceCodingScheme();
         source_version = mappingData.getSourceCodingSchemeVersion();
