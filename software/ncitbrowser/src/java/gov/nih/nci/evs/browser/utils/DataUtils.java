@@ -3970,7 +3970,8 @@ System.out.println("querying relationship data ...");
 				conceptDomainName_vec.add(entity.getEntityDescription().getContent());
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
+			System.out.println("Unable to resolve " + scheme + "  -- concept domain may not be available.");
 		}
 		conceptDomainName_vec = SortUtils.quickSort(conceptDomainName_vec);
 		return conceptDomainName_vec;
