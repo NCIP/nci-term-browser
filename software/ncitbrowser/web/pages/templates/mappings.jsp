@@ -144,7 +144,7 @@ if (show_rank_column) {
         if (display_name_hmap.containsKey(source_namespace)) {
             source_namespace = (String) display_name_hmap.get(source_namespace);
         } else {
-            String short_name = DataUtils.getMappingDisplayName(mapping_dictionary, source_namespace);
+            String short_name = DataUtils.getMappingDisplayName(scheme_curr, source_namespace);
             display_name_hmap.put(source_namespace, short_name);
             source_namespace = short_name;
         }
@@ -159,7 +159,7 @@ if (show_rank_column) {
         if (display_name_hmap.containsKey(target_namespace)) {
             target_namespace = (String) display_name_hmap.get(target_namespace);
         } else {
-            String short_name = DataUtils.getMappingDisplayName(mapping_dictionary, target_namespace);
+            String short_name = DataUtils.getMappingDisplayName(scheme_curr, target_namespace);
             display_name_hmap.put(target_namespace, short_name);
             target_namespace = short_name;
         }    
