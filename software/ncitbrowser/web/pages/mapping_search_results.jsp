@@ -67,34 +67,15 @@ HashMap scheme2MappingIteratorBeanMap = null;
 ResolvedConceptReferencesIterator iterator = null;
 MappingIteratorBean bean = null;
 
-String mapping_scheme = null;
-String mapping_dictionary = null;
-String mapping_version = null;
-
-mapping_dictionary = request.getParameter("dictionary");
-if (mapping_dictionary != null) {
-    mapping_scheme = mapping_dictionary;
-    mapping_version = request.getParameter("version");
-    if (mapping_version == null) {
-	mapping_version = DataUtils.getVocabularyVersionByTag(mapping_scheme, "PRODUCTION");
-    } 
-    request.getSession().setAttribute("version", mapping_version);
-    request.getSession().setAttribute("dictionary", mapping_scheme);
-
-} else {
-    mapping_dictionary = (String) request.getSession().getAttribute("dictionary");
-    mapping_scheme = mapping_dictionary;
-    mapping_version = (String) request.getSession().getAttribute("version");
-    if (mapping_version == null) {
-	mapping_version = DataUtils.getVocabularyVersionByTag(mapping_scheme, "PRODUCTION");
-    }        
-}
+JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+String mapping_scheme = info.dictionary;
+String mapping_dictionary = info.dictionary;
+String mapping_version = info.version;
 
 System.out.println("(*) mapping_search_results.jsp dictionary: " + mapping_dictionary);
 System.out.println("(*) mapping_search_results.jsp version: " + mapping_version);
 _logger.debug("mapping_search_results.jsp dictionary: " + mapping_dictionary);
 _logger.debug("mapping_search_results.jsp version: " + mapping_version);
-
 
  String mapping_display_name =
                 DataUtils

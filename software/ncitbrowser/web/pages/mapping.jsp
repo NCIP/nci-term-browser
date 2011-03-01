@@ -59,19 +59,13 @@
 HashMap display_name_hmap = new HashMap();
 
 ResolvedConceptReferencesIterator iterator = null;
-String mapping_dictionary = request.getParameter("dictionary");
-String mapping_version = request.getParameter("version");
-
-
-if (mapping_dictionary == null) {
-mapping_dictionary = (String) request.getSession().getAttribute("dictionary");
-}
-
-
+JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+String mapping_dictionary = info.dictionary;
+String mapping_version = info.version;
 
 String mapping_schema = request.getParameter("schema");
-
-if (mapping_dictionary != null && mapping_schema == null) mapping_schema = mapping_dictionary;
+if (mapping_dictionary != null && mapping_schema == null)
+  mapping_schema = mapping_dictionary;
 if (mapping_schema != null) {
   request.getSession().setAttribute("dictionary", mapping_schema);
 }

@@ -4,17 +4,10 @@
 
 
   Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
-  String scheme_curr = (String) request.getSession().getAttribute("dictionary");
-  if (scheme_curr == null) {
-    scheme_curr = (String) request.getParameter("dictionary");
-  }
-
-  String version_curr = (String) request.getSession().getAttribute("version");
-  if (version_curr == null) {
-      version_curr = (String) request.getParameter("version");
-  }  
+  JSPUtils.JSPHeaderInfo mapping_info = new JSPUtils.JSPHeaderInfo(request);
+  String scheme_curr = mapping_info.dictionary;
+  String version_curr = mapping_info.version;
   String code_curr = (String) request.getSession().getAttribute("code");
-  
   
   boolean isMappingCS = DataUtils.isMapping(scheme_curr, version_curr);
   
