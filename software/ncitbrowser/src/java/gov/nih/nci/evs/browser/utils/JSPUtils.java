@@ -71,15 +71,15 @@ public class JSPUtils {
 
             String dictionary = request.getParameter("dictionary");
             String version = request.getParameter("version");
-            debugDV(prefix + "Request Parameters: ", version, dictionary);
+            debugDV(prefix + "Request Parameters: ", dictionary, version);
 
             dictionary = (String) request.getAttribute("dictionary");
             version = (String) request.getAttribute("version");
-            debugDV(prefix + "Request Attributes: ", version, dictionary);
+            debugDV(prefix + "Request Attributes: ", dictionary, version);
             
             dictionary = (String) request.getSession().getAttribute("dictionary");
             version = (String) request.getSession().getAttribute("version");
-            debugDV(prefix + "Session Attributes: ", version, dictionary);
+            debugDV(prefix + "Session Attributes: ", dictionary, version);
         }
 
         public JSPHeaderInfo(HttpServletRequest request) {
@@ -88,18 +88,18 @@ public class JSPUtils {
             _logger.debug(Utils.SEPARATOR);
             dictionary = request.getParameter("dictionary");
             version = request.getParameter("version");
-            debugDV("Request Parameters: ", version, dictionary);
+            debugDV("Request Parameters: ", dictionary, version);
 
             if (isNull(dictionary) && isNull(version)) {
                 dictionary = (String) request.getAttribute("dictionary");
                 version = (String) request.getAttribute("version");
-                debugDV("Request Attributes: ", version, dictionary);
+                debugDV("Request Attributes: ", dictionary, version);
             }
 
             if (isNull(dictionary) && isNull(version)) {
                 dictionary = (String) request.getSession().getAttribute("dictionary");
                 version = (String) request.getSession().getAttribute("version");
-                debugDV("Session Attributes: ", version, dictionary);
+                debugDV("Session Attributes: ", dictionary, version);
             }
 
             if (isNull(dictionary) && ! isNull(version)) {
