@@ -74,7 +74,7 @@
         <p class="textbodyred">&nbsp;<%=message%></p>
 
         
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>

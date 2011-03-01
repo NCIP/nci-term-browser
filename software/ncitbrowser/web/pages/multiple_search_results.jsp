@@ -397,7 +397,7 @@ if (resultsPerPage == null) {
         
         
         
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div> <!-- end Page content -->
     </div> <!-- end main-area -->    
     <div class="mainbox-bottom"><img src="images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>

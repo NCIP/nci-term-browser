@@ -363,7 +363,7 @@ if (isMapping || isExtension) {
 
 
         <%@ include file="/pages/templates/pagination.jsp" %>
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>

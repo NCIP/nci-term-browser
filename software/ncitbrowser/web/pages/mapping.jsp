@@ -502,7 +502,7 @@ if (show_rank_column) {
           </table>
 
         <%@ include file="/pages/templates/pagination-mapping.jsp" %>
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>

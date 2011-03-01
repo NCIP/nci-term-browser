@@ -327,7 +327,6 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
 				    term_browser_version = version;
 				}     
 				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
-		
 
 				if (label != null)
 				  http_label = label.replaceAll(" ", "%20");
@@ -362,6 +361,12 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
 				  </td>
 
                                </tr>
+                    <tr class="textbodysmall">
+                      <td>&nbsp;</td>
+                      <td>
+                        &nbsp;&nbsp;&nbsp;&nbsp;DEBUG: version = <%=version%>, Metadata(term_browser_version) = <%=term_browser_version%>
+                      </td>
+                    </tr>
 			     <%
 			      }
 			   }
@@ -378,7 +383,7 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
 %>
 
           </div> <!-- end tabTableContentContainer -->
-          <%@ include file="/pages/templates/nciFooter.html"%>
+          <%@ include file="/pages/templates/nciFooter.jsp"%>
         </div> <!-- end Page content -->
     </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>

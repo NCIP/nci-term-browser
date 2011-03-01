@@ -375,7 +375,7 @@ if (show_rank_column) {
  %>       
         
         
-        <%@ include file="/pages/templates/nciFooter.html" %>
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>
