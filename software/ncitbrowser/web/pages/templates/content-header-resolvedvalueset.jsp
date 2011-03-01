@@ -55,9 +55,31 @@ System.out.println("vsdUri: " + vsdUri);
 	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?nav_type=valuesets&uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
       
 	<div class="vocabularynamebanner">
+	
+<%
+if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
+%>
+	
 		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
 		    <%=HTTPUtils.cleanXSS(vsd_name)%>
 		  </div>
+<%		  
+} else {
+
+System.out.println("Using small font.");
+%>
+
+
+		  <div class="vocabularynameshort" STYLE="font-size:x-small; ">
+		    <%=HTTPUtils.cleanXSS(vsd_name)%>
+		  </div>
+
+<%
+}
+%>
+		  
+		  
+		  
 	</div>
   
 	    </a>

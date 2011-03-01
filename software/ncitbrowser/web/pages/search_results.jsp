@@ -132,8 +132,8 @@ request.setAttribute("key", key);
           {
               page_string = page_number;
           }
-
           request.getSession().setAttribute("new_search", Boolean.FALSE);
+          
           int page_num = Integer.parseInt(page_string);
           int next_page_num = page_num + 1;
           int prev_page_num = page_num - 1;
@@ -151,10 +151,9 @@ request.setAttribute("key", key);
           String match_size = "0";
 
           if (iteratorBean != null) {
-      size = iteratorBean.getSize();
-      match_size = new Integer(size).toString();
+	      size = iteratorBean.getSize();
+	      match_size = new Integer(size).toString();
           }
-
 
           if (iend > size-1) iend = size-1;
           int num_pages = size / page_size;
@@ -164,13 +163,13 @@ request.setAttribute("key", key);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
 
-    int numberRemaining_before = iteratorBean.getSize();
-    List list = iteratorBean.getData(istart, iend);
-    int numberRemaining_after = iteratorBean.getSize();
-    if (numberRemaining_before != numberRemaining_after) {
-        iend_str = new Integer(numberRemaining_after).toString();
-        match_size = new Integer(numberRemaining_after).toString();
-    }
+	  int numberRemaining_before = iteratorBean.getSize();
+	  List list = iteratorBean.getData(istart, iend);
+	  int numberRemaining_after = iteratorBean.getSize();
+	  if (numberRemaining_before != numberRemaining_after) {
+		iend_str = new Integer(numberRemaining_after).toString();
+		match_size = new Integer(numberRemaining_after).toString();
+	  }
     
     boolean timeout = iteratorBean.getTimeout();
     if (timeout) {

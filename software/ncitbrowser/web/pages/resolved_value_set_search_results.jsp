@@ -107,26 +107,35 @@ String key = (String) request.getSession().getAttribute("key");
         //String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
         String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
 
+
         if (page_number != null && new_search == Boolean.FALSE)
         {
             page_string = page_number;
         }
         request.getSession().setAttribute("new_search", Boolean.FALSE);
 
-        int page_num = Integer.parseInt(page_string);
-        int next_page_num = page_num + 1;
-        int prev_page_num = page_num - 1;
-        int page_size = 50;
-        if (selectedResultsPerPage != null && selectedResultsPerPage.compareTo("") != 0)
-        {
-            page_size = Integer.parseInt(selectedResultsPerPage);
-        }
+
+
+          int page_num = Integer.parseInt(page_string);
+          int next_page_num = page_num + 1;
+          int prev_page_num = page_num - 1;
+          int page_size = 50;
+
+          if (selectedResultsPerPage != null && selectedResultsPerPage.compareTo("") != 0)
+          {
+              page_size = Integer.parseInt(selectedResultsPerPage);
+          }
 
           int iend = page_num * page_size;
           int istart = iend - page_size;
           iend = iend-1;
-          int size = iteratorBean.getSize();
-          String match_size = new Integer(size).toString();
+          int size = 0;
+          String match_size = "0";
+
+          if (iteratorBean != null) {
+	      size = iteratorBean.getSize();
+	      match_size = new Integer(size).toString();
+          }
 
           if (iend > size-1) iend = size-1;
           int num_pages = size / page_size;
@@ -135,6 +144,17 @@ String key = (String) request.getSession().getAttribute("key");
           String iend_str = Integer.toString(iend+1);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
+
+	  int numberRemaining_before = iteratorBean.getSize();
+	  List list = iteratorBean.getData(istart, iend);
+	  int numberRemaining_after = iteratorBean.getSize();
+	  if (numberRemaining_before != numberRemaining_after) {
+		iend_str = new Integer(numberRemaining_after).toString();
+		match_size = new Integer(numberRemaining_after).toString();
+	  }
+	  
+	  
+	  
 
       %>
         <table width="700px">
