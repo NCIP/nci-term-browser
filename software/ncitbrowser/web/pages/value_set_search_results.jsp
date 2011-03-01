@@ -149,7 +149,7 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
                         tabindex="2">
                       </h:commandButton>
                     &nbsp;
-                      <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportToXMLAction}"
+                      <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportVSDToXMLAction}"
                         onclick="javascript:cursor_wait();"
                         image="#{valueSetSearch_requestContextPath}/images/xmldefinitions.gif"
                         alt="XML Definition"
@@ -356,7 +356,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
                        tabindex="2">
                      </h:commandButton>
                    &nbsp;
-                     <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportToXMLAction}"
+                     <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportVSDToXMLAction}"
                        onclick="javascript:cursor_wait();"
                        image="#{valueSetSearch_requestContextPath}/images/xmldefinitions.gif"
                        alt="XML Definition"
@@ -373,7 +373,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 <%		
 if (vsd_vec != null && vsd_vec.size() == 1) {
 %>		
-    <input type="hidden" name="valueset" id="valueset" value="<%=vsd_uri%>">	
+    <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">	
 <%
 }
 %>
