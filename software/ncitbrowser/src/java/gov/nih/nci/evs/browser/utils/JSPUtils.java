@@ -59,46 +59,47 @@ public class JSPUtils {
         public String dictionary;
         public String version;
         public String version_deprecated;
+        private boolean debugAll = false;
+        
+        private void debugDV(String msg, String dictionary, String version) {
+            _logger.debug(msg + "version=" + version + ", dictionary=" + dictionary);
+        }
         
         private void debugAllVersions(HttpServletRequest request) {
+            String prefix = "ALL: ";
+            _logger.debug(Utils.SEPARATOR_DASHES);
+
             String dictionary = request.getParameter("dictionary");
             String version = request.getParameter("version");
-            String prefix = "TESTING: ";
-            _logger.debug(Utils.SEPARATOR);
-            _logger.debug(prefix + "Request Parameters: " + 
-                "version=" + version + ", dictionary=" + dictionary);
-            
+            debugDV(prefix + "Request Parameters: ", version, dictionary);
+
             dictionary = (String) request.getAttribute("dictionary");
             version = (String) request.getAttribute("version");
-            _logger.debug(prefix + "Request Attributes: " + 
-                "version=" + version + ", dictionary=" + dictionary);
-
+            debugDV(prefix + "Request Attributes: ", version, dictionary);
+            
             dictionary = (String) request.getSession().getAttribute("dictionary");
             version = (String) request.getSession().getAttribute("version");
-            _logger.debug(prefix + "Session Attributes: " + 
-                "version=" + version + ", dictionary=" + dictionary);
+            debugDV(prefix + "Session Attributes: ", version, dictionary);
         }
 
         public JSPHeaderInfo(HttpServletRequest request) {
-            // debugAllVersions(request);
+            if (debugAll)
+                debugAllVersions(request);
+            _logger.debug(Utils.SEPARATOR);
             dictionary = request.getParameter("dictionary");
             version = request.getParameter("version");
-            _logger.debug(Utils.SEPARATOR);
-            _logger.debug("Request Parameters: " + 
-                "version=" + version + ", dictionary=" + dictionary);
+            debugDV("Request Parameters: ", version, dictionary);
 
             if (isNull(dictionary) && isNull(version)) {
                 dictionary = (String) request.getAttribute("dictionary");
                 version = (String) request.getAttribute("version");
-                _logger.debug("Request Attributes: " + 
-                    "version=" + version + ", dictionary=" + dictionary);
+                debugDV("Request Attributes: ", version, dictionary);
             }
 
             if (isNull(dictionary) && isNull(version)) {
                 dictionary = (String) request.getSession().getAttribute("dictionary");
                 version = (String) request.getSession().getAttribute("version");
-                _logger.debug("Session Attributes: " + 
-                    "version=" + version + ", dictionary=" + dictionary);
+                debugDV("Session Attributes: ", version, dictionary);
             }
 
             if (isNull(dictionary) && ! isNull(version)) {

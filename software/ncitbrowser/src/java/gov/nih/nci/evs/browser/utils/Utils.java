@@ -52,6 +52,9 @@ public class Utils {
     public static final String SEPARATOR =
         "----------------------------------------"
             + "----------------------------------------";
+    public static final String SEPARATOR_DASHES =
+        "========================================"
+            + "========================================";
     private static DecimalFormat _doubleFormatter = new DecimalFormat("0.00");
 
     public static Logger getJspLogger(String fileName) {
