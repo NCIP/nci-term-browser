@@ -68,8 +68,12 @@
         <a name="evs-content" id="evs-content"></a>
         <%
           String message = (String) request.getSession().getAttribute("message");
+          request.getSession().removeAttribute("message");
         %>
+        
         <p class="textbodyred">&nbsp;<%=message%></p>
+
+        
         <%@ include file="/pages/templates/nciFooter.html" %>
       </div>
       <!-- end Page content -->
