@@ -227,7 +227,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                         scheme, version, "vocabulary_sort_category");
                     
                     display_name_hmap.put(display_name+"$"+version, value);
-                    display_name_vec.add(new OntologyInfo(display_name+"$"+version, sort_category));
+                    display_name_vec.add(new OntologyInfo(display_name+"$"+version, scheme, sort_category));
                   }
                   
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());

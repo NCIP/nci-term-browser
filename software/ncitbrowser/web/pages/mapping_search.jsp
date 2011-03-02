@@ -293,7 +293,7 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
                         String label = (String)  display_name_hmap.get(display_name_version);
                        
                         String label2 = "|" + label + "|";
-                        String scheme = DataUtils.key2CodingSchemeName(value);
+                        String scheme = info.getCodingScheme();
                         String version = DataUtils.key2CodingSchemeVersion(value);
                         
                         boolean isMapping = DataUtils.isMapping(scheme, version);
