@@ -242,7 +242,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         int sort_category = info.getSortCategory();
-                        String display_name_version = info.getDisplayName();
+                        String display_name_version = info.getDisplayNameVersion();
                         
                         int n = display_name_version.indexOf("$");
                         String display_name = display_name_version.substring(0, n);
@@ -405,7 +405,7 @@ System.out.println("mappings tab clicked...");
                      
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-                        String display_name_version = info.getDisplayName();
+                        String display_name_version = info.getDisplayNameVersion();
                         
                         int n = display_name_version.indexOf("$");
                         String display_name = display_name_version.substring(0, n);
