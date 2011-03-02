@@ -72,13 +72,11 @@
     request.getSession().removeAttribute("dictionary");
     
     String navigation_type = (String) request.getParameter("nav_type");
-    
-System.out.println("multiple_search.jsp  navigation_type: " + navigation_type);
-
-    
-    if (navigation_type != null) {
-    	request.getSession().setAttribute("nav_type", navigation_type);
+    if (navigation_type == null) {
+        navigation_type = "terminologies";
     }
+    request.getSession().setAttribute("nav_type", navigation_type);
+
  
 
 HashMap display_name_hmap = null;
@@ -188,15 +186,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
             <br/><br/>
             </span>
 <%
-} else if (navigation_type != null || navigation_type.compareTo("mappings") == 0) {
-%>           
-            <span class="textbody">&nbsp;Select mapping data sets to perform simultaneous search, or click on a specific mapping data set name to go to its home page
-            and perform search there.
-            &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow.)
-            <br/><br/>
-            </span>
-<%
-}
+} 
 %>
 
 
@@ -528,6 +518,8 @@ System.out.println("mappings tab clicked...");
 </f:view>
 <%
     request.getSession().removeAttribute("dictionary");
+    request.getSession().removeAttribute("message");
+    request.getSession().removeAttribute("warning");
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().putValue("visited","true");
     

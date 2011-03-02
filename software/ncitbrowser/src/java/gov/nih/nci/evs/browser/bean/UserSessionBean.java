@@ -348,6 +348,7 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 					System.out.println("(******************) searchAction returns " + msg);
 
 					if (mapping_search) {
+						request.getSession().setAttribute("nav_type", "mappings");
 						return "return_to_mapping_home";
 					} else {
 						return "message";
@@ -370,6 +371,7 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 						System.out.println("(******************) searchAction returns " + numberRemaining + " matches.");
 
 						if (mapping_search) {
+							request.getSession().setAttribute("nav_type", "mappings");
 							return "return_to_mapping_home";
 						} else {
 							return "message";
@@ -385,6 +387,7 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 					request.getSession().setAttribute("version", version);
 
 					if (mapping_search) {
+						request.getSession().setAttribute("nav_type", "mappings");
 						return "return_to_mapping_home";
 					} else {
 						return "message";
@@ -1053,6 +1056,8 @@ System.out.println("Relationship search ****************************************
                     "defaultOntologiesToSearchOnStr", "|");
                 request.getSession().setAttribute("matchText",
                     HTTPUtils.convertJSPString(matchText));
+
+                request.getSession().setAttribute("nav_type", "Terminologies");
 
                 return "multiple_search";
             } else {

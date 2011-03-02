@@ -247,19 +247,7 @@ if (mapping_error_msg != null) {
 } 
 %>
 
-          <table class="termstable" border="0">
-                <tr>
-                  <td>
 
-                  <h:commandButton id="Search" value="Search"
-                    action="#{userSessionBean.searchAction}"
-                    image="#{requestContextPath}/images/search.gif"
-                    alt="Search">
-                  </h:commandButton>
-                  
-                  </td>
-                </tr>
-          </table>
 
             
  
@@ -371,7 +359,22 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
            
             </table>
 
+<p></p>
 
+          <table class="termstable" border="0">
+                <tr>
+                  <td>
+
+                  <h:commandButton id="Search" value="Search"
+                    action="#{userSessionBean.searchAction}"
+                    image="#{requestContextPath}/images/search.gif"
+                    alt="Search">
+                  </h:commandButton>
+                  
+                  </td>
+                </tr>
+          </table>
+          
 <%
 }
 %>

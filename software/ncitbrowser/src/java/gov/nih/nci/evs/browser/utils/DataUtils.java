@@ -561,11 +561,11 @@ public class DataUtils {
         boolean isLoaded = _formalNameVersion2MetadataHashMap.containsKey(scheme + "$" + version);
         if (isLoaded)
             return isLoaded;
-        
+
         String formalName = getFormalName(scheme);
         if (formalName.equals(scheme))
             return isLoaded;
-            
+
         isLoaded = _formalNameVersion2MetadataHashMap.containsKey(formalName + "$" + version);
         return isLoaded;
     }

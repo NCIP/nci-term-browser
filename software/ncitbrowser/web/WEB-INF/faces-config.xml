@@ -818,27 +818,12 @@
        <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
     </navigation-case>
 
-
-    <navigation-case>
-       <description>mapping_search_results</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>mapping_search_results</from-outcome>
-       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
-    </navigation-case>
-    
-    
+   
     <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.multipleSearchAction}</from-action>
        <from-outcome>license</from-outcome>
        <to-view-id>/pages/license.jsp</to-view-id>
-    </navigation-case>
-
-    <navigation-case>
-       <description>message</description>
-       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
-       <from-outcome>message</from-outcome>
-       <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
 
     <navigation-case>
@@ -855,6 +840,14 @@
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
 
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>
+    
+    
   </navigation-rule>
 
   <navigation-rule>
