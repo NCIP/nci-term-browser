@@ -3,37 +3,52 @@ package gov.nih.nci.evs.browser.utils;
 import java.util.*;
 
 public class OntologyInfo {
-    private String _displayNameVersion = "";
     private String _codingScheme = "";
+    private String _displayName = "";
+    private String _version = "";
+    private String _displayNameVersion = "";
     private int _sortCategory = 0;
 
-    public OntologyInfo(String displayNameVersion, String codingScheme, String sortCategory) {
+    public OntologyInfo(String codingScheme, String displayName, String version,
+        String sortCategory) {
         try {
             if (sortCategory == null || sortCategory.trim().length() <= 0)
                 throw new Exception("Sort Category not defined.");
             int category = Integer.parseInt(sortCategory);
-            init(displayNameVersion, codingScheme, category);
+            init(codingScheme, displayName, version, category);
         } catch (Exception e) {
-            init(displayNameVersion, codingScheme, 0);
+            init(codingScheme, displayName, version, 0);
         }
     }
 
-    public OntologyInfo(String displayNameVersion, String codingScheme, int sortCategory) {
-        init(displayNameVersion, codingScheme, sortCategory);
+    public OntologyInfo(String codingScheme, String displayName, String version,
+        int sortCategory) {
+        init(codingScheme, displayName, version, sortCategory);
     }
 
-    private void init(String displayNameVersion, String codingScheme, int sortCategory) {
-        _displayNameVersion = displayNameVersion;
+    private void init(String codingScheme, String displayName, String version,
+        int sortCategory) {
         _codingScheme = codingScheme;
+        _displayName = displayName;
+        _version = version;
+        _displayNameVersion = displayName + "$" + version;
         _sortCategory = sortCategory;
-    }
-
-    public String getDisplayNameVersion() {
-        return _displayNameVersion;
     }
 
     public String getCodingScheme() {
         return _codingScheme;
+    }
+
+    public String getDisplayName() {
+        return _displayName;
+    }
+
+    public String getVersion() {
+        return _version;
+    }
+
+    public String getDisplayNameVersion() {
+        return _displayNameVersion;
     }
 
     public int getSortCategory() {

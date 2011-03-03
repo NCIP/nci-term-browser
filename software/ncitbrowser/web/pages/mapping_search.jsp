@@ -286,15 +286,12 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         String display_name_version = info.getDisplayNameVersion();
-                        
-                        int n = display_name_version.indexOf("$");
-                        String display_name = display_name_version.substring(0, n);
-                        String value = (String)  display_name_hmap.get(display_name_version);
+                        String display_name = info.getDisplayName();
                         String label = (String)  display_name_hmap.get(display_name_version);
                        
                         String label2 = "|" + label + "|";
                         String scheme = info.getCodingScheme();
-                        String version = DataUtils.key2CodingSchemeVersion(value);
+                        String version = info.getVersion();
                         
                         boolean isMapping = DataUtils.isMapping(scheme, version);
                         if (isMapping) {
