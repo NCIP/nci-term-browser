@@ -79,10 +79,7 @@
 
  
 
-HashMap display_name_hmap = null;
-Vector display_name_vec = null;
-display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
-display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 String warning_msg = (String) request.getSession().getAttribute("warning");
 String ontologiesToSearchOn = (String) request.getSession().getAttribute("defaultOntologiesToSearchOnStr");
 if (ontologiesToSearchOn == null) {
@@ -207,9 +204,8 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                 int num_vocabularies = ontology_list.size();
 
 
-                if (display_name_hmap == null || display_name_vec == null) {
-                        display_name_hmap = new HashMap();
-                        display_name_vec = new Vector();
+                if (display_name_vec == null) {
+                  display_name_vec = new Vector();
 
                   for (int i = 0; i < ontology_list.size(); i++) {
                     SelectItem item = (SelectItem) ontology_list.get(i);
@@ -226,13 +222,11 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                     String sort_category = DataUtils.getMetadataValue(
                         scheme, version, "vocabulary_sort_category");
                     
-                    OntologyInfo info = new OntologyInfo(scheme, display_name, version, sort_category);
-                    display_name_hmap.put(info.getDisplayNameVersion(), value);
+                    OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
                     display_name_vec.add(info);
                   }
                   
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
-                  request.getSession().setAttribute("display_name_hmap", display_name_hmap);
                   request.getSession().setAttribute("display_name_vec", display_name_vec);
                 }
                 %>
@@ -245,8 +239,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                         int sort_category = info.getSortCategory();
                         String display_name_version = info.getDisplayNameVersion();
                         String display_name = info.getDisplayName();
-                        String label = (String)  display_name_hmap.get(display_name_version);
-                       
+                        String label = info.getLabel();
                         String label2 = "|" + label + "|";
                         String scheme = info.getCodingScheme();
                         String version = info.getVersion();
@@ -405,8 +398,7 @@ System.out.println("mappings tab clicked...");
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         String display_name_version = info.getDisplayNameVersion();
                         String display_name = info.getDisplayName();
-                        String label = (String)  display_name_hmap.get(display_name_version);
-                       
+                        String label = info.getLabel();
                         String label2 = "|" + label + "|";
                         String scheme = info.getCodingScheme();
                         String version = info.getVersion();

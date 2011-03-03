@@ -154,10 +154,6 @@ public class JSPUtils {
             return "";
 
         @SuppressWarnings("unchecked")
-        HashMap<String, String> display_name_hmap =
-            (HashMap<String, String>) request.getSession().getAttribute(
-                "display_name_hmap");
-        @SuppressWarnings("unchecked")
         Vector<OntologyInfo> display_name_vec =
             (Vector<OntologyInfo>) request.getSession().getAttribute(
                 "display_name_vec");
@@ -177,8 +173,8 @@ public class JSPUtils {
             for (int j = 0; j < display_name_vec.size(); j++) {
                 OntologyInfo info = display_name_vec.elementAt(j);
                 String nm = info.getDisplayNameVersion();
-                String val = display_name_hmap.get(nm);
-                if (val.compareTo(s) == 0) {
+                String label = info.getLabel();
+                if (label.compareTo(s) == 0) {
                     s = nm;
                     break;
                 }

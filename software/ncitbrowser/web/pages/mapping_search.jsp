@@ -86,10 +86,7 @@ System.out.println("mapping_search.jsp  navigation_type: " + navigation_type);
     }
  
 
-HashMap display_name_hmap = null;
-Vector display_name_vec = null;
-display_name_hmap = (HashMap) request.getSession().getAttribute("display_name_hmap");
-display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 String warning_msg = (String) request.getSession().getAttribute("warning");
 
 
@@ -287,9 +284,7 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         String display_name_version = info.getDisplayNameVersion();
                         String display_name = info.getDisplayName();
-                        String label = (String)  display_name_hmap.get(display_name_version);
-                       
-                        String label2 = "|" + label + "|";
+                        String label = info.getLabel();
                         String scheme = info.getCodingScheme();
                         String version = info.getVersion();
                         
