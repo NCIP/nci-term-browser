@@ -1109,9 +1109,6 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 			URI valueSetDefinitionURI = new URI(uri);
 			StringBuffer buf = vsd_service.exportValueSetDefinition(valueSetDefinitionURI, valueSetDefinitionRevisionId);
             s = buf.toString();
-
-            System.out.println(s);
-
         } catch (Exception ex) {
            ex.printStackTrace();
         }
@@ -1133,6 +1130,14 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 			HttpServletResponse response = (HttpServletResponse) FacesContext
 					.getCurrentInstance().getExternalContext().getResponse();
 			response.setContentType("text/xml");
+
+			String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+			vsd_name = vsd_name.replaceAll(" ", "_");
+			vsd_name = vsd_name + ".xml";
+
+		    response.setHeader("Content-Disposition", "attachment; filename="
+					+ vsd_name);
+
 			response.setContentLength(xml_str.length());
 
 			ServletOutputStream ouputStream = response.getOutputStream();
@@ -1195,11 +1200,19 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 					for(int c = reader.read(); c != -1; c = reader.read()) {
 						sb.append((char)c);
 					}
-					//System.out.println(buf.toString());
 
 					HttpServletResponse response = (HttpServletResponse) FacesContext
 							.getCurrentInstance().getExternalContext().getResponse();
 					response.setContentType("text/xml");
+
+					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+					vsd_name = vsd_name.replaceAll(" ", "_");
+					vsd_name = "resolved_" + vsd_name + ".xml";
+
+					response.setHeader("Content-Disposition", "attachment; filename="
+							+ vsd_name);
+
+
 					response.setContentLength(sb.length());
 					ServletOutputStream ouputStream = response.getOutputStream();
 					ouputStream.write(sb.toString().getBytes(), 0, sb.length());
@@ -1293,8 +1306,14 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		HttpServletResponse response = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
 		response.setContentType("text/csv");
+
+		vsd_uri = DataUtils.valueSetDefiniionURI2Name(vsd_uri);
+		vsd_uri = vsd_uri.replaceAll(" ", "_");
+		vsd_uri = "resolved_" + vsd_uri + ".txt";
+
 		response.setHeader("Content-Disposition", "attachment; filename="
-					+ vsd_uri);
+				+ vsd_uri);
+
 		response.setContentLength(sb.length());
 
 		try {
