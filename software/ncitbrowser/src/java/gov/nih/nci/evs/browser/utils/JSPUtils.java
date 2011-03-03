@@ -163,27 +163,24 @@ public class JSPUtils {
         String value = "";
         for (int i = 0; i < ontologies_to_search_on.size(); i++) {
             String s = ontologies_to_search_on.elementAt(i);
-            String t1 = DataUtils.key2CodingSchemeName(s);
-            String v1 = DataUtils.key2CodingSchemeVersion(s);
+            String csName = DataUtils.key2CodingSchemeName(s);
+            String csVersion = DataUtils.key2CodingSchemeVersion(s);
             String term_browser_version =
-                DataUtils.getMetadataValue(t1, v1, "term_browser_version");
+                DataUtils.getMetadataValue(csName, csVersion, "term_browser_version");
+            String displayName = "";
 
             if (term_browser_version == null)
-                term_browser_version = v1;
+                term_browser_version = csVersion;
             for (int j = 0; j < display_name_vec.size(); j++) {
                 OntologyInfo info = display_name_vec.elementAt(j);
-                String nm = info.getDisplayNameVersion();
                 String label = info.getLabel();
                 if (label.compareTo(s) == 0) {
-                    s = nm;
+                    displayName = info.getDisplayName();
                     break;
                 }
             }
-            int k = s.lastIndexOf('$');
-            if (k >= 0)
-                s = s.substring(0, k);
-            s = s + " (" + term_browser_version + ")";
-            value = value + s + "<br/>";
+            displayName += " (" + term_browser_version + ")";
+            value = value + displayName + "<br/>";
         }
         return value;
     }
