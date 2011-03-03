@@ -237,7 +237,6 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         int sort_category = info.getSortCategory();
-                        String display_name_version = info.getDisplayNameVersion();
                         String display_name = info.getDisplayName();
                         String label = info.getLabel();
                         String label2 = "|" + label + "|";
@@ -396,7 +395,6 @@ System.out.println("mappings tab clicked...");
                      
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-                        String display_name_version = info.getDisplayNameVersion();
                         String display_name = info.getDisplayName();
                         String label = info.getLabel();
                         String label2 = "|" + label + "|";

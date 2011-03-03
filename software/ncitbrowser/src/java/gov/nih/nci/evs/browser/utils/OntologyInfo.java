@@ -48,7 +48,6 @@ public class OntologyInfo {
     private String _codingScheme = "";
     private String _displayName = "";
     private String _version = "";
-    private String _displayNameVersion = "";
     private String _label = "";
     private int _sortCategory = 0;
 
@@ -74,7 +73,6 @@ public class OntologyInfo {
         _codingScheme = codingScheme;
         _displayName = displayName;
         _version = version;
-        _displayNameVersion = displayName + "$" + version;
         _label = label;
         _sortCategory = sortCategory;
     }
@@ -91,10 +89,6 @@ public class OntologyInfo {
         return _version;
     }
 
-    public String getDisplayNameVersion() {
-        return _displayNameVersion;
-    }
-
     public String getLabel() {
         return _label;
     }
@@ -104,15 +98,15 @@ public class OntologyInfo {
     }
 
     public static class ComparatorImpl implements Comparator<OntologyInfo> {
-        public int compare(OntologyInfo value1, OntologyInfo value2) {
-            int sortCategory1 = value1.getSortCategory();
-            int sortCategory2 = value2.getSortCategory();
+        public int compare(OntologyInfo info1, OntologyInfo info2) {
+            int sortCategory1 = info1.getSortCategory();
+            int sortCategory2 = info2.getSortCategory();
             if (sortCategory1 != sortCategory2)
                 return sortCategory2 - sortCategory1;
 
-            String displayName1 = value1.getDisplayNameVersion();
-            String displayName2 = value2.getDisplayNameVersion();
-            return displayName1.compareToIgnoreCase(displayName2);
+            String value1 = info1.getDisplayName() + info1.getVersion();
+            String value2 = info2.getDisplayName() + info2.getVersion();
+            return value1.compareToIgnoreCase(value2);
         }
     }
 }
