@@ -877,7 +877,106 @@ String key = vsd_uri;
         return "resolved_value_set";
 	}
 
+    // radio button implementation
+    public String continueResolveValueSetAction() {
 
+ System.out.println("(************* ) continueResolveValueSetAction ");
+
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        //String[] coding_scheme_ref = (String[]) request.getParameterValues("coding_scheme_ref");
+
+
+
+        String vsd_uri = (String) request.getParameter("vsd_uri");
+        if (vsd_uri == null) {
+			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+		}
+
+        request.getSession().setAttribute("vsd_uri", vsd_uri);
+
+Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri);
+if (coding_scheme_ref_vec == null) {
+			String msg = "WARNING: No coding scheme version reference is available.";
+			request.getSession().setAttribute("message", msg);
+			return "resolve_value_set";
+}
+
+Vector cs_name_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(vsd_uri);
+
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+Vector ref_vec = new Vector();
+
+
+String key = vsd_uri;
+        for (int i=0; i<cs_name_vec.size(); i++) {
+			String cs_name = (String) cs_name_vec.elementAt(i);
+			String version = (String) request.getParameter(cs_name);
+            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
+            ref_vec.add(cs_name + "$" + version);
+            key = key + "|" + cs_name + "$" + version;
+		}
+
+
+System.out.println("(*) continueResolveValueSetAction #2 ");
+
+        long time = System.currentTimeMillis();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		ResolvedValueSetDefinition rvsd = null;
+		int lcv = 0;
+		try {
+			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+
+			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
+			if(rvsd != null) {
+				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+
+				IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("iteratorBeanManager");
+
+				if (iteratorBeanManager == null) {
+					iteratorBeanManager = new IteratorBeanManager();
+					request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
+				}
+
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+
+				IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+				if (iteratorBean == null) {
+					iteratorBean = new IteratorBean(itr);
+					iteratorBean.initialize();
+					iteratorBean.setKey(key);
+					iteratorBeanManager.addIteratorBean(iteratorBean);
+				}
+				//request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+			}
+
+			String[] coding_scheme_ref = new String[ref_vec.size()];
+			for (int j=0; j<ref_vec.size(); j++) {
+				coding_scheme_ref[j] = (String) ref_vec.elementAt(j);
+			}
+            request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+            request.getSession().setAttribute("resolved_vs_key", key);
+			return "resolved_value_set";
+
+
+		} catch (Exception ex) {
+			System.out.println("??? vds.resolveValueSetDefinition throws exception");
+		}
+
+System.out.println("(*) continueResolveValueSetAction #3 ");
+
+
+		String msg = "Unable to resolve the value set " + vsd_uri;
+		request.getSession().setAttribute("message", msg);
+        return "resolved_value_set";
+	}
+
+
+/*
     public String continueResolveValueSetAction() {
 
  System.out.println("(************* ) continueResolveValueSetAction ");
@@ -989,7 +1088,7 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		request.getSession().setAttribute("message", msg);
         return "resolved_value_set";
 	}
-
+*/
 
     public String exportValueSetAction() {
         HttpServletRequest request =

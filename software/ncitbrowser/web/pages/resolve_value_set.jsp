@@ -67,7 +67,14 @@ request.getSession().setAttribute("vsd_uri", vsd_uri);
 
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri);
+
+System.out.println("resolve_value_set.jsp coding_scheme_ref_vec.size() " + coding_scheme_ref_vec.size()) ;
+
+
 String checked = "";
+
+
+String prev_cs_urn = "";
 
 %>
         <div class="pagecontent">
@@ -103,9 +110,15 @@ String checked = "";
                 <th class="dataTableHeader" scope="col" align="left">Tag</th>
 <%
 if (coding_scheme_ref_vec != null) {
+int k = -1;
+
             for (int i=0; i<coding_scheme_ref_vec.size(); i++) {
             
 		    String coding_scheme_ref_str = (String) coding_scheme_ref_vec.elementAt(i);
+int lcv = i+1;		    
+System.out.println("(" + lcv + ")" + coding_scheme_ref_str);		    
+		    
+		    
 		    String coding_scheme_name_version = coding_scheme_ref_str;
 		    
 		    Vector u = DataUtils.parseData(coding_scheme_ref_str);
@@ -113,14 +126,19 @@ if (coding_scheme_ref_vec != null) {
 		    String cs_version = (String) u.elementAt(1);
 		    String cs_tag = DataUtils.getVocabularyVersionTag(cs_name, cs_version);
 		    
+		    if (cs_name.compareTo(prev_cs_urn) != 0) {
+		       k++;
+		       prev_cs_urn = cs_name;
+		    }
+		    
 		    if (coding_scheme_ref_vec.size() == 1) {
 		        checked = "checked";
 		    } else if (cs_tag.compareToIgnoreCase("PRODUCTION") == 0) {
 		        checked = "checked";
 		    }
-		    
+	    
         
-		    if (i % 2 == 0) {
+		    if (k % 2 == 0) {
 		    %>
 		      <tr class="dataRowDark">
 		    <%
@@ -132,7 +150,7 @@ if (coding_scheme_ref_vec != null) {
 		    %>    
 
 		<td>
-		     <input type=checkbox name="coding_scheme_ref" value="<%=coding_scheme_name_version%>" <%=checked%> >&nbsp;</input>
+<input type="radio" name="cs_name" value="<%=cs_version%>" <%=checked%> tabinex="1" />
 		</td>
 		
 		      <td class="dataCellText">
