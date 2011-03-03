@@ -4055,6 +4055,13 @@ System.out.println("findValueSetDefinitionByURI: " + uri);
 	}
 
 
+    public static String valueSetDefiniionURI2Name(String vsd_uri) {
+		String metadata = getValueSetDefinitionMetadata(vsd_uri);
+		Vector v = parseData(metadata);
+		return (String) v.elementAt(0);
+	}
+
+
     public static HashMap getCodingSchemeURN2ValueSetMetadataHashMap(Vector vsd_vec) {
         HashMap hmap = new HashMap();
 
