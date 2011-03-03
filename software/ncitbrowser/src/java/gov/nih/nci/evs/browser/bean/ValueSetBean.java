@@ -810,11 +810,15 @@ String key = vsd_uri;
 			for (int i=0; i<w.size(); i++) {
 				String s = (String) w.elementAt(i);
 				coding_scheme_ref[i] = s;
+
+ System.out.println("(************* ) coding_scheme_ref: " + s);
+
+
 			}
 		}
 
         if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
-			String msg = "No production version of coding scheme is available.";
+			String msg = "No PRODUCTION version of coding scheme is available.";
 			request.getSession().setAttribute("message", msg);
 			return "resolve_value_set";
 		}
@@ -825,9 +829,16 @@ String key = vsd_uri;
 			String t = coding_scheme_ref[i];
 
 			System.out.println("(*) coding_scheme_ref: " + t);
-			Vector u = DataUtils.parseData(t);
+			String delim = "|";
+			if (t.indexOf("|") == -1) {
+				delim = "$";
+			}
+			Vector u = DataUtils.parseData(t, delim);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
+			if (version == null || version.compareTo("null") == 0) {
+				version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
+			}
 			key = key + "|" + uri + "$" + version;
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
@@ -863,7 +874,7 @@ String key = vsd_uri;
 					iteratorBeanManager.addIteratorBean(iteratorBean);
 				}
 
-
+                request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
 				request.getSession().setAttribute("resolved_vs_key", key);
 				return "resolved_value_set";
@@ -898,6 +909,18 @@ String key = vsd_uri;
 
         request.getSession().setAttribute("vsd_uri", vsd_uri);
 
+
+String test = (String) request.getParameter("test");
+if (test != null) {
+ System.out.println("(************* ) test:  " + test);
+
+} else {
+	 System.out.println("(************* ) test:  " + test);
+}
+
+
+
+
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri);
 if (coding_scheme_ref_vec == null) {
 			String msg = "WARNING: No coding scheme version reference is available.";
@@ -912,12 +935,34 @@ Vector ref_vec = new Vector();
 
 
 String key = vsd_uri;
+
+
+	System.out.println("(&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& cs_name_vec " + cs_name_vec.size());
+
+
         for (int i=0; i<cs_name_vec.size(); i++) {
 			String cs_name = (String) cs_name_vec.elementAt(i);
+
+System.out.println("(&&&&&&&&&& continueResolveValueSetAction checking if selected: " + cs_name);
+
+//testing
+//cs_name = DataUtils.uri2CodingSchemeName(cs_name);
+
+
 			String version = (String) request.getParameter(cs_name);
-            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
-            ref_vec.add(cs_name + "$" + version);
-            key = key + "|" + cs_name + "$" + version;
+
+			if (version != null) {
+	System.out.println("(&&&&&&&&&& continueResolveValueSetAction cs_name: " + cs_name);
+	System.out.println("(&&&&&&&&&& continueResolveValueSetAction SELECTED version: " + version);
+
+				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
+				ref_vec.add(cs_name + "$" + version);
+				key = key + "|" + cs_name + "$" + version;
+		    } else {
+System.out.println("(&&&&&&&&&& continueResolveValueSetAction NOT SELECTED: " + cs_name);
+
+
+			}
 		}
 
 
@@ -959,6 +1004,7 @@ System.out.println("(*) continueResolveValueSetAction #2 ");
 				coding_scheme_ref[j] = (String) ref_vec.elementAt(j);
 			}
             request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+
             request.getSession().setAttribute("resolved_vs_key", key);
 			return "resolved_value_set";
 
@@ -1158,7 +1204,6 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 
 
     public void exportToXMLAction() {
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -1166,12 +1211,12 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		String valueSetDefinitionRevisionId = null;
 
         String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
-        String uri = (String) request.getSession().getAttribute("vsd_uri");
-        System.out.println("URI: " + uri);
 
+        String uri = (String) request.getSession().getAttribute("vsd_uri");
         if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
 			String msg = "No coding scheme reference is selected.";
 			request.getSession().setAttribute("message", msg);
+			System.out.println(msg);
 			return;// "resolve_value_set";
 		}
 
@@ -1179,7 +1224,7 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
 			System.out.println("(*) coding_scheme_ref: " + t);
-			Vector u = DataUtils.parseData(t);
+			Vector u = DataUtils.parseData(t, "$");
 			String url = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
@@ -1303,14 +1348,14 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 			sb.append("WARNING: Export to CVS action failed.");
 		}
 
-		HttpServletResponse response = (HttpServletResponse) FacesContext
-				.getCurrentInstance().getExternalContext().getResponse();
-		response.setContentType("text/csv");
 
 		vsd_uri = DataUtils.valueSetDefiniionURI2Name(vsd_uri);
 		vsd_uri = vsd_uri.replaceAll(" ", "_");
 		vsd_uri = "resolved_" + vsd_uri + ".txt";
 
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.setContentType("text/csv");
 		response.setHeader("Content-Disposition", "attachment; filename="
 				+ vsd_uri);
 
@@ -1352,9 +1397,6 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		}
 
         request.getSession().setAttribute("vsd_uri", vsd_uri);
-
-System.out.println("resolvedValueSetSearchAction vsd_uri " + vsd_uri);
-
         String matchText = (String) request.getParameter("matchText");
         if (matchText != null)
             matchText = matchText.trim();
@@ -1365,9 +1407,7 @@ System.out.println("resolvedValueSetSearchAction vsd_uri " + vsd_uri);
             String message = "Please enter a search string.";
             request.getSession().setAttribute("message", message);
             // request.getSession().removeAttribute("matchText");
-
             request.removeAttribute("matchText");
-
             return "message";
         }
         request.getSession().setAttribute("matchText", matchText);
@@ -1377,10 +1417,6 @@ System.out.println("resolvedValueSetSearchAction vsd_uri " + vsd_uri);
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
-
-System.out.println("searchTarget: " + searchTarget);
-System.out.println("matchAlgorithm: " + matchAlgorithm);
-
 
         //Vector<org.LexGrid.concepts.Entity> v = null;
 
