@@ -123,7 +123,17 @@ System.out.println("(" + lcv + ")" + coding_scheme_ref_str);
 		    
 		    Vector u = DataUtils.parseData(coding_scheme_ref_str);
 		    String cs_name = (String) u.elementAt(0);
+		    String displayed_cs_name = DataUtils.uri2CodingSchemeName(cs_name);
+		    
+		    //cs_name = DataUtils.uri2CodingSchemeName(cs_name); 
+		    
+		    
 		    String cs_version = (String) u.elementAt(1);
+		    
+System.out.println("resolve_value_set.jsp cs_name: " + cs_name);
+
+System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
+		    
 		    String cs_tag = DataUtils.getVocabularyVersionTag(cs_name, cs_version);
 		    
 		    if (cs_name.compareTo(prev_cs_urn) != 0) {
@@ -149,12 +159,16 @@ System.out.println("(" + lcv + ")" + coding_scheme_ref_str);
 			}
 		    %>    
 
+
+
 		<td>
-<input type="radio" name="cs_name" value="<%=cs_version%>" <%=checked%> tabinex="1" />
+<input type="radio" name="<%=cs_name%>" value="<%=cs_version%>" <%=checked%> tabinex="1" />
 		</td>
-		
+
+
+	
 		      <td class="dataCellText">
-			 <%=cs_name%>
+			 <%=displayed_cs_name%>
 		      </td>
 		      <td class="dataCellText">
 			 <%=cs_version%>
@@ -176,7 +190,8 @@ System.out.println("(" + lcv + ")" + coding_scheme_ref_str);
 <%
 }
              %>                 
-                  
+
+
               </table>
 
                   <tr><td>
