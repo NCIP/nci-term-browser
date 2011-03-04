@@ -148,26 +148,18 @@ if (bean == null) {
             
             System.out.println("numRemaining: " + numRemaining);
             
+            bean = new MappingIteratorBean(iterator);
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-  bean = new MappingIteratorBean(
-    iterator,
-    numRemaining, // number remaining
-    0,    // istart
-    50,   // iend,
-    numRemaining, // size,
-    0,    // pageNumber,
-    1);   // numberPages
+	    
     }
-    
-    System.out.println("bean = new MappingIteratorBean: " );
     
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
 } else if (prevSortByStr != null && sortBy != prevSortBy) {
     bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
-    bean.setList(new ArrayList());
+    //bean.setList(new ArrayList());
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
 
     if (iterator != null) {
@@ -175,22 +167,15 @@ if (bean == null) {
         try {
             numRemaining = iterator.numberRemaining();
             System.out.println("MappingIteratorBean: numRemaining " + numRemaining);
+	    bean.initialize();
+	    scheme2MappingIteratorBeanMap.put(mapping_schema, bean);            
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-System.out.println("MappingIteratorBean: calling bean.initialize");
-
-  bean.initialize(
-    iterator,
-    numRemaining, // number remaining
-    0,    // istart
-    50,   // iend,
-    numRemaining, // size,
-    0,    // pageNumber,
-    1);   // numberPages
     }
-    scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
+
+
 }
 
 
@@ -208,7 +193,7 @@ if (page_num == 0) page_num++;
 
 int pageSize = Integer.parseInt(selectedResultsPerPage);
 
-int size = bean.getNumberRemaining();
+int size = bean.getSize();
 
 System.out.println("\npage_num: " + page_num);
 System.out.println("size: " + size);
