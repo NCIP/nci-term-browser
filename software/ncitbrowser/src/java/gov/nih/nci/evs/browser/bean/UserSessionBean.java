@@ -399,10 +399,10 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 				numberRemaining, // number remaining
 				0,    // istart
 				50,   // iend,
-				numberRemaining, // size,
+				//numberRemaining, // size,
 				0,    // pageNumber,
 				1);   // numberPages
-
+/*
 				mappingIteratorBean.initialize(
 				iterator,
 				numberRemaining, // number remaining
@@ -411,7 +411,8 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 				numberRemaining, // size,
 				0,    // pageNumber,
 				1);   // numberPages
-
+*/
+mappingIteratorBean.initialize();
 				request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
 
 				System.out.println("(*************) returning mapping_search_results");

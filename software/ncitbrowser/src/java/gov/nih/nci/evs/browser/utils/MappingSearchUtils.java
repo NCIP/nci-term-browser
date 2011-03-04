@@ -716,10 +716,10 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 		numberRemaining, // number remaining
 		0,    // istart
 		50,   // iend,
-		numberRemaining, // size,
+		//numberRemaining, // size,
 		0,    // pageNumber,
 		1);   // numberPages
-
+/*
 		mappingIteratorBean.initialize(
 		iterator,
 		numberRemaining, // number remaining
@@ -728,7 +728,8 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 		numberRemaining, // size,
 		0,    // pageNumber,
 		1);   // numberPages
-
+*/
+        mappingIteratorBean.initialize();
 		return mappingIteratorBean.getData(0, numberRemaining); // implement getAll
     }
 

@@ -172,7 +172,7 @@ int size = 0;
 int pageNum = 0;
 
 if (mapping_bean != null) {
-	size = mapping_bean.getNumberRemaining();
+	size = mapping_bean.getSize();
 }
 
 List list = null;
