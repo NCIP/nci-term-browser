@@ -64,7 +64,6 @@
         <b>Maps To:</b>
 <%        
         for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
-        
     
         
            String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
