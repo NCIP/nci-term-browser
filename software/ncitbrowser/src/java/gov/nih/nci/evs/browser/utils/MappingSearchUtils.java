@@ -714,12 +714,6 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
     public List getMappingRelationship(
         String scheme, String version, String code, int direction) {
 
-
-System.out.println("(*) getMappingRelationship scheme " + scheme);
-System.out.println("(*) getMappingRelationship version " + version);
-System.out.println("(*) getMappingRelationship code " + code);
-System.out.println("(*) getMappingRelationship direction " + direction);
-
 		SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES;
 		if (direction == 1) searchContext = SearchContext.SOURCE_CODES;
         else if (direction == -1) searchContext = SearchContext.TARGET_CODES;

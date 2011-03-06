@@ -171,18 +171,11 @@ if (show_rank_column) {
 		target_scheme = mappingData.getTargetCodingScheme();
 		target_version = mappingData.getTargetCodingSchemeVersion();         
           
-
-              if (n2 % 2 == 0) {
         %>
-            <tr class="dataRowDark">
-        <%
-        } else {
-        %>
-            <tr class="dataRowLight">
-        <%
-        }
-        n2++;
-        %>
+        
+        <tr>
+        
+        
         <td class="datacoldark"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="#"
@@ -227,7 +220,7 @@ if (show_rank_column) {
         <td class="datacoldark"><%=target_name%></td>
 
 
-          </tr>
+        </tr>
         <%
         }
 
@@ -344,17 +337,9 @@ if (show_rank_column) {
 		target_scheme = mappingData.getTargetCodingScheme();
 		target_version = mappingData.getTargetCodingSchemeVersion();  
 
-              if (n2 % 2 == 0) {
         %>
-            <tr class="dataRowDark">
-        <%
-        } else {
-        %>
-            <tr class="dataRowLight">
-        <%
-        }
-        n2++;
-        %>
+
+        <tr>
         <td class="datacoldark"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="#"
