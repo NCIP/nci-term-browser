@@ -173,11 +173,7 @@ public class MappingIteratorBean extends Object {
                 _size = 0;
             } else {
                 _size = _iterator.numberRemaining();
-
-
                 System.out.println("(***) MappingIteratorBean numberRemaining: " + _size);
-
-
             }
             _pageNumber = 1;
             _list = new ArrayList();
@@ -227,13 +223,169 @@ public class MappingIteratorBean extends Object {
         return _endIndex;
     }
 
+
+
+    public List copyData(int idx1, int idx2) {
+		List arrayList = new ArrayList();
+		int upper = idx2;
+		int max = _list.size();
+		if (max < idx2) upper = max;
+
+		for (int i=idx1; i<upper; i++) {
+			MappingData mappingData = (MappingData) _list.get(i);
+			arrayList.add(mappingData);
+		}
+		return arrayList;
+	}
+
+
+
     public List getData(int pageNumber) {
         int idx1 = getStartIndex(pageNumber);
         int idx2 = getEndIndex(pageNumber);
         return getData(idx1, idx2);
     }
 
+
+/*
+
     public List getData(int idx1, int idx2) {
+
+System.out.println("MappingIteratorBean idx1: " + idx1);
+System.out.println("MappingIteratorBean idx2: " + idx2);
+
+
+		MappingData mappingData = null;
+        if (_list.size() >= idx2) {
+			return copyData(idx1, idx2);
+		}
+
+        _logger.debug("Retrieving mapping data (from: " + idx1 + " to: " + idx2 + ")");
+        long ms = System.currentTimeMillis();
+        long dt = 0;
+        long total_delay = 0;
+
+		String sourceCode = null;
+		String sourceName = null;
+		String sourceCodingScheme = null;
+		String sourceCodingSchemeVesion = null;
+		String sourceCodeNamespace = null;
+		String associationName = null;
+		String rel = null;
+		int score = 0;
+		String targetCode = null;
+		String targetName = null;
+		String targetCodingScheme = null;
+		String targetCodingSchemeVesion = null;
+		String targetCodeNamespace = null;
+
+
+        try {
+			if (_iterator == null) {
+				_logger.debug("iterator == null???");
+			} else if (!_iterator.hasNext()) {
+				_logger.debug("iterator is empty???");
+			}
+
+			while (_iterator.hasNext() && _list.size() < idx2) {
+				ResolvedConceptReference ref = (ResolvedConceptReference) _iterator.next();
+				int depth = 0;
+				String description;
+
+				if(ref.getEntityDescription() == null) {
+					description = "NOT AVAILABLE";
+				} else {
+					description = ref.getEntityDescription().getContent();
+				}
+				//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
+				//	+ ", Namespace: " + ref.getCodeNamespace());
+
+				sourceCode = ref.getCode();
+				sourceName = description;
+				sourceCodingScheme = ref.getCodingSchemeName();
+				sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
+				sourceCodeNamespace = ref.getCodeNamespace();
+
+				rel = null;
+				score = 0;
+
+				AssociationList assocs = ref.getSourceOf();
+				if(assocs != null){
+					for(Association assoc : assocs.getAssociation()){
+						associationName = assoc.getAssociationName();
+
+						//System.out.println("\tassociationName: " + associationName);
+						int lcv = 0;
+						for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+							lcv++;
+							if(ac.getEntityDescription() == null) {
+								description = "NOT AVAILABLE";
+							} else {
+								description = ac.getEntityDescription().getContent();
+							}
+							//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+							//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+                            //System.out.println("====================================================");
+							targetCode = ac.getCode();
+							targetName = description;
+							targetCodingScheme = ac.getCodingSchemeName();
+							targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+							targetCodeNamespace = ac.getCodeNamespace();
+
+                            if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+								for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+									String qualifier_name = qual.getName();
+									String qualifier_value = qual.getContent();
+									if (qualifier_name.compareTo("rel") == 0) {
+										rel = qualifier_value;
+									} else if (qualifier_name.compareTo("score") == 0) {
+										score = Integer.parseInt(qualifier_value);
+									}
+								}
+						    }
+
+							//System.out.println("\t\tREL: " + rel + " score: " + score);
+							mappingData = new MappingData(
+								sourceCode,
+								sourceName,
+								sourceCodingScheme,
+								sourceCodingSchemeVesion,
+								sourceCodeNamespace,
+								associationName,
+								rel,
+								score,
+								targetCode,
+								targetName,
+								targetCodingScheme,
+								targetCodingSchemeVesion,
+								targetCodeNamespace);
+							_list.add(mappingData);
+
+						}
+					}
+				}
+			}
+
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        _logger.debug("getData Run time (ms): "
+            + (System.currentTimeMillis() - ms));
+        return copyData(idx1, idx2);
+    }
+
+*/
+
+
+    public List getData(int idx1, int idx2) {
+
+System.out.println("mappingIteratorBean getData idx1 " + idx1);
+System.out.println("mappingIteratorBean getData idx2 " + idx2);
+
+
+
 		MappingData mappingData = null;
 
 		String sourceCode = null;
@@ -258,92 +410,161 @@ public class MappingIteratorBean extends Object {
         int upper_bound = idx2;
         _timeout = false;
 
-
         try {
 
 			if (idx2 >= _size-1) {
 				while (_iterator != null && _iterator.hasNext()) {
+
+					//KLO 03/05/11
+					if (idx2 <= _list.size()) {
+						return copyData(idx1, idx2);
+					}
+
+
 					ResolvedConceptReference[] refs =
 						_iterator.next(_maxReturn).getResolvedConceptReference();
-					for (ResolvedConceptReference ref : refs) {
-						 //displayRef(ref);
-						_lastResolved++;
-						upper_bound = _lastResolved;
 
-						String description;
+					if (refs != null) {
+						for (ResolvedConceptReference ref : refs) {
+							 //displayRef(ref);
+							_lastResolved++;
 
-						if(ref.getEntityDescription() == null) {
-							description = "NOT AVAILABLE";
-						} else {
-							description = ref.getEntityDescription().getContent();
-						}
-						//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
-						//	+ ", Namespace: " + ref.getCodeNamespace());
+							upper_bound = _lastResolved;
 
-						sourceCode = ref.getCode();
-						sourceName = description;
-						sourceCodingScheme = ref.getCodingSchemeName();
-						sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
-						sourceCodeNamespace = ref.getCodeNamespace();
+							String description;
 
-						rel = null;
-						score = 0;
+							if(ref.getEntityDescription() == null) {
+								description = "NOT AVAILABLE";
+							} else {
+								description = ref.getEntityDescription().getContent();
+							}
 
-						AssociationList assocs = ref.getSourceOf();
-						if(assocs != null){
-							for(Association assoc : assocs.getAssociation()){
-								associationName = assoc.getAssociationName();
+							//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
+							//	+ ", Namespace: " + ref.getCodeNamespace());
 
-								//System.out.println("\tassociationName: " + associationName);
-								int lcv = 0;
-								for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
-									lcv++;
-									if(ac.getEntityDescription() == null) {
-										description = "NOT AVAILABLE";
-									} else {
-										description = ac.getEntityDescription().getContent();
-									}
-									//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
-									//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
-									//System.out.println("====================================================");
-									targetCode = ac.getCode();
-									targetName = description;
-									targetCodingScheme = ac.getCodingSchemeName();
-									targetCodingSchemeVesion = ac.getCodingSchemeVersion();
-									targetCodeNamespace = ac.getCodeNamespace();
+							sourceCode = ref.getCode();
+							sourceName = description;
+							sourceCodingScheme = ref.getCodingSchemeName();
+							sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
+							sourceCodeNamespace = ref.getCodeNamespace();
 
-									if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
-										for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
-											String qualifier_name = qual.getName();
-											String qualifier_value = qual.getContent();
-											if (qualifier_name.compareTo("rel") == 0) {
-												rel = qualifier_value;
-											} else if (qualifier_name.compareTo("score") == 0) {
-												score = Integer.parseInt(qualifier_value);
+							rel = null;
+							score = 0;
+
+							AssociationList assocs = ref.getSourceOf();
+							if(assocs != null){
+								for(Association assoc : assocs.getAssociation()){
+									associationName = assoc.getAssociationName();
+
+									//System.out.println("\tassociationName: " + associationName);
+									int lcv = 0;
+									for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+										lcv++;
+										if(ac.getEntityDescription() == null) {
+											description = "NOT AVAILABLE";
+										} else {
+											description = ac.getEntityDescription().getContent();
+										}
+										//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+										//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+										//System.out.println("====================================================");
+										targetCode = ac.getCode();
+										targetName = description;
+										targetCodingScheme = ac.getCodingSchemeName();
+										targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+										targetCodeNamespace = ac.getCodeNamespace();
+
+										if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+											for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+												String qualifier_name = qual.getName();
+												String qualifier_value = qual.getContent();
+												if (qualifier_name.compareTo("rel") == 0) {
+													rel = qualifier_value;
+												} else if (qualifier_name.compareTo("score") == 0) {
+													score = Integer.parseInt(qualifier_value);
+												}
 											}
 										}
+
+										//System.out.println("\t\tREL: " + rel + " score: " + score);
+										mappingData = new MappingData(
+											sourceCode,
+											sourceName,
+											sourceCodingScheme,
+											sourceCodingSchemeVesion,
+											sourceCodeNamespace,
+											associationName,
+											rel,
+											score,
+											targetCode,
+											targetName,
+											targetCodingScheme,
+											targetCodingSchemeVesion,
+											targetCodeNamespace);
+										_list.add(mappingData);
+
 									}
-
-									//System.out.println("\t\tREL: " + rel + " score: " + score);
-									mappingData = new MappingData(
-										sourceCode,
-										sourceName,
-										sourceCodingScheme,
-										sourceCodingSchemeVesion,
-										sourceCodeNamespace,
-										associationName,
-										rel,
-										score,
-										targetCode,
-										targetName,
-										targetCodingScheme,
-										targetCodingSchemeVesion,
-										targetCodeNamespace);
-									_list.add(mappingData);
-
 								}
 							}
-						}
+
+							assocs = ref.getTargetOf();
+							if(assocs != null){
+								for(Association assoc : assocs.getAssociation()){
+									associationName = assoc.getAssociationName();
+
+									//System.out.println("\tassociationName: " + associationName);
+									int lcv = 0;
+									for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+										lcv++;
+										if(ac.getEntityDescription() == null) {
+											description = "NOT AVAILABLE";
+										} else {
+											description = ac.getEntityDescription().getContent();
+										}
+										//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+										//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+										//System.out.println("====================================================");
+										targetCode = ac.getCode();
+										targetName = description;
+										targetCodingScheme = ac.getCodingSchemeName();
+										targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+										targetCodeNamespace = ac.getCodeNamespace();
+
+										if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+											for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+												String qualifier_name = qual.getName();
+												String qualifier_value = qual.getContent();
+												if (qualifier_name.compareTo("rel") == 0) {
+													rel = qualifier_value;
+												} else if (qualifier_name.compareTo("score") == 0) {
+													score = Integer.parseInt(qualifier_value);
+												}
+											}
+										}
+
+										System.out.println("\t\tREL: " + rel + " score: " + score);
+										mappingData = new MappingData(
+											sourceCode,
+											sourceName,
+											sourceCodingScheme,
+											sourceCodingSchemeVesion,
+											sourceCodeNamespace,
+											associationName,
+											rel,
+											score,
+											targetCode,
+											targetName,
+											targetCodingScheme,
+											targetCodingSchemeVesion,
+											targetCodeNamespace);
+										_list.add(mappingData);
+
+									}
+								}
+							}
+
+					    }
+
 
 
 					   // _list.set(_lastResolved, ref);
@@ -361,93 +582,170 @@ public class MappingIteratorBean extends Object {
 					}
 				}
 			} else {
+
 				while (_iterator != null && _iterator.hasNext()
 					&& _lastResolved < idx2) {
+
+					//KLO 03/05/11
+					if (idx2 <= _list.size()) {
+
+						System.out.println("calling copyData ..2.");
+
+						return copyData(idx1, idx2);
+					}
+
+
 					ResolvedConceptReference[] refs =
 						_iterator.next(_maxReturn).getResolvedConceptReference();
-					for (ResolvedConceptReference ref : refs) {
-						 //displayRef(ref);
-						_lastResolved++;
-					   // _list.set(_lastResolved, ref);
+
+					if (refs != null) {
+
+						for (ResolvedConceptReference ref : refs) {
+							 //displayRef(ref);
+							_lastResolved++;
+						   // _list.set(_lastResolved, ref);
 
 
-						String description;
+							String description;
 
-						if(ref.getEntityDescription() == null) {
-							description = "NOT AVAILABLE";
-						} else {
-							description = ref.getEntityDescription().getContent();
-						}
+							if(ref.getEntityDescription() == null) {
+								description = "NOT AVAILABLE";
+							} else {
+								description = ref.getEntityDescription().getContent();
+							}
 
-						//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
-						//	+ ", Namespace: " + ref.getCodeNamespace());
+							//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
+							//	+ ", Namespace: " + ref.getCodeNamespace());
 
-						sourceCode = ref.getCode();
-						sourceName = description;
-						sourceCodingScheme = ref.getCodingSchemeName();
-						sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
-						sourceCodeNamespace = ref.getCodeNamespace();
+							sourceCode = ref.getCode();
+							sourceName = description;
+							sourceCodingScheme = ref.getCodingSchemeName();
+							sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
+							sourceCodeNamespace = ref.getCodeNamespace();
 
-						rel = null;
-						score = 0;
+							rel = null;
+							score = 0;
 
-						AssociationList assocs = ref.getSourceOf();
-						if(assocs != null){
-							for(Association assoc : assocs.getAssociation()){
-								associationName = assoc.getAssociationName();
+							AssociationList assocs = ref.getSourceOf();
+							if(assocs != null){
+								for(Association assoc : assocs.getAssociation()){
+									associationName = assoc.getAssociationName();
 
-								//System.out.println("\tassociationName: " + associationName);
-								int lcv = 0;
-								for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
-									lcv++;
-									if(ac.getEntityDescription() == null) {
-										description = "NOT AVAILABLE";
-									} else {
-										description = ac.getEntityDescription().getContent();
-									}
-									//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
-									//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
-									//System.out.println("====================================================");
-									targetCode = ac.getCode();
-									targetName = description;
-									targetCodingScheme = ac.getCodingSchemeName();
-									targetCodingSchemeVesion = ac.getCodingSchemeVersion();
-									targetCodeNamespace = ac.getCodeNamespace();
+									//System.out.println("\tassociationName: " + associationName);
+									int lcv = 0;
+									for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+										lcv++;
+										if(ac.getEntityDescription() == null) {
+											description = "NOT AVAILABLE";
+										} else {
+											description = ac.getEntityDescription().getContent();
+										}
+										//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+										//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+										//System.out.println("====================================================");
+										targetCode = ac.getCode();
+										targetName = description;
+										targetCodingScheme = ac.getCodingSchemeName();
+										targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+										targetCodeNamespace = ac.getCodeNamespace();
 
-									if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
-										for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
-											String qualifier_name = qual.getName();
-											String qualifier_value = qual.getContent();
-											if (qualifier_name.compareTo("rel") == 0) {
-												rel = qualifier_value;
-											} else if (qualifier_name.compareTo("score") == 0) {
-												score = Integer.parseInt(qualifier_value);
+										if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+											for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+												String qualifier_name = qual.getName();
+												String qualifier_value = qual.getContent();
+												if (qualifier_name.compareTo("rel") == 0) {
+													rel = qualifier_value;
+												} else if (qualifier_name.compareTo("score") == 0) {
+													score = Integer.parseInt(qualifier_value);
+												}
 											}
 										}
+
+										//System.out.println("\t\tREL: " + rel + " score: " + score);
+										mappingData = new MappingData(
+											sourceCode,
+											sourceName,
+											sourceCodingScheme,
+											sourceCodingSchemeVesion,
+											sourceCodeNamespace,
+											associationName,
+											rel,
+											score,
+											targetCode,
+											targetName,
+											targetCodingScheme,
+											targetCodingSchemeVesion,
+											targetCodeNamespace);
+										_list.add(mappingData);
+										if (_list.size() > _size) _size = _list.size();
+
 									}
-
-									//System.out.println("\t\tREL: " + rel + " score: " + score);
-									mappingData = new MappingData(
-										sourceCode,
-										sourceName,
-										sourceCodingScheme,
-										sourceCodingSchemeVesion,
-										sourceCodeNamespace,
-										associationName,
-										rel,
-										score,
-										targetCode,
-										targetName,
-										targetCodingScheme,
-										targetCodingSchemeVesion,
-										targetCodeNamespace);
-									_list.add(mappingData);
-
 								}
 							}
-						}
 
-					   //_list.add(ref);
+						   //_list.add(ref);
+
+
+
+							assocs = ref.getTargetOf();
+							if(assocs != null){
+								for(Association assoc : assocs.getAssociation()){
+									associationName = assoc.getAssociationName();
+
+									//System.out.println("\tassociationName: " + associationName);
+									int lcv = 0;
+									for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+										lcv++;
+										if(ac.getEntityDescription() == null) {
+											description = "NOT AVAILABLE";
+										} else {
+											description = ac.getEntityDescription().getContent();
+										}
+										//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
+										//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
+										//System.out.println("====================================================");
+										targetCode = ac.getCode();
+										targetName = description;
+										targetCodingScheme = ac.getCodingSchemeName();
+										targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+										targetCodeNamespace = ac.getCodeNamespace();
+
+										if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+											for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+												String qualifier_name = qual.getName();
+												String qualifier_value = qual.getContent();
+												if (qualifier_name.compareTo("rel") == 0) {
+													rel = qualifier_value;
+												} else if (qualifier_name.compareTo("score") == 0) {
+													score = Integer.parseInt(qualifier_value);
+												}
+											}
+										}
+
+										//System.out.println("\t\tREL: " + rel + " score: " + score);
+										mappingData = new MappingData(
+											sourceCode,
+											sourceName,
+											sourceCodingScheme,
+											sourceCodingSchemeVesion,
+											sourceCodeNamespace,
+											associationName,
+											rel,
+											score,
+											targetCode,
+											targetName,
+											targetCodingScheme,
+											targetCodingSchemeVesion,
+											targetCodeNamespace);
+										_list.add(mappingData);
+										if (_list.size() > _size) _size = _list.size();
+
+									}
+								}
+							}
+
+					    }
+
 
 
 
@@ -464,34 +762,39 @@ public class MappingIteratorBean extends Object {
 		    }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
+            System.out.println("getData exception???");
         }
 
-        /*
-         * for (int i=idx1; i<=idx2; i++) { ResolvedConceptReference rcr =
-         * (ResolvedConceptReference) list.get(i); rcr_list.add(rcr); if (i
-         * > lastResolved) break; }
-         */
 
         Vector temp_vec = new Vector();
         //upper_bound may be breached.
 
         if (upper_bound > idx2) {
 			_size = _size + (upper_bound - idx2);
-
 System.out.println("Upper bound breached -- reset _size to " + _size);
 
 		}
 
+
+List rcr_list = new ArrayList();
+if (_list.size() == 0) return rcr_list;
+
+
+
         //for (int i = idx1; i <= idx2; i++) {
 	    for (int i = idx1; i <= upper_bound; i++) {
+
+			if (i > _size) break;
+
             MappingData rcr =
                 (MappingData) _list.get(i);
+
             temp_vec.add(rcr);
-            if (i > _lastResolved)
-                break;
+            //if (i > _lastResolved)
+            //    break;
         }
-        List rcr_list = new ArrayList();
+
 
         for (int i = 0; i < temp_vec.size(); i++) {
             MappingData rcr =
@@ -502,7 +805,11 @@ System.out.println("Upper bound breached -- reset _size to " + _size);
         _logger.debug("getData Run time (ms): "
             + (System.currentTimeMillis() - ms));
         return rcr_list;
+
+//return copyData(idx1, idx2);
+
     }
+
 
 
     protected void displayRef(ResolvedConceptReference ref) {

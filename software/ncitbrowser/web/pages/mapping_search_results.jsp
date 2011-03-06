@@ -201,16 +201,24 @@ if (iend > size) {
 }
 
 
-System.out.println("\npage_num: " + page_num);
-System.out.println("size: " + size);
-System.out.println("pageSize: " + pageSize);
-
 
 try {
    list = mapping_bean.getData(istart, iend);
 } catch (Exception ex) {
    System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
+
+
+
+
+System.out.println("\npage_num: " + page_num);
+System.out.println("size: " + size);
+System.out.println("pageSize: " + pageSize);
+System.out.println("(**************** iend: " + iend);
+
+
+
+
 System.out.println("exiting bean.getData ...");
 
 boolean show_rank_column = true;

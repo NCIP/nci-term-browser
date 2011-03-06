@@ -217,15 +217,22 @@ System.out.println("==============================  MappingSearchUtils searchByC
             scheme = (String) schemes.elementAt(lcv);
             version = (String) versions.elementAt(lcv);
 
-System.out.println(scheme + " (version: " +  version);
+System.out.println(scheme + " (version: " +  version + ")");
 
 			String containerName = getMappingRelationsContainerName(scheme, version);
 System.out.println("\tcontainer name: " +  containerName);
 
 			if (containerName != null) {
 				try {
+
+		CodingSchemeVersionOrTag versionOrTag =
+			new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+
 					Mapping mapping =
-						mappingExtension.getMapping(scheme, null, containerName);
+						mappingExtension.getMapping(scheme, versionOrTag, containerName);
 
 					if (mapping != null) {
 
@@ -310,8 +317,14 @@ System.out.println("\tcontainer name: " +  containerName);
 			String containerName = getMappingRelationsContainerName(scheme, version);
 			if (containerName != null) {
 				try {
+
+		CodingSchemeVersionOrTag versionOrTag =
+			new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
 					Mapping mapping =
-						mappingExtension.getMapping(scheme, null, containerName);
+						mappingExtension.getMapping(scheme, versionOrTag, containerName);
 
 					if (mapping != null) {
 						mapping = mapping.restrictToMatchingDesignations(
@@ -411,8 +424,15 @@ System.out.println("searchByProperties version: " + version);
 			String containerName = getMappingRelationsContainerName(scheme, version);
 			if (containerName != null) {
 				try {
+
+		CodingSchemeVersionOrTag versionOrTag =
+			new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+
 					Mapping mapping =
-						mappingExtension.getMapping(scheme, null, containerName);
+						mappingExtension.getMapping(scheme, versionOrTag, containerName);
 
 					if (mapping != null) {
 						mapping = mapping.restrictToMatchingProperties(
@@ -553,8 +573,14 @@ System.out.println("searchByProperties version: " + version);
 				LocalNameList relationshipList = getSupportedAssociationNames(lbSvc, scheme, version, containerName);
 
 				try {
+
+		CodingSchemeVersionOrTag versionOrTag =
+			new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
 					Mapping mapping =
-						mappingExtension.getMapping(scheme, null, containerName);
+						mappingExtension.getMapping(scheme, versionOrTag, containerName);
 
 					if (mapping != null) {
 
@@ -687,6 +713,13 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 
     public List getMappingRelationship(
         String scheme, String version, String code, int direction) {
+
+
+System.out.println("(*) getMappingRelationship scheme " + scheme);
+System.out.println("(*) getMappingRelationship version " + version);
+System.out.println("(*) getMappingRelationship code " + code);
+System.out.println("(*) getMappingRelationship direction " + direction);
+
 		SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES;
 		if (direction == 1) searchContext = SearchContext.SOURCE_CODES;
         else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
@@ -706,11 +739,15 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 			}
 
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
+			System.out.println("iterator.numberRemaining() throws exceptions???");
 			return null;
 		}
 
+		System.out.println("(*) getMappingRelationship numberRemaining " + numberRemaining);
 
+
+/*
 		MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
 		iterator,
 		numberRemaining, // number remaining
@@ -719,7 +756,7 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 		//numberRemaining, // size,
 		0,    // pageNumber,
 		1);   // numberPages
-/*
+
 		mappingIteratorBean.initialize(
 		iterator,
 		numberRemaining, // number remaining
@@ -729,8 +766,15 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 		0,    // pageNumber,
 		1);   // numberPages
 */
-        mappingIteratorBean.initialize();
-		return mappingIteratorBean.getData(0, numberRemaining); // implement getAll
+        //mappingIteratorBean.initialize();
+
+
+ 		MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(iterator);
+		List list = mappingIteratorBean.getData(0, numberRemaining); // implement getAll
+		if (mappingIteratorBean.getSize() != numberRemaining) {
+			list = mappingIteratorBean.getData(0, mappingIteratorBean.getSize() );
+		}
+		return list;
     }
 
 /*
