@@ -81,6 +81,7 @@ if (inverse_associations == null) {
     String label = "";
     String rel = "";
     String score = "";
+    String scheme_curr_0 = scheme_curr;
     scheme_curr = scheme_curr.replaceAll(" ", "%20");
 
 %>
@@ -387,7 +388,17 @@ if (inverse_associations == null) {
 
   <p>
   <%
-     String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr, version_curr, "display_inverse_relationships");
+     String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr_0, version_curr, "display_inverse_relationships");
+
+
+System.out.println("(********* ) scheme_curr: " + scheme_curr);
+
+System.out.println("(********* ) version_curr: " + version_curr);
+
+System.out.println("(********* ) display_inverse_relationships: " + display_inverse_relationships_metadata_value);
+
+
+
      boolean display_inverse_relationships = true;
 
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {

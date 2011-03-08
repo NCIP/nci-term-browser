@@ -1116,7 +1116,7 @@ public class DataUtils {
         if (full_name == null || full_name.compareTo("null") == 0)
             full_name = scheme;
         String version =
-            DataUtils.getMetadataValue(scheme, "term_browser_version");
+            getMetadataValue(scheme, "term_browser_version");
 
         if (version == null)
             version = getVocabularyVersionByTag(scheme, null);
