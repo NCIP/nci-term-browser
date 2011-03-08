@@ -299,7 +299,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
 
 				if (scheme.compareTo("NCI Thesaurus") == 0) {
 				    String nciturl = NCItBrowserProperties.getNCIT_URL();
-				    nciturl = nciturl + "?version=" + version;
+				    nciturl = nciturl + "/?version=" + version;
 				  %>
 				    <a href="<%=nciturl%>"><%=display_label%></a><%=cabig_approval_indicator%>
 				  <%
