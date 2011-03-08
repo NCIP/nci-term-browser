@@ -823,7 +823,6 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 		if (direction == 1) searchContext = SearchContext.SOURCE_CODES;
         else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
 
-
 System.out.println("direction: " + direction);
 
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -889,9 +888,12 @@ System.out.println("direction: " + direction);
 									.compareToIgnoreCase("equivalentClass") != 0
 									&& ac.getConceptCode().indexOf("@") == -1) {
 
+/*
 									String relaValue =
 										replaceAssociationNameByRela(
 											ac, associationName);
+*/
+String relaValue = associationName;
 
 System.out.println("relaValue: " + relaValue);
 

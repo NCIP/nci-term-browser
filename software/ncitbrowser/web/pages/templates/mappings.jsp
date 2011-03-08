@@ -166,9 +166,9 @@ if (show_rank_column) {
         }    
         
 
-		source_scheme = mappingData.getSourceCodingScheme();
+		source_scheme = DataUtils.getFormalName(mappingData.getSourceCodingScheme());
 		source_version = mappingData.getSourceCodingSchemeVersion();
-		target_scheme = mappingData.getTargetCodingScheme();
+		target_scheme = DataUtils.getFormalName(mappingData.getTargetCodingScheme());
 		target_version = mappingData.getTargetCodingSchemeVersion();         
           
         %>
@@ -331,11 +331,13 @@ if (show_rank_column) {
 		    String short_name = DataUtils.getMappingDisplayName(mapping_cs_name, target_namespace);
 		    display_name_hmap.put(target_namespace, short_name);
 		    target_namespace = short_name;
-		}    
-		source_scheme = mappingData.getSourceCodingScheme();
+		} 
+		
+		source_scheme = DataUtils.getFormalName(mappingData.getSourceCodingScheme());
 		source_version = mappingData.getSourceCodingSchemeVersion();
-		target_scheme = mappingData.getTargetCodingScheme();
-		target_version = mappingData.getTargetCodingSchemeVersion();  
+		target_scheme = DataUtils.getFormalName(mappingData.getTargetCodingScheme());
+		target_version = mappingData.getTargetCodingSchemeVersion();         
+
 
         %>
 

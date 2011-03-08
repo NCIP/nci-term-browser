@@ -425,9 +425,9 @@ if (show_rank_column) {
             target_namespace = short_name;
         }       
 
-        source_scheme = mappingData.getSourceCodingScheme();
+        source_scheme = DataUtils.getFormalName(mappingData.getSourceCodingScheme());
         source_version = mappingData.getSourceCodingSchemeVersion();
-        target_scheme = mappingData.getTargetCodingScheme();
+        target_scheme = DataUtils.getFormalName(mappingData.getTargetCodingScheme());
         target_version = mappingData.getTargetCodingSchemeVersion();
 
             %>
