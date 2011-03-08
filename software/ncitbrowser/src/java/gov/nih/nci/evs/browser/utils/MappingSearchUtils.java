@@ -823,6 +823,9 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 		if (direction == 1) searchContext = SearchContext.SOURCE_CODES;
         else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
 
+
+System.out.println("direction: " + direction);
+
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         LexBIGServiceConvenienceMethods lbscm =
             new DataUtils().createLexBIGServiceConvenienceMethods(lbSvc);
@@ -844,7 +847,10 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
         try {
 			while (iterator.hasNext()) {
 				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
+
 				AssociationList asso_of = ref.getSourceOf();
+				//KLO, 030811
+				if (direction == -1) asso_of = ref.getTargetOf();
 
 				if (asso_of != null) {
 					Association[] associations =
@@ -887,6 +893,8 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 										replaceAssociationNameByRela(
 											ac, associationName);
 
+System.out.println("relaValue: " + relaValue);
+
 									String s =
 										relaValue + "|" + pt + "|"
 											 + ac.getConceptCode() + "|"
@@ -926,6 +934,9 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 									} else {
 										s = s + "|" + ac.getCodeNamespace();
 									}
+
+
+System.out.println(s);
 
 									list.add(s);
 
