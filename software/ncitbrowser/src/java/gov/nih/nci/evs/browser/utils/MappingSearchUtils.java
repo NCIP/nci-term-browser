@@ -893,9 +893,19 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 											 + ac.getCodingSchemeName();
 
                                     if (direction == -1) {
-										s = relaValue + "|" + ref.getEntityDescription().getContent() + "|"
+
+										EntityDescription ref_ed =
+											ref.getEntityDescription();
+
+										String ref_name = "No Description";
+										if (ref_ed != null)
+											ref_name = ref_ed.getContent();
+
+
+										s = relaValue + "|" + ref_name + "|"
 											 + ref.getCode() + "|"
 											 + ref.getCodingSchemeName();
+
 									}
 
 									if (ac.getAssociationQualifiers() != null) {

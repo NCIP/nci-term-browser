@@ -389,12 +389,10 @@ if (inverse_associations == null) {
   <%
      String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr, version_curr, "display_inverse_relationships");
      boolean display_inverse_relationships = true;
-     
-     /*
+
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;
      }
-     */
 
 
 if (!isMapping) {
@@ -502,7 +500,7 @@ if (!isMapping) {
 <p>
 
   <%
-     } else if ((inverse_roles == null || inverse_roles.size() == 0) && display_inverse_relationships) {
+     } else if (inverse_roles == null || inverse_roles.size() == 0 || !display_inverse_relationships) {
   %>
        <b>Inverse Role Relationships: </b><i>(none)</i>
   <%
@@ -641,7 +639,7 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
 </p>
 
 <%
-  } else if ((inverse_associations == null || inverse_associations.size() == 0) && display_inverse_relationships) {
+  } else if (inverse_associations == null || inverse_associations.size() == 0 || !display_inverse_relationships) {
     %>
     <b>Inverse Associations: </b><i>(none)</i>
     <%
