@@ -222,7 +222,7 @@ String next_page_num_str = Integer.toString(next_page_num);
              
                 <th class="dataTableHeader" scope="col" align="left">Code</th>
                 <th class="dataTableHeader" scope="col" align="left">Name</th>
-                <th class="dataTableHeader" scope="col" align="left">Coding Scheme</th>
+                <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
                 <th class="dataTableHeader" scope="col" align="left">Namespace</th>
 
 <%
