@@ -1209,10 +1209,9 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
                 .getExternalContext().getRequest();
 
 		String valueSetDefinitionRevisionId = null;
-
         String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
-
         String uri = (String) request.getSession().getAttribute("vsd_uri");
+
         if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
 			String msg = "No coding scheme reference is selected.";
 			request.getSession().setAttribute("message", msg);
@@ -1223,8 +1222,7 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
-			System.out.println("(*) coding_scheme_ref: " + t);
-			Vector u = DataUtils.parseData(t, "$");
+			Vector u = DataUtils.parseData(t, "|");
 			String url = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
