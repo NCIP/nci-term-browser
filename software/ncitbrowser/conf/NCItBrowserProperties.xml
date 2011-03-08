@@ -437,12 +437,12 @@
 
         <ConfigurableItem>
                  <key>NCIM_URL</key>
-                 <value>@ncim.url@ncimbrowser/</value>
+                 <value>@ncim.url@ncimbrowser</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
                  <key>NCIT_URL</key>
-                 <value>@ncit.url@ncitbrowser/</value>
+                 <value>@ncit.url@ncitbrowser</value>
         </ConfigurableItem>
 
         <ConfigurableItem>
