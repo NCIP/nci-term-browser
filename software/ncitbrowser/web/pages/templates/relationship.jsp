@@ -395,6 +395,11 @@ if (inverse_associations == null) {
      }
 
 
+System.out.println("(********* ) display_inverse_relationships: " + display_inverse_relationships);
+
+
+
+
 if (!isMapping) {
 
 
