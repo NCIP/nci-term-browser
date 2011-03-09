@@ -179,21 +179,18 @@
               }
 
               if (dictionary.compareTo("NCI Thesaurus") == 0
-                  || dictionary.compareTo("NCI_Thesaurus") == 0) {
-          %> <%@ include file="/pages/templates/content-header.jsp"%>
-  <%
-          } else {
-              request.getSession().setAttribute("dictionary", dictionary);
-        %> <%@ include file="/pages/templates/content-header-other.jsp"%>
-  <%
-          }
-            String tg_dictionary_0 = dictionary;
+                  || dictionary.compareTo("NCI_Thesaurus") == 0) { 
+                %> <%@ include file="/pages/templates/content-header.jsp"%> <%
+              } else {
+                request.getSession().setAttribute("dictionary", dictionary);
+                %> <%@ include file="/pages/templates/content-header-other.jsp"%> <%
+              }
+              String tg_dictionary_0 = dictionary;
             
-            String tg_dictionary = DataUtils.replaceAll(dictionary, " ",
-                "%20");
-            if (c != null) {
-              request.getSession().setAttribute("type", type);
-              request.getSession().setAttribute("singleton", "false");
+              String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
+              if (c != null) {
+                request.getSession().setAttribute("type", type);
+                request.getSession().setAttribute("singleton", "false");
         %> <!-- Page content -->
   <div class="pagecontent">
   <a name="evs-content" id="evs-content"></a>

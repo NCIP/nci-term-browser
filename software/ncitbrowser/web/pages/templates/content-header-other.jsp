@@ -5,7 +5,16 @@
 <div class="bannerarea">
 <%
   JSPUtils.JSPHeaderInfoMore info3 = new JSPUtils.JSPHeaderInfoMore(request);
-  if (info3.dictionary == null || info3.dictionary.compareTo("NCI Thesaurus") == 0) {
+  if (JSPUtils.isNull(info3.dictionary)) {
+      %>
+      <div class="banner">
+        <a href="<%=basePath%>"><img
+          src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383"
+          height="117" alt="Term Browser Logo" border="0" />
+        </a>
+      </div>
+    <%
+  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0) {
   %>
     <div class="banner">
       <a href="<%=basePath%>"><img
@@ -14,7 +23,7 @@
       </a>
     </div>
   <%
-  } else if (info3.dictionary != null) {
+  } else {
   %>
     <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(info3.dictionary)%>">
       <div class="vocabularynamebanner">

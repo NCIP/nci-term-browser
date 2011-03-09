@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.common.*;
+
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -50,7 +52,8 @@ import org.apache.log4j.*;
 
 public class JSPUtils {
     private static Logger _logger = Logger.getLogger(JSPUtils.class);
-
+    private static final String DEFAULT_DICTIONARY = Constants.NCI_THESAURUS;
+    
     public static boolean isNull(String text) {
         return text == null || text.equalsIgnoreCase("null");
     }
@@ -102,12 +105,12 @@ public class JSPUtils {
                 debugDV("Session Attributes: ", dictionary, version);
             }
 
-            if (isNull(dictionary) && ! isNull(version)) {
-                _logger.debug("Defaulting dictionary to: NCI Thesaurus");
-                dictionary = "NCI Thesaurus";
-            }
-            
-            if (version != null && !DataUtils.isCodingSchemeLoaded(dictionary, version)) {
+            if (isNull(dictionary) && ! isNull(version) &&
+                    DataUtils.isCodingSchemeLoaded(DEFAULT_DICTIONARY, version)) {
+                dictionary = DEFAULT_DICTIONARY;
+                debugDV("Defaulting to: ", dictionary, version);
+            } else if (! isNull(dictionary) && ! isNull(version) &&
+                    ! DataUtils.isCodingSchemeLoaded(dictionary, version)) {
                 version_deprecated = version;
                 version =
                     DataUtils.getVocabularyVersionByTag(dictionary,
