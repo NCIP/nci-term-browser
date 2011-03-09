@@ -51,14 +51,17 @@ package gov.nih.nci.evs.browser.utils;
  *
  */
 
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+
 import java.util.*;
 
 import org.apache.log4j.*;
 
 public class FormatUtils {
     private static Logger _logger = Logger.getLogger(FormatUtils.class);
+    private static String _ncitUrl = NCItBrowserProperties.getNCIT_URL();
     private static final String NCIT_URL =
-        "http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&";
+        _ncitUrl + "/ConceptReport.jsp?dictionary=NCI%20Thesaurus&";
 
     public FormatUtils() {
 
@@ -172,12 +175,6 @@ public class FormatUtils {
     }
 
     public static String replaceBrowserURL(String url) {
-        /*
-         * http://ncit.nci.nih.gov/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code
-         * =C1723
-         * http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary
-         * =NCI%20Thesaurus&code=C1723
-         */
         int n = url.indexOf("code=");
         if (n != -1) {
             String t = url.substring(n, url.length());
