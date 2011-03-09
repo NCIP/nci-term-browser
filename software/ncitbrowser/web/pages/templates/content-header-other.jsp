@@ -8,7 +8,7 @@
   if (JSPUtils.isNull(info3.dictionary)) {
       %>
       <div class="banner">
-        <a href="<%=basePath%>"><img
+        <a href="<%=basePath%>/start.jsf"><img
           src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383"
           height="117" alt="Term Browser Logo" border="0" />
         </a>
@@ -37,18 +37,22 @@
   <%
   }
 %>
-        
-<div class="search-globalnav"><!-- Search box -->
-<div class="searchbox-top"><img
-  src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
-  alt="SearchBox Top" /></div>
-<div class="searchbox"><%@ include file="searchForm.jsp"%></div>
-<div class="searchbox-bottom"><img
-  src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2"
-  alt="SearchBox Bottom" /></div>
-<!-- end Search box --> <!-- Global Navigation --> <%@ include
-  file="menuBar.jsp"%> <!-- end Global Navigation -->
-</div>
+
+<% if (! JSPUtils.isNull(info3.dictionary)) { %>
+  <div class="search-globalnav"><!-- Search box -->
+    <div class="searchbox-top"><img
+      src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
+      alt="SearchBox Top" /></div>
+    <div class="searchbox"><%@ include file="searchForm.jsp"%></div>
+    <div class="searchbox-bottom"><img
+      src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2"
+      alt="SearchBox Bottom" />
+    </div>
+    <!-- end Search box --> <!-- Global Navigation --> 
+    <%@ include file="menuBar.jsp"%> 
+    <!-- end Global Navigation -->
+  </div>
+<% } %>
 </div>
 <!-- end Thesaurus, banner search area -->
 <!-- Quick links bar -->
