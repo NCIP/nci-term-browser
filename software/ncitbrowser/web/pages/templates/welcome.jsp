@@ -1,19 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.MetadataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <%
   String nci_meta_url = new DataUtils().getNCImURL();
-  String vocablary_version = DataUtils.getVersion();
-  String vocablary_version_value = DataUtils.getVersion();
-  
-  String version_para_value = (String) request.getParameter("version");
-  if (version_para_value != null) {
-      vocablary_version_value = version_para_value;
-  }
-  
-  if (vocablary_version_value == null) vocablary_version_value = "";
+  JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+  String vocablary_version_value = info.version;
 %>
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
