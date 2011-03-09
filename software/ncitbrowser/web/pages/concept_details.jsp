@@ -168,16 +168,22 @@
 
               String ltag = null;
 
-              c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
-              if (c != null) {
-                request.getSession().setAttribute("concept", c);
-                request.getSession().setAttribute("code", code);
-                name = c.getEntityDescription().getContent();
+              if (JSPUtils.isNull(dictionary)) {
+                name = "Error: Invalid dictionary - " + dictionary + ".";  
+              } else if (JSPUtils.isNull(version)) {
+                name = "Error: Invalid version - " + version + ".";  
               } else {
-                //name = "The server encountered an internal error that prevented it from fulfilling this request.";
-                name = "ERROR: Invalid code - " + code + ".";
+                c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
+                if (c != null) {
+                  request.getSession().setAttribute("concept", c);
+                  request.getSession().setAttribute("code", code);
+                  name = c.getEntityDescription().getContent();
+                } else {
+                  //name = "The server encountered an internal error that prevented it from fulfilling this request.";
+                  name = "ERROR: Invalid code - " + code + ".";
+                }
               }
-
+              
               if (dictionary.compareTo("NCI Thesaurus") == 0
                   || dictionary.compareTo("NCI_Thesaurus") == 0) { 
                 %> <%@ include file="/pages/templates/content-header.jsp"%> <%
