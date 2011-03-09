@@ -31,6 +31,7 @@
 
   <%!
     private static Logger _logger = Utils.getJspLogger("multiple_search_results.jsp");
+    private static String _ncimUrl = NCItBrowserProperties.getNCIM_URL();
   %>
 
   <f:view>
@@ -335,7 +336,7 @@ if (resultsPerPage == null) {
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>" ><%=name%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
-               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
+               String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
           %>
                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>
           <%
@@ -362,7 +363,7 @@ if (resultsPerPage == null) {
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
-               String meta_url = "http://ncim.nci.nih.gov/ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
+               String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
           %>
                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>&nbsp;(<%=con_status%>)
           <%

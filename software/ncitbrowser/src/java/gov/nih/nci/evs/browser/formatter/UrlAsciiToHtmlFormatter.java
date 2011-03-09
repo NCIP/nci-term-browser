@@ -96,19 +96,26 @@ public class UrlAsciiToHtmlFormatter extends AsciiToHtmlFormatter implements
         return _value;
     }
 
-    public static String generate(String textfile, int[] ncitCodeColumns)
-            throws Exception {
+    public static String generate(String textfile, int[] ncitCodeColumns,
+            String ncitUrl)
+        throws Exception {
         if (textfile == null)
             return "";
         
         String delimiter = "\t";
         UrlAsciiToHtmlFormatter formatter = new UrlAsciiToHtmlFormatter();
-        formatter.setNcitUrl("http://ncit.nci.nih.gov/ncitbrowser/");
+        formatter.setNcitUrl(ncitUrl);
         formatter.setNcitCodeColumns(ncitCodeColumns);
         formatter
             .setDisplayNCItCodeUrl(DisplayNCItCodeUrl.SeparateSingleWindow);
         formatter.convert(textfile, delimiter);
         return formatter.getValue();
+    }
+
+    
+    public static String generate(String textfile, int[] ncitCodeColumns)
+            throws Exception {
+        return generate(textfile, ncitCodeColumns, DEFAULT_URL);
     }
 
     public static void main(String[] args) {

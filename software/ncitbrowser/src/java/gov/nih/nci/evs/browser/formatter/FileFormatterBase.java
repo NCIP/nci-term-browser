@@ -211,7 +211,7 @@ public abstract class FileFormatterBase {
     }
 
     // -------------------------------------------------------------------------
-    private final String DEFAULT_URL = "http://ncit.nci.nih.gov/ncitbrowser/";
+    protected static final String DEFAULT_URL = "http://ncit.nci.nih.gov/ncitbrowser/";
     protected String _ncitUrl = DEFAULT_URL;
     protected Vector<Integer> _ncitCodeColumns = new Vector<Integer>();
 
