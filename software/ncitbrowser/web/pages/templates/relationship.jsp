@@ -309,19 +309,34 @@ if (inverse_associations == null) {
   score = null;
 
   if (isMapping) {
-      qualifiers = (String) ret_vec.elementAt(4);
-      System.out.println(qualifiers);
-      Vector v = DataUtils.parseData(qualifiers, "$");
-      String rel_str = (String) v.elementAt(0);
-      int m1 = rel_str.indexOf(":");
-      rel = rel_str.substring(m1+1, rel_str.length());
-      String score_str = "0";
-      score = score_str;
-      if (v.size() > 1) {
-          score_str = (String) v.elementAt(1);
-          int m2 = score_str.indexOf(":");
-          score = score_str.substring(m2+1, score_str.length());
+  
+  
+      if (ret_vec.size() > 4) {
+        qualifiers = (String) ret_vec.elementAt(4);
+        Vector v = DataUtils.parseData(qualifiers, "$");
+        
+        for (int k=0; k<v.size(); k++) {
+	  String t = (String) v.elementAt(k);
+	  Vector nv_vec = DataUtils.parseData(t, ":");
+	  if (nv_vec.size() > 1) {
+	  
+		  String qualifier_name = (String) nv_vec.elementAt(0);
+		  String qualifier_value = (String) nv_vec.elementAt(1);
+         
+		  if (qualifier_name.compareToIgnoreCase("rel") == 0) {
+		      rel = qualifier_value;
+		  }
+		  if (qualifier_name.compareToIgnoreCase("maprank") == 0 || qualifier_name.compareToIgnoreCase("score") == 0) {
+		      score = qualifier_value;
+		  }
+		  
+		  
+	  }
+        }
+        
       }
+
+      
       target_namespace = "NOT AVAILABLE";
       if(ret_vec.size() > 5) {
            target_namespace = (String) ret_vec.elementAt(5);
@@ -389,26 +404,11 @@ if (inverse_associations == null) {
   <p>
   <%
      String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr_0, version_curr, "display_inverse_relationships");
-
-
-System.out.println("(********* ) scheme_curr: " + scheme_curr);
-
-System.out.println("(********* ) version_curr: " + version_curr);
-
-System.out.println("(********* ) display_inverse_relationships: " + display_inverse_relationships_metadata_value);
-
-
-
      boolean display_inverse_relationships = true;
 
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;
      }
-
-
-System.out.println("(********* ) display_inverse_relationships: " + display_inverse_relationships);
-
-
 
 
 if (!isMapping) {
@@ -434,26 +434,6 @@ if (!isMapping) {
         String target_concept_code = (String) ret_vec.elementAt(2);
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
-  String qualifiers = null;
-  rel = null;
-  score = null;
-
-  if (isMapping) {
-      qualifiers = (String) ret_vec.elementAt(4);
-      System.out.println(qualifiers);
-      Vector v = DataUtils.parseData(qualifiers, "$");
-      String rel_str = (String) v.elementAt(0);
-      int m1 = rel_str.indexOf(":");
-      rel = rel_str.substring(m1+1, rel_str.length());
-      
-      String score_str = "0";
-      score = score_str;
-      if (v.size() > 1) {
-          score_str = (String) v.elementAt(1);
-          int m2 = score_str.indexOf(":");
-          score = score_str.substring(m2+1, score_str.length());
-      }      
-  }
 
         if (n1 % 2 == 0) {
           %>
@@ -573,19 +553,25 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
   if (isMapping) {
       if (ret_vec.size() > 4) {
         qualifiers = (String) ret_vec.elementAt(4);
-        System.out.println(qualifiers);
         Vector v = DataUtils.parseData(qualifiers, "$");
-        String rel_str = (String) v.elementAt(0);
-        int m1 = rel_str.indexOf(":");
-        rel = rel_str.substring(m1+1, rel_str.length());
         
-        String score_str = "0";
-        score = score_str;
-        if (v.size() > 1) {
-          score_str = (String) v.elementAt(1);
-          int m2 = score_str.indexOf(":");
-          score = score_str.substring(m2+1, score_str.length());
-        }        
+        for (int k=0; k<v.size(); k++) {
+	  String t = (String) v.elementAt(k);
+	  Vector nv_vec = DataUtils.parseData(t, ":");
+	  if (nv_vec.size() > 1) {
+	  
+		  String qualifier_name = (String) nv_vec.elementAt(0);
+		  String qualifier_value = (String) nv_vec.elementAt(1);
+          
+		  if (qualifier_name.compareToIgnoreCase("rel") == 0) {
+		      rel = qualifier_value;
+		  }
+		  if (qualifier_name.compareToIgnoreCase("maprank") == 0 || qualifier_name.compareToIgnoreCase("score") == 0) {
+		      score = qualifier_value;
+		  }
+	  }
+        }
+        
       }
       if (ret_vec.size() > 5) {
           target_namespace = (String) ret_vec.elementAt(5);
