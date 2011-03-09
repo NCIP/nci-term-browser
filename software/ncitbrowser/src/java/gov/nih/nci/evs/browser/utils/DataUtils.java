@@ -3607,6 +3607,8 @@ System.out.println("querying relationship data ...");
                                         rel = qualifier_value;
 									} else if (qualifier_name.compareTo("score") == 0) {
 										score = Integer.parseInt(qualifier_value);
+									} else if (qualifier_name.compareTo("maprank") == 0) {
+										score = Integer.parseInt(qualifier_value);
  								    }
 								}
 
