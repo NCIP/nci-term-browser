@@ -238,11 +238,42 @@
   request.setAttribute("version", version);    
             
       
-%> <%@ include file="/pages/templates/typeLinks.jsp"%>
-  <div class="tabTableContentContainer"><%@ include
-    file="/pages/templates/property.jsp"%> <%@ include
-    file="/pages/templates/relationship.jsp"%>
+%> 
+  <%@ include file="/pages/templates/typeLinks.jsp"%>
+  <div class="tabTableContentContainer">
+  
+<%  
+if (type != null && type.compareTo("all") == 0) {
+
+  boolean isMappingCD = DataUtils.isMapping(dictionary, version);
+
+%>
+
+<H1 class="textsubtitle-blue">Table of Contents</H1>
+<ul>
+<li><A href="#properties">Terms &amp; Properties</A></li>
+<li><A href="#synonyms">Synonym Details</A></li>
+<li><A href="#relationships">Relationships</A></li>
+
+<%
+if (!isMappingCD) {
+%>
+<li><A href="#mappings">Mapping Details</A></li>
+<%
+}
+%>
+
+</ul> 
+<br>
+
+<%
+}
+%>  
+  
+  
+  <%@ include file="/pages/templates/property.jsp"%> 
   <%@ include file="/pages/templates/synonym.jsp"%>
+  <%@ include file="/pages/templates/relationship.jsp"%>
   <%@ include file="/pages/templates/mappings.jsp"%>
   </div>
   <%
