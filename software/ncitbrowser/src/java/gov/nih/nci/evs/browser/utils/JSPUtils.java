@@ -105,11 +105,18 @@ public class JSPUtils {
                 debugDV("Session Attributes: ", dictionary, version);
             }
 
-            if (isNull(dictionary) && ! isNull(version) &&
+            boolean isDictionaryNull = isNull(dictionary); 
+            boolean isVersionNull = isNull(version); 
+            if (isDictionaryNull && ! isVersionNull &&
                     DataUtils.isCodingSchemeLoaded(DEFAULT_DICTIONARY, version)) {
                 dictionary = DEFAULT_DICTIONARY;
                 debugDV("Defaulting to: ", dictionary, version);
-            } else if (! isNull(dictionary) && ! isNull(version) &&
+            } else if (! isDictionaryNull && isVersionNull) {
+                version =
+                    DataUtils.getVocabularyVersionByTag(dictionary,
+                        "PRODUCTION");
+                debugDV("Defaulting to: ", dictionary, version);
+            } else if (! isDictionaryNull && ! isVersionNull &&
                     ! DataUtils.isCodingSchemeLoaded(dictionary, version)) {
                 version_deprecated = version;
                 version =
