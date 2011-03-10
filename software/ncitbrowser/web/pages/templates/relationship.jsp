@@ -90,7 +90,23 @@ if (inverse_associations == null) {
 
     
     
-      <td class="textsubtitle-blue" align="left"><A name="relationships">Relationships with other <%=rel_display_name%> Concepts</A></td>
+      <td class="textsubtitle-blue" align="left">
+      
+      
+<%			
+if (type != null && type.compareTo("all") == 0) {
+%>
+    <A name="relationships">Relationships with other <%=rel_display_name%> Concepts</A>
+<%    
+} else {
+%>
+    Relationships with other <%=rel_display_name%> Concepts
+<%    
+}
+%>     
+      
+
+      </td>
       <td align="right" class="texttitle-blue-rightJust">
         <h:form>
           <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
