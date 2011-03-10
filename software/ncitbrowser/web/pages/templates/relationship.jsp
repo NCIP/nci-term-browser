@@ -678,44 +678,31 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
 <%
       if (!isMapping) {
 
-        Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
+        //Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
         Entity con = (Entity) request.getSession().getAttribute("concept");
 	Vector meta_cui_vec = DataUtils.getMatchedMetathesaurusCUIs(con);//scheme_curr, version_curr, null, code_curr);
         
-        if ((mapping_uri_version_vec != null && mapping_uri_version_vec.size() > 0) || (meta_cui_vec != null && meta_cui_vec.size() > 0))
-        {
-                String ncim_url = NCItBrowserProperties.getNCIM_URL();
+
 %>
 		<p>
 		    <b>Mapping relationships:</b>
 		<br/>
 		<table class="dataTable">
-		<%
-                  if (mapping_uri_version_vec != null) {
-			  for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
-			       String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
-			       Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
-			       String mapping_cs_uri = (String) ret_vec.elementAt(0);
-			       String mapping_cs_version = (String) ret_vec.elementAt(1);
-
-			       String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
-
-			%>
+		
+		
 			       <tr>
 				 <td>
-				 <%=mapping_cs_name%>&nbsp;(<%=mapping_cs_version%>)&nbsp;
-					<a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=mapping_cs_name%>&version=<%=mapping_cs_version%>&code=<%=code_curr%>&type=relationship">
-					   <i class="textbodyred">View Mapping</i>
-					</a>
+		
+<a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme_curr%>&version=<%=version_curr%>&code=<%=code_curr%>&type=mapping">see Mapping Details</a>
+		
 				 </td>
-			       </tr>
-			<%
+			       </tr>		
+		
 
-			  }
-		  }
-
-
-                if (meta_cui_vec != null) {
+<%
+        if (meta_cui_vec != null && meta_cui_vec.size() > 0)
+        {
+                String ncim_url = NCItBrowserProperties.getNCIM_URL();
 			for(int lcv=0; lcv<meta_cui_vec.size(); lcv++) {
 			       String meta_cui = (String) meta_cui_vec.elementAt(lcv);
 			       String ncim_cs_name = "NCI Metathesaurus";
@@ -735,7 +722,6 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
 			       </tr>
 			<%
 			}
-		}
                 %> 
 
 		</table>
