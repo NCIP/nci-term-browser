@@ -197,15 +197,15 @@
        </DisplayItem>
 
        <DisplayItem>
-            <propertyName>Synonym</propertyName>
+            <propertyName>textualPresentation</propertyName>
             <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
-
+       
        <DisplayItem>
-            <propertyName>textualPresentation</propertyName>
+            <propertyName>Synonym</propertyName>
             <itemLabel>Synonyms &amp; Abbreviations</itemLabel>
             <url>null</url>
             <hyperlinkText>null</hyperlinkText>

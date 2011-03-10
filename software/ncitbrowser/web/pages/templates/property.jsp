@@ -273,11 +273,12 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       }
       
       if (value_vec != null && value_vec.size() > 0) {
-          
+
         //[#28262] Only one "NCI Meta CUI" displays
         for (int lcv=0; lcv<value_vec.size(); lcv++) {
          
 		String value = (String) value_vec.elementAt(lcv);
+		
 		String value_wo_qualifier = value;
 
 		int n = value.indexOf("|");
@@ -304,6 +305,8 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 			String url_str = url + value;
                         if (value_vec.size() == 1) {
+                        
+                        
 			%> 
 			  <p>
 			  <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
@@ -339,12 +342,16 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       
     } else if (propName_label.indexOf("Synonyms") == -1) {
       displayed_properties.add(propName);
+     
+      
       Vector value_vec = (Vector) hmap.get(propName);
 
       if (value_vec != null && value_vec.size() > 0) {
-        int k = 0;  
+      
+        int k = -1;  
         for (int j=0; j<value_vec.size(); j++) {
           String value = (String) value_vec.elementAt(j);
+          k++;
           
           if (propName.compareTo("NCI_META_CUI") == 0) {
               ncim_cui_code_vec.add(value);
@@ -352,6 +359,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           
 	  if(propName_label.compareTo("Definition") == 0) {
 	      value = FormatUtils.reformatPDQDefinition(value);
+	      
 	  }
           
           String value_wo_qualifier = value;
@@ -382,15 +390,18 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
               }
           }
           
+          if (propName_label.indexOf("textualPresentation") == -1) {
           
-          if (k == 0) {
-%>
-            <p><b><%=propName_label%>:&nbsp;</b><%=value%></p>
-<%
-          } else {
-%>
-            <p><%=value%></p>
-<%
+		  if (k == 0) {
+
+	%>
+		    <p><b><%=propName_label%>:&nbsp;</b><%=value%></p>
+	<%
+		  } else {
+	%>
+		    <p><%=value%></p>
+	<%
+		  }
           }
 
       }
