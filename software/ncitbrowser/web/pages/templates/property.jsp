@@ -20,8 +20,6 @@
   String prop_dictionary = prop_info.dictionary;
   String prop_version = prop_info.version;
     
-  //System.out.println("property.jsp prop_version: " + prop_version);    
-
   List displayItemList = null;
   Entity curr_concept = null;
   Boolean bool_obj = null;
@@ -147,7 +145,20 @@
 	<table border="0" width="708px">
 		<tr>
 			<td class="textsubtitle-blue" align="left">
-			<A name="properties">Terms & Properties</A>
+
+<%			
+if (type != null && type.compareTo("all") == 0) {
+%>
+    <A name="properties">Terms & Properties</A>
+<%    
+} else {
+%>
+    Terms & Properties
+<%    
+}
+%>
+			
+			
 			</td>
 			<td align="right" class="texttitle-blue-rightJust">	
 				<h:form>			

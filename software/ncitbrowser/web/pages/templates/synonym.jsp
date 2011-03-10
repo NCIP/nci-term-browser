@@ -10,7 +10,21 @@
   <table border="0" width="708px">
     <tr>
       <td class="textsubtitle-blue" align="left">
-      <A name="synonyms">Synonym Details</A>
+      
+<%			
+if (type != null && type.compareTo("all") == 0) {
+%>
+    <A name="synonyms">Synonym Details</A>
+<%    
+} else {
+%>
+    Synonym Details
+<%    
+}
+%>         
+      
+      
+      
       </td>
       <td align="right" class="texttitle-blue-rightJust">
         <h:form>

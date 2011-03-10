@@ -37,7 +37,22 @@
  %>
   <table border="0" width="708px">
     <tr>
-      <td class="textsubtitle-blue" align="left"><A name="mappings">Mapping Details</A></td>
+      <td class="textsubtitle-blue" align="left">
+      
+<%			
+if (type != null && type.compareTo("all") == 0) {
+%>
+    <A name="mappings">Mapping Details</A>
+<%    
+} else {
+%>
+    Mapping Details
+<%    
+}
+%>        
+      
+      
+      </td>
       <td align="right" class="texttitle-blue-rightJust">
         <h:form>
           <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
