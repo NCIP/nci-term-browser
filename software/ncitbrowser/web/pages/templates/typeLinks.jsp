@@ -56,6 +56,32 @@
         }
           %>
       </td>
+      
+        <td width="119" height="21">
+          <%
+            if (data_type == null ||
+              (data_type != null && data_type.compareTo("synonym") != 0)) {
+          %>
+          <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=synonym">
+            <img name="sdTab"
+              src="<%=request.getContextPath() %>/images/tab_sd.gif"
+              width="119" height="21" border="0" alt="Synonym Details"
+              title="Synonym Details" />
+          </a>
+          <%
+            } else {
+          %>
+            <img name="sdTab"
+              src="<%=request.getContextPath() %>/images/tab_sd_clicked.gif"
+              width="119" height="21" border="0" alt="Synonym Details"
+              title="Synonym Details" />
+          <%
+            }
+          %>
+          </td>      
+      
+      
+      
       <td width="102" height="21">
         <%
           if (data_type == null ||
@@ -78,28 +104,10 @@
           }
         %>
         </td>
-        <td width="119" height="21">
-          <%
-            if (data_type == null ||
-              (data_type != null && data_type.compareTo("synonym") != 0)) {
-          %>
-          <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=synonym">
-            <img name="sdTab"
-              src="<%=request.getContextPath() %>/images/tab_sd.gif"
-              width="119" height="21" border="0" alt="Synonym Details"
-              title="Synonym Details" />
-          </a>
-          <%
-            } else {
-          %>
-            <img name="sdTab"
-              src="<%=request.getContextPath() %>/images/tab_sd_clicked.gif"
-              width="119" height="21" border="0" alt="Synonym Details"
-              title="Synonym Details" />
-          <%
-            }
-          %>
-          </td>
+        
+        
+
+          
 <%          
 if (!typeLink_isMapping) {          
 %>          

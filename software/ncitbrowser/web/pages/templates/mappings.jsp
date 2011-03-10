@@ -37,7 +37,7 @@
  %>
   <table border="0" width="708px">
     <tr>
-      <td class="textsubtitle-blue" align="left">Mapping relationships</td>
+      <td class="textsubtitle-blue" align="left"><A name="mappings">Mapping Details</A></td>
       <td align="right" class="texttitle-blue-rightJust">
         <h:form>
           <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">

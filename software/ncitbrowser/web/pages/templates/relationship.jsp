@@ -87,7 +87,10 @@ if (inverse_associations == null) {
 %>
   <table border="0" width="708px">
     <tr>
-      <td class="textsubtitle-blue" align="left">Relationships with other <%=rel_display_name%> Concepts</td>
+
+    
+    
+      <td class="textsubtitle-blue" align="left"><A name="relationships">Relationships with other <%=rel_display_name%> Concepts</A></td>
       <td align="right" class="texttitle-blue-rightJust">
         <h:form>
           <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
@@ -668,7 +671,7 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
                 String ncim_url = NCItBrowserProperties.getNCIM_URL();
 %>
 		<p>
-		    <b>Mapping Relationships:</b>
+		    <b>Mapping relationships:</b>
 		<br/>
 		<table class="dataTable">
 		<%
