@@ -186,9 +186,7 @@ if (page_number != null) {
 }
 
 int page_num = pageNum;
-if (page_num == 0) page_num++;
-
-
+//if (page_num == 0) page_num++;
 //int pageSize = bean.getPageSize();
 
 int pageSize = Integer.parseInt(selectedResultsPerPage);
@@ -204,11 +202,14 @@ if (num_pages * pageSize < size) num_pages++;
 
 System.out.println("num_pages: " + num_pages + "\n");
 
-//int istart = bean.getIstart();
-//int iend = bean.getIend();
+int istart = (page_num - 1) * pageSize;
+if (istart < 0) istart = 0;
 
-int istart = pageNum * pageSize;
+
 int iend = istart + pageSize - 1;
+if (iend > size) iend = size-1;
+
+
 
 List list = null;
 System.out.println("calling bean.getData ...");
