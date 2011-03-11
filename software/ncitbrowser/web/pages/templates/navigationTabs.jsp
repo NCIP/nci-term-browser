@@ -36,6 +36,23 @@
 
       <td width="88" height="21">
         <% if (nav_type == null ||
+            (nav_type != null && nav_type.compareTo("valuesets") != 0)) { %>
+          <a href="<%=request.getContextPath() %>/pages/value_set_search.jsf">
+            <img name="tab_valuesets"
+              src="<%=request.getContextPath() %>/images/tab_valuesets.gif"
+              width="88" height="21" border="0" alt="Value Sets" 
+              title="ValueSets" />
+          </a>
+        <% } else { %>
+          <img name="tab_valuesets"
+            src="<%=request.getContextPath() %>/images/tab_valuesets_clicked.gif"
+            width="88" height="21" border="0" alt="Value Sets" 
+            title="ValueSets" />
+        <% } %>
+     </td>
+     
+      <td width="88" height="21">
+        <% if (nav_type == null ||
             (nav_type != null && nav_type.compareTo("mappings") != 0)) { %>
           <a href="<%=request.getContextPath() %>/pages/<%=mapping_jsp_page_name%>?nav_type=mappings">
             <img name="tab_map"
@@ -51,21 +68,6 @@
         <% } %>
       </td>
 
-      <td width="88" height="21">
-        <% if (nav_type == null ||
-            (nav_type != null && nav_type.compareTo("valuesets") != 0)) { %>
-          <a href="<%=request.getContextPath() %>/pages/value_set_search.jsf">
-            <img name="tab_valuesets"
-              src="<%=request.getContextPath() %>/images/tab_valuesets.gif"
-              width="88" height="21" border="0" alt="Value Sets" 
-              title="ValueSets" />
-          </a>
-        <% } else { %>
-          <img name="tab_valuesets"
-            src="<%=request.getContextPath() %>/images/tab_valuesets_clicked.gif"
-            width="88" height="21" border="0" alt="Value Sets" 
-            title="ValueSets" />
-        <% } %>
-     </td>
+
   </tr>
 </table>

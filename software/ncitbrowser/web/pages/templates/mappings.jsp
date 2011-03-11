@@ -13,6 +13,11 @@
   
   boolean isMappingCS = DataUtils.isMapping(scheme_curr, version_curr);
   
+   
+  
+  
+  
+  
   if(!isMappingCS) {
   
   Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
@@ -36,6 +41,15 @@
 
  %>
   <table border="0" width="708px">
+
+ <%
+ 
+         Entity con = (Entity) request.getSession().getAttribute("concept");
+ 	 Vector meta_cui_vec = DataUtils.getMatchedMetathesaurusCUIs(con);//scheme_curr, version_curr, null, code_curr);
+
+
+%>  
+  
     <tr>
       <td class="textsubtitle-blue" align="left">
       
@@ -53,6 +67,8 @@ if (type != null && type.compareTo("all") == 0) {
       
       
       </td>
+      
+      
       <td align="right" class="texttitle-blue-rightJust">
         <h:form>
           <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
@@ -63,6 +79,13 @@ if (type != null && type.compareTo("all") == 0) {
         </h:form>
       </td>
     </tr>
+    
+    
+    
+    
+    
+    
+    
   </table>
 <%
         if (mapping_uri_version_vec == null || mapping_uri_version_vec.size() == 0) {
@@ -72,8 +95,52 @@ if (type != null && type.compareTo("all") == 0) {
         } else {
               DataUtils util = new DataUtils();
               
-        
-%>
+
+
+
+         if (meta_cui_vec != null && meta_cui_vec.size() > 0)
+         {
+                        String ncim_url = NCItBrowserProperties.getNCIM_URL();
+                        
+%> 
+          <b>Mapping through NCI Metathesaurus:</b>
+          <table>
+          <tr>
+              <td>
+                  <table>
+<%                        
+ 			for(int lcv=0; lcv<meta_cui_vec.size(); lcv++) {
+ 			       String meta_cui = (String) meta_cui_vec.elementAt(lcv);
+ 			       String ncim_cs_name = "NCI Metathesaurus";
+ 
+ 			%>
+ 			       <tr>
+ 				 <td class="textbody">
+  					    <a href="<%= ncim_url %>/ConceptReport.jsp?dictionary=<%=ncim_cs_name%>&code=<%=meta_cui%>&type=synonym" target="_blank">
+ 					      <i class="textbody"><%=meta_cui%></i>
+ 					      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=ncim_cs_name%>" />
+ 					    </a>
+ 
+ 				 </td>
+ 			       </tr>
+ 			<%
+ 			}
+                 %> 
+ 
+ 		</table>
+             </td>
+         </tr>
+         </table>
+         <hr></hr>
+
+ 
+ 
+ 	  <%
+ 	}
+    %>
+
+
+
             
 
         <b>Maps To:</b>
