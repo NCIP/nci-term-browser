@@ -152,17 +152,22 @@ public class MappingSearchUtils {
     public ResolvedConceptReferencesIteratorWrapper searchByCode(
         String scheme, String version, String matchText,
         String matchAlgorithm, int maxToReturn) {
+
+
+
 		Vector schemes = new Vector();
 		schemes.add(scheme);
 		Vector versions = new Vector();
 		versions.add(version);
-		return searchByCode(scheme, version, matchText, matchAlgorithm, SearchContext.SOURCE_OR_TARGET_CODES, maxToReturn);
+		return searchByCode(schemes, versions, matchText, matchAlgorithm, SearchContext.SOURCE_OR_TARGET_CODES, maxToReturn);
 	}
 
 
     public ResolvedConceptReferencesIteratorWrapper searchByCode(
         Vector schemes, Vector versions, String matchText,
         String matchAlgorithm, int maxToReturn) {
+
+
 
         return searchByCode(
          schemes, versions, matchText,
@@ -198,6 +203,7 @@ System.out.println("==============================  MappingSearchUtils searchByC
 		{
 		   matchAlgorithm = new SearchUtils().findBestContainsAlgorithm(matchText);
 		}
+		System.out.println("matchAlgorithm: " + matchAlgorithm);
 
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		MappingExtension mappingExtension = null;
@@ -238,8 +244,12 @@ System.out.println("\tcontainer name: " +  containerName);
 
 						ConceptReferenceList codeList = new ConceptReferenceList();
 						ConceptReference ref = new ConceptReference();
+
+						System.out.println("ref.setConceptCode: " + matchText);
 						ref.setConceptCode(matchText);
  						codeList.addConceptReference(ref);
+
+                        System.out.println("mapping.restrictToCodes: " + matchText);
 
                         mapping = mapping.restrictToCodes(codeList, searchContext);
 						itr = mapping.resolveMapping();
