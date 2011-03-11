@@ -4,11 +4,20 @@
 
 <%
 
-    int prev_page_num = pageNum;
-    int next_page_num = prev_page_num + 1;
+System.out.println("pagination-mapping.jsp pageNum: " + pageNum);
+
+    int prev_page_num = pageNum - 1;
+    int next_page_num = pageNum + 1;
     
-    String istart_str = Integer.toString(istart+1);
-    String iend_str = Integer.toString(iend+1);
+    
+    
+String istart_str = Integer.toString(istart+1);
+String iend_str = Integer.toString(iend+1);
+  
+  
+System.out.println("pagination-mapping.jsp istart_str: " + istart_str);
+System.out.println("pagination-mapping.jsp iend_str: " + iend_str);
+
   
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
 System.out.println("(*) dictionary_map " + dictionary_map);
@@ -29,12 +38,10 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
     
     String match_size = Integer.toString(numRemaining);
     
-    String prev_page_num_str = Integer.toString(pageNum);
-    String next_page_num_str = Integer.toString(pageNum+1);
+    String prev_page_num_str = Integer.toString(prev_page_num);
+    String next_page_num_str = Integer.toString(next_page_num);
     
-    
-System.out.println("prev_page_num_str: " + prev_page_num_str);
-System.out.println("next_page_num_str: " + next_page_num_str);
+
     
 %>
 

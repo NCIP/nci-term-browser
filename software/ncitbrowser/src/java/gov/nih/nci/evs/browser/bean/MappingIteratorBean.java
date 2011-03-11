@@ -383,8 +383,10 @@ System.out.println("MappingIteratorBean idx2: " + idx2);
 
 System.out.println("mappingIteratorBean getData idx1 " + idx1);
 System.out.println("mappingIteratorBean getData idx2 " + idx2);
+System.out.println("mappingIteratorBean getData _list.size() " + _list.size());
 
 
+if (idx2 <= _list.size()) return copyData(idx1, idx2);
 
 		MappingData mappingData = null;
 
@@ -804,6 +806,10 @@ if (_list.size() == 0) return rcr_list;
 
         _logger.debug("getData Run time (ms): "
             + (System.currentTimeMillis() - ms));
+
+
+System.out.println("end of getData size: " + _size);
+
         return rcr_list;
 
 //return copyData(idx1, idx2);
