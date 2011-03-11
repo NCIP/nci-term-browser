@@ -201,13 +201,17 @@ if (iend > size) {
 }
 
 
-
 try {
    list = mapping_bean.getData(istart, iend);
+   int prev_size = size;
+   size = mapping_bean.getSize();
+   if (size != prev_size && iend < size) {
+       iend = size;
+   }
+   
 } catch (Exception ex) {
    System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
-
 
 
 
