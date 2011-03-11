@@ -228,9 +228,9 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 }
 
 %>
-          <table width="580px" cellpadding="3" cellspacing="0" border="0">
+          <table class="datatable">
 
-          <th class="dataTableHeader" scope="col" align="left">Source</th>
+          <th class="dataTableHeader" width="60px" scope="col" align="left">Source</th>
 
 
           <th class="dataTableHeader" scope="col" align="left">
@@ -241,21 +241,21 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
                  Source Name
           </th>
 
-          <th class="dataTableHeader" scope="col" align="left">
+          <th class="dataTableHeader" width="30px" scope="col" align="left">
                  REL
           </th>
 
 <%
 if (show_rank_column) {
 %>
-          <th class="dataTableHeader" scope="col" align="left">
+          <th class="dataTableHeader" width="35px" scope="col" align="left">
                  Map Rank
           </th>
 <%
 }
 %>
 
-          <th class="dataTableHeader" scope="col" align="left">Target</th>
+          <th class="dataTableHeader" width="60px" scope="col" align="left">Target</th>
 
           <th class="dataTableHeader" scope="col" align="left">
                  Target Code
