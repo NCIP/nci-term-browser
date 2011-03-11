@@ -87,7 +87,12 @@ System.out.println("page_num: " + page_num);
 
 		 for (int idx=sliding_window_start; idx<=sliding_window_end; idx++) { 
 		    String idx_str = Integer.toString(idx);
-		    if (page_num != idx) {
+		    
+		    if (idx == 1 && page_num == idx) {
+		    %>
+		        <%=idx_str%>&nbsp;
+		    <%    
+		    } else if (page_num != idx) {
 		      %>
 		        <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=idx_str%>"><%=idx_str%></a>
 		
