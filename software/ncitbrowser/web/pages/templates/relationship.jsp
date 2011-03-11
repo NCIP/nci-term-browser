@@ -678,11 +678,6 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
 <%
       if (!isMapping) {
 
-        //Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
-        Entity con = (Entity) request.getSession().getAttribute("concept");
-	Vector meta_cui_vec = DataUtils.getMatchedMetathesaurusCUIs(con);//scheme_curr, version_curr, null, code_curr);
-        
-
 %>
 		<p>
 		    <b>Mapping relationships:</b>
@@ -696,43 +691,13 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
 <a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme_curr%>&version=<%=version_curr%>&code=<%=code_curr%>&type=mapping">see Mappings</a>
 		
 				 </td>
-			       </tr>		
-		
+			       </tr>
+			       
+		</table>
 
 <%
-        if (meta_cui_vec != null && meta_cui_vec.size() > 0)
-        {
-                String ncim_url = NCItBrowserProperties.getNCIM_URL();
-			for(int lcv=0; lcv<meta_cui_vec.size(); lcv++) {
-			       String meta_cui = (String) meta_cui_vec.elementAt(lcv);
-			       String ncim_cs_name = "NCI Metathesaurus";
-
-			%>
-			       <tr>
-				 <td>
-
-					  <%=ncim_cs_name%>&nbsp;
-
-					    <a href="<%= ncim_url %>/ConceptReport.jsp?dictionary=<%=ncim_cs_name%>&code=<%=meta_cui%>&type=synonym" target="_blank">
-					      <i class="textbody"><%=meta_cui%></i>
-					      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=ncim_cs_name%>" />
-					    </a>
-
-				 </td>
-			       </tr>
-			<%
-			}
-                %> 
-
-		</table>
-		</p>
-
-
-	  <%
-	}
 
      } //ismapping
-
 
 }
 %>
