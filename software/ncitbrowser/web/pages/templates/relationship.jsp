@@ -693,7 +693,7 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
 			       <tr>
 				 <td>
 		
-<a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme_curr%>&version=<%=version_curr%>&code=<%=code_curr%>&type=mapping">see Mapping Details</a>
+<a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme_curr%>&version=<%=version_curr%>&code=<%=code_curr%>&type=mapping">see Mappings</a>
 		
 				 </td>
 			       </tr>		

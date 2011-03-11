@@ -274,10 +274,12 @@ System.out.println("(***) isMapping " + isMapping);
 System.out.println("(*************) calling MappingSearchUtils -- search by " + searchTarget);
 //testing
 				if (searchTarget.compareTo("names") == 0) {
+
 System.out.println("(*************) calling MappingSearchUtils -- searchByCode " + searchTarget);
 					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByCode(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn);
+
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
 					}
