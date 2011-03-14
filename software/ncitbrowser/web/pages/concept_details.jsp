@@ -191,6 +191,9 @@
                 request.getSession().setAttribute("dictionary", dictionary);
                 %> <%@ include file="/pages/templates/content-header-other.jsp"%> <%
               }
+              
+              List namespace_list = DataUtils.getDistinctNamespacesOfCode(dictionary, version, code);
+              
               String tg_dictionary_0 = dictionary;
             
               String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
@@ -205,6 +208,27 @@
       <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
 
           <%
+          
+          
+
+if (namespace_list != null && namespace_list.size() > 1) {
+        String count_str = new Integer(namespace_list.size()).toString();
+        count_str = "(Note: Code " + code + " is found in " + count_str + " different namespaces.)";
+
+
+%>
+<tr>
+<td class="textbodyred">
+<%=count_str%>
+</td>
+</tr>
+<%
+
+}
+          
+          
+          
+          
                 VisitedConceptUtils.add(request, tg_dictionary_0, version, code, name);
                 if (term_suggestion_application_url != null
                     && term_suggestion_application_url.compareTo("") != 0) {
