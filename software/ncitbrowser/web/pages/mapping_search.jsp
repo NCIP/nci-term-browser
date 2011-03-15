@@ -139,12 +139,12 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
     value="<%=termbrowser_displayed_match_text%>"
     onFocus="active = true"
     onBlur="active = false"
-    onkeypress="return submitEnter('multiple_search',event)"
+    onkeypress="return submitEnter('mapping_search',event)"
     tabindex="1"
   />
   <h:commandButton
     id="search"
-    value="Search"
+    value="mapping_search"
     action="#{userSessionBean.searchAction}"
     image="#{searchform_requestContextPath}/images/search.gif"
     alt="Search"
