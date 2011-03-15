@@ -143,7 +143,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
 
-                  &nbsp;&nbsp; <h:commandButton id="multiple_search" value="Search"
+                  &nbsp;&nbsp; <h:commandButton id="multi_search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{requestContextPath}/images/search.gif"
                     alt="Search">
@@ -362,7 +362,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
 
-                  &nbsp;&nbsp; <h:commandButton id="multiplesearch" value="Search"
+                  &nbsp;&nbsp; <h:commandButton id="multipleSearch" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{requestContextPath}/images/search.gif"
                     alt="Search">
