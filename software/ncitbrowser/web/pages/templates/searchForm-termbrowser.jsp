@@ -23,7 +23,7 @@
     tabindex="1"
   />
   <h:commandButton
-    id="search"
+    id="multiple_search"
     value="Search"
     action="#{userSessionBean.multipleSearchAction}"
     image="#{searchform_requestContextPath}/images/search.gif"
