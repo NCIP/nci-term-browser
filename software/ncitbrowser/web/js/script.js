@@ -281,6 +281,8 @@ function savemenustate(){
 	document.cookie=cookiename+"="+cookievalue
 }
 
+
+
 function submitEnter(commandId,e)
 {
         var keycode;

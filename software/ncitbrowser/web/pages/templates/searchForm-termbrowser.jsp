@@ -19,7 +19,7 @@
     value="<%=termbrowser_displayed_match_text%>"
     onFocus="active = true"
     onBlur="active = false"
-    onkeypress="return submitEnter('multiple_search',event)"
+    onkeypress="return submitEnter('searchTerm:multiple_search',event)"
     tabindex="1"
   />
   <h:commandButton
