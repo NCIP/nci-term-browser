@@ -53,7 +53,7 @@ System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
 <h:form id="resolvedValueSetSearchForm" styleClass="search-form">   
   <label for="matchText" />
     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=match_text%>" onFocus="active=true"
-        onBlur="active=false"  onkeypress="return submitEnter('resolvedvalueset_search',event)" tabindex="1"/>
+        onBlur="active=false"  onkeypress="return submitEnter('resolvedValueSetSearchForm:resolvedvalueset_search',event)" tabindex="1"/>
     <h:commandButton id="resolvedvalueset_search" value="Search" action="#{valueSetBean.resolvedValueSetSearchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"

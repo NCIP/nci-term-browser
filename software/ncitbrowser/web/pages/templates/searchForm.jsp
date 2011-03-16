@@ -82,7 +82,7 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
 
   <label for="matchText" />
     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=displayed_match_text%>" onFocus="active=true"
-        onBlur="active=false"  onkeypress="return submitEnter('search',event)" tabindex="1"/>
+        onBlur="active=false"  onkeypress="return submitEnter('searchTerm:search', event)" tabindex="1"/>
     <h:commandButton id="search" value="Search" action="#{userSessionBean.searchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"

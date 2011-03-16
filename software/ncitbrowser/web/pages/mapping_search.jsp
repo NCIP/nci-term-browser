@@ -99,7 +99,7 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
   
-<h:form id="searchTerm" styleClass="search-form" >
+<h:form id="mappingSearch" styleClass="search-form" >
     
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
@@ -139,7 +139,7 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
     value="<%=termbrowser_displayed_match_text%>"
     onFocus="active = true"
     onBlur="active = false"
-    onkeypress="return submitEnter('mapping_search',event)"
+    onkeypress="return submitEnter('mappingSearch:mapping_search',event)"
     tabindex="1"
   />
   <h:commandButton

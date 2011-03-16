@@ -94,7 +94,7 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	  <input CLASS="searchbox-input"
 	    name="matchText"
 	    value=""
-	    onkeypress="return submitEnter('valueset_search',event)"
+	    onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
 	    tabindex="1"/>
 <%
 } else {
@@ -105,7 +105,7 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	    value="<%=valueset_match_text%>"
 	    onFocus="active = true"
 	    onBlur="active = false"
-	    onkeypress="return submitEnter('valueset_search',event)"
+	    onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
 	    tabindex="1"/>
 <%
 }
