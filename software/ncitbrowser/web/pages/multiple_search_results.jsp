@@ -255,6 +255,9 @@ if (resultsPerPage == null) {
       <%
     } else {
 
+
+HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_Status");
+
     for (int i=0; i<list.size(); i++) {
         ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
               if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
@@ -307,7 +310,10 @@ if (resultsPerPage == null) {
             <%
             } else {
 
-            String con_status = DataUtils.getConceptStatus(vocabulary_name, version, null, code);
+            //String con_status = DataUtils.getConceptStatus(vocabulary_name, version, null, code);
+            String con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion()
+               + "$" + code);
+            
             if (con_status != null) {
                 con_status = con_status.replaceAll("_", " ");
             }
