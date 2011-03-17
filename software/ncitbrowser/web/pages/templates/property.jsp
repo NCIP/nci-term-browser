@@ -51,6 +51,7 @@
     additionalproperties.add("CONCEPT_NAME");
     additionalproperties.add("primitive");
 
+/*
     String concept_status = null;
     try {
         concept_status = curr_concept.getStatus();
@@ -62,6 +63,14 @@
        concept_status = concept_status.replaceAll("_", " ");
        if (concept_status.compareToIgnoreCase("active") == 0 || concept_status.compareToIgnoreCase("reviewed") == 0) concept_status = null;
     }
+*/
+    String concept_status = null;
+    concept_status = DataUtils.getConceptStatus(dictionary, version, null, curr_concept.getEntityCode());
+    if (concept_status != null) {
+       concept_status = concept_status.replaceAll("_", " ");
+       if (concept_status.compareToIgnoreCase("active") == 0 || concept_status.compareToIgnoreCase("reviewed") == 0) concept_status = null;
+    }    
+        
 
     HashSet hset = new HashSet();
     HashMap hmap = new HashMap();
@@ -172,12 +181,16 @@ if (type != null && type.compareTo("all") == 0) {
 		</tr>
 	</table>
 <%
-if (bool_obj != null && !bool_obj.equals(Boolean.TRUE) ||
-  (concept_status != null &&
-    concept_status.compareToIgnoreCase("Retired Concept") == 0)) // non-active
-{
+
+boolean show_status = false;
+if (concept_status != null) {
+	if (concept_status.compareToIgnoreCase("Retired Concept")  == 0 || concept_status.compareToIgnoreCase("Obsolete Concept") == 0) {
+	    show_status = true;
+	}
+}
+if (bool_obj != null && !bool_obj.equals(Boolean.TRUE) || show_status) {
 %>
-    <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred">Retired Concept</i>
+    <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred"><%=concept_status%></i>
 <%
 
     

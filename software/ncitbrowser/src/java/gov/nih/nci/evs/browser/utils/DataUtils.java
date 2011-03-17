@@ -2969,6 +2969,7 @@ System.out.println("querying relationship data ...");
         return w;
     }
 
+
     public static String getConceptStatus(String scheme, String version,
         String ltag, String code) {
         boolean conceptStatusSupported = false;
@@ -4598,6 +4599,8 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
         if (list.size() == 0) return hmap;
 
 
+
+
         PropertyExtension extension = null;
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -4625,20 +4628,25 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		for (int i=0; i<list.size(); i++) {
 			ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
 			String cs_name = rcr.getCodingSchemeName();
-			String version = rcr.getCodingSchemeVersion();
-			String cs_name_and_version = cs_name + "$" + version;
-			if (!hset.contains(cs_name_and_version)) {
-				hset.add(cs_name_and_version);
-				//cs_name_vec.add(cs_name);
-				//cs_version_vec.add(version);
-				ArrayList alist = new ArrayList();
-				alist.add(rcr.getConceptCode());
-				csnv2codesMap.put(cs_name_and_version, alist);
 
-			} else {
-				ArrayList alist = (ArrayList) csnv2codesMap.get(cs_name_and_version);
-				alist.add(rcr.getConceptCode());
-				csnv2codesMap.put(cs_name_and_version, alist);
+			boolean conceptStatusSupported = false;
+			if (_vocabulariesWithConceptStatusHashSet.contains(getFormalName(cs_name))) {
+				String version = rcr.getCodingSchemeVersion();
+				String cs_name_and_version = cs_name + "$" + version;
+				if (!hset.contains(cs_name_and_version)) {
+					hset.add(cs_name_and_version);
+					//cs_name_vec.add(cs_name);
+					//cs_version_vec.add(version);
+					ArrayList alist = new ArrayList();
+					alist.add(rcr.getConceptCode());
+					csnv2codesMap.put(cs_name_and_version, alist);
+
+				} else {
+					ArrayList alist = (ArrayList) csnv2codesMap.get(cs_name_and_version);
+					alist.add(rcr.getConceptCode());
+					csnv2codesMap.put(cs_name_and_version, alist);
+				}
+
 			}
 		}
 
