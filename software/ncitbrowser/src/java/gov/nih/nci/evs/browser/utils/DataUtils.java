@@ -4673,4 +4673,28 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 
         return hmap;
 	}
+
+    public static List<String> getDistinctNamespacesOfCode(
+            String codingScheme,
+            String version,
+            String code) {
+
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            LexBIGServiceConvenienceMethods lbscm =
+                (LexBIGServiceConvenienceMethods) lbSvc
+                    .getGenericExtension("LexBIGServiceConvenienceMethods");
+            lbscm.setLexBIGService(lbSvc);
+
+            CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+            csvt.setVersion(version);
+
+            return lbscm.getDistinctNamespacesOfCode(codingScheme, csvt, code);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+        return null;
+	}
+
+
 }
