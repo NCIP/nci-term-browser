@@ -264,10 +264,17 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                         <% } else { %>
                               <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="10">Home</a>
                         <% }
+                        
+                        
                            if (download_site != null) {
-                        %>    | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="17">
+                        %>  
+                        <!--
+                        | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="17">
                               Download </a>
+                         -->     
                         <% }
+                        
+                        
                         %>
 
          <%

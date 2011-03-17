@@ -93,7 +93,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
             </p>
         <%
         }
-
+        
         if (cabig_vkc_index_url_value != null) {
         %>
             <p>
