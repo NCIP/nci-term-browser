@@ -189,8 +189,10 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 		
 		
                 <th class="dataTableHeader" scope="col" align="left">Name</th>
+                <!--
                 <th class="dataTableHeader" scope="col" align="left">URI</th>
                 <th class="dataTableHeader" scope="col" align="left">Description</th>
+                -->
                 <th class="dataTableHeader" scope="col" align="left">Concept Domain</th>
                 <th class="dataTableHeader" scope="col" align="left">Sources</th>
 		
@@ -302,6 +304,8 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 		      <td class="dataCellText">
                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=<%=uri%>"><%=name%></a>
 		      </td>
+		      
+		      <!--
 		      <td class="dataCellText">
                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=<%=uri%>"><%=uri%></a>
 		      </td>
@@ -310,6 +314,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 		      <td class="dataCellText">
 			 <%=label%>
 		      </td>
+		      -->
 		      <td class="dataCellText">
 			 <%=cd%>
 		      </td>

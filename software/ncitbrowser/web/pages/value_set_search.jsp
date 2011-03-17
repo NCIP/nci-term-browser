@@ -202,8 +202,10 @@ if (view.compareToIgnoreCase("source") == 0) {
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 		<th class="dataTableHeader" scope="col" align="left">Name</th>
+		<!--
 		<th class="dataTableHeader" scope="col" align="left">URI</th>
                 <th class="dataTableHeader" scope="col" align="left">Description</th>
+                -->
 
 <%
 
@@ -238,6 +240,8 @@ System.out.println("URI: " + uri);
 		      <td class="dataCellText">
                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=<%=uri%>"><%=name%></a>
 		      </td>
+		      
+		      <!--
 		      <td class="dataCellText">
                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=<%=uri%>"><%=uri%></a>
 		      </td>		      
@@ -245,6 +249,7 @@ System.out.println("URI: " + uri);
 		      <td class="dataCellText">
 			 <%=description%>
 		      </td>
+		      -->
 
 		      </tr>
               
@@ -266,8 +271,11 @@ System.out.println("URI: " + uri);
                <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <th class="dataTableHeader" scope="col" align="left">Terminology</th>
  		<th class="dataTableHeader" scope="col" align="left">Name</th>
+ 		
+ 		<!--
  		<th class="dataTableHeader" scope="col" align="left">URI</th>
                 <th class="dataTableHeader" scope="col" align="left">Description</th>
+                -->
  
  <%
  
@@ -306,6 +314,7 @@ System.out.println("URI: " + uri);
  		      <td class="dataCellText">
                           <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=<%=uri%>"><%=name%></a>
  		      </td>
+ 		      <!--
  		      <td class="dataCellText">
                           <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=<%=uri%>"><%=uri%></a>
  		      </td>		      
@@ -313,6 +322,7 @@ System.out.println("URI: " + uri);
  		      <td class="dataCellText">
  			 <%=description%>
  		      </td>
+ 		      -->
  
  		      </tr>
                
@@ -335,8 +345,10 @@ System.out.println("URI: " + uri);
                <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <th class="dataTableHeader" scope="col" align="left">Resource</th>
  		<th class="dataTableHeader" scope="col" align="left">Name</th>
+ 		<!--
  		<th class="dataTableHeader" scope="col" align="left">URI</th>
                 <th class="dataTableHeader" scope="col" align="left">Description</th>
+                -->
  
  <%
  
@@ -373,6 +385,7 @@ System.out.println("URI: " + uri);
  		      <td class="dataCellText">
                           <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=<%=uri%>"><%=name%></a>
  		      </td>
+ 		      <!--
  		      <td class="dataCellText">
                           <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=<%=uri%>"><%=uri%></a>
  		      </td>		      
@@ -380,6 +393,7 @@ System.out.println("URI: " + uri);
  		      <td class="dataCellText">
  			 <%=description%>
  		      </td>
+ 		      -->
  
  		      </tr>
                
