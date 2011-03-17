@@ -55,6 +55,14 @@ import org.apache.log4j.*;
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping;
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSApplicationService;
+import org.lexevs.property.PropertyExtension;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -4581,25 +4589,88 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 	}
 
 
-    public static List<String> getDistinctNamespacesOfCode(
-            String codingScheme,
-            String version,
-            String code) {
+//  Key coding scheme name$version$code
+//  Value: property value (delimeter: ;)
+    public static HashMap getPropertyValuesInBatch(List list, String propertyName) {
 
+        if (list == null) return null;
+        HashMap hmap = new HashMap();
+        if (list.size() == 0) return hmap;
+
+
+        PropertyExtension extension = null;
         try {
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 
-            CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
-            csvt.setVersion(version);
-
-            return lbscm.getDistinctNamespacesOfCode(codingScheme, csvt, code);
+            if (lbSvc == null) {
+                _logger.warn("lbSvc = null");
+                return null;
+            }
+            extension = (PropertyExtension) lbSvc.getGenericExtension("property-extension");
+            if (extension == null) {
+                _logger.error("Error! PropertyExtension is null!");
+                return null;
+            }
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			return null;
 		}
-        return null;
+
+
+        Vector cs_name_vec = new Vector();
+        Vector cs_version_vec = new Vector();
+        HashSet hset = new HashSet();
+
+        HashMap csnv2codesMap = new HashMap();
+
+		for (int i=0; i<list.size(); i++) {
+			ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
+			String cs_name = rcr.getCodingSchemeName();
+			String version = rcr.getCodingSchemeVersion();
+			String cs_name_and_version = cs_name + "$" + version;
+			if (!hset.contains(cs_name_and_version)) {
+				hset.add(cs_name_and_version);
+				//cs_name_vec.add(cs_name);
+				//cs_version_vec.add(version);
+				ArrayList alist = new ArrayList();
+				alist.add(rcr.getConceptCode());
+				csnv2codesMap.put(cs_name_and_version, alist);
+
+			} else {
+				ArrayList alist = (ArrayList) csnv2codesMap.get(cs_name_and_version);
+				alist.add(rcr.getConceptCode());
+				csnv2codesMap.put(cs_name_and_version, alist);
+			}
+		}
+
+		Iterator it = csnv2codesMap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			ArrayList alist = (ArrayList) csnv2codesMap.get(key);
+			Vector u = DataUtils.parseData(key, "$");
+			String scheme = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+			CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+			if (version != null) csvt.setVersion(version);
+			String[] a = new String[alist.size()];
+			for (int i=0; i<alist.size(); i++) {
+				a[i] = (String) alist.get(i);
+			}
+
+            try {
+				Map<String,String> propertyMap =
+					extension.getProperty(scheme, csvt, propertyName, Arrays.asList(a));
+
+				for (Entry<String, String> entry : propertyMap.entrySet()) {
+					//System.out.println("Code: " + entry.getKey());
+					//System.out.println(" - Property: " + entry.getValue());
+					hmap.put(key + "$" + entry.getKey(), entry.getValue());
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				return null;
+			}
+		}
+
+        return hmap;
 	}
 }

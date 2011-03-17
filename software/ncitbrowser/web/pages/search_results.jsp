@@ -222,6 +222,7 @@ if (isMapping || isExtension) {
 
                 <%
 
+/*
                   Vector code_vec = new Vector();
                   for (int k=0; k<list.size(); k++) {
                       ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(k);
@@ -234,6 +235,11 @@ if (isMapping || isExtension) {
 
 //to be modified:
                   Vector status_vec = DataUtils.getConceptStatusByConceptCodes(search_results_dictionary, search_results_version, null, code_vec);
+*/                  
+                  
+HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_Status");
+                  
+                  
                   int i = -1;
 
                   for (int k=0; k<list.size(); k++) {
@@ -302,11 +308,19 @@ if (isMapping || isExtension) {
 
                       else if (code != null && code.indexOf("@") == -1) {
                           i++;
-                  String con_status = null;
-        if (status_vec != null && status_vec.elementAt(i) != null) {
-           con_status = (String) status_vec.elementAt(i);
+                          
+        /*                  
+        String con_status = null;
+        */
+        String con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion()
+               + "$" + code);
+        
+        //if (status_vec != null && status_vec.elementAt(i) != null) {
+        //   con_status = (String) status_vec.elementAt(i);
+        if (con_status != null) {
            con_status = con_status.replaceAll("_", " ");
         }
+              
 
 
         if (i % 2 == 0) {
