@@ -217,17 +217,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		        if (w.size() > 0) {
 				info.setHasMultipleVersions(true);
 		        }
-		        /*
-			for (int j = 0; j < display_name_vec.size(); j++) { 
-			    OntologyInfo ontologyInfo = (OntologyInfo) display_name_vec.elementAt(j);
-			    if (ontologyInfo.getCodingScheme().compareTo(info.getCodingScheme()) == 0) {
-				    if (DataUtils.isNull(ontologyInfo.getTag()) || ontologyInfo.getTag().compareToIgnoreCase("PRODUCTION") != 0) {
-					info.setHasMultipleVersions(true);
-					break;
-				    }
-			    }
-			}
-			*/
 		     }
 		  }
 
@@ -300,10 +289,17 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				boolean checked = ontologiesToSearchOn != null
 				    && ontologiesToSearchOn.indexOf(label2) != -1;
 				String checkedStr = checked ? "checked" : "";
+				
+				String indent = "&nbsp;&nbsp;&nbsp;";
+				if (info.isProduction()) {
+				    indent = "";
+				} 				
+				
 				%>
-				   
+
+				   <%=indent%>
 				   <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> />
-				   
+
 				   
 				<%
 
@@ -336,6 +332,23 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				    </a><%=cabig_approval_indicator%>
 				  <%
 				}
+				  %>
+
+
+				   <%
+				   if (info.isProduction() && info.getHasMultipleVersions() && !info.getExpanded()) {
+				       String expand_cs = info.getCodingScheme();
+				   %>    
+				       &nbsp
+				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?expand=<%=expand_cs%>">
+				           [show other versions]
+				       </a> 
+				   <%    
+				   }
+				   %>				
+				
+				
+		      <%		
                         }
                       %>
                         </td>
