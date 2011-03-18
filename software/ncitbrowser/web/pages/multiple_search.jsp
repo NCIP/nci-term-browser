@@ -126,18 +126,11 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     name="selectAll" alt="selectAll"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
 
-<%
-if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
-%>
-
                   &nbsp;&nbsp; <img
                     src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
                     name="reset" alt="selectAllButNCIm"
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
 
-<%
- }
- %>
                   &nbsp;&nbsp; <img
                     src="<%= request.getContextPath() %>/images/clear.gif"
                     name="reset" alt="reset"
@@ -194,6 +187,7 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
 
                 if (display_name_vec == null) {
                   display_name_vec = new Vector();
+                  
 
                   for (int i = 0; i < ontology_list.size(); i++) {
                     SelectItem item = (SelectItem) ontology_list.get(i);
@@ -204,8 +198,8 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                     String version = DataUtils.key2CodingSchemeVersion(value);
                     
                     String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
-                    
-                    if (display_name == null || display_name.compareTo("null") == 0)
+                    if (DataUtils.isNull(display_name))
+                    //if (display_name == null || display_name.compareTo("null") == 0)
                         display_name = DataUtils.getLocalName(scheme);
                     String sort_category = DataUtils.getMetadataValue(
                         scheme, version, "vocabulary_sort_category");
@@ -214,9 +208,46 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                     display_name_vec.add(info);
                   }
                   
+ 
+		  for (int i = 0; i < display_name_vec.size(); i++) { 
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		     if (!DataUtils.isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
+		     
+		        Vector w = DataUtils.getNonProductionOntologies(display_name_vec, info.getCodingScheme());
+		        if (w.size() > 0) {
+				info.setHasMultipleVersions(true);
+		        }
+		        /*
+			for (int j = 0; j < display_name_vec.size(); j++) { 
+			    OntologyInfo ontologyInfo = (OntologyInfo) display_name_vec.elementAt(j);
+			    if (ontologyInfo.getCodingScheme().compareTo(info.getCodingScheme()) == 0) {
+				    if (DataUtils.isNull(ontologyInfo.getTag()) || ontologyInfo.getTag().compareToIgnoreCase("PRODUCTION") != 0) {
+					info.setHasMultipleVersions(true);
+					break;
+				    }
+			    }
+			}
+			*/
+		     }
+		  }
+
+
+		  for (int k = 0; k < display_name_vec.size(); k++) { 
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
+		     if (info.getHasMultipleVersions()) {
+			 System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
+		     }
+		  }
+                
+                  
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
                   request.getSession().setAttribute("display_name_vec", display_name_vec);
+                  
                 }
+                
+               
+                display_name_vec = DataUtils.sortOntologyInfo(display_name_vec);
+                
                 %>
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
