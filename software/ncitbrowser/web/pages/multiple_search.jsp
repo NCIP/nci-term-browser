@@ -170,31 +170,19 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
              request.getSession().removeAttribute("warning");
              String hide_ontology_list = (String) request.getSession().getAttribute("hide_ontology_list");
              request.getSession().removeAttribute("hide_ontology_list");
+             
              if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
              %>
              
-             
-<%
-if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
-%>           
+           
             <span class="textbody">&nbsp;Select NCI hosted terminologies to search, or click on a source name to go to its browser home page.
             <br/>
             &nbsp;(WARNING: <b>Select All</b> searches with thousands of hits may be slow; try NCI Metathesaurus separately.)
             <br/><br/>
             </span>
-<%
-} 
-%>
-
-
-
             
             
             <table class="termstable" border="0">
-
-<%
-if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
-%>
 
               <tr>
               <%
@@ -373,114 +361,6 @@ if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) 
                    }
                   %>
                 </tr>
-                
- <%
- }
- %>
-  
-  
-<%
-if (navigation_type != null && (navigation_type.compareTo("mappings") == 0)) {
-
-System.out.println("mappings tab clicked...");
-
-%> 
-                
-                <tr><td class="textbody">Mappings:</td></tr>
-                
-                <tr>
-                  <td class="textbody">
-                    <table border="0" cellpadding="0" cellspacing="0">
-                      <%
-                     
-                      for (int i = 0; i < display_name_vec.size(); i++) {
-                        OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-                        String display_name = info.getDisplayName();
-                        String label = info.getLabel();
-                        String label2 = "|" + label + "|";
-                        String scheme = info.getCodingScheme();
-                        String version = info.getVersion();
-                        
-                        boolean isMapping = DataUtils.isMapping(scheme, version);
-                        if (isMapping) {
-                       
-				String http_label = null;
-				String http_scheme = null;
-				String http_version = null;
-				
-				boolean checked = ontologiesToSearchOn != null
-				    && ontologiesToSearchOn.indexOf(label2) != -1;
-				String checkedStr = checked ? "checked" : "";
-
-				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
-				if (full_name == null || full_name.compareTo("null") == 0) 
-				    full_name = scheme;
-				String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
-				if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
-				    term_browser_version = version;
-				}     
-				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
-		
-
-				if (label != null)
-				  http_label = label.replaceAll(" ", "%20");
-				if (scheme != null)
-				  http_scheme = scheme.replaceAll(" ", "%20");
-				if (version != null)
-				  http_version = version.replaceAll(" ", "%20");
-				%>
-				<tr>
-				  <td width="25px"></td>
-				  
-				  <td>
-
-				     <input type="checkbox" name="ontology_list" value="<%=label%>" <%=checkedStr%> tabinex="1" />
-
-				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
-				      <%=display_label%>
-				    </a>
-				  
-				  </td>
-
-                               </tr>
-			     <%
-			      }
-			   }
-			 %>
-                    </table>
-                  </td>
-                </tr> 
-                
-                
-                
-                 <tr><td height="20"></td></tr>
-                
-                <tr>
-                  <td><img
-                    src="<%= request.getContextPath() %>/images/selectAll.gif"
-                    name="selectAll" alt="selectAll"
-                    onClick="checkAll(document.searchTerm.ontology_list)" />
-
-                  &nbsp;&nbsp; <img
-                    src="<%= request.getContextPath() %>/images/clear.gif"
-                    name="reset" alt="reset"
-                    onClick="uncheckAll(document.searchTerm.ontology_list)" />
-
-                  &nbsp;&nbsp; <h:commandButton id="multiplesearch" value="Search"
-                    action="#{userSessionBean.multipleSearchAction}"
-                    image="#{requestContextPath}/images/search.gif"
-                    alt="Search">
-                  </h:commandButton></td>
-                   <%
-                   if (warning_msg != null) {
-                      request.getSession().removeAttribute("ontologiesToSearchOn");
-                   }
-                  %>
-                </tr>               
-                
- <%
- }
- %>                
                 
             </table>
 <%
