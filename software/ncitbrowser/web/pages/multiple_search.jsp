@@ -336,17 +336,25 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 
 
 				   <%
+				   String expand_cs = info.getCodingScheme();
 				   if (info.isProduction() && info.getHasMultipleVersions() && !info.getExpanded()) {
-				       String expand_cs = info.getCodingScheme();
+				       
 				   %>    
 				       &nbsp
-				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?expand=<%=expand_cs%>">
+				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?show=<%=expand_cs%>">
 				           [show other versions]
 				       </a> 
 				   <%    
+				   } else if (info.isProduction() && info.getHasMultipleVersions() && info.getExpanded()) {
+				       
+				   %>    
+				       &nbsp
+				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?hide=<%=expand_cs%>">
+				           [hide other versions]
+				       </a> 
+				   <%    
 				   }
-				   %>				
-				
+				   %>					
 				
 		      <%		
                         }
