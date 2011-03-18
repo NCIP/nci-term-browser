@@ -196,6 +196,9 @@ public class DataUtils {
     public static HashMap _isMappingHashMap = null;
     public static HashMap _mappingDisplayNameHashMap = null;
 
+    public static HashMap _codingSchemeTagHashMap = null;
+
+
     // ==================================================================================
 
     public DataUtils() {
@@ -269,6 +272,8 @@ public class DataUtils {
         _codingSchemeName2URIHashMap = new HashMap();
 
         _isMappingHashMap = new HashMap();
+
+        _codingSchemeTagHashMap = new HashMap();
 
 
         Vector nv_vec = new Vector();
@@ -4509,7 +4514,7 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
 */
 
 
-
+/*
     public static String getVocabularyVersionTag(String codingSchemeName,
         String version) {
 
@@ -4546,7 +4551,7 @@ public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
         }
         return "<NOT AVAILABLE>";
     }
-
+*/
 
     public static Vector getMatchedMetathesaurusCUIs(String scheme, String version,
         String ltag, String code) {
@@ -4705,4 +4710,127 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 	}
 
 
+    public static String getVocabularyVersionTag(String codingSchemeName,
+        String version) {
+
+        if (codingSchemeName == null)
+            return null;
+
+
+        if (_codingSchemeTagHashMap != null) {
+			String key = null;
+			if (version == null) {
+				key = codingSchemeName + "$null";
+			} else {
+				key = codingSchemeName + "$" + version;
+			}
+			if (_codingSchemeTagHashMap.containsKey(key)) {
+				String tag = (String) _codingSchemeTagHashMap.get(key);
+				return tag;
+			}
+		}
+
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
+            CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
+            for (int i = 0; i < csra.length; i++) {
+                CodingSchemeRendering csr = csra[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                if (css.getFormalName().compareTo(codingSchemeName) == 0
+                    || css.getLocalName().compareTo(codingSchemeName) == 0
+                    || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
+
+					if (version == null) return "PRODUCTION";
+
+					String representsVersion = css.getRepresentsVersion();
+
+                    if (representsVersion.compareTo(version) == 0) {
+						RenderingDetail rd = csr.getRenderingDetail();
+						CodingSchemeTagList cstl = rd.getVersionTags();
+						String tag_str = "";
+						java.lang.String[] tags = cstl.getTag();
+						if (tags == null)
+							return "NOT ASSIGNED";
+
+						if (tags != null && tags.length > 0) {
+							tag_str = "";
+							for (int j = 0; j < tags.length; j++) {
+								String version_tag = (String) tags[j];
+								if (j == 0) {
+									tag_str = version_tag;
+								} else if (j == tags.length-1) {
+									tag_str = tag_str + version_tag;
+								} else {
+									tag_str = tag_str + version_tag + "|";
+								}
+							}
+						} else {
+							return "<NOT ASSIGNED>";
+						}
+
+                        if (_codingSchemeTagHashMap == null) {
+							_codingSchemeTagHashMap = new HashMap();
+						}
+						String key = null;
+						if (version == null) {
+							key = codingSchemeName + "$null";
+						} else {
+							key = codingSchemeName + "$" + version;
+						}
+						_codingSchemeTagHashMap.put(key, tag_str);
+						return tag_str;
+					}
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "<NOT AVAILABLE>";
+    }
+
+
+    public static boolean isNull(String value) {
+		if (value == null || value.compareTo("null") == 0) return true;
+		return false;
+	}
+
+
+	public static Vector getNonProductionOntologies(Vector v, String scheme) {
+		Vector u = new Vector();
+		for (int i = 0; i < v.size(); i++) {
+			OntologyInfo info = (OntologyInfo) v.elementAt(i);
+			if (scheme.compareTo(info.getCodingScheme()) == 0) {
+				if (DataUtils.isNull(info.getTag()) || info.getTag().compareToIgnoreCase("PRODUCTION") != 0) {
+					u.add(info);
+				}
+			}
+		}
+		if (u.size() > 0) {
+			Collections.sort(u, new OntologyInfo.ComparatorImpl());
+		}
+		return u;
+	}
+
+
+
+	public static Vector sortOntologyInfo(Vector v) {
+		Vector u = new Vector();
+        Collections.sort(v, new OntologyInfo.ComparatorImpl());
+		for (int i = 0; i < v.size(); i++) {
+			OntologyInfo info = (OntologyInfo) v.elementAt(i);
+			if (!DataUtils.isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
+				u.add(info);
+			    if (info.getExpanded()) {
+					Vector w = getNonProductionOntologies(v, info.getCodingScheme());
+					for (int j=0; j<w.size(); j++) {
+						OntologyInfo ontologyInfo = (OntologyInfo) w.elementAt(j);
+						u.add(ontologyInfo);
+					}
+				}
+			}
+		}
+		return u;
+	}
 }

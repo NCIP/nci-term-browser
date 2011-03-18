@@ -51,6 +51,10 @@ public class OntologyInfo {
     private String _label = "";
     private int _sortCategory = 0;
 
+    private String _tag = "";
+    private boolean _hasMultipleVersions = false;
+    private boolean _expanded = false;
+
     public OntologyInfo(String codingScheme, String displayName, String version,
         String label, String sortCategory) {
         try {
@@ -75,6 +79,10 @@ public class OntologyInfo {
         _version = version;
         _label = label;
         _sortCategory = sortCategory;
+
+        _tag = DataUtils.getVocabularyVersionTag(codingScheme, version);
+		_hasMultipleVersions = false;
+		_expanded = false;
     }
 
     public String getCodingScheme() {
@@ -91,6 +99,32 @@ public class OntologyInfo {
 
     public String getLabel() {
         return _label;
+    }
+
+    public String getTag() {
+        return _tag;
+    }
+
+    public boolean isProduction() {
+        if (_tag != null && _tag.compareTo("PRODUCTION") == 0) return true;
+        if (_version == null) return true;
+        return false;
+    }
+
+    public boolean getHasMultipleVersions() {
+        return _hasMultipleVersions;
+    }
+
+    public void setHasMultipleVersions(boolean hasMultipleVersions) {
+        this._hasMultipleVersions = hasMultipleVersions;
+    }
+
+    public boolean getExpanded() {
+        return _expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this._expanded = expanded;
     }
 
     public int getSortCategory() {
