@@ -312,7 +312,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				    && ontologiesToSearchOn.indexOf(label2) != -1;
 				String checkedStr = checked ? "checked" : "";
 				
-				String indent = "&nbsp;&nbsp;&nbsp;";
+				String indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
 				if (info.isProduction()) {
 				    indent = "";
 				} 				
