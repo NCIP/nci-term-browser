@@ -1949,6 +1949,7 @@ System.out.println("advancedSearchAction version: " + version);
 			 if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 			     info.setExpanded(true);
 			 }
+			 info.setSelected(false);
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 				 info.setSelected(true);
 			 }
@@ -1985,6 +1986,7 @@ System.out.println("advancedSearchAction version: " + version);
 			 if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 			     info.setExpanded(false);
 			 }
+			 info.setSelected(false);
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 				 info.setSelected(true);
 			 }
