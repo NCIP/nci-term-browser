@@ -1946,16 +1946,24 @@ System.out.println("advancedSearchAction version: " + version);
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 		for (int i = 0; i < display_name_vec.size(); i++) {
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+
+			 if (info.getVisible()) {
+				 info.setSelected(false);
+				 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+					 info.setSelected(true);
+				 }
+				 if (ontology_list == null) {
+					 info.setSelected(false);
+				 }
+		     }
+
 			 if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 			     info.setExpanded(true);
+			 } else if (action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+				 info.setVisible(true);
 			 }
-			 info.setSelected(false);
-			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
-				 info.setSelected(true);
-			 }
-			 if (ontology_list == null) {
-				 info.setSelected(false);
-			 }
+
+
 		}
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
@@ -1983,16 +1991,24 @@ System.out.println("advancedSearchAction version: " + version);
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 		for (int i = 0; i < display_name_vec.size(); i++) {
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+
+			 if (info.getVisible()) {
+				 info.setSelected(false);
+				 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+					 info.setSelected(true);
+				 }
+				 if (ontology_list == null) {
+					 info.setSelected(false);
+				 }
+		     }
+
 			 if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 			     info.setExpanded(false);
+			 } else if (action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+				 info.setVisible(false);
 			 }
-			 info.setSelected(false);
-			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
-				 info.setSelected(true);
-			 }
-			 if (ontology_list == null) {
-				 info.setSelected(false);
-			 }
+
+
 		}
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
