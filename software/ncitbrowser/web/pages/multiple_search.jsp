@@ -227,34 +227,34 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 			 System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
 		     }
 		  }
-                
                   
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
-                  
-                  
                 }
                 
-                String expand_cs = (String) request.getParameter("show");
-                if (expand_cs != null) {
-		    for (int k = 0; k < display_name_vec.size(); k++) { 
-		       OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-		       if (expand_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
-			   info.setExpanded(true);
-			   break;
-		       }
-		    }                
-                } else {
-                    String collapse_cs = (String) request.getParameter("hide");
-		    if (collapse_cs != null) {
-			for (int k = 0; k < display_name_vec.size(); k++) { 
-			   OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-			   if (collapse_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+                String action = (String) request.getParameter("action");
+                String action_cs = null;
+                if (action != null) {
+                    if (action.compareTo("show") == 0) {
+			action_cs = (String) request.getParameter("dictionary");
+		        for (int k = 0; k < display_name_vec.size(); k++) { 
+		           OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
+		           if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+			       info.setExpanded(true);
+			       break;
+		           }
+		        } 
+		    } else if (action.compareTo("hide") == 0) {    
+			action_cs = (String) request.getParameter("dictionary");
+		        for (int k = 0; k < display_name_vec.size(); k++) { 
+		           OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
+		           if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 			       info.setExpanded(false);
 			       break;
-			   }
-			}                
-		    }               
-                }
+		           }
+		        } 
+		    }
+	        }
+			
                 request.getSession().setAttribute("display_name_vec", display_name_vec);
                
                 display_name_vec = DataUtils.sortOntologyInfo(display_name_vec);
@@ -363,7 +363,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				       
 				   %>    
 				       &nbsp
-				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?show=<%=cs_nm%>">
+				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?action=show&dictionary=<%=cs_nm%>">
 				           <font color="red">[show other versions]</font>
 				       </a> 
 				   <%    
@@ -371,7 +371,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				       
 				   %>    
 				       &nbsp
-				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?hide=<%=cs_nm%>">
+				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?action=hide&dictionary=<%=cs_nm%>">
 				           <font color="red">[hide other versions]</font>
 				       </a> 
 				   <%    
