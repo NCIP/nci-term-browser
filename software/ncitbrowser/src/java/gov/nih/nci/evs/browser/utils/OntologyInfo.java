@@ -55,6 +55,7 @@ public class OntologyInfo {
     private boolean _hasMultipleVersions = false;
     private boolean _expanded = false;
     private boolean _selected = false;
+    private boolean _visible = false;
 
     public OntologyInfo(String codingScheme, String displayName, String version,
         String label, String sortCategory) {
@@ -85,6 +86,10 @@ public class OntologyInfo {
 		_hasMultipleVersions = false;
 		_expanded = false;
 		_selected = false;
+
+		if (_tag != null && _tag.compareTo("PRODUCTION") == 0) {
+			_visible = true;
+		}
     }
 
     public String getCodingScheme() {
@@ -127,6 +132,14 @@ public class OntologyInfo {
 
     public void setExpanded(boolean expanded) {
         this._expanded = expanded;
+    }
+
+    public boolean getVisible() {
+        return _visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this._visible = visible;
     }
 
     public boolean getSelected() {
