@@ -83,7 +83,7 @@ Vector display_name_vec = (Vector) request.getSession().getAttribute("display_na
 String warning_msg = (String) request.getSession().getAttribute("warning");
 
 String action = (String) request.getParameter("action");
-
+       
 String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
 if (ontologiesToSearchOn == null) {
     ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
@@ -240,6 +240,9 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		     if (info.getHasMultipleVersions()) {
 			 System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
 		     }
+		     if (ontologiesToSearchOn.indexOf(info.getLabel()) != -1) {
+			 info.setSelected(true);
+		     }		     
 		  }
                   
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
