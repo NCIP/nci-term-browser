@@ -300,8 +300,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				  
 				  <td>
 				<%
-				boolean checked = ontologiesToSearchOn != null
-				    && ontologiesToSearchOn.indexOf(label2) != -1;
+				
+				
+				//boolean checked = ontologiesToSearchOn != null
+				//    && ontologiesToSearchOn.indexOf(label2) != -1;
+				    
+				boolean checked = info.getSelected();
+				
 				String checkedStr = checked ? "checked" : "";
 				
 				String indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
