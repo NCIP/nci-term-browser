@@ -805,6 +805,20 @@
     <from-view-id>/pages/multiple_search.jsp</from-view-id>
 
     <navigation-case>
+       <description>show versions</description>
+       <from-action>#{userSessionBean.showOtherVersions}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>show versions</description>
+       <from-action>#{userSessionBean.hideOtherVersions}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.multipleSearchAction}</from-action>
        <from-outcome>multiple_search</from-outcome>

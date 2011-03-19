@@ -81,12 +81,18 @@
 
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 String warning_msg = (String) request.getSession().getAttribute("warning");
-String ontologiesToSearchOn = (String) request.getSession().getAttribute("defaultOntologiesToSearchOnStr");
+
+String action = (String) request.getParameter("action");
+
+String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
 if (ontologiesToSearchOn == null) {
-  ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
+    ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
+    request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOn);
 }
+
+
 if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
-   ontologiesToSearchOn = "|";
+    ontologiesToSearchOn = "|";
 }
 String unsupported_vocabulary_message = (String) request.getSession().getAttribute("unsupported_vocabulary_message");
 
@@ -117,8 +123,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
           
           <div class="tabTableContentContainer">
 
-
-
           <table class="termstable" border="0">
                 <tr>
                   <td><img
@@ -131,10 +135,20 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     name="reset" alt="selectAllButNCIm"
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
 
-                  &nbsp;&nbsp; <img
+                  &nbsp;&nbsp; 
+                    <img
                     src="<%= request.getContextPath() %>/images/clear.gif"
                     name="reset" alt="reset"
                     onClick="uncheckAll(document.searchTerm.ontology_list)" />
+<!--
+
+            &nbsp;&nbsp; 
+            <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?action=reset">
+                    <img
+                    src="<%= request.getContextPath() %>/images/clear.gif"
+                    name="reset" alt="reset" style="border-style:none;" />
+            </a>        
+-->
 
                   &nbsp;&nbsp; <h:commandButton id="multi_search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
@@ -230,33 +244,8 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                   
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
                 }
-                
-                String action = (String) request.getParameter("action");
-                String action_cs = null;
-                if (action != null) {
-                    if (action.compareTo("show") == 0) {
-			action_cs = (String) request.getParameter("dictionary");
-		        for (int k = 0; k < display_name_vec.size(); k++) { 
-		           OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-		           if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
-			       info.setExpanded(true);
-			       break;
-		           }
-		        } 
-		    } else if (action.compareTo("hide") == 0) {    
-			action_cs = (String) request.getParameter("dictionary");
-		        for (int k = 0; k < display_name_vec.size(); k++) { 
-		           OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-		           if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
-			       info.setExpanded(false);
-			       break;
-		           }
-		        } 
-		    }
-	        }
-			
+		
                 request.getSession().setAttribute("display_name_vec", display_name_vec);
-               
                 display_name_vec = DataUtils.sortOntologyInfo(display_name_vec);
                 
                 %>
@@ -360,20 +349,43 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				   <%
 				   String cs_nm = info.getCodingScheme();
 				   if (info.isProduction() && info.getHasMultipleVersions() && !info.getExpanded()) {
-				       
 				   %>    
-				       &nbsp
+
+                  &nbsp&nbsp; 
+                  <font color="red">
+                  <h:commandLink id="show" value="[show other versions]"
+                      action="#{userSessionBean.showOtherVersions}" >
+                  </h:commandLink></td>
+                  </font>
+                  <input type="hidden" id="show_versions_of" name="show_versions_of" value="<%=cs_nm%>">
+                  
+                  <!--
+
 				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?action=show&dictionary=<%=cs_nm%>">
 				           <font color="red">[show other versions]</font>
-				       </a> 
+		  		       </a> 
+		   -->		       
+				       
 				   <%    
 				   } else if (info.isProduction() && info.getHasMultipleVersions() && info.getExpanded()) {
 				       
-				   %>    
+				   %>  
+				   
+                  &nbsp&nbsp; 
+                  <font color="red">
+                  <h:commandLink id="hide" value="[hide other versions]"
+                      action="#{userSessionBean.hideOtherVersions}" >
+                  </h:commandLink></td>
+                  </font>
+                  <input type="hidden" id="hide_versions_of" name="hide_versions_of" value="<%=cs_nm%>">				   
+				   
+		  <!--		   
 				       &nbsp
 				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?action=hide&dictionary=<%=cs_nm%>">
 				           <font color="red">[hide other versions]</font>
 				       </a> 
+		   -->		       
+				       
 				   <%    
 				   }
 				   %>					
