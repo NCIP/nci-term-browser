@@ -54,6 +54,7 @@ public class OntologyInfo {
     private String _tag = "";
     private boolean _hasMultipleVersions = false;
     private boolean _expanded = false;
+    private boolean _selected = false;
 
     public OntologyInfo(String codingScheme, String displayName, String version,
         String label, String sortCategory) {
@@ -83,6 +84,7 @@ public class OntologyInfo {
         _tag = DataUtils.getVocabularyVersionTag(codingScheme, version);
 		_hasMultipleVersions = false;
 		_expanded = false;
+		_selected = false;
     }
 
     public String getCodingScheme() {
@@ -125,6 +127,14 @@ public class OntologyInfo {
 
     public void setExpanded(boolean expanded) {
         this._expanded = expanded;
+    }
+
+    public boolean getSelected() {
+        return _selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this._selected = selected;
     }
 
     public int getSortCategory() {

@@ -1925,5 +1925,76 @@ System.out.println("advancedSearchAction version: " + version);
 
 	}
 
+	public String showOtherVersions() {
+		System.out.println("showOtherVersions");
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String action_cs = (String) request.getParameter("show_versions_of");
+		System.out.println("showOtherVersions -- " + action_cs);
+
+        String[] ontology_list = request.getParameterValues("ontology_list");
+        String ontologiesToSearchOnStr = "|";
+        if (ontology_list != null) {
+			for (int i = 0; i < ontology_list.length; ++i) {
+				ontologiesToSearchOnStr =
+					ontologiesToSearchOnStr + ontology_list[i] + "|";
+			}
+	    }
+
+	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+		for (int i = 0; i < display_name_vec.size(); i++) {
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+			 if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+			     info.setExpanded(true);
+			 }
+			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+				 info.setSelected(true);
+			 }
+			 if (ontology_list == null) {
+				 info.setSelected(false);
+			 }
+		}
+        request.getSession().setAttribute("display_name_vec", display_name_vec);
+        request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+		return "multiple_search";
+	}
+
+	public String hideOtherVersions() {
+		System.out.println("hideOtherVersions");
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String action_cs = (String) request.getParameter("hide_versions_of");
+		System.out.println("hide_versions_of -- " + action_cs);
+
+        String[] ontology_list = request.getParameterValues("ontology_list");
+        String ontologiesToSearchOnStr = "|";
+        if (ontology_list != null) {
+			for (int i = 0; i < ontology_list.length; ++i) {
+				ontologiesToSearchOnStr =
+					ontologiesToSearchOnStr + ontology_list[i] + "|";
+			}
+	    }
+
+	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+		for (int i = 0; i < display_name_vec.size(); i++) {
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+			 if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+			     info.setExpanded(false);
+			 }
+			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+				 info.setSelected(true);
+			 }
+			 if (ontology_list == null) {
+				 info.setSelected(false);
+			 }
+		}
+        request.getSession().setAttribute("display_name_vec", display_name_vec);
+        request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+		return "multiple_search";
+	}
 
 }
