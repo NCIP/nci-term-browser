@@ -120,41 +120,34 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
           
           <%@ include file="/pages/templates/navigationTabs.jsp"%>
           
-          
           <div class="tabTableContentContainer">
 
           <table class="termstable" border="0">
                 <tr>
-                  <td><img
-                    src="<%= request.getContextPath() %>/images/selectAll.gif"
+                  <td>
+                  <img src="<%= request.getContextPath() %>/images/selectAll.gif"
                     name="selectAll" alt="selectAll"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
 
-                  &nbsp;&nbsp; <img
-                    src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
-                    name="reset" alt="selectAllButNCIm"
+                  &nbsp;&nbsp; 
+                  <img src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
+                    name="selectAllButNCIm" alt="selectAllButNCIm"
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
 
                   &nbsp;&nbsp; 
-                    <img
-                    src="<%= request.getContextPath() %>/images/clear.gif"
-                    name="reset" alt="reset"
-                    onClick="uncheckAll(document.searchTerm.ontology_list)" />
-<!--
-
-            &nbsp;&nbsp; 
-            <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?action=reset">
-                    <img
-                    src="<%= request.getContextPath() %>/images/clear.gif"
-                    name="reset" alt="reset" style="border-style:none;" />
-            </a>        
--->
-
-                  &nbsp;&nbsp; <h:commandButton id="multi_search" value="Search"
+                  <h:commandButton id="clear" value="clearall"
+                    action="#{userSessionBean.clearAll}"
+                    image="#{requestContextPath}/images/clear.gif"
+                    alt="reset">
+                  </h:commandButton>
+                  
+                  &nbsp;&nbsp; 
+                  <h:commandButton id="multi_search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{requestContextPath}/images/search.gif"
                     alt="Search">
-                  </h:commandButton></td>
+                  </h:commandButton>
+                  </td>
                 </tr>
           </table>
 
@@ -361,18 +354,11 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 
                   &nbsp&nbsp; 
                   <font color="red">
-                  <h:commandLink id="show" value="[show other versions]"
+                  <h:commandLink styleClass="textbodyred" id="show" value="[show other versions]"
                       action="#{userSessionBean.showOtherVersions}" >
                   </h:commandLink></td>
                   </font>
                   <input type="hidden" id="show_versions_of" name="show_versions_of" value="<%=cs_nm%>">
-                  
-                  <!--
-
-				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?action=show&dictionary=<%=cs_nm%>">
-				           <font color="red">[show other versions]</font>
-		  		       </a> 
-		   -->		       
 				       
 				   <%    
 				   } else if (info.isProduction() && info.getHasMultipleVersions() && info.getExpanded()) {
@@ -381,18 +367,12 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				   
                   &nbsp&nbsp; 
                   <font color="red">
-                  <h:commandLink id="hide" value="[hide other versions]"
+                  <h:commandLink styleClass="textbodyred" id="hide" value="[hide other versions]"
                       action="#{userSessionBean.hideOtherVersions}" >
                   </h:commandLink></td>
                   </font>
                   <input type="hidden" id="hide_versions_of" name="hide_versions_of" value="<%=cs_nm%>">				   
-				   
-		  <!--		   
-				       &nbsp
-				       <a href="<%=request.getContextPath() %>/pages/multiple_search.jsf?action=hide&dictionary=<%=cs_nm%>">
-				           <font color="red">[hide other versions]</font>
-				       </a> 
-		   -->		       
+
 				       
 				   <%    
 				   }
@@ -429,26 +409,32 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                 <tr><td height="20"></td></tr>
                 
                 <tr>
-                  <td><img
-                    src="<%= request.getContextPath() %>/images/selectAll.gif"
+                  <td>
+                    <img src="<%= request.getContextPath() %>/images/selectAll.gif"
                     name="selectAll" alt="selectAll"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
 
-                  &nbsp;&nbsp; <img
-                    src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
-                    name="reset" alt="selectAllButNCIm"
+                  &nbsp;&nbsp; 
+                    <img src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
+                    name="selectAllExceptNCIm" alt="selectAllButNCIm"
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
 
-                  &nbsp;&nbsp; <img
-                    src="<%= request.getContextPath() %>/images/clear.gif"
-                    name="reset" alt="reset"
-                    onClick="uncheckAll(document.searchTerm.ontology_list)" />
-
-                  &nbsp;&nbsp; <h:commandButton id="multipleSearch" value="Search"
+                  &nbsp;&nbsp; 
+                  <h:commandButton id="clearall" value="clearall"
+                    action="#{userSessionBean.clearAll}"
+                    image="#{requestContextPath}/images/clear.gif"
+                    alt="reset">
+                  </h:commandButton>
+                  
+                  &nbsp;&nbsp; 
+                  <h:commandButton id="multipleSearch" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{requestContextPath}/images/search.gif"
                     alt="Search">
-                  </h:commandButton></td>
+                  </h:commandButton>
+                  
+                  </td>
+                  
                    <%
                    if (warning_msg != null) {
                       request.getSession().removeAttribute("ontologiesToSearchOn");

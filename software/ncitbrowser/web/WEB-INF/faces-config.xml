@@ -817,6 +817,13 @@
        <from-outcome>multiple_search</from-outcome>
        <to-view-id>/pages/multiple_search.jsp</to-view-id>
     </navigation-case>    
+ 
+     <navigation-case>
+        <description>show versions</description>
+        <from-action>#{userSessionBean.clearAll}</from-action>
+        <from-outcome>multiple_search</from-outcome>
+        <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>  
     
     <navigation-case>
        <description>Search</description>
