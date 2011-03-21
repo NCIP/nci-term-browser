@@ -1012,9 +1012,7 @@ System.out.println("Relationship search ****************************************
 
         String initial_search = (String) request.getParameter("initial_search");
 
-        String[] ontology_list = null;
-        //if (navigation_type == null || navigation_type.compareTo("terminologies") == 0) {
-            ontology_list = request.getParameterValues("ontology_list");
+        String[] ontology_list = request.getParameterValues("ontology_list");
 		//}
 
         List list = new ArrayList<String>();
@@ -1024,25 +1022,52 @@ System.out.println("Relationship search ****************************************
         List<String> ontologiesToSearchOn = null;
         int knt = 0;
 
+//        String[] ontology_list = request.getParameterValues("ontology_list");
+        Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
         // process mappings
         if (initial_search != null) { // from home page
 			if (multiple_search_error != null) {
 				ontologiesToSearchOn = new ArrayList<String>();
+			}
+
+			// No check box is checked
+			if (ontology_list == null) {
+				for (int i = 0; i < display_name_vec.size(); i++) {
+					 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+					 if (info.getVisible()) {
+						 info.setSelected(false);
+					 }
+				}
+			}
+			ontologiesToSearchOnStr = "|";
+			for (int i = 0; i < display_name_vec.size(); i++) {
+				 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+				 if (info.getSelected()) {
+					ontologiesToSearchOnStr =
+						ontologiesToSearchOnStr + info.getLabel() + "|";
+				 }
+			}
+
+/*
+
+
 				ontologiesToSearchOnStr =
 					(String) request.getSession().getAttribute(
 						"ontologiesToSearchOn");
 
-				if (ontologiesToSearchOnStr != null) {
-					Vector ontologies_to_search_on =
-						DataUtils.parseData(ontologiesToSearchOnStr);
-					ontology_list = new String[ontologies_to_search_on.size()];
-					knt = ontologies_to_search_on.size();
-					for (int k = 0; k < ontologies_to_search_on.size(); k++) {
-						String s =
-							(String) ontologies_to_search_on.elementAt(k);
-						ontology_list[k] = s;
-						ontologiesToSearchOn.add(s);
-					}
+
+*/
+
+			if (ontologiesToSearchOnStr != null) {
+				Vector ontologies_to_search_on =
+					DataUtils.parseData(ontologiesToSearchOnStr);
+				ontology_list = new String[ontologies_to_search_on.size()];
+				knt = ontologies_to_search_on.size();
+				for (int k = 0; k < ontologies_to_search_on.size(); k++) {
+					String s =
+						(String) ontologies_to_search_on.elementAt(k);
+					ontology_list[k] = s;
+					ontologiesToSearchOn.add(s);
 				}
 			}
 
@@ -2012,6 +2037,23 @@ System.out.println("advancedSearchAction version: " + version);
 		}
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+		return "multiple_search";
+	}
+
+
+	public String clearAll() {
+		System.out.println("clearAll");
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+		for (int i = 0; i < display_name_vec.size(); i++) {
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+             info.setSelected(false);
+		}
+        request.getSession().setAttribute("display_name_vec", display_name_vec);
+        request.getSession().setAttribute("ontologiesToSearchOnStr", "|");
 		return "multiple_search";
 	}
 
