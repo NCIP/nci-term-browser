@@ -230,10 +230,42 @@ if (namespace_list != null && namespace_list.size() > 1) {
           
           
                 VisitedConceptUtils.add(request, tg_dictionary_0, version, code, name);
-                if (term_suggestion_application_url != null
-                    && term_suggestion_application_url.compareTo("") != 0) {
+                boolean show_cadsr_link = false;
+                if (tg_dictionary_0.compareTo("NCI Thesaurus") == 0) {
+                    show_cadsr_link = true;
+                }
+                String cadsr_url = 
+                "https://cdebrowser-dev.nci.nih.gov/CDEBrowser/search?searchDataElements=9&SEARCH=1&performQuery=yes&FirstTimer=0&jspConceptCode="
+                    + code;
+
+
+                if ((term_suggestion_application_url == null
+                    || term_suggestion_application_url.compareTo("") == 0) && show_cadsr_link) {
           %>
                   <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
+			<a href="javascript:openQuickLinkSite('<%=cadsr_url%>')">Search for linked caDSR metadata</a>
+		  </td>
+          <%
+                }
+
+                else if (term_suggestion_application_url != null
+                    && term_suggestion_application_url.compareTo("") != 0 && !show_cadsr_link) {
+          %>
+                  <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
+                    <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
+                    target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
+                  </td>
+          <%
+                }
+              
+                
+                else if (term_suggestion_application_url != null
+                    && term_suggestion_application_url.compareTo("") != 0 && show_cadsr_link) {
+          %>
+                  <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
+                    <a href="javascript:openQuickLinkSite('<%=cadsr_url%>')">Search for linked caDSR metadata</a>
+                     &nbsp;
+                  
                     <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
                     target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
                   </td>

@@ -1345,11 +1345,6 @@ System.out.println("Step 2: ");
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
 
-
-
-System.out.println("Step 3: ");
-
-
         if (iterator != null) {
             IteratorBean iteratorBean =
                 (IteratorBean) FacesContext.getCurrentInstance()
@@ -1365,29 +1360,14 @@ System.out.println("Step 3: ");
             }
 
             int size = iteratorBean.getSize();
-
- System.out.println("(************) multipleSearchAction size: " + size);
-
-
             if (size == 1) {
-
-System.out.println("(************) multipleSearchAction iteratorBean.getSize(): " + iteratorBean.getSize());
-
-
                 int pageNumber = 1;
                 list = iteratorBean.getData(1);
                 ResolvedConceptReference ref =
                     (ResolvedConceptReference) list.get(0);
 
                 String coding_scheme = ref.getCodingSchemeName();
-
-System.out.println("(************) coding_scheme: " + coding_scheme);
-
-
                 String ref_version = ref.getCodingSchemeVersion();
-
-System.out.println("(************) ref_version: " + ref_version);
-
 
                 if (coding_scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
                     String match_size = Integer.toString(size);
@@ -1399,9 +1379,6 @@ System.out.println("(************) ref_version: " + ref_version);
                     // route to multiple_search_results.jsp
                     return "search_results";
                 }
-
-System.out.println("(************) Step 4");
-
 
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", coding_scheme);
@@ -1418,12 +1395,10 @@ System.out.println("(************) Step 4");
                 } else {
                     c = ref.getReferencedEntry();
                     if (c == null) {
-                        c = DataUtils.getConceptByCode(coding_scheme, version,
+                        c = DataUtils.getConceptByCode(coding_scheme, ref_version,
                                 null, ref.getConceptCode());
                     }
                 }
-
-System.out.println("(************) Step 4.a");
 
                 request.getSession().setAttribute("code", ref.getConceptCode());
                 request.getSession().setAttribute("concept", c);
@@ -1441,9 +1416,6 @@ System.out.println("(************) Step 4.a");
 
                 request.setAttribute("dictionary", coding_scheme);
                 request.setAttribute("version", ref_version);
-
-System.out.println("returning concept_details");
-
 
                 return "concept_details";
             } else if (size > 0) {
@@ -1499,9 +1471,6 @@ System.out.println("(************) Step 5");
 
         request.getSession().setAttribute("matchText",
             HTTPUtils.convertJSPString(matchText));
-
-System.out.println("(************) Step 6 returning multiple_search");
-
 
         return "multiple_search";
     }
