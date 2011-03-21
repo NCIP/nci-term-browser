@@ -413,12 +413,14 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 %>        
         	<%@ include file="/pages/templates/pagination-termbrowser.jsp" %>
 <%        
+        } else if (message != null) {
+%>        
+            <p class="textbodyred"><%=message%></p>
+<%        
         } else {
 %>        
-        
             <p class="textbodyred">No match found.</p>
-<%        
-        
+<%          
         }
 %>        
         
