@@ -215,11 +215,11 @@ if (resultsPerPage == null) {
           <tr>
             <td class="dataTableHeader">
             <%
-              if (contains_warning_msg != null) {
+              if (contains_warning_msg != null && size > 0) {
              %>
               <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=match_text%></b>&nbsp;<%=contains_warning_msg%>
              <%
-              } else {
+              } else if (size > 0) {
               %>
               Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=match_text%></b>
               <%
@@ -234,8 +234,15 @@ if (resultsPerPage == null) {
           <tr>
             <td class="textbody">
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+<%              
+if (size > 0) {
+%>
                 <th class="dataTableHeader" scope="col" align="left">Concept</th>
                 <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
+<%
+}   
+%>
+                
                 <%
                   List list = iteratorBean.getData(istart, iend);
 
@@ -400,9 +407,20 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
             </td>
           </tr>
         </table>
-        <%@ include file="/pages/templates/pagination-termbrowser.jsp" %>
+
+<%        
+        if (size > 0) {
+%>        
+        	<%@ include file="/pages/templates/pagination-termbrowser.jsp" %>
+<%        
+        } else {
+%>        
         
+            <p class="textbodyred">No match found.</p>
+<%        
         
+        }
+%>        
         
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div> <!-- end Page content -->
