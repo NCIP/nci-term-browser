@@ -970,6 +970,9 @@ System.out.println("Relationship search ****************************************
 
 
     public String multipleSearchAction() {
+
+System.out.println("Step 1");
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -1025,63 +1028,69 @@ System.out.println("Relationship search ****************************************
 //        String[] ontology_list = request.getParameterValues("ontology_list");
         Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
         // process mappings
-        if (initial_search != null) { // from home page
-			if (multiple_search_error != null) {
-				ontologiesToSearchOn = new ArrayList<String>();
-			}
 
-			// No check box is checked
-			if (ontology_list == null) {
-				for (int i = 0; i < display_name_vec.size(); i++) {
-					 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-					 if (info.getVisible()) {
-						 info.setSelected(false);
-					 }
-				}
-			}
-			ontologiesToSearchOnStr = "|";
-			for (int i = 0; i < display_name_vec.size(); i++) {
-				 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-				 if (info.getSelected()) {
-					ontologiesToSearchOnStr =
-						ontologiesToSearchOnStr + info.getLabel() + "|";
-				 }
-			}
+System.out.println("display_name_vec: " + display_name_vec.size());
+
+System.out.println("initial_search: " + initial_search);
 
 /*
-
-
-				ontologiesToSearchOnStr =
-					(String) request.getSession().getAttribute(
-						"ontologiesToSearchOn");
-
+		for (int i = 0; i < display_name_vec.size(); i++) {
+			 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+			 if (info.getVisible()) {
+				 info.setSelected(false);
+			 }
+		}
 
 */
-
-			if (ontologiesToSearchOnStr != null) {
-				Vector ontologies_to_search_on =
-					DataUtils.parseData(ontologiesToSearchOnStr);
-				ontology_list = new String[ontologies_to_search_on.size()];
-				knt = ontologies_to_search_on.size();
-				for (int k = 0; k < ontologies_to_search_on.size(); k++) {
-					String s =
-						(String) ontologies_to_search_on.elementAt(k);
-					ontology_list[k] = s;
-					ontologiesToSearchOn.add(s);
-				}
+        if (ontology_list != null) {
+			List checked_list = Arrays.asList(ontology_list);
+			for (int i = 0; i < display_name_vec.size(); i++) {
+				 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+				 if (checked_list.contains(info.getLabel())) {
+					 info.setSelected(true);
+				 }
 			}
+		}
+
+
+int selected_knt = 0;
+
+		Vector ontologies_to_search_on = new Vector();
+		ontologiesToSearchOnStr = "|";
+		for (int i = 0; i < display_name_vec.size(); i++) {
+			 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+			 if (info.getSelected()) {
+				 selected_knt++;
+				 ontologies_to_search_on.add(info.getLabel());
+				 ontologiesToSearchOnStr = ontologiesToSearchOnStr + info.getLabel() + "|";
+			 }
+		}
+
+System.out.println("selected_knt: " + selected_knt);
+
+		ontology_list = new String[ontologies_to_search_on.size()];
+		ontologiesToSearchOn = new ArrayList<String>();
+
+		for (int k = 0; k < ontologies_to_search_on.size(); k++) {
+			String s =
+				(String) ontologies_to_search_on.elementAt(k);
+			ontology_list[k] = s;
+			ontologiesToSearchOn.add(s);
+		}
+
+
+
+        if (initial_search != null) { // from home page
 
             if (ontology_list == null || ontology_list.length == 0) {
+
+System.out.println("ontology_list == null or size = 0");
 
                 String message = Constants.ERROR_NO_VOCABULARY_SELECTED;// "Please select at least one vocabulary.";
                 request.getSession().setAttribute("warning", message);
                 request.getSession().setAttribute("message", message);
                 request.getSession().removeAttribute("ontologiesToSearchOn");
-
-                // String defaultOntologiesToSearchOnStr =
-                // ontologiesToSearchOnStr;
-                request.getSession().setAttribute(
-                    "defaultOntologiesToSearchOnStr", "|");
+                request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
                 request.getSession().setAttribute("matchText",
                     HTTPUtils.convertJSPString(matchText));
 
@@ -1089,15 +1098,6 @@ System.out.println("Relationship search ****************************************
 
                 return "multiple_search";
             } else {
-                ontologiesToSearchOn = new ArrayList<String>();
-
-                ontologiesToSearchOnStr = "|";
-                for (int i = 0; i < ontology_list.length; ++i) {
-                    list.add(ontology_list[i]);
-                    ontologiesToSearchOn.add(ontology_list[i]);
-                    ontologiesToSearchOnStr =
-                        ontologiesToSearchOnStr + ontology_list[i] + "|";
-                }
 
                 if (ontology_list_str == null) {
                     ontology_list_str = "";
@@ -1112,25 +1112,11 @@ System.out.println("Relationship search ****************************************
                 request.getSession().setAttribute("ontologiesToSearchOn",
                     ontologiesToSearchOnStr);
             }
-        } else {
-
-			ontologiesToSearchOn = new ArrayList<String>();
-			ontologiesToSearchOnStr =
-				(String) request.getSession().getAttribute(
-					"ontologiesToSearchOn");
-			if (ontologiesToSearchOnStr != null) {
-				Vector ontologies_to_search_on =
-					DataUtils.parseData(ontologiesToSearchOnStr);
-				ontology_list = new String[ontologies_to_search_on.size()];
-				knt = ontologies_to_search_on.size();
-				for (int k = 0; k < ontologies_to_search_on.size(); k++) {
-					String s = (String) ontologies_to_search_on.elementAt(k);
-					ontology_list[k] = s;
-					ontologiesToSearchOn.add(s);
-				}
-			}
-
         }
+
+
+
+System.out.println("Step 2: ");
 
 
         String hide_ontology_list = "false";
@@ -1359,6 +1345,11 @@ System.out.println("Relationship search ****************************************
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
 
+
+
+System.out.println("Step 3: ");
+
+
         if (iterator != null) {
             IteratorBean iteratorBean =
                 (IteratorBean) FacesContext.getCurrentInstance()
@@ -1374,7 +1365,14 @@ System.out.println("Relationship search ****************************************
             }
 
             int size = iteratorBean.getSize();
+
+ System.out.println("(************) multipleSearchAction size: " + size);
+
+
             if (size == 1) {
+
+System.out.println("(************) multipleSearchAction iteratorBean.getSize(): " + iteratorBean.getSize());
+
 
                 int pageNumber = 1;
                 list = iteratorBean.getData(1);
@@ -1382,7 +1380,15 @@ System.out.println("Relationship search ****************************************
                     (ResolvedConceptReference) list.get(0);
 
                 String coding_scheme = ref.getCodingSchemeName();
+
+System.out.println("(************) coding_scheme: " + coding_scheme);
+
+
                 String ref_version = ref.getCodingSchemeVersion();
+
+System.out.println("(************) ref_version: " + ref_version);
+
+
                 if (coding_scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
                     String match_size = Integer.toString(size);
                     ;// Integer.toString(v.size());
@@ -1393,6 +1399,9 @@ System.out.println("Relationship search ****************************************
                     // route to multiple_search_results.jsp
                     return "search_results";
                 }
+
+System.out.println("(************) Step 4");
+
 
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", coding_scheme);
@@ -1409,11 +1418,12 @@ System.out.println("Relationship search ****************************************
                 } else {
                     c = ref.getReferencedEntry();
                     if (c == null) {
-                        c =
-                            DataUtils.getConceptByCode(coding_scheme, null,
+                        c = DataUtils.getConceptByCode(coding_scheme, version,
                                 null, ref.getConceptCode());
                     }
                 }
+
+System.out.println("(************) Step 4.a");
 
                 request.getSession().setAttribute("code", ref.getConceptCode());
                 request.getSession().setAttribute("concept", c);
@@ -1431,6 +1441,10 @@ System.out.println("Relationship search ****************************************
 
                 request.setAttribute("dictionary", coding_scheme);
                 request.setAttribute("version", ref_version);
+
+System.out.println("returning concept_details");
+
+
                 return "concept_details";
             } else if (size > 0) {
                 String match_size = Integer.toString(size);
@@ -1446,6 +1460,10 @@ System.out.println("Relationship search ****************************************
                 return "search_results";
             }
         }
+
+
+System.out.println("(************) Step 5");
+
 
         int minimumSearchStringLength =
             NCItBrowserProperties.getMinimumSearchStringLength();
@@ -1469,9 +1487,7 @@ System.out.println("Relationship search ****************************************
         }
 
         hide_ontology_list = "false";
-        /*
-         * if (initial_search == null) { hide_ontology_list = "true"; }
-         */
+
         request.getSession().setAttribute("hide_ontology_list",
             hide_ontology_list);
         request.getSession().setAttribute("warning", message);
@@ -1483,6 +1499,10 @@ System.out.println("Relationship search ****************************************
 
         request.getSession().setAttribute("matchText",
             HTTPUtils.convertJSPString(matchText));
+
+System.out.println("(************) Step 6 returning multiple_search");
+
+
         return "multiple_search";
     }
 

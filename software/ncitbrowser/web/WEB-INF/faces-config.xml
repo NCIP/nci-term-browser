@@ -600,6 +600,20 @@
     </navigation-case>
 
     <navigation-case>
+       <description>Match</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
        <description>contact_us_message</description>
        <from-action>#{userSessionBean.contactUs}</from-action>
        <from-outcome>message</from-outcome>
@@ -805,21 +819,21 @@
     <from-view-id>/pages/multiple_search.jsp</from-view-id>
 
     <navigation-case>
-       <description>show versions</description>
+       <description>show_versions</description>
        <from-action>#{userSessionBean.showOtherVersions}</from-action>
        <from-outcome>multiple_search</from-outcome>
        <to-view-id>/pages/multiple_search.jsp</to-view-id>
     </navigation-case>
 
     <navigation-case>
-       <description>show versions</description>
+       <description>hide_versions</description>
        <from-action>#{userSessionBean.hideOtherVersions}</from-action>
        <from-outcome>multiple_search</from-outcome>
        <to-view-id>/pages/multiple_search.jsp</to-view-id>
     </navigation-case>    
  
      <navigation-case>
-        <description>show versions</description>
+        <description>clear_all</description>
         <from-action>#{userSessionBean.clearAll}</from-action>
         <from-outcome>multiple_search</from-outcome>
         <to-view-id>/pages/multiple_search.jsp</to-view-id>
