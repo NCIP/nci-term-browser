@@ -71,6 +71,10 @@ public class LicenseBean extends Object {
         _logger.debug("LicenseBean addLicenseAgreement " + scheme);
         _licenseAgreementHashSet.add(scheme);
     }
+    
+    public void clearAllLicenseAgreements() {
+        _licenseAgreementHashSet = new HashSet();
+    }
 
     public boolean licenseAgreementAccepted(String scheme) {
         // option to not pop-up the license agreement page:
@@ -120,5 +124,4 @@ public class LicenseBean extends Object {
         }
         return copyRightStmt;
     }
-
 }
