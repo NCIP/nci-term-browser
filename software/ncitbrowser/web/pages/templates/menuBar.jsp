@@ -89,9 +89,9 @@ if (menubar_version == null) {
     %> 
    
 
-      | <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf" tabindex="15">Value Sets</a>
+      | <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
       
-      | <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf" tabindex="15">Maps</a>      
+      | <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Maps</a>      
       
     <%
       }
