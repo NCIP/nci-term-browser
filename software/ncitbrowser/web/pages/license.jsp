@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
@@ -19,15 +19,15 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <%
+  LexEVSUtils.CSchemes unacceptedLicensesCS = 
+    (LexEVSUtils.CSchemes) request.getAttribute("unacceptedLicensesCS");
   String scheme = (String) request.getAttribute("scheme");
   String version = (String) request.getAttribute("version");
   String ontology_list_str = (String) request.getAttribute("ontology_list_str");
   String matchText = (String) request.getSession().getAttribute("matchText");
-
-    if (matchText == null) matchText = "";
-    String license_page__match_text = HTTPUtils.convertJSPString(matchText);
-
-
+  if (matchText == null)
+    matchText = "";
+  String license_page__match_text = HTTPUtils.convertJSPString(matchText);
   String searchTarget = (String) request.getAttribute("searchTarget");
   String matchAlgorithm = (String) request.getAttribute("algorithm");
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
@@ -55,26 +55,9 @@
       <!-- Page content -->
       <div class="pagecontent">
         <a name="evs-content" id="evs-content"></a>
-        <p>
-        <%
-          String display_name = DataUtils.getMetadataValue(scheme, "display_name");
-        %>
-          To access <b><%=display_name%></b>, please review and accept the copyright/license statement below:
-        </p>
-        <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>
-        <p>
-          If and only if you agree to these terms and conditions, click the Accept button to proceed.
-        </p>
-        <%
-          String scheme0 = scheme;
-          String version0 = version;
-          if (scheme != null) {
-            scheme = scheme.replaceAll(" ", "%20");
-          }
-          if (version != null) {
-            version = version.replaceAll(" ", "%20");
-          }
-         %>
+        <p><%= LicenseUtils.WebPage.getReviewAndAcceptMessage(unacceptedLicensesCS) %></p>
+        <textarea cols="87" rows="15" readonly align="left"><%= LicenseUtils.WebPage.getLicenseMessages(unacceptedLicensesCS, 87) %></textarea>
+        <p><%= LicenseUtils.WebPage.getButtonMessage() %></p>
           <h:form>
             <h:commandButton
               id="search"
@@ -91,8 +74,9 @@
             <input type="hidden" id="matchText" name="matchText" value="<%=license_page__match_text%>" />
             <input type="hidden" id="algorithm" name="algorithm" value="<%=matchAlgorithm%>" />
             <input type="hidden" id="ontology_list_str" name="ontology_list_str" value="<%=ontology_list_str%>" />
-            <input type="hidden" id="scheme" name="scheme" value="<%=scheme0%>" />
-            <input type="hidden" id="version" name="version" value="<%=version0%>" />
+            <input type="hidden" id="scheme" name="scheme" value="<%=scheme%>" />
+            <input type="hidden" id="version" name="version" value="<%=version%>" />            
+            <input type="hidden" id="acceptedLicenses" name="acceptedLicenses" value="<%=unacceptedLicensesCS.getDelimitedValues()%>" />            
             <input type="hidden" id="searchTarget" name="searchTarget" value="<%=searchTarget%>" />
 
           </h:form>
