@@ -233,15 +233,20 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
 		     if (info.getHasMultipleVersions()) {
 			 System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
-		     } else {
-		         info.setSelected(false);
-		     }
+		     } 
 		     
 		     if (ontologiesToSearchOn.indexOf(info.getLabel()) != -1) {
 			 info.setSelected(true);
 		     }		     
 		  }
-                  
+ 
+ 		  for (int k = 0; k < display_name_vec.size(); k++) { 
+ 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
+ 		     if (!info.isProduction()) {
+ 		          info.setSelected(false);
+ 		     }		     
+		  }
+		  
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
                 }
 		
