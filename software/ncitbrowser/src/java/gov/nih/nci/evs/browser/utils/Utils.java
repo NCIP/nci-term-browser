@@ -138,4 +138,15 @@ public class Utils {
         text = text.replaceAll("  ", "&nbsp;&nbsp;");
         return text;
     }
+    
+    public static Vector<String> unique(Vector<String> list) {
+        Vector<String> newList = new Vector<String>();
+        Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            String text = iterator.next();
+            if (! newList.contains(text))
+                newList.add(text);
+        }
+        return newList;
+    }
 }

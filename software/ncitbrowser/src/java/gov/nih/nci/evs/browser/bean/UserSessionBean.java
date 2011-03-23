@@ -976,8 +976,6 @@ System.out.println("Step 1");
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-        String scheme = (String) request.getParameter("scheme");
-        String version = (String) request.getParameter("version");
 
 		String navigation_type = request.getParameter("nav_type");
 		if (navigation_type == null || navigation_type.equals("null")) {
@@ -985,15 +983,12 @@ System.out.println("Step 1");
 		}
 
         // Called from license.jsp
-        LicenseBean licenseBean =
-            (LicenseBean) request.getSession().getAttribute("licenseBean");
-        if (scheme != null && version != null) {
-
-            if (licenseBean == null) {
-                licenseBean = new LicenseBean();
-            }
-            licenseBean.addLicenseAgreement(scheme);
-            request.getSession().setAttribute("licenseBean", licenseBean);
+        String acceptedLicensesStr = (String) request.getParameter("acceptedLicenses");
+        if (acceptedLicensesStr != null) {
+            LexEVSUtils.CSchemes acceptedLicenses = 
+                LexEVSUtils.CSchemes.toSchemes(acceptedLicensesStr);
+            if (acceptedLicenses != null)
+                LicenseUtils.acceptLicenses(request, acceptedLicenses);
         }
 
         String matchText = (String) request.getParameter("matchText");
@@ -1203,9 +1198,6 @@ System.out.println("Step 2: ");
             }
         }
 
-        Vector schemes = new Vector();
-        Vector versions = new Vector();
-
         ontologiesToSearchOn = new ArrayList<String>();
 
         ontologiesToSearchOnStr = "|";
@@ -1226,9 +1218,6 @@ System.out.println("Step 2: ");
             }
         }
 
-        scheme = null;
-        version = null;
-        String t = "";
         if (ontologiesToSearchOn.size() == 0) {
             String message = Constants.ERROR_NO_VOCABULARY_SELECTED;// "Please select at least one vocabulary.";
             request.getSession().setAttribute("warning", message);
@@ -1239,54 +1228,34 @@ System.out.println("Step 2: ");
                 HTTPUtils.convertJSPString(matchText));
 
             return "multiple_search";
-        } else {
-            request.getSession().setAttribute("ontologiesToSearchOn",
-                ontologiesToSearchOnStr);
+        } 
 
-            // [#25270] Set "all but NCIm selected" as the default for the TB
-            // home page.
-            String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
-            request.getSession().setAttribute("defaultOntologiesToSearchOnStr",
-                defaultOntologiesToSearchOnStr);
+        request.getSession().setAttribute("ontologiesToSearchOn",
+            ontologiesToSearchOnStr);
 
-            for (int k = 0; k < ontologiesToSearchOn.size(); k++) {
-                String key = (String) list.get(k);
-                if (key != null) {
-                    scheme = DataUtils.key2CodingSchemeName(key);
-                    version = DataUtils.key2CodingSchemeVersion(key);
-                    if (scheme != null) {
-                        schemes.add(scheme);
-                        // to be modified (handling of versions)
-                        versions.add(version);
-                        t = t + scheme + " (" + version + ")" + "\n";
-                        boolean isLicensed =
-                            LicenseBean.isLicensed(scheme, version);
-                        if (licenseBean == null) {
-                            licenseBean = new LicenseBean();
-                            request.getSession().setAttribute("licenseBean",
-                                licenseBean);
-                        }
+        // [#25270] Set "all but NCIm selected" as the default for the TB
+        // home page.
+        String defaultOntologiesToSearchOnStr = ontologiesToSearchOnStr;
+        request.getSession().setAttribute("defaultOntologiesToSearchOnStr",
+            defaultOntologiesToSearchOnStr);
 
-                        boolean accepted =
-                            licenseBean.licenseAgreementAccepted(scheme);
-                        if (isLicensed && !accepted) {
-                            request.getSession().setAttribute("matchText",
-                                matchText);
-
-                            request.setAttribute("searchTarget", searchTarget);
-                            request.setAttribute("algorithm", matchAlgorithm);
-                            request.setAttribute("ontology_list_str",
-                                ontology_list_str);
-                            request.setAttribute("scheme", scheme);
-                            request.setAttribute("version", version);
-                            return "license";
-                        }
-                    } else {
-                        _logger.warn("Unable to identify " + key);
-                    }
-                }
-            }
+        LexEVSUtils.CSchemes unacceptedLicensesCS =
+            LicenseUtils.getUnacceptedLicenses(request, ontologiesToSearchOn);
+        if (unacceptedLicensesCS.size() > 0) {
+            request.getSession().setAttribute("matchText", matchText);
+            request.setAttribute("searchTarget", searchTarget);
+            request.setAttribute("algorithm", matchAlgorithm);
+            request.setAttribute("ontology_list_str", ontology_list_str);
+            request.setAttribute("scheme", null);
+            request.setAttribute("version", null);
+            request.setAttribute("unacceptedLicensesCS", unacceptedLicensesCS);
+            return "license";
         }
+
+        LexEVSUtils.CSchemes cSchemes = 
+            LexEVSUtils.getCSchemes(request, ontologiesToSearchOn);
+        Vector<String> schemes = cSchemes.getCodingSchemes();
+        Vector<String> versions = cSchemes.getVersions();
 
         String max_str = null;
         int maxToReturn = -1;// 1000;
@@ -1333,7 +1302,6 @@ System.out.println("Step 2: ");
            }
         }
 
-        request.getSession().setAttribute("vocabulary", scheme);
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
@@ -1496,7 +1464,7 @@ System.out.println("(************) Step 5");
         request.getSession().setAttribute("version", version);
         return "vocabulary_home";
     }
-
+    
     public String advancedSearchAction() {
 
         ResolvedConceptReferencesIteratorWrapper wrapper = null;
@@ -2043,6 +2011,8 @@ System.out.println("advancedSearchAction version: " + version);
 		}
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", "|");
+        
+        //LicenseUtils.clearAllLicenses(request); //DYEE
 		return "multiple_search";
 	}
 
