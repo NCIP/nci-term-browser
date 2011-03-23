@@ -223,6 +223,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		        Vector w = DataUtils.getNonProductionOntologies(display_name_vec, info.getCodingScheme());
 		        if (w.size() > 0) {
 				info.setHasMultipleVersions(true);
+				
 		        }
 		     }
 		  }
@@ -232,7 +233,10 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
 		     if (info.getHasMultipleVersions()) {
 			 System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
+		     } else {
+		         info.setSelected(false);
 		     }
+		     
 		     if (ontologiesToSearchOn.indexOf(info.getLabel()) != -1) {
 			 info.setSelected(true);
 		     }		     
