@@ -86,7 +86,13 @@ if (menubar_version == null) {
     </c:choose>    
     <%
       if (hdr_dictionary0 != null && hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) {
-      %> | <a href="<%= request.getContextPath() %>/pages/subset.jsf" tabindex="15">Subsets</a>
+    %> 
+   
+      | <a href="<%= request.getContextPath() %>/pages/subset.jsf" tabindex="15">Subsets</a>
+
+ 
+      | <a href="<%= request.getContextPath() %>/pages/value_set_hierarcy.jsf" tabindex="15">Value Sets</a>
+      
     <%
       }
       %> | <a href="<%= request.getContextPath() %>/pages/help.jsf" tabindex="16">Help</a>

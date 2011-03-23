@@ -148,24 +148,18 @@ if (view == null) {
 }
 
 if (view == null) {
-    view = "URI";
+    view = "terminology";
 }
 %>
 
-<%
-if (view.compareToIgnoreCase("URI") == 0) {
-%>
-    URI View
-<%    
-} else {
-%>
-    <a href="<%=request.getContextPath() %>/pages/value_set_search.jsf?view=uri">URI View</a>
-<%
-} 
-%>
-&nbsp; | 
+ 
 <%
 if (view.compareToIgnoreCase("terminology") == 0) {
+
+
+DataUtils.printValueSetDefinitionHierarchy();
+
+
 %>
     Terminology View
 <%
@@ -202,10 +196,6 @@ if (view.compareToIgnoreCase("source") == 0) {
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 		<th class="dataTableHeader" scope="col" align="left">Name</th>
-		<!--
-		<th class="dataTableHeader" scope="col" align="left">URI</th>
-                <th class="dataTableHeader" scope="col" align="left">Description</th>
-                -->
 
 <%
 
@@ -336,6 +326,7 @@ System.out.println("URI: " + uri);
              
  <%           
   } else if (view.compareToIgnoreCase("source") == 0) { 
+  
      HashMap src2ValueSetMetadataHashMap = DataUtils.getSource2ValueSetMetadataHashMap(vsd_vec); 
      Iterator it = src2ValueSetMetadataHashMap.keySet().iterator();
      
@@ -345,17 +336,13 @@ System.out.println("URI: " + uri);
                <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <th class="dataTableHeader" scope="col" align="left">Resource</th>
  		<th class="dataTableHeader" scope="col" align="left">Name</th>
- 		<!--
- 		<th class="dataTableHeader" scope="col" align="left">URI</th>
-                <th class="dataTableHeader" scope="col" align="left">Description</th>
-                -->
  
  <%
  
  
         while (it.hasNext()) {
                 String resource = (String) it.next();
-               
+              
  		Vector vsd_vector = (Vector) src2ValueSetMetadataHashMap.get(resource);
  
                  for (int i=0; i<vsd_vector.size(); i++) {

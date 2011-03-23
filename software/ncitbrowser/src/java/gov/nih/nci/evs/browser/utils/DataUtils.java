@@ -198,6 +198,10 @@ public class DataUtils {
 
     public static HashMap _codingSchemeTagHashMap = null;
 
+    public static HashMap _valueSetDefinitionHierarchyHashMap = null;
+    public static Vector  _availableValueSetDefinitionSources = null;
+    public static Vector  _valueSetDefinitionHierarchyRoots = null;
+
 
     // ==================================================================================
 
@@ -1707,7 +1711,6 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 			cr.setCodingSchemeName(entityCodeNamespace);
 		}
 
-System.out.println("querying relationship data ...");
 
 
         // Perform the query ...
@@ -1880,7 +1883,7 @@ System.out.println("querying relationship data ...");
 															String qualifier_value = qual.getContent();
 															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
 
-														    System.out.println("qualifiers: " + qualifiers);
+														    //System.out.println("qualifiers: " + qualifiers);
 
 														}
 														s = s + "|" + qualifiers;
@@ -3938,8 +3941,8 @@ System.out.println("querying relationship data ...");
 
 			//output is all of the mapping ontologies that this code participates in.
 			for(AbsoluteCodingSchemeVersionReference ref : mappingSchemes.getAbsoluteCodingSchemeVersionReference()){
-				System.out.println("URI: " + ref.getCodingSchemeURN());
-				System.out.println("Version: " + ref.getCodingSchemeVersion());
+				//System.out.println("URI: " + ref.getCodingSchemeURN());
+				//System.out.println("Version: " + ref.getCodingSchemeVersion());
 				v.add(ref.getCodingSchemeURN() + "|" + ref.getCodingSchemeVersion());
 			}
 
@@ -4031,10 +4034,6 @@ System.out.println("querying relationship data ...");
 
 
     public static ValueSetDefinition findValueSetDefinitionByURI(String uri) {
-
-System.out.println("findValueSetDefinitionByURI: " + uri);
-
-
 		if (uri == null) return null;
 	    if (uri.indexOf("|") != -1) {
 			Vector u = DataUtils.parseData(uri);
@@ -4081,9 +4080,6 @@ System.out.println("findValueSetDefinitionByURI: " + uri);
     public static HashMap getCodingSchemeURN2ValueSetMetadataHashMap(Vector vsd_vec) {
         HashMap hmap = new HashMap();
 
- System.out.println("DataUtils  getCodingSchemeURN2ValueSetMetadataHashMap vsd_vec.size(): " + vsd_vec.size());
-
-
         for (int i=0; i<vsd_vec.size(); i++) {
 		    String vsd_str = (String) vsd_vec.elementAt(i);
 
@@ -4093,19 +4089,11 @@ System.out.println("vsd_str " + vsd_str);
 		    String name = (String) u.elementAt(0);
 		    String uri = (String) u.elementAt(1);
 
-
-
-
-System.out.println("uri " + uri);
-
-
 		    String description = (String) u.elementAt(2);
 
 		    Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
 
             if (cs_vec != null) {
-	System.out.println("cs_vec.size: " + cs_vec.size());
-
 
 				for (int k=0; k<cs_vec.size(); k++) {
 					String cs_urn = (String) cs_vec.elementAt(k);
@@ -4133,13 +4121,8 @@ System.out.println("uri " + uri);
     public static HashMap getSource2ValueSetMetadataHashMap(Vector vsd_vec) {
         HashMap hmap = new HashMap();
 
- System.out.println("DataUtils  getSource2ValueSetMetadataHashMap vsd_vec.size(): " + vsd_vec.size());
-
-
         for (int i=0; i<vsd_vec.size(); i++) {
 		    String vsd_str = (String) vsd_vec.elementAt(i);
-
-System.out.println("vsd_str " + vsd_str);
 
 		    Vector u = parseData(vsd_str);
 		    String name = (String) u.elementAt(0);
@@ -4147,7 +4130,6 @@ System.out.println("vsd_str " + vsd_str);
 		    String description = (String) u.elementAt(2);
 		    String domain = (String) u.elementAt(3);
 		    String src_str = (String) u.elementAt(4);
-
 		    if (src_str == null || src_str.compareTo("<NOT ASSIGNED>") == 0) {
 				String key = "<NOT ASSIGNED>";
 				if (hmap.containsKey(key)) {
@@ -4169,6 +4151,9 @@ System.out.println("vsd_str " + vsd_str);
 						Vector v = (Vector) hmap.get(src);
 						if (!v.contains(vsd_str)) {
 							v.add(vsd_str);
+
+							System.out.println("hmap " + src);
+
 							hmap.put(src, v);
 						}
 					} else {
@@ -4219,6 +4204,137 @@ System.out.println("vsd_str " + vsd_str);
 		return null;
 	}
 
+
+    public static Vector getAvailableValueSetDefinitionSources() {
+		if (_availableValueSetDefinitionSources != null) return _availableValueSetDefinitionSources;
+		_availableValueSetDefinitionSources = new Vector();
+		HashSet hset = new HashSet();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        if (list == null) return null;
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+			while (sourceEnum.hasMoreElements()) {
+				Source src = (Source) sourceEnum.nextElement();
+				String src_str = src.getContent();
+				if (!hset.contains(src_str)) {
+					hset.add(src_str);
+					_availableValueSetDefinitionSources.add(src_str);
+				}
+			}
+		}
+		return SortUtils.quickSort(_availableValueSetDefinitionSources);
+	}
+
+
+
+    public static void printValueSetDefinitionHierarchyNode(int level, String root) {
+		String indent = "";
+		for (int i=0; i<level; i++) {
+			indent = indent + "\t";
+		}
+		System.out.println(indent + root);
+		Vector children = (Vector) _valueSetDefinitionHierarchyHashMap.get(root);
+		if (children != null) {
+			for (int j=0; j<children.size(); j++) {
+				String child = (String) children.elementAt(j);
+                printValueSetDefinitionHierarchyNode(level+1, child);
+			}
+		}
+	}
+
+
+    public static void printValueSetDefinitionHierarchy() {
+		HashMap hmap = getValueSetDefinitionHierarchy();
+		Vector roots = getValueSetDefinitionHierarchyRoots();
+		for (int i=0; i<roots.size(); i++) {
+			String root = (String) roots.elementAt(i);
+			printValueSetDefinitionHierarchyNode(0, root);
+		}
+
+	}
+
+
+    public static Vector getValueSetDefinitionHierarchyRoots() {
+		if (_valueSetDefinitionHierarchyRoots != null) return _valueSetDefinitionHierarchyRoots;
+
+		_valueSetDefinitionHierarchyRoots = new Vector();
+		_valueSetDefinitionHierarchyRoots = getAvailableValueSetDefinitionSources();
+		HashMap hmap = getValueSetDefinitionHierarchy();
+
+
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			Vector children = (Vector) hmap.get(key);
+			for (int i=0; i<children.size(); i++) {
+			    String child = (String) children.elementAt(i);
+			    _valueSetDefinitionHierarchyRoots.remove(child);
+			}
+		}
+		_valueSetDefinitionHierarchyRoots = SortUtils.quickSort(_valueSetDefinitionHierarchyRoots);
+		return _valueSetDefinitionHierarchyRoots;
+	}
+
+
+    public static HashMap getValueSetDefinitionHierarchy() {
+		if (_valueSetDefinitionHierarchyHashMap != null) return _valueSetDefinitionHierarchyHashMap;
+		Vector v = getAvailableValueSetDefinitionSources();
+
+		System.out.println("source size: " + v.size());
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			System.out.println("\tsource: " + t);
+		}
+
+		_valueSetDefinitionHierarchyHashMap = new HashMap();
+		if (v.size() <= 1) return _valueSetDefinitionHierarchyHashMap;
+
+		for (int i=0; i<v.size(); i++) {
+			String s = (String) v.elementAt(i);
+			for (int j=i+1; j<v.size(); j++) {
+				String t = (String) v.elementAt(j);
+				// if s is a substring of t
+				//FDA  FDA_SPL
+
+				System.out.println("s: " + s + "   ; t: " + t);
+				System.out.println("\tt.indexOf(s): " + t.indexOf(s));
+				System.out.println("\ts.indexOf(t): " + s.indexOf(t));
+
+				if (t.indexOf(s) == -1 && s.indexOf(t) != -1) {
+					Vector w = null;
+					if (!_valueSetDefinitionHierarchyHashMap.containsKey(t)) {
+						w = new Vector();
+					} else {
+						w = (Vector) _valueSetDefinitionHierarchyHashMap.get(t);
+					}
+					if (!w.contains(s)) w.add(s);
+					_valueSetDefinitionHierarchyHashMap.put(t, w);
+				} else if (t.indexOf(s) != -1 && s.indexOf(t) == -1) {
+					Vector w = null;
+					if (!_valueSetDefinitionHierarchyHashMap.containsKey(s)) {
+						w = new Vector();
+					} else {
+						w = (Vector) _valueSetDefinitionHierarchyHashMap.get(s);
+					}
+					if (!w.contains(t)) w.add(t);
+					_valueSetDefinitionHierarchyHashMap.put(s, w);
+				}
+			}
+		}
+
+		Iterator it = _valueSetDefinitionHierarchyHashMap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			Vector w = (Vector) _valueSetDefinitionHierarchyHashMap.get(key);
+			w = SortUtils.quickSort(w);
+			_valueSetDefinitionHierarchyHashMap.put(key, w);
+		}
+		return _valueSetDefinitionHierarchyHashMap;
+	}
 
 
 	public static Vector getValueSetDefinitionMetadata() {
@@ -4496,62 +4612,6 @@ System.out.println("(***) URI: " + uri + " version: " + version);
 
 
 
-
-/*
-org.LexGrid.LexBIG.Impl.exporters
-Class LexGridExport
-
-LexGridExport()
-
-exportValueSetDefinition
-public void exportValueSetDefinition(java.net.URI valueSetDefinitionURI,
-                                     java.lang.String valueSetDefinitionRevisionId,
-                                     java.net.URI destination,
-                                     boolean overwrite,
-                                     boolean stopOnErros,
-                                     boolean async)
-                              throws LBException
-*/
-
-
-/*
-    public static String getVocabularyVersionTag(String codingSchemeName,
-        String version) {
-
-        if (codingSchemeName == null)
-            return null;
-
-        if (version == null) return "PRODUCTION";
-        String ltag = null;
-        int knt = 0;
-        try {
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
-            CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
-            for (int i = 0; i < csra.length; i++) {
-                CodingSchemeRendering csr = csra[i];
-                CodingSchemeSummary css = csr.getCodingSchemeSummary();
-                if (css.getFormalName().compareTo(codingSchemeName) == 0
-                    || css.getLocalName().compareTo(codingSchemeName) == 0
-                    || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
-					if (css.getRepresentsVersion().compareTo(version) == 0) {
-						RenderingDetail rd = csr.getRenderingDetail();
-						CodingSchemeTagList cstl = rd.getVersionTags();
-						java.lang.String[] tags = cstl.getTag();
-
-                        if (tags == null) return "<NOT ASSIGNED>";
-						if (tags != null && tags.length > 0) {
-							return (String) tags[0];
-						}
-					}
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "<NOT AVAILABLE>";
-    }
-*/
 
     public static Vector getMatchedMetathesaurusCUIs(String scheme, String version,
         String ltag, String code) {
