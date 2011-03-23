@@ -490,8 +490,11 @@ if (search_results_dictionary == null || search_results_dictionary.compareTo("NC
 %>
       <!-- Page content -->
       <div class="pagecontent">
+       <div id="popupContentArea">
+     
       
         <a name="evs-content" id="evs-content"></a>
+
 
 
 
@@ -529,12 +532,10 @@ if (ontology_display_name == null) {
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
 
           </form>
-
-
-
-
+         
 
         <%@ include file="/pages/templates/nciFooter.jsp" %>
+           </div>
       </div>
       <!-- end Page content -->
     </div>
