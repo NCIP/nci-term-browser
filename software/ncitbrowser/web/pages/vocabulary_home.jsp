@@ -199,11 +199,21 @@
          %>
 
           | <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
-              View Hierarchy
+              Hierarchy
             </a>
 
          <% }
     %>
+    
+    
+  
+      | <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
+      
+      | <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Maps</a>      
+  
+    
+    
+    
 	<c:choose>	
 		<c:when test="${sessionScope.CartActionBean.count>0}">
 		| <a href="<%= request.getContextPath() %>/pages/cart.jsf" tabindex="14">Cart</a>
