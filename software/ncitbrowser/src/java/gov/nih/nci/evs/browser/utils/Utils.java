@@ -139,6 +139,13 @@ public class Utils {
         return text;
     }
     
+    public static String fill(String text, Character fillText, int maxChar) {
+        StringBuffer buffer = new StringBuffer(text);
+        for (int i = text.length(); i < maxChar; ++i)
+            buffer.append(fillText);
+        return buffer.toString();
+    }
+    
     public static Vector<String> unique(Vector<String> list) {
         Vector<String> newList = new Vector<String>();
         Iterator<String> iterator = list.iterator();
