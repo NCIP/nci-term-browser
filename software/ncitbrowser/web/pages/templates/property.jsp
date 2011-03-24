@@ -412,10 +412,18 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           }
           
           if (propName_label.indexOf("textualPresentation") == -1) {
-
-	%>
-		    <p><b><%=propName_label%>:&nbsp;</b><%=value%></p>
-        <%
+	      %>
+		    <p>
+              <b><%=propName_label%>:&nbsp;</b><%=value%>
+              <% if (prop_dictionary.equalsIgnoreCase("NCI Thesaurus") &&
+                      propName_label.equalsIgnoreCase("NCI Thesaurus Code")) {
+                   String cadsr_url = "https://cdebrowser-dev.nci.nih.gov/CDEBrowser/search?searchDataElements=9&SEARCH=1&performQuery=yes&FirstTimer=0&jspConceptCode="
+                    + value;
+              %>
+                (<a href="javascript:openQuickLinkSite('<%=cadsr_url%>')">Search for linked caDSR metadata</a>)
+              <% } %>
+            </p>
+          <%
           }
 
       }
