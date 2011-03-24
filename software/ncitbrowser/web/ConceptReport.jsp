@@ -24,15 +24,9 @@
    if (version != null && ! version.equalsIgnoreCase("null"))
        version_parameter = "&version=" + version;
    String match_text = (String) request.getSession().getAttribute("matchText");
-   
-   LicenseBean licenseBean = (LicenseBean) request.getSession().getAttribute("licenseBean");
-   if (licenseBean == null) {
-       licenseBean = new LicenseBean();
-       request.getSession().setAttribute("licenseBean", licenseBean);
-   }
-   
+  
    String jsfPage = "/pages/concept_details.jsf";
-   if (LicenseBean.isLicensed(dictionary, null) && !licenseBean.licenseAgreementAccepted(dictionary))
+   if (LicenseUtils.isLicensedAndNotAccepted(request, dictionary, null))
        jsfPage = "/pages/accept_license.jsf";
    String forwardPage = jsfPage + "?&dictionary=" + dictionary + version_parameter + "&code=" + code;
    %>

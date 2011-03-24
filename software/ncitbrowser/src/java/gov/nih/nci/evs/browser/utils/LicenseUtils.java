@@ -95,19 +95,22 @@ public class LicenseUtils {
             licenseBean.addLicenseAgreement(cScheme.getCodingScheme());
         }
     }
-    
-    public static boolean isLicensedAndNotAccepted(HttpServletRequest request, 
+
+    public static boolean isLicensedAndNotAccepted(HttpServletRequest request,
         String scheme, String version) {
         boolean isLicensed = LicenseBean.isLicensed(scheme, version);
-        LicenseBean licenseBean = (LicenseBean) request.getSession()
-            .getAttribute("licenseBean");
+        if (! isLicensed)
+            return false;
+        
+        LicenseBean licenseBean =
+            (LicenseBean) request.getSession().getAttribute("licenseBean");
         if (licenseBean == null) {
-          licenseBean = new LicenseBean();
-          request.getSession().setAttribute("licenseBean",
-              licenseBean);
+            licenseBean = new LicenseBean();
+            request.getSession().setAttribute("licenseBean", licenseBean);
         }
         boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
-        return isLicensed && ! accepted;
+        boolean value = isLicensed && !accepted;
+        return value;
     }
 
     public static void clearAllLicenses(HttpServletRequest request) {
@@ -119,16 +122,16 @@ public class LicenseUtils {
 
     public static class WebPageHelper {
         private LexEVSUtils.CSchemes _schemes = null;
-        
+
         public WebPageHelper(LexEVSUtils.CSchemes schemes) {
             _schemes = schemes;
         }
-        
+
         public WebPageHelper(String scheme, String version) {
             _schemes = new LexEVSUtils.CSchemes();
             _schemes.add(new LexEVSUtils.CScheme(scheme, version));
         }
-        
+
         public String getReviewAndAcceptMessage() {
             StringBuffer buffer = new StringBuffer();
             buffer.append("To access <b>");
