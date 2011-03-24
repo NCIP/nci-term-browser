@@ -216,7 +216,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
                     display_name_vec.add(info);
   
- if (!info.isProduction())) {
+ if (!info.isProduction()) {
      System.out.println("Non-production version: " + scheme + " version: " + version);
  }
                     
