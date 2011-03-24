@@ -396,8 +396,8 @@ public class MetadataUtils {
 			}
 		}
 
-        _logger.debug("getMetadataPropertyList codingSchemeName: "
-            + codingSchemeName);
+       // _logger.debug("getMetadataPropertyList codingSchemeName: "
+       //     + codingSchemeName);
 
 
         LexBIGServiceConvenienceMethods lbscm = null;
