@@ -316,7 +316,7 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
             <table class="termstable" border="0">
   
                
-                <tr><td class="textbody"><%=cs_mappings_dictionary%> participated mappings:</td></tr>
+                <tr><td class="textbody"><%=cs_mappings_dictionary%> mappings:</td></tr>
                 
                 <tr>
                   <td class="textbody">

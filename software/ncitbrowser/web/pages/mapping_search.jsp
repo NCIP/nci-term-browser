@@ -149,7 +149,7 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
     value="mapping_search"
     action="#{userSessionBean.searchAction}"
     image="#{searchform_requestContextPath}/images/search.gif"
-    alt="Search"
+    alt="Search selected mapping"
     styleClass="searchbox-btn"
     tabindex="2">
   </h:commandButton>
@@ -361,7 +361,7 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
                   <h:commandButton id="Search" value="Search"
                     action="#{userSessionBean.searchAction}"
                     image="#{requestContextPath}/images/search.gif"
-                    alt="Search">
+                    alt="Search selected mapping">
                   </h:commandButton>
                   
                   </td>
