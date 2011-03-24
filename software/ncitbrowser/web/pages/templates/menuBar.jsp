@@ -17,7 +17,9 @@
   String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );
 
 
- boolean menubar_isMapping = DataUtils.isMapping(menubar_dictionary, null);
+boolean menubar_isMapping = DataUtils.isMapping(menubar_dictionary, null);
+
+Vector mapping_scheme_vec = DataUtils.getMappingCodingSchemes(menubar_dictionary);
 
 
 if (menubar_version == null) {
@@ -90,9 +92,13 @@ if (menubar_version == null) {
    
 
       | <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
-      
+<%
+if (mapping_scheme_vec != null && mapping_scheme_vec.size() > 0) { 
+%>
       | <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Maps</a>      
-      
+<%
+}
+%>
     <%
       }
       %> | <a href="<%= request.getContextPath() %>/pages/help.jsf" tabindex="16">Help</a>
