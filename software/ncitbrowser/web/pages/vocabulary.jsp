@@ -104,16 +104,6 @@ if (scheme != null) {
         menubar_version = version;
         menubar_scheme0 = menubar_scheme;
 
-        boolean isLicensed = LicenseBean.isLicensed(scheme, version);
-        LicenseBean licenseBean = (LicenseBean) request.getSession()
-            .getAttribute("licenseBean");
-        if (licenseBean == null) {
-          licenseBean = new LicenseBean();
-          request.getSession().setAttribute("licenseBean",
-              licenseBean);
-        }
-        boolean accepted = licenseBean.licenseAgreementAccepted(scheme);
-
         /* ------------------------ */
 
         v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
@@ -166,8 +156,8 @@ if (scheme != null) {
         <%@ include file="/pages/templates/sub-header.jsp"%> <!-- Main box -->
         <div id="main-area">
         <%
-          if (isLicensed && !accepted) {
-            String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
+          if (LicenseUtils.isLicensedAndNotAccepted(request, scheme, version)) {
+            LicenseUtils.WebPageHelper helper = new LicenseUtils.WebPageHelper(scheme, version);
         %>
             <!-- Thesaurus, banner search area -->
             <div class="bannerarea">
@@ -180,25 +170,21 @@ if (scheme != null) {
             <%@ include file="/pages/templates/quickLink.jsp" %>
             <!-- end Quick links bar -->
             <div class="pagecontent">
-            <a name="evs-content" id="evs-content"></a>
-        <p>
-          To access <b><%=HTTPUtils.cleanXSS(display_name)%></b>, please review and accept the copyright/license statement below:
-        </p>
-
-              <textarea cols="87" rows="15" readonly align="left"><%=licenseStmt%></textarea>
-              <p>If and only if you agree to these terms and conditions, click the
-              Accept button to proceed.</p>
+              <a name="evs-content" id="evs-content"></a>
+              <p><%= helper.getReviewAndAcceptMessage() %></p>
+              <textarea cols="87" rows="15" readonly align="left"><%= helper.getLicenseMessages(87) %></textarea>
+              <p><%= helper.getButtonMessage() %></p>
               <p>
-              <h:form>
-                <h:commandButton id="accept" value="Accept"
-                action="#{userSessionBean.acceptLicenseAgreement}"
-                image="/images/accept.gif"
-                alt="Accept">
-              </h:commandButton> &nbsp;&nbsp; <img
-                src="<%=request.getContextPath()%>/images/cancel.gif" name="cancel"
-                alt="reset" onClick="history.back()" />
-                <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(scheme)%>" />
-                <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" /></h:form>
+                <h:form>
+                  <h:commandButton id="accept" value="Accept"
+                  action="#{userSessionBean.acceptLicenseAgreement}"
+                  image="/images/accept.gif"
+                  alt="Accept">
+                </h:commandButton> &nbsp;&nbsp; <img
+                  src="<%=request.getContextPath()%>/images/cancel.gif" name="cancel"
+                  alt="reset" onClick="history.back()" />
+                  <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(scheme)%>" />
+                  <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(version)%>" /></h:form>
               </p>
               <%@ include file="/pages/templates/nciFooter.jsp" %>
             </div>
