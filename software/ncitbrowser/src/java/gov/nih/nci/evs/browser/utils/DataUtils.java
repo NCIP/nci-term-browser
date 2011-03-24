@@ -3472,14 +3472,66 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    // To be implemented based on metadata
-    /*
-	public static boolean isMapping(String codingScheme, String version) {
-		String scheme = codingScheme.toLowerCase();
-		if (scheme.indexOf("mapping") != -1 || scheme.indexOf("_to_") != -1) return true;
-		return false;
+
+	public static Vector getMappingCodingSchemes(String codingScheme) {
+        if (_codingSchemeHashSet == null)
+            setCodingSchemeMap();
+
+System.out.println("getMappingCodingSchemes: " + codingScheme);
+        String formalName = getFormalName(codingScheme);
+System.out.println("getMappingCodingSchemes formalname: " + codingScheme);
+
+		Vector v = new Vector();
+		List ontology_list = getOntologyList();
+		LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+        for (int i = 0; i < ontology_list.size(); i++) {
+			SelectItem item = (SelectItem) ontology_list.get(i);
+			String value = (String) item.getValue();
+			String label = (String) item.getLabel();
+
+			String scheme = key2CodingSchemeName(value);
+			String version = key2CodingSchemeVersion(value);
+
+			if (isMapping(scheme, version)) {
+
+System.out.println("getMappingCodingSchemes: label " + label);
+
+
+				try {
+
+					CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+					if (version != null)
+						csvt.setVersion(version);
+					CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+					Relations[] relations = cs.getRelations();
+					for (int j = 0; j < relations.length; j++) {
+						Relations relation = relations[j];
+						Boolean bool_obj = relation.isIsMapping();
+						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
+
+							System.out.println("\trelation.getSourceCodingScheme(): " + relation.getSourceCodingScheme());
+							System.out.println("\trelation.getTargetCodingScheme(): " + relation.getTargetCodingScheme());
+
+
+                            if (codingScheme.compareTo(getFormalName(relation.getSourceCodingScheme())) == 0 ||
+                                codingScheme.compareTo(getFormalName(relation.getTargetCodingScheme())) == 0) {
+								v.add(label);
+								System.out.println("\tadding " + label);
+
+								break;
+							}
+						}
+					}
+				} catch (Exception ex) {
+                    ex.printStackTrace();
+				}
+			}
+		}
+		return SortUtils.quickSort(v);
+
 	}
-	*/
+
+
 
     public static boolean isMapping(String scheme, String version) {
 		if (_isMappingHashMap == null) {

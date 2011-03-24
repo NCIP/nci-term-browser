@@ -72,6 +72,9 @@
       shortName = info.display_name;
       if (shortName == null) shortName = "Vocabulary";
     }
+    
+    Vector maps_scheme_vec = DataUtils.getMappingCodingSchemes(scheme);
+
 
     boolean tree_access_allowed = true;
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
@@ -209,8 +212,16 @@
   
       | <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
       
+      
+<%
+if (map_scheme_vec != null && map_scheme_vec.size() > 0) { 
+%>
       | <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Maps</a>      
-  
+<%
+}
+%>      
+      
+ 
     
     
     
