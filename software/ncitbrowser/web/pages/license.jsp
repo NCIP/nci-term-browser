@@ -21,6 +21,8 @@
 <%
   LexEVSUtils.CSchemes unacceptedLicensesCS = 
     (LexEVSUtils.CSchemes) request.getAttribute("unacceptedLicensesCS");
+  LicenseUtils.WebPageHelper helper = new LicenseUtils.WebPageHelper(unacceptedLicensesCS);
+  
   String scheme = (String) request.getAttribute("scheme");
   String version = (String) request.getAttribute("version");
   String ontology_list_str = (String) request.getAttribute("ontology_list_str");
@@ -30,7 +32,6 @@
   String license_page__match_text = HTTPUtils.convertJSPString(matchText);
   String searchTarget = (String) request.getAttribute("searchTarget");
   String matchAlgorithm = (String) request.getAttribute("algorithm");
-  String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(scheme, version);
 
   if (scheme != null) scheme = scheme.replaceAll("%20", " ");
 %>
@@ -55,9 +56,9 @@
       <!-- Page content -->
       <div class="pagecontent">
         <a name="evs-content" id="evs-content"></a>
-        <p><%= LicenseUtils.WebPage.getReviewAndAcceptMessage(unacceptedLicensesCS) %></p>
-        <textarea cols="87" rows="15" readonly align="left"><%= LicenseUtils.WebPage.getLicenseMessages(unacceptedLicensesCS, 87) %></textarea>
-        <p><%= LicenseUtils.WebPage.getButtonMessage() %></p>
+        <p><%= helper.getReviewAndAcceptMessage() %></p>
+        <textarea cols="87" rows="15" readonly align="left"><%= helper.getLicenseMessages(87) %></textarea>
+        <p><%= helper.getButtonMessage() %></p>
           <h:form>
             <h:commandButton
               id="search"

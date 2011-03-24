@@ -103,12 +103,17 @@ public class LicenseUtils {
         licenseBean.clearAllLicenseAgreements();
     }
 
-    public static class WebPage {
-        public static String getReviewAndAcceptMessage(
-            LexEVSUtils.CSchemes schemes) {
+    public static class WebPageHelper {
+        private LexEVSUtils.CSchemes _schemes = null;
+        
+        public WebPageHelper(LexEVSUtils.CSchemes schemes) {
+            _schemes = schemes;
+        }
+        
+        public String getReviewAndAcceptMessage() {
             StringBuffer buffer = new StringBuffer();
             buffer.append("To access <b>");
-            Vector<String> list = schemes.getCodingSchemes();
+            Vector<String> list = _schemes.getCodingSchemes();
             list = Utils.unique(list);
 
             int n = list.size();
@@ -126,14 +131,13 @@ public class LicenseUtils {
             return buffer.toString();
         }
 
-        public static String getLicenseMessages(LexEVSUtils.CSchemes schemes,
-            int maxChars) {
+        public String getLicenseMessages(int maxChars) {
             StringBuffer buffer = new StringBuffer();
             HashSet<String> hset = new HashSet<String>();
 
-            int n = schemes.size();
+            int n = _schemes.size();
             for (int i = 0; i < n; ++i) {
-                LexEVSUtils.CScheme cScheme = schemes.get(i);
+                LexEVSUtils.CScheme cScheme = _schemes.get(i);
                 String scheme = cScheme.getCodingScheme();
                 String version = cScheme.getVersion();
                 if (hset.contains(scheme))
@@ -143,25 +147,18 @@ public class LicenseUtils {
                 if (n > 1) {
                     String name = cScheme.getDisplayName();
                     String separator =
-                        fill("== " + name + " License: ", '=', maxChars);
+                        Utils.fill("== " + name + " License: ", '=', maxChars);
                     buffer.append(separator + "\n");
                 }
                 buffer.append(LicenseBean.resolveCodingSchemeCopyright(scheme,
-                    version));
+                    version).trim());
                 buffer.append("\n");
                 hset.add(cScheme.getCodingScheme());
             }
             return buffer.toString();
         }
 
-        public static String fill(String text, Character fillText, int maxChar) {
-            StringBuffer buffer = new StringBuffer(text);
-            for (int i = text.length(); i < maxChar; ++i)
-                buffer.append(fillText);
-            return buffer.toString();
-        }
-
-        public static String getButtonMessage() {
+        public String getButtonMessage() {
             return "If and only if you agree to these terms and conditions,"
                 + " click the Accept button to proceed.";
         }
