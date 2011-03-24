@@ -203,16 +203,23 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     
                     String scheme = DataUtils.key2CodingSchemeName(value);
                     String version = DataUtils.key2CodingSchemeVersion(value);
-                    
+  
                     String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
-                    if (DataUtils.isNull(display_name))
-                    //if (display_name == null || display_name.compareTo("null") == 0)
+                    if (DataUtils.isNull(display_name)) {
+                        //if (display_name == null || display_name.compareTo("null") == 0)
                         display_name = DataUtils.getLocalName(scheme);
+                    }
+ 
                     String sort_category = DataUtils.getMetadataValue(
                         scheme, version, "vocabulary_sort_category");
                     
                     OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
                     display_name_vec.add(info);
+  
+ if (!info.isProduction())) {
+     System.out.println("Non-production version: " + scheme + " version: " + version);
+ }
+                    
                   }
                   
  
