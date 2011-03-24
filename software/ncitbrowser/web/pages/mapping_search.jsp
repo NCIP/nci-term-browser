@@ -97,6 +97,8 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
+  
+  
   <div class="center-page">
   
 <h:form id="mappingSearch" styleClass="search-form" >

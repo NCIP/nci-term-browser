@@ -3477,9 +3477,9 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
         if (_codingSchemeHashSet == null)
             setCodingSchemeMap();
 
-System.out.println("getMappingCodingSchemes: " + codingScheme);
+//System.out.println("getMappingCodingSchemes: " + codingScheme);
         String formalName = getFormalName(codingScheme);
-System.out.println("getMappingCodingSchemes formalname: " + codingScheme);
+//System.out.println("getMappingCodingSchemes formalname: " + codingScheme);
 
 		Vector v = new Vector();
 		List ontology_list = getOntologyList();
@@ -3494,7 +3494,7 @@ System.out.println("getMappingCodingSchemes formalname: " + codingScheme);
 
 			if (isMapping(scheme, version)) {
 
-System.out.println("getMappingCodingSchemes: label " + label);
+//System.out.println("getMappingCodingSchemes: label " + label);
 
 
 				try {
@@ -3509,14 +3509,14 @@ System.out.println("getMappingCodingSchemes: label " + label);
 						Boolean bool_obj = relation.isIsMapping();
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
 
-							System.out.println("\trelation.getSourceCodingScheme(): " + relation.getSourceCodingScheme());
-							System.out.println("\trelation.getTargetCodingScheme(): " + relation.getTargetCodingScheme());
+							//System.out.println("\trelation.getSourceCodingScheme(): " + relation.getSourceCodingScheme());
+							//System.out.println("\trelation.getTargetCodingScheme(): " + relation.getTargetCodingScheme());
 
 
                             if (codingScheme.compareTo(getFormalName(relation.getSourceCodingScheme())) == 0 ||
                                 codingScheme.compareTo(getFormalName(relation.getTargetCodingScheme())) == 0) {
 								v.add(label);
-								System.out.println("\tadding " + label);
+								//System.out.println("\tadding " + label);
 
 								break;
 							}
