@@ -427,41 +427,32 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           }
           
           if (propName_label.indexOf("textualPresentation") == -1) {
- 
- url = (String) label2URL.get(propName_label);
- linktext = (String) label2Linktext.get(propName_label); 
-               if (url != null) {
-                        System.out.println("url: " + url);
-                        String encoded_value = value;
-                        encoded_value = encoded_value.replaceAll(":", "%3A");
-			String url_str = url + encoded_value;
- 
- %>
- 			  <p>
- 			  <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
- 			  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
-			  </p>
-<%			  
-	       } else {
-%>	       
-
-		    <p>
-                    <b><%=propName_label%>:&nbsp;</b><%=value%>
-<%              
-              }
 %>
+            <p>
+              <b><%=propName_label%>:&nbsp;</b><%=value%>
 
-              <% if (prop_dictionary.equalsIgnoreCase("NCI Thesaurus") &&
-                      propName_label.equalsIgnoreCase("NCI Thesaurus Code")) {
-                   String url_cadsr = "https://cdebrowser-dev.nci.nih.gov/CDEBrowser/search?searchDataElements=9&SEARCH=1&performQuery=yes&FirstTimer=0&jspConceptCode="
-                    + value;
+              <% if (! prop_dictionary.equalsIgnoreCase("NCI Thesaurus")) {
+                   url = (String) label2URL.get(propName_label);
+                   linktext = (String) label2Linktext.get(propName_label); 
+                   if (url != null) {
+                     System.out.println("url: " + url);
+                     String encoded_value = value;
+                     encoded_value = encoded_value.replaceAll(":", "%3A");
+                     String url_str = url + encoded_value; 
               %>
-                (<a href="javascript:openQuickLinkSite('<%=url_cadsr%>')">Search for linked caDSR metadata</a>)
-              <% } %>
+                     <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
+              <%
+                   }  
+                 } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) {
+                   String url_cadsr = "https://cdebrowser-dev.nci.nih.gov/CDEBrowser/search?searchDataElements=9&SEARCH=1&performQuery=yes&FirstTimer=0&jspConceptCode=" + value;
+              %>
+                   (<a href="javascript:openQuickLinkSite('<%=url_cadsr%>')">Search for linked caDSR metadata</a>)
+              <% 
+                 }
+              %>
             </p>
-          <%
+<%
           }
-
       }
     }
   }
