@@ -4088,7 +4088,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
     public static ValueSetDefinition findValueSetDefinitionByURI(String uri) {
 		if (uri == null) return null;
 	    if (uri.indexOf("|") != -1) {
-			Vector u = DataUtils.parseData(uri);
+			Vector u = parseData(uri);
 			uri = (String) u.elementAt(1);
 		}
 
@@ -4255,6 +4255,61 @@ System.out.println("vsd_str " + vsd_str);
 		}
 		return null;
 	}
+
+//===========================================================================================================================
+// Value Set Hierarchy
+//===========================================================================================================================
+
+    public static ResolvedConceptReferenceList getValueSetHierarchyRoots() {
+        String scheme = "Terminology Value Set";
+        String version = getVocabularyVersionByTag(scheme, "PRODUCTION");
+        ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(scheme, version);
+        return rcrl;
+	}
+
+	public static void geValueSetHierarchy(HashMap hmap, Vector v) {
+
+    }
+
+	public static void geValueSetHierarchy() {
+        HashMap hmap = new HashMap();
+        ResolvedConceptReferenceList roots = getValueSetHierarchyRoots();
+        Vector v = new Vector();
+        for (int i=0; i<roots.getResolvedConceptReferenceCount(); i++) {
+			ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
+			v.add(rcr);
+		}
+        geValueSetHierarchy(hmap, v);
+	}
+
+
+
+
+    public static Vector getValueSetDefinitionsBySource(String source) {
+		if (_availableValueSetDefinitionSources != null) {
+			if (!_availableValueSetDefinitionSources.contains(source)) return null;
+		}
+		Vector v = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        if (list == null) return null;
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+            boolean found = false;
+			while (sourceEnum.hasMoreElements()) {
+				Source src = (Source) sourceEnum.nextElement();
+				String src_str = src.getContent();
+				if (src_str.compareTo(source) == 0) {
+					v.add(vsd);
+					break;
+				}
+			}
+		}
+		return v;
+	}
+
 
 
     public static Vector getAvailableValueSetDefinitionSources() {

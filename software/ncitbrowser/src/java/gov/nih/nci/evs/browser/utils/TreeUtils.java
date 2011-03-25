@@ -1651,7 +1651,7 @@ public class TreeUtils {
     }
 
     public static ResolvedConceptReferenceList getHierarchyRoots(
-        java.lang.String codingScheme, String version) {
+        String codingScheme, String version) {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
