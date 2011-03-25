@@ -237,6 +237,22 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 //[#26722] Support cross-linking of individual source vocabularies with NCI Metathesaurus.
 
+
+ System.out.println("properties_to_display.size(): " + properties_to_display.size());
+
+  HashMap label2URL = new HashMap();
+  HashMap label2Linktext = new HashMap();
+  for (int m=0; m<properties_to_display.size(); m++) {
+      String propName = (String) properties_to_display.elementAt(m);
+      String prop_nm_label = (String) properties_to_display_label.elementAt(m);
+      String prop_url = (String) properties_to_display_url.elementAt(m);
+      String prop_linktext = (String) properties_to_display_linktext.elementAt(m);
+      if (prop_url != null) {
+	      label2URL.put(prop_nm_label, prop_url); 
+	      label2Linktext.put(prop_nm_label, prop_linktext); 
+      }
+  }
+
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
    
@@ -245,16 +261,17 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
     if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
         String formalName = DataUtils.getFormalName(dictionary);
-        if (formalName == null)
+        if (formalName == null) {
         	formalName = dictionary;
+        }
 	propName_label = formalName + " Code";
     }
     
     
     String propName_label2 = propName_label;
     String url = (String) properties_to_display_url.elementAt(i);
-    
     String linktext = (String) properties_to_display_linktext.elementAt(i);
+
 
     if (propName.compareTo(ncim_cui_propName) == 0 || propName.compareTo(umls_cui_propName) == 0) {
         ncim_cui_propName_label = propName_label;
@@ -298,6 +315,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 		int n = value.indexOf("|");
 		if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 
 		         || propName_label.indexOf("definition") != -1)) {
+		         
 			  value_wo_qualifier = value.substring(0, n);
 			  qualifier = value.substring(n+1, value.length());
 
@@ -356,7 +374,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       
     } else if (propName_label.indexOf("Synonyms") == -1) {
     
-    
       displayed_properties.add(propName);
      
       
@@ -380,13 +397,11 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           String value_wo_qualifier = value;
           int n = value.indexOf("|");
 
-
           if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 || propName_label.indexOf("definition") != -1)) {
 
               value_wo_qualifier = value.substring(0, n);
               qualifier = value.substring(n+1, value.length());
-             
-              
+  
               if (def_map != null && def_map.containsKey(qualifier)) {
 	          String def_source_display_value = (String) def_map.get(qualifier);
 	          value = value_wo_qualifier + " (" + qualifier + ")";
@@ -412,15 +427,36 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           }
           
           if (propName_label.indexOf("textualPresentation") == -1) {
-	      %>
+ 
+ url = (String) label2URL.get(propName_label);
+ linktext = (String) label2Linktext.get(propName_label); 
+               if (url != null) {
+                        System.out.println("url: " + url);
+                        String encoded_value = value;
+                        encoded_value = encoded_value.replaceAll(":", "%3A");
+			String url_str = url + encoded_value;
+ 
+ %>
+ 			  <p>
+ 			  <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
+ 			  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
+			  </p>
+<%			  
+	       } else {
+%>	       
+
 		    <p>
-              <b><%=propName_label%>:&nbsp;</b><%=value%>
+                    <b><%=propName_label%>:&nbsp;</b><%=value%>
+<%              
+              }
+%>
+
               <% if (prop_dictionary.equalsIgnoreCase("NCI Thesaurus") &&
                       propName_label.equalsIgnoreCase("NCI Thesaurus Code")) {
-                   String cadsr_url = "https://cdebrowser-dev.nci.nih.gov/CDEBrowser/search?searchDataElements=9&SEARCH=1&performQuery=yes&FirstTimer=0&jspConceptCode="
+                   String url_cadsr = "https://cdebrowser-dev.nci.nih.gov/CDEBrowser/search?searchDataElements=9&SEARCH=1&performQuery=yes&FirstTimer=0&jspConceptCode="
                     + value;
               %>
-                (<a href="javascript:openQuickLinkSite('<%=cadsr_url%>')">Search for linked caDSR metadata</a>)
+                (<a href="javascript:openQuickLinkSite('<%=url_cadsr%>')">Search for linked caDSR metadata</a>)
               <% } %>
             </p>
           <%
