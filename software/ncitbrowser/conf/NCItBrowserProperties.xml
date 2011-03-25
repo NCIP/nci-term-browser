@@ -2,6 +2,14 @@
 
 <root>
     <DisplayItems>
+        <DisplayItem>
+            <propertyName>ChEBI Code</propertyName>
+            <itemLabel>ChEBI Code</itemLabel>
+            <url>http://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=</url>
+            <hyperlinkText>see ChEBI info</hyperlinkText>
+            <isExternalCode>false</isExternalCode>
+       </DisplayItem>
+       
       <DisplayItem>
             <propertyName>DEFINITION</propertyName>
             <itemLabel>Definition</itemLabel>
