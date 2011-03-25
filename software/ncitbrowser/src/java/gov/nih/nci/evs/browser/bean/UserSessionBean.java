@@ -971,8 +971,6 @@ System.out.println("Relationship search ****************************************
 
     public String multipleSearchAction() {
 
-System.out.println("Step 1");
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -982,10 +980,29 @@ System.out.println("Step 1");
 			navigation_type = "terminologies";
 		}
 
+        String[] ontology_list = request.getParameterValues("ontology_list");
+
+        if ( ontology_list  == null ) {
+			 System.out.println("(*) multipleSearchAction ontology_list is null"); //?????
+		} else {
+			 System.out.println("(*) multipleSearchAction ontology_list != null");
+		}
+
+
+        if ( ontology_list  == null ) {
+			 ontology_list = (String[]) request.getSession().getAttribute("ontology_list");
+		}
+
+        if ( ontology_list  == null ) {
+			 System.out.println("(*) multipleSearchAction #2 ontology_list is null");
+		} else {
+			 System.out.println("(*) multipleSearchAction #2 ontology_list != null");
+		}
+
         // Called from license.jsp
         String acceptedLicensesStr = (String) request.getParameter("acceptedLicenses");
         if (acceptedLicensesStr != null) {
-            LexEVSUtils.CSchemes acceptedLicenses = 
+            LexEVSUtils.CSchemes acceptedLicenses =
                 LexEVSUtils.CSchemes.toSchemes(acceptedLicensesStr);
             if (acceptedLicenses != null)
                 LicenseUtils.acceptLicenses(request, acceptedLicenses);
@@ -1010,33 +1027,46 @@ System.out.println("Step 1");
 
         String initial_search = (String) request.getParameter("initial_search");
 
-        String[] ontology_list = request.getParameterValues("ontology_list");
-		//}
+        //String[] ontology_list = request.getParameterValues("ontology_list");
+
+Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+
+// check if selection status has been changed.
+String ontologiesToSearchOnStr = "|";
+if (ontology_list != null) {
+	for (int i = 0; i < ontology_list.length; ++i) {
+		ontologiesToSearchOnStr =
+			ontologiesToSearchOnStr + ontology_list[i] + "|";
+	}
+}
+
+
+for (int i = 0; i < display_name_vec.size(); i++) {
+	 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+
+	 System.out.println(info.getLabel() + " is visible.");
+	 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) { // visible and checked by the user
+	     System.out.println("\t" + info.getLabel() + " selected.");
+		 info.setSelected(true);
+	 } else if (info.getVisible() && ontologiesToSearchOnStr.indexOf(info.getLabel()) == -1) {
+		 System.out.println("\t" + info.getLabel() + " unselected.");
+		 info.setSelected(false);
+	 }
+}
+
+
+request.getSession().setAttribute("display_name_vec", display_name_vec);
+request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+
+
 
         List list = new ArrayList<String>();
 
-        String ontologiesToSearchOnStr = null;
+        //String ontologiesToSearchOnStr = null;
         String ontology_list_str = null;
         List<String> ontologiesToSearchOn = null;
         int knt = 0;
 
-//        String[] ontology_list = request.getParameterValues("ontology_list");
-        Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-        // process mappings
-
-System.out.println("display_name_vec: " + display_name_vec.size());
-
-System.out.println("initial_search: " + initial_search);
-
-/*
-		for (int i = 0; i < display_name_vec.size(); i++) {
-			 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-			 if (info.getVisible()) {
-				 info.setSelected(false);
-			 }
-		}
-
-*/
         if (ontology_list != null) {
 			List checked_list = Arrays.asList(ontology_list);
 			for (int i = 0; i < display_name_vec.size(); i++) {
@@ -1061,8 +1091,6 @@ int selected_knt = 0;
 			 }
 		}
 
-System.out.println("selected_knt: " + selected_knt);
-
 		ontology_list = new String[ontologies_to_search_on.size()];
 		ontologiesToSearchOn = new ArrayList<String>();
 
@@ -1076,11 +1104,7 @@ System.out.println("selected_knt: " + selected_knt);
 
 
         if (initial_search != null) { // from home page
-
             if (ontology_list == null || ontology_list.length == 0) {
-
-System.out.println("ontology_list == null or size = 0");
-
                 String message = Constants.ERROR_NO_VOCABULARY_SELECTED;// "Please select at least one vocabulary.";
                 request.getSession().setAttribute("warning", message);
                 request.getSession().setAttribute("message", message);
@@ -1108,10 +1132,6 @@ System.out.println("ontology_list == null or size = 0");
                     ontologiesToSearchOnStr);
             }
         }
-
-
-
-System.out.println("Step 2: ");
 
 
         String hide_ontology_list = "false";
@@ -1228,7 +1248,7 @@ System.out.println("Step 2: ");
                 HTTPUtils.convertJSPString(matchText));
 
             return "multiple_search";
-        } 
+        }
 
         request.getSession().setAttribute("ontologiesToSearchOn",
             ontologiesToSearchOnStr);
@@ -1249,10 +1269,15 @@ System.out.println("Step 2: ");
             request.setAttribute("scheme", null);
             request.setAttribute("version", null);
             request.setAttribute("unacceptedLicensesCS", unacceptedLicensesCS);
+
+
+            request.getSession().setAttribute("ontology_list", ontology_list);
+
+
             return "license";
         }
 
-        LexEVSUtils.CSchemes cSchemes = 
+        LexEVSUtils.CSchemes cSchemes =
             LexEVSUtils.getCSchemes(request, ontologiesToSearchOn);
         Vector<String> schemes = cSchemes.getCodingSchemes();
         Vector<String> versions = cSchemes.getVersions();
@@ -1401,10 +1426,6 @@ System.out.println("Step 2: ");
             }
         }
 
-
-System.out.println("(************) Step 5");
-
-
         int minimumSearchStringLength =
             NCItBrowserProperties.getMinimumSearchStringLength();
         if (ontologiesToSearchOn.size() == 0) {
@@ -1464,7 +1485,7 @@ System.out.println("(************) Step 5");
         request.getSession().setAttribute("version", version);
         return "vocabulary_home";
     }
-    
+
     public String advancedSearchAction() {
 
         ResolvedConceptReferencesIteratorWrapper wrapper = null;
@@ -2011,7 +2032,7 @@ System.out.println("advancedSearchAction version: " + version);
 		}
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", "|");
-        
+
         //LicenseUtils.clearAllLicenses(request); //DYEE
 		return "multiple_search";
 	}
