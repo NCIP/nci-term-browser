@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="software/ncitbrowser/src/java"/>
-	<classpathentry kind="src" path="software/test/src"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/acegi-security-1.0.4.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/args4j-2.0.12.jar"/>
@@ -86,13 +85,6 @@
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/MSSOUserValidator.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/mysql-connector-java-5.1.10.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/ognl-2.7.3.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/org.eclipse.core.runtime_3.2.0.v20060603.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/org.eclipse.emf.common_2.2.1.v200609210005.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/org.eclipse.emf.ecore_2.2.1.v200609210005.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/org.eclipse.emf.ecore.xmi_2.2.1.v200609210005.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/org.eclipse.equinox.common_3.2.0.v20060603.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/org.eclipse.equinox.preferences_3.2.0.v20060601.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/org.eclipse.osgi_3.2.0.v20060601.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/orphanNodesAlg.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/persistence-api-1.0.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/prefuse-2006.07.15-mod.jar"/>
@@ -128,9 +120,11 @@
 	<classpathentry kind="lib" path="software/ncitbrowser/extlib/jsf-api.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/extlib/jsf-impl.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/extlib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-tree-2.0.1.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevsapi60-beans.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/extlib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-tree-2.0.5.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/property-extension-1.0.0.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/rmiio-2.0.2.jar"/>
 	<classpathentry kind="output" path="software/ncitbrowser/build/web/WEB-INF/classes"/>
 </classpath>

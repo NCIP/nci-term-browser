@@ -392,6 +392,32 @@ public class SearchCart {
         return direction;
     }    
     
+    /**
+     * Returns the coding scheme's URI
+     * @param scheme
+     * @param version
+     * @return
+     * @throws Exception
+     */
+    public String getSchemeURI(String scheme, String version) throws Exception {    
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        versionOrTag.setVersion(version);
+        CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);    
+    	return cs.getCodingSchemeURI();
+    }    
+
+    /**
+     * Returns the coding scheme production version
+     * @param scheme
+     * @param version
+     * @return
+     * @throws Exception
+     */
+    public String getDefaultSchemeVersion(String scheme) throws Exception {    
+        CodingScheme cs = lbSvc.resolveCodingScheme(scheme,null);//, versionOrTag);    
+    	return cs.getRepresentsVersion();// .getCodingSchemeURI();
+    }     
+    
     // -----------------------------------------------------
     // Internal utility methods
     // -----------------------------------------------------
