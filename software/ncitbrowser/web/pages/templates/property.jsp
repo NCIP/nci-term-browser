@@ -6,6 +6,26 @@
 <%@ page import="org.LexGrid.LexBIG.Utility.Iterators.*" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.*" %>
 
+<%!
+  public String getDisplayLink(HashMap<String, String> label2URL, 
+      HashMap<String, String> label2Linktext, String label, String value) {
+    String url = (String) label2URL.get(label);
+    if (url == null)
+        return "";
+
+    String linktext = (String) label2Linktext.get(label); 
+    System.out.println("url: " + url);
+    String encoded_value = value;
+    encoded_value = encoded_value.replaceAll(":", "%3A");
+    String url_str = url + encoded_value;
+
+    // Note: Escaped " character.
+    String val =  "<a href=\"javascript:redirect_site('" 
+      + url_str + "')\">(" + linktext + ")</a>";
+    return val;
+  }
+%>
+
 <%
   HashMap def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
   
@@ -240,8 +260,8 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
  System.out.println("properties_to_display.size(): " + properties_to_display.size());
 
-  HashMap label2URL = new HashMap();
-  HashMap label2Linktext = new HashMap();
+  HashMap<String, String> label2URL = new HashMap<String, String>();
+  HashMap<String, String> label2Linktext = new HashMap<String, String>();
   for (int m=0; m<properties_to_display.size(); m++) {
       String propName = (String) properties_to_display.elementAt(m);
       String prop_nm_label = (String) properties_to_display_label.elementAt(m);
@@ -430,34 +450,11 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 %>
             <p>
               <b><%=propName_label%>:&nbsp;</b><%=value%>
-
-              <% if (! prop_dictionary.equalsIgnoreCase("NCI Thesaurus")) {
-                   url = (String) label2URL.get(propName_label);
-                   linktext = (String) label2Linktext.get(propName_label); 
-                   if (url != null) {
-                     System.out.println("url: " + url);
-                     String encoded_value = value;
-                     encoded_value = encoded_value.replaceAll(":", "%3A");
-                     String url_str = url + encoded_value; 
-              %>
-                     <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
-              <%
-                   }  
-                 } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) {
-                   String label = "caDSR metadata";
-                   url = (String) label2URL.get(label);
-                   linktext = (String) label2Linktext.get(label); 
-                   if (url != null) {
-                     System.out.println("url: " + url);
-                     String encoded_value = value;
-                     encoded_value = encoded_value.replaceAll(":", "%3A");
-                     String url_str = url + encoded_value; 
-              %>
-                     <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
-              <% 
-                   }
-                 }
-              %>
+              <% if (! prop_dictionary.equalsIgnoreCase("NCI Thesaurus")) { %>
+                   <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
+              <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
+                  <%= getDisplayLink(label2URL, label2Linktext, "caDSR metadata", value) %>
+              <% } %>
             </p>
 <%
           }
