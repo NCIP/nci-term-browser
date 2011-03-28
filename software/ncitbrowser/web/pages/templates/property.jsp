@@ -444,10 +444,18 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
               <%
                    }  
                  } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) {
-                   String url_cadsr = "https://cdebrowser-dev.nci.nih.gov/CDEBrowser/search?searchDataElements=9&SEARCH=1&performQuery=yes&FirstTimer=0&jspConceptCode=" + value;
+                   String label = "caDSR metadata";
+                   url = (String) label2URL.get(label);
+                   linktext = (String) label2Linktext.get(label); 
+                   if (url != null) {
+                     System.out.println("url: " + url);
+                     String encoded_value = value;
+                     encoded_value = encoded_value.replaceAll(":", "%3A");
+                     String url_str = url + encoded_value; 
               %>
-                   (<a href="javascript:openQuickLinkSite('<%=url_cadsr%>')">Search for linked caDSR metadata</a>)
+                     <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
               <% 
+                   }
                  }
               %>
             </p>
