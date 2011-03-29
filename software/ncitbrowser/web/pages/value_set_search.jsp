@@ -155,11 +155,6 @@ if (view == null) {
  
 <%
 if (view.compareToIgnoreCase("terminology") == 0) {
-
-
-DataUtils.printValueSetDefinitionHierarchy();
-
-
 %>
     Terminology View
 <%
@@ -208,9 +203,6 @@ if (view.compareToIgnoreCase("source") == 0) {
 		    name = (String) u.elementAt(0);
 		    uri = (String) u.elementAt(1);
 		    
-		    
-System.out.println("URI: " + uri);
-
 		    description = (String) u.elementAt(2);
 		    //domain = (String) u.elementAt(3);
 		    //src_str = (String) u.elementAt(4);

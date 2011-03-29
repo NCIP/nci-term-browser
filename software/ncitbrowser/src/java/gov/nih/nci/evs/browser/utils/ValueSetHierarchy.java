@@ -1634,6 +1634,7 @@ public class ValueSetHierarchy {
 		return null;
 	}
 
+
 	public static HashMap getRootValueSets(String scheme) {
 		String formalName = DataUtils.getFormalName(scheme);
 		String codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
@@ -1688,8 +1689,6 @@ public class ValueSetHierarchy {
         Vector root_source_vec = new Vector();
 		for (int k=0; k<source_in_cs_vsd_vec.size(); k++) {
 			String src = (String) source_in_cs_vsd_vec.elementAt(k);
-			System.out.println("\nChecking " + src);
-
 			// check has children
 			boolean has_children = false;
 			if (_source_subconcept_map.containsKey(src)) {
@@ -1766,332 +1765,159 @@ public class ValueSetHierarchy {
 
 
 
-	public static void main(String[] args) throws Exception {
-		ValueSetHierarchy test = new ValueSetHierarchy();
-/*
 
-        Vector source_vec = getAvailableValueSetDefinitionSources();
-        if (source_vec != null) {
-			System.out.println("Available sources: " + source_vec.size());
-			for (int i=0; i<source_vec.size(); i++) {
-				String src = (String) source_vec.elementAt(i);
-				int j = i+1;
-				System.out.println("(" + j + ") " + src);
+// to be modified
+	public static HashMap getSubValueSets(String scheme, String code) {
+		String formalName = DataUtils.getFormalName(scheme);
+		String codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
 
-				Vector vsd_vec = getValueSetDefinitionsBySource(src);
-				for (int k=0; k<vsd_vec.size(); k++) {
-					ValueSetDefinition vsd = (ValueSetDefinition) vsd_vec.elementAt(k);
-					String metadata = getValueSetDefinitionMetadata(vsd);
-					System.out.println("\t" + metadata);
-				}
-				System.out.println("\n");
-			}
-	    } else {
-			System.out.println("Available sources not found.$");
-		}
 
-		String scheme = "ChEBI";
-		//scheme = "automobiles";
-		String version = null;
+		HashMap source_hier = getValueSetSourceHierarchy();
+        Vector source_in_cs_vsd_vec = new Vector();
+        HashMap source2VSD_map = new HashMap();
+        HashMap uri2VSD_map = new HashMap();
+		ValueSetDefinition root_vsd = null;
+		Vector participating_vsd_vec = new Vector();
 
-		System.out.println(scheme + "Roots: " );
-		ResolvedConceptReferenceList roots = getHierarchyRoots(scheme, version);
-		if (roots != null) {
-			for (int i=0; i<roots.getResolvedConceptReferenceCount(); i++) {
-				ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
-				System.out.println("Root: " + rcr.getEntityDescription().getContent() + " (" + rcr.getConceptCode() + ")");
-				List superconcepts = test.getSubconceptList(scheme, version, rcr.getConceptCode());
-				for (int lcv=0; lcv<superconcepts.size(); lcv++) {
-					String nv = (String) superconcepts.get(lcv);
-					System.out.println(nv);
+		System.out.println("ValueSetHierarchy getSubValueSets codingSchemeURN: " + codingSchemeURN);
+		// find participating VSDs based on scheme uri2VSD_map & source2VSD_map
+
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			//
+            Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
+            if (cs_vec.contains(codingSchemeURN)) {
+
+				ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+				if (uri.compareTo(code) == 0) {
+					root_vsd = vsd;
 				}
 
-				HashMap hmap = test.getSubconcepts(scheme, version, rcr.getConceptCode());
+				uri2VSD_map.put(uri, vsd);
+				participating_vsd_vec.add(uri);
 
+				System.out.println("participating_vsd: " + vsd.getValueSetDefinitionName());
 
-System.out.println("\nTreeUtils().printTree...\n");
-                printTree(hmap);
+				java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
 
-
-System.out.println("\nexit TreeUtils().printTree...\n");
-
-
-
-				JSONArray json = test.HashMap2JSONArray(hmap);
-
-				System.out.println(json.toString());
-
-
-			}
-
-	    } else {
-			System.out.println("Unable to resolve roots for " + scheme);
-		}
-
-
-System.out.println("=============================================");
-
-
-		Vector v1 = new Vector();
-
-		v1.add("s1");
-		v1.add("s2");
-
-		Vector v2 = null;
-
-
-		//Collections.copy(v1,v2);
-
-		v2 = (Vector) v1.clone();
-
-
-
-		//v2 = v1;
-		for (int i=0; i<v1.size(); i++) {
-			String s = (String) v1.elementAt(i);
-			System.out.println(s);
-		}
-
-        System.out.println("\nV1:");
-		for (int i=0; i<v1.size(); i++) {
-			String s = (String) v1.elementAt(i);
-			System.out.println(s);
-		}
-
-        System.out.println("\nV2:");
-		for (int i=0; i<v2.size(); i++) {
-			String s = (String) v2.elementAt(i);
-			System.out.println(s);
-		}
-
-		v2.remove("s1");
-
-System.out.println("after removing s1 from V2:");
-
-        System.out.println("\nV1:");
-		for (int i=0; i<v1.size(); i++) {
-			String s = (String) v1.elementAt(i);
-			System.out.println(s);
-		}
-
-        System.out.println("\nV2:");
-		for (int i=0; i<v2.size(); i++) {
-			String s = (String) v2.elementAt(i);
-			System.out.println(s);
-		}
-
-*/
-        //HashMap root_hierarchy = test.getValueSetSourceHierarchy("Terminology Value Set", null);
-
-/*
-String scheme = "automobiles";
-String version = "1.0";
-
-
-
-scheme = "Terminology Value Set";
-version = "03.24.2011";
-
-
-        HashMap source_hierarchy = test.getValueSetSourceHierarchy(scheme, version);
-        //HashMap root_hierarchy = test.getValueSetSourceHierarchy("conceptDemainCodingScheme", "1.0");
-
-		//HashMap source_hierarchy = test.getValueSetSourceHierarchy("Terminology Value Set", "03.24.2011");
-
-		printTree(source_hierarchy);
-
-
-
-		//TreeItem root = (TreeItem) source_hierarchy.get("<Root>");
-
-        System.out.println("Calling populateSubconceptHashMap ...");
-        HashMap sub_hashmap = new HashMap();
-		populateSubconceptHashMap(source_hierarchy, sub_hashmap);//, root);
-		Iterator it = sub_hashmap.keySet().iterator();
-		while (it.hasNext()) {
-			String t = (String) it.next();
-			System.out.println(t);
-			Vector v = (Vector) sub_hashmap.get(t);
-			for (int i=0; i<v.size(); i++) {
-				String s = (String) v.elementAt(i);
-				System.out.println("\tsub: " + s);
-			}
-			System.out.println("\n");
-		}
-
-
-System.out.println("=============================================");
-
-        System.out.println("Calling populateSuperconceptHashMap ...");
-        HashMap super_hashmap = new HashMap();
-		populateSuperconceptHashMap(source_hierarchy, super_hashmap);//, root);
-
-		it = super_hashmap.keySet().iterator();
-		while (it.hasNext()) {
-			String t = (String) it.next();
-			System.out.println(t);
-			Vector v = (Vector) super_hashmap.get(t);
-			for (int i=0; i<v.size(); i++) {
-				String s = (String) v.elementAt(i);
-				System.out.println("\tsuper: " + s);
-			}
-			System.out.println("\n");
-		}
-
-System.out.println("=============================================");
-System.out.println("Calling getCodeList ...");
-
-		Vector concept_vec = test.getCodeList(scheme, version);
-
-		for (int i=0; i<concept_vec.size(); i++) {
-			int j=i+1;
-			String s = (String) concept_vec.elementAt(i);
-			System.out.println("(" + j + ") " + s);
-		}
-
-
-System.out.println("=============================================");
-System.out.println("Find orphans and regular roots: ");
-
-        Vector orphan_vec = new Vector();
-        Vector regular_root_vec = new Vector();
-
-		for (int i=0; i<concept_vec.size(); i++) {
-			int j=i+1;
-			String s = (String) concept_vec.elementAt(i);
-			System.out.println("(" + j + ") " + s);
-			if (!super_hashmap.containsKey(s) && !sub_hashmap.containsKey(s)) {
-				System.out.println("\tOrphan");
-				orphan_vec.add(s);
-			} else if (!super_hashmap.containsKey(s)) {
-				System.out.println("\tRegular root concept");
-				regular_root_vec.add(s);
+				while (sourceEnum.hasMoreElements()) {
+					Source src = (Source) sourceEnum.nextElement();
+					String src_str = src.getContent();
+					if (!source_in_cs_vsd_vec.contains(src_str)) {
+						source_in_cs_vsd_vec.add(src_str);
+					}
+					if (source2VSD_map.containsKey(src_str)) {
+						Vector vsd_v = (Vector) source2VSD_map.get(src_str);
+						if (!vsd_v.contains(uri)) {
+							vsd_v.add(uri);
+						}
+						source2VSD_map.put(src_str, vsd_v);
+					} else {
+						Vector vsd_v = new Vector();
+						vsd_v.add(uri);
+						source2VSD_map.put(src_str, vsd_v);
+					}
+				}
 			}
 		}
 
-
-System.out.println("=============================================");
-System.out.println("Orphans: ");
-
-		for (int i=0; i<orphan_vec.size(); i++) {
-			int j=i+1;
-			String s = (String) orphan_vec.elementAt(i);
-			System.out.println("(" + j + ") " + s);
+		if (root_vsd == null) {
+			System.out.println("Error: VSD " + code + " not found.");
+			return null;
+		} else {
+			System.out.println("fining subs for VSD: " + code);
 		}
 
-System.out.println("=============================================");
-System.out.println("Regular roots: ");
 
-		for (int i=0; i<regular_root_vec.size(); i++) {
-			int j=i+1;
-			String s = (String) regular_root_vec.elementAt(i);
-			System.out.println("(" + j + ") " + s);
+		TreeItem root = new TreeItem(code, root_vsd.getValueSetDefinitionName());
+
+        List <TreeItem> children = new ArrayList();
+
+		java.util.Enumeration<? extends Source> sourceEnum = root_vsd.enumerateSource();
+
+try {
+		while (sourceEnum.hasMoreElements()) {
+			Source src = (Source) sourceEnum.nextElement();
+
+			String src_str = src.getContent();
+
+			System.out.println("root source: " + src_str);
+
+			if (_source_subconcept_map.containsKey(src_str)) {
+				Vector sub_vec = (Vector) _source_subconcept_map.get(src_str);
+				for (int k=0; k<sub_vec.size(); k++) {
+					String sub_src = (String) sub_vec.elementAt(k);
+					System.out.println("\tsubsource: " + sub_src);
+
+					Vector sub_vsd_vec = (Vector) source2VSD_map.get(sub_src);
+					if (sub_vsd_vec != null) {
+						for (int m=0; m<sub_vsd_vec.size(); m++) {
+							String sub_vsd_uri = (String) sub_vsd_vec.elementAt(m);
+
+							if (participating_vsd_vec.contains(sub_vsd_uri)) {
+								System.out.println("\t\tparticipating_vsd: " + sub_vsd_uri);
+
+								ValueSetDefinition sub_vsd = (ValueSetDefinition) uri2VSD_map.get(sub_vsd_uri);
+
+								String vsd_text = sub_vsd.getValueSetDefinitionName();
+								System.out.println("sub vsd found: " + sub_vsd_uri + " " + vsd_text);
+
+
+										java.util.Enumeration<? extends Source> sub_vsd_sourceEnum = sub_vsd.enumerateSource();
+										while (sub_vsd_sourceEnum.hasMoreElements()) {
+											Source sub_vsd_src = (Source) sub_vsd_sourceEnum.nextElement();
+											String sub_vsd_src_str = sub_vsd_src.getContent();
+											System.out.println("sub_vsd_src_str: " + sub_vsd_src_str);
+										}
+
+
+
+								TreeItem ti_sub = new TreeItem(sub_vsd_uri, vsd_text);
+								ti_sub._expandable = false; // to be modified
+								children.add(ti_sub);
+							} else {
+								System.out.println("\t\tNot in participating_vsd: " + sub_vsd_uri);
+							}
+						}
+				    }
+				}
+			}
+		}
+} catch (Exception ex) {
+	ex.printStackTrace();
+}
+		if (root == null) {
+			System.out.println("root == null???");
+			return null;
+		}
+		root._expandable = false;
+		if (children.size() > 0) {
+			root._expandable = true;
 		}
 
-*/
+		System.out.println("root.addAll...");
 
-String cs_url = "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#";
+		root.addAll("[inverse_is_a]", children);
 
-	    HashMap root_hmap = ValueSetHierarchy.getRootValueSets(cs_url);
-	    if (root_hmap != null) {
-			printTree(root_hmap);
-		}
+		HashMap hmap = new HashMap();
+		hmap.put(code, root);
 
+		System.out.println("Existing ValueSetHierarchy getSubValueSets...");
+        return hmap;
 	}
 
 
 
+	public static void main(String[] args) throws Exception {
+		ValueSetHierarchy test = new ValueSetHierarchy();
+        String cs_url = "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#";
+	    HashMap root_hmap = ValueSetHierarchy.getRootValueSets(cs_url);
+	    if (root_hmap != null) {
+			printTree(root_hmap);
+		}
+	}
 
 }
 
-
-/*
-
-Available sources: 7
-(1) FDA_Device
-        FDA Patient Problem Codes Terminology|http://ncit:C54450|<NO DESCRIPTION
->|<NOT ASSIGNED>|FDA_Device
-        FDA Medical Device Problem Codes Terminology|http://ncit:C54451|<NO DESC
-RIPTION>|<NOT ASSIGNED>|FDA_Device
-        FDA Medical Device Component Or Accessory Terminology|http://ncit:C54577
-|<NO DESCRIPTION>|<NOT ASSIGNED>|FDA_Device
-        FDA Medical Device Evaluation Methods Terminology|http://ncit:C91800|<NO
- DESCRIPTION>|<NOT ASSIGNED>|FDA_Device
-        FDA Medical Device Evaluation Results Terminology|http://ncit:C91801|<NO
- DESCRIPTION>|<NOT ASSIGNED>|FDA_Device
-        FDA Medical Device Evaluation Conclusions Terminology|http://ncit:C91802
-|<NO DESCRIPTION>|<NOT ASSIGNED>|FDA_Device
-
-
-(2) FDA
-        FDA SPL Terminology|http://ncit:C54452|<NO DESCRIPTION>|<NOT ASSIGNED>|F
-DA
-
-
-(3) FDA_SPL
-        FDA SPL Color Terminology|http://ncit:C54453|<NO DESCRIPTION>|<NOT ASSIG
-NED>|FDA_SPL
-        FDA SPL Shape Terminology|http://ncit:C54454|<NO DESCRIPTION>|<NOT ASSIG
-NED>|FDA_SPL
-        FDA SPL Drug Route of Administration Terminology|http://ncit:C54455|<NO
-DESCRIPTION>|<NOT ASSIGNED>|FDA_SPL
-        FDA SPL Pharmaceutical Dosage Form Terminology|http://ncit:C54456|<NO DE
-SCRIPTION>|<NOT ASSIGNED>|FDA_SPL
-        FDA SPL Potency Terminology|http://ncit:C54458|<NO DESCRIPTION>|<NOT ASS
-IGNED>|FDA_SPL
-        FDA SPL DEA Schedule Terminology|http://ncit:C54459|<NO DESCRIPTION>|<NO
-T ASSIGNED>|FDA_SPL
-        FDA SPL Limitation of Use Terminology|http://ncit:C54599|<NO DESCRIPTION
->|<NOT ASSIGNED>|FDA_SPL
-        FDA SPL Pharmacokinetic Effect Consequences Terminology|http://ncit:C546
-00|<NO DESCRIPTION>|<NOT ASSIGNED>|FDA_SPL
-        FDA SPL Type of Drug Interaction Terminology|http://ncit:C54618|<NO DESC
-RIPTION>|<NOT ASSIGNED>|FDA_SPL
-        FDA SPL Medical Product Intent of Use Terminology|http://ncit:C54619|<NO
- DESCRIPTION>|<NOT ASSIGNED>|FDA_SPL
-        FDA SPL Flavor Terminology|http://ncit:C73339|<NO DESCRIPTION>|<NOT ASSI
-GNED>|FDA_SPL
-        FDA SPL Marketing Category Terminology|http://ncit:C73582|<NO DESCRIPTIO
-N>|<NOT ASSIGNED>|FDA_SPL
-        FDA SPL Business Operation Terminology|http://ncit:C73600|<NO DESCRIPTIO
-N>|<NOT ASSIGNED>|FDA_SPL
-        FDA SPL Document Type Terminology|http://ncit:C87299|<NO DESCRIPTION>|<N
-OT ASSIGNED>|FDA_SPL
-        FDA SPL Unit of Measure Terminology|http://ncit:C92951|<NO DESCRIPTION>|
-<NOT ASSIGNED>|FDA_SPL
-
-
-(4) CDISC
-        CDISC Terminology|http://ncit:C61410|<NO DESCRIPTION>|<NOT ASSIGNED>|CDI
-SC
-        CDISC SDTM Terminology|http://ncit:C66830|<NO DESCRIPTION>|<NOT ASSIGNED
->|CDISC
-        CDISC Glossary Terminology|http://ncit:C67497|<NO DESCRIPTION>|<NOT ASSI
-GNED>|CDISC
-        CDISC SEND Terminology|http://ncit:C77526|<NO DESCRIPTION>|<NOT ASSIGNED
->|CDISC
-        CDISC CDASH Terminology|http://ncit:C77527|<NO DESCRIPTION>|<NOT ASSIGNE
-D>|CDISC
-        CDISC ADaM Terminology|http://ncit:C81222|<NO DESCRIPTION>|<NOT ASSIGNED
->|CDISC
-        CDISC Observation Class Terminology|http://ncit:C82590|<NO DESCRIPTION>|
-<NOT ASSIGNED>|CDISC
-        CDISC Variable Terminology|http://ncit:C83187|<NO DESCRIPTION>|<NOT ASSI
-GNED>|CDISC
-
-
-(5) DICOM
-        DICOM Terminology|http://ncit:C69186|<NO DESCRIPTION>|<NOT ASSIGNED>|DIC
-OM
-
-
-(6) NCI
-        NCIt Neoplasm Tree|http://ncit:Neoplasm|<NO DESCRIPTION>|<NOT ASSIGNED>|
-NCI
-
-
-(7) NDFRT
-        NDFRT Mechanism of Action |http://ndfrt:MoA|<NO DESCRIPTION>|<NOT ASSIGN
-ED>|NDFRT
-
-*/
