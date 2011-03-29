@@ -194,4 +194,12 @@ public class JSPUtils {
         }
         return value;
     }
+    
+    public static String getPipeSeparator(Boolean[] display) {
+        boolean isDisplayed = display[0].booleanValue();
+        if (isDisplayed)
+            return "|";
+        display[0] = Boolean.TRUE;
+        return "";
+    }
 }
