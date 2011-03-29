@@ -411,6 +411,8 @@ public class DataUtils {
                             _localName2FormalNameHashMap.put(css_local_name,
                                 formalname);
 
+                            _codingSchemeName2URIHashMap.put(formalname, cs.getCodingSchemeURI());
+
                             // String displayName = getMetadataValue(formalname,
                             // "display_name");
                             // _logger.debug("\tdisplay_name: " + displayName);

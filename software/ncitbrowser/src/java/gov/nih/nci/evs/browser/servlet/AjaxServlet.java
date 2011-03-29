@@ -281,7 +281,35 @@ System.out.println("jsonString: " + jsonString);
             _logger.debug("Run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
             return;
+        } else if (action.equals("build_vs_tree")) {
+            if (ontology_display_name == null)
+                ontology_display_name = CODING_SCHEME_NAME;
+
+            response.setContentType("text/html");
+            response.setHeader("Cache-Control", "no-cache");
+            JSONObject json = new JSONObject();
+            JSONArray nodesArray = null;// new JSONArray();
+            try {
+				//HashMap getRootValueSets(String codingSchemeURN)
+				String codingSchemeVersion = null;
+                nodesArray =
+                    CacheController.getInstance().getRootValueSets(
+                        ontology_display_name, codingSchemeVersion);
+                if (nodesArray != null) {
+                    json.put("root_nodes", nodesArray);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            response.getWriter().write(json.toString());
+            //System.out.println(json.toString());
+
+            _logger.debug("Run time (milliseconds): "
+                + (System.currentTimeMillis() - ms));
+            return;
         }
+
     }
 
     private boolean isRoot(JSONArray rootsArray, String code) {

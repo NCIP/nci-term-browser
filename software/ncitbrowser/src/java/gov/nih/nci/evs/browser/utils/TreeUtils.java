@@ -972,6 +972,7 @@ public class TreeUtils {
         Vector v = new Vector();
         try {
 			Entity concept = getConceptByCode(scheme, version, null, code);
+			if (concept == null) return null;
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
 			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
@@ -1141,6 +1142,8 @@ public class TreeUtils {
         try {
 
 			Entity concept = getConceptByCode(scheme, version, null, code);
+			if (concept == null) return null;
+
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
 			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
@@ -2100,18 +2103,20 @@ public class TreeUtils {
                         nameAndValueList_qualifier);
 
 				Entity concept = getConceptByCode(scheme, version, null, code);
-				String entityCodeNamespace = concept.getEntityCodeNamespace();
-				//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
-				ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
-				focus.setCodingSchemeName(entityCodeNamespace);
-				//String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
+				if (concept != null) {
+					String entityCodeNamespace = concept.getEntityCodeNamespace();
+					//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
+					ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
+					focus.setCodingSchemeName(entityCodeNamespace);
+					//String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
 
-                //ConceptReference graphFocus =
-                //    ConvenienceMethods.createConceptReference(code, scheme);
-                matches =
-                    cng.resolveAsList(focus, associationsNavigatedFwd,
-                        !associationsNavigatedFwd, 1, 1, new LocalNameList(),
-                        null, null, -1);
+					//ConceptReference graphFocus =
+					//    ConvenienceMethods.createConceptReference(code, scheme);
+					matches =
+						cng.resolveAsList(focus, associationsNavigatedFwd,
+							!associationsNavigatedFwd, 1, 1, new LocalNameList(),
+							null, null, -1);
+				}
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
