@@ -245,52 +245,33 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                   <table class="global-nav" border="0" width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        <% if (menubar_version == null) { %>
-                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>" tabindex="10">Home</a>
-                        <% } else { %>
-                              <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="10">Home</a>
-                        <% }
-                        
-                        
-                           if (download_site != null) {
-                        %>  
-                        <!--
-                        | <a href="#" onclick="javascript:window.open('<%=download_site%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="17">
-                              Download </a>
-                         -->     
-                        <% }
-                        
-                        
-                        %>
+                         <% Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE }; %>
+                         <% if (vocabulary_isMapping) { %>
+                              <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+                              <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>">
+                                Mapping</a>
+                         <% } else if (tree_access_allowed) { %>
+                              <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+                              <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
+                                Hierarchy </a>
+                         <% } %>
 
-         <%
-      if (vocabulary_isMapping) {
-      %>
+                         <% if (menubar_scheme0 != null && menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
+                              <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+                              <a href="<%=request.getContextPath()%>/pages/subset.jsf" tabindex="15">Subsets</a>
+                         <% } %>
+                         
+                         <c:choose>   
+                           <c:when test="${sessionScope.CartActionBean.count>0}">
+                             <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+                             <a href="<%= request.getContextPath() %>/pages/cart.jsf" tabindex="14">Cart</a>
+                           </c:when>
+                         </c:choose> 
 
-      | <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>">
-        View Mapping
-      </a>
-
-      <%
-      }
-      else if (tree_access_allowed) {
-         %>
-                        | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
-                        View Hierarchy </a>
-   	<c:choose>	
-		<c:when test="${sessionScope.CartActionBean.count>0}">
-			| <a href="<%= request.getContextPath() %>/pages/cart.jsf" tabindex="14">Cart</a>
-	    </c:when>
-    </c:choose> 
-   <% }
-       %>
-
-                        <% if (menubar_scheme0 != null && menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
-                              | <a href="<%=request.getContextPath()%>/pages/subset.jsf" tabindex="15">Subsets</a>
-                        <% } %> | <a href="<%=request.getContextPath()%>/pages/help.jsf" tabindex="16">Help</a>
+                         <%= VisitedConceptUtils.getDisplayLink(request, isPipeDisplayed) %>
                       </td>
                       <td align="right">
-                        <%= VisitedConceptUtils.getDisplayLink(request) %>
+                        <a href="<%=request.getContextPath()%>/pages/help.jsf" tabindex="16">Help</a>
                       </td>
                       <td width="7"></td>
                     </tr>

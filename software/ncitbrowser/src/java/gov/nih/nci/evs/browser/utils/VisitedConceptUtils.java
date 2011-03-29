@@ -167,7 +167,10 @@ public class VisitedConceptUtils {
         return strbuf.toString();
     }
 
-    public static String getDisplayLink(HttpServletRequest request) {
+    public static String getDisplayLink(HttpServletRequest request, 
+        Boolean[] displaySeparator) {
+        //Note: Boolean[] displaySeparator is a hack to return the
+        //  state of the display separate.
         @SuppressWarnings("unchecked")
         Vector<VisitedConcept> visitedConcepts =
             (Vector<VisitedConcept>) request.getSession().getAttribute(
@@ -176,6 +179,19 @@ public class VisitedConceptUtils {
             return "";
 
         String value = getLink(visitedConcepts);
+        String pipe = JSPUtils.getPipeSeparator(displaySeparator);
+        if (pipe.length() > 0)
+            value = pipe + " " + value;
         return value;
+    }
+    
+    public static String getDisplayLink(HttpServletRequest request, 
+        boolean displaySeparator) {
+        Boolean[] isPipeDisplayed = new Boolean[] { new Boolean(displaySeparator) };
+        return getDisplayLink(request, isPipeDisplayed);
+    }
+    
+    public static String getDisplayLink(HttpServletRequest request) {
+        return getDisplayLink(request, false);
     }
 }

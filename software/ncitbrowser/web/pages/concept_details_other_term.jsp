@@ -111,34 +111,25 @@
                 <tr>
                   <td>
 
-                    <a href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">Home</a>
+                    <% Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE }; %>
+                    <% if (cdo_isMapping) { %>
+                      <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+                      <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                        Mapping</a>
 
-      <%
-      if (cdo_isMapping) {
-      %>
+                    <% } else if (tree_access_allowed) { %>
+                      <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+                      <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                        Hierarchy </a>
+                    <% } %>
 
-      <a href="#"
-      onclick="javascript:window.open('<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-      </a>
-
-      <%
-      } else if (tree_access_allowed) {
-      %>
-
-                    | <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-                    View Hierarchy </a>
-      <%
-      }
-      %>
-
-
-                    | <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
+                    <%= VisitedConceptUtils.getDisplayLink(request, isPipeDisplayed) %>
                   </td>
 
 
 
                   <td align="right">
-                    <%= VisitedConceptUtils.getDisplayLink(request) %>
+                    <a href="<%=request.getContextPath()%>/pages/help.jsf">Help</a>
                   </td>
                   <td width="7"></td>
                 </tr>
