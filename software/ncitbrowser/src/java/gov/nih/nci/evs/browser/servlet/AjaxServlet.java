@@ -308,6 +308,29 @@ System.out.println("jsonString: " + jsonString);
             _logger.debug("Run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
             return;
+        } else if (action.equals("expand_vs_tree")) {
+            if (node_id != null && ontology_display_name != null) {
+                response.setContentType("text/html");
+                response.setHeader("Cache-Control", "no-cache");
+                JSONObject json = new JSONObject();
+                JSONArray nodesArray = null;
+                try {
+                    nodesArray =
+                        CacheController.getInstance().getSubValueSets(
+                            ontology_display_name, ontology_version, node_id);
+                    if (nodesArray != null) {
+						System.out.println("expand_vs_tree nodesArray != null");
+                        json.put("nodes", nodesArray);
+                    } else {
+						System.out.println("expand_vs_tree nodesArray == null???");
+					}
+
+                } catch (Exception e) {
+                }
+                response.getWriter().write(json.toString());
+                _logger.debug("Run time (milliseconds): "
+                    + (System.currentTimeMillis() - ms));
+            }
         }
 
     }

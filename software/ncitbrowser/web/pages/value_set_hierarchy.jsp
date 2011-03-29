@@ -169,10 +169,11 @@
       }
     }
 
+
     function onClickTreeNode(ontology_node_id) {
-      var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
-      var ontology_version = document.forms["pg_form"].ontology_version.value;
-      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id,top.opener);
+        window.open ('<%= request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=' + ontology_node_id,
+        "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
+      
     }
 
     function onClickViewEntireOntology(ontology_display_name) {
