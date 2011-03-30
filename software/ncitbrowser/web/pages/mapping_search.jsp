@@ -335,7 +335,7 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
 
 
 
-				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
+				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>&nav_type=mappings">
 				      <%=display_label%>
 				    </a>
 				  
