@@ -32,6 +32,8 @@
       String tab_mappings_link = pagesPath + mapping_jsp_page_name + "?nav_type=mappings";
 
     %>
+    <td width="5"></td>
+    
     <td>
       <a href="<%=tab_terms_link%>">
         <img name="tab_terms" src="<%=tab_terms_image%>" border="0"
