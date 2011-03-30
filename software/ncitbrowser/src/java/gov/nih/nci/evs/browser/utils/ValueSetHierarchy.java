@@ -1786,7 +1786,9 @@ public class ValueSetHierarchy {
 				}
 		    }
 		}
-		return _valueSetParticipationHashSet.contains(scheme);
+		boolean retval = _valueSetParticipationHashSet.contains(scheme);
+		System.out.println(cs_name + " has value set? " + retval);
+		return retval;
     }
 
 

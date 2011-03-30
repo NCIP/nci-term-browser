@@ -69,18 +69,23 @@ if (scheme != null) {
         shortName = DataUtils.getLocalName(scheme);
 }
 
+
         String dictionary = null;
         if (scheme == null) {
             scheme = (String) request.getSession().getAttribute("scheme");
         }
+
+  boolean hasValueSet = ValueSetHierarchy.hasValueSet(scheme);
+  boolean hasMapping = DataUtils.hasMapping(scheme);
+
+
 
  boolean tree_access_allowed = true;
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
      tree_access_allowed = false;
  }
  boolean vocabulary_isMapping = DataUtils.isMapping(scheme, null);
- //System.out.println("vocabulary_isMapping: " + vocabulary_isMapping);
-
+ 
         String version = info.version;
         String term_browser_version = info.term_browser_version;
         String display_name = info.display_name;
@@ -204,7 +209,9 @@ if (scheme != null) {
               <div class="bannerarea">
 <%
 
-//System.out.println("vocabulary.jsp basePath " + basePath);
+
+
+
 
 if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
     (scheme != null && scheme.compareTo("NCI Thesaurus") == 0)
@@ -249,17 +256,26 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                          <% if (vocabulary_isMapping) { %>
                               <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
                               <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>">
-                                Mapping</a>
+                                Mapping
+                              </a>
                          <% } else if (tree_access_allowed) { %>
                               <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
                               <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
                                 Hierarchy </a>
-                         <% } %>
+                         <% } %>       
+                                
+                                
+      <% if (hasValueSet) { %>
+        <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+        <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
+      <% } %>
+      
+      <% if (hasMapping) { %>
+          <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+          <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Maps</a>      
+      <% } %>                                
+                                
 
-                         <% if (menubar_scheme0 != null && menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
-                              <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
-                              <a href="<%=request.getContextPath()%>/pages/subset.jsf" tabindex="15">Subsets</a>
-                         <% } %>
                          
                          <c:choose>   
                            <c:when test="${sessionScope.CartActionBean.count>0}">
