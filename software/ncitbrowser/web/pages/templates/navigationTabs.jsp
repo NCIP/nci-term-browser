@@ -6,7 +6,7 @@
       String imagesPath = request.getContextPath() + "/images/";
       String pagesPath = request.getContextPath() + "/pages/";
       String term_jsp_page_name = "multiple_search.jsf";
-      String valueset_jsp_page_name = "value_set_search.jsf";
+      String valueset_jsp_page_name = "value_set_terminology_view.jsf";
       String mapping_jsp_page_name = "mapping_search.jsf";
       
       String nav_type = (String) HTTPUtils.cleanXSS(request.getParameter("nav_type"));

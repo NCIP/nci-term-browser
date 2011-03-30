@@ -358,6 +358,7 @@ public class DataUtils {
                             _localName2FormalNameHashMap.put(localname,
                                 formalname);
                         }
+                        _localName2FormalNameHashMap.put(cs.getCodingSchemeURI(), formalname);
 
                         NameAndValue[] nvList =
                             MetadataUtils.getMetadataProperties(cs);
