@@ -330,12 +330,14 @@ public class CacheController {
         String key = "valuesetroots";
         JSONArray nodesArray = null;
 
+/*
         if (fromCache) {
             Element element = _cache.get(key);
             if (element != null) {
                 nodesArray = (JSONArray) element.getValue();
             }
         }
+*/
 
         if (nodesArray == null) {
             try {
