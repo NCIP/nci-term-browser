@@ -324,6 +324,147 @@ public class CacheController {
     }
 
 
+    public JSONArray getRootValueSets(boolean fromCache) {
+
+        List list = null;// new ArrayList();
+        String key = "valuesetroots";
+        JSONArray nodesArray = null;
+
+        if (fromCache) {
+            Element element = _cache.get(key);
+            if (element != null) {
+                nodesArray = (JSONArray) element.getValue();
+            }
+        }
+
+        if (nodesArray == null) {
+            try {
+                HashMap hmap = ValueSetHierarchy.getRootValueSets();
+                TreeItem root = (TreeItem) hmap.get("<Root>");
+                nodesArray = new JSONArray();
+
+				for (String association : root._assocToChildMap.keySet()) {
+					 System.out.println("association: " + association);
+
+					 List<TreeItem> children = root._assocToChildMap.get(association);
+					 for (TreeItem childItem : children) {
+
+						 String code = childItem._code;
+						 String name = childItem._text;
+
+						 System.out.println("\t" + name + " (code: " + code + ")");
+
+						 int childCount = 0;
+						 if (childItem._expandable) childCount = 1;
+
+						 try {
+							 JSONObject nodeObject = new JSONObject();
+							 nodeObject.put(ONTOLOGY_NODE_ID, code);
+							 nodeObject.put(ONTOLOGY_NODE_NAME, name);
+							 nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+							 nodeObject.put(CHILDREN_NODES, new JSONArray());
+							 nodesArray.put(nodeObject);
+
+						 } catch (Exception ex) {
+							 ex.printStackTrace();
+						 }
+					 }
+                }
+
+                //nodeArray = list2JSONArray(scheme, list);
+
+                if (fromCache) {
+                    Element element = new Element(key, nodesArray);
+                    _cache.put(element);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            _logger.debug("Retrieved from cache.");
+        }
+        return nodesArray;
+    }
+
+    public JSONArray getRootValueSets(boolean fromCache, boolean bySource) {
+
+
+System.out.println("CacheControler value set by source: " );
+
+        List list = null;// new ArrayList();
+        String key = "valuesetroots";
+        JSONArray nodesArray = null;
+
+/*
+        if (fromCache) {
+            Element element = _cache.get(key);
+            if (element != null) {
+                nodesArray = (JSONArray) element.getValue();
+            }
+        }
+*/
+
+System.out.println("CacheControler Step 1 " );
+
+
+        if (nodesArray == null) {
+
+System.out.println("CacheControler Step 2 " );
+
+
+            try {
+
+System.out.println("CacheControler Step 3 getRootValueSets  " + bySource);
+
+                HashMap hmap = ValueSetHierarchy.getRootValueSets(bySource);
+                TreeItem root = (TreeItem) hmap.get("<Root>");
+                nodesArray = new JSONArray();
+
+				for (String association : root._assocToChildMap.keySet()) {
+					 System.out.println("association: " + association);
+
+					 List<TreeItem> children = root._assocToChildMap.get(association);
+					 for (TreeItem childItem : children) {
+
+						 String code = childItem._code;
+						 String name = childItem._text;
+
+						 System.out.println("\t" + name + " (code: " + code + ")");
+
+						 int childCount = 0;
+						 if (childItem._expandable) childCount = 1;
+
+						 try {
+							 JSONObject nodeObject = new JSONObject();
+							 nodeObject.put(ONTOLOGY_NODE_ID, code);
+							 nodeObject.put(ONTOLOGY_NODE_NAME, name);
+							 nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+							 nodeObject.put(CHILDREN_NODES, new JSONArray());
+							 nodesArray.put(nodeObject);
+
+						 } catch (Exception ex) {
+							 ex.printStackTrace();
+						 }
+					 }
+                }
+
+                //nodeArray = list2JSONArray(scheme, list);
+
+                if (fromCache) {
+                    Element element = new Element(key, nodesArray);
+                    _cache.put(element);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            _logger.debug("Retrieved from cache.");
+        }
+        return nodesArray;
+    }
+
+
+
     public JSONArray getRootConcepts(String scheme, String version) {
         return getRootConcepts(scheme, version, true);
     }

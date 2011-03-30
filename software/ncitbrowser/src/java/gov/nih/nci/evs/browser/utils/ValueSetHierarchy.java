@@ -1765,6 +1765,166 @@ public class ValueSetHierarchy {
 	}
 
 
+	public static HashMap getRootValueSets(boolean bySource) {
+		if (!bySource) return getRootValueSets();
+
+
+System.out.println("ValueSetHierarchy Step 0 getRootValueSets  " + bySource);
+
+
+		HashMap source_hier = getValueSetSourceHierarchy();
+        Vector source_vec = new Vector();
+        HashSet source_set = new HashSet();
+
+        HashMap source2VSD_map = new HashMap();
+        HashMap uri2VSD_map = new HashMap();
+
+		//Vector v = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			uri2VSD_map.put(uri, vsd);
+			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+			while (sourceEnum.hasMoreElements()) {
+				Source src = (Source) sourceEnum.nextElement();
+				String src_str = src.getContent();
+				if (!source_set.contains(src_str)) {
+					source_set.add(src_str);
+					source_vec.add(src_str);
+				}
+
+				if (source2VSD_map.containsKey(src_str)) {
+					Vector vsd_v = (Vector) source2VSD_map.get(src_str);
+					if (!vsd_v.contains(uri)) {
+						vsd_v.add(uri);
+					}
+					source2VSD_map.put(src_str, vsd_v);
+				} else {
+					Vector vsd_v = new Vector();
+					vsd_v.add(uri);
+					source2VSD_map.put(src_str, vsd_v);
+				}
+			}
+		}
+
+System.out.println("ValueSetHierarchy Step 1 " + bySource);
+
+
+		TreeItem root = new TreeItem("<Root>", "Root node");
+
+        List <TreeItem> children = new ArrayList();
+        Vector root_source_vec = new Vector();
+		for (int k=0; k<source_vec.size(); k++) {
+			String src = (String) source_vec.elementAt(k);
+			// check has children
+			boolean has_children = false;
+			if (_source_subconcept_map.containsKey(src)) {
+				Vector sub_vec = (Vector) _source_subconcept_map.get(src);
+				for (int j=0; j<source_vec.size(); j++) {
+					String source = (String) source_vec.elementAt(j);
+					if (source.compareTo(src) != 0 && sub_vec.contains(source)) {
+						has_children = true;
+						break;
+					}
+				}
+
+			}
+
+
+			boolean has_parent = false;
+			if (_source_superconcept_map.containsKey(src)) {
+				Vector super_vec = (Vector) _source_superconcept_map.get(src);
+				for (int j=0; j<source_vec.size(); j++) {
+					String source = (String) source_vec.elementAt(j);
+					if (source.compareTo(src) != 0 && super_vec.contains(source)) {
+						has_parent = true;
+						break;
+					}
+				}
+			}
+
+			// orphan
+			if (!has_children && !has_parent) {
+				// find all VSDs has the source
+				Vector vsd_v = (Vector) source2VSD_map.get(src);
+				for(int i=0; i<vsd_v.size(); i++) {
+					//ValueSetDefinition vsd = (ValueSetDefinition) vsd_v.elementAt(i);
+					String vsd_uri = (String) vsd_v.elementAt(i);
+					ValueSetDefinition vsd = (ValueSetDefinition) uri2VSD_map.get(vsd_uri);
+
+					String name = vsd.getValueSetDefinitionName();
+					if (name == null || name.compareTo("") == 0) {
+						name = "<NOT ASSIGNED>";
+					}
+
+					TreeItem ti = new TreeItem(src, src);
+					ti._expandable = false;
+					children.add(ti);
+				}
+
+			} else if (has_children && !has_parent) {
+				Vector vsd_v = (Vector) source2VSD_map.get(src);
+				for(int i=0; i<vsd_v.size(); i++) {
+					//ValueSetDefinition vsd = (ValueSetDefinition) vsd_v.elementAt(i);
+					String vsd_uri = (String) vsd_v.elementAt(i);
+					ValueSetDefinition vsd = (ValueSetDefinition) uri2VSD_map.get(vsd_uri);
+
+					String name = vsd.getValueSetDefinitionName();
+					if (name == null || name.compareTo("") == 0) {
+						name = "<NOT ASSIGNED>";
+					}
+
+					TreeItem ti = new TreeItem(src, src);
+					ti._expandable = true;
+					children.add(ti);
+				}
+			}
+		}
+
+		root._expandable = false;
+		root.addAll("[inverse_is_a]", children);
+
+		HashMap hmap = new HashMap();
+		hmap.put("<Root>", root);
+        return hmap;
+	}
+
+
+
+	public static HashMap getRootValueSets() {
+        if (_valueSetParticipationHashSet == null) return null;
+        Vector root_cs_vec = new Vector();
+        Iterator it = _valueSetParticipationHashSet.iterator();
+        while (it.hasNext()) {
+			String cs = (String) it.next();
+			System.out.println(cs);
+			String formalName = DataUtils.getFormalName(cs);
+			System.out.println("ValueSet cs root: " + formalName);
+			root_cs_vec.add(formalName);
+		}
+		root_cs_vec = SortUtils.quickSort(root_cs_vec);
+		TreeItem root = new TreeItem("<Root>", "Root node");
+        List <TreeItem> children = new ArrayList();
+
+        for (int i=0; i<root_cs_vec.size(); i++) {
+			String cs = (String) root_cs_vec.elementAt(i);
+			//cs = cs.replaceAll(" ", "_");
+			String code = cs + "_root";
+			TreeItem ti = new TreeItem(code, cs);
+			ti._expandable = true;
+			children.add(ti);
+		}
+
+		root.addAll("[has_value_sets]", children);
+
+		HashMap hmap = new HashMap();
+		hmap.put("<Root>", root);
+        return hmap;
+	}
+
+
 
 	public static boolean hasValueSet(String cs_name) {
 		String scheme = DataUtils.getFormalName(cs_name);

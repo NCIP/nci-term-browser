@@ -237,9 +237,6 @@ public final class AjaxServlet extends HttpServlet {
                         CacheController.getInstance().getTree(
                             ontology_display_name, versionOrTag, node_id);
 
-System.out.println("jsonString: " + jsonString);
-
-
                     JSONArray rootsArray = new JSONArray(jsonString);
 
                     json.put("root_nodes", rootsArray);
@@ -331,7 +328,107 @@ System.out.println("jsonString: " + jsonString);
                 _logger.debug("Run time (milliseconds): "
                     + (System.currentTimeMillis() - ms));
             }
+
+        } else if (action.equals("build_cs_vs_tree")) {
+
+            response.setContentType("text/html");
+            response.setHeader("Cache-Control", "no-cache");
+            JSONObject json = new JSONObject();
+            JSONArray nodesArray = null;// new JSONArray();
+            try {
+				//HashMap getRootValueSets(String codingSchemeURN)
+				String codingSchemeVersion = null;
+                nodesArray =
+                    CacheController.getInstance().getRootValueSets(true);
+
+                if (nodesArray != null) {
+                    json.put("root_nodes", nodesArray);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            response.getWriter().write(json.toString());
+            //System.out.println(json.toString());
+
+            _logger.debug("Run time (milliseconds): "
+                + (System.currentTimeMillis() - ms));
+            return;
+        } else if (action.equals("expand_cs_vs_tree")) {
+            if (node_id != null && ontology_display_name != null) {
+                response.setContentType("text/html");
+                response.setHeader("Cache-Control", "no-cache");
+                JSONObject json = new JSONObject();
+                JSONArray nodesArray = null;
+                try {
+                    nodesArray =
+                        CacheController.getInstance().getSubValueSets(
+                            ontology_display_name, ontology_version, node_id);
+                    if (nodesArray != null) {
+						System.out.println("expand_vs_tree nodesArray != null");
+                        json.put("nodes", nodesArray);
+                    } else {
+						System.out.println("expand_vs_tree nodesArray == null???");
+					}
+
+                } catch (Exception e) {
+                }
+                response.getWriter().write(json.toString());
+                _logger.debug("Run time (milliseconds): "
+                    + (System.currentTimeMillis() - ms));
+            }
+
+
+        } else if (action.equals("build_src_vs_tree")) {
+
+            response.setContentType("text/html");
+            response.setHeader("Cache-Control", "no-cache");
+            JSONObject json = new JSONObject();
+            JSONArray nodesArray = null;// new JSONArray();
+            try {
+				//HashMap getRootValueSets(String codingSchemeURN)
+				String codingSchemeVersion = null;
+                nodesArray =
+                    CacheController.getInstance().getRootValueSets(true, true);
+
+                if (nodesArray != null) {
+                    json.put("root_nodes", nodesArray);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            response.getWriter().write(json.toString());
+            //System.out.println(json.toString());
+
+            _logger.debug("Run time (milliseconds): "
+                + (System.currentTimeMillis() - ms));
+            return;
+        } else if (action.equals("expand_src_vs_tree")) {
+            if (node_id != null && ontology_display_name != null) {
+                response.setContentType("text/html");
+                response.setHeader("Cache-Control", "no-cache");
+                JSONObject json = new JSONObject();
+                JSONArray nodesArray = null;
+                try {
+                    nodesArray =
+                        CacheController.getInstance().getSubValueSets(
+                            ontology_display_name, ontology_version, node_id);
+                    if (nodesArray != null) {
+						System.out.println("expand_vs_tree nodesArray != null");
+                        json.put("nodes", nodesArray);
+                    } else {
+						System.out.println("expand_vs_tree nodesArray == null???");
+					}
+
+                } catch (Exception e) {
+                }
+                response.getWriter().write(json.toString());
+                _logger.debug("Run time (milliseconds): "
+                    + (System.currentTimeMillis() - ms));
+            }
         }
+
 
     }
 
