@@ -118,7 +118,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
           
-          <%@ include file="/pages/templates/navigationTabs.jsp"%>
+          <%-- 1 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
           
           <div class="tabTableContentContainer">
 
