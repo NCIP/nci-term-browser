@@ -19,7 +19,10 @@
   String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );
 
   boolean menubar_isMapping = DataUtils.isMapping(menubar_dictionary, null);
-  Vector mapping_scheme_vec = DataUtils.getMappingCodingSchemes(menubar_dictionary);
+  //Vector mapping_scheme_vec = DataUtils.getMappingCodingSchemes(menubar_dictionary);
+  
+  boolean hasValueSet = ValueSetHierarchy.hasValueSet(menubar_dictionary);
+  boolean hasMapping = DataUtils.hasMapping(menubar_dictionary);
 
   if (menubar_version == null) menubar_version = menuBar_info.version;
   //System.out.println("menuBar.jsp menubar_version: " + menubar_version);
@@ -46,14 +49,15 @@
         <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
           Hierarchy</a>
       <% } %>
-      
-      <% if (hdr_dictionary0 != null && hdr_dictionary0.compareTo(Constants.CODING_SCHEME_NAME) == 0) { %>
+
+      <% if (hasValueSet) { %>
         <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
         <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
-        <% if (mapping_scheme_vec != null && mapping_scheme_vec.size() > 0) { %>
+      <% } %>
+      
+      <% if (hasMapping) { %>
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
           <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Maps</a>      
-        <% } %>
       <% } %>
 
       <c:choose>
