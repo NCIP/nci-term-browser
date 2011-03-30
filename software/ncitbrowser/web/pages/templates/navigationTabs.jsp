@@ -30,26 +30,22 @@
         ? "tab_map_clicked.gif" : "tab_map.gif";
       tab_mappings_image = imagesPath + tab_mappings_image;
       String tab_mappings_link = pagesPath + mapping_jsp_page_name + "?nav_type=mappings";
-
     %>
-    <td width="5"></td>
-    
-    <td>
-      <a href="<%=tab_terms_link%>">
-        <img name="tab_terms" src="<%=tab_terms_image%>" border="0"
-          alt="Terminologies" title="Terminologies" /></a>
-    </td>
 
-    <td>
-      <a href="<%=tab_valuesets_link%>">
-        <img name="tab_valuesets" src="<%=tab_valuesets_image%>"
-          border="0" alt="Value Sets" title="ValueSets" /></a>
-    </td>
-   
-    <td>
-      <a href="<%=tab_mappings_link%>">
-        <img name="tab_map" src="<%=tab_mappings_image%>"
-          border="0" alt="Mappings" title="Mappings" /></a>
-    </td>
+    <%-- 
+      Note: Slight gap appears between the tab images and the logo when
+        * (For Firefox): </a> is on a separate line,
+        * (For Internet Explorer): </td> is on a separate line
+    --%>
+    <td width="5"></td>
+    <td><a href="<%=tab_terms_link%>">
+      <img name="tab_terms" src="<%=tab_terms_image%>"
+        border="0" alt="Terminologies" title="Terminologies" /></a></td>
+    <td><a href="<%=tab_valuesets_link%>">
+      <img name="tab_valuesets" src="<%=tab_valuesets_image%>"
+        border="0" alt="Value Sets" title="ValueSets" /></a></td>
+    <td><a href="<%=tab_mappings_link%>">
+      <img name="tab_map" src="<%=tab_mappings_image%>"
+        border="0" alt="Mappings" title="Mappings" /></a></td>
   </tr>
 </table>
