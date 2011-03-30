@@ -9,6 +9,7 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 
 <%
+
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
@@ -72,8 +73,13 @@
       shortName = info.display_name;
       if (shortName == null) shortName = "Vocabulary";
     }
+
+
+  boolean hasValueSet = ValueSetHierarchy.hasValueSet(menubar_dictionary);
+  boolean hasMapping = DataUtils.hasMapping(menubar_dictionary);
+
     
-    Vector maps_scheme_vec = DataUtils.getMappingCodingSchemes(scheme);
+    //Vector maps_scheme_vec = DataUtils.getMappingCodingSchemes(scheme);
 
 
     boolean tree_access_allowed = true;
@@ -182,6 +188,18 @@
             <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
               Hierarchy</a>
           <% } %>
+
+      <% if (hasValueSet) { %>
+        <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+        <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
+      <% } %>
+      
+      <% if (hasMapping) { %>
+          <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+          <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Maps</a>      
+      <% } %>
+      
+ <!--   
     
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
           <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">
@@ -192,19 +210,20 @@
             <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">
               Maps</a>      
           <% } %>      
-    
+ -->   
           <c:choose>	
             <c:when test="${sessionScope.CartActionBean.count>0}">
               <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
               <a href="<%= request.getContextPath() %>/pages/cart.jsf" tabindex="14">Cart</a>
             </c:when>
           </c:choose>
-          
+
+<!--          
           <% if (menubar_scheme0.compareTo("NCI Thesaurus") == 0) { %>
             <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
             <a href="<%= request.getContextPath() %>/pages/subset.jsf" tabindex="15">Subsets</a>
           <% } %>
-          
+-->          
           <%= VisitedConceptUtils.getDisplayLink(request, isPipeDisplayed) %>
         </td>
         <td align="right">
