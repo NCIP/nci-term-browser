@@ -24,8 +24,7 @@
             <img name="tab_terms"
               src="<%=request.getContextPath() %>/images/tab_terms.gif"
               border="0" alt="Terminologies" 
-              title="Terminologies" />
-          </a>
+              title="Terminologies" /></a>
         <% } %>
       </td>
 
@@ -35,8 +34,7 @@
             <img name="tab_valuesets"
               src="<%=request.getContextPath() %>/images/tab_valuesets.gif"
               border="0" alt="Value Sets" 
-              title="ValueSets" />
-          </a>
+              title="ValueSets" /></a>
         <% } else { %>
           <img name="tab_valuesets"
             src="<%=request.getContextPath() %>/images/tab_valuesets_clicked.gif"
@@ -51,8 +49,7 @@
             <img name="tab_map"
               src="<%=request.getContextPath() %>/images/tab_map.gif"
               border="0" alt="Mappings" 
-              title="Mappings" />
-          </a>
+              title="Mappings" /></a>
         <% } else { %>
           <img name="tab_map"
             src="<%=request.getContextPath() %>/images/tab_map_clicked.gif"
