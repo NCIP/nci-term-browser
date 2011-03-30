@@ -96,9 +96,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
-          <!--
-          <%@ include file="/pages/templates/navigationTabs.jsp"%>
-          -->
+          <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
           <div class="tabTableContentContainer">
           
           <table>

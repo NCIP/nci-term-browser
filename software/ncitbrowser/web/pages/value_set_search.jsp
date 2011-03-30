@@ -102,9 +102,7 @@ if (conceptDomain == null) conceptDomain = "";
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
-<!--          
-          <%@ include file="/pages/templates/navigationTabs.jsp"%>
--->          
+          <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
           <div class="tabTableContentContainer">
           
             <span class="textbody">&nbsp;All value sets available on the server are listed below. 

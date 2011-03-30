@@ -172,9 +172,7 @@ String next_page_num_str = Integer.toString(next_page_num);
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
 
-<!--          
-          <%@ include file="/pages/templates/navigationTabs.jsp"%>
--->          
+          <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
           
           <div class="tabTableContentContainer">
           
