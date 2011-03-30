@@ -327,17 +327,15 @@ public class CacheController {
     public JSONArray getRootValueSets(boolean fromCache) {
 
         List list = null;// new ArrayList();
-        String key = "valuesetroots";
+        String key = "cs_valuesetroots";
         JSONArray nodesArray = null;
 
-/*
         if (fromCache) {
             Element element = _cache.get(key);
             if (element != null) {
                 nodesArray = (JSONArray) element.getValue();
             }
         }
-*/
 
         if (nodesArray == null) {
             try {
@@ -390,33 +388,19 @@ public class CacheController {
 
     public JSONArray getRootValueSets(boolean fromCache, boolean bySource) {
 
-
-System.out.println("CacheControler value set by source: " );
-
         List list = null;// new ArrayList();
-        String key = "valuesetroots";
+        String key = "src_valuesetroots";
         JSONArray nodesArray = null;
 
-/*
         if (fromCache) {
             Element element = _cache.get(key);
             if (element != null) {
                 nodesArray = (JSONArray) element.getValue();
             }
         }
-*/
-
-System.out.println("CacheControler Step 1 " );
-
 
         if (nodesArray == null) {
-
-System.out.println("CacheControler Step 2 " );
-
-
             try {
-
-System.out.println("CacheControler Step 3 getRootValueSets  " + bySource);
 
                 HashMap hmap = ValueSetHierarchy.getRootValueSets(bySource);
                 TreeItem root = (TreeItem) hmap.get("<Root>");
