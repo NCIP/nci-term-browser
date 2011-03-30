@@ -81,6 +81,7 @@ import org.json.*;
 
 
 public class ValueSetHierarchy {
+	public static HashSet _valueSetParticipationHashSet = null;
 
     public static String SOURCE_SCHEME = "Terminology Value Set";
     public static String SOURCE_VERSION = null;
@@ -1762,6 +1763,31 @@ public class ValueSetHierarchy {
 		hmap.put("<Root>", root);
         return hmap;
 	}
+
+
+
+	public static boolean hasValueSet(String cs_name) {
+		String scheme = DataUtils.getFormalName(cs_name);
+		scheme = DataUtils.codingSchemeName2URI(scheme);
+
+		if (_valueSetParticipationHashSet == null) {
+            _valueSetParticipationHashSet = new HashSet();
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			List list = vsd_service.listValueSetDefinitionURIs();
+			for (int i=0; i<list.size(); i++) {
+				String uri = (String) list.get(i);
+
+				Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
+				for (int j=0; j<cs_vec.size(); j++) {
+					String cs = (String) cs_vec.elementAt(j);
+					if (!_valueSetParticipationHashSet.contains(cs)) {
+						_valueSetParticipationHashSet.add(cs);
+					}
+				}
+		    }
+		}
+		return _valueSetParticipationHashSet.contains(scheme);
+    }
 
 
 

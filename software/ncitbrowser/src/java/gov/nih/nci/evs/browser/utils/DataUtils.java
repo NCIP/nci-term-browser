@@ -202,6 +202,9 @@ public class DataUtils {
     public static Vector  _availableValueSetDefinitionSources = null;
     public static Vector  _valueSetDefinitionHierarchyRoots = null;
 
+    public static HashMap _codingScheme2MappingCodingSchemes = null;
+
+
 
     // ==================================================================================
 
@@ -3475,12 +3478,30 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
+//public static HashMap _codingScheme2MappingCodingSchemes = null;
+
+    public static boolean hasMapping(String codingScheme) {
+		Vector v = getMappingCodingSchemes(codingScheme);
+		if (v != null && v.size() > 0) return true;
+		return false;
+	}
+
 	public static Vector getMappingCodingSchemes(String codingScheme) {
         if (_codingSchemeHashSet == null)
             setCodingSchemeMap();
 
+        if (_codingScheme2MappingCodingSchemes == null) {
+			_codingScheme2MappingCodingSchemes = new HashMap();
+		}
+
+
 //System.out.println("getMappingCodingSchemes: " + codingScheme);
         String formalName = getFormalName(codingScheme);
+
+        if (_codingScheme2MappingCodingSchemes.containsKey(formalName)) {
+			return (Vector) _codingScheme2MappingCodingSchemes.get(formalName);
+		}
+
 //System.out.println("getMappingCodingSchemes formalname: " + codingScheme);
 
 		Vector v = new Vector();
@@ -3529,6 +3550,8 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 				}
 			}
 		}
+
+		_codingScheme2MappingCodingSchemes.put(formalName, v);
 		return SortUtils.quickSort(v);
 
 	}
@@ -4912,4 +4935,7 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		}
 		return u;
 	}
+
+
+
 }
