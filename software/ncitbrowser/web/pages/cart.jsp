@@ -23,9 +23,31 @@
     <!-- End Skip Top Navigation --> 
 	<h:form>
 	<script language="javascript" type="text/javascript">
-		function backButton() {
-			location.href = '<h:outputText value="#{CartActionBean.backurl}"/>';
-		}
+   	function backButton() {
+   		location.href = '<h:outputText value="#{CartActionBean.backurl}"/>';
+   	}
+      function confirmRemoveMessage() {
+         var count = <h:outputText value="#{CartActionBean.count}"/>;
+         var flag = false;
+         var first = document.getElementById("cartFormId:checkboxId");
+         if (first != null) {
+            if (first.checked) {
+               flag = true;
+            } else {
+               for (i=1;i<count;i++) {
+                  var element = document.getElementById('cartFormId:checkboxIdj_id_' + i);
+                  if (element.checked) {
+                     flag = true;
+                     break;
+                  }
+               }
+            }
+         }
+         if (flag) {
+            return confirm("Are you sure?");
+         }
+         return true;
+       }      
 	</script>	
 	  <%
 	    String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
@@ -40,22 +62,30 @@
 	      <!-- Page content -->
 	      <div class="pagecontent">
 	      	<a name="evs-content" id="evs-content"></a>
-	      	<table border="0" width="708px">
+	      	<table border="0" width="100%">
 	      		<tr>
 	      			<td>
 						<table border="0">
 						  <tr>
 						    <td class="texttitle-blue">Cart</td>	
 						    <td class="texttitle-gray">(<h:outputText value="#{CartActionBean.count}"/>)</td>
+                      <td class="texttitle-gray">
+                        &nbsp;&nbsp;&nbsp;<h:commandLink value="Exit Cart" onclick="backButton();return false;" title="Return to previous screen" styleClass="texttitle-blue-small"/>
+                      </td>                      
 						  </tr>
 						</table>
 					</td>
-					<td align="right">
-						<h:commandLink onclick="backButton();return false;" value="Back" styleClass="texttitle-blue-small" title="Return to search"/> |					    
-						<h:commandLink value="Remove Concept" action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small" title="Remove concepts from the cart"/> |					
-						<h:commandLink value="Export XML" action="#{CartActionBean.exportCartXML}" styleClass="texttitle-blue-small" title="Export cart contents in RDF/XML format"/> |
-						<h:commandLink value="Export CSV" action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small" title="Generate a list of cart concepts in CSV format readable from Excel"/>				
-					</td>
+					<td align="right">											    
+                  <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small" onclick="return confirmRemoveMessage();">
+                    <h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove concepts from the cart" style="border: none" />
+                  </h:commandLink>&nbsp;
+                  <h:commandLink action="#{CartActionBean.exportCartXML}" styleClass="texttitle-blue-small">
+                    <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />
+                  </h:commandLink>&nbsp;                  
+                  <h:commandLink action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small">
+                    <h:graphicImage value="../images/exportcsv.gif" alt="Export CSV" title="Generate a list of cart concepts in CSV format readable from Excel" style="border: none" />
+                  </h:commandLink>                  
+  				  </td>
 				</tr>      
 			</table>	
 			<hr/>
@@ -74,7 +104,7 @@
 							<tr class="dataRowLight">
 						</c:otherwise>
 				    </c:choose>   
-				    	<td><h:selectBooleanCheckbox value="#{item.selected}"/></td>
+                  <td><h:selectBooleanCheckbox id="checkboxId" binding="#{item.checkbox}" onclick="submit()"/></td>
 				    	<td>
 				    		<h:outputLink value="#{item.url}">${item.name}</h:outputLink> ${item.displayStatus}
 				    	</td> 
