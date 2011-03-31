@@ -1,6 +1,5 @@
 package gov.nih.nci.evs.browser.bean;
 
-import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 import gov.nih.nci.evs.browser.utils.RemoteServerUtil;
 import gov.nih.nci.evs.browser.utils.DataUtils;
 import gov.nih.nci.evs.browser.utils.SearchCart;
@@ -85,9 +84,11 @@ public class CartActionBean {
     private static Logger _logger = Logger.getLogger(CartActionBean.class);
     private String _entity = null;
     private String _codingScheme = null;
-    private String _version = null;
     private HashMap<String, Concept> _cart = null;
+    private String _version = null;
     private String _backurl = null;
+    private boolean _messageflag = false;
+    private String _message = null;
 
     // Local constants
     static public final String XML_FILE_NAME = "cart.xml";
@@ -95,6 +96,11 @@ public class CartActionBean {
     static public final String CSV_FILE_NAME = "cart.csv";
     static public final String CSV_CONTENT_TYPE = "text/csv";
 
+    // Error messages
+    
+    static public final String NO_CONCEPTS = "No concepts in cart.";
+    static public final String NOTHING_SELECTED = "No concepts selected.";
+    
     // Getters & Setters
 
     /**
@@ -131,6 +137,23 @@ public class CartActionBean {
     }
 
     /**
+     * Return Popup message flag
+     * @return
+     */
+    public boolean getMessageflag() {
+    	return _messageflag;
+    }    
+
+    /**
+     * Return Popup message text
+     * @return
+     */
+    public String getMessage() {
+    	_messageflag = false;
+    	return _message;
+    }    
+    
+    /**
      * Compute a back to url that is not the cart page
      * @return
      */
@@ -152,7 +175,9 @@ public class CartActionBean {
         if (_cart == null) _init();
         return _cart.values();
     }
-
+   
+    // ******************** Class methods ************************
+    
     /**
      * Initialize the cart container
      */
@@ -165,13 +190,15 @@ public class CartActionBean {
      * @return
      * @throws Exception
      */
-    public void addToCart() throws Exception {
+    public String addToCart() throws Exception {
         String code = null;
         String codingScheme = null;
         String nameSpace = null;
         String name = null;
         String url = null;
         String version = null;
+
+        _messageflag = false;
 
         // Get concept information from the Entity item passed in
 
@@ -180,9 +207,13 @@ public class CartActionBean {
                 .getExternalContext().getRequest();
 
         // Get Entity object
-        Entity curr_concept = null;
-        curr_concept = (Entity) request.getSession().getAttribute(_entity);
-        code = curr_concept.getEntityCode(); // Story identifier
+        Entity curr_concept = (Entity) request.getSession().getAttribute(_entity);
+        if (curr_concept == null) {
+        	// Called from a non search area
+        	_logger.error("*** Cart error: Entity object is null!");
+        	return null;
+        }
+        code = curr_concept.getEntityCode(); // Store identifier
 
         // Get coding scheme
         codingScheme = (String)request.getSession().getAttribute(_codingScheme);
@@ -196,8 +227,14 @@ public class CartActionBean {
         name = curr_concept.getEntityDescription().getContent();
 
         // Get concept URL
-        url = NCItBrowserProperties.getNCIT_URL()
-            + "/ConceptReport.jsp?dictionary=" + codingScheme
+        String protocol = request.getScheme();
+        String domain = request.getServerName();
+        String port = Integer.toString(request.getServerPort());
+        if (port.equals("80")) port = ""; else port = ":" + port;
+        String path = request.getContextPath();
+        url = protocol + "://" + domain
+            + port + path
+            + "/pages/concept_details.jsf?dictionary=" + codingScheme
             + "&version=" + version
             + "&code=" + code;
 
@@ -211,41 +248,100 @@ public class CartActionBean {
         item.setVersion(version);
         item.setUrl(url);
 
-        String key = item.getKey();
-        if (!_cart.containsKey(key)) {
-            _cart.put(key,item);
-            _logger.debug("Added: " + key);
-        } else {
-            _logger.debug("Already exists: " + key);
-        }
+        if (!_cart.containsKey(code))
+            _cart.put(code,item);
+
+		return null;
     }
 
     /**
      * Remove concept(s) from the Cart
      * @return
-     * @throws Exception
      */
-    public void removeFromCart() throws Exception {
-        if (_cart != null && _cart.size() > 0) {
+    public String removeFromCart() {
+    	_messageflag = false;
+    	
+    	if (getCount() < 1) {
+        	_messageflag = true;
+        	_message = NO_CONCEPTS;    		
+    	} else if (!hasSelected()) {
+        	_messageflag = true;
+        	_message = NOTHING_SELECTED;        	
+    	} else {    	
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
-                if (item.getSelected()) {
-                    if (_cart.containsKey(item.getKey()))
+                if (item.getCheckbox().isSelected()) {
+                    if (_cart.containsKey(item.code))
                         i.remove();
                 }
             }
-        }
+    	}
+	        
+        return "showcart";
     }
 
+    /*
+     * Unselect all concept(s) in the Cart
+     * @return
+     */
+    public String selectAllInCart() {
+        _messageflag = false;
+        
+    	if (getCount() < 1) {
+        	_messageflag = true;
+        	_message = NO_CONCEPTS;    	 
+    	} else {
+            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+                Concept item = (Concept)i.next();                
+                item.setSelected(true);
+            }
+        }
+        return null;
+    }    
+
+    /**
+     * Unselect all concept(s) in the Cart
+     * @return
+     */
+    public String unselectAllInCart() {
+        _messageflag = false;
+        
+    	if (getCount() < 1) {
+        	_messageflag = true;
+        	_message = NO_CONCEPTS;    		
+    	} else if (!hasSelected()) {
+        	_messageflag = true;
+        	_message = NOTHING_SELECTED;        	
+    	} else {
+            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+                Concept item = (Concept)i.next();
+                item.setSelected(false);
+            }
+        }
+        return null;
+    }    
+    
     /**
      * Export cart in XML format
      * @return
      * @throws Exception
      */
-    public void exportCartXML() throws Exception {
+    public String exportCartXML() throws Exception {
 
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
+
+    	if (getCount() < 1) {
+        	_messageflag = true;
+        	_message = NO_CONCEPTS;
+        	return null;
+    	} 
+    	if (!hasSelected()) {
+        	_messageflag = true;
+        	_message = NOTHING_SELECTED;        
+        	return null;
+    	}    		
+        
 
         // Get Entities to be exported and build export xml string
         // in memory
@@ -395,6 +491,8 @@ public class CartActionBean {
             // Don't allow JSF to forward to cart.jsf
             FacesContext.getCurrentInstance().responseComplete();
         }
+        
+        return null;
     }
 
     /**
@@ -402,11 +500,26 @@ public class CartActionBean {
      * @return
      * @throws Exception
      */
-    public void exportCartCSV() throws Exception {
+    public String exportCartCSV() throws Exception {
+
+        _messageflag = false;
+        
 
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         StringBuffer sb = new StringBuffer();
+        
+    	if (getCount() < 1) {
+        	_messageflag = true;
+        	_message = NO_CONCEPTS;
+        	return null;
+    	} 
+    	if (!hasSelected()) {
+        	_messageflag = true;
+        	_message = NOTHING_SELECTED;        
+        	return null;
+    	}         
+        
 
         // Get Entities to be exported and build export file
         // in memory
@@ -451,6 +564,8 @@ public class CartActionBean {
             // Don't allow JSF to forward to cart.jsf
             FacesContext.getCurrentInstance().responseComplete();
         }
+
+		return null;
     }
 
     /**
