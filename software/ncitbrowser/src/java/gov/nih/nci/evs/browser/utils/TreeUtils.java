@@ -2179,6 +2179,25 @@ public class TreeUtils {
         return list;
     }
 
+
+    public static void relabelTreeNodes(HashMap hmap) {
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			TreeItem ti = (TreeItem) hmap.get(key);
+			for (String association : ti._assocToChildMap.keySet()) {
+				List<TreeItem> children = ti._assocToChildMap.get(association);
+				for (TreeItem childItem : children) {
+					String code = childItem._code;
+					String text = childItem._text;
+					childItem._text = childItem._code + " (" + text + ")";
+				}
+
+			}
+		}
+	}
+
+
     public static void main(String[] args) {
         String url = "http://lexevsapi-dev.nci.nih.gov/lexevsapi42";
         url = "http://lexevsapi-qa.nci.nih.gov/lexevsapi50";

@@ -277,7 +277,7 @@ public class CacheController {
         return nodeArray;
     }
 
-
+    /// find coding scheme specific value sets
     public JSONArray getRootValueSets(String scheme, String version) {
         return getRootValueSets(scheme, version, true);
     }
@@ -305,10 +305,6 @@ public class CacheController {
         if (nodesArray == null) {
             _logger.debug("Not in cache -- calling ValueSetHierarchy.getRootValueSets " + scheme);
             try {
-                // list = new DataUtils().getHierarchyRoots(scheme, version,
-                // null);
-                ////HashMap getRootValueSets(String codingSchemeURN)
-
                 HashMap hmap = ValueSetHierarchy.getRootValueSets(scheme);
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
@@ -419,6 +415,7 @@ public class CacheController {
         return nodesArray;
     }
 
+    // value set home page (Source view)
     public JSONArray getRootValueSets(boolean fromCache, boolean bySource) {
 
         List list = null;// new ArrayList();
@@ -440,7 +437,7 @@ public class CacheController {
                 nodesArray = new JSONArray();
 
 				for (String association : root._assocToChildMap.keySet()) {
-					 System.out.println("association: " + association);
+					 //System.out.println("association: " + association);
 
 					 List<TreeItem> children = root._assocToChildMap.get(association);
 					 for (TreeItem childItem : children) {
@@ -448,7 +445,7 @@ public class CacheController {
 						 String code = childItem._code;
 						 String name = childItem._text;
 
-						 System.out.println("\t" + name + " (code: " + code + ")");
+						 //System.out.println("\t" + name + " (code: " + code + ")");
 
 						 int childCount = 0;
 						 if (childItem._expandable) childCount = 1;
