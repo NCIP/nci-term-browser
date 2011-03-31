@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="software/ncitbrowser/src/java"/>
+	<classpathentry kind="src" path="software/ncitbrowser/web/pages"/>
+	<classpathentry kind="src" path="software/test/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_21">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.generic.runtimeTarget/JBoss v5.0 2">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/extlib/ant-contrib-1.0nci.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/extlib/bda-lite-1.0.0.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/extlib/jsf-api.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/extlib/jsf-impl.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/extlib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/extlib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/extlib/xmltask-1.15.1.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/acegi-security-1.0.4.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/args4j-2.0.12.jar"/>
@@ -70,6 +91,8 @@
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexbig.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-client-framework.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-core.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-tree-2.0.5.jar"/>
+	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevsapi60-beans.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevsapi60-orm.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/LexEVSSecurity.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/log4j-1.2.15.jar"/>
@@ -117,14 +140,5 @@
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/velocity-1.6.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/xsdlib-20030807.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/xwork-2.0-beta-1.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/extlib/jsf-api.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/extlib/jsf-impl.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/extlib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevsapi60-beans.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/extlib/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/lexevs-tree-2.0.5.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/property-extension-1.0.0.jar"/>
-	<classpathentry kind="lib" path="software/ncitbrowser/lib/rmiio-2.0.2.jar"/>
 	<classpathentry kind="output" path="software/ncitbrowser/build/web/WEB-INF/classes"/>
 </classpath>
