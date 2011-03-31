@@ -317,6 +317,12 @@ public final class AjaxServlet extends HttpServlet {
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
+
+ System.out.println( "expand_vs_tree ontology_display_name: " + ontology_display_name);
+ System.out.println( "expand_vs_tree ontology_version: " + ontology_version);
+ System.out.println( "expand_vs_tree node_id: " + node_id);
+
+
                 try {
                     nodesArray =
                         CacheController.getInstance().getSubValueSets(
@@ -361,24 +367,50 @@ public final class AjaxServlet extends HttpServlet {
                 + (System.currentTimeMillis() - ms));
             return;
         } else if (action.equals("expand_cs_vs_tree")) {
-            if (node_id != null && ontology_display_name != null) {
-                response.setContentType("text/html");
-                response.setHeader("Cache-Control", "no-cache");
-                JSONObject json = new JSONObject();
-                JSONArray nodesArray = null;
-                try {
-                    nodesArray =
-                        CacheController.getInstance().getSubValueSets(
-                            ontology_display_name, ontology_version, node_id);
-                    if (nodesArray != null) {
-						System.out.println("expand_vs_tree nodesArray != null");
-                        json.put("nodes", nodesArray);
-                    } else {
-						System.out.println("expand_vs_tree nodesArray == null???");
-					}
 
-                } catch (Exception e) {
-                }
+System.out.println("node_id: " + node_id);
+
+			response.setContentType("text/html");
+			response.setHeader("Cache-Control", "no-cache");
+			JSONObject json = new JSONObject();
+			JSONArray nodesArray = null;
+
+
+            //if (node_id != null && ontology_display_name != null) {
+			if (node_id != null) {
+				if (node_id.startsWith("root_")) {
+					node_id = node_id.substring(5, node_id.length());
+					System.out.println("coding scheme name: " + node_id);
+
+				   try {
+						nodesArray =
+							CacheController.getInstance().getRootValueSets(node_id, null); //find roots (by source)
+
+						if (nodesArray != null) {
+							System.out.println("expand_vs_tree nodesArray != null");
+							json.put("nodes", nodesArray);
+						} else {
+							System.out.println("expand_vs_tree nodesArray == null???");
+						}
+
+					} catch (Exception e) {
+					}
+			    } else {
+					try {
+						nodesArray =
+							CacheController.getInstance().getSubValueSets(
+								ontology_display_name, ontology_version, node_id);
+						if (nodesArray != null) {
+							System.out.println("expand_vs_tree nodesArray != null");
+							json.put("nodes", nodesArray);
+						} else {
+							System.out.println("expand_vs_tree nodesArray == null???");
+						}
+
+					} catch (Exception e) {
+					}
+				}
+
                 response.getWriter().write(json.toString());
                 _logger.debug("Run time (milliseconds): "
                     + (System.currentTimeMillis() - ms));
@@ -386,6 +418,8 @@ public final class AjaxServlet extends HttpServlet {
 
 
         } else if (action.equals("build_src_vs_tree")) {
+
+System.out.println("node_id: " + node_id);
 
             response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
@@ -411,19 +445,34 @@ public final class AjaxServlet extends HttpServlet {
                 + (System.currentTimeMillis() - ms));
             return;
         } else if (action.equals("expand_src_vs_tree")) {
-            if (node_id != null && ontology_display_name != null) {
 
 System.out.println("node_id: " + node_id);
 
+            if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
 
-				if (ValueSetHierarchy._valueSetDefinitionSourceListing.contains(node_id)) {
+				if (ValueSetHierarchy._valueSetDefinitionSourceCode2Name_map.containsKey(node_id)) {
+
+System.out.println("found in source listing: " + node_id);
+System.out.println("TreeUtils().getSubconcepts " + ValueSetHierarchy.SOURCE_SCHEME);
+System.out.println("TreeUtils().getSubconcepts " + ValueSetHierarchy.SOURCE_VERSION);
+
 					HashMap hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
+
+
+System.out.println("return from getSubconcepts ..." );
+
+
 					if (hmap != null) {
 						TreeItem root = (TreeItem) hmap.get(node_id);
+
+if (root != null) {
+	System.out.println("return from getSubconcepts ..." + root._code + " " + root._text);
+}
+
 						if (root._expandable) {
 							// continue to expand according to the source hierarchy
                             nodesArray = CacheController.getInstance().HashMap2JSONArray(hmap);
