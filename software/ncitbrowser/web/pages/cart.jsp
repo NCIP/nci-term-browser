@@ -82,7 +82,7 @@
 					</td>
 					<td align="right">	
 		            <h:commandLink action="#{CartActionBean.selectAllInCart}" styleClass="texttitle-blue-small">
-		              <h:graphicImage value="../images/selectall.gif" alt="Select All" title="Select all concepts" style="border: none" />
+		              <h:graphicImage value="../images/selectAll.gif" alt="Select All" title="Select all concepts" style="border: none" />
 		            </h:commandLink>&nbsp;
 		            <h:commandLink action="#{CartActionBean.unselectAllInCart}" styleClass="texttitle-blue-small">
 		              <h:graphicImage value="../images/clearselections.gif" alt="Unselect" title="Unselect all concepts" style="border: none" />
