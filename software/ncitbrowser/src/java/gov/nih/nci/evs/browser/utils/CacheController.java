@@ -155,6 +155,9 @@ public class CacheController {
         return getSubconcepts(scheme, version, code, true);
     }
 
+
+
+
     public JSONArray getSubconcepts(String scheme, String version, String code,
         boolean fromCache) {
         if (scheme == null)
@@ -242,6 +245,37 @@ public class CacheController {
         return nodeArray;
     }
 
+    public JSONArray getSubValueSets(String code, boolean fromCache) {
+        HashMap map = null;
+        String key = "sub_vsd$" + code;
+        JSONArray nodeArray = null;
+        if (fromCache) {
+            Element element = _cache.get(key);
+            if (element != null) {
+                nodeArray = (JSONArray) element.getValue();
+            }
+        }
+        if (nodeArray == null) {
+            _logger.debug("Not in cache -- calling getSubValueSets ");
+            System.out.println("Not in cache -- calling getSubValueSets ");
+            map = ValueSetHierarchy.getSubValueSets(null, code);
+            System.out.println("exit ValueSetHierarchy.getSubValueSets ");
+            System.out.println("calling HashMap2JSONArray... ");
+            nodeArray = HashMap2JSONArray(map);
+
+            if (fromCache) {
+                try {
+                    Element element = new Element(key, nodeArray);
+                    _cache.put(element);
+                } catch (Exception ex) {
+
+                }
+            }
+        } else {
+            _logger.debug("Retrieved from cache.");
+        }
+        return nodeArray;
+    }
 
 
     public JSONArray getRootValueSets(String scheme, String version) {
@@ -610,7 +644,7 @@ public class CacheController {
      * } return nodesArray; }
      */
 
-    private JSONArray HashMap2JSONArray(HashMap hmap) {
+    public JSONArray HashMap2JSONArray(HashMap hmap) {
 
 		System.out.println("(***********) HashMap2JSONArray ...");
 

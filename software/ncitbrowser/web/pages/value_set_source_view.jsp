@@ -171,9 +171,7 @@
 
 
     function onClickTreeNode(ontology_node_id) {
-        window.open ('<%= request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=' + ontology_node_id,
-        "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
-      
+        window.location = '<%= request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=' + ontology_node_id;
     }
 
     function onClickViewEntireOntology(ontology_display_name) {
@@ -306,7 +304,7 @@
 
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
       var ontology_version = document.forms["pg_form"].ontology_version.value;
-      var cObj = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_vs_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);
+      var cObj = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_src_vs_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);
     }
 
     function setRootDesc(rootNodeName, ontology_display_name) {
@@ -491,13 +489,15 @@ if (view.compareToIgnoreCase("source") == 0) {
 %>
 
 </td>
-<td class="pageTitle" align="right">
+<td align="right">
 <font size="1" color="red" align="right">
   <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
 </font>
 </td>
 </tr>
 </table>
+
+<hr></hr>
 
 
 

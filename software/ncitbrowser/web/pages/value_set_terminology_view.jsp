@@ -171,9 +171,7 @@
 
 
     function onClickTreeNode(ontology_node_id) {
-        window.open ('<%= request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=' + ontology_node_id,
-        "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
-      
+        window.location = '<%= request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=' + ontology_node_id;
     }
 
     function onClickViewEntireOntology(ontology_display_name) {
@@ -491,15 +489,16 @@ if (view.compareToIgnoreCase("source") == 0) {
 %>
 
 </td>
-<td class="pageTitle" align="right">
-<font size="1" color="red" align="right">
-  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
-</font>
+
+<td align="right">
+   <font size="1" color="red" align="right">
+      <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
+   </font>
 </td>
 </tr>
 </table>
 
-
+<hr></hr>
 
 
           <!-- Tree content -->

@@ -4,6 +4,7 @@ import org.json.*;
 import gov.nih.nci.evs.browser.utils.*;
 
 import java.io.*;
+import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
@@ -279,6 +280,11 @@ public final class AjaxServlet extends HttpServlet {
                 + (System.currentTimeMillis() - ms));
             return;
         } else if (action.equals("build_vs_tree")) {
+
+
+	System.out.println("AjaxServlet build_vs_tree action");
+
+
             if (ontology_display_name == null)
                 ontology_display_name = CODING_SCHEME_NAME;
 
@@ -406,14 +412,31 @@ public final class AjaxServlet extends HttpServlet {
             return;
         } else if (action.equals("expand_src_vs_tree")) {
             if (node_id != null && ontology_display_name != null) {
+
+System.out.println("node_id: " + node_id);
+
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
+
+				if (ValueSetHierarchy._valueSetDefinitionSourceListing.contains(node_id)) {
+					HashMap hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
+					if (hmap != null) {
+						TreeItem root = (TreeItem) hmap.get(node_id);
+						if (root._expandable) {
+							// continue to expand according to the source hierarchy
+                            nodesArray = CacheController.getInstance().HashMap2JSONArray(hmap);
+						}
+					}
+				}
+
+				// expand value set
+				if (nodesArray == null) {
+                    nodesArray = CacheController.getInstance().getSubValueSets(node_id, true);
+				}
+
                 try {
-                    nodesArray =
-                        CacheController.getInstance().getSubValueSets(
-                            ontology_display_name, ontology_version, node_id);
                     if (nodesArray != null) {
 						System.out.println("expand_vs_tree nodesArray != null");
                         json.put("nodes", nodesArray);
