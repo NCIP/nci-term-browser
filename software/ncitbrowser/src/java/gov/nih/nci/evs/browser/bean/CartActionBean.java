@@ -341,8 +341,7 @@ public class CartActionBean {
         	_message = NOTHING_SELECTED;        
         	return null;
     	}    		
-        
-
+    
         // Get Entities to be exported and build export xml string
         // in memory
 
@@ -504,7 +503,6 @@ public class CartActionBean {
 
         _messageflag = false;
         
-
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         StringBuffer sb = new StringBuffer();
@@ -520,7 +518,6 @@ public class CartActionBean {
         	return null;
     	}         
         
-
         // Get Entities to be exported and build export file
         // in memory
 
