@@ -67,9 +67,6 @@
      tree_access_allowed = false;
  }
 
-          String term_suggestion_application_url = new DataUtils()
-              .getTermSuggestionURL();
-
        %>
           <!-- Thesaurus, banner search area -->
           <div class="bannerarea">
@@ -208,18 +205,7 @@
           <table border="0" width="700px">
             <tr>
               <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
-              <%
-                    VisitedConceptUtils.add(request, dictionary, vers, code, name);
-                    if (term_suggestion_application_url != null
-                        && term_suggestion_application_url.compareTo("") != 0) {
-              %>
-              <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
-                 <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(tg_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>" target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
-              </td>
-              <%
-                }
-              %>
-
+              <% VisitedConceptUtils.add(request, dictionary, vers, code, name); %>
             </tr>
           </table>
           <hr>

@@ -201,8 +201,41 @@
                 request.getSession().setAttribute("type", type);
                 request.getSession().setAttribute("singleton", "false");
         %> <!-- Page content -->
-  <div class="pagecontent">
-  <a name="evs-content" id="evs-content"></a>
+  
+  <div class="pagecontentLittlePadding">
+    <!-- DYEE -->
+    <div class="global-nav-line2">
+      <% Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE }; 
+         boolean tree_access2 = ! DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(dictionary);
+         boolean typeLink_isMapping2 = DataUtils.isMapping(dictionary, null);
+         if (tree_access2 && !typeLink_isMapping2) { %>
+           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+           <a href="#" onClick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+             View in Hierarchy</a>
+      <% } %>
+      <% boolean historyAccess = HistoryUtils.isHistoryServiceAvailable(dictionary); 
+         if (historyAccess) {%>
+           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+           <a href="#" onClick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_history.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+             View History</a>
+      <% } %>
+      <% if (false) { %>
+        <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+        <h:form><h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">   
+          <f:setPropertyActionListener target="#{CartActionBean.entity}" value="concept" />
+          <f:setPropertyActionListener target="#{CartActionBean.codingScheme}" value="dictionary" />
+          <f:setPropertyActionListener target="#{CartActionBean.version}" value="version" />
+        </h:commandLink></h:form>              
+      <% } %>
+  
+      <% if (term_suggestion_application_url != null && term_suggestion_application_url.compareTo("") != 0) { %>        
+        <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>           
+        <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
+          target="_blank" alt="Term Suggestion">Suggest Changes</a>
+      <% } %>
+    </div>
+  
+  <a name="evs-content" id="evs-content"></a>  
   <table border="0" width="700px">
     <tr>
       <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
@@ -223,23 +256,10 @@ if (namespace_list != null && namespace_list.size() > 1) {
 </td>
 </tr>
 <%
-
 }
-          
-          
-          
-          
-                VisitedConceptUtils.add(request, tg_dictionary_0, version, code, name);
-                if (term_suggestion_application_url != null
-                    && term_suggestion_application_url.compareTo("") != 0) {
-          %>
-                  <td align="right" valign="bottom" class="texttitle-blue-rightJust" nowrap>
-                    <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
-                    target="_blank" alt="Term Suggestion">Suggest changes to this concept</a>
-                  </td>
-          <%
-                }
-          %>
+VisitedConceptUtils.add(request, tg_dictionary_0, version, code, name);
+%>
+
                 <!-- <td align="right" valign="bottom" class="textbodysmall" nowrap><%= version %></td> -->
     </tr>
     <% if (deprecatedVersion != null) { %>

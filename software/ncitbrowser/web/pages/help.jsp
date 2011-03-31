@@ -307,7 +307,7 @@ else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
               goes to a special suggestion page.  This link is lost
               when <b>Visited Concepts</b> start, but is still available
               on the <b>Quick Links</b> pull-down menu.</li>
-            <li><b>Suggest changes to this concept</b> link appears in the
+            <li><b>Suggest changes</b> (to this concept) link appears in the
               upper right of all concept details pages of sources
               for which NCI can handle such requests.  It goes to
               a special suggestion page with source and concept code
