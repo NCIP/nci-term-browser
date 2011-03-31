@@ -279,11 +279,12 @@ public final class AjaxServlet extends HttpServlet {
             _logger.debug("Run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
             return;
+
         } else if (action.equals("build_vs_tree")) {
 
-
+	System.out.println("==================================================================");
 	System.out.println("AjaxServlet build_vs_tree action");
-
+	System.out.println("AjaxServlet ontology_display_name " + ontology_display_name);
 
             if (ontology_display_name == null)
                 ontology_display_name = CODING_SCHEME_NAME;
@@ -311,6 +312,7 @@ public final class AjaxServlet extends HttpServlet {
             _logger.debug("Run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
             return;
+
         } else if (action.equals("expand_vs_tree")) {
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");

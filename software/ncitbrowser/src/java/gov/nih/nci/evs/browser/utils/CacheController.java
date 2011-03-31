@@ -277,12 +277,17 @@ public class CacheController {
         return nodeArray;
     }
 
-    /// find coding scheme specific value sets
+    /// find coding scheme specific Value Sets
     public JSONArray getRootValueSets(String scheme, String version) {
         return getRootValueSets(scheme, version, true);
     }
 
     public JSONArray getRootValueSets(String scheme, String version, boolean fromCache) {
+System.out.println("===================================================");
+System.out.println("getRootValueSets: scheme: " + scheme);
+System.out.println("getRootValueSets: version: " + version);
+System.out.println("===================================================");
+
 
         List list = null;// new ArrayList();
         String key = scheme + "$" + version + "$valueset" + "$root";
@@ -310,7 +315,7 @@ public class CacheController {
                 nodesArray = new JSONArray();
 
 				for (String association : root._assocToChildMap.keySet()) {
-					 System.out.println("association: " + association);
+					 //System.out.println("association: " + association);
 
 					 List<TreeItem> children = root._assocToChildMap.get(association);
 					 for (TreeItem childItem : children) {
@@ -318,10 +323,12 @@ public class CacheController {
 						 String code = childItem._code;
 						 String name = childItem._text;
 
-						 System.out.println("\t" + name + " (code: " + code + ")");
+						 //System.out.println("\t" + name + " (code: " + code + ")");
 
 						 int childCount = 0;
 						 if (childItem._expandable) childCount = 1;
+
+						 //childItem._text = code + " (" + name + ")";
 
 						 try {
 							 JSONObject nodeObject = new JSONObject();
