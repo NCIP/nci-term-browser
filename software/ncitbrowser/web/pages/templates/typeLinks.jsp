@@ -10,10 +10,6 @@
  String tab_version = typeLinks_info.version;
  //System.out.println("typeLink.jsp tab_version: " + version);
 
- boolean tree_access = true;
- if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
-     tree_access = false;
- }
  boolean typeLink_isMapping = DataUtils.isMapping(scheme, null);
 
  
@@ -161,37 +157,7 @@ if (!typeLink_isMapping) {
           %>
     </td>
     <td align="right" valign="top">
-         <%
-          // hide View In Hierarchy button for mapping coding schemes
-          if (tree_access && !typeLink_isMapping) {
-         %>       
-    
-        <input onClick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');"
-                  type="button"
-                 class="redButton"
-                 value="View in Hierarchy"
-         />
-        
-	 <% } else {
-	 %>
-	    &nbsp;
-	 <%
-	 }
-	 %>    
-	 
-        <%
-        String link_scheme = scheme.replaceAll("%20", " ");
-        if (HistoryUtils.isHistoryServiceAvailable(link_scheme)) {
-        %>
-        &nbsp;
-        <input onClick="javascript:window.open('<%=request.getContextPath() %>/pages/concept_history.jsf?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');"
-                  type="button"
-                 class="redButton"
-                 value="View History"
-        />
-        <%
-        }
-        %>
+      &nbsp;
     </td>
   </tr>
 </table>
