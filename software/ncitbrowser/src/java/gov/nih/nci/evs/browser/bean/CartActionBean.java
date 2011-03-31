@@ -15,6 +15,7 @@ import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionRefer
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Utility.Constructors;
 
+import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,7 @@ import org.LexGrid.concepts.Entity;
 
 import org.apache.log4j.Logger;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
+import org.LexGrid.valueSets.CodingSchemeReference;
 import org.LexGrid.valueSets.DefinitionEntry;
 import org.LexGrid.valueSets.EntityReference;
 import org.LexGrid.valueSets.ValueSetDefinition; 
@@ -260,15 +262,26 @@ public class CartActionBean {
 			vsd.setValueSetDefinitionURI("EXPORT:VSDREF_CART");
 			vsd.setValueSetDefinitionName("VSDREF_CART");
 
+			// **************** test *******************************
 			// Set default coding scheme
-			String version = search.getDefaultSchemeVersion("NCI_Thesaurus");
-			String uri = search.getSchemeURI("NCI_Thesaurus",version);
-			
 			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+
+			// Add Thesaurus
+			String version = search.getDefaultSchemeVersion("NCI_Thesaurus");
+			String uri = search.getSchemeURI("NCI_Thesaurus",version);						
 			csvList.addAbsoluteCodingSchemeVersionReference(Constructors
 				.createAbsoluteCodingSchemeVersionReference(uri,version));		
+
+			// Add Zebrafish
+			version = search.getDefaultSchemeVersion("Zebrafish");
+			uri = search.getSchemeURI("Zebrafish",version);						
+			csvList.addAbsoluteCodingSchemeVersionReference(Constructors
+				.createAbsoluteCodingSchemeVersionReference(uri,version));			
 			
-			vsd.setDefaultCodingScheme("NCI_Thesaurus");
+			//vsd.setDefaultCodingScheme("NCI_Thesaurus"); // Test #1
+			//vsd.setDefaultCodingScheme("Zebrafish"); // Test #2			
+			
+			// *************** test *************************************
 			
 			// Set concept domain
 			vsd.setConceptDomain("Concepts");
@@ -312,11 +325,16 @@ public class CartActionBean {
             		entityRef.setEntityCode(EC);
             		entityRef.setEntityCodeNamespace(ECN);
             		entityRef.setLeafOnly(false);
-            		entityRef.setTransitiveClosure(false);
+            		entityRef.setTransitiveClosure(false);            		
 
             		// To add another definitionEntry to VSD, we fist re-instantiate DefinitionEntry
             		de = new DefinitionEntry();
-            		 
+            		
+            		// Set coding scheme            		
+        			CodingSchemeReference csr = new CodingSchemeReference(); 
+            		csr.setCodingScheme(ref.getCodingSchemeName());
+            		de.setCodingSchemeReference(csr);
+            		
             		// Set the order and operator for this definitionEntry
             		de.setRuleOrder(2L);
             		de.setOperator(DefinitionOperator.OR);        		
@@ -336,11 +354,18 @@ public class CartActionBean {
     		InputStream reader = vsd_service.exportValueSetResolution(vsd, null,
     			csvList, null, false);
     		
+    		System.out.println("--------------------------------------");
+    		int limit = 10000;
+    		
 			if (reader != null) {
 				buf = new StringBuffer();
 				try {
-					for (int c = reader.read(); c != -1; c = reader.read())
+					for (int c = reader.read(); c != -1; c = reader.read()) {
 						buf.append((char) c);
+						
+						if (limit < 0) break;
+						limit = limit - 1;
+					}	
 				} catch (IOException e) {
 					throw e;
 				} finally {
@@ -437,11 +462,11 @@ public class CartActionBean {
         private String codingScheme = null;
         private String nameSpace = null;
         private String name = null;
-        private boolean selected = false;
         private String version = null;
         private String url = null;
         private String displayStatus = "";
         private String displayCodingSchemeName = "[Not Set]";
+        private HtmlSelectBooleanCheckbox checkbox = null;
 
         // Getters & setters
 
@@ -488,14 +513,6 @@ public class CartActionBean {
             this.name = name;
         }
 
-        public void setSelected(Boolean value) {
-            this.selected = value;
-        }
-
-        public Boolean getSelected() {
-            return this.selected;
-        }
-
         public String getVersion() {
             return this.version;
         }
@@ -518,6 +535,25 @@ public class CartActionBean {
         	return code + " (" + displayCodingSchemeName + " " + version + ")"; 
         }
         
+        public HtmlSelectBooleanCheckbox getCheckbox() {
+         	if (checkbox == null) checkbox = new HtmlSelectBooleanCheckbox();
+            return checkbox;
+        }
+        
+        public void setCheckbox(HtmlSelectBooleanCheckbox checkbox) {
+            this.checkbox = checkbox;
+        }
+
+        // *** Private Methods ***
+        
+        private void setSelected(boolean selected) {
+        	this.checkbox.setSelected(selected);
+        }
+        
+        private boolean getSelected() {
+        	return this.checkbox.isSelected();
+        }    
+
         private void initDisplayStatus() {
             if (this.codingScheme == null || this.version == null || this.code == null)
                 return;
@@ -547,6 +583,20 @@ public class CartActionBean {
     //**
 
     /**
+     * Test any concept in the cart has been selected
+     * @return
+     */
+    private boolean hasSelected() {
+        if (_cart != null && _cart.size() > 0) {
+            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+                Concept item = (Concept)i.next();
+                if (item.getSelected()) return true;
+            }
+        }
+        return false;
+    }    
+    
+    /**
      * Dump contents of cart object
      * (non-Javadoc)
      * @see java.lang.Object#toString()
@@ -564,7 +614,7 @@ public class CartActionBean {
                 sb.append("\t      Version = " + item.version + "\n");
                 sb.append("\t   Name space = " + item.nameSpace + "\n");
                 sb.append("\t         Name = " + item.name + "\n");
-                sb.append("\t     Selected = " + item.selected + "\n");
+                sb.append("\t     Selected = " + item.getSelected() + "\n");
                 sb.append("\t          URL = " + item.url + "\n");
             }
         } else {
