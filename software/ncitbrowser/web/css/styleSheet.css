@@ -535,11 +535,32 @@ a.hideLink
  word-wrap: break-word;
 }
 
+.pagecontentLittlePadding
+{
+ background-image: url(../images/content-background.gif);
+ background-repeat: repeat-x;
+ padding-top: 5px;
+ padding-right: 11px;
+ padding-bottom: 0;
+ padding-left: 12px;
+ word-wrap: break-word;
+}
+
 .global-nav, .global-nav a
 {
  font-weight: bold;
  font-size: 11px;
  color: #2F2F5F;
+}
+
+.global-nav-line2, .global-nav-line2 a text
+{
+ font-weight: bold;
+ font-size: 11px;
+ color: #2F2F5F;
+ position: relative;
+ left: 370px;
+ top: 0px;
 }
 
 /* ------------- Tab bar classes ------------- */
