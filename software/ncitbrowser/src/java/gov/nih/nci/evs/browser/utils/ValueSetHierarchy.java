@@ -110,7 +110,8 @@ public class ValueSetHierarchy {
     public static Vector  _availableValueSetDefinitionSources = null;
     public static Vector  _valueSetDefinitionHierarchyRoots = null;
 
-    public static Vector  _valueSetDefinitionSourceListing = null;
+    //public static Vector  _valueSetDefinitionSourceListing = null;
+    public static HashMap _valueSetDefinitionSourceCode2Name_map = null;
 
 	//private static String URL = "http://bmidev4:19280/lexevsapi60";
 	//private static String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
@@ -1450,7 +1451,8 @@ public class ValueSetHierarchy {
 		if (_source_hierarchy != null) return _source_hierarchy;
 
 		_source_hierarchy = new HashMap();
-		_valueSetDefinitionSourceListing = getCodeList(SOURCE_SCHEME, SOURCE_VERSION);
+		//_valueSetDefinitionSourceListing = getCodeList(SOURCE_SCHEME, SOURCE_VERSION);
+		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(SOURCE_SCHEME, SOURCE_VERSION);
 
 		// value set source coding scheme
 		ResolvedConceptReferenceList roots = getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
@@ -1555,7 +1557,7 @@ public class ValueSetHierarchy {
 
 
 
-    public static Vector getCodeList(String scheme, String version) {
+    public static HashMap getCodeHashMap(String scheme, String version) {
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 
@@ -1575,6 +1577,7 @@ public class ValueSetHierarchy {
                 e1.printStackTrace();
             }
 
+            HashMap hmap = new HashMap();
             try {
                 //LocalNameList propertyNames = null;
                 SortOptionList sortOptions = null;
@@ -1592,9 +1595,10 @@ public class ValueSetHierarchy {
                         ResolvedConceptReference rcr =
                             rcrl.getResolvedConceptReference(i);
                         v.add(rcr.getConceptCode() + "|" + rcr.getEntityDescription().getContent());
+                        hmap.put(rcr.getConceptCode(), rcr.getEntityDescription().getContent());
 					}
 				}
-				return v;
+				return hmap;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -1861,7 +1865,8 @@ System.out.println("ValueSetHierarchy Step 0 getRootValueSets  " + bySource);
 						name = "<NOT ASSIGNED>";
 					}
 
-					TreeItem ti = new TreeItem(src, src);
+                    String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
+					TreeItem ti = new TreeItem(src, text);
 					ti._expandable = false;
 					children.add(ti);
 				}
@@ -1878,7 +1883,8 @@ System.out.println("ValueSetHierarchy Step 0 getRootValueSets  " + bySource);
 						name = "<NOT ASSIGNED>";
 					}
 
-					TreeItem ti = new TreeItem(src, src);
+                    String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
+					TreeItem ti = new TreeItem(src, text);
 					ti._expandable = true;
 					children.add(ti);
 				}
@@ -1913,7 +1919,7 @@ System.out.println("ValueSetHierarchy Step 0 getRootValueSets  " + bySource);
         for (int i=0; i<root_cs_vec.size(); i++) {
 			String cs = (String) root_cs_vec.elementAt(i);
 			//cs = cs.replaceAll(" ", "_");
-			String code = cs + "_root";
+			String code = "root_" + cs;
 			TreeItem ti = new TreeItem(code, cs);
 			ti._expandable = true;
 			children.add(ti);
@@ -2101,13 +2107,14 @@ try {
 */
     // code: value set URI
 	public static HashMap getSubValueSets(String scheme, String code) {
+		if (scheme == null) {
+			// return subconcepts from the source coding scheme
+			return new TreeUtils().getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
+		}
+
 		String codingSchemeURN = null;
-
-		if (scheme != null) {
-			String formalName = DataUtils.getFormalName(scheme);
-			codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
-	    }
-
+		String formalName = DataUtils.getFormalName(scheme);
+		codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
 
 		HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_in_cs_vsd_vec = new Vector();
@@ -2140,7 +2147,7 @@ try {
 				uri2VSD_map.put(uri, vsd);
 				participating_vsd_vec.add(uri);
 
-				System.out.println("participating_vsd: " + vsd.getValueSetDefinitionName());
+				//System.out.println("participating_vsd: " + vsd.getValueSetDefinitionName());
 
 				java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
 

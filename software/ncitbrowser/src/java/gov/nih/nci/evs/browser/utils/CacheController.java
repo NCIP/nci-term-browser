@@ -282,8 +282,7 @@ public class CacheController {
         return getRootValueSets(scheme, version, true);
     }
 
-    public JSONArray getRootValueSets(String scheme, String version,
-        boolean fromCache) {
+    public JSONArray getRootValueSets(String scheme, String version, boolean fromCache) {
 
         List list = null;// new ArrayList();
         String key = scheme + "$" + version + "$valueset" + "$root";
