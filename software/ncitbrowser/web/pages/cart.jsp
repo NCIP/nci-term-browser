@@ -13,7 +13,7 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body>
+<body onLoad="javascript:popupMessage();document.forms.searchTerm.matchText.focus();">
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
@@ -26,6 +26,11 @@
    	function backButton() {
    		location.href = '<h:outputText value="#{CartActionBean.backurl}"/>';
    	}
+      function popupMessage() {
+         if (<h:outputText value="#{CartActionBean.messageflag}"/>) {
+          alert('<h:outputText value="#{CartActionBean.message}"/>');
+         }
+      }
       function confirmRemoveMessage() {
          var count = <h:outputText value="#{CartActionBean.count}"/>;
          var flag = false;
@@ -75,7 +80,13 @@
 						  </tr>
 						</table>
 					</td>
-					<td align="right">											    
+					<td align="right">	
+		            <h:commandLink action="#{CartActionBean.selectAllInCart}" styleClass="texttitle-blue-small">
+		              <h:graphicImage value="../images/selectall.gif" alt="Select All" title="Select all concepts" style="border: none" />
+		            </h:commandLink>&nbsp;
+		            <h:commandLink action="#{CartActionBean.unselectAllInCart}" styleClass="texttitle-blue-small">
+		              <h:graphicImage value="../images/clearselections.gif" alt="Unselect" title="Unselect all concepts" style="border: none" />
+		            </h:commandLink>&nbsp;										    
                   <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small" onclick="return confirmRemoveMessage();">
                     <h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove concepts from the cart" style="border: none" />
                   </h:commandLink>&nbsp;
@@ -104,7 +115,7 @@
 							<tr class="dataRowLight">
 						</c:otherwise>
 				    </c:choose>   
-                  <td><h:selectBooleanCheckbox id="checkboxId" binding="#{item.checkbox}" onclick="submit()"/></td>
+				    	<td><h:selectBooleanCheckbox id="checkboxId" binding="#{item.checkbox}" onclick="submit()"/></td>
 				    	<td>
 				    		<h:outputLink value="#{item.url}">${item.name}</h:outputLink> ${item.displayStatus}
 				    	</td> 
