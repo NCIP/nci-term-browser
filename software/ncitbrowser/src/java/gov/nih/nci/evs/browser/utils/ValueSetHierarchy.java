@@ -1776,10 +1776,6 @@ public class ValueSetHierarchy {
 	public static HashMap getRootValueSets(boolean bySource) {
 		if (!bySource) return getRootValueSets();
 
-
-System.out.println("ValueSetHierarchy Step 0 getRootValueSets  " + bySource);
-
-
 		HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_vec = new Vector();
         HashSet source_set = new HashSet();
@@ -1866,7 +1862,7 @@ System.out.println("ValueSetHierarchy Step 0 getRootValueSets  " + bySource);
 					}
 
                     String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
-					TreeItem ti = new TreeItem(src, text);
+					TreeItem ti = new TreeItem(src, src + " (" + text + ")");
 					ti._expandable = false;
 					children.add(ti);
 				}
@@ -1884,7 +1880,7 @@ System.out.println("ValueSetHierarchy Step 0 getRootValueSets  " + bySource);
 					}
 
                     String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
-					TreeItem ti = new TreeItem(src, text);
+					TreeItem ti = new TreeItem(src, src + " (" + text + ")");
 					ti._expandable = true;
 					children.add(ti);
 				}
@@ -2256,9 +2252,6 @@ try {
 		System.out.println("Existing ValueSetHierarchy getSubValueSets...");
         return hmap;
 	}
-
-
-
 
 
 	public static void main(String[] args) throws Exception {

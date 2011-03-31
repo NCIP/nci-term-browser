@@ -462,7 +462,7 @@ System.out.println("TreeUtils().getSubconcepts " + ValueSetHierarchy.SOURCE_VERS
 
 					HashMap hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
 
-
+                    TreeUtils.relabelTreeNodes(hmap);
 System.out.println("return from getSubconcepts ..." );
 
 
