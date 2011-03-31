@@ -110,6 +110,8 @@ public class ValueSetHierarchy {
     public static Vector  _availableValueSetDefinitionSources = null;
     public static Vector  _valueSetDefinitionHierarchyRoots = null;
 
+    public static Vector  _valueSetDefinitionSourceListing = null;
+
 	//private static String URL = "http://bmidev4:19280/lexevsapi60";
 	//private static String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
 	//private static String URL = "http://ncias-q532-v.nci.nih.gov:29080/lexevsapi60";
@@ -1448,6 +1450,8 @@ public class ValueSetHierarchy {
 		if (_source_hierarchy != null) return _source_hierarchy;
 
 		_source_hierarchy = new HashMap();
+		_valueSetDefinitionSourceListing = getCodeList(SOURCE_SCHEME, SOURCE_VERSION);
+
 		// value set source coding scheme
 		ResolvedConceptReferenceList roots = getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
 
@@ -1809,8 +1813,6 @@ System.out.println("ValueSetHierarchy Step 0 getRootValueSets  " + bySource);
 			}
 		}
 
-System.out.println("ValueSetHierarchy Step 1 " + bySource);
-
 
 		TreeItem root = new TreeItem("<Root>", "Root node");
 
@@ -1952,7 +1954,7 @@ System.out.println("ValueSetHierarchy Step 1 " + bySource);
     }
 
 
-
+/*
 
 // to be modified
 	public static HashMap getSubValueSets(String scheme, String code) {
@@ -2095,6 +2097,160 @@ try {
 		System.out.println("Existing ValueSetHierarchy getSubValueSets...");
         return hmap;
 	}
+
+*/
+    // code: value set URI
+	public static HashMap getSubValueSets(String scheme, String code) {
+		String codingSchemeURN = null;
+
+		if (scheme != null) {
+			String formalName = DataUtils.getFormalName(scheme);
+			codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
+	    }
+
+
+		HashMap source_hier = getValueSetSourceHierarchy();
+        Vector source_in_cs_vsd_vec = new Vector();
+        HashMap source2VSD_map = new HashMap();
+        HashMap uri2VSD_map = new HashMap();
+		ValueSetDefinition root_vsd = null;
+		Vector participating_vsd_vec = new Vector();
+
+		System.out.println("ValueSetHierarchy getSubValueSets codingSchemeURN: " + codingSchemeURN);
+		// find participating VSDs based on scheme uri2VSD_map & source2VSD_map
+
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			//
+            Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
+            boolean restriction_to_cs_condition = true;
+            if (codingSchemeURN != null) {
+				if (!cs_vec.contains(codingSchemeURN)) {
+					restriction_to_cs_condition = false;
+				}
+			}
+            if (restriction_to_cs_condition) {
+				ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+				if (uri.compareTo(code) == 0) {
+					root_vsd = vsd;
+				}
+
+				uri2VSD_map.put(uri, vsd);
+				participating_vsd_vec.add(uri);
+
+				System.out.println("participating_vsd: " + vsd.getValueSetDefinitionName());
+
+				java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+				while (sourceEnum.hasMoreElements()) {
+					Source src = (Source) sourceEnum.nextElement();
+					String src_str = src.getContent();
+					if (!source_in_cs_vsd_vec.contains(src_str)) {
+						source_in_cs_vsd_vec.add(src_str);
+					}
+					if (source2VSD_map.containsKey(src_str)) {
+						Vector vsd_v = (Vector) source2VSD_map.get(src_str);
+						if (!vsd_v.contains(uri)) {
+							vsd_v.add(uri);
+						}
+						source2VSD_map.put(src_str, vsd_v);
+					} else {
+						Vector vsd_v = new Vector();
+						vsd_v.add(uri);
+						source2VSD_map.put(src_str, vsd_v);
+					}
+				}
+			}
+		}
+
+		if (root_vsd == null) {
+			System.out.println("Error: VSD " + code + " not found.");
+			return null;
+		} else {
+			System.out.println("fining subs for VSD: " + code);
+		}
+
+
+		TreeItem root = new TreeItem(code, root_vsd.getValueSetDefinitionName());
+
+        List <TreeItem> children = new ArrayList();
+
+		java.util.Enumeration<? extends Source> sourceEnum = root_vsd.enumerateSource();
+
+try {
+		while (sourceEnum.hasMoreElements()) {
+			Source src = (Source) sourceEnum.nextElement();
+
+			String src_str = src.getContent();
+
+			System.out.println("root source: " + src_str);
+
+			if (_source_subconcept_map.containsKey(src_str)) {
+				Vector sub_vec = (Vector) _source_subconcept_map.get(src_str);
+				for (int k=0; k<sub_vec.size(); k++) {
+					String sub_src = (String) sub_vec.elementAt(k);
+					System.out.println("\tsubsource: " + sub_src);
+
+					Vector sub_vsd_vec = (Vector) source2VSD_map.get(sub_src);
+					if (sub_vsd_vec != null) {
+						for (int m=0; m<sub_vsd_vec.size(); m++) {
+							String sub_vsd_uri = (String) sub_vsd_vec.elementAt(m);
+
+							if (participating_vsd_vec.contains(sub_vsd_uri)) {
+								System.out.println("\t\tparticipating_vsd: " + sub_vsd_uri);
+
+								ValueSetDefinition sub_vsd = (ValueSetDefinition) uri2VSD_map.get(sub_vsd_uri);
+
+								String vsd_text = sub_vsd.getValueSetDefinitionName();
+								System.out.println("sub vsd found: " + sub_vsd_uri + " " + vsd_text);
+
+
+										java.util.Enumeration<? extends Source> sub_vsd_sourceEnum = sub_vsd.enumerateSource();
+										while (sub_vsd_sourceEnum.hasMoreElements()) {
+											Source sub_vsd_src = (Source) sub_vsd_sourceEnum.nextElement();
+											String sub_vsd_src_str = sub_vsd_src.getContent();
+											System.out.println("sub_vsd_src_str: " + sub_vsd_src_str);
+										}
+
+
+
+								TreeItem ti_sub = new TreeItem(sub_vsd_uri, vsd_text);
+								ti_sub._expandable = false; // to be modified
+								children.add(ti_sub);
+							} else {
+								System.out.println("\t\tNot in participating_vsd: " + sub_vsd_uri);
+							}
+						}
+				    }
+				}
+			}
+		}
+} catch (Exception ex) {
+	ex.printStackTrace();
+}
+		if (root == null) {
+			System.out.println("root == null???");
+			return null;
+		}
+		root._expandable = false;
+		if (children.size() > 0) {
+			root._expandable = true;
+		}
+
+		System.out.println("root.addAll...");
+
+		root.addAll("[inverse_is_a]", children);
+
+		HashMap hmap = new HashMap();
+		hmap.put(code, root);
+
+		System.out.println("Existing ValueSetHierarchy getSubValueSets...");
+        return hmap;
+	}
+
+
 
 
 

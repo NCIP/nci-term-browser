@@ -171,10 +171,9 @@
 
 
     function onClickTreeNode(ontology_node_id) {
-        window.open ('<%= request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&&vsd_uri=' + ontology_node_id,
-        "", "alwaysRaised,dependent,status,scrollbars,resizable,width=800,height=600");  
-      
-    }
+        window.location = '<%= request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=' + ontology_node_id;
+   }
+    
 
     function onClickViewEntireOntology(ontology_display_name) {
       var ontology_display_name = document.pg_form.ontology_display_name.value;
