@@ -245,6 +245,41 @@ public class CacheController {
         return nodeArray;
     }
 
+    public JSONArray getSubValueSets(String code) {
+        HashMap map = null;
+        String key = "sub_vsd_uri_$" + code;
+        boolean fromCache = true;
+        JSONArray nodeArray = null;
+        if (fromCache) {
+            Element element = _cache.get(key);
+            if (element != null) {
+                nodeArray = (JSONArray) element.getValue();
+            }
+        }
+        if (nodeArray == null) {
+            _logger.debug("Not in cache -- calling getSubValueSets ");
+            System.out.println("Not in cache -- calling getSubValueSets ");
+            map = ValueSetHierarchy.getSubValueSets(code);
+            System.out.println("exit ValueSetHierarchy.getSubValueSets ");
+            System.out.println("calling HashMap2JSONArray... ");
+            nodeArray = HashMap2JSONArray(map);
+
+            if (fromCache) {
+                try {
+                    Element element = new Element(key, nodeArray);
+                    _cache.put(element);
+                } catch (Exception ex) {
+
+                }
+            }
+        } else {
+            _logger.debug("Retrieved from cache.");
+        }
+        return nodeArray;
+    }
+
+
+
     public JSONArray getSubValueSets(String code, boolean fromCache) {
         HashMap map = null;
         String key = "sub_vsd$" + code;
