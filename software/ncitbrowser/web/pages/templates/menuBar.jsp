@@ -42,7 +42,7 @@
     <td align="left">
       <% if (menubar_isMapping) { %>
         <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
-        <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=menubar_version%>" tabindex="11">
+        <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=menubar_version%>&nav_type=mappings" tabindex="11">
           Mapping</a>
       <% } else if (tree_access_allowed) { %>
         <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>

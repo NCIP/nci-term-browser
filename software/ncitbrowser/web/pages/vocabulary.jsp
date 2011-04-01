@@ -255,7 +255,7 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                          <% Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE }; %>
                          <% if (vocabulary_isMapping) { %>
                               <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
-                              <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>">
+                              <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>&nav_type=mappings">
                                 Mapping
                               </a>
                          <% } else if (tree_access_allowed) { %>
