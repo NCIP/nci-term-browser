@@ -1113,7 +1113,7 @@ int selected_knt = 0;
                 request.getSession().setAttribute("matchText",
                     HTTPUtils.convertJSPString(matchText));
 
-                request.getSession().setAttribute("nav_type", "Terminologies");
+                request.getSession().setAttribute("nav_type", "terminologies");
 
                 return "multiple_search";
             } else {
