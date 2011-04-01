@@ -231,7 +231,7 @@ public class CacheController {
             System.out.println("calling HashMap2JSONArray... ");
             nodeArray = HashMap2JSONArray(map);
 
-            if (fromCache) {
+            if (nodeArray != null && fromCache) {
                 try {
                     Element element = new Element(key, nodeArray);
                     _cache.put(element);
@@ -264,14 +264,14 @@ public class CacheController {
             System.out.println("calling HashMap2JSONArray... ");
             nodeArray = HashMap2JSONArray(map);
 
-            if (fromCache) {
-                try {
-                    Element element = new Element(key, nodeArray);
-                    _cache.put(element);
-                } catch (Exception ex) {
+            if (nodeArray != null && fromCache) {
+				try {
+					Element element = new Element(key, nodeArray);
+					_cache.put(element);
+				} catch (Exception ex) {
 
-                }
-            }
+				}
+		    }
         } else {
             _logger.debug("Retrieved from cache.");
         }
@@ -298,7 +298,7 @@ public class CacheController {
             System.out.println("calling HashMap2JSONArray... ");
             nodeArray = HashMap2JSONArray(map);
 
-            if (fromCache) {
+            if (nodeArray != null && fromCache) {
                 try {
                     Element element = new Element(key, nodeArray);
                     _cache.put(element);
@@ -1022,30 +1022,6 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
             .getObjectValue();
     }
 
-/*
-    public static String getTree(String codingScheme,
-        CodingSchemeVersionOrTag versionOrTag, String code) {
-        if (!CacheController._instance
-            .containsKey(getTreeKey(codingScheme, code))) {
-            _logger.debug("Tree Not Found In Cache.");
-            TreeService treeService =
-                TreeServiceFactory.getInstance().getTreeService(
-                    RemoteServerUtil.createLexBIGService());
-
-            LexEvsTree tree =
-                treeService.getTree(codingScheme, versionOrTag, code);
-
-            String json =
-                treeService.getJsonConverter().buildJsonPathFromRootTree(
-                    tree.getCurrentFocus());
-
-            _cache.put(new Element(getTreeKey(tree), json));
-            return json;
-        }
-        return (String) _cache.get(getTreeKey(codingScheme, code))
-            .getObjectValue();
-    }
-*/
 
     public static String getTree(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
@@ -1062,9 +1038,6 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
             String json =
                 treeService.getJsonConverter().buildJsonPathFromRootTree(
                     tree.getCurrentFocus());
-
-
-System.out.println("cachController json: " + json);
 
             _cache.put(new Element(getTreeKey(tree, versionOrTag.getVersion()), json));
             return json;
