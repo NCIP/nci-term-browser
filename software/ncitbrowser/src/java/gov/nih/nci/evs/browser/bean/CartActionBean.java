@@ -352,114 +352,74 @@ public class CartActionBean {
 
     		// Instantiate VSD
     		ValueSetDefinition vsd = new ValueSetDefinition();
-	
-			// Populate VSD meta-data
 			vsd.setValueSetDefinitionURI("EXPORT:VSDREF_CART");
 			vsd.setValueSetDefinitionName("VSDREF_CART");
-
-			// **************** test *******************************
-			// Set default coding scheme
-			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-
-			// Add Thesaurus
-			String version = search.getDefaultSchemeVersion("NCI_Thesaurus");
-			String uri = search.getSchemeURI("NCI_Thesaurus",version);						
-			csvList.addAbsoluteCodingSchemeVersionReference(Constructors
-				.createAbsoluteCodingSchemeVersionReference(uri,version));		
-
-			// Add Zebrafish
-			version = search.getDefaultSchemeVersion("Zebrafish");
-			uri = search.getSchemeURI("Zebrafish",version);						
-			csvList.addAbsoluteCodingSchemeVersionReference(Constructors
-				.createAbsoluteCodingSchemeVersionReference(uri,version));			
-			
-			//vsd.setDefaultCodingScheme("NCI_Thesaurus"); // Test #1
-			//vsd.setDefaultCodingScheme("Zebrafish"); // Test #2			
-			
-			// *************** test *************************************
-			
-			// Set concept domain
 			vsd.setConceptDomain("Concepts");
 
 			// Instantiate DefinitionEntry(Rule Set)
 			DefinitionEntry de = new DefinitionEntry();
-
-			// Assign the rule order(order this definitionEntry should be processed)
 			de.setRuleOrder(1L);
-
-			// Assign operator (OR, AND or SUBTRACT). This is to OR, AND or SUBTRACT the result of this definitionEntry from vsd resolution
 			de.setOperator(DefinitionOperator.OR);
+			vsd.addDefinitionEntry(de);			
 
-			// Instantiate ValueSetDefinitionReference which is one of the 4 definitionEntry (the other:CodingSchemeReference, EntityReference and PropertyReference) 
+			// Instantiate ValueSetDefinitionReference 
 			ValueSetDefinitionReference vsdRef = new ValueSetDefinitionReference();
-		 
-			// Assign referenced VSD
 			vsdRef.setValueSetDefinitionURI("EXPORT:CART_NODES");
-		 
-			// Add vsdReference to definitionEntry.
 			de.setValueSetDefinitionReference(vsdRef);
-		 
-			// add the definitionEntry to VSD. With this, we added the first definitionEntry to VSD
-			vsd.addDefinitionEntry(de);
 
-            // Add all terms from the cart
+			// Add terms from the cart - DefinitionEntry(Rule Set)
+			
+			DefinitionEntry deSub = null;
+			long ruleOrder = 2;
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept) i.next();
                 ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
-                if (ref != null) {
+                
+                if (item.getSelected() && ref != null) {
 					_logger.debug("Exporting: " + ref.getCode() + "("
 							+ item.codingScheme + ":" + item.version + ")");
 
-                    String EC = ref.getEntity().getEntityCode();
-                    String ECN = ref.getCodeNamespace();                     
-                    
-            		// Instantiate EntityReference which is one of the 4 definitionEntry
-            		EntityReference entityRef = new EntityReference();
+					deSub = new DefinitionEntry();
+					deSub.setRuleOrder(ruleOrder); ruleOrder++;
+					deSub.setOperator(DefinitionOperator.OR);   					
+					
+            		// Instantiate EntityReference
+            		EntityReference entityRef = new EntityReference();					
+                    String entityCode = ref.getEntity().getEntityCode();
+                    String entityNameSpace = ref.getCodeNamespace();                     
             		 
             		// set appropriate values for entityReference
-            		entityRef.setEntityCode(EC);
-            		entityRef.setEntityCodeNamespace(ECN);
+            		entityRef.setEntityCode(entityCode);
+            		entityRef.setEntityCodeNamespace(entityNameSpace);
             		entityRef.setLeafOnly(false);
             		entityRef.setTransitiveClosure(false);            		
-
-            		// To add another definitionEntry to VSD, we fist re-instantiate DefinitionEntry
-            		de = new DefinitionEntry();
-            		
-            		// Set coding scheme            		
-        			CodingSchemeReference csr = new CodingSchemeReference(); 
-            		csr.setCodingScheme(ref.getCodingSchemeName());
-            		de.setCodingSchemeReference(csr);
-            		
-            		// Set the order and operator for this definitionEntry
-            		de.setRuleOrder(2L);
-            		de.setOperator(DefinitionOperator.OR);        		
-            		
-            		// add entityReference to definitionEntry
-            		de.setEntityReference(entityRef);
-            		 
-            		// add the second definitionEntry to VSD
-            		vsd.addDefinitionEntry(de);  
-
+            		deSub.setEntityReference(entityRef);
+            		vsd.addDefinitionEntry(deSub);  
                 }
             }
-
+            
+			// Add list of coding schemes
+			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+                Concept item = (Concept) i.next();
+                ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+    			String version = search.getDefaultSchemeVersion(ref.getCodingSchemeName());
+    			String uri = search.getSchemeURI(ref.getCodingSchemeName(),version);						
+    			csvList.addAbsoluteCodingSchemeVersionReference(Constructors
+    				.createAbsoluteCodingSchemeVersionReference(uri,version));               
+            }
+            
             // Build a buffer holding the XML data
     		
             StringBuffer buf = null;           
     		InputStream reader = vsd_service.exportValueSetResolution(vsd, null,
     			csvList, null, false);
     		
-    		System.out.println("--------------------------------------");
-    		int limit = 10000;
-    		
 			if (reader != null) {
 				buf = new StringBuffer();
 				try {
 					for (int c = reader.read(); c != -1; c = reader.read()) {
 						buf.append((char) c);
-						
-						if (limit < 0) break;
-						limit = limit - 1;
 					}	
 				} catch (IOException e) {
 					throw e;
