@@ -448,7 +448,7 @@ System.out.println("node_id: " + node_id);
             return;
         } else if (action.equals("expand_src_vs_tree")) {
 
-System.out.println("node_id: " + node_id);
+System.out.println("(********) expand_src_vs_tree node_id: " + node_id);
 
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
@@ -458,9 +458,7 @@ System.out.println("node_id: " + node_id);
 
 				if (ValueSetHierarchy._valueSetDefinitionSourceCode2Name_map.containsKey(node_id)) {
 
-System.out.println("found in source listing: " + node_id);
-System.out.println("TreeUtils().getSubconcepts " + ValueSetHierarchy.SOURCE_SCHEME);
-System.out.println("TreeUtils().getSubconcepts " + ValueSetHierarchy.SOURCE_VERSION);
+System.out.println("(**********) found in source listing: " + node_id);
 
 					HashMap hmap = null;
                     if (ValueSetHierarchy.hasSubSourceInSourceHierarchy(node_id)) {
@@ -471,20 +469,41 @@ System.out.println("TreeUtils().getSubconcepts " + ValueSetHierarchy.SOURCE_VERS
 						hmap = ValueSetHierarchy.getValueSetDefinitionNodesWithSource(node_id);
 					}
 
-System.out.println("return from getSubconcepts ..." );
-
+                    TreeItem root = null;
 					if (hmap != null) {
-						TreeItem root = (TreeItem) hmap.get(node_id);
-
-if (root != null) {
-	System.out.println("return from getSubconcepts ..." + root._code + " " + root._text);
-}
+						Iterator it = hmap.keySet().iterator();
+						while (it.hasNext()) {
+							String key = (String) it.next();
+							root = (TreeItem) hmap.get(key);
+							if (root == null) {
+								System.out.println("expand_src_vs_tree returns NULL???.(1).");
+							}
+					    }
 
 						if (root._expandable) {
 							// continue to expand according to the source hierarchy
                             nodesArray = CacheController.getInstance().HashMap2JSONArray(hmap);
 						}
+					} else {
+						System.out.println("expand_src_vs_tree returns NULL???..(2).");
 					}
+				} else {
+
+System.out.println("(**********) NOT found in source listing (so it is a value set): " + node_id);
+
+					try {
+						nodesArray =
+							CacheController.getInstance().getSubValueSets(node_id);
+						if (nodesArray != null) {
+							System.out.println("expand_vs_tree nodesArray != null");
+							json.put("nodes", nodesArray);
+						} else {
+							System.out.println("expand_vs_tree nodesArray == null???");
+						}
+
+					} catch (Exception e) {
+					}
+
 				}
 
 				// expand value set

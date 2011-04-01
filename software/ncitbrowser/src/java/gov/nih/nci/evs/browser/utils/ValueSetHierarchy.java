@@ -2214,12 +2214,14 @@ try {
 */
     // code: value set URI
 	public static HashMap getSubValueSets(String scheme, String code) {
+
 		if (scheme == null) {
 			// default to source hierarchy
 			 HashMap hmap = new TreeUtils().getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
              TreeUtils.relabelTreeNodes(hmap);
 			 return hmap;
 		}
+
 
         // find sub value sets based on value set source data:
 		String codingSchemeURN = null;
@@ -2367,6 +2369,64 @@ try {
         return hmap;
 	}
 
+
+    // code: parent vsd_uri
+	public static HashMap getSubValueSets(String vsd_uri) {
+		HashMap source_hier = getValueSetSourceHierarchy();
+		createVSDSource2VSDsMap();
+		Vector sub_src_vec = new Vector();
+		HashSet hset = new HashSet();
+
+		ValueSetDefinition root_vsd = findValueSetDefinitionByURI(vsd_uri);
+		TreeItem root = new TreeItem(root_vsd.getValueSetDefinitionURI(), root_vsd.getValueSetDefinitionName());
+
+		java.util.Enumeration<? extends Source> sourceEnum = root_vsd.enumerateSource();
+
+		while (sourceEnum.hasMoreElements()) {
+			Source source = (Source) sourceEnum.nextElement();
+			String src = source.getContent();
+
+			if (_source_subconcept_map.containsKey(src)) {
+				Vector sub_vec = (Vector) _source_subconcept_map.get(src);
+				for (int j=0; j<sub_vec.size(); j++) {
+					String sub_src = (String) sub_vec.elementAt(j);
+					if (!hset.contains(sub_src)) {
+						hset.add(sub_src);
+						sub_src_vec.add(sub_src);
+					}
+				}
+
+			}
+		}
+
+
+		List<TreeItem> children = new ArrayList();
+		HashSet sub_vsd_uri_hset = new HashSet();
+		for (int i=0; i<sub_src_vec.size(); i++) {
+			String sub_str = (String) sub_src_vec.elementAt(i);
+			if (_vsd_source_to_vsds_map.containsKey(sub_str)) {
+				Vector sub_vsd_vec = (Vector) _vsd_source_to_vsds_map.get(sub_str);
+				for (int k=0; k<sub_vsd_vec.size(); k++) {
+					ValueSetDefinition sub_vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(k);
+					if (!sub_vsd_uri_hset.contains(sub_vsd.getValueSetDefinitionURI())) {
+						sub_vsd_uri_hset.add(sub_vsd.getValueSetDefinitionURI());
+						//create child node
+						TreeItem childnode = new TreeItem(sub_vsd.getValueSetDefinitionURI(), sub_vsd.getValueSetDefinitionName());
+						children.add(childnode);
+					}
+				}
+			}
+		}
+
+		if (sub_vsd_uri_hset.size() > 0) {
+			root._expandable = true;
+		}
+		root.addAll("[inverse_is_a]", children);
+
+		HashMap hmap = new HashMap();
+		hmap.put("<Root>", root);
+        return hmap;
+	}
 
 
     public static void assignTreeNodeExpandible(HashMap hmap) {

@@ -483,7 +483,7 @@ if (view.compareToIgnoreCase("source") == 0) {
 <%
 } else {
 %>
-    <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Bibliographic Resource View</a>
+    <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Value Set Source View</a>
 <%
 } 
 %>
