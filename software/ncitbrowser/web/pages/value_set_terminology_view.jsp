@@ -479,11 +479,11 @@ if (view.compareToIgnoreCase("terminology") == 0) {
 <%
 if (view.compareToIgnoreCase("source") == 0) {
 %>
-    Bibliographic Resource View
+    Value Set Source View
 <%
 } else {
 %>
-    <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Bibliographic Resource View</a>
+    <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Value Set Source View</a>
 <%
 } 
 %>

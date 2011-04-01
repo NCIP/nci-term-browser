@@ -479,7 +479,7 @@ if (view.compareToIgnoreCase("terminology") == 0) {
 <%
 if (view.compareToIgnoreCase("source") == 0) {
 %>
-    Bibliographic Resource View
+    Value Set Source View
 <%
 } else {
 %>
