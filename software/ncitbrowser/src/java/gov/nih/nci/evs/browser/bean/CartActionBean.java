@@ -355,18 +355,30 @@ public class CartActionBean {
 			vsd.setValueSetDefinitionURI("EXPORT:VSDREF_CART");
 			vsd.setValueSetDefinitionName("VSDREF_CART");
 			vsd.setConceptDomain("Concepts");
+			
+			// Set Default Coding Scheme
+            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+                Concept item = (Concept) i.next();                
+                if (item.getSelected()) {				
+                	String version = search.getDefaultSchemeVersion(item.getCodingScheme());
+                	String uri = search.getSchemeURI(item.getCodingScheme(),version);
+                	vsd.setDefaultCodingScheme(uri);
+					_logger.debug("Default Coding Scheme: " + uri);                	
+                	break; // Just set the first one
+                }	
+            }		
 
 			// Instantiate DefinitionEntry(Rule Set)
 			DefinitionEntry de = new DefinitionEntry();
 			de.setRuleOrder(1L);
 			de.setOperator(DefinitionOperator.OR);
-			vsd.addDefinitionEntry(de);			
-
+		
 			// Instantiate ValueSetDefinitionReference 
 			ValueSetDefinitionReference vsdRef = new ValueSetDefinitionReference();
 			vsdRef.setValueSetDefinitionURI("EXPORT:CART_NODES");
 			de.setValueSetDefinitionReference(vsdRef);
-
+			vsd.addDefinitionEntry(de);			
+			
 			// Add terms from the cart - DefinitionEntry(Rule Set)
 			
 			DefinitionEntry deSub = null;
@@ -406,7 +418,8 @@ public class CartActionBean {
     			String version = search.getDefaultSchemeVersion(ref.getCodingSchemeName());
     			String uri = search.getSchemeURI(ref.getCodingSchemeName(),version);						
     			csvList.addAbsoluteCodingSchemeVersionReference(Constructors
-    				.createAbsoluteCodingSchemeVersionReference(uri,version));               
+    				.createAbsoluteCodingSchemeVersionReference(uri,version));
+				_logger.debug("Coding Scheme Version Reference: " + uri);    			
             }
             
             // Build a buffer holding the XML data
