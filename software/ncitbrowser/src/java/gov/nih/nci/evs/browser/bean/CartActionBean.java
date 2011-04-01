@@ -24,7 +24,9 @@ import org.LexGrid.concepts.Entity;
 
 import org.apache.log4j.Logger;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
-import org.LexGrid.valueSets.CodingSchemeReference;
+import org.LexGrid.naming.Mappings;
+import org.LexGrid.naming.SupportedCodingScheme;
+import org.LexGrid.naming.SupportedNamespace;
 import org.LexGrid.valueSets.DefinitionEntry;
 import org.LexGrid.valueSets.EntityReference;
 import org.LexGrid.valueSets.ValueSetDefinition; 
@@ -350,24 +352,42 @@ public class CartActionBean {
     		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil
 				.getLexEVSValueSetDefinitionServices();
 
+            //instantiate the mappings
+            Mappings maps = new Mappings();    		
+    		
     		// Instantiate VSD
     		ValueSetDefinition vsd = new ValueSetDefinition();
+    		vsd.setMappings(maps);
 			vsd.setValueSetDefinitionURI("EXPORT:VSDREF_CART");
 			vsd.setValueSetDefinitionName("VSDREF_CART");
 			vsd.setConceptDomain("Concepts");
 			
-			// Set Default Coding Scheme
+			// Add supported coding schemes
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept) i.next();                
-                if (item.getSelected()) {				
-                	String version = search.getDefaultSchemeVersion(item.getCodingScheme());
-                	String uri = search.getSchemeURI(item.getCodingScheme(),version);
-                	vsd.setDefaultCodingScheme(uri);
-					_logger.debug("Default Coding Scheme: " + uri);                	
-                	break; // Just set the first one
+                if (item.getSelected()) {
+                	ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+                	SupportedCodingScheme scs = new SupportedCodingScheme();
+                	scs.setLocalId(ref.getCodingSchemeName());                	                	
+                	scs.setUri(ref.getCodingSchemeURI());
+                	maps.addSupportedCodingScheme(scs);
+					_logger.debug("Adding coding scheme: " + ref.getCodingSchemeName());                	
                 }	
             }		
-
+            
+            // Add supported name spaces
+            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+                Concept item = (Concept) i.next();                
+                if (item.getSelected()) {
+                	ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+                	SupportedNamespace sns = new SupportedNamespace();	
+                	sns.setLocalId(ref.getCodeNamespace());
+                	sns.setEquivalentCodingScheme(ref.getCodingSchemeName());
+                	maps.addSupportedNamespace(sns);
+                	_logger.debug("Adding supported NS: " + item.getCodingScheme());
+                }
+            }    
+   
 			// Instantiate DefinitionEntry(Rule Set)
 			DefinitionEntry de = new DefinitionEntry();
 			de.setRuleOrder(1L);
@@ -410,18 +430,20 @@ public class CartActionBean {
                 }
             }
             
-			// Add list of coding schemes
+			// Add list of coding schemes version reference
 			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
-                Concept item = (Concept) i.next();
-                ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
-    			String version = search.getDefaultSchemeVersion(ref.getCodingSchemeName());
-    			String uri = search.getSchemeURI(ref.getCodingSchemeName(),version);						
-    			csvList.addAbsoluteCodingSchemeVersionReference(Constructors
-    				.createAbsoluteCodingSchemeVersionReference(uri,version));
-				_logger.debug("Coding Scheme Version Reference: " + uri);    			
-            }
-            
+			for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+				Concept item = (Concept) i.next();
+				ref = search.getConceptByCode(item.codingScheme, item.version,
+						item.code);
+				csvList.addAbsoluteCodingSchemeVersionReference(Constructors
+						.createAbsoluteCodingSchemeVersionReference(ref
+								.getCodingSchemeURI(), ref
+								.getCodingSchemeVersion()));
+				_logger.debug("Coding Scheme Version Reference: "
+						+ ref.getCodingSchemeVersion());
+			}
+
             // Build a buffer holding the XML data
     		
             StringBuffer buf = null;           
