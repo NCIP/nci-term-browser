@@ -9,24 +9,18 @@
       String valueset_jsp_page_name = "value_set_terminology_view.jsf";
       String mapping_jsp_page_name = "mapping_search.jsf";
       
-      String nav_type = (String) HTTPUtils.cleanXSS(request.getParameter("nav_type"));
-      if (nav_type == null) {
-        nav_type = (String) request.getSession().getAttribute("nav_type");
-        if (nav_type != null) request.getSession().removeAttribute("nav_type");
-      }
-      if (nav_type == null) nav_type = "terminologies";
-
-      String tab_terms_image = nav_type.equals("terminologies")
+      String nav_type = JSPUtils.getNavType(request);
+      String tab_terms_image = nav_type.equalsIgnoreCase("terminologies")
         ? "tab_terms_clicked.gif" : "tab_terms.gif";
       tab_terms_image = imagesPath + tab_terms_image;
       String tab_terms_link = pagesPath + term_jsp_page_name + "?nav_type=terminologies";   
       
-      String tab_valuesets_image = nav_type.equals("valuesets")
+      String tab_valuesets_image = nav_type.equalsIgnoreCase("valuesets")
         ? "tab_valuesets_clicked.gif" : "tab_valuesets.gif";
       tab_valuesets_image = imagesPath + tab_valuesets_image;
       String tab_valuesets_link = pagesPath + valueset_jsp_page_name + "?nav_type=valuesets";
     
-      String tab_mappings_image = nav_type.equals("mappings")
+      String tab_mappings_image = nav_type.equalsIgnoreCase("mappings")
         ? "tab_map_clicked.gif" : "tab_map.gif";
       tab_mappings_image = imagesPath + tab_mappings_image;
       String tab_mappings_link = pagesPath + mapping_jsp_page_name + "?nav_type=mappings";
