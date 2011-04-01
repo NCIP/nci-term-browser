@@ -113,6 +113,9 @@ public class ValueSetHierarchy {
     //public static Vector  _valueSetDefinitionSourceListing = null;
     public static HashMap _valueSetDefinitionSourceCode2Name_map = null;
 
+    public static HashMap _vsd_source_to_vsds_map = null;
+    public static HashMap _valueSetDefinitionURI2VSD_map = null;
+
 	//private static String URL = "http://bmidev4:19280/lexevsapi60";
 	//private static String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
 	//private static String URL = "http://ncias-q532-v.nci.nih.gov:29080/lexevsapi60";
@@ -307,6 +310,14 @@ public class ValueSetHierarchy {
     }
 
     public static ValueSetDefinition findValueSetDefinitionByURI(String uri) {
+
+        if (_valueSetDefinitionURI2VSD_map == null) {
+			_valueSetDefinitionURI2VSD_map = new HashMap();
+		}
+		if (_valueSetDefinitionURI2VSD_map.containsKey(uri)) {
+			return (ValueSetDefinition) _valueSetDefinitionURI2VSD_map.get(uri);
+		}
+
 		if (uri == null) return null;
 	    if (uri.indexOf("|") != -1) {
 			Vector u = parseData(uri);
@@ -317,6 +328,7 @@ public class ValueSetHierarchy {
 		try {
 			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 			ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
+			_valueSetDefinitionURI2VSD_map.put(uri, vsd);
 			return vsd;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -1429,6 +1441,20 @@ public class ValueSetHierarchy {
 		ti.addAll("[inverse_is_a]", children);
 	}
 
+    public static boolean hasSubSourceInSourceHierarchy(String src) {
+		if (_source_subconcept_map.containsKey(src)) {
+			return true;
+		}
+		return false;
+	}
+
+    public static boolean hasValueSetsInSource(String src) {
+		if (_source_subconcept_map.containsKey(src)) {
+			return true;
+		}
+		return false;
+	}
+
 
     public static void preprocessSourceHierarchyData() {
 		_source_hierarchy = getValueSetSourceHierarchy(SOURCE_SCHEME, SOURCE_VERSION);
@@ -1642,6 +1668,91 @@ public class ValueSetHierarchy {
 		}
 		return null;
 	}
+
+
+    public static HashMap getValueSetDefinitionNodesWithSource(String src) {
+		createVSDSource2VSDsMap();
+
+		String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
+		TreeItem root = new TreeItem(src, src + " (" + text + ")");
+		root._expandable = false;
+		List <TreeItem> children = new ArrayList();
+		Vector v = getValueSetDefinitionsWithSource(src);
+
+		for (int i=0; i<v.size(); i++) {
+			ValueSetDefinition vsd = (ValueSetDefinition) v.elementAt(i);
+			TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), vsd.getValueSetDefinitionName());
+			ti._expandable = false;
+			children.add(ti);
+		}
+		if (v.size() > 0) {
+			root._expandable = true;
+		}
+		root.addAll("[inverse_is_a]", children);
+
+		HashMap hmap = new HashMap();
+		hmap.put("<Root>", root);
+        return hmap;
+
+	}
+
+
+
+    public static void createVSDSource2VSDsMap() {
+		if (_vsd_source_to_vsds_map != null) return;
+
+		_vsd_source_to_vsds_map = new HashMap();
+
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		List list = vsd_service.listValueSetDefinitionURIs();
+		for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+			while (sourceEnum.hasMoreElements()) {
+				Source source = (Source) sourceEnum.nextElement();
+				String src_str = source.getContent();
+				Vector vsd_vec = new Vector();
+				if (_vsd_source_to_vsds_map.containsKey(src_str)) {
+					vsd_vec = (Vector) _vsd_source_to_vsds_map.get(src_str);
+				}
+				boolean found = false;
+				for (int j=0; j<vsd_vec.size(); j++) {
+					ValueSetDefinition next_vsd = (ValueSetDefinition) vsd_vec.elementAt(j);
+					if (next_vsd.getValueSetDefinitionURI().compareTo(vsd.getValueSetDefinitionURI()) == 0) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					vsd_vec.add(vsd);
+				}
+				_vsd_source_to_vsds_map.put(src_str, vsd_vec);
+			}
+		}
+	}
+
+
+	public static boolean hasValueSetDefinitionsWithSource(String src) {
+		if (_vsd_source_to_vsds_map == null) {
+			createVSDSource2VSDsMap();
+		}
+		if (_vsd_source_to_vsds_map.containsKey(src)) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public static Vector getValueSetDefinitionsWithSource(String src) {
+		if (_vsd_source_to_vsds_map == null) {
+			createVSDSource2VSDsMap();
+		}
+		return (Vector) _vsd_source_to_vsds_map.get(src);
+	}
+
+
 
 
 	public static HashMap getRootValueSets(String scheme) {
@@ -2104,10 +2215,13 @@ try {
     // code: value set URI
 	public static HashMap getSubValueSets(String scheme, String code) {
 		if (scheme == null) {
-			// return subconcepts from the source coding scheme
-			return new TreeUtils().getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
+			// default to source hierarchy
+			 HashMap hmap = new TreeUtils().getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
+             TreeUtils.relabelTreeNodes(hmap);
+			 return hmap;
 		}
 
+        // find sub value sets based on value set source data:
 		String codingSchemeURN = null;
 		String formalName = DataUtils.getFormalName(scheme);
 		codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
@@ -2251,6 +2365,33 @@ try {
 
 		System.out.println("Existing ValueSetHierarchy getSubValueSets...");
         return hmap;
+	}
+
+
+
+    public static void assignTreeNodeExpandible(HashMap hmap) {
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			TreeItem ti = (TreeItem) hmap.get(key);
+			for (String association : ti._assocToChildMap.keySet()) {
+				List<TreeItem> children = ti._assocToChildMap.get(association);
+				for (TreeItem childItem : children) {
+
+					String code = childItem._code;
+					String text = childItem._text;
+
+					childItem._expandable = false;
+
+					if (hasSubSourceInSourceHierarchy(code)) {
+						childItem._expandable = true;
+					} else if (hasValueSetDefinitionsWithSource(code)) {
+						childItem._expandable = true;
+					}
+				}
+
+			}
+		}
 	}
 
 

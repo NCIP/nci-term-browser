@@ -462,11 +462,16 @@ System.out.println("found in source listing: " + node_id);
 System.out.println("TreeUtils().getSubconcepts " + ValueSetHierarchy.SOURCE_SCHEME);
 System.out.println("TreeUtils().getSubconcepts " + ValueSetHierarchy.SOURCE_VERSION);
 
-					HashMap hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
+					HashMap hmap = null;
+                    if (ValueSetHierarchy.hasSubSourceInSourceHierarchy(node_id)) {
+						hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
+						ValueSetHierarchy.assignTreeNodeExpandible(hmap);
+						TreeUtils.relabelTreeNodes(hmap);
+				    } else if (ValueSetHierarchy.hasValueSetDefinitionsWithSource(node_id)) {
+						hmap = ValueSetHierarchy.getValueSetDefinitionNodesWithSource(node_id);
+					}
 
-                    TreeUtils.relabelTreeNodes(hmap);
 System.out.println("return from getSubconcepts ..." );
-
 
 					if (hmap != null) {
 						TreeItem root = (TreeItem) hmap.get(node_id);
