@@ -122,6 +122,17 @@ public class ValueSetHierarchy {
 
 	private static String URL = "http://localhost:8080/lexevsapi60";
 
+    public ValueSetHierarchy() {
+        SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
+        _valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+    }
+
+    public static String getSourceSchemeVersion() {
+		if (SOURCE_VERSION == null) {
+			SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
+		}
+		return SOURCE_VERSION;
+	}
 
     public static String getVocabularyVersionByTag(String codingSchemeName,
         String ltag) {
@@ -308,6 +319,30 @@ public class ValueSetHierarchy {
         }
         return data_vec;
     }
+
+    public static HashMap getValueSetDefinitionURI2VSD_map() {
+		if (_valueSetDefinitionURI2VSD_map != null) {
+			return _valueSetDefinitionURI2VSD_map;
+		}
+		_valueSetDefinitionURI2VSD_map = new HashMap();
+
+		try {
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			String valueSetDefinitionRevisionId = null;
+			List list = vsd_service.listValueSetDefinitionURIs();
+			for (int i=0; i<list.size(); i++) {
+				String uri = (String) list.get(i);
+			    ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
+			    _valueSetDefinitionURI2VSD_map.put(uri, vsd);
+		    }
+		    return _valueSetDefinitionURI2VSD_map;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+
+	}
+
 
     public static ValueSetDefinition findValueSetDefinitionByURI(String uri) {
 
@@ -2026,7 +2061,7 @@ public class ValueSetHierarchy {
         for (int i=0; i<root_cs_vec.size(); i++) {
 			String cs = (String) root_cs_vec.elementAt(i);
 			//cs = cs.replaceAll(" ", "_");
-			String code = "root_" + cs;
+			String code = cs;
 			TreeItem ti = new TreeItem(code, cs);
 			ti._expandable = true;
 			children.add(ti);
