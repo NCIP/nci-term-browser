@@ -448,45 +448,12 @@
 <tr class="textbody">
 <td class="textbody" align="left">
 <%
-String view = null;
-Object view_obj = request.getSession().getAttribute("view");
-if (view_obj != null) view = (String) view_obj;
-
-if (view == null) {
-    view = (String) request.getParameter("view");
-} else {
-    request.getSession().removeAttribute("view");
-}
-
-if (view == null) {
-    view = "source";
-}
+String view = "terminology";
 %>
 
-
-<%
-if (view.compareToIgnoreCase("source") == 0) {
-%>
-    Standards View
-<%
-} else {
-%>
-    <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Standards View</a>
-<%
-} 
-%>
-&nbsp;| 
-<%
-if (view.compareToIgnoreCase("terminology") == 0) {
-%>
-    Terminology View
-<%
-} else {
-%>
-    <a href="<%=request.getContextPath() %>/pages/value_set_terminology_view.jsf?view=terminology">Terminology View</a>
-<%
-} 
-%>
+<a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Standards View</a>
+&nbsp;|
+Terminology View
 
 
 </td>
