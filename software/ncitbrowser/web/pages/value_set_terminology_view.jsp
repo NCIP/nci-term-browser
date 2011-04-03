@@ -459,11 +459,23 @@ if (view == null) {
 }
 
 if (view == null) {
-    view = "terminology";
+    view = "source";
 }
 %>
 
- 
+
+<%
+if (view.compareToIgnoreCase("source") == 0) {
+%>
+    Standards View
+<%
+} else {
+%>
+    <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Standards View</a>
+<%
+} 
+%>
+&nbsp;| 
 <%
 if (view.compareToIgnoreCase("terminology") == 0) {
 %>
@@ -475,18 +487,7 @@ if (view.compareToIgnoreCase("terminology") == 0) {
 <%
 } 
 %>
-&nbsp; | 
-<%
-if (view.compareToIgnoreCase("source") == 0) {
-%>
-    Value Set Source View
-<%
-} else {
-%>
-    <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Value Set Source View</a>
-<%
-} 
-%>
+
 
 </td>
 
