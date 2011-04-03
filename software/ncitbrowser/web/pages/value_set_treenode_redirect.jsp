@@ -42,6 +42,7 @@ if (vsd != null) {
     } else {
         String formalname = DataUtils.getFormalName(ontology_node_id);
         String version = DataUtils.getVocabularyVersionByTag(formalname, "PRODUCTION");
+        formalname = formalname.replaceAll(" ", "%20");
         redirect_url = context_path + "/pages/vocabulary.jsf?dictionary=" 
             + HTTPUtils.cleanXSS(formalname)
             + "&version="
