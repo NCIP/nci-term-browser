@@ -13,6 +13,7 @@ import org.apache.log4j.*;
 import gov.nih.nci.evs.browser.properties.*;
 import static gov.nih.nci.evs.browser.common.Constants.*;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+import org.LexGrid.valueSets.ValueSetDefinition;
 
 
 /**
@@ -370,23 +371,21 @@ public final class AjaxServlet extends HttpServlet {
             return;
         } else if (action.equals("expand_cs_vs_tree")) {
 
-System.out.println("node_id: " + node_id);
+System.out.println("(****) node_id: " + node_id);
 
 			response.setContentType("text/html");
 			response.setHeader("Cache-Control", "no-cache");
 			JSONObject json = new JSONObject();
 			JSONArray nodesArray = null;
 
-
             //if (node_id != null && ontology_display_name != null) {
 			if (node_id != null) {
-				if (node_id.startsWith("root_")) {
-					node_id = node_id.substring(5, node_id.length());
-					System.out.println("coding scheme name: " + node_id);
+				ValueSetDefinition vsd = ValueSetHierarchy.findValueSetDefinitionByURI(node_id);
+				if (vsd == null) {
+					System.out.println("(****) coding scheme name: " + node_id);
 
 				   try {
-						nodesArray =
-							CacheController.getInstance().getRootValueSets(node_id, null); //find roots (by source)
+						nodesArray = CacheController.getInstance().getRootValueSets(node_id, null); //find roots (by source)
 
 						if (nodesArray != null) {
 							System.out.println("expand_vs_tree nodesArray != null");
