@@ -255,7 +255,7 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                          <% Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE }; %>
                          <% if (vocabulary_isMapping) { %>
                               <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
-                              <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>&nav_type=mappings">
+                              <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=menubar_version%>">
                                 Mapping
                               </a>
                          <% } else if (tree_access_allowed) { %>
@@ -287,7 +287,7 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                          <%= VisitedConceptUtils.getDisplayLink(request, isPipeDisplayed) %>
                       </td>
                       <td align="right">
-                        <a href="<%=request.getContextPath()%>/pages/help.jsf?<%= JSPUtils.getNavTypeParameter(request) %>" tabindex="16">Help</a>
+                        <a href="<%=request.getContextPath()%>/pages/help.jsf" tabindex="16">Help</a>
                       </td>
                       <td width="7"></td>
                     </tr>

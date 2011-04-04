@@ -120,7 +120,7 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	    </h:commandButton>
 
 	    <h:outputLink
-	    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf?nav_type=valuesets#searchhelp"
+	    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
 	    tabindex="3">
 	    <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
 	    style="border-width:0;"/>
