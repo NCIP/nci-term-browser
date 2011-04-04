@@ -28,8 +28,6 @@
   String searchform_requestContextPath = request.getContextPath();
   searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
-    request.getSession().setAttribute("nav_type", "valuesets");
-
     String selected_cs = "";
     String selected_cd = null;
 

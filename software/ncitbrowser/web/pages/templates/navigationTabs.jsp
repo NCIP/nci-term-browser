@@ -5,8 +5,6 @@
 <table cellspacing="0" cellpadding="0" border="0">
   <tr>
     <%
-      String nav_type_in_session = (String) request.getSession().getAttribute("nav_type");
-    
       String imagesPath = request.getContextPath() + "/images/";
       String pagesPath = request.getContextPath() + "/pages/";
       String term_jsp_page_name = "multiple_search.jsf";
@@ -24,14 +22,10 @@
       System.out.println("nav_tab_vsd_uri: " + nav_tab_vsd_uri);
       String nav_type = DataUtils.getNavigationTabType(nav_tab_dictionary, nav_tab_version, nav_tab_vsd_uri, nav_tab_nav_type);
       
-      if (nav_type == null) {
-          if (nav_type_in_session != null) nav_type = nav_type_in_session;
-      }
-      if (nav_type == null) {
+      if (nav_type == null)
+          nav_type = (String) request.getSession().getAttribute("nav_type");
+      if (nav_type == null)
           nav_type = "terminologies";
-      }
-      
-      
       request.getSession().setAttribute("nav_type", nav_type);
       
       String tab_terms_image = nav_type.equalsIgnoreCase("terminologies")
