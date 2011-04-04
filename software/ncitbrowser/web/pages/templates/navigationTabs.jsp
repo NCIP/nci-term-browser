@@ -25,6 +25,9 @@
       System.out.println("nav_tab_vsd_uri: " + nav_tab_vsd_uri);
       String nav_type = DataUtils.getNavigationTabType(nav_tab_dictionary, nav_tab_version, nav_tab_vsd_uri, nav_tab_nav_type);
       
+      if (nav_type == null) {
+          if (nav_type_in_session != null) nav_type = nav_type_in_session;
+      }
       request.getSession().setAttribute("nav_type", nav_type);
       
       String tab_terms_image = nav_type.equalsIgnoreCase("terminologies")
