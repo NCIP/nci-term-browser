@@ -483,8 +483,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
     request.getSession().removeAttribute("warning");
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().putValue("visited","true");
-    
-    request.getSession().removeAttribute("nav_type");
 %>
 <br/>
 </body>

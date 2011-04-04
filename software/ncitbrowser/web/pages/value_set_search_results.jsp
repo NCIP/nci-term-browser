@@ -300,12 +300,12 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 %>		      
 		      
 		      <td class="dataCellText">
-                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=<%=uri%>"><%=name%></a>
+                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?vsd_uri=<%=uri%>"><%=name%></a>
 		      </td>
 		      
 		      <!--
 		      <td class="dataCellText">
-                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=<%=uri%>"><%=uri%></a>
+                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?vsd_uri=<%=uri%>"><%=uri%></a>
 		      </td>
 
 

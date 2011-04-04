@@ -219,9 +219,4 @@ public class JSPUtils {
         }
         return value;
     }
-    
-    public static String getNavTypeParameter(HttpServletRequest request) {
-        String value = getNavType(request);
-        return "nav_type=" + value;
-    }
 }

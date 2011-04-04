@@ -27,8 +27,7 @@ ValueSetDefinition vsd = ValueSetHierarchy.findValueSetDefinitionByURI(ontology_
 
 
 if (vsd != null) {
-    redirect_url = context_path + "/pages/value_set_search_results.jsf?nav_type=valuesets&vsd_uri=" + ontology_node_id
-       + "&nav_type=valuesets";
+    redirect_url = context_path + "/pages/value_set_search_results.jsf?vsd_uri=" + ontology_node_id;
 } else {
     if (ValueSetHierarchy._valueSetDefinitionSourceCode2Name_map.containsKey(ontology_node_id)) {
         redirect_url = context_path + "/pages/concept_details.jsf?dictionary="
@@ -36,8 +35,7 @@ if (vsd != null) {
             + "&version="
             + source_version
             + "&code=" 
-            + ontology_node_id
-            + "&nav_type=terminologies";
+            + ontology_node_id;
             
     } else {
         String formalname = DataUtils.getFormalName(ontology_node_id);
@@ -46,8 +44,7 @@ if (vsd != null) {
         redirect_url = context_path + "/pages/vocabulary.jsf?dictionary=" 
             + HTTPUtils.cleanXSS(formalname)
             + "&version="
-            + version
-            + "&nav_type=terminologies";
+            + version;
     }
 }
 

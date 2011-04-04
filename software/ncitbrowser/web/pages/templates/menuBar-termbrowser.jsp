@@ -36,7 +36,7 @@
       <%= VisitedConceptUtils.getDisplayLink(request, true) %> 
     </td>
     <td align="right" valign="bottom">
-      <a href="<%= request.getContextPath() %>/pages/help.jsf?<%= JSPUtils.getNavTypeParameter(request) %>" tabindex="16">Help</a>
+      <a href="<%= request.getContextPath() %>/pages/help.jsf" tabindex="16">Help</a>
     </td>
     <td width="7"></td>
   </tr>

@@ -13,7 +13,6 @@
       String valueset_jsp_page_name = "value_set_source_view.jsf";
       String mapping_jsp_page_name = "mapping_search.jsf";
       
-      //String nav_tab_nav_type = JSPUtils.getNavType(request);
       JSPUtils.JSPHeaderInfo nav_tab_info = new JSPUtils.JSPHeaderInfo(request);
       String nav_tab_vsd_uri = (String) request.getParameter("vsd_uri");
       String nav_tab_dictionary = nav_tab_info.dictionary;

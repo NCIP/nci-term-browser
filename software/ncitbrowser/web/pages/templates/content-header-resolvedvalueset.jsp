@@ -52,7 +52,7 @@ System.out.println("vsdUri: " + vsdUri);
 
 <div class="bannerarea">
     <div class="banner">
-	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?nav_type=valuesets&uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
+	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
       
 	<div class="vocabularynamebanner">
 	

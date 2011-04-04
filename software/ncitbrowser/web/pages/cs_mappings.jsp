@@ -193,7 +193,7 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
     tabindex="2">
   </h:commandButton>
   <h:outputLink
-    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf?nav_type=mappings#searchhelp"
+    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
     tabindex="3">
     <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
     style="border-width:0;"/>
@@ -431,7 +431,6 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
 <%
     request.getSession().removeAttribute("dictionary");
     request.getSession().putValue("visited","true");
-    request.getSession().removeAttribute("nav_type");
 %>
 <br/>
 </body>
