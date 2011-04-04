@@ -28,6 +28,11 @@
       if (nav_type == null) {
           if (nav_type_in_session != null) nav_type = nav_type_in_session;
       }
+      if (nav_type == null) {
+          nav_type = "terminologies";
+      }
+      
+      
       request.getSession().setAttribute("nav_type", nav_type);
       
       String tab_terms_image = nav_type.equalsIgnoreCase("terminologies")
