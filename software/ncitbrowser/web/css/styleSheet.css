@@ -397,6 +397,15 @@ a.hideLink
  font-size: 12px;
 }
 
+.searchbox-input-2
+{
+ width: 250px;
+ height: 21px;
+ margin-bottom: 3px;
+ vertical-align: top;
+ font-size: 12px;
+}
+
 .searchbox-btn
 {
  vertical-align: top;

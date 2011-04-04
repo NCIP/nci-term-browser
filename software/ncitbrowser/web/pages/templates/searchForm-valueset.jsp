@@ -90,7 +90,7 @@ String valueset_match_text = "";
 if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 %>
 
-	  <input CLASS="searchbox-input"
+	  <input CLASS="searchbox-input-2"
 	    name="matchText"
 	    value=""
 	    onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
@@ -99,7 +99,7 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 } else {
 %>
 
-	  <input CLASS="searchbox-input"
+	  <input CLASS="searchbox-input-2"
 	    name="matchText"
 	    value="<%=valueset_match_text%>"
 	    onFocus="active = true"
@@ -114,6 +114,7 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	    <h:commandButton id="valueset_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
 	      onclick="javascript:cursor_wait();"
 	      image="#{valueSetSearch_requestContextPath}/images/search.gif"
+          styleClass="searchbox-btn"
 	      alt="Search"
 	      tabindex="2">
 	    </h:commandButton>
