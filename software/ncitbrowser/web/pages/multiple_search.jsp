@@ -71,13 +71,6 @@
 <%
     request.getSession().removeAttribute("dictionary");
     
-    String navigation_type = (String) request.getParameter("nav_type");
-    if (navigation_type == null) {
-        navigation_type = "terminologies";
-    }
-    request.getSession().setAttribute("nav_type", navigation_type);
-
- 
 
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 String warning_msg = (String) request.getSession().getAttribute("warning");
@@ -467,10 +460,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
         </div> <!-- end Page content -->
     </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-
-    <input type="hidden" id="nav_type" name="nav_type" value="<%=navigation_type%>">
-
-
 
 </h:form>
 

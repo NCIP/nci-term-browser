@@ -76,16 +76,6 @@
 <%
     request.getSession().removeAttribute("dictionary");
     
-    String navigation_type = (String) request.getParameter("nav_type");
-    
-System.out.println("mapping_search.jsp  navigation_type: " + navigation_type);
-
-   
-    if (navigation_type != null) {
-    	request.getSession().setAttribute("nav_type", navigation_type);
-    }
- 
-
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 String warning_msg = (String) request.getSession().getAttribute("warning");
 
@@ -417,8 +407,6 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
         </div> <!-- end Page content -->
     </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-
-    <input type="hidden" id="nav_type" name="nav_type" value="<%=navigation_type%>">
     <input type="hidden" id="single_mapping_search" name="single_mapping_search" value="true">
 
 

@@ -10,7 +10,6 @@
     if (vsdUri == null) vsdUri = (String) request.getSession().getAttribute("vsd_uri");
     
    
-    request.getSession().setAttribute("nav_type", "valuesets");
     
 String vsd_name = null;  
 System.out.println("content-header-resolvedvalueset.jsp vsdUri: " + vsdUri);
