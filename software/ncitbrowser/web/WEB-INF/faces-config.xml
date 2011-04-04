@@ -22,7 +22,6 @@
     <render-kit-factory>com.sun.faces.renderkit.RenderKitFactoryImpl</render-kit-factory>
   </factory>
 
-
   <navigation-rule>
     <from-view-id>/pages/mapping_search.jsp</from-view-id>
     <navigation-case>
@@ -45,10 +44,8 @@
        <from-outcome>return_to_mapping_home</from-outcome>
        <to-view-id>/pages/mapping_search.jsp</to-view-id>
     </navigation-case>    
-
     
-  </navigation-rule>   
- 
+   </navigation-rule>   
  
    <navigation-rule>
      <from-view-id>/pages/cs_mappings.jsp</from-view-id>
@@ -72,12 +69,9 @@
         <from-outcome>return_to_mapping_home</from-outcome>
         <to-view-id>/pages/mapping_search.jsp</to-view-id>
      </navigation-case>    
- 
-     
+      
   </navigation-rule>   
-  
-  
-  
+    
   <navigation-rule>
     <from-view-id>/pages/mapping_search_results.jsp</from-view-id>
     <navigation-case>
@@ -101,7 +95,6 @@
        <to-view-id>/pages/mapping_search.jsp</to-view-id>
     </navigation-case>    
 
-
   </navigation-rule>   
     
   <navigation-rule>
@@ -113,8 +106,7 @@
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.acceptLicenseAgreement}</from-action>
@@ -136,14 +128,12 @@
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
     
     <navigation-case>
        <description>single_search_results</description>
@@ -173,15 +163,13 @@
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>contact_us_message</description>
        <from-action>#{userSessionBean.contactUs}</from-action>
@@ -189,7 +177,6 @@
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
-
 
   <navigation-rule>
     <from-view-id>/pages/accept_license.jsp</from-view-id>
@@ -230,7 +217,6 @@
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
-
 
     <navigation-case>
        <description>mapping_search_results</description>
@@ -278,15 +264,13 @@
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -353,7 +337,6 @@
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -362,15 +345,13 @@
       
     </navigation-case>
 
-
     <navigation-case>
        <description>no_match</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>concept_details</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -402,15 +383,13 @@
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -449,15 +428,13 @@
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -517,15 +494,13 @@
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>concept_details</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -564,15 +539,13 @@
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>concept_details</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -604,7 +577,6 @@
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
     </navigation-case>
-
 
     <navigation-case>
        <description>message</description>
@@ -671,7 +643,6 @@
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -715,15 +686,13 @@
     </navigation-case>
   </navigation-rule>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
   <navigation-rule>
     <from-view-id>/pages/subset.jsp</from-view-id>
     <navigation-case>
@@ -740,15 +709,13 @@
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
 
-
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>mapping_search_results</from-outcome>
        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
     <navigation-case>
        <description>concept_details</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -787,7 +754,6 @@
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
-
 
     <navigation-case>
        <description>mapping_search_results</description>
@@ -880,7 +846,6 @@
        <from-outcome>search_results</from-outcome>
        <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
     </navigation-case>
-
    
     <navigation-case>
        <description>Search</description>
@@ -909,8 +874,7 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/multiple_search.jsp</to-view-id>
     </navigation-case>
-    
-    
+        
   </navigation-rule>
 
   <navigation-rule>
@@ -929,7 +893,6 @@
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
-
 
     <navigation-case>
        <description>mapping_search_results</description>
@@ -1004,7 +967,6 @@
         <from-outcome>search_results</from-outcome>
         <to-view-id>/pages/search_results.jsp</to-view-id>
      </navigation-case>
-
 
     <navigation-case>
        <description>mapping_search_results</description>
@@ -1234,7 +1196,6 @@
     
   </navigation-rule>
    
-
   <navigation-rule>
     <from-view-id>/pages/value_set_search_results.jsp</from-view-id>
     <navigation-case>
@@ -1273,7 +1234,6 @@
     </navigation-case>      
     
   </navigation-rule>
-
 
   <navigation-rule>
     <from-view-id>/pages/resolve_value_set.jsp</from-view-id>
@@ -1345,10 +1305,6 @@
     </navigation-case> 
     
   </navigation-rule>  
-
-
-
-    
     
   <managed-bean>
     <managed-bean-name>userSessionBean</managed-bean-name>
