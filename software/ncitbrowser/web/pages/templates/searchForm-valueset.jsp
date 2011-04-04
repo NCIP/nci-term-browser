@@ -1,5 +1,4 @@
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices" %>
 
 
@@ -120,7 +119,7 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	    </h:commandButton>
 
 	    <h:outputLink
-	    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
+	    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf?nav_type=valuesets#searchhelp"
 	    tabindex="3">
 	    <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
 	    style="border-width:0;"/>

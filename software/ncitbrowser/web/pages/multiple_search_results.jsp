@@ -103,7 +103,7 @@ request.getSession().setAttribute("matchText", match_text);
                 alt="Search">
               </h:commandButton>
               <h:outputLink
-                value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp">
+                value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf?nav_type=terminologies#searchhelp">
                 <h:graphicImage value="/images/search-help.gif"
                 style="border-width:0;" />
               </h:outputLink>
