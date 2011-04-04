@@ -1,15 +1,32 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
+
+
 <table cellspacing="0" cellpadding="0" border="0">
   <tr>
     <%
+      String nav_type_in_session = (String) request.getSession().getAttribute("nav_type");
+    
       String imagesPath = request.getContextPath() + "/images/";
       String pagesPath = request.getContextPath() + "/pages/";
       String term_jsp_page_name = "multiple_search.jsf";
       String valueset_jsp_page_name = "value_set_source_view.jsf";
       String mapping_jsp_page_name = "mapping_search.jsf";
       
-      String nav_type = JSPUtils.getNavType(request);
+      //String nav_tab_nav_type = JSPUtils.getNavType(request);
+      JSPUtils.JSPHeaderInfo nav_tab_info = new JSPUtils.JSPHeaderInfo(request);
+      String nav_tab_vsd_uri = (String) request.getParameter("vsd_uri");
+      String nav_tab_dictionary = nav_tab_info.dictionary;
+      String nav_tab_version = nav_tab_info.version;
+      String nav_tab_nav_type = (String) request.getParameter("nav_type");
+      
+      System.out.println("nav_tab_dictionary: " + nav_tab_dictionary);
+      System.out.println("nav_tab_version: " + nav_tab_version);
+      System.out.println("nav_tab_vsd_uri: " + nav_tab_vsd_uri);
+      String nav_type = DataUtils.getNavigationTabType(nav_tab_dictionary, nav_tab_version, nav_tab_vsd_uri, nav_tab_nav_type);
+      
+      request.getSession().setAttribute("nav_type", nav_type);
+      
       String tab_terms_image = nav_type.equalsIgnoreCase("terminologies")
         ? "tab_terms_clicked.gif" : "tab_terms.gif";
       tab_terms_image = imagesPath + tab_terms_image;

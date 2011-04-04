@@ -31,7 +31,7 @@ if (vsd != null) {
        + "&nav_type=valuesets";
 } else {
     if (ValueSetHierarchy._valueSetDefinitionSourceCode2Name_map.containsKey(ontology_node_id)) {
-        redirect_url = context_path + "/pages/concept_details.jsf?nav_type=terminology&dictionary="
+        redirect_url = context_path + "/pages/concept_details.jsf?dictionary="
             + source_scheme
             + "&version="
             + source_version
