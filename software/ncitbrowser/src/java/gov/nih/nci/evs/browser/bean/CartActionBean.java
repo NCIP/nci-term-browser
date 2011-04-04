@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
@@ -23,7 +24,6 @@ import javax.servlet.ServletOutputStream;
 import org.LexGrid.concepts.Entity;
 
 import org.apache.log4j.Logger;
-import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 import org.LexGrid.naming.Mappings;
 import org.LexGrid.naming.SupportedCodingScheme;
 import org.LexGrid.naming.SupportedNamespace;
@@ -32,6 +32,8 @@ import org.LexGrid.valueSets.EntityReference;
 import org.LexGrid.valueSets.ValueSetDefinition; 
 import org.LexGrid.valueSets.ValueSetDefinitionReference;
 import org.LexGrid.valueSets.types.DefinitionOperator;
+import org.LexGrid.valueSets.CodingSchemeReference;
+import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -249,8 +251,7 @@ public class CartActionBean {
         item.setVersion(version);
         item.setUrl(url);
 
-        if (!_cart.containsKey(code))
-            _cart.put(code,item);
+        _cart.put(code + "|" + version,item);
 
         // Add scheme and version back in for redisplay
         request.setAttribute("dictionary", codingScheme);
@@ -276,7 +277,7 @@ public class CartActionBean {
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
                 if (item.getCheckbox().isSelected()) {
-                    if (_cart.containsKey(item.code))
+                    if (_cart.containsKey(item.code + "|" + item.version))
                         i.remove();
                 }
             }
@@ -373,8 +374,10 @@ public class CartActionBean {
                 	SupportedCodingScheme scs = new SupportedCodingScheme();
                 	scs.setLocalId(ref.getCodingSchemeName());                	                	
                 	scs.setUri(ref.getCodingSchemeURI());
-                	maps.addSupportedCodingScheme(scs);
-					_logger.debug("Adding coding scheme: " + ref.getCodingSchemeName());                	
+                    if (!mapContainsURI(maps, ref.getCodingSchemeURI()))
+                    	maps.addSupportedCodingScheme(scs);
+					_logger.debug("Adding coding scheme: " + ref.getCodingSchemeName()
+						+ " (" + ref.getCodingSchemeVersion() + ")");                	
                 }	
             }		
             
@@ -386,8 +389,9 @@ public class CartActionBean {
                 	SupportedNamespace sns = new SupportedNamespace();	
                 	sns.setLocalId(ref.getCodeNamespace());
                 	sns.setEquivalentCodingScheme(ref.getCodingSchemeName());
-                	maps.addSupportedNamespace(sns);
-                	_logger.debug("Adding supported NS: " + item.getCodingScheme());
+                	if (!mapContainsSupportedNamespace(maps, ref.getCodeNamespace()))                	
+                		maps.addSupportedNamespace(sns);
+                	_logger.debug("Adding supported NS: " + ref.getCodeNamespace());
                 }
             }    
    
@@ -438,13 +442,14 @@ public class CartActionBean {
 			for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
 				Concept item = (Concept) i.next();
 				ref = search.getConceptByCode(item.codingScheme, item.version,
-						item.code);
+					item.code);
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors
-						.createAbsoluteCodingSchemeVersionReference(ref
-								.getCodingSchemeURI(), ref
-								.getCodingSchemeVersion()));
+					.createAbsoluteCodingSchemeVersionReference(
+						ref.getCodingSchemeURI(),
+						ref.getCodingSchemeVersion()));
 				_logger.debug("Coding Scheme Version Reference: "
-						+ ref.getCodingSchemeVersion());
+						+ ref.getCodingSchemeVersion()
+						+ " (" +  ref.getCodingSchemeVersion() + ")");
 			}
 
             // Build a buffer holding the XML data
@@ -692,6 +697,46 @@ public class CartActionBean {
     //* Utility methods
     //**
 
+    /**
+     * Check if a URI is in the map
+     * @param maps
+     * @param uri
+     * @return
+     */
+    private boolean mapContainsURI(Mappings maps, String uri) {
+    	if (maps == null || uri == null)
+    		return false;
+    	List<SupportedCodingScheme> list =
+    		maps.getSupportedCodingSchemeAsReference();
+    	if (list == null || list.size() < 1) return false;
+    	Iterator<?> i = list.iterator();
+    	SupportedCodingScheme scs = null;
+    	while (i.hasNext()) {
+    		scs = (SupportedCodingScheme) i.next();
+    		if (scs.getUri().equals(uri))
+    			return true;
+    	}   	
+    	
+    	return false;
+    }
+        
+    /**
+     * Check if a Supported Name Space is in the map
+     * @param maps
+     * @param sns
+     * @return
+     */
+    private boolean mapContainsSupportedNamespace(Mappings maps, String sns) {
+    	if (maps == null || sns == null)
+    		return false;
+    	SupportedNamespace[] list =
+    		maps.getSupportedNamespace();    	
+    	if (list == null || list.length < 1) return false;
+    	for(int x=0;x<list.length;x++)
+    		if (list[x].getLocalId().equals(sns)) return true;    		
+        return false;
+    }
+    
     /**
      * Test any concept in the cart has been selected
      * @return
