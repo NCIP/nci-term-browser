@@ -219,7 +219,6 @@ public class CartActionBean {
 
         // Get coding scheme
         codingScheme = (String)request.getSession().getAttribute(_codingScheme);
-        
         version = (String)request.getSession().getAttribute(_version);
 
         // Get concept name space
@@ -253,6 +252,10 @@ public class CartActionBean {
         if (!_cart.containsKey(code))
             _cart.put(code,item);
 
+        // Add scheme and version back in for redisplay
+        request.setAttribute("dictionary", codingScheme);
+        request.setAttribute("version", version);
+        
 		return null;
     }
 
