@@ -1,5 +1,4 @@
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%
 
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
@@ -32,7 +31,7 @@
     tabindex="2">
   </h:commandButton>
   <h:outputLink
-    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
+    value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf?nav_type=terminologies#searchhelp"
     tabindex="3">
     <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
     style="border-width:0;"/>
