@@ -156,6 +156,14 @@ public class CartActionBean {
     public boolean getSelectflag() {
     	return _selectflag;
     }
+    
+    /**
+     * Set popup select flag
+     * @param flag
+     */
+    public void setSelectflag(boolean flag) {
+    	_selectflag = flag;
+    }    
 
     /**
      * Return Popup message text
@@ -276,6 +284,7 @@ public class CartActionBean {
      */
     public String removeFromCart() {
     	_messageflag = false;
+    	_selectflag = false;
     	
     	if (getCount() < 1) {
         	_messageflag = true;
@@ -302,6 +311,7 @@ public class CartActionBean {
      */
     public String selectAllInCart() {
         _messageflag = false;
+        _selectflag = false;
         
     	if (getCount() < 1) {
         	_messageflag = true;
@@ -321,6 +331,7 @@ public class CartActionBean {
      */
     public String unselectAllInCart() {
         _messageflag = false;
+        _selectflag = false;
         
     	if (getCount() < 1) {
         	_messageflag = true;
@@ -525,6 +536,7 @@ public class CartActionBean {
     public String exportCartCSV() throws Exception {
 
         _messageflag = false;
+        _selectflag = false;
         
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
