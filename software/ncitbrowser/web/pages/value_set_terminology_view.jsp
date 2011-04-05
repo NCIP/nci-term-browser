@@ -453,7 +453,7 @@
 String view = "terminology";
 %>
 
-<a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?view=source">Standards View</a>
+<a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?&view=source">Standards View</a>
 &nbsp;|
 Terminology View
 

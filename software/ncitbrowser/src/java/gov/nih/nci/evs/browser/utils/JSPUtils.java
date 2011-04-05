@@ -53,7 +53,7 @@ import org.apache.log4j.*;
 public class JSPUtils {
     private static Logger _logger = Logger.getLogger(JSPUtils.class);
     private static final String DEFAULT_DICTIONARY = Constants.NCI_THESAURUS;
-    
+
     public static boolean isNull(String text) {
         return text == null || text.equalsIgnoreCase("null");
     }
@@ -63,11 +63,11 @@ public class JSPUtils {
         public String version;
         public String version_deprecated;
         private boolean debugAll = false;
-        
+
         private void debugDV(String msg, String dictionary, String version) {
             _logger.debug(msg + "version=" + version + ", dictionary=" + dictionary);
         }
-        
+
         private void debugAllVersions(HttpServletRequest request) {
             String prefix = "ALL: ";
             _logger.debug(Utils.SEPARATOR_DASHES);
@@ -79,7 +79,7 @@ public class JSPUtils {
             dictionary = (String) request.getAttribute("dictionary");
             version = (String) request.getAttribute("version");
             debugDV(prefix + "Request Attributes: ", dictionary, version);
-            
+
             dictionary = (String) request.getSession().getAttribute("dictionary");
             version = (String) request.getSession().getAttribute("version");
             debugDV(prefix + "Session Attributes: ", dictionary, version);
@@ -105,8 +105,8 @@ public class JSPUtils {
                 debugDV("Session Attributes: ", dictionary, version);
             }
 
-            boolean isDictionaryNull = isNull(dictionary); 
-            boolean isVersionNull = isNull(version); 
+            boolean isDictionaryNull = isNull(dictionary);
+            boolean isVersionNull = isNull(version);
             if (isDictionaryNull && ! isVersionNull &&
                     DataUtils.isCodingSchemeLoaded(DEFAULT_DICTIONARY, version)) {
                 dictionary = DEFAULT_DICTIONARY;
@@ -194,7 +194,7 @@ public class JSPUtils {
         }
         return value;
     }
-    
+
     public static String getPipeSeparator(Boolean[] display) {
         boolean isDisplayed = display[0].booleanValue();
         if (isDisplayed)
@@ -202,21 +202,25 @@ public class JSPUtils {
         display[0] = Boolean.TRUE;
         return "";
     }
-    
+
     public static String getNavType(HttpServletRequest request) {
         JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+
+        String vsd_view = (String) request.getParameter("view");
+        if (vsd_view != null) return "valuesets";
+
         String vsd_uri = (String) request.getParameter("vsd_uri");
         String dictionary = info.dictionary;
         String version = info.version;
-        
+
         _logger.debug(Utils.SEPARATOR);
         String nav_type = (String) request.getParameter("nav_type");
         _logger.debug("nav_type (Parameter): " + nav_type);
-        
+
         nav_type = DataUtils.getNavigationTabType(
             dictionary, version, vsd_uri, nav_type);
         _logger.debug("nav_type (getNavigationTabType): " + nav_type);
-        
+
         if (nav_type == null) {
             nav_type = (String) request.getSession().getAttribute("nav_type");
             _logger.debug("nav_type (Session): " + nav_type);
