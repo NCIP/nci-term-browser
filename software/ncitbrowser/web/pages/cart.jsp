@@ -119,7 +119,7 @@
 				    	<td>
 				    		<h:outputLink value="#{item.url}">${item.name}</h:outputLink> ${item.displayStatus}
 				    	</td> 
-			            <td>${item.displayCodingSchemeName} (${item.version})</td>
+			            <td>${item.displayCodingSchemeName}</td>
 			        </tr>
 			    </c:forEach>
 			</table>

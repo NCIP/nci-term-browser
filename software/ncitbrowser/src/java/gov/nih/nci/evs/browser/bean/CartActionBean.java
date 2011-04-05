@@ -6,11 +6,11 @@ import gov.nih.nci.evs.browser.utils.SearchCart;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
@@ -34,7 +34,6 @@ import org.LexGrid.valueSets.EntityReference;
 import org.LexGrid.valueSets.ValueSetDefinition; 
 import org.LexGrid.valueSets.ValueSetDefinitionReference;
 import org.LexGrid.valueSets.types.DefinitionOperator;
-import org.LexGrid.valueSets.CodingSchemeReference;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 
 /**
@@ -181,7 +180,7 @@ public class CartActionBean {
         if (_cart == null) _init();
         return _cart.values();
     }
-   
+    
     // ******************** Class methods ************************
     
     /**
@@ -253,7 +252,8 @@ public class CartActionBean {
         item.setVersion(version);
         item.setUrl(url);
 
-        _cart.put(code + "|" + version,item);
+        if (!_cart.containsKey(code))
+        	_cart.put(code,item);
 
         // Add scheme and version back in for redisplay
         request.setAttribute("dictionary", codingScheme);
@@ -279,7 +279,7 @@ public class CartActionBean {
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
                 if (item.getCheckbox().isSelected()) {
-                    if (_cart.containsKey(item.code + "|" + item.version))
+                    if (_cart.containsKey(item.code))
                         i.remove();
                 }
             }
@@ -350,18 +350,16 @@ public class CartActionBean {
         	return null;
     	}    		
     
-        // Get Entities to be exported and build export xml string
+        // Get Entities to be exported and build export XML string
         // in memory
 
         if (_cart != null && _cart.size() > 0) {
 
-        	
-        	getSchemeVersionList(search);
-        	
-        	
-        	
-        	
-        	
+        	// Generate unique list of scheme / versions for the cart
+			HashMap<String, SchemeVersion> versionList
+				= getSchemeVersionList(search);
+
+        	// Setup lexbig service
     		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil
 				.getLexEVSValueSetDefinitionServices();
 
@@ -376,32 +374,29 @@ public class CartActionBean {
 			vsd.setConceptDomain("Concepts");
 			
 			// Add supported coding schemes
-            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
-                Concept item = (Concept) i.next();                
-                if (item.getSelected()) {
-                	ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
-                	SupportedCodingScheme scs = new SupportedCodingScheme();
-                	scs.setLocalId(ref.getCodingSchemeName());                	                	
-                	scs.setUri(ref.getCodingSchemeURI());
-                    if (!mapContainsURI(maps, ref.getCodingSchemeURI()))
-                    	maps.addSupportedCodingScheme(scs);
-					_logger.debug("Adding coding scheme: " + ref.getCodingSchemeName()
-						+ " (" + ref.getCodingSchemeVersion() + ")");                	
-                }	
-            }		
+			for (Iterator<Entry<String, SchemeVersion>> i = versionList
+					.entrySet().iterator(); i.hasNext();) {
+				Entry<String, SchemeVersion> x = i.next();
+				SchemeVersion sv = x.getValue();
+				SupportedCodingScheme scs = new SupportedCodingScheme();
+				scs.setLocalId(sv.codingScheme);
+				scs.setUri(sv.uri);
+				maps.addSupportedCodingScheme(scs);
+				_logger.debug("Adding CS: "
+						+ sv.codingScheme + " ("
+						+ sv.uri + ")");
+			}		
             
             // Add supported name spaces
-            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
-                Concept item = (Concept) i.next();                
-                if (item.getSelected()) {
-                	ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
-                	SupportedNamespace sns = new SupportedNamespace();	
-                	sns.setLocalId(ref.getCodeNamespace());
-                	sns.setEquivalentCodingScheme(ref.getCodingSchemeName());
-                	if (!mapContainsSupportedNamespace(maps, ref.getCodeNamespace()))                	
-                		maps.addSupportedNamespace(sns);
-                	_logger.debug("Adding supported NS: " + ref.getCodeNamespace());
-                }
+			for (Iterator<Entry<String, SchemeVersion>> i = versionList
+					.entrySet().iterator(); i.hasNext();) {
+				Entry<String, SchemeVersion> x = i.next();
+				SchemeVersion sv = x.getValue();				
+            	SupportedNamespace sns = new SupportedNamespace();	
+            	sns.setLocalId(sv.namespace);
+            	sns.setEquivalentCodingScheme(sv.codingScheme);
+           		maps.addSupportedNamespace(sns);
+            	_logger.debug("Adding NS: " + sv.namespace);
             }    
    
 			// Instantiate DefinitionEntry(Rule Set)
@@ -448,17 +443,17 @@ public class CartActionBean {
             
 			// Add list of coding schemes version reference
 			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-			for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
-				Concept item = (Concept) i.next();
-				ref = search.getConceptByCode(item.codingScheme, item.version,
-					item.code);
+			for (Iterator<Entry<String, SchemeVersion>> i = versionList
+					.entrySet().iterator(); i.hasNext();) {
+				Entry<String, SchemeVersion> x = i.next();
+				SchemeVersion sv = x.getValue();				
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors
 					.createAbsoluteCodingSchemeVersionReference(
-						ref.getCodingSchemeURI(),
-						ref.getCodingSchemeVersion()));
-				_logger.debug("CS Version Reference: "
-						+ ref.getCodingSchemeURI()
-						+ " (" +  ref.getCodingSchemeVersion() + ")");
+						sv.uri,
+						sv.version));
+				_logger.debug("Adding CS Ver Ref: "
+						+ sv.uri
+						+ " (" +  sv.version + ")");
 			}
 
             // Build a buffer holding the XML data
@@ -753,17 +748,20 @@ public class CartActionBean {
     private class SchemeVersion {
         private String uri = null;
         private String codingScheme = null;
-        private String version = null;    
+        private String version = null; 
+        private String namespace = null;
         private boolean mult = false;
     }    
 
 	/**
-	 * Return a unique coding scheme map
+	 * Return a unique coding scheme map with versions for concepts
+	 *  in the cart
 	 * @param search
 	 * @return
+	 * @throws Exception 
 	 */
 	private HashMap<String, SchemeVersion> getSchemeVersionList(
-			SearchCart search) {
+			SearchCart search) throws Exception {
 		HashMap<String, SchemeVersion> map = new HashMap<String, SchemeVersion>();
 		ResolvedConceptReference ref = null;
 
@@ -771,21 +769,25 @@ public class CartActionBean {
 			Concept item = (Concept) i.next();
 			ref = search.getConceptByCode(item.codingScheme, item.version,
 					item.code);
-			SchemeVersion vs = new SchemeVersion();
-			vs.uri = ref.getCodingSchemeURI();
-			vs.codingScheme = ref.getCodingSchemeName();
-			vs.version = ref.getCodingSchemeVersion();			
-			map.put(item.codingScheme + "|" + item.version, vs);
+			ArrayList<String> list = search.getSchemeVersions(ref.getCodingSchemeURI()); 
+			for(int x=0;x<list.size();x++) {
+				SchemeVersion vs = new SchemeVersion();
+				vs.uri = ref.getCodingSchemeURI();
+				vs.codingScheme = ref.getCodingSchemeName();
+				vs.version = list.get(x);
+				vs.namespace = ref.getCodeNamespace();
+				map.put(item.codingScheme + "|" + vs.version, vs);
+			}
 		}
-		
-		// Set has other version flags 
+	
+		// Set 'has other version' flags 
 		for (Iterator<Entry<String, SchemeVersion>> i = map.entrySet()
 				.iterator(); i.hasNext();) {
 			Entry<String, SchemeVersion> x = i.next();
 			SchemeVersion vs = x.getValue();
 			vs.mult = schemeHasOtherVersion(map,vs.uri,vs.version);			
 		}		
-
+		
 		return map;
 	}
     
