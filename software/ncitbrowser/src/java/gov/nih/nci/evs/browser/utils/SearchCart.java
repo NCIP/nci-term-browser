@@ -1,14 +1,21 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.bean.CartActionBean.Concept;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Vector;
 
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
 import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
 import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
 import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
 import org.LexGrid.LexBIG.Exceptions.LBException;
 import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
@@ -414,9 +421,31 @@ public class SearchCart {
      * @throws Exception
      */
     public String getDefaultSchemeVersion(String scheme) throws Exception {    
-        CodingScheme cs = lbSvc.resolveCodingScheme(scheme,null);//, versionOrTag);    
-    	return cs.getRepresentsVersion();// .getCodingSchemeURI();
-    }     
+        CodingScheme cs = lbSvc.resolveCodingScheme(scheme,null);    
+    	return cs.getRepresentsVersion();
+    }   
+    
+    /**
+     * Returns list of all versions associated with a scheme
+     * @param uri
+     * @return
+     * @throws Exception
+     */
+    public ArrayList<String> getSchemeVersions(String uri) throws Exception { 
+    	ArrayList<String> list = new ArrayList<String>();
+
+        CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
+        CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+
+        for (int i = 0; i < csrs.length; i++) {
+            CodingSchemeRendering csr = csrs[i];
+            CodingSchemeSummary css = csr.getCodingSchemeSummary();
+            if (css.getCodingSchemeURI().equals(uri)) 
+            	list.add(css.getRepresentsVersion());
+        }
+    	
+    	return list;
+    }    
     
     // -----------------------------------------------------
     // Internal utility methods
