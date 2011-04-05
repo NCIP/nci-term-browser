@@ -267,7 +267,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     
     String vsd_description = ValueSetHierarchy.getValueSetDecription(vsd_uri);
     if (vsd_description == null) {
-        vsd_description = "<NO DESCRIPTION>";
+        vsd_description = "DESCRIPTION NOT AVAILABLE";
     }
     
 %>
