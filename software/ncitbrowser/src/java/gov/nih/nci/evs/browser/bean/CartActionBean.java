@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
@@ -94,6 +93,7 @@ public class CartActionBean {
     private String _backurl = null;
     private boolean _messageflag = false;
     private String _message = null;
+    private boolean _selectflag = false;
 
     // Local constants
     static public final String XML_FILE_NAME = "cart.xml";
@@ -148,6 +148,14 @@ public class CartActionBean {
     public boolean getMessageflag() {
     	return _messageflag;
     }    
+
+    /**
+     * Return Popup version selection flag
+     * @return
+     */
+    public boolean getSelectflag() {
+    	return _selectflag;
+    }
 
     /**
      * Return Popup message text
@@ -348,7 +356,7 @@ public class CartActionBean {
         	_messageflag = true;
         	_message = NOTHING_SELECTED;        
         	return null;
-    	}    		
+    	}  	
     
         // Get Entities to be exported and build export XML string
         // in memory
@@ -359,6 +367,12 @@ public class CartActionBean {
 			HashMap<String, SchemeVersion> versionList
 				= getSchemeVersionList(search);
 
+			// Display version select popup
+			if (schemeVersionListHasMult(versionList) && !_selectflag) {
+				_selectflag = true;
+				return null;				
+			}			
+			
         	// Setup lexbig service
     		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil
 				.getLexEVSValueSetDefinitionServices();
@@ -497,6 +511,8 @@ public class CartActionBean {
             // Don't allow JSF to forward to cart.jsf
             FacesContext.getCurrentInstance().responseComplete();
         }
+        
+        _selectflag = false; // Clear multi version flag
         
         return null;
     }
@@ -702,46 +718,6 @@ public class CartActionBean {
     //**
 
     /**
-     * Check if a URI is in the map
-     * @param maps
-     * @param uri
-     * @return
-     */
-    private boolean mapContainsURI(Mappings maps, String uri) {
-    	if (maps == null || uri == null)
-    		return false;
-    	List<SupportedCodingScheme> list =
-    		maps.getSupportedCodingSchemeAsReference();
-    	if (list == null || list.size() < 1) return false;
-    	Iterator<?> i = list.iterator();
-    	SupportedCodingScheme scs = null;
-    	while (i.hasNext()) {
-    		scs = (SupportedCodingScheme) i.next();
-    		if (scs.getUri().equals(uri))
-    			return true;
-    	}   	
-    	
-    	return false;
-    }
-        
-    /**
-     * Check if a Supported Name Space is in the map
-     * @param maps
-     * @param sns
-     * @return
-     */
-    private boolean mapContainsSupportedNamespace(Mappings maps, String sns) {
-    	if (maps == null || sns == null)
-    		return false;
-    	SupportedNamespace[] list =
-    		maps.getSupportedNamespace();    	
-    	if (list == null || list.length < 1) return false;
-    	for(int x=0;x<list.length;x++)
-    		if (list[x].getLocalId().equals(sns)) return true;    		
-        return false;
-    }
-
-    /**
      * Class to hold a unique scheme version
      * @author garciaw     
      */
@@ -791,6 +767,21 @@ public class CartActionBean {
 		return map;
 	}
     
+	/**
+	 * Determine if version map has multiple versions in it
+	 * @param map
+	 * @return
+	 */
+	private boolean schemeVersionListHasMult(HashMap<String, SchemeVersion> map) {
+		for (Iterator<Entry<String, SchemeVersion>> i = map.entrySet()
+				.iterator(); i.hasNext();) {
+			Entry<String, SchemeVersion> x = i.next();
+			SchemeVersion vs = x.getValue();
+			if (vs.mult) return true;		
+		}	
+		return false;
+	}	
+	
 	/**
 	 * Test if map contains other versions of a given scheme
 	 * @param map

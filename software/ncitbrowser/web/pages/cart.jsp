@@ -13,7 +13,7 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body onLoad="javascript:popupMessage();document.forms.searchTerm.matchText.focus();">
+<body onLoad="javascript:popupMessage();popupSelectVersions();document.forms.searchTerm.matchText.focus();">
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
@@ -31,6 +31,11 @@
           alert('<h:outputText value="#{CartActionBean.message}"/>');
          }
       }
+      function popupSelectVersions() {
+          if (<h:outputText value="#{CartActionBean.selectflag}"/>) {
+           alert('Please select version');
+          }
+      }      
       function confirmRemoveMessage() {
          var count = <h:outputText value="#{CartActionBean.count}"/>;
          var flag = false;
