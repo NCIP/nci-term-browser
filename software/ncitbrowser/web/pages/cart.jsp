@@ -33,7 +33,8 @@
       }
       function popupSelectVersions() {
           if (<h:outputText value="#{CartActionBean.selectflag}"/>) {
-           alert('Please select version');
+        	   window.open('<%=request.getContextPath() %>/pages/cartSelPopup.jsf',
+        			   '_blank','top=100, left=100, height=440, width=380, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
           }
       }      
       function confirmRemoveMessage() {
