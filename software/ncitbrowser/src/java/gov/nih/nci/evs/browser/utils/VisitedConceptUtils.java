@@ -126,8 +126,13 @@ public class VisitedConceptUtils {
             String formalName = DataUtils.getFormalName(scheme);
             // String localName = DataUtils.getLocalName(scheme);
             String version = visitedConcept.version;
-            String vocabulary_name =
+            String display_name =
                 DataUtils.getMetadataValue(formalName, version, "display_name");
+            if (display_name == null) {
+                _logger.warn("Missing \"display_name\" metadata for: " + formalName);
+                _logger.warn("  * Defaulting to display_name value to: " + formalName);
+                display_name = formalName;
+            }
             String code = visitedConcept.code;
             String name = visitedConcept.name;
             name = DataUtils.htmlEntityEncode(name);
@@ -136,15 +141,20 @@ public class VisitedConceptUtils {
             String versionParameter = "", versionParameterDisplay = "";
             if (version != null && version.length() > 0) {
                 versionParameter = "&version=" + version;
-                versionParameterDisplay = " "
-                    + DataUtils.getMetadataValue(formalName, version,
-                        "term_browser_version");
+                String term_browser_version = DataUtils.getMetadataValue(
+                    formalName, version, "term_browser_version");
+                if (term_browser_version == null) {
+                    _logger.warn("Missing \"term_browser_version\" metadata for: " + formalName);
+                    _logger.warn("  * Defaulting to \"term_browser_version\" value to: " + version);
+                    term_browser_version = version;
+                }
+                versionParameterDisplay = term_browser_version;
             }
 
             line =
                 "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
                     + formalName + versionParameter + "&code=" + code + "\\'>"
-                    + name + " &#40;" + vocabulary_name
+                    + name + " &#40;" + display_name + " "
                     + versionParameterDisplay + "&#41;" + "</a><br>";
             strbuf.append(line);
             strbuf.append("</li>");
