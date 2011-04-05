@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
@@ -353,6 +355,13 @@ public class CartActionBean {
 
         if (_cart != null && _cart.size() > 0) {
 
+        	
+        	getSchemeVersionList(search);
+        	
+        	
+        	
+        	
+        	
     		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil
 				.getLexEVSValueSetDefinitionServices();
 
@@ -447,8 +456,8 @@ public class CartActionBean {
 					.createAbsoluteCodingSchemeVersionReference(
 						ref.getCodingSchemeURI(),
 						ref.getCodingSchemeVersion()));
-				_logger.debug("Coding Scheme Version Reference: "
-						+ ref.getCodingSchemeVersion()
+				_logger.debug("CS Version Reference: "
+						+ ref.getCodingSchemeURI()
 						+ " (" +  ref.getCodingSchemeVersion() + ")");
 			}
 
@@ -736,7 +745,69 @@ public class CartActionBean {
     		if (list[x].getLocalId().equals(sns)) return true;    		
         return false;
     }
+
+    /**
+     * Class to hold a unique scheme version
+     * @author garciaw     
+     */
+    private class SchemeVersion {
+        private String uri = null;
+        private String codingScheme = null;
+        private String version = null;    
+        private boolean mult = false;
+    }    
+
+	/**
+	 * Return a unique coding scheme map
+	 * @param search
+	 * @return
+	 */
+	private HashMap<String, SchemeVersion> getSchemeVersionList(
+			SearchCart search) {
+		HashMap<String, SchemeVersion> map = new HashMap<String, SchemeVersion>();
+		ResolvedConceptReference ref = null;
+
+		for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+			Concept item = (Concept) i.next();
+			ref = search.getConceptByCode(item.codingScheme, item.version,
+					item.code);
+			SchemeVersion vs = new SchemeVersion();
+			vs.uri = ref.getCodingSchemeURI();
+			vs.codingScheme = ref.getCodingSchemeName();
+			vs.version = ref.getCodingSchemeVersion();			
+			map.put(item.codingScheme + "|" + item.version, vs);
+		}
+		
+		// Set has other version flags 
+		for (Iterator<Entry<String, SchemeVersion>> i = map.entrySet()
+				.iterator(); i.hasNext();) {
+			Entry<String, SchemeVersion> x = i.next();
+			SchemeVersion vs = x.getValue();
+			vs.mult = schemeHasOtherVersion(map,vs.uri,vs.version);			
+		}		
+
+		return map;
+	}
     
+	/**
+	 * Test if map contains other versions of a given scheme
+	 * @param map
+	 * @param uri
+	 * @param version
+	 * @return
+	 */
+	private boolean schemeHasOtherVersion(HashMap<String, SchemeVersion> map,
+			String uri, String version) {
+		for (Iterator<Entry<String, SchemeVersion>> i = map.entrySet()
+				.iterator(); i.hasNext();) {
+			Entry<String, SchemeVersion> x = i.next();
+			SchemeVersion vs = x.getValue();
+			if (vs.uri.equals(uri) && !vs.version.equals(version))
+				return true;
+		}
+		return false;
+	}
+	
     /**
      * Test any concept in the cart has been selected
      * @return
@@ -779,6 +850,30 @@ public class CartActionBean {
         return sb.toString();
     }
 
+    
+    /**
+     * Dump scheme version map
+     * @param map
+     * @return
+     */
+    public String versionMapToString(HashMap<String, SchemeVersion> map) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("Listing scheme versions...\n");
+        
+		for (Iterator<Entry<String, SchemeVersion>> i = map.entrySet()
+				.iterator(); i.hasNext();) {	
+			Entry<String, SchemeVersion> x = i.next();
+			SchemeVersion vs = x.getValue();
+			sb.append("\t--------------------------------\n");
+			sb.append("\t          Key = " + x.getKey() + "\n");
+			sb.append("\tCoding Scheme = " + vs.codingScheme + "\n");
+			sb.append("\t          URI = " + vs.uri + "\n");
+			sb.append("\t      Version = " + vs.version + "\n");
+			sb.append("\t Multiple Ver = " + vs.mult + "\n");
+		}
+		return sb.toString();
+    }    
+    
     /**
      * Clean a string for use in file type CSV
      * @param str
