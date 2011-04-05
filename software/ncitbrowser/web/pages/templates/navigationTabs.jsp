@@ -22,10 +22,15 @@
       System.out.println("nav_tab_vsd_uri: " + nav_tab_vsd_uri);
       String nav_type = DataUtils.getNavigationTabType(nav_tab_dictionary, nav_tab_version, nav_tab_vsd_uri, nav_tab_nav_type);
       
-      if (nav_type == null)
+      System.out.println("nav_type (getNavigationTabType): " + nav_type);
+      if (nav_type == null) {
           nav_type = (String) request.getSession().getAttribute("nav_type");
-      if (nav_type == null)
+          System.out.println("nav_type (session): " + nav_type);
+      }
+      if (nav_type == null) {
           nav_type = "terminologies";
+          System.out.println("nav_type (default): " + nav_type);
+      }
       request.getSession().setAttribute("nav_type", nav_type);
       
       String tab_terms_image = nav_type.equalsIgnoreCase("terminologies")
