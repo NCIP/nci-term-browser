@@ -264,17 +264,28 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 <%
 if (vsd_vec != null && vsd_vec.size() == 1) {
     //if (sources == null || sources.compareTo("") == 0) sources = "not available";
+    
+    String vsd_description = ValueSetHierarchy.getValueSetDecription(vsd_uri);
+    if (vsd_description == null) {
+        vsd_description = "<NO DESCRIPTION>";
+    }
+    
 %>
 		      <td class="dataCellText">
 		      <p>
 			 <b><%=name%></b>
 		      </p>
 		      
-		      <p>
+		      <p class="dataCellText">
+		      
+		      <%=vsd_description%>
+		      <!--
 			 Clicking on the Values button to find all concepts contained in this value set. The value set will be resolved
 			 using the production version of each participating terminology.
 			 Clicking on the Versions button to view available versions of each terminology participating in this value set.
 			 Clicking on XMLDefinition button to view the definition of the value set in LexGrid XML format.
+		      -->
+		      
 		      </p>
 		      
 		      </td>

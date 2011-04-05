@@ -105,7 +105,8 @@ if (conceptDomain == null) conceptDomain = "";
           <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
           <div class="tabTableContentContainer">
           
-            <span class="textbody">&nbsp;All value sets available on the server are listed below. 
+            <span class="textbody">
+            &nbsp;All value sets available on the server are listed below. 
             You may search value sets by code, name, source, or coding scheme. Click on the Help (i.e., the question mark) icon above for instructions on
             how to perform each type of search.
             <br/><br/><br/>
