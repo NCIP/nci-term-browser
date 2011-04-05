@@ -4937,23 +4937,21 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		return u;
 	}
 
-	public static String getNavigationTabType(String dictionary, String version, String vsd_uri, String nav_type) {
-		System.out.println("(*) getNavigationTabType dictionary: " + dictionary);
-		System.out.println("(*) getNavigationTabType version: " + version);
-		System.out.println("(*) getNavigationTabType vsd_uri: " + vsd_uri);
-		System.out.println("(*) getNavigationTabType nav_type: " + nav_type);
+	public static String getNavigationTabType(String dictionary, String version, 
+	        String vsd_uri, String nav_type) {
+	    _logger.debug("Method: DataUtils.getNavigationTabType");
+		_logger.debug("  * dictionary: " + dictionary);
+		_logger.debug("  * version: " + version);
+		_logger.debug("  * vsd_uri: " + vsd_uri);
+		_logger.debug("  * nav_type: " + nav_type);
 
-		if (nav_type != null) return nav_type;
-		if (vsd_uri != null) {
+		if (nav_type != null) 
+		    return nav_type;
+		if (vsd_uri != null)
 			return "valuesets";
-		}
 		if (dictionary != null) {
 			boolean isMapping = isMapping(dictionary, version);
-			if (isMapping) {
-				return "mappings";
-			} else {
-				return "terminologies";
-			}
+			return isMapping ? "mappings" : "terminologies";
 		}
 		return null;
 	}
