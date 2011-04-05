@@ -202,4 +202,30 @@ public class JSPUtils {
         display[0] = Boolean.TRUE;
         return "";
     }
+    
+    public static String getNavType(HttpServletRequest request) {
+        JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+        String vsd_uri = (String) request.getParameter("vsd_uri");
+        String dictionary = info.dictionary;
+        String version = info.version;
+        
+        _logger.debug(Utils.SEPARATOR);
+        String nav_type = (String) request.getParameter("nav_type");
+        _logger.debug("nav_type (Parameter): " + nav_type);
+        
+        nav_type = DataUtils.getNavigationTabType(
+            dictionary, version, vsd_uri, nav_type);
+        _logger.debug("nav_type (getNavigationTabType): " + nav_type);
+        
+        if (nav_type == null) {
+            nav_type = (String) request.getSession().getAttribute("nav_type");
+            _logger.debug("nav_type (Session): " + nav_type);
+        }
+        if (nav_type == null) {
+            nav_type = "terminologies";
+            _logger.debug("nav_type (Default): " + nav_type);
+        }
+        request.getSession().setAttribute("nav_type", nav_type);
+        return nav_type;
+    }
 }
