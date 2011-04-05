@@ -127,6 +127,19 @@ public class ValueSetHierarchy {
         _valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
     }
 
+    public static String getValueSetDecription(String uri) {
+		if (_valueSetDefinitionURI2VSD_map == null) {
+			_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+		}
+		ValueSetDefinition vsd = (ValueSetDefinition) _valueSetDefinitionURI2VSD_map.get(uri);
+		if (vsd == null) return null;
+		if (vsd.getEntityDescription() == null) return null;
+		return vsd.getEntityDescription().getContent();
+	}
+
+
+
+
     public static String getSourceSchemeVersion() {
 		if (SOURCE_VERSION == null) {
 			SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
