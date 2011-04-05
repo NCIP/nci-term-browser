@@ -1670,8 +1670,6 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		//request.setAttribute("key", key);
 
 		request.getSession().setAttribute("key", key);
-		request.getSession().setAttribute("nav_type", "valuesets");
-
 
 		System.out.println("(*************) setAttribute key: " + key);
 
