@@ -84,6 +84,7 @@
       <!-- Main box -->
       <div id="main-area">
         <%-- Simple Search Link Version: <%@ include file="/pages/templates/content-header-alt.jsp" %> --%>
+        <% request.setAttribute("hideAdvancedSearchLink", true); %>
         <%@ include file="/pages/templates/content-header.jsp" %>
 <%
 
