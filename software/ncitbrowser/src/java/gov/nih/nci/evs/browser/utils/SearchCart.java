@@ -439,7 +439,8 @@ public class SearchCart {
 
         for (int i = 0; i < csrs.length; i++) {
             CodingSchemeRendering csr = csrs[i];
-            if (csr.getRenderingDetail().getVersionStatus().equals("active")) {                
+            String status = csr.getRenderingDetail().getVersionStatus().value(); 
+            if (status.equals("active")) {                
 	            CodingSchemeSummary css = csr.getCodingSchemeSummary();
 	            if (css.getCodingSchemeURI().equals(uri)) 
 	            	list.add(css.getRepresentsVersion());
