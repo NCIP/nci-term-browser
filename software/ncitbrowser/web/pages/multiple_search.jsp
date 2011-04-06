@@ -97,9 +97,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-  
-    <h:form id="searchTerm" styleClass="search-form" >
-    
+    <h:form id="searchTerm">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
