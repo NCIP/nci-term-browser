@@ -459,14 +459,33 @@ System.out.println("(********) expand_src_vs_tree node_id: " + node_id);
 
 System.out.println("(**********) found in source listing: " + node_id);
 
-					HashMap hmap = null;
-                    if (ValueSetHierarchy.hasSubSourceInSourceHierarchy(node_id)) {
-						hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
-						ValueSetHierarchy.assignTreeNodeExpandible(hmap);
-						TreeUtils.relabelTreeNodes(hmap);
-				    } else if (ValueSetHierarchy.hasValueSetDefinitionsWithSource(node_id)) {
-						hmap = ValueSetHierarchy.getValueSetDefinitionNodesWithSource(node_id);
+					HashMap hmap1 = null;
+					HashMap hmap2 = null;
+
+					boolean bool_val = ValueSetHierarchy.hasSubSourceInSourceHierarchy(node_id);
+					System.out.println("hasSubSourceInSourceHierarchy " + node_id + ": " + bool_val);
+
+                    if (bool_val) {
+						hmap1 = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
+
+System.out.println("assignTreeNodeExpandible ...");
+
+						ValueSetHierarchy.assignTreeNodeExpandible(hmap1);
+
+System.out.println("relabelTreeNodes ...");
+
+
+						TreeUtils.relabelTreeNodes(hmap1);
 					}
+
+					bool_val = ValueSetHierarchy.hasValueSetDefinitionsWithSource(node_id);
+					System.out.println("hasValueSetDefinitionsWithSource " + node_id + ": " + bool_val);
+
+				    if (bool_val) {
+						hmap2 = ValueSetHierarchy.getValueSetDefinitionNodesWithSource(node_id);
+					}
+
+					HashMap hmap = TreeUtils.combine(hmap2, hmap1);
 
                     TreeItem root = null;
 					if (hmap != null) {
