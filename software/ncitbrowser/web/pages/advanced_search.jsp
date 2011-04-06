@@ -83,7 +83,8 @@
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
-        <%@ include file="/pages/templates/content-header-alt.jsp" %>
+        <%-- Simple Search Link Version: <%@ include file="/pages/templates/content-header-alt.jsp" %> --%>
+        <%@ include file="/pages/templates/content-header.jsp" %>
 <%
 
   String advSearch_requestContextPath = request.getContextPath();
