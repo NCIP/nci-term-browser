@@ -2,7 +2,6 @@
 <%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices" %>
 
 
-
   <script type="text/javascript">
   
     function refresh() {
@@ -15,6 +14,7 @@
         }
       }
       
+    
       window.location.href="/ncitbrowser/pages/value_set_search.jsf?refresh=1"
           + "&opt="+ selectValueSetSearchOption;
 
@@ -80,6 +80,7 @@ String valueset_match_text = "";
 %>
 <h:form id="valueSetSearchForm" styleClass="search-form">   
 
+<input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
 
 <table>
   <tr><td> 
