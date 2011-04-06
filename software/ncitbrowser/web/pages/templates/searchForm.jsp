@@ -146,12 +146,14 @@ Logger logger = Utils.getJspLogger("searchForm.jsp");
   %>
 </h:form>
 
-
+        <% Boolean hideAdvancedSearchLink = (Boolean) request.getAttribute("hideAdvancedSearchLink");
+          if (hideAdvancedSearchLink == null || ! hideAdvancedSearchLink) { %>
           <td valign="middle" align="right">
             <a class="global-nav" href="<%=request.getContextPath() %>/pages/advanced_search.jsf?dictionary=<%=vocab_name%>&version=<%=srchform_version%>" tabindex="6">
                Advanced Search
             </a>
           </td>
+        <% } %>
 
         </tr>
       </table>
