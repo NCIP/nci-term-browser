@@ -377,17 +377,14 @@ System.out.println("matchText: " + matchText);
 
 			try {
 
-System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchText);
+System.out.println("ENTERING valueSetSearchAction listValueSetsWithEntityCode: " + matchText);
 
 				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
+
+System.out.println("RETURNED FROM valueSetSearchAction vsd_service.listValueSetsWithEntityCode: " + matchText);
+
 				if (list != null) {
 					System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");
-/*
-					if (list.size() == 1) {
-						String vsd_uri = (String) list.get(0);
-						request.getSession().setAttribute("vsd_uri", vsd_uri);
-					}
-*/
 
 					for (int j=0; j<list.size(); j++) {
 						uri = (String) list.get(j);
