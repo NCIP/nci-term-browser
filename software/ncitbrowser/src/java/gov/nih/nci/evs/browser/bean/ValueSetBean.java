@@ -517,42 +517,6 @@ System.out.println("valueSetSearchAction listValueSetsWithEntityCode: " + matchT
 			msg = "Unexpected errors encountered; search by name failed.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
-/*
-		} else if (selectValueSetSearchOption.compareTo("URI") == 0) {
-			System.out.println("valueSetSearchAction selectURI: " + selectURI);
-
-			if (selectURI != null) {
-
-				try {
-					ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(selectURI), valueSetDefinitionRevisionId);
-					if (vsd == null) {
-						msg = "Unable to find any value set with URI " + selectURI + ".";
-						request.getSession().setAttribute("message", msg);
-						return "message";
-					}
-
-
-					String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-					if (metadata != null) {
-						v.add(metadata);
-					}
-
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					msg = "Unable to find any value set with URI " + selectURI + ".";
-					request.getSession().setAttribute("message", msg);
-					return "message";
-				}
-		    }
-			request.getSession().setAttribute("matched_vsds", v);
-			if (v.size() == 0) {
-				msg = "No match found.";
-				request.getSession().setAttribute("message", msg);
-				return "message";
-			}
-
-			return "value_set";
-*/
 
 		}
 

@@ -204,7 +204,7 @@ String key = (String) request.getSession().getAttribute("key");
                 <th class="dataTableHeader" scope="col" align="left">Concept</th>
                 <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
                 <%
-                  List list = iteratorBean.getData(istart, iend);
+                  list = iteratorBean.getData(istart, iend);
 
     boolean timeout = iteratorBean.getTimeout();
     message = iteratorBean.getMessage();

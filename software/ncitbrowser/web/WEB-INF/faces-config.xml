@@ -1195,7 +1195,76 @@
     </navigation-case>    
     
   </navigation-rule>
-   
+
+
+  <navigation-rule>
+    <from-view-id>/pages/value_set_source_view.jsp</from-view-id>
+    <navigation-case>
+       <description>value_set_search</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>value_set</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_source_view.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>all_value_sets</from-outcome>
+       <to-view-id>/pages/value_set_source_view.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_source_view.jsp</to-view-id>
+    </navigation-case>    
+    
+  </navigation-rule>
+  
+  
+  <navigation-rule>
+    <from-view-id>/pages/value_set_terminology_view.jsp</from-view-id>
+    <navigation-case>
+       <description>value_set_search</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>value_set</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_terminology_view.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>all_value_sets</from-outcome>
+       <to-view-id>/pages/value_set_terminology_view.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_terminology_view.jsp</to-view-id>
+    </navigation-case>    
+    
+  </navigation-rule>
+  
+  
+  
+  
   <navigation-rule>
     <from-view-id>/pages/value_set_search_results.jsp</from-view-id>
     <navigation-case>
