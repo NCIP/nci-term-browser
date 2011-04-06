@@ -536,7 +536,7 @@ String valueset_match_text = "";
 %>
 <h:form id="valueSetSearchForm" styleClass="search-form">   
 
-<input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
+
 
 <table>
   <tr><td> 
@@ -644,7 +644,7 @@ if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) {
 </table>
 
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
-
+<input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
 </h:form>           
         
         
