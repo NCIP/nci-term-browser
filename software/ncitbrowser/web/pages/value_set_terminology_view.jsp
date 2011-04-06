@@ -694,10 +694,9 @@ if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) {
 String view = "terminology";
 %>
 
-<a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?&view=source">Standards View</a>
-&nbsp;|
 Terminology View
-
+&nbsp;|
+<a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?&view=source">Standards View</a>
 
 </td>
 

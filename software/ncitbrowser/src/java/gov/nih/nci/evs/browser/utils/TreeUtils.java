@@ -2197,6 +2197,61 @@ public class TreeUtils {
 		}
 	}
 
+	public static HashMap combine(HashMap hmap1, HashMap hmap2) {
+
+		if (hmap1 == null) {
+			System.out.println("(********) hmap1 == null" );
+		}
+		if (hmap2 == null) {
+			System.out.println("(********) hmap2 == null" );
+		}
+
+		if (hmap1 == null && hmap2 == null) return null;
+		if (hmap1 == null && hmap2 != null) return hmap2;
+		if (hmap2 == null && hmap1 != null) return hmap1;
+
+		TreeItem ti = new TreeItem("<Root>", "Root node");
+		ti._expandable = false;
+
+		TreeItem root = null;
+		Iterator it = hmap1.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			root = (TreeItem) hmap1.get(key);
+			if (root != null) {
+				for (String association : root._assocToChildMap.keySet()) {
+					List<TreeItem> children = root._assocToChildMap.get(association);
+					for (TreeItem childItem : children) {
+						ti.addChild(association, childItem);
+						ti._expandable = true;
+
+						System.out.println(childItem._text + " : " + childItem._expandable);
+					}
+				}
+			}
+		}
+		it = hmap2.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			root = (TreeItem) hmap2.get(key);
+			if (root != null) {
+				for (String association : root._assocToChildMap.keySet()) {
+					List<TreeItem> children = root._assocToChildMap.get(association);
+					for (TreeItem childItem : children) {
+						ti.addChild(association, childItem);
+						ti._expandable = true;
+
+						System.out.println(childItem._text + " : " + childItem._expandable);
+					}
+				}
+			}
+		}
+		HashMap hmap = new HashMap();
+		hmap.put("<Root>", ti);
+		return hmap;
+
+	}
+
 
     public static void main(String[] args) {
         String url = "http://lexevsapi-dev.nci.nih.gov/lexevsapi42";

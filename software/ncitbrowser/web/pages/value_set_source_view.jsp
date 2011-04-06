@@ -686,18 +686,20 @@ if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) {
              
              
 <tr class="textbody">
-<td class="textbody" align="left">
-<%
-String view = "source";
-%>
-Standards View&nbsp;| 
-<a href="<%=request.getContextPath() %>/pages/value_set_terminology_view.jsf?view=terminology">Terminology View</a>
-</td>
-<td align="right">
-<font size="1" color="red" align="right">
-  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
-</font>
-</td>
+	<td class="textbody" align="left">
+	<%
+	String view = "source";
+	%>
+	<a href="<%=request.getContextPath() %>/pages/value_set_terminology_view.jsf?view=terminology">Terminology View</a>
+	&nbsp;| 
+	Standards View
+	</td>
+
+	<td align="right">
+	<font size="1" color="red" align="right">
+	  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
+	</font>
+	</td>
 </tr>
 </table>
 

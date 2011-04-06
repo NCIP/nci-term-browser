@@ -2481,6 +2481,10 @@ try {
 		Iterator it = hmap.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
+
+	System.out.println("assignTreeNodeExpandible key " + key);
+
+
 			TreeItem ti = (TreeItem) hmap.get(key);
 			for (String association : ti._assocToChildMap.keySet()) {
 				List<TreeItem> children = ti._assocToChildMap.get(association);
@@ -2489,6 +2493,9 @@ try {
 					String code = childItem._code;
 					String text = childItem._text;
 
+
+System.out.println("\t" + code + " - " + text);
+
 					childItem._expandable = false;
 
 					if (hasSubSourceInSourceHierarchy(code)) {
@@ -2496,6 +2503,10 @@ try {
 					} else if (hasValueSetDefinitionsWithSource(code)) {
 						childItem._expandable = true;
 					}
+
+System.out.println("\t\texpandable: " + childItem._expandable);
+
+
 				}
 
 			}
