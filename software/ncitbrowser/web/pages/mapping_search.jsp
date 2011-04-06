@@ -172,7 +172,7 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
   
   <div class="center-page">
   
-<h:form id="mappingSearch" styleClass="search-form" >
+<h:form id="mappingSearch" >
     
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
