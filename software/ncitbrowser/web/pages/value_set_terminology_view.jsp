@@ -606,58 +606,35 @@
       <%@ include file="/pages/templates/quickLink.jsp" %>
       <!-- end Quick links bar -->
 
-   
-   
-    
-
       <!-- Page content -->
       <div class="pagecontent">
-       <div id="popupContentArea">
-        
-        <a name="evs-content" id="evs-content"></a>
-
-
-<table width="580px" cellpadding="3" cellspacing="0" border="0">
-
-
- 
- 
-             <% if (message != null) { 
-                 request.getSession().removeAttribute("message");
-             %>
- 		<tr class="textbodyred"><td>
- 	            <p class="textbodyred">&nbsp;<%=message%></p>
- 		</td></tr>
-             <% 
-             } 
-             %>
-
-
-
-
-<tr class="textbody">
-<td class="textbody" align="left">
-<%
-String view = "terminology";
-%>
-
-Terminology View
-&nbsp;|
-<a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?&view=source">Standards View</a>
-
-</td>
-
-<td align="right">
-   <font size="1" color="red" align="right">
-      <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
-   </font>
-</td>
-</tr>
-</table>
-
-<hr></hr>
-
-
+        <div id="popupContentArea">
+          <a name="evs-content" id="evs-content"></a>
+  
+          <table width="580px" cellpadding="3" cellspacing="0" border="0">
+          <% if (message != null) { request.getSession().removeAttribute("message"); %>
+            <tr class="textbodyred"><td>
+              <p class="textbodyred">&nbsp;<%=message%></p>
+            </td></tr>
+          <% } %>
+          
+            <tr class="textbody">
+              <td class="textbody" align="left">
+                <% String view = "terminology"; %>
+                Terminology View
+                &nbsp;|
+                <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?&view=source">Standards View</a>
+              </td>
+            
+              <td align="right">
+                <font size="1" color="red" align="right">
+                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
+                </font>
+              </td>
+            </tr>
+          </table>
+          <hr></hr>
+  
           <!-- Tree content -->
           <div id="rootDesc">
             <div id="bd"></div>
@@ -670,40 +647,31 @@ Terminology View
             <div id="bd"></div>
           </div>
           <div id="treecontainer"></div>
-
+  
           <form id="pg_form">
             <%
               String ontology_node_id = (String)request.getParameter("code");
-
-String schema = request.getParameter("schema");
-String ontology_version = request.getParameter("version");
-
-
-String ontology_display_name = request.getParameter("schema");
-if (ontology_display_name == null) {
-    ontology_display_name = request.getParameter("dictionary");
-}
-
+              String schema = request.getParameter("schema");
+              String ontology_version = request.getParameter("version");
+              String ontology_display_name = request.getParameter("schema");
+              if (ontology_display_name == null) {
+                ontology_display_name = request.getParameter("dictionary");
+              }
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=HTTPUtils.cleanXSS(ontology_display_name)%>" />
             <input type="hidden" id="schema" name="schema" value="<%=HTTPUtils.cleanXSS(schema)%>" />
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
-            
             <input type="hidden" id="view" name="view" value="terminology" />
-
-
           </form>
-         
-
-        <%@ include file="/pages/templates/nciFooter.jsp" %>
-           </div>
-      </div>
-      <!-- end Page content -->
-    </div>
+           
+          <%@ include file="/pages/templates/nciFooter.jsp" %>
+        </div> <!-- popupContentArea -->
+      </div> <!-- pagecontent -->
+    </div> <!-- main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
-  </div>
+  </div> <!-- center-page -->
 </f:view>
 </body>
 </html>
