@@ -542,7 +542,6 @@ String valueset_match_text = "";
 <%
 if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 %>
-
 	  <input CLASS="searchbox-input-2"
 	    name="matchText"
 	    value=""
@@ -551,7 +550,6 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 <%
 } else {
 %>
-
 	  <input CLASS="searchbox-input-2"
 	    name="matchText"
 	    value="<%=valueset_match_text%>"
