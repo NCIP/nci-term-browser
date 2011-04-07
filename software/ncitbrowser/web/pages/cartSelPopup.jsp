@@ -19,7 +19,7 @@
          </tr>
          <tr>
             <td align="left">
-               <h:selectManyListbox size="10" style="width:250px;">  
+               <h:selectManyListbox value="#{CartActionBean.selectedVersionItems}" size="10" style="width:250px;">  
                    <f:selectItems value="#{CartActionBean.selectVersionItems}" />  
                </h:selectManyListbox>
             </td>
@@ -44,7 +44,7 @@
 <script language="javascript" type="text/javascript">
    function checkIfDone() {
 	   document.getElementById('popupForm:startExport').click();
-	   alert('Export started.');
+	   alert('Export started. Download page should appear shortly.');
 	   setTimeout ('window.close()',1200); 	        
    }
 </script>

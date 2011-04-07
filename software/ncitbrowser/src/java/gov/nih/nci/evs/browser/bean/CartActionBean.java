@@ -96,6 +96,7 @@ public class CartActionBean {
     private boolean _messageflag = false;
     private String _message = null;
     private List<SelectItem> _selectVersionItems = null; 
+    private List<String> _selectedVersionItems = null;
 
     // Local constants
     static public final String XML_FILE_NAME = "cart.xml";
@@ -108,6 +109,7 @@ public class CartActionBean {
     static public final String NO_CONCEPTS = "No concepts in cart.";
     static public final String NOTHING_SELECTED = "No concepts selected.";
     static public final String EXPORT_COMPLETE = "Export completed.";
+    static private final String NO_CONFLICTS = "[Production]";
     
     // Getters & Setters
 
@@ -185,14 +187,22 @@ public class CartActionBean {
     }
 
     public List<SelectItem> getSelectVersionItems() throws Exception {
-    	
-        if (_selectVersionItems == null) {
-			SearchCart search = new SearchCart();
-			HashMap<String, SchemeVersion> versionList
-				= getSchemeVersionList(search);
-			initSelectVersionItems(versionList);
-		}
+        if (_selectVersionItems == null) _initDisplayItems();
         return _selectVersionItems;
+    }
+    
+    public void setSelectVersionItems(List<SelectItem> selectVersionItems) {
+    	this._selectVersionItems = selectVersionItems;
+    }
+    
+    public List<String> getSelectedVersionItems() throws Exception {
+    	
+        if (_selectedVersionItems == null) _initDisplayItems();
+        return _selectedVersionItems;
+    }
+    
+    public void setSelectedVersionItems(List<String> selectedVersionItems) {
+    	this._selectedVersionItems = selectedVersionItems;
     }    
     
     // ******************** Class methods ************************
@@ -205,6 +215,18 @@ public class CartActionBean {
 			_cart = new HashMap<String, Concept>();
 	}
 
+	private void _initDisplayItems() throws Exception {
+		SearchCart search = new SearchCart();
+		HashMap<String, SchemeVersion> versionList
+			= getSchemeVersionList(search);
+		
+		// Init scheme version scheme list		
+		initSelectVersionItems(versionList);
+		
+		// Init scheme version selected list
+		initSelectedVersionItems(versionList);		
+	}
+		
     /**
      * Add concept to the Cart
      * @return
@@ -273,6 +295,9 @@ public class CartActionBean {
         // Add scheme and version back in for redisplay
         request.setAttribute("dictionary", codingScheme);
         request.setAttribute("version", version);
+        
+        // Rebuild version selected lists
+        _initDisplayItems();
         
 		return null;
     }
@@ -458,17 +483,30 @@ public class CartActionBean {
             
 			// Add list of coding schemes version reference
 			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+			boolean flag;
 			for (Iterator<Entry<String, SchemeVersion>> i = versionList
 					.entrySet().iterator(); i.hasNext();) {
 				Entry<String, SchemeVersion> x = i.next();
-				SchemeVersion sv = x.getValue();				
-				csvList.addAbsoluteCodingSchemeVersionReference(Constructors
-					.createAbsoluteCodingSchemeVersionReference(
-						sv.uri,
-						sv.version));
-				_logger.debug("Adding CS Ver Ref: "
-						+ sv.uri
-						+ " (" +  sv.version + ")");
+				SchemeVersion sv = x.getValue();	
+				
+				// Add only selected scheme versions
+				flag = false;
+				if (inSelectedlist(sv.uri)) {
+					if (inSelectedlist(sv.uri,sv.version))
+						flag = true;
+				} else {
+					flag = true;
+				}
+		
+				if (flag) {						
+					csvList.addAbsoluteCodingSchemeVersionReference(Constructors
+						.createAbsoluteCodingSchemeVersionReference(
+							sv.uri,
+							sv.version));
+					_logger.debug("Adding CS Ver Ref: "
+							+ sv.uri
+							+ " (" +  sv.version + ")");
+				}				
 			}
 
             // Build a buffer holding the XML data
@@ -677,7 +715,7 @@ public class CartActionBean {
         public void setCheckbox(HtmlSelectBooleanCheckbox checkbox) {
             this.checkbox = checkbox;
         }
-
+        
         // *** Private Methods ***
         
         private void setSelected(boolean selected) {
@@ -744,12 +782,59 @@ public class CartActionBean {
 				.iterator(); i.hasNext();) {
 			Entry<String, SchemeVersion> x = i.next();
 			SchemeVersion vs = x.getValue();
-			this._selectVersionItems.add(new SelectItem(
-				vs.uri + "|" + vs.version,
-				vs.getDisplayCodingSchemeName()));
-		}	
+			if (vs.mult) {
+				_selectVersionItems.add(new SelectItem(
+					vs.uri + "|" + vs.version,
+					vs.getDisplayCodingSchemeName()));
+			}	
+		}
+		if (_selectVersionItems.size() < 1) {
+			_selectVersionItems.add(new SelectItem(
+				NO_CONFLICTS,
+				NO_CONFLICTS));
+		}		
 	}
 	
+	/**
+	 * Create a display list of 'selected' version display items
+	 * @param versionList
+	 */
+	private void initSelectedVersionItems(HashMap<String, SchemeVersion> versionList) {
+		_selectedVersionItems = new ArrayList<String>();
+		
+		for (Iterator<Entry<String, SchemeVersion>> i = versionList.entrySet()
+				.iterator(); i.hasNext();) {
+			Entry<String, SchemeVersion> x = i.next();
+			SchemeVersion vs = x.getValue();
+			if (vs.mult && inSelectedlist(vs.uri))
+				_selectedVersionItems.add(vs.uri + "|" + vs.version);
+		}
+	}	
+	
+	private boolean inSelectedlist(String uri) {
+		for (int x=0;x<_selectedVersionItems.size();x++) {
+			if (_selectedVersionItems.get(x).contains(uri)) return true;
+		}
+		return false;
+	}	
+	
+	private boolean inSelectedlist(String uri, String version) {
+		for (int x = 0; x < _selectedVersionItems.size(); x++) {
+			if (_selectedVersionItems.get(x).contains(uri + "|" + version))
+				return true;
+		}
+		return false;
+	}		
+
+	public String dumpSelectedlist() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Listing selected versions...\n");
+		for (int x = 0; x < _selectedVersionItems.size(); x++) {
+			sb.append("\t    URI = " + _selectedVersionItems.get(x));	
+		}
+		return sb.toString();
+	}	
+
 	/**
 	 * Return a unique coding scheme map with versions for concepts
 	 *  in the cart
