@@ -450,39 +450,13 @@
 <%!
   private static Logger _logger = Utils.getJspLogger("search_results.jsp");
 %>
-<f:view>
-  <!-- Begin Skip Top Navigation -->
-    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
-  <!-- End Skip Top Navigation --> 
-  <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.jsp" %>
-    <!-- Main box -->
-    <div id="main-area">
-    
-    
-    
-<!-- Thesaurus, banner search area -->
-<div class="bannerarea">
-    <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
-    <div class="search-globalnav">
-        <!-- Search box -->
-        <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-        
-        
-        
 
-
-
-  
-  
-  
 <%
     String message = (String) request.getSession().getAttribute("message");
     request.getSession().removeAttribute("message");
 
-  String searchform_requestContextPath = request.getContextPath();
-  searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
+    String searchform_requestContextPath = request.getContextPath();
+    searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
     String selected_cs = "";
     String selected_cd = null;
@@ -527,13 +501,37 @@
     else if (selectValueSetSearchOption.compareTo("Source") == 0)
         check_src = "checked";
     
- 
- 
- 
- 
-String valueset_match_text = "";
-
+    String valueset_match_text = "";
 %>
+
+<f:view>
+  <!-- Begin Skip Top Navigation -->
+    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+  <!-- End Skip Top Navigation --> 
+  <%@ include file="/pages/templates/header.jsp" %>
+  <div class="center-page">
+    <%@ include file="/pages/templates/sub-header.jsp" %>
+    <!-- Main box -->
+    <div id="main-area">
+    
+    
+    
+<!-- Thesaurus, banner search area -->
+<div class="bannerarea">
+    <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
+    <div class="search-globalnav">
+        <!-- Search box -->
+        <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
+        
+        
+        
+
+
+
+  
+  
+  
+
 <h:form id="valueSetSearchForm" styleClass="search-form">   
   <table>
     <tr><td> 
