@@ -56,9 +56,9 @@
         }
       }
       
-    
-      window.location.href="/ncitbrowser/pages/value_set_search.jsf?refresh=1"
+      window.location.href="/ncitbrowser/pages/value_set_terminology_view.jsf?refresh=1"
           + "&opt="+ selectValueSetSearchOption;
+
 
     }
   </script>
@@ -577,7 +577,6 @@ if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	    style="border-width:0;"/>
 	  </h:outputLink> 
   </td></tr>
-   
    		  <tr><td>
    		  <table border="0" cellspacing="0" cellpadding="0">
    		     <tr valign="top" align="left"><td align="left" class="textbody">
