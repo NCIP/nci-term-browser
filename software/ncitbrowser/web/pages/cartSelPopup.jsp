@@ -45,7 +45,7 @@
    function checkIfDone() {
 	   document.getElementById('popupForm:startExport').click();
 	   alert('Export started.');
-	   setTimeout ('window.close()',3000); 	        
+	   setTimeout ('window.close()',1200); 	        
    }
 </script>
 </f:view>

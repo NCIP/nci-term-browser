@@ -106,7 +106,7 @@
                   <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small" onclick="return confirmRemoveMessage();">
                     <h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove concepts from the cart" style="border: none" />
                   </h:commandLink>&nbsp;
-                  <h:commandLink action="#{CartActionBean.clearPopupCloseFlag}" onclick="javascript:popupSelectVersions();" styleClass="texttitle-blue-small">
+                  <h:commandLink onclick="javascript:popupSelectVersions();" styleClass="texttitle-blue-small">
                     <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />
                   </h:commandLink>&nbsp;                  
                   <h:commandLink action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small">
