@@ -506,7 +506,7 @@
 
 <f:view>
   <!-- Begin Skip Top Navigation -->
-    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+  <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
@@ -514,165 +514,138 @@
     <!-- Main box -->
     <div id="main-area">
     
-    
-    
-<!-- Thesaurus, banner search area -->
-<div class="bannerarea">
-    <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
-    <div class="search-globalnav">
-        <!-- Search box -->
-        <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-        
-        
-        
-
-
-
-  
-  
-  
-
-<h:form id="valueSetSearchForm" styleClass="search-form">   
-  <table>
-    <tr><td> 
-  
-      <% if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) { %>
-        <input CLASS="searchbox-input-2"
-          name="matchText"
-          value=""
-          onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
-          tabindex="1"/>
-      <% } else { %>
-        <input CLASS="searchbox-input-2"
-          name="matchText"
-          value="<%=valueset_match_text%>"
-          onFocus="active = true"
-          onBlur="active = false"
-          onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
-          tabindex="1"/>
-      <% } %>  
-      
-      <h:commandButton id="valueset_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
-        onclick="javascript:cursor_wait();"
-        image="#{valueSetSearch_requestContextPath}/images/search.gif"
-          styleClass="searchbox-btn"
-        alt="Search"
-        tabindex="2">
-      </h:commandButton>
-      
-      <h:outputLink
-        value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
-        tabindex="3">
-        <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
-          style="border-width:0;"/>
-      </h:outputLink> 
-    </td></tr>
-     
-    <tr><td>
-      <table border="0" cellspacing="0" cellpadding="0">
-        <tr valign="top" align="left"><td align="left" class="textbody">
-          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
-            alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
-          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
-            alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
-          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=check_src%> 
-            alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
-          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
-            alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
-        </td></tr>
-      
-        <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>    
-          <tr align="left">
-            <td height="1px" bgcolor="#2F2F5F"></td>
-          </tr>
+      <!-- Thesaurus, banner search area -->
+      <div class="bannerarea">
+        <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
+        <div class="search-globalnav">
+          <!-- Search box -->
+          <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
+              
+          <h:form id="valueSetSearchForm" styleClass="search-form">   
+            <table>
+              <tr><td> 
+            
+                <% if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) { %>
+                  <input CLASS="searchbox-input-2"
+                    name="matchText"
+                    value=""
+                    onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
+                    tabindex="1"/>
+                <% } else { %>
+                  <input CLASS="searchbox-input-2"
+                    name="matchText"
+                    value="<%=valueset_match_text%>"
+                    onFocus="active = true"
+                    onBlur="active = false"
+                    onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
+                    tabindex="1"/>
+                <% } %>  
+                
+                <h:commandButton id="valueset_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
+                  onclick="javascript:cursor_wait();"
+                  image="#{valueSetSearch_requestContextPath}/images/search.gif"
+                    styleClass="searchbox-btn"
+                  alt="Search"
+                  tabindex="2">
+                </h:commandButton>
+                
+                <h:outputLink
+                  value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
+                  tabindex="3">
+                  <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
+                    style="border-width:0;"/>
+                </h:outputLink> 
+              </td></tr>
+               
+              <tr><td>
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tr valign="top" align="left"><td align="left" class="textbody">
+                    <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
+                      alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
+                    <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
+                      alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
+                    <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=check_src%> 
+                      alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
+                    <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
+                      alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
+                  </td></tr>
+                
+                  <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>    
+                    <tr align="left">
+                      <td height="1px" bgcolor="#2F2F5F"></td>
+                    </tr>
+                    
+                    <tr valign="top" align="left"><td align="left" class="textbody">
+                      <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
+                      <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
+                      <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
+                    </td></tr>
+                  <% } %>		    
+                </table> 
+              </td></tr>
+            
+              <% if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { %>
+              <tr>
+                <td class="dataCellText">
+                   <h:outputLabel id="codingschemelabel" value="Terminology:" styleClass="textbody">
+                     <h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
+                         immediate = "true"
+                         valueChangeListener="#{valueSetBean.ontologyChangedEvent}">
+                       <f:selectItems value="#{valueSetBean.ontologyList}"/>
+                     </h:selectOneMenu>
+                   </h:outputLabel>
+                </td>                   
+              </tr>
+              <% } %>
+            </table>
+            <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
+            <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
+          </h:form>           
           
-          <tr valign="top" align="left"><td align="left" class="textbody">
-            <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
-            <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
-            <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
-          </td></tr>
-        <% } %>		    
-      </table> 
-    </td></tr>
-  
-    <% if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { %>
-    <tr>
-      <td class="dataCellText">
-         <h:outputLabel id="codingschemelabel" value="Terminology:" styleClass="textbody">
-           <h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
-               immediate = "true"
-               valueChangeListener="#{valueSetBean.ontologyChangedEvent}">
-             <f:selectItems value="#{valueSetBean.ontologyList}"/>
-           </h:selectOneMenu>
-         </h:outputLabel>
-      </td>                   
-    </tr>
-    <% } %>
-  </table>
-  <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
-  <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
-</h:form>           
-
-<div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
-<!-- end Search box -->
-<!-- Global Navigation -->
-<%@ include file="/pages/templates/menuBar-termbrowser.jsp" %>
-<!-- end Global Navigation -->
-        
-    </div>
-</div>
-<!-- end Thesaurus, banner search area -->
-<!-- Quick links bar -->
-<%@ include file="/pages/templates/quickLink.jsp" %>
-<!-- end Quick links bar -->
-
-
-
-
+          <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
+          <!-- end Search box -->
+          <!-- Global Navigation -->
+          <%@ include file="/pages/templates/menuBar-termbrowser.jsp" %>
+          <!-- end Global Navigation -->
+              
+        </div> <!-- search-globalnav -->
+      </div> <!-- bannerarea -->
+      
+      <!-- end Thesaurus, banner search area -->
+      <!-- Quick links bar -->
+      <%@ include file="/pages/templates/quickLink.jsp" %>
+      <!-- end Quick links bar -->
+      
       <!-- Page content -->
       <div class="pagecontent">
-       <div id="popupContentArea">
-        
-        <a name="evs-content" id="evs-content"></a>
-
-
-<table width="580px" cellpadding="3" cellspacing="0" border="0">
-
-
-             <% if (message != null) { 
-                 request.getSession().removeAttribute("message");
-             %>
- 		<tr class="textbodyred"><td>
- 	            <p class="textbodyred">&nbsp;<%=message%></p>
- 		</td></tr>
-             <% 
-             } 
-             %>
-             
-             
-<tr class="textbody">
-	<td class="textbody" align="left">
-	<%
-	String view = "source";
-	%>
-	<a href="<%=request.getContextPath() %>/pages/value_set_terminology_view.jsf?view=terminology">Terminology View</a>
-	&nbsp;| 
-	Standards View
-	</td>
-
-	<td align="right">
-	<font size="1" color="red" align="right">
-	  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
-	</font>
-	</td>
-</tr>
-</table>
-
-<hr></hr>
-
-
-
-
+        <div id="popupContentArea">
+          <a name="evs-content" id="evs-content"></a>
+          
+          <table width="580px" cellpadding="3" cellspacing="0" border="0">
+            <% if (message != null) { request.getSession().removeAttribute("message"); %>
+              <tr class="textbodyred"><td>
+                <p class="textbodyred">&nbsp;<%=message%></p>
+              </td></tr>
+            <% } %>
+                       
+            <tr class="textbody">
+              <td class="textbody" align="left">
+                <% String view = "source"; %>
+                <a href="<%=request.getContextPath() %>/pages/value_set_terminology_view.jsf?view=terminology">Terminology View</a>
+                &nbsp;| 
+                Standards View
+              </td>
+            
+              <td align="right">
+               <font size="1" color="red" align="right">
+                 <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
+               </font>
+              </td>
+            </tr>
+          </table>
+          
+          <hr></hr>
+          
           <!-- Tree content -->
           <div id="rootDesc">
             <div id="bd"></div>
@@ -685,38 +658,32 @@
             <div id="bd"></div>
           </div>
           <div id="treecontainer"></div>
-
+          
           <form id="pg_form">
             <%
               String ontology_node_id = (String)request.getParameter("code");
-
-String schema = request.getParameter("schema");
-String ontology_version = request.getParameter("version");
-
-
-String ontology_display_name = request.getParameter("schema");
-if (ontology_display_name == null) {
-    ontology_display_name = request.getParameter("dictionary");
-}
-
+              String schema = request.getParameter("schema");
+              String ontology_version = request.getParameter("version");
+              String ontology_display_name = request.getParameter("schema");
+              if (ontology_display_name == null) {
+                  ontology_display_name = request.getParameter("dictionary");
+              }
+          
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=HTTPUtils.cleanXSS(ontology_display_name)%>" />
             <input type="hidden" id="schema" name="schema" value="<%=HTTPUtils.cleanXSS(schema)%>" />
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
             <input type="hidden" id="view" name="view" value="source" />
-
           </form>
-         
-
-        <%@ include file="/pages/templates/nciFooter.jsp" %>
-           </div>
-      </div>
-      <!-- end Page content -->
-    </div>
+          <%@ include file="/pages/templates/nciFooter.jsp" %>
+      
+        </div> <!-- popupContentArea -->
+      </div> <!-- pagecontent -->
+            
+    </div> <!--  main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-    <!-- end Main box -->
-  </div>
+  </div> <!-- center-page -->
 </f:view>
 </body>
 </html>
