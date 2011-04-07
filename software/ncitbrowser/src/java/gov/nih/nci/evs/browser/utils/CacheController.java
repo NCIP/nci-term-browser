@@ -411,6 +411,9 @@ System.out.println("===================================================");
         if (nodesArray == null) {
             try {
                 HashMap hmap = ValueSetHierarchy.getRootValueSets();
+
+                ValueSetHierarchy.moveNCItToTop(hmap);
+
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
 
@@ -702,7 +705,7 @@ System.out.println("===================================================");
             TreeItem ti = (TreeItem) hmap.get(code);
             for (String association : ti._assocToChildMap.keySet()) {
 
-				System.out.println("HashMap2JSONArray .association: " + association);
+				//System.out.println("HashMap2JSONArray .association: " + association);
 
                 List<TreeItem> children = ti._assocToChildMap.get(association);
                 // Collections.sort(children);

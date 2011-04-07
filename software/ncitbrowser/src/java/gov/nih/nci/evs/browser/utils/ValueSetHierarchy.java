@@ -2673,6 +2673,35 @@ System.out.println("expand_src_vs_tree assignValueSetNodeExpandable...");
 	}
 
 
+	public static void moveNCItToTop(HashMap hmap) {
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			TreeItem ti = (TreeItem) hmap.get(key);
+			int k = 0;
+			List<TreeItem> new_children = new ArrayList();
+			for (String association : ti._assocToChildMap.keySet()) {
+				List<TreeItem> children = ti._assocToChildMap.get(association);
+				if (children.size() > 1) {
+					for (int i=0; i<children.size(); i++) {
+						TreeItem ti_1 = (TreeItem) children.get(i);
+						if (ti_1._text.compareTo("NCI Thesaurus") == 0) {
+							new_children.add(ti_1);
+						}
+					}
+					for (int i=0; i<children.size(); i++) {
+						TreeItem ti_1 = (TreeItem) children.get(i);
+						if (ti_1._text.compareTo("NCI Thesaurus") != 0) {
+							new_children.add(ti_1);
+						}
+					}
+				}
+				ti._assocToChildMap.put(association, new_children);
+			}
+
+		}
+
+	}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
