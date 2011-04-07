@@ -1,9 +1,6 @@
 package gov.nih.nci.evs.browser.utils;
 
-import gov.nih.nci.evs.browser.bean.CartActionBean.Concept;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
@@ -440,8 +437,8 @@ public class SearchCart {
         for (int i = 0; i < csrs.length; i++) {
             CodingSchemeRendering csr = csrs[i];
             String status = csr.getRenderingDetail().getVersionStatus().value(); 
-            if (status.equals("active")) {                
-	            CodingSchemeSummary css = csr.getCodingSchemeSummary();
+            CodingSchemeSummary css = csr.getCodingSchemeSummary();
+            if (status.equals("active")) {      
 	            if (css.getCodingSchemeURI().equals(uri)) 
 	            	list.add(css.getRepresentsVersion());
             }
