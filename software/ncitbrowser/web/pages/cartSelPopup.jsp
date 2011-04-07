@@ -12,7 +12,7 @@
 <body>
 <f:view>
 <div class="pagecontent">   
-   <h:form>
+   <h:form id="popupForm">
       <table border="0">
          <tr>
             <td align="left"><b>Select export versions</b></td>
@@ -26,18 +26,28 @@
          </tr>
          <tr> 
             <td align="left">
-               <h:commandLink action="#{CartActionBean.exportCartXML}" styleClass="texttitle-blue-small">
-                  <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />               
-               </h:commandLink>
+               <h:outputLink value="javascript:checkIfDone();">
+                  <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export XML" style="border: none" />
+               </h:outputLink>                                 
                &#xA0;    
                <h:outputLink value="javascript:window.close();">
                   <h:graphicImage value="../images/close.gif" alt="Close window" title="Close window" style="border: none" />
-               </h:outputLink>               
+               </h:outputLink>
+               <h:commandButton style="display: none; visibility: hidden;"
+                  id="startExport" action="#{CartActionBean.exportCartXML}">
+               </h:commandButton>                              
             </td>   
          </tr> 
       </table>           
    </h:form>   
 </div>
+<script language="javascript" type="text/javascript">
+   function checkIfDone() {
+	   document.getElementById('popupForm:startExport').click();
+	   alert('Export started.');
+	   setTimeout ('window.close()',3000); 	        
+   }
+</script>
 </f:view>
 </body>
 </html>
