@@ -37,7 +37,9 @@
        	  if (thePopup == null) {  
        		  thePopup = open('<%=request.getContextPath() %>/pages/cartSelPopup.jsf', 
            	   'selectVersions','top=100, left=100, height=260, width=290, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
-       	  }
+       	  } else {
+       		  thePopup.focus();
+       	  }   
     	  } else {
            alert('No concepts selected.');
     	  }       
@@ -104,7 +106,7 @@
                   <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small" onclick="return confirmRemoveMessage();">
                     <h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove concepts from the cart" style="border: none" />
                   </h:commandLink>&nbsp;
-                  <h:commandLink onclick="javascript:popupSelectVersions();" styleClass="texttitle-blue-small">
+                  <h:commandLink action="#{CartActionBean.clearPopupCloseFlag}" onclick="javascript:popupSelectVersions();" styleClass="texttitle-blue-small">
                     <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />
                   </h:commandLink>&nbsp;                  
                   <h:commandLink action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small">

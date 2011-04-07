@@ -96,7 +96,6 @@ public class CartActionBean {
     private boolean _messageflag = false;
     private String _message = null;
     private List<SelectItem> _selectVersionItems = null; 
-    private boolean _closeflag = true;
 
     // Local constants
     static public final String XML_FILE_NAME = "cart.xml";
@@ -108,6 +107,7 @@ public class CartActionBean {
     
     static public final String NO_CONCEPTS = "No concepts in cart.";
     static public final String NOTHING_SELECTED = "No concepts selected.";
+    static public final String EXPORT_COMPLETE = "Export completed.";
     
     // Getters & Setters
 
@@ -151,14 +151,6 @@ public class CartActionBean {
     public boolean getMessageflag() {
     	return _messageflag;
     }    
-
-    /**
-     * Return Popup close flag
-     * @return
-     */
-    public boolean getCloseflag() {
-    	return _closeflag;
-    }      
     
     /**
      * Return Popup message text
@@ -351,7 +343,7 @@ public class CartActionBean {
         }
         return null;
     }    
-    
+
     /**
      * Export cart in XML format
      * @return
@@ -520,8 +512,6 @@ public class CartActionBean {
             // Don't allow JSF to forward to cart.jsf
             FacesContext.getCurrentInstance().responseComplete();
         }
-        
-        _closeflag = true;
 
         return null;
     }
