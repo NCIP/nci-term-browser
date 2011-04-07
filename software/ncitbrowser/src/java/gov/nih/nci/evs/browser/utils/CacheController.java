@@ -474,7 +474,9 @@ System.out.println("===================================================");
         if (nodesArray == null) {
             try {
 
-                HashMap hmap = ValueSetHierarchy.getRootValueSets(bySource);
+                //HashMap hmap = ValueSetHierarchy.getRootValueSets(bySource);
+                HashMap hmap = ValueSetHierarchy.build_src_vs_tree();
+
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
 
