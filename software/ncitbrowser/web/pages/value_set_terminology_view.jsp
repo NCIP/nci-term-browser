@@ -51,7 +51,7 @@
       }
       
       window.location.href="/ncitbrowser/pages/value_set_terminology_view.jsf?refresh=1"
-          + "&opt="+ selectValueSetSearchOption;
+          + "&nav_type=valuesets" + "&opt="+ selectValueSetSearchOption;
 
 
     }
