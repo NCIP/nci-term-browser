@@ -455,6 +455,7 @@ System.out.println("(********) expand_src_vs_tree node_id: " + node_id);
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
 
+/*
 				if (ValueSetHierarchy._valueSetDefinitionSourceCode2Name_map.containsKey(node_id)) {
 
 System.out.println("(**********) found in source listing: " + node_id);
@@ -470,7 +471,7 @@ System.out.println("(**********) found in source listing: " + node_id);
 
 System.out.println("assignTreeNodeExpandible ...");
 
-						ValueSetHierarchy.assignTreeNodeExpandible(hmap1);
+						ValueSetHierarchy.assignTreeNodeExpandable(hmap1);
 
 System.out.println("relabelTreeNodes ...");
 
@@ -523,6 +524,9 @@ System.out.println("(**********) NOT found in source listing (so it is a value s
 					}
 
 				}
+				*/
+				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree(node_id);
+				nodesArray = CacheController.getInstance().HashMap2JSONArray(hmap);
 
 				// expand value set
 				if (nodesArray == null) {
