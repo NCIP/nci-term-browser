@@ -2303,11 +2303,23 @@ System.out.println("\t\texpandable: " + childItem._expandable);
 					for (int i=0; i<source_vec.size(); i++) {
 						String source = (String) source_vec.elementAt(i);
 
+System.out.println("source: " + source);
+
 						if (hasSubSourceInSourceHierarchy(source)) {
+System.out.println("hasSubSourceInSourceHierarchy source? " + source + " " + hasSubSourceInSourceHierarchy(source));
+
+System.out.println("making " + text + " expandable.");
+
 							childItem._expandable = true;
+
+
 							break;
 						}
 					}
+
+
+
+
 				}
 			}
 		}
@@ -2515,8 +2527,18 @@ System.out.println("\t\texpandable: " + childItem._expandable);
 
 			hmap = getValueSetDefinitionNodesWithSource(node_id);
 			boolean has_children = hasChildren(hmap);
+
+System.out.println("expand_src_vs_tree has_children(" + node_id + ")? " + has_children);
+
+
+
 			if (has_children) {
+
+
+System.out.println("expand_src_vs_tree assignValueSetNodeExpandable...");
+
 				assignValueSetNodeExpandable(hmap);
+
 				return hmap;
 			}
 			hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
@@ -2528,16 +2550,18 @@ System.out.println("\t\texpandable: " + childItem._expandable);
 
 		} else if (isValueSetNode(node_id)) {
 
-			System.out.println("isValueSetNode? " + isValueSetNode(node_id));
+			System.out.println("isValueSetNode(" + node_id + ")? " + isValueSetNode(node_id));
 
 			Vector source_vec = getValueSetDecriptionSources(node_id);
-			String src = (String) source_vec.elementAt(0);
-
-			System.out.println("src: " + src);
-
-			System.out.println("calling getSubconcepts in " + ValueSetHierarchy.SOURCE_SCHEME);
-
-			hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, src);
+			HashMap hmap0 = null;
+			for (int i=0; i<source_vec.size();i++) {
+				String src = (String) source_vec.elementAt(i);
+				System.out.println("src: " + src);
+				System.out.println("calling getSubconcepts in " + ValueSetHierarchy.SOURCE_SCHEME);
+				hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, src);
+				hmap = TreeUtils.combine(hmap0, hmap);
+				hmap0 = hmap;
+			}
 			if (hmap != null) {
 				assignTreeNodeExpandable(hmap);
 				TreeUtils.relabelTreeNodes(hmap);
