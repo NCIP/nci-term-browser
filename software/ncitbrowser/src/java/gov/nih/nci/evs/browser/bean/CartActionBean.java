@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
@@ -21,6 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletOutputStream;
+import javax.faces.model.SelectItem;
 
 import org.LexGrid.concepts.Entity;
 
@@ -93,7 +95,8 @@ public class CartActionBean {
     private String _backurl = null;
     private boolean _messageflag = false;
     private String _message = null;
-    private boolean _selectflag = false;
+    private List<SelectItem> _selectVersionItems = null; 
+    private boolean _closeflag = true;
 
     // Local constants
     static public final String XML_FILE_NAME = "cart.xml";
@@ -150,21 +153,13 @@ public class CartActionBean {
     }    
 
     /**
-     * Return Popup version selection flag
+     * Return Popup close flag
      * @return
      */
-    public boolean getSelectflag() {
-    	return _selectflag;
-    }
+    public boolean getCloseflag() {
+    	return _closeflag;
+    }      
     
-    /**
-     * Set popup select flag
-     * @param flag
-     */
-    public void setSelectflag(boolean flag) {
-    	_selectflag = flag;
-    }    
-
     /**
      * Return Popup message text
      * @return
@@ -196,15 +191,27 @@ public class CartActionBean {
         if (_cart == null) _init();
         return _cart.values();
     }
+
+    public List<SelectItem> getSelectVersionItems() throws Exception {
+    	
+        if (_selectVersionItems == null) {
+			SearchCart search = new SearchCart();
+			HashMap<String, SchemeVersion> versionList
+				= getSchemeVersionList(search);
+			initSelectVersionItems(versionList);
+		}
+        return _selectVersionItems;
+    }    
     
     // ******************** Class methods ************************
     
     /**
      * Initialize the cart container
      */
-    private void _init() {
-        if (_cart == null) _cart = new HashMap<String, Concept>();
-    }
+	private void _init() {
+		if (_cart == null)
+			_cart = new HashMap<String, Concept>();
+	}
 
     /**
      * Add concept to the Cart
@@ -284,7 +291,6 @@ public class CartActionBean {
      */
     public String removeFromCart() {
     	_messageflag = false;
-    	_selectflag = false;
     	
     	if (getCount() < 1) {
         	_messageflag = true;
@@ -311,7 +317,6 @@ public class CartActionBean {
      */
     public String selectAllInCart() {
         _messageflag = false;
-        _selectflag = false;
         
     	if (getCount() < 1) {
         	_messageflag = true;
@@ -331,7 +336,6 @@ public class CartActionBean {
      */
     public String unselectAllInCart() {
         _messageflag = false;
-        _selectflag = false;
         
     	if (getCount() < 1) {
         	_messageflag = true;
@@ -357,6 +361,7 @@ public class CartActionBean {
 
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
+        HashMap<String, SchemeVersion> versionList = null;
 
     	if (getCount() < 1) {
         	_messageflag = true;
@@ -368,22 +373,15 @@ public class CartActionBean {
         	_message = NOTHING_SELECTED;        
         	return null;
     	}  	
-    
+
         // Get Entities to be exported and build export XML string
         // in memory
 
         if (_cart != null && _cart.size() > 0) {
 
-        	// Generate unique list of scheme / versions for the cart
-			HashMap<String, SchemeVersion> versionList
-				= getSchemeVersionList(search);
+        	// Generate unique list of scheme / versions for the cart        	
+        	versionList = getSchemeVersionList(search);
 
-			// Display version select popup
-			if (schemeVersionListHasMult(versionList) && !_selectflag) {
-				_selectflag = true;
-				return null;				
-			}			
-			
         	// Setup lexbig service
     		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil
 				.getLexEVSValueSetDefinitionServices();
@@ -523,8 +521,8 @@ public class CartActionBean {
             FacesContext.getCurrentInstance().responseComplete();
         }
         
-        _selectflag = false; // Clear multi version flag
-        
+        _closeflag = true;
+
         return null;
     }
 
@@ -536,7 +534,6 @@ public class CartActionBean {
     public String exportCartCSV() throws Exception {
 
         _messageflag = false;
-        _selectflag = false;
         
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
@@ -733,14 +730,36 @@ public class CartActionBean {
      * Class to hold a unique scheme version
      * @author garciaw     
      */
-    private class SchemeVersion {
+    public class SchemeVersion {
         private String uri = null;
         private String codingScheme = null;
         private String version = null; 
         private String namespace = null;
         private boolean mult = false;
+        
+        // Getters & setters
+        
+        public String getDisplayCodingSchemeName() {
+            return this.codingScheme + " (" + this.version + ")";
+        }        
     }    
 
+	/**
+	 * Create a display list of versions
+	 * @param versionList
+	 */
+	private void initSelectVersionItems(HashMap<String, SchemeVersion> versionList) {
+		_selectVersionItems = new ArrayList<SelectItem>();
+		for (Iterator<Entry<String, SchemeVersion>> i = versionList.entrySet()
+				.iterator(); i.hasNext();) {
+			Entry<String, SchemeVersion> x = i.next();
+			SchemeVersion vs = x.getValue();
+			this._selectVersionItems.add(new SelectItem(
+				vs.uri + "|" + vs.version,
+				vs.getDisplayCodingSchemeName()));
+		}	
+	}
+	
 	/**
 	 * Return a unique coding scheme map with versions for concepts
 	 *  in the cart
@@ -779,21 +798,6 @@ public class CartActionBean {
 		return map;
 	}
     
-	/**
-	 * Determine if version map has multiple versions in it
-	 * @param map
-	 * @return
-	 */
-	private boolean schemeVersionListHasMult(HashMap<String, SchemeVersion> map) {
-		for (Iterator<Entry<String, SchemeVersion>> i = map.entrySet()
-				.iterator(); i.hasNext();) {
-			Entry<String, SchemeVersion> x = i.next();
-			SchemeVersion vs = x.getValue();
-			if (vs.mult) return true;		
-		}	
-		return false;
-	}	
-	
 	/**
 	 * Test if map contains other versions of a given scheme
 	 * @param map

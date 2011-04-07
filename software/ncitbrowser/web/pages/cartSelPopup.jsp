@@ -11,8 +11,32 @@
 </head>
 <body>
 <f:view>
-<div class="pagecontent">
-   Select export version
+<div class="pagecontent">   
+   <h:form>
+      <table border="0">
+         <tr>
+            <td align="left"><b>Select export versions</b></td>
+         </tr>
+         <tr>
+            <td align="left">
+               <h:selectManyListbox size="10" style="width:250px;">  
+                   <f:selectItems value="#{CartActionBean.selectVersionItems}" />  
+               </h:selectManyListbox>
+            </td>
+         </tr>
+         <tr> 
+            <td align="left">
+               <h:commandLink action="#{CartActionBean.exportCartXML}" styleClass="texttitle-blue-small">
+                  <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />               
+               </h:commandLink>
+               &#xA0;    
+               <h:outputLink value="javascript:window.close();">
+                  <h:graphicImage value="../images/close.gif" alt="Close window" title="Close window" style="border: none" />
+               </h:outputLink>               
+            </td>   
+         </tr> 
+      </table>           
+   </h:form>   
 </div>
 </f:view>
 </body>

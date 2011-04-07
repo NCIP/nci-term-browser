@@ -13,7 +13,7 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
-<body onLoad="javascript:popupMessage();popupSelectVersions();document.forms.searchTerm.matchText.focus();">
+<body onLoad="javascript:popupMessage();document.forms.searchTerm.matchText.focus();">
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
@@ -21,7 +21,7 @@
     <!-- Begin Skip Top Navigation -->
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
     <!-- End Skip Top Navigation --> 
-	<h:form>
+	<h:form id="conceptForm">
 	<script language="javascript" type="text/javascript">
    	function backButton() {
    		location.href = '<h:outputText value="#{CartActionBean.backurl}"/>';
@@ -31,34 +31,42 @@
           alert('<h:outputText value="#{CartActionBean.message}"/>');
          }
       }
+      var thePopup;
       function popupSelectVersions() {
-          if (<h:outputText value="#{CartActionBean.selectflag}"/>) {
-        	   window.open('<%=request.getContextPath() %>/pages/cartSelPopup.jsf',
-        			   '_blank','top=100, left=100, height=440, width=380, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
-          }
+    	  if (isSelected()) {  
+       	  if (thePopup == null) {  
+       		  thePopup = open('<%=request.getContextPath() %>/pages/cartSelPopup.jsf', 
+           	   'selectVersions','top=100, left=100, height=260, width=290, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
+       	  }
+    	  } else {
+           alert('No concepts selected.');
+    	  }       
       }      
       function confirmRemoveMessage() {
-         var count = <h:outputText value="#{CartActionBean.count}"/>;
-         var flag = false;
-         var first = document.getElementById("cartFormId:checkboxId");
-         if (first != null) {
-            if (first.checked) {
-               flag = true;
-            } else {
-               for (i=1;i<count;i++) {
-                  var element = document.getElementById('cartFormId:checkboxIdj_id_' + i);
-                  if (element.checked) {
-                     flag = true;
-                     break;
-                  }
-               }
-            }
-         }
-         if (flag) {
+         if (isSelected()) {
             return confirm("Are you sure?");
          }
          return true;
-       }      
+      }
+      function isSelected() {
+          var flag = false;
+          var first = document.getElementById("conceptForm:checkboxId");
+          var count = <h:outputText value="#{CartActionBean.count}"/>;
+          if (first != null) {
+             if (first.checked) {
+                flag = true;
+             } else {
+                for (i=1;i<count;i++) {
+                   var element = document.getElementById('conceptForm:checkboxIdj_id_' + i);
+                   if (element.checked) {
+                      flag = true;
+                      break;
+                   }
+                }
+             }
+          }
+          return flag;
+      }               
 	</script>	
 	  <%
 	    String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
@@ -96,12 +104,12 @@
                   <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small" onclick="return confirmRemoveMessage();">
                     <h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove concepts from the cart" style="border: none" />
                   </h:commandLink>&nbsp;
-                  <h:commandLink action="#{CartActionBean.exportCartXML}" styleClass="texttitle-blue-small">
+                  <h:commandLink onclick="javascript:popupSelectVersions();" styleClass="texttitle-blue-small">
                     <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />
                   </h:commandLink>&nbsp;                  
                   <h:commandLink action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small">
                     <h:graphicImage value="../images/exportcsv.gif" alt="Export CSV" title="Generate a list of cart concepts in CSV format readable from Excel" style="border: none" />
-                  </h:commandLink>                  
+                  </h:commandLink>     
   				  </td>
 				</tr>      
 			</table>	
