@@ -137,6 +137,23 @@ public class ValueSetHierarchy {
 		return vsd.getEntityDescription().getContent();
 	}
 
+    public static Vector getValueSetDecriptionSources(String uri) {
+		if (_valueSetDefinitionURI2VSD_map == null) {
+			_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+		}
+		Vector source_vec = new Vector();
+		ValueSetDefinition vsd = (ValueSetDefinition) _valueSetDefinitionURI2VSD_map.get(uri);
+		if (vsd == null) return null;
+		java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+		while (sourceEnum.hasMoreElements()) {
+			Source source = (Source) sourceEnum.nextElement();
+			String src_str = source.getContent();
+			source_vec.add(src_str);
+		}
+
+		return source_vec;
+	}
 
 
 
@@ -2477,12 +2494,12 @@ try {
 	}
 
 
-    public static void assignTreeNodeExpandible(HashMap hmap) {
+    public static void assignTreeNodeExpandable(HashMap hmap) {
 		Iterator it = hmap.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
 
-	System.out.println("assignTreeNodeExpandible key " + key);
+	System.out.println("assignTreeNodeExpandable key " + key);
 
 
 			TreeItem ti = (TreeItem) hmap.get(key);
@@ -2513,6 +2530,145 @@ System.out.println("\t\texpandable: " + childItem._expandable);
 		}
 	}
 
+    public static void assignValueSetNodeExpandable(HashMap hmap) {
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			TreeItem ti = (TreeItem) hmap.get(key);
+			for (String association : ti._assocToChildMap.keySet()) {
+				List<TreeItem> children = ti._assocToChildMap.get(association);
+				for (TreeItem childItem : children) {
+					String code = childItem._code;
+					String text = childItem._text;
+
+					childItem._expandable = false;
+					Vector source_vec = getValueSetDecriptionSources(code);
+					for (int i=0; i<source_vec.size(); i++) {
+						String source = (String) source_vec.elementAt(i);
+
+						if (hasSubSourceInSourceHierarchy(source)) {
+							childItem._expandable = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Standards (Source) View Tree
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static boolean isTerminologyNode(String node_id) {
+	   return false;
+	}
+
+    public static boolean isValueSetSourceNode(String node_id) {
+	System.out.println("(*) In isValueSetSourceNode " + node_id);
+
+	   if (_valueSetDefinitionSourceCode2Name_map.containsKey(node_id)) return true;
+	   return false;
+	}
+
+    public static boolean isValueSetNode(String node_id) {
+	   if (_valueSetDefinitionURI2VSD_map.containsKey(node_id)) return true;
+	   return false;
+	}
+
+    public static boolean isTerminologyNodeExpandable(String node_id) {
+	   return false;
+	}
+
+    public static boolean isValueSetSourceNodeExpandable(String node_id) {
+	   //HashMap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
+
+	   return false;
+	}
+
+    public static boolean isValueSetNodeExpandable(String node_id) {
+	   return false;
+	}
+
+	public static boolean containsValueSets(String node_id) {
+	   return false;
+	}
+
+    public static boolean isNodeExpandable(String node_id) {
+	   if (isTerminologyNode(node_id)) {
+	       if (containsValueSets(node_id)) return true;
+	       return false;
+       } else if (isValueSetSourceNode(node_id)) {
+	       if (containsValueSets(node_id)) return true;
+	       return false;
+       } else if (isValueSetNode(node_id)) {
+
+	       return false;
+       }
+       return false;
+    }
+
+    public static HashMap expand_src_vs_tree(String node_id) {
+
+		System.out.println("expand_src_vs_tree " + node_id);
+		HashMap hmap = null;
+		if (isValueSetSourceNode(node_id)) {
+			System.out.println("isValueSetSourceNode? " + isValueSetSourceNode(node_id));
+			System.out.println("calling getValueSetDefinitionNodesWithSource " + node_id);
+
+			hmap = getValueSetDefinitionNodesWithSource(node_id);
+			assignValueSetNodeExpandable(hmap);
+		} else if (isValueSetNode(node_id)) {
+
+			System.out.println("isValueSetNode? " + isValueSetNode(node_id));
+
+			Vector source_vec = getValueSetDecriptionSources(node_id);
+			String src = (String) source_vec.elementAt(0);
+
+			System.out.println("src: " + src);
+
+			System.out.println("calling getSubconcepts in " + ValueSetHierarchy.SOURCE_SCHEME);
+
+			hmap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, src);
+			if (hmap != null) {
+				assignTreeNodeExpandable(hmap);
+				TreeUtils.relabelTreeNodes(hmap);
+			}
+		}
+		return hmap;
+	}
+/*
+			// show corresponding value sets with the source
+			HashMap hmap1 = null;
+			HashMap hmap2 = null;
+
+			boolean bool_val = ValueSetHierarchy.hasSubSourceInSourceHierarchy(node_id);
+			System.out.println("hasSubSourceInSourceHierarchy " + node_id + ": " + bool_val);
+
+			if (bool_val) {
+				hmap1 = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
+
+System.out.println("assignTreeNodeExpandable ...");
+
+				ValueSetHierarchy.assignTreeNodeExpandable(hmap1);
+
+System.out.println("relabelTreeNodes ...");
+
+
+				TreeUtils.relabelTreeNodes(hmap1);
+			}
+
+			bool_val = ValueSetHierarchy.hasValueSetDefinitionsWithSource(node_id);
+			System.out.println("hasValueSetDefinitionsWithSource " + node_id + ": " + bool_val);
+
+			if (bool_val) {
+				hmap2 = ValueSetHierarchy.getValueSetDefinitionNodesWithSource(node_id);
+			}
+*/
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static void main(String[] args) throws Exception {
 		ValueSetHierarchy test = new ValueSetHierarchy();
