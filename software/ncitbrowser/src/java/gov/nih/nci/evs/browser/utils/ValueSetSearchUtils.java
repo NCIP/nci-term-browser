@@ -195,17 +195,12 @@ public class ValueSetSearchUtils
       public static AbsoluteCodingSchemeVersionReferenceList getEntireAbsoluteCodingSchemeVersionReferenceList() {
         boolean includeInactive = false;
         AbsoluteCodingSchemeVersionReferenceList list = new AbsoluteCodingSchemeVersionReferenceList();
-
-System.out.println("Step 1");
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
             }
-
-System.out.println("Step 2");
-
 
             CodingSchemeRenderingList csrl = null;
             try {
@@ -218,8 +213,6 @@ System.out.println("Step 2");
                     + ex.getCause());
                 return null;
             }
-
-System.out.println("Step 3");
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
 

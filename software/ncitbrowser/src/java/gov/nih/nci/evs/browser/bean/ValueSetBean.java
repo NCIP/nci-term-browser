@@ -371,17 +371,16 @@ public class ValueSetBean {
         if (matchText != null) matchText = matchText.trim();
 		if (selectValueSetSearchOption.compareTo("Code") == 0) {
 
-
 System.out.println("matchText: " + matchText);
             String uri = null;
 
 			try {
 
-System.out.println("ENTERING valueSetSearchAction listValueSetsWithEntityCode: " + matchText);
+				AbsoluteCodingSchemeVersionReferenceList csVersionList = ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
+				String versionTag = "PRODUCTION";
+				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, csVersionList, versionTag);
 
-				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, null, null);
-
-System.out.println("RETURNED FROM valueSetSearchAction vsd_service.listValueSetsWithEntityCode: " + matchText);
+//System.out.println("RETURNED FROM valueSetSearchAction vsd_service.listValueSetsWithEntityCode: " + matchText);
 
 				if (list != null) {
 					System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");

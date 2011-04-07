@@ -81,6 +81,8 @@ import org.json.*;
 
 
 public class ValueSetHierarchy {
+	public static AbsoluteCodingSchemeVersionReferenceList _csVersionList = null;
+
 	public static HashSet _valueSetParticipationHashSet = null;
 
     public static String SOURCE_SCHEME = "Terminology Value Set";
@@ -1829,6 +1831,85 @@ public class ValueSetHierarchy {
 	}
 
 
+    public static AbsoluteCodingSchemeVersionReferenceList getAbsoluteCodingSchemeVersionReferenceList() {
+        if (_valueSetParticipationHashSet == null) {
+			getValueSetParticipationHashSet();
+		}
+        if (_csVersionList != null) return _csVersionList;
+		_csVersionList = new AbsoluteCodingSchemeVersionReferenceList();
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) return null;
+            CodingSchemeRenderingList csrl = null;
+            try {
+                csrl = lbSvc.getSupportedCodingSchemes();
+            } catch (LBInvocationException ex) {
+                ex.printStackTrace();
+                System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..."
+                    + ex.getCause());
+                return _csVersionList;
+            }
+            CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+            for (int i = 0; i < csrs.length; i++) {
+                int j = i + 1;
+                CodingSchemeRendering csr = csrs[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                String formalname = css.getFormalName();
+
+                Boolean isActive = null;
+                if (csr == null) {
+                    System.out.println("\tcsr == null???");
+                } else if (csr.getRenderingDetail() == null) {
+                    System.out.println("\tcsr.getRenderingDetail() == null");
+                } else if (csr.getRenderingDetail().getVersionStatus() == null) {
+                    System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
+                } else {
+                    isActive =
+                        csr.getRenderingDetail().getVersionStatus().equals(
+                            CodingSchemeVersionStatus.ACTIVE);
+                }
+
+                String representsVersion = css.getRepresentsVersion();
+                boolean includeInactive = false;
+
+                if ((includeInactive && isActive == null)
+                    || (isActive != null && isActive.equals(Boolean.TRUE))
+                    || (includeInactive && (isActive != null && isActive
+                        .equals(Boolean.FALSE)))) {
+
+
+                    CodingSchemeVersionOrTag vt =
+                        new CodingSchemeVersionOrTag();
+                    vt.setVersion(representsVersion);
+
+                    try {
+                        CodingScheme cs =
+                            lbSvc.resolveCodingScheme(formalname, vt);
+
+                        String cs_uri = cs.getCodingSchemeURI();
+                        if (_valueSetParticipationHashSet.contains(cs_uri)) {
+
+							AbsoluteCodingSchemeVersionReference csv_ref = new AbsoluteCodingSchemeVersionReference();
+							csv_ref.setCodingSchemeURN(cs.getCodingSchemeURI());
+							csv_ref.setCodingSchemeVersion(representsVersion);
+
+							System.out.println(cs.getCodingSchemeURI() + " (version: " + representsVersion + ")");
+
+							_csVersionList.addAbsoluteCodingSchemeVersionReference(csv_ref);
+						}
+                    } catch (Exception ex) {
+
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // e.printStackTrace();
+            // return null;
+        }
+        return _csVersionList;
+    }
+
+
 
 	public static HashMap getRootValueSets() {
         if (_valueSetParticipationHashSet == null) return null;
@@ -1863,6 +1944,27 @@ public class ValueSetHierarchy {
 
 
 
+	public static HashSet getValueSetParticipationHashSet() {
+
+		if (_valueSetParticipationHashSet != null) return _valueSetParticipationHashSet;
+		_valueSetParticipationHashSet = new HashSet();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		List list = vsd_service.listValueSetDefinitionURIs();
+		for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
+			for (int j=0; j<cs_vec.size(); j++) {
+				String cs = (String) cs_vec.elementAt(j);
+				if (!_valueSetParticipationHashSet.contains(cs)) {
+					_valueSetParticipationHashSet.add(cs);
+				}
+			}
+		}
+		return _valueSetParticipationHashSet;
+	}
+
+
+
 	public static boolean hasValueSet(String cs_name) {
 		String scheme = DataUtils.getFormalName(cs_name);
 		scheme = DataUtils.codingSchemeName2URI(scheme);
@@ -1873,7 +1975,6 @@ public class ValueSetHierarchy {
 			List list = vsd_service.listValueSetDefinitionURIs();
 			for (int i=0; i<list.size(); i++) {
 				String uri = (String) list.get(i);
-
 				Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
 				for (int j=0; j<cs_vec.size(); j++) {
 					String cs = (String) cs_vec.elementAt(j);
@@ -1883,6 +1984,7 @@ public class ValueSetHierarchy {
 				}
 		    }
 		}
+
 		boolean retval = _valueSetParticipationHashSet.contains(scheme);
 		System.out.println(cs_name + " has value set? " + retval);
 		return retval;
