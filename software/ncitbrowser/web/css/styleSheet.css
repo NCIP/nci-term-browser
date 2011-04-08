@@ -107,6 +107,15 @@ a.hideLink
  font-size: 12px;
 }
 
+.popupContentAreaWithoutBorder
+{
+ padding-top: 0px;
+ padding-right: 15px;
+ padding-bottom: 0px;
+ padding-left: 15px;
+ font-size: 12px;
+}
+
 #closeWindow
 {
  height: 10px;
