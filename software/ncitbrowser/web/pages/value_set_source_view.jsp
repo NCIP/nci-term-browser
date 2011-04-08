@@ -657,11 +657,11 @@
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
             <input type="hidden" id="view" name="view" value="source" />
           </form>
-          <%@ include file="/pages/templates/nciFooter.jsp" %>
-      
         </div> <!-- popupContentArea -->
+        <div class="popupContentAreaWithoutBorder">        
+          <%@ include file="/pages/templates/nciFooter.jsp" %>
+        </div>        
       </div> <!-- pagecontent -->
-            
     </div> <!--  main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
   </div> <!-- center-page -->
