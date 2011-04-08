@@ -109,7 +109,7 @@ public class CartActionBean {
     static public final String NO_CONCEPTS = "No concepts in cart.";
     static public final String NOTHING_SELECTED = "No concepts selected.";
     static public final String EXPORT_COMPLETE = "Export completed.";
-    static private final String NO_CONFLICTS = "[Production]";
+    static private final String PROD_VERSION = "[Production]";
     
     // Getters & Setters
 
@@ -414,6 +414,7 @@ public class CartActionBean {
 			vsd.setConceptDomain("Concepts");
 			
 			// Add supported coding schemes
+			DuplicateCheck dc = new DuplicateCheck();
 			for (Iterator<Entry<String, SchemeVersion>> i = versionList
 					.entrySet().iterator(); i.hasNext();) {
 				Entry<String, SchemeVersion> x = i.next();
@@ -421,13 +422,16 @@ public class CartActionBean {
 				SupportedCodingScheme scs = new SupportedCodingScheme();
 				scs.setLocalId(sv.codingScheme);
 				scs.setUri(sv.uri);
-				maps.addSupportedCodingScheme(scs);
-				_logger.debug("Adding CS: "
-						+ sv.codingScheme + " ("
-						+ sv.uri + ")");
+				if (dc.test(sv.codingScheme)) {
+					maps.addSupportedCodingScheme(scs);
+					_logger.debug("Adding CS: "
+							+ sv.codingScheme + " ("
+							+ sv.uri + ")");
+				}
 			}		
             
             // Add supported name spaces
+			dc.reset();
 			for (Iterator<Entry<String, SchemeVersion>> i = versionList
 					.entrySet().iterator(); i.hasNext();) {
 				Entry<String, SchemeVersion> x = i.next();
@@ -435,8 +439,10 @@ public class CartActionBean {
             	SupportedNamespace sns = new SupportedNamespace();	
             	sns.setLocalId(sv.namespace);
             	sns.setEquivalentCodingScheme(sv.codingScheme);
-           		maps.addSupportedNamespace(sns);
-            	_logger.debug("Adding NS: " + sv.namespace);
+            	if (dc.test(sv.namespace)) {
+            		maps.addSupportedNamespace(sns);
+            		_logger.debug("Adding NS: " + sv.namespace);
+            	}	
             }    
    
 			// Instantiate DefinitionEntry(Rule Set)
@@ -790,8 +796,8 @@ public class CartActionBean {
 		}
 		if (_selectVersionItems.size() < 1) {
 			_selectVersionItems.add(new SelectItem(
-				NO_CONFLICTS,
-				NO_CONFLICTS));
+				PROD_VERSION,
+				PROD_VERSION));
 		}		
 	}
 	
@@ -968,4 +974,39 @@ public class CartActionBean {
         return tmpStr;
     }
 
+    /**
+     * Utility class that helps check for duplicate entries
+     * @author garciaw
+     */
+    public class DuplicateCheck {
+    	
+    	private ArrayList<String> list = null;
+    	
+    	/**
+    	 * Constructors
+    	 */
+    	public DuplicateCheck() {
+			list = new ArrayList<String>();
+		}
+
+    	/**
+    	 * Add a key and check it it is already in the list
+    	 * @param key
+    	 * @return
+    	 */
+    	public boolean test(String key) {
+    		if (list.contains(key)) return false;
+    		list.add(key);
+    		return true;
+    	} 
+    	
+    	/**
+    	 * Clear contents of duplicate check list
+    	 */
+    	public void reset() {
+    		list.clear();
+    	}
+    	
+    } // End of DuplicateCheck   
+        
 } // End of CartActionBean
