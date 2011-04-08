@@ -1266,6 +1266,7 @@ public class ValueSetHierarchy {
 	}
 
     public static boolean hasSubSourceInSourceHierarchy(String src) {
+		if (_source_subconcept_map == null) preprocessSourceHierarchyData();
 		if (_source_subconcept_map.containsKey(src)) {
 			return true;
 		}
@@ -1273,6 +1274,7 @@ public class ValueSetHierarchy {
 	}
 
     public static boolean hasValueSetsInSource(String src) {
+		if (_source_subconcept_map == null) preprocessSourceHierarchyData();
 		if (_source_subconcept_map.containsKey(src)) {
 			return true;
 		}
@@ -1502,18 +1504,18 @@ public class ValueSetHierarchy {
 		root._expandable = false;
 		List <TreeItem> children = new ArrayList();
 		Vector v = getValueSetDefinitionsWithSource(src);
-
-		for (int i=0; i<v.size(); i++) {
-			ValueSetDefinition vsd = (ValueSetDefinition) v.elementAt(i);
-			TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), vsd.getValueSetDefinitionName());
-			ti._expandable = false;
-			children.add(ti);
-		}
-		if (v.size() > 0) {
-			root._expandable = true;
-		}
+		if (v != null) {
+			for (int i=0; i<v.size(); i++) {
+				ValueSetDefinition vsd = (ValueSetDefinition) v.elementAt(i);
+				TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), vsd.getValueSetDefinitionName());
+				ti._expandable = false;
+				children.add(ti);
+			}
+			if (v.size() > 0) {
+				root._expandable = true;
+			}
+	    }
 		root.addAll("[inverse_is_a]", children);
-
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", root);
         return hmap;
@@ -2438,7 +2440,9 @@ System.out.println("making " + text + " expandable.");
 
     public static boolean isValueSetSourceNode(String node_id) {
 	System.out.println("(*) In isValueSetSourceNode " + node_id);
-
+       if (_valueSetDefinitionSourceCode2Name_map == null) {
+		   _valueSetDefinitionSourceCode2Name_map = getCodeHashMap(SOURCE_SCHEME, SOURCE_VERSION);
+	   }
 	   if (_valueSetDefinitionSourceCode2Name_map.containsKey(node_id)) return true;
 	   return false;
 	}
@@ -2495,7 +2499,33 @@ System.out.println("making " + text + " expandable.");
 	}
 
 
+	public static HashMap build_src_vs_tree() {
+        ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(
+             SOURCE_SCHEME, SOURCE_VERSION);
 
+System.out.println("calling build_src_vs_tree ...");
+System.out.println("Number of source roots: " + rcrl.getResolvedConceptReferenceCount());
+
+
+		TreeItem root = new TreeItem("<Root>", "Root node");
+        List <TreeItem> children = new ArrayList();
+        for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
+			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+			String src = rcr.getConceptCode();
+			String text = rcr.getEntityDescription().getContent();
+			TreeItem ti = new TreeItem(src, src + " (" + text + ")");
+			ti._expandable = true;
+			children.add(ti);
+		}
+		root.addAll("[inverse_is_a]", children);
+
+		HashMap hmap = new HashMap();
+		hmap.put("<Root>", root);
+        return hmap;
+	}
+
+
+    /*
 	public static HashMap build_src_vs_tree() {
 		HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_vec = new Vector();
@@ -2617,7 +2647,7 @@ System.out.println("making " + text + " expandable.");
 		hmap.put("<Root>", root);
         return hmap;
 	}
-
+*/
 
     public static HashMap expand_src_vs_tree(String node_id) {
 
@@ -2674,6 +2704,13 @@ System.out.println("expand_src_vs_tree assignValueSetNodeExpandable...");
 
 
 	public static void moveNCItToTop(HashMap hmap) {
+		if (hmap == null) return;
+
+System.out.println("moveNCItToTop: hmap.keySet().size() " + hmap.keySet().size());
+
+		if (hmap.keySet().size() <= 1) return;
+
+
 		Iterator it = hmap.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
