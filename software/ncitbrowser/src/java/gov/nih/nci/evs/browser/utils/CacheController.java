@@ -77,6 +77,8 @@ public class CacheController {
     public static final String ONTOLOGY_DISPLAY_NAME = "ontology_display_name";
     public static final String ONTOLOGY_NODE = "ontology_node";
     public static final String ONTOLOGY_NODE_ID = "ontology_node_id";
+    public static final String ONTOLOGY_NODE_SCHEME = "ontology_node_scheme";
+
 
     public static final String ONTOLOGY_SOURCE = "ontology_source";
 
@@ -202,8 +204,7 @@ public class CacheController {
         return getSubValueSets(scheme, version, code, true);
     }
 
-    public JSONArray getSubValueSets(String scheme, String version, String code,
-        boolean fromCache) {
+    public JSONArray getSubValueSets(String scheme, String version, String code, boolean fromCache) {
         if (scheme == null)
             scheme = Constants.CODING_SCHEME_NAME;
 
@@ -211,6 +212,12 @@ public class CacheController {
         if (retval != null) {
             scheme = retval;
         }
+
+
+ System.out.println("=========== getSubValueSets scheme: " +  scheme);
+ System.out.println("=========== getSubValueSets code: " +  code);
+
+
 
         System.out.println("(*******) CacheController getSubValueSets " + scheme);
 
@@ -225,8 +232,12 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            System.out.println("Not in cache -- calling getSubValueSets ");
+            System.out.println("Not in cache -- calling ValueSetHierarchy.getSubValueSets ");
+
+
             map = ValueSetHierarchy.getSubValueSets(scheme, code);
+
+
             System.out.println("exit ValueSetHierarchy.getSubValueSets ");
             System.out.println("calling HashMap2JSONArray... ");
             nodeArray = HashMap2JSONArray(map);
@@ -313,6 +324,7 @@ public class CacheController {
     }
 
     /// find coding scheme specific Value Sets
+
     public JSONArray getRootValueSets(String scheme, String version) {
         return getRootValueSets(scheme, version, true);
     }
@@ -367,7 +379,12 @@ System.out.println("===================================================");
 
 						 try {
 							 JSONObject nodeObject = new JSONObject();
-							 nodeObject.put(ONTOLOGY_NODE_ID, code);
+							 //nodeObject.put(ONTOLOGY_NODE_SCHEME, scheme);
+
+							 //nodeObject.put(ONTOLOGY_NODE_ID, code);
+
+							 nodeObject.put(ONTOLOGY_NODE_ID, scheme + "$" + code);
+
 							 nodeObject.put(ONTOLOGY_NODE_NAME, name);
 							 nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
 							 nodeObject.put(CHILDREN_NODES, new JSONArray());
@@ -394,7 +411,7 @@ System.out.println("===================================================");
         return nodesArray;
     }
 
-
+    //build_cs_vs_tree
     public JSONArray getRootValueSets(boolean fromCache) {
 
         List list = null;// new ArrayList();
@@ -412,7 +429,7 @@ System.out.println("===================================================");
             try {
                 HashMap hmap = ValueSetHierarchy.getRootValueSets();
 
-                ValueSetHierarchy.moveNCItToTop(hmap);
+                //ValueSetHierarchy.moveNCItToTop(hmap);
 
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();

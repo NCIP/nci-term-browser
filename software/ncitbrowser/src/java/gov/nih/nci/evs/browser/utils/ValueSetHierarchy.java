@@ -1912,7 +1912,7 @@ public class ValueSetHierarchy {
     }
 
 
-
+    //build_cs_vs_tree
 	public static HashMap getRootValueSets() {
         if (_valueSetParticipationHashSet == null) return null;
         Vector root_cs_vec = new Vector();
@@ -1941,6 +1941,10 @@ public class ValueSetHierarchy {
 
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", root);
+
+System.out.println("********************** Calling moveNCItToTop ...");
+		moveNCItToTop(hmap);
+
         return hmap;
 	}
 
@@ -2710,7 +2714,6 @@ System.out.println("moveNCItToTop: hmap.keySet().size() " + hmap.keySet().size()
 
 		if (hmap.keySet().size() <= 1) return;
 
-
 		Iterator it = hmap.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
@@ -2718,7 +2721,11 @@ System.out.println("moveNCItToTop: hmap.keySet().size() " + hmap.keySet().size()
 			int k = 0;
 			List<TreeItem> new_children = new ArrayList();
 			for (String association : ti._assocToChildMap.keySet()) {
+
+System.out.println("moveNCItToTop: association " + association);
+
 				List<TreeItem> children = ti._assocToChildMap.get(association);
+
 				if (children.size() > 1) {
 					for (int i=0; i<children.size(); i++) {
 						TreeItem ti_1 = (TreeItem) children.get(i);
@@ -2739,6 +2746,19 @@ System.out.println("moveNCItToTop: hmap.keySet().size() " + hmap.keySet().size()
 		}
 
 	}
+
+	public static String getCodingSchemeName(String cs_code) {
+		if (cs_code.indexOf("$") == -1) return cs_code;
+		Vector v = DataUtils.parseData(cs_code, "$");
+		return (String) v.elementAt(0);
+	}
+
+	public static String getValueSetURI(String cs_code) {
+		if (cs_code.indexOf("$") == -1) return cs_code;
+		Vector v = DataUtils.parseData(cs_code, "$");
+		return (String) v.elementAt(1);
+	}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
