@@ -250,7 +250,7 @@
 
     function showNodeNotFound(node_id) {
       //emptyRootDiv.setBody("<span class='instruction_text'>Concept with code " + node_id + " not found in the hierarchy.</span>");
-      emptyRootDiv.setBody("<span class='instruction_text'>Concept not part of the parent-child hierarchy in this source – check other relationships.</span>");
+      emptyRootDiv.setBody("<span class='instruction_text'>Concept not part of the parent-child hierarchy in this source. Check other relationships.</span>");
       emptyRootDiv.show();
       emptyRootDiv.render();
     }

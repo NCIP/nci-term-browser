@@ -21,7 +21,12 @@ HashMap VSDURI2VSD_map = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
 
 
 String ontology_node_id = request.getParameter("ontology_node_id");
-System.out.println("(*) node: " + ontology_node_id + " clicked.");
+System.out.println("redirecting (*) node: " + ontology_node_id + " clicked.");
+
+ontology_node_id = ValueSetHierarchy.getValueSetURI(ontology_node_id);
+//ontology_node_id = ValueSetHierarchy.getCodingSchemeName(ontology_node_id);
+
+System.out.println("redirecting (*) ontology_node_id: " + ontology_node_id);
 
 ValueSetDefinition vsd = ValueSetHierarchy.findValueSetDefinitionByURI(ontology_node_id);
 
