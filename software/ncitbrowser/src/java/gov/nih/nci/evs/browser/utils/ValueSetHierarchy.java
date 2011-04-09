@@ -124,6 +124,8 @@ public class ValueSetHierarchy {
 
 	private static String URL = "http://localhost:8080/lexevsapi60";
 
+    public static HashMap cs2vsdURIs_map = null;
+
     public ValueSetHierarchy() {
         SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
         _valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
@@ -398,7 +400,7 @@ public class ValueSetHierarchy {
 			_valueSetDefinitionURI2VSD_map.put(uri, vsd);
 			return vsd;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 		return null;
 	}
@@ -1304,10 +1306,10 @@ public class ValueSetHierarchy {
 
 		_source_hierarchy = new HashMap();
 		//_valueSetDefinitionSourceListing = getCodeList(SOURCE_SCHEME, SOURCE_VERSION);
-		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(SOURCE_SCHEME, SOURCE_VERSION);
+		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(scheme, version);
 
 		// value set source coding scheme
-		ResolvedConceptReferenceList roots = getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
+		ResolvedConceptReferenceList roots = getHierarchyRoots(scheme, version);
 
 		HashSet visited_nodes = new HashSet();
 
@@ -1320,7 +1322,7 @@ public class ValueSetHierarchy {
 
 				TreeItem root_node = new TreeItem(rcr.getConceptCode(), rcr.getEntityDescription().getContent());
 
-				populateChildrenNodes(SOURCE_SCHEME, SOURCE_VERSION, root_node, visited_nodes);
+				populateChildrenNodes(scheme, version, root_node, visited_nodes);
 				ti.addChild("inverse_is_a", root_node);
 				ti._expandable = true;
 			}
@@ -1928,12 +1930,31 @@ public class ValueSetHierarchy {
 		TreeItem root = new TreeItem("<Root>", "Root node");
         List <TreeItem> children = new ArrayList();
 
+        SortUtils.quickSort(root_cs_vec);
+        Vector sorted_root_cs_vec = new Vector();
+        for (int i=0; i<root_cs_vec.size(); i++) {
+			String cs = (String) root_cs_vec.elementAt(i);
+			if (cs.compareTo("NCI Thesaurus") == 0) {
+				sorted_root_cs_vec.add(cs);
+				break;
+			}
+		}
+
+        for (int i=0; i<root_cs_vec.size(); i++) {
+			String cs = (String) root_cs_vec.elementAt(i);
+			if (cs.compareTo("NCI Thesaurus") != 0) {
+				sorted_root_cs_vec.add(cs);
+			}
+		}
+		root_cs_vec = sorted_root_cs_vec;
+
         for (int i=0; i<root_cs_vec.size(); i++) {
 			String cs = (String) root_cs_vec.elementAt(i);
 			//cs = cs.replaceAll(" ", "_");
 			String code = cs;
 			TreeItem ti = new TreeItem(code, cs);
 			ti._expandable = true;
+			System.out.println("getRootValueSets " + cs + "  code: " + code);
 			children.add(ti);
 		}
 
@@ -1942,8 +1963,8 @@ public class ValueSetHierarchy {
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", root);
 
-System.out.println("********************** Calling moveNCItToTop ...");
-		moveNCItToTop(hmap);
+//System.out.println("********************** Calling moveNCItToTop ...");
+//		moveNCItToTop(hmap);
 
         return hmap;
 	}
@@ -2152,11 +2173,23 @@ try {
 			 return hmap;
 		}
 
+		Vector vsd_vec = getValueSetDefinitionURIsForCodingScheme(scheme);
+		if (vsd_vec == null) return null;
+
+System.out.println("(**************) getSubValueSets getValueSetDefinitionURIsForCodingScheme returns " + vsd_vec.size() );
+
+		if (vsd_vec.size() == 0) return null;
 
         // find sub value sets based on value set source data:
 		String codingSchemeURN = null;
 		String formalName = DataUtils.getFormalName(scheme);
+
+	System.out.println("(**************) formalName " + formalName);
+
+
 		codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
+
+	System.out.println("(**************) codingSchemeURN " + codingSchemeURN);
 
 		HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_in_cs_vsd_vec = new Vector();
@@ -2165,7 +2198,6 @@ try {
 		ValueSetDefinition root_vsd = null;
 		Vector participating_vsd_vec = new Vector();
 
-		System.out.println("ValueSetHierarchy getSubValueSets codingSchemeURN: " + codingSchemeURN);
 		// find participating VSDs based on scheme uri2VSD_map & source2VSD_map
 
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -2264,10 +2296,11 @@ try {
 										}
 
 
-
-								TreeItem ti_sub = new TreeItem(sub_vsd_uri, vsd_text);
-								ti_sub._expandable = false; // to be modified
-								children.add(ti_sub);
+                                if (vsd_vec.contains( sub_vsd_uri )) {
+									TreeItem ti_sub = new TreeItem(sub_vsd_uri, vsd_text);
+									ti_sub._expandable = false; // to be modified
+									children.add(ti_sub);
+							    }
 							} else {
 								System.out.println("\t\tNot in participating_vsd: " + sub_vsd_uri);
 							}
@@ -2706,7 +2739,7 @@ System.out.println("expand_src_vs_tree assignValueSetNodeExpandable...");
 		return hmap;
 	}
 
-
+/*
 	public static void moveNCItToTop(HashMap hmap) {
 		if (hmap == null) return;
 
@@ -2746,7 +2779,7 @@ System.out.println("moveNCItToTop: association " + association);
 		}
 
 	}
-
+*/
 	public static String getCodingSchemeName(String cs_code) {
 		if (cs_code.indexOf("$") == -1) return cs_code;
 		Vector v = DataUtils.parseData(cs_code, "$");
@@ -2758,6 +2791,41 @@ System.out.println("moveNCItToTop: association " + association);
 		Vector v = DataUtils.parseData(cs_code, "$");
 		return (String) v.elementAt(1);
 	}
+
+
+    public static Vector getValueSetDefinitionURIsForCodingScheme(String codingSchemeName) {
+		if (cs2vsdURIs_map == null) {
+			cs2vsdURIs_map = new HashMap();
+		}
+		if (cs2vsdURIs_map.containsKey(codingSchemeName)) {
+			return (Vector) cs2vsdURIs_map.get(codingSchemeName);
+		}
+
+		long ms = System.currentTimeMillis();
+		Vector v = new Vector();
+		String cs_uri = DataUtils.codingSchemeName2URI(codingSchemeName);
+		_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+		Iterator it = _valueSetDefinitionURI2VSD_map.keySet().iterator();
+		while (it.hasNext()) {
+			String vsd_uri = (String) it.next();
+			Vector cs_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(vsd_uri);
+			if (cs_vec != null) {
+				if (cs_vec.contains(cs_uri)) {
+					v.add(vsd_uri);
+				}
+			}
+		}
+
+System.out.println("(**********) getValueSetDefinitionURIsForCodingScheme " + codingSchemeName);
+System.out.println("(**********) getValueSetDefinitionURIsForCodingScheme v.size() = " + v.size());
+
+
+		cs2vsdURIs_map.put(codingSchemeName, v);
+		System.out.println("getValueSetDefinitionURIsForCodingScheme " + codingSchemeName);
+		System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+		return v;
+	}
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

@@ -381,10 +381,6 @@ System.out.println("(*****************************************************) expa
 String vsd_uri = ValueSetHierarchy.getValueSetURI(node_id);
 node_id = ValueSetHierarchy.getCodingSchemeName(node_id);
 
-System.out.println("(*) ***************************************************** expand_cs_vs_tree node_id: " + node_id);
-System.out.println("(*) ***************************************************** expand_cs_vs_tree vsd_uri: " + vsd_uri);
-
-
             //if (node_id != null && ontology_display_name != null) {
 			if (node_id != null) {
 				ValueSetDefinition vsd = ValueSetHierarchy.findValueSetDefinitionByURI(vsd_uri);
@@ -406,8 +402,8 @@ System.out.println("(*) ***************************************************** ex
 					} catch (Exception e) {
 					}
 			    } else {
-					System.out.println("(****) coding scheme name: " + node_id);
-					System.out.println("(****) value set URI:      " + vsd_uri);
+					System.out.println("(*) coding scheme name: " + node_id);
+					System.out.println("(*) value set URI:      " + vsd_uri);
 					try {
 						nodesArray =
 							CacheController.getInstance().getSubValueSets(
@@ -467,76 +463,7 @@ System.out.println("(********) expand_src_vs_tree node_id: " + node_id);
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
 
-/*
-				if (ValueSetHierarchy._valueSetDefinitionSourceCode2Name_map.containsKey(node_id)) {
 
-System.out.println("(**********) found in source listing: " + node_id);
-
-					HashMap hmap1 = null;
-					HashMap hmap2 = null;
-
-					boolean bool_val = ValueSetHierarchy.hasSubSourceInSourceHierarchy(node_id);
-					System.out.println("hasSubSourceInSourceHierarchy " + node_id + ": " + bool_val);
-
-                    if (bool_val) {
-						hmap1 = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
-
-System.out.println("assignTreeNodeExpandible ...");
-
-						ValueSetHierarchy.assignTreeNodeExpandable(hmap1);
-
-System.out.println("relabelTreeNodes ...");
-
-
-						TreeUtils.relabelTreeNodes(hmap1);
-					}
-
-					bool_val = ValueSetHierarchy.hasValueSetDefinitionsWithSource(node_id);
-					System.out.println("hasValueSetDefinitionsWithSource " + node_id + ": " + bool_val);
-
-				    if (bool_val) {
-						hmap2 = ValueSetHierarchy.getValueSetDefinitionNodesWithSource(node_id);
-					}
-
-					HashMap hmap = TreeUtils.combine(hmap2, hmap1);
-
-                    TreeItem root = null;
-					if (hmap != null) {
-						Iterator it = hmap.keySet().iterator();
-						while (it.hasNext()) {
-							String key = (String) it.next();
-							root = (TreeItem) hmap.get(key);
-							if (root == null) {
-								System.out.println("expand_src_vs_tree returns NULL???.(1).");
-							}
-					    }
-
-						if (root._expandable) {
-							// continue to expand according to the source hierarchy
-                            nodesArray = CacheController.getInstance().HashMap2JSONArray(hmap);
-						}
-					} else {
-						System.out.println("expand_src_vs_tree returns NULL???..(2).");
-					}
-				} else {
-
-System.out.println("(**********) NOT found in source listing (so it is a value set): " + node_id);
-
-					try {
-						nodesArray =
-							CacheController.getInstance().getSubValueSets(node_id);
-						if (nodesArray != null) {
-							System.out.println("expand_vs_tree nodesArray != null");
-							json.put("nodes", nodesArray);
-						} else {
-							System.out.println("expand_vs_tree nodesArray == null???");
-						}
-
-					} catch (Exception e) {
-					}
-
-				}
-				*/
 				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree(node_id);
 				nodesArray = CacheController.getInstance().HashMap2JSONArray(hmap);
 

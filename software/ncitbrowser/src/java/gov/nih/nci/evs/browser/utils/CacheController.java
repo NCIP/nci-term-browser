@@ -204,6 +204,7 @@ public class CacheController {
         return getSubValueSets(scheme, version, code, true);
     }
 
+// get sub value sets in scheme
     public JSONArray getSubValueSets(String scheme, String version, String code, boolean fromCache) {
         if (scheme == null)
             scheme = Constants.CODING_SCHEME_NAME;
@@ -232,7 +233,7 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            System.out.println("Not in cache -- calling ValueSetHierarchy.getSubValueSets ");
+            System.out.println("Not in cache -- calling ValueSetHierarchy.getSubValueSets " + scheme + " " + code);
 
 
             map = ValueSetHierarchy.getSubValueSets(scheme, code);

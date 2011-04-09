@@ -527,6 +527,12 @@ public class DataUtils {
         dumpHashMap(_formalName2NCImSABHashMap);
 
         setMappingDisplayNameHashMap();
+
+        _logger.error("\tInitializing ValueSetHierarchy ...");
+        HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
+        HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
+
+        _logger.error("\tDone initializing ValueSetHierarchy ...");
     }
 
     public static String getMetadataValue(String scheme, String propertyName) {
@@ -4261,7 +4267,7 @@ System.out.println("vsd_str " + vsd_str);
                 if (codingSchemes != null) {
 					//output is all of the mapping ontologies that this code participates in.
 					for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
-						System.out.println("URI: " + ref.getCodingSchemeURN());
+						//System.out.println("URI: " + ref.getCodingSchemeURN());
 						v.add(ref.getCodingSchemeURN());
 					}
 					return SortUtils.quickSort(v);
@@ -4937,7 +4943,7 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		return u;
 	}
 
-	public static String getNavigationTabType(String dictionary, String version, 
+	public static String getNavigationTabType(String dictionary, String version,
 	        String vsd_uri, String nav_type) {
 	    _logger.debug("Method: DataUtils.getNavigationTabType");
 		_logger.debug("  * dictionary: " + dictionary);
@@ -4945,7 +4951,7 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		_logger.debug("  * vsd_uri: " + vsd_uri);
 		_logger.debug("  * nav_type: " + nav_type);
 
-		if (nav_type != null) 
+		if (nav_type != null)
 		    return nav_type;
 		if (vsd_uri != null)
 			return "valuesets";
