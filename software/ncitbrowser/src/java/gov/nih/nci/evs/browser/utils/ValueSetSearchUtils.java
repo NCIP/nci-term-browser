@@ -73,7 +73,6 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 
 public class ValueSetSearchUtils
 {
-
 	private static Logger _logger = Logger.getLogger(ValueSetSearchUtils.class);
 
 	protected static void displayRef(int count, ResolvedConceptReference ref){
@@ -642,12 +641,15 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         return w;
 	}
 
+
     public static boolean containsConceptInCodingScheme(String vsd_uri, String codingSchemeName) {
 		if (codingSchemeName.compareTo("ALL") == 0) return true;
 	    Vector cs_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(vsd_uri);
         if (cs_vec.contains(codingSchemeName)) return true;
         return false;
 	}
+
+
 
 
 
