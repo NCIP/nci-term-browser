@@ -293,9 +293,6 @@ public class ValueSetBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
         request.getSession().setAttribute("selectValueSetSearchOption", newValue);
-        System.out.println("selectValueSetSearchOption: " + newValue);
-
-        //setSelectedValueSetURI(newValue);
 	}
 
     public void valueSetURIChangedEvent(ValueChangeEvent event) {
@@ -319,35 +316,6 @@ public class ValueSetBean {
         setSelectedConceptDomain(newValue);
 	}
 
-/*
-    public String getValueSetDefinitionMetadata(ValueSetDefinition vsd) {
-		if (vsd== null) return null;
-		String uri = "";
-		String description = "";
-		String domain = "";
-		String src_str = "";
-
-		uri = vsd.getValueSetDefinitionURI();
-		description = vsd.getValueSetDefinitionName();
-		domain = vsd.getConceptDomain();
-
-		java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
-
-		while (sourceEnum.hasMoreElements()) {
-			Source src = (Source) sourceEnum.nextElement();
-			src_str = src_str + src.getContent() + ";";
-		}
-		if (src_str.length() > 0) {
-			src_str = src_str.substring(0, src_str.length()-1);
-		}
-
-		if (vsd.getEntityDescription() != null) {
-			description = vsd.getEntityDescription().getContent();
-		}
-
-		return uri + "|" + description + "|" + domain + "|" + src_str;
-	}
-*/
 
 
 
@@ -386,8 +354,6 @@ public class ValueSetBean {
 
         if (matchText != null) matchText = matchText.trim();
 		if (selectValueSetSearchOption.compareTo("Code") == 0) {
-
-System.out.println("matchText: " + matchText);
             String uri = null;
 
 			try {
@@ -395,8 +361,6 @@ System.out.println("matchText: " + matchText);
 				AbsoluteCodingSchemeVersionReferenceList csVersionList = ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
 				String versionTag = "PRODUCTION";
 				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, csVersionList, versionTag);
-
-//System.out.println("RETURNED FROM valueSetSearchAction vsd_service.listValueSetsWithEntityCode: " + matchText);
 
 				if (list != null) {
 					System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");
@@ -698,7 +662,9 @@ System.out.println("(********) metadata " + metadata);
                 .getExternalContext().getRequest();
 
 
-        String uri = (String) request.getParameter("valueset");
+        //String uri = (String) request.getParameter("valueset");
+
+        String uri = (String) request.getParameter("vsd_uri");
 
 	    if (uri.indexOf("|") != -1) {
 			Vector u = DataUtils.parseData(uri);
@@ -728,23 +694,18 @@ System.out.println("(********) metadata " + metadata);
 
     public String resolveValueSetAction() {
 
- System.out.println("(************* ) resolveValueSetAction ");
-
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
 
 
-        String selectedvalueset = (String) request.getParameter("valueset");
+        //String selectedvalueset = (String) request.getParameter("valueset");
+        String selectedvalueset = (String) request.getParameter("vsd_uri");
 	    if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
 			Vector u = DataUtils.parseData(selectedvalueset);
 			selectedvalueset = (String) u.elementAt(1);
 		}
-System.out.println("resolveValueSetAction: selected value set " + selectedvalueset);
-
-
 
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
         String vsd_uri = null;
@@ -759,15 +720,8 @@ System.out.println("resolveValueSetAction: selected value set " + selectedvalues
 
 String key = vsd_uri;
 
- System.out.println("(************* ) resolveValueSetAction vsd_uri: " + vsd_uri);
-
-
         request.getSession().setAttribute("vsd_uri", vsd_uri);
         String[] coding_scheme_ref = null;
-
-
- System.out.println("(************* ) resolveValueSetAction selectedvalueset: " + selectedvalueset);
-
 
         Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
         if (w != null) {
@@ -775,9 +729,6 @@ String key = vsd_uri;
 			for (int i=0; i<w.size(); i++) {
 				String s = (String) w.elementAt(i);
 				coding_scheme_ref[i] = s;
-
- System.out.println("(************* ) coding_scheme_ref: " + s);
-
 
 			}
 		}
@@ -856,23 +807,14 @@ String key = vsd_uri;
     // radio button implementation
     public String continueResolveValueSetAction() {
 
- System.out.println("(************* ) continueResolveValueSetAction ");
-
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-
-        //String[] coding_scheme_ref = (String[]) request.getParameterValues("coding_scheme_ref");
-
-
 
         String vsd_uri = (String) request.getParameter("vsd_uri");
         if (vsd_uri == null) {
 			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
-
-System.out.println("(************* ) continueResolveValueSetAction vsd_uri:  " + vsd_uri);
 
         request.getSession().setAttribute("vsd_uri", vsd_uri);
 
@@ -893,36 +835,18 @@ Vector ref_vec = new Vector();
 String key = vsd_uri;
 
 
-	System.out.println("(*) cs_name_vec " + cs_name_vec.size());
-
-
         for (int i=0; i<cs_name_vec.size(); i++) {
 			String cs_name = (String) cs_name_vec.elementAt(i);
-
-System.out.println("(&&&&&&&&&& continueResolveValueSetAction checking if selected: " + cs_name);
-
-//testing
-//cs_name = DataUtils.uri2CodingSchemeName(cs_name);
-
 
 			String version = (String) request.getParameter(cs_name);
 
 			if (version != null) {
-	System.out.println("(&&&&&&&&&& continueResolveValueSetAction cs_name: " + cs_name);
-	System.out.println("(&&&&&&&&&& continueResolveValueSetAction SELECTED version: " + version);
-
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
 				ref_vec.add(cs_name + "$" + version);
 				key = key + "|" + cs_name + "$" + version;
-		    } else {
-System.out.println("(&&&&&&&&&& continueResolveValueSetAction NOT SELECTED: " + cs_name);
-
-
-			}
+		    }
 		}
 
-
-System.out.println("(*) continueResolveValueSetAction #2 ");
 
         long time = System.currentTimeMillis();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -969,128 +893,13 @@ System.out.println("(*) continueResolveValueSetAction #2 ");
 			System.out.println("??? vds.resolveValueSetDefinition throws exception");
 		}
 
-System.out.println("(*) continueResolveValueSetAction #3 ");
-
-
 		String msg = "Unable to resolve the value set " + vsd_uri;
 		request.getSession().setAttribute("message", msg);
         return "resolved_value_set";
 	}
 
 
-/*
-    public String continueResolveValueSetAction() {
 
- System.out.println("(************* ) continueResolveValueSetAction ");
-
-
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
-
-        String[] coding_scheme_ref = (String[]) request.getParameterValues("coding_scheme_ref");
-
-
-        String vsd_uri = (String) request.getParameter("vsd_uri");
-        if (vsd_uri == null) {
-			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
-		}
-
-        request.getSession().setAttribute("vsd_uri", vsd_uri);
-
-
- System.out.println("(*) continueResolveValueSetAction " + vsd_uri);
-
-
-        if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
-			String msg = "No reference is selected.";
-			request.getSession().setAttribute("message", msg);
-			return "resolve_value_set";
-		}
-
-
-
-String key = vsd_uri;
-HashSet hset = new HashSet();
-
-		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-Vector ref_vec = new Vector();
-        for (int i=0; i<coding_scheme_ref.length; i++) {
-			String t = coding_scheme_ref[i];
-
-			System.out.println("(*) coding_scheme_ref: " + t);
-			Vector u = DataUtils.parseData(t);
-			String uri = (String) u.elementAt(0);
-			String version = (String) u.elementAt(1);
-			key = key + "|" + uri + "$" + version;
-
-			if (hset.contains(uri)) {
-				String msg = "Please select exactly one reference (i.e., version) for " + uri;
-				request.getSession().setAttribute("message", msg);
-				return "resolve_value_set";
-
-			} else {
-				hset.add(uri);
-			}
-
-
-
-            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
-		}
-
-		//csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("urn:oid:11.11.1.1", "1.0"));
-		//csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("Automobiles", "1.0"));
-
-
-System.out.println("(*) continueResolveValueSetAction #2 ");
-
-        long time = System.currentTimeMillis();
-		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-		ResolvedValueSetDefinition rvsd = null;
-		int lcv = 0;
-		try {
-			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
-
-			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
-			if(rvsd != null) {
-				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-
-				IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
-				.getSessionMap().get("iteratorBeanManager");
-
-				if (iteratorBeanManager == null) {
-					iteratorBeanManager = new IteratorBeanManager();
-					request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
-				}
-
-				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
-
-				IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
-				if (iteratorBean == null) {
-					iteratorBean = new IteratorBean(itr);
-					iteratorBean.initialize();
-					iteratorBean.setKey(key);
-					iteratorBeanManager.addIteratorBean(iteratorBean);
-				}
-				//request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
-			}
-            request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
-            request.getSession().setAttribute("resolved_vs_key", key);
-			return "resolved_value_set";
-
-
-		} catch (Exception ex) {
-			System.out.println("??? vds.resolveValueSetDefinition throws exception");
-		}
-
-System.out.println("(*) continueResolveValueSetAction #3 ");
-
-
-		String msg = "Unable to resolve the value set " + vsd_uri;
-		request.getSession().setAttribute("message", msg);
-        return "resolved_value_set";
-	}
-*/
 
     public String exportValueSetAction() {
         HttpServletRequest request =
@@ -1104,6 +913,7 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 
 
     public String valueSetDefinition2XMLString(String uri) {
+
         LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
         String s = null;
         String valueSetDefinitionRevisionId = null;
@@ -1125,7 +935,11 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String uri = (String) request.getSession().getAttribute("vsd_uri");
+        String uri = (String) request.getParameter("vsd_uri");
+        if (uri == null) {
+            uri = (String) request.getSession().getAttribute("vsd_uri");
+		}
+
         String xml_str = valueSetDefinition2XMLString(uri);
 
 		try {
@@ -1166,10 +980,11 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 
 		String valueSetDefinitionRevisionId = null;
         String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
-        String uri = (String) request.getSession().getAttribute("vsd_uri");
 
-System.out.println("===================== exportToXMLAction uri: " + uri);
-
+        String uri = (String) request.getParameter("vsd_uri");
+        if (uri == null) {
+            uri = (String) request.getSession().getAttribute("vsd_uri");
+		}
 
         if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
 			String msg = "No coding scheme reference is selected.";
@@ -1237,99 +1052,6 @@ System.out.println("===================== exportToXMLAction uri: " + uri);
 
         FacesContext.getCurrentInstance().responseComplete();
 	}
-
-/*
-    public void exportToCSVAction() {
-
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
-
-        String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
-        String vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
-        if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
-			String msg = "No coding scheme reference is selected.";
-			request.getSession().setAttribute("message", msg);
-			return;// "resolve_value_set";
-		}
-
-		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-        for (int i=0; i<coding_scheme_ref.length; i++) {
-			String t = coding_scheme_ref[i];
-			System.out.println("(*) coding_scheme_ref: " + t);
-			Vector u = DataUtils.parseData(t);
-			String uri = (String) u.elementAt(0);
-			String version = (String) u.elementAt(1);
-            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
-		}
-
-        long time = System.currentTimeMillis();
-		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-		ResolvedValueSetDefinition rvsd = null;
-
-		StringBuffer sb = new StringBuffer();
-		try {
-			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
-			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
-
-			if(rvsd != null) {
-				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-
-				sb.append("Code,");
-				sb.append("Name,");
-				sb.append("Coding Scheme,");
-				sb.append("Version,");
-				sb.append("Namespace");
-				sb.append("\r\n");
-
-				while (itr != null && itr.hasNext()) {
-					ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
-					for (ResolvedConceptReference ref : refs) {
-						String entityDescription = "<NOT ASSIGNED>";
-						if (ref.getEntityDescription() != null) {
-							entityDescription = ref.getEntityDescription().getContent();
-						}
-
-						sb.append("\"" + ref.getConceptCode() + "\",");
-						sb.append("\"" + entityDescription + "\",");
-						sb.append("\"" + ref.getCodingSchemeName() + "\",");
-						sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
-						sb.append("\"" + ref.getCodeNamespace() + "\"");
-						sb.append("\r\n");
-					}
-				}
-			 } else {
-				sb.append("WARNING: Export to CVS action failed.");
-			 }
-		} catch (Exception ex)	{
-			sb.append("WARNING: Export to CVS action failed.");
-		}
-
-
-		vsd_uri = DataUtils.valueSetDefiniionURI2Name(vsd_uri);
-		vsd_uri = vsd_uri.replaceAll(" ", "_");
-		vsd_uri = "resolved_" + vsd_uri + ".txt";
-
-		HttpServletResponse response = (HttpServletResponse) FacesContext
-				.getCurrentInstance().getExternalContext().getResponse();
-		response.setContentType("text/csv");
-		response.setHeader("Content-Disposition", "attachment; filename="
-				+ vsd_uri);
-
-		response.setContentLength(sb.length());
-
-		try {
-			ServletOutputStream ouputStream = response.getOutputStream();
-			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
-			ouputStream.flush();
-			ouputStream.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			sb.append("WARNING: Export to CVS action failed.");
-		}
-		FacesContext.getCurrentInstance().responseComplete();
-	}
-*/
 
 
     public String getNCIDefinition(ResolvedConceptReference ref) {
@@ -1494,7 +1216,6 @@ System.out.println("===================== exportToXMLAction uri: " + uri);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        System.out.println("valueSetBean.searchAction");
 
 		return "search_results";
 	}
@@ -1620,9 +1341,6 @@ System.out.println("===================== exportToXMLAction uri: " + uri);
             }
 
         }
-
-
-		//request.setAttribute("key", key);
 
 		request.getSession().setAttribute("key", key);
 
