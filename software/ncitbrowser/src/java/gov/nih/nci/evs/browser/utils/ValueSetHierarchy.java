@@ -1484,6 +1484,8 @@ public class ValueSetHierarchy {
 		for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
 			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+
+			String vsd_uri = vsd.getValueSetDefinitionURI();
 			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
 
 			while (sourceEnum.hasMoreElements()) {
@@ -1496,7 +1498,7 @@ public class ValueSetHierarchy {
 				boolean found = false;
 				for (int j=0; j<vsd_vec.size(); j++) {
 					ValueSetDefinition next_vsd = (ValueSetDefinition) vsd_vec.elementAt(j);
-					if (next_vsd.getValueSetDefinitionURI().compareTo(vsd.getValueSetDefinitionURI()) == 0) {
+					if (next_vsd.getValueSetDefinitionURI().compareTo(vsd_uri) == 0) {
 						found = true;
 						break;
 					}
@@ -1507,6 +1509,18 @@ public class ValueSetHierarchy {
 				_vsd_source_to_vsds_map.put(src_str, vsd_vec);
 			}
 		}
+
+		Iterator it = _vsd_source_to_vsds_map.keySet().iterator();
+		while (it.hasNext()) {
+			String src_str = (String) it.next();
+			System.out.println(src_str);
+			Vector vsd_vec = (Vector) _vsd_source_to_vsds_map.get(src_str);
+			for (int i=0; i<vsd_vec.size(); i++) {
+				ValueSetDefinition vsd = (ValueSetDefinition) vsd_vec.elementAt(i);
+				System.out.println("\t" + vsd.getValueSetDefinitionName());
+			}
+		}
+
 	}
 
 
@@ -1523,6 +1537,7 @@ public class ValueSetHierarchy {
 
 	public static Vector getValueSetDefinitionsWithSource(String src) {
 		if (_vsd_source_to_vsds_map == null) {
+			System.out.println("createVSDSource2VSDsMap ...");
 			createVSDSource2VSDsMap();
 		}
 		return (Vector) _vsd_source_to_vsds_map.get(src);

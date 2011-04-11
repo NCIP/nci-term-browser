@@ -204,6 +204,8 @@ public class DataUtils {
 
     public static HashMap _codingScheme2MappingCodingSchemes = null;
 
+    public static Vector _valueSetDefinitionMetadata = null;
+
 
 
     // ==================================================================================
@@ -528,12 +530,22 @@ public class DataUtils {
 
         setMappingDisplayNameHashMap();
 
+        _logger.error("Initializing Value Set Metadata ...");
+        getValueSetDefinitionMetadata();
+        _logger.error("Done Initializing Value Set Metadata ...");
+
         _logger.error("\tInitializing ValueSetHierarchy ...");
+        System.out.println("\tgetValueSetSourceHierarchy ...");
         HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
+        System.out.println("\tgetValueSetDefinitionURI2VSD_map ...");
         HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
+        System.out.println("\tpreprocessSourceHierarchyData ...");
         ValueSetHierarchy.preprocessSourceHierarchyData();
+        System.out.println("\tgetValueSetParticipationHashSet ...");
         ValueSetHierarchy.getValueSetParticipationHashSet();
+        System.out.println("\tcreateVSDSource2VSDsMap ...");
         ValueSetHierarchy.createVSDSource2VSDsMap();
+        System.out.println("\tinitializeCS2vsdURIsMap ...");
         ValueSetHierarchy.initializeCS2vsdURIs_map();
 
         _logger.error("\tDone initializing ValueSetHierarchy ...");
@@ -4391,7 +4403,8 @@ System.out.println("vsd_str " + vsd_str);
 
 
 	public static Vector getValueSetDefinitionMetadata() {
-		Vector v = new Vector();
+		if (_valueSetDefinitionMetadata != null) return _valueSetDefinitionMetadata;
+		_valueSetDefinitionMetadata = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
         List list = vsd_service.listValueSetDefinitionURIs();
         if (list == null) return null;
@@ -4399,9 +4412,10 @@ System.out.println("vsd_str " + vsd_str);
 			String uri = (String) list.get(i);
 			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
 			String metadata = getValueSetDefinitionMetadata(vsd);
-			v.add(metadata);
+			_valueSetDefinitionMetadata.add(metadata);
 		}
-		return SortUtils.quickSort(v);
+		SortUtils.quickSort(_valueSetDefinitionMetadata);
+		return _valueSetDefinitionMetadata;
 	}
 
 	public static String getValueSetDefinitionMetadata(String vsd_uri) {
