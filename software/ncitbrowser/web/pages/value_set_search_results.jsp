@@ -276,13 +276,14 @@ System.out.println("Using small font.");
                   alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
                 <br/>
               
-                <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>    
+                <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || 
+                       selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>    
                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
                     <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
                     <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
-                <% } %>		    
-            
-                <% if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { %>
+                <% } else if (selectValueSetSearchOption.compareToIgnoreCase("Source") == 0) {
+                    request.setAttribute("globalNavHeight", "54"); 
+                   } else if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { %>
                     &nbsp;&nbsp;
                     <h:outputLabel id="codingschemelabel" value="Terminology: " styleClass="textbody">
                       <h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
