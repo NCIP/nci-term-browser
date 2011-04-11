@@ -128,10 +128,106 @@
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
+   
+   
+<%
+
+String valueSetSearch_requestContextPath = request.getContextPath();
+
+String selected_ValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption"); 
+
+
+Vector vsd_vec = null;
+
+String vsd_uri = (String) request.getParameter("vsd_uri"); 
+System.out.println("value_set_search_results.jsp vsd_uri: " + vsd_uri);
+
+String selectedvalueset = null;
+if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
+    String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
+    vsd_vec = new Vector();
+    vsd_vec.add(vsd_metadata);
     
+} else {
+    vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
+    if (vsd_vec != null && vsd_vec.size() == 1) {
+	vsd_uri = (String) vsd_vec.elementAt(0);
+	
+	Vector temp_vec = DataUtils.parseData(vsd_uri);
+	selectedvalueset = (String) temp_vec.elementAt(1);
+    }
+}   
+
+System.out.println("(*) value_set_search_results.jsp vsd_uri: " + vsd_uri);
+%>
+   
+   
       <!-- Thesaurus, banner search area -->
       <div class="bannerarea">
-        <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
+      
+<%
+if (vsd_vec != null && vsd_vec.size() > 1) {
+%>
+
+      
+        <div class="banner">
+            <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a>
+        </div>
+
+
+<%
+} else {
+
+   vsd_uri = (String) vsd_vec.elementAt(0);
+   Vector temp_vec = DataUtils.parseData(vsd_uri);
+   String vsd_name = (String) temp_vec.elementAt(0);
+
+
+
+%>
+
+    <div class="banner">
+	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?uri=<%=HTTPUtils.cleanXSS(vsd_uri)%>">
+      
+	<div class="vocabularynamebanner">
+	
+<%
+if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
+%>
+	
+		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
+		    <%=HTTPUtils.cleanXSS(vsd_name)%>
+		  </div>
+<%		  
+} else {
+
+System.out.println("Using small font.");
+%>
+
+
+		  <div class="vocabularynameshort" STYLE="font-size:x-small; ">
+		    <%=HTTPUtils.cleanXSS(vsd_name)%>
+		  </div>
+
+<%
+}
+%>
+		  
+		  
+		  
+	</div>
+  
+	    </a>
+    
+
+    </div>
+
+
+<%
+} 
+%>
+
+
         <div class="search-globalnav">
           <!-- Search box -->
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
@@ -229,34 +325,6 @@
             <tr>
 
 <%
-
-String valueSetSearch_requestContextPath = request.getContextPath();
-
-String selected_ValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption"); 
-
-
-Vector vsd_vec = null;
-
-String vsd_uri = (String) request.getParameter("vsd_uri"); 
-System.out.println("value_set_search_results.jsp vsd_uri: " + vsd_uri);
-
-String selectedvalueset = null;
-if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
-    String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
-    vsd_vec = new Vector();
-    vsd_vec.add(vsd_metadata);
-    
-} else {
-    vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
-    if (vsd_vec != null && vsd_vec.size() == 1) {
-	vsd_uri = (String) vsd_vec.elementAt(0);
-	
-	Vector temp_vec = DataUtils.parseData(vsd_uri);
-	selectedvalueset = (String) temp_vec.elementAt(1);
-    }
-}   
-
-System.out.println("(*) value_set_search_results.jsp vsd_uri: " + vsd_uri);
 
 if (vsd_vec != null && vsd_vec.size() > 1) {
 %>     
