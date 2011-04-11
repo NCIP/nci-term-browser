@@ -4,6 +4,8 @@ import java.util.*;
 
 import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.apache.log4j.*;
+import org.LexGrid.valueSets.ValueSetDefinition;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -110,10 +112,18 @@ public class SortComparator implements Comparator<Object> {
             return ti._text;
         }
 
+        else if (c instanceof ValueSetDefinition) {
+            ValueSetDefinition vsd = (ValueSetDefinition) c;
+            if (sort_option == SORT_BY_CODE)
+                return vsd.getValueSetDefinitionURI();
+            return vsd.getValueSetDefinitionName();
+        }
+
         else if (c instanceof String) {
             String s = (String) c;
             return s;
         }
+
 
         return c.toString();
     }

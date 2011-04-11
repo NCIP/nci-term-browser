@@ -531,6 +531,10 @@ public class DataUtils {
         _logger.error("\tInitializing ValueSetHierarchy ...");
         HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
         HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
+        ValueSetHierarchy.preprocessSourceHierarchyData();
+        ValueSetHierarchy.getValueSetParticipationHashSet();
+        ValueSetHierarchy.createVSDSource2VSDsMap();
+        ValueSetHierarchy.initializeCS2vsdURIs_map();
 
         _logger.error("\tDone initializing ValueSetHierarchy ...");
     }
