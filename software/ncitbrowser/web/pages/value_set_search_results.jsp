@@ -327,9 +327,8 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
       </td>
     </tr>
     <tr><td height="5px;"></td></tr>
-    <tr><td colspan="2">
-      <table border="0" cellspacing="0" cellpadding="0" width="100%">
-        <tr valign="top">
+   </table>
+
 
     <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>" />
 <%
@@ -339,6 +338,7 @@ if (uri_str != null) {
 <%
 }
 %>
+
 </div>
 </h:form>
 
