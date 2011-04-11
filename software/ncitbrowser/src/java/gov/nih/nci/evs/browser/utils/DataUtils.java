@@ -348,6 +348,8 @@ public class DataUtils {
                             lbSvc.resolveCodingScheme(formalname, vt);
 
                         _uri2CodingSchemeNameHashMap.put(cs.getCodingSchemeURI(), cs.getCodingSchemeName());
+                        _uri2CodingSchemeNameHashMap.put(formalname, cs.getCodingSchemeName());
+
                         _codingSchemeName2URIHashMap.put(cs.getCodingSchemeName(), cs.getCodingSchemeURI());
 
                         boolean isMapping = isMapping(cs.getCodingSchemeName(), representsVersion);

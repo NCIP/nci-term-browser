@@ -1,19 +1,20 @@
 <!-- Thesaurus, banner search area -->
+<%@ page import="org.LexGrid.valueSets.ValueSetDefinition" %>
+
 
 <%
 
-    String vsdUri = null;//(String) request.getSession().getAttribute("selectedvalueset");
-    //if (vsdUri == null) vsdUri = (String) request.getParameter("selectedvalueset");
-
-    //if (vsdUri == null) vsdUri = (String) request.getParameter("uri");
+    String vsdUri = null;
     if (vsdUri == null) vsdUri = (String) request.getParameter("vsd_uri");
     if (vsdUri == null) vsdUri = (String) request.getSession().getAttribute("vsd_uri");
     
-   
-    
 String vsd_name = null;  
 System.out.println("content-header-resolvedvalueset.jsp vsdUri: " + vsdUri);
-if (vsdUri.indexOf("|") != -1) {
+
+
+ValueSetDefinition selected_vsd = (ValueSetDefinition) request.getSession().getAttribute("selected_vsd");
+
+if (vsdUri != null && vsdUri.compareTo("null") != 0 && vsdUri.indexOf("|") != -1) {
 
 System.out.println("(1) vsdUri: " + vsdUri);
 
@@ -27,7 +28,15 @@ System.out.println("(1) vsdUri: " + vsdUri);
     vsdUri = (String) w.elementAt(1);
     vsd_name = (String) w.elementAt(0);
     request.getSession().setAttribute("vsd_uri", vsdUri); 
-} else {
+
+} else if (selected_vsd != null) {
+
+    vsd_name = selected_vsd.getValueSetDefinitionName();
+    vsdUri = selected_vsd.getValueSetDefinitionURI();
+    request.getSession().setAttribute("vsd_uri", vsdUri); 
+
+    
+} else if (vsdUri != null) {
     String metadata = DataUtils.getValueSetDefinitionMetadata(vsdUri);
     
 System.out.println("(2) metadata: " + metadata);    
