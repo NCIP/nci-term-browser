@@ -560,11 +560,28 @@ System.out.println("matchText: " + matchText);
 
 		} else if (selectValueSetSearchOption.compareTo("Source") == 0) {
 			String uri = null;
+			v = new Vector();
 			try {
 				String supportedTag = "supportedSource";
 				supportedTag = "Source";
 				String value = matchText;
 				String source_uri = null;
+
+System.out.println("(*) selectValueSetSearchOption source: " + value);
+
+
+Vector w = ValueSetHierarchy.getValueSetDefinitionsWithSource(value);
+				if (w != null) {
+
+					for (int i=0; i<w.size(); i++) {
+						ValueSetDefinition vsd = (ValueSetDefinition) w.elementAt(i);
+						String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+						if (metadata != null) {
+							v.add(metadata);
+						}
+					}
+				}
+/*
 
 System.out.println("(*) supportedTag: " + supportedTag);
 
@@ -609,16 +626,20 @@ System.out.println("uri: " + uri);
 						return "message";
 					}
 				}
+*/
+
 
 
 			} catch (Exception ex) {
-				System.out.println("WARNING: getValueSetDefinitionURIsForSupportedTagAndValue throws exception???");
-				msg = "getValueSetDefinitionURIsForSupportedTagAndValue throws exception -- search by \"" + matchText + "\" failed.";
+				System.out.println("WARNING: getValueSetDefinitionsWithSource throws exception???");
+				msg = "getValueSetDefinitionsWithSource throws exception -- search by \"" + matchText + "\" failed.";
 				request.getSession().setAttribute("message", msg);
 				return "message";
 			}
 
+			//request.getSession().setAttribute("matched_vsds", w);
 			request.getSession().setAttribute("matched_vsds", v);
+
 
 			if (v.size() == 0) {
 				msg = "No match found.";
