@@ -742,7 +742,7 @@ System.out.println("(********) metadata " + metadata);
 			Vector u = DataUtils.parseData(selectedvalueset);
 			selectedvalueset = (String) u.elementAt(1);
 		}
-        System.out.println("resolveValueSetAction: selected value set " + selectedvalueset);
+System.out.println("resolveValueSetAction: selected value set " + selectedvalueset);
 
 
 
@@ -872,18 +872,9 @@ String key = vsd_uri;
 			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
 
+System.out.println("(************* ) continueResolveValueSetAction vsd_uri:  " + vsd_uri);
+
         request.getSession().setAttribute("vsd_uri", vsd_uri);
-
-
-String test = (String) request.getParameter("test");
-if (test != null) {
- System.out.println("(************* ) test:  " + test);
-
-} else {
-	 System.out.println("(************* ) test:  " + test);
-}
-
-
 
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri);
@@ -902,7 +893,7 @@ Vector ref_vec = new Vector();
 String key = vsd_uri;
 
 
-	System.out.println("(&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& cs_name_vec " + cs_name_vec.size());
+	System.out.println("(*) cs_name_vec " + cs_name_vec.size());
 
 
         for (int i=0; i<cs_name_vec.size(); i++) {
@@ -1176,6 +1167,9 @@ System.out.println("(*) continueResolveValueSetAction #3 ");
 		String valueSetDefinitionRevisionId = null;
         String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
         String uri = (String) request.getSession().getAttribute("vsd_uri");
+
+System.out.println("===================== exportToXMLAction uri: " + uri);
+
 
         if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
 			String msg = "No coding scheme reference is selected.";
