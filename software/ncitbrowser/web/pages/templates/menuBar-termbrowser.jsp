@@ -18,10 +18,11 @@
   String _menubar_tb_dictionary = DataUtils.getCodingSchemeName( _dictionaryName0 );
   String _menubar_tb_version = DataUtils.getCodingSchemeVersion( _dictionaryName0 );
   
-  
+  int globalNavHeight = JSPUtils.parseInt(
+      (String) request.getAttribute("globalNavHeight"), 33);
 %>
 
-<table class="global-nav" border="0" width="100%" height="33px" cellpadding="0" cellspacing="0">
+<table class="global-nav" border="0" width="100%" height="<%=globalNavHeight%>px" cellpadding="0" cellspacing="0">
   <tr>
     <td align="left" valign="bottom">
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/source_help_info-termbrowser.jsf',

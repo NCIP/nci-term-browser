@@ -232,4 +232,16 @@ public class JSPUtils {
         request.getSession().setAttribute("nav_type", nav_type);
         return nav_type;
     }
+    
+    public static int parseInt(String text, int defaultValue) {
+        if (isNull(text))
+            return defaultValue;
+        try {
+            int value = Integer.parseInt(text);
+            return value;
+        } catch (Exception e) {
+            _logger.error(e.getMessage());
+            return defaultValue;
+        }
+    }
 }
