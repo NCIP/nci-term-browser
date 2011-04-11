@@ -155,6 +155,7 @@ public class ValueSetBean {
 		HashSet hset = new HashSet();
 		ontologyList = new ArrayList();
 
+/*
 		Vector vsd_vec = DataUtils.getValueSetDefinitionMetadata();
 		HashMap csURN2ValueSetMetadataHashMap = DataUtils.getCodingSchemeURN2ValueSetMetadataHashMap(vsd_vec);
 		Iterator it = csURN2ValueSetMetadataHashMap.keySet().iterator();
@@ -165,6 +166,21 @@ public class ValueSetBean {
 			   hset.add(cs);
 		   }
 	    }
+*/
+
+
+        if (ValueSetHierarchy._valueSetParticipationHashSet == null) return null;
+        Iterator it = ValueSetHierarchy._valueSetParticipationHashSet.iterator();
+        while (it.hasNext()) {
+			String cs = (String) it.next();
+			System.out.println(cs);
+			String formalName = DataUtils.getFormalName(cs);
+			String codingSchemeName = DataUtils.uri2CodingSchemeName(formalName);
+
+			System.out.println("ValueSet cs root: " + codingSchemeName);
+			v.add(codingSchemeName);
+		}
+
 		v = SortUtils.quickSort(v);
 
 		String display_name = "ALL";
@@ -559,7 +575,11 @@ System.out.println("matchText: " + matchText);
 			return "value_set";
 
 		} else if (selectValueSetSearchOption.compareTo("Source") == 0) {
+			request.getSession().removeAttribute("selected_vsd");
+
 			String uri = null;
+
+			ValueSetDefinition selected_vsd = null;
 			v = new Vector();
 			try {
 				String supportedTag = "supportedSource";
@@ -577,59 +597,13 @@ SortUtils.quickSort(w);
 
 					for (int i=0; i<w.size(); i++) {
 						ValueSetDefinition vsd = (ValueSetDefinition) w.elementAt(i);
+						selected_vsd = vsd;
 						String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
 						if (metadata != null) {
 							v.add(metadata);
 						}
 					}
 				}
-/*
-
-System.out.println("(*) supportedTag: " + supportedTag);
-
-System.out.println("(*) value: " + value);
-
-System.out.println("(*) calling getValueSetDefinitionURIsForSupportedTagAndValue ... ");
-
-
-				List<java.lang.String> list = vsd_service.getValueSetDefinitionURIsForSupportedTagAndValue(
-																		  supportedTag,
-																		  value,
-																		  source_uri);
-				if (list == null) {
-System.out.println("(*) getValueSetDefinitionURIsForSupportedTagAndValue returns null??? ");
-
-					return null;
-				}
-
-System.out.println("(*) list.size(): " + list.size());
-
-				for (int i=0; i<list.size(); i++) {
-					uri = (String) list.get(i);
-System.out.println("uri: " + uri);
-
-					try {
-						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
-						if (vsd == null) {
-							msg = "Unable to find any value set with name " + matchText + ".";
-							request.getSession().setAttribute("message", msg);
-							return "message";
-						}
-
-						String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-						if (metadata != null) {
-							v.add(metadata);
-						}
-
-					} catch (Exception ex) {
-						ex.printStackTrace();
-						msg = "Unable to find any value set with name " + matchText + ".";
-						request.getSession().setAttribute("message", msg);
-						return "message";
-					}
-				}
-*/
-
 
 
 			} catch (Exception ex) {
@@ -649,6 +623,10 @@ System.out.println("uri: " + uri);
 				return "message";
 			} else if (v.size() == 1) {
 				request.getSession().setAttribute("vsd_uri", uri);
+
+				request.getSession().setAttribute("vsd_uri", uri);
+				request.getSession().setAttribute("selected_vsd", selected_vsd);
+
 			}
 
 			return "value_set";

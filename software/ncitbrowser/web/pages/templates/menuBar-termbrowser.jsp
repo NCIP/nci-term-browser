@@ -3,20 +3,20 @@
 
 <%
 
-  JSPUtils.JSPHeaderInfo mbo_info = new JSPUtils.JSPHeaderInfo(request);
-  String dictionaryName0 = null;
-  String dictionaryName = mbo_info.dictionary;
-  if (dictionaryName == null) dictionaryName = (String) request.getSession().getAttribute("dictionary");
-  if (dictionaryName == null) dictionaryName = Constants.CODING_SCHEME_NAME;
+  JSPUtils.JSPHeaderInfo menubar_tb_info = new JSPUtils.JSPHeaderInfo(request);
+  String _dictionaryName0 = null;
+  String _dictionaryName = menubar_tb_info.dictionary;
+  if (_dictionaryName == null) _dictionaryName = (String) request.getSession().getAttribute("dictionary");
+  if (_dictionaryName == null) _dictionaryName = Constants.CODING_SCHEME_NAME;
 
-  dictionaryName0 = dictionaryName;
-  dictionaryName = dictionaryName.replaceAll(" ", "%20");
+  _dictionaryName0 = _dictionaryName;
+  _dictionaryName = _dictionaryName.replaceAll(" ", "%20");
 
-  dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#40;", "(");
-  dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#41;", ")");
+  _dictionaryName0 = DataUtils.replaceAll(_dictionaryName0, "&#40;", "(");
+  _dictionaryName0 = DataUtils.replaceAll(_dictionaryName0, "&#41;", ")");
 
-  String mbo_dictionary = DataUtils.getCodingSchemeName( dictionaryName0 );
-  String mbo_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );
+  String _menubar_tb_dictionary = DataUtils.getCodingSchemeName( _dictionaryName0 );
+  String _menubar_tb_version = DataUtils.getCodingSchemeVersion( _dictionaryName0 );
   
   
 %>
