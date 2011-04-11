@@ -703,6 +703,12 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 <%		
 if (vsd_vec != null && vsd_vec.size() == 1) {
 
+if (vsd_uri.indexOf("|") != -1) {
+	Vector w = (Vector) DataUtils.parseData(vsd_uri);
+	vsd_uri = (String) w.elementAt(1);
+}
+
+
 System.out.println("(***) value_set_search_results.jsp hidden variable vsd_uri: " + vsd_uri);
 
 
