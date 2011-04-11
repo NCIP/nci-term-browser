@@ -571,6 +571,8 @@ System.out.println("(*) selectValueSetSearchOption source: " + value);
 
 
 Vector w = ValueSetHierarchy.getValueSetDefinitionsWithSource(value);
+SortUtils.quickSort(w);
+
 				if (w != null) {
 
 					for (int i=0; i<w.size(); i++) {
