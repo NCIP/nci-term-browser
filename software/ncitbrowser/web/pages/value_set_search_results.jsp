@@ -510,23 +510,19 @@ if (uri_str != null) {
  %>
 
  
-              <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+              <table class="datatableValueSet" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 <%
 if (vsd_vec != null && vsd_vec.size() > 1) {
 %> 
 		<th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
-		
-		
-                <th class="dataTableHeader" scope="col" align="left">Name</th>
-                <!--
-                <th class="dataTableHeader" scope="col" align="left">URI</th>
-                <th class="dataTableHeader" scope="col" align="left">Description</th>
-                -->
-                <th class="dataTableHeader" scope="col" align="left">Concept Domain</th>
-                <th class="dataTableHeader" scope="col" align="left">Sources</th>
-		
-		
+        <th class="dataTableHeader" scope="col" align="left">Name</th>
+        <!--
+        <th class="dataTableHeader" scope="col" align="left">URI</th>
+        <th class="dataTableHeader" scope="col" align="left">Description</th>
+        -->
+        <th class="dataTableHeader" scope="col" align="left">Concept Domain</th>
+        <th class="dataTableHeader" scope="col" align="left">Sources</th>
 <%
 }
 %>		
@@ -534,64 +530,35 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 
 
 <%
-if (vsd_vec != null) {
-            for (int i=0; i<vsd_vec.size(); i++) {
-            
-		    String vsd_str = (String) vsd_vec.elementAt(i);
-	    
-		    Vector u = DataUtils.parseData(vsd_str);
-		    
-		    String name = (String) u.elementAt(0);
-		    String uri = (String) u.elementAt(1);
-		    String label = (String) u.elementAt(2);
-		    String cd = (String) u.elementAt(3);
-		    String sources = (String) u.elementAt(4);
-
-
-if (vsd_vec.size() > 1)
-{
-		    if (i % 2 == 0) {
-		    %>
-		      <tr class="dataRowDark">
-		    <%
-			} else {
-		    %>
-		      <tr class="dataRowLight">
-		    <%
-			}
-		    %>  
-		    
-<%		    
-} else {
-%>
-    <tr>
-<%
-}
-%>
-		
-<%		
-if (vsd_vec != null && vsd_vec.size() > 1) {
-%>		
-
-                <td>
-                <%
-                if (i == 0) {
-                %>
-                <input type=radio name="valueset" value="<%=uri%>" checked >&nbsp;</input>
-                <%
-                } else {
-                %>
-                
-		<input type=radio name="valueset" value="<%=uri%>">&nbsp;</input>
-		
-		<%
-		}
-		%>
-		
-		</td>
-<%		
-}
-%>
+  if (vsd_vec != null) {
+    for (int i=0; i<vsd_vec.size(); i++) {
+      String vsd_str = (String) vsd_vec.elementAt(i);
+      Vector u = DataUtils.parseData(vsd_str);
+      String name = (String) u.elementAt(0);
+      String uri = (String) u.elementAt(1);
+      String label = (String) u.elementAt(2);
+      String cd = (String) u.elementAt(3);
+      String sources = (String) u.elementAt(4);
+    
+      if (vsd_vec.size() > 1) {
+        if (i % 2 == 0) {
+          %> <tr class="dataRowDark"> <%
+        } else {
+          %> <tr class="dataRowLight"> <%
+        }
+      } else {
+        %> <tr> <%
+      } 
+      if (vsd_vec != null && vsd_vec.size() > 1) {
+%>	
+        <td>
+          <% if (i == 0) { %>
+            <input type=radio name="valueset" value="<%=uri%>" checked >&nbsp;</input>
+          <% } else { %>
+            <input type=radio name="valueset" value="<%=uri%>">&nbsp;</input>
+          <% } %>
+        </td>
+<%    } %>
 
 <%
 if (vsd_vec != null && vsd_vec.size() == 1) {
