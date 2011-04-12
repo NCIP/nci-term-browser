@@ -131,6 +131,8 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
+    private static boolean initializeValueSetHierarchy = true;
+
     // ==================================================================================
     // For customized query use
 
@@ -532,25 +534,25 @@ public class DataUtils {
 
         setMappingDisplayNameHashMap();
 
-        _logger.error("Initializing Value Set Metadata ...");
-        getValueSetDefinitionMetadata();
-        _logger.error("Done Initializing Value Set Metadata ...");
-
-        _logger.error("\tInitializing ValueSetHierarchy ...");
-        System.out.println("\tgetValueSetSourceHierarchy ...");
-        HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
-        System.out.println("\tgetValueSetDefinitionURI2VSD_map ...");
-        HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
-        System.out.println("\tpreprocessSourceHierarchyData ...");
-        ValueSetHierarchy.preprocessSourceHierarchyData();
-        System.out.println("\tgetValueSetParticipationHashSet ...");
-        ValueSetHierarchy.getValueSetParticipationHashSet();
-        System.out.println("\tcreateVSDSource2VSDsMap ...");
-        ValueSetHierarchy.createVSDSource2VSDsMap();
-        System.out.println("\tinitializeCS2vsdURIsMap ...");
-        ValueSetHierarchy.initializeCS2vsdURIs_map();
-
-        _logger.error("\tDone initializing ValueSetHierarchy ...");
+        if (initializeValueSetHierarchy) {
+			_logger.error("Initializing Value Set Metadata ...");
+			getValueSetDefinitionMetadata();
+			_logger.error("Done Initializing Value Set Metadata ...");
+			_logger.error("\tInitializing ValueSetHierarchy ...");
+			System.out.println("\tgetValueSetSourceHierarchy ...");
+			HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
+			System.out.println("\tgetValueSetDefinitionURI2VSD_map ...");
+			HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
+			System.out.println("\tpreprocessSourceHierarchyData ...");
+			ValueSetHierarchy.preprocessSourceHierarchyData();
+			System.out.println("\tgetValueSetParticipationHashSet ...");
+			ValueSetHierarchy.getValueSetParticipationHashSet();
+			System.out.println("\tcreateVSDSource2VSDsMap ...");
+			ValueSetHierarchy.createVSDSource2VSDsMap();
+			System.out.println("\tinitializeCS2vsdURIsMap ...");
+			ValueSetHierarchy.initializeCS2vsdURIs_map();
+			_logger.error("\tDone initializing ValueSetHierarchy ...");
+	    }
     }
 
     public static String getMetadataValue(String scheme, String propertyName) {
