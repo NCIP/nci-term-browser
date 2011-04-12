@@ -15,10 +15,10 @@ if (home != null) {
      String home_formal_name = DataUtils.getFormalName(home); 
      if (home_formal_name == null) {
          request.getSession().setAttribute("unsupported_vocabulary_message", "WARNING: Vocabulary " + home + " is not supported.");
-         redirect_url = context_path + "/pages/multiple_search.jsf";
+         redirect_url = context_path + "/pages/multiple_search.jsf?nav_type=terminologies";
      } else {
         if (home_formal_name.compareTo(Constants.NCI_THESAURUS) == 0) {
-            redirect_url = context_path + "/index.jsf";
+            redirect_url = context_path + "/index.jsf?nav_type=terminologies";
         } else if (home_formal_name.compareTo(Constants.NCI_METATHESAURUS) == 0) {
             redirect_url = ncimurl;//context_path + "/start.jsf";            
         } else {
@@ -27,7 +27,7 @@ if (home != null) {
 	}
      }
 } else {
-        redirect_url = context_path + "/pages/multiple_search.jsf";
+        redirect_url = context_path + "/pages/multiple_search.jsf?nav_type=terminologies";
 }
 String url = response.encodeRedirectURL(redirect_url);
 response.sendRedirect(url);
