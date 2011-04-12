@@ -192,7 +192,6 @@
        <from-outcome>concept_details</from-outcome>
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
-
   </navigation-rule>
 
   <navigation-rule>
@@ -950,6 +949,12 @@
        <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
     </navigation-case>
 
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
   </navigation-rule>
 
    <navigation-rule>
