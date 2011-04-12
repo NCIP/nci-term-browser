@@ -495,7 +495,11 @@
         check_name = "checked";        
     else if (selectValueSetSearchOption.compareTo("Source") == 0)
         check_src = "checked";
-    String valueset_match_text = "";
+    String valueset_match_text = (String) request.getSession().getAttribute("matchText_VSD");
+    if (valueset_match_text == null) valueset_match_text = "";
+    if (valueset_match_text != null && valueset_match_text.compareTo("null") == 0) valueset_match_text = "";
+    
+    
 %>
 
 <f:view>

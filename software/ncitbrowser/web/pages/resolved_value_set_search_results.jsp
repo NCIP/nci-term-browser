@@ -94,11 +94,12 @@ if (resultsPerPage == null) {
 String key = (String) request.getSession().getAttribute("key");
 
           IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
-          
-          
+                    
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
-        //String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
+        String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText_RVS"));
+        if (matchText == null) matchText = "";
+        if (matchText != null && matchText.compareTo("null") == 0) matchText = "";
+        
         String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
         Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
 

@@ -349,6 +349,8 @@ public class ValueSetBean {
 
 
         String matchText = (String) request.getParameter("matchText");
+        request.getSession().setAttribute("matchText_VSD", matchText);
+
         String algorithm = (String) request.getParameter("valueset_search_algorithm");
 
 
@@ -500,6 +502,16 @@ public class ValueSetBean {
             String uri = null;
 			if (selectCodingScheme != null) {
 
+				if (selectCodingScheme.compareTo("ALL") != 0) {
+					matchText = matchText.trim();
+					if (matchText.compareTo("") != 0) {
+						String cs_name = DataUtils.uri2CodingSchemeName(DataUtils.getFormalName(matchText));
+						if (cs_name != null) {
+							selectCodingScheme = cs_name;
+						}
+					}
+			    }
+
 				if (selectCodingScheme.compareTo("ALL") == 0) {
 					request.getSession().setAttribute("view", "terminology");
 					return "all_value_sets";
@@ -552,7 +564,23 @@ public class ValueSetBean {
 				String source_uri = null;
 
 System.out.println("(*) selectValueSetSearchOption source: " + value);
+Vector schemes = new Vector();
+Vector versions = new Vector();
+schemes.add(ValueSetHierarchy.SOURCE_SCHEME);
+versions.add(ValueSetHierarchy.SOURCE_VERSION);
 
+                ResolvedConceptReferencesIteratorWrapper wrapper =
+                    new SearchUtils()
+                        .searchByName(schemes, versions, matchText, null,
+                            "exactMatch", false, 1);
+                if (wrapper != null) {
+                    ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
+                    while (iterator.hasNext()) {
+						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+						value = rcr.getConceptCode();
+						break;
+					}
+				}
 
 Vector w = ValueSetHierarchy.getValueSetDefinitionsWithSource(value);
 SortUtils.quickSort(w);
@@ -1234,6 +1262,8 @@ String key = vsd_uri;
 
         request.getSession().setAttribute("vsd_uri", vsd_uri);
         String matchText = (String) request.getParameter("matchText");
+        request.getSession().setAttribute("matchText_RVS", matchText);
+
         if (matchText != null)
             matchText = matchText.trim();
 
