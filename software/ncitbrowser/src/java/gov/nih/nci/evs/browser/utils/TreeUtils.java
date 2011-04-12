@@ -2190,7 +2190,8 @@ public class TreeUtils {
 				for (TreeItem childItem : children) {
 					String code = childItem._code;
 					String text = childItem._text;
-					childItem._text = childItem._code + " (" + text + ")";
+					//childItem._text = childItem._code + " (" + text + ")";
+					childItem._text = childItem._code;
 				}
 
 			}

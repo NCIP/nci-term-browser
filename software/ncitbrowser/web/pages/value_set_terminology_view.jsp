@@ -561,8 +561,12 @@
                   alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
                   alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
-                <br/>
-              
+                
+
+    <tr align="left">
+      <td height="1px" bgcolor="#2F2F5F"></td>
+    </tr>
+    
                 <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 ||
                        selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>    
                      <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;

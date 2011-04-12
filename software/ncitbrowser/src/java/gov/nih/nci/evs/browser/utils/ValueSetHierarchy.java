@@ -1449,7 +1449,8 @@ public class ValueSetHierarchy {
 		createVSDSource2VSDsMap();
 
 		String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
-		TreeItem root = new TreeItem(src, src + " (" + text + ")");
+		//TreeItem root = new TreeItem(src, src + " (" + text + ")");
+		TreeItem root = new TreeItem(src, src);
 		root._expandable = false;
 		List <TreeItem> children = new ArrayList();
 		Vector v = getValueSetDefinitionsWithSource(src);
@@ -1763,7 +1764,8 @@ public class ValueSetHierarchy {
 					}
 
                     String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
-					TreeItem ti = new TreeItem(src, src + " (" + text + ")");
+					//TreeItem ti = new TreeItem(src, src + " (" + text + ")");
+					TreeItem ti = new TreeItem(src, src);
 					ti._expandable = false;
 					children.add(ti);
 				}
@@ -1781,7 +1783,8 @@ public class ValueSetHierarchy {
 					}
 
                     String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
-					TreeItem ti = new TreeItem(src, src + " (" + text + ")");
+					//TreeItem ti = new TreeItem(src, src + " (" + text + ")");
+					TreeItem ti = new TreeItem(src, src);
 					ti._expandable = true;
 					children.add(ti);
 				}
@@ -1913,7 +1916,6 @@ public class ValueSetHierarchy {
 
         for (int i=0; i<root_cs_vec.size(); i++) {
 			String cs = (String) root_cs_vec.elementAt(i);
-			//cs = cs.replaceAll(" ", "_");
 			String code = cs;
 			TreeItem ti = new TreeItem(code, cs);
 			ti._expandable = true;
@@ -2481,7 +2483,8 @@ try {
 			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 			String src = rcr.getConceptCode();
 			String text = rcr.getEntityDescription().getContent();
-			TreeItem ti = new TreeItem(src, src + " (" + text + ")");
+			//TreeItem ti = new TreeItem(src, src + " (" + text + ")");
+			TreeItem ti = new TreeItem(src, src);
 			ti._expandable = true;
 			children.add(ti);
 		}
