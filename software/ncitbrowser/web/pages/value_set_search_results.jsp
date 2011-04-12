@@ -445,75 +445,58 @@ if (uri_str != null) {
 
 
           <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
-          <div class="tabTableContentContainer">
           
           <table>
-            <tr>
-
-<%
-
-if (vsd_vec != null && vsd_vec.size() > 1) {
-%>     
-    <td class="texttitle-blue">Matched Value Sets:</td>
-<%
-}
-%>
-            </tr>
-
+            <% if (vsd_vec != null && vsd_vec.size() > 1) { %>     
+                <tr>
+                  <td class="texttitle-blue">Matched Value Sets:</td>
+                </tr>
+            <% } %>
             <% if (message != null) { %>
-        <tr class="textbodyred"><td>
-      <p class="textbodyred">&nbsp;<%=message%></p>
-        </td></tr>
+              <tr class="textbodyred"><td>
+              <p class="textbodyred">&nbsp;<%=message%></p>
+              </td></tr>
             <% } else { %>
 
-
  <h:form id="valueSetSearchResultsForm" styleClass="search-form">            
-
             <tr class="textbody"><td>
- 
- 
- <%
- if (vsd_vec != null && vsd_vec.size() == 1) {
- %>
- <div id="message" class="textbody">
-    <table border="0" width="700px">
-     <tr>
-       <td>
-          <div class="texttitle-blue">Welcome</div>
-       </td>
-       
-       <td class="dataCellText" align="right">
-                      <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
-                        onclick="javascript:cursor_wait();"
-                        image="#{valueSetSearch_requestContextPath}/images/values.gif"
-                        alt="Values"
-                        tabindex="3">
-                      </h:commandButton>                  
-                    &nbsp;
-                      <h:commandButton id="versions" value="versions" action="#{valueSetBean.selectCSVersionAction}"
-                        onclick="javascript:cursor_wait();"
-                        image="#{valueSetSearch_requestContextPath}/images/versions.gif"
-                        alt="Versions"
-                        tabindex="2">
-                      </h:commandButton>
-                    &nbsp;
-                      <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportVSDToXMLAction}"
-                        onclick="javascript:cursor_wait();"
-                        image="#{valueSetSearch_requestContextPath}/images/xmldefinitions.gif"
-                        alt="XML Definition"
-                        tabindex="2">
-                      </h:commandButton>
-       
-       </td>
-     </tr>
-   </table>  
-   <hr/>
- </div>
- 
- <%
- }
- %> 
-  
+              <% if (vsd_vec != null && vsd_vec.size() == 1) { %>
+                <div id="message" class="textbody">
+                   <table border="0" width="700px">
+                    <tr>
+                      <td>
+                         <div class="texttitle-blue">Welcome</div>
+                      </td>
+                      
+                      <td class="dataCellText" align="right">
+                        <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
+                          onclick="javascript:cursor_wait();"
+                          image="#{valueSetSearch_requestContextPath}/images/values.gif"
+                          alt="Values"
+                          tabindex="3">
+                        </h:commandButton>                  
+                        &nbsp;
+                        <h:commandButton id="versions" value="versions" action="#{valueSetBean.selectCSVersionAction}"
+                          onclick="javascript:cursor_wait();"
+                          image="#{valueSetSearch_requestContextPath}/images/versions.gif"
+                          alt="Versions"
+                          tabindex="2">
+                        </h:commandButton>
+                        &nbsp;
+                        <h:commandButton id="xmldefinition" value="xmldefinition" action="#{valueSetBean.exportVSDToXMLAction}"
+                          onclick="javascript:cursor_wait();"
+                          image="#{valueSetSearch_requestContextPath}/images/xmldefinitions.gif"
+                          alt="XML Definition"
+                          tabindex="2">
+                        </h:commandButton>                      
+                      </td>
+                    </tr>
+                    <tr><td colspan="2">
+                      <hr/>
+                    </td></tr>
+                  </table>  
+                </div>
+              <% } %> 
  
  <%
  if (vsd_uri != null) {
@@ -731,8 +714,6 @@ System.out.println("(***) value_set_search_results.jsp hidden variable vsd_uri: 
           
           
         </table>
-        </div> <!-- end tabTableContentContainer -->
-         
           
         </div> <!--  popupContentArea -->
         
