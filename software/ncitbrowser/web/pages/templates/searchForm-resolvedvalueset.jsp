@@ -4,7 +4,7 @@
           
           
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
-    .cleanXSS((String) request.getSession().getAttribute("matchText"));
+    .cleanXSS((String) request.getSession().getAttribute("matchText_RVS"));
 
   if (match_text == null) match_text = "";
 
