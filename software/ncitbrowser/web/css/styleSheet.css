@@ -340,6 +340,14 @@ a.hideLink
  font-size: 11px;
 }
 
+.datatableValueSet
+{
+ table-layout: fixed;
+ width: 680px;
+ word-wrap: break-word;
+ font-size: 11px;
+}
+
 .datatableheader
 {
  font-size: 12px;
