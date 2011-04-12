@@ -36,8 +36,12 @@
   }
 
   Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE };
+  String adjustedHeight = "";
+  Boolean hideAdvancedSearchLink2 = (Boolean) request.getAttribute("hideAdvancedSearchLink");
+  if (hideAdvancedSearchLink2 != null && hideAdvancedSearchLink2)
+      adjustedHeight = "height=\"42\"";
 %>
-<table class="global-nav" border="0" width="100%" cellpadding="0" cellspacing="0">
+<table class="global-nav" border="0" width="100%" <%=adjustedHeight%> cellpadding="0" cellspacing="0">
   <tr>
     <td align="left">
       <% if (menubar_isMapping) { %>
