@@ -66,13 +66,15 @@ System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
     </h:outputLink>
 
   <table border="0" cellspacing="0" cellpadding="0" width="340px">
+
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
-        <input type="radio" name="algorithm" id="algorithm1" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4"/><label for="algorithm1">Exact Match&nbsp;</label>
-        <input type="radio" name="algorithm" id="algorithm2" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4"/><label for="algorithm2">Begins With&nbsp;</label>
-        <input type="radio" name="algorithm" id="algorithm3" value="contains" alt="Contains" <%=check_c%> tabindex="4"/><label for="algorithm3">Contains</label>
+        <input type="radio" name="searchTarget" id="searchTarget0" value="code" alt="Code" <%=check_cd%> tabindex="5"/><label for="searchTarget0">Code&nbsp;</label>
+        <input type="radio" name="searchTarget" id="searchTarget1" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="searchTarget1">Name&nbsp;</label>
+        <input type="radio" name="searchTarget" id="searchTarget2" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="searchTarget2">Property</label>
       </td>
-    </tr>
+    </tr>  
+    
     <tr align="left">
       <td width="263px" height="1px" bgcolor="#2F2F5F"></td>
       <!-- The following lines are needed to make "Advanced Search" link flush right -->
@@ -85,11 +87,13 @@ System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
 
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
-        <input type="radio" name="searchTarget" id="searchTarget0" value="code" alt="Code" <%=check_cd%> tabindex="5"/><label for="searchTarget0">Code&nbsp;</label>
-        <input type="radio" name="searchTarget" id="searchTarget1" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="searchTarget1">Name&nbsp;</label>
-        <input type="radio" name="searchTarget" id="searchTarget2" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="searchTarget2">Property</label>
+        <input type="radio" name="algorithm" id="algorithm1" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4"/><label for="algorithm1">Exact Match&nbsp;</label>
+        <input type="radio" name="algorithm" id="algorithm2" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4"/><label for="algorithm2">Begins With&nbsp;</label>
+        <input type="radio" name="algorithm" id="algorithm3" value="contains" alt="Contains" <%=check_c%> tabindex="4"/><label for="algorithm3">Contains</label>
       </td>
     </tr>
+    
+    
     <tr><td height="5px;"></td></tr>
     <tr><td colspan="2">
       <table border="0" cellspacing="0" cellpadding="0" width="100%">
