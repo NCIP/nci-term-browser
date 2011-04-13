@@ -365,7 +365,14 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                       action="#{userSessionBean.showOtherVersions}" >
                   </h:commandLink></td>
                   </font>
-                  <input type="hidden" id="show_versions_of" name="show_versions_of" value="<%=cs_nm%>">
+                  
+ 
+                  <%
+                   String show_versions_of_cs = "show_versions_of" + cs_nm.replaceAll(" ", "_");
+                   System.out.println("JSP show_versions_of_cs:" + show_versions_of_cs);
+                  %>
+                  
+                  <input type="hidden" id=<%=show_versions_of_cs%> name=<%=show_versions_of_cs%> value="<%=cs_nm%>">
 				       
 				   <%    
 				   } else if (info.isProduction() && info.getHasMultipleVersions() && info.getExpanded()) {
@@ -378,7 +385,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                       action="#{userSessionBean.hideOtherVersions}" >
                   </h:commandLink></td>
                   </font>
-                  <input type="hidden" id="hide_versions_of" name="hide_versions_of" value="<%=cs_nm%>">				   
+                  
+                  <%
+                  String hide_versions_of_cs = "hide_versions_of" + cs_nm.replaceAll(" ", "_");
+                  System.out.println("JSP hide_versions_of_cs:" + hide_versions_of_cs);
+                  %>
+                  
+                  <input type="hidden" id=<%=hide_versions_of_cs%> name=<%=hide_versions_of_cs%> value="<%=cs_nm%>">				   
 
 				       
 				   <%    
