@@ -1923,8 +1923,8 @@ System.out.println("advancedSearchAction version: " + version);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-		String action_cs = (String) request.getParameter("show_versions_of");
-		System.out.println("showOtherVersions -- " + action_cs);
+		//String action_cs = (String) request.getParameter("show_versions_of");
+		//System.out.println("showOtherVersions -- " + action_cs);
 
         String[] ontology_list = request.getParameterValues("ontology_list");
         String ontologiesToSearchOnStr = "|";
@@ -1936,6 +1936,22 @@ System.out.println("advancedSearchAction version: " + version);
 	    }
 
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+	    String action_cs = null;
+		for (int i = 0; i < display_name_vec.size(); i++) {
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		     String cs_name = info.getCodingScheme();
+	         String show_versions_of_cs = "show_versions_of" + cs_name.replaceAll(" ", "_");
+		     //System.out.println("show_versions_of_cs: " + show_versions_of_cs);
+
+		     if (request.getParameter(show_versions_of_cs) != null) {
+				 action_cs = info.getCodingScheme();
+				 break;
+			 }
+		}
+
+		System.out.println("action_cs: " + action_cs);
+
+
 		for (int i = 0; i < display_name_vec.size(); i++) {
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
 
@@ -1949,13 +1965,11 @@ System.out.println("advancedSearchAction version: " + version);
 				 }
 		     }
 
-			 if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+			 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 			     info.setExpanded(true);
-			 } else if (action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+			 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
 				 info.setVisible(true);
 			 }
-
-
 		}
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
@@ -1968,8 +1982,8 @@ System.out.println("advancedSearchAction version: " + version);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-		String action_cs = (String) request.getParameter("hide_versions_of");
-		System.out.println("hide_versions_of -- " + action_cs);
+		//String action_cs = (String) request.getParameter("hide_versions_of");
+		//System.out.println("hide_versions_of -- " + action_cs);
 
         String[] ontology_list = request.getParameterValues("ontology_list");
         String ontologiesToSearchOnStr = "|";
@@ -1981,9 +1995,25 @@ System.out.println("advancedSearchAction version: " + version);
 	    }
 
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+	    String action_cs = null;
 		for (int i = 0; i < display_name_vec.size(); i++) {
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		     String cs_name = info.getCodingScheme();
+		     String hide_versions_of_cs = "hide_versions_of" + cs_name.replaceAll(" ", "_");
 
+		     //System.out.println("hide_versions_of_cs: " + hide_versions_of_cs);
+
+		     if (request.getParameter(hide_versions_of_cs) != null) {
+				 action_cs = info.getCodingScheme();
+				 break;
+			 }
+		}
+
+		System.out.println("action_cs: " + action_cs);
+
+
+		for (int i = 0; i < display_name_vec.size(); i++) {
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
 			 if (info.getVisible()) {
 				 info.setSelected(false);
 				 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
@@ -1994,9 +2024,9 @@ System.out.println("advancedSearchAction version: " + version);
 				 }
 		     }
 
-			 if (action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+			 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 			     info.setExpanded(false);
-			 } else if (action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+			 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
 				 info.setVisible(false);
 			 }
 
