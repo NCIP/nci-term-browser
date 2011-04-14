@@ -47,7 +47,7 @@
       }
       var adv_search_source = document.forms["advancedSearchForm"].adv_search_source.value;
 
-      selectSearchOption = "Property";
+      var selectSearchOption = "";
       var selectSearchOptionObj = document.forms["advancedSearchForm"].selectSearchOption;
       for (var i=0; i<selectSearchOptionObj.length; i++) {
         if (selectSearchOptionObj[i].checked) {
@@ -131,7 +131,8 @@
         rel_search_association = (String) request.getParameter("rel");
         rel_search_rela = (String) request.getParameter("rela");
         selectProperty = (String) request.getParameter("prop");
-
+        
+        adv_search_type = selectSearchOption;
 
 
     } else {
@@ -151,24 +152,45 @@
 
 
     if (!refresh_page || message != null) {
+        /*
         // Note: Called when search contains no match.
         Object bean_obj = FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("searchStatusBean");
         if (bean_obj == null) {
-            bean_obj = request.getAttribute("searchStatusBean");
+            //bean_obj = request.getAttribute("searchStatusBean");
+            
+            bean_obj = request.getSession().getAttribute("searchStatusBean");
         }
+        */
+        
+        Object bean_obj = request.getSession().getAttribute("searchStatusBean");
 
         if (bean_obj == null) {
             bean = new SearchStatusBean(adv_search_vocabulary);
             FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("searchStatusBean", bean);
+            
+            System.out.println("bean_obj == null???");
+            adv_search_algorithm = bean.getAlgorithm();
+            System.out.println("adv_search_algorithm " + adv_search_algorithm);
 
         } else {
+        
+            System.out.println("bean_obj != null???");
+        
             bean = (SearchStatusBean) bean_obj;
             adv_search_algorithm = bean.getAlgorithm();
+            
+            System.out.println("adv_search_algorithm " + adv_search_algorithm);
+            
             adv_search_source = bean.getSelectedSource();
             selectProperty = bean.getSelectedProperty();
             search_string = bean.getMatchText();
             rel_search_association = bean.getSelectedAssociation();
             rel_search_rela = bean.getSelectedRELA();
+            
+            //KLO
+            adv_search_type = bean.getSearchType();
+            selectSearchOption = adv_search_type;
+            
 
             _logger.debug("advanced_search.jsp adv_search_algorithm: " + adv_search_algorithm);
             _logger.debug("advanced_search.jsp adv_search_source: " + adv_search_source);
@@ -180,7 +202,6 @@
         }
     }
 
-    adv_search_type = selectSearchOption;
 
     if (rel_search_association == null) rel_search_association = "ALL";
     if (rel_search_rela == null) rel_search_rela = " ";
@@ -210,8 +231,7 @@
       check_p2 = "checked";
     else if (selectSearchOption.compareTo("Relationship") == 0)
       check_r2 = "checked";
-    else check_n2 = "checked";
-
+      
 
 %>
         <div class="pagecontent">

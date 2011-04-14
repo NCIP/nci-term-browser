@@ -73,19 +73,79 @@
     
 
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-String warning_msg = (String) request.getSession().getAttribute("warning");
+
+
+
+//   Modifications:
+
+String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
+if (ontologiesToSearchOnStr == null) {
+    ontologiesToSearchOnStr = DataUtils.getDefaultOntologiesToSearchOnStr();
+    request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+}
 
 String action = (String) request.getParameter("action");
-       
-String ontologiesToSearchOn = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
-if (ontologiesToSearchOn == null) {
-    ontologiesToSearchOn = DataUtils.getDefaultOntologiesToSearchOnStr();
-    request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOn);
+System.out.println("action: " + action);
+if (action != null) {
+    String action_cs = (String) request.getParameter("dictionary");
+    System.out.println("action_cs: " + action_cs);
+    if (action.compareTo("show") == 0) {
+	for (int i = 0; i < display_name_vec.size(); i++) {
+	     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+
+		 if (info.getVisible()) {
+			 info.setSelected(false);
+			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+				 info.setSelected(true);
+			 }
+			 /*
+			 if (ontology_list == null) {
+				 info.setSelected(false);
+			 }
+			 */
+	         }
+
+		 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+		     info.setExpanded(true);
+		 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+			 info.setVisible(true);
+		 }
+	}
+    } else if(action.compareTo("hide") == 0) {
+	for (int i = 0; i < display_name_vec.size(); i++) {
+	     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		 if (info.getVisible()) {
+			 info.setSelected(false);
+			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+				 info.setSelected(true);
+			 }
+			 /*
+			 if (ontology_list == null) {
+				 info.setSelected(false);
+			 }
+			 */
+	     }
+		 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+		     info.setExpanded(false);
+		 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+			 info.setVisible(false);
+		 }
+	}    
+    
+    }
 }
+		
+request.getSession().setAttribute("display_name_vec", display_name_vec);
+
+
+String warning_msg = (String) request.getSession().getAttribute("warning");
+
+       
+
 
 
 if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
-    ontologiesToSearchOn = "|";
+    ontologiesToSearchOnStr = "|";
 }
 String unsupported_vocabulary_message = (String) request.getSession().getAttribute("unsupported_vocabulary_message");
 
@@ -207,9 +267,9 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
                     display_name_vec.add(info);
   
- if (!info.isProduction()) {
-     System.out.println("Non-production version: " + scheme + " version: " + version);
- }
+		    if (!info.isProduction()) {
+		        System.out.println("Non-production version: " + scheme + " version: " + version);
+		    }
                     
                   }
                   
@@ -233,7 +293,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 			 System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
 		     } 
 		     
-		     if (ontologiesToSearchOn.indexOf(info.getLabel()) != -1) {
+		     if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 			 info.setSelected(true);
 		     }		     
 		  }
@@ -256,7 +316,14 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     <table border="0" cellpadding="0" cellspacing="0">
                       <%
                      
+  int hide_counter = 0; 
+  int show_counter = 0;
                       for (int i = 0; i < display_name_vec.size(); i++) {
+                      
+  //String index_str = new Integer(i).toString();
+  //System.out.println("(*) multiple_search: index_str " + index_str);
+ 
+                      
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         int sort_category = info.getSortCategory();
                         String display_name = info.getDisplayName();
@@ -357,13 +424,52 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				   <%
 				   String cs_nm = info.getCodingScheme();
 				   if (info.isProduction() && info.getHasMultipleVersions() && !info.getExpanded()) {
+				   
+				       show_counter++;
+				   
 				   %>    
 
                   &nbsp&nbsp; 
                   <font color="red">
-                  <h:commandLink styleClass="textbodyred" id="show" value="[show other versions]"
-                      action="#{userSessionBean.showOtherVersions}" >
-                  </h:commandLink></td>
+
+
+
+
+<h:commandLink styleClass="textbodyred" id="show" value="[show other versions]"
+    action="#{userSessionBean.showOtherVersions}" actionListener="#{userSessionBean.showListener}"  immediate="true"> 
+    
+<%
+if (show_counter == 1) {
+%>    
+    <f:param name="action_cs_index" value="1" />
+<%
+} else if (show_counter == 2) {
+%> 
+    <f:param name="action_cs_index" value="2" />
+<%
+} else if (show_counter == 3) {
+%> 
+    <f:param name="action_cs_index" value="3" />
+<%
+} else if (show_counter == 4) {
+%> 
+    <f:param name="action_cs_index" value="4" />
+<%
+} else if (show_counter == 5) {
+%> 
+    <f:param name="action_cs_index" value="5" />
+<%
+}
+%>
+
+    
+</h:commandLink></td>
+
+                 
+                  
+                  </td>
+                  
+                  
                   </font>
                   
  
@@ -377,13 +483,44 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				   <%    
 				   } else if (info.isProduction() && info.getHasMultipleVersions() && info.getExpanded()) {
 				       
+				       hide_counter++;
 				   %>  
 				   
                   &nbsp&nbsp; 
                   <font color="red">
-                  <h:commandLink styleClass="textbodyred" id="hide" value="[hide other versions]"
-                      action="#{userSessionBean.hideOtherVersions}" >
-                  </h:commandLink></td>
+
+
+<h:commandLink styleClass="textbodyred" id="hide" value="[hide other versions]"
+action="#{userSessionBean.hideOtherVersions}" actionListener="#{userSessionBean.hideListener}"  immediate="true"> 
+
+<%
+if (hide_counter == 1) {
+%>    
+    <f:param name="action_cs_index" value="1" />
+<%
+} else if (hide_counter == 2) {
+%> 
+    <f:param name="action_cs_index" value="2" />
+<%
+} else if (hide_counter == 3) {
+%> 
+    <f:param name="action_cs_index" value="3" />
+<%
+} else if (hide_counter == 4) {
+%> 
+    <f:param name="action_cs_index" value="4" />
+<%
+} else if (hide_counter == 5) {
+%> 
+    <f:param name="action_cs_index" value="5" />
+<%
+}
+%>
+
+</h:commandLink></td>
+
+                  
+                  </td>
                   </font>
                   
                   <%
