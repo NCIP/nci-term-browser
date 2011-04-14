@@ -507,6 +507,7 @@
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
+<h:form id="valueSetSearchForm"> 
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
@@ -519,8 +520,10 @@
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           <div class="searchbox">
           
-            <h:form id="valueSetSearchForm" styleClass="search-form"> 
-              <div class="textbody">          
+              <%-- <div class="textbody"> --%>
+<table border="0" cellspacing="0" cellpadding="0" style="margin: 4px" >
+  <tr valign="top" align="left">
+    <td align="left" class="textbody">  
                 <% if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) { %>
                   <input CLASS="searchbox-input-2"
                     name="matchText"
@@ -551,7 +554,15 @@
                   <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
                     style="border-width:0;"/>
                 </h:outputLink> 
-               
+    </td>
+  </tr>
+  
+  <tr valign="top" align="left">
+    <td>
+      <table border="0" cellspacing="0" cellpadding="0" style="margin: 2px">
+    
+        <tr valign="top" align="left">
+          <td align="left" class="textbody">
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
                   alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
@@ -560,17 +571,27 @@
                   alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
                   alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
-                <br/>
-                
+          </td>
+        </tr>
+           
                 <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || 
                        selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>
-                     <hr color="#2F2F5F" align="left" size="1" width="80%" style="margin: 0px" />   
+        <tr align="left">
+            <td height="1px" bgcolor="#2F2F5F" align="left"></td>
+        </tr>
+        <tr valign="top" align="left">
+          <td align="left" class="textbody">     
                      <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
                      <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
                      <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
+          </td>
+        </tr>
+
                 <% } else if (selectValueSetSearchOption.compareToIgnoreCase("Source") == 0) {
                      request.setAttribute("globalNavHeight", "53"); 
                    } else if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { %>
+        <tr valign="top" align="left">
+          <td align="left" class="textbody">
                      &nbsp;&nbsp;
                      <h:outputLabel id="codingschemelabel" value="Terminology: " styleClass="textbody">
                        <h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
@@ -579,12 +600,17 @@
                          <f:selectItems value="#{valueSetBean.ontologyList}"/>
                        </h:selectOneMenu>
                      </h:outputLabel>
+          </td>
+        </tr>
                 <% } %>
-                
+
+      </table>
+    </td>
+  </tr>
+</table>                 
                 <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
                 <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
-              </div> <!-- textbody -->
-            </h:form>
+              <%-- </div> <!-- textbody --> --%>
           </div> <!-- searchbox -->
           
           <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
@@ -668,6 +694,7 @@
       </div> <!-- pagecontent -->
     </div> <!--  main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+</h:form>
   </div> <!-- center-page -->
 </f:view>
 </body>
