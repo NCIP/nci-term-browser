@@ -36,7 +36,8 @@
 
       var dictionary = document.forms["advancedSearchForm"].dictionary.value;
 
-      var text = document.forms["advancedSearchForm"].matchText.value;
+      var text = escape(document.forms["advancedSearchForm"].matchText.value);
+      
       algorithm = "exactMatch";
       var algorithmObj = document.forms["advancedSearchForm"].adv_search_algorithm;
       for (var i=0; i<algorithmObj.length; i++) {
