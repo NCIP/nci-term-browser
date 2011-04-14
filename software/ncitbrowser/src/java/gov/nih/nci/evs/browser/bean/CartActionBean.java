@@ -591,8 +591,8 @@ public class CartActionBean {
             // Add header
             sb.append("Concept,");
             sb.append("Vocabulary,");
-            sb.append("Version");
-            sb.append("Code,");
+            sb.append("Version Code,");
+            sb.append("Concept Code,");
             sb.append("URL");
             sb.append("\r\n");
 
