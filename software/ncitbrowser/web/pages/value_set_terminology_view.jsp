@@ -508,7 +508,6 @@
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-<h:form id="valueSetSearchForm"> 
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
@@ -521,7 +520,7 @@
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           <div class="searchbox">
           
-
+<h:form id="valueSetSearchForm" styleClass="search-form-main-area"> 
               <%-- <div class="textbody">  --%>
 <table border="0" cellspacing="0" cellpadding="0" style="margin: 4px" >
   <tr valign="top" align="left">
@@ -610,7 +609,7 @@
                 <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
                 <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
               <%-- </div> <!-- textbody -->  --%>
-              
+</h:form>              
           </div> <!-- searchbox -->
           
           <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
@@ -692,7 +691,7 @@
 
     </div> <!-- main-area -->
     <!-- end Main box -->
-</h:form>
+
   </div> <!-- center-page -->
   <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
