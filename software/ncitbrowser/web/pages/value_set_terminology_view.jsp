@@ -575,7 +575,8 @@
           </td>
         </tr>
                 <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 ||
-                       selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>
+                       selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) {
+                     request.setAttribute("globalNavHeight", "27"); %>
         <tr align="left">
             <td height="1px" bgcolor="#2F2F5F" align="left"></td>
         </tr>
@@ -587,8 +588,9 @@
           </td>
         </tr>
                 <% } else if (selectValueSetSearchOption.compareToIgnoreCase("Source") == 0) {
-                    request.setAttribute("globalNavHeight", "53");
-                   } else if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { %>
+                    request.setAttribute("globalNavHeight", "49");
+                   } else if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { 
+                     request.setAttribute("globalNavHeight", "28"); %>
         <tr valign="top" align="left">
           <td align="left" class="textbody">
                      &nbsp;&nbsp;
