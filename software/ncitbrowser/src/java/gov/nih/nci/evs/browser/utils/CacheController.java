@@ -479,6 +479,12 @@ System.out.println("===================================================");
     }
 
     // value set home page (Source view)
+
+    public JSONArray build_src_vs_tree() {
+		return getRootValueSets(true, true);
+	}
+
+
     public JSONArray getRootValueSets(boolean fromCache, boolean bySource) {
 
         List list = null;// new ArrayList();
@@ -496,7 +502,8 @@ System.out.println("===================================================");
             try {
 
                 //HashMap hmap = ValueSetHierarchy.getRootValueSets(bySource);
-                HashMap hmap = ValueSetHierarchy.build_src_vs_tree();
+                //HashMap hmap = ValueSetHierarchy.build_src_vs_tree();_exclude_src_nodes
+                HashMap hmap = ValueSetHierarchy.build_src_vs_tree_exclude_src_nodes();
 
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
@@ -705,6 +712,42 @@ System.out.println("===================================================");
      * } return nodesArray; }
      */
 
+
+    public JSONArray expand_src_vs_tree(String node_id) {
+		//JSONArray nodesArray = null;
+
+        String key = "expand_src_vs_tree$" + node_id;
+        JSONArray nodesArray = null;
+        Element element = _cache.get(key);
+        if (element != null) {
+            nodesArray = (JSONArray) element.getValue();
+        }
+
+        if (nodesArray == null) {
+            _logger.debug("Not in cache -- calling expand_src_vs_tree_exclude_src_nodes " + node_id);
+            try {
+				//HashMap hmap = ValueSetHierarchy.expand_src_vs_tree(node_id);
+
+				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
+
+				if (hmap == null) {
+					System.out.println("ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes returns NULL???");
+				}
+
+				nodesArray = HashMap2JSONArray(hmap);
+                element = new Element(key, nodesArray);
+                _cache.put(element);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            _logger.debug("Retrieved from cache.");
+        }
+        return nodesArray;
+	}
+
+
+
     public JSONArray HashMap2JSONArray(HashMap hmap) {
 
 		System.out.println("(***********) HashMap2JSONArray ...");
@@ -731,7 +774,7 @@ System.out.println("===================================================");
                     // printTree(childItem, focusCode, depth + 1);
                     JSONObject nodeObject = new JSONObject();
 
-                    System.out.println(childItem._text + " " + childItem._code);
+                    System.out.println(childItem._text + " (" + childItem._code + ")");
 
                     nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
                     nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);

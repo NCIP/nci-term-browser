@@ -438,7 +438,8 @@ System.out.println("node_id: " + node_id);
 				//HashMap getRootValueSets(String codingSchemeURN)
 				String codingSchemeVersion = null;
                 nodesArray =
-                    CacheController.getInstance().getRootValueSets(true, true);
+                    //CacheController.getInstance().getRootValueSets(true, true);
+                    CacheController.getInstance().build_src_vs_tree();
 
                 if (nodesArray != null) {
                     json.put("root_nodes", nodesArray);
@@ -463,24 +464,34 @@ System.out.println("(********) expand_src_vs_tree node_id: " + node_id);
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
 
+				//HashMap hmap = ValueSetHierarchy.expand_src_vs_tree(node_id);
 
-				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree(node_id);
-				nodesArray = CacheController.getInstance().HashMap2JSONArray(hmap);
+				System.out.println("(********) calling CacheController expand_src_vs_tree node_id: " + node_id);
 
+				nodesArray = CacheController.getInstance().expand_src_vs_tree(node_id);
+/*
 				// expand value set
 				if (nodesArray == null) {
                     nodesArray = CacheController.getInstance().getSubValueSets(node_id, true);
 				}
+*/
+
+				if (nodesArray == null) {
+                    System.out.println("(********) CacheController returns nodesArray == null");
+				}
+
 
                 try {
                     if (nodesArray != null) {
-						System.out.println("expand_vs_tree nodesArray != null");
+						System.out.println("expand_src_vs_tree nodesArray != null");
                         json.put("nodes", nodesArray);
                     } else {
-						System.out.println("expand_vs_tree nodesArray == null???");
+						System.out.println("expand_src_vs_tree nodesArray == null???");
 					}
 
                 } catch (Exception e) {
+					e.printStackTrace();
+
                 }
                 response.getWriter().write(json.toString());
                 _logger.debug("Run time (milliseconds): "
