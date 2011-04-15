@@ -63,9 +63,9 @@ public class HTTPUtils {
     private static Logger _logger = Logger.getLogger(HTTPUtils.class);
     private static final String REFERER = "referer";
     private static final int MAX_FONT_SIZE = 29;
-    private static final int MIN_FONT_SIZE = 16;
+    private static final int MIN_FONT_SIZE = 22;
     private static final int MAX_STR_LEN = 18;
-
+    
     public  static final int ABS_MAX_STR_LEN = 40;
 
     /**
@@ -102,10 +102,17 @@ public class HTTPUtils {
      * @return
      */
     public static int maxFontSize(String value) {
-    	if (value == null || value.length() <= MAX_STR_LEN)
-    		return MAX_FONT_SIZE;
-    	int size = MAX_FONT_SIZE - (value.length() - MAX_STR_LEN);
-    	if (size < MIN_FONT_SIZE) size = MIN_FONT_SIZE;
+    	int size;    	
+		if (value == null || value.length() == 0)
+			size = MAX_FONT_SIZE;
+		else if (value.length() >= MAX_STR_LEN)
+			size = MIN_FONT_SIZE;
+		else {
+			// Calculate an intermediate font size
+			size = MIN_FONT_SIZE
+					+ Math.round((MAX_FONT_SIZE / MAX_STR_LEN)
+							/ (MIN_FONT_SIZE / value.length()));
+		}
     	return size;
     }
 
