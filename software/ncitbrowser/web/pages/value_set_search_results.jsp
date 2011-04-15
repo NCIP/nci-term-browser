@@ -37,28 +37,19 @@
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/code.css" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/tree.css" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
-
   <script type="text/javascript">
-  
-    function refresh() {
-      
+    function refresh() {      
       var selectValueSetSearchOptionObj = document.forms["valueSetSearchForm"].selectValueSetSearchOption;
-      
       for (var i=0; i<selectValueSetSearchOptionObj.length; i++) {
         if (selectValueSetSearchOptionObj[i].checked) {
             selectValueSetSearchOption = selectValueSetSearchOptionObj[i].value;
         }
       }
-      
       window.location.href="/ncitbrowser/pages/value_set_terminology_view.jsf?refresh=1"
           + "&nav_type=valuesets" + "&opt="+ selectValueSetSearchOption;
-
-
     }
   </script>
-  
 </head>
-
 <body onLoad="document.forms.valueSetSearchForm.matchText.focus();">
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
@@ -196,31 +187,9 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?uri=<%=HTTPUtils.cleanXSS(vsd_uri)%>">
       
 	<div class="vocabularynamebanner">
-	
-<%
-if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
-%>
-	
 		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
 		    <%=HTTPUtils.cleanXSS(vsd_name)%>
 		  </div>
-<%		  
-} else {
-
-System.out.println("Using small font.");
-%>
-
-
-		  <div class="vocabularynameshort" STYLE="font-size:x-small; ">
-		    <%=HTTPUtils.cleanXSS(vsd_name)%>
-		  </div>
-
-<%
-}
-%>
-		  
-		  
-		  
 	</div>
   
 	    </a>
