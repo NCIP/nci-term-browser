@@ -8,6 +8,7 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.List"%>
+<%@ page import="java.net.URLEncoder"%>
 
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
@@ -436,8 +437,7 @@ if (show_rank_column) {
 <tr>
                     <td class="datacoldark"><%=source_namespace%></td>
         <td class="datacoldark">
-<a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">
+<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=URLEncoder.encode(source_code,"UTF-8")%>">
       <%=source_code%>
 </a>
 
@@ -462,8 +462,7 @@ if (show_rank_column) {
         <td class="datacoldark"><%=target_namespace%></td>
         <td class="datacoldark">
 
-<a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'">
+<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=URLEncoder.encode(target_code,"UTF-8")%>">
       <%=target_code%>
 </a>
 
