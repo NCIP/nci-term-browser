@@ -582,10 +582,8 @@ a.hideLink
 {
  font-weight: bold;
  font-size: 11px;
- color: #2F2F5F;
- position: relative;
- left: 370px;
- top: 0px;
+ color: #2F2F5F; 
+ text-align: right;
 }
 
 /* ------------- Tab bar classes ------------- */
