@@ -98,11 +98,7 @@ if (action != null) {
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 				 info.setSelected(true);
 			 }
-			 /*
-			 if (ontology_list == null) {
-				 info.setSelected(false);
-			 }
-			 */
+
 	         }
 
 		 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
@@ -119,11 +115,7 @@ if (action != null) {
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 				 info.setSelected(true);
 			 }
-			 /*
-			 if (ontology_list == null) {
-				 info.setSelected(false);
-			 }
-			 */
+
 	     }
 		 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 		     info.setExpanded(false);
@@ -319,12 +311,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
   int hide_counter = 0; 
   int show_counter = 0;
                       for (int i = 0; i < display_name_vec.size(); i++) {
-                      
-  //String index_str = new Integer(i).toString();
-  //System.out.println("(*) multiple_search: index_str " + index_str);
- 
-                      
-                        OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                       OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         int sort_category = info.getSortCategory();
                         String display_name = info.getDisplayName();
                         String label = info.getLabel();
@@ -469,16 +456,8 @@ if (show_counter == 1) {
                   
                   </td>
                   
-                  
                   </font>
                   
- 
-                  <%
-                   String show_versions_of_cs = "show_versions_of" + cs_nm.replaceAll(" ", "_");
-                   System.out.println("JSP show_versions_of_cs:" + show_versions_of_cs);
-                  %>
-                  
-                  <input type="hidden" id=<%=show_versions_of_cs%> name=<%=show_versions_of_cs%> value="<%=cs_nm%>">
 				       
 				   <%    
 				   } else if (info.isProduction() && info.getHasMultipleVersions() && info.getExpanded()) {
@@ -522,13 +501,6 @@ if (hide_counter == 1) {
                   
                   </td>
                   </font>
-                  
-                  <%
-                  String hide_versions_of_cs = "hide_versions_of" + cs_nm.replaceAll(" ", "_");
-                  System.out.println("JSP hide_versions_of_cs:" + hide_versions_of_cs);
-                  %>
-                  
-                  <input type="hidden" id=<%=hide_versions_of_cs%> name=<%=hide_versions_of_cs%> value="<%=cs_nm%>">				   
 
 				       
 				   <%    

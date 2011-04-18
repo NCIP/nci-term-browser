@@ -101,86 +101,8 @@ public class UserSessionBean extends Object {
         _ontologiesToSearchOn = new ArrayList<String>();
         contextPath = getContextPath();
         _ontologyInfo_map = new HashMap<String, OntologyInfo>();
-        initializeOntologyInfoMap();
     }
 
-
-    public Collection<OntologyInfo> getConcepts() {
-        if (_ontologyInfo_map == null) initializeOntologyInfoMap();
-        return _ontologyInfo_map.values();
-    }
-
-
-    public void initializeOntologyInfoMap() {
-        if (_ontologyInfo_map != null) return;
-
-        _ontologyInfo_map = new HashMap<String, OntologyInfo>();
-
-		List ontology_list = DataUtils.getOntologyList();
-		int num_vocabularies = ontology_list.size();
-
-		if (display_name_vec == null) {
-		  display_name_vec = new Vector();
-	    }
-
-
-   	    for (int i = 0; i < ontology_list.size(); i++) {
-			SelectItem item = (SelectItem) ontology_list.get(i);
-			String value = (String) item.getValue();
-			String label = (String) item.getLabel();
-
-			String scheme = DataUtils.key2CodingSchemeName(value);
-			String version = DataUtils.key2CodingSchemeVersion(value);
-
-			String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
-			if (DataUtils.isNull(display_name)) {
-				display_name = DataUtils.getLocalName(scheme);
-			}
-
-			String sort_category = DataUtils.getMetadataValue(
-				scheme, version, "vocabulary_sort_category");
-
-			OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
-			display_name_vec.add(info);
-			_ontologyInfo_map.put(label, info);
-
-			if (!info.isProduction()) {
-				System.out.println("Non-production version: " + scheme + " version: " + version);
-		    }
-
-	    }
-
-		for (int i = 0; i < display_name_vec.size(); i++) {
-		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		     if (!DataUtils.isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
-		        Vector w = DataUtils.getNonProductionOntologies(display_name_vec, info.getCodingScheme());
-		        if (w.size() > 0) {
-					info.setHasMultipleVersions(true);
-		        }
-		     }
-		}
-
-		String ontologiesToSearchOnStr = DataUtils.getDefaultOntologiesToSearchOnStr();
-
-		for (int k = 0; k < display_name_vec.size(); k++) {
-		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-		     if (info.getHasMultipleVersions()) {
-			 	System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
-		     }
-
-		     if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
-			 	info.setSelected(true);
-		     }
-		}
-
- 		for (int k = 0; k < display_name_vec.size(); k++) {
- 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
- 		     if (!info.isProduction()) {
- 		          info.setSelected(false);
- 		     }
-		}
-        Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
-	}
 
     public String getContextPath() {
         if (contextPath == null) {
@@ -582,19 +504,11 @@ mappingIteratorBean.initialize();
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
 
-
- System.out.println("(**************** iterator = wrapper.getIterator()");
-
-
-
                     if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
-                    } else {
- System.out.println("(**************** iterator == null???");
-
-					}
+                    }
 
                 }
             }
@@ -619,9 +533,6 @@ mappingIteratorBean.initialize();
             }
 
         } else if (searchTarget.compareTo("relationships") == 0) {
-
-
-System.out.println("Relationship search *************************************************");
 
 
             designationOnly = true;
@@ -839,9 +750,6 @@ System.out.println("Relationship search ****************************************
             return;
         }
         String newValue = (String) event.getNewValue();
-
-        System.out.println("(*) UserSessionBean resultsPerPageChanged newValue: " + newValue);
-
 
         setSelectedResultsPerPage(newValue);
     }
@@ -1572,8 +1480,6 @@ int selected_knt = 0;
         String scheme = (String) request.getParameter("dictionary");
         String version = (String) request.getParameter("version");
 
-System.out.println("advancedSearchAction version: " + version);
-
 
         SearchStatusBean bean =
             (SearchStatusBean) FacesContext.getCurrentInstance()
@@ -2020,11 +1926,7 @@ System.out.println("advancedSearchAction version: " + version);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-		//String action_cs = (String) request.getParameter("show_versions_of");
-		//System.out.println("showOtherVersions -- " + action_cs);
-
         String[] ontology_list = request.getParameterValues("ontology_list");
-        //String action_cs = (String) request.getParameter("cs_name");
 
         String ontologiesToSearchOnStr = "|";
         if (ontology_list != null) {
@@ -2035,22 +1937,6 @@ System.out.println("advancedSearchAction version: " + version);
 	    }
 
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-	    /*
-	    String action_cs = null;
-		for (int i = 0; i < display_name_vec.size(); i++) {
-		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		     String cs_name = info.getCodingScheme();
-	         String show_versions_of_cs = "show_versions_of" + cs_name.replaceAll(" ", "_");
-		     //System.out.println("show_versions_of_cs: " + show_versions_of_cs);
-
-		     if (request.getParameter(show_versions_of_cs) != null) {
-				 action_cs = info.getCodingScheme();
-				 break;
-			 }
-		}
-		*/
-
-		//System.out.println("action_cs: " + action_cs);
 		String action_cs = action_coding_scheme;
 
 		System.out.println("action_cs: " + action_cs);
@@ -2101,21 +1987,7 @@ System.out.println("advancedSearchAction version: " + version);
 	    }
 
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-	    /*
-	    String action_cs = null;
-		for (int i = 0; i < display_name_vec.size(); i++) {
-		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		     String cs_name = info.getCodingScheme();
-		     String hide_versions_of_cs = "hide_versions_of" + cs_name.replaceAll(" ", "_");
 
-		     //System.out.println("hide_versions_of_cs: " + hide_versions_of_cs);
-
-		     if (request.getParameter(hide_versions_of_cs) != null) {
-				 action_cs = info.getCodingScheme();
-				 break;
-			 }
-		}
-		*/
 		String action_cs = action_coding_scheme;
 
 		System.out.println("action_cs: " + action_cs);
@@ -2170,11 +2042,6 @@ System.out.println("advancedSearchAction version: " + version);
         FacesContext ctx = FacesContext.getCurrentInstance();
         String action_cs_index_str = (String) ctx.getExternalContext().getRequestParameterMap().get("action_cs_index");
 
-        //System.out.pritnln(action_cs_index_str);
-
-        //int action_cs_index = Integer.parseInt(action_cs_index_str);
-        System.out.println("Show Event received for action_cs_index: " + action_cs_index_str);
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -2194,17 +2061,11 @@ System.out.println("advancedSearchAction version: " + version);
 			 }
 		}
 
-		System.out.println("showListener -- action_coding_scheme: " + action_coding_scheme);
-
-
     }
 
     public void hideListener(ActionEvent evt) {
         FacesContext ctx = FacesContext.getCurrentInstance();
         String action_cs_index_str = (String) ctx.getExternalContext().getRequestParameterMap().get("action_cs_index");
-        //int action_cs_index = Integer.parseInt(action_cs_index_str);
-        System.out.println("Hide Event received for action_cs_index: " + action_cs_index_str);
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -2222,8 +2083,6 @@ System.out.println("advancedSearchAction version: " + version);
 				 }
 			 }
 		}
-
-		System.out.println("hideListener -- action_coding_scheme: " + action_coding_scheme);
 
     }
 }
