@@ -517,28 +517,31 @@ public class CartActionBean {
 
             // Build a buffer holding the XML data
     		
-            StringBuffer buf = null;           
-    		InputStream reader = vsd_service.exportValueSetResolution(vsd, null,
-    			csvList, null, false);
-    		
-			if (reader != null) {
-				buf = new StringBuffer();
-				try {
+            StringBuffer buf = null;
+            InputStream reader = null;
+            
+            try {
+	    		reader = vsd_service.exportValueSetResolution(vsd, null,
+	    			csvList, null, false);
+	    		
+				if (reader != null) {
+					buf = new StringBuffer();
 					for (int c = reader.read(); c != -1; c = reader.read()) {
 						buf.append((char) c);
 					}	
-				} catch (IOException e) {
-					throw e;
-				} finally {
-					try {
-						reader.close();
-					} catch (Exception e) {
-						// ignored
-					}
+				} else {
+					buf = new StringBuffer("<error>exportValueSetResolution returned null.</error>");
 				}
-			} else {
-				buf = new StringBuffer("<error>exportValueSetResolution returned null.</error>");
-			}
+            } catch (Exception e) {
+				buf = new StringBuffer("<error>The VSD export service is not supported by your current LexEVS setup.</error>");
+				buf.append("<!-- " + e.getMessage() + " -->");
+			} finally {
+				try {
+					reader.close();
+				} catch (Exception e) {
+					new StringBuffer("<error>" + e.getMessage() + "</error>");
+				}
+			}            
             
             // Send export XML string to browser
 
