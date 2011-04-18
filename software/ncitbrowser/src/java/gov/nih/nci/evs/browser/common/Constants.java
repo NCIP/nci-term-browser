@@ -74,7 +74,7 @@ public class Constants {
     public static final int DEFAULT_PAGE_SIZE = 50;
 
     public static final String ERROR_NO_VOCABULARY_SELECTED =
-        "Please select at least one vocabulary.";
+        "Please select at least one terminology.";
     public static final String ERROR_NO_SEARCH_STRING_ENTERED =
         "Please enter a search string.";
     public static final String ERROR_NO_MATCH_FOUND = "No match found.";
