@@ -46,12 +46,15 @@
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
       <div id="main-area">
-        <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+        <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
         
 <%
 
 String message = (String) request.getSession().getAttribute("message");  
 request.getSession().removeAttribute("message");  
+
+String export_format = (String) request.getSession().getAttribute("format"); 
+if (export_format == null) export_format = "XML";
 
 Vector coding_scheme_ref_vec = (Vector) request.getSession().getAttribute("cart_coding_scheme_ref_vec");
 
@@ -172,6 +175,9 @@ System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
 
               </table>
 
+<%
+if (export_format.compareTo("XML") == 0) {
+%>
                   <tr><td>
                     <h:commandButton id="continue_resolve" value="continue_resolve" action="#{CartActionBean.exportCartXML}"
                       onclick="javascript:cursor_wait();"
@@ -180,7 +186,24 @@ System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
                       tabindex="2">
                     </h:commandButton>
                   </td></tr>
-                  
+ <%             
+ } else {
+ %>
+ 
+                   <tr><td>
+                     <h:commandButton id="continue_resolve" value="continue_resolve" action="#{CartActionBean.exportCartCSV}"
+                       onclick="javascript:cursor_wait();"
+                       image="#{valueSetSearch_requestContextPath}/images/continue.gif"
+                       alt="Resolve"
+                       tabindex="2">
+                     </h:commandButton>
+                  </td></tr>
+ 
+ <%
+ }
+ %>             
+              
+              <input type="hidden" name="format" value="<%=export_format%>">
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
             
