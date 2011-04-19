@@ -127,14 +127,27 @@
                   </h:commandLink>&nbsp; 
 -->
 
-                  <h:commandLink action="#{CartActionBean.cartVersionSelectionAction}" styleClass="texttitle-blue-small">
+                  <h:commandLink action="#{CartActionBean.cartVersionSelectionAction}" styleClass="texttitle-blue-small"
+                      actionListener="#{CartActionBean.formatListener}"  immediate="true"  >
                     <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />
+                    <f:param name="format" value="XML" />
                   </h:commandLink>&nbsp; 
 
-                  
-                  <h:commandLink action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small">
+<!--                 
+                  <h:commandLink action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small"
+                    actionListener="#{CartActionBean.formatListener}"  immediate="true"  >
                     <h:graphicImage value="../images/exportcsv.gif" alt="Export CSV" title="Generate a list of cart concepts in CSV format readable from Excel" style="border: none" />
-                  </h:commandLink>     
+                    <f:param name="format" value="CSV" /> 
+                  </h:commandLink>
+                  
+-->
+                  <h:commandLink action="#{CartActionBean.cartVersionSelectionAction}" styleClass="texttitle-blue-small"
+                    actionListener="#{CartActionBean.formatListener}"  immediate="true"  >
+                    <h:graphicImage value="../images/exportcsv.gif" alt="Export CSV" title="Generate a list of cart concepts in CSV format readable from Excel" style="border: none" />
+                    <f:param name="format" value="CSV" /> 
+                  </h:commandLink>
+                  
+                  
   				  </td>
 				</tr>      
 			</table>	

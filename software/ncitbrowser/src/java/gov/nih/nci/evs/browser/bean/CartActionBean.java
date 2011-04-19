@@ -15,6 +15,9 @@ import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.HashSet;
 
+import javax.faces.event.*;
+
+
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Utility.Constructors;
@@ -99,6 +102,9 @@ public class CartActionBean {
     private String _message = null;
     private List<SelectItem> _selectVersionItems = null;
     private List<String> _selectedVersionItems = null;
+
+    private String _exportFormat = "XML";
+
 
     // Local constants
     static public final String XML_FILE_NAME = "cart.xml";
@@ -382,7 +388,6 @@ public class CartActionBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         HashMap<String, SchemeVersion> versionList = null;
@@ -593,6 +598,9 @@ public class CartActionBean {
      * @throws Exception
      */
     public String exportCartCSV() throws Exception {
+
+System.out.println("(***************) exportCartCSV to be changed to exportCartToCSV");
+
 
         _messageflag = false;
 
@@ -1048,6 +1056,12 @@ public class CartActionBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+String format = (String) request.getParameter("format");
+System.out.println("cartVersionSelectionAction format: " + format);
+
+		request.getSession().setAttribute("format", format);
+
+
         int selectedCount = 0;
 		for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
 			Concept item = (Concept)i.next();
@@ -1089,5 +1103,84 @@ public class CartActionBean {
 		}
     }
 
+
+
+    public String exportCartToCSV() throws Exception {
+
+        _messageflag = false;
+
+        SearchCart search = new SearchCart();
+        ResolvedConceptReference ref = null;
+        StringBuffer sb = new StringBuffer();
+
+    	if (getCount() < 1) {
+        	_messageflag = true;
+        	_message = NO_CONCEPTS;
+        	return null;
+    	}
+    	if (!hasSelected()) {
+        	_messageflag = true;
+        	_message = NOTHING_SELECTED;
+        	return null;
+    	}
+
+        // Get Entities to be exported and build export file
+        // in memory
+
+        if (_cart != null && _cart.size() > 0) {
+            // Add header
+            sb.append("Concept,");
+            sb.append("Vocabulary,");
+            sb.append("Version Code,");
+            sb.append("Concept Code,");
+            sb.append("URL");
+            sb.append("\r\n");
+
+            // Find coding schemes
+
+
+            // Add concepts
+            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+                Concept item = (Concept)i.next();
+                ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+                if (ref != null) {
+                    _logger.debug("Exporting: " + ref.getCode());
+                    sb.append("\"" + clean(item.name) + "\",");
+                    sb.append("\"" + clean(item.codingScheme) + "\",");
+                    sb.append("\"" + clean(item.version) + "\",");
+                    sb.append("\"" + clean(item.code) + "\",");
+                    sb.append("\"" + clean(item.url) + "\"");
+                    sb.append("\r\n");
+                }
+            }
+
+            // Send export file to browser
+
+            HttpServletResponse response = (HttpServletResponse) FacesContext
+                    .getCurrentInstance().getExternalContext().getResponse();
+            response.setContentType(CSV_CONTENT_TYPE);
+            response.setHeader("Content-Disposition", "attachment; filename="
+                    + CSV_FILE_NAME);
+            response.setContentLength(sb.length());
+            ServletOutputStream ouputStream = response.getOutputStream();
+            ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+            ouputStream.flush();
+            ouputStream.close();
+
+            // Don't allow JSF to forward to cart.jsf
+            FacesContext.getCurrentInstance().responseComplete();
+        }
+
+		return null;
+    }
+
+    public void formatListener(ActionEvent evt) {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        String format = (String) ctx.getExternalContext().getRequestParameterMap().get("format");
+        _exportFormat = format;
+
+        System.out.println("formatListener format: " + format);
+
+    }
 
 } // End of CartActionBean
