@@ -30,24 +30,7 @@
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-
-<%
-String help_dictionary = (String) request.getSession().getAttribute("dictionary");
-if (help_dictionary == null || help_dictionary == "null") {
-%>
-   <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
-<%
-}
-else if (help_dictionary.compareTo("NCI Thesaurus") == 0) {
-%>
-   <%@ include file="/pages/templates/content-header.jsp" %>
-<%
-} else {
-%>
-   <%@ include file="/pages/templates/content-header-other.jsp" %>
-<%
-}
-%>
+    <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
       <!-- Page content -->
       <div class="pagecontent">
         <a name="evs-content" id="evs-content"></a>
