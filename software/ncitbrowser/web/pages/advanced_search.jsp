@@ -411,46 +411,10 @@ System.out.println("adv_search_version: " + adv_search_version);
                         </h:outputLabel>
                       </td>
                     </tr>
-
-                    <tr>
-                      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                      <td>
-                        <h:outputLabel id="rel_search_rela_Label" value="RELA" styleClass="textbody">
-                          <select id="rel_search_rela" name="rel_search_rela" size="1">
-                          <%
-                            t = " ";
-                            if (t.compareTo(rel_search_rela) == 0) {
-                          %>
-                              <option value="<%=t%>" selected><%=t%></option>
-                          <%} else {%>
-                              <option value="<%=t%>"><%=t%></option>
-                          <%}%>
-
-                          <%
-                            Vector rela_vec = OntologyBean.getRELAs(adv_search_vocabulary, adv_search_version);
-                            for (int i=0; i<rela_vec.size(); i++) {
-                              t = (String) rela_vec.elementAt(i);
-                              //_logger.debug("rela: " + t);
-                              if (t.compareTo(rel_search_rela) == 0) {
-                          %>
-                                <option value="<%=t%>" selected><%=t%></option>
-                          <%  } else { %>
-                                <option value="<%=t%>"><%=t%></option>
-                          <%
-                              }
-                            }
-                          %>
-                          </select>
-                        </h:outputLabel>
-                      </td>
-                    </tr>
                   <% } else { %>
                     <input type="hidden" name="selectProperty" id="selectProperty" value="<%=selectProperty%>">
                     <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=rel_search_association%>">
                     <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=rel_search_rela%>">
-                    
-                    
-                    
 
                   <% }%>
 
