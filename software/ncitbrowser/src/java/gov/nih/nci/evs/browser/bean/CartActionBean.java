@@ -5,7 +5,6 @@ import gov.nih.nci.evs.browser.utils.DataUtils;
 import gov.nih.nci.evs.browser.utils.SearchCart;
 import gov.nih.nci.evs.browser.utils.SortUtils;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;

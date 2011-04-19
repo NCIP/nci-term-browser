@@ -578,14 +578,6 @@ a.hideLink
  color: #2F2F5F;
 }
 
-.global-nav-line2, .global-nav-line2 a text
-{
- font-weight: bold;
- font-size: 11px;
- color: #2F2F5F; 
- text-align: right;
-}
-
 /* ------------- Tab bar classes ------------- */
 .tabtable
 {

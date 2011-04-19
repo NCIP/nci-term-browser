@@ -204,7 +204,10 @@
   
   <div class="pagecontentLittlePadding">
     <h:form>
-      <div class="global-nav-line2">
+      <table border="0" width="100%" class="global-nav">
+        <tr>
+            <td width="365px"></td>
+            <td> 
         <% Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE }; 
            boolean tree_access2 = ! DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(dictionary);
            boolean typeLink_isMapping2 = DataUtils.isMapping(dictionary, null);
@@ -232,7 +235,9 @@
           <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
             target="_blank" alt="Term Suggestion">Suggest Changes</a>
         <% } %>
-      </div>
+            </td>
+        </tr>
+      </table>
     </h:form>              
   
   <a name="evs-content" id="evs-content"></a>  
