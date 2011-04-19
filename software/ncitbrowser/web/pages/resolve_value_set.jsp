@@ -133,6 +133,7 @@ System.out.println("resolve_value_set.jsp cs_name: " + cs_name);
 System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
 		    
 		    String cs_tag = DataUtils.getVocabularyVersionTag(cs_name, cs_version);
+		    if (cs_tag == null) cs_tag = "";
 		    
 		    if (cs_name.compareTo(prev_cs_urn) != 0) {
 		       k++;

@@ -84,6 +84,20 @@
 	      <div class="pagecontent">
 	      	<a name="evs-content" id="evs-content"></a>
 	      	<table border="0" width="100%">
+	      	
+	     <%
+	     String message = (String) request.getSession().getAttribute("message");
+	     if (message != null) {
+	         request.getSession().removeAttribute("message");
+	     %>    
+	         <tr><td>
+	         <p class="textbodyred">&nbsp;<%=message%></p>
+	         </td></tr>
+	     <%    
+	     }
+	     %>
+	     
+	      	
 	      		<tr>
 	      			<td>
 						<table border="0">
@@ -106,9 +120,18 @@
                   <h:commandLink action="#{CartActionBean.removeFromCart}" styleClass="texttitle-blue-small" onclick="return confirmRemoveMessage();">
                     <h:graphicImage value="../images/remove.gif" alt="Remove" title="Remove concepts from the cart" style="border: none" />
                   </h:commandLink>&nbsp;
+                  
+<!--                  
                   <h:commandLink onclick="javascript:popupSelectVersions();" styleClass="texttitle-blue-small">
                     <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />
-                  </h:commandLink>&nbsp;                  
+                  </h:commandLink>&nbsp; 
+-->
+
+                  <h:commandLink action="#{CartActionBean.cartVersionSelectionAction}" styleClass="texttitle-blue-small">
+                    <h:graphicImage value="../images/exportxml.gif" alt="Export XML" title="Export cart contents in LexGrid XML format" style="border: none" />
+                  </h:commandLink>&nbsp; 
+
+                  
                   <h:commandLink action="#{CartActionBean.exportCartCSV}" styleClass="texttitle-blue-small">
                     <h:graphicImage value="../images/exportcsv.gif" alt="Export CSV" title="Generate a list of cart concepts in CSV format readable from Excel" style="border: none" />
                   </h:commandLink>     

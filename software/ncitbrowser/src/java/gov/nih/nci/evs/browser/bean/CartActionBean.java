@@ -3,6 +3,7 @@ package gov.nih.nci.evs.browser.bean;
 import gov.nih.nci.evs.browser.utils.RemoteServerUtil;
 import gov.nih.nci.evs.browser.utils.DataUtils;
 import gov.nih.nci.evs.browser.utils.SearchCart;
+import gov.nih.nci.evs.browser.utils.SortUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Vector;
+import java.util.HashSet;
 
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
@@ -32,7 +35,7 @@ import org.LexGrid.naming.SupportedCodingScheme;
 import org.LexGrid.naming.SupportedNamespace;
 import org.LexGrid.valueSets.DefinitionEntry;
 import org.LexGrid.valueSets.EntityReference;
-import org.LexGrid.valueSets.ValueSetDefinition; 
+import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.valueSets.ValueSetDefinitionReference;
 import org.LexGrid.valueSets.types.DefinitionOperator;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
@@ -95,7 +98,7 @@ public class CartActionBean {
     private String _backurl = null;
     private boolean _messageflag = false;
     private String _message = null;
-    private List<SelectItem> _selectVersionItems = null; 
+    private List<SelectItem> _selectVersionItems = null;
     private List<String> _selectedVersionItems = null;
 
     // Local constants
@@ -105,12 +108,12 @@ public class CartActionBean {
     static public final String CSV_CONTENT_TYPE = "text/csv";
 
     // Error messages
-    
+
     static public final String NO_CONCEPTS = "No concepts in cart.";
     static public final String NOTHING_SELECTED = "No concepts selected.";
     static public final String EXPORT_COMPLETE = "Export completed.";
     static private final String PROD_VERSION = "[Production]";
-    
+
     // Getters & Setters
 
     /**
@@ -136,7 +139,7 @@ public class CartActionBean {
     public void setVersion(String version) {
         this._version = version;
     }
-    
+
     /**
      * Return number of items in cart
      * @return
@@ -152,8 +155,8 @@ public class CartActionBean {
      */
     public boolean getMessageflag() {
     	return _messageflag;
-    }    
-    
+    }
+
     /**
      * Return Popup message text
      * @return
@@ -161,8 +164,8 @@ public class CartActionBean {
     public String getMessage() {
     	_messageflag = false;
     	return _message;
-    }    
-    
+    }
+
     /**
      * Compute a back to url that is not the cart page
      * @return
@@ -190,23 +193,23 @@ public class CartActionBean {
         if (_selectVersionItems == null) _initDisplayItems();
         return _selectVersionItems;
     }
-    
+
     public void setSelectVersionItems(List<SelectItem> selectVersionItems) {
     	this._selectVersionItems = selectVersionItems;
     }
-    
+
     public List<String> getSelectedVersionItems() throws Exception {
-    	
+
         if (_selectedVersionItems == null) _initDisplayItems();
         return _selectedVersionItems;
     }
-    
+
     public void setSelectedVersionItems(List<String> selectedVersionItems) {
     	this._selectedVersionItems = selectedVersionItems;
-    }    
-    
+    }
+
     // ******************** Class methods ************************
-    
+
     /**
      * Initialize the cart container
      */
@@ -219,14 +222,14 @@ public class CartActionBean {
 		SearchCart search = new SearchCart();
 		HashMap<String, SchemeVersion> versionList
 			= getSchemeVersionList(search);
-		
-		// Init scheme version scheme list		
+
+		// Init scheme version scheme list
 		initSelectVersionItems(versionList);
-		
+
 		// Init scheme version selected list
-		initSelectedVersionItems(versionList);		
+		initSelectedVersionItems(versionList);
 	}
-		
+
     /**
      * Add concept to the Cart
      * @return
@@ -295,10 +298,10 @@ public class CartActionBean {
         // Add scheme and version back in for redisplay
         request.setAttribute("dictionary", codingScheme);
         request.setAttribute("version", version);
-        
+
         // Rebuild version selected lists
         _initDisplayItems();
-        
+
 		return null;
     }
 
@@ -308,14 +311,14 @@ public class CartActionBean {
      */
     public String removeFromCart() {
     	_messageflag = false;
-    	
+
     	if (getCount() < 1) {
         	_messageflag = true;
-        	_message = NO_CONCEPTS;    		
+        	_message = NO_CONCEPTS;
     	} else if (!hasSelected()) {
         	_messageflag = true;
-        	_message = NOTHING_SELECTED;        	
-    	} else {    	
+        	_message = NOTHING_SELECTED;
+    	} else {
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
                 if (item.getCheckbox().isSelected()) {
@@ -324,7 +327,7 @@ public class CartActionBean {
                 }
             }
     	}
-	        
+
         return "showcart";
     }
 
@@ -334,18 +337,18 @@ public class CartActionBean {
      */
     public String selectAllInCart() {
         _messageflag = false;
-        
+
     	if (getCount() < 1) {
         	_messageflag = true;
-        	_message = NO_CONCEPTS;    	 
+        	_message = NO_CONCEPTS;
     	} else {
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
-                Concept item = (Concept)i.next();                
+                Concept item = (Concept)i.next();
                 item.setSelected(true);
             }
         }
         return null;
-    }    
+    }
 
     /**
      * Unselect all concept(s) in the Cart
@@ -353,13 +356,13 @@ public class CartActionBean {
      */
     public String unselectAllInCart() {
         _messageflag = false;
-        
+
     	if (getCount() < 1) {
         	_messageflag = true;
-        	_message = NO_CONCEPTS;    		
+        	_message = NO_CONCEPTS;
     	} else if (!hasSelected()) {
         	_messageflag = true;
-        	_message = NOTHING_SELECTED;        	
+        	_message = NOTHING_SELECTED;
     	} else {
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
@@ -367,7 +370,7 @@ public class CartActionBean {
             }
         }
         return null;
-    }    
+    }
 
     /**
      * Export cart in XML format
@@ -375,6 +378,11 @@ public class CartActionBean {
      * @throws Exception
      */
     public String exportCartXML() throws Exception {
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
 
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
@@ -384,19 +392,19 @@ public class CartActionBean {
         	_messageflag = true;
         	_message = NO_CONCEPTS;
         	return null;
-    	} 
+    	}
     	if (!hasSelected()) {
         	_messageflag = true;
-        	_message = NOTHING_SELECTED;        
+        	_message = NOTHING_SELECTED;
         	return null;
-    	}  	
+    	}
 
         // Get Entities to be exported and build export XML string
         // in memory
 
         if (_cart != null && _cart.size() > 0) {
 
-        	// Generate unique list of scheme / versions for the cart        	
+        	// Generate unique list of scheme / versions for the cart
         	versionList = getSchemeVersionList(search);
 
         	// Setup lexbig service
@@ -404,15 +412,15 @@ public class CartActionBean {
 				.getLexEVSValueSetDefinitionServices();
 
             //instantiate the mappings
-            Mappings maps = new Mappings();    		
-    		
+            Mappings maps = new Mappings();
+
     		// Instantiate VSD
     		ValueSetDefinition vsd = new ValueSetDefinition();
     		vsd.setMappings(maps);
 			vsd.setValueSetDefinitionURI("EXPORT:VSDREF_CART");
 			vsd.setValueSetDefinitionName("VSDREF_CART");
 			vsd.setConceptDomain("Concepts");
-			
+
 			// Add supported coding schemes
 			DuplicateCheck dc = new DuplicateCheck();
 			for (Iterator<Entry<String, SchemeVersion>> i = versionList
@@ -428,73 +436,89 @@ public class CartActionBean {
 							+ sv.codingScheme + " ("
 							+ sv.uri + ")");
 				}
-			}		
-            
+			}
+
             // Add supported name spaces
 			dc.reset();
 			for (Iterator<Entry<String, SchemeVersion>> i = versionList
 					.entrySet().iterator(); i.hasNext();) {
 				Entry<String, SchemeVersion> x = i.next();
-				SchemeVersion sv = x.getValue();				
-            	SupportedNamespace sns = new SupportedNamespace();	
+				SchemeVersion sv = x.getValue();
+            	SupportedNamespace sns = new SupportedNamespace();
             	sns.setLocalId(sv.namespace);
             	sns.setEquivalentCodingScheme(sv.codingScheme);
             	if (dc.test(sv.namespace)) {
             		maps.addSupportedNamespace(sns);
             		_logger.debug("Adding NS: " + sv.namespace);
-            	}	
-            }    
-   
+            	}
+            }
+
 			// Instantiate DefinitionEntry(Rule Set)
 			DefinitionEntry de = new DefinitionEntry();
 			de.setRuleOrder(1L);
 			de.setOperator(DefinitionOperator.OR);
-		
-			// Instantiate ValueSetDefinitionReference 
+
+			// Instantiate ValueSetDefinitionReference
 			ValueSetDefinitionReference vsdRef = new ValueSetDefinitionReference();
 			vsdRef.setValueSetDefinitionURI("EXPORT:CART_NODES");
 			de.setValueSetDefinitionReference(vsdRef);
-			vsd.addDefinitionEntry(de);			
-			
+			vsd.addDefinitionEntry(de);
+
 			// Add terms from the cart - DefinitionEntry(Rule Set)
-			
+
 			DefinitionEntry deSub = null;
 			long ruleOrder = 2;
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept) i.next();
                 ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
-                
+
                 if (item.getSelected() && ref != null) {
 					_logger.debug("Exporting: " + ref.getCode() + "("
 							+ item.codingScheme + ":" + item.version + ")");
 
 					deSub = new DefinitionEntry();
 					deSub.setRuleOrder(ruleOrder); ruleOrder++;
-					deSub.setOperator(DefinitionOperator.OR);   					
-					
+					deSub.setOperator(DefinitionOperator.OR);
+
             		// Instantiate EntityReference
-            		EntityReference entityRef = new EntityReference();					
+            		EntityReference entityRef = new EntityReference();
                     String entityCode = ref.getEntity().getEntityCode();
-                    String entityNameSpace = ref.getCodeNamespace();                     
-            		 
+                    String entityNameSpace = ref.getCodeNamespace();
+
             		// set appropriate values for entityReference
             		entityRef.setEntityCode(entityCode);
             		entityRef.setEntityCodeNamespace(entityNameSpace);
             		entityRef.setLeafOnly(false);
-            		entityRef.setTransitiveClosure(false);            		
+            		entityRef.setTransitiveClosure(false);
             		deSub.setEntityReference(entityRef);
-            		vsd.addDefinitionEntry(deSub);  
+            		vsd.addDefinitionEntry(deSub);
                 }
             }
-            
+
 			// Add list of coding schemes version reference
 			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+			HashSet uri_hset = new HashSet();
+            Vector cart_coding_scheme_ref_vec = (Vector) request.getSession().getAttribute("cart_coding_scheme_ref_vec");
+            for (int i=0; i<cart_coding_scheme_ref_vec.size(); i++) {
+				String cart_coding_scheme_ref = (String) cart_coding_scheme_ref_vec.elementAt(i);
+				Vector u = DataUtils.parseData(cart_coding_scheme_ref);
+				String cs_uri = (String) u.elementAt(0);
+				if (!uri_hset.contains(cs_uri)) {
+					uri_hset.add(cs_uri);
+					String version = (String) request.getParameter(cs_uri);
+					if (version != null) {
+						csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_uri, version));
+				    }
+				}
+			}
+
+			/*
 			boolean flag;
 			for (Iterator<Entry<String, SchemeVersion>> i = versionList
 					.entrySet().iterator(); i.hasNext();) {
 				Entry<String, SchemeVersion> x = i.next();
-				SchemeVersion sv = x.getValue();	
-				
+				SchemeVersion sv = x.getValue();
+
 				// Add only selected scheme versions
 				flag = false;
 				if (inSelectedlist(sv.uri)) {
@@ -503,8 +527,8 @@ public class CartActionBean {
 				} else {
 					flag = true;
 				}
-		
-				if (flag) {						
+
+				if (flag) {
 					csvList.addAbsoluteCodingSchemeVersionReference(Constructors
 						.createAbsoluteCodingSchemeVersionReference(
 							sv.uri,
@@ -512,23 +536,24 @@ public class CartActionBean {
 					_logger.debug("Adding CS Ver Ref: "
 							+ sv.uri
 							+ " (" +  sv.version + ")");
-				}				
+				}
 			}
+			*/
 
             // Build a buffer holding the XML data
-    		
+
             StringBuffer buf = null;
             InputStream reader = null;
-            
+
             try {
 	    		reader = vsd_service.exportValueSetResolution(vsd, null,
 	    			csvList, null, false);
-	    		
+
 				if (reader != null) {
 					buf = new StringBuffer();
 					for (int c = reader.read(); c != -1; c = reader.read()) {
 						buf.append((char) c);
-					}	
+					}
 				} else {
 					buf = new StringBuffer("<error>exportValueSetResolution returned null.</error>");
 				}
@@ -541,8 +566,8 @@ public class CartActionBean {
 				} catch (Exception e) {
 					new StringBuffer("<error>" + e.getMessage() + "</error>");
 				}
-			}            
-            
+			}
+
             // Send export XML string to browser
 
             HttpServletResponse response = (HttpServletResponse) FacesContext
@@ -571,22 +596,22 @@ public class CartActionBean {
     public String exportCartCSV() throws Exception {
 
         _messageflag = false;
-        
+
         SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         StringBuffer sb = new StringBuffer();
-        
+
     	if (getCount() < 1) {
         	_messageflag = true;
         	_message = NO_CONCEPTS;
         	return null;
-    	} 
+    	}
     	if (!hasSelected()) {
         	_messageflag = true;
-        	_message = NOTHING_SELECTED;        
+        	_message = NOTHING_SELECTED;
         	return null;
-    	}         
-        
+    	}
+
         // Get Entities to be exported and build export file
         // in memory
 
@@ -667,13 +692,13 @@ public class CartActionBean {
         public String getDisplayCodingSchemeName() {
             return this.displayCodingSchemeName;
         }
-        
+
         public void setCodingScheme(String codingScheme) {
             this.codingScheme = codingScheme;
             initDisplayStatus();
             initDisplayCodingSchemeName();
         }
-        
+
         public String getNameSpace() {
             return this.nameSpace;
         }
@@ -711,34 +736,34 @@ public class CartActionBean {
         public void setUrl(String url) {
             this.url = url;
         }
-        
+
         public String getKey() {
-        	return code + " (" + displayCodingSchemeName + " " + version + ")"; 
+        	return code + " (" + displayCodingSchemeName + " " + version + ")";
         }
-        
+
         public HtmlSelectBooleanCheckbox getCheckbox() {
          	if (checkbox == null) checkbox = new HtmlSelectBooleanCheckbox();
             return checkbox;
         }
-        
+
         public void setCheckbox(HtmlSelectBooleanCheckbox checkbox) {
             this.checkbox = checkbox;
         }
-        
+
         // *** Private Methods ***
-        
+
         private void setSelected(boolean selected) {
         	this.checkbox.setSelected(selected);
         }
-        
+
         private boolean getSelected() {
         	return this.checkbox.isSelected();
-        }    
+        }
 
         private void initDisplayStatus() {
             if (this.codingScheme == null || this.version == null || this.code == null)
                 return;
-            
+
             String status = DataUtils.getConceptStatus(
                 this.codingScheme, this.version, null, this.code);
             if (status == null || status.length() <= 0)
@@ -753,7 +778,7 @@ public class CartActionBean {
             displayCodingSchemeName = DataUtils.getMetadataValue(
                 this.codingScheme, this.version, "display_name");
             if (displayCodingSchemeName == null)
-                displayCodingSchemeName = 
+                displayCodingSchemeName =
                     DataUtils.getLocalName(this.codingScheme);
         }
 
@@ -765,21 +790,21 @@ public class CartActionBean {
 
     /**
      * Class to hold a unique scheme version
-     * @author garciaw     
+     * @author garciaw
      */
     public class SchemeVersion {
         private String uri = null;
         private String codingScheme = null;
-        private String version = null; 
+        private String version = null;
         private String namespace = null;
         private boolean mult = false;
-        
+
         // Getters & setters
-        
+
         public String getDisplayCodingSchemeName() {
             return this.codingScheme + " (" + this.version + ")";
-        }        
-    }    
+        }
+    }
 
 	/**
 	 * Create a display list of versions
@@ -795,22 +820,22 @@ public class CartActionBean {
 				_selectVersionItems.add(new SelectItem(
 					vs.uri + "|" + vs.version,
 					vs.getDisplayCodingSchemeName()));
-			}	
+			}
 		}
 		if (_selectVersionItems.size() < 1) {
 			_selectVersionItems.add(new SelectItem(
 				PROD_VERSION,
 				PROD_VERSION));
-		}		
+		}
 	}
-	
+
 	/**
 	 * Create a display list of 'selected' version display items
 	 * @param versionList
 	 */
 	private void initSelectedVersionItems(HashMap<String, SchemeVersion> versionList) {
 		_selectedVersionItems = new ArrayList<String>();
-		
+
 		for (Iterator<Entry<String, SchemeVersion>> i = versionList.entrySet()
 				.iterator(); i.hasNext();) {
 			Entry<String, SchemeVersion> x = i.next();
@@ -818,38 +843,38 @@ public class CartActionBean {
 			if (vs.mult && inSelectedlist(vs.uri))
 				_selectedVersionItems.add(vs.uri + "|" + vs.version);
 		}
-	}	
-	
+	}
+
 	private boolean inSelectedlist(String uri) {
 		for (int x=0;x<_selectedVersionItems.size();x++) {
 			if (_selectedVersionItems.get(x).contains(uri)) return true;
 		}
 		return false;
-	}	
-	
+	}
+
 	private boolean inSelectedlist(String uri, String version) {
 		for (int x = 0; x < _selectedVersionItems.size(); x++) {
 			if (_selectedVersionItems.get(x).contains(uri + "|" + version))
 				return true;
 		}
 		return false;
-	}		
+	}
 
 	public String dumpSelectedlist() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Listing selected versions...\n");
 		for (int x = 0; x < _selectedVersionItems.size(); x++) {
-			sb.append("\t    URI = " + _selectedVersionItems.get(x));	
+			sb.append("\t    URI = " + _selectedVersionItems.get(x));
 		}
 		return sb.toString();
-	}	
+	}
 
 	/**
 	 * Return a unique coding scheme map with versions for concepts
 	 *  in the cart
 	 * @param search
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	private HashMap<String, SchemeVersion> getSchemeVersionList(
 			SearchCart search) throws Exception {
@@ -860,7 +885,7 @@ public class CartActionBean {
 			Concept item = (Concept) i.next();
 			ref = search.getConceptByCode(item.codingScheme, item.version,
 					item.code);
-			ArrayList<String> list = search.getSchemeVersions(ref.getCodingSchemeURI()); 
+			ArrayList<String> list = search.getSchemeVersions(ref.getCodingSchemeURI());
 			for(int x=0;x<list.size();x++) {
 				SchemeVersion vs = new SchemeVersion();
 				vs.uri = ref.getCodingSchemeURI();
@@ -870,18 +895,18 @@ public class CartActionBean {
 				map.put(item.codingScheme + "|" + vs.version, vs);
 			}
 		}
-	
-		// Set 'has other version' flags 
+
+		// Set 'has other version' flags
 		for (Iterator<Entry<String, SchemeVersion>> i = map.entrySet()
 				.iterator(); i.hasNext();) {
 			Entry<String, SchemeVersion> x = i.next();
 			SchemeVersion vs = x.getValue();
-			vs.mult = schemeHasOtherVersion(map,vs.uri,vs.version);			
-		}		
-		
+			vs.mult = schemeHasOtherVersion(map,vs.uri,vs.version);
+		}
+
 		return map;
 	}
-    
+
 	/**
 	 * Test if map contains other versions of a given scheme
 	 * @param map
@@ -900,7 +925,7 @@ public class CartActionBean {
 		}
 		return false;
 	}
-	
+
     /**
      * Test any concept in the cart has been selected
      * @return
@@ -913,8 +938,8 @@ public class CartActionBean {
             }
         }
         return false;
-    }    
-    
+    }
+
     /**
      * Dump contents of cart object
      * (non-Javadoc)
@@ -943,7 +968,7 @@ public class CartActionBean {
         return sb.toString();
     }
 
-    
+
     /**
      * Dump scheme version map
      * @param map
@@ -952,9 +977,9 @@ public class CartActionBean {
     public String versionMapToString(HashMap<String, SchemeVersion> map) {
         StringBuffer sb = new StringBuffer();
         sb.append("Listing scheme versions...\n");
-        
+
 		for (Iterator<Entry<String, SchemeVersion>> i = map.entrySet()
-				.iterator(); i.hasNext();) {	
+				.iterator(); i.hasNext();) {
 			Entry<String, SchemeVersion> x = i.next();
 			SchemeVersion vs = x.getValue();
 			sb.append("\t--------------------------------\n");
@@ -965,8 +990,8 @@ public class CartActionBean {
 			sb.append("\t Multiple Ver = " + vs.mult + "\n");
 		}
 		return sb.toString();
-    }    
-    
+    }
+
     /**
      * Clean a string for use in file type CSV
      * @param str
@@ -982,9 +1007,9 @@ public class CartActionBean {
      * @author garciaw
      */
     public class DuplicateCheck {
-    	
+
     	private ArrayList<String> list = null;
-    	
+
     	/**
     	 * Constructors
     	 */
@@ -1001,15 +1026,69 @@ public class CartActionBean {
     		if (list.contains(key)) return false;
     		list.add(key);
     		return true;
-    	} 
-    	
+    	}
+
     	/**
     	 * Clear contents of duplicate check list
     	 */
     	public void reset() {
     		list.clear();
     	}
-    	
-    } // End of DuplicateCheck   
-        
+
+    } // End of DuplicateCheck
+
+
+
+    /*
+     * Unselect all concept(s) in the Cart
+     * @return
+     */
+    public String cartVersionSelectionAction() {
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        int selectedCount = 0;
+		for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+			Concept item = (Concept)i.next();
+			if (item.getSelected()) selectedCount++;
+		}
+
+    	if (selectedCount == 0) {
+        	String message = "No concept is selected.";
+ 			request.getSession().setAttribute("message", message);
+			return "message";
+
+    	} else {
+			Vector cart_coding_scheme_ref_vec = new Vector();
+			HashSet hset = new HashSet();
+            for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
+                Concept item = (Concept)i.next();
+
+                if (item.getSelected()) {
+					String cs_name = item.getCodingScheme();
+					String cs_uri = DataUtils.codingSchemeName2URI(cs_name);
+					if (!hset.contains(cs_uri)) {
+						hset.add(cs_uri);
+					}
+				}
+			}
+			Iterator it = hset.iterator();
+			while (it.hasNext()) {
+				String cs_uri = (String) it.next();
+				Vector versions = DataUtils.getCodingSchemeVersionsByURN(cs_uri);
+				for (int i=0; i<versions.size(); i++) {
+					String version = (String) versions.elementAt(i);
+					cart_coding_scheme_ref_vec.add(cs_uri + "|" + version);
+				}
+			}
+
+            cart_coding_scheme_ref_vec = SortUtils.quickSort(cart_coding_scheme_ref_vec);
+			request.getSession().setAttribute("cart_coding_scheme_ref_vec", cart_coding_scheme_ref_vec);
+			return "cart_version_selection";
+		}
+    }
+
+
 } // End of CartActionBean

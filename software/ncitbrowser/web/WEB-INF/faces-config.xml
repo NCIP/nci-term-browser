@@ -1164,6 +1164,21 @@
 
   <navigation-rule>
       <from-view-id>/pages/cart.jsp</from-view-id>
+      
+      <navigation-case>
+         <description>cart_version_selection</description>
+         <from-action>#{CartActionBean.cartVersionSelectionAction}</from-action>
+         <from-outcome>cart_version_selection</from-outcome>
+         <to-view-id>/pages/cartVersionSelection.jsp</to-view-id>
+      </navigation-case>      
+
+      <navigation-case>
+         <description>cart_version_selection</description>
+         <from-action>#{CartActionBean.cartVersionSelectionAction}</from-action>
+         <from-outcome>message</from-outcome>
+         <to-view-id>/pages/cart.jsp</to-view-id>
+      </navigation-case>         
+      
       <navigation-case>
          <description>add_to_cart</description>
          <from-action>#{CartActionBean.addToCartAction}</from-action>
