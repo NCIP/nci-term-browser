@@ -1183,7 +1183,7 @@ String key = vsd_uri;
 
 			sb.append("Code,");
 			sb.append("Name,");
-			sb.append("Coding Scheme,");
+			sb.append("Terminology,");
 			sb.append("Version,");
 			sb.append("Namespace,");
 			sb.append("Definition");
