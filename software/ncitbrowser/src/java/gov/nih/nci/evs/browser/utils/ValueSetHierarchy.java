@@ -2298,10 +2298,11 @@ try {
 	   return false;
 	}
 
+/*
 	public static boolean containsValueSets(String node_id) {
 	   return false;
 	}
-
+*/
     public static boolean isNodeExpandable(String node_id) {
 	   if (isTerminologyNode(node_id)) {
 	       if (containsValueSets(node_id)) return true;
@@ -2331,6 +2332,14 @@ try {
 	}
 
 
+    public static boolean containsValueSets(String src_str) {
+		Vector v = getVSDRootsBySource(src_str);
+		if (v == null || v.size() == 0) return false;
+        return true;
+	}
+
+
+
 	public static HashMap build_src_vs_tree() {
         ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
 
@@ -2343,7 +2352,7 @@ try {
 			String text = rcr.getEntityDescription().getContent();
 			//TreeItem ti = new TreeItem(src, src + " (" + text + ")");
 			TreeItem ti = new TreeItem(src, src);
-			ti._expandable = true;
+			ti._expandable = containsValueSets(src);
 			children.add(ti);
 		}
 		SortUtils.quickSort(children);
@@ -2374,8 +2383,6 @@ try {
         for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 			String src = rcr.getConceptCode();
-
-System.out.println("src root code: " + src);
 
 			Vector vsd_root_vec = getVSDRootsBySource(src);
 			if (vsd_root_vec != null) {

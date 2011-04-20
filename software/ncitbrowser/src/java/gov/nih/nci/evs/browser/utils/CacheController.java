@@ -214,14 +214,6 @@ public class CacheController {
             scheme = retval;
         }
 
-
- System.out.println("=========== getSubValueSets scheme: " +  scheme);
- System.out.println("=========== getSubValueSets code: " +  code);
-
-
-
-        System.out.println("(*******) CacheController getSubValueSets " + scheme);
-
         HashMap map = null;
         String key = scheme + "$" + version + "subvsd$" + code;
         JSONArray nodeArray = null;
@@ -233,14 +225,8 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            System.out.println("Not in cache -- calling ValueSetHierarchy.getSubValueSets " + scheme + " " + code);
-
 
             map = ValueSetHierarchy.getSubValueSets(scheme, code);
-
-
-            System.out.println("exit ValueSetHierarchy.getSubValueSets ");
-            System.out.println("calling HashMap2JSONArray... ");
             nodeArray = HashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -331,11 +317,6 @@ public class CacheController {
     }
 
     public JSONArray getRootValueSets(String scheme, String version, boolean fromCache) {
-System.out.println("===================================================");
-System.out.println("getRootValueSets: scheme: " + scheme);
-System.out.println("getRootValueSets: version: " + version);
-System.out.println("===================================================");
-
 
         List list = null;// new ArrayList();
         String key = scheme + "$" + version + "$valueset" + "$root";
@@ -500,10 +481,6 @@ System.out.println("===================================================");
 
         if (nodesArray == null) {
             try {
-
-                //HashMap hmap = ValueSetHierarchy.getRootValueSets(bySource);
-                //HashMap hmap = ValueSetHierarchy.build_src_vs_tree();_exclude_src_nodes
-                //HashMap hmap = ValueSetHierarchy.build_src_vs_tree_exclude_src_nodes();
                 HashMap hmap = ValueSetHierarchy.build_src_vs_tree();
 
                 TreeItem root = (TreeItem) hmap.get("<Root>");
@@ -517,8 +494,6 @@ System.out.println("===================================================");
 
 						 String code = childItem._code;
 						 String name = childItem._text;
-
-						 //System.out.println("\t" + name + " (code: " + code + ")");
 
 						 int childCount = 0;
 						 if (childItem._expandable) childCount = 1;
@@ -536,8 +511,6 @@ System.out.println("===================================================");
 						 }
 					 }
                 }
-
-                //nodeArray = list2JSONArray(scheme, list);
 
                 if (fromCache) {
                     Element element = new Element(key, nodesArray);
@@ -750,9 +723,6 @@ System.out.println("===================================================");
 
 
     public JSONArray HashMap2JSONArray(HashMap hmap) {
-
-		System.out.println("(***********) HashMap2JSONArray ...");
-
 
         JSONObject json = new JSONObject();
         JSONArray nodesArray = null;
