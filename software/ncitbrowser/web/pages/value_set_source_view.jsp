@@ -645,9 +645,9 @@
             <tr class="textbody">
               <td class="textbody" align="left">
                 <% String view = "source"; %>
-                <a href="<%=request.getContextPath() %>/pages/value_set_terminology_view.jsf?view=terminology">Terminology View</a>
-                &nbsp;| 
                 Standards View
+                &nbsp;| 
+                <a href="<%=request.getContextPath() %>/pages/value_set_terminology_view.jsf?view=terminology">Terminology View</a>
               </td>
             
               <td align="right">

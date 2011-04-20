@@ -2245,8 +2245,6 @@ System.out.println("version: " + version);
 					for (TreeItem childItem : children) {
 						ti.addChild(association, childItem);
 						ti._expandable = true;
-
-						System.out.println(childItem._text + " : " + childItem._expandable);
 					}
 				}
 			}
@@ -2261,8 +2259,6 @@ System.out.println("version: " + version);
 					for (TreeItem childItem : children) {
 						ti.addChild(association, childItem);
 						ti._expandable = true;
-
-						System.out.println(childItem._text + " : " + childItem._expandable);
 					}
 				}
 			}

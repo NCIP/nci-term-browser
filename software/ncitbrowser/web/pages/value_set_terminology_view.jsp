@@ -640,11 +640,13 @@
             <% } %>
           
             <tr class="textbody">
+            
+            
               <td class="textbody" align="left">
                 <% String view = "terminology"; %>
-                Terminology View
-                &nbsp;|
                 <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?&view=source">Standards View</a>
+                &nbsp;|
+                Terminology View
               </td>
             
               <td align="right">
@@ -652,7 +654,10 @@
                   <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
                 </font>
               </td>
+              
             </tr>
+            
+            
           </table>
           <hr></hr>
   
