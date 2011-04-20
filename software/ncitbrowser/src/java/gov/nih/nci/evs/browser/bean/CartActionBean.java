@@ -42,6 +42,17 @@ import org.LexGrid.valueSets.ValueSetDefinitionReference;
 import org.LexGrid.valueSets.types.DefinitionOperator;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+
+
+import gov.nih.nci.evs.browser.utils.*;
+
+
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -1104,8 +1115,48 @@ System.out.println("cartVersionSelectionAction format: " + format);
     }
 
 
+    public static ConceptReferenceList createConceptReferenceList(
+        Vector codes, String codingSchemeName) {
+        if (codes == null) {
+            return null;
+        }
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.size(); i++) {
+			String code = (String) codes.elementAt(i);
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(code);
+            list.addConceptReference(cr);
+        }
+        return list;
+    }
+
 
     public String exportCartToCSV() throws Exception {
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		//AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+		HashSet uri_hset = new HashSet();
+		Vector uri_vec = new Vector();
+		HashMap cs_uri2version_map = new HashMap();
+		Vector cart_coding_scheme_ref_vec = (Vector) request.getSession().getAttribute("cart_coding_scheme_ref_vec");
+		for (int i=0; i<cart_coding_scheme_ref_vec.size(); i++) {
+			String cart_coding_scheme_ref = (String) cart_coding_scheme_ref_vec.elementAt(i);
+			Vector u = DataUtils.parseData(cart_coding_scheme_ref);
+			String cs_uri = (String) u.elementAt(0);
+			if (!uri_hset.contains(cs_uri)) {
+				uri_hset.add(cs_uri);
+				uri_vec.add(cs_uri);
+				String version = (String) request.getParameter(cs_uri);
+				if (version != null) {
+					cs_uri2version_map.put(cs_uri, version);
+				}
+			}
+		}
+		SortUtils.quickSort(uri_vec);
 
         _messageflag = false;
 
@@ -1127,7 +1178,9 @@ System.out.println("cartVersionSelectionAction format: " + format);
         // Get Entities to be exported and build export file
         // in memory
 
+        HashMap cs2codes_map = new HashMap();
         if (_cart != null && _cart.size() > 0) {
+
             // Add header
             sb.append("Concept,");
             sb.append("Vocabulary,");
@@ -1136,23 +1189,54 @@ System.out.println("cartVersionSelectionAction format: " + format);
             sb.append("URL");
             sb.append("\r\n");
 
-            // Find coding schemes
 
-
-            // Add concepts
+			// uri_hset
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
-                ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
-                if (ref != null) {
-                    _logger.debug("Exporting: " + ref.getCode());
-                    sb.append("\"" + clean(item.name) + "\",");
-                    sb.append("\"" + clean(item.codingScheme) + "\",");
-                    sb.append("\"" + clean(item.version) + "\",");
-                    sb.append("\"" + clean(item.code) + "\",");
-                    sb.append("\"" + clean(item.url) + "\"");
-                    sb.append("\r\n");
-                }
-            }
+                if (item.getCheckbox().isSelected()) {
+					String cs = item.getCodingScheme();
+					String code = item.getCode();
+					Vector v = new Vector();
+					if (cs2codes_map.containsKey(cs)) {
+						v = (Vector) cs2codes_map.get(cs);
+					}
+					if (!v.contains(code)) {
+						v.add(code);
+					}
+					cs2codes_map.put(cs, v);
+				}
+			}
+
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+			for (int i=0; i<uri_vec.size(); i++) {
+				String scheme = (String) uri_vec.elementAt(i);
+				String version = (String) cs_uri2version_map.get(scheme);
+
+                CodingSchemeVersionOrTag versionOrTag =
+                    new CodingSchemeVersionOrTag();
+                versionOrTag.setVersion(version);
+
+                CodedNodeSet cns = SearchUtils.getNodeSet(lbSvc, scheme, versionOrTag);
+                Vector v = (Vector) cs2codes_map.get(scheme);
+
+
+                if (v != null && v.size() > 0) {
+					ConceptReferenceList crefs = createConceptReferenceList(v, scheme);
+					cns = cns.restrictToCodes(crefs);
+					ResolvedConceptReferencesIterator iterator = cns.resolve(null, null, null, null, false);
+					while (iterator.hasNext()) {
+						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+
+						sb.append("\"" + clean(rcr.getEntityDescription().getContent()) + "\",");
+						sb.append("\"" + clean(rcr.getCodingSchemeName()) + "\",");
+						sb.append("\"" + clean(rcr.getCodingSchemeVersion()) + "\",");
+						sb.append("\"" + clean(rcr.getConceptCode()) + "\",");
+						sb.append("\"" + clean(rcr.getCodingSchemeURI()) + "\"");
+						sb.append("\r\n");
+					}
+				}
+			}
 
             // Send export file to browser
 
