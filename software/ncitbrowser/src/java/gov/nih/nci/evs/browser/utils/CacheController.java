@@ -503,7 +503,8 @@ System.out.println("===================================================");
 
                 //HashMap hmap = ValueSetHierarchy.getRootValueSets(bySource);
                 //HashMap hmap = ValueSetHierarchy.build_src_vs_tree();_exclude_src_nodes
-                HashMap hmap = ValueSetHierarchy.build_src_vs_tree_exclude_src_nodes();
+                //HashMap hmap = ValueSetHierarchy.build_src_vs_tree_exclude_src_nodes();
+                HashMap hmap = ValueSetHierarchy.build_src_vs_tree();
 
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
