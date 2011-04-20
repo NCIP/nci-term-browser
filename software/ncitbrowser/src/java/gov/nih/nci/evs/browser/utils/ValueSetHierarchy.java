@@ -129,6 +129,8 @@ public class ValueSetHierarchy {
 
     public ValueSetHierarchy() {
         SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
+        System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
+
         _valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
     }
 
@@ -2355,13 +2357,25 @@ try {
 
 	public static HashMap build_src_vs_tree_exclude_src_nodes() {
         ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
+        if (rcrl == null) {
+			System.out.println("build_src_vs_tree_exclude_src_nodes TreeUtils.getHierarchyRoots returns null???");
+			return null;
+		}
 
 		TreeItem root = new TreeItem("<Root>", "Root node");
 		HashSet hset = new HashSet();
         List <TreeItem> children = new ArrayList();
+
+
+        System.out.println("rcrl.getResolvedConceptReferenceCount(): " + rcrl.getResolvedConceptReferenceCount());
+
+
+
         for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 			String src = rcr.getConceptCode();
+
+System.out.println("src root code: " + src);
 
 			Vector vsd_root_vec = getVSDRootsBySource(src);
 			if (vsd_root_vec != null) {
@@ -2428,7 +2442,7 @@ try {
 		return hmap;
 	}
 
-
+/*
     public static HashMap expand_src_vs_tree_exclude_src_nodes(String vsduri) {
 
 		HashMap hmap = new HashMap();
@@ -2458,7 +2472,7 @@ try {
 
         return hmap;
     }
-
+*/
 
 	public static String getCodingSchemeName(String cs_code) {
 		if (cs_code.indexOf("$") == -1) return cs_code;
@@ -2590,6 +2604,63 @@ try {
 		hset.clear();
 		return SortUtils.quickSort(vsd_in_sub_src_vec);
 	}
+
+
+
+
+    public static HashMap expand_src_vs_tree_exclude_src_nodes(String vsduri) {
+
+        String node_id = vsduri;
+
+		HashMap hmap = new HashMap();
+		HashSet hset = new HashSet();
+		TreeItem root = new TreeItem("<Root>", "Root node");
+		List <TreeItem> children = new ArrayList();
+
+		if (isValueSetSourceNode(node_id)) {
+
+			Vector vsd_root_vec = getVSDRootsBySource(node_id);
+			if (vsd_root_vec != null) {
+				for (int j=0; j<vsd_root_vec.size(); j++) {
+					ValueSetDefinition vsd = (ValueSetDefinition) vsd_root_vec.elementAt(j);
+					if (!hset.contains(vsd.getValueSetDefinitionURI())) {
+						hset.add(vsd.getValueSetDefinitionURI());
+						TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), vsd.getValueSetDefinitionName());
+                        Vector sub_vsd_vec = getVSDChildrenNodesBySource(vsd.getValueSetDefinitionURI());
+                        if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
+							ti._expandable = true;
+						}
+						children.add(ti);
+					}
+				}
+			}
+
+	    } else {
+
+			Vector sub_vsd_vec = getVSDChildrenNodesBySource(vsduri);
+			if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
+				for (int i=0; i<sub_vsd_vec.size(); i++) {
+					ValueSetDefinition vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(i);
+
+					if (!hset.contains(vsd.getValueSetDefinitionURI())) {
+						hset.add(vsd.getValueSetDefinitionURI());
+						TreeItem child_node = new TreeItem(vsd.getValueSetDefinitionURI(), vsd.getValueSetDefinitionName());
+						Vector next_level_sub_vsd_vec = getVSDChildrenNodesBySource(vsd.getValueSetDefinitionURI());
+						if (next_level_sub_vsd_vec != null && next_level_sub_vsd_vec.size() > 0) {
+							child_node._expandable = true;
+						}
+						children.add(child_node);
+					}
+				}
+			}
+		}
+		SortUtils.quickSort(children);
+		root.addAll("[inverse_is_a]", children);
+		hmap.put("<Root>", root);
+		hset.clear();
+		return hmap;
+
+    }
 
 
 

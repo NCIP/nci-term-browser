@@ -1655,19 +1655,39 @@ public class TreeUtils {
 
     public static ResolvedConceptReferenceList getHierarchyRoots(
         String codingScheme, String version) {
+
+System.out.println("scheme: " + codingScheme);
+System.out.println("version: " + version);
+
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
             LexBIGServiceConvenienceMethods lbscm =
                 (LexBIGServiceConvenienceMethods) lbSvc
                     .getGenericExtension("LexBIGServiceConvenienceMethods");
+
             lbscm.setLexBIGService(lbSvc);
             String hierarchyID = getHierarchyID(codingScheme, version);
-            return lbscm.getHierarchyRoots(codingScheme, versionOrTag,
+
+            System.out.println("hierarchyID: " + hierarchyID);
+            ResolvedConceptReferenceList rcrl = lbscm.getHierarchyRoots(codingScheme, versionOrTag,
                 hierarchyID);
-        } catch (Exception e) {
+
+            if (rcrl == null) {
+				System.out.println("lbscm.getHierarchyRoots: codingScheme " + codingScheme);
+				System.out.println("lbscm.getHierarchyRoots: version " + version);
+				System.out.println("lbscm.getHierarchyRoots returns NULL???");
+			}
+
+            return rcrl;
+
+        } catch (Exception ex) {
+			ex.printStackTrace();
+
+			System.out.println("lbscm.getHierarchyRoots throws exception???");
             return null;
         }
     }
