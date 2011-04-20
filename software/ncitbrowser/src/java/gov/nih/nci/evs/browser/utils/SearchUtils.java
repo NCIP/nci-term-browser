@@ -3011,10 +3011,14 @@ public class SearchUtils {
     public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
         throws Exception {
 		CodedNodeSet cns = null;
-		cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
-        CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
-        //6.0 mod (KLO, 101810)
-        cns = cns.restrictToAnonymous(restrictToAnonymous);
+		try {
+			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+			CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
+			//6.0 mod (KLO, 101810)
+			cns = cns.restrictToAnonymous(restrictToAnonymous);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
     	/*
     	LocalNameList entityTypes = new LocalNameList();

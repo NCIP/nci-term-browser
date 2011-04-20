@@ -120,7 +120,7 @@ public class CartActionBean {
     // Local constants
     static public final String XML_FILE_NAME = "cart.xml";
     static public final String XML_CONTENT_TYPE = "text/xml";
-    static public final String CSV_FILE_NAME = "cart.csv";
+    static public final String CSV_FILE_NAME = "cart.txt";
     static public final String CSV_CONTENT_TYPE = "text/csv";
 
     // Error messages
@@ -608,10 +608,9 @@ public class CartActionBean {
      * @return
      * @throws Exception
      */
-    public String exportCartCSV() throws Exception {
 
-System.out.println("(***************) exportCartCSV to be changed to exportCartToCSV");
-
+    // Garcia implementation:
+    public String exportCartToCSV() throws Exception {
 
         _messageflag = false;
 
@@ -1124,7 +1123,7 @@ System.out.println("cartVersionSelectionAction format: " + format);
         for (int i = 0; i < codes.size(); i++) {
 			String code = (String) codes.elementAt(i);
             ConceptReference cr = new ConceptReference();
-            cr.setCodingSchemeName(codingSchemeName);
+            if (codingSchemeName != null) cr.setCodingSchemeName(codingSchemeName);
             cr.setConceptCode(code);
             list.addConceptReference(cr);
         }
@@ -1132,7 +1131,7 @@ System.out.println("cartVersionSelectionAction format: " + format);
     }
 
 
-    public String exportCartToCSV() throws Exception {
+    public String exportCartCSV() throws Exception {
 
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -1156,7 +1155,7 @@ System.out.println("cartVersionSelectionAction format: " + format);
 				}
 			}
 		}
-		SortUtils.quickSort(uri_vec);
+		uri_vec = SortUtils.quickSort(uri_vec);
 
         _messageflag = false;
 
@@ -1182,9 +1181,9 @@ System.out.println("cartVersionSelectionAction format: " + format);
         if (_cart != null && _cart.size() > 0) {
 
             // Add header
-            sb.append("Concept,");
-            sb.append("Vocabulary,");
-            sb.append("Version Code,");
+            sb.append("Concept Name,");
+            sb.append("Terminology,");
+            sb.append("Version,");
             sb.append("Concept Code,");
             sb.append("URL");
             sb.append("\r\n");
@@ -1193,9 +1192,13 @@ System.out.println("cartVersionSelectionAction format: " + format);
 			// uri_hset
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
-                if (item.getCheckbox().isSelected()) {
-					String cs = item.getCodingScheme();
-					String code = item.getCode();
+
+				String cs = item.getCodingScheme();
+				cs = DataUtils.codingSchemeName2URI(cs);
+				String code = item.getCode();
+
+                if (item.getSelected()) {
+
 					Vector v = new Vector();
 					if (cs2codes_map.containsKey(cs)) {
 						v = (Vector) cs2codes_map.get(cs);
@@ -1208,7 +1211,6 @@ System.out.println("cartVersionSelectionAction format: " + format);
 			}
 
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-
 			for (int i=0; i<uri_vec.size(); i++) {
 				String scheme = (String) uri_vec.elementAt(i);
 				String version = (String) cs_uri2version_map.get(scheme);
@@ -1218,8 +1220,9 @@ System.out.println("cartVersionSelectionAction format: " + format);
                 versionOrTag.setVersion(version);
 
                 CodedNodeSet cns = SearchUtils.getNodeSet(lbSvc, scheme, versionOrTag);
-                Vector v = (Vector) cs2codes_map.get(scheme);
 
+                Vector v = (Vector) cs2codes_map.get(scheme);
+                scheme = DataUtils.uri2CodingSchemeName(scheme);
 
                 if (v != null && v.size() > 0) {
 					ConceptReferenceList crefs = createConceptReferenceList(v, scheme);
