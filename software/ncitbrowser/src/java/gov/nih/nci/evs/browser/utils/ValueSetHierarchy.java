@@ -1201,7 +1201,6 @@ public class ValueSetHierarchy {
 		List<TreeItem> children = new ArrayList();
 		for (int lcv=0; lcv<subconcepts.size(); lcv++) {
 			String nv = (String) subconcepts.get(lcv);
-			System.out.println(nv);
 			Vector u = parseData(nv);
 			String name = (String) u.elementAt(0);
 			String code = (String) u.elementAt(1);
@@ -1267,7 +1266,7 @@ public class ValueSetHierarchy {
 		if (roots != null) {
 			for (int i=0; i<roots.getResolvedConceptReferenceCount(); i++) {
 				ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
-				System.out.println("\tRoot: " + rcr.getEntityDescription().getContent() + " (" + rcr.getConceptCode() + ")");
+				//System.out.println("\tRoot: " + rcr.getEntityDescription().getContent() + " (" + rcr.getConceptCode() + ")");
 
 				TreeItem root_node = new TreeItem(rcr.getConceptCode(), rcr.getEntityDescription().getContent());
 
@@ -1516,7 +1515,6 @@ public class ValueSetHierarchy {
 		Iterator it = _vsd_source_to_vsds_map.keySet().iterator();
 		while (it.hasNext()) {
 			String src_str = (String) it.next();
-			System.out.println(src_str);
 			Vector vsd_vec = (Vector) _vsd_source_to_vsds_map.get(src_str);
 			for (int i=0; i<vsd_vec.size(); i++) {
 				ValueSetDefinition vsd = (ValueSetDefinition) vsd_vec.elementAt(i);
@@ -1540,7 +1538,6 @@ public class ValueSetHierarchy {
 
 	public static Vector getValueSetDefinitionsWithSource(String src) {
 		if (_vsd_source_to_vsds_map == null) {
-			System.out.println("createVSDSource2VSDsMap ...");
 			createVSDSource2VSDsMap();
 		}
 		return (Vector) _vsd_source_to_vsds_map.get(src);
@@ -1889,9 +1886,7 @@ public class ValueSetHierarchy {
         Iterator it = _valueSetParticipationHashSet.iterator();
         while (it.hasNext()) {
 			String cs = (String) it.next();
-			System.out.println(cs);
 			String formalName = DataUtils.getFormalName(cs);
-			System.out.println("ValueSet cs root: " + formalName);
 			root_cs_vec.add(formalName);
 		}
 		root_cs_vec = SortUtils.quickSort(root_cs_vec);
@@ -1921,7 +1916,6 @@ public class ValueSetHierarchy {
 			String code = cs;
 			TreeItem ti = new TreeItem(code, cs);
 			ti._expandable = true;
-			System.out.println("getRootValueSets " + cs + "  code: " + code);
 			children.add(ti);
 		}
 
@@ -2367,18 +2361,12 @@ try {
 	public static HashMap build_src_vs_tree_exclude_src_nodes() {
         ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
         if (rcrl == null) {
-			System.out.println("build_src_vs_tree_exclude_src_nodes TreeUtils.getHierarchyRoots returns null???");
 			return null;
 		}
 
 		TreeItem root = new TreeItem("<Root>", "Root node");
 		HashSet hset = new HashSet();
         List <TreeItem> children = new ArrayList();
-
-
-        System.out.println("rcrl.getResolvedConceptReferenceCount(): " + rcrl.getResolvedConceptReferenceCount());
-
-
 
         for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
@@ -2581,20 +2569,13 @@ try {
 	    for (int i=0; i<sources.size(); i++) {
 			String source = (String) sources.elementAt(i);
 
-			System.out.println("\tsource: " + source);
-
-
 			if (_source_subconcept_map.containsKey(source)) {
 				Vector sub_vec = (Vector) _source_subconcept_map.get(source);
 				for (int j=0; j<sub_vec.size(); j++) {
 					String sub_source = (String) sub_vec.elementAt(j);
-					System.out.println("\t\tsub_source: " + sub_source);
-
 			        Vector vsd_vec = getVSDRootsBySource(sub_source);
 
 					if (vsd_vec != null && vsd_vec.size() > 0) {
-
-						System.out.println("\tvsd_vec.size(): " + vsd_vec.size());
 						for (int k=0; k<vsd_vec.size(); k++) {
 							ValueSetDefinition vsd = (ValueSetDefinition) vsd_vec.elementAt(k);
 							if (!hset.contains(vsd.getValueSetDefinitionURI())) {
@@ -2602,8 +2583,6 @@ try {
 							   vsd_in_sub_src_vec.add(vsd);
 						    }
 						}
-					} else {
-						System.out.println("vsd_vec is null or empty???");
 					}
 				}
 			}

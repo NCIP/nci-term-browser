@@ -256,10 +256,7 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            System.out.println("Not in cache -- calling getSubValueSets ");
             map = ValueSetHierarchy.getSubValueSets(code);
-            System.out.println("exit ValueSetHierarchy.getSubValueSets ");
-            System.out.println("calling HashMap2JSONArray... ");
             nodeArray = HashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -290,10 +287,7 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            System.out.println("Not in cache -- calling getSubValueSets ");
             map = ValueSetHierarchy.getSubValueSets(null, code);
-            System.out.println("exit ValueSetHierarchy.getSubValueSets ");
-            System.out.println("calling HashMap2JSONArray... ");
             nodeArray = HashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -344,15 +338,12 @@ public class CacheController {
                 nodesArray = new JSONArray();
 
 				for (String association : root._assocToChildMap.keySet()) {
-					 //System.out.println("association: " + association);
 
 					 List<TreeItem> children = root._assocToChildMap.get(association);
 					 for (TreeItem childItem : children) {
 
 						 String code = childItem._code;
 						 String name = childItem._text;
-
-						 //System.out.println("\t" + name + " (code: " + code + ")");
 
 						 int childCount = 0;
 						 if (childItem._expandable) childCount = 1;
@@ -417,15 +408,12 @@ public class CacheController {
                 nodesArray = new JSONArray();
 
 				for (String association : root._assocToChildMap.keySet()) {
-					 System.out.println("association: " + association);
 
 					 List<TreeItem> children = root._assocToChildMap.get(association);
 					 for (TreeItem childItem : children) {
 
 						 String code = childItem._code;
 						 String name = childItem._text;
-
-						 System.out.println("\t" + name + " (code: " + code + ")");
 
 						 int childCount = 0;
 						 if (childItem._expandable) childCount = 1;
@@ -487,7 +475,6 @@ public class CacheController {
                 nodesArray = new JSONArray();
 
 				for (String association : root._assocToChildMap.keySet()) {
-					 //System.out.println("association: " + association);
 
 					 List<TreeItem> children = root._assocToChildMap.get(association);
 					 for (TreeItem childItem : children) {
@@ -700,7 +687,6 @@ public class CacheController {
         if (nodesArray == null) {
             _logger.debug("Not in cache -- calling expand_src_vs_tree_exclude_src_nodes " + node_id);
             try {
-				//HashMap hmap = ValueSetHierarchy.expand_src_vs_tree(node_id);
 
 				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
 
@@ -732,20 +718,15 @@ public class CacheController {
             Object[] objs = keyset.toArray();
             String code = (String) objs[0];
 
-            System.out.println("HashMap2JSONArray .code: " + code);
 
             TreeItem ti = (TreeItem) hmap.get(code);
             for (String association : ti._assocToChildMap.keySet()) {
-
-				//System.out.println("HashMap2JSONArray .association: " + association);
 
                 List<TreeItem> children = ti._assocToChildMap.get(association);
                 // Collections.sort(children);
                 for (TreeItem childItem : children) {
                     // printTree(childItem, focusCode, depth + 1);
                     JSONObject nodeObject = new JSONObject();
-
-                    System.out.println(childItem._text + " (" + childItem._code + ")");
 
                     nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
                     nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);

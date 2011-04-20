@@ -283,10 +283,6 @@ public final class AjaxServlet extends HttpServlet {
 
         } else if (action.equals("build_vs_tree")) {
 
-	System.out.println("==================================================================");
-	System.out.println("AjaxServlet build_vs_tree action");
-	System.out.println("AjaxServlet ontology_display_name " + ontology_display_name);
-
             if (ontology_display_name == null)
                 ontology_display_name = CODING_SCHEME_NAME;
 
@@ -320,11 +316,6 @@ public final class AjaxServlet extends HttpServlet {
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
-
- System.out.println( "expand_vs_tree ontology_display_name: " + ontology_display_name);
- System.out.println( "expand_vs_tree ontology_version: " + ontology_version);
- System.out.println( "expand_vs_tree node_id: " + node_id);
-
 
                 try {
                     nodesArray =
@@ -364,14 +355,11 @@ public final class AjaxServlet extends HttpServlet {
             }
 
             response.getWriter().write(json.toString());
-            //System.out.println(json.toString());
 
             _logger.debug("Run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
             return;
         } else if (action.equals("expand_cs_vs_tree")) {
-
-System.out.println("(*****************************************************) expand_cs_vs_tree node_id: " + node_id);
 
 			response.setContentType("text/html");
 			response.setHeader("Cache-Control", "no-cache");
@@ -393,7 +381,6 @@ node_id = ValueSetHierarchy.getCodingSchemeName(node_id);
 						//nodesArray = CacheController.getInstance().getRootValueSets(node_id, null); //find roots (by source)
 
 						if (nodesArray != null) {
-							System.out.println("expand_vs_tree nodesArray != null");
 							json.put("nodes", nodesArray);
 						} else {
 							System.out.println("expand_vs_tree nodesArray == null???");
@@ -402,18 +389,13 @@ node_id = ValueSetHierarchy.getCodingSchemeName(node_id);
 					} catch (Exception e) {
 					}
 			    } else {
-					System.out.println("(*) coding scheme name: " + node_id);
-					System.out.println("(*) value set URI:      " + vsd_uri);
 					try {
 						nodesArray =
 							CacheController.getInstance().getSubValueSets(
 								node_id, null, vsd_uri);
 
 						if (nodesArray != null) {
-							System.out.println("expand_vs_tree nodesArray != null");
 							json.put("nodes", nodesArray);
-						} else {
-							System.out.println("expand_vs_tree nodesArray == null???");
 						}
 
 					} catch (Exception e) {
@@ -428,7 +410,6 @@ node_id = ValueSetHierarchy.getCodingSchemeName(node_id);
 
         } else if (action.equals("build_src_vs_tree")) {
 
-System.out.println("node_id: " + node_id);
 
             response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
@@ -456,28 +437,15 @@ System.out.println("node_id: " + node_id);
             return;
         } else if (action.equals("expand_src_vs_tree")) {
 
-System.out.println("(********) expand_src_vs_tree node_id: " + node_id);
-
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
-
-				//HashMap hmap = ValueSetHierarchy.expand_src_vs_tree(node_id);
-
-				System.out.println("(********) calling CacheController expand_src_vs_tree node_id: " + node_id);
-
 				nodesArray = CacheController.getInstance().expand_src_vs_tree(node_id);
-/*
-				// expand value set
-				if (nodesArray == null) {
-                    nodesArray = CacheController.getInstance().getSubValueSets(node_id, true);
-				}
-*/
 
 				if (nodesArray == null) {
-                    System.out.println("(********) CacheController returns nodesArray == null");
+                    System.out.println("(*) CacheController returns nodesArray == null");
 				}
 
 
