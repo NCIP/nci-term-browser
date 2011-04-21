@@ -126,20 +126,28 @@ public class IteratorBean extends Object {
 
             }
             _pageNumber = 1;
-            /*
+
+/*
             _list = new ArrayList(_size);
             for (int i = 0; i < _size; i++) {
                 _list.add(null);
             }
-            */
-            _list = new ArrayList();
+*/
+
+            _list = new ArrayList<ResolvedConceptReference>();
 
             _pageSize = Constants.DEFAULT_PAGE_SIZE;
             _numberOfPages = _size / _pageSize;
             if (_pageSize * _numberOfPages < _size) {
                 _numberOfPages = _numberOfPages + 1;
             }
+
+            System.out.println("(***) IteratorBean _pageSize: " + _pageSize);
+            System.out.println("(***) IteratorBean _numberOfPages: " + _numberOfPages);
+
             _lastResolved = -1;
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -186,6 +194,7 @@ public class IteratorBean extends Object {
     }
 
     public List getData(int idx1, int idx2) {
+
         _logger.debug("Retrieving data (from: " + idx1 + " to: " + idx2 + ")");
         long ms = System.currentTimeMillis();
         long dt = 0;
@@ -193,23 +202,31 @@ public class IteratorBean extends Object {
         int upper_bound = idx2;
         _timeout = false;
         try {
-
-
-System.out.println("(****) idx2 " + idx2 + " _size: " + _size);
-
-
 			if (idx2 >= _size-1) {
+/*
+if (_iterator == null) {
+System.out.println("Case 1 _iterator == null?????????????????????????????? " + _maxReturn);
+} else {
+System.out.println("Case 1 _iterator != null _maxReturn " + _maxReturn);
+
+	if (_iterator.hasNext()) {
+		System.out.println("Case 1 _iterator.hasNext() returns true" );
+	} else {
+        System.out.println("Case 1 _iterator.hasNext() returns false?????????????????? " );
+	}
+}
+*/
+
 				while (_iterator != null && _iterator.hasNext()) {
 					ResolvedConceptReference[] refs =
 						_iterator.next(_maxReturn).getResolvedConceptReference();
+
 					for (ResolvedConceptReference ref : refs) {
 						// displayRef(ref);
 						_lastResolved++;
 						upper_bound = _lastResolved;
 					   // _list.set(_lastResolved, ref);
-
 					   _list.add(ref);
-
 					}
 					dt = System.currentTimeMillis() - ms;
 					ms = System.currentTimeMillis();
@@ -220,6 +237,8 @@ System.out.println("(****) idx2 " + idx2 + " _size: " + _size);
 						break;
 					}
 				}
+
+
 			} else {
 				while (_iterator != null && _iterator.hasNext()
 					&& _lastResolved < idx2) {
@@ -258,8 +277,6 @@ System.out.println("(****) idx2 " + idx2 + " _size: " + _size);
          */
 
         Vector temp_vec = new Vector();
-        //upper_bound may be breached.
-
         if (upper_bound > idx2) {
 			_size = _size + (upper_bound - idx2);
 		}

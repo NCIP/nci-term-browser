@@ -56,7 +56,7 @@
       }
 
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
-      var rel_search_rela = document.forms["advancedSearchForm"].rel_search_rela.value;
+      //var rel_search_rela = document.forms["advancedSearchForm"].rel_search_rela.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
       var _version = document.forms["advancedSearchForm"].version.value;
 
@@ -67,7 +67,7 @@
           + "&sab="+ adv_search_source
           + "&prop="+ selectProperty
           + "&rel="+ rel_search_association
-          + "&rela="+ rel_search_rela
+          //+ "&rela="+ rel_search_rela
           + "&dictionary="+ dictionary
           + "&version="+ _version;
     }

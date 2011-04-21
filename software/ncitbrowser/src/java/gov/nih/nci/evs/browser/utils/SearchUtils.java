@@ -3811,6 +3811,14 @@ public class SearchUtils {
                     ResolvedConceptReferencesIterator quickUnionIterator =
                         new QuickUnionIterator(cns_vec, sortCriteria, null,
                             restrictToProperties, null, resolveConcepts);
+
+
+System.out.println("SearchUtils associationsToNavigate: " + associationsToNavigate);
+System.out.println("SearchUtils qualifiers: " + qualifiers);
+
+
+
+
                     if (associationsToNavigate == null && qualifiers == null) {
 
 /*
