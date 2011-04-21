@@ -206,6 +206,12 @@ public class SearchByAssociationIteratorDecorator extends
             Boolean restrictToAnonymous = Boolean.FALSE;
             cng = cng.restrictToAnonymous(restrictToAnonymous);
 
+            LocalNameList localNameList = new LocalNameList();
+            localNameList.addEntry("concept");
+
+            cng = cng.restrictToEntityTypes(localNameList);
+
+
 			if (_associationNameAndValueList != null) {
 				cng =
 					cng.restrictToAssociations(
@@ -256,7 +262,6 @@ public class SearchByAssociationIteratorDecorator extends
 			for(Association assoc : list.getAssociation()){
 				for(AssociatedConcept ac :
 					assoc.getAssociatedConcepts().getAssociatedConcept()){
-
 
 System.out.println("(*) search relationship AssociatedConcept: " + ac.getEntityDescription().getContent() + " (" + ac.getConceptCode() + ")");
 
