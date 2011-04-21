@@ -314,7 +314,7 @@ public class SearchUtils {
         long ms = System.currentTimeMillis();
         Vector v = new Vector();
         try {
-            LexBIGService lbSvc = new LexBIGServiceImpl();
+            LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
             LexBIGServiceConvenienceMethods lbscm =
                 (LexBIGServiceConvenienceMethods) lbSvc
                     .getGenericExtension("LexBIGServiceConvenienceMethods");

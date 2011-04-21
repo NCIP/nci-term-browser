@@ -105,7 +105,7 @@ public class RemoteServerUtil {
                         .getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
                 System.setProperty(NCItBrowserProperties.LG_CONFIG_FILE,
                     lg_config_file);
-                LexBIGService lbSvc = new LexBIGServiceImpl();
+                LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
                 return lbSvc;
             }
             if (_debug) {
@@ -173,7 +173,7 @@ public class RemoteServerUtil {
         String codingScheme, SecurityToken securityToken) {
         try {
             if (serviceUrl == null || serviceUrl.compareTo("") == 0) {
-                LexBIGService lbSvc = new LexBIGServiceImpl();
+                LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
                 return lbSvc;
             }
 
@@ -238,7 +238,7 @@ public class RemoteServerUtil {
              * properties.getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
              * System
              * .setProperty(NCItBrowserProperties.LG_CONFIG_FILE,lg_config_file
-             * ); LexBIGService lbSvc = new LexBIGServiceImpl(); return lbSvc; }
+             * ); LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance(); return lbSvc; }
              * if (debug) { _logger.debug(Utils.SEPARATOR);
              * _logger.debug("LexBIGService(remote): " + serviceUrl); }
              */
