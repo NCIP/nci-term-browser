@@ -68,7 +68,7 @@ String short_vocabulary_name = null;
 String coding_scheme_version = null;
 
 String key = (String) request.getAttribute("key");
-System.out.println("search results.jsp key: " + key);
+System.out.println("********* search results.jsp key: " + key);
 if (key == null) {
     key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 }
@@ -114,6 +114,10 @@ request.setAttribute("key", key);
 
 
           IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+          
+          
+          
+          
 
     if (iteratorBean == null){
       _logger.warn("iteratorBean NOT FOUND???" + key);
@@ -152,7 +156,13 @@ request.setAttribute("key", key);
 
           if (iteratorBean != null) {
 	      size = iteratorBean.getSize();
+	      
+	      System.out.println("iteratorBean size: " + size);
+	      
 	      match_size = new Integer(size).toString();
+	      
+	      
+	      
           }
 
           if (iend > size-1) iend = size-1;
@@ -164,7 +174,16 @@ request.setAttribute("key", key);
           String next_page_num_str = Integer.toString(next_page_num);
 
 	  int numberRemaining_before = iteratorBean.getSize();
+	  
+System.out.println("iteratorBean numberRemaining_before " + numberRemaining_before);	  
+	  
+System.out.println("iteratorBean.getData istart " + istart);	  
+System.out.println("iteratorBean.getData iend " + iend);	  
+	  
 	  List list = iteratorBean.getData(istart, iend);
+	  
+	  
+	  
 	  int numberRemaining_after = iteratorBean.getSize();
 	  if (numberRemaining_before != numberRemaining_after) {
 		iend_str = new Integer(numberRemaining_after).toString();

@@ -579,6 +579,17 @@ mappingIteratorBean.initialize();
         if (iterator != null) {
 
             int size = iteratorBean.getSize();
+
+            // LexEVS API itersator.numberRemaining is inaccurate, and can cause issues.
+            // the following code is a work around.
+            if (size == 1) {
+            	List list = iteratorBean.getData(0, 0);
+            	if (size != iteratorBean.getSize()) {
+					size = iteratorBean.getSize();
+				}
+			}
+
+
             if (size > 1) {
                 request.getSession().setAttribute("search_results", v);
                 String match_size = Integer.toString(size);
@@ -1480,6 +1491,9 @@ int selected_knt = 0;
         String scheme = (String) request.getParameter("dictionary");
         String version = (String) request.getParameter("version");
 
+System.out.println("(**********) advancedSearchAction ...scheme " + scheme);
+System.out.println("(**********) advancedSearchAction ...version " + version);
+
 
         SearchStatusBean bean =
             (SearchStatusBean) FacesContext.getCurrentInstance()
@@ -1498,9 +1512,6 @@ int selected_knt = 0;
 
         String matchAlgorithm =
             (String) request.getParameter("adv_search_algorithm");
-
-
-        System.out.println("(************) advancedSearchAction bean.setAlgorithm: " + matchAlgorithm);
 
 
         bean.setAlgorithm(matchAlgorithm);
@@ -1532,6 +1543,9 @@ int selected_knt = 0;
 
         String searchTarget = (String) request.getParameter("searchTarget");
 
+        System.out.println("(************) advancedSearchAction searchTarget: " + searchTarget);
+
+
         String matchText = (String) request.getParameter("matchText");
         if (matchText == null || matchText.length() == 0) {
             String message = "Please enter a search string.";
@@ -1541,6 +1555,9 @@ int selected_knt = 0;
         }
         matchText = matchText.trim();
         bean.setMatchText(matchText);
+
+        System.out.println("(************) advancedSearchAction matchText: " + matchText);
+
 
         if (NCItBrowserProperties._debugOn) {
             _logger.debug(Utils.SEPARATOR);
@@ -1650,6 +1667,11 @@ int selected_knt = 0;
 
         } else if (searchType != null
             && searchType.compareTo("Relationship") == 0) {
+
+			System.out.println("relationship search: " + 	searchType);
+
+
+
             if (rel_search_association != null
                 && rel_search_association.compareTo("ALL") == 0)
                 rel_search_association = null;
@@ -1684,6 +1706,7 @@ int selected_knt = 0;
                 SearchFields.setRelationship(schemes, matchText, searchTarget,
                     rel_search_association, rel_search_rela, source,
                     matchAlgorithm, maxToReturn);
+
             key = searchFields.getKey();
 
             _logger.debug("AdvancedSearchAction key " + key);
@@ -1706,6 +1729,8 @@ int selected_knt = 0;
 					//_logger.debug("Converting " + rel_search_association + " to " + assocName);
                     associationsToNavigate =
                         new String[] { assocName };
+
+					System.out.println("association: " + assocName);
 
 
                 } else {
@@ -1733,6 +1758,11 @@ int selected_knt = 0;
 
                 } else {
                     _logger.warn("(*) qualifiers == null");
+
+
+                    System.out.println("No RELA");
+
+
                 }
 
                 wrapper =
@@ -1744,12 +1774,15 @@ int selected_knt = 0;
                         maxToReturn);
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
+
+
                 }
                 if (iterator != null) {
                     iteratorBean = new IteratorBean(iterator);
                     iteratorBean.setKey(key);
                     iteratorBean.setMatchText(matchText);
                     iteratorBeanManager.addIteratorBean(iteratorBean);
+
                 }
             }
 
@@ -1801,7 +1834,10 @@ int selected_knt = 0;
                     if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
+
                         iteratorBean.setMatchText(matchText);
+
+
                         iteratorBeanManager.addIteratorBean(iteratorBean);
                     }
                 }
@@ -1822,6 +1858,16 @@ int selected_knt = 0;
         if (iterator != null) {
             int size = iteratorBean.getSize();
 
+            // LexEVS API itersator.numberRemaining is inaccurate, and can cause issues.
+            // the following code is a work around.
+            if (size == 1) {
+            	List list = iteratorBean.getData(0, 0);
+            	if (size != iteratorBean.getSize()) {
+					size = iteratorBean.getSize();
+				}
+			}
+
+
             _logger.debug("AdvancedSearchActon size: " + size);
 
             // Write a search log entry
@@ -1829,6 +1875,7 @@ int selected_knt = 0;
                 .getRefererParmDecode(request));
 
             if (size > 1) {
+
                 request.getSession().setAttribute("search_results", v);
 
                 String match_size = Integer.toString(size);

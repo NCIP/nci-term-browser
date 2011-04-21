@@ -131,7 +131,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = true;
+    private static boolean initializeValueSetHierarchy = false;
 
     // ==================================================================================
     // For customized query use
@@ -551,7 +551,7 @@ public class DataUtils {
 			ValueSetHierarchy.createVSDSource2VSDsMap();
 			System.out.println("\tinitializeCS2vsdURIsMap ...");
 			ValueSetHierarchy.initializeCS2vsdURIs_map();
-			_logger.error("\tDone initializing ValueSetHierarchy ...");
+			_logger.debug("\tDone initializing ValueSetHierarchy ...");
 	    }
     }
 
