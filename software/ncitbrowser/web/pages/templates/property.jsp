@@ -203,8 +203,6 @@ if (bool_obj != null && !bool_obj.equals(Boolean.TRUE) || show_status) {
 %>
     <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred"><%=concept_status%></i>
 <%
-
-    
     Vector descendantCodes = HistoryUtils.getDescendantCodes(dictionary, null, null, curr_concept.getEntityCode());
     if (descendantCodes != null) {
             if (descendantCodes != null && descendantCodes.size() > 0) {
@@ -214,18 +212,16 @@ if (bool_obj != null && !bool_obj.equals(Boolean.TRUE) || show_status) {
 		    <%=link%>
 	<%            
 		    for (int i=0; i<descendantCodes.size(); i++) {
-			String t = (String) descendantCodes.elementAt(i);
-			Vector w = DataUtils.parseData(t);
-			String descendantName = (String) w.elementAt(0);
-			String descendantCode = (String) w.elementAt(1);
+		    	   String t = (String) descendantCodes.elementAt(i);
+		    	   Vector w = DataUtils.parseData(t);
+		    	   String descendantName = (String) w.elementAt(0);
+		    	   String descendantCode = (String) w.elementAt(1);
 	%>
-
 		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary%>&code=<%=descendantCode%>">
-			<%=descendantName%>
+			      <%=descendantName%>
 		      </a>
 	<%              
 		    }
-
 		    link = ")"; 
 	%>            
 		    <%=link%></p>	
@@ -367,15 +363,17 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 				    <%
 				  }
 			    %>
-			          <i>
-				  &nbsp;<%=value%>&nbsp;
-				  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
-				  </i>
+                 <td>
+      			     <i>
+      				  &nbsp;<%=value%>&nbsp;
+      				  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
+      				  </i>
+                 </td>   
+              </tr>
 			    <%
 			  }
 		}
-      }
-      
+      }      
       
       if (value_vec != null && value_vec.size() > 1) {
           %>
@@ -473,15 +471,13 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 				    ResolvedConceptReference ref = refs[k];
 				    String ref_code = ref.getCode();
 				    if (!ncim_cui_code_vec.contains(ref_code)) {
-
-					String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
-					%>
-			  <p>
-			  <b><%=ncim_cui_propName_label%>:&nbsp;</b><%=ref_code%>&nbsp;
-			  <a href="javascript:redirect_site('<%= _ncim_cui_prop_url %>')">(<%=ncim_cui_prop_linktext%>)</a>
-			  </p>
-			                <%
-			  
+  					    String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
+   					%>
+         			  <p>
+         			  <b><%=ncim_cui_propName_label%>:&nbsp;</b><%=ref_code%>&nbsp;
+         			  <a href="javascript:redirect_site('<%= _ncim_cui_prop_url %>')">(<%=ncim_cui_prop_linktext%>)</a>
+         			  </p>
+   			      <%			  
 				    } 
 				}
 			}
