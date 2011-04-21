@@ -2530,7 +2530,7 @@ try {
 
     public static Vector getVSDRootsBySource(String src_str) {
 		createVSDSource2VSDsMap();
-		if (_source_subconcept_map == null) return null;
+		if (_source_subconcept_map == null) preprocessSourceHierarchyData();
 		Vector vsd_vec = (Vector) _vsd_source_to_vsds_map.get(src_str);
 		if (vsd_vec != null && vsd_vec.size() > 0) {
 			return vsd_vec;
