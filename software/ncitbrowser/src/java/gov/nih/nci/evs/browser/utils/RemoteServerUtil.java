@@ -99,7 +99,7 @@ public class RemoteServerUtil {
             NCItBrowserProperties properties = null;
             properties = NCItBrowserProperties.getInstance();
 
-            if (serviceUrl == null || serviceUrl.compareTo("") == 0) {
+            if (serviceUrl == null || serviceUrl.compareTo("") == 0 || serviceUrl.compareToIgnoreCase("null") == 0) {
                 String lg_config_file =
                     properties
                         .getProperty(NCItBrowserProperties.LG_CONFIG_FILE);
