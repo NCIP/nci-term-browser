@@ -14,6 +14,8 @@ import org.apache.log4j.*;
 
 import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
+import org.lexgrid.valuesets.impl.LexEVSValueSetDefinitionServicesImpl;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -172,7 +174,7 @@ public class RemoteServerUtil {
     public static LexBIGService createLexBIGService(String serviceUrl,
         String codingScheme, SecurityToken securityToken) {
         try {
-            if (serviceUrl == null || serviceUrl.compareTo("") == 0) {
+            if (serviceUrl == null || serviceUrl.compareTo("") == 0 || serviceUrl.compareToIgnoreCase("null") == 0) {
                 LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
                 return lbSvc;
             }
@@ -285,13 +287,21 @@ public class RemoteServerUtil {
 
 
     public static LexEVSValueSetDefinitionServices getLexEVSValueSetDefinitionServices() {
+
+		NCItBrowserProperties properties = null;
 		try {
+            properties = NCItBrowserProperties.getInstance();
+            String serviceUrl = properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+            if (serviceUrl == null || serviceUrl.compareTo("") == 0 || serviceUrl.compareToIgnoreCase("null") == 0) {
+				return LexEVSValueSetDefinitionServicesImpl.defaultInstance();
+			}
 			LexEVSDistributed distributed = getLexEVSDistributed();
 			LexEVSValueSetDefinitionServices vds = distributed.getLexEVSValueSetDefinitionServices();
 			return vds;
-		} catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+
         return null;
 	}
 
