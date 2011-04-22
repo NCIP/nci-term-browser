@@ -1491,9 +1491,6 @@ int selected_knt = 0;
         String scheme = (String) request.getParameter("dictionary");
         String version = (String) request.getParameter("version");
 
-System.out.println("(**********) advancedSearchAction ...scheme " + scheme);
-System.out.println("(**********) advancedSearchAction ...version " + version);
-
 
         SearchStatusBean bean =
             (SearchStatusBean) FacesContext.getCurrentInstance()
@@ -1528,6 +1525,8 @@ System.out.println("(**********) advancedSearchAction ...version " + version);
 
         String rel_search_association =
             (String) request.getParameter("rel_search_association");
+
+
         bean.setSelectedAssociation(rel_search_association);
 
         String rel_search_rela =
@@ -1555,8 +1554,6 @@ System.out.println("(**********) advancedSearchAction ...version " + version);
         }
         matchText = matchText.trim();
         bean.setMatchText(matchText);
-
-        System.out.println("(************) advancedSearchAction matchText: " + matchText);
 
 
         if (NCItBrowserProperties._debugOn) {
@@ -1725,7 +1722,13 @@ System.out.println("(**********) advancedSearchAction ...version " + version);
                     associationsToNavigate =
                         new String[] { rel_search_association };
                     */
-					String assocName = OntologyBean.convertAssociationName(scheme, null, rel_search_association);
+
+                    //KLO, 042211
+					//String assocName = OntologyBean.convertAssociationName(scheme, null, rel_search_association);
+
+					String assocName = rel_search_association;
+
+
 					//_logger.debug("Converting " + rel_search_association + " to " + assocName);
                     associationsToNavigate =
                         new String[] { assocName };
@@ -1758,10 +1761,6 @@ System.out.println("(**********) advancedSearchAction ...version " + version);
 
                 } else {
                     _logger.warn("(*) qualifiers == null");
-
-
-                    System.out.println("No RELA");
-
 
                 }
 

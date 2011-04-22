@@ -2546,8 +2546,7 @@ public class SearchUtils {
 			SearchByAssociationIteratorDecorator decorator = new SearchByAssociationIteratorDecorator(quickUnionIterator);
 			decorator.setResolveForward(resolveForward);
 			decorator.setResolveBackward(resolveBackward);
-			//decorator.setResolveForward(true);
-			//decorator.setResolveBackward(true);
+
 			decorator.setResolveAssociationDepth(resolveAssociationDepth);
 			if (associationNameAndValueList != null) {
 				decorator.setAssociationNameAndValueList(associationNameAndValueList);
@@ -2775,6 +2774,7 @@ public class SearchUtils {
 							ex.printStackTrace();
 						}
 
+
 /*
 						iterator =
 							new SearchByAssociationIteratorDecorator(
@@ -2783,18 +2783,20 @@ public class SearchUtils {
 								maxToReturn);
 */
 
+
+
 						iterator =
 							createSearchByAssociationIteratorDecorator(
 								quickUnionIterator, resolveForward,
 								resolveBackward, resolveAssociationDepth,
 								maxToReturn);
 
+
 					} else {
 
 						ResolvedConceptReferencesIterator quickUnionIteratorWrapper =
 							new QuickUnionIteratorWrapper(codingSchemeNames, cns_vec, sortCriteria, null,
 								restrictToProperties, null, resolveConcepts);
-
 
 /*
 						iterator =
@@ -2812,9 +2814,6 @@ public class SearchUtils {
 
 
 					}
-
-                    // testing, KLO (work-around) failed
-                    // iterator = filterOutAnonymousClasses(cns, iterator);
 
                 } catch (Exception e) {
                     _logger.error("Method: SearchUtil.searchByAssociations");
@@ -3813,12 +3812,6 @@ public class SearchUtils {
                             restrictToProperties, null, resolveConcepts);
 
 
-System.out.println("SearchUtils associationsToNavigate: " + associationsToNavigate);
-System.out.println("SearchUtils qualifiers: " + qualifiers);
-
-
-
-
                     if (associationsToNavigate == null && qualifiers == null) {
 
 /*
@@ -3828,13 +3821,16 @@ System.out.println("SearchUtils qualifiers: " + qualifiers);
                                 resolveBackward, resolveAssociationDepth,
                                 maxToReturn);
  */
+
                          iterator =
                              createSearchByAssociationIteratorDecorator(
                                  quickUnionIterator, resolveForward,
                                  resolveBackward, resolveAssociationDepth,
                                 maxToReturn);
 
+
                     } else {
+
 
 /*
                         iterator =
@@ -3843,6 +3839,7 @@ System.out.println("SearchUtils qualifiers: " + qualifiers);
                                 resolveBackward, associationList, qualifiers,
                                 resolveAssociationDepth, maxToReturn);
 */
+
 
                         iterator =
                             createSearchByAssociationIteratorDecorator(

@@ -142,8 +142,6 @@ public class IteratorBean extends Object {
                 _numberOfPages = _numberOfPages + 1;
             }
 
-            System.out.println("(***) IteratorBean _pageSize: " + _pageSize);
-            System.out.println("(***) IteratorBean _numberOfPages: " + _numberOfPages);
 
             _lastResolved = -1;
 
@@ -202,7 +200,10 @@ public class IteratorBean extends Object {
         int upper_bound = idx2;
         _timeout = false;
         try {
+
+
 			if (idx2 >= _size-1) {
+
 /*
 if (_iterator == null) {
 System.out.println("Case 1 _iterator == null?????????????????????????????? " + _maxReturn);
@@ -240,6 +241,7 @@ System.out.println("Case 1 _iterator != null _maxReturn " + _maxReturn);
 
 
 			} else {
+				System.out.println("Case 2");
 				while (_iterator != null && _iterator.hasNext()
 					&& _lastResolved < idx2) {
 					ResolvedConceptReference[] refs =
@@ -275,6 +277,7 @@ System.out.println("Case 1 _iterator != null _maxReturn " + _maxReturn);
          * (ResolvedConceptReference) list.get(i); rcr_list.add(rcr); if (i
          * > lastResolved) break; }
          */
+
 
         Vector temp_vec = new Vector();
         if (upper_bound > idx2) {
