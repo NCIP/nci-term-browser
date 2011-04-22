@@ -127,16 +127,14 @@ if (_selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
    
    		  <tr><td>
    		  <table border="0" cellspacing="0" cellpadding="0">
-   		     <tr valign="top" align="left"><td align="left" class="textbody">
- 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=_check_code%> 
- 				              alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
- 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=_check_name%> 
- 				              alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
- 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=_check_src%> 
- 				              alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
- 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=_check_cs%> 
-                                              alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
-                     </td></tr>
+
+		    <tr valign="top" align="left"><td align="left" class="textbody">
+		      <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=_check__e%> tabindex="3">Exact Match&nbsp;
+		      <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=_check__s%> tabindex="3">Begins With&nbsp;
+		      <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=_check__c%> tabindex="3">Contains
+		    </td></tr>
+		    
+
 
 
 
@@ -149,11 +147,17 @@ if (_selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || _selectValue
 		      <td height="1px" bgcolor="#2F2F5F"></td>
 		    </tr>
 		    
-		    <tr valign="top" align="left"><td align="left" class="textbody">
-		      <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=_check__e%> tabindex="3">Exact Match&nbsp;
-		      <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=_check__s%> tabindex="3">Begins With&nbsp;
-		      <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=_check__c%> tabindex="3">Contains
-		    </td></tr>
+   		  
+   		     <tr valign="top" align="left"><td align="left" class="textbody">
+ 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=_check_code%> 
+ 				              alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
+ 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=_check_name%> 
+ 				              alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
+ 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=_check_src%> 
+ 				              alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
+ 				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=_check_cs%> 
+                                              alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
+                     </td></tr>
 <%
 }                
 %>		    
