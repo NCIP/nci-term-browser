@@ -564,14 +564,9 @@
     
         <tr valign="top" align="left">
           <td align="left" class="textbody">
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
-                  alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
-                  alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=check_src%> 
-                  alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
-                  alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
+                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
+                     <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
+                     <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
           </td>
         </tr>
                 <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 ||
@@ -582,9 +577,16 @@
         </tr>
         <tr valign="top" align="left">
           <td align="left" class="textbody">
-                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
-                     <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
-                     <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
+          
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
+                  alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
+                  alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=check_src%> 
+                  alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
+                  alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology          
+          
           </td>
         </tr>
                 <% } else if (selectValueSetSearchOption.compareToIgnoreCase("Source") == 0) {
