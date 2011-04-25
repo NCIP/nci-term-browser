@@ -552,10 +552,11 @@ if (ontology_display_name == null) {
           </form>
          
 
-        <%@ include file="/pages/templates/nciFooter.jsp" %>
-           </div>
-      </div>
-      <!-- end Page content -->
+        </div> <!-- popupContentArea -->
+        <div class="popupContentAreaWithoutBorder">   
+          <%@ include file="/pages/templates/nciFooter.jsp" %>
+        </div> <!-- popupContentAreaWithoutBorder -->
+      </div> <!-- pagecontent -->
     </div>
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
