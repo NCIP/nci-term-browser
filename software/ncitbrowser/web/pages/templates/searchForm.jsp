@@ -117,6 +117,10 @@
             <label for="algorithm3">Contains</label>
          </td>
       </tr>
+      <tr align="left">
+        <td width="263px" height="1px" bgcolor="#2F2F5F"></td>
+        <td width="77px"></td>
+      </tr>
       <tr valign="top" align="left">
          <td align="left" class="textbody" colspan="2">
             <input type="radio" name="searchTarget" id="searchTarget1"
@@ -136,13 +140,14 @@
          <td height="5px;"></td>
       </tr>
       <tr>
-         <td>
+         <td colspan="2">
             <%
                Boolean hideAdvancedSearchLink = (Boolean) request.getAttribute("hideAdvancedSearchLink");
                if (!is_a_mapping && (hideAdvancedSearchLink == null || !hideAdvancedSearchLink)) {
             %>
             <table border="0" cellspacing="0" cellpadding="0" width="100%">
                <tr valign="top">
+                  <td height="5px;"></td>
                   <td valign="middle" align="right">
                      <a class="global-nav"
                         href="<%=request.getContextPath()%>/pages/advanced_search.jsf?dictionary=<%=vocab_name%>&version=<%=srchform_version%>"
