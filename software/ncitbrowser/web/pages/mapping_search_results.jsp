@@ -169,7 +169,7 @@ MappingIteratorBean mapping_bean = (MappingIteratorBean) request.getSession().ge
 
 int pageSize = Integer.parseInt(selectedResultsPerPage);
 int size = 0;
-int pageNum = 0;
+int pageNum = 1;
 
 if (mapping_bean != null) {
 	size = mapping_bean.getSize();
@@ -195,7 +195,14 @@ if (page_num == 0) {
     istart = (pageNum-1) * pageSize;
 }
 
+
+System.out.println( "(*) pageSize: " + pageSize);
+
+
 int iend = istart + pageSize - 1;
+
+System.out.println( "(*) iend: " + iend);
+
 if (iend > size) {
     iend = size;
 }
@@ -205,20 +212,42 @@ try {
    list = mapping_bean.getData(istart, iend);
    int prev_size = size;
    size = mapping_bean.getSize();
-   if (size != prev_size && iend < size) {
-       iend = size;
-   }
    
+System.out.println( "(*) prev_size: " + prev_size);
+System.out.println( "(*) size: " + size);
+
+
+   if (size != prev_size) {
+       if (iend > istart + pageSize -1) {
+           iend = istart + pageSize -1;
+       } 
+       if (size > istart + pageSize -1) {
+           iend = istart + pageSize -1;
+       }
+   }
+
+
 } catch (Exception ex) {
    System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
 
 
+num_pages = size / pageSize;
+if (num_pages * pageSize < size) num_pages++;
 
-System.out.println("\npage_num: " + page_num);
-System.out.println("size: " + size);
-System.out.println("pageSize: " + pageSize);
+System.out.println("num_pages: " + num_pages);
+
+
+System.out.println("\npage_num: " + page_num); //0
+System.out.println("size: " + size); //85
+System.out.println("pageSize: " + pageSize); //50
+
+
+
 System.out.println("(**************** iend: " + iend);
+
+System.out.println("(**************** page_num: " + page_num);
+
 
 
 
@@ -291,7 +320,16 @@ if (show_rank_column) {
   System.out.println("list == null???");
  } else {
 
-                for (int lcv=0; lcv<list.size(); lcv++) {
+                //for (int lcv=0; lcv<list.size(); lcv++) {
+                
+ int upper_bound = list.size();
+ if (upper_bound > pageSize) upper_bound = pageSize;
+ 
+ 
+ System.out.println("(**************** upper_bound: " + upper_bound);
+ 
+                
+                for (int lcv=0; lcv<upper_bound; lcv++) {
                     mappingData = (MappingData) list.get(lcv);
         source_code = mappingData.getSourceCode();
         source_name = mappingData.getSourceName();

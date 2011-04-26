@@ -772,10 +772,9 @@ if (idx2 <= _list.size()) return copyData(idx1, idx2);
         Vector temp_vec = new Vector();
         //upper_bound may be breached.
 
-        if (upper_bound > idx2) {
-			_size = _size + (upper_bound - idx2);
-System.out.println("Upper bound breached -- reset _size to " + _size);
-
+        if (upper_bound >=idx2) {
+			_size = _size + (upper_bound - idx2) + 1;
+			System.out.println("Upper bound breached -- reset _size to " + _size);
 		}
 
 
@@ -806,7 +805,6 @@ if (_list.size() == 0) return rcr_list;
 
         _logger.debug("getData Run time (ms): "
             + (System.currentTimeMillis() - ms));
-
 
 System.out.println("end of getData size: " + _size);
 

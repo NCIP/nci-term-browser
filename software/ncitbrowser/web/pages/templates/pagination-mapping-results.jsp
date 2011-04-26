@@ -6,6 +6,12 @@
 
     int prev_page_num = pageNum;
     int next_page_num = prev_page_num + 1;
+    
+//System.out.println("(*) pagination: pageNum " + pageNum);
+//System.out.println("(*) pagination: prev_page_num " + prev_page_num);
+//System.out.println("(*) pagination: next_page_num " + next_page_num);
+
+    
 
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
 bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
@@ -29,15 +35,20 @@ if (iend >= numRemaining) {
    iend_str = match_size;
 }
     
-    String prev_page_num_str = Integer.toString(pageNum);
+    String prev_page_num_str = Integer.toString(pageNum-1);
     String next_page_num_str = Integer.toString(pageNum+1);
+
+
+//System.out.println("(*) pagination: prev_page_num_str " + prev_page_num_str);
+//System.out.println("(*) pagination: next_page_num_str " + next_page_num_str);
+
     
 %>
 
 
 
 
-<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping.jsf?" >
+<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?" >
   <table>
     <tr>
       <td class="textbody" align=left>
@@ -73,8 +84,8 @@ if (iend >= numRemaining) {
           sliding_window_end = sliding_window_start + sliding_window_half_width * 2 - 1;
           if (sliding_window_end > num_pages) sliding_window_end = num_pages;
 
-System.out.println("num_pages: " + num_pages);
-System.out.println("page_num: " + page_num);
+//System.out.println("num_pages: " + num_pages);
+//System.out.println("page_num: " + page_num);
 
 
 		 for (int idx=sliding_window_start; idx<=sliding_window_end; idx++) { 
@@ -93,11 +104,16 @@ System.out.println("page_num: " + page_num);
 		  }
           }
           
-          if (next_page_num < num_pages) {
+          
+//System.out.println("(*) next_page_num: " + next_page_num);
+//System.out.println("(*) num_pages: " + num_pages);
+          
+          
+          if (next_page_num <= num_pages) {
         %>
           &nbsp;
           <i>
-            <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_scheme%>&page_number=<%=next_page_num_str%>">Next</a>
+            <a href="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?dictionary=<%=mapping_scheme%>&page_number=<%=next_page_num_str%>">Next</a>
 
           </i>
         <%
@@ -112,6 +128,11 @@ System.out.println("page_num: " + page_num);
         
   <select name=resultsPerPage size=1 onChange="paginationForm.submit();">
   <%
+  
+	//System.out.println("(*) mapping pagination  selectedResultsPerPage: " + selectedResultsPerPage); 
+  
+  
+  
     List resultsPerPageValues = UserSessionBean.getResultsPerPageValues();
     for (int i=0; i<resultsPerPageValues.size(); i++) {
         String resultsPerPageValue = (String) resultsPerPageValues.get(i);
