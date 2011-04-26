@@ -34,7 +34,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/fonts.css" />
+  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/fonts2.css" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/grids.css" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/code.css" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/tree.css" />
@@ -430,16 +430,6 @@
 <%!
   private static Logger _logger = Utils.getJspLogger("search_results.jsp");
 %>
-<f:view>
-  <!-- Begin Skip Top Navigation -->
-    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
-  <!-- End Skip Top Navigation --> 
-  <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
-    <%@ include file="/pages/templates/sub-header.jsp" %>
-    <!-- Main box -->
-    <div id="main-area">
-
 <%
 JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 String search_results_dictionary = info.dictionary;
@@ -480,18 +470,24 @@ _logger.debug("search_results.jsp version: " + search_results_version);
 if (search_results_version != null) {
     request.setAttribute("version", search_results_version);
 }
-
-if (search_results_dictionary == null || search_results_dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
 
+<f:view>
+  <!-- Begin Skip Top Navigation -->
+    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+  <!-- End Skip Top Navigation --> 
+  <%@ include file="/pages/templates/header.jsp" %>
+  <div class="center-page">
+    <%@ include file="/pages/templates/sub-header.jsp" %>
+    <!-- Main box -->
+    <div id="main-area">
+
+    <% if (search_results_dictionary == null || search_results_dictionary.compareTo("NCI Thesaurus") == 0) { %>
       <%@ include file="/pages/templates/content-header.jsp" %>
-<%
-} else {
-%>
+    <% } else { %>
       <%@ include file="/pages/templates/content-header-other.jsp" %>
-<%
-}
-%>
+    <% } %>
+    
       <!-- Page content -->
       <div class="pagecontent">
        <div id="popupContentArea">
