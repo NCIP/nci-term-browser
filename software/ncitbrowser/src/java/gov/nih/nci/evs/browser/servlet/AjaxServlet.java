@@ -266,7 +266,7 @@ public final class AjaxServlet extends HttpServlet {
             try {
                 nodesArray =
                     CacheController.getInstance().getRootConcepts(
-                        ontology_display_name, null);
+                        ontology_display_name, ontology_version);
                 if (nodesArray != null) {
                     json.put("root_nodes", nodesArray);
                 }

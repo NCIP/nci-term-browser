@@ -162,14 +162,23 @@ public class CacheController {
 
     public JSONArray getSubconcepts(String scheme, String version, String code,
         boolean fromCache) {
-        if (scheme == null)
-            scheme = Constants.CODING_SCHEME_NAME;
 
+        if (scheme == null) {
+            scheme = Constants.CODING_SCHEME_NAME;
+			String retval = DataUtils.getCodingSchemeName(scheme);
+			if (retval != null) {
+				scheme = retval;
+				version = DataUtils.key2CodingSchemeVersion(scheme);
+			}
+		}
+
+/*
         String retval = DataUtils.getCodingSchemeName(scheme);
         if (retval != null) {
             scheme = retval;
             version = DataUtils.key2CodingSchemeVersion(scheme);
         }
+*/
 
         HashMap map = null;
         String key = scheme + "$" + version + "$" + code;
@@ -1018,8 +1027,13 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
 
     public static String getSubConcepts(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
+
+	    String version = null;
+	    if (versionOrTag != null && versionOrTag.getVersion() != null) version = versionOrTag.getVersion();
+
+
         if (!CacheController._instance.containsKey(getSubConceptKey(
-            codingScheme, code))) {
+            codingScheme, version, code))) {
             _logger.debug("SubConcepts Not Found In Cache.");
             TreeService treeService =
                 TreeServiceFactory.getInstance().getTreeService(
@@ -1033,10 +1047,10 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
             String json =
                 treeService.getJsonConverter().buildChildrenNodes(node);
 
-            _cache.put(new Element(getSubConceptKey(codingScheme, code), json));
+            _cache.put(new Element(getSubConceptKey(codingScheme, version, code), json));
             return json;
         }
-        return (String) _cache.get(getSubConceptKey(codingScheme, code))
+        return (String) _cache.get(getSubConceptKey(codingScheme, version, code))
             .getObjectValue();
     }
 
@@ -1109,16 +1123,18 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
             + code.hashCode());
     }
 
+    private static String getSubConceptKey(String codingScheme, String version, String code) {
+		if (version == null) return getSubConceptKey(codingScheme, code);
+        return String.valueOf("SubConcept".hashCode() + codingScheme.hashCode()
+            + version.hashCode()
+            + code.hashCode());
+    }
+
     private static String getTreeKey(String codingScheme, String code) {
         return String.valueOf("Tree".hashCode() + codingScheme.hashCode()
             + code.hashCode());
     }
 
-    private static String getSubConceptKey(String codingScheme, String version, String code) {
-        return String.valueOf("SubConcept".hashCode() + codingScheme.hashCode()
-            + version.hashCode()
-            + code.hashCode());
-    }
 
     private static String getTreeKey(String codingScheme, String version, String code) {
         return String.valueOf("Tree".hashCode() + codingScheme.hashCode()
