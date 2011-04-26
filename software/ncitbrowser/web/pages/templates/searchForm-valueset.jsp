@@ -87,7 +87,6 @@ String _valueset_match_text = "";
 <%
 if (_selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 %>
-
 	  <input CLASS="searchbox-input-2"
 	    name="matchText"
 	    value=""
@@ -135,14 +134,7 @@ if (_selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 		    </td></tr>
 		    
 
-
-
-
-    
-    
-<%
-if (_selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || _selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) {                
-%>    
+ 
 		    <tr align="left">
 		      <td height="1px" bgcolor="#2F2F5F"></td>
 		    </tr>
@@ -158,9 +150,7 @@ if (_selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || _selectValue
  				          <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=_check_cs%> 
                                               alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
                      </td></tr>
-<%
-}                
-%>		    
+		    
 		    
 		  </table> 
 		  </td></tr>
