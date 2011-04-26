@@ -369,11 +369,17 @@ public class MetadataUtils {
             String version = DataUtils.key2CodingSchemeVersion(value);
             String name = DataUtils.getMetadataValue(scheme, "display_name");
 
+            if (name == null || name.compareTo("") == 0) {
+				System.out.println("(*) WARNING: getSupportedVocabularyMetadataValues -- " + scheme + " does not have a display_name property.");
+			}
+
             String urn = null;
 
             Vector w = getMetadataValues(scheme, version, urn, propertyName);
             if (w == null || w.size() == 0) {
-                v.add(name + "|" + propertyName + " not available");
+                //v.add(name + "|" + propertyName + " not available");
+                v.add(scheme + " (version: " + version + ")" + "|" );
+
             } else {
                 String t = (String) w.elementAt(0);
                 v.add(name + " (version: " + version + ")" + "|" + t);
