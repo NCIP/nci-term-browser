@@ -458,14 +458,19 @@ if (display_name == null || display_name.compareTo("null") == 0) {
 
 if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 %>
-    <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
+    <div>
+      <img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
+      <span class="texttitle-blue-rightjust-2"><%=HTTPUtils.cleanXSS(term_browser_version)%></span>
+    </div>
 <%
 } else {
      String hierarchy_shortName = DataUtils.getLocalName(hierarchy_schema);
 %>
     <div>
       <img src="<%=basePath%>/images/other_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
-      <div class="vocabularynamepopupshort"><%=HTTPUtils.cleanXSS(display_name)%></div>
+      <div class="vocabularynamepopupshort"><%=HTTPUtils.cleanXSS(display_name)%>
+        <span class="texttitle-blue-rightJust"><%=HTTPUtils.cleanXSS(term_browser_version)%></span>
+      </div>
     </div>
 <%
 }

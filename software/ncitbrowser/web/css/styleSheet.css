@@ -256,6 +256,18 @@ a.hideLink
  text-align: right;
 }
 
+.texttitle-blue-rightjust-2
+{
+ position: absolute;
+ top: 102px;
+ left: 185px;
+ font-size: 10px;
+ color: #2F2F5F;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+ font-weight: bold;
+ text-align: right;
+}
+
 .texttitle-blue-rightjust-large
 {
  font-size: 9px;
