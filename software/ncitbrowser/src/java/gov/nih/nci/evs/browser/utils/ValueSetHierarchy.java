@@ -139,8 +139,12 @@ public class ValueSetHierarchy {
 			_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
 		}
 		ValueSetDefinition vsd = (ValueSetDefinition) _valueSetDefinitionURI2VSD_map.get(uri);
-		if (vsd == null) return null;
-		if (vsd.getEntityDescription() == null) return null;
+		if (vsd == null) {
+		    return null;
+		}
+		if (vsd.getEntityDescription() == null) {
+			return null;
+		}
 		return vsd.getEntityDescription().getContent();
 	}
 

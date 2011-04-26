@@ -151,9 +151,6 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
     }
 }   
 
-System.out.println("(*) value_set_search_results.jsp vsd_uri: " + vsd_uri);
-
-
 
 
 %>
@@ -532,7 +529,10 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 
 <%
 if (vsd_vec != null && vsd_vec.size() == 1) {
-    //if (sources == null || sources.compareTo("") == 0) sources = "not available";
+    String vsd_metadata_str = (String) vsd_vec.elementAt(0);
+    Vector w = DataUtils.parseData(vsd_metadata_str);
+    vsd_uri = (String) w.elementAt(1);
+
     
     String vsd_description = ValueSetHierarchy.getValueSetDecription(vsd_uri);
     if (vsd_description == null) {
@@ -629,9 +629,6 @@ if (vsd_uri.indexOf("|") != -1) {
 	Vector w = (Vector) DataUtils.parseData(vsd_uri);
 	vsd_uri = (String) w.elementAt(1);
 }
-
-
-System.out.println("(***) value_set_search_results.jsp hidden variable vsd_uri: " + vsd_uri);
 
 
 %>		
