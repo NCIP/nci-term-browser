@@ -57,6 +57,7 @@
 <%
 
 
+
 HashMap display_name_hmap = new HashMap();
 
 ResolvedConceptReferencesIterator iterator = null;
@@ -72,11 +73,21 @@ if (mapping_schema != null) {
 }
 
 
+if (mapping_dictionary != null) {
+  request.getSession().setAttribute("dictionary", mapping_dictionary);
+}
+
+
 _logger.debug("mapping.jsp dictionary: " + mapping_dictionary);
 _logger.debug("mapping.jsp version: " + mapping_version);
 
+
+System.out.println("mapping.jsp dictionary: " + mapping_dictionary);
+System.out.println("mapping.jsp version: " + mapping_version);
+
+
 if (mapping_version != null) {
-    request.setAttribute("version", mapping_version);
+    request.getSession().setAttribute("version", mapping_version);
 }
 
 if (mapping_dictionary != null && mapping_dictionary.compareTo("NCI Thesaurus") == 0) {
@@ -95,12 +106,35 @@ if (mapping_dictionary != null && mapping_dictionary.compareTo("NCI Thesaurus") 
 	    <a name="evs-content" id="evs-content"></a>
 
 <%
-String resultsPerPage = request.getParameter("resultsPerPage");
-if (resultsPerPage == null) {
-    resultsPerPage = "50";
+
+HashMap scheme2MappingIteratorBeanMap = null;
+Object scheme2MappingIteratorBean = request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
+
+if (scheme2MappingIteratorBean != null) {
+    scheme2MappingIteratorBeanMap = (HashMap) scheme2MappingIteratorBean;
+} else {
+    scheme2MappingIteratorBeanMap = new HashMap();
+    request.getSession().setAttribute("scheme2MappingIteratorBeanMap", scheme2MappingIteratorBeanMap);
 }
 
-String selectedResultsPerPage = resultsPerPage;
+
+String resultsPerPage = (String) request.getParameter("resultsPerPage");
+if (resultsPerPage == null) {
+    resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
+    if (resultsPerPage == null) {
+        resultsPerPage = "50";
+    }
+    
+}  else {
+    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+    MappingIteratorBean mapping_bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
+    if (mapping_bean != null) {
+        mapping_bean.setPageSize(Integer.parseInt(resultsPerPage));
+        scheme2MappingIteratorBeanMap.put(mapping_schema, mapping_bean);
+    }
+}
+
+
 
 
   String base_path = request.getContextPath();
@@ -126,20 +160,15 @@ if (sortByStr == null) {
 }
 
 
-Object scheme2MappingIteratorBean = request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
-HashMap scheme2MappingIteratorBeanMap = null;
-if (scheme2MappingIteratorBean != null) {
-    scheme2MappingIteratorBeanMap = (HashMap) scheme2MappingIteratorBean;
-} else {
-    scheme2MappingIteratorBeanMap = new HashMap();
-    request.getSession().setAttribute("scheme2MappingIteratorBeanMap", scheme2MappingIteratorBeanMap);
-}
+
+
 
 System.out.println("mapping.jsp mapping_schema: " + mapping_schema);
 
 MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
 if (bean == null) {
-    bean = new MappingIteratorBean();
+
+    //bean = new MappingIteratorBean();
     // initialization
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
     if (iterator != null) {
@@ -158,6 +187,7 @@ if (bean == null) {
     }
     
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
+    
 } else if (prevSortByStr != null && sortBy != prevSortBy) {
     bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
     //bean.setList(new ArrayList());
@@ -180,6 +210,20 @@ if (bean == null) {
 }
 
 
+if (resultsPerPage != null) {
+    bean.setPageSize(Integer.parseInt(resultsPerPage));
+   
+}
+
+
+
+
+int pageSize = bean.getPageSize();
+System.out.println("(*) pageSize: " + pageSize);
+
+String selectedResultsPerPage = new Integer(pageSize).toString();
+
+
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 int pageNum = 0;
 if (page_number != null) {
@@ -190,9 +234,12 @@ int page_num = pageNum;
 //if (page_num == 0) page_num++;
 //int pageSize = bean.getPageSize();
 
-int pageSize = Integer.parseInt(selectedResultsPerPage);
 
+
+
+bean.setPageSize(pageSize);
 int size = bean.getSize();
+
 
 System.out.println("\npage_num: " + page_num);
 System.out.println("size: " + size);

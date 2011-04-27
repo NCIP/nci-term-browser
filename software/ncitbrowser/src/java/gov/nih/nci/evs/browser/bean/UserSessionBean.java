@@ -96,11 +96,16 @@ public class UserSessionBean extends Object {
     public String contextPath = null;
     public String action_coding_scheme = null;
 
+    private String _selectedPageSize = null;
+    private List _pageSizeList = null;
+
 
     public UserSessionBean() {
         _ontologiesToSearchOn = new ArrayList<String>();
         contextPath = getContextPath();
         _ontologyInfo_map = new HashMap<String, OntologyInfo>();
+
+        _selectedPageSize = "50";
     }
 
 
@@ -2131,4 +2136,87 @@ int selected_knt = 0;
 		}
 
     }
+
+
+    public List getPageSizeList() {
+		if (_pageSizeList != null) return _pageSizeList;
+        _pageSizeList = new ArrayList();
+        _pageSizeList.add(new SelectItem("25"));
+        _pageSizeList.add(new SelectItem("50"));
+        _pageSizeList.add(new SelectItem("75"));
+        _pageSizeList.add(new SelectItem("100"));
+        _pageSizeList.add(new SelectItem("150"));
+        _pageSizeList.add(new SelectItem("200"));
+        _pageSizeList.add(new SelectItem("250"));
+        _pageSizeList.add(new SelectItem("500"));
+        return _pageSizeList;
+    }
+
+    public void setSelectedPageSize(String selectedPageSize) {
+
+		System.out.println("setSelectedPageSize to " + selectedPageSize);
+
+        _selectedPageSize = selectedPageSize;
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        request.getSession().setAttribute("selectedPageSize",
+            _selectedPageSize);
+    }
+
+    public String getSelectedPageSize() {
+        return _selectedPageSize;
+    }
+
+
+    public void pageSizeChanged(ValueChangeEvent event) {
+
+System.out.println("=============================== pageSizeChanged event ");
+
+
+        if (event.getNewValue() == null) {
+
+System.out.println("event.getNewValue() == null ???");
+
+            return;
+		}
+        String newValue = (String) event.getNewValue();
+
+        setSelectedPageSize(newValue);
+
+System.out.println("pageSizeChanged to " + newValue);
+
+/*
+        HttpServletResponse response =
+            (HttpServletResponse) FacesContext.getCurrentInstance()
+                .getExternalContext().getResponse();
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String requestContextPath = request.getContextPath();
+
+        String targetURL = requestContextPath + "//pages/mapping.jsf?";
+
+        try {
+            response.sendRedirect(response.encodeRedirectURL(targetURL));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            // send error message
+        }
+
+        */
+
+
+    }
+
+    public String selectPageSize() {
+		System.out.println("UserSessionBean.selectPageSize========================");
+
+		return "mapping";
+	}
+
 }
