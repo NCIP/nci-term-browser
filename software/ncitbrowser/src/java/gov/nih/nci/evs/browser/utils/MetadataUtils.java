@@ -378,7 +378,7 @@ public class MetadataUtils {
             Vector w = getMetadataValues(scheme, version, urn, propertyName);
             if (w == null || w.size() == 0) {
                 //v.add(name + "|" + propertyName + " not available");
-                v.add(scheme + " (version: " + version + ")" + "|" );
+                v.add(scheme + " (version: " + version + ")" + "|WARNING: please check the completeness of metadata " + propertyName);
 
             } else {
                 String t = (String) w.elementAt(0);

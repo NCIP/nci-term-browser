@@ -6,6 +6,14 @@
 
 System.out.println("pagination-mapping.jsp pageNum: " + pageNum);
 
+
+String mapping_selectedPageSize = (String) request.getSession().getAttribute("selectedPageSize");
+
+System.out.println("pagination-mapping.jsp mapping_selectedPageSize: " + mapping_selectedPageSize);
+
+
+
+
     int prev_page_num = pageNum - 1;
     int next_page_num = pageNum + 1;
     
@@ -20,10 +28,7 @@ System.out.println("pagination-mapping.jsp iend_str: " + iend_str);
 
   
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
-System.out.println("(*) dictionary_map " + dictionary_map);
-
-
-//bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
+System.out.println("(*) pagination-mapping.jsp dictionary_map " + dictionary_map);
 
 
 scheme2MappingIteratorBeanMap = (HashMap) request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
@@ -43,6 +48,7 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
 
     
 %>
+
 
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping.jsf?" >
   <table>
@@ -67,6 +73,9 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
         </i>&nbsp;
         <%
           }
+          
+          
+          
           if (num_pages > 1) {
           
           
@@ -101,7 +110,10 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
 		  }
           }
           
-          if (next_page_num < num_pages) {
+System.out.println("(*) pagination_mapping next_page_num: " +  next_page_num);         
+System.out.println("(*) pagination_mapping num_pages: " +  num_pages);         
+          
+          if (next_page_num <= num_pages) {
         %>
           &nbsp;
           <i>
@@ -117,8 +129,15 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
     <tr>
       <td class="textbody" align=left>
         Show
-        
-  <select name=resultsPerPage size=1 onChange="paginationForm.submit();">
+  <!--
+  	<h:selectOneMenu id="pageSize" value="#{userSessionBean.selectedPageSize}" 
+  	   valueChangeListener="#{userSessionBean.pageSizeChanged}" 
+  	   immediate="true" onchange="submit()">
+  		<f:selectItems value="#{userSessionBean.pageSizeList}" />
+  	</h:selectOneMenu>
+  -->
+  
+  <select name="resultsPerPage" size=1 onChange="paginationForm.submit();">
   <%
     List resultsPerPageValues = UserSessionBean.getResultsPerPageValues();
     for (int i=0; i<resultsPerPageValues.size(); i++) {
@@ -138,15 +157,8 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
   }
   %>
   </select>
-  <!--
-        
-        <h:selectOneMenu
-          id="id" value="#{userSessionBean.selectedResultsPerPage}"
-          valueChangeListener="#{userSessionBean.resultsPerPageChanged}" immediate="true" onchange="submit()"> 
-          <f:selectItems value="#{userSessionBean.resultsPerPageList}"/>
-        </h:selectOneMenu>
-        
-  -->        
+  
+
         &nbsp;results per page
       </td>
       <td>

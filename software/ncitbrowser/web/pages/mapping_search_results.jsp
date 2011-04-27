@@ -224,6 +224,10 @@ System.out.println( "(*) size: " + size);
        if (size > istart + pageSize -1) {
            iend = istart + pageSize -1;
        }
+       
+       //KLO
+       list = mapping_bean.getData(istart, size);
+       
    }
 
 
@@ -323,8 +327,13 @@ if (show_rank_column) {
                 //for (int lcv=0; lcv<list.size(); lcv++) {
                 
  int upper_bound = list.size();
- if (upper_bound > pageSize) upper_bound = pageSize;
+ if (upper_bound > pageSize) {
+     upper_bound = pageSize;
+     
+ }
  
+ 
+ System.out.println("(**************** list.size(): " + list.size());
  
  System.out.println("(**************** upper_bound: " + upper_bound);
  
