@@ -210,6 +210,11 @@
                         <f:setPropertyActionListener target="#{CartActionBean.codingScheme}" value="dictionary" />
                         <f:setPropertyActionListener target="#{CartActionBean.version}" value="version" />
                      </h:commandLink>
+		     <c:choose>
+			<c:when test="${sessionScope.CartActionBean.count>0}">
+			  (<h:outputText value="#{CartActionBean.count}"/>)
+			</c:when>
+		     </c:choose>                     
              <%
  	                  if (term_suggestion_application_url != null && term_suggestion_application_url
  								.compareTo("") != 0) {
