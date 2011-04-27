@@ -361,6 +361,10 @@ if (show_rank_column) {
         source_version = mappingData.getSourceCodingSchemeVersion();
         target_scheme = mappingData.getTargetCodingScheme();
         target_version = mappingData.getTargetCodingSchemeVersion();
+       
+                
+source_scheme = DataUtils.getFormalName(source_scheme);        
+target_scheme = DataUtils.getFormalName(target_scheme);        
 
             %>
 
