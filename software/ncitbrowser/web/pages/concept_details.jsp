@@ -69,12 +69,11 @@
    <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
    <f:view>
       <!-- Begin Skip Top Navigation -->
-      <a href="#evs-content" class="hideLink" accesskey="1"
-         title="Skip repetitive navigation links">skip navigation
-         links</A>
+      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
       <!-- End Skip Top Navigation -->
       <%@ include file="/pages/templates/header.jsp"%>
       <div class="center-page">
+         <h:form>
          <%@ include file="/pages/templates/sub-header.jsp"%>
          <!-- Main box -->
          <div id="main-area">
@@ -180,8 +179,7 @@
             			request.getSession().setAttribute("singleton", "false");
             %>
             <!-- Page content -->
-            <div class="pagecontentLittlePadding">
-               <h:form>
+            <div class="pagecontentLittlePadding">               
                   <table border="0">
                      <tr class="global-nav">
                         <td width="365px"></td>
@@ -223,8 +221,7 @@
              %>
                         </td>
                      </tr>
-                  </table>
-               </h:form>
+                  </table>               
                <a name="evs-content" id="evs-content"></a>
                <table border="0" cellpadding="0" cellspacing="0" width="700px">
                   <tr>
@@ -255,7 +252,7 @@
                   <%
                   	}
                   %>
-               </table>
+               </table>              
                <hr>
                <%
                	request.getSession().setAttribute("concept", c);
@@ -304,6 +301,7 @@
             </div> <!--  End pagecontentLittlePadding -->
          </div> <!--  End main-area -->
          <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+       </h:form>
       </div> <!-- End center-page -->
       <br />
    </f:view>
