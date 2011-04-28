@@ -578,7 +578,7 @@ mappingIteratorBean.initialize();
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
 
-		request.setAttribute("key", key);
+		request.getSession().setAttribute("key", key);
 		System.out.println("(*************) setAttribute key: " + key);
 
         if (iterator != null) {
