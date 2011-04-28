@@ -10,7 +10,7 @@
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
-    <td><div class="texttitle-blue-rightJust">Version: <%= vocablary_version_value %></div></td>
+    <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(vocablary_version_value)%></div></td>
   </tr></table>
   <hr/>
 
@@ -59,7 +59,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         %>
             <p>
             Source Home Page:
-              <a href="<%=source_url_value%>" target="_blank"><%=source_url_value%></a>
+              <a href="<%=source_url_value%>" target="_blank"><%=HTTPUtils.cleanXSS(source_url_value)%></a>
             </p>
         <%
         }
@@ -68,7 +68,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         %>
             <p>
             Download:
-              <a href="<%=download_url_value%>" target="_blank"><%=download_url_value%></a>
+              <a href="<%=download_url_value%>" target="_blank"><%=HTTPUtils.cleanXSS(download_url_value)%></a>
             </p>
         <%
         }
@@ -77,7 +77,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         %>
             <p>
             caBIG VKC Link:
-              <a href="<%=cabig_vkc_index_url_value%>" target="_blank"><%=cabig_vkc_index_url_value%></a>
+              <a href="<%=cabig_vkc_index_url_value%>" target="_blank"><%=HTTPUtils.cleanXSS(cabig_vkc_index_url_value)%></a>
             </p>
         <%
         }
