@@ -257,7 +257,7 @@
                
                 <table>
                   <tr><td>
-                    <input CLASS="searchbox-input" name="matchText" value="<%=search_string%>" 
+                    <input CLASS="searchbox-input" name="matchText" value="<%=HTTPUtils.cleanXSS(search_string)%>" 
                            onkeypress="return submitEnter('adv_search',event)" tabindex="1">
                     <h:commandButton id="adv_search" value="Search" action="#{userSessionBean.advancedSearchAction}"
                       onclick="javascript:cursor_wait();"
@@ -331,8 +331,8 @@
                 <tr><td>
                   <table>
                   <% if (selectSearchOption.equals("Property")) { %>
-                    <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=rel_search_association%>">
-                    <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=rel_search_rela%>">
+                    <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=HTTPUtils.cleanXSS(rel_search_association)%>">
+                    <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=HTTPUtils.cleanXSS(rel_search_rela)%>">
                     <tr>
                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                       <td>
@@ -366,7 +366,7 @@
                     </tr>
 
                   <% } else if (selectSearchOption.equals("Relationship")) { %>
-                    <input type="hidden" name="selectProperty" id="selectProperty" value="<%=selectProperty%>">
+                    <input type="hidden" name="selectProperty" id="selectProperty" value="<%=HTTPUtils.cleanXSS(selectProperty)%>">
                     <tr>
                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                       <td>
@@ -412,9 +412,9 @@ System.out.println("adv_search_version: " + adv_search_version);
                       </td>
                     </tr>
                   <% } else { %>
-                    <input type="hidden" name="selectProperty" id="selectProperty" value="<%=selectProperty%>">
-                    <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=rel_search_association%>">
-                    <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=rel_search_rela%>">
+                    <input type="hidden" name="selectProperty" id="selectProperty" value="<%=HTTPUtils.cleanXSS(selectProperty)%>">
+                    <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=HTTPUtils.cleanXSS(rel_search_association)%>">
+                    <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=HTTPUtils.cleanXSS(rel_search_rela)%>">
 
                   <% }%>
 
@@ -423,10 +423,10 @@ System.out.println("adv_search_version: " + adv_search_version);
 
               </table>
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
-              <input type="hidden" name="dictionary" id="dictionary" value="<%=adv_search_vocabulary%>">
-              <input type="hidden" name="version" id="version" value="<%=adv_search_version%>">
+              <input type="hidden" name="dictionary" id="dictionary" value="<%=HTTPUtils.cleanXSS(adv_search_vocabulary)%>">
+              <input type="hidden" name="version" id="version" value="<%=HTTPUtils.cleanXSS(adv_search_version)%>">
 
-              <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=adv_search_type%>" />
+              <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=HTTPUtils.cleanXSS(adv_search_type)%>" />
 <!--
             </form>
  -->           
