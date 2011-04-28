@@ -32,13 +32,13 @@
         * (For Internet Explorer): </td> is on a separate line
     --%>
     <td width="5"></td>
-    <td><a href="<%=tab_terms_link%>">
+    <td><a href="<%=HTTPUtils.cleanXSS(tab_terms_link)%>">
       <img name="tab_terms" src="<%=tab_terms_image%>"
         border="0" alt="Terminologies" title="Terminologies" /></a></td>
-    <td><a href="<%=tab_valuesets_link%>">
+    <td><a href="<%=HTTPUtils.cleanXSS(tab_valuesets_link)%>">
       <img name="tab_valuesets" src="<%=tab_valuesets_image%>"
         border="0" alt="Value Sets" title="ValueSets" /></a></td>
-    <td><a href="<%=tab_mappings_link%>">
+    <td><a href="<%=HTTPUtils.cleanXSS(tab_mappings_link)%>">
       <img name="tab_map" src="<%=tab_mappings_image%>"
         border="0" alt="Mappings" title="Mappings" /></a></td>
   </tr>
