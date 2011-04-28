@@ -100,7 +100,12 @@ if (search_results_dictionary == null || search_results_dictionary.compareTo("NC
 
 String resultsPerPage = request.getParameter("resultsPerPage");
 if (resultsPerPage == null) {
-    resultsPerPage = "50";
+    resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
+    if (resultsPerPage == null) {
+       resultsPerPage = "50";
+    }
+} else {
+    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
 }
 
 String selectedResultsPerPage = resultsPerPage;
