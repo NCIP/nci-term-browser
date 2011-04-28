@@ -9,7 +9,7 @@
 
 <%
   String report = request.getParameter("report");
-  String value = "Warning: " + report + " is an invalid report.";
+  String value = "Warning: " + HTTPUtils.cleanXSS(report) + " is an invalid report.";
 
   try {
     Vector<StandardFtpReportInfo> list =
