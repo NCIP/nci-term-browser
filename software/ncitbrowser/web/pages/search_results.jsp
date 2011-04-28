@@ -67,7 +67,7 @@ String vocabulary_name = null;
 String short_vocabulary_name = null;
 String coding_scheme_version = null;
 
-String key = (String) request.getAttribute("key");
+String key = (String) request.getSession().getAttribute("key");
 System.out.println("********* search results.jsp key: " + key);
 if (key == null) {
     key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
