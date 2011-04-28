@@ -180,10 +180,10 @@
             %>
             <!-- Page content -->
             <div class="pagecontentLittlePadding">               
-                  <table border="0">
-                     <tr class="global-nav">
-                        <td width="365px"></td>
-                        <td align="right">
+                  <table border="0" width="720px">
+                     <tr class="global-nav"> 
+                        <td width="25%"></td>                       
+                        <td align="right" width="75%">
                            <%
                            	Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE };
                            	boolean tree_access2 = !DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(dictionary);
