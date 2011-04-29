@@ -82,12 +82,13 @@ String prev_cs_urn = "";
 
  <h:form id="resolveValueSetForm" styleClass="search-form">            
                
-              <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-                <th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
-                <th class="dataTableHeader" scope="col" align="left">Coding Scheme</th>
-                <th class="dataTableHeader" scope="col" align="left">Version</th>
-                <th class="dataTableHeader" scope="col" align="left">Tag</th>
-                
+              <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0">
+                <tr>                
+                   <th class="dataTableHeader" scope="col" align="left" width="25px">&nbsp;</th>
+                   <th class="dataTableHeader" scope="col" align="left">Coding Scheme</th>
+                   <th class="dataTableHeader" scope="col" align="left">Version</th>
+                   <th class="dataTableHeader" scope="col" align="left">Tag</th>
+                </tr>
 <%
 if (coding_scheme_ref_vec != null) {
 int k = -1;

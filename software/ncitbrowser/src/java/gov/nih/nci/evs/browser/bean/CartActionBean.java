@@ -1147,7 +1147,7 @@ public class CartActionBean {
             sb.append("Terminology,");
             sb.append("Version,");
             sb.append("Concept Code,");
-            sb.append("URL");
+            sb.append("URI");
             sb.append("\r\n");
 
 
