@@ -17,7 +17,6 @@ import java.util.HashSet;
 
 import javax.faces.event.*;
 
-
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
 import org.LexGrid.LexBIG.Utility.Constructors;
@@ -48,10 +47,7 @@ import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 
-
 import gov.nih.nci.evs.browser.utils.*;
-
-
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -114,13 +110,10 @@ public class CartActionBean {
     private List<SelectItem> _selectVersionItems = null;
     private List<String> _selectedVersionItems = null;
 
-    private String _exportFormat = "XML";
-
-
     // Local constants
     static public final String XML_FILE_NAME = "cart.xml";
     static public final String XML_CONTENT_TYPE = "text/xml";
-    static public final String CSV_FILE_NAME = "cart.txt";
+    static public final String CSV_FILE_NAME = "cart.csv";
     static public final String CSV_CONTENT_TYPE = "text/csv";
 
     // Error messages
@@ -526,34 +519,6 @@ public class CartActionBean {
 				    }
 				}
 			}
-
-			/*
-			boolean flag;
-			for (Iterator<Entry<String, SchemeVersion>> i = versionList
-					.entrySet().iterator(); i.hasNext();) {
-				Entry<String, SchemeVersion> x = i.next();
-				SchemeVersion sv = x.getValue();
-
-				// Add only selected scheme versions
-				flag = false;
-				if (inSelectedlist(sv.uri)) {
-					if (inSelectedlist(sv.uri,sv.version))
-						flag = true;
-				} else {
-					flag = true;
-				}
-
-				if (flag) {
-					csvList.addAbsoluteCodingSchemeVersionReference(Constructors
-						.createAbsoluteCodingSchemeVersionReference(
-							sv.uri,
-							sv.version));
-					_logger.debug("Adding CS Ver Ref: "
-							+ sv.uri
-							+ " (" +  sv.version + ")");
-				}
-			}
-			*/
 
             // Build a buffer holding the XML data
 
@@ -1054,8 +1019,6 @@ public class CartActionBean {
 
     } // End of DuplicateCheck
 
-
-
     /*
      * Unselect all concept(s) in the Cart
      * @return
@@ -1066,11 +1029,10 @@ public class CartActionBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-String format = (String) request.getParameter("format");
-System.out.println("cartVersionSelectionAction format: " + format);
+		String format = (String) request.getParameter("format");
+		System.out.println("cartVersionSelectionAction format: " + format);
 
 		request.getSession().setAttribute("format", format);
-
 
         int selectedCount = 0;
 		for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
@@ -1264,10 +1226,7 @@ System.out.println("cartVersionSelectionAction format: " + format);
     public void formatListener(ActionEvent evt) {
         FacesContext ctx = FacesContext.getCurrentInstance();
         String format = (String) ctx.getExternalContext().getRequestParameterMap().get("format");
-        _exportFormat = format;
-
         System.out.println("formatListener format: " + format);
-
     }
 
 } // End of CartActionBean
