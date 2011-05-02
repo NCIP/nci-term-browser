@@ -21,7 +21,7 @@ System.out.println("pagination-mapping.jsp next_page_num_str: " + next_page_num_
 %>
 
 
-<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?" >
+<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?nav_type=valuesets" >
   <table>
     <tr>
       <td class="textbody" align=left>
