@@ -38,7 +38,7 @@ System.out.println("pagination-mapping.jsp next_page_num_str: " + next_page_num_
         %>
         &nbsp;
         <i>
-          <a href="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?page_number=<%=prev_page_num_str%>">Prev</a>
+          <a href="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?nav_type=valuesets&page_number=<%=prev_page_num_str%>">Prev</a>
         </i>&nbsp;
         <%
           }
@@ -60,7 +60,7 @@ System.out.println("pagination-mapping.jsp next_page_num_str: " + next_page_num_
 		    String idx_str = Integer.toString(idx);
 		    if (page_num != idx) {
 		      %>
-			<a href="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?page_number=<%=idx_str%>"><%=idx_str%></a>
+			<a href="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?nav_type=valuesets&page_number=<%=idx_str%>"><%=idx_str%></a>
 			&nbsp;
 		      <%
 		    } else {
@@ -75,7 +75,7 @@ System.out.println("pagination-mapping.jsp next_page_num_str: " + next_page_num_
         %>
           &nbsp;
           <i>
-            <a href="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?page_number=<%=next_page_num_str%>">Next</a>
+            <a href="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?nav_type=valuesets&page_number=<%=next_page_num_str%>">Next</a>
           </i>
         <%
           }
