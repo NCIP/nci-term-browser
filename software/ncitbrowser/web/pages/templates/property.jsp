@@ -243,9 +243,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 
 //[#26722] Support cross-linking of individual source vocabularies with NCI Metathesaurus.
-
-
- System.out.println("properties_to_display.size(): " + properties_to_display.size());
+// System.out.println("properties_to_display.size(): " + properties_to_display.size());
 
   HashMap<String, String> label2URL = new HashMap<String, String>();
   HashMap<String, String> label2Linktext = new HashMap<String, String>();
@@ -456,6 +454,10 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 <%
     String vocab = (String) request.getSession().getAttribute("dictionary");
     String NCIm_sab = DataUtils.getNCImSAB(vocab);
+    
+    
+//System.out.println("vocab: " + vocab);    
+    
     
     if (NCIm_sab != null) {
 	ResolvedConceptReferencesIterator iterator = new SearchUtils().findConceptWithSourceCodeMatching("NCI Metathesaurus", null,

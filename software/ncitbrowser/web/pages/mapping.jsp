@@ -164,12 +164,8 @@ if (sortByStr == null) {
 }
 
 
-
-System.out.println("(* KLO) mapping.jsp mapping_schema: " + mapping_schema);
-
 MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
 if (bean == null) {
-    System.out.println("(* KLO) bean == null -- initialize MappingIteratorBean.");
     //bean = new MappingIteratorBean();
     // initialization
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
@@ -190,11 +186,6 @@ if (bean == null) {
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
     
 } else { //if (prevSortByStr != null && sortBy != prevSortBy) {
-
-    System.out.println("(* KLO) MappingIteratorBean exists.");
-    System.out.println("(* KLO) MappingIteratorBean prevSortByStr " + prevSortByStr); //1
-    System.out.println("(* KLO) MappingIteratorBean sortBy " + sortBy); //2
-
     bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
     if (iterator != null) {
