@@ -141,12 +141,16 @@ if (resultsPerPage == null) {
 int numRemaining = 0;
 
 int sortBy = MappingData.COL_SOURCE_CODE;
+
 int prevSortBy = MappingData.COL_SOURCE_CODE;
 
 String sortByStr = request.getParameter("sortBy");
 if (sortByStr != null) {
     sortBy = Integer.parseInt(sortByStr);
 }
+
+System.out.println("SORT_BY: " + sortBy);
+
 
 String prevSortByStr = (String) request.getSession().getAttribute("sortBy");
 if (prevSortByStr != null) {
@@ -161,13 +165,11 @@ if (sortByStr == null) {
 
 
 
-
-
-System.out.println("mapping.jsp mapping_schema: " + mapping_schema);
+System.out.println("(* KLO) mapping.jsp mapping_schema: " + mapping_schema);
 
 MappingIteratorBean bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
 if (bean == null) {
-
+    System.out.println("(* KLO) bean == null -- initialize MappingIteratorBean.");
     //bean = new MappingIteratorBean();
     // initialization
     iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
@@ -175,7 +177,6 @@ if (bean == null) {
 
         try {
             numRemaining = iterator.numberRemaining();
-            
             System.out.println("numRemaining: " + numRemaining);
             
             bean = new MappingIteratorBean(iterator);
@@ -188,17 +189,21 @@ if (bean == null) {
     
     scheme2MappingIteratorBeanMap.put(mapping_schema, bean);
     
-} else if (prevSortByStr != null && sortBy != prevSortBy) {
-    bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
-    //bean.setList(new ArrayList());
-    iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
+} else { //if (prevSortByStr != null && sortBy != prevSortBy) {
 
+    System.out.println("(* KLO) MappingIteratorBean exists.");
+    System.out.println("(* KLO) MappingIteratorBean prevSortByStr " + prevSortByStr); //1
+    System.out.println("(* KLO) MappingIteratorBean sortBy " + sortBy); //2
+
+    bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
+    iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version, sortBy);
     if (iterator != null) {
 
         try {
+            bean.setIterator(iterator);
             numRemaining = iterator.numberRemaining();
             System.out.println("MappingIteratorBean: numRemaining " + numRemaining);
-	    bean.initialize();
+	    //bean.initialize();
 	    scheme2MappingIteratorBeanMap.put(mapping_schema, bean);            
             
         } catch (Exception ex) {
@@ -212,7 +217,6 @@ if (bean == null) {
 
 if (resultsPerPage != null) {
     bean.setPageSize(Integer.parseInt(resultsPerPage));
-   
 }
 
 
@@ -304,7 +308,7 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
                   String s = new Integer(MappingData.COL_SOURCE_NAME).toString();
               %>
 
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Source Name
                 </a>
 
@@ -324,7 +328,7 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
                   String s = new Integer(MappingData.COL_REL).toString();
               %>
 
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    REL
                 </a>
 
@@ -353,7 +357,7 @@ if (show_rank_column) {
                   String s = new Integer(MappingData.COL_SCORE).toString();
               %>
 
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Map Rank
                 </a>
 
@@ -387,7 +391,7 @@ if (show_rank_column) {
                   String s = new Integer(MappingData.COL_TARGET_CODE).toString();
               %>
 
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Target Code
                 </a>
 
@@ -406,7 +410,7 @@ if (show_rank_column) {
                   String s = new Integer(MappingData.COL_TARGET_NAME).toString();
               %>
 
-                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
+                <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
                    Target Name
                 </a>
 
