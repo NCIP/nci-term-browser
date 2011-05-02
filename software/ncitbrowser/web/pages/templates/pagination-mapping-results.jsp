@@ -100,13 +100,8 @@ if (iend >= numRemaining) {
 		    }
 		  }
           }
-          
-          
-//System.out.println("(*) next_page_num: " + next_page_num);
-//System.out.println("(*) num_pages: " + num_pages);
-          
-          
-          if (next_page_num <= num_pages) {
+
+          if (num_pages > 1 && next_page_num <= num_pages) {
         %>
           &nbsp;
           <i>
