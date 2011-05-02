@@ -147,12 +147,22 @@ request.getSession().setAttribute("matchText", match_text);
       
       <%
 
-String resultsPerPage = request.getParameter("resultsPerPage");
+
+String resultsPerPage = (String) request.getParameter("resultsPerPage");
 if (resultsPerPage == null) {
-    resultsPerPage = "50";
+    resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
+    if (resultsPerPage == null) {
+        resultsPerPage = "50";
+    }
+    
+}  else {
+    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
 }
 
-		String selectedResultsPerPage = resultsPerPage;
+
+
+
+	String selectedResultsPerPage = resultsPerPage;
         request.getSession().removeAttribute("dictionary");
         HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 
