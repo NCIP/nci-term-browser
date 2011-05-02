@@ -1977,6 +1977,18 @@ int selected_knt = 0;
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        String matchText = (String) request.getParameter("matchText");
+        if (matchText != null)
+            matchText = matchText.trim();
+
+        request.getSession().setAttribute("matchText", matchText);
+
+        String matchAlgorithm = (String) request.getParameter("algorithm");
+        String searchTarget = (String) request.getParameter("searchTarget");
+
+        request.getSession().setAttribute("searchTarget", searchTarget);
+        request.getSession().setAttribute("algorithm", matchAlgorithm);
+
         String[] ontology_list = request.getParameterValues("ontology_list");
 
         String ontologiesToSearchOnStr = "|";
@@ -2022,6 +2034,18 @@ int selected_knt = 0;
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
+
+        String matchText = (String) request.getParameter("matchText");
+        if (matchText != null)
+            matchText = matchText.trim();
+
+        request.getSession().setAttribute("matchText", matchText);
+
+        String matchAlgorithm = (String) request.getParameter("algorithm");
+        String searchTarget = (String) request.getParameter("searchTarget");
+
+        request.getSession().setAttribute("searchTarget", searchTarget);
+        request.getSession().setAttribute("algorithm", matchAlgorithm);
 
 		//String action_cs = (String) request.getParameter("hide_versions_of");
 		//System.out.println("hide_versions_of -- " + action_cs);
