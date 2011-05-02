@@ -47,7 +47,8 @@
 		    }
 		  }
           }
-          if (next_page_num < num_pages) {
+          if (num_pages > 1 && next_page_num <= num_pages) {
+
         %>
           &nbsp;
           <i>
