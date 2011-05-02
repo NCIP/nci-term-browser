@@ -216,8 +216,6 @@ if (resultsPerPage != null) {
 }
 
 
-
-
 int pageSize = bean.getPageSize();
 System.out.println("(*) pageSize: " + pageSize);
 
@@ -231,11 +229,6 @@ if (page_number != null) {
 }
 
 int page_num = pageNum;
-//if (page_num == 0) page_num++;
-//int pageSize = bean.getPageSize();
-
-
-
 
 bean.setPageSize(pageSize);
 int size = bean.getSize();

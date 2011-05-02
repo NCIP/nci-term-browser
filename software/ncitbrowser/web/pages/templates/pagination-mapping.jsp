@@ -44,7 +44,6 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
     
     String prev_page_num_str = Integer.toString(prev_page_num);
     String next_page_num_str = Integer.toString(next_page_num);
-    
 
     
 %>

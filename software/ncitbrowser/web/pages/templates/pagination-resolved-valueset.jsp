@@ -3,6 +3,24 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.IteratorBeanManager" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 
+<%
+int prev_page_num = pageNum - 1;
+int next_page_num = pageNum + 1;
+
+String istart_str = Integer.toString(istart+1);
+String iend_str = Integer.toString(iend+1);
+    
+String match_size = Integer.toString(numRemaining);
+
+String prev_page_num_str = Integer.toString(prev_page_num);
+String next_page_num_str = Integer.toString(next_page_num);
+
+System.out.println("pagination-mapping.jsp page_num: " + page_num);
+System.out.println("pagination-mapping.jsp prev_page_num_str: " + prev_page_num_str);
+System.out.println("pagination-mapping.jsp next_page_num_str: " + next_page_num_str);
+%>
+
+
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?" >
   <table>
     <tr>
@@ -53,11 +71,11 @@
 		  }
           }
           
-          if (next_page_num < num_pages) {
+          if (num_pages > 1 && next_page_num <= num_pages) {
         %>
           &nbsp;
           <i>
-            <a href="<%=request.getContextPath() %>/pages/resolved_value_set?page_number=<%=next_page_num_str%>">Next</a>
+            <a href="<%=request.getContextPath() %>/pages/resolved_value_set.jsf?page_number=<%=next_page_num_str%>">Next</a>
           </i>
         <%
           }

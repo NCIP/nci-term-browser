@@ -56,6 +56,8 @@
         
 <%
 
+int numRemaining = 0;
+
 String valueSetSearch_requestContextPath = request.getContextPath();
 	
 String message = (String) request.getSession().getAttribute("message");  
@@ -108,13 +110,58 @@ if (iteratorBean == null) {
     //request.getSession().setAttribute("itr_size_str", itr_size_str);    
 }
 
-		
-String resultsPerPage = request.getParameter("resultsPerPage");
+
+
+String resultsPerPage = (String) request.getParameter("resultsPerPage");
 if (resultsPerPage == null) {
-    resultsPerPage = "50";
+    resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
+    if (resultsPerPage == null) {
+        resultsPerPage = "50";
+    }
+    
+}  else {
+    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
 }
 
+
 String selectedResultsPerPage = resultsPerPage;
+
+String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+int pageNum = 0;
+
+if (page_number != null) {
+    pageNum = Integer.parseInt(page_number);
+} else {
+    pageNum = 1;
+}
+
+int page_num = pageNum;
+
+int pageSize = Integer.parseInt(resultsPerPage);
+iteratorBean.setPageSize(pageSize);
+int size = iteratorBean.getSize();
+numRemaining = size;
+
+System.out.println("\npage_num: " + page_num);
+System.out.println("size: " + size);
+System.out.println("pageSize: " + pageSize);
+
+int num_pages = size / pageSize;
+if (num_pages * pageSize < size) num_pages++;
+
+System.out.println("num_pages: " + num_pages + "\n");
+
+int istart = (page_num - 1) * pageSize;
+if (istart < 0) istart = 0;
+
+
+int iend = istart + pageSize - 1;
+if (iend > size) iend = size-1;
+
+/*
+
+
+
 String page_string = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 if (page_string == null) page_string = "0";
 int page_num = Integer.parseInt(page_string);
@@ -143,7 +190,7 @@ System.out.println("(*) istart: " + istart);
 System.out.println("(*) iend: " + iend);
 
 
-int size = 0;
+//int size = 0;
 String match_size = "0";
 
 if (iteratorBean != null) {
@@ -166,6 +213,7 @@ System.out.println("(*) iend_str: " + iend_str);
 String prev_page_num_str = Integer.toString(prev_page_num);
 String next_page_num_str = Integer.toString(next_page_num);
 
+*/
 
 
 %>
@@ -230,6 +278,7 @@ String next_page_num_str = Integer.toString(next_page_num);
           
 		//ResolvedConceptReferenceList list = new ResolvedConceptReferenceList();
 		List list = iteratorBean.getData(istart, iend);
+		
 
                 for (int k=0; k<list.size(); k++) {
                       Object obj = list.get(k);
