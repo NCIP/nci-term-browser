@@ -48,7 +48,7 @@ if (iend >= numRemaining) {
 
 
 
-<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?" >
+<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?nav_type=mappings" >
   <table>
     <tr>
       <td class="textbody" align=left>

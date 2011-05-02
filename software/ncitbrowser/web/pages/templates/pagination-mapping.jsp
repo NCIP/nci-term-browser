@@ -49,7 +49,7 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
 %>
 
 
-<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping.jsf?" >
+<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings" >
   <table>
     <tr>
       <td class="textbody" align=left>
