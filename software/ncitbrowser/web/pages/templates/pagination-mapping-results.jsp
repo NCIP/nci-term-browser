@@ -39,9 +39,6 @@ if (iend >= numRemaining) {
     String next_page_num_str = Integer.toString(pageNum+1);
 
 
-//System.out.println("(*) pagination: prev_page_num_str " + prev_page_num_str);
-//System.out.println("(*) pagination: next_page_num_str " + next_page_num_str);
-
     
 %>
 

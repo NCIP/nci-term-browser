@@ -2076,6 +2076,19 @@ int selected_knt = 0;
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        String matchText = (String) request.getParameter("matchText");
+        if (matchText != null)
+            matchText = matchText.trim();
+
+        request.getSession().setAttribute("matchText", matchText);
+
+        String matchAlgorithm = (String) request.getParameter("algorithm");
+        String searchTarget = (String) request.getParameter("searchTarget");
+
+        request.getSession().setAttribute("searchTarget", searchTarget);
+        request.getSession().setAttribute("algorithm", matchAlgorithm);
+
+
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 		for (int i = 0; i < display_name_vec.size(); i++) {
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
