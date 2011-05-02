@@ -521,7 +521,7 @@
 
 <h:form id="valueSetSearchForm" styleClass="search-form-main-area">      
               <%-- <div class="textbody"> --%>
-<table border="0" cellspacing="0" cellpadding="0" style="margin: 4px" >
+<table border="0" cellspacing="0" cellpadding="0" style="margin: 2px" >
   <tr valign="top" align="left">
     <td align="left" class="textbody">  
                 <% if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) { %>
@@ -559,7 +559,7 @@
   
   <tr valign="top" align="left">
     <td>
-      <table border="0" cellspacing="0" cellpadding="0" style="margin: 2px">
+      <table border="0" cellspacing="0" cellpadding="0" style="margin: 0px">
     
         <tr valign="top" align="left">
         <td align="left" class="textbody">  
@@ -569,7 +569,7 @@
         </td>
         </tr>
         <%
-                     request.setAttribute("globalNavHeight", "27"); 
+                     request.setAttribute("globalNavHeight", "37"); 
         %>
         <tr align="left">
             <td height="1px" bgcolor="#2F2F5F" align="left"></td>
@@ -589,7 +589,7 @@
         </tr>
 
                 <% if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { 
-                     request.setAttribute("globalNavHeight", "38"); %>
+                     request.setAttribute("globalNavHeight", "12"); %>
         <tr valign="top" align="left">
           <td align="left" class="textbody">
                      &nbsp;&nbsp;
