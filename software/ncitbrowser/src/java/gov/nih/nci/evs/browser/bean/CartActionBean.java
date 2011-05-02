@@ -251,6 +251,7 @@ public class CartActionBean {
         String name = null;
         String url = null;
         String version = null;
+        String type = null;
 
         _messageflag = false;
 
@@ -272,6 +273,7 @@ public class CartActionBean {
         // Get coding scheme
         codingScheme = (String)request.getSession().getAttribute(_codingScheme);
         version = (String)request.getSession().getAttribute(_version);
+        type = (String)request.getSession().getAttribute("type");
 
         // Get concept name space
         nameSpace = curr_concept.getEntityCodeNamespace();
@@ -307,11 +309,12 @@ public class CartActionBean {
         // Add scheme and version back in for redisplay
         request.setAttribute("dictionary", codingScheme);
         request.setAttribute("version", version);
-
+        request.setAttribute("type", type);
+  
         // Rebuild version selected lists
         _initDisplayItems();
 
-		return null;
+		return "concept_details";
     }
 
     /**

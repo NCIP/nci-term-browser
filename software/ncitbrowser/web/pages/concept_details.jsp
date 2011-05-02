@@ -78,7 +78,7 @@
          <!-- Main box -->
          <div id="main-area">
             <%
-            	String code = null;
+                  String code = null;
             		String type = null;
             		String singleton = (String) request.getAttribute("singleton");
             		if (singleton != null && singleton.compareTo("true") == 0) {
@@ -113,6 +113,7 @@
             		}
             		Boolean new_search = null;
             		Object new_search_obj = request.getSession().getAttribute("new_search");
+                  
             		if (new_search_obj != null) {
             			new_search = (Boolean) new_search_obj;
             			if (new_search.equals(Boolean.TRUE)) {
@@ -123,6 +124,7 @@
             		}
             		if (type == null) {
             			type = (String) request.getParameter("type");
+                     if (type == null) type = (String) request.getAttribute("type");
             			if (type == null) {
             				type = "properties";
             			} else if (type.compareTo("properties") != 0
@@ -133,7 +135,7 @@
             				type = "properties";
             			}
             		}
-
+                  
             		String cd_dictionary = DataUtils.getFormalName(dictionary);
             		String term_suggestion_application_url = DataUtils
             				.getMetadataValue(cd_dictionary,"term_suggestion_application_url");
