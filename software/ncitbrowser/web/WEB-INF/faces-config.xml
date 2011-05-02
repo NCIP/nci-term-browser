@@ -670,7 +670,14 @@
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>
 
-     <navigation-case>
+    <navigation-case>
+       <description>Add concept to cart</description>
+       <from-action>#{CartActionBean.addToCart}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
        <description>advanced_search</description>
        <to-view-id>/pages/advanced_search.jsp</to-view-id>
     </navigation-case>
