@@ -448,8 +448,10 @@ String hierarchy_version = info.version;
 String hierarchy_schema = request.getParameter("schema");
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
 
-String term_browser_version = DataUtils.getMetadataValue(hierarchy_schema, hierarchy_version, "term_browser_version");
-String display_name = DataUtils.getMetadataValue(hierarchy_schema, hierarchy_version, "display_name");
+String localName = DataUtils.getLocalName(hierarchy_schema);
+String formalName = DataUtils.getFormalName(localName);
+String term_browser_version = DataUtils.getMetadataValue(formalName, hierarchy_version, "term_browser_version");
+String display_name = DataUtils.getMetadataValue(formalName, hierarchy_version, "display_name");
 
 
 if (display_name == null || display_name.compareTo("null") == 0) {
