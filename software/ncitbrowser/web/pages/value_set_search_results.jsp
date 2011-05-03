@@ -45,8 +45,16 @@
             selectValueSetSearchOption = selectValueSetSearchOptionObj[i].value;
         }
       }
-      window.location.href="/ncitbrowser/pages/value_set_terminology_view.jsf?refresh=1"
-          + "&nav_type=valuesets" + "&opt="+ selectValueSetSearchOption;
+      
+      var view = document.forms["view_form"].view.value;
+      if (view == "source") {
+          window.location.href="/ncitbrowser/pages/value_set_source_view.jsf?refresh=1"
+              + "&nav_type=valuesets" + "&opt="+ selectValueSetSearchOption;
+      
+      } else {
+          window.location.href="/ncitbrowser/pages/value_set_terminology_view.jsf?refresh=1"
+              + "&nav_type=valuesets" + "&opt="+ selectValueSetSearchOption;
+      }
     }
   </script>
 </head>
@@ -58,8 +66,19 @@
   private static Logger _logger = Utils.getJspLogger("value_set_search_results.jsp");
 %>
 
+    
+    
+<form id="view_form">
 <%
-    String VSD_view = (String) request.getSession().getAttribute("view");
+     String VSD_view = (String) request.getSession().getAttribute("view");
+%>
+     <input type="hidden" id="view" name="view" value="<%=VSD_view%>" />
+</form>
+<%
+
+    
+    
+    
     String searchform_requestContextPath = request.getContextPath();
     searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
