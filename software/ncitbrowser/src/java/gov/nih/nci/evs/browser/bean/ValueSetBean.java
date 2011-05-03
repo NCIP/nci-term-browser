@@ -329,6 +329,7 @@ public class ValueSetBean {
 
         String VSD_view = (String) request.getParameter("view");
         request.getSession().setAttribute("view", VSD_view);
+        System.out.println("view: " + VSD_view);
 
 
         String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
