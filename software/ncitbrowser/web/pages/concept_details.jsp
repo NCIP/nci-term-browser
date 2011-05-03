@@ -63,20 +63,20 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/search.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/dropdown.js"></script>
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<body>
    <script type="text/javascript" src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
    <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
    <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
    <f:view>
+              
       <!-- Begin Skip Top Navigation -->
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
       <!-- End Skip Top Navigation -->
       <%@ include file="/pages/templates/header.jsp"%>
-      <div class="center-page">
-         <h:form>
+      <div class="center-page">         
          <%@ include file="/pages/templates/sub-header.jsp"%>
          <!-- Main box -->
-         <div id="main-area">
+         <div id="main-area">         
             <%
                   String code = null;
             		String type = null;
@@ -159,7 +159,6 @@
             				name = "ERROR: Invalid code - " + code + ".";
             			}
             		}
-
             		if (dictionary.compareTo("NCI Thesaurus") == 0
             				|| dictionary.compareTo("NCI_Thesaurus") == 0) {
                %>
@@ -171,7 +170,6 @@
                <%@ include file="/pages/templates/content-header-other.jsp"%>
                <%
                	}
-
             		List namespace_list = DataUtils.getDistinctNamespacesOfCode(
             				dictionary, version, code);
             		String tg_dictionary_0 = dictionary;
@@ -181,7 +179,8 @@
             			request.getSession().setAttribute("singleton", "false");
             %>
             <!-- Page content -->
-            <div class="pagecontentLittlePadding">               
+            <div class="pagecontentLittlePadding">      
+                  <h:form>          
                   <table border="0" width="720px">
                      <tr class="global-nav"> 
                         <td width="25%"></td>                       
@@ -212,11 +211,11 @@
                         <f:setPropertyActionListener target="#{CartActionBean.codingScheme}" value="dictionary" />
                         <f:setPropertyActionListener target="#{CartActionBean.version}" value="version" />
                      </h:commandLink>
-		     <c:choose>
-			<c:when test="${sessionScope.CartActionBean.count>0}">
-			  (<h:outputText value="#{CartActionBean.count}"/>)
-			</c:when>
-		     </c:choose>                     
+         		     <c:choose>
+         			      <c:when test="${sessionScope.CartActionBean.count>0}">
+         			         (<h:outputText value="#{CartActionBean.count}"/>)
+         			      </c:when>
+         		     </c:choose>                     
              <%
  	                  if (term_suggestion_application_url != null && term_suggestion_application_url
  								.compareTo("") != 0) {
@@ -228,7 +227,8 @@
              %>
                         </td>
                      </tr>
-                  </table>               
+                  </table>
+                  </h:form>               
                <a name="evs-content" id="evs-content"></a>
                <table border="0" cellpadding="0" cellspacing="0" width="700px">
                   <tr>
@@ -305,12 +305,12 @@
                	}
                %>
                <%@ include file="/pages/templates/nciFooter.jsp"%>
-            </div> <!--  End pagecontentLittlePadding -->
+           
+            </div> <!--  End pagecontentLittlePadding -->         
          </div> <!--  End main-area -->
          <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-       </h:form>
       </div> <!-- End center-page -->
-      <br />
+      
    </f:view>
 </body>
 </html>
