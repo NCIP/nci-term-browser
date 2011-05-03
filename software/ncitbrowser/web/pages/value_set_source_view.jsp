@@ -612,6 +612,7 @@
 </table>                 
                 <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
                 <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
+                <input type="hidden" id="view" name="view" value="source" />
               <%-- </div> <!-- textbody --> --%>
 </h:form>               
           </div> <!-- searchbox -->

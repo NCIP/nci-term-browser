@@ -47,6 +47,7 @@
       }
       
       var view = document.forms["view_form"].view.value;
+     
       if (view == "source") {
           window.location.href="/ncitbrowser/pages/value_set_source_view.jsf?refresh=1"
               + "&nav_type=valuesets" + "&opt="+ selectValueSetSearchOption;
@@ -71,6 +72,8 @@
 <form id="view_form">
 <%
      String VSD_view = (String) request.getSession().getAttribute("view");
+     System.out.println("value set search results VSD_view: " + VSD_view);
+     
 %>
      <input type="hidden" id="view" name="view" value="<%=VSD_view%>" />
 </form>
