@@ -591,6 +591,7 @@ public class OntologyBean {
 				SupportedAssociation sa = (SupportedAssociation) assos[i];
 				String id = sa.getLocalId();
 				String name = sa.getContent();
+				String t = name + "|" + id;
 /*
 String content = sa.getContent();
 String entityCode = sa.getEntityCode();
@@ -605,7 +606,9 @@ System.out.println("localId: " + name + " content: " + content + " entityCode " 
 				}
 */
 				//_association_name_vec.add(name);
-				_association_name_vec.add(name + "|" + id);
+				if (name != null && name.compareTo("") != 0 && id != null && id.compareTo("") != 0) {
+					_association_name_vec.add(name + "|" + id);
+				}
 
 			}
 			_association_name_vec = SortUtils.quickSort(_association_name_vec);
