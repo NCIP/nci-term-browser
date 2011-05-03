@@ -279,6 +279,15 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 
     if (propName.compareTo(ncim_cui_propName) == 0 || propName.compareTo(umls_cui_propName) == 0) {
+    
+    
+    
+ System.out.println("(*) KLO propName: " + propName);    
+ System.out.println("(*) KLO ncim_cui_propName: " + ncim_cui_propName);    
+ System.out.println("(*) KLO umls_cui_propName: " + umls_cui_propName);    
+    
+    
+    
         ncim_cui_propName_label = propName_label;
         ncim_cui_prop_url = url;
         ncim_cui_prop_linktext = linktext;
@@ -456,7 +465,8 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     String NCIm_sab = DataUtils.getNCImSAB(vocab);
     
     
-//System.out.println("vocab: " + vocab);    
+System.out.println("KLO vocab: " + vocab);    
+System.out.println("KLO NCIm_sab: " + NCIm_sab);    
     
     
     if (NCIm_sab != null) {
@@ -474,6 +484,10 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 				    String ref_code = ref.getCode();
 				    if (!ncim_cui_code_vec.contains(ref_code)) {
   					    String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
+  					    
+  					    
+System.out.println("KLO _ncim_cui_prop_url: " + _ncim_cui_prop_url); 
+
    					%>
          			  <p>
          			  <b><%=ncim_cui_propName_label%>:&nbsp;</b><%=ref_code%>&nbsp;

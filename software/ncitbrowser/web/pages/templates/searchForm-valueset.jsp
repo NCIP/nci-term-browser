@@ -38,6 +38,10 @@
     String _check_src = "";
     
     String _valueset_search_algorithm = null;
+    _valueset_search_algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
+    if (_valueset_search_algorithm == null) _valueset_search_algorithm = "";
+    System.out.println("JSP _valueset_search_algorithm " + _valueset_search_algorithm);   
+    
 
     String _check__e = "", _check__b = "", _check__s = "" , _check__c ="";
     if (_valueset_search_algorithm == null || _valueset_search_algorithm.compareTo("exactMatch") == 0)
@@ -74,7 +78,9 @@
  
  
  
-String _valueset_match_text = "";
+String _valueset_match_text = null;
+_valueset_match_text = (String) request.getSession().getAttribute("matchText_VSD");
+if (_valueset_match_text == null) _valueset_match_text = "";
 
 %>
 <h:form id="valueSetSearchForm" styleClass="search-form">   

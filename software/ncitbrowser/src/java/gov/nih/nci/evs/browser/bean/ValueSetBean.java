@@ -339,19 +339,30 @@ public class ValueSetBean {
         System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
         String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
 
-        LexEVSValueSetDefinitionServices vsd_service = null;
-        vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-
-        Vector v = new Vector();
-
 		System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
-
 
         String matchText = (String) request.getParameter("matchText");
         request.getSession().setAttribute("matchText_VSD", matchText);
 
         String algorithm = (String) request.getParameter("valueset_search_algorithm");
+        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+
+
+        matchText = matchText.trim();
+
+        if (matchText.length() == 0) {
+            String message = "Please enter a search string.";
+            request.getSession().setAttribute("message", message);
+            // request.getSession().removeAttribute("matchText");
+            // request.removeAttribute("matchText");
+            return "message";
+        }
+
+
+        Vector v = new Vector();
+        LexEVSValueSetDefinitionServices vsd_service = null;
+        vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
 
         if (matchText != null) matchText = matchText.trim();
