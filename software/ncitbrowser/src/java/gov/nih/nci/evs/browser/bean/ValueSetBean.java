@@ -327,6 +327,10 @@ public class ValueSetBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        String VSD_view = (String) request.getParameter("view");
+        request.getSession().setAttribute("view", VSD_view);
+
+
         String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
 
         String selectURI = (String) request.getParameter("selectedValueSetURI");

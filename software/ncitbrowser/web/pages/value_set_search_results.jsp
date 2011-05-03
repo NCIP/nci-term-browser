@@ -59,6 +59,7 @@
 %>
 
 <%
+    String VSD_view = (String) request.getSession().getAttribute("view");
     String searchform_requestContextPath = request.getContextPath();
     searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
@@ -352,17 +353,12 @@ if (uri_str != null) {
                   <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
                   style="border-width:0;"/>
                 </h:outputLink> 
+             
+    <table border="0" cellspacing="0" cellpadding="0" width="340px">
+      <tr valign="top" align="left">
+         <td align="left" class="textbody" colspan="2">
             
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
-                  alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
-                  alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=check_src%> 
-                  alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
-                  alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
-                <br/>
-              
+             
                 <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || 
                        selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>    
                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
@@ -381,6 +377,32 @@ if (uri_str != null) {
                     </h:outputLabel>
                 <% } %>
               
+ 
+          </td>
+      </tr>
+      
+      
+       <tr align="left">
+         <td width="263px" height="1px" bgcolor="#2F2F5F"></td>
+         <td width="77px"></td>
+      </tr>
+
+      <tr valign="top" align="left">
+         <td align="left" class="textbody" colspan="2">
+            
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
+                  alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
+                  alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=check_src%> 
+                  alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
+                  alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
+                
+
+         </td>
+      </tr>             
+ </table>             
                 <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
                 <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
               </div> <!-- textbody -->      
@@ -632,12 +654,13 @@ if (vsd_uri.indexOf("|") != -1) {
 
 
 %>		
-    <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">	
+    <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
+    
 <%
 }
 %>
 
-          
+          <input type="hidden" name="view" id="view" value="<%=VSD_view%>">
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
             
