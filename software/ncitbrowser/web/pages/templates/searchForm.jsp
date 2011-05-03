@@ -123,17 +123,17 @@
       </tr>
       <tr valign="top" align="left">
          <td align="left" class="textbody" colspan="2">
+            <label for="searchTarget1">Name/Code&nbsp;</label>
             <input type="radio" name="searchTarget" id="searchTarget1"
                value="names" alt="Names" <%=HTTPUtils.cleanXSS(check_n)%> tabindex="5" />
-            <label for="searchTarget1">Name/Code&nbsp;</label>
+            <label for="searchTarget2">Property&nbsp;</label>
             <input type="radio" name="searchTarget" id="searchTarget2"
                value="properties" alt="Properties" <%=HTTPUtils.cleanXSS(check_p)%>
                tabindex="5" />
-            <label for="searchTarget2">Property&nbsp;</label>
+            <label for="searchTarget3">Relationship</label>
             <input type="radio" name="searchTarget" id="searchTarget3"
                value="relationships" alt="Relationships" <%=HTTPUtils.cleanXSS(check_r)%>
-               tabindex="5" />
-            <label for="searchTarget3">Relationship</label>
+               tabindex="5" />            
          </td>
       </tr>
       <tr>
@@ -161,23 +161,18 @@
          </td>
       </tr>
    </table>
-   <input type="hidden" name="referer" id="referer"
-      value="<%=HTTPUtils.getRefererParmEncode(request)%>" />   
+   <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>" />   
    <%
       if (vocab_name != null) {
    %>
-   <input type="hidden" id="vocabulary" name="vocabulary"
-      value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
-   <input type="hidden" id="dictionary" name="dictionary"
-      value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
-   <input type="hidden" id="scheme" name="scheme"
-      value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
+   <input type="hidden" id="vocabulary" name="vocabulary" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
+   <input type="hidden" id="dictionary" name="dictionary" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
+   <input type="hidden" id="scheme" name="scheme" value="<%=HTTPUtils.cleanXSS(vocab_name)%>" />
    <%
       }
       if (srchform_version != null) {
    %>
-   <input type="hidden" id="version" name="version"
-      value="<%=HTTPUtils.cleanXSS(srchform_version)%>" />
+   <input type="hidden" id="version" name="version" value="<%=HTTPUtils.cleanXSS(srchform_version)%>" />
    <%
       }
    %>   
