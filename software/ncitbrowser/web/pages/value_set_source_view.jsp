@@ -462,21 +462,23 @@
     String check_name = "";
     String check_src = "";
     
-    // to be modified
     String valueset_search_algorithm = null;
+    valueset_search_algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
+    if (valueset_search_algorithm == null) valueset_search_algorithm = "";
+    System.out.println("JSP valueset_search_algorithm " + valueset_search_algorithm);   
+    
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";
-    if (valueset_search_algorithm == null || valueset_search_algorithm.compareTo("exactMatch") == 0)
+    if (valueset_search_algorithm.compareTo("") == 0 || valueset_search_algorithm.compareTo("exactMatch") == 0)
         check__e = "checked";
     else if (valueset_search_algorithm.compareTo("startsWith") == 0)
         check__s= "checked";
-    else if (valueset_search_algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0)
-        check__b= "checked";
-    else
+    else if (valueset_search_algorithm.compareTo("contains") == 0)
         check__c = "checked";
         
 
     String selectValueSetSearchOption = null;
+
     selectValueSetSearchOption = (String) request.getParameter("opt");
     
     if (selectValueSetSearchOption == null) {
