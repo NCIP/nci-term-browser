@@ -27,6 +27,9 @@
 %>
 
 <%
+  Vector ncim_metathesaurus_cui_vec = new Vector();
+  HashSet ncim_metathesaurus_cui_hset = new HashSet();
+
   HashMap def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
   
   String ncim_cui_propName = "NCI_META_CUI";
@@ -245,6 +248,10 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 //[#26722] Support cross-linking of individual source vocabularies with NCI Metathesaurus.
 // System.out.println("properties_to_display.size(): " + properties_to_display.size());
 
+
+System.out.println("Step 1");
+
+
   HashMap<String, String> label2URL = new HashMap<String, String>();
   HashMap<String, String> label2Linktext = new HashMap<String, String>();
   for (int m=0; m<properties_to_display.size(); m++) {
@@ -279,15 +286,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 
     if (propName.compareTo(ncim_cui_propName) == 0 || propName.compareTo(umls_cui_propName) == 0) {
-    
-    
-    
- System.out.println("(*) KLO propName: " + propName);    
- System.out.println("(*) KLO ncim_cui_propName: " + ncim_cui_propName);    
- System.out.println("(*) KLO umls_cui_propName: " + umls_cui_propName);    
-    
-    
-    
+   
         ncim_cui_propName_label = propName_label;
         ncim_cui_prop_url = url;
         ncim_cui_prop_linktext = linktext;
@@ -298,6 +297,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
            for (int lcv=0; lcv<ncim_cui_code_vec_temp.size(); lcv++) {
                String t = (String) ncim_cui_code_vec_temp.elementAt(lcv);
                ncim_cui_code_vec.add(t);
+               
            }
         } 
             
@@ -309,8 +309,10 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       displayed_properties.add(propName);
       Vector value_vec = (Vector) hmap.get(propName);
       int row3=0;
-      
-      if (value_vec != null && value_vec.size() > 1) {
+
+//if (propName_label.compareTo("NCI Metathesaurus CUI") == 0) {
+
+      if (value_vec != null && value_vec.size() > 1 && propName_label.compareTo("NCI Metathesaurus CUI") != 0) {
           %>
           <b><%=propName_label%></b>:
           <table class="datatable">
@@ -320,6 +322,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       if (value_vec != null && value_vec.size() > 0) {
 
         //[#28262] Only one "NCI Meta CUI" displays
+        
         for (int lcv=0; lcv<value_vec.size(); lcv++) {
          
 		String value = (String) value_vec.elementAt(lcv);
@@ -350,16 +353,35 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 			  }
 
 			String url_str = url + value;
+			
+			
+			if (propName_label.compareTo("NCI Metathesaurus CUI") == 0) {
+			    if (!ncim_metathesaurus_cui_hset.contains(value)) {
+			        ncim_metathesaurus_cui_hset.add(value);
+			        ncim_metathesaurus_cui_vec.add(propName_label 
+			                                   + "|" + value
+			                                   + "|" + url_str
+			                                   + "|" + linktext);
+			    }
+			}
+			
+			
                         if (value_vec.size() == 1) {
-                        
-                        
-			%> 
+
+                          if (propName_label.compareTo("NCI Metathesaurus CUI") != 0) {
+			  %>
 			  <p>
 			  <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
 			  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
 			  </p>
-			<%  
+			  <%
+			  }
+			 
+			
 			  } else {
+			  
+			      if (propName_label.compareTo("NCI Metathesaurus CUI") != 0) {
+			  
 				  if ((row3++) % 2 == 0) {
 				    %>
 				      <tr class="dataRowDark">
@@ -372,12 +394,15 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 			    %>
                  <td>
       			     <i>
+
+      			     
       				  &nbsp;<%=value%>&nbsp;
       				  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
       				  </i>
                  </td>   
               </tr>
 			    <%
+			    }
 			  }
 		}
       }      
@@ -464,11 +489,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     String vocab = (String) request.getSession().getAttribute("dictionary");
     String NCIm_sab = DataUtils.getNCImSAB(vocab);
     
-    
-System.out.println("KLO vocab: " + vocab);    
-System.out.println("KLO NCIm_sab: " + NCIm_sab);    
-    
-    
     if (NCIm_sab != null) {
 	ResolvedConceptReferencesIterator iterator = new SearchUtils().findConceptWithSourceCodeMatching("NCI Metathesaurus", null,
 	    NCIm_sab, curr_concept.getEntityCode(), 100, true);
@@ -479,21 +499,29 @@ System.out.println("KLO NCIm_sab: " + NCIm_sab);
 		while(iterator.hasNext()) {
 			ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
 			if (refs != null) {
+			
 				for (int k=0; k<refs.length; k++) {
 				    ResolvedConceptReference ref = refs[k];
 				    String ref_code = ref.getCode();
+				    
 				    if (!ncim_cui_code_vec.contains(ref_code)) {
   					    String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
-  					    
-  					    
-System.out.println("KLO _ncim_cui_prop_url: " + _ncim_cui_prop_url); 
 
-   					%>
-         			  <p>
-         			  <b><%=ncim_cui_propName_label%>:&nbsp;</b><%=ref_code%>&nbsp;
-         			  <a href="javascript:redirect_site('<%= _ncim_cui_prop_url %>')">(<%=ncim_cui_prop_linktext%>)</a>
-         			  </p>
-   			      <%			  
+
+			if (ncim_cui_propName_label.compareTo("NCI Metathesaurus CUI") == 0) {
+			    if (!ncim_metathesaurus_cui_hset.contains(ref_code)) {
+			        ncim_metathesaurus_cui_hset.add(ref_code);
+			        ncim_metathesaurus_cui_vec.add(ncim_cui_propName_label 
+			                                   + "|" + ref_code
+			                                   + "|" + _ncim_cui_prop_url
+			                                   + "|" + ncim_cui_prop_linktext);
+			    }
+			}
+			
+
+
+
+		  
 				    } 
 				}
 			}
@@ -503,6 +531,61 @@ System.out.println("KLO _ncim_cui_prop_url: " + _ncim_cui_prop_url);
 	    }
 	}
     }
+    
+    
+    if (ncim_metathesaurus_cui_vec.size() > 0) {
+        if (ncim_metathesaurus_cui_vec.size() == 1) {
+            String t = (String) ncim_metathesaurus_cui_vec.elementAt(0);
+            Vector u = DataUtils.parseData(t);
+            String t0 = (String) u.elementAt(0);
+            String t1 = (String) u.elementAt(1);
+            String t2 = (String) u.elementAt(2);
+            String t3 = (String) u.elementAt(3);
+%>
+	  <p>
+		  <b><%=t0%>:&nbsp;</b><%=t1%>&nbsp;
+		  <a href="javascript:redirect_site('<%= t2 %>')">(<%=t3%>)</a>
+	  </p>
+<%         			  
+        } else {
+           
+%>
+            <table class="datatable">
+           
+                <b>NCI Metathesaurus CUI:</b>
+<%                
+		for (int k=0; k<ncim_metathesaurus_cui_vec.size(); k++) {
+		    int lcv = k;
+		
+			if ((lcv++) % 2 == 0) {
+		%>
+			      <tr class="dataRowLight">
+		<%
+			} else {
+		%>
+			      <tr class="dataRowLight">
+		<%
+			}		
+		
+		    String t = (String) ncim_metathesaurus_cui_vec.elementAt(k);
+		    Vector u = DataUtils.parseData(t);
+		    String t0 = (String) u.elementAt(0);
+		    String t1 = (String) u.elementAt(1);
+		    String t2 = (String) u.elementAt(2);
+		    String t3 = (String) u.elementAt(3);
+%>		    
+		    <td><%=t1%>&nbsp;<a href="javascript:redirect_site('<%= t2 %>')">(<%=t3%>)</a></td>
+		    
+		    </tr>
+<%
+		}
+%>		
+           </table>
+<%           
+	}
+    } 
+   
+    
 %>
 
 
