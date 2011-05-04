@@ -192,6 +192,18 @@ a.hideLink
  padding-top: 10px;
 }
 
+.vocabularynamelong_ncit
+{
+ position: relative;
+ left: 27px;
+ top: -25px;
+ width: 150px;
+ font-family: Arial, Verdana, Helvetica, sans-serif;
+ font-size: 10px;
+ font-weight: bold;
+ color: #2F2F5F;
+}
+
 .pagetitle
 {
  font-size: 18px;
