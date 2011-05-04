@@ -5,12 +5,11 @@
 <%
   String nci_meta_url = new DataUtils().getNCImURL();
   JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
-  String vocablary_version_value = info.version;
 %>
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
-    <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(vocablary_version_value)%></div></td>
+    <%-- <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(info.version)%></div></td> --%>
   </tr></table>
   <hr/>
 
