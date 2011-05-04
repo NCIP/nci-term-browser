@@ -347,22 +347,25 @@ public class ValueSetBean {
 		System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
-        String matchText = (String) request.getParameter("matchText");
-        request.getSession().setAttribute("matchText_VSD", matchText);
 
         String algorithm = (String) request.getParameter("valueset_search_algorithm");
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
+        String matchText = (String) request.getParameter("matchText");
 
-        matchText = matchText.trim();
 
-        if (matchText.length() == 0) {
-            String message = "Please enter a search string.";
-            request.getSession().setAttribute("message", message);
-            // request.getSession().removeAttribute("matchText");
-            // request.removeAttribute("matchText");
-            return "message";
-        }
+        if (matchText != null) {
+			matchText = matchText.trim();
+
+			if (matchText.length() == 0) {
+				String message = "Please enter a search string.";
+				request.getSession().setAttribute("message", message);
+				// request.getSession().removeAttribute("matchText");
+				// request.removeAttribute("matchText");
+				return "message";
+			}
+			request.getSession().setAttribute("matchText_VSD", matchText);
+	    }
 
 
         Vector v = new Vector();
