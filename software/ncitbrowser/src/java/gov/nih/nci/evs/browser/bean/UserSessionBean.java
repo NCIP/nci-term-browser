@@ -214,6 +214,8 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 
             request.removeAttribute("matchText");
 
+            if (mapping_search)
+                return "return_to_mapping_home";
             return "message";
         }
         request.getSession().setAttribute("matchText", matchText);
