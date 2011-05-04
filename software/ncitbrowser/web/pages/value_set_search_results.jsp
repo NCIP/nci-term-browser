@@ -156,7 +156,6 @@ String selected_ValueSetSearchOption = (String) request.getSession().getAttribut
 Vector vsd_vec = null;
 
 String vsd_uri = (String) request.getParameter("vsd_uri"); 
-System.out.println("value_set_search_results.jsp vsd_uri: " + vsd_uri);
 
 String selectedvalueset = null;
 if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
@@ -196,15 +195,26 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 } else {
 
    vsd_uri = (String) vsd_vec.elementAt(0);
+   
+String uri_vsd = null;
+String vsd_name = null;
+if (vsd_uri.indexOf("|") == -1) {
+    uri_vsd = vsd_uri;
+} else {
+   
+   
    Vector temp_vec = DataUtils.parseData(vsd_uri);
-   String vsd_name = (String) temp_vec.elementAt(0);
+   vsd_name = (String) temp_vec.elementAt(0);
+   uri_vsd = (String) temp_vec.elementAt(1);
+}
+   
 
 
 
 %>
 
     <div class="banner">
-	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?uri=<%=HTTPUtils.cleanXSS(vsd_uri)%>">
+	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(uri_vsd)%>">
       
 	<div class="vocabularynamebanner">
 		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
@@ -242,6 +252,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 
 
     String uri_str = (String) request.getSession().getAttribute("vsd_uri");
+    
     if (uri_str == null) {
         uri_str = (String) request.getParameter("vsd_uri");
     }
