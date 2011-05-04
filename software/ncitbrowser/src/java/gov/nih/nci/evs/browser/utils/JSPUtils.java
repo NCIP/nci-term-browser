@@ -204,6 +204,13 @@ public class JSPUtils {
     }
 
     public static String getNavType(HttpServletRequest request) {
+
+		String navigation_type = (String) request.getSession().getAttribute("navigation_type");
+		if (navigation_type != null) {
+			request.getSession().removeAttribute("navigation_type");
+			return navigation_type;
+		}
+
         JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 
         String vsd_view = (String) request.getParameter("view");
@@ -232,7 +239,7 @@ public class JSPUtils {
         request.getSession().setAttribute("nav_type", nav_type);
         return nav_type;
     }
-    
+
     public static int parseInt(String text, int defaultValue) {
         if (isNull(text))
             return defaultValue;
