@@ -72,21 +72,50 @@
 <form id="view_form">
 <%
      String VSD_view = (String) request.getSession().getAttribute("view");
-     System.out.println("value set search results VSD_view: " + VSD_view);
-     
 %>
      <input type="hidden" id="view" name="view" value="<%=VSD_view%>" />
 </form>
 <%
 
+
+String valueSetSearch_requestContextPath = request.getContextPath();
+String selected_ValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption"); 
+Vector vsd_vec = null;
+String vsd_uri = (String) request.getParameter("vsd_uri"); 
+
+String selectedvalueset = null;
+if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
+    String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
+    vsd_vec = new Vector();
+    vsd_vec.add(vsd_metadata);
     
+} else {
+    vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
+    if (vsd_vec != null && vsd_vec.size() == 1) {
+	vsd_uri = (String) vsd_vec.elementAt(0);
+	
+	Vector temp_vec = DataUtils.parseData(vsd_uri);
+	selectedvalueset = (String) temp_vec.elementAt(1);
+    }
+}   
+
+  
     
     
     String searchform_requestContextPath = request.getContextPath();
     searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
+    request.getSession().setAttribute("navigation_type", "valuesets");
+
     String message = (String) request.getSession().getAttribute("message");
     request.getSession().removeAttribute("message");
+    
+    
+if (vsd_vec == null) {
+    message = "WARNING: Session lost. Please click on the Value Sets tab to start a new session.";
+}
+
+    
     String t = null;
     
     String selected_cs = "";
@@ -133,6 +162,13 @@
     String valueset_match_text = (String) request.getSession().getAttribute("matchText_VSD");
     if (valueset_match_text == null) valueset_match_text = "";
     if (valueset_match_text != null && valueset_match_text.compareTo("null") == 0) valueset_match_text = "";
+    
+
+
+
+    
+    
+    
 %>
 
 <f:view>
@@ -146,43 +182,23 @@
     <div id="main-area">
    
    
-<%
 
-String valueSetSearch_requestContextPath = request.getContextPath();
-
-String selected_ValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption"); 
-
-
-Vector vsd_vec = null;
-
-String vsd_uri = (String) request.getParameter("vsd_uri"); 
-
-String selectedvalueset = null;
-if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
-    String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
-    vsd_vec = new Vector();
-    vsd_vec.add(vsd_metadata);
-    
-} else {
-    vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
-    if (vsd_vec != null && vsd_vec.size() == 1) {
-	vsd_uri = (String) vsd_vec.elementAt(0);
-	
-	Vector temp_vec = DataUtils.parseData(vsd_uri);
-	selectedvalueset = (String) temp_vec.elementAt(1);
-    }
-}   
-
-
-
-%>
    
    
       <!-- Thesaurus, banner search area -->
       <div class="bannerarea">
       
 <%
-if (vsd_vec != null && vsd_vec.size() > 1) {
+String uri_vsd = null;
+String vsd_name = "null";
+
+if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
+
+
+if (vsd_vec == null) {
+
+}
+
 %>
 
       
@@ -192,21 +208,19 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 
 
 <%
-} else {
+} else if (vsd_vec != null) {
 
    vsd_uri = (String) vsd_vec.elementAt(0);
    
-String uri_vsd = null;
-String vsd_name = null;
+
 if (vsd_uri.indexOf("|") == -1) {
     uri_vsd = vsd_uri;
 } else {
    
-   
    Vector temp_vec = DataUtils.parseData(vsd_uri);
    vsd_name = (String) temp_vec.elementAt(0);
    uri_vsd = (String) temp_vec.elementAt(1);
-}
+} 
    
 
 
@@ -214,8 +228,21 @@ if (vsd_uri.indexOf("|") == -1) {
 %>
 
     <div class="banner">
-	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(uri_vsd)%>">
-      
+            <%
+            
+ System.out.println("JSP vsd_name: " + vsd_name);
+ 
+            
+            if (vsd_name == null || vsd_name.compareTo("null") == 0) {
+            %>
+            <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
+            <%
+            } else {
+            %>
+	        <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(uri_vsd)%>">
+            <%
+            }
+            %>
 	<div class="vocabularynamebanner">
 		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
 		    <%=HTTPUtils.cleanXSS(vsd_name)%>
@@ -694,6 +721,8 @@ if (vsd_uri.indexOf("|") != -1) {
 %>
 
           <input type="hidden" name="view" id="view" value="<%=VSD_view%>">
+          <input type="hidden" name="view" id="nav_type" value="valuesets">
+          
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
             
