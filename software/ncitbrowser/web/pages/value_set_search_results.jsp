@@ -381,12 +381,16 @@ if (uri_str != null) {
           
           <div class="searchbox">
           
-            <h:form id="valueSetSearchForm" styleClass="search-form"> 
-              <div class="textbody">          
+<h:form id="valueSetSearchForm" styleClass="search-form-main-area">      
+              <%-- <div class="textbody"> --%>
+<table border="0" cellspacing="0" cellpadding="0" style="margin: 2px" >
+  <tr valign="top" align="left">
+    <td align="left" class="textbody">  
                 <% if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) { %>
                   <input CLASS="searchbox-input-2"
                     name="matchText"
                     value=""
+                    disabled="disabled" 
                     onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
                     tabindex="1"/>
                 <% } else { %>
@@ -398,11 +402,11 @@ if (uri_str != null) {
                     onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
                     tabindex="1"/>
                 <% } %>  
-                	    
+                
                 <h:commandButton id="valueset_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
                   onclick="javascript:cursor_wait();"
                   image="#{valueSetSearch_requestContextPath}/images/search.gif"
-                  styleClass="searchbox-btn"
+                    styleClass="searchbox-btn"
                   alt="Search"
                   tabindex="2">
                 </h:commandButton>
@@ -411,45 +415,30 @@ if (uri_str != null) {
                   value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
                   tabindex="3">
                   <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
-                  style="border-width:0;"/>
+                    style="border-width:0;"/>
                 </h:outputLink> 
-             
-    <table border="0" cellspacing="0" cellpadding="0" width="340px">
-      <tr valign="top" align="left">
-         <td align="left" class="textbody" colspan="2">
-            
-             
-                <% if (selectValueSetSearchOption.compareToIgnoreCase("Code") == 0 || 
-                       selectValueSetSearchOption.compareToIgnoreCase("Name") == 0) { %>    
-                    <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
-                    <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
-                    <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
-                <% } else if (selectValueSetSearchOption.compareToIgnoreCase("Source") == 0) {
-                    request.setAttribute("globalNavHeight", "54"); 
-                   } else if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { %>
-                    &nbsp;&nbsp;
-                    <h:outputLabel id="codingschemelabel" value="Terminology: " styleClass="textbody">
-                      <h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
-                          immediate = "true"
-                          valueChangeListener="#{valueSetBean.ontologyChangedEvent}">
-                        <f:selectItems value="#{valueSetBean.ontologyList}"/>
-                      </h:selectOneMenu>
-                    </h:outputLabel>
-                <% } %>
-              
- 
-          </td>
-      </tr>
-      
-      
-       <tr align="left">
-         <td width="263px" height="1px" bgcolor="#2F2F5F"></td>
-         <td width="77px"></td>
-      </tr>
-
-      <tr valign="top" align="left">
-         <td align="left" class="textbody" colspan="2">
-            
+    </td>
+  </tr>
+  
+  <tr valign="top" align="left">
+    <td>
+      <table border="0" cellspacing="0" cellpadding="0" style="margin: 0px">
+    
+        <tr valign="top" align="left">
+        <td align="left" class="textbody">  
+                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
+                     <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
+                     <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
+        </td>
+        </tr>
+        <%
+                     request.setAttribute("globalNavHeight", "37"); 
+        %>
+        <tr align="left">
+            <td height="1px" bgcolor="#2F2F5F" align="left"></td>
+        </tr>
+        <tr valign="top" align="left">
+          <td align="left" class="textbody">     
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
                   alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
@@ -458,15 +447,36 @@ if (uri_str != null) {
                   alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
                   alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
-                
 
-         </td>
-      </tr>             
- </table>             
+          </td>
+        </tr>
+
+                <% if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { 
+                     request.setAttribute("globalNavHeight", "12"); %>
+        <tr valign="top" align="left">
+          <td align="left" class="textbody">
+                     &nbsp;&nbsp;
+                     <h:outputLabel id="codingschemelabel" value="Terminology: " styleClass="textbody">
+                       <h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
+                           immediate = "true"
+                           valueChangeListener="#{valueSetBean.ontologyChangedEvent}">
+                         <f:selectItems value="#{valueSetBean.ontologyList}"/>
+                       </h:selectOneMenu>
+                     </h:outputLabel>
+          </td>
+        </tr>
+                <% } %>
+
+      </table>
+    </td>
+  </tr>
+</table>                 
                 <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
                 <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
-              </div> <!-- textbody -->      
-            </h:form>
+                <input type="hidden" id="view" name="view" value="source" />
+              <%-- </div> <!-- textbody --> --%>
+</h:form> 
+
           </div> <!-- searchbox -->
           
  <%
