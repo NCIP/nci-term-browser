@@ -163,10 +163,7 @@ if (vsd_vec == null) {
     if (valueset_match_text == null) valueset_match_text = "";
     if (valueset_match_text != null && valueset_match_text.compareTo("null") == 0) valueset_match_text = "";
     
-
-
-
-    
+  
     
     
 %>
@@ -442,31 +439,9 @@ if (uri_str != null) {
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
                   alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
-                  alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Source" <%=check_src%> 
-                  alt="Source" tabindex="1" onclick="javascript:refresh()" >Source&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="CodingScheme" <%=check_cs%> 
-                  alt="Coding Scheme" tabindex="1" onclick="javascript:refresh()" >Terminology
-
+                  alt="Name" tabindex="1" onclick="javascript:refresh()" >Name
           </td>
         </tr>
-
-                <% if (selectValueSetSearchOption.compareToIgnoreCase("CodingScheme") == 0) { 
-                     request.setAttribute("globalNavHeight", "12"); %>
-        <tr valign="top" align="left">
-          <td align="left" class="textbody">
-                     &nbsp;&nbsp;
-                     <h:outputLabel id="codingschemelabel" value="Terminology: " styleClass="textbody">
-                       <h:selectOneMenu id="selectedOntology" value="#{valueSetBean.selectedOntology}"
-                           immediate = "true"
-                           valueChangeListener="#{valueSetBean.ontologyChangedEvent}">
-                         <f:selectItems value="#{valueSetBean.ontologyList}"/>
-                       </h:selectOneMenu>
-                     </h:outputLabel>
-          </td>
-        </tr>
-                <% } %>
-
       </table>
     </td>
   </tr>
