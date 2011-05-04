@@ -354,7 +354,7 @@ public class ValueSetBean {
         String matchText = (String) request.getParameter("matchText");
 
 
-        if (matchText != null) {
+        if (selectValueSetSearchOption.compareTo("CodingScheme") != 0) {
 			matchText = matchText.trim();
 
 			if (matchText.length() == 0) {
@@ -522,12 +522,9 @@ public class ValueSetBean {
 			if (selectCodingScheme != null) {
 
 				if (selectCodingScheme.compareTo("ALL") != 0) {
-					matchText = matchText.trim();
-					if (matchText.compareTo("") != 0) {
-						String cs_name = DataUtils.uri2CodingSchemeName(DataUtils.getFormalName(matchText));
-						if (cs_name != null) {
-							selectCodingScheme = cs_name;
-						}
+					String cs_name = DataUtils.uri2CodingSchemeName(DataUtils.getFormalName(selectCodingScheme));
+					if (cs_name != null) {
+						selectCodingScheme = cs_name;
 					}
 			    }
 
