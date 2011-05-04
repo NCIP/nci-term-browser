@@ -20,6 +20,9 @@ if (bean != null) {
 
     numRemaining = bean.getSize();
 
+
+System.out.println("pagination mapping numRemaining (bean.getSize()): " + numRemaining);
+
     
     String istart_str = Integer.toString(istart+1);
     String iend_str = Integer.toString(iend);
@@ -34,6 +37,7 @@ if (bean != null) {
 if (iend >= numRemaining) {
    iend_str = match_size;
 }
+
     
     String prev_page_num_str = Integer.toString(pageNum-1);
     String next_page_num_str = Integer.toString(pageNum+1);

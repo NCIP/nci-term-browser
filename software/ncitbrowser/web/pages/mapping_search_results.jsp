@@ -203,9 +203,7 @@ int iend = istart + pageSize - 1;
 
 System.out.println( "(*) iend: " + iend);
 
-if (iend > size) {
-    iend = size;
-}
+
 
 
 try {
@@ -218,16 +216,29 @@ System.out.println( "(*) size: " + size);
 
 
    if (size != prev_size) {
+   /*
        if (iend > istart + pageSize -1) {
            iend = istart + pageSize -1;
        } 
        if (size > istart + pageSize -1) {
            iend = istart + pageSize -1;
        }
-       
+   */
+
+	if (iend > size) {
+	    iend = size;
+	}
+
+   
        //KLO
        list = mapping_bean.getData(istart, size);
        
+   } else {
+
+	if (iend > size) {
+	    iend = size;
+	}
+
    }
 
 
@@ -336,6 +347,10 @@ if (show_rank_column) {
  System.out.println("(**************** list.size(): " + list.size());
  
  System.out.println("(**************** upper_bound: " + upper_bound);
+ 
+  System.out.println("(**************** istart: " + istart);
+  
+  System.out.println("(**************** iend: " + iend);
  
                 
                 for (int lcv=0; lcv<upper_bound; lcv++) {
