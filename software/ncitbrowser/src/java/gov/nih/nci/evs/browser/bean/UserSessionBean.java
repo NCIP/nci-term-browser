@@ -1355,6 +1355,13 @@ int selected_knt = 0;
             }
 
             int size = iteratorBean.getSize();
+
+
+  System.out.println("( ***************** ) search by association size: " + size);
+
+
+
+
             if (size == 1) {
                 int pageNumber = 1;
                 list = iteratorBean.getData(1);

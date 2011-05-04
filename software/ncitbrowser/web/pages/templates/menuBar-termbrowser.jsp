@@ -17,6 +17,9 @@
 
   String _menubar_tb_dictionary = DataUtils.getCodingSchemeName( _dictionaryName0 );
   String _menubar_tb_version = DataUtils.getCodingSchemeVersion( _dictionaryName0 );
+
+  boolean hasValueSet = ValueSetHierarchy.hasValueSet(_menubar_tb_dictionary);
+  boolean hasMapping = DataUtils.hasMapping(_menubar_tb_dictionary);
   
   int globalNavHeight = JSPUtils.parseInt(
       (String) request.getAttribute("globalNavHeight"), 33);
@@ -28,6 +31,21 @@
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/source_help_info-termbrowser.jsf',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
         Sources</a> 
+   
+   
+
+      <% if (hasValueSet) { %>
+        |
+        <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(_dictionaryName)%>&version=<%=HTTPUtils.cleanXSS(_menubar_tb_version)%>" tabindex="15">Value Sets</a>
+      <% } %>
+      
+      <% if (hasMapping) { %>
+        |
+          <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(_dictionaryName)%>&version=<%=HTTPUtils.cleanXSS(_menubar_tb_version)%>" tabindex="15">Maps</a>      
+      <% } %>     
+         
+   
+   
    
       <c:choose>	
         <c:when test="${sessionScope.CartActionBean.count>0}">

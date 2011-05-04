@@ -452,6 +452,10 @@ String search_results_version = info.version;
 System.out.println("********* search_results.jsp search_results_version: " + search_results_version);
 
 
+  //boolean hasValueSet = ValueSetHierarchy.hasValueSet(search_results_dictionary);
+  //boolean hasMapping = DataUtils.hasMapping(search_results_dictionary);
+
+
 HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 HashMap name_hmap = new HashMap();
 String vocabulary_name = null;
