@@ -199,32 +199,43 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
         }
         ResolvedConceptReferencesIterator iterator = null;
 
+        String matchAlgorithm = (String) request.getParameter("algorithm");
+        String searchTarget = (String) request.getParameter("searchTarget");
+
+        request.getSession().setAttribute("searchTarget", searchTarget);
+        request.getSession().setAttribute("algorithm", matchAlgorithm);
 
 
         String matchText = (String) request.getParameter("matchText");
-        if (matchText != null)
+        if (matchText != null) {
             matchText = matchText.trim();
+            request.getSession().setAttribute("matchText", matchText);
+
+		}
 
         // [#19965] Error message is not displayed when Search Criteria is not
         // proivded
         if (matchText == null || matchText.length() == 0) {
             String message = "Please enter a search string.";
             request.getSession().setAttribute("message", message);
-            // request.getSession().removeAttribute("matchText");
-
             request.removeAttribute("matchText");
 
             if (mapping_search)
                 return "return_to_mapping_home";
             return "message";
         }
-        request.getSession().setAttribute("matchText", matchText);
 
-        String matchAlgorithm = (String) request.getParameter("algorithm");
-        String searchTarget = (String) request.getParameter("searchTarget");
+        if (matchText != null && matchText.length() < 3
+              && matchAlgorithm.compareTo("contains") == 0) {
+            String message = "Please enter a search string of length no less than 3.";
+            request.getSession().setAttribute("message", message);
+            request.removeAttribute("matchText");
 
-        request.getSession().setAttribute("searchTarget", searchTarget);
-        request.getSession().setAttribute("algorithm", matchAlgorithm);
+            if (mapping_search)
+                return "return_to_mapping_home";
+            return "message";
+        }
+
 
         boolean ranking = true;
         String scheme = null;
