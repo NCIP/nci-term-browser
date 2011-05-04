@@ -220,8 +220,10 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
             request.getSession().setAttribute("message", message);
             request.removeAttribute("matchText");
 
-            if (mapping_search)
+            if (mapping_search) {
+				request.getSession().setAttribute("navigation_type", "mappings");
                 return "return_to_mapping_home";
+			}
             return "message";
         }
 
@@ -231,8 +233,10 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
             request.getSession().setAttribute("message", message);
             request.removeAttribute("matchText");
 
-            if (mapping_search)
+            if (mapping_search) {
+                request.getSession().setAttribute("navigation_type", "mappings");
                 return "return_to_mapping_home";
+			}
             return "message";
         }
 
