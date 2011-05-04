@@ -530,6 +530,7 @@
                   <input CLASS="searchbox-input-2"
                     name="matchText"
                     value=""
+                    disabled="disabled" 
                     onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
                     tabindex="1"/>
                 <% } else { %>

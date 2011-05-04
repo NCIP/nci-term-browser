@@ -487,8 +487,9 @@
         selectValueSetSearchOption = "Code";
     }
 
-    if (selectValueSetSearchOption.compareTo("CodingScheme") == 0)
+    if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
         check_cs = "checked";
+    }
     else if (selectValueSetSearchOption.compareTo("Code") == 0)
         check_code = "checked";
     else if (selectValueSetSearchOption.compareTo("Name") == 0)
@@ -529,16 +530,20 @@
                   <input CLASS="searchbox-input-2"
                     name="matchText"
                     value=""
+                    disabled="disabled" 
                     onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
                     tabindex="1"/>
+                    
                 <% } else { %>
-                  <input CLASS="searchbox-input-2"
-                    name="matchText"
-                    value="<%=valueset_match_text%>"
-                    onFocus="active = true"
-                    onBlur="active = false"
-                    onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
+
+                   <input CLASS="searchbox-input-2"
+                     name="matchText"
+                     value="<%=valueset_match_text%>"
+                     onFocus="active = true"
+                     onBlur="active = false"
+                     onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
                     tabindex="1"/>
+                  
                 <% } %>  
                 	    
                 <h:commandButton id="valueset_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
