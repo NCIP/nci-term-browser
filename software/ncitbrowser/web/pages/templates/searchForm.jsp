@@ -123,17 +123,17 @@
       </tr>
       <tr valign="top" align="left">
          <td align="left" class="textbody" colspan="2">
-            <label for="searchTarget1">Name/Code&nbsp;</label>
             <input type="radio" name="searchTarget" id="searchTarget1"
                value="names" alt="Names" <%=HTTPUtils.cleanXSS(check_n)%> tabindex="5" />
-            <label for="searchTarget2">Property&nbsp;</label>
+            <label for="searchTarget1">Name/Code&nbsp;</label>   
             <input type="radio" name="searchTarget" id="searchTarget2"
                value="properties" alt="Properties" <%=HTTPUtils.cleanXSS(check_p)%>
                tabindex="5" />
-            <label for="searchTarget3">Relationship</label>
+            <label for="searchTarget2">Property&nbsp;</label>   
             <input type="radio" name="searchTarget" id="searchTarget3"
                value="relationships" alt="Relationships" <%=HTTPUtils.cleanXSS(check_r)%>
-               tabindex="5" />            
+               tabindex="5" />
+            <label for="searchTarget3">Relationship</label>               
          </td>
       </tr>
       <tr>
