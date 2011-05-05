@@ -43,9 +43,6 @@
 JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 String search_results_dictionary = info.dictionary;
 
-System.out.println("********* search_results.jsp search_results_dictionary: " + search_results_dictionary);
-
-
 boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
 
 //System.out.println("isMapping: " + isMapping);
@@ -58,8 +55,6 @@ boolean isExtension = DataUtils.isExtension(search_results_dictionary, null);
 
 String search_results_version = info.version;
 
-System.out.println("********* search_results.jsp search_results_version: " + search_results_version);
-
 
 HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 HashMap name_hmap = new HashMap();
@@ -68,7 +63,6 @@ String short_vocabulary_name = null;
 String coding_scheme_version = null;
 
 String key = (String) request.getSession().getAttribute("key");
-System.out.println("********* search results.jsp key: " + key);
 if (key == null) {
     key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 }
@@ -180,26 +174,48 @@ request.setAttribute("key", key);
 
 	  int numberRemaining_before = iteratorBean.getSize();
 	  
-System.out.println("iteratorBean numberRemaining_before " + numberRemaining_before);	  
-	  
-System.out.println("iteratorBean.getData istart " + istart);	  
-System.out.println("iteratorBean.getData iend " + iend);	  
 	  
 	  List list = iteratorBean.getData(istart, iend);
 	  
-	  
-	  
+
 	  int numberRemaining_after = iteratorBean.getSize();
+  
+	  
 	  if (numberRemaining_before != numberRemaining_after) {
 		iend_str = new Integer(numberRemaining_after).toString();
 		match_size = new Integer(numberRemaining_after).toString();
 	  }
+	  
+	  
+int expected_count = (iend - istart) + 1;
+int actual_count = list.size();
+if (expected_count != actual_count) {
+    System.out.println("expected_count != actual_count???");	  
+    if (actual_count < expected_count) {
+        int upper_bound = istart + actual_count;
+        System.out.println("upper_bound " + upper_bound);
+        
+	iend_str = new Integer(upper_bound).toString();
+	match_size = new Integer(upper_bound).toString();
+        
+    }
+}
+
+    String message = null;
+    if (list.size() == 0) {
+        message = "No match found.";    
+    }
+
     
     boolean timeout = iteratorBean.getTimeout();
     if (timeout) {
       %>
       <p class="textbodyred">WARNING: System times out. Please advance fewer pages at one time.</p>
       <%
+    } else if (message != null) {
+    %>
+      <p class="textbodyred"><%=message%></p>
+    <%
     } else {
 
         %>
@@ -333,9 +349,7 @@ if (isMapping || isExtension) {
                       else if (code != null && code.indexOf("@") == -1) {
                           i++;
                           
-        /*                  
-        String con_status = null;
-        */
+
         String con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion()
                + "$" + code);
         

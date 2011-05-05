@@ -188,10 +188,42 @@ public class IteratorBean extends Object {
     public List getData(int pageNumber) {
         int idx1 = getStartIndex(pageNumber);
         int idx2 = getEndIndex(pageNumber);
+
+
+        System.out.println("getStartIndex --- idx1 " + idx1);
+        System.out.println("getStartIndex --- idx2 " + idx2);
         return getData(idx1, idx2);
     }
 
+
+    public ResolvedConceptReference getFirstResolvedConceptReference(ResolvedConceptReferencesIterator iterator) {
+		if (iterator == null) {
+			System.out.println("UserSessionBean.iterator == null getFirstResolvedConceptReference returns null???");
+			return null;
+		}
+		try {
+			int numberRemaining = iterator.numberRemaining();
+			System.out.println("getFirstResolvedConceptReference numberRemaining: " + numberRemaining);
+			while (iterator != null && iterator.hasNext()) {
+				//ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
+				//return refs[0];
+				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
+				if (ref == null) {
+					System.out.println("(*) UserSessionBean.broken iterator getFirstResolvedConceptReference returns null???");
+				}
+				return ref;
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+    }
+
     public List getData(int idx1, int idx2) {
+        if (_list.size() > 0 && idx2 <= _list.size()) {
+			System.out.println("Copying data " + idx1 + " to: " + idx2 + ")");
+			return copyData(idx1, idx2);
+		}
 
         _logger.debug("Retrieving data (from: " + idx1 + " to: " + idx2 + ")");
         long ms = System.currentTimeMillis();
@@ -199,121 +231,64 @@ public class IteratorBean extends Object {
         long total_delay = 0;
         int upper_bound = idx2;
         _timeout = false;
+
         try {
 
-
-			if (idx2 >= _size-1) {
-
+            int count = (idx2 - idx1) + 1;
+            int lcv = 0;
+			while (_iterator != null && _iterator.hasNext()) {
 /*
-if (_iterator == null) {
-System.out.println("Case 1 _iterator == null?????????????????????????????? " + _maxReturn);
-} else {
-System.out.println("Case 1 _iterator != null _maxReturn " + _maxReturn);
+                if (lcv > count) break;
 
-	if (_iterator.hasNext()) {
-		System.out.println("Case 1 _iterator.hasNext() returns true" );
-	} else {
-        System.out.println("Case 1 _iterator.hasNext() returns false?????????????????? " );
-	}
-}
+				if (idx2 <= _list.size()) {
+					System.out.println("Calling copyData #1 idx1: " + idx1 + "   idx2: " + idx2);
+					return copyData(idx1, idx2);
+				}
 */
 
-				while (_iterator != null && _iterator.hasNext()) {
-					ResolvedConceptReference[] refs =
-						_iterator.next(_maxReturn).getResolvedConceptReference();
 
+				ResolvedConceptReference[] refs =
+					_iterator.next(_maxReturn).getResolvedConceptReference();
+
+
+				if (refs != null) {
 					for (ResolvedConceptReference ref : refs) {
-						// displayRef(ref);
+
 						_lastResolved++;
+
+						System.out.println("_lastResolved = " + _lastResolved);
+
 						upper_bound = _lastResolved;
-					   // _list.set(_lastResolved, ref);
-					   _list.add(ref);
+
+						_list.add(ref);
+						lcv++;
+
+						displayRef(ref);
+
 					}
-					dt = System.currentTimeMillis() - ms;
-					ms = System.currentTimeMillis();
-					total_delay = total_delay + dt;
-					if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
-						_timeout = true;
-						_logger.debug("Time out at: " + _lastResolved);
-						break;
-					}
+
+					if (_list.size() > idx2) break;
+
+				} else {
+					System.out.println("refs == null???");
 				}
-
-
-			} else {
-				System.out.println("Case 2");
-				while (_iterator != null && _iterator.hasNext()
-					&& _lastResolved < idx2) {
-					ResolvedConceptReference[] refs =
-						_iterator.next(_maxReturn).getResolvedConceptReference();
-					for (ResolvedConceptReference ref : refs) {
-						// displayRef(ref);
-						_lastResolved++;
-					   // _list.set(_lastResolved, ref);
-
-					   _list.add(ref);
-
-					}
-					dt = System.currentTimeMillis() - ms;
-					ms = System.currentTimeMillis();
-					total_delay = total_delay + dt;
-					if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
-						_timeout = true;
-						_logger.debug("Time out at: " + _lastResolved);
-						break;
-					}
-				}
-		    }
-
-            // check if max is reached,
+			}
 
 
         } catch (Exception ex) {
             ex.printStackTrace();
+            System.out.println("getData exception???");
         }
 
-        /*
-         * for (int i=idx1; i<=idx2; i++) { ResolvedConceptReference rcr =
-         * (ResolvedConceptReference) list.get(i); rcr_list.add(rcr); if (i
-         * > lastResolved) break; }
-         */
-
-
-        Vector temp_vec = new Vector();
-        if (upper_bound > idx2) {
-			_size = _size + (upper_bound - idx2);
+        if (_list.size() > _size) {
+			_size = _list.size();
+			System.out.println("Upper bound breached -- reset _size to " + _size);
 		}
-
-        //for (int i = idx1; i <= idx2; i++) {
-	    for (int i = idx1; i <= upper_bound; i++) {
-            ResolvedConceptReference rcr =
-                (ResolvedConceptReference) _list.get(i);
-            temp_vec.add(rcr);
-            if (i > _lastResolved)
-                break;
-        }
-        List rcr_list = new ArrayList();
-        /*
-        for (int i = 0; i < temp_vec.size(); i++) {
-            rcr_list.add(null);
-        }
-
-        for (int i = 0; i < temp_vec.size(); i++) {
-            ResolvedConceptReference rcr =
-                (ResolvedConceptReference) temp_vec.elementAt(i);
-            rcr_list.set(i, rcr);
-        }
-        */
-        for (int i = 0; i < temp_vec.size(); i++) {
-            ResolvedConceptReference rcr =
-                (ResolvedConceptReference) temp_vec.elementAt(i);
-            rcr_list.add(rcr);
-        }
-
-        _logger.debug("getData Run time (ms): "
-            + (System.currentTimeMillis() - ms));
-        return rcr_list;
+		return copyData(idx1, idx2);
     }
+
+
+
 
     protected void displayRef(ResolvedConceptReference ref) {
         _logger.debug(ref.getConceptCode() + ":"
@@ -385,4 +360,32 @@ System.out.println("Case 1 _iterator != null _maxReturn " + _maxReturn);
     public String getMatchText() {
         return _matchText;
     }
+
+     public List copyData(int idx1, int idx2) {
+		List arrayList = new ArrayList();
+		System.out.println("copydata _list.size() #1 idx2 " + idx2);
+        System.out.println("copydata _list.size() #1 _list.size() " + _list.size());
+
+        if (_list.size() == 0) return arrayList;
+
+		if (idx2 > _list.size()-1) {
+			idx2 = _list.size()-1;
+		}
+
+		if (idx2 < idx1) idx2 = idx1;
+
+        System.out.println("copydata idx1 " + idx1);
+		System.out.println("copydata idx2 " + idx2);
+
+		for (int i=idx1; i<=idx2; i++) {
+			ResolvedConceptReference ref = (ResolvedConceptReference) _list.get(i);
+			arrayList.add(ref);
+			if (i > _list.size()) break;
+		}
+
+		return arrayList;
+	}
+
+
+
 }
