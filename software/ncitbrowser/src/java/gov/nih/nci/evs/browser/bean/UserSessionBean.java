@@ -1433,6 +1433,9 @@ System.out.println("( ***************** ) search by association (NEW IteratorBea
 			try {
 				size = iterator.numberRemaining();
 
+
+System.out.println("====KLO======numberRemaining========" + size);
+
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -1528,7 +1531,21 @@ System.out.println("( ***************** ) search by association (NEW IteratorBea
 					_logger.debug("Start to render search_results ... ");
 					return "search_results";
 				}
-		    }
+		    } else if (size > 1) {
+				String match_size = Integer.toString(size);
+				;// Integer.toString(v.size());
+				request.getSession().setAttribute("match_size", match_size);
+				request.getSession().setAttribute("page_string", "1");
+				request.getSession().setAttribute("new_search", Boolean.TRUE);
+				// route to multiple_search_results.jsp
+				request.getSession().setAttribute("matchText",
+					HTTPUtils.convertJSPString(matchText));
+
+				_logger.debug("Start to render search_results ... ");
+				return "search_results";
+			}
+
+
         }
 
         int minimumSearchStringLength =
