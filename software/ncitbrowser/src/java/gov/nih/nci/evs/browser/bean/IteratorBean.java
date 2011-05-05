@@ -263,7 +263,7 @@ public class IteratorBean extends Object {
 						_list.add(ref);
 						lcv++;
 
-						displayRef(ref);
+						//displayRef(ref);
 
 					}
 
