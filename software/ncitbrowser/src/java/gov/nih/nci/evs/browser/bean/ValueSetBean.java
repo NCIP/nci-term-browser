@@ -1014,9 +1014,6 @@ String key = vsd_uri;
 	}
 
 
-
-
-
     public void exportToXMLAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
