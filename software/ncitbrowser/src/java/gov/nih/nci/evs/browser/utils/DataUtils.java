@@ -4595,7 +4595,7 @@ System.out.println("vsd_str " + vsd_str);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
 
-System.out.println("(***) URI: " + uri + " version: " + version);
+//System.out.println("(***) URI: " + uri + " version: " + version);
 
 			AbsoluteCodingSchemeVersionReference vAbsoluteCodingSchemeVersionReference
 			    = new AbsoluteCodingSchemeVersionReference();
