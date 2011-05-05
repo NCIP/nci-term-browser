@@ -263,7 +263,7 @@ public class SearchByAssociationIteratorDecorator extends
 				for(AssociatedConcept ac :
 					assoc.getAssociatedConcepts().getAssociatedConcept()){
 
-//System.out.println("(*) SearchByAssociationIteratorDecorator " + ac.getEntityDescription().getContent() + " (" + ac.getConceptCode() + ")");
+System.out.println("(*) SearchByAssociationIteratorDecorator " + ac.getEntityDescription().getContent() + " (" + ac.getConceptCode() + ")");
 
 					returnList.add(ac);
 				}

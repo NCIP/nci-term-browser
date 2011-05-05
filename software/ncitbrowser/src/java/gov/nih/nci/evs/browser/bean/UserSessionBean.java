@@ -443,8 +443,6 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 */
 mappingIteratorBean.initialize();
 				request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
-
-				System.out.println("(*************) returning mapping_search_results");
 				request.getSession().setAttribute("dictionary", scheme);
 				//request.getSession().setAttribute("scheme", scheme);
 				request.getSession().setAttribute("version", version);
@@ -556,6 +554,7 @@ mappingIteratorBean.initialize();
 
         } else if (searchTarget.compareTo("relationships") == 0) {
 
+System.out.println("(*) KLO relationships search on " + matchText);
 
             designationOnly = true;
             if (iteratorBeanManager.containsIteratorBean(key)) {
@@ -571,15 +570,18 @@ mappingIteratorBean.initialize();
                     if (iterator != null) {
 						try {
 							int numberOfMatches = iterator.numberRemaining();
-							System.out.println("Relationship search numberOfMatches: " + numberOfMatches);
+							System.out.println("(*) KLO Relationship search numberOfMatches: " + numberOfMatches);
 
 						} catch (Exception ex) {
-
+                            System.out.println("(*) KLO Relationship search throws exception.");
 						}
 
 
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
+
+                        System.out.println("(*) KLO Relationship iteratorBean key: " + key);
+
                         iteratorBeanManager.addIteratorBean(iteratorBean);
                     }
                 }
@@ -602,15 +604,22 @@ mappingIteratorBean.initialize();
 
             int size = iteratorBean.getSize();
 
+            System.out.println("(*************) size #1: " + size);
+            List list = null;
             // LexEVS API itersator.numberRemaining is inaccurate, and can cause issues.
             // the following code is a work around.
             if (size == 1) {
-            	List list = iteratorBean.getData(0, 0);
+
+				System.out.println("(*************) iteratorBean.getData(0, 0): " );
+            	list = iteratorBean.getData(0, 0);
+System.out.println("(*************) iteratorBean.list " + list.size() );
+
             	if (size != iteratorBean.getSize()) {
 					size = iteratorBean.getSize();
 				}
 			}
 
+System.out.println("(*************) size #2: " + size);
 
             if (size > 1) {
                 request.getSession().setAttribute("search_results", v);
@@ -631,66 +640,73 @@ mappingIteratorBean.initialize();
                 return "search_results";
             } else if (size == 1) {
 
-
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", scheme);// Constants.CODING_SCHEME_NAME);
                 int pageNumber = 1;
-                List list = iteratorBean.getData(1);
-                ResolvedConceptReference ref =
-                    (ResolvedConceptReference) list.get(0);
-                Entity c = null;
-                if (ref == null) {
-                    String msg =
-                        "Error: Null ResolvedConceptReference encountered.";
-                    request.getSession().setAttribute("message", msg);
 
-                    request.getSession().setAttribute("dictionary", scheme);
-                    return "message";
+                //List list = iteratorBean.getData(1);
 
-                } else {
-                    if (ref.getConceptCode() == null) {
-                        String message =
-                            "Code has not been assigned to the concept matches with '"
-                                + matchText + "'";
-                        _logger.warn("WARNING: " + message);
-                        request.getSession().setAttribute("message", message);
-                        request.getSession().setAttribute("dictionary", scheme);
-                        return "message";
-                    } else {
-                        request.getSession().setAttribute("code",
-                            ref.getConceptCode());
-                    }
+                //List list = iteratorBean.getData(0, 0);
 
-                    c = ref.getReferencedEntry();
+                if (list != null && list.size() > 0) {
 
-                    if (c == null) {
+					ResolvedConceptReference ref =
+						(ResolvedConceptReference) list.get(0);
 
-                        c =
-                            DataUtils.getConceptByCode(scheme, null, null, ref
-                                .getConceptCode());
-                        if (c == null) {
-                            String message =
-                                "Unable to find the concept with a code '"
-                                    + ref.getConceptCode() + "'";
-                            _logger.warn("WARNING: " + message);
-                            request.getSession().setAttribute("message",
-                                message);
-                            request.getSession().setAttribute("dictionary",
-                                scheme);
-                            return "message";
-                        }
+					Entity c = null;
+					if (ref == null) {
+						String msg =
+							"Error: Null ResolvedConceptReference encountered.";
+						request.getSession().setAttribute("message", msg);
 
-                    } else {
-                        request.getSession().setAttribute("code",
-                            c.getEntityCode());
-                    }
-                }
+						request.getSession().setAttribute("dictionary", scheme);
+						return "message";
 
-                request.getSession().setAttribute("concept", c);
-                request.getSession().setAttribute("type", "properties");
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
+					} else {
+						if (ref.getConceptCode() == null) {
+							String message =
+								"Code has not been assigned to the concept matches with '"
+									+ matchText + "'";
+							_logger.warn("WARNING: " + message);
+							request.getSession().setAttribute("message", message);
+							request.getSession().setAttribute("dictionary", scheme);
+							return "message";
+						} else {
+							request.getSession().setAttribute("code",
+								ref.getConceptCode());
+						}
 
-                return "concept_details";
+						c = ref.getReferencedEntry();
+
+						if (c == null) {
+
+							c =
+								DataUtils.getConceptByCode(scheme, null, null, ref
+									.getConceptCode());
+							if (c == null) {
+								String message =
+									"Unable to find the concept with a code '"
+										+ ref.getConceptCode() + "'";
+								_logger.warn("WARNING: " + message);
+								request.getSession().setAttribute("message",
+									message);
+								request.getSession().setAttribute("dictionary",
+									scheme);
+								return "message";
+							}
+
+						} else {
+							request.getSession().setAttribute("code",
+								c.getEntityCode());
+						}
+					}
+
+					request.getSession().setAttribute("concept", c);
+					request.getSession().setAttribute("type", "properties");
+					request.getSession().setAttribute("new_search", Boolean.TRUE);
+
+					return "concept_details";
+			    }
             }
         }
 
@@ -996,6 +1012,7 @@ mappingIteratorBean.initialize();
 
     public String multipleSearchAction() {
 
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -1035,6 +1052,9 @@ mappingIteratorBean.initialize();
         } else {
             matchText = (String) request.getSession().getAttribute("matchText");
         }
+
+
+
         String multiple_search_error =
             (String) request.getSession().getAttribute(
                 "multiple_search_no_match_error");
@@ -1044,6 +1064,10 @@ mappingIteratorBean.initialize();
         request.getSession().setAttribute("algorithm", matchAlgorithm);
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
+
+
+System.out.println("(*) KLO multipleSearchAction " + matchText + " algorithm: " +  matchAlgorithm + " target: " + searchTarget);
+
 
         String initial_search = (String) request.getParameter("initial_search");
 
@@ -1355,12 +1379,48 @@ int selected_knt = 0;
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
 
+
+        IteratorBeanManager iteratorBeanManager =
+            (IteratorBeanManager) FacesContext.getCurrentInstance()
+                .getExternalContext().getSessionMap()
+                .get("iteratorBeanManager");
+
+        if (iteratorBeanManager == null) {
+            iteratorBeanManager = new IteratorBeanManager();
+            FacesContext.getCurrentInstance().getExternalContext()
+                .getSessionMap()
+                .put("iteratorBeanManager", iteratorBeanManager);
+        }
+
         if (iterator != null) {
+
+/*
+            String iteratorBean_key =
+            iteratorBeanManager.createIteratorKey(schemes, matchText,
+                searchTarget, matchAlgorithm, maxToReturn);
+
+            System.out.println("( ***************** ) search by association (NEW IteratorBean) ");
+
+            IteratorBean iteratorBean = new IteratorBean(iterator);
+            iteratorBean.setKey(iteratorBean_key);
+			iteratorBeanManager.addIteratorBean(iteratorBean);
+*/
+            int size = 0;
+
             IteratorBean iteratorBean =
                 (IteratorBean) FacesContext.getCurrentInstance()
                     .getExternalContext().getSessionMap().get("iteratorBean");
 
+            iteratorBean = new IteratorBean(iterator);
+
+            FacesContext.getCurrentInstance().getExternalContext()
+                .getSessionMap().put("iteratorBean", iteratorBean);
+
+/*
             if (iteratorBean == null) {
+
+System.out.println("( ***************** ) search by association (NEW IteratorBean) ");
+
                 iteratorBean = new IteratorBean(iterator);
 
                 FacesContext.getCurrentInstance().getExternalContext()
@@ -1368,86 +1428,107 @@ int selected_knt = 0;
             } else {
                 iteratorBean.setIterator(iterator);
             }
+            */
+           //int size = iteratorBean.getSize();
+			try {
+				size = iterator.numberRemaining();
 
-            int size = iteratorBean.getSize();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
+/*
+			ResolvedConceptReference singleton_ref = null;
+			try {
+				int match_count = iterator.numberRemaining();
+				if (match_count == 1) {
+					singleton_ref = getFirstResolvedConceptReference(iterator);
+				}
 
-  System.out.println("( ***************** ) search by association size: " + size);
-
-
-
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+*/
 
             if (size == 1) {
+
                 int pageNumber = 1;
                 list = iteratorBean.getData(1);
-                ResolvedConceptReference ref =
-                    (ResolvedConceptReference) list.get(0);
 
-                String coding_scheme = ref.getCodingSchemeName();
-                String ref_version = ref.getCodingSchemeVersion();
+                if (list != null && list.size() > 0) {
+					ResolvedConceptReference ref =
+						(ResolvedConceptReference) list.get(0);
 
-                if (coding_scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
-                    String match_size = Integer.toString(size);
-                    ;// Integer.toString(v.size());
-                    request.getSession().setAttribute("match_size", match_size);
-                    request.getSession().setAttribute("page_string", "1");
-                    request.getSession().setAttribute("new_search",
-                        Boolean.TRUE);
-                    // route to multiple_search_results.jsp
-                    return "search_results";
-                }
 
-                request.getSession().setAttribute("singleton", "true");
-                request.getSession().setAttribute("dictionary", coding_scheme);
-                request.getSession().setAttribute("version", ref_version);
-                Entity c = null;
-                if (ref == null) {
-                    String msg =
-                        "Error: Null ResolvedConceptReference encountered.";
-                    request.getSession().setAttribute("message", msg);
-                    request.getSession().setAttribute("matchText",
-                        HTTPUtils.convertJSPString(matchText));
-                    return "message";
+					//ResolvedConceptReference ref = getFirstResolvedConceptReference(iterator);
+					String coding_scheme = ref.getCodingSchemeName();
+					String ref_version = ref.getCodingSchemeVersion();
 
-                } else {
-                    c = ref.getReferencedEntry();
-                    if (c == null) {
-                        c = DataUtils.getConceptByCode(coding_scheme, ref_version,
-                                null, ref.getConceptCode());
-                    }
-                }
+					if (coding_scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
+						String match_size = Integer.toString(size);
+						;// Integer.toString(v.size());
+						request.getSession().setAttribute("match_size", match_size);
+						request.getSession().setAttribute("page_string", "1");
+						request.getSession().setAttribute("new_search",
+							Boolean.TRUE);
+						// route to multiple_search_results.jsp
+						return "search_results";
+					}
 
-                request.getSession().setAttribute("code", ref.getConceptCode());
-                request.getSession().setAttribute("concept", c);
-                request.getSession().setAttribute("type", "properties");
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
+					request.getSession().setAttribute("singleton", "true");
+					request.getSession().setAttribute("dictionary", coding_scheme);
+					request.getSession().setAttribute("version", ref_version);
+					Entity c = null;
+					if (ref == null) {
+						String msg =
+							"Error: Null ResolvedConceptReference encountered.";
+						request.getSession().setAttribute("message", msg);
+						request.getSession().setAttribute("matchText",
+							HTTPUtils.convertJSPString(matchText));
+						return "message";
 
-                request.setAttribute("algorithm", matchAlgorithm);
-                coding_scheme =
-                    (String) DataUtils._localName2FormalNameHashMap
-                        .get(coding_scheme);
+					} else {
+						c = ref.getReferencedEntry();
+						if (c == null) {
+							c = DataUtils.getConceptByCode(coding_scheme, ref_version,
+									null, ref.getConceptCode());
+						}
+					}
 
-                String convertJSPString = HTTPUtils.convertJSPString(matchText);
-                request.getSession()
-                    .setAttribute("matchText", convertJSPString);
+					request.getSession().setAttribute("code", ref.getConceptCode());
+					request.getSession().setAttribute("concept", c);
+					request.getSession().setAttribute("type", "properties");
+					request.getSession().setAttribute("new_search", Boolean.TRUE);
 
-                request.setAttribute("dictionary", coding_scheme);
-                request.setAttribute("version", ref_version);
+					request.setAttribute("algorithm", matchAlgorithm);
+					coding_scheme =
+						(String) DataUtils._localName2FormalNameHashMap
+							.get(coding_scheme);
 
-                return "concept_details";
-            } else if (size > 0) {
-                String match_size = Integer.toString(size);
-                ;// Integer.toString(v.size());
-                request.getSession().setAttribute("match_size", match_size);
-                request.getSession().setAttribute("page_string", "1");
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
-                // route to multiple_search_results.jsp
-                request.getSession().setAttribute("matchText",
-                    HTTPUtils.convertJSPString(matchText));
+					String convertJSPString = HTTPUtils.convertJSPString(matchText);
+					request.getSession()
+						.setAttribute("matchText", convertJSPString);
 
-                _logger.debug("Start to render search_results ... ");
-                return "search_results";
-            }
+					request.setAttribute("dictionary", coding_scheme);
+					request.setAttribute("version", ref_version);
+
+					return "concept_details";
+
+
+				} else if (list != null && list.size() > 0) {
+					String match_size = Integer.toString(size);
+					;// Integer.toString(v.size());
+					request.getSession().setAttribute("match_size", match_size);
+					request.getSession().setAttribute("page_string", "1");
+					request.getSession().setAttribute("new_search", Boolean.TRUE);
+					// route to multiple_search_results.jsp
+					request.getSession().setAttribute("matchText",
+						HTTPUtils.convertJSPString(matchText));
+
+					_logger.debug("Start to render search_results ... ");
+					return "search_results";
+				}
+		    }
         }
 
         int minimumSearchStringLength =
@@ -1726,8 +1807,6 @@ int selected_knt = 0;
             _logger.debug("AdvancedSearchAction search_direction "
                 + search_direction);
 
-
-
             searchFields =
                 SearchFields.setRelationship(schemes, matchText, searchTarget,
                     rel_search_association, rel_search_rela, source,
@@ -1894,7 +1973,6 @@ int selected_knt = 0;
 					size = iteratorBean.getSize();
 				}
 			}
-
 
             _logger.debug("AdvancedSearchActon size: " + size);
 
@@ -2280,4 +2358,27 @@ System.out.println("pageSizeChanged to " + newValue);
 		return "mapping";
 	}
 
+
+    public ResolvedConceptReference getFirstResolvedConceptReference(ResolvedConceptReferencesIterator iterator) {
+		if (iterator == null) {
+			System.out.println("UserSessionBean.iterator == null getFirstResolvedConceptReference returns null???");
+			return null;
+		}
+		try {
+			int numberRemaining = iterator.numberRemaining();
+			System.out.println("getFirstResolvedConceptReference numberRemaining: " + numberRemaining);
+			while (iterator != null && iterator.hasNext()) {
+				//ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
+				//return refs[0];
+				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
+				if (ref == null) {
+					System.out.println("(*) UserSessionBean.broken iterator getFirstResolvedConceptReference returns null???");
+				}
+				return ref;
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+    }
 }
