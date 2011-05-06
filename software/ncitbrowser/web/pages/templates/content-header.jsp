@@ -4,12 +4,11 @@
   JSPUtils.JSPHeaderInfoMore info4 = new JSPUtils.JSPHeaderInfoMore(request);
 %>
 <div class="bannerarea">
-    <div class="banner">
-      <a href="<%=basePath%>">
-        <img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/>
-      </a>
-      <span class="vocabularynamelong_ncit">Version:&nbsp;<%=HTTPUtils.cleanXSS(info4.term_browser_version)%></span>
-    </div>
+    <a href="<%=basePath%>" style="text-decoration: none;">
+      <div class="vocabularynamebanner_ncit">
+         <span class="vocabularynamelong_ncit">Version:&nbsp;<%=HTTPUtils.cleanXSS(info4.term_browser_version)%></span>
+      </div>
+    </a>   
     <div class="search-globalnav">
         <!-- Search box -->
         <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>

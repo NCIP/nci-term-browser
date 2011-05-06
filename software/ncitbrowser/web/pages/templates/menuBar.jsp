@@ -41,8 +41,8 @@
   if (hideAdvancedSearchLink2 != null && hideAdvancedSearchLink2)
       adjustedHeight = "height=\"42\"";
 %>
-<table class="global-nav" border="0" width="100%" <%=adjustedHeight%> cellpadding="0" cellspacing="0">
-  <tr>
+<table class="global-nav" border="0" width="100%" height="15px" <%=adjustedHeight%> cellpadding="0" cellspacing="0">
+  <tr valign="bottom">
     <td align="left">
       <% if (menubar_isMapping) { %>
         <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>

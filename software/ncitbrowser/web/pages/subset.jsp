@@ -55,7 +55,7 @@
           partners. They are currently distributed largely as tab-delimited data and Excel spreadsheet files accessible
           via FTP. Below are four important subset collections currently presented on these Cancer.gov Web pages:
         </p>
-        <table width="100%" border="0">
+        <table width="670px" border="0">
           <tr>
             <td>
               <a href="http://www.cancer.gov/cancertopics/terminologyresources/CDISC" target="_blank"

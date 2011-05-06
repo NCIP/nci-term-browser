@@ -152,6 +152,17 @@ a.hideLink
  cursor: pointer;
 }
 
+.vocabularynamebanner_ncit
+{
+ float: left;
+ width: 382px;
+ height: 117px;
+ background-image: url(../images/thesaurus_browser_logo.jpg);
+ background-repeat: no-repeat;
+ text-decoration: none;
+ cursor: pointer;
+}
+
 .vocabularynameshort
 {
  position: relative;
@@ -196,7 +207,7 @@ a.hideLink
 {
  position: relative;
  left: 27px;
- top: -25px;
+ top: 90px;
  width: 150px;
  font-family: Arial, Verdana, Helvetica, sans-serif;
  font-size: 10px;
