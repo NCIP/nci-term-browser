@@ -101,13 +101,6 @@
                               <tr>
                                  <td class="texttitle-blue">Cart</td>
                                  <td class="texttitle-gray">(<h:outputText value="#{CartActionBean.count}" />)</td>
-                                 <td class="texttitle-gray">
-                                    &nbsp;&nbsp;&nbsp;
-                                    <h:commandLink value="Exit Cart"
-                                       onclick="backButton();return false;"
-                                       title="Return to previous screen"
-                                       styleClass="texttitle-blue-small" />
-                                 </td>
                               </tr>
                            </table>
                         </td>
