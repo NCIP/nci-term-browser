@@ -48,7 +48,8 @@
           defining the nature of the subset, and these are hierarchically organized under the parent concept
           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
           Terminology Subset (C54443)</a>. These subset concepts are linked to subset-member concepts through
-          over 20,000 association relationships.
+          over 20,000 association relationships. Many of these subsets are now also available as
+          <a href="<%=request.getContextPath()%>/pages/value_set_source_view.jsf?nav_type=valuesets">Value Sets</a>.
         </p>
         <p>
           Most of these subsets are federal and international coding standards maintained in active collaboration with our FDA, CDISC, and other
