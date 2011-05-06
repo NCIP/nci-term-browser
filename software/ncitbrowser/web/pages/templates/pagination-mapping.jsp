@@ -67,7 +67,7 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
         %>
         &nbsp;
         <i>
-          <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=prev_page_num_str%>">Prev</a>
+          <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&sortBy=<%=sortByStr%>&page_number=<%=prev_page_num_str%>">Prev</a>
           
         </i>&nbsp;
         <%
@@ -97,7 +97,7 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
 		    <%    
 		    } else if (page_num != idx) {
 		      %>
-		        <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=idx_str%>"><%=idx_str%></a>
+		        <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&sortBy=<%=sortByStr%>&page_number=<%=idx_str%>"><%=idx_str%></a>
 		
 			&nbsp;
 		      <%
@@ -118,8 +118,7 @@ System.out.println("(*) pagination_mapping num_pages: " +  num_pages);
         %>
           &nbsp;
           <i>
-            <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&page_number=<%=next_page_num_str%>">Next</a>
-
+            <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=mapping_schema%>&sortBy=<%=sortByStr%>&page_number=<%=next_page_num_str%>">Next</a>
           </i>
         <%
           }
