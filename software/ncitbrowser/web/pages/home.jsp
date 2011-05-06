@@ -11,12 +11,6 @@
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
   String evs_service_url = new DataUtils().getEVSServiceURL();
 %>
-<!--
-   Build info: <%=ncit_build_info%>
- Version info: <%=application_version%>
-          Tag: <%=anthill_build_tag_built%>
-   LexEVS URL: <%=evs_service_url%>          
-  -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -29,15 +23,19 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
 </head>
 <body onLoad="document.forms.searchTerm.matchText.focus();">
+<!--
+   Build info: <%=ncit_build_info%>
+ Version info: <%=application_version%>
+          Tag: <%=anthill_build_tag_built%>
+   LexEVS URL: <%=evs_service_url%>          
+  -->
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
 <%
-    request.getSession().setAttribute("dictionary", "NCI Thesaurus");
-    
+request.getSession().setAttribute("dictionary", "NCI Thesaurus");
 String vocabulary_version = request.getParameter("version");
-//System.out.println("(***** home.jsp) vocabulary_version: " + vocabulary_version);
 if (vocabulary_version != null) {
 	request.setAttribute("version", vocabulary_version);
 }

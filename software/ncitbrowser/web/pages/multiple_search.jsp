@@ -37,12 +37,6 @@
   boolean display_cabig_approval_indicator_note = false;
   Integer curr_sort_category = null;
 %>
-<!--
-   Build info: <%=ncit_build_info%>
- Version info: <%=application_version%>
-          Tag: <%=anthill_build_tag_built%>
-   LexEVS URL: <%=evs_service_url%>
-  -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -58,6 +52,12 @@
 <body onload="checkVisited();">
 -->
 <body onLoad="document.forms.searchTerm.matchText.focus();">
+<!--
+   Build info: <%=ncit_build_info%>
+ Version info: <%=application_version%>
+          Tag: <%=anthill_build_tag_built%>
+   LexEVS URL: <%=evs_service_url%>
+  -->
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>

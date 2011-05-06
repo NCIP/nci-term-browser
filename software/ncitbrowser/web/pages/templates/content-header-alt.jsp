@@ -7,8 +7,7 @@
   if (info.dictionary == null || info.dictionary.compareTo("NCI Thesaurus") == 0) {
   %>
     <div class="banner">
-      <a href="<%=basePath%>"><img
-        src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383"
+      <a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383"
         height="117" alt="Thesaurus Browser Logo" border="0" />
       </a>
     </div>
