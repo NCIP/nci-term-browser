@@ -901,7 +901,12 @@ if (!hasOtherProperties) {
   String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>
-  <b>URL</b>: <%=url%>
+   <table class="datatable" border="0" cellpadding="0" cellspacing="0" width="700px">
+      <tr>
+         <td class="dataRowLight">URL: <%=url%></td>
+      </tr>
+   </table>              
+</p>
 <%
 }
 %>
