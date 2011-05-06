@@ -4554,6 +4554,7 @@ System.out.println("vsd_str " + vsd_str);
 
     public static Vector getCodingSchemeReferencesInValueSetDefinition(String uri) {
 		System.out.println("getCodingSchemeReferencesInValueSetDefinition: " + uri);
+		HashSet hset = new HashSet();
 	    if (uri.indexOf("|") != -1) {
 			Vector u = DataUtils.parseData(uri);
 			uri = (String) u.elementAt(1);
@@ -4569,7 +4570,11 @@ System.out.println("vsd_str " + vsd_str);
 					if (v != null) {
 						for (int j=0; j<v.size(); j++) {
 							String version = (String) v.elementAt(j);
-							w.add(urn + "|" + version);
+							String urn_version = urn + "|" + version;
+							if (!hset.contains(urn_version)) {
+								hset.add(urn_version);
+							    w.add(urn_version);
+						    }
 						}
 					}
 				}

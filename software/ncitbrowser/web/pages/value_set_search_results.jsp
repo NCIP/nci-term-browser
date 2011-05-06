@@ -702,6 +702,10 @@ if (vsd_uri.indexOf("|") != -1) {
     <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
     
 <%
+} else {
+%>
+    <input type="hidden" name="multiplematches" id="multiplematches" value="true">
+<%
 }
 %>
 
