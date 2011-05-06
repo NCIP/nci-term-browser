@@ -705,15 +705,20 @@ System.out.println("(********) metadata " + metadata);
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-
-        //String uri = (String) request.getParameter("valueset");
-
-        String uri = (String) request.getParameter("vsd_uri");
-
-	    if (uri.indexOf("|") != -1) {
-			Vector u = DataUtils.parseData(uri);
-			uri = (String) u.elementAt(1);
+        String selectedvalueset = null;
+        String uri = null;
+        String multiplematches = (String) request.getParameter("multiplematches");
+        if (multiplematches != null) {
+			selectedvalueset = (String) request.getParameter("valueset");
+			uri = selectedvalueset;
+		} else {
+			uri = (String) request.getParameter("vsd_uri");
+			if (uri.indexOf("|") != -1) {
+				Vector u = DataUtils.parseData(uri);
+				uri = (String) u.elementAt(1);
+			}
 		}
+        //String uri = (String) request.getParameter("valueset");
 
         System.out.println("selectCSVersionAction: selected value set " + uri);
 		//request.getSession().setAttribute("selectedvalueset", uri);
@@ -743,15 +748,21 @@ System.out.println("(********) metadata " + metadata);
                 .getExternalContext().getRequest();
 
 
-
+        String selectedvalueset = null;
         //String selectedvalueset = (String) request.getParameter("valueset");
-        String selectedvalueset = (String) request.getParameter("vsd_uri");
-	    if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
-			Vector u = DataUtils.parseData(selectedvalueset);
-			selectedvalueset = (String) u.elementAt(1);
-		}
-
+        String multiplematches = (String) request.getParameter("multiplematches");
+        if (multiplematches != null) {
+			selectedvalueset = (String) request.getParameter("valueset");
+		} else {
+			selectedvalueset = (String) request.getParameter("vsd_uri");
+			if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
+				Vector u = DataUtils.parseData(selectedvalueset);
+				selectedvalueset = (String) u.elementAt(1);
+			}
+	    }
+        String vsd_uri = selectedvalueset;
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
+		/*
         String vsd_uri = null;
         if (selectedvalueset != null) {
 			vsd_uri = selectedvalueset;
@@ -761,11 +772,15 @@ System.out.println("(********) metadata " + metadata);
 				vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 			}
 		}
+		*/
 
 String key = vsd_uri;
 
         request.getSession().setAttribute("vsd_uri", vsd_uri);
         String[] coding_scheme_ref = null;
+
+System.out.println("(*) KLO resolveValueSetAction vsd_uri: " + vsd_uri);
+
 
         Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
         if (w != null) {
@@ -979,10 +994,28 @@ String key = vsd_uri;
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+
+        String selectedvalueset = null;
+       String multiplematches = (String) request.getParameter("multiplematches");
+        if (multiplematches != null) {
+			selectedvalueset = (String) request.getParameter("valueset");
+		} else {
+			selectedvalueset = (String) request.getParameter("vsd_uri");
+			if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
+				Vector u = DataUtils.parseData(selectedvalueset);
+				selectedvalueset = (String) u.elementAt(1);
+			}
+	    }
+        String uri = selectedvalueset;
+		request.getSession().setAttribute("selectedvalueset", uri);
+
+		/*
         String uri = (String) request.getParameter("vsd_uri");
         if (uri == null) {
             uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
+		*/
+
 
         String xml_str = valueSetDefinition2XMLString(uri);
 
