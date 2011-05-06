@@ -163,8 +163,6 @@ request.setAttribute("key", key);
 	      
 	      match_size = new Integer(size).toString();
 	      
-	      
-	      
           }
 
           if (iend > size-1) iend = size-1;
@@ -177,18 +175,28 @@ request.setAttribute("key", key);
 
 	  int numberRemaining_before = iteratorBean.getSize();
 	  
-	  
 	  List list = iteratorBean.getData(istart, iend);
-	  
 
 	  int numberRemaining_after = iteratorBean.getSize();
-  
-	  
-	  if (numberRemaining_before != numberRemaining_after) {
+ 
+  	  if (numberRemaining_before != numberRemaining_after) {
 		iend_str = new Integer(numberRemaining_after).toString();
 		match_size = new Integer(numberRemaining_after).toString();
+		size = iteratorBean.getSize();
+		iend = page_num * page_size;
+		istart = iend - page_size;
+		iend = iend-1;
+
+                if (iend > size-1) iend = size-1;
+                num_pages = size / page_size;
+                if (num_pages * page_size < size) num_pages++;
+                istart_str = Integer.toString(istart+1);
+                iend_str = Integer.toString(iend+1);
+                prev_page_num_str = Integer.toString(prev_page_num);
+                next_page_num_str = Integer.toString(next_page_num);
+	        list = iteratorBean.getData(istart, iend);         
 	  }
-	  
+
 	  
 int expected_count = (iend - istart) + 1;
 int actual_count = list.size();

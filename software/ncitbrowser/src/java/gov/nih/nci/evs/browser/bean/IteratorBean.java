@@ -256,7 +256,7 @@ public class IteratorBean extends Object {
 
 						_lastResolved++;
 
-						System.out.println("_lastResolved = " + _lastResolved);
+						//System.out.println("_lastResolved = " + _lastResolved);
 
 						upper_bound = _lastResolved;
 
