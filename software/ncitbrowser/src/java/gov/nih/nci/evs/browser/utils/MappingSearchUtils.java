@@ -93,7 +93,7 @@ import gov.nih.nci.evs.browser.bean.*;
  */
 
 public class MappingSearchUtils {
-    private static Logger _logger = Logger.getLogger(SearchUtils.class);
+    private static Logger _logger = Logger.getLogger(MappingSearchUtils.class);
 
     public MappingSearchUtils() {
 
