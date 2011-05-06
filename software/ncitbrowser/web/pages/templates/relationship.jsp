@@ -40,8 +40,9 @@ System.out.println("*** (MAPPING)");
             hmap = new MappingSearchUtils().getMappingRelationshipHashMap(scheme_curr, version_curr, code_curr);
     } else {
     
-System.out.println("*** (NOT MAPPING)");   
-    
+System.out.println("*** (NOT MAPPING)"); 
+            hmap = new DataUtils().getRelationshipHashMap(scheme_curr, version_curr, code_curr);
+/*    
 	    hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
 	    if (hmap == null) {
 	      DataUtils util = new DataUtils();
@@ -51,11 +52,15 @@ System.out.println("*** Calling getRelationshipHashMap code_curr " + code_curr);
 	      
 	      hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
 	    }
+	    
+*/	    
     }
 
     if (hmap != null) {
 
     request.getSession().setAttribute("RelationshipHashMap", hmap);
+    
+    
 
     ArrayList superconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
     ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
