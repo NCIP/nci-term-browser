@@ -90,7 +90,10 @@ if (search_results_dictionary == null || search_results_dictionary.compareTo("NC
         <a name="evs-content" id="evs-content"></a>
         <%
 
-          //String key = (String) request.getSession().getAttribute("key");
+key = (String) request.getSession().getAttribute("key");
+
+System.out.println("key: " + key);
+
 
 String resultsPerPage = request.getParameter("resultsPerPage");
 if (resultsPerPage == null) {

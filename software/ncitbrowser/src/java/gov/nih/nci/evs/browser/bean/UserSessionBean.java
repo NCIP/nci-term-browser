@@ -1907,6 +1907,8 @@ System.out.println("====KLO======numberRemaining========" + size);
                     iteratorBean.setMatchText(matchText);
                     iteratorBeanManager.addIteratorBean(iteratorBean);
 
+                    request.getSession().setAttribute("key", key);
+
                 }
             }
 
@@ -1930,6 +1932,8 @@ System.out.println("====KLO======numberRemaining========" + size);
                         iteratorBean.setKey(key);
                         iteratorBean.setMatchText(matchText);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
+
+                        request.getSession().setAttribute("key", key);
                     }
                 }
             }
@@ -1963,12 +1967,14 @@ System.out.println("====KLO======numberRemaining========" + size);
 
 
                         iteratorBeanManager.addIteratorBean(iteratorBean);
+
+                        request.getSession().setAttribute("key", key);
                     }
                 }
             }
         }
 
-        request.setAttribute("key", key);
+        request.getSession().setAttribute("key", key);
         request.getSession().setAttribute("matchText", matchText);
 
         request.getSession().removeAttribute("neighborhood_synonyms");
