@@ -155,7 +155,12 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
     <div id="main-area">
         <input type="hidden" name="initial_search" value="true" />
 
-        <%@ include file="/pages/templates/content-header-termbrowser.jsp" %>
+
+
+        <%@ include file="/pages/templates/content-header-termbrowserhome.jsp" %>
+        
+        
+        
         
         <!-- Page content -->
         <div class="pagecontent">
