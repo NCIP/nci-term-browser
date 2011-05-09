@@ -9,7 +9,7 @@ System.out.println("pagination-mapping.jsp pageNum: " + pageNum);
 
 String mapping_selectedPageSize = (String) request.getSession().getAttribute("selectedPageSize");
 
-System.out.println("pagination-mapping.jsp mapping_selectedPageSize: " + mapping_selectedPageSize);
+//System.out.println("pagination-mapping.jsp mapping_selectedPageSize: " + mapping_selectedPageSize);
 
 
 
@@ -23,12 +23,12 @@ String istart_str = Integer.toString(istart+1);
 String iend_str = Integer.toString(iend+1);
   
   
-System.out.println("pagination-mapping.jsp istart_str: " + istart_str);
-System.out.println("pagination-mapping.jsp iend_str: " + iend_str);
+//System.out.println("pagination-mapping.jsp istart_str: " + istart_str);
+//System.out.println("pagination-mapping.jsp iend_str: " + iend_str);
 
   
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
-System.out.println("(*) pagination-mapping.jsp dictionary_map " + dictionary_map);
+//System.out.println("(*) pagination-mapping.jsp dictionary_map " + dictionary_map);
 
 
 scheme2MappingIteratorBeanMap = (HashMap) request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
@@ -37,7 +37,7 @@ bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
 
 numRemaining = bean.getSize();
 
-System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemaining);    
+//System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemaining);    
    
     
     String match_size = Integer.toString(numRemaining);
@@ -109,8 +109,8 @@ System.out.println("(2) pagination-mapping.jsp iterator.getSize(): " + numRemain
 		  }
           }
           
-System.out.println("(*) pagination_mapping next_page_num: " +  next_page_num);         
-System.out.println("(*) pagination_mapping num_pages: " +  num_pages);         
+//System.out.println("(*) pagination_mapping next_page_num: " +  next_page_num);         
+//System.out.println("(*) pagination_mapping num_pages: " +  num_pages);         
           
 
         if (num_pages > 1 && next_page_num <= num_pages) {

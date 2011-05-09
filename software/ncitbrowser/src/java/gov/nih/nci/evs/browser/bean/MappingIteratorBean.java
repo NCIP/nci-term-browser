@@ -251,10 +251,6 @@ public class MappingIteratorBean extends Object {
 
     public List getData(int idx1, int idx2) {
 
-System.out.println("mappingIteratorBean getData idx1 " + idx1);
-System.out.println("mappingIteratorBean getData idx2 " + idx2);
-System.out.println("mappingIteratorBean getData _list.size() " + _list.size());
-
         if (idx2 <= _list.size()) return copyData(idx1, idx2);
 
 		MappingData mappingData = null;
@@ -461,8 +457,6 @@ System.out.println("mappingIteratorBean getData _list.size() " + _list.size());
 			_size = _list.size();
 			System.out.println("Upper bound breached -- reset _size to " + _size);
 		}
-
-System.out.println("Calling copyData #2 idx1: " + idx1 + "   idx2: " + idx2);
 		return copyData(idx1, idx2);
 		/*
 

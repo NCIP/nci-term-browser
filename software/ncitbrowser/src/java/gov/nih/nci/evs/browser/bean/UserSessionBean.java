@@ -228,7 +228,8 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
         }
 
         if (matchText != null && matchText.length() < 3
-              && matchAlgorithm.compareTo("contains") == 0) {
+              //&& matchAlgorithm.compareTo("contains") == 0) {
+			  && matchAlgorithm.compareTo("exactMatch") != 0) {
             String message = "Please enter a search string of length no less than 3.";
             request.getSession().setAttribute("message", message);
             request.removeAttribute("matchText");
@@ -283,29 +284,17 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 		    }
 	    }
 
-
-System.out.println("(***) Searching scheme " + scheme + " ...");
-
-
         request.setAttribute("dictionary", scheme);
 	    request.setAttribute("version", version);
 
 		boolean isMapping = DataUtils.isMapping(scheme, version);
-
-
-System.out.println("(***) isMapping " + isMapping);
 
         _logger.debug("UserSessionBean scheme: " + scheme);
         _logger.debug("searchAction version: " + version);
 
 
 		if (isMapping) {
-
-System.out.println("(*************) calling MappingSearchUtils -- search by " + searchTarget);
-//testing
 				if (searchTarget.compareTo("names") == 0) {
-
-System.out.println("(*************) calling MappingSearchUtils -- searchByCode " + searchTarget);
 					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByCode(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn);
@@ -327,9 +316,6 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByCode "
 				    }
 
 					if (iterator == null) {
-
-System.out.println("(*************) calling MappingSearchUtils -- searchByName " + searchTarget);
-
 						wrapper = new MappingSearchUtils().searchByName(
 							scheme, version, matchText,
 							matchAlgorithm, maxToReturn);
@@ -377,8 +363,6 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 					request.getSession().setAttribute("dictionary", scheme);
 					request.getSession().setAttribute("version", version);
 
-					System.out.println("(******************) searchAction returns " + msg);
-
 					if (mapping_search) {
 						return "return_to_mapping_home";
 					} else {
@@ -398,8 +382,6 @@ System.out.println("(*************) calling MappingSearchUtils -- searchByName "
 						request.getSession().setAttribute("message", msg);
 						request.getSession().setAttribute("dictionary", scheme);
 						request.getSession().setAttribute("version", version);
-
-						System.out.println("(******************) searchAction returns " + numberRemaining + " matches.");
 
 						if (mapping_search) {
 							return "return_to_mapping_home";
@@ -553,9 +535,6 @@ mappingIteratorBean.initialize();
             }
 
         } else if (searchTarget.compareTo("relationships") == 0) {
-
-System.out.println("(*) KLO relationships search on " + matchText);
-
             designationOnly = true;
             if (iteratorBeanManager.containsIteratorBean(key)) {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
@@ -612,14 +591,10 @@ System.out.println("(*) KLO relationships search on " + matchText);
 
 				System.out.println("(*************) iteratorBean.getData(0, 0): " );
             	list = iteratorBean.getData(0, 0);
-System.out.println("(*************) iteratorBean.list " + list.size() );
-
             	if (size != iteratorBean.getSize()) {
 					size = iteratorBean.getSize();
 				}
 			}
-
-System.out.println("(*************) size #2: " + size);
 
             if (size > 1) {
                 request.getSession().setAttribute("search_results", v);
