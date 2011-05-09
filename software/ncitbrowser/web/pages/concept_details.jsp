@@ -274,16 +274,13 @@
                   %>
                   <h1 class="textsubtitle-blue">Table of Contents</h1>
                   <ul>
-                     <li><a href="#properties">Terms &amp; Properties</a>
-                     </li>
-                     <li><a href="#synonyms">Synonym Details</a>
-                     </li>
-                     <li><a href="#relationships">Relationships</a>
-                     </li>
+                     <li><a href="#properties">Terms &amp; Properties</a></li>
+                     <li><a href="#synonyms">Synonym Details</a></li>
+                     <li><a href="#relationships">Relationships</a></li>
                      <%
                      	if (!isMappingCD) {
                      %>
-                     <li><a href="#mappings">Mapping Details</a</li>
+                     <li><a href="#mappings">Mapping Details</a></li>
                      <%
                      	}
                      %>
