@@ -111,7 +111,7 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
 		   src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2"
 		   alt="SearchBox Bottom" /></div>
 		 <!-- end Search box --> <!-- Global Navigation --> <%@ include
-		   file="/pages/templates/menuBar.jsp"%> <!-- end Global Navigation -->
+		   file="/pages/templates/menuBar-termbrowserhome.jsp"%> <!-- end Global Navigation -->
 	 </div>
  </div>
  <!-- end Thesaurus, banner search area -->

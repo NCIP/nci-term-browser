@@ -462,7 +462,7 @@ if (uri_str != null) {
           <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
           <!-- end Search box -->
           <!-- Global Navigation -->
-          <%@ include file="/pages/templates/menuBar-termbrowser.jsp" %>
+          <%@ include file="/pages/templates/menuBar-termbrowserhome.jsp" %>
           <!-- end Global Navigation -->
         </div> <!-- search-globalnav -->
       </div> <!-- bannerarea -->
