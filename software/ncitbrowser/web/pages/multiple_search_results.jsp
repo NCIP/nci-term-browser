@@ -78,13 +78,12 @@ request.getSession().setAttribute("matchText", match_text);
       check_r = "checked";
 %>
       <!-- Thesaurus, banner search area -->
-      <h:form styleClass="search-form-main-area">
+      <h:form styleClass="search-form-main-area" id="searchTerm">
       <div class="bannerarea">
         <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
         <div class="search-globalnav">
           <!-- Search box -->
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-            <!-- form name="searchTerm" method="post" class="search-form-main-area" -->
             <div class="searchbox">
               <div class="search-form">
               <input CLASS="searchbox-input"
@@ -93,8 +92,8 @@ request.getSession().setAttribute("matchText", match_text);
                 value="<%=match_text%>"
                 onFocus="active = true"
                 onBlur="active = false"
-                onkeypress="return submitEnter('search',event)"
-              />
+                onkeypress="return submitEnter('searchTerm:search',event);"
+              />&nbsp;
               <h:commandButton
                 id="search"
                 value="Search"
