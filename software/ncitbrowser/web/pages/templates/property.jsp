@@ -602,6 +602,7 @@ System.out.println("Step 1");
         Vector w = DataUtils.parseData(t, "$");
         String presentaion_name = (String) w.elementAt(0);
         String presentaion_value = (String) w.elementAt(1);
+        presentaion_value = presentaion_value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         String isPreferred = (String) w.elementAt(2);
 
         displayed_properties.add(presentaion_name);
