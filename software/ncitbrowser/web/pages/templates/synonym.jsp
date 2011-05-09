@@ -66,6 +66,7 @@ if (type != null && type.compareTo("all") == 0) {
                     n++;
         Vector synonym_data = DataUtils.parseData(s, "|");
         String term_name = (String) synonym_data.elementAt(0);
+        term_name = term_name.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         String term_type = (String) synonym_data.elementAt(1);
         String term_source = (String) synonym_data.elementAt(2);
         String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
