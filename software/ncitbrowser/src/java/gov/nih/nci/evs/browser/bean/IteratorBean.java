@@ -195,6 +195,14 @@ public class IteratorBean extends Object {
         return getData(idx1, idx2);
     }
 
+    public boolean hasNext() {
+		try {
+			return _iterator.hasNext();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return false;
+	}
 
     public ResolvedConceptReference getFirstResolvedConceptReference(ResolvedConceptReferencesIterator iterator) {
 		if (iterator == null) {
@@ -266,8 +274,15 @@ public class IteratorBean extends Object {
 						//displayRef(ref);
 
 					}
+/*
+					if (_list.size() > idx2 && knt != _maxReturn) {
+						break;
+					}
+*/
 
-					if (_list.size() > idx2) break;
+					if (_list.size() > idx2 && lcv > 5000) {
+						break;
+					}
 
 				} else {
 					System.out.println("refs == null???");
