@@ -202,7 +202,15 @@ if (concept_status != null) {
 	    show_status = true;
 	}
 }
-if (bool_obj != null && !bool_obj.equals(Boolean.TRUE) || show_status) {
+
+//System.out.println("concept_status: " + concept_status);
+
+if (bool_obj != null ) {
+System.out.println("bool_obj: " + bool_obj);
+
+}
+
+if ((bool_obj != null && !bool_obj.equals(Boolean.TRUE)  && concept_status != null) || (concept_status != null && concept_status.compareTo("null") != 0 && show_status)) {
 %>
     <p class="textbody"><b>Concept Status:</b>&nbsp;<i class="textbodyred"><%=concept_status%></i>
 <%
