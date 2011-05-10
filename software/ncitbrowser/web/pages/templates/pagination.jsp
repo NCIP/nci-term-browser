@@ -16,7 +16,10 @@ String search_key = (String) request.getAttribute("key");
 request.setAttribute("key", search_key);
 %>
 <input type="hidden" id="key" name="key" value="<%=key%>" />
+<input type="hidden" id="dictionary" name="dictionary" value="<%=search_results_dictionary%>" />
+<input type="hidden" id="version" version="key" value="<%=search_results_version%>" />
 <%
+
 
 IteratorBeanManager iteratorBeanMgr = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
 .getSessionMap().get("iteratorBeanManager");
