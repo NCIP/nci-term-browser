@@ -168,6 +168,75 @@ if (resultsPerPage == null) {
         IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
               .getSessionMap().get("iteratorBean");
 
+
+String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
+ 
+int pageNum = 0; 
+int pageSize = Integer.parseInt( resultsPerPage );
+int size = iteratorBean.getSize();    
+List list = null;
+int num_pages = size / pageSize;
+if (num_pages * pageSize < size) num_pages++;
+System.out.println("num_pages: " + num_pages);
+
+String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+if (page_number != null) {
+    pageNum = Integer.parseInt(page_number);
+}
+System.out.println("pageNum: " + pageNum);
+int istart = pageNum * pageSize;
+int page_num = pageNum;
+if (page_num == 0) {
+    page_num++;
+} else {
+    istart = (pageNum-1) * pageSize;
+}
+int iend = istart + pageSize - 1;
+try {
+   list = iteratorBean.getData(istart, iend);
+   int prev_size = size;
+   size = iteratorBean.getSize();
+   
+System.out.println( "(*) prev_size: " + prev_size);
+System.out.println( "(*) size: " + size);
+
+
+   if (size != prev_size) {
+	if (iend > size) {
+	    iend = size;
+	}
+       list = iteratorBean.getData(istart, size);
+       
+   } else {
+
+	if (iend > size) {
+	    iend = size;
+	}
+
+   }
+} catch (Exception ex) {
+   System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+}
+
+
+num_pages = size / pageSize;
+if (num_pages * pageSize < size) num_pages++;
+    
+
+String istart_str = Integer.toString(istart+1);    
+String iend_str = new Integer(iend).toString();
+String match_size = new Integer(size).toString();
+    
+
+          String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
+          int next_page_num = page_num + 1;
+          int prev_page_num = page_num - 1;
+          String prev_page_num_str = Integer.toString(prev_page_num);
+          String next_page_num_str = Integer.toString(next_page_num);
+
+
+
+/*
         String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
         //String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
         String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
@@ -205,6 +274,9 @@ if (resultsPerPage == null) {
           String iend_str = Integer.toString(iend+1);
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
+
+*/
+
 
       %>
         <table width="700px">
@@ -253,7 +325,8 @@ if (size > 0) {
 %>
                 
                 <%
-                  List list = iteratorBean.getData(istart, iend);
+   //list = iteratorBean.getData(istart, iend);
+    
 
     boolean timeout = iteratorBean.getTimeout();
     String message = iteratorBean.getMessage();

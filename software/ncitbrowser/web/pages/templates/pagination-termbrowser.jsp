@@ -47,7 +47,7 @@
 		    }
 		  }
           }
-          if (num_pages > 1 && next_page_num <= num_pages) {
+        if (num_pages > 1 && next_page_num <= num_pages) {
 
         %>
           &nbsp;
@@ -55,7 +55,8 @@
             <a href="<%=request.getContextPath() %>/pages/multiple_search_results.jsf?page_number=<%=next_page_num_str%>">Next</a>
           </i>
         <%
-          }
+          } 
+          
         %>
           </td>
     </tr>

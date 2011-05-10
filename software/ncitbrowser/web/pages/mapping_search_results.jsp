@@ -167,14 +167,11 @@ if (key == null) {
     key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 }
 
-
 //IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
 //.getSessionMap().get("iteratorBeanManager");
 
 
 MappingIteratorBean mapping_bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
-
-
 int pageSize = Integer.parseInt(selectedResultsPerPage);
 int size = 0;
 int pageNum = 1;
@@ -193,27 +190,14 @@ if (page_number != null) {
     pageNum = Integer.parseInt(page_number);
 }
 System.out.println("pageNum: " + pageNum);
-
 int istart = pageNum * pageSize;
-
 int page_num = pageNum;
 if (page_num == 0) {
     page_num++;
 } else {
     istart = (pageNum-1) * pageSize;
 }
-
-
-System.out.println( "(*) pageSize: " + pageSize);
-
-
 int iend = istart + pageSize - 1;
-
-System.out.println( "(*) iend: " + iend);
-
-
-
-
 try {
    list = mapping_bean.getData(istart, iend);
    int prev_size = size;
@@ -224,21 +208,9 @@ System.out.println( "(*) size: " + size);
 
 
    if (size != prev_size) {
-   /*
-       if (iend > istart + pageSize -1) {
-           iend = istart + pageSize -1;
-       } 
-       if (size > istart + pageSize -1) {
-           iend = istart + pageSize -1;
-       }
-   */
-
 	if (iend > size) {
 	    iend = size;
 	}
-
-   
-       //KLO
        list = mapping_bean.getData(istart, size);
        
    } else {
@@ -248,8 +220,6 @@ System.out.println( "(*) size: " + size);
 	}
 
    }
-
-
 } catch (Exception ex) {
    System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
@@ -259,23 +229,11 @@ num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 
 System.out.println("num_pages: " + num_pages);
-
-
 System.out.println("\npage_num: " + page_num); //0
 System.out.println("size: " + size); //85
 System.out.println("pageSize: " + pageSize); //50
 
 
-
-System.out.println("(**************** iend: " + iend);
-
-System.out.println("(**************** page_num: " + page_num);
-
-
-
-
-
-System.out.println("exiting bean.getData ...");
 
 boolean show_rank_column = true;
 String map_rank_applicable = DataUtils.getMetadataValue(mapping_scheme, mapping_version, "map_rank_applicable");

@@ -1409,7 +1409,7 @@ System.out.println("( ***************** ) search by association (NEW IteratorBea
 				size = iterator.numberRemaining();
 
 
-System.out.println("====KLO======numberRemaining========" + size);
+System.out.println("====KLO======numberRemaining========#1 " + size);
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -1430,10 +1430,15 @@ System.out.println("====KLO======numberRemaining========" + size);
 
             if (size == 1) {
 
-                int pageNumber = 1;
-                list = iteratorBean.getData(1);
 
-                if (list != null && list.size() > 0) {
+                int pageNumber = 1;
+                list = iteratorBean.getData(0, 0);
+                size = iteratorBean.getSize();
+
+System.out.println("====KLO======numberRemaining========#2 " + size);
+
+                if (list != null && size == 1) {
+
 					ResolvedConceptReference ref =
 						(ResolvedConceptReference) list.get(0);
 
