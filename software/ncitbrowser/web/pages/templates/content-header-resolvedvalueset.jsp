@@ -78,7 +78,7 @@ System.out.println("Using small font.");
 %>
 
 
-		  <div class="vocabularynameshort" STYLE="font-size:x-small; ">
+		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial;">
 		    <%=HTTPUtils.cleanXSS(vsd_name)%>
 		  </div>
 
