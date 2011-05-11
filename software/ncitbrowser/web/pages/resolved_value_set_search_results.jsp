@@ -76,10 +76,19 @@ String checked = "";
           
       <%
 
-String resultsPerPage = request.getParameter("resultsPerPage");
+
+String resultsPerPage = (String) request.getParameter("resultsPerPage");
 if (resultsPerPage == null) {
-    resultsPerPage = "50";
+    resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
+    if (resultsPerPage == null) {
+        resultsPerPage = "50";
+    }
+    
+}  else {
+    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
 }
+
+
 
 		String selectedResultsPerPage = resultsPerPage;
         
@@ -153,21 +162,15 @@ String key = (String) request.getSession().getAttribute("key");
 		match_size = new Integer(numberRemaining_after).toString();
 	  }
 	  
-	  
-	  
 
-      %>
-        <table width="700px">
-        
-      <%  
       if (message != null) {
       %>
       <p class="textbodyred"><%=message%></p>
       <% 
       }
+      
       %>
-        
-        
+        <table width="700px">
           <tr>
             <td>
               <table>
@@ -376,10 +379,15 @@ String key = (String) request.getSession().getAttribute("key");
             </td>
           </tr>
         </table>
+<%        
+if(message != null) {
+%>        
         <%@ include file="/pages/templates/pagination-termbrowser.jsp" %>
-        
-        
-        
+<%       
+    
+}  
+%>
+       
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
