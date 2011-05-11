@@ -180,8 +180,8 @@
             %>
             <!-- Page content -->
             <div class="pagecontentLittlePadding">      
-                  <h:form>          
-                  <table border="0" width="720px">
+                  <h:form style="margin:0px 0px 0px 0px;">          
+                  <table border="0" width="720px" style="margin:0px 0px 0px 0px;">
                      <tr class="global-nav"> 
                         <td width="25%"></td>                       
                         <td align="right" width="75%">
