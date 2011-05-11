@@ -75,6 +75,8 @@ public class IteratorBean extends Object {
 
     private int _lastResolved;
     private int _maxReturn = 100;
+    private int _stopping_rule = 5000;
+
     private String _message = null;
 
     private String _matchText = null;
@@ -280,7 +282,7 @@ public class IteratorBean extends Object {
 					}
 */
 
-					if (_list.size() > idx2 && lcv > 5000) {
+					if (_list.size() > idx2 && lcv > _stopping_rule) {
 						break;
 					}
 
