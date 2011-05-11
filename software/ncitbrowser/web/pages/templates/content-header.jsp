@@ -2,10 +2,10 @@
 <!-- Thesaurus, banner search area -->
 <%
   JSPUtils.JSPHeaderInfoMore info4 = new JSPUtils.JSPHeaderInfoMore(request);
-  String nciturl = NCItBrowserProperties.getNCIT_URL();
+  String nciturl = HTTPUtils.appendNCIT(NCItBrowserProperties.getNCIT_URL());  
 %>
 <div class="bannerarea">
-    <a href="<%=nciturl%>/ncitbrowser/" style="text-decoration: none;">
+    <a href="<%=nciturl%>" style="text-decoration: none;">
       <div class="vocabularynamebanner_ncit">
          <span class="vocabularynamelong_ncit">Version:&nbsp;<%=HTTPUtils.cleanXSS(info4.term_browser_version)%></span>
       </div>

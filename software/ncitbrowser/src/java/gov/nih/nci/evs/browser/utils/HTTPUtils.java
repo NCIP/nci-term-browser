@@ -94,6 +94,14 @@ public class HTTPUtils {
         return value;
 
     }
+    
+    public static String appendNCIT(String link) {
+    	String nciturl = null;
+    	if (link.contains("/ncitbrowser")) return link;
+    	if (link.endsWith("/"))	link = nciturl + "ncitbrowser";
+    	link = nciturl + "/ncitbrowser";
+    	return link;
+    }
 
     /**
      * Calculate a max font size for the length of the text to be
