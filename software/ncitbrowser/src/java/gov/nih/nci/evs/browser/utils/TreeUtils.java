@@ -320,6 +320,10 @@ public class TreeUtils {
         // direction. Resolve the children as a code graph, looking 2
         // levels deep but leaving the final level unresolved.
         CodedNodeGraph cng = lbsvc.getNodeGraph(scheme, csvt, null);
+        Boolean restrictToAnonymous = Boolean.FALSE;
+        cng = cng.restrictToAnonymous(restrictToAnonymous);
+
+
         ConceptReference focus =
             Constructors.createConceptReference(branchRootCode, scheme);
         cng =
@@ -984,6 +988,9 @@ public class TreeUtils {
             ti._expandable = false;
 
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+            Boolean restrictToAnonymous = Boolean.FALSE;
+            cng = cng.restrictToAnonymous(restrictToAnonymous);
+
             //ConceptReference focus =
             //    Constructors.createConceptReference(code, scheme);
             cng =
@@ -1155,6 +1162,9 @@ public class TreeUtils {
             ti._expandable = false;
 
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+            Boolean restrictToAnonymous = Boolean.FALSE;
+            cng = cng.restrictToAnonymous(restrictToAnonymous);
+
             //ConceptReference focus =
             //    Constructors.createConceptReference(code, scheme);
             cng =
@@ -2116,6 +2126,9 @@ System.out.println("version: " + version);
             ResolvedConceptReferenceList matches = null;
             try {
                 CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+           		Boolean restrictToAnonymous = Boolean.FALSE;
+                cng = cng.restrictToAnonymous(restrictToAnonymous);
+
                 NameAndValueList nameAndValueList_qualifier = null;
 
                 cng =

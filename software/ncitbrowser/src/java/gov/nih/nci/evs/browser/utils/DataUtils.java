@@ -924,7 +924,8 @@ public class DataUtils {
             // RemoteServerUtil().createLexBIGService();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
-            Boolean restrictToAnonymous = Boolean.TRUE;
+            //Boolean restrictToAnonymous = Boolean.TRUE;
+            Boolean restrictToAnonymous = Boolean.FALSE;
             //6.0 mod (KLO, 101810)
             cng = cng.restrictToAnonymous(restrictToAnonymous);
 
