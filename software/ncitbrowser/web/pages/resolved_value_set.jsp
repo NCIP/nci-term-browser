@@ -56,6 +56,8 @@
         
 <%
 
+System.out.println("(*******KLO********) resovled_value_set.jsp ...");
+
 int numRemaining = 0;
 
 String valueSetSearch_requestContextPath = request.getContextPath();
@@ -251,7 +253,9 @@ String next_page_num_str = Integer.toString(next_page_num);
         <tr class="textbodyred"><td>
       <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>
-            <% } else { %>
+            <% } 
+            %>
+            
             <tr class="textbody"><td><b>Name</b>: <%=name%></td>
             <tr class="textbody"><td><b>Description</b>: <%=description%></td>
             <tr class="textbody"><td><b>Concept Domain</b>: <%=concept_domain%></td>
@@ -261,7 +265,6 @@ String next_page_num_str = Integer.toString(next_page_num);
             <tr class="textbody"><td><b>Concepts</b>:</td>
 
             <tr class="textbody"><td>
-
             
                
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
@@ -355,7 +358,6 @@ String next_page_num_str = Integer.toString(next_page_num);
               
              <%
                 }
-            }    
              %>                 
                   
               </table>
