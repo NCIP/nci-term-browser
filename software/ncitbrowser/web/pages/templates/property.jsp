@@ -207,7 +207,9 @@ if (concept_status != null) {
 
 if (bool_obj != null ) {
 System.out.println("bool_obj: " + bool_obj);
-
+     if (!bool_obj.equals(Boolean.TRUE) && concept_status == null) {
+         concept_status = "Inactive";
+     }
 }
 
 if ((bool_obj != null && !bool_obj.equals(Boolean.TRUE)  && concept_status != null) || (concept_status != null && concept_status.compareTo("null") != 0 && show_status)) {
