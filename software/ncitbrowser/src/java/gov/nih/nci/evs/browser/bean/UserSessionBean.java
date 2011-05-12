@@ -1626,6 +1626,7 @@ System.out.println("====KLO======numberRemaining========#2 " + size);
         String selectSearchOption =
             (String) request.getParameter("selectSearchOption");
         bean.setSelectedSearchOption(selectSearchOption);
+        //request.getSession().setAttribute("selectSearchOption", selectSearchOption);
 
         String selectProperty = (String) request.getParameter("selectProperty");
         bean.setSelectedProperty(selectProperty);

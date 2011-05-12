@@ -136,7 +136,7 @@
 
 
     } else {
-        selectSearchOption = (String) request.getAttribute("selectSearchOption");
+        selectSearchOption = (String) request.getSession().getAttribute("selectSearchOption");
         search_string = (String) request.getSession().getAttribute("matchText");
     }
 
@@ -190,6 +190,8 @@
             //KLO
             adv_search_type = bean.getSearchType();
             selectSearchOption = adv_search_type;
+            
+            selectSearchOption = bean.getSelectedSearchOption();
             
 
             _logger.debug("advanced_search.jsp adv_search_algorithm: " + adv_search_algorithm);
