@@ -5,6 +5,7 @@
 <%
 
     String vsdUri = null;
+    if (vsdUri == null) vsdUri = (String) request.getParameter("uri");
     if (vsdUri == null) vsdUri = (String) request.getParameter("vsd_uri");
     if (vsdUri == null) vsdUri = (String) request.getSession().getAttribute("vsd_uri");
     
@@ -60,7 +61,7 @@ System.out.println("vsdUri: " + vsdUri);
 
 <div class="bannerarea">
     <div class="banner">
-	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
+	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
       
 	<div class="vocabularynamebanner">
 	
