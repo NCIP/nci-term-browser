@@ -148,6 +148,8 @@ if (page_num == 0) {
     istart = (pageNum-1) * pageSize;
 }
 int iend = istart + pageSize - 1;
+
+
 try {
    list = iteratorBean.getData(istart, iend);
    int prev_size = size;
@@ -160,6 +162,7 @@ System.out.println( "(*) size: " + size);
    if (size != prev_size) {
 	if (iend > size) {
 	    iend = size;
+
 	}
        list = iteratorBean.getData(istart, size);
        
@@ -167,6 +170,7 @@ System.out.println( "(*) size: " + size);
 
 	if (iend > size) {
 	    iend = size;
+
 	}
 
    }
@@ -177,12 +181,21 @@ System.out.println( "(*) size: " + size);
 
 num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
-    
+
+int istart_plus_pageSize = istart+pageSize;
+
 
 String istart_str = Integer.toString(istart+1);    
 String iend_str = new Integer(iend).toString();
+
+if (iend >= istart+pageSize-1) {
+    iend = istart+pageSize-1;
+    list = iteratorBean.getData(istart, iend);
+    iend_str = new Integer(iend+1).toString();
+}
+
 String match_size = new Integer(size).toString();
-    
+   
 
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
           int next_page_num = page_num + 1;
