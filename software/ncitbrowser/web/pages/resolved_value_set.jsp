@@ -226,11 +226,21 @@ String next_page_num_str = Integer.toString(next_page_num);
           
           <div class="tabTableContentContainer">
           
-          
+ 
+<%          
+  if (message != null) {         
+%> 
+     <p class="textbodyred">&nbsp;<%=message%></p>
+<%
+     request.getSession().removeAttribute("message");  
+  } else {
+%>
+
  
  <h:form id="valueSetSearchResultsForm" styleClass="search-form"> 
           
           <table border="0" width="100%">
+         
             <tr>
                 <td>
                      <table border="0">
@@ -245,7 +255,7 @@ String next_page_num_str = Integer.toString(next_page_num);
 		     </table>
 	        </td>	      
             </tr>
-            
+
             <% if (message != null) { 
                 request.getSession().removeAttribute("message"); 
              %>
@@ -253,8 +263,7 @@ String next_page_num_str = Integer.toString(next_page_num);
         <tr class="textbodyred"><td>
       <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>
-            <% } else {
-            %>
+
             
             <tr class="textbody"><td><b>Name</b>: <%=name%></td>
             <tr class="textbody"><td><b>Description</b>: <%=description%></td>
@@ -354,21 +363,20 @@ String next_page_num_str = Integer.toString(next_page_num);
 		      </td>  
 
 		      </tr>
-              
-              
-             <%
-                }
-         }
-             %>                 
+     
                   
               </table>
            
               <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
-            
-          </td></tr>
-        </table>
+
+        
+<%
+}
+%>
+        
+        
         </div> <!-- end tabTableContentContainer -->
 <%        
 if (message != null) {       
