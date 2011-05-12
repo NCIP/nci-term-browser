@@ -102,7 +102,7 @@ System.out.println("Using small font.");
         <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
         <!-- end Search box -->
         <!-- Global Navigation -->
-            <%@ include file="menuBar-termbrowser.jsp" %>
+            <%@ include file="menuBar-termbrowserhome.jsp" %>
         <!-- end Global Navigation -->
     </div>
     
