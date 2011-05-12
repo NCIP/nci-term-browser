@@ -160,63 +160,6 @@ if (istart < 0) istart = 0;
 int iend = istart + pageSize - 1;
 if (iend > size) iend = size-1;
 
-/*
-
-
-
-String page_string = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
-if (page_string == null) page_string = "0";
-int page_num = Integer.parseInt(page_string);
-
-System.out.println("(*) initial page_num: " + page_num);
-
-if (page_num <= 0) page_num = 1;
-
-int next_page_num = page_num + 1;
-int prev_page_num = page_num - 1;
-int page_size = 50;
-
-if (selectedResultsPerPage != null && selectedResultsPerPage.compareTo("") != 0)
-{
-    page_size = Integer.parseInt(selectedResultsPerPage);
-}
-
-System.out.println("(*) page_num: " + page_num);
-
-int iend = page_num * page_size;
-int istart = iend - page_size;
-iend = iend-1;
-
-
-System.out.println("(*) istart: " + istart);
-System.out.println("(*) iend: " + iend);
-
-
-//int size = 0;
-String match_size = "0";
-
-if (iteratorBean != null) {
-size = iteratorBean.getSize();
-System.out.println("(*) size: " + size);
-match_size = new Integer(size).toString();
-}
-
-
-if (iend > size-1) iend = size-1;
-int num_pages = size / page_size;
-if (num_pages * page_size < size) num_pages++;
-String istart_str = Integer.toString(istart+1);
-String iend_str = Integer.toString(iend+1);
-
-System.out.println("(*) istart_str: " + istart_str);
-System.out.println("(*) iend_str: " + iend_str);
-
-
-String prev_page_num_str = Integer.toString(prev_page_num);
-String next_page_num_str = Integer.toString(next_page_num);
-
-*/
-
 
 %>
         <div class="pagecontent">
@@ -225,6 +168,9 @@ String next_page_num_str = Integer.toString(next_page_num);
           <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
           
           <div class="tabTableContentContainer">
+ 
+ <h:form id="valueSetSearchResultsForm" styleClass="search-form"> 
+          
           
  
 <%          
@@ -236,9 +182,6 @@ String next_page_num_str = Integer.toString(next_page_num);
   } else {
 %>
 
- 
- <h:form id="valueSetSearchResultsForm" styleClass="search-form"> 
-          
           <table border="0" width="100%">
          
             <tr>
@@ -256,12 +199,8 @@ String next_page_num_str = Integer.toString(next_page_num);
 	        </td>	      
             </tr>
 
-            <% if (message != null) { 
-                request.getSession().removeAttribute("message"); 
-             %>
-             
+            
         <tr class="textbodyred"><td>
-      <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>
 
             
@@ -363,23 +302,29 @@ String next_page_num_str = Integer.toString(next_page_num);
 		      </td>  
 
 		      </tr>
+	  <%	      
+	      }
+	   %>   
      
                   
               </table>
-           
-              <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
-              <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
-</h:form>
 
         
 <%
 }
 %>
-        
+   
+           
+              <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
+              <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
+</h:form>
+
+     
         
         </div> <!-- end tabTableContentContainer -->
 <%        
-if (message != null) {       
+if (message == null) {   
+
 %>        
         <%@ include file="/pages/templates/pagination-resolved-valueset.jsp" %>
 <%        
