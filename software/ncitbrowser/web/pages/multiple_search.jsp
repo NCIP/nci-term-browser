@@ -391,10 +391,9 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
 				if (scheme.compareTo("NCI Thesaurus") == 0) {
-				    String nciturl = NCItBrowserProperties.getNCIT_URL();
-				    nciturl = nciturl + "/?version=" + version;
+				    String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + version;
 				  %>
-				    <a href="<%=nciturl%>"><%=display_label%></a><%=cabig_approval_indicator%>
+                    <a href="<%=nciturl%>"><%=display_label%></a><%=cabig_approval_indicator%>
 				  <%
 				} else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
 				    String ncimurl = NCItBrowserProperties.getNCIM_URL();
