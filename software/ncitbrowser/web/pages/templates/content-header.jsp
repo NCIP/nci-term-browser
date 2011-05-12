@@ -2,7 +2,7 @@
 <!-- Thesaurus, banner search area -->
 <%
   JSPUtils.JSPHeaderInfoMore info4 = new JSPUtils.JSPHeaderInfoMore(request);
-  String nciturl = HTTPUtils.appendNCIT(NCItBrowserProperties.getNCIT_URL());  
+  String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + info4.version;
 %>
 <div class="bannerarea">
     <a href="<%=nciturl%>" style="text-decoration: none;">
