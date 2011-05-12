@@ -253,7 +253,7 @@ String next_page_num_str = Integer.toString(next_page_num);
         <tr class="textbodyred"><td>
       <p class="textbodyred">&nbsp;<%=message%></p>
         </td></tr>
-            <% } 
+            <% } else {
             %>
             
             <tr class="textbody"><td><b>Name</b>: <%=name%></td>
@@ -358,6 +358,7 @@ String next_page_num_str = Integer.toString(next_page_num);
               
              <%
                 }
+         }
              %>                 
                   
               </table>
@@ -369,7 +370,15 @@ String next_page_num_str = Integer.toString(next_page_num);
           </td></tr>
         </table>
         </div> <!-- end tabTableContentContainer -->
+<%        
+if (message != null) {       
+%>        
         <%@ include file="/pages/templates/pagination-resolved-valueset.jsp" %>
+<%        
+}   
+%>
+        
+        
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
