@@ -24,6 +24,8 @@
   <%
     String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
     String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
+    String dyeePrevHelpUrl = request.getContextPath() + "/pages/help_orig.jsf";
+    String tab = "&nbsp;&nbsp;&nbsp;&nbsp;";
   %>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
@@ -34,58 +36,104 @@
       <!-- Page content -->
       <div class="pagecontent">
         <a name="evs-content" id="evs-content"></a>
+<%-- DYEE(Begin) --%>        
+        <div class="texttitle-blue">Note(s):</div>
+        <ul>
+          <li>This help page is still being updated.</li>
+          <li>To see previous version, select the following link:
+            <ul>
+              <li><a href="<%=dyeePrevHelpUrl%>">Previous Help</a></li>
+            </ul>
+          </li>
+        </ul>
+        <div class="texttitle-blue">Reminder(s):</div>
+        <ul>
+          <li>Verify links in the "Help" section all works.</li>
+        </ul>
+        <hr/>
+<%-- DYEE(End) --%>
+
         <!-- ======================================= -->
         <!--                 HELP CONTENT            -->
         <!-- ======================================= -->
         <div class="texttitle-blue">Help</div>
+       
         <p class="textbody">
-          <A HREF="#introduction">Introduction</A><br>
-          <A HREF="#sources">Sources</A><br>
-          <A HREF="#searchhelp">Search</A><br>
-          <A HREF="#conceptdetails">Concept Details</A><br>
-          <A HREF="#viewhierarchy">View Hierarchy</A><br>
-          <A HREF="#otherlinks">Other Links</A><br>
-          <A HREF="#knownissues">Known Issues</A><br>
-          <A HREF="#additionalinfo">Additional Information</A>
+          <a href="#introduction">Introduction</a><br/>
+          <a href="#homePage">NCI Term Browser Home Page</a><br/>
+          <a href="#terminologies">Terminologies Tab</a><br/>
+          <%=tab%> <a href="#sources">Sources</a><br/>
+          <%=tab%> <a href="#searchBox">Using the Search Box</a><br/>
+          <%=tab%> <a href="#searchResults">Search Results</a><br/>
+          <%=tab%> <a href="#searchingOther">Searching Other/Multiple Versions of a Terminology</a><br/>
+          <%=tab%> <a href="#advancedSearch">Advanced Search</a><br/>
+          <%=tab%> <a href="#conceptDetails">Concept Details</a><br/>
+          <%=tab%> <a href="#additionalLinks">Additional Links for Individual Terminologies</a><br/>
+          <%=tab%> <a href="#cartAndExport">Cart and Export Functionality</a><br/>
+          <a href="#valueSetsTab">Value Sets Tab</a><br/>
+          <%=tab%> <a href="#valueSetsSearchBox">Using the Search Box</a><br/>
+          <%=tab%> <a href="#conceptDetails">Concept Details</a><br/>
+          <a href="#mappingsTab">Mappings Tab</a><br/>
+          <%=tab%> <a href="#mappingSets">Mapping Sets</a><br/>
+          <%=tab%> <a href="#mappingSearchBox">Using the Search Box</a><br/>
+          <a href="#additionalInformation">Additional Information</a><br/>
         </p>
-        <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="introduction">Introduction</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-          </tr></table>
-          <b>NCI Term Browser</b> provides a consistent, user-friendly tool to
-          browse and search all of the biomedical terminologies hosted
-          by NCI EVS, including both NCI Thesaurus (NCIt) and the NCI
-          Metathesaurus (NCIm), which itself includes more than 70
-          terminologies.  These terminologies normally represent each
-          specific meaning, such as melanoma, lung, orchemotherapy, by
-          a distinct <i>concept</i> with a unique, permanent <i>code</i>. Each concept
-          normally provides additional information such as a preferred
-          name, other terms and codes, definitions, and relationships
-          with other concepts. Concepts are normally organized in
-          parent-child hierarchies from very broad top concepts down
-          to the most specific subcategories.  All browsing and searching
-          in this browser reflects this concept-based view of terminology.
-          For information on other EVS browsers, file formats, and computer
-          application access, see the
-          <a href="http://evs.nci.nih.gov/" target="_blank">EVS web site</a>.
-        </p>
-        <p class="textbody">
-          <b>Get in touch</b> to get help or offer suggestions using the
-          browser's <a href="<%= contactUsUrl %>">Contact Us</a> page.
-        </p>
-        <p class="textbody">
-          This help file provides basic information about how to use
-          the NCI Term Browser effectively, as well as links to additional
-          information elsewhere. The following typeface font conventions
-          are used for describing search and the browser interface:
+        
+        <div class="textbody">
+          <br/>
+          <p>
+            <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+              <td><h2><A NAME="introduction">Introduction</A></h2></td>
+              <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
+            </tr></table>
+          </p>
+  
+          <p>
+            <b>NCI Term Browser</b> provides a consistent, user-friendly 
+            tool to browse, search and retrieve all of the biomedical 
+            terminologies hosted by National Cancer Institute Enterprise 
+            Vocabulary Services (NCI EVS), including both NCI Thesaurus 
+            (NCIt) and the NCI Metathesaurus (NCIm), which itself 
+            includes more than 70 terminologies.
+          </p>
+          <p>
+            This new version of the <b>NCI Term Browser</b> adds new 
+            functionalities, including retrieving and querying Value 
+            Sets and Mappings, performing Advanced Searches, using a 
+            Cart and Data Export, and searching in multiple versions 
+            of a particular terminology.  All of these new functionalities 
+            are discussed below.
+          </p>
+          <p>
+            <b>Get in touch:</b> To get help or to offer suggestions, use 
+            the browser's <a href="<%= contactUsUrl %>">Contact Us</a> page. 
+          </p>
+          <p>
+            This help file provides basic information about how to 
+            use the NCI Term Browser effectively, as well as links 
+            to additional information elsewhere. The following 
+            typeface font conventions are used for describing search 
+            and the browser interface:
+          </p>
+          <table class="textbody" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><%=tab%></td><td><li><b>Bold:</b></li></td>
+              <td><%=tab%></td><td>Browser links, buttons, page tabs, and drop-down boxes.</td>
+            </tr>
+            <tr>
+              <td><%=tab%></td><td><li><font face="courier">Fixed Width:</font></li></td>
+              <td><%=tab%></td><td>Search strings.</td>
+            </tr>
+            <tr>
+              <td><%=tab%></td><td><li><i>Italics:</i></li></td>
+              <td><%=tab%></td><td>Concept terms.</td>
+            </tr>
+          </table>
+        </div>
 
-          <ul>
-            <li><b>Bold</b>: Browser links, buttons, page tabs, and drop-down boxes.</li>
-            <li><font face="courier">Fixed Width</font>: Search strings.</li>
-            <li><i>Italics</i>: Concept terms.</li>
-          </ul>
-        </p>
+<hr/> <%-- DYEE Begin --%>
+<hr/> <%-- DYEE Middle --%>
+<hr/> <%-- DYEE End --%>
 
         <p class="textbody">
           <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
