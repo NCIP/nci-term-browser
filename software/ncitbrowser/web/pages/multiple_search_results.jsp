@@ -221,10 +221,19 @@ System.out.println( "(*) size: " + size);
 
 num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
-    
+
+int istart_plus_pageSize = istart+pageSize;
+
 
 String istart_str = Integer.toString(istart+1);    
 String iend_str = new Integer(iend).toString();
+
+if (iend >= istart+pageSize-1) {
+    iend = istart+pageSize-1;
+    list = iteratorBean.getData(istart, iend);
+    iend_str = new Integer(iend+1).toString();
+}
+
 String match_size = new Integer(size).toString();
     
 
