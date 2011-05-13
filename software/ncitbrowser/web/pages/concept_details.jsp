@@ -119,7 +119,10 @@
             			if (new_search.equals(Boolean.TRUE)) {
             				type = "properties";
             				request.getSession().setAttribute("new_search",Boolean.FALSE);
+            			    String codeFromParameter = code;
             				code = (String) request.getSession().getAttribute("code");
+                            if (code == null)
+                                code = codeFromParameter;
             			}
             		}
             		if (type == null) {
