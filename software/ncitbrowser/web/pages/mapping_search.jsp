@@ -216,7 +216,7 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
     tabindex="1"
   />
   <h:commandButton
-    id="search"
+    id="mapping_search"
     value="mapping_search"
     action="#{userSessionBean.searchAction}"
     image="#{searchform_requestContextPath}/images/search.gif"
