@@ -79,7 +79,8 @@
           <%=tab%> <a href="#mappingSearchBox">Using the Search Box</a><br/>
           <a href="#additionalInformation">Additional Information</a><br/>
         </p>
-        
+
+        <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
@@ -134,6 +135,7 @@
           </table>
         </div>
 
+        <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
@@ -193,6 +195,36 @@
               to this Help page.</li>
           </ul>
         </div>
+
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a NAME="terminologies"><b>Terminologies Tab</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            These terminologies normally represent each specific 
+            meaning, such as melanoma, lung, or chemotherapy, by a 
+            distinct concept with a unique, permanent code. Each 
+            concept normally provides additional information such 
+            as a preferred name, other terms and codes, definitions, 
+            and relationships with other concepts. Concepts are 
+            normally organized in parent-child hierarchies from 
+            very broad top concepts down to the most specific 
+            subcategories. All browsing and searching in this 
+            browser reflects this concept-based view of terminology. 
+            For information on other EVS browsers, file formats, 
+            and computer application access, see the 
+            <a href="http://evs.nci.nih.gov/" target="_blank">EVS web site.</a>
+          </p>
+        </div>
+
 <hr/> <%-- DYEE Begin --%>
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
