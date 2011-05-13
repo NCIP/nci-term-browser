@@ -24,9 +24,10 @@
   <%
     String contactUsUrl = request.getContextPath() + "/pages/contact_us.jsf";
     String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
-    String dyeePrevHelpUrl = request.getContextPath() + "/pages/help_orig.jsf";
+    String arrowImage = request.getContextPath() + "/images/up_arrow.jpg";
     String tab = "&nbsp;&nbsp;&nbsp;&nbsp;";
     String tab2 = tab + tab;
+    String dyeePrevHelpUrl = request.getContextPath() + "/pages/help_orig.jsf";
   %>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
@@ -85,9 +86,9 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><b><a NAME="introduction">Introduction</a></b></td>
+              <td><b><a name="introduction">Introduction</a></b></td>
               <td align="right">
-                <a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" 
+                <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
               </td>
             </tr>
@@ -140,9 +141,9 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a NAME="homePage"><b>NCI Term Browser Home Page</b></a></td>
+              <td><a name="homePage"><b>NCI Term Browser Home Page</b></a></td>
               <td align="right">
-                <a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" 
+                <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
               </td>
             </tr>
@@ -201,9 +202,9 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a NAME="terminologies"><b>Terminologies Tab</b></a></td>
+              <td><a name="terminologies"><b>Terminologies Tab</b></a></td>
               <td align="right">
-                <a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" 
+                <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
               </td>
             </tr>
@@ -230,9 +231,9 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a NAME="sources"><b>Sources</b></a></td>
+              <td><a name="sources"><b>Sources</b></a></td>
               <td align="right">
-                <a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" 
+                <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
               </td>
             </tr>
