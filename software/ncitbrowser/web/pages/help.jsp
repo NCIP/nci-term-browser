@@ -225,32 +225,52 @@
           </p>
         </div>
 
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a NAME="sources"><b>Sources</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            The <b>Terminologies</b> tab of the NCI Term Browser 
+            home page lists the terminologies that are available: 
+            NCI Metathesaurus, NCI Thesaurus, and the rest in 
+            alphabetical order. Click on a terminology name to 
+            go to its home page, or click on a terminology's 
+            check box to include it in a search from the 
+            <b>Terminologies</b> tab of the NCI Term Browser 
+            home page. Both above and below the terminologies
+            list on the <b>Terminologies</b> tab are four buttons: 
+          </p>
+          <ul>
+            <li><b>Select All</b> button: includes all terminologies
+              for searching, leaving their check boxes checked.</li>
+            <li><b>All but NCIm</b> button: includes all terminologies
+              except NCI Metathesaurus (NCIm); this is to aid a quick 
+              search since the time to retrieve search results may be 
+              affected when a search within the NCIm is included.</li>
+            <li><b>Clear</b> button: unselects all terminologies and 
+              clears their check boxes.</li>
+            <li><b>Search</b> button: starts a search in the same way
+              as the Search button in the search box (see below).</li>
+          </ul>
+          <p>
+            The <b>Sources</b> link at the top of the NCI Term Browser
+            home page gives information about all terminologies, 
+            including the terminology descriptions appearing 
+            correspondingly on each individual terminology's home page. 
+          </p>
+        </div>
+
 <hr/> <%-- DYEE Begin --%>
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
-
-        <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="sources">Sources</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-          </tr></table>
-            The NCI Term Browser home page lists alphabetically the
-            terminology sources that are available.  Click on a source
-            name to go to its home page, or click on a source's check
-            box to include it in a search from the NCI Term Browser
-            home page.  Below the sources list are four buttons:
-
-            <ul>
-              <li><b>Select All</b> includes all sources for searching, leaving their check boxes checked.</li>
-              <li><b>All but NCIm</b> includes all sources except NCI Metathesaurus (NCIm), as searches with thousands of hits may be slow when NCIm is included.</li>
-              <li><b>Clear</b> unselects all sources, unchecking their check boxes.</li>
-              <li><b>Search</b> starts a search in the same way as the Search button in the search box.</li>
-            </ul>
-
-            The <b>Sources</b> link at the top of the NCI Term Browser home page
-            gives information about all sources, including the source
-            descriptions appearing on each source's home page.
-        </p>
 
         <p class="textbody">
           <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
