@@ -82,12 +82,15 @@
         
         <div class="textbody">
           <br/>
-          <p>
-            <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-              <td><h2><A NAME="introduction">Introduction</A></h2></td>
-              <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-            </tr></table>
-          </p>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><b><a NAME="introduction">Introduction</a></b></td>
+              <td align="right">
+                <a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
           <p>
             <b>NCI Term Browser</b> provides a consistent, user-friendly 
             tool to browse, search and retrieve all of the biomedical 
@@ -133,12 +136,15 @@
 
         <div class="textbody">
           <br/>
-          <p>
-            <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-              <td><h2><A NAME="homePage">NCI Term Browser Home Page</A></h2></td>
-              <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-            </tr></table>
-          </p>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a NAME="homePage"><b>NCI Term Browser Home Page</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
           <p>
             In the upper left of the NCI Term Browser home page are 
             3 tabs: the <b>Terminologies tab</b> (the default tab), 
