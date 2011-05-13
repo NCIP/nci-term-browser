@@ -26,6 +26,7 @@
     String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
     String dyeePrevHelpUrl = request.getContextPath() + "/pages/help_orig.jsf";
     String tab = "&nbsp;&nbsp;&nbsp;&nbsp;";
+    String tab2 = tab + tab;
   %>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
@@ -87,7 +88,6 @@
               <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
             </tr></table>
           </p>
-  
           <p>
             <b>NCI Term Browser</b> provides a consistent, user-friendly 
             tool to browse, search and retrieve all of the biomedical 
@@ -117,20 +117,76 @@
           </p>
           <table class="textbody" border="0" cellspacing="0" cellpadding="0">
             <tr>
-              <td><%=tab%></td><td><li><b>Bold:</b></li></td>
+              <td><%=tab2%></td><td><li><b>Bold:</b></li></td>
               <td><%=tab%></td><td>Browser links, buttons, page tabs, and drop-down boxes.</td>
             </tr>
             <tr>
-              <td><%=tab%></td><td><li><font face="courier">Fixed Width:</font></li></td>
+              <td><%=tab2%></td><td><li><font face="courier">Fixed Width:</font></li></td>
               <td><%=tab%></td><td>Search strings.</td>
             </tr>
             <tr>
-              <td><%=tab%></td><td><li><i>Italics:</i></li></td>
+              <td><%=tab2%></td><td><li><i>Italics:</i></li></td>
               <td><%=tab%></td><td>Concept terms.</td>
             </tr>
           </table>
         </div>
 
+        <div class="textbody">
+          <br/>
+          <p>
+            <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+              <td><h2><A NAME="homePage">NCI Term Browser Home Page</A></h2></td>
+              <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
+            </tr></table>
+          </p>
+          <p>
+            In the upper left of the NCI Term Browser home page are 
+            3 tabs: the <b>Terminologies tab</b> (the default tab), 
+            the <b>Value Sets tab</b>, and the <b>Mappings tab</b>:
+          </p>
+          <ul>
+            <li>The <b>Terminologies</b> tab allows browsing and 
+              searching within each of the NCI hosted terminologies, 
+              or within multiple terminologies.</li>
+            <li>The <b>Value Sets</b> tab allows browsing and searching 
+              within all value sets (i.e., the CDISC SEND Terminology, 
+              the FDA SPL Terminology, etc.) available on the NCI server.</li>
+            <li>The <b>Mappings</b> tab allows browsing and searching 
+              within a mapping set such as the PDQ to NCIt Mapping: 
+              National Cancer Institute Thesaurus (201010).</li>
+          </ul>
+          <p>
+            These 3 tabs will appear at the top of every Term Browser 
+            page you are on, and the tab that is highlighted indicates 
+            which section of the Term Browser you are in.  The 
+            <b>NCI Term Browser</b> icon above the tabs always leads 
+            back to the main Terminologies home page.
+          </p>
+          <p>
+            The NCI Term Browser home page contains a <b>Search Box</b>
+            in the upper right hand corner. This Search Box has different 
+            options, and will bring back different results, depending on 
+            which tab you are on in the Term Browser.
+          </p>
+          <p>
+            Several links appear below the <b>Search Box</b>.  Most 
+            appear only in certain tabs or other settings, but these 
+            appear on all tabs:
+          </p>
+          <ul>
+            <li><b>Sources</b> always appears at the left, and gives 
+              information about all terminologies including the 
+              descriptions appearing on each individual terminology's 
+              home page.</li>
+            <li><b>Visited Concepts</b> will appear under the Search 
+              box once you start visiting individual concept pages. 
+              It shows the concept name, terminology, and version for
+              each concept visited, with the most recent concepts at 
+              the top.</li>
+            <li><b>Help</b> always appears at the far right, linking 
+              to this Help page.</li>
+          </ul>
+        </div>
 <hr/> <%-- DYEE Begin --%>
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
