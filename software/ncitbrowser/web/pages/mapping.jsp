@@ -145,7 +145,10 @@ int sortBy = MappingData.COL_SOURCE_CODE;
 int prevSortBy = MappingData.COL_SOURCE_CODE;
 
 String sortByStr = request.getParameter("sortBy");
-if (sortByStr != null) {
+
+System.out.println("****************** sortByStr: " + sortByStr);
+
+if (sortByStr != null  && sortByStr.compareTo("null") != 0 ) {
     sortBy = Integer.parseInt(sortByStr);
 }
 
