@@ -557,7 +557,7 @@
                 <h:outputLink
                   value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
                   tabindex="3">
-                  <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
+                  <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn" alt="Search Help"
                   style="border-width:0;"/>
                 </h:outputLink>
     </td>
