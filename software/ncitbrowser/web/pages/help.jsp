@@ -360,7 +360,6 @@
           </p>
         </div>
 
-<hr/> <%-- DYEE Begin --%>
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
@@ -385,124 +384,33 @@
           </p>
           <ul>
             <li>All matching concepts are returned.</li>
-            <li>Results are listed from best match to weakest. For example, a Contains search on Bone returns Bone at the top, followed by concepts with two word matches (e.g., Flat Bone), followed by concepts whose terms have more non-Bone content.</li> 
-            <li>When a terminology search is run, it looks for matches not only in the preferred name of concepts but also among the synonyms of the preferred name as listed in the concept details page.  For this reason, the match will often be to synonyms or codes only visible on the concept details page (e.g., searching Begins With melanoma will show MIA in the results list because that concept contains a synonym of melanoma inhibitory activity.)</li> 
-            <li>If there are too many to show on one page, you can page through the results, with a default of 50 per page. To change the default number, use the Show results per page drop-down menu at the bottom of the results page.</li>
-            <li>If a concept is retired, this will be indicated by the phrase "(Retired Concept") next to the name of the concept in the Results listing.</li>
+            <li>Results are listed from best match to weakest. For 
+              example, a <b>Contains</b> search on <font face="courier">Bone</font>
+              returns <i>Bone</i> at the top, followed by concepts 
+              with two word matches (e.g., <i>Flat Bone</i>), followed 
+              by concepts whose terms have more non-<i>Bone</i> content.</li> 
+            <li>When a terminology search is run, it looks for matches 
+              not only in the preferred name of concepts but also among 
+              the synonyms of the preferred name as listed in the concept 
+              details page.  For this reason, the match will often be 
+              to synonyms or codes only visible on the concept details 
+              page (e.g., searching <b>Begins With</b> 
+              <font face="courier">melanoma</font> will show <i>MIA</i>
+              in the results list because that concept contains a 
+              synonym of <i>melanoma inhibitory activity</i>.)</li> 
+            <li>If there are too many to show on one page, you can page 
+              through the results, with a default of 50 per page. To 
+              change the default number, use the <b>Show results per page</b> 
+              drop-down menu at the bottom of the results page.</li>
+            <li>If a concept is retired, this will be indicated by the
+              phrase "(Retired Concept") next to the name of the concept
+              in the Results listing.</li>
             <li>Click on the preferred name to see a concept's details.</li>
           </ul>
-
         </div>
-        
+
+<hr/> <%-- DYEE Begin --%>
 <hr/> <%-- DYEE Middle --%>
-
-        <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="searchhelp">Search</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-          </tr></table>
-
-          <b>The Search box</b>, in the upper right corner of most browser
-          pages, lets you enter all or part of what you are looking
-          for and how you want to search for it. Some details:
-
-          <ul>
-            <li><b>Text Box</b>: Enter the exact string of characters you want to search for.
-              <ul>
-                <li>Search is not case sensitive (e.g., <font face="courier">aids</font> will match
-                  <i>aids</i>, <i>Aids</i>, and <i>AIDS</i>).</li>
-                <li>There are no wildcard characters. All characters
-                  are matched literally (e.g., searching for <b>Begins With</b>
-                  <font face="courier">NAT2*</font> will match <i>NAT2*5 Allele</i> but not <i>NAT2 Gene</i>).</li>
-                <li>Do not use quotes - they will be searched for literally,
-                  as characters to be matched.</li>
-                <li>Searching for multiple words does not search on each
-                  word separately. To match, all words have to be found in
-                  the same order you provided. For example, if you do a
-                  <b>Contains</b> search on <font face="courier">Melanoma Corneal</font> no results will be
-                  returned, but if you search on <font face="courier">Corneal Melanoma</font> you get
-                  the detail page for <i>Corneal Melanoma</i>.</li>
-              </ul>
-            </li>
-            <li><b>Match method radio buttons</b> select how your search string
-                will be matched.
-              <ul>
-                <li><b>Exact Match</b> is the default: Only terms or codes that
-                  are identical will match.</li>
-                <li><b>Begins With</b> can be selected to find all terms or codes
-                  that start with the words or characters you enter.</li>
-                <li><b>Contains</b> will search for what you enter anywhere
-                  within a term or code (e.g., <font face="courier">carcinoma</font> will match
-                  <i>adenocarcinoma</i>).</li>
-                <li>Concept Codes will only match if they exactly match
-                  what you enter, even if you select <b>Begins With</b> or
-                  <b>Contains</b>.</li>
-              </ul>
-            </li>
-            <li><b>Match target radio buttons</b> select what category of
-                concept information is searched
-              <ul>
-                <li><b>Name/Code</b> is the default: Search text is matched to
-                  a concept's preferred name, synonyms, acronyms, or
-                  codes. Unless stated otherwise, all search examples
-                  in this Help page use the default name/code search.</li>
-                <li><b>Property</b> will match to other direct property
-                  attributes of a concept, such as definitions.</li>
-                <li><b>Relationship</b> will return concepts that have
-                  relationships to concepts that match by name/code
-                  (e.g., an exact relationship search on <font face="courier">toe</font> does
-                  not return the concept <i>toe</i>, but does return <i>toenail</i>
-                  and other related concepts).</li>
-              </ul>
-            </li>
-            <li><b>Search</b> button starts a search.</li>
-            <li><b>"?"</b> button takes you to this Search section of the Help file.</li>
-          </ul>
-        </p>
-        <p class="textbody">
-          If you are in the main NCI Term Browser pages, all currently
-          selected sources will be searched.  If you are in the pages
-          of a particular source, only that source will be searched.
-          The banner to the left of the Search box tells you which
-          source environment you are in.
-        </p>
-        <p class="textbody">
-          <b>Search results</b> are displayed by concept preferred name.
-          If you are searching multiple sources, a right-hand column
-          displays the source of each matching concept.  If there is
-          only one match, the concept details page is shown directly
-          without first listing results, unless the matching concept
-          is in the NCI Metathesaurus (because this links to the
-          separate NCIm Browser). Some details:
-          <ul>
-            <li>All matching concepts are returned.</li>
-            <li>Results are listed from best match to weakest. For
-              example, a <b>Contains</b> search on <font face="courier">Bone</font> returns <i>Bone</i> at
-              the top, followed by concepts with two word matches
-              (e.g., <i>Flat Bone</i>), followed by concepts whose terms
-              have more non-<i>Bone</i> content. Ranking of results from
-              multiple sources is still uneven, so that, e.g.,
-              exact matches from one source may appear after some
-              weaker matches from other sources; we are working
-              to fix this problem.</li>
-            <li>The match will often be to synonyms or codes only
-              visible on the concept details page (e.g., searching
-              <b>Begins With</b> <font face="courier">melanoma</font> will show <i>Corneal Melanoma</i> in
-              the results list because that concept contains a
-              synonym of <i>Melanoma of the Cornea</i>.) A future release
-              will show these matches in the results window.</li>
-            <li>If there are too many to show on one page, you can
-              page through the results with a default of 50 per page.
-              To change the default number, use the <b>Show results per
-              page</b> drop-down menu at the bottom of the results page.</li>
-            <li>Concepts whose status is unusual (e.g., retired
-              or obsolete) show their status in parentheses in
-              the results listing.</li>
-            <li>Click on the preferred name to see a concept's
-              details.</li>
-          </ul>
-        </p>
-
 <hr/> <%-- DYEE End --%>
 
         <p class="textbody">
