@@ -156,7 +156,7 @@ System.out.println("SORT_BY: " + sortBy);
 
 
 String prevSortByStr = (String) request.getSession().getAttribute("sortBy");
-if (prevSortByStr != null) {
+if (prevSortByStr != null && prevSortByStr.compareTo("null") != 0) {
     prevSortBy = Integer.parseInt(prevSortByStr);
 }
 
@@ -209,7 +209,7 @@ if (bean == null) {
 }
 
 
-if (resultsPerPage != null) {
+if (resultsPerPage != null && resultsPerPage.compareTo("null") != 0) {
     bean.setPageSize(Integer.parseInt(resultsPerPage));
 }
 
@@ -222,7 +222,7 @@ String selectedResultsPerPage = new Integer(pageSize).toString();
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 int pageNum = 0;
-if (page_number != null) {
+if (page_number != null && page_number.compareTo("null") != 0) {
     pageNum = Integer.parseInt(page_number);
 }
 
