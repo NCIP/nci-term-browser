@@ -1,7 +1,7 @@
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 
 
-<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/multiple_search_results.jsf?" >
+<FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/resolved_value_set_search_results.jsf?" >
   <table>
     <tr>
       <td class="textbody" align=left>
@@ -16,7 +16,7 @@
         %>
         &nbsp;
         <i>
-          <a href="<%=request.getContextPath() %>/pages/multiple_search_results.jsf?page_number=<%=prev_page_num_str%>">Prev</a>
+          <a href="<%=request.getContextPath() %>/pages/resolved_value_set_search_results.jsf?page_number=<%=prev_page_num_str%>">Prev</a>
         </i>&nbsp;
         <%
           }
@@ -38,7 +38,7 @@
 		    String idx_str = Integer.toString(idx);
 		    if (page_num != idx) {
 		      %>
-			<a href="<%=request.getContextPath() %>/pages/multiple_search_results.jsf?page_number=<%=idx_str%>"><%=idx_str%></a>
+			<a href="<%=request.getContextPath() %>/pages/resolved_value_set_search_results.jsf?page_number=<%=idx_str%>"><%=idx_str%></a>
 			&nbsp;
 		      <%
 		    } else {
@@ -53,7 +53,7 @@
         %>
           &nbsp;
           <i>
-            <a href="<%=request.getContextPath() %>/pages/multiple_search_results.jsf?page_number=<%=next_page_num_str%>">Next</a>
+            <a href="<%=request.getContextPath() %>/pages/resolved_value_set_search_results.jsf?page_number=<%=next_page_num_str%>">Next</a>
           </i>
         <%
           } 

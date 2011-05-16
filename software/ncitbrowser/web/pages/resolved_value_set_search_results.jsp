@@ -379,10 +379,14 @@ String key = (String) request.getSession().getAttribute("key");
             </td>
           </tr>
         </table>
-<%        
-if(message != null) {
+<% 
+
+if(message == null || message.compareTo("null") == 0) {
+
+
+
 %>        
-        <%@ include file="/pages/templates/pagination-termbrowser.jsp" %>
+        <%@ include file="/pages/templates/pagination-valueset-results.jsp" %>
 <%       
     
 }  
