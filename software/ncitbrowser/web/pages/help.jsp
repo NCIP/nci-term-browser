@@ -290,31 +290,65 @@
           </p>
 
           <ul>
-            <li>Text Box: Enter the exact string of characters you want to search for.
+            <li><b>Text Box</b>: Enter the exact string of characters 
+                you want to search for.
               <ul>
-                <li>Search is not case sensitive (e.g., aids will match aids, Aids, and AIDS).</li>
-                <li>There are no wildcard characters. All characters are matched literally (e.g., searching for Begins With NAT2* will match NAT2*5 Allele but not NAT2 Gene).</li>
-                <li>Do not use quotes - they will be searched for literally, as characters to be matched.</li>
-                <li>Searching for multiple words does not search on each word separately. To match, all words have to be found in the same order you provided. For example, if you do a Contains search on Melanoma Corneal, no results will be returned, but if you search on Corneal Melanoma you get the detail page for Corneal Melanoma.</li>
+                <li>Search is not case sensitive (e.g., <font face="courier">aids</font>
+                    will match <i>aids</i>, <i>Aids</i>, and <i>AIDS</i>).</li>
+                <li>There are no wildcard characters. All characters are 
+                    matched literally (e.g., searching for <b>Begins With</b>
+                    <font face="courier">NAT2*</font> will match <i>NAT2*5 Allele</i>
+                     but not <i>NAT2 Gene</i>).</li>
+                <li>Do not use quotes - they will be searched for 
+                   literally, as characters to be matched.</li>
+                <li>Searching for multiple words does not search on each
+                   word separately. To match, all words have to be found 
+                   in the same order you provided. For example, if you do
+                   a <b>Contains</b> search on <font face="courier">Melanoma Corneal</font>,
+                   no results will be returned, but if you search on
+                   <font face="courier">Corneal Melanoma</font> you get
+                   the detail page for <i>Corneal Melanoma</i>.</li>
               </ul>
             </li>
-            <li>Match method radio buttons select how your search string will be matched.
+            <li><b>Match method radio buttons</b> select how your 
+                search string will be matched.
               <ul>
-                <li>Exact Match button is the default: Only terms or codes that are identical will match.</li>
-                <li>Begins With button can be selected to find all terms or codes that start with the words or characters you enter.</li>
-                <li>Contains button will search for what you enter anywhere within a term or code (e.g., carcinoma will match adenocarcinoma).</li>
-                <li>Concept Codes will only match if they exactly match what you enter, even if you select Begins With or Contains buttons.</li>
+                <li><b>Exact Match</b> button is the default: Only terms 
+                    or codes that are identical will match.</li>
+                <li><b>Begins With</b> button can be selected to find all 
+                    terms or codes that start with the words or characters 
+                    you enter.</li>
+                <li><b>Contains</b> button will search for what you enter 
+                    anywhere within a term or code (e.g., 
+                    <font face="courier">carcinoma</font> will match 
+                    <i>adenocarcinoma)</i>.</li>
+                <li>Concept Codes will only match if they exactly match 
+                    what you enter, even if you select <b>Begins With</b>
+                    or <b>Contains</b> buttons.</li>
               </ul>
             </li>
-            <li>Match target radio buttons select what category of concept information is searched 
+            <li><b>Match target radio buttons</b> select what category 
+                of concept information is searched 
               <ul>
-                <li>Name/Code button is the default: Search text is matched to a concept's preferred name, synonyms, acronyms, or codes. Unless stated otherwise, all search examples in this Help page use the default name/code search.</li>
-                <li>Property button will match to other direct property attributes of a concept, such as definitions.</li>
-                <li>Relationship button will return concepts that have relationships to concepts that match by name/code (e.g., an exact relationship search on toe does not return the concept toe, but does return toenail and other related concepts).</li>
+                <li><b>Name/Code</b> button is the default: Search text 
+                    is matched to a concept's preferred name, synonyms, 
+                    acronyms, or codes. Unless stated otherwise, all 
+                    search examples in this Help page use the default 
+                    name/code search.</li>
+                <li><b>Property</b> button will match to other direct 
+                    property attributes of a concept, such as 
+                    definitions.</li>
+                <li><b>Relationship</b> button will return concepts 
+                    that have relationships to concepts that match by 
+                    name/code (e.g., an exact relationship search on 
+                    <font face="courier">toe</font> does not return 
+                    the concept <i>toe</i>, but does return <i>toenail</i> 
+                    and other related concepts).</li>
               </ul>
             </li>
-            <li>Search button starts a search.</li>
-            <li>The "?" button brings you to this Search section of the Help file.</li>
+            <li><b>Search</b> button starts a search.</li>
+            <li>The <b>"?"</b> button brings you to this Search section 
+                of the Help file.</li>
           </ul>
 
           <p>
