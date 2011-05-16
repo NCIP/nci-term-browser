@@ -5,36 +5,48 @@
 --------------------------------------
 Pre-installation requirements
 --------------------------------------
-1. JDK 1.5
+1. JDK 1.6
 2. Apache ANT 1.7 or newer
+3. LexEVS 6.0 (lexevs60.war) deployed and running
+
+-------------------------------------------------------------------
+Build the application (Linux Example, Adjust as needed for windows)
+-------------------------------------------------------------------
+
+Checkout source files from SVN:
+
+1. Create the application directory
+   EG; mkdir /home/user/NCI-Projects/ncitbrowser
+
+2. Checkout NCIt code from trunk
+   EG; svn checkout https://ncisvn.nci.nih.gov/svn/ncit/trunk /home/user/NCI-Projects/ncitbrowser
+
+Setup the projects build property file:
+
+1. Change directory to the build folder
+   EG; cd /home/user/NCI-Projects/ncitbrowser/software/build
+
+2. Copy example property file in to build folder
+   EG; cp /home/user/NCI-Projects/ncitbrowser/docs/example.local.properties ./local.properties
+
+3. Updated property values in local.properties as appropriate for your environment.
+
+Install JBoss 5.1
+
+1. Run NCI Jboss install
+   ant deploy:local:install
 
 
------------------------
-Build the application
------------------------
-Checkout source files from SVN at the following URL:
-https://gforge.nci.nih.gov/svnroot/ncit/trunk
+Deploy NCIt we application
 
-1. Change to the build directory
-   Example; c:> cd C:\SVN-Projects\ncit\software\build
+1. ant deploy:local:upgrade
 
-2. Compile and deploy the application locally
-   c:\...\build> ant deploy:local:install
+The URL for accessing NCIt is : http:// your_app_server.com:19280/ncitbrowser/
 
-Step (2) will deploy a new JBoss container and start it at the following URL
-http://localhost:19280/ncitbrowser/
 
-The JBoss instance will be located in "C:\Apps\evs\jboss-4.0.5.GA" by default.
-
-If you need to overwrite any settings, create a local.properties file and add the
-properties you wish to overwrite to it. Properties can be found in
-project.properties and install.properties.
-
-For example, if you need to change the location of the application server add the
-following to your local.properties:
-
-application.base.path.windows=h:/Apps/evs/ncitbrowser-webapp
-
+************************
+* Miscellaneous  notes *
+************************
 
 --------------------------------------
 Deploy to DEV remotely from desktop
