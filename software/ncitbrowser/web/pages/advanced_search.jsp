@@ -260,7 +260,7 @@
                 <table>
                   <tr><td>
                     <input CLASS="searchbox-input" name="matchText" value="<%=HTTPUtils.cleanXSS(search_string)%>" 
-                           onkeypress="return submitEnter('adv_search',event)" tabindex="1">
+                           onkeypress="return submitEnter('advancedSearchForm:adv_search',event)" tabindex="1">
                     <h:commandButton id="adv_search" value="Search" action="#{userSessionBean.advancedSearchAction}"
                       onclick="javascript:cursor_wait();"
                       image="#{advSearch_requestContextPath}/images/search.gif"
