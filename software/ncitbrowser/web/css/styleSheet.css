@@ -107,6 +107,20 @@ a.hideLink
  font-size: 12px;
 }
 
+#contentArea
+{
+ padding-top: 0px;
+ padding-right: 0px;
+ padding-bottom: 0px;
+ padding-left: 10px;
+ border-color: #ADADC2;
+ border-width: 1px;
+ border-style: solid;
+ background-color: #FFF;
+ font-size: 12px;
+ width: 700px;
+}
+
 .popupContentAreaWithoutBorder
 {
  padding-top: 0px;

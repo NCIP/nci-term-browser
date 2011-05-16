@@ -474,13 +474,13 @@ if (uri_str != null) {
 
       <!-- Page content -->
       <div class="pagecontent">
-        <div id="popupContentArea">
+        <div id="contentArea">
           <a name="evs-content" id="evs-content"></a>
 
 
           <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
           
-          <table>
+          <table border="0">
             <% if (vsd_vec != null && vsd_vec.size() > 1) { %>     
                 <tr>
                   <td class="texttitle-blue">Matched Value Sets:</td>
