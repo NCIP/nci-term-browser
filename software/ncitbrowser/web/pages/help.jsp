@@ -410,6 +410,50 @@
         </div>
 
 <hr/> <%-- DYEE Begin --%>
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="searchingOther"><b>Searching Other/Multiple Versions of a Terminology</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            It is possible in some instances to search non-production 
+            or multiple versions of a particular terminology from the 
+            <b>Terminologies</b> tab of the Term Browser. 
+          </p>
+          <ul>
+            <li>The terminologies for which this is possible will have a 
+              link to the right of them that says <b>show other versions</b>. 
+              Click on that link to see the non-production versions of 
+              the terminology that are available.</li>  
+            <li>These versions, which will appear directly underneath 
+              the production version, will have a check box to the left; 
+              click on that check box and the non-production version(s) 
+              will be included in the search.</li>
+          </ul>
+          <p>
+            Some details about searching other or multiple versions of a
+            particular terminology from the <b>Terminologies</b> tab:
+          </p>
+          <ul>
+            <li>The <b>Select All</b> button will not select non-production 
+              versions of a terminology unless the <b>show other versions</b>
+              link has already been clicked and the non-production version(s) 
+              are visible.</li>
+            <li>However, the <b>Clear</b> button will unselect the check 
+              box of a non-production version of a terminology even if 
+              it is hidden from view.</li>
+            <li>The <b>Search Results</b> will also indicate in parentheses 
+              under <b>Vocabulary</b> the terminology version the result 
+              came from.</li>
+          </ul>
+        </div>          
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
