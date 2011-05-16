@@ -270,8 +270,63 @@
         </div>
 
 <hr/> <%-- DYEE Begin --%>
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="searchBox"><b>Using the Search Box</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            The <b>Search Box</b>, in the upper right corner of the 
+            Term Browser home page and of most Term Browser pages, 
+            lets you enter all or part of what you are looking for 
+            and how you want to search for it. Some details: 
+          </p>
+
+          <ul>
+            <li>Text Box: Enter the exact string of characters you want to search for.
+              <ul>
+                <li>Search is not case sensitive (e.g., aids will match aids, Aids, and AIDS).</li>
+                <li>There are no wildcard characters. All characters are matched literally (e.g., searching for Begins With NAT2* will match NAT2*5 Allele but not NAT2 Gene).</li>
+                <li>Do not use quotes - they will be searched for literally, as characters to be matched.</li>
+                <li>Searching for multiple words does not search on each word separately. To match, all words have to be found in the same order you provided. For example, if you do a Contains search on Melanoma Corneal, no results will be returned, but if you search on Corneal Melanoma you get the detail page for Corneal Melanoma.</li>
+              </ul>
+            </li>
+            <li>Match method radio buttons select how your search string will be matched.
+              <ul>
+                <li>Exact Match button is the default: Only terms or codes that are identical will match.</li>
+                <li>Begins With button can be selected to find all terms or codes that start with the words or characters you enter.</li>
+                <li>Contains button will search for what you enter anywhere within a term or code (e.g., carcinoma will match adenocarcinoma).</li>
+                <li>Concept Codes will only match if they exactly match what you enter, even if you select Begins With or Contains buttons.</li>
+              </ul>
+            </li>
+            <li>Match target radio buttons select what category of concept information is searched 
+              <ul>
+                <li>Name/Code button is the default: Search text is matched to a concept's preferred name, synonyms, acronyms, or codes. Unless stated otherwise, all search examples in this Help page use the default name/code search.</li>
+                <li>Property button will match to other direct property attributes of a concept, such as definitions.</li>
+                <li>Relationship button will return concepts that have relationships to concepts that match by name/code (e.g., an exact relationship search on toe does not return the concept toe, but does return toenail and other related concepts).</li>
+              </ul>
+            </li>
+            <li>Search button starts a search.</li>
+            <li>The "?" button brings you to this Search section of the Help file.</li>
+          </ul>
+
+          <p>
+            If you are in the NCI Term Browser home page, all 
+            currently selected terminologies on the <b>Terminologies</b> 
+            tab will be searched. When you are in the pages of a 
+            particular terminology, only that terminology will be 
+            searched. The banner to the left of the Search box tells 
+            you which terminology environment you are in.
+          </p>
+        </div>
 <hr/> <%-- DYEE Middle --%>
-<hr/> <%-- DYEE End --%>
 
         <p class="textbody">
           <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
@@ -379,6 +434,8 @@
               details.</li>
           </ul>
         </p>
+
+<hr/> <%-- DYEE End --%>
 
         <p class="textbody">
           <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
