@@ -103,7 +103,7 @@ request.getSession().setAttribute("matchText", match_text);
               </h:commandButton>
               <h:outputLink
                 value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp">
-                <h:graphicImage value="/images/search-help.gif"
+                <h:graphicImage value="/images/search-help.gif" alt="Search Help"
                 style="border-width:0;" />
               </h:outputLink>
               <table border="0" cellspacing="0" cellpadding="0">

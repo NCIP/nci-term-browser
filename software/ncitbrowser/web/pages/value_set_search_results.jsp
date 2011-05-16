@@ -324,7 +324,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
       tabindex="2">
     </h:commandButton>
     <h:outputLink value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp" tabindex="3">
-      <h:graphicImage value="/images/search-help.gif" style="border-width:0;" styleClass="searchbox-btn"/>
+      <h:graphicImage value="/images/search-help.gif" style="border-width:0;" styleClass="searchbox-btn" alt="Search Help" />
     </h:outputLink>
 
   <table border="0" cellspacing="0" cellpadding="0" width="340px">
@@ -411,7 +411,7 @@ if (uri_str != null) {
                 <h:outputLink
                   value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
                   tabindex="3">
-                  <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn"
+                  <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn" alt="Search Help"
                     style="border-width:0;"/>
                 </h:outputLink> 
     </td>

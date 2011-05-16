@@ -99,7 +99,7 @@
    <h:outputLink
       value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
       tabindex="3">
-      <h:graphicImage value="/images/search-help.gif"
+      <h:graphicImage value="/images/search-help.gif" alt="Search Help"
          style="border-width:0;" styleClass="searchbox-btn" />
    </h:outputLink>
    <table border="0" cellspacing="0" cellpadding="0" width="340px">
