@@ -1,6 +1,6 @@
 <!-- EVS Logo -->
 <div>
-  <img src="<%=basePath%>/images/evs-logo-swapped.gif"
+  <img src="<%=basePath%>/images/evs-logo-swapped.gif" alt="EVS Logo"
        width="745" height="26" border="0"
        usemap="#external-evs" />
   <map id="external-evs" name="external-evs">
