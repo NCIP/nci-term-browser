@@ -349,7 +349,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
         <% if (curr_sort_category != null && sort_category != curr_sort_category.intValue()) { %>
           <tr>
             <td width="25px"></td>
-            <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="Shim" /></td>
+            <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="<%=CABIG_APPROVED_MSG %>" /></td>
           </tr>
         <% } curr_sort_category = new Integer(sort_category); %>
         
@@ -522,12 +522,12 @@ if (hide_counter == 1) {
                      <% if (display_cabig_approval_indicator_note) { %>
                        <tr>
                          <td width="25px"></td>
-                         <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="Shim" /></td>
+                         <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="<%=CABIG_APPROVED_MSG %>" /></td>
                        </tr>                     
                        <tr>
                          <td width="25px"></td>
                          <td class="termstable">
-                           <img src="<%=basePath%>/images/shim.gif" width="20" height="1" alt="Shim" />
+                           <img src="<%=basePath%>/images/shim.gif" width="20" height="1" alt="<%=CABIG_APPROVED_MSG %>" />
                            <b class="textbody">*</b> <%=CABIG_APPROVED_MSG%>.
                          </td>
                        </tr>
