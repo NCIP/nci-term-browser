@@ -269,7 +269,6 @@
           </p>
         </div>
 
-<hr/> <%-- DYEE Begin --%>
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
@@ -360,6 +359,41 @@
             you which terminology environment you are in.
           </p>
         </div>
+
+<hr/> <%-- DYEE Begin --%>
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="searchResults"><b>Search Results</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            When a terminologies search is run, <b>Search Results</b>
+            are displayed by concept preferred name. If you are searching 
+            multiple terminologies, a right-hand column displays the 
+            corresponding name  of the terminology for each matching 
+            concept. If there is only one match, the concept details 
+            page is shown directly without first listing results, unless 
+            the matching concept is in the NCI Metathesaurus (because 
+            this links to the separate NCIm Browser). Some details: 
+          </p>
+          <ul>
+            <li>All matching concepts are returned.</li>
+            <li>Results are listed from best match to weakest. For example, a Contains search on Bone returns Bone at the top, followed by concepts with two word matches (e.g., Flat Bone), followed by concepts whose terms have more non-Bone content.</li> 
+            <li>When a terminology search is run, it looks for matches not only in the preferred name of concepts but also among the synonyms of the preferred name as listed in the concept details page.  For this reason, the match will often be to synonyms or codes only visible on the concept details page (e.g., searching Begins With melanoma will show MIA in the results list because that concept contains a synonym of melanoma inhibitory activity.)</li> 
+            <li>If there are too many to show on one page, you can page through the results, with a default of 50 per page. To change the default number, use the Show results per page drop-down menu at the bottom of the results page.</li>
+            <li>If a concept is retired, this will be indicated by the phrase "(Retired Concept") next to the name of the concept in the Results listing.</li>
+            <li>Click on the preferred name to see a concept's details.</li>
+          </ul>
+
+        </div>
+        
 <hr/> <%-- DYEE Middle --%>
 
         <p class="textbody">
