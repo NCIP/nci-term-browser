@@ -184,6 +184,16 @@ boolean mapping_search = false;
 String single_mapping_search = (String) request.getParameter("single_mapping_search");
 if (single_mapping_search != null && single_mapping_search.compareTo("true") == 0) {
 	mapping_search = true;
+
+    request.getSession().setAttribute("nav_type", "terminologis");
+	String cs_dictionary = (String) request.getParameter("dictionary");
+	String cs_version = (String) request.getParameter("version");
+
+
+System.out.println("(*******************) SearchAction single_mapping_search");
+System.out.println("(*******************) SearchAction cs_dictionary " + cs_dictionary);
+System.out.println("(*******************) SearchAction cs_version " + cs_version);
+
 }
 
 
@@ -2316,42 +2326,13 @@ System.out.println("====KLO======numberRemaining========#2 " + size);
 
     public void pageSizeChanged(ValueChangeEvent event) {
 
-System.out.println("=============================== pageSizeChanged event ");
-
-
         if (event.getNewValue() == null) {
-
-System.out.println("event.getNewValue() == null ???");
 
             return;
 		}
         String newValue = (String) event.getNewValue();
 
         setSelectedPageSize(newValue);
-
-System.out.println("pageSizeChanged to " + newValue);
-
-/*
-        HttpServletResponse response =
-            (HttpServletResponse) FacesContext.getCurrentInstance()
-                .getExternalContext().getResponse();
-
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
-
-        String requestContextPath = request.getContextPath();
-
-        String targetURL = requestContextPath + "//pages/mapping.jsf?";
-
-        try {
-            response.sendRedirect(response.encodeRedirectURL(targetURL));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            // send error message
-        }
-
-        */
 
 
     }

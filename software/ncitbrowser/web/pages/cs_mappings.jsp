@@ -11,7 +11,7 @@
 <%@ page import="org.apache.log4j.*" %>
 <%!
   private static final String CABIG_APPROVED_MSG = "caBIG approved";
-  private static Logger _logger = Utils.getJspLogger("multiple_search.jsp");
+  private static Logger _logger = Utils.getJspLogger("cs_mappings.jsp");
 
   private static String getCabigIndicator(boolean display, String basePath) {
     if (! display)
@@ -27,10 +27,16 @@
   }
 %>
 <%
+
+  String cs_dictionary = (String) request.getParameter("dictionary");
+  String cs_version = (String) request.getParameter("version");
+
   String mapping_scheme_and_version = (String) request.getSession().getAttribute("scheme_and_version");
   if (mapping_scheme_and_version == null) {
       mapping_scheme_and_version = "";
   }
+
+
 
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
@@ -106,8 +112,11 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
  
 <%
   JSPUtils.JSPHeaderInfoMore info3 = new JSPUtils.JSPHeaderInfoMore(request);
+  
   String cs_mappings_dictionary = info3.dictionary;
   
+
+
   if (JSPUtils.isNull(info3.dictionary)) {
       %>
       <div class="banner">
@@ -352,6 +361,9 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
 				  <td>
 <%
 String scheme_and_version_str = scheme + "$" + version;
+
+
+
 String checkedStr = "";
 if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
      checkedStr = "checked";
@@ -408,7 +420,8 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
     </div> <!-- end main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <input type="hidden" id="single_mapping_search" name="single_mapping_search" value="true">
-
+    <input type="hidden" id="dictionary" name="dictionary" value="<%=cs_dictionary%>">
+    <input type="hidden" id="version" name="version" value="<%=cs_version%>">
 
 
 </h:form>
