@@ -52,6 +52,7 @@
         <ul>
           <li>Verify links in the "Help" section all works.</li>
           <li>Verify "see below" links in Advanced Search.</li>
+          <li>Verify "see below" links in Concept Details.</li>
         </ul>
         <hr/>
 <%-- DYEE(End) --%>
@@ -512,18 +513,42 @@
           </p>
           <ul>
             <li>
-              Tabbed information gives the concept's meaning, labels, and direct relationships:
+              Tabbed information gives the concept's meaning, labels, 
+                  and direct relationships:
               <ul>
-                <li>Terms & Properties: Gives definitions, synonyms, abbreviations, codes, and other information.</li>
-                <li>Synonym Details: Shows each term or abbreviation with the corresponding term type, source, and code (for sources that have them).</li>
-                <li>Relationships: Shows how other concepts are directly related to this concept as parents, children, or in other ways.  Note: For some sources, the browser adds inverse relationships not asserted bidirectionally in the source data file; this is often useful for navigational purposes, but might be confusing, and will be evaluated for adjustments in future releases.</li>
-                <li>Mappings: Gives the mapping relationships, if any, to other vocabularies.</li>
-                <li>View All: Combines all of the concept details on a single page.</li>
+                <li><b>Terms &amp; Properties</b>: Gives definitions, 
+                  synonyms, abbreviations, codes, and other information.</li>
+                <li><b>Synonym Details</b>: Shows each term or abbreviation 
+                  with the corresponding term type, source, and code 
+                  (for sources that have them).</li>
+                <li><b>Relationships</b>: Shows how other concepts are 
+                  directly related to this concept as parents, children, 
+                  or in other ways.  Note: For some sources, the browser 
+                  adds inverse relationships not asserted bidirectionally 
+                  in the source data file; this is often useful for 
+                  navigational purposes, but might be confusing, and 
+                  will be evaluated for adjustments in future releases.</li>
+                <li><b>Mappings</b>: Gives the mapping relationships, 
+                  if any, to other vocabularies.</li>
+                <li><b>View All</b>: Combines all of the concept details 
+                  on a single page.</li>
               </ul>
             </li>
-            <li>View in Hierarchy: Click the link to see where the concept is found within the terminology hierarchy. Concepts are often found in several different places. The focus concept will be bold, underlined, and colored red.</li>
-            <li>A Suggest changes link appears in the upper right of all concept details pages of sources for which NCI can handle such requests. It goes to a special suggestion page with source and concept code filled in.</li>
-            <li>For information about placing concepts into the Cart (using the Add to Cart link found on the Concept Details pages) in order to Export concept information to a file, please see below.</li>
+            <li><b>View in Hierarchy</b>: Click the link to see where 
+              the concept is found within the terminology hierarchy. 
+              Concepts are often found in several different places. 
+              The focus concept will be bold, underlined, and 
+              colored red.</li>
+            <li>A <b>Suggest changes</b> link appears in the upper 
+              right of all concept details pages of sources for 
+              which NCI can handle such requests. It goes to a 
+              special suggestion page with source and concept 
+              code filled in.</li>
+            <li>For information about placing concepts into the 
+              <b>Cart</b> (using the <b>Add to Cart</b> link found 
+              on the Concept Details pages) in order to <b>Export</b>
+              concept information to a file, please 
+              <a href="#cartAndExport">see below</a>.</li>
           </ul>
         </div>
 
