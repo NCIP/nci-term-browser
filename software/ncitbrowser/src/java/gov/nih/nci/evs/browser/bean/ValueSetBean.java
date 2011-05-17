@@ -779,9 +779,6 @@ String key = vsd_uri;
         request.getSession().setAttribute("vsd_uri", vsd_uri);
         String[] coding_scheme_ref = null;
 
-System.out.println("(*) KLO resolveValueSetAction vsd_uri: " + vsd_uri);
-
-
         Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
         if (w != null) {
 			coding_scheme_ref = new String[w.size()];
