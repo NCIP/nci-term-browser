@@ -51,6 +51,7 @@
         <div class="texttitle-blue">Reminder(s):</div>
         <ul>
           <li>Verify links in the "Help" section all works.</li>
+          <li>Verify "see below" links in Advanced Search.</li>
         </ul>
         <hr/>
 <%-- DYEE(End) --%>
@@ -74,7 +75,7 @@
           <%=tab%> <a href="#cartAndExport">Cart and Export Functionality</a><br/>
           <a href="#valueSetsTab">Value Sets Tab</a><br/>
           <%=tab%> <a href="#valueSetsSearchBox">Using the Search Box</a><br/>
-          <%=tab%> <a href="#conceptDetails">Concept Details</a><br/>
+          <%=tab%> <a href="#valueSetConceptDetails">Concept Details</a><br/>
           <a href="#mappingsTab">Mappings Tab</a><br/>
           <%=tab%> <a href="#mappingSets">Mapping Sets</a><br/>
           <%=tab%> <a href="#mappingSearchBox">Using the Search Box</a><br/>
@@ -409,7 +410,6 @@
           </ul>
         </div>
 
-<hr/> <%-- DYEE Begin --%>
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
@@ -454,12 +454,52 @@
               came from.</li>
           </ul>
         </div>          
+
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="advancedSearch"><b>Advanced Search</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            The <b>Advanced Search</b> link, which appears under the 
+            Search Box on terminology source home pages, Concept Details 
+            pages (<a href="#conceptDetails">see below</a>) or on mapping 
+            set home pages (<a href="#mappingSets">see below</a>), leads 
+            to a separate page. The options and selections are similar 
+            to those described for the <b>Search Box</b>, with the following 
+            key differences:
+          </p>
+        </div>
+        <ul>
+          <li><b>Code</b> and <b>Name</b> are searched separately.</li>
+          <li><b>Source</b>: Some terminologies include content from 
+            more than one contributing source.  You can choose to 
+            limit search to one contributing source, or stay with 
+            the default of all, using the pull down menu.</li>
+          <li><b>Property</b> search offers a drop-down list 
+            of all specific properties associated with the home 
+            terminology source, so that they can be selected and 
+            searched individually.</li>
+          <li><b>Relationship</b> search offers a drop-down list 
+            of all specific relationships associated with the home 
+            terminology source, so that they can be selected and 
+            searched individually.</li> 
+        </ul>
+
+<hr/> <%-- DYEE Begin --%>
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
         <p class="textbody">
           <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="conceptdetails">Concept Details</A></h2></td>
+            <td><h2><A NAME="conceptDetails">Concept Details</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
           Detailed information on the selected concept is grouped
