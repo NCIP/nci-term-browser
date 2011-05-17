@@ -595,6 +595,42 @@
         </div>
 
 <hr/> <%-- DYEE Begin --%>
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="cartAndExport"><b>Cart and Export Functionality</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            The Cart and Export functionality is available from within the detailed Concept Page of any concept that is selected for viewing. This is true no matter whether the concept was selected from the Terminologies tab, the Value Sets tab, or the Mappings tab of the Term Browser. The purpose of the Cart and Export functionality is to allow the user to collect and save one or more concepts so that they can be exported to a file. The following instructions apply to the Cart and Export functionality.
+          </p>
+          <ul>
+            <li>In order to place a concept whose details you are viewing into the Cart, click on the Add to Cart link on the right hand side of the concept details (note that the Add to Cart link appears on all of the tabbed pages: Terms & Properties, Relationships, Synonym Details, Mappings, and View All).</li>
+            <li>Once you have placed a concept into the Cart, a link called Cart will appear underneath the Search Box at the top of the page, next to Visited Concepts; from this point forward, this link will remain there regardless of the Term Browser page you are on (provided that the Cart is not emptied; if the Cart is emptied, the link will disappear).</li>
+            <li>
+               If you click on the Cart link, you will be taken to the Cart page:
+               <ul>
+                 <li>The number next to the word Cart on the left indicates the number of concepts you have placed in the cart.</li>
+                 <li>The concepts you have placed in the cart are listed by concept Name (on the left) and concept Vocabulary (on the right).</li>
+                 <li>If you want to remove a particular concept from the Cart, check the box on the left of the concept's name and then click Remove. This will also work for removing several selected concepts at once.</li>
+               </ul>
+            </li>
+            <li>
+              Exporting of the concepts you have accumulated on the Cart page can be done in two formats:
+              <ul>
+                <li>Export XML will export cart contents in XML format.</li>
+                <li>Export CSV (Comma Separated Values) will generate a list of cart contents in CSV format readable from Excel.</li>
+                <li>If a concept is available in more than one version of a terminology, the user is allowed to choose between the default production version of the terminology and other available versions.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
