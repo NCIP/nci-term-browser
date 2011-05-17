@@ -494,7 +494,6 @@
           </ul>
         </div>
 
-<hr/> <%-- DYEE Begin --%>
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
@@ -552,43 +551,51 @@
           </ul>
         </div>
 
-<hr/> <%-- DYEE Middle --%>
-
-        <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="conceptDetails">Concept Details</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-          </tr></table>
-          Detailed information on the selected concept is grouped
-            and shown on several related pages:
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="additionalLinks"><b>Additional Links for Individual Terminologies</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
           <ul>
-            <li>Tabbed information gives the concept's meaning, labels,
-                and direct relationships:</li>
+            <li>
+              Click on the <b>Hierarchy link</b>, at the top of pages 
+              for sources that support it, to bring up a separate 
+              window showing the full terminology hierarchy. Some details:
               <ul>
-                <li><b>Terms & Properties</b>: Gives definitions, synonyms,
-                  abbreviations, codes, and other information.</li>
-                <li><b>Relationships</b>: Shows how other concepts are
-                  directly related to this concept as parents, children,
-                  or in other ways.  Note: For some sources, the browser
-                  adds inverse relationships not asserted bidirectionally
-                  in the source data file; this is often useful for
-                  navigational purposes, but might be confusing, and
-                  will be evaluated for adjustments in future releases.</li>
-                <li><b>Synonym Details</b>: For each term or abbreviation,
-                  shows its term type, source, and code (for sources
-                  that have them).</li>
-                <li><b>View All</b>: Combines all of the above information
-                  on a single page.</li>
+                <li>At first, only the top level nodes of the hierarchy 
+                  are shown.</li>
+                <li>At each level, concepts are listed alphabetically by 
+                  concept preferred name.</li>
+                <li>Browse through the levels by clicking on the + next 
+                  to each concept.</li>
+                <li>Click on the concept name itself to see the concept's 
+                  details in the main browser window.</li>
               </ul>
-            <li><b>View in Hierarchy</b>: Click the button to see where the
-              concept is found within the source hierarchy. Concepts
-              are often found in several different places. The focus
-              concept will be bold, underlined, and colored red.</li>
-            <li><b>View History</b>: Click the button (for sources that have
-              it) to view a history of edit actions on this concept,
-              possibly including dates and other information.</li>
-          </ul>
-        </p>
+            </li>
+            <li>Click on the <b>Maps</b> link to bring up a list of 
+              the mapping data sets of the terminology, which can 
+              then be searched. Terminologies that do not have mappings 
+              will not have the <b>Maps</b> link (see the information 
+              on the <b>Mappings</b> tab below).</li>
+            <li>Click on the <b>Value Sets</b> link at the top of the 
+              page to bring up a separate window showing a hierarchy 
+              of the value sets of the terminology.  Clicking on the 
+              name of a value set will bring up that value set's home 
+              page.  Terminologies that do not have value sets will 
+              not have the <b>Value Sets</b> link (see the information 
+              on the <b>Value Sets</b> tab below).</li>
+          </ul>      
+        </div>
+
+<hr/> <%-- DYEE Begin --%>
+<hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
         <p class="textbody">
