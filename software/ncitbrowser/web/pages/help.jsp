@@ -476,26 +476,58 @@
             to those described for the <b>Search Box</b>, with the following 
             key differences:
           </p>
+          <ul>
+            <li><b>Code</b> and <b>Name</b> are searched separately.</li>
+            <li><b>Source</b>: Some terminologies include content from 
+              more than one contributing source.  You can choose to 
+              limit search to one contributing source, or stay with 
+              the default of all, using the pull down menu.</li>
+            <li><b>Property</b> search offers a drop-down list 
+              of all specific properties associated with the home 
+              terminology source, so that they can be selected and 
+              searched individually.</li>
+            <li><b>Relationship</b> search offers a drop-down list 
+              of all specific relationships associated with the home 
+              terminology source, so that they can be selected and 
+              searched individually.</li> 
+          </ul>
         </div>
-        <ul>
-          <li><b>Code</b> and <b>Name</b> are searched separately.</li>
-          <li><b>Source</b>: Some terminologies include content from 
-            more than one contributing source.  You can choose to 
-            limit search to one contributing source, or stay with 
-            the default of all, using the pull down menu.</li>
-          <li><b>Property</b> search offers a drop-down list 
-            of all specific properties associated with the home 
-            terminology source, so that they can be selected and 
-            searched individually.</li>
-          <li><b>Relationship</b> search offers a drop-down list 
-            of all specific relationships associated with the home 
-            terminology source, so that they can be selected and 
-            searched individually.</li> 
-        </ul>
 
 <hr/> <%-- DYEE Begin --%>
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="conceptDetails"><b>Concept Details</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            Detailed information on a selected concept is grouped 
+            and shown on several related pages: 
+          </p>
+          <ul>
+            <li>
+              Tabbed information gives the concept's meaning, labels, and direct relationships:
+              <ul>
+                <li>Terms & Properties: Gives definitions, synonyms, abbreviations, codes, and other information.</li>
+                <li>Synonym Details: Shows each term or abbreviation with the corresponding term type, source, and code (for sources that have them).</li>
+                <li>Relationships: Shows how other concepts are directly related to this concept as parents, children, or in other ways.  Note: For some sources, the browser adds inverse relationships not asserted bidirectionally in the source data file; this is often useful for navigational purposes, but might be confusing, and will be evaluated for adjustments in future releases.</li>
+                <li>Mappings: Gives the mapping relationships, if any, to other vocabularies.</li>
+                <li>View All: Combines all of the concept details on a single page.</li>
+              </ul>
+            </li>
+            <li>View in Hierarchy: Click the link to see where the concept is found within the terminology hierarchy. Concepts are often found in several different places. The focus concept will be bold, underlined, and colored red.</li>
+            <li>A Suggest changes link appears in the upper right of all concept details pages of sources for which NCI can handle such requests. It goes to a special suggestion page with source and concept code filled in.</li>
+            <li>For information about placing concepts into the Cart (using the Add to Cart link found on the Concept Details pages) in order to Export concept information to a file, please see below.</li>
+          </ul>
+        </div>
+
 <hr/> <%-- DYEE Middle --%>
-<hr/> <%-- DYEE End --%>
 
         <p class="textbody">
           <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
@@ -532,6 +564,7 @@
               possibly including dates and other information.</li>
           </ul>
         </p>
+<hr/> <%-- DYEE End --%>
 
         <p class="textbody">
           <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
