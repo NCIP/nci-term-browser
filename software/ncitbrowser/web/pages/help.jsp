@@ -906,7 +906,6 @@
           </p>
         </div>
 
-<hr/> <%-- DYEE Begin --%>
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
@@ -921,6 +920,55 @@
           </table>
         </div>
 
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="mappingSets"><b>Mapping Sets</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>          
+            The <b>Mappings</b> tab covers special mappings created 
+            between pairs of terminologies, showing how some or all 
+            concepts in the first (source) terminology can be mapped 
+            to one or more concepts, with the same or related meaning, 
+            in the second (target) terminology.  The Mappings tab home
+            page provides a full list of mapping data sets, but for 
+            now only allows searching one at a time.  To search a 
+            mapping set, you have the choice of either 
+          </p>
+          <ul>
+            <li>Searching using the list of mapping data sets
+              (by clicking on one of the <b>mapping set radio 
+              buttons</b>); or</li> 
+            <li>Searching within a particular mapping data set by 
+              clicking on its link and going to its home page 
+              (where the name of the mapping set will be prominently 
+              displayed as a banner in the upper left-hand corner 
+              of the home page).</li>
+          </ul>
+          <p>
+            If you choose to go to a particular mapping set's home
+            page, you can also choose to view the full mapping set 
+            (which will appear in a format described below for the 
+            results of a search) by clicking on the red box called 
+            <b>View Mapping</b> or by clicking on the link that says 
+            <b>Mapping</b> right underneath the Search Box.
+          </p>
+          <p>
+            A mapping set's home page will also have a description 
+            of the mapping and, where available, links to the source 
+            of the mapping set, sites where you can download the 
+            mapping set, and other sites offering related information.
+          </p>
+        </div>
+
+<hr/> <%-- DYEE Begin --%>
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
