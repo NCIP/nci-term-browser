@@ -1,5 +1,5 @@
 <!-- footer -->
-<div class="footer">
+<div class="footer" style="width:720px">
   <ul>
     <li><a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute">NCI Home</a> |</li>
     <li><a href="<%= request.getContextPath() %>/pages/contact_us.jsf">Contact Us</a> |</i>
