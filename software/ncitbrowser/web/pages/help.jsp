@@ -802,42 +802,81 @@
             </tr>
           </table>
           <p>
-            The Search Box, in the upper right corner of the Value Sets tab, lets you enter all or part of what you are looking for and how you want to search for it. You can search all value sets at once, or individual value sets separately. 
+            The <b>Search Box</b>, in the upper right corner of the 
+            Value Sets tab, lets you enter all or part of what you 
+            are looking for and how you want to search for it. You 
+            can search all value sets at once, or individual value 
+            sets separately. 
           </p>
           <p>
-            1. Search all value sets at once to determine which ones contain a match to your search string. This is how search works when you first come to the Value Sets tab. Some details:
+            1. Search all value sets at once to determine which ones 
+            contain a match to your search string. This is how search 
+            works when you first come to the Value Sets tab. Some details:
           </p>
                
           <ul>
             <li>
-              Text Box: Enter the exact string of characters you want to search for.
+              <b>Text Box</b>: Enter the exact string of characters 
+                you want to search for.
               <ul> 
-                <li>Search is not case sensitive (e.g., aids will match aids, Aids, and AIDS).</li>
-                <li>There are no wildcard characters. All characters are matched literally (e.g., searching for Begins With NAT2* will match NAT2*5 Allele but not NAT2 Gene).</li>
-                <li>Do not use quotes - they will be searched for literally, as characters to be matched.</li>
-                <li>Searching for multiple words does not search on each word separately. To match, all words have to be found in the same order you provided. For example, if you do a Contains search on Canis Brucella, no results will be returned, but if you search on Brucella Canis you get the Value Set(s) that contain that concept.</li>
+                <li>Search is not case sensitive (e.g., 
+                  <font face="courier">aids</font> will match <i>aids</i>, 
+                  <i>Aids</i>, and <i>AIDS</i>).</li>
+                <li>There are no wildcard characters. All characters are 
+                  matched literally (e.g., searching for <b>Begins With</b>
+                  <font face="courier">NAT2*</font> will match <i>NAT2*5 Allele</i>
+                  but not <i>NAT2 Gene</i>).</li>
+                <li>Do not use quotes - they will be searched for literally, 
+                  as characters to be matched.</li>
+                <li>Searching for multiple words does not search on each 
+                  word separately. To match, all words have to be found 
+                  in the same order you provided. For example, if you do 
+                  a <b>Contains</b> search on <font face="courier">Canis Brucella</font>, 
+                  no results will be returned, but if you search on 
+                  <font face="courier">Brucella Canis</font> you get the 
+                  Value Set(s) that contain that concept.</li>
               </ul>
             </li>
             <li>
-              Match method radio buttons select how your search string will be matched. 
+              <b>Match method radio buttons</b> select how your search 
+                string will be matched. 
               <ul>
-                <li>Exact Match is the default: Only terms or codes that are identical will match.</li>
-                <li>Begins With can be selected to find all terms or codes that start with the words or characters you enter.</li>
-                <li>Contains will search for what you enter anywhere within a term or code (e.g., carcinoma will match adenocarcinoma).</li>
-                <li>Concept Codes will only match if they exactly match what you enter, even if you select Begins With or Contains.</li>
+                <li><b>Exact Match</b> is the default: Only terms or 
+                  codes that are identical will match.</li>
+                <li><b>Begins With</b> can be selected to find all terms 
+                  or codes that start with the words or characters you enter.</li>
+                <li><b>Contains</b> will search for what you enter 
+                  anywhere within a term or code (e.g., 
+                  <font face="courier">carcinoma</font> will match 
+                  <i>adenocarcinoma)</i>.</li>
+                <li>Concept Codes will only match if they exactly match 
+                  what you enter, even if you select <b>Begins With</b>
+                  or <b>Contains</b>.</li>
               </ul> 
             </li>
             <li>
-              Match target radio buttons select what category of concept information is searched
+              <b>Match target radio buttons</b> select what category of 
+                concept information is searched
               <ul>
-                <li>Code - this is the default: Enter the concept code (e.g., C81209) that you wish to find. Value sets containing at least one concept with that concept code will be returned (e.g., CDISC Terminology.)</li>
-                <li>Name - enter all or part of the search phrase of the concept you wish to find (e.g., Month Day Imputed). NOTE: the name search is not intended to find the value set name, but rather a specific concept name contained within a value set.</li>
+                <li><b>Code</b> - this is the default: Enter the concept 
+                  code (e.g., C81209) that you wish to find. Value sets 
+                  containing at least one concept with that concept code 
+                  will be returned (e.g., CDISC Terminology.)</li>
+                <li><b>Name</b> - enter all or part of the search phrase 
+                  of the concept you wish to find (e.g., Month Day Imputed). 
+                  NOTE: the name search is not intended to find the value 
+                  set name, but rather a specific concept name contained 
+                  within a value set.</li>
               </ul>
             </li>
           </ul>
 
           <p>
-            When a Values Set search is run, Matched Value Sets are displayed by name. Select the radio button in front of the value set you wish to view. Then you can choose the Values button, Versions button or XML definitions button to view the values in that set. 
+            When a Values Set search is run, <b>Matched Value Sets</b>
+            are displayed by name. Select the radio button in front of 
+            the value set you wish to view. Then you can choose the 
+            Values button, Versions button or XML definitions button 
+            to view the values in that set. 
           </p>
           <p>
             Some details: 
@@ -845,16 +884,26 @@
           
           <ul>
            <li>All matching value sets are returned.</li>
-           <li>If there are too many to show on one page, you can page through the results with a default of 50 per page. To change the default number, use the Show results per page drop-down menu at the bottom of the page.</li>
+           <li>If there are too many to show on one page, you can page 
+             through the results with a default of 50 per page. To change 
+             the default number, use the <b>Show results per page</b>
+             drop-down menu at the bottom of the page.</li>
           </ul>
           <p>
-            2. Search within a Values Set. Once you have selected a Values Set to view, e.g., CDISC ADaM Terminology, you can search for specific values within that set. The search box works the same as described above, with one additional target radio button:
+            2. Search <b><i>within</i></b> a Values Set. Once you have 
+            selected a Values Set to view, e.g., CDISC ADaM Terminology, 
+            you can search for specific values within that set. The 
+            search box works the same as described above, with one 
+            additional target radio button:
           </p>
           <ul>
-           <li>Property - enter all or part of the text you want to find (e.g., Quantitative Concept).</li>
+           <li><b>Property</b> - enter all or part of the text you want 
+             to find (e.g., Quantitative Concept).</li>
           </ul>
           <p>
-            The matched values will appear in the results list. Select the Concept Name to view the details for that concept. See Concept Details for further information.
+            The matched values will appear in the results list. Select 
+            the <b>Concept Name</b> to view the details for that concept. 
+            See Concept Details for further information.
           </p>
         </div>
 <hr/> <%-- DYEE Middle --%>
