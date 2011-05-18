@@ -65,7 +65,7 @@
         <p class="textbody">
           <a href="#introduction">Introduction</a><br/>
           <a href="#homePage">NCI Term Browser Home Page</a><br/>
-          <a href="#terminologies">Terminologies Tab</a><br/>
+          <br/>
           <%=tab%> <a href="#sources">Sources</a><br/>
           <%=tab%> <a href="#searchBox">Using the Search Box</a><br/>
           <%=tab%> <a href="#searchResults">Search Results</a><br/>
@@ -689,30 +689,46 @@
           </p>
           <ul>
             <li>
-              <b>Standards View</b> is the default view, and shows the available value sets listed by the authority responsible for their content.
+              <b>Standards View</b> is the default view, and shows 
+                the available value sets listed by the authority 
+                responsible for their content.
               <ul> 
-                <li>Authorities, and value sets for each, are listed alphabetically.  Some value sets are defined by combining component value sets, displayed as child entries.</li>
-                <li>Browse through the levels by clicking on the + next to entries having lower levels.</li>
-                <li>If you select one of the top-level authority entries, such as CDISC or FDA, you will go to a concept for that authority in the Terminology Value Set terminology, a small new NCI terminology used to help organize value set information.</li>
+                <li>Authorities, and value sets for each, are listed 
+                  alphabetically.  Some value sets are defined by 
+                  combining component value sets, displayed as child 
+                  entries.</li>
+                <li>Browse through the levels by clicking on the + 
+                  next to entries having lower levels.</li>
+                <li>If you select one of the top-level authority 
+                  entries, such as CDISC or FDA, you will go to 
+                  a concept for that authority in the Terminology 
+                  Value Set terminology, a small new NCI terminology 
+                  used to help organize value set information.</li>
               </ul>
             </li>
           </ul>
           <ul>
             <li>
-              Terminology View shows available value sets listed by the terminologies their values come from.
+              <b>Terminology View</b> shows available value sets 
+                listed by the terminologies their values come from.
               <ul> 
-                <li>Browse through the levels by clicking on the + next to each terminology.</li>
-                <li>If you select one of the top-level terminologies, you will go to the home page for that terminology.</li>
+                <li>Browse through the levels by clicking on the + 
+                  next to each terminology.</li>
+                <li>If you select one of the top-level terminologies, 
+                  you will go to the home page for that terminology.</li>
               </ul>
             </li>
           </ul>
           <p>
-            Select a value set name, in either view, to go to that value set's home page.  The home page gives a brief description, and three buttons for viewing it:
+            Select a value set name, in either view, to go to that 
+            value set's home page.  The home page gives a brief 
+            description, and three buttons for viewing it:
           </p>
-          
           <ul>
             <li>
-              Values lists all concepts contained in this value set, using the production version of each participating terminology.  The listing shows:
+              <b>Values</b> lists all concepts contained in this 
+                value set, using the production version of each 
+                participating terminology.  The listing shows:
               <ul> 
                 <li>Name</li>
                 <li>Description</li>
@@ -721,31 +737,52 @@
                 <li>
                   Concepts
                   <ul>
-                    <li>The first 50 concepts of the value set are listed. Use the Show <n> results per page drop-down menu at the bottom of the page to display up to 500 concepts at once.</li>
-                    <li>Each concept listed shows its code, name, vocabulary and namespace.</li>
-                    <li>Select the Code link (e.g., C81209) to display the concept details. See the Terminologies Tab help section for information on the concept details display.</li>
+                    <li>The first 50 concepts of the value set are 
+                      listed. Use the <b>Show <n> results per page</b>
+                      drop-down menu at the bottom of the page to 
+                      display up to 500 concepts at once.</li>
+                    <li>Each concept listed shows its <b>code</b>, 
+                      <b>name</b>, <b>vocabulary</b> and <b>namespace</b>.</li>
+                    <li>Select the <b>Code</b> link (e.g., C81209) 
+                      to display the concept details. See the 
+                      <a href="#terminologies">Terminologies Tab</a>
+                      help section for information on the concept 
+                      details display.</li>
                   </ul>
                 </li>
               </ul>
-              <br/>There are two options for exporting all of the values from the displayed set:<br/><br/>
+              <br/>There are two options for exporting all of the 
+                values from the displayed set:<br/><br/>
               <ul>
-                <li>Export XML will open or save the value set in a tagged XML format.</li>
-                <li>Export CSV (Comma Separated Values) will open or save the value set in a delimited text format.</li>
+                <li><b>Export XML</b> will open or save the value set 
+                  in a tagged XML format.</li>
+                <li><b>Export CSV</b> (Comma Separated Values) will 
+                  open or save the value set in a delimited text format.</li>
               </ul>
               <br/>
             </li>
             <li>
-              Versions allows you to select particular versions of each terminology participating in this value set. For example, selecting the CDISC ADaM Terminology and then the Versions button will show the currently available versions of NCI Thesaurus. The version information includes:
+              <b>Versions</b> allows you to select particular versions 
+                of each terminology participating in this value set. 
+                For example, selecting the CDISC ADaM Terminology and 
+                then the Versions button will show the currently available 
+                versions of NCI Thesaurus. The version information includes:
               <ul>
                 <li>Coding Scheme</li>
                 <li>Version</li>
                 <li>Tag</li>
               </ul>
-              <br/>The Continue button uses the selected version(s) to select the values contained in the set. See help section on Values above for information on the details contained there.
+              <br/>The <b>Continue</b> button uses the selected version(s) 
+                to select the values contained in the set. See help section 
+                on Values above for information on the details contained there.
               <br/><br/>
             </li>
             <li>
-              XML Definition opens or saves the logical definition of the value set in LexGrid XML format. This definition contains the criteria used to find the values in the value set, using concept codes, logical hierarchies, or other criteria sometimes combining multiple parts. 
+              <b>XML Definition</b> opens or saves the logical definition 
+              of the value set in LexGrid XML format. This definition 
+              contains the criteria used to find the values in the 
+              value set, using concept codes, logical hierarchies, 
+              or other criteria sometimes combining multiple parts. 
             </li>
           </ul>
         </div>
