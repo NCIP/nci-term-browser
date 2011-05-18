@@ -1072,110 +1072,24 @@
           </ul>
         </div>
         
-<hr/> <%-- DYEE Begin --%>
-<hr/> <%-- DYEE Middle --%>
-<hr/> <%-- DYEE End --%>
-
-        <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="viewhierarchy">View Hierarchy</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-          </tr></table>
-          Click on the <b>View Hierarchy</b> link, at the top of
-          pages for sources that support it, to bring up a separate
-          window showing the full source hierarchy. Some details:
-          <ul>
-            <li>At first, only the top level nodes of the hierarchy
-              are shown.</li>
-            <li>At each level, concepts are listed alphabetically
-              by concept preferred name.</li>
-            <li>Browse through the levels by clicking on the + next
-              to each concept.</li>
-            <li>Click on the concept name itself to see the concept's
-              details in the main browser window.</li>
-          </ul>
-        </p>
-
-        <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="otherlinks">Other Links</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-          </tr></table>
-          Several other browser links appear in the upper parts of
-            pages to which they apply:
-          <ul>
-            <li><b>Visited Concepts</b> will appear under the Search box
-              once you start visiting individual concept pages.  It
-              shows the concept name and source for each concept
-              visited, with most recent concepts at the top.</li>
-            <li><b>Term Suggestion</b> appears on the initial pages of
-              sources for which NCI can handle such requests, and
-              goes to a special suggestion page.  This link is lost
-              when <b>Visited Concepts</b> start, but is still available
-              on the <b>Quick Links</b> pull-down menu.</li>
-            <li><b>Suggest changes</b> (to this concept) link appears in the
-              upper right of all concept details pages of sources
-              for which NCI can handle such requests.  It goes to
-              a special suggestion page with source and concept code
-              filled in.</li>
-            <li><b>Subsets</b> on NCI Thesaurus (NCIt) pages links to a
-              special page to read about and link to
-              <a href="<%= subsetsUrl %>">NCI Thesaurus Subsets</a>
-              The text on this page provides additional
-              information. </li>
-          </ul>
-        </p>
-
-        <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="knownissues">Known Issues</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-          </tr></table>
-          This browser addresses many of the issues identified in the
-          NCIt Browser on which it is based. We are still working on
-          remaining issues of data, functionality and documentation,
-          which include the following:
-          <ul>
-            <li><b>Data</b>: Some source data are not being properly loaded
-              into the LexBIG database, or are not being correctly
-              processed for presentation and search.  We are addressing
-              such issues through ongoing changes in data file formats
-              and loading, and expect significant improvements to be
-              visible even before the next browser release.</li>
-            <li><b>Functionality</b>: The default scoring for search
-              matches will continue to be improved, especially in
-              harmonizing the currently very uneven scoring of matches
-              from multiple sources. The often large performance penalty
-              for searching NCIm together with other sources also needs
-              to be fixed.  Some user-settable options should be part
-              of a forthcoming Advanced Search page. Performance in
-              some features, such as the display of concept placement
-              in source hierarchies, still needs major improvement. Single
-              character Contains searches or Begins With are not supported
-              by the browser at this time but will be addressed in a future
-              release.</li>
-            <li><b>Documentation</b>: Online and standalone documentation
-              are still under development.</li>
-            <li>For the latest updates of known issues,
-              <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.0+Release+Notes" target="_blank"> see NCI Term Browser 2.0 Release Notes</a>.</li>
-          </ul>
-          Please report any bugs or suggestions using the browser's
-          <a href="<%= contactUsUrl %>">Contact Us</a> page.
-        </p>
-
-        <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td><h2><A NAME="additionalinfo">Additional Information</A></h2></td>
-            <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
-          </tr></table>
-          Additional information about EVS can be found on the
-          <a href="http://evs.nci.nih.gov/" target="_blank">EVS Web</a> and
-          <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank">EVS Wiki sites</a>.
-          Several journal articles describe some aspects in greater detail; these are listed in the
-          <a href="http://evs.nci.nih.gov/aboutEVS" target="_blank">About EVS</a>
-          page on the EVS Web site.
-        </p>
-        <br>
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="additionalInformation"><b>Additional Information</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            Additional information about EVS can be found on the
+            <a href="http://evs.nci.nih.gov/" target="_blank">EVS Web</a> and 
+            <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank">EVS Wiki sites</a>.
+          </p>
+        </div>
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div> <!-- end pagecontent -->
     </div> <!-- end main-area -->
