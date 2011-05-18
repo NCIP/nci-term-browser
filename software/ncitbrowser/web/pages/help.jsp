@@ -27,7 +27,6 @@
     String arrowImage = request.getContextPath() + "/images/up_arrow.jpg";
     String tab = "&nbsp;&nbsp;&nbsp;&nbsp;";
     String tab2 = tab + tab;
-    String dyeePrevHelpUrl = request.getContextPath() + "/pages/help_orig.jsf";
   %>
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
@@ -38,25 +37,6 @@
       <!-- Page content -->
       <div class="pagecontent">
         <a name="evs-content" id="evs-content"></a>
-<%-- DYEE(Begin) --%>        
-        <div class="texttitle-blue">Note(s):</div>
-        <ul>
-          <li>This help page is still being updated.</li>
-          <li>To see previous version, select the following link:
-            <ul>
-              <li><a href="<%=dyeePrevHelpUrl%>">Previous Help</a></li>
-            </ul>
-          </li>
-        </ul>
-        <div class="texttitle-blue">Reminder(s):</div>
-        <ul>
-          <li>Verify links in the "Help" section all works.</li>
-          <li>Verify "see below" links in Advanced Search.</li>
-          <li>Verify "see below" links in Concept Details.</li>
-        </ul>
-        <hr/>
-<%-- DYEE(End) --%>
-
         <!-- ======================================= -->
         <!--                 HELP CONTENT            -->
         <!-- ======================================= -->
