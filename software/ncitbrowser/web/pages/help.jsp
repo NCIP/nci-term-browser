@@ -969,6 +969,66 @@
         </div>
 
 <hr/> <%-- DYEE Begin --%>
+
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="mappingSearchBox"><b>Using the Search Box</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+          <p>
+            Searching using the <b>Search Box</b> on either the 
+            <b>Mappings</b> tab or on a particular Mapping Set's home 
+            page works, on the surface, the same way as on the 
+            <b>Terminologies</b> tab: the <b>TextBox</b>, the 
+            <b>Match method radio buttons</b>, and the <b>Match 
+            target radio buttons</b> all function the same way as 
+            with the <b>Terminologies</b> tab. The one exception to 
+            note is that to search only one or two characters, it is 
+            necessary to do an <b>Exact Match</b>; it is not possible 
+            to do a <b>Contains</b> or <b>Begins With</b> with a search 
+            string under 3 characters.
+          </p>
+
+<p>
+  The results of the search are quite different, however, because the search involves matched pairs of concepts from both the source and target terminologies; search hits can happen on either source or target, and what comes back are the matched pairs. In order to illustrate the nature and results of a search in the Mappings tab, we will use a PDQ to NCIt (version 201010) mapping set search for anything that contains "melanoma." A chart appears with eight columns:
+</p>
+
+<ul>
+  <li>Source: the source terminology which has been mapped to a target terminology (for a PDQ to NCIt mapping, for example, the source will always be "PDQ," since PDQ is the source terminology and NCIt is the target terminology).</li>
+  <li>Source Code: the concept code of a concept in a source terminology which has been mapped to a concept in the target terminology (for example, the source code CDR00000038833  of the PDQ concept "melanoma" that has been mapped to the target NCIt concept "Melanoma").</li>
+  <li>Source Name: the name of a concept in a source terminology which has been mapped to a concept in a target terminology (for example, the PDQ concept with the source name "melanoma" has been mapped to the NCIt concept "Melanoma").</li>
+  <li>
+    REL: the relationship between the source concept and the target concept to which it has been mapped (in this case the relationship between the PDQ concept and the NCIt concept to which it has been mapped).
+    <ul>
+      <li>RB: indicates the source concept is broader than the target concept.</li>
+      <li>RN: indicates the source concept is narrower than the target concept.</li>
+      <li>SY: indicates the source concept and the target concept are synonymous.</li>
+      <li>RQ: indicates the source concept and the target concept are related and possibly synonymous.</li>
+    </ul>
+  </li>
+  <li>Map Rank: a numerical ranking of the quality of a mapping where a "1" is considered to be the highest quality mapping and higher numbers indicate increasingly lower quality mappings (the map rank is available only for certain mapping data sets).</li>
+  <li>Target: the target terminology to which a source terminology has been mapped (for a PDQ to NCIt mapping, for example, the target will always be NCIt).</li>
+  <li>Target Code: the concept code of a target concept to which a source concept has been mapped (for example, the target code C3224 of the NCIt concept "Melanoma" to which the PDQ concept "melanoma" has been mapped).</li>
+  <li>Target Name: the name of a target concept to which a source concept has been mapped (for example, the NCIt concept with the target name "Melanoma" to which the PDQ concept "melanoma" has been mapped)..</li>
+</ul>
+<p>
+  Some details regarding the results of mapping set searches:
+</p>
+<ul>
+  <li>All mapping matches are returned.</li>
+  <li>Results are listed from best match to weakest.</li>
+  <li>If there are too many to show on one page, you can page through the results with a default of 50 per page. To change the default number, use the Show results per page drop-down menu at the bottom of the results page.</li>
+  <li>Click on a Source Code or a Target Code to see a concept's details (the details of the concept are the same as outlined in Terminology-Concept Details, above)</li>
+</ul>
+        </div>
+        
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
