@@ -62,15 +62,19 @@ public class JSPUtils {
         public String dictionary;
         public String version;
         public String version_deprecated;
-        private boolean debugAll = false;
+        protected boolean debugAll = false;
+        protected boolean debug = false;
 
         private void debugDV(String msg, String dictionary, String version) {
-            _logger.debug(msg + "version=" + version + ", dictionary=" + dictionary);
+            if (debug)
+                _logger.debug(msg + "version=" + version + 
+                    ", dictionary=" + dictionary);
         }
 
         private void debugAllVersions(HttpServletRequest request) {
             String prefix = "ALL: ";
-            _logger.debug(Utils.SEPARATOR_DASHES);
+            if (debug)
+                _logger.debug(Utils.SEPARATOR_DASHES);
 
             String dictionary = request.getParameter("dictionary");
             String version = request.getParameter("version");
@@ -88,7 +92,8 @@ public class JSPUtils {
         public JSPHeaderInfo(HttpServletRequest request) {
             if (debugAll)
                 debugAllVersions(request);
-            _logger.debug(Utils.SEPARATOR);
+            if (debug)
+                _logger.debug(Utils.SEPARATOR);
             dictionary = request.getParameter("dictionary");
             version = request.getParameter("version");
             debugDV("Request Parameters: ", dictionary, version);
@@ -122,12 +127,14 @@ public class JSPUtils {
                 version =
                     DataUtils.getVocabularyVersionByTag(dictionary,
                         "PRODUCTION");
-                _logger.debug(Utils.SEPARATOR);
-                _logger.debug("dictionary: " + dictionary);
-                _logger.debug("  * version: " + version);
-                if (version_deprecated != null)
-                    _logger.debug("  * version_deprecated: " + version_deprecated);
-                else _logger.debug("  * Note: Version was not specified.  Defaulting to producion.");
+                if (debug) {
+                    _logger.debug(Utils.SEPARATOR);
+                    _logger.debug("dictionary: " + dictionary);
+                    _logger.debug("  * version: " + version);
+                    if (version_deprecated != null)
+                        _logger.debug("  * version_deprecated: " + version_deprecated);
+                    else _logger.debug("  * Note: Version was not specified.  Defaulting to producion.");
+                }
             }
             request.getSession().setAttribute("dictionary", dictionary);
             request.getSession().setAttribute("version", version);
@@ -204,7 +211,7 @@ public class JSPUtils {
     }
 
     public static String getNavType(HttpServletRequest request) {
-
+        boolean debug = false;
 		String navigation_type = (String) request.getSession().getAttribute("navigation_type");
 		if (navigation_type != null) {
 			request.getSession().removeAttribute("navigation_type");
@@ -220,21 +227,26 @@ public class JSPUtils {
         String dictionary = info.dictionary;
         String version = info.version;
 
-        _logger.debug(Utils.SEPARATOR);
         String nav_type = (String) request.getParameter("nav_type");
-        _logger.debug("nav_type (Parameter): " + nav_type);
-
+        if (debug) {
+            _logger.debug(Utils.SEPARATOR);
+            _logger.debug("nav_type (Parameter): " + nav_type);
+        }
+        
         nav_type = DataUtils.getNavigationTabType(
             dictionary, version, vsd_uri, nav_type);
-        _logger.debug("nav_type (getNavigationTabType): " + nav_type);
+        if (debug)
+            _logger.debug("nav_type (getNavigationTabType): " + nav_type);
 
         if (nav_type == null) {
             nav_type = (String) request.getSession().getAttribute("nav_type");
-            _logger.debug("nav_type (Session): " + nav_type);
+            if (debug)
+                _logger.debug("nav_type (Session): " + nav_type);
         }
         if (nav_type == null) {
             nav_type = "terminologies";
-            _logger.debug("nav_type (Default): " + nav_type);
+            if (debug)
+                _logger.debug("nav_type (Default): " + nav_type);
         }
         request.getSession().setAttribute("nav_type", nav_type);
         return nav_type;
