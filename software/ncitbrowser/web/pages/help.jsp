@@ -65,7 +65,7 @@
         <p class="textbody">
           <a href="#introduction">Introduction</a><br/>
           <a href="#homePage">NCI Term Browser Home Page</a><br/>
-          <br/>
+          <a href="#terminologies">Terminologies Tab</a><br/>
           <%=tab%> <a href="#sources">Sources</a><br/>
           <%=tab%> <a href="#searchBox">Using the Search Box</a><br/>
           <%=tab%> <a href="#searchResults">Search Results</a><br/>
