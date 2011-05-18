@@ -667,7 +667,6 @@
           </ul>
         </div>
         
-<hr/> <%-- DYEE Begin --%>
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
@@ -726,7 +725,8 @@
           </p>
           <ul>
             <li>
-              <b>Values</b> lists all concepts contained in this 
+              <a name="valueBullet"><b>Values</b></a>
+              lists all concepts contained in this 
                 value set, using the production version of each 
                 participating terminology.  The listing shows:
               <ul> 
@@ -738,7 +738,7 @@
                   Concepts
                   <ul>
                     <li>The first 50 concepts of the value set are 
-                      listed. Use the <b>Show <n> results per page</b>
+                      listed. Use the <b>Show &lt;n&gt; results per page</b>
                       drop-down menu at the bottom of the page to 
                       display up to 500 concepts at once.</li>
                     <li>Each concept listed shows its <b>code</b>, 
@@ -774,7 +774,8 @@
               </ul>
               <br/>The <b>Continue</b> button uses the selected version(s) 
                 to select the values contained in the set. See help section 
-                on Values above for information on the details contained there.
+                on <a href="#valueBullet">Values</a> above for information 
+                on the details contained there.
               <br/><br/>
             </li>
             <li>
@@ -786,6 +787,8 @@
             </li>
           </ul>
         </div>
+
+<hr/> <%-- DYEE Begin --%>
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
