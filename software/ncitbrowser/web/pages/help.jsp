@@ -233,7 +233,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="sources"><b>Sources</b></a></td>
+              <td><h2><a name="sources">Sources</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -276,7 +276,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="searchBox"><b>Using the Search Box</b></a></td>
+              <td><h2><a name="searchBox">Using the Search Box</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -367,7 +367,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="searchResults"><b>Search Results</b></a></td>
+              <td><h2><a name="searchResults">Search Results</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -416,7 +416,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="searchingOther"><b>Searching Other/Multiple Versions of a Terminology</b></a></td>
+              <td><h2><a name="searchingOther">Searching Other/Multiple Versions of a Terminology</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -461,7 +461,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="advancedSearch"><b>Advanced Search</b></a></td>
+              <td><h2><a name="advancedSearch">Advanced Search</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -499,7 +499,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="conceptDetails"><b>Concept Details</b></a></td>
+              <td><h2><a name="conceptDetails">Concept Details</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -556,7 +556,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="additionalLinks"><b>Additional Links for Individual Terminologies</b></a></td>
+              <td><h2><a name="additionalLinks">Additional Links for Individual Terminologies</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -599,7 +599,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="cartAndExport"><b>Cart and Export Functionality</b></a></td>
+              <td><h2><a name="cartAndExport">Cart and Export Functionality</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -793,7 +793,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="valueSetsSearchBox"><b>Using the Search Box</b></a></td>
+              <td><h2><a name="valueSetsSearchBox">Using the Search Box</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -925,7 +925,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="mappingSets"><b>Mapping Sets</b></a></td>
+              <td><h2><a name="mappingSets">Mapping Sets</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
@@ -973,7 +973,7 @@
           <br/>
           <table width="720px" cellpadding="0" cellspacing="0" border="0">
             <tr>
-              <td><a name="mappingSearchBox"><b>Using the Search Box</b></a></td>
+              <td><h2><a name="mappingSearchBox">Using the Search Box</a></h2></td>
               <td align="right">
                 <a href="#"><img src="<%=arrowImage%>" 
                   width="16" height="16" border="0" alt="top" /></a>
