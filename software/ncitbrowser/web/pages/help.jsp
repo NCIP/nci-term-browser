@@ -1065,6 +1065,9 @@
             </tr>
           </table>
           <p>
+            For information on known issues, 
+            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.0+Release+Notes" target="_blank">
+              see NCI Term Browser 2.0 Release Notes</a>.
             Additional information about EVS can be found on the
             <a href="http://evs.nci.nih.gov/" target="_blank">EVS Web</a> and 
             <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank">EVS Wiki sites</a>.
