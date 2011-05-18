@@ -907,6 +907,20 @@
         </div>
 
 <hr/> <%-- DYEE Begin --%>
+        <%-- -------------------------------------------------------------- --%>        
+        <div class="textbody">
+          <br/>
+          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td><a name="mappingsTab"><b>Mappings Tab</b></a></td>
+              <td align="right">
+                <a href="#"><img src="<%=arrowImage%>" 
+                  width="16" height="16" border="0" alt="top" /></a>
+              </td>
+            </tr>
+          </table>
+        </div>
+
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
