@@ -76,7 +76,7 @@
           <%=tab%> <a href="#cartAndExport">Cart and Export Functionality</a><br/>
           <a href="#valueSetsTab">Value Sets Tab</a><br/>
           <%=tab%> <a href="#valueSetsSearchBox">Using the Search Box</a><br/>
-          <%=tab%> <a href="#valueSetConceptDetails">Concept Details</a><br/>
+          <%=tab%> <a href="#conceptDetails">Concept Details</a><br/>
           <a href="#mappingsTab">Mappings Tab</a><br/>
           <%=tab%> <a href="#mappingSets">Mapping Sets</a><br/>
           <%=tab%> <a href="#mappingSearchBox">Using the Search Box</a><br/>
@@ -788,7 +788,6 @@
           </ul>
         </div>
 
-<hr/> <%-- DYEE Begin --%>
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
@@ -903,9 +902,11 @@
           <p>
             The matched values will appear in the results list. Select 
             the <b>Concept Name</b> to view the details for that concept. 
-            See Concept Details for further information.
+            See <a href="#conceptDetails">Concept Details</a> for further information.
           </p>
         </div>
+
+<hr/> <%-- DYEE Begin --%>
 <hr/> <%-- DYEE Middle --%>
 <hr/> <%-- DYEE End --%>
 
