@@ -418,13 +418,9 @@ if (type != null && type.compareTo("all") == 0) {
 
   <p>
   <%
+  
      String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr_0, version_curr, "display_inverse_relationships");
      boolean display_inverse_relationships = true;
-
-System.out.println("(*) relationship.jsp scheme_curr_0: " + scheme_curr_0);
-System.out.println("(*) relationship.jsp version_curr: " + version_curr);
-
-System.out.println("(*) relationship.jsp display_inverse_relationships_metadata_value: " + display_inverse_relationships_metadata_value);
 
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;

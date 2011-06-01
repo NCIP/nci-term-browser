@@ -60,7 +60,7 @@
     <!-- Main box -->
     <div id="main-area">
 <%
-
+//String basePath = request.getContextPath();
 HashMap display_name_hmap = new HashMap();
 
 HashMap scheme2MappingIteratorBeanMap = null;

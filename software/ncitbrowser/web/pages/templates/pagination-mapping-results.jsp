@@ -4,46 +4,25 @@
 
 <%
 
-    int prev_page_num = pageNum;
-    int next_page_num = prev_page_num + 1;
+int prev_page_num = pageNum - 1;
+int next_page_num = pageNum + 1;
     
-//System.out.println("(*) pagination: pageNum " + pageNum);
-//System.out.println("(*) pagination: prev_page_num " + prev_page_num);
-//System.out.println("(*) pagination: next_page_num " + next_page_num);
-
+String istart_str = Integer.toString(istart+1);
+String iend_str = Integer.toString(iend+1);
     
-
 String dictionary_map = (String) request.getSession().getAttribute("dictionary");
 bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
 
+
 if (bean != null) {
 
-    numRemaining = bean.getSize();
+numRemaining = bean.getSize();
 
+String match_size = Integer.toString(numRemaining);
 
-System.out.println("pagination mapping numRemaining (bean.getSize()): " + numRemaining);
-
-    
-    String istart_str = Integer.toString(istart+1);
-    String iend_str = Integer.toString(iend);
-    
-    String match_size = Integer.toString(numRemaining);
-    
-    if (istart == 0) {
-    	iend_str = Integer.toString(iend+1);
-    }
-    
-
-if (iend >= numRemaining) {
-   iend_str = match_size;
-}
-
-    
-    String prev_page_num_str = Integer.toString(pageNum-1);
-    String next_page_num_str = Integer.toString(pageNum+1);
-
-
-    
+String prev_page_num_str = Integer.toString(prev_page_num);
+String next_page_num_str = Integer.toString(next_page_num);
+ 
 %>
 
 
