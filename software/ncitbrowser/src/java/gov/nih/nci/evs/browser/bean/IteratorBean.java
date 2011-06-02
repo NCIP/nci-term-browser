@@ -122,10 +122,6 @@ public class IteratorBean extends Object {
             } else {
                 _size = _iterator.numberRemaining();
 
-
-                System.out.println("(***) IteratorBean numberRemaining: " + _size);
-
-
             }
             _pageNumber = 1;
 
@@ -190,10 +186,6 @@ public class IteratorBean extends Object {
     public List getData(int pageNumber) {
         int idx1 = getStartIndex(pageNumber);
         int idx2 = getEndIndex(pageNumber);
-
-
-        System.out.println("getStartIndex --- idx1 " + idx1);
-        System.out.println("getStartIndex --- idx2 " + idx2);
         return getData(idx1, idx2);
     }
 
@@ -213,7 +205,7 @@ public class IteratorBean extends Object {
 		}
 		try {
 			int numberRemaining = iterator.numberRemaining();
-			System.out.println("getFirstResolvedConceptReference numberRemaining: " + numberRemaining);
+			//System.out.println("getFirstResolvedConceptReference numberRemaining: " + numberRemaining);
 			while (iterator != null && iterator.hasNext()) {
 				//ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
 				//return refs[0];
@@ -231,7 +223,7 @@ public class IteratorBean extends Object {
 
     public List getData(int idx1, int idx2) {
         if (_list.size() > 0 && idx2 <= _list.size()) {
-			System.out.println("Copying data " + idx1 + " to: " + idx2 + ")");
+			//System.out.println("Copying data " + idx1 + " to: " + idx2 + ")");
 			return copyData(idx1, idx2);
 		}
 
@@ -246,7 +238,9 @@ public class IteratorBean extends Object {
 
             int count = (idx2 - idx1) + 1;
             int lcv = 0;
+
 			while (_iterator != null && _iterator.hasNext()) {
+
 /*
                 if (lcv > count) break;
 
@@ -256,21 +250,18 @@ public class IteratorBean extends Object {
 				}
 */
 
-
 				ResolvedConceptReference[] refs =
 					_iterator.next(_maxReturn).getResolvedConceptReference();
 
 
 				if (refs != null) {
+
 					for (ResolvedConceptReference ref : refs) {
 
 						_lastResolved++;
-
-						//System.out.println("_lastResolved = " + _lastResolved);
-
 						upper_bound = _lastResolved;
-
 						_list.add(ref);
+
 						lcv++;
 
 						//displayRef(ref);
@@ -308,6 +299,13 @@ public class IteratorBean extends Object {
 
 
     protected void displayRef(ResolvedConceptReference ref) {
+
+		if (ref == null) {
+			System.out.println("displayRef ERROR: ref == null???");
+			return;
+		}
+
+
         _logger.debug(ref.getConceptCode() + ":"
             + ref.getEntityDescription().getContent());
     }
@@ -380,8 +378,6 @@ public class IteratorBean extends Object {
 
      public List copyData(int idx1, int idx2) {
 		List arrayList = new ArrayList();
-		System.out.println("copydata _list.size() #1 idx2 " + idx2);
-        System.out.println("copydata _list.size() #1 _list.size() " + _list.size());
 
         if (_list.size() == 0) return arrayList;
 
@@ -390,9 +386,6 @@ public class IteratorBean extends Object {
 		}
 
 		if (idx2 < idx1) idx2 = idx1;
-
-        System.out.println("copydata idx1 " + idx1);
-		System.out.println("copydata idx2 " + idx2);
 
 		for (int i=idx1; i<=idx2; i++) {
 			ResolvedConceptReference ref = (ResolvedConceptReference) _list.get(i);
