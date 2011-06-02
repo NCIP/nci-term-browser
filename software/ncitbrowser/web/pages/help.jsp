@@ -108,7 +108,9 @@
               <td><%=tab%></td><td>Browser links, buttons, page tabs, and drop-down boxes.</td>
             </tr>
             <tr>
-              <td><%=tab2%></td><td><li><font face="courier">Fixed Width:</font></li></td>
+              <td><%=tab2%></td><td><li>
+              <tt>Fixed Width:</tt>
+              </li></td>
               <td><%=tab%></td><td>Search strings.</td>
             </tr>
             <tr>
