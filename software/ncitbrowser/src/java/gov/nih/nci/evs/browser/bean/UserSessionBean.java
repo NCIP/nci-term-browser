@@ -1050,10 +1050,6 @@ mappingIteratorBean.initialize();
         String searchTarget = (String) request.getParameter("searchTarget");
         request.getSession().setAttribute("searchTarget", searchTarget);
 
-
-System.out.println("(*) KLO multipleSearchAction " + matchText + " algorithm: " +  matchAlgorithm + " target: " + searchTarget);
-
-
         String initial_search = (String) request.getParameter("initial_search");
 
         //String[] ontology_list = request.getParameterValues("ontology_list");
@@ -1379,17 +1375,6 @@ int selected_knt = 0;
 
         if (iterator != null) {
 
-/*
-            String iteratorBean_key =
-            iteratorBeanManager.createIteratorKey(schemes, matchText,
-                searchTarget, matchAlgorithm, maxToReturn);
-
-            System.out.println("( ***************** ) search by association (NEW IteratorBean) ");
-
-            IteratorBean iteratorBean = new IteratorBean(iterator);
-            iteratorBean.setKey(iteratorBean_key);
-			iteratorBeanManager.addIteratorBean(iteratorBean);
-*/
             int size = 0;
 
             IteratorBean iteratorBean =
@@ -1401,57 +1386,57 @@ int selected_knt = 0;
             FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().put("iteratorBean", iteratorBean);
 
-/*
-            if (iteratorBean == null) {
-
-System.out.println("( ***************** ) search by association (NEW IteratorBean) ");
-
-                iteratorBean = new IteratorBean(iterator);
-
-                FacesContext.getCurrentInstance().getExternalContext()
-                    .getSessionMap().put("iteratorBean", iteratorBean);
-            } else {
-                iteratorBean.setIterator(iterator);
-            }
-            */
-           //int size = iteratorBean.getSize();
 			try {
 				size = iterator.numberRemaining();
 
-
-System.out.println("====KLO======numberRemaining========#1 " + size);
-
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 
-/*
-			ResolvedConceptReference singleton_ref = null;
-			try {
-				int match_count = iterator.numberRemaining();
-				if (match_count == 1) {
-					singleton_ref = getFirstResolvedConceptReference(iterator);
+            if (size == 1) {
+            	list = iteratorBean.getData(0, 0);
+            	if (list == null || list.size() == 0) {
+					    System.out.println("WARNING: Iterator is empty." );
+						String msg =
+							"No match found.";
+						request.getSession().setAttribute("message", msg);
+						request.getSession().setAttribute("matchText",
+							HTTPUtils.convertJSPString(matchText));
+
+
+						hide_ontology_list = "false";
+
+						request.getSession().setAttribute("hide_ontology_list",
+							hide_ontology_list);
+						request.getSession().setAttribute("warning", msg);
+						request.getSession().setAttribute("message", msg);
+						request.getSession().setAttribute("ontologiesToSearchOn",
+							ontologiesToSearchOnStr);
+						request.getSession().setAttribute("multiple_search_no_match_error",
+							"true");
+
+						request.getSession().setAttribute("matchText",
+							HTTPUtils.convertJSPString(matchText));
+
+						return "multiple_search";
+
+						//return "message";
 				}
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
+            	if (size != iteratorBean.getSize()) {
+					size = iteratorBean.getSize();
+				}
 			}
-*/
+
 
             if (size == 1) {
 
-
                 int pageNumber = 1;
-                list = iteratorBean.getData(0, 0);
-                size = iteratorBean.getSize();
+                list = iteratorBean.getData(1);
 
-System.out.println("====KLO======numberRemaining========#2 " + size);
-
-                if (list != null && size == 1) {
+                if (list != null) {
 
 					ResolvedConceptReference ref =
 						(ResolvedConceptReference) list.get(0);
-
 
 					//ResolvedConceptReference ref = getFirstResolvedConceptReference(iterator);
 					String coding_scheme = ref.getCodingSchemeName();
