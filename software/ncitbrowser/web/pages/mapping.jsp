@@ -209,6 +209,9 @@ if (bean == null) {
 }
 
 
+
+
+
 if (resultsPerPage != null && resultsPerPage.compareTo("null") != 0) {
     bean.setPageSize(Integer.parseInt(resultsPerPage));
 }
@@ -258,6 +261,38 @@ try {
    System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
 System.out.println("exiting bean.getData ...");
+
+
+
+String mapping_selectedPageSize = (String) request.getSession().getAttribute("selectedPageSize");
+
+
+int prev_page_num = pageNum - 1;
+int next_page_num = pageNum + 1;
+    
+    
+String istart_str = Integer.toString(istart+1);
+String iend_str = Integer.toString(iend+1);
+    
+String dictionary_map = (String) request.getSession().getAttribute("dictionary");
+
+//scheme2MappingIteratorBeanMap = (HashMap) request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
+//bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(dictionary_map);
+
+numRemaining = bean.getSize();
+
+
+String match_size = Integer.toString(numRemaining);
+
+String prev_page_num_str = Integer.toString(prev_page_num);
+String next_page_num_str = Integer.toString(next_page_num);
+
+
+
+
+
+
+
 
 boolean show_rank_column = true;
 String map_rank_applicable = DataUtils.getMetadataValue(mapping_schema, mapping_version, "map_rank_applicable");

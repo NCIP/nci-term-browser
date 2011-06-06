@@ -2,31 +2,6 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.IteratorBeanManager" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 
-<%
-
-int prev_page_num = pageNum - 1;
-int next_page_num = pageNum + 1;
-    
-String istart_str = Integer.toString(istart+1);
-String iend_str = Integer.toString(iend+1);
-    
-String dictionary_map = (String) request.getSession().getAttribute("dictionary");
-bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
-
-
-if (bean != null) {
-
-numRemaining = bean.getSize();
-
-String match_size = Integer.toString(numRemaining);
-
-String prev_page_num_str = Integer.toString(prev_page_num);
-String next_page_num_str = Integer.toString(next_page_num);
- 
-%>
-
-
-
 
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/mapping_search_results.jsf?nav_type=mappings" >
   <table>
