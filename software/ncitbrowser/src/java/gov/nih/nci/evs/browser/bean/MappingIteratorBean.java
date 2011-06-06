@@ -224,7 +224,7 @@ public class MappingIteratorBean extends Object {
     }
 
 
-
+/*
     public List copyData(int idx1, int idx2) {
 		List arrayList = new ArrayList();
 		int upper = idx2;
@@ -237,6 +237,29 @@ public class MappingIteratorBean extends Object {
 		}
 		return arrayList;
 	}
+*/
+
+     public List copyData(int idx1, int idx2) {
+		List arrayList = new ArrayList();
+
+        if (_list.size() == 0) return arrayList;
+
+		if (idx2 > _list.size()-1) {
+			idx2 = _list.size()-1;
+		}
+
+		if (idx2 < idx1) idx2 = idx1;
+
+		for (int i=idx1; i<=idx2; i++) {
+			MappingData ref = (MappingData) _list.get(i);
+			arrayList.add(ref);
+			if (i > _list.size()) break;
+		}
+
+		return arrayList;
+	}
+
+
 
 
 

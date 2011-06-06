@@ -60,7 +60,8 @@
     <!-- Main box -->
     <div id="main-area">
 <%
-//String basePath = request.getContextPath();
+
+String base_Path = request.getContextPath();
 HashMap display_name_hmap = new HashMap();
 
 HashMap scheme2MappingIteratorBeanMap = null;
@@ -103,12 +104,12 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
          
 	 <div class="search-globalnav"><!-- Search box -->
 		 <div class="searchbox-top"><img
-		   src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
+		   src="<%=base_Path%>/images/searchbox-top.gif" width="352" height="2"
 		   alt="SearchBox Top" /></div>
 	 	<div class="searchbox"><%@ include file="/pages/templates/searchForm.jsp"%></div>
 	 
 		 <div class="searchbox-bottom"><img
-		   src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2"
+		   src="<%=base_Path%>/images/searchbox-bottom.gif" width="352" height="2"
 		   alt="SearchBox Bottom" /></div>
 		 <!-- end Search box --> <!-- Global Navigation --> <%@ include
 		   file="/pages/templates/menuBar-termbrowserhome.jsp"%> <!-- end Global Navigation -->
@@ -141,16 +142,16 @@ if (mapping_results_msg != null) {
 } else {    
 
 
-String resultsPerPage = (String) request.getParameter("resultsPerPage");
-if (resultsPerPage == null) {
-    resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
-    if (resultsPerPage == null) {
-        resultsPerPage = "50";
-    }
-    
-}  else {
-    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
-}
+	String resultsPerPage = (String) request.getParameter("resultsPerPage");
+	if (resultsPerPage == null) {
+	    resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
+	    if (resultsPerPage == null) {
+		resultsPerPage = "50";
+	    }
+
+	}  else {
+	    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+	}
 
 
 
@@ -170,22 +171,21 @@ if (key == null) {
 //IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
 //.getSessionMap().get("iteratorBeanManager");
 
+MappingIteratorBean iteratorBean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
 
-MappingIteratorBean mapping_bean = (MappingIteratorBean) request.getSession().getAttribute("mapping_search_results");
-int pageSize = Integer.parseInt(selectedResultsPerPage);
-int size = 0;
-int pageNum = 1;
 
-if (mapping_bean != null) {
-	size = mapping_bean.getSize();
-}
-
+//====================================================================================================
+String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
+int pageNum = 0; 
+int pageSize = Integer.parseInt( resultsPerPage );
+int size = iteratorBean.getSize();    
 List list = null;
 int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 System.out.println("num_pages: " + num_pages);
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+
 if (page_number != null) {
     pageNum = Integer.parseInt(page_number);
 }
@@ -199,9 +199,9 @@ if (page_num == 0) {
 }
 int iend = istart + pageSize - 1;
 try {
-   list = mapping_bean.getData(istart, iend);
+   list = iteratorBean.getData(istart, iend);
    int prev_size = size;
-   size = mapping_bean.getSize();
+   size = iteratorBean.getSize();
    
 System.out.println( "(*) prev_size: " + prev_size);
 System.out.println( "(*) size: " + size);
@@ -211,7 +211,7 @@ System.out.println( "(*) size: " + size);
 	if (iend > size) {
 	    iend = size;
 	}
-       list = mapping_bean.getData(istart, size);
+       list = iteratorBean.getData(istart, size);
        
    } else {
 
@@ -228,10 +228,35 @@ System.out.println( "(*) size: " + size);
 num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 
-System.out.println("num_pages: " + num_pages);
-System.out.println("\npage_num: " + page_num); //0
-System.out.println("size: " + size); //85
-System.out.println("pageSize: " + pageSize); //50
+int istart_plus_pageSize = istart+pageSize;
+
+
+String istart_str = Integer.toString(istart+1);    
+String iend_str = new Integer(iend).toString();
+
+if (iend >= istart+pageSize-1) {
+    iend = istart+pageSize-1;
+    list = iteratorBean.getData(istart, iend);
+    iend_str = new Integer(iend+1).toString();
+}
+
+
+if (iend+1 > size) {
+    iend = size;
+    iend_str = new Integer(iend).toString();
+}
+
+
+String match_size = new Integer(size).toString();
+    
+
+int next_page_num = page_num + 1;
+int prev_page_num = page_num - 1;
+String prev_page_num_str = Integer.toString(prev_page_num);
+String next_page_num_str = Integer.toString(next_page_num);
+
+//====================================================================================================
+
 
 
 
@@ -319,7 +344,8 @@ if (show_rank_column) {
   System.out.println("(**************** iend: " + iend);
  
                 
-                for (int lcv=0; lcv<upper_bound; lcv++) {
+                //for (int lcv=0; lcv<upper_bound; lcv++) {
+  for (int lcv=0; lcv<list.size(); lcv++) {
                     mappingData = (MappingData) list.get(lcv);
         source_code = mappingData.getSourceCode();
         source_name = mappingData.getSourceName();
@@ -396,26 +422,29 @@ if (show_rank_column) {
 
 </tr>
 
+
+
+
+
                <%
                }
-}
-               %>
-
-
+%>               
+               
           </table>
 
         <%@ include file="/pages/templates/pagination-mapping-results.jsp" %>
-        
- <%       
- }       
- %>       
-        
+      
+                 
+<%               
+}
+               %>
+      
         
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
       <!-- end Page content -->
     </div>
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=base_Path%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>

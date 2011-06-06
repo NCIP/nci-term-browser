@@ -158,19 +158,18 @@ if (resultsPerPage == null) {
     request.getSession().setAttribute("resultsPerPage", resultsPerPage);
 }
 
+String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
+
+String selectedResultsPerPage = resultsPerPage;
+request.getSession().removeAttribute("dictionary");
+HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
+
+IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
+      .getSessionMap().get("iteratorBean");
 
 
-
-	String selectedResultsPerPage = resultsPerPage;
-        request.getSession().removeAttribute("dictionary");
-        HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
-
-        IteratorBean iteratorBean = (IteratorBean) FacesContext.getCurrentInstance().getExternalContext()
-              .getSessionMap().get("iteratorBean");
-
-
+//====================================================================================================
 String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
- 
 int pageNum = 0; 
 int pageSize = Integer.parseInt( resultsPerPage );
 int size = iteratorBean.getSize();    
@@ -180,6 +179,7 @@ if (num_pages * pageSize < size) num_pages++;
 System.out.println("num_pages: " + num_pages);
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+
 if (page_number != null) {
     pageNum = Integer.parseInt(page_number);
 }
@@ -237,57 +237,18 @@ if (iend >= istart+pageSize-1) {
 String match_size = new Integer(size).toString();
     
 
-          String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
-          int next_page_num = page_num + 1;
-          int prev_page_num = page_num - 1;
-          String prev_page_num_str = Integer.toString(prev_page_num);
-          String next_page_num_str = Integer.toString(next_page_num);
+int next_page_num = page_num + 1;
+int prev_page_num = page_num - 1;
+String prev_page_num_str = Integer.toString(prev_page_num);
+String next_page_num_str = Integer.toString(next_page_num);
+
+//====================================================================================================
 
 
-
-/*
-        String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
-        //String match_size = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("match_size"));
-        String page_string = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("page_string"));
-        Boolean new_search = (Boolean) request.getSession().getAttribute("new_search");
-
-        String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
-        //String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
-        String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
-
-        if (page_number != null && new_search == Boolean.FALSE)
-        {
-            page_string = page_number;
-        }
-        request.getSession().setAttribute("new_search", Boolean.FALSE);
-
-        int page_num = Integer.parseInt(page_string);
-        int next_page_num = page_num + 1;
-        int prev_page_num = page_num - 1;
-        int page_size = 50;
-        if (selectedResultsPerPage != null && selectedResultsPerPage.compareTo("") != 0)
-        {
-            page_size = Integer.parseInt(selectedResultsPerPage);
-        }
-
-          int iend = page_num * page_size;
-          int istart = iend - page_size;
-          iend = iend-1;
-          int size = iteratorBean.getSize();
-          String match_size = new Integer(size).toString();
-
-          if (iend > size-1) iend = size-1;
-          int num_pages = size / page_size;
-          if (num_pages * page_size < size) num_pages++;
-          String istart_str = Integer.toString(istart+1);
-          String iend_str = Integer.toString(iend+1);
-          String prev_page_num_str = Integer.toString(prev_page_num);
-          String next_page_num_str = Integer.toString(next_page_num);
-
-*/
-
-
-      %>
+%>
+      
+      
+      
         <table width="700px">
           <tr>
             <td>
