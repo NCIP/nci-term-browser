@@ -1068,7 +1068,9 @@ String key = vsd_uri;
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
 			//System.out.println("coding_scheme_ref " + t);
-			Vector u = DataUtils.parseData(t, "$");
+			String delim = "$";
+			if (t.indexOf("$") == -1) delim = "|";
+			Vector u = DataUtils.parseData(t, delim);
 			String url = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
@@ -1197,7 +1199,9 @@ String key = vsd_uri;
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
 			//System.out.println("(*) coding_scheme_ref: " + t);
-			Vector u = DataUtils.parseData(t, "$");
+			String delim = "$";
+			if (t.indexOf("$") == -1) delim = "|";
+			Vector u = DataUtils.parseData(t, delim);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
