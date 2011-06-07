@@ -116,6 +116,8 @@ subject to the conditions specified at
               Vector from_vec = new Vector();
               Vector to_vec = new Vector();
               from_vec.add("ncim_url"); to_vec.add(new DataUtils().getNCImURL());
+              
+              
               Vector abbr_vec = (Vector) request.getSession().getAttribute("source_descriptions");
               if (abbr_vec == null) {
                   abbr_vec = new MetadataUtils().getSupportedVocabularyMetadataValues(propertyName);
@@ -126,6 +128,7 @@ subject to the conditions specified at
                  Vector w = DataUtils.parseData(t, "|");
                  String abbr = (String) w.elementAt(0);
                  String def = (String) w.elementAt(1);
+                 def = DataUtils.replaceContextPath(def, basePath);
                  def = DataUtils.replaceInnerEvalExpressions(def, from_vec, to_vec);
                  String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
             %>
