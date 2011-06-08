@@ -65,6 +65,10 @@ public class JSPUtils {
         protected boolean debugAll = false;
         protected boolean debug = false;
 
+        public void setVersion(String ver) {
+			version = ver;
+		}
+
         private void debugDV(String msg, String dictionary, String version) {
             if (debug)
                 _logger.debug(msg + "version=" + version +
