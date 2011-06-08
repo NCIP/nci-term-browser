@@ -15,7 +15,7 @@
          String message = null;
          boolean isVersionValid = DataUtils.validateCodingSchemeVersion(info.dictionary, info.version);
          if (!isVersionValid) {
-             message = "WARNING: invalid version number. Please correct it before proceeding any further.";
+             message = "WARNING: Invalid version number detected. Please correct it before proceeding any further.";
          }
 
     %>
