@@ -9,7 +9,23 @@
 <div id="message" class="textbody">
   <table border="0" width="700px"><tr>
     <td><div class="texttitle-blue">Welcome</div></td>
+    
+    <%
+         String codingschemeversion = HTTPUtils.cleanXSS(info.version);
+         String message = null;
+         boolean isVersionValid = DataUtils.validateCodingSchemeVersion(info.dictionary, info.version);
+         if (!isVersionValid) {
+             message = "WARNING: invalid version number. Please correct it before proceeding any further.";
+         }
+
+    %>
+    
+    
     <%-- <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(info.version)%></div></td> --%>
+    
+    
+    
+    
   </tr></table>
   <hr/>
 
@@ -49,7 +65,21 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
 }
 
 %>
+   
+
   <table border="0">
+
+      <% 
+      if (message != null) {
+      %>
+      <tr><td>
+          <p class="textbodyred"><%=message%></p>
+      </td></tr>
+      <%
+      }
+      %>
+      
+  
     <tr>
       <td class="textbody">
         <%=html_compatable_description_value%>

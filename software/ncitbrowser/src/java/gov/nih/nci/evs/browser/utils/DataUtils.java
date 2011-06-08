@@ -209,6 +209,10 @@ public class DataUtils {
     public static Vector _valueSetDefinitionMetadata = null;
 
 
+    public static HashMap _formalName2VersionsHashMap = null;
+
+
+
 
     // ==================================================================================
 
@@ -286,6 +290,7 @@ public class DataUtils {
 
         _codingSchemeTagHashMap = new HashMap();
 
+        _formalName2VersionsHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -311,6 +316,11 @@ public class DataUtils {
                 CodingSchemeRendering csr = csrs[i];
                 CodingSchemeSummary css = csr.getCodingSchemeSummary();
                 String formalname = css.getFormalName();
+
+                if (!_formalName2VersionsHashMap.containsKey(formalname)) {
+					Vector version_vec = new Vector();
+					_formalName2VersionsHashMap.put(formalname, version_vec);
+				}
 
                 Boolean isActive = null;
                 if (csr == null) {
@@ -344,6 +354,15 @@ public class DataUtils {
                     CodingSchemeVersionOrTag vt =
                         new CodingSchemeVersionOrTag();
                     vt.setVersion(representsVersion);
+
+                    Vector ver_vec = (Vector) _formalName2VersionsHashMap.get(formalname);
+                    if (ver_vec == null) {
+						ver_vec = new Vector();
+					}
+					if (!ver_vec.contains(representsVersion)) {
+						ver_vec.add(representsVersion);
+						_formalName2VersionsHashMap.put(formalname, ver_vec);
+					}
 
                     try {
                         CodingScheme cs =
@@ -4989,5 +5008,17 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		}
 		return null;
 	}
+
+	public static boolean validateCodingSchemeVersion(String codingSchemeName, String version) {
+		if (!_localName2FormalNameHashMap.containsKey(codingSchemeName)) return false;
+	    String formalname = (String) _localName2FormalNameHashMap.get(codingSchemeName);
+	    if (formalname == null) return false;
+
+	    if (!_formalName2VersionsHashMap.containsKey(formalname)) return false;
+	    Vector version_vec = (Vector) _formalName2VersionsHashMap.get(formalname);
+	    if (version_vec == null) return false;
+	    if (!version_vec.contains(version)) return false;
+	    return true;
+    }
 
 }
