@@ -89,6 +89,9 @@
             			}
             		}
             		code = (String) request.getParameter("code");
+            		//KLO 
+            		code = HTTPUtils.cleanXSS(code);
+            		
             		if (code == null) {
             			Entity con = (Entity) request.getSession().getAttribute("concept");
             			if (con != null) {
@@ -254,9 +257,26 @@
                   %>
                   <tr>
                      <td class="textbodysmall" colspan="2">
+                        <%
+                        if (deprecatedVersion.compareTo(version) == 0) {
+                        %>
+                        <font color="#A90101">Warning:</font> Requested version 
+                        is not accessible. Displaying version <%=version%>
+                        of this concept instead.
+                        
+                        <%
+                        } else {
+                        %>
+                     
                         <font color="#A90101">Warning:</font> Version <%=deprecatedVersion%>
                         of this vocabulary is not accessible. Displaying version <%=version%>
                         of this concept instead.
+                        
+                        <%
+                        }
+                        %>
+                        
+                        
                      </td>
                   </tr>
                   <%

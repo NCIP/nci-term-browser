@@ -67,7 +67,7 @@ public class JSPUtils {
 
         private void debugDV(String msg, String dictionary, String version) {
             if (debug)
-                _logger.debug(msg + "version=" + version + 
+                _logger.debug(msg + "version=" + version +
                     ", dictionary=" + dictionary);
         }
 
@@ -96,6 +96,16 @@ public class JSPUtils {
                 _logger.debug(Utils.SEPARATOR);
             dictionary = request.getParameter("dictionary");
             version = request.getParameter("version");
+
+
+ //KLO testing AppScan fix:
+if (dictionary != null) {
+	dictionary = HTTPUtils.cleanXSS(dictionary);
+}
+if (version != null) {
+ 	version = HTTPUtils.cleanXSS(version);
+}
+
             debugDV("Request Parameters: ", dictionary, version);
 
             if (isNull(dictionary) && isNull(version)) {
@@ -232,7 +242,7 @@ public class JSPUtils {
             _logger.debug(Utils.SEPARATOR);
             _logger.debug("nav_type (Parameter): " + nav_type);
         }
-        
+
         nav_type = DataUtils.getNavigationTabType(
             dictionary, version, vsd_uri, nav_type);
         if (debug)
