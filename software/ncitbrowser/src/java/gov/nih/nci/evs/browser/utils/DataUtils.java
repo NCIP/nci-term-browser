@@ -1806,7 +1806,9 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 						}
 					}
 				}
-				Collections.sort(superconceptList);
+				//Collections.sort(superconceptList);
+				SortUtils.quickSort(superconceptList);
+
 		}
         map.put(TYPE_SUPERCONCEPT, superconceptList);
 
@@ -1824,7 +1826,10 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 		if (!isMapping) {
 				subconceptList =
 					TreeUtils.getSubconceptNamesAndCodes(scheme, version, code);
-				// Collections.sort(subconceptList);
+				//KLO
+				//Collections.sort(subconceptList);
+				SortUtils.quickSort(subconceptList);
+
 		}
         map.put(TYPE_SUBCONCEPT, subconceptList);
 
@@ -2137,22 +2142,27 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
             }
 
             if (roleList.size() > 0) {
-                Collections.sort(roleList);
+                //Collections.sort(roleList);
+                SortUtils.quickSort(roleList);
+
             }
 
             if (associationList.size() > 0) {
-                Collections.sort(associationList);
+                //Collections.sort(associationList);
+                SortUtils.quickSort(associationList);
             }
 
             map.put(TYPE_ROLE, roleList);
             map.put(TYPE_ASSOCIATION, associationList);
 
             if (inverse_roleList.size() > 0) {
-                Collections.sort(inverse_roleList);
+                //Collections.sort(inverse_roleList);
+                SortUtils.quickSort(inverse_roleList);
             }
 
             if (inverse_associationList.size() > 0) {
-                Collections.sort(inverse_associationList);
+                //Collections.sort(inverse_associationList);
+                SortUtils.quickSort(inverse_associationList);
             }
 
             map.put(TYPE_INVERSE_ROLE, inverse_roleList);
