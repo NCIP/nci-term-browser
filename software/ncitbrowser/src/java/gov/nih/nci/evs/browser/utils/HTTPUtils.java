@@ -65,7 +65,7 @@ public class HTTPUtils {
     private static final int MAX_FONT_SIZE = 29;
     private static final int MIN_FONT_SIZE = 22;
     private static final int MAX_STR_LEN = 18;
-    
+
     public  static final int ABS_MAX_STR_LEN = 40;
 
     /**
@@ -75,6 +75,7 @@ public class HTTPUtils {
      * @return
      */
 
+/*
     public static String cleanXSS(String value) {
 
         if (value == null || value.length() < 1)
@@ -94,7 +95,32 @@ public class HTTPUtils {
         return value;
 
     }
-    
+*/
+
+
+    public static String cleanXSS(String value) {
+
+        if (value == null || value.length() < 1)
+            return value;
+
+        // Remove XSS attacks
+        value = replaceAll(value, "<\\s*script\\s*>.*</\\s*script\\s*>", "");
+        value = replaceAll(value, ".*<\\s*iframe.*>", "");
+        value = value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        //value = value.replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;");
+        value = value.replaceAll("'", "&#39;");
+        value = value.replaceAll("eval\\((.*)\\)", "");
+        value =
+            replaceAll(value, "[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']",
+                "\"\"");
+        value = value.replaceAll("\"", "&quot;");
+        return value;
+
+    }
+
+
+
+
     public static String appendNCIT(String link) {
     	String nciturl = null;
     	if (link.contains("/ncitbrowser")) return link;
@@ -111,7 +137,7 @@ public class HTTPUtils {
      * @return
      */
     public static int maxFontSize(String value) {
-    	int size;    	
+    	int size;
 		if (value == null || value.length() == 0)
 			size = MAX_FONT_SIZE;
 		else if (value.length() >= MAX_STR_LEN)
