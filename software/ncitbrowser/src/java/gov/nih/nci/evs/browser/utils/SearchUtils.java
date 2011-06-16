@@ -1228,6 +1228,7 @@ public class SearchUtils {
     private static CodedNodeSet matchConceptCode_CNS(
         String scheme, String version, String matchText, String source,
         String matchAlgorithm) throws Exception {
+
         LexBIGService lbs = RemoteServerUtil.createLexBIGService();
         Vector v = new Vector();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -1312,7 +1313,9 @@ public class SearchUtils {
                     null, resolveConcepts);
             return filterIterator(iterator, scheme, version, code);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("ERROR: matchConceptCode throws exception " + scheme + " " + version + " " + code);
+
             return null;
         }
     }
