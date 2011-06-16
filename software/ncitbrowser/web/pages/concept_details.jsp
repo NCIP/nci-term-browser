@@ -88,7 +88,20 @@
             				dictionary = DataUtils.getCodingSchemeName(dictionary);
             			}
             		}
-            		code = (String) request.getParameter("code");
+            		
+            		boolean code_from_cart_action = false;
+            		
+            		code = (String) request.getAttribute("code_from_cart_action");
+            		 
+            		 
+            		if (code == null) {
+           		    code = (String) request.getParameter("code");
+           		} else {
+           		    request.removeAttribute("code_from_cart_action");
+           		    code_from_cart_action = true;
+           		}
+           		
+            		
             		//KLO 
             		code = HTTPUtils.cleanXSS(code);
             		
@@ -104,7 +117,11 @@
             				System.out.println("WARNING: concept_details.jsp code: "	+ code);
             			}
             		}
+           		
+            		
             		String active_code = (String) request.getSession().getAttribute("active_code");
+            		
+            		
             		if (active_code == null) {
             			request.getSession().setAttribute("active_code", code);
             		} else {
@@ -114,23 +131,27 @@
             				request.getSession().setAttribute("active_code", code);
             			}
             		}
+            		
             		Boolean new_search = null;
             		Object new_search_obj = request.getSession().getAttribute("new_search");
                   
             		if (new_search_obj != null) {
             			new_search = (Boolean) new_search_obj;
             			if (new_search.equals(Boolean.TRUE)) {
-            				type = "properties";
-            				request.getSession().setAttribute("new_search",Boolean.FALSE);
+            			    type = "properties";
+            			    request.getSession().setAttribute("new_search",Boolean.FALSE);
             			    String codeFromParameter = code;
-            				code = (String) request.getSession().getAttribute("code");
-                            if (code == null)
-                                code = codeFromParameter;
-            			}
+            			    code = (String) request.getSession().getAttribute("code");
+                                    if (code == null) {
+                                        code = codeFromParameter;
+                                    }
+            		        }
             		}
+            		
+           		
             		if (type == null) {
             			type = (String) request.getParameter("type");
-                     if (type == null) type = (String) request.getAttribute("type");
+                                if (type == null) type = (String) request.getAttribute("type");
             			if (type == null) {
             				type = "properties";
             			} else if (type.compareTo("properties") != 0
@@ -154,8 +175,7 @@
             		} else if (JSPUtils.isNull(version)) {
             			name = "Error: Invalid version - " + version + ".";
             		} else {
-            			c = DataUtils.getConceptByCode(dictionary, version, ltag,
-            					code);
+           			c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
             			if (c != null) {
             				request.getSession().setAttribute("concept", c);
             				request.getSession().setAttribute("code", code);
@@ -165,6 +185,8 @@
             				name = "ERROR: Invalid code - " + code + ".";
             			}
             		}
+          		
+            		
             		if (dictionary.compareTo("NCI Thesaurus") == 0
             				|| dictionary.compareTo("NCI_Thesaurus") == 0) {
                %>
@@ -212,11 +234,14 @@
  	                   }
              %>
                      <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
+                     
+                    
                      <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
                         <f:setPropertyActionListener target="#{CartActionBean.entity}" value="concept" />
                         <f:setPropertyActionListener target="#{CartActionBean.codingScheme}" value="dictionary" />
                         <f:setPropertyActionListener target="#{CartActionBean.version}" value="version" />
                      </h:commandLink>
+                   
          		     <c:choose>
          			      <c:when test="${sessionScope.CartActionBean.count>0}">
          			         (<h:outputText value="#{CartActionBean.count}"/>)
@@ -234,6 +259,13 @@
                         </td>
                      </tr>
                   </table>
+                  
+ 
+             <input type="hidden" id="cart_dictionary" name="cart_dictionary" value="<%=HTTPUtils.cleanXSS(dictionary)%>" />
+             <input type="hidden" id="cart_version" name="cart_version" value="<%=HTTPUtils.cleanXSS(version)%>" />
+             <input type="hidden" id="cart_code" name="cart_code" value="<%=HTTPUtils.cleanXSS(code)%>" />
+ 
+                  
                   </h:form>               
                <a name="evs-content" id="evs-content"></a>
                <table border="0" cellpadding="0" cellspacing="0" width="700px">

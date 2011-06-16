@@ -14,7 +14,6 @@
         return "";
 
     String linktext = (String) label2Linktext.get(label); 
-    System.out.println("url: " + url);
     String encoded_value = value;
     encoded_value = encoded_value.replaceAll(":", "%3A");
     String url_str = url + encoded_value;
@@ -206,7 +205,6 @@ if (concept_status != null) {
 //System.out.println("concept_status: " + concept_status);
 
 if (bool_obj != null ) {
-System.out.println("bool_obj: " + bool_obj);
      if (!bool_obj.equals(Boolean.TRUE) && concept_status == null) {
          concept_status = "Inactive";
      }
@@ -257,10 +255,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 //[#26722] Support cross-linking of individual source vocabularies with NCI Metathesaurus.
 // System.out.println("properties_to_display.size(): " + properties_to_display.size());
-
-
-System.out.println("Step 1");
-
 
   HashMap<String, String> label2URL = new HashMap<String, String>();
   HashMap<String, String> label2Linktext = new HashMap<String, String>();

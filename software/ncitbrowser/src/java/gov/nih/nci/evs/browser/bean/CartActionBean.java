@@ -261,6 +261,7 @@ public class CartActionBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+/*
         // Get Entity object
         Entity curr_concept = (Entity) request.getSession().getAttribute(_entity);
         if (curr_concept == null) {
@@ -273,6 +274,21 @@ public class CartActionBean {
         // Get coding scheme
         codingScheme = (String)request.getSession().getAttribute(_codingScheme);
         version = (String)request.getSession().getAttribute(_version);
+*/
+
+        codingScheme = request.getParameter("cart_dictionary");
+        version = request.getParameter("cart_version");
+        code = request.getParameter("cart_code");
+
+
+        Entity curr_concept = DataUtils.getConceptByCode(codingScheme,
+            version, null, code);
+        if (curr_concept == null) {
+        	// Called from a non search area
+        	_logger.error("*** Cart error: Entity object is null!");
+        	return null;
+        }
+
         type = (String)request.getSession().getAttribute("type");
 
         // Get concept name space
@@ -309,8 +325,9 @@ public class CartActionBean {
         // Add scheme and version back in for redisplay
         request.setAttribute("dictionary", codingScheme);
         request.setAttribute("version", version);
+        request.setAttribute("code_from_cart_action", code);
         request.setAttribute("type", type);
-  
+
         // Rebuild version selected lists
         _initDisplayItems();
 
