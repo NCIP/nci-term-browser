@@ -535,6 +535,11 @@ if (uri_str != null) {
  <%
  if (vsd_uri != null) {
   
+      if (vsd_uri.indexOf("|") != -1) {
+  	Vector w = (Vector) DataUtils.parseData(vsd_uri);
+  	vsd_uri = (String) w.elementAt(1);
+      }
+
  %>
  
     <input type="hidden" name="valueset" value="<%=vsd_uri%>">&nbsp;</input>
@@ -567,12 +572,16 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
   if (vsd_vec != null) {
     for (int i=0; i<vsd_vec.size(); i++) {
       String vsd_str = (String) vsd_vec.elementAt(i);
+      
+      
       Vector u = DataUtils.parseData(vsd_str);
       String name = (String) u.elementAt(0);
       String uri = (String) u.elementAt(1);
       String label = (String) u.elementAt(2);
       String cd = (String) u.elementAt(3);
       String sources = (String) u.elementAt(4);
+
+
     
       if (vsd_vec.size() > 1) {
         if (i % 2 == 0) {
@@ -597,6 +606,9 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
 <%
 if (vsd_vec != null && vsd_vec.size() == 1) {
     String vsd_metadata_str = (String) vsd_vec.elementAt(0);
+  
+    
+    
     Vector w = DataUtils.parseData(vsd_metadata_str);
     vsd_uri = (String) w.elementAt(1);
 
@@ -605,6 +617,9 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     if (vsd_description == null) {
         vsd_description = "DESCRIPTION NOT AVAILABLE";
     }
+    
+    
+    
     
 %>
 		      <td class="dataCellText">
