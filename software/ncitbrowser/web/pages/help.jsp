@@ -452,9 +452,8 @@
           </table>
           <p>
             The <b>Advanced Search</b> link, which appears under the 
-            Search Box on terminology source home pages, Concept Details 
-            pages (<a href="#conceptDetails">see below</a>) or on mapping 
-            set home pages (<a href="#mappingSets">see below</a>), leads 
+            Search Box on terminology source home pages, or Concept Details 
+            pages (<a href="#conceptDetails">see below</a>), leads 
             to a separate page. The options and selections are similar 
             to those described for the <b>Search Box</b>, with the following 
             key differences:
