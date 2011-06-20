@@ -42,7 +42,6 @@
          <div id="main-area">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
-            	   System.out.println("(*******KLO********) resovled_value_set.jsp ...");
             		int numRemaining = 0;
             		String valueSetSearch_requestContextPath = request
             				.getContextPath();
@@ -158,7 +157,12 @@
             		if (iend > size)
             			iend = size - 1;
             %>
+            
+            <!--
             <div class="pagecontent" style="width:590px;">
+            -->
+            <div class="pagecontent"> 
+            
                <a name="evs-content" id="evs-content"></a>               
                   <div class="tabTableContentContainer">
                   <h:form id="valueSetSearchResultsForm" styleClass="search-form">
@@ -174,7 +178,14 @@
                      <table border="0">
                         <tr>
                            <td>
+                           
+                              <!--  
                               <table border="0" width="680px;">
+                              -->
+                              
+                              <table border="0" width="95%">
+                             
+                              
                                  <tr>
                                     <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
                                     <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
