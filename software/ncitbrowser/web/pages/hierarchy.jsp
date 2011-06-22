@@ -445,7 +445,7 @@ String hierarchy_version = info.version;
 
 //System.out.println("hierarchy.jsp hierarchy_version: " + hierarchy_version);
 
-String hierarchy_schema = request.getParameter("schema");
+String hierarchy_schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
 
 String localName = DataUtils.getLocalName(hierarchy_schema);
@@ -506,21 +506,21 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 
           <form id="pg_form">
             <%
-              String ontology_node_id = (String)request.getParameter("code");
+              String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
 
               //String ontology_display_name = hierarchy_dictionary;
         //String schema = hierarchy_schema;
         //String version = hierarchy_version;
 
-String schema = request.getParameter("schema");
-String ontology_version = request.getParameter("version");
+String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
+String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 
 //System.out.println("hierarchy.jsp ontology_version: " + ontology_version);
 
 
-String ontology_display_name = request.getParameter("schema");
+String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
 if (ontology_display_name == null) {
-    ontology_display_name = request.getParameter("dictionary");
+    ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 }
 
             %>

@@ -479,7 +479,7 @@
 
     String selectValueSetSearchOption = null;
 
-    selectValueSetSearchOption = (String) request.getParameter("opt");
+    selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
     
     if (selectValueSetSearchOption == null) {
         selectValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption");
@@ -655,12 +655,12 @@
           
           <form id="pg_form">
             <%
-              String ontology_node_id = (String)request.getParameter("code");
-              String schema = request.getParameter("schema");
-              String ontology_version = request.getParameter("version");
-              String ontology_display_name = request.getParameter("schema");
+              String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
+              String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
+              String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
+              String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
               if (ontology_display_name == null) {
-                  ontology_display_name = request.getParameter("dictionary");
+                  ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
               }
           
             %>

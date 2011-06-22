@@ -5,6 +5,8 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils"%>
+
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
@@ -35,7 +37,7 @@
 
 <%
 request.getSession().setAttribute("dictionary", "NCI Thesaurus");
-String vocabulary_version = request.getParameter("version");
+String vocabulary_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 if (vocabulary_version != null) {
 	request.setAttribute("version", vocabulary_version);
 }

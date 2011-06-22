@@ -20,8 +20,8 @@
   </head>
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
   <%
-    String code = (String) request.getParameter("code");
-    String dictionary = (String) request.getParameter("dictionary");
+    String code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
+    String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
     String vers = null;
     String ltag = null;
     Entity concept = (Entity) request.getSession().getAttribute("concept");

@@ -76,7 +76,7 @@
   valueSetSearch_requestContextPath = valueSetSearch_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
 
-String selected_ValueSetSearchOption = request.getParameter("opt");
+String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
 if (selected_ValueSetSearchOption == null) {
     selected_ValueSetSearchOption = "Code";
 }
@@ -141,7 +141,7 @@ Object view_obj = request.getSession().getAttribute("view");
 if (view_obj != null) view = (String) view_obj;
 
 if (view == null) {
-    view = (String) request.getParameter("view");
+    view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
 } else {
     request.getSession().removeAttribute("view");
 }

@@ -55,7 +55,7 @@
         
 
     String _selectValueSetSearchOption = null;
-    _selectValueSetSearchOption = (String) request.getParameter("opt");
+    _selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
     
     if (_selectValueSetSearchOption == null) {
         _selectValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption");

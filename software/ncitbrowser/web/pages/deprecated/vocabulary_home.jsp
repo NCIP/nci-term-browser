@@ -65,7 +65,7 @@
   <%
     String dictionary = info.dictionary;
     String version = info.version;
-    String scheme = (String) request.getParameter("scheme");
+    String scheme = HTTPUtils.cleanXSS((String) request.getParameter("scheme"));
     String shortName = "Vocabulary";
     if (scheme == null) {
       scheme = (String) request.getAttribute("scheme");

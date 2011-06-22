@@ -17,7 +17,7 @@
       String id = null;
       id = (String) request.getSession().getAttribute("code");
 
-      String data_type = (String) gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getParameter("data_type"));
+      String data_type = HTTPUtils.cleanXSS((String) request.getParameter("data_type"));
       if (data_type == null) {
           data_type = (String) request.getSession().getAttribute("type");
       }

@@ -45,7 +45,7 @@ if (html_compatable_description_value == null) {
     html_compatable_description_value = DataUtils.replaceInnerEvalExpressions(html_compatable_description_value, from_vec, to_vec);
 }
 
-String _version = request.getParameter("version");
+String _version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 //System.out.println("(welcome.jsp: ) vocabulary_version: " + _version);
 if (vocabulary_version != null) {
 	request.setAttribute("version", _version);

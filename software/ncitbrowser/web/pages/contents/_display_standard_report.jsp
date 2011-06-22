@@ -8,7 +8,7 @@
 %>
 
 <%
-  String report = request.getParameter("report");
+  String report = HTTPUtils.cleanXSS((String) request.getParameter("report"));
   String value = "Warning: " + HTTPUtils.cleanXSS(report) + " is an invalid report.";
 
   try {

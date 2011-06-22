@@ -1,12 +1,12 @@
 <!-- Thesaurus, banner search area -->
 <%@ page import="org.LexGrid.valueSets.ValueSetDefinition" %>
-
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <%
 
     String vsdUri = null;
-    if (vsdUri == null) vsdUri = (String) request.getParameter("uri");
-    if (vsdUri == null) vsdUri = (String) request.getParameter("vsd_uri");
+    if (vsdUri == null) vsdUri = HTTPUtils.cleanXSS((String) request.getParameter("uri"));
+    if (vsdUri == null) vsdUri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
     if (vsdUri == null) vsdUri = (String) request.getSession().getAttribute("vsd_uri");
     
 String vsd_name = null;  

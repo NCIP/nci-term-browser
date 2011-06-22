@@ -1710,6 +1710,13 @@ public class DataUtils {
     // [#24809] Missing relas
     private String replaceAssociationNameByRela(AssociatedConcept ac,
         String associationName) {
+
+
+
+
+
+
+
         if (ac.getAssociationQualifiers() == null)
             return associationName;
         if (ac.getAssociationQualifiers().getNameAndValue() == null)
@@ -1875,7 +1882,6 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                                 Association assoc = associations[i];
                                 String associationName = null;
 
-
                                 try {
 									associationName =
 										lbscm
@@ -1928,6 +1934,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                                                 String relaValue =
                                                     replaceAssociationNameByRela(
                                                         ac, associationName);
+
 
                                                 String s =
                                                     relaValue + "|" + pt + "|"
@@ -2036,6 +2043,7 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                                 // String associationName =
                                 // assoc.getAssociationName();
 
+
                                 String associationName = null;
                                 try {
                                     associationName = lbscm
@@ -2106,6 +2114,10 @@ System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
                                                 String relaValue =
                                                     replaceAssociationNameByRela(
                                                         ac, associationName);
+
+
+
+
                                                 String s =
                                                     relaValue + "|" + pt + "|"
                                                          + ac.getConceptCode() + "|"
