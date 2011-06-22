@@ -95,7 +95,7 @@
             		 
             		 
             		if (code == null) {
-           		    code = (String) request.getParameter("code");
+           		    code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
            		} else {
            		    request.removeAttribute("code_from_cart_action");
            		    code_from_cart_action = true;
@@ -150,7 +150,7 @@
             		
            		
             		if (type == null) {
-            			type = (String) request.getParameter("type");
+            			type = HTTPUtils.cleanXSS((String) request.getParameter("type"));
                                 if (type == null) type = (String) request.getAttribute("type");
             			if (type == null) {
             				type = "properties";

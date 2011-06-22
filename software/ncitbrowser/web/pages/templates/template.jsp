@@ -1,14 +1,16 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
   String evs_service_url = new DataUtils().getEVSServiceURL();
-  String content_title = request.getParameter("content_title");
-  String content_page = request.getParameter("content_page");
+  String content_title = HTTPUtils.cleanXSS((String) request.getParameter("content_title"));
+  String content_page = HTTPUtils.cleanXSS((String) request.getParameter("content_page"));
 %>
 <!--
    Build info: <%=ncit_build_info%>

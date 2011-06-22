@@ -79,7 +79,7 @@
 
 
 String valueSetSearch_requestContextPath = request.getContextPath();
-String selected_ValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption"); 
+String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
 Vector vsd_vec = null;
 String vsd_uri = (String) request.getParameter("vsd_uri"); 
 
@@ -141,7 +141,7 @@ if (vsd_vec == null) {
         check__c = "checked";
         
     String selectValueSetSearchOption = null;
-    selectValueSetSearchOption = (String) request.getParameter("opt");
+    selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
     
     if (selectValueSetSearchOption == null) {
         selectValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption");
@@ -275,7 +275,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");
 
 
-    String uri_str = (String) request.getParameter("vsd_uri");
+    String uri_str = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
     
     if (uri_str == null) {
         uri_str = (String) request.getSession().getAttribute("vsd_uri");

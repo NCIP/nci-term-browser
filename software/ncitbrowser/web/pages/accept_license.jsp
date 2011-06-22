@@ -5,6 +5,8 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils"%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -23,7 +25,7 @@
   if (info.version_deprecated != null)  //Note: This change will display the version deprecation
     version = info.version_deprecated;  //  message in the concept detail page.
   String display_name = info.display_name;
-  String code = (String) request.getParameter("code");
+  String code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
   String licenseStmt = LicenseBean.resolveCodingSchemeCopyright(dictionary, null);
 
   String matchText_licensedPage = (String) request.getSession().getAttribute("matchText");

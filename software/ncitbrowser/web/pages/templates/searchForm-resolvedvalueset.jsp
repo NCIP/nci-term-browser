@@ -14,7 +14,7 @@
 
 String uri_str = (String) request.getSession().getAttribute("vsd_uri");
 if (uri_str == null) {
-    uri_str = (String) request.getParameter("vsd_uri");
+    uri_str = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 }
 
 System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);

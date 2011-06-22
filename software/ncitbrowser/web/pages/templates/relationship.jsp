@@ -24,7 +24,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
     if (rel_display_name == null) rel_display_name = DataUtils.getLocalName(scheme_curr);
 
     if (code_curr == null) {
-        code_curr = (String) request.getParameter("code");
+        code_curr = HTTPUtils.cleanXSS((String) request.getParameter("code"));
     }
     
 System.out.println("(**********************************************************)");   

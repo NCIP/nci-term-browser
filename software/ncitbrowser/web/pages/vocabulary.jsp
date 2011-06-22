@@ -60,7 +60,7 @@ String vocabulary_version = info.version;
         /* ------------------------ */
 
         String scheme = info.dictionary;
-        String vocabulary_home_str = (String) request.getParameter("home");
+        String vocabulary_home_str = HTTPUtils.cleanXSS((String) request.getParameter("home"));
         String shortName = null;
 //KLO, testing
 if (scheme != null) {

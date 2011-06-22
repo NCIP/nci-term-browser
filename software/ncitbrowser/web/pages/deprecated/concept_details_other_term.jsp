@@ -150,7 +150,7 @@
                 code = (String) request.getSession().getAttribute("code");
               } else {
                 code = (String) request.getSession().getAttribute("code");
-                type = (String) request.getParameter("type");
+                type = HTTPUtils.cleanXSS((String) request.getParameter("type"));
               }
               if (dictionary == null) {
                 dictionary = Constants.CODING_SCHEME_NAME;

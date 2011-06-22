@@ -84,10 +84,10 @@ if (ontologiesToSearchOnStr == null) {
     request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
 }
 
-String action = (String) request.getParameter("action");
+String action = HTTPUtils.cleanXSS((String) request.getParameter("action"));
 System.out.println("action: " + action);
 if (action != null) {
-    String action_cs = (String) request.getParameter("dictionary");
+    String action_cs = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
     System.out.println("action_cs: " + action_cs);
     if (action.compareTo("show") == 0) {
 	for (int i = 0; i < display_name_vec.size(); i++) {

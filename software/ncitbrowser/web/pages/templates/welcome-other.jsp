@@ -35,7 +35,7 @@
 <%
 
 
-String _version = request.getParameter("version");
+String _version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 //System.out.println("(*****welcome-other.jsp) vocabulary_version: " + _version);
 if (vocabulary_version != null) {
   request.setAttribute("version", _version);

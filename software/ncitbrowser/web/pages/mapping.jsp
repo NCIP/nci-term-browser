@@ -65,7 +65,7 @@ JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 String mapping_dictionary = info.dictionary;
 String mapping_version = info.version;
 
-String mapping_schema = request.getParameter("schema");
+String mapping_schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
 if (mapping_dictionary != null && mapping_schema == null)
   mapping_schema = mapping_dictionary;
 if (mapping_schema != null) {
@@ -118,7 +118,7 @@ if (scheme2MappingIteratorBean != null) {
 }
 
 
-String resultsPerPage = (String) request.getParameter("resultsPerPage");
+String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 if (resultsPerPage == null) {
     resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
     if (resultsPerPage == null) {
@@ -144,7 +144,7 @@ int sortBy = MappingData.COL_SOURCE_CODE;
 
 int prevSortBy = MappingData.COL_SOURCE_CODE;
 
-String sortByStr = request.getParameter("sortBy");
+String sortByStr = HTTPUtils.cleanXSS((String) request.getParameter("sortBy"));
 
 System.out.println("****************** sortByStr: " + sortByStr);
 

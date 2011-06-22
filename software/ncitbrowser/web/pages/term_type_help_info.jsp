@@ -42,8 +42,8 @@
         </table>
 
         <%
-          String dictionary = request.getParameter("dictionary");
-          String schema = request.getParameter("schema");
+          String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+          String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
           if (dictionary != null && schema == null)
             schema = dictionary;
           

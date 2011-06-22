@@ -28,8 +28,8 @@
 %>
 <%
 
-  String cs_dictionary = (String) request.getParameter("dictionary");
-  String cs_version = (String) request.getParameter("version");
+  String cs_dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+  String cs_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 
   String mapping_scheme_and_version = (String) request.getSession().getAttribute("scheme_and_version");
   if (mapping_scheme_and_version == null) {

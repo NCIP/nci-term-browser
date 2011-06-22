@@ -10,16 +10,16 @@
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
   String evs_service_url = new DataUtils().getEVSServiceURL();
-  String content_title = request.getParameter("content_title");
-  String content_page = request.getParameter("content_page");
-  String display_app_logo = request.getParameter("display_app_logo");
+  String content_title = HTTPUtils.cleanXSS((String) request.getParameter("content_title"));
+  String content_page = HTTPUtils.cleanXSS((String) request.getParameter("content_page"));
+  String display_app_logo = HTTPUtils.cleanXSS((String) request.getParameter("display_app_logo"));
   boolean is_display_app_logo = display_app_logo != null
     && display_app_logo.equalsIgnoreCase("true");
 
   JSPUtils.JSPHeaderInfoMore hierarchy_info = new JSPUtils.JSPHeaderInfoMore(request);
   String hierarchy_dictionary = hierarchy_info.dictionary;
   String hierarchy_version = hierarchy_info.version;
-  String hierarchy_schema = request.getParameter("schema");
+  String hierarchy_schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
   if (hierarchy_dictionary != null && hierarchy_schema == null)
     hierarchy_schema = hierarchy_dictionary;
   String display_name = hierarchy_info.display_name;
