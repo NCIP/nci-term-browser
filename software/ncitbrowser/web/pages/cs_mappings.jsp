@@ -142,7 +142,32 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
           <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(info3.display_name)%>px; font-family : Arial">
             <%=HTTPUtils.cleanXSS(info3.display_name)%>
           </div>
-          <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(info3.term_browser_version)%>
+          
+
+
+<%              
+String cs_mappings_dictionary = HTTPUtils.cleanXSS(info3.dictionary);
+String cs_mappings_version = HTTPUtils.cleanXSS(info3.version);
+
+String release_date = DataUtils.getVersionReleaseDate(cs_mappings_dictionary, cs_mappings_version);
+boolean display_release_date = true;
+if (release_date == null || release_date.compareTo("") == 0) {
+    display_release_date = false;
+}
+if (display_release_date) {
+%>
+    <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(info3.term_browser_version)%> (Release date: <%=release_date%>)</div>
+<%
+} else {
+%>
+    <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(info3.term_browser_version)%>
+<%
+}
+%> 
+         
+          
+          
+          
           </div>
        </div>
     </a>

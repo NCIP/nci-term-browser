@@ -19,7 +19,28 @@
         <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(info.display_name)%>px; font-family : Arial">
             <%=HTTPUtils.cleanXSS(info.display_name)%>
         </div>
-        <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(info.term_browser_version)%></div>
+        
+  
+<%              
+String content_header_alt_dictionary = HTTPUtils.cleanXSS(info.dictionary);
+String content_header_alt_version = HTTPUtils.cleanXSS(info.version);
+
+String release_date = DataUtils.getVersionReleaseDate(content_header_alt_dictionary, content_header_alt_version);
+boolean display_release_date = true;
+if (release_date == null || release_date.compareTo("") == 0) {
+    display_release_date = false;
+}
+if (display_release_date) {
+%>
+    <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(info.term_browser_version)%> (Release date: <%=release_date%>)</div>
+<%
+} else {
+%>
+    <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(info.term_browser_version)%></div>
+<%
+}
+%> 
+
       </div>
     </a>
   <%

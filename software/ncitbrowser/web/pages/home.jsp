@@ -51,7 +51,7 @@ if (vocabulary_version != null) {
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
-      <%@ include file="/pages/templates/content-header.jsp" %>
+      <%@ include file="/pages/templates/content-header-other.jsp" %>
       <!-- Page content -->
       <div class="pagecontent">
         <a name="evs-content" id="evs-content"></a>

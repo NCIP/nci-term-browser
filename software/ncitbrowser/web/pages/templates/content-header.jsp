@@ -7,7 +7,30 @@
 <div class="bannerarea">
     <a href="<%=nciturl%>" style="text-decoration: none;">
       <div class="vocabularynamebanner_ncit">
-         <span class="vocabularynamelong_ncit">Version:&nbsp;<%=HTTPUtils.cleanXSS(info4.term_browser_version)%></span>
+      
+      
+
+<%              
+String content_header_dictionary = HTTPUtils.cleanXSS(info4.dictionary);
+String content_header_version = HTTPUtils.cleanXSS(info4.version);
+
+String release_date = DataUtils.getVersionReleaseDate(content_header_dictionary, content_header_version);
+boolean display_release_date = true;
+if (release_date == null || release_date.compareTo("") == 0) {
+    display_release_date = false;
+}
+if (display_release_date) {
+%>
+    <span class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(info4.term_browser_version)%> (Release date: <%=release_date%>)</span>
+<%
+} else {
+%>
+    <span class="vocabularynamelong_ncit">Version:&nbsp;<%=HTTPUtils.cleanXSS(info4.term_browser_version)%></span>
+<%
+}
+%> 
+        
+         
       </div>
     </a>   
     <div class="search-globalnav">
