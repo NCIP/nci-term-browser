@@ -75,6 +75,8 @@ if (scheme != null) {
             scheme = (String) request.getSession().getAttribute("scheme");
         }
 
+
+
   boolean hasValueSet = ValueSetHierarchy.hasValueSet(scheme);
   boolean hasMapping = DataUtils.hasMapping(scheme);
 
@@ -231,7 +233,24 @@ if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
                       <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(display_name)%>px; font-family : Arial">
                           <%=HTTPUtils.cleanXSS(display_name)%>
                       </div>
-                      <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
+                      
+<%
+String release_date = DataUtils.getVersionReleaseDate(scheme, version);
+boolean display_release_date = true;
+if (release_date == null || release_date.compareTo("") == 0) {
+    display_release_date = false;
+}
+if (display_release_date) {
+%>
+    <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%> (Release date: <%=release_date%>)</div>
+<%
+} else {
+%>
+    <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
+<%
+}
+%>                    
+                      
                     </div>
                   </a>
 <%
