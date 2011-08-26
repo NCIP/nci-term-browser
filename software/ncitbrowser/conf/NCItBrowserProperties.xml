@@ -377,7 +377,7 @@
        <DisplayItem>
             <propertyName>NCI Thesaurus Code</propertyName>
             <itemLabel>caDSR metadata</itemLabel>
-            <url>https://cdebrowser-dev.nci.nih.gov/CDEBrowser/search?searchDataElements=9&amp;SEARCH=1&amp;performQuery=yes&amp;FirstTimer=0&amp;jspConceptCode=</url>
+            <url>https://cdebrowser.nci.nih.gov/CDEBrowser/search?searchDataElements=9&amp;SEARCH=1&amp;performQuery=yes&amp;FirstTimer=0&amp;jspConceptCode=</url>
             <hyperlinkText>Search for linked caDSR metadata</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>

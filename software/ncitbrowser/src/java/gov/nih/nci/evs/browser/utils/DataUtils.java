@@ -210,6 +210,7 @@ public class DataUtils {
 
 
     public static HashMap _formalName2VersionsHashMap = null;
+    public static HashMap _versionReleaseDateHashMap = null;
 
 
 
@@ -291,6 +292,7 @@ public class DataUtils {
         _codingSchemeTagHashMap = new HashMap();
 
         _formalName2VersionsHashMap = new HashMap();
+        _versionReleaseDateHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -459,6 +461,10 @@ public class DataUtils {
                                 if (nv.getName().compareTo(Constants.TREE_ACCESS_ALLOWED) == 0 && nv.getContent().compareTo("false") == 0) {
 									_vocabulariesWithoutTreeAccessHashSet.add(formalname);
 									_logger.debug("\t" + "Tree not accessible.");
+								}
+
+								if (nv.getName().compareTo("version_releaseDate") == 0) {
+									_versionReleaseDateHashMap.put(formalname + "$" + representsVersion, nv.getContent());
 								}
                             }
 
@@ -5046,5 +5052,27 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 	    if (!version_vec.contains(version)) return false;
 	    return true;
     }
+
+
+	public static String getVersionReleaseDate(String codingSchemeName, String version) {
+        if (_versionReleaseDateHashMap == null) {
+            setCodingSchemeMap();
+        }
+		String key = getFormalName(codingSchemeName) + "$" + version;
+		if (_versionReleaseDateHashMap.containsKey(key)) {
+			return (String) _versionReleaseDateHashMap.get(key);
+		}
+		/*
+
+		Vector v = MetadataUtils.getMetadataNameValuePairs(codingSchemeName, version);
+		if (v == null) return null;
+		if (v.size() == 0) return null;
+		String release_date = (String) v.elementAt(0);
+		_versionReleaseDateHashMap.put(key, release_date);
+		return release_date;
+		*/
+		return null;
+	}
+
 
 }

@@ -638,56 +638,6 @@ SortUtils.quickSort(w);
 			}
 
 			return "value_set";
-/*
-		} else if (selectValueSetSearchOption.compareTo("ConceptDomain") == 0) {
-			System.out.println("valueSetSearchAction selectConceptDomain: " + selectConceptDomain);
-
-			if (selectConceptDomain != null) {
-
-				try {
-                    List uri_list = vsd_service.getValueSetDefinitionURIsWithConceptDomain(selectConceptDomain,
-                                                                           "http://lexevs.org/codingscheme/conceptdomain");
-
-System.out.println("(********) getValueSetDefinitionURIsWithConceptDomain returns " + uri_list.size());
-
-
-					for (int i=0; i<uri_list.size(); i++) {
-						String uri = (String) uri_list.get(i);
-						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
-						String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-
-System.out.println("(********) metadata " + metadata);
-
-
-						if (metadata != null) {
-							v.add(metadata);
-						}
-					}
-
-					if(uri_list.size() == 0) {
-						msg = "Unable to find any value set with concept domain " + selectConceptDomain;
-						request.getSession().setAttribute("message", msg);
-						return "message";
-					}
-
-
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					msg = "Unable to find any value set with concept domain " + selectConceptDomain;
-					request.getSession().setAttribute("message", msg);
-					return "message";
-				}
-		    }
-			request.getSession().setAttribute("matched_vsds", v);
-			if (v.size() == 0) {
-				msg = "No match found.";
-				request.getSession().setAttribute("message", msg);
-				return "message";
-			}
-
-			return "value_set";
-*/
-
 		}
 
 
@@ -698,9 +648,6 @@ System.out.println("(********) metadata " + metadata);
 	}
 
     public String selectCSVersionAction() {
-
- System.out.println("(************* ) selectCSVersionAction ");
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -1126,6 +1073,7 @@ String key = vsd_uri;
 
         FacesContext.getCurrentInstance().responseComplete();
 	}
+
 
 
     public String getNCIDefinition(ResolvedConceptReference ref) {
