@@ -5,6 +5,9 @@
 <div class="bannerarea">
 <%
   JSPUtils.JSPHeaderInfoMore info3 = new JSPUtils.JSPHeaderInfoMore(request);
+  String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + info3.version;
+  
+  
   if (JSPUtils.isNull(info3.dictionary)) {
      %>
       <div class="banner">
@@ -13,18 +16,61 @@
     <%
   } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0) {
   %>
-    <div class="banner">
-      <a href="<%=basePath%>">
-         <img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="117" alt="Thesaurus Browser Logo" border="0" />
-      </a>
-    </div>
+	 <a href="<%=nciturl%>" style="text-decoration: none;">
+	      <div class="vocabularynamebanner_ncit">
+
+<%	      
+	 String content_header_other_dictionary = HTTPUtils.cleanXSS(info3.dictionary);
+	 String content_header_other_version = HTTPUtils.cleanXSS(info3.version);
+
+	 String release_date = DataUtils.getVersionReleaseDate(content_header_other_dictionary, content_header_other_version);
+	 boolean display_release_date = true;
+	 if (release_date == null || release_date.compareTo("") == 0) {
+	     display_release_date = false;
+	 }
+	 if (display_release_date) {
+%>	 
+	 
+	     <span class="vocabularynamelong_ncit">Version: <%=HTTPUtils.cleanXSS(info3.term_browser_version)%> (Release date: <%=release_date%>)</span>
+<%
+	 } else {
+%>	 
+	     <span class="vocabularynamelong_ncit">Version:&nbsp;<%=HTTPUtils.cleanXSS(info3.term_browser_version)%></span>
+<%
+	 }
+%>	      
+		 
+	     </div>
+	 </a>
   <%
   } else {
   %>
     <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(info3.dictionary)%>">
       <div class="vocabularynamebanner">
           <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(info3.display_name)%>px; font-family : Arial"><%=HTTPUtils.cleanXSS(info3.display_name)%></div>
-          <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(info3.term_browser_version)%></div>
+          
+
+<%              
+String content_header_other_dictionary = HTTPUtils.cleanXSS(info3.dictionary);
+String content_header_other_version = HTTPUtils.cleanXSS(info3.version);
+
+String release_date = DataUtils.getVersionReleaseDate(content_header_other_dictionary, content_header_other_version);
+boolean display_release_date = true;
+if (release_date == null || release_date.compareTo("") == 0) {
+    display_release_date = false;
+}
+if (display_release_date) {
+%>
+    <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(info3.term_browser_version)%> (Release date: <%=release_date%>)</div>
+<%
+} else {
+%>
+    <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(info3.term_browser_version)%></div>
+<%
+}
+%> 
+          
+          
        </div>
     </a>
   <%

@@ -96,10 +96,32 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
            <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(mapping_display_name)%>px; font-family : Arial">
              <%=HTTPUtils.cleanXSS(mapping_display_name)%>
            </div>
-           <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(mapping_term_browser_version)%>
-           </div>
-        </div>
-     </a>
+  
+  
+  
+           
+ <%              
+ 
+ 
+ String release_date = DataUtils.getVersionReleaseDate(mapping_dictionary, mapping_version);
+ boolean display_release_date = true;
+ if (release_date == null || release_date.compareTo("") == 0) {
+     display_release_date = false;
+ }
+ if (display_release_date) {
+ %>
+     <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(mapping_term_browser_version)%> (Release date: <%=release_date%>)</div>
+ <%
+ } else {
+ %>
+     <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(mapping_term_browser_version)%> </div>
+ <%
+ }
+%> 
+           
+           
+     </div>
+   </a>
 
          
 	 <div class="search-globalnav"><!-- Search box -->

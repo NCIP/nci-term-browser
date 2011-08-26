@@ -57,7 +57,27 @@
               <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(dictionary)%>px; font-family : Arial">
                   <%=HTTPUtils.cleanXSS(dictionary)%>
               </div>
-               <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(version)%></div>
+
+<%              
+String error_handler_dictionary = HTTPUtils.cleanXSS(dictionary);
+String error_handler_version = HTTPUtils.cleanXSS(version);
+
+String release_date = DataUtils.getVersionReleaseDate(error_handler_dictionary, error_handler_version);
+boolean display_release_date = true;
+if (release_date == null || release_date.compareTo("") == 0) {
+    display_release_date = false;
+}
+if (display_release_date) {
+%>
+    <div class="vocabularynamelong">Version: <%=error_handler_version%> (Release date: <%=release_date%>)</div>
+<%
+} else {
+%>
+    <div class="vocabularynamelong">Version: <%=error_handler_version%></div>
+<%
+}
+%>   
+               
             </div>
           </a>
         <% } else { %>
