@@ -131,7 +131,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = true;
+    private static boolean initializeValueSetHierarchy = false;
 
     // ==================================================================================
     // For customized query use
@@ -632,6 +632,10 @@ public class DataUtils {
     }
 
     public static boolean isCodingSchemeLoaded(String scheme, String version) {
+		if (_formalNameVersion2MetadataHashMap == null) {
+			setCodingSchemeMap();
+		}
+
         boolean isLoaded = _formalNameVersion2MetadataHashMap.containsKey(scheme + "$" + version);
         if (isLoaded) {
             return isLoaded;
