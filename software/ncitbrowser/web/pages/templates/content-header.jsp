@@ -32,7 +32,8 @@ if (display_release_date) {
         
          
       </div>
-    </a>   
+    </a> 
+    
     <div class="search-globalnav">
         <!-- Search box -->
         <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
