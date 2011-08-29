@@ -190,7 +190,7 @@
             		if (dictionary.compareTo("NCI Thesaurus") == 0
             				|| dictionary.compareTo("NCI_Thesaurus") == 0) {
                %>
-               <%@ include file="/pages/templates/content-header.jsp"%>
+               <%@ include file="/pages/templates/content-header-other.jsp"%>
                <%
                	} else {
                			request.getSession().setAttribute("dictionary", dictionary);
