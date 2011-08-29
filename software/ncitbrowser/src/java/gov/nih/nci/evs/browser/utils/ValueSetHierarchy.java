@@ -1551,6 +1551,7 @@ public class ValueSetHierarchy {
 
 
 	public static HashMap getRootValueSets(String scheme) {
+		if (DataUtils._codingSchemeName2URIHashMap == null) DataUtils.initializeCodingSchemeMap();
 		String formalName = DataUtils.getFormalName(scheme);
 		String codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
 
@@ -1885,7 +1886,13 @@ public class ValueSetHierarchy {
 
     //build_cs_vs_tree
 	public static HashMap getRootValueSets() {
-        if (_valueSetParticipationHashSet == null) return null;
+		if (DataUtils._codingSchemeName2URIHashMap == null) DataUtils.initializeCodingSchemeMap();
+
+        if (_valueSetParticipationHashSet == null) {
+            //return null;
+            getValueSetParticipationHashSet();
+		}
+
         Vector root_cs_vec = new Vector();
         Iterator it = _valueSetParticipationHashSet.iterator();
         while (it.hasNext()) {

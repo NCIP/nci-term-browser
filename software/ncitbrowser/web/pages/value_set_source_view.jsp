@@ -619,7 +619,9 @@
             <% if (message != null) { request.getSession().removeAttribute("message"); %>
               <tr class="textbodyred"><td>
                 <p class="textbodyred">&nbsp;<%=message%></p>
-              </td></tr>
+              </td>
+              <td>&nbsp;</td>
+             </tr>
             <% } %>
                        
             <tr class="textbody">
@@ -639,6 +641,8 @@
           </table>
           
           <hr></hr>
+          
+          
           
           <!-- Tree content -->
           <div id="rootDesc">
@@ -670,6 +674,10 @@
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
             <input type="hidden" id="view" name="view" value="source" />
           </form>
+          
+          
+          
+          
         </div> <!-- popupContentArea -->
         <div class="popupContentAreaWithoutBorder">        
           <%@ include file="/pages/templates/nciFooter.jsp" %>

@@ -265,6 +265,10 @@ public class DataUtils {
  		}
 	}
 
+	public static void initializeCodingSchemeMap() {
+		setCodingSchemeMap();
+	}
+
 
     private static void setCodingSchemeMap() {
         _logger.debug("Initializing ...");
