@@ -458,11 +458,33 @@ if (display_name == null || display_name.compareTo("null") == 0) {
    display_name = DataUtils.getLocalName(hierarchy_schema); 
 }
 
+
+String release_date = DataUtils.getVersionReleaseDate(hierarchy_schema, hierarchy_version);
+boolean display_release_date = true;
+if (release_date == null || release_date.compareTo("") == 0) {
+	display_release_date = false;
+}
+ 
+	 
+	 
+
 if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 %>
     <div>
       <img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
-      <span class="texttitle-blue-rightjust-2"><%=HTTPUtils.cleanXSS(term_browser_version)%></span>
+      
+<%      
+	 if (display_release_date) {
+%>	 
+             <span class="texttitle-blue-rightjust-2"><%=HTTPUtils.cleanXSS(term_browser_version)%> (Release date: <%=release_date%>)</span>
+<%
+	 } else {
+%>	 
+	     <span class="texttitle-blue-rightjust-2"><%=HTTPUtils.cleanXSS(term_browser_version)%></span>
+<%
+	 }      
+%>      
+
     </div>
 <%
 } else {
@@ -471,7 +493,19 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
     <div>
       <img src="<%=basePath%>/images/other_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
       <div class="vocabularynamepopupshort"><%=HTTPUtils.cleanXSS(display_name)%>
-        <span class="texttitle-blue-rightJust"><%=HTTPUtils.cleanXSS(term_browser_version)%></span>
+      
+<%      
+	 if (display_release_date) {
+%>	 
+             <span class="texttitle-blue-rightjust"><%=HTTPUtils.cleanXSS(term_browser_version)%> (Release date: <%=release_date%>)</span>
+<%
+	 } else {
+%>	 
+	     <span class="texttitle-blue-rightjust"><%=HTTPUtils.cleanXSS(term_browser_version)%></span>
+<%
+	 }      
+%>         
+
       </div>
     </div>
 <%
