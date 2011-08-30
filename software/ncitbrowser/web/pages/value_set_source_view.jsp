@@ -612,6 +612,9 @@
       
       <!-- Page content -->
       <div class="pagecontent">
+      
+      
+      
         <div id="popupContentArea">
           <a name="evs-content" id="evs-content"></a>
           
@@ -639,10 +642,8 @@
               </td>
             </tr>
           </table>
-          
-          <hr></hr>
-          
-          
+        
+          <hr/>
           
           <!-- Tree content -->
           <div id="rootDesc">
@@ -650,10 +651,10 @@
             <div id="ft"></div>
           </div>
           <div id="treeStatus">
-            <div id="bd"></div>
+            <div id="ts"></div>
           </div>
           <div id="emptyRoot">
-            <div id="bd"></div>
+            <div id="er"></div>
           </div>
           <div id="treecontainer"></div>
           
@@ -676,12 +677,14 @@
           </form>
           
           
-          
-          
         </div> <!-- popupContentArea -->
-        <div class="popupContentAreaWithoutBorder">        
-          <%@ include file="/pages/templates/nciFooter.jsp" %>
-        </div>        
+        
+
+<div class="textbody">
+<%@ include file="/pages/templates/nciFooter.jsp"%>
+</div>       
+
+        
       </div> <!-- pagecontent -->
     </div> <!--  main-area -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
