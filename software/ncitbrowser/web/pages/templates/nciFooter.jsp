@@ -2,7 +2,7 @@
 <div class="footer" style="width:720px">
   <ul>
     <li><a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute">NCI Home</a> |</li>
-    <li><a href="<%= request.getContextPath() %>/pages/contact_us.jsf">Contact Us</a> |</i>
+    <li><a href="<%= request.getContextPath() %>/pages/contact_us.jsf">Contact Us</a> |</li>
     <li><a href="http://www.cancer.gov/policies" target="_blank" alt="National Cancer Institute Policies">Policies</a> |</li>
     <li><a href="http://www.cancer.gov/policies/page3" target="_blank" alt="National Cancer Institute Accessibility">Accessibility</a> |</li>
     <li><a href="http://www.cancer.gov/policies/page6" target="_blank" alt="National Cancer Institute FOIA">FOIA</a></li>

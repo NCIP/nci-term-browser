@@ -679,9 +679,9 @@
             <input type="hidden" id="view" name="view" value="terminology" />
           </form>
         </div> <!--  popupContentArea -->
-        <div class="popupContentAreaWithoutBorder">        
-          <%@ include file="/pages/templates/nciFooter.jsp" %>
-        </div>
+<div class="textbody">
+<%@ include file="/pages/templates/nciFooter.jsp"%>
+</div>     
       </div> <!-- pagecontent -->
 
     </div> <!-- main-area -->
