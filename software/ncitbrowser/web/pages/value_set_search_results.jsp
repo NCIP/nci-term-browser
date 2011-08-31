@@ -739,8 +739,10 @@ if (vsd_uri.indexOf("|") != -1) {
         </table>
           
         </div> <!--  popupContentArea -->
-        
-        <div class="popupContentAreaWithoutBorder">        
+        <!--
+        <div class="popupContentAreaWithoutBorder">
+        -->
+        <div class="textbody">
           <%@ include file="/pages/templates/nciFooter.jsp" %>
         </div>
       </div> <!-- pagecontent -->
