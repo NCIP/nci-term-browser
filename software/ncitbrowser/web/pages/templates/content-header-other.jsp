@@ -14,7 +14,7 @@
         <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Term Browser Logo" border="0" /></a>
       </div>
     <%
-  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0) {
+  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0 || info3.dictionary.compareTo("NCI_Thesaurus") == 0) {
   %>
 	 <a href="<%=nciturl%>" style="text-decoration: none;">
 	      <div class="vocabularynamebanner_ncit">
