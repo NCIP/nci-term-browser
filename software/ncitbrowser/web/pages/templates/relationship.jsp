@@ -237,6 +237,13 @@ if (type != null && type.compareTo("all") == 0) {
         String target_concept_name = (String) ret_vec.elementAt(1);
         String target_concept_code = (String) ret_vec.elementAt(2);
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
+        
+        if (target_coding_scheme_name != null) {
+            target_coding_scheme_name = DataUtils.getFormalName(target_coding_scheme_name);
+        }
+        
+        
+        
         String qualifiers = null;
   rel = null;
   score = null;
@@ -317,6 +324,11 @@ if (type != null && type.compareTo("all") == 0) {
       String target_concept_name = (String) ret_vec.elementAt(1);
       String target_concept_code = (String) ret_vec.elementAt(2);
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
+
+        if (target_coding_scheme_name != null) {
+            target_coding_scheme_name = DataUtils.getFormalName(target_coding_scheme_name);
+        }      
+      
       String target_namespace = null;
 
   String qualifiers = null;
@@ -453,6 +465,9 @@ if (!isMapping) {
         String target_concept_code = (String) ret_vec.elementAt(2);
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
+        if (target_coding_scheme_name != null) {
+            target_coding_scheme_name = DataUtils.getFormalName(target_coding_scheme_name);
+        }
 
         if (n1 % 2 == 0) {
           %>
@@ -564,6 +579,12 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
       String target_concept_name = (String) ret_vec.elementAt(1);
       String target_concept_code = (String) ret_vec.elementAt(2);
       String target_coding_scheme_name = (String) ret_vec.elementAt(3);
+      
+        if (target_coding_scheme_name != null) {
+            target_coding_scheme_name = DataUtils.getFormalName(target_coding_scheme_name);
+        }
+        
+      
       String target_namespace = null;
   String qualifiers = null;
   rel = null;
