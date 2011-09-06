@@ -335,11 +335,11 @@ if (mapping_error_msg != null) {
              request.getSession().removeAttribute("hide_ontology_list");
 if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
 %>
-             
            
-            <span class="textbody">&nbsp;Select exactly one mapping data sets to perform search, or click on a specific mapping data set name to go to its home page
-            and perform search there.
-            <br/><br/>
+            <span class="textbody">
+Select a mapping data set to search here, or click on a mapping data set name to go to its home page and browse
+or search from there.  It is not yet possible to search more than one mapping data set at a time.
+           <br/><br/>
             </span>
             
             
