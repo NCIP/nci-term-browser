@@ -3881,4 +3881,31 @@ public class SearchUtils {
         return new ResolvedConceptReferencesIteratorWrapper(iterator, message);
     }
 
+    //KLO, 091211
+    public Boolean isCodeInCodingScheme(String scheme, String version, String code) {
+
+        CodedNodeSet cns = null;
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+
+            if (lbSvc == null) {
+                _logger.warn("lbSvc = null");
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (version != null) {
+                versionOrTag.setVersion(version);
+			}
+            cns = getNodeSet(lbSvc, scheme, versionOrTag);
+            ConceptReference cr = new ConceptReference();
+            cr.setConceptCode(code);
+
+            return cns.isCodeInSet(cr);
+
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+		return null;
+	}
+
 }

@@ -72,7 +72,12 @@
 
     function addTreeNode(rootNode, nodeInfo) {
       var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
-      var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+      
+      if (nodeInfo.ontology_node_id.indexOf("TVS_") >= 0) {
+          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id };
+      } else {
+          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+      }        
       var newNode = new YAHOO.widget.TextNode(newNodeData, rootNode, false);
       if (nodeInfo.ontology_node_child_count > 0) {
         newNode.setDynamicLoad(loadNodeData);
@@ -380,7 +385,13 @@
 
     function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {
       var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
-      var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+      
+      var newNodeData;
+      if (ontology_node_id.indexOf("TVS_") >= 0) {
+          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id };
+      } else {
+          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+      }  
 
       var expand = false;
       var childNodes = nodeInfo.children_nodes;
@@ -494,6 +505,14 @@ if (search_results_version != null) {
     
       <!-- Page content -->
       <div class="pagecontent">
+      
+<p class="textbody">
+View value sets organized by supported standard or source terminology.  
+Top standards labels group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.  
+Search or browse each from its home page, or search all value sets at once from this page (very slow).
+</p>      
+      
+      
        <div id="popupContentArea">
      
 
@@ -512,9 +531,6 @@ if (search_results_version != null) {
           
           
         <a name="evs-content" id="evs-content"></a>
-
-
-
 
 
           <!-- Tree content -->
