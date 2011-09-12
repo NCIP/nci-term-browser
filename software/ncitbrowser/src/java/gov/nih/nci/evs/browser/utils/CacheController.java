@@ -491,6 +491,7 @@ public class CacheController {
 						 String code = childItem._code;
 						 String name = childItem._text;
 
+/*
 						 int childCount = 0;
 						 if (childItem._expandable) childCount = 1;
 
@@ -505,6 +506,27 @@ public class CacheController {
 						 } catch (Exception ex) {
 							 ex.printStackTrace();
 						 }
+
+*/
+
+                         if (childItem._expandable) {
+
+							 int childCount = 1;
+							 try {
+								 JSONObject nodeObject = new JSONObject();
+								 nodeObject.put(ONTOLOGY_NODE_ID, code);
+								 nodeObject.put(ONTOLOGY_NODE_NAME, name);
+								 nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+								 nodeObject.put(CHILDREN_NODES, new JSONArray());
+								 nodesArray.put(nodeObject);
+
+							 } catch (Exception ex) {
+								 ex.printStackTrace();
+							 }
+
+					     }
+
+
 					 }
                 }
 
