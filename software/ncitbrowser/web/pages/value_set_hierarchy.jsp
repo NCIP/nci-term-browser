@@ -445,7 +445,7 @@
 JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 String search_results_dictionary = info.dictionary;
 
-System.out.println("********* search_results.jsp search_results_dictionary: " + search_results_dictionary);
+//System.out.println("********* search_results.jsp search_results_dictionary: " + search_results_dictionary);
 
 
 boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
@@ -460,7 +460,7 @@ boolean isExtension = DataUtils.isExtension(search_results_dictionary, null);
 
 String search_results_version = info.version;
 
-System.out.println("********* search_results.jsp search_results_version: " + search_results_version);
+//System.out.println("********* search_results.jsp search_results_version: " + search_results_version);
 
 
   //boolean hasValueSet = ValueSetHierarchy.hasValueSet(search_results_dictionary);
