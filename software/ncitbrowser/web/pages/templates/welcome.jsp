@@ -47,7 +47,7 @@ if (html_compatable_description_value == null) {
 
 String _version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 //System.out.println("(welcome.jsp: ) vocabulary_version: " + _version);
-if (vocabulary_version != null) {
+if (_version != null) {
 	request.setAttribute("version", _version);
 }
 

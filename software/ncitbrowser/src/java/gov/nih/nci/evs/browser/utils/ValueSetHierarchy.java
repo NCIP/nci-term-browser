@@ -1497,6 +1497,7 @@ public class ValueSetHierarchy {
 			while (sourceEnum.hasMoreElements()) {
 				Source source = (Source) sourceEnum.nextElement();
 				String src_str = source.getContent();
+
 				Vector vsd_vec = new Vector();
 				if (_vsd_source_to_vsds_map.containsKey(src_str)) {
 					vsd_vec = (Vector) _vsd_source_to_vsds_map.get(src_str);
