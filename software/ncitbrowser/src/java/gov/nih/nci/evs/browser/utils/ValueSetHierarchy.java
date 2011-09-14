@@ -2357,7 +2357,11 @@ try {
 
 			String text = rcr.getEntityDescription().getContent();
 			//TreeItem ti = new TreeItem(src, src + " (" + text + ")");
-			TreeItem ti = new TreeItem(src, src);
+
+			//TreeItem ti = new TreeItem(src, src);
+			//KLO 091411
+			TreeItem ti = new TreeItem(src, text);
+
 			ti._expandable = containsValueSets(src);
 			children.add(ti);
 		}

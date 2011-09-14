@@ -319,7 +319,7 @@
        <DisplayItem>
             <propertyName>Swiss_Prot</propertyName>
             <itemLabel>Swiss Prot</itemLabel>
-            <url>http://www.uniprot.org/entry/</url>
+            <url>http://www.uniprot.org/uniprot/</url>
             <hyperlinkText>see UniProt/Swiss-Prot info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
