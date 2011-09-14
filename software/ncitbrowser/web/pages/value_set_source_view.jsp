@@ -626,9 +626,9 @@
       <div class="pagecontent">
           
 <p class="textbody">
-View value sets organized by supported standard or source terminology.  
-Top standards labels group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.  
-Search or browse each from its home page, or search all value sets at once from this page (very slow).
+View value sets organized by standards category or source terminology. 
+Standards categories group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies. 
+Search or browse a value set from its home page, or search all value sets at once from this page (very slow) to find which ones contain a particular code or term.
 </p> 
 
         <div id="popupContentArea">
