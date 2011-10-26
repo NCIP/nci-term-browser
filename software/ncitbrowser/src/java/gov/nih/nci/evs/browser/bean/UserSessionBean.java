@@ -2222,6 +2222,11 @@ int selected_knt = 0;
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", "|");
 
+
+        //KLO, 102611
+     	request.getSession().removeAttribute("ontology_list");
+
+
         //LicenseUtils.clearAllLicenses(request); //DYEE
 		return "multiple_search";
 	}
