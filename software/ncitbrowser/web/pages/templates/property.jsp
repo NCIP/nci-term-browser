@@ -288,9 +288,9 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     String url = (String) properties_to_display_url.elementAt(i);
     String linktext = (String) properties_to_display_linktext.elementAt(i);
 
-
-    if (propName.compareTo(ncim_cui_propName) == 0 || propName.compareTo(umls_cui_propName) == 0) {
-   
+    //KLO 102611
+    //if (propName.compareTo(ncim_cui_propName) == 0 || propName.compareTo(umls_cui_propName) == 0) {
+   if (propName.compareTo(ncim_cui_propName) == 0) {
         ncim_cui_propName_label = propName_label;
         ncim_cui_prop_url = url;
         ncim_cui_prop_linktext = linktext;
@@ -712,7 +712,8 @@ if (!hasExternalSourceCodes) {
               <td>
                 <%=value%>
                 <%
-                  if (prop_url != null && prop_url.compareTo("null") != 0) {
+                  // KLO
+                  if (propName.compareTo("UMLS_CUI") != 0 && prop_url != null && prop_url.compareTo("null") != 0) {
                     String url_str = prop_url + value;
                     %>
                       <a href="javascript:redirect_site('<%= url_str %>')">(<%= prop_linktext %>)</a>
