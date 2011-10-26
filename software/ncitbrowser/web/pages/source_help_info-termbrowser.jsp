@@ -122,22 +122,29 @@ subject to the conditions specified at
               if (abbr_vec == null) {
                   abbr_vec = new MetadataUtils().getSupportedVocabularyMetadataValues(propertyName);
                   request.getSession().setAttribute("source_descriptions", abbr_vec);
-              }              
+              } 
+              
+              int lcv = -1;
               for (int n=0; n<abbr_vec.size(); n++) {
                  String t = (String) abbr_vec.elementAt(n);
                  Vector w = DataUtils.parseData(t, "|");
                  String abbr = (String) w.elementAt(0);
-                 String def = (String) w.elementAt(1);
-                 def = DataUtils.replaceContextPath(def, basePath);
-                 def = DataUtils.replaceInnerEvalExpressions(def, from_vec, to_vec);
-                 String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
-            %>
-              <tr class="<%=rowColor%>">
-                <td><%=abbr%></td>
-                <td>&nbsp;</td>
-                <td><%=def%></td>
-              </tr>
-            <%
+                 
+                 if (!abbr.startsWith("Terminology Value Set")) {
+                         lcv++;
+			 String def = (String) w.elementAt(1);
+			 def = DataUtils.replaceContextPath(def, basePath);
+			 def = DataUtils.replaceInnerEvalExpressions(def, from_vec, to_vec);
+			 
+			 String rowColor = (lcv%2 == 0) ? "dataRowDark" : "dataRowLight";
+		    %>
+		      <tr class="<%=rowColor%>">
+			<td><%=abbr%></td>
+			<td>&nbsp;</td>
+			<td><%=def%></td>
+		      </tr> 
+		    <%
+                 }
               }
             %>
           </table>
