@@ -134,6 +134,10 @@ if (version != null) {
                 version =
                     DataUtils.getVocabularyVersionByTag(dictionary,
                         "PRODUCTION");
+                if (version == null) {
+                	String formalName = DataUtils.getFormalName(dictionary);
+                	version = DataUtils.getVocabularyVersionByTag(formalName, "PRODUCTION");
+                }
                 debugDV("Defaulting to: ", dictionary, version);
             } else if (! isDictionaryNull && ! isVersionNull &&
                     ! DataUtils.isCodingSchemeLoaded(dictionary, version)) {
@@ -161,20 +165,23 @@ if (version != null) {
 
         public JSPHeaderInfoMore(HttpServletRequest request) {
             super(request);
-            String localName = DataUtils.getLocalName(dictionary);
-            String formalName = DataUtils.getFormalName(localName);
-
+            String formalName = DataUtils.getFormalName(dictionary);
             display_name =
                 DataUtils
                     .getMetadataValue(formalName, version, "display_name");
-            if (isNull(display_name))
-                display_name = localName;
+            if (isNull(display_name)) {
+            	display_name = DataUtils.getMetadataValue(formalName, "display_name");
+            }
 
             term_browser_version =
                 DataUtils.getMetadataValue(formalName, version,
                     "term_browser_version");
             if (isNull(term_browser_version))
                 term_browser_version = version;
+            if (isNull(version)) {
+            	version = DataUtils.getVocabularyVersionByTag(formalName, null); //DataUtils.getVersion(formalName);
+            	request.getSession().setAttribute("version", version);
+            }
         }
     }
 
