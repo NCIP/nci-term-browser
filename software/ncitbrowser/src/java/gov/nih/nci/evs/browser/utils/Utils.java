@@ -132,6 +132,34 @@ public class Utils {
             _logger.debug("  " + (i + 1) + ") " + list[i]);
         }
     }
+    
+    public static void debugHashMap(String preNote, HashMap<String, String> hashMap,
+    		String postNote) {
+        if (preNote != null && preNote.length() > 0)
+            _logger.debug(preNote);
+        if (hashMap != null) {
+	        Set<String> keys = (Set<String>) hashMap.keySet();
+	        List<String> sortedKeys = asSortedList(keys);
+	
+	        Iterator<?> iterator = sortedKeys.iterator();
+	        int i = 0;
+	        while (iterator.hasNext()) {
+	        	String key = (String) iterator.next();
+	        	String value = (String) hashMap.get(key);
+	        	 _logger.debug(i + ": " + key + " = " + value);
+	        	++i;
+	        }
+        }
+        if (postNote != null && postNote.length() > 0)
+            _logger.debug(postNote);
+    }
+    
+	public static <T extends Comparable<? super T>> List<T> asSortedList(
+			Collection<T> c) {
+		List<T> list = new ArrayList<T>(c);
+		java.util.Collections.sort(list);
+		return list;
+	}
 
     public static String toHtml(String text) {
         text = text.replaceAll("\n", "<br/>");
