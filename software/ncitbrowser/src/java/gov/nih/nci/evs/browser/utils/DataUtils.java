@@ -661,7 +661,11 @@ public class DataUtils {
         if (_formalName2LocalNameHashMap == null) {
             setCodingSchemeMap();
         }
-        return (String) _formalName2LocalNameHashMap.get(key);
+
+        String value = (String) _formalName2LocalNameHashMap.get(key);
+//        Utils.debugHashMap("DataUtils.getFormalName: " + key, 
+//        	_formalName2LocalNameHashMap, "value: " + value);
+        return value;
     }
 
     public static String getFormalName(String key) {
@@ -673,7 +677,11 @@ public class DataUtils {
         }
         if (!_localName2FormalNameHashMap.containsKey(key))
             return null;
-        return (String) _localName2FormalNameHashMap.get(key);
+
+        String value = (String) _localName2FormalNameHashMap.get(key);
+//        Utils.debugHashMap("DataUtils.getFormalName: " + key, 
+//        	_localName2FormalNameHashMap, "value: " + value);
+        return value;
     }
 
     public static Vector<String> getSupportedAssociationNames(String key) {

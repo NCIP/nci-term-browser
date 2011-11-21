@@ -447,6 +447,7 @@ String hierarchy_version = info.version;
 
 String hierarchy_schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
+hierarchy_schema = DataUtils.getFormalName(hierarchy_schema);
 
 String localName = DataUtils.getLocalName(hierarchy_schema);
 String formalName = DataUtils.getFormalName(localName);
