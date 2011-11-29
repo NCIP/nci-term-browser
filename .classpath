@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="software/ncitbrowser/src/java"/>
-	<classpathentry kind="src" path="software/ncitbrowser/web/pages"/>
+	<classpathentry kind="src" path="software/ncitbrowser/web"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/acegi-security-1.0.4.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="software/ncitbrowser/lib/args4j-2.0.12.jar"/>
