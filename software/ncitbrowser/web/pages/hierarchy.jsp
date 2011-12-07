@@ -40,7 +40,6 @@
     var emptyRootDiv;
     var treeStatusDiv;
     var nodes = [];
-    var currOpener;
 
     function load(url,target) {
       if (target != '')
@@ -60,7 +59,6 @@
       treeStatusDiv = new YAHOO.widget.Module("treeStatus", {visible:true} );
       resetTreeStatus();
 
-      currOpener = opener;
       initTree();
     }
 
@@ -169,7 +167,7 @@
     function onClickTreeNode(ontology_node_id) {
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
       var ontology_version = document.forms["pg_form"].ontology_version.value;
-      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id, currOpener);
+      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id,top.opener);
     }
 
     function onClickViewEntireOntology(ontology_display_name) {
