@@ -327,6 +327,18 @@ public class ValueSetBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		System.out.println("checked_vocabularies: " + checked_vocabularies);
+		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
+			msg = "No value set definition is selected.";
+			request.getSession().setAttribute("message", msg);
+			return "message";
+		}
+
+		Vector selected_vocabularies = new Vector();
+		selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+
+
         String VSD_view = (String) request.getParameter("view");
         request.getSession().setAttribute("view", VSD_view);
         System.out.println("view: " + VSD_view);
@@ -372,46 +384,71 @@ public class ValueSetBean {
         LexEVSValueSetDefinitionServices vsd_service = null;
         vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
-
         if (matchText != null) matchText = matchText.trim();
+
 		if (selectValueSetSearchOption.compareTo("Code") == 0) {
             String uri = null;
 
 			try {
-
-				AbsoluteCodingSchemeVersionReferenceList csVersionList = ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
 				String versionTag = "PRODUCTION";
-				List list = vsd_service.listValueSetsWithEntityCode(matchText, null, csVersionList, versionTag);
+				if (checked_vocabularies != null) {
+					for (int k=0; k<selected_vocabularies.size(); k++) {
+						String vsd_name = (String) selected_vocabularies.elementAt(k);
+						String vsd_uri = DataUtils.getValueSetDefinitionURIByName(vsd_name);
 
-				if (list != null) {
-					System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");
+						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
+						if (vsd_uri != null) {
 
-					for (int j=0; j<list.size(); j++) {
-						uri = (String) list.get(j);
-						System.out.println(uri);
-
-						try {
-							ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
-							if (vsd == null) {
-								msg = "Unable to find any value set with URI " + selectURI + ".";
-								request.getSession().setAttribute("message", msg);
-								return "message";
+							AbsoluteCodingSchemeVersionReference acsvr = vsd_service.isEntityInValueSet(matchText,
+								  new URI(vsd_uri),
+								  null,
+								  versionTag);
+							if (acsvr != null) {
+								String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+								if (metadata != null) {
+									v.add(metadata);
+								}
 							}
-
-							String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-							if (metadata != null) {
-								v.add(metadata);
-							}
-
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							msg = "Unable to find any value set with URI " + selectURI + ".";
-							request.getSession().setAttribute("message", msg);
-							return "message";
 						}
-
 					}
-				}
+			    } else {
+				    AbsoluteCodingSchemeVersionReferenceList csVersionList = ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
+					List list = vsd_service.listValueSetsWithEntityCode(matchText, null, csVersionList, versionTag);
+					if (list != null) {
+						System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");
+
+						for (int j=0; j<list.size(); j++) {
+							uri = (String) list.get(j);
+							System.out.println(uri);
+
+							String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+							if (selected_vocabularies.contains(vsd_name)) {
+								try {
+									ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
+									if (vsd == null) {
+										msg = "Unable to find any value set with URI " + selectURI + ".";
+										request.getSession().setAttribute("message", msg);
+										return "message";
+									}
+
+									String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+									if (metadata != null) {
+										v.add(metadata);
+									}
+
+								} catch (Exception ex) {
+									ex.printStackTrace();
+									msg = "Unable to find any value set with URI " + selectURI + ".";
+									request.getSession().setAttribute("message", msg);
+									return "message";
+								}
+
+							}
+
+						}
+					}
+			    }
+
 
 				request.getSession().setAttribute("matched_vsds", v);
 				if (v.size() == 0) {
@@ -435,62 +472,71 @@ public class ValueSetBean {
 			return "message";
 
 		} else if (selectValueSetSearchOption.compareTo("Name") == 0) {
+
+
             String uri = null;
 			try {
 
 				Vector uri_vec = DataUtils.getValueSetURIs();
+
                 for (int i=0; i<uri_vec.size(); i++) {
 					uri = (String) uri_vec.elementAt(i);
-					AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
-					Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
-					if (cs_ref_vec != null) {
-						csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
-					}
 
-					ResolvedValueSetCodedNodeSet rvs_cns = null;
-					SortOptionList sortOptions = null;
-					LocalNameList propertyNames = null;
-					CodedNodeSet.PropertyType[] propertyTypes = null;
+					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+					if (checked_vocabularies == null || selected_vocabularies.contains(vsd_name)) {
 
-					try {
-						rvs_cns = vsd_service.getValueSetDefinitionEntitiesForTerm(matchText, algorithm, new URI(uri), csVersionList, null);
+System.out.println("Searching vsd_name ..." + vsd_name);
 
-						if (rvs_cns != null) {
-							CodedNodeSet cns = rvs_cns.getCodedNodeSet();
-							ResolvedConceptReferencesIterator itr = cns.resolve(sortOptions, propertyNames, propertyTypes);
-							if (itr != null && itr.numberRemaining() > 0) {
- 								AbsoluteCodingSchemeVersionReferenceList ref_list = rvs_cns.getCodingSchemeVersionRefList();
-								if (ref_list.getAbsoluteCodingSchemeVersionReferenceCount() > 0) {
-									try {
-										ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
-										if (vsd == null) {
+						AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+						Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
+						if (cs_ref_vec != null) {
+							csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
+						}
+
+						ResolvedValueSetCodedNodeSet rvs_cns = null;
+						SortOptionList sortOptions = null;
+						LocalNameList propertyNames = null;
+						CodedNodeSet.PropertyType[] propertyTypes = null;
+
+						try {
+							rvs_cns = vsd_service.getValueSetDefinitionEntitiesForTerm(matchText, algorithm, new URI(uri), csVersionList, null);
+
+							if (rvs_cns != null) {
+								CodedNodeSet cns = rvs_cns.getCodedNodeSet();
+								ResolvedConceptReferencesIterator itr = cns.resolve(sortOptions, propertyNames, propertyTypes);
+								if (itr != null && itr.numberRemaining() > 0) {
+									AbsoluteCodingSchemeVersionReferenceList ref_list = rvs_cns.getCodingSchemeVersionRefList();
+									if (ref_list.getAbsoluteCodingSchemeVersionReferenceCount() > 0) {
+										try {
+											ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
+											if (vsd == null) {
+												msg = "Unable to find any value set with name " + matchText + ".";
+												request.getSession().setAttribute("message", msg);
+												return "message";
+											}
+
+											String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+											if (metadata != null) {
+												v.add(metadata);
+											}
+
+										} catch (Exception ex) {
+											ex.printStackTrace();
 											msg = "Unable to find any value set with name " + matchText + ".";
 											request.getSession().setAttribute("message", msg);
 											return "message";
 										}
-
-
-										String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-										if (metadata != null) {
-											v.add(metadata);
-										}
-
-									} catch (Exception ex) {
-										ex.printStackTrace();
-										msg = "Unable to find any value set with name " + matchText + ".";
-										request.getSession().setAttribute("message", msg);
-										return "message";
 									}
 								}
-						    }
+							}
+
+
+						} catch (Exception ex) {
+							System.out.println("WARNING: getValueSetDefinitionEntitiesForTerm throws exception???");
+							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed.";
+							request.getSession().setAttribute("message", msg);
+							return "message";
 						}
-
-
-				    } catch (Exception ex) {
-					    System.out.println("WARNING: getValueSetDefinitionEntitiesForTerm throws exception???");
-						msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed.";
-						request.getSession().setAttribute("message", msg);
-						return "message";
 					}
 				}
 

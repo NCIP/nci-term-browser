@@ -3908,4 +3908,36 @@ public class SearchUtils {
 		return null;
 	}
 
+
+	public ResolvedConceptReferenceList searchByName(String scheme, String version, String matchText,
+	                                                 String algorithm) throws Exception {
+        CodedNodeSet cns = null;
+        ResolvedConceptReferenceList list = null;
+        try {
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            CodingSchemeVersionOrTag versionOrTag =
+                new CodingSchemeVersionOrTag();
+            if (version != null)
+                versionOrTag.setVersion(version);
+
+            if (lbSvc == null) {
+                _logger.warn("lbSvc = null");
+                return null;
+            }
+
+            cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+            if (cns == null) {
+                _logger.debug("cns = null");
+                return null;
+            }
+
+            boolean preferredOnly = false;
+			cns = cns.restrictToMatchingDesignations(matchText, preferredOnly, algorithm, null);
+			list = cns.resolveToList(null, null, null, -1);
+            System.out.println("number of matches: " + list.getResolvedConceptReferenceCount());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return list;
+	}
 }
