@@ -1150,8 +1150,9 @@ version: 2.9.0
                 e[e.length] = '<td id="' + this.getToggleElId();
                 e[e.length] = '" class="ygtvcell ';
                 e[e.length] = this.getStyle();
-                //DYEE: e[e.length] = '"><a href="#" class="ygtvspacer">&#160;</a></td>';
-                e[e.length] = '"><a href="#" class="ygtvspacer"></a></td>';
+                //DYEE1: e[e.length] = '"><a href="#" class="ygtvspacer">&#160;</a></td>';
+                //DYEE2: e[e.length] = '"><a href="#" class="ygtvspacer"></a></td>';
+                e[e.length] = '"></a></td>';
             }
             e[e.length] = '<td id="' + this.contentElId;
             e[e.length] = '" class="ygtvcell ';
