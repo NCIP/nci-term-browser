@@ -2480,8 +2480,9 @@ YAHOO.widget.Node.prototype = {
             sb[sb.length] = '<td id="' + this.getToggleElId();
             sb[sb.length] = '" class="ygtvcell ';
             sb[sb.length] = this.getStyle() ;
-            //YEED (Orig): sb[sb.length] = '"><a href="#" class="ygtvspacer">&#160;</a></td>';
-            sb[sb.length] = '"><a href="#" class="ygtvspacer"></a></td>'; // YEED: Removed extra space before expand/collapse icon.
+            //YEED 0: sb[sb.length] = '"><a href="#" class="ygtvspacer">&#160;</a></td>'; //YEED: Orig
+            //YEED 1: sb[sb.length] = '"><a href="#" class="ygtvspacer"></a></td>'; //YEED: Removed extra space before expand/collapse icon.
+            sb[sb.length] = '"></a></td>'; //YEED: Fixed multiple tabbing issue on each node.
         }
 
         sb[sb.length] = '<td id="' + this.contentElId;
