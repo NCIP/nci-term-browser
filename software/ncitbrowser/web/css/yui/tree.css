@@ -73,5 +73,6 @@
 .treemenu .ygtvchildren { }  
 .treemenu .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
 	font-size: 12px;
+	color: black; #YEED: Change tree row's font color
 }
 
