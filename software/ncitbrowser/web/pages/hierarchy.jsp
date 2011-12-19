@@ -7,6 +7,9 @@
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
+<!-- Note: This tree is used in Hierarchy (ex. NCIt home page) and 
+  View in Hierarchy (ex. Concept Detail page) features. -->
+
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/dom-min.js" ></script>

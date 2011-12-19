@@ -13,6 +13,8 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices" %>
 
+<!-- Note: This tree is used in Value Sets tab. -->
+
 <!--
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
