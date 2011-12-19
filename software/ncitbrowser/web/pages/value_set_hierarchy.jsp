@@ -11,6 +11,8 @@
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.apache.log4j.*" %>
 
+<!-- Note: This tree is used in concept detail page (see Value Sets link). -->
+
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/dom-min.js" ></script>
