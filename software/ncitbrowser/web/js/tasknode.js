@@ -238,7 +238,8 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
 
 
         sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
-        sb[sb.length] = '<tr>';
+        //YEED_ORIG: sb[sb.length] = '<tr>';
+        sb[sb.length] = '<tr class="ygtvrow">'; //YEED: Fixed mouse click event on Expand/Collapse icon.
         
         for (var i=0;i<this.depth;++i) {
             //sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
@@ -259,7 +260,9 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         //sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">&#160;';
         sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">';
         //sb[sb.length] = '</td>';
-        sb[sb.length] = '<div class="ygtvspacer"></div></td>';
+        
+        //YEED_ORIG: sb[sb.length] = '<div class="ygtvspacer"></div></td>';
+        sb[sb.length] = '<a class="ygtvspacer" href="#">&nbsp;</a></td>'; //YEED: Fixed keyboard mouse keys actions.  Moves focus up and down.
 
         // check box
         sb[sb.length] = '<td';
@@ -270,7 +273,9 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         sb[sb.length] = '<div class="ygtvspacer"></div></td>';
         
 
-        sb[sb.length] = '<td>';
+        //YEED_ORIG: sb[sb.length] = '<td>';
+        sb[sb.length] = '<td id="ygtvcontentel' + this.index + '" class="ygtvcell ygtvcontent">'; //YEED: Fixed recognizing mouse click action on label.
+        
         sb[sb.length] = '<a';
         sb[sb.length] = ' id="' + this.labelElId + '"';
         if (this.title) {
