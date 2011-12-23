@@ -573,14 +573,15 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
     for (int i=0; i<vsd_vec.size(); i++) {
       String vsd_str = (String) vsd_vec.elementAt(i);
       
-      
+System.out.println(vsd_str);      
+            
       Vector u = DataUtils.parseData(vsd_str);
       String name = (String) u.elementAt(0);
       String uri = (String) u.elementAt(1);
       String label = (String) u.elementAt(2);
       String cd = (String) u.elementAt(3);
       String sources = (String) u.elementAt(4);
-
+      String supportedsources = (String) u.elementAt(5);
 
     
       if (vsd_vec.size() > 1) {
@@ -652,7 +653,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 			 <%=cd%>
 		      </td>
 		      <td class="dataCellText">
-			 <%=sources%>
+			 <%=supportedsources%>
 		      </td>  
 
 <%		

@@ -328,7 +328,7 @@ public class ValueSetBean {
                 .getExternalContext().getRequest();
 
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
-		System.out.println("checked_vocabularies: " + checked_vocabularies);
+		//System.out.println("checked_vocabularies: " + checked_vocabularies);
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
@@ -341,7 +341,7 @@ public class ValueSetBean {
 
         String VSD_view = (String) request.getParameter("view");
         request.getSession().setAttribute("view", VSD_view);
-        System.out.println("view: " + VSD_view);
+        //System.out.println("view: " + VSD_view);
 
 
         String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
@@ -350,13 +350,13 @@ public class ValueSetBean {
         if (selectURI == null) {
 			selectURI = getSelectedValueSetURI();
 		}
-		System.out.println("(*) valueSetSearchAction selectURI: " + selectURI);
+		//System.out.println("(*) valueSetSearchAction selectURI: " + selectURI);
 
         String selectCodingScheme = getSelectedOntology(); //(String) request.getParameter("selectedOntology");
-        System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
+        //System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
         String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
 
-		System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
+		//System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
 
@@ -364,7 +364,6 @@ public class ValueSetBean {
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
         String matchText = (String) request.getParameter("matchText");
-
 
         if (selectValueSetSearchOption.compareTo("CodingScheme") != 0) {
 			matchText = matchText.trim();
@@ -419,7 +418,7 @@ public class ValueSetBean {
 
 						for (int j=0; j<list.size(); j++) {
 							uri = (String) list.get(j);
-							System.out.println(uri);
+							//System.out.println(uri);
 
 							String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
 							if (selected_vocabularies.contains(vsd_name)) {
@@ -473,7 +472,6 @@ public class ValueSetBean {
 
 		} else if (selectValueSetSearchOption.compareTo("Name") == 0) {
 
-
             String uri = null;
 			try {
 
@@ -484,8 +482,6 @@ public class ValueSetBean {
 
 					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
 					if (checked_vocabularies == null || selected_vocabularies.contains(vsd_name)) {
-
-System.out.println("Searching vsd_name ..." + vsd_name);
 
 						AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
 						Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
@@ -518,6 +514,7 @@ System.out.println("Searching vsd_name ..." + vsd_name);
 											String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
 											if (metadata != null) {
 												v.add(metadata);
+
 											}
 
 										} catch (Exception ex) {
@@ -544,6 +541,9 @@ System.out.println("Searching vsd_name ..." + vsd_name);
 
 				if (v.size() == 0) {
 					msg = "No match found.";
+
+					System.out.println("\t(*) " + msg);
+
 					request.getSession().setAttribute("message", msg);
 					return "message";
 				} else if (v.size() == 1) {
