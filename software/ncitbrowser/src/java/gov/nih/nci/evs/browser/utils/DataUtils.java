@@ -663,7 +663,7 @@ public class DataUtils {
         }
 
         String value = (String) _formalName2LocalNameHashMap.get(key);
-//        Utils.debugHashMap("DataUtils.getFormalName: " + key, 
+//        Utils.debugHashMap("DataUtils.getFormalName: " + key,
 //        	_formalName2LocalNameHashMap, "value: " + value);
         return value;
     }
@@ -679,7 +679,7 @@ public class DataUtils {
             return null;
 
         String value = (String) _localName2FormalNameHashMap.get(key);
-//        Utils.debugHashMap("DataUtils.getFormalName: " + key, 
+//        Utils.debugHashMap("DataUtils.getFormalName: " + key,
 //        	_localName2FormalNameHashMap, "value: " + value);
         return value;
     }
@@ -4521,6 +4521,7 @@ System.out.println("vsd_str " + vsd_str);
 		String description = "";
 		String domain = "";
 		String src_str = "";
+		String supportedSourceStr = "";
 
 		uri = vsd.getValueSetDefinitionURI();
 		name = vsd.getValueSetDefinitionName();
@@ -4556,7 +4557,22 @@ System.out.println("vsd_str " + vsd_str);
 			description = "<NO DESCRIPTION>";
 		}
 
-		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str;
+		//[GF#31718] Sources on value set home pages displaying wrong value.
+		Mappings mappings = vsd.getMappings();
+        java.util.Enumeration<? extends SupportedSource> supportedSourceEnum = mappings.enumerateSupportedSource();
+
+		while (supportedSourceEnum.hasMoreElements()) {
+			SupportedSource src = (SupportedSource) supportedSourceEnum.nextElement();
+			supportedSourceStr = supportedSourceStr + src.getContent() + ";";
+		}
+		if (supportedSourceStr.length() > 0) {
+			supportedSourceStr = supportedSourceStr.substring(0, supportedSourceStr.length()-1);
+		}
+		if (supportedSourceStr == null || supportedSourceStr.compareTo("") == 0) {
+			supportedSourceStr = "<NOT ASSIGNED>";
+		}
+
+		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str + "|" + supportedSourceStr;
 	}
 
 
