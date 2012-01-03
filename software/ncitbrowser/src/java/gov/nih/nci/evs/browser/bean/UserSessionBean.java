@@ -1605,6 +1605,8 @@ int selected_knt = 0;
             request.getSession().setAttribute("searchStatusBean", bean);
         }
 
+        String direction = (String) request.getParameter("direction");
+
         String matchType = (String) request.getParameter("adv_search_type");
 
         bean.setSearchType(matchType);
@@ -1614,6 +1616,8 @@ int selected_knt = 0;
 
 
         bean.setAlgorithm(matchAlgorithm);
+
+        bean.setDirection(direction);
 
         String source = (String) request.getParameter("adv_search_source");
         bean.setSelectedSource(source);
@@ -1770,8 +1774,6 @@ int selected_knt = 0;
 
 			System.out.println("relationship search: " + 	searchType);
 
-
-
             if (rel_search_association != null
                 && rel_search_association.compareTo("ALL") == 0)
                 rel_search_association = null;
@@ -1796,14 +1798,24 @@ int selected_knt = 0;
              */
 
             int search_direction = Constants.SEARCH_SOURCE;
+            if (direction != null && direction.compareToIgnoreCase("target") == 0) {
+				search_direction = Constants.SEARCH_TARGET;
+			}
 
             _logger.debug("AdvancedSearchAction search_direction "
                 + search_direction);
 
+/*
             searchFields =
                 SearchFields.setRelationship(schemes, matchText, searchTarget,
                     rel_search_association, rel_search_rela, source,
                     matchAlgorithm, maxToReturn);
+
+*/
+            searchFields =
+                SearchFields.setRelationship(schemes, matchText, searchTarget,
+                    rel_search_association, rel_search_rela, source,
+                    matchAlgorithm, direction, maxToReturn);
 
             key = searchFields.getKey();
 

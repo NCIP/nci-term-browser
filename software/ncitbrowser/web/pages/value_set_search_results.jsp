@@ -572,8 +572,6 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
   if (vsd_vec != null) {
     for (int i=0; i<vsd_vec.size(); i++) {
       String vsd_str = (String) vsd_vec.elementAt(i);
-      
-System.out.println(vsd_str);      
             
       Vector u = DataUtils.parseData(vsd_str);
       String name = (String) u.elementAt(0);
