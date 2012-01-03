@@ -73,6 +73,8 @@ public class SearchStatusBean extends Object {
     private String _codingSchemeName = null;
     private String _version = null;
 
+    private String _direction = null;
+
     public SearchStatusBean() {
     }
 
@@ -110,6 +112,15 @@ public class SearchStatusBean extends Object {
     public String getSelectedSearchOption() {
         return _selectedSearchOption;
     }
+
+    public void setDirection(String direction) {
+        _direction = direction;
+    }
+
+    public String getDirection() {
+        return _direction;
+    }
+
 
     public void searchOptionChanged(ValueChangeEvent event) {
         if (event.getNewValue() == null)

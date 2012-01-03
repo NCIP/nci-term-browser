@@ -56,10 +56,19 @@
       }
 
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
-      //var rel_search_rela = document.forms["advancedSearchForm"].rel_search_rela.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
       var _version = document.forms["advancedSearchForm"].version.value;
 
+
+      var direction = "";
+      var directionObj = document.forms["advancedSearchForm"].direction;
+      for (var i=0; i<directionObj.length; i++) {
+        if (directionObj[i].checked) {
+          direction = directionObj[i].value;
+        }
+      }
+      
+      
       window.location.href="/ncitbrowser/pages/advanced_search.jsf?refresh=1"
           + "&opt="+ selectSearchOption
           + "&text="+ text
@@ -67,7 +76,7 @@
           + "&sab="+ adv_search_source
           + "&prop="+ selectProperty
           + "&rel="+ rel_search_association
-          //+ "&rela="+ rel_search_rela
+          + "&dir="+ direction
           + "&dictionary="+ dictionary
           + "&version="+ _version;
     }
@@ -121,6 +130,7 @@
 
     String t = null;
     String selectSearchOption = null;
+    String direction = null;
 
     if (refresh_page) {
         // Note: Called when the user selects "Search By" fields.
@@ -129,6 +139,8 @@
         adv_search_algorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
         adv_search_source = HTTPUtils.cleanXSS((String) request.getParameter("sab"));
         rel_search_association = HTTPUtils.cleanXSS((String) request.getParameter("rel"));
+        direction = HTTPUtils.cleanXSS((String) request.getParameter("dir"));
+        
         rel_search_rela = HTTPUtils.cleanXSS((String) request.getParameter("rela"));
         selectProperty = HTTPUtils.cleanXSS((String) request.getParameter("prop"));
         
@@ -138,11 +150,13 @@
     } else {
         selectSearchOption = (String) request.getSession().getAttribute("selectSearchOption");
         search_string = (String) request.getSession().getAttribute("matchText");
+        direction = (String) request.getSession().getAttribute("direction");
     }
 
     if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
         selectSearchOption = "Property";
     }
+    if (direction == null) direction = "source";
 
     SearchStatusBean bean = null;
     String message = (String) request.getAttribute("message");
@@ -152,15 +166,6 @@
 
 
     if (!refresh_page || message != null) {
-        /*
-        // Note: Called when search contains no match.
-        Object bean_obj = FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get("searchStatusBean");
-        if (bean_obj == null) {
-            //bean_obj = request.getAttribute("searchStatusBean");
-            
-            bean_obj = request.getSession().getAttribute("searchStatusBean");
-        }
-        */
         
         Object bean_obj = request.getSession().getAttribute("searchStatusBean");
 
@@ -187,6 +192,8 @@
             rel_search_association = bean.getSelectedAssociation();
             rel_search_rela = bean.getSelectedRELA();
             
+            direction = bean.getDirection();
+            
             //KLO
             adv_search_type = bean.getSearchType();
             selectSearchOption = adv_search_type;
@@ -211,6 +218,7 @@
     if (adv_search_source == null) adv_search_source = "ALL";
     if (search_string == null) search_string = "";
     if (adv_search_algorithm == null) adv_search_algorithm = "exactMatch";
+    if (direction == null) direction = "source";
 
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";
@@ -235,6 +243,15 @@
       check_r2 = "checked";
       
 
+
+    String check_source = "", check_target = "";
+    direction = (String) request.getSession().getAttribute("direction");
+    if (direction == null || direction.compareTo("source") == 0)
+        check_source = "checked";
+    else if (direction.compareTo("target") == 0)
+        check_target= "checked";
+        
+        
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
@@ -335,6 +352,9 @@
                   <% if (selectSearchOption.equals("Property")) { %>
                     <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=HTTPUtils.cleanXSS(rel_search_association)%>">
                     <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=HTTPUtils.cleanXSS(rel_search_rela)%>">
+                    <input type="hidden" name="direction" id="direction" value="<%=HTTPUtils.cleanXSS(direction)%>">
+
+
                     <tr>
                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                       <td>
@@ -369,10 +389,13 @@
 
                   <% } else if (selectSearchOption.equals("Relationship")) { %>
                     <input type="hidden" name="selectProperty" id="selectProperty" value="<%=HTTPUtils.cleanXSS(selectProperty)%>">
+
                     <tr>
-                      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                      <td>&nbsp;&nbsp;&nbsp;</td>
                       <td>
+
                         <h:outputLabel id="rel_search_associationLabel" value="Relationship" styleClass="textbody">
+                        
                           <select id="rel_search_association" name="rel_search_association" size="1">
                           <%
                             t = "ALL";
@@ -413,10 +436,26 @@ System.out.println("adv_search_version: " + adv_search_version);
                         </h:outputLabel>
                       </td>
                     </tr>
+                    
+                    
+                  <tr>
+                      <td>&nbsp;&nbsp;&nbsp;</td>
+                      <td>
+                     <h:outputLabel id="rel_search_directionLabel" value="Direction" styleClass="textbody">
+                        <input type="radio" id="direction" name="direction" value="source" alt="Source" <%=check_source%> tabindex="5">Source&nbsp;
+                        <input type="radio" id="direction" name="direction" value="target" alt="Target" <%=check_target%> tabindex="5">Target&nbsp;
+                     </h:outputLabel> 
+                  </td>
+                </tr>                    
+                    
+                    
+                    
                   <% } else { %>
                     <input type="hidden" name="selectProperty" id="selectProperty" value="<%=HTTPUtils.cleanXSS(selectProperty)%>">
                     <input type="hidden" name="rel_search_association" id="rel_search_association" value="<%=HTTPUtils.cleanXSS(rel_search_association)%>">
                     <input type="hidden" name="rel_search_rela" id="rel_search_rela" value="<%=HTTPUtils.cleanXSS(rel_search_rela)%>">
+                    
+                    <input type="hidden" name="direction" id="direction" value="<%=HTTPUtils.cleanXSS(direction)%>">
 
                   <% }%>
 
