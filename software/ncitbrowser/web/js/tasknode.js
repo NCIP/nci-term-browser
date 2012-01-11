@@ -238,8 +238,11 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
 
 
         sb[sb.length] = '<table border="0" cellpadding="0" cellspacing="0">';
+        
+        //YEED: Fixed mouse click event on Expand/Collapse icon by replacing
+        //YEED:   the following line:
         //YEED_ORIG: sb[sb.length] = '<tr>';
-        sb[sb.length] = '<tr class="ygtvrow">'; //YEED: Fixed mouse click event on Expand/Collapse icon.
+        sb[sb.length] = '<tr class="ygtvrow">'; //YEED_FIX
         
         for (var i=0;i<this.depth;++i) {
             //sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
@@ -261,8 +264,10 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         sb[sb.length] = ' onclick="javascript:' + this.getToggleLink() + '">';
         //sb[sb.length] = '</td>';
         
+        //YEED: Fixed recognizing keyboard key events related to moving
+        //YEED:   the focus up and down by replacing the following line:
         //YEED_ORIG: sb[sb.length] = '<div class="ygtvspacer"></div></td>';
-        sb[sb.length] = '<a class="ygtvspacer" href="#">&nbsp;</a></td>'; //YEED: Fixed keyboard mouse keys actions.  Moves focus up and down.
+        sb[sb.length] = '<a class="ygtvspacer" href="#">&nbsp;</a></td>'; //YEED_FIX
 
         // check box
         sb[sb.length] = '<td';
@@ -272,9 +277,10 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         //sb[sb.length] = '&#160;</td>';
         sb[sb.length] = '<div class="ygtvspacer"></div></td>';
         
-
+        //YEED: Fixed recognizing mouse click event on label by replacing 
+        //YEED:   the following line:
         //YEED_ORIG: sb[sb.length] = '<td>';
-        sb[sb.length] = '<td id="ygtvcontentel' + this.index + '" class="ygtvcell ygtvcontent">'; //YEED: Fixed recognizing mouse click action on label.
+        sb[sb.length] = '<td id="ygtvcontentel' + this.index + '" class="ygtvcell ygtvcontent">'; //YEED_FIX
         
         sb[sb.length] = '<a';
         sb[sb.length] = ' id="' + this.labelElId + '"';
@@ -284,7 +290,12 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         sb[sb.length] = ' class="' + this.labelStyle + '"';
         sb[sb.length] = ' href="' + this.href + '"';
         sb[sb.length] = ' target="' + this.target + '"';
-        sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
+        
+        //YEED: Fix mouse click event on the value set tree label
+        //YEED:   (displays the value set home page) by commenting
+        //YEED:   the following line:
+        //sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
+        
         if (this.hasChildren(true)) {
             sb[sb.length] = ' onmouseover="document.getElementById(\'';
             sb[sb.length] = this.getToggleElId() + '\').className=';
