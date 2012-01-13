@@ -299,8 +299,11 @@ body {
         tree = new YAHOO.widget.TreeView("treecontainer");
 	tree.setNodesProperty('propagateHighlightUp',true);
 	tree.setNodesProperty('propagateHighlightDown',true);
-	
-	tree.subscribe('clickEvent',tree.onEventToggleHighlight);
+	//YEED: Commented the following line.  Instead of opening the folder 
+	//  when the user selected the label of the value set tree node, the 
+	//  following error message is displayed:
+    //    * HTTP Status 404 - /ncitbrowser/pages/null
+	//YEED: tree.subscribe('clickEvent',tree.onEventToggleHighlight);
 	tree.subscribe('keydown',tree._onKeyDownEvent);
 		
 	
