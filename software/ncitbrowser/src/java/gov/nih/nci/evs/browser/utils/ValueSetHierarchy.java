@@ -1552,6 +1552,10 @@ public class ValueSetHierarchy {
 
 
 	public static HashMap getRootValueSets(String scheme) {
+
+System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
+
+
 		if (DataUtils._codingSchemeName2URIHashMap == null) DataUtils.initializeCodingSchemeMap();
 		String formalName = DataUtils.getFormalName(scheme);
 		String codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
@@ -1663,6 +1667,10 @@ public class ValueSetHierarchy {
 					}
 
 					TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), name);
+
+
+System.out.println("Adding VSD " + vsd.getValueSetDefinitionURI() + " (" + name + ")");
+
 					ti._expandable = true;
 					children.add(ti);
 				}
@@ -1682,6 +1690,10 @@ public class ValueSetHierarchy {
 
 	public static HashMap getRootValueSets(boolean bySource) {
 		if (!bySource) return getRootValueSets();
+
+
+System.out.println("calling getRootValueSets " + bySource);
+
 
 		HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_vec = new Vector();
@@ -2663,6 +2675,235 @@ try {
 		return hmap;
 
     }
+
+
+
+    // To be implemented
+
+    public static TreeItem getVSDChildNodeBySource(ValueSetDefinition vsd) {
+		TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), vsd.getValueSetDefinitionName());
+		List <TreeItem> children = new ArrayList();
+
+		Vector sub_vsd_vec = getVSDChildrenNodesBySource(vsd.getValueSetDefinitionURI());
+		if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
+			ti._expandable = true;
+
+			for (int i=0; i<sub_vsd_vec.size(); i++) {
+				ValueSetDefinition child_vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(i);
+				children.add(getVSDChildNodeBySource(child_vsd));
+			}
+		}
+		return ti;
+	}
+
+
+
+
+    public static TreeItem getSourceValueSetTreeBranch(ValueSetDefinition vsd) {
+		TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), vsd.getValueSetDefinitionName());
+		ti._expandable = false;
+		List <TreeItem> children = new ArrayList();
+		Vector sub_vsd_vec = getVSDChildrenNodesBySource(vsd.getValueSetDefinitionURI());
+		if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
+			//ti._expandable = true;
+			for (int j=0; j<sub_vsd_vec.size(); j++) {
+				ValueSetDefinition child_vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(j);
+				TreeItem child = getSourceValueSetTreeBranch(child_vsd);
+				children.add(child);
+				ti._expandable = true;
+			}
+		}
+	    SortUtils.quickSort(children);
+	    ti.addAll("[inverse_is_a]", children);
+	    return ti;
+	}
+
+
+
+    public static HashMap getSourceValueSetTree(String scheme, String version) {
+        ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
+        if (rcrl == null) {
+			return null;
+		}
+
+		TreeItem super_root = new TreeItem("<Root>", "Root node");
+
+		List <TreeItem> branch = new ArrayList();
+		//HashSet hset = new HashSet();
+
+        //List <TreeItem> children = new ArrayList();
+        for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
+			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+			String src = rcr.getConceptCode();
+
+			Vector vsd_root_vec = getVSDRootsBySource(src);
+			if (vsd_root_vec != null) {
+				for (int j=0; j<vsd_root_vec.size(); j++) {
+					ValueSetDefinition root_vsd = (ValueSetDefinition) vsd_root_vec.elementAt(j);
+					TreeItem root = new TreeItem(root_vsd.getValueSetDefinitionURI(), root_vsd.getValueSetDefinitionName());
+					root._expandable = false;
+
+					List <TreeItem> children = new ArrayList();
+					Vector sub_vsd_vec = getVSDChildrenNodesBySource(root_vsd.getValueSetDefinitionURI());
+					if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
+						for (int k=0; k<sub_vsd_vec.size(); k++) {
+							ValueSetDefinition child_vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(k);
+							TreeItem child = getSourceValueSetTreeBranch(child_vsd);
+							children.add(child);
+							root._expandable = true;
+						}
+					}
+					SortUtils.quickSort(children);
+					root.addAll("[inverse_is_a]", children);
+	                branch.add(root);
+	                super_root._expandable = true;
+				}
+			}
+		}
+		SortUtils.quickSort(branch);
+		super_root.addAll("[inverse_is_a]", branch);
+		HashMap hmap = new HashMap();
+		hmap.put("<Root>", super_root);
+		//hset.clear();
+        return hmap;
+	}
+
+
+
+
+/*
+        List list = null;// new ArrayList();
+        String key = scheme + "$" + version + "$valueset" + "$root";
+        JSONArray nodesArray = null;
+
+
+        String retval = DataUtils.getCodingSchemeName(scheme);
+        if (retval != null) {
+            scheme = retval;
+        }
+
+        if (fromCache) {
+            Element element = _cache.get(key);
+            if (element != null) {
+                nodesArray = (JSONArray) element.getValue();
+            }
+        }
+
+        if (nodesArray == null) {
+            _logger.debug("Not in cache -- calling ValueSetHierarchy.getRootValueSets " + scheme);
+            try {
+                HashMap hmap = ValueSetHierarchy.getRootValueSets(scheme);
+                TreeItem root = (TreeItem) hmap.get("<Root>");
+                nodesArray = new JSONArray();
+
+				for (String association : root._assocToChildMap.keySet()) {
+
+					 List<TreeItem> children = root._assocToChildMap.get(association);
+					 for (TreeItem childItem : children) {
+
+						 String code = childItem._code;
+						 String name = childItem._text;
+
+						 int childCount = 0;
+						 if (childItem._expandable) childCount = 1;
+
+						 //childItem._text = code + " (" + name + ")";
+
+						 try {
+							 JSONObject nodeObject = new JSONObject();
+							 //nodeObject.put(ONTOLOGY_NODE_SCHEME, scheme);
+
+							 //nodeObject.put(ONTOLOGY_NODE_ID, code);
+
+							 nodeObject.put(ONTOLOGY_NODE_ID, scheme + "$" + code);
+
+							 nodeObject.put(ONTOLOGY_NODE_NAME, name);
+							 nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
+							 nodeObject.put(CHILDREN_NODES, new JSONArray());
+							 nodesArray.put(nodeObject);
+
+						 } catch (Exception ex) {
+							 ex.printStackTrace();
+						 }
+					 }
+                }
+
+                //nodeArray = list2JSONArray(scheme, list);
+
+                if (fromCache) {
+                    Element element = new Element(key, nodesArray);
+                    _cache.put(element);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            _logger.debug("Retrieved from cache.");
+        }
+        return nodesArray;
+*/
+
+
+
+    public static HashMap getCodingSchemeValueSetTree(String scheme, String version) {
+
+
+System.out.println("getCodingSchemeValueSetTree: scheme " + scheme);
+System.out.println("getCodingSchemeValueSetTree: version " + version);
+
+
+
+		List <TreeItem> branch = new ArrayList();
+
+		TreeItem super_root = new TreeItem("<Root>", "Root node");
+
+
+System.out.println("calling getRootValueSets: scheme " + scheme);
+
+
+		HashMap hmap = getRootValueSets(scheme);
+		TreeItem root = (TreeItem) hmap.get("<Root>");
+		JSONArray nodesArray = new JSONArray();
+
+		for (String association : root._assocToChildMap.keySet()) {
+			 List<TreeItem> children = super_root._assocToChildMap.get(association);
+			 for (TreeItem childItem : children) {
+				 String code = childItem._code;
+				 String name = childItem._text;
+				 TreeItem cs_vs_root = new TreeItem(code, name);
+
+System.out.println("CS VS tree root code: " + code);
+System.out.println("CS VS tree root name: " + name);
+
+   				 cs_vs_root._expandable = true;
+				 List <TreeItem> cs_vs_root_children = new ArrayList();
+
+				 /*
+
+				 Vector sub_vsd_vec = getVSDChildrenNodesBySource(root_vsd.getValueSetDefinitionURI());
+				 if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
+					for (int k=0; k<sub_vsd_vec.size(); k++) {
+						ValueSetDefinition child_vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(k);
+						TreeItem child = getSourceValueSetTreeBranch(child_vsd);
+						children.add(child);
+						root._expandable = true;
+					}
+				 }
+				 */
+				 SortUtils.quickSort(cs_vs_root_children);
+				 cs_vs_root.addAll("[inverse_is_a]", cs_vs_root_children);
+
+				 branch.add(cs_vs_root);
+				 super_root._expandable = true;
+			}
+		}
+		SortUtils.quickSort(branch);
+		super_root.addAll("[inverse_is_a]", branch);
+		hmap = new HashMap();
+		hmap.put("<Root>", super_root);
+		//hset.clear();
+        return hmap;
+	}
 
 
 

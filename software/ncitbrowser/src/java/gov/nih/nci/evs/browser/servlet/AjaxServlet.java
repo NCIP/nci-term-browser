@@ -335,6 +335,58 @@ public final class AjaxServlet extends HttpServlet {
                     + (System.currentTimeMillis() - ms));
             }
 
+
+        } else if (action.equals("expand_entire_vs_tree")) {
+            if (node_id != null && ontology_display_name != null) {
+                response.setContentType("text/html");
+                response.setHeader("Cache-Control", "no-cache");
+                JSONObject json = new JSONObject();
+                JSONArray nodesArray = null;
+
+                try {
+                    nodesArray =
+                        CacheController.getInstance().getSourceValueSetTree(
+                            ontology_display_name, ontology_version, true);
+                    if (nodesArray != null) {
+						System.out.println("expand_entire_vs_tree nodesArray != null");
+                        json.put("root_nodes", nodesArray);
+                    } else {
+						System.out.println("expand_entire_vs_tree nodesArray == null???");
+					}
+
+                } catch (Exception e) {
+                }
+                response.getWriter().write(json.toString());
+                _logger.debug("Run time (milliseconds): "
+                    + (System.currentTimeMillis() - ms));
+            }
+
+        } else if (action.equals("expand_entire_cs_vs_tree")) {
+            if (node_id != null && ontology_display_name != null) {
+                response.setContentType("text/html");
+                response.setHeader("Cache-Control", "no-cache");
+                JSONObject json = new JSONObject();
+                JSONArray nodesArray = null;
+
+                try {
+                    nodesArray =
+                        CacheController.getInstance().getCodingSchemeValueSetTree(
+                            ontology_display_name, ontology_version, true);
+                    if (nodesArray != null) {
+						System.out.println("expand_entire_vs_tree nodesArray != null");
+                        json.put("root_nodes", nodesArray);
+                    } else {
+						System.out.println("expand_entire_vs_tree nodesArray == null???");
+					}
+
+                } catch (Exception e) {
+                }
+                response.getWriter().write(json.toString());
+                _logger.debug("Run time (milliseconds): "
+                    + (System.currentTimeMillis() - ms));
+            }
+
+
         } else if (action.equals("build_cs_vs_tree")) {
 
             response.setContentType("text/html");
@@ -366,8 +418,8 @@ public final class AjaxServlet extends HttpServlet {
 			JSONObject json = new JSONObject();
 			JSONArray nodesArray = null;
 
-String vsd_uri = ValueSetHierarchy.getValueSetURI(node_id);
-node_id = ValueSetHierarchy.getCodingSchemeName(node_id);
+			String vsd_uri = ValueSetHierarchy.getValueSetURI(node_id);
+			node_id = ValueSetHierarchy.getCodingSchemeName(node_id);
 
             //if (node_id != null && ontology_display_name != null) {
 			if (node_id != null) {

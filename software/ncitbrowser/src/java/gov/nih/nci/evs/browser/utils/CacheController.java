@@ -236,6 +236,11 @@ public class CacheController {
             _logger.debug("Not in cache -- calling getSubValueSets ");
 
             map = ValueSetHierarchy.getSubValueSets(scheme, code);
+
+System.out.println("****************** CacheController calling ValueSetHierarchy.getSubValueSets scheme: " + scheme);
+System.out.println("****************** CacheController calling ValueSetHierarchy.getSubValueSets code: " + code);
+
+
             nodeArray = HashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -491,24 +496,6 @@ public class CacheController {
 						 String code = childItem._code;
 						 String name = childItem._text;
 
-/*
-						 int childCount = 0;
-						 if (childItem._expandable) childCount = 1;
-
-						 try {
-							 JSONObject nodeObject = new JSONObject();
-							 nodeObject.put(ONTOLOGY_NODE_ID, code);
-							 nodeObject.put(ONTOLOGY_NODE_NAME, name);
-							 nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
-							 nodeObject.put(CHILDREN_NODES, new JSONArray());
-							 nodesArray.put(nodeObject);
-
-						 } catch (Exception ex) {
-							 ex.printStackTrace();
-						 }
-
-*/
-
                          if (childItem._expandable) {
 
 							 int childCount = 1;
@@ -749,7 +736,6 @@ public class CacheController {
             Object[] objs = keyset.toArray();
             String code = (String) objs[0];
 
-
             TreeItem ti = (TreeItem) hmap.get(code);
             for (String association : ti._assocToChildMap.keySet()) {
 
@@ -930,6 +916,7 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
      * } } } return nodesArray; }
      */
 
+
     private int findFocusNodePosition(String node_id, List<TreeItem> children) {
         for (int i = 0; i < children.size(); i++) {
             TreeItem childItem = (TreeItem) children.get(i);
@@ -939,6 +926,7 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
         return -1;
     }
 
+    // node_id: search_tree target (highlighted node)
     private JSONArray getNodesArray(String node_id, TreeItem ti) {
         JSONArray nodesArray = new JSONArray();
         for (String association : ti._assocToChildMap.keySet()) {
@@ -1158,9 +1146,130 @@ System.out.println("Exception thrown by HashMap2JSONArray???");
     }
 
 
+
+
+
     private static String getTreeKey(String codingScheme, String version, String code) {
         return String.valueOf("Tree".hashCode() + codingScheme.hashCode()
             + version.hashCode()
             + code.hashCode());
     }
+
+
+
+
+
+
+
+
+    private JSONArray getNodesArray(TreeItem ti) {
+        JSONArray nodesArray = new JSONArray();
+        for (String association : ti._assocToChildMap.keySet()) {
+            List<TreeItem> children = ti._assocToChildMap.get(association);
+            SortUtils.quickSort(children);
+
+			for (int i = 0; i < children.size(); i++) {
+				TreeItem childItem = (TreeItem) children.get(i);
+				int knt = 0;
+				if (childItem._expandable) {
+					knt = 1;
+				}
+				JSONObject nodeObject = new JSONObject();
+				try {
+					nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+					nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
+					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
+					nodeObject.put(CHILDREN_NODES, getNodesArray(childItem));
+					nodesArray.put(nodeObject);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
+        return nodesArray;
+    }
+
+
+
+    public JSONArray getSourceValueSetTree (String scheme, String version, boolean fromCache) {
+        List list = null;// new ArrayList();
+        String key = "src_vs_tree";
+        JSONArray nodeArray = null;
+
+        String retval = DataUtils.getCodingSchemeName(scheme);
+        if (retval != null) {
+            scheme = retval;
+            version = DataUtils.key2CodingSchemeVersion(scheme);
+        }
+
+        if (fromCache) {
+            Element element = _cache.get(key);
+            if (element != null) {
+                nodeArray = (JSONArray) element.getValue();
+                _logger.debug("Retrieved source value set tree from cache.");
+                return nodeArray;
+            }
+        }
+
+        HashMap map = null;
+		_logger.debug("Not in cache -- calling getSubValueSets ");
+
+		map = ValueSetHierarchy.getSourceValueSetTree(scheme, version);
+		TreeItem root = (TreeItem) map.get("<Root>");
+		nodeArray = getNodesArray(root);
+
+		if (nodeArray != null && fromCache) {
+			try {
+				Element element = new Element(key, nodeArray);
+				_cache.put(element);
+			} catch (Exception ex) {
+                ex.printStackTrace();
+			}
+		}
+
+        return nodeArray;
+	}
+
+
+
+    public JSONArray getCodingSchemeValueSetTree (String scheme, String version, boolean fromCache) {
+        List list = null;// new ArrayList();
+        String key = "cs_vs_tree";
+        JSONArray nodeArray = null;
+
+        String retval = DataUtils.getCodingSchemeName(scheme);
+        if (retval != null) {
+            scheme = retval;
+            version = DataUtils.key2CodingSchemeVersion(scheme);
+        }
+
+        if (fromCache) {
+            Element element = _cache.get(key);
+            if (element != null) {
+                nodeArray = (JSONArray) element.getValue();
+                _logger.debug("Retrieved source value set tree from cache.");
+                return nodeArray;
+            }
+        }
+
+        HashMap map = null;
+		_logger.debug("Not in cache -- calling getCodingSchemeValueSetTree ");
+
+		map = ValueSetHierarchy.getCodingSchemeValueSetTree(scheme, version);
+		TreeItem root = (TreeItem) map.get("<Root>");
+		nodeArray = getNodesArray(root);
+
+		if (nodeArray != null && fromCache) {
+			try {
+				Element element = new Element(key, nodeArray);
+				_cache.put(element);
+			} catch (Exception ex) {
+                ex.printStackTrace();
+			}
+		}
+
+        return nodeArray;
+	}
+
+
 }
