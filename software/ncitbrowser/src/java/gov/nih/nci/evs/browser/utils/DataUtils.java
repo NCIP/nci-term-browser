@@ -131,7 +131,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = false;
+    private static boolean initializeValueSetHierarchy = true;
 
     // ==================================================================================
     // For customized query use

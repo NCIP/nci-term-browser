@@ -150,7 +150,8 @@ body {
 
 	//handler for expanding all nodes
 	YAHOO.util.Event.on("expand_all", "click", function(e) {
-		tree.expandAll();
+	        expandEntireTree();
+		//tree.expandAll();
 		//YAHOO.util.Event.preventDefault(e);
 	});
 	
@@ -559,6 +560,65 @@ body {
          addTreeBranch(ontology_node_id, newNode, childnodeInfo);
       }
     }
+    
+    
+    function expandEntireTree() {
+        tree = new YAHOO.widget.TreeView("treecontainer");
+        //tree.draw();
+        
+        var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
+        var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
+        
+        var handleBuildTreeSuccess = function(o) {
+
+        var respTxt = o.responseText;
+        var respObj = eval('(' + respTxt + ')');
+        if ( typeof(respObj) != "undefined") {
+        
+             if ( typeof(respObj.root_nodes) != "undefined") {
+             
+                    //alert(respObj.root_nodes.length);
+            
+                    var root = tree.getRoot();  
+		    if (respObj.root_nodes.length == 0) {
+		      //showEmptyRoot();
+		    } else {
+
+
+	              
+
+		      for (var i=0; i < respObj.root_nodes.length; i++) {
+			 var nodeInfo = respObj.root_nodes[i];
+	                 //alert("calling addTreeBranch ");
+
+			 addTreeBranch(ontology_node_id, root, nodeInfo);
+		      }
+		    }
+              }
+        }
+      }
+
+      var handleBuildTreeFailure = function(o) {
+        alert('responseFailure: ' + o.statusText);
+      }
+
+      var buildTreeCallback =
+      {
+        success:handleBuildTreeSuccess,
+        failure:handleBuildTreeFailure
+      };
+
+      if (ontology_display_name!='') {
+        var ontology_source = null;
+        var ontology_version = document.forms["pg_form"].ontology_version.value;
+        var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_entire_cs_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);
+
+      }
+    }    
+    
+    
+    
+    
     YAHOO.util.Event.addListener(window, "load", init);
     
     YAHOO.util.Event.onDOMReady(initTree);
