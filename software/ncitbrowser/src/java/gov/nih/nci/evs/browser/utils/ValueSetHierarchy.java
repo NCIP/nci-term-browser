@@ -2737,8 +2737,6 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 				 String code = childItem._code;
 				 String name = childItem._text;
 
-				 System.out.println("(*) SRC VIEW ROOT: " + name + " " + code);
-
 				 TreeItem top_node = new TreeItem(childItem._code, childItem._text);
 				 top_node._expandable = false;
 				 List <TreeItem> top_branch = new ArrayList();
@@ -2776,7 +2774,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 
     public static TreeItem getCodingSchemeValueSetTreeBranch(String scheme, String code, String name) {
 
-		System.out.println("CS ValueSetTreeBranch " + scheme + " VSD: " + code + " " + name);
+		//System.out.println("CS ValueSetTreeBranch " + scheme + " VSD: " + code + " " + name);
 
 		TreeItem ti = new TreeItem(code, name);
 		ti._expandable = false;
@@ -2797,6 +2795,32 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 	    SortUtils.quickSort(children);
 	    ti.addAll("[inverse_is_a]", children);
 	    return ti;
+	}
+
+	public static List SortCSVSDTree(List <TreeItem> branch) {
+		if (branch == null) return null;
+		if (branch.size() == 1) return null;
+
+		List <TreeItem> new_branch = new ArrayList();
+
+		TreeItem ncit_node = null;
+		for (int i=0; i<branch.size(); i++) {
+			TreeItem ti = (TreeItem) branch.get(i);
+			if (ti._text.compareTo("NCI Thesaurus") == 0) {
+				ncit_node = ti;
+				new_branch.add(ti);
+				break;
+			}
+		}
+
+		for (int i=0; i<branch.size(); i++) {
+			TreeItem ti = (TreeItem) branch.get(i);
+			if (ti._text.compareTo("NCI Thesaurus") != 0) {
+				new_branch.add(ti);
+			}
+		}
+
+		return new_branch;
 	}
 
 
@@ -2832,14 +2856,9 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 						     String vs_code = child_item._code;
 						     String vs_name = child_item._text;
 
-						     // debugging...
-						     if (vs_name.compareTo("FDA SPL Terminology") == 0) {
-
-								 TreeItem child = getCodingSchemeValueSetTreeBranch(node_id, vs_code, vs_name);
-								 cs_vs_root_children.add(child);
-								 cs_vs_root._expandable = true;
-
-						     }
+							 TreeItem child = getCodingSchemeValueSetTreeBranch(node_id, vs_code, vs_name);
+							 cs_vs_root_children.add(child);
+							 cs_vs_root._expandable = true;
 					     }
 				     }
 				 } catch (Exception ex) {
@@ -2854,6 +2873,9 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 			}
 		}
 		SortUtils.quickSort(branch);
+		// bubble NCI Thesaurus node to the top
+		branch = SortCSVSDTree(branch);
+
 		super_root.addAll("[inverse_is_a]", branch);
 		hmap = new HashMap();
 		hmap.put("<Root>", super_root);
