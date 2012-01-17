@@ -610,6 +610,7 @@ body {
 
       if (ontology_display_name!='') {
         var ontology_source = null;
+        var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
         var ontology_version = document.forms["pg_form"].ontology_version.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_entire_cs_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);
 
