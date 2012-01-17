@@ -362,7 +362,7 @@ public final class AjaxServlet extends HttpServlet {
             }
 
         } else if (action.equals("expand_entire_cs_vs_tree")) {
-            if (node_id != null && ontology_display_name != null) {
+            //if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
@@ -384,7 +384,7 @@ public final class AjaxServlet extends HttpServlet {
                 response.getWriter().write(json.toString());
                 _logger.debug("Run time (milliseconds): "
                     + (System.currentTimeMillis() - ms));
-            }
+            //}
 
 
         } else if (action.equals("build_cs_vs_tree")) {

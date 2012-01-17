@@ -127,6 +127,10 @@ public class ValueSetHierarchy {
     public static HashMap _cs2vsdURIs_map = null;
     public static HashMap _subValueSet_hmap = null;
 
+
+    public static HashMap vsdURI2CodingSchemeURNs = null;
+
+
     public ValueSetHierarchy() {
         SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
         System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
@@ -1417,7 +1421,16 @@ public class ValueSetHierarchy {
 
 
 
+
     public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
+		if (vsdURI2CodingSchemeURNs == null) {
+			vsdURI2CodingSchemeURNs = new HashMap();
+		}
+
+		if (vsdURI2CodingSchemeURNs.containsKey(uri)) {
+			return (Vector) vsdURI2CodingSchemeURNs.get(uri);
+		}
+
 		try {
 			java.net.URI valueSetDefinitionURI = new URI(uri);
 			Vector v = new Vector();
@@ -1431,6 +1444,7 @@ public class ValueSetHierarchy {
 					for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
 						v.add(ref.getCodingSchemeURN());
 					}
+					vsdURI2CodingSchemeURNs.put(uri, v);
 					return SortUtils.quickSort(v);
 			    } else {
 					System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition returns null (URI: "
@@ -1668,9 +1682,6 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 
 					TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), name);
 
-
-System.out.println("Adding VSD " + vsd.getValueSetDefinitionURI() + " (" + name + ")");
-
 					ti._expandable = true;
 					children.add(ti);
 				}
@@ -1690,10 +1701,6 @@ System.out.println("Adding VSD " + vsd.getValueSetDefinitionURI() + " (" + name 
 
 	public static HashMap getRootValueSets(boolean bySource) {
 		if (!bySource) return getRootValueSets();
-
-
-System.out.println("calling getRootValueSets " + bySource);
-
 
 		HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_vec = new Vector();
@@ -1915,6 +1922,7 @@ System.out.println("calling getRootValueSets " + bySource);
 		}
 		root_cs_vec = SortUtils.quickSort(root_cs_vec);
 		TreeItem root = new TreeItem("<Root>", "Root node");
+
         List <TreeItem> children = new ArrayList();
 
         SortUtils.quickSort(root_cs_vec);
@@ -2091,10 +2099,7 @@ System.out.println("calling getRootValueSets " + bySource);
 		if (root_vsd == null) {
 			System.out.println("Error: VSD " + code + " not found.");
 			return null;
-		} else {
-			System.out.println("fining subs for VSD: " + code);
 		}
-
 
 		TreeItem root = new TreeItem(code, root_vsd.getValueSetDefinitionName());
 
@@ -2102,50 +2107,51 @@ System.out.println("calling getRootValueSets " + bySource);
 
 		java.util.Enumeration<? extends Source> sourceEnum = root_vsd.enumerateSource();
 
-try {
-		while (sourceEnum.hasMoreElements()) {
-			Source src = (Source) sourceEnum.nextElement();
+        try {
 
-			String src_str = src.getContent();
+			while (sourceEnum.hasMoreElements()) {
+				Source src = (Source) sourceEnum.nextElement();
 
-			if (_source_subconcept_map.containsKey(src_str)) {
-				Vector sub_vec = (Vector) _source_subconcept_map.get(src_str);
-				for (int k=0; k<sub_vec.size(); k++) {
-					String sub_src = (String) sub_vec.elementAt(k);
+				String src_str = src.getContent();
 
-					Vector sub_vsd_vec = (Vector) source2VSD_map.get(sub_src);
-					if (sub_vsd_vec != null) {
-						for (int m=0; m<sub_vsd_vec.size(); m++) {
-							String sub_vsd_uri = (String) sub_vsd_vec.elementAt(m);
+				if (_source_subconcept_map.containsKey(src_str)) {
+					Vector sub_vec = (Vector) _source_subconcept_map.get(src_str);
+					for (int k=0; k<sub_vec.size(); k++) {
+						String sub_src = (String) sub_vec.elementAt(k);
 
-							if (participating_vsd_vec.contains(sub_vsd_uri)) {
+						Vector sub_vsd_vec = (Vector) source2VSD_map.get(sub_src);
+						if (sub_vsd_vec != null) {
+							for (int m=0; m<sub_vsd_vec.size(); m++) {
+								String sub_vsd_uri = (String) sub_vsd_vec.elementAt(m);
 
-								ValueSetDefinition sub_vsd = (ValueSetDefinition) uri2VSD_map.get(sub_vsd_uri);
+								if (participating_vsd_vec.contains(sub_vsd_uri)) {
 
-								String vsd_text = sub_vsd.getValueSetDefinitionName();
+									ValueSetDefinition sub_vsd = (ValueSetDefinition) uri2VSD_map.get(sub_vsd_uri);
 
-
-										java.util.Enumeration<? extends Source> sub_vsd_sourceEnum = sub_vsd.enumerateSource();
-										while (sub_vsd_sourceEnum.hasMoreElements()) {
-											Source sub_vsd_src = (Source) sub_vsd_sourceEnum.nextElement();
-											String sub_vsd_src_str = sub_vsd_src.getContent();
-										}
+									String vsd_text = sub_vsd.getValueSetDefinitionName();
 
 
-                                if (vsd_vec.contains( sub_vsd_uri )) {
-									TreeItem ti_sub = new TreeItem(sub_vsd_uri, vsd_text);
-									ti_sub._expandable = false; // to be modified
-									children.add(ti_sub);
-							    }
+											java.util.Enumeration<? extends Source> sub_vsd_sourceEnum = sub_vsd.enumerateSource();
+											while (sub_vsd_sourceEnum.hasMoreElements()) {
+												Source sub_vsd_src = (Source) sub_vsd_sourceEnum.nextElement();
+												String sub_vsd_src_str = sub_vsd_src.getContent();
+											}
+
+
+									if (vsd_vec.contains( sub_vsd_uri )) {
+										TreeItem ti_sub = new TreeItem(sub_vsd_uri, vsd_text);
+										ti_sub._expandable = false; // to be modified
+										children.add(ti_sub);
+									}
+								}
 							}
 						}
-				    }
+					}
 				}
 			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-} catch (Exception ex) {
-	ex.printStackTrace();
-}
 		if (root == null) {
 			System.out.println("root == null???");
 			return null;
@@ -2316,11 +2322,7 @@ try {
 	   return false;
 	}
 
-/*
-	public static boolean containsValueSets(String node_id) {
-	   return false;
-	}
-*/
+
     public static boolean isNodeExpandable(String node_id) {
 	   if (isTerminologyNode(node_id)) {
 	       if (containsValueSets(node_id)) return true;
@@ -2698,20 +2700,21 @@ try {
 
 
 
-
     public static TreeItem getSourceValueSetTreeBranch(ValueSetDefinition vsd) {
 		TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), vsd.getValueSetDefinitionName());
 		ti._expandable = false;
 		List <TreeItem> children = new ArrayList();
-		Vector sub_vsd_vec = getVSDChildrenNodesBySource(vsd.getValueSetDefinitionURI());
-		if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
-			//ti._expandable = true;
-			for (int j=0; j<sub_vsd_vec.size(); j++) {
-				ValueSetDefinition child_vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(j);
-				TreeItem child = getSourceValueSetTreeBranch(child_vsd);
-				children.add(child);
-				ti._expandable = true;
-			}
+
+		HashMap src_vs_tree_root_hamp = expand_src_vs_tree_exclude_src_nodes(vsd.getValueSetDefinitionURI());
+		TreeItem src_vs_tree_root = (TreeItem) src_vs_tree_root_hamp.get("<Root>");
+		for (String asso_name : src_vs_tree_root._assocToChildMap.keySet()) {
+		    List<TreeItem> child_nodes = src_vs_tree_root._assocToChildMap.get(asso_name);
+		    for (TreeItem child_item : child_nodes) {
+				 ValueSetDefinition child_vsd = findValueSetDefinitionByURI(child_item._code);
+				 TreeItem root = getSourceValueSetTreeBranch(child_vsd);
+				 children.add(root);
+				 ti._expandable = true;
+		    }
 		}
 	    SortUtils.quickSort(children);
 	    ti.addAll("[inverse_is_a]", children);
@@ -2721,45 +2724,47 @@ try {
 
 
     public static HashMap getSourceValueSetTree(String scheme, String version) {
-        ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
-        if (rcrl == null) {
-			return null;
-		}
 
 		TreeItem super_root = new TreeItem("<Root>", "Root node");
-
+		super_root._expandable = false;
 		List <TreeItem> branch = new ArrayList();
-		//HashSet hset = new HashSet();
 
-        //List <TreeItem> children = new ArrayList();
-        for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
-			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
-			String src = rcr.getConceptCode();
+        HashMap src_vs_tree_hmap = build_src_vs_tree();
+		TreeItem vs_roots = (TreeItem) src_vs_tree_hmap.get("<Root>");
+		for (String association : vs_roots._assocToChildMap.keySet()) {
+			 List<TreeItem> children = vs_roots._assocToChildMap.get(association);
+			 for (TreeItem childItem : children) {
+				 String code = childItem._code;
+				 String name = childItem._text;
 
-			Vector vsd_root_vec = getVSDRootsBySource(src);
-			if (vsd_root_vec != null) {
-				for (int j=0; j<vsd_root_vec.size(); j++) {
-					ValueSetDefinition root_vsd = (ValueSetDefinition) vsd_root_vec.elementAt(j);
-					TreeItem root = new TreeItem(root_vsd.getValueSetDefinitionURI(), root_vsd.getValueSetDefinitionName());
-					root._expandable = false;
+				 System.out.println("(*) SRC VIEW ROOT: " + name + " " + code);
 
-					List <TreeItem> children = new ArrayList();
-					Vector sub_vsd_vec = getVSDChildrenNodesBySource(root_vsd.getValueSetDefinitionURI());
-					if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
-						for (int k=0; k<sub_vsd_vec.size(); k++) {
-							ValueSetDefinition child_vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(k);
-							TreeItem child = getSourceValueSetTreeBranch(child_vsd);
-							children.add(child);
-							root._expandable = true;
-						}
-					}
-					SortUtils.quickSort(children);
-					root.addAll("[inverse_is_a]", children);
-	                branch.add(root);
-	                super_root._expandable = true;
-				}
-			}
+				 TreeItem top_node = new TreeItem(childItem._code, childItem._text);
+				 top_node._expandable = false;
+				 List <TreeItem> top_branch = new ArrayList();
+
+				 HashMap src_vs_tree_root_hamp = expand_src_vs_tree_exclude_src_nodes(code);
+				 TreeItem src_vs_tree_root = (TreeItem) src_vs_tree_root_hamp.get("<Root>");
+				 for (String asso_name : src_vs_tree_root._assocToChildMap.keySet()) {
+					 List<TreeItem> child_nodes = src_vs_tree_root._assocToChildMap.get(asso_name);
+					 for (TreeItem child_item : child_nodes) {
+						 ValueSetDefinition child_vsd = findValueSetDefinitionByURI(child_item._code);
+						 TreeItem root = getSourceValueSetTreeBranch(child_vsd);
+						 top_branch.add(root);
+						 top_node._expandable = true;
+					 }
+				 }
+
+				 SortUtils.quickSort(top_branch);
+				 top_node.addAll("[inverse_is_a]", top_branch);
+
+				 branch.add(top_node);
+
+				 super_root._expandable = true;
+
+			 }
 		}
+
 		SortUtils.quickSort(branch);
 		super_root.addAll("[inverse_is_a]", branch);
 		HashMap hmap = new HashMap();
@@ -2769,127 +2774,78 @@ try {
 	}
 
 
+    public static TreeItem getCodingSchemeValueSetTreeBranch(String scheme, String code, String name) {
 
+		System.out.println("CS ValueSetTreeBranch " + scheme + " VSD: " + code + " " + name);
 
-/*
-        List list = null;// new ArrayList();
-        String key = scheme + "$" + version + "$valueset" + "$root";
-        JSONArray nodesArray = null;
+		TreeItem ti = new TreeItem(code, name);
+		ti._expandable = false;
+		List <TreeItem> children = new ArrayList();
 
-
-        String retval = DataUtils.getCodingSchemeName(scheme);
-        if (retval != null) {
-            scheme = retval;
-        }
-
-        if (fromCache) {
-            Element element = _cache.get(key);
-            if (element != null) {
-                nodesArray = (JSONArray) element.getValue();
-            }
-        }
-
-        if (nodesArray == null) {
-            _logger.debug("Not in cache -- calling ValueSetHierarchy.getRootValueSets " + scheme);
-            try {
-                HashMap hmap = ValueSetHierarchy.getRootValueSets(scheme);
-                TreeItem root = (TreeItem) hmap.get("<Root>");
-                nodesArray = new JSONArray();
-
-				for (String association : root._assocToChildMap.keySet()) {
-
-					 List<TreeItem> children = root._assocToChildMap.get(association);
-					 for (TreeItem childItem : children) {
-
-						 String code = childItem._code;
-						 String name = childItem._text;
-
-						 int childCount = 0;
-						 if (childItem._expandable) childCount = 1;
-
-						 //childItem._text = code + " (" + name + ")";
-
-						 try {
-							 JSONObject nodeObject = new JSONObject();
-							 //nodeObject.put(ONTOLOGY_NODE_SCHEME, scheme);
-
-							 //nodeObject.put(ONTOLOGY_NODE_ID, code);
-
-							 nodeObject.put(ONTOLOGY_NODE_ID, scheme + "$" + code);
-
-							 nodeObject.put(ONTOLOGY_NODE_NAME, name);
-							 nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, childCount);
-							 nodeObject.put(CHILDREN_NODES, new JSONArray());
-							 nodesArray.put(nodeObject);
-
-						 } catch (Exception ex) {
-							 ex.printStackTrace();
-						 }
-					 }
-                }
-
-                //nodeArray = list2JSONArray(scheme, list);
-
-                if (fromCache) {
-                    Element element = new Element(key, nodesArray);
-                    _cache.put(element);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        } else {
-            _logger.debug("Retrieved from cache.");
-        }
-        return nodesArray;
-*/
-
+		HashMap hmap = getSubValueSets(scheme, code);
+		if (hmap != null) {
+			TreeItem temp_root = (TreeItem) hmap.get(code);
+            for (String association : temp_root._assocToChildMap.keySet()) {
+                List<TreeItem> child_nodes = temp_root._assocToChildMap.get(association);
+                for (TreeItem childItem : child_nodes) {
+					TreeItem child = getCodingSchemeValueSetTreeBranch(scheme, childItem._code, childItem._text);
+					children.add(child);
+					ti._expandable = true;
+				}
+			}
+		}
+	    SortUtils.quickSort(children);
+	    ti.addAll("[inverse_is_a]", children);
+	    return ti;
+	}
 
 
     public static HashMap getCodingSchemeValueSetTree(String scheme, String version) {
-
-
-System.out.println("getCodingSchemeValueSetTree: scheme " + scheme);
-System.out.println("getCodingSchemeValueSetTree: version " + version);
-
-
-
 		List <TreeItem> branch = new ArrayList();
-
 		TreeItem super_root = new TreeItem("<Root>", "Root node");
 
-
-System.out.println("calling getRootValueSets: scheme " + scheme);
-
-
-		HashMap hmap = getRootValueSets(scheme);
+		HashMap hmap = getRootValueSets();
 		TreeItem root = (TreeItem) hmap.get("<Root>");
+
 		JSONArray nodesArray = new JSONArray();
 
 		for (String association : root._assocToChildMap.keySet()) {
-			 List<TreeItem> children = super_root._assocToChildMap.get(association);
+			 List<TreeItem> children = root._assocToChildMap.get(association);
 			 for (TreeItem childItem : children) {
 				 String code = childItem._code;
 				 String name = childItem._text;
+
 				 TreeItem cs_vs_root = new TreeItem(code, name);
-
-System.out.println("CS VS tree root code: " + code);
-System.out.println("CS VS tree root name: " + name);
-
-   				 cs_vs_root._expandable = true;
+   				 cs_vs_root._expandable = false;
 				 List <TreeItem> cs_vs_root_children = new ArrayList();
 
-				 /*
+				 String node_id = code;
 
-				 Vector sub_vsd_vec = getVSDChildrenNodesBySource(root_vsd.getValueSetDefinitionURI());
-				 if (sub_vsd_vec != null && sub_vsd_vec.size() > 0) {
-					for (int k=0; k<sub_vsd_vec.size(); k++) {
-						ValueSetDefinition child_vsd = (ValueSetDefinition) sub_vsd_vec.elementAt(k);
-						TreeItem child = getSourceValueSetTreeBranch(child_vsd);
-						children.add(child);
-						root._expandable = true;
-					}
+				 System.out.println("(*) coding scheme: " + node_id);
+
+				 try {
+				     HashMap cs_hmap = getRootValueSets(node_id);
+				     TreeItem temp_root = (TreeItem) cs_hmap.get("<Root>");
+				     for (String asso_name : temp_root._assocToChildMap.keySet()) {
+					     List<TreeItem> cs_vs_children = temp_root._assocToChildMap.get(asso_name);
+					     for (TreeItem child_item : cs_vs_children) {
+						     String vs_code = child_item._code;
+						     String vs_name = child_item._text;
+
+						     // debugging...
+						     if (vs_name.compareTo("FDA SPL Terminology") == 0) {
+
+								 TreeItem child = getCodingSchemeValueSetTreeBranch(node_id, vs_code, vs_name);
+								 cs_vs_root_children.add(child);
+								 cs_vs_root._expandable = true;
+
+						     }
+					     }
+				     }
+				 } catch (Exception ex) {
+				   ex.printStackTrace();
 				 }
-				 */
+
 				 SortUtils.quickSort(cs_vs_root_children);
 				 cs_vs_root.addAll("[inverse_is_a]", cs_vs_root_children);
 
