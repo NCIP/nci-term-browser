@@ -184,4 +184,57 @@ public class Utils {
         }
         return newList;
     }
+    
+    // -------------------------------------------------------------------------
+    private static String debugJSONLine(int indentLevel, int i, String str) {
+        if (str.length() <= 0)
+            return "";
+        for (int j=0; j<indentLevel; ++j)
+            str = "  " + str;
+        
+        String index = Integer.toString(i);
+        for (int j=index.length(); j<3; ++j)
+        	index = " " + index;
+     
+        String line = index + ": ";
+        // line += indentLevel + " ";
+        line += str;
+        _logger.debug(line);
+        
+        return ""; // Initializes the string after printing.
+    }
+    
+    // -------------------------------------------------------------------------
+    public static void debugJSONString(String text) {
+        String delimiter = "{},[]";
+        StringTokenizer tokenizer = new StringTokenizer(text, delimiter, true);
+        int i = 0;
+        String str = "";
+        int indentLevel = -1;
+        String prevToken = "";
+        String token = "";
+        while (tokenizer.hasMoreTokens()) {
+            prevToken = token;
+            token = tokenizer.nextToken();
+            //_logger.debug("token: " + token);
+            str += token;
+            
+            if (prevToken.equals("[") && ! token.equals("]")) {
+                str = debugJSONLine(indentLevel, i++, str);
+                continue;
+            }
+
+            if (token.equals("[")) {
+                ++indentLevel;
+                continue;
+            } else if (token.equals("]")) {
+                --indentLevel;
+            }
+
+            if (! str.endsWith("},") && ! str.endsWith("}],"))
+                continue;
+            str = debugJSONLine(indentLevel, i++, str);
+        }
+        str = debugJSONLine(indentLevel, i++, str);
+    }
 }

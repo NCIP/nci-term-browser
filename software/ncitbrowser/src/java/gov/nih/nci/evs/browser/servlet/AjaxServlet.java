@@ -112,6 +112,18 @@ public final class AjaxServlet extends HttpServlet {
         execute(request, response);
     }
 
+    private void debugJSONString(String msg, String jsonString) {
+    	boolean debug = true;
+    	if (! debug) 
+    		return;
+    	_logger.debug(Utils.SEPARATOR);
+	    if (msg != null && msg.length() > 0)
+	    	_logger.debug(msg);
+	    _logger.debug("jsonString: " + jsonString);
+	    _logger.debug("jsonString length: " + jsonString.length());
+	    Utils.debugJSONString(jsonString);
+    }
+
     /**
      * Process the specified HTTP request, and create the corresponding HTTP
      * response (or forward to another web component that will create it).
@@ -159,6 +171,8 @@ public final class AjaxServlet extends HttpServlet {
 
                 } catch (Exception e) {
                 }
+
+                debugJSONString("Section: expand_tree", json.toString());
                 response.getWriter().write(json.toString());
                 _logger.debug("Run time (milliseconds): "
                     + (System.currentTimeMillis() - ms));
@@ -239,6 +253,8 @@ public final class AjaxServlet extends HttpServlet {
                         CacheController.getInstance().getTree(
                             ontology_display_name, versionOrTag, node_id);
 
+                    debugJSONString("Section: search_tree", jsonString);
+
                     JSONArray rootsArray = new JSONArray(jsonString);
 
                     json.put("root_nodes", rootsArray);
@@ -274,6 +290,7 @@ public final class AjaxServlet extends HttpServlet {
                 e.printStackTrace();
             }
 
+            debugJSONString("Section: build_tree", json.toString());
             response.getWriter().write(json.toString());
             // response.getWriter().flush();
 
