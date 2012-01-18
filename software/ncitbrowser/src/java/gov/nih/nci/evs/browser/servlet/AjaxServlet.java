@@ -113,7 +113,7 @@ public final class AjaxServlet extends HttpServlet {
     }
 
     private void debugJSONString(String msg, String jsonString) {
-    	boolean debug = true;
+    	boolean debug = false;
     	if (! debug) 
     		return;
     	_logger.debug(Utils.SEPARATOR);
