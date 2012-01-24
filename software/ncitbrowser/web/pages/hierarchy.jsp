@@ -236,8 +236,8 @@
       emptyRootDiv.render();
     }
     
-    function showPartialHierarchy() {
-      rootDescDiv.setBody("<span class='instruction_text'>(Note: This tree only shows partial hierarchy.)</span>");
+    function showPartialHierarchy(msg) {
+      rootDescDiv.setBody("<span class='instruction_text'>(Note: This tree only shows partial hierarchy.)" + msg + "</span>");
       rootDescDiv.show();
       rootDescDiv.render();
     }
@@ -317,13 +317,19 @@
       rootDescDiv.render();
     }
 
+    function getTimeStamp() {
+    	return Math.round((new Date()).getTime() / 1000);
+    }
 
     function searchTree(ontology_node_id, ontology_display_name) {
 
         var handleBuildTreeSuccess = function(o) {
+      	var tsTotalStart = getTimeStamp();
 
         var respTxt = o.responseText;
+        var tsEvalStart = getTimeStamp();
         var respObj = eval('(' + respTxt + ')');
+        var tsEvalTotal = getTimeStamp() - tsEvalStart;
         if ( typeof(respObj) != "undefined") {
         
           if ( typeof(respObj.dummy_root_nodes) != "undefined") {
@@ -336,7 +342,7 @@
               showEmptyRoot();
             }
             else {
-              showPartialHierarchy();
+              showPartialHierarchy("");
               showConstructingTreeStatus();
 
               for (var i=0; i < respObj.root_nodes.length; i++) {
@@ -348,6 +354,9 @@
           }
         }
         resetTreeStatus();
+        var tsTotal = getTimeStamp() - tsTotalStart;
+        // showPartialHierarchy("<br/>* EvalTotal: " + tsEvalTotal + " sec"
+        //    + ", <br/>* tsTotal: " + tsTotal + " sec");
       }
 
       var handleBuildTreeFailure = function(o) {
