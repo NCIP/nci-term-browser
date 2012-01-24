@@ -277,40 +277,48 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         //sb[sb.length] = '&#160;</td>';
         sb[sb.length] = '<div class="ygtvspacer"></div></td>';
         
-        //YEED: Fixed recognizing mouse click event on label by replacing 
-        //YEED:   the following line:
-        //YEED_ORIG: sb[sb.length] = '<td>';
-        sb[sb.length] = '<td id="ygtvcontentel' + this.index + '" class="ygtvcell ygtvcontent">'; //YEED_FIX
-        
-        sb[sb.length] = '<a';
-        sb[sb.length] = ' id="' + this.labelElId + '"';
-        if (this.title) {
-            sb[sb.length] = ' title="' + this.title + '"';
+        if (this.href == null) {
+        	//YEED: Made Value Set "folder" node label non-selectable.  Before,
+        	//YEED:   it was expanding/collapsing the folder.
+            sb[sb.length] = '<td class="ygtvcell ygtvcontent">';
+        	sb[sb.length] = this.label;
+        	sb[sb.length] = '</td>';
+        } else {
+            //YEED: Fixed recognizing mouse click event on label by replacing 
+            //YEED:   the following line:
+            //YEED_ORIG: sb[sb.length] = '<td>';
+            sb[sb.length] = '<td id="ygtvcontentel' + this.index + '" class="ygtvcell ygtvcontent">'; //YEED_FIX
+            
+	        sb[sb.length] = '<a';
+	        sb[sb.length] = ' id="' + this.labelElId + '"';
+	        if (this.title) {
+	            sb[sb.length] = ' title="' + this.title + '"';
+	        }
+	        sb[sb.length] = ' class="' + this.labelStyle + '"';
+	        sb[sb.length] = ' href="' + this.href + '"';
+	        sb[sb.length] = ' target="' + this.target + '"';
+	        
+	        //YEED: Fix mouse click event on the value set tree label
+	        //YEED:   (displays the value set home page) by commenting
+	        //YEED:   the following line:
+	        //sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
+	        
+	        if (this.hasChildren(true)) {
+	            sb[sb.length] = ' onmouseover="document.getElementById(\'';
+	            sb[sb.length] = this.getToggleElId() + '\').className=';
+	            sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+	            sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
+	            sb[sb.length] = ' onmouseout="document.getElementById(\'';
+	            sb[sb.length] = this.getToggleElId() + '\').className=';
+	            sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
+	            sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
+	        }
+	        sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
+	        sb[sb.length] = ' >';
+	        sb[sb.length] = this.label;
+	        sb[sb.length] = '</a>';
+	        sb[sb.length] = '</td>';
         }
-        sb[sb.length] = ' class="' + this.labelStyle + '"';
-        sb[sb.length] = ' href="' + this.href + '"';
-        sb[sb.length] = ' target="' + this.target + '"';
-        
-        //YEED: Fix mouse click event on the value set tree label
-        //YEED:   (displays the value set home page) by commenting
-        //YEED:   the following line:
-        //sb[sb.length] = ' onclick="return ' + getNode + '.onLabelClick(' + getNode +')"';
-        
-        if (this.hasChildren(true)) {
-            sb[sb.length] = ' onmouseover="document.getElementById(\'';
-            sb[sb.length] = this.getToggleElId() + '\').className=';
-            sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
-            sb[sb.length] = this.tree.id + '\',' + this.index +  ').getHoverStyle()"';
-            sb[sb.length] = ' onmouseout="document.getElementById(\'';
-            sb[sb.length] = this.getToggleElId() + '\').className=';
-            sb[sb.length] = 'YAHOO.widget.TreeView.getNode(\'';
-            sb[sb.length] = this.tree.id + '\',' + this.index +  ').getStyle()"';
-        }
-        sb[sb.length] = (this.nowrap) ? ' nowrap="nowrap" ' : '';
-        sb[sb.length] = ' >';
-        sb[sb.length] = this.label;
-        sb[sb.length] = '</a>';
-        sb[sb.length] = '</td>';
         sb[sb.length] = '</tr>';
         sb[sb.length] = '</table>';
 
