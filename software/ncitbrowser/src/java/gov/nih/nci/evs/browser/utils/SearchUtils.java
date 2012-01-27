@@ -4115,8 +4115,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 				cns_code = cns_code.restrictToMatchingProperties(ConvenienceMethods
 					.createLocalNameList(new String[] { "conceptCode" }),
 					propertyTypes, sourceList, contextList, qualifierList,
-					//matchText, "LuceneQuery", null);
-					matchText, "exactMatch", null);
+					matchText, "LuceneQuery", null);
+					//matchText, "exactMatch", null);
 				if (cns_code != null) cns_vec.add(cns_code);
 
                 // source code match:

@@ -131,7 +131,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = false;
+    private static boolean initializeValueSetHierarchy = true;
 
     // ==================================================================================
     // For customized query use
@@ -926,6 +926,7 @@ public class DataUtils {
         String vers, String ltag, String code) {
         return SearchUtils.matchConceptByCode(codingSchemeName, vers, code,
             null, "LuceneQuery");
+            //null, "exactMatch");
     }
 
     public static NameAndValueList createNameAndValueList(String[] names,
