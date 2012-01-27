@@ -129,4 +129,11 @@ public class TreeItem implements Serializable, Comparable<TreeItem> {
         } else
             children.add(child);
     }
+    
+    public String toString() {
+    	String s = _text;
+    	if (_code != null && _code.length() > 0)
+    		s += " (" + _code + ")";
+    	return s;
+    }
 }
