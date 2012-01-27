@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <%!
   private static final int INDENT = 10;
@@ -10,6 +11,11 @@
   String ICON_LEAF = basePath + "/images/yui/treeview/ln.gif";
   String ICON_EXPAND = basePath + "/images/yui/treeview/lp.gif";
   String ICON_COLLAPSE = basePath + "/images/yui/treeview/lm.gif";
+  
+  TreeItem root = HierarchyUtils.init();
+  StringBuffer buffer = new StringBuffer();
+  HierarchyUtils.html(buffer, root, "");
+  String tree = buffer.toString();
 %>
 
 <html>
@@ -51,73 +57,6 @@
   </head>
 
   <body>
-    <table border=0>
-      <tr>
-        <td>
-          <table border=0>
-            <tr>
-              <td>
-                <img src="<%=ICON_LEAF%>">Analysis<div>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <table border=0>
-            <tr>
-              <td>
-                <a onclick="toggle(this)"><img src="<%=ICON_COLLAPSE%>">Implementation</a><div> <%-- div must be on same line as toggle --%>
-                <table border=0>
-                  <tr>
-                    <td width="<%=INDENT%>"></td>
-                    <td>
-                      <img src="<%=ICON_LEAF%>">PHP<div>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
-
-                <table border=0>
-                  <tr>
-                    <td width="<%=INDENT%>"></td>
-                    <td><a onclick="toggle(this)"><img src="<%=ICON_COLLAPSE%>"> Visual C++</a><div>
-
-                      <table border=0>
-                        <tr>
-                          <td width="<%=INDENT%>"></td>
-                          <td>
-                            <img src="<%=ICON_LEAF%>"> Memory Leak problems<div>
-                            </div>
-                          </td>
-                        </tr>
-                      </table></div>
-                    </td>
-                  </tr>
-                </table></div>
-
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <table border=0>
-            <tr>
-              <td>
-                <img src="<%=ICON_LEAF%>">Design<div>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-    </table>
+    <%= tree %>
   </body>
 </html>
