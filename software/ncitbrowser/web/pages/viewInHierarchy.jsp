@@ -62,12 +62,30 @@
                   <tr>
                     <td width="<%=INDENT%>"></td>
                     <td>
-                      <img src="<%=ICON_LEAF%>">PHP
-                      <div>
+                      <img src="<%=ICON_LEAF%>">PHP<div>
                       </div>
                     </td>
                   </tr>
+                </table>
+                
+                <table border=0>
+                  <tr>
+                    <td width="<%=INDENT%>"></td>
+                    <td><a onclick="toggle(this)"><img src="<%=ICON_COLLAPSE%>"> Visual C++</a><div>
+
+                      <table border=0>
+                        <tr>
+                          <td width="<%=INDENT%>"></td>
+                          <td>
+                            <img src="<%=ICON_LEAF%>"> Memory Leak problems<div>
+                            </div>
+                          </td>
+                        </tr>
+                      </table></div>
+                    </td>
+                  </tr>
                 </table></div>
+                
               </td>
             </tr>
           </table>
