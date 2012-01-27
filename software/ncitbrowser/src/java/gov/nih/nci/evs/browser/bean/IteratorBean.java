@@ -75,7 +75,7 @@ public class IteratorBean extends Object {
 
     private int _lastResolved;
     private int _maxReturn = 100;
-    private int _stopping_rule = 5000;
+    private int _stopping_rule = 2000;
 
     private String _message = null;
 
