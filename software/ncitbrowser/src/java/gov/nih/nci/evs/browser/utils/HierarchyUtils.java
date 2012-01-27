@@ -68,21 +68,24 @@ public class HierarchyUtils {
 	private static final String ICON_EXPAND = BASEPATH + "/images/yui/treeview/lp.gif";
 	private static final String ICON_COLLAPSE = BASEPATH + "/images/yui/treeview/lm.gif";
 
-	public static StringBuffer html(StringBuffer buffer, TreeItem top, String indent) {
+	public static StringBuffer html(StringBuffer buffer, TreeItem top, String indent, boolean skip) {
 		Map<String, List<TreeItem>> map = top._assocToChildMap;
 		Set<String> keys = map.keySet();
-		boolean isLeafNode = keys.isEmpty();
-
-		append(buffer, indent + "<table border=0>");
-		append(buffer, indent + "  <tr>");
-		append(buffer, indent + "    <td width=\"" + INDENT_PIXELS + "\"></td>");
 		
-		append(buffer, indent + "    <td>");
-		if (isLeafNode)
-			append(buffer, indent + "      <img src=\"" + ICON_LEAF +  "\">" + top._text + "<div>");
-		else
-			append(buffer, indent + "      <a onclick=\"toggle(this)\"><img src=\"" + ICON_COLLAPSE + "\">" + top._text + "</a><div>");
-
+		if (! skip) {
+    		boolean isLeafNode = keys.isEmpty();
+    
+    		append(buffer, indent + "<table border=0>");
+    		append(buffer, indent + "  <tr>");
+    		append(buffer, indent + "    <td width=\"" + INDENT_PIXELS + "\"></td>");
+    		
+    		append(buffer, indent + "    <td>");
+    		if (isLeafNode)
+    			append(buffer, indent + "      <img src=\"" + ICON_LEAF +  "\">" + top._text + "<div>");
+    		else
+    			append(buffer, indent + "      <a onclick=\"toggle(this)\"><img src=\"" + ICON_COLLAPSE + "\">" + top._text + "</a><div>");
+		}
+    		
 		Iterator<String> iterator_key = keys.iterator();
 		while (iterator_key.hasNext()) {
 			String key = iterator_key.next();
@@ -90,14 +93,25 @@ public class HierarchyUtils {
 			Iterator<TreeItem> iterator_treeItem = items.iterator();
 			while (iterator_treeItem.hasNext()) {
 				TreeItem item = iterator_treeItem.next(); 
-				html(buffer, item, indent + "      " + INDENT);
+				String indent2 = indent;
+				if (! skip)
+				    indent2 += "      " + INDENT;
+				//html(buffer, item, indent + "      " + INDENT, false);
+                html(buffer, item, indent2, false);
 			}
 		}
-		append(buffer, indent + "      </div>");
-		append(buffer, indent + "    </td>");
-		append(buffer, indent + "  </tr>");
-		append(buffer, indent + "</table>");
+
+		if (! skip) {
+    		append(buffer, indent + "      </div>");
+    		append(buffer, indent + "    </td>");
+    		append(buffer, indent + "  </tr>");
+    		append(buffer, indent + "</table>");
+		}
 		return buffer;
+	}
+	
+	public static StringBuffer html(StringBuffer buffer, TreeItem top, String indent) {
+	    return html(buffer, top, indent, true);
 	}
 
 	public static void main(String[] args) {
