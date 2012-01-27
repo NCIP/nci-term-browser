@@ -28,10 +28,10 @@
               node.children.item(0).src = "<%=ICON_COLLAPSE%>";
             }
           }
-    
+
           node.nextSibling.style.display = '';
         }
-    
+
         // Collapse the branch if it IS visible
         else
         {
@@ -43,15 +43,28 @@
               node.children.item(0).src = "<%=ICON_EXPAND%>";
             }
           }
-    
+
           node.nextSibling.style.display = 'none';
         }
       }
     </script>
   </head>
-  
+
   <body>
     <table border=0>
+      <tr>
+        <td>
+          <table border=0>
+            <tr>
+              <td>
+                <img src="<%=ICON_LEAF%>">Analysis<div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
       <tr>
         <td>
           <table border=0>
@@ -67,7 +80,7 @@
                     </td>
                   </tr>
                 </table>
-                
+
                 <table border=0>
                   <tr>
                     <td width="<%=INDENT%>"></td>
@@ -85,12 +98,26 @@
                     </td>
                   </tr>
                 </table></div>
-                
+
               </td>
             </tr>
           </table>
         </td>
       </tr>
+
+      <tr>
+        <td>
+          <table border=0>
+            <tr>
+              <td>
+                <img src="<%=ICON_LEAF%>">Design<div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
     </table>
   </body>
 </html>
