@@ -223,7 +223,7 @@
                            	if (tree_access2 && !typeLink_isMapping2) {
                            %>
                            <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
-                           <% boolean displayInDialog = true; if (displayInDialog) { //YEED %>
+                           <% boolean displayInDialog = true; if (displayInDialog) {  //DYEE_DEBUG %>
                              <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                                 View in Hierarchy</a>
 	                       <% } else { %>
