@@ -13,73 +13,66 @@
 %>
 
 <html>
-<head>
-  <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/yui/tree.css" />
-  <script language="javascript">
-    function toggle(node)
-    {
-      // Unfold the branch if it isn't visible
-      if (node.nextSibling.style.display == 'none')
+  <head>
+    <script language="javascript">
+      function toggle(node)
       {
-        // Change the image (if there is an image)
-        if (node.children.length > 0)
+        // Unfold the branch if it isn't visible
+        if (node.nextSibling.style.display == 'none')
         {
-          if (node.children.item(0).tagName == "IMG")
+          // Change the image (if there is an image)
+          if (node.children.length > 0)
           {
-            node.children.item(0).src = "<%=ICON_COLLAPSE%>";
+            if (node.children.item(0).tagName == "IMG")
+            {
+              node.children.item(0).src = "<%=ICON_COLLAPSE%>";
+            }
           }
+    
+          node.nextSibling.style.display = '';
         }
-  
-        node.nextSibling.style.display = '';
-      }
-  
-      // Collapse the branch if it IS visible
-      else
-      {
-        // Change the image (if there is an image)
-        if (node.children.length > 0)
+    
+        // Collapse the branch if it IS visible
+        else
         {
-          if (node.children.item(0).tagName == "IMG")
+          // Change the image (if there is an image)
+          if (node.children.length > 0)
           {
-            node.children.item(0).src = "<%=ICON_EXPAND%>";
+            if (node.children.item(0).tagName == "IMG")
+            {
+              node.children.item(0).src = "<%=ICON_EXPAND%>";
+            }
           }
+    
+          node.nextSibling.style.display = 'none';
         }
-  
-        node.nextSibling.style.display = 'none';
       }
+    </script>
+  </head>
   
-    }
-  </script>
-</head>
-
-<body>
-  <table border=0>
-    <tr><td>
-      <table border=0><tr><td><img src="<%=ICON_LEAF%>"> Analysis<div>
-      </div></td></tr></table>
-    </tr></td>
-  
-    <tr><td>
-      <table border=0><tr><td><a onclick="toggle(this)"><img src="<%=ICON_COLLAPSE%>"> Implementation</a><div>
-  
-      <table border=0><tr><td width="<%=INDENT%>"></td><td><img src="<%=ICON_LEAF%>"> PHP<div>
-      </div></td></tr></table>
-  
-      <table border=0><tr><td width="<%=INDENT%>"></td><td><a onclick="toggle(this)"><img src="<%=ICON_COLLAPSE%>"> Visual C++</a><div>
-  
-        <table border=0><tr><td width="<%=INDENT%>"></td><td><img src="<%=ICON_LEAF%>"> Memory Leak problems<div>
-        </div></td></tr></table>
-  
-        <table border=0><tr><td width="<%=INDENT%>"></td><td><img src="<%=ICON_LEAF%>"> Database problems<div>
-        </div></td></tr></table>
-  
-      </div></td></tr></table>
-    </tr></td>
-  
-    <tr><td>
-       <table border=0><tr><td><img src="<%=ICON_LEAF%>"> Design<div></div>
-       </td></tr></table>
-    </tr></td>
-  </table>
-</body>
+  <body>
+    <table border=0>
+      <tr>
+        <td>
+          <table border=0>
+            <tr>
+              <td>
+                <a onclick="toggle(this)"><img src="<%=ICON_COLLAPSE%>">Implementation</a><div> <%-- div must be on same line as toggle --%>
+                <table border=0>
+                  <tr>
+                    <td width="<%=INDENT%>"></td>
+                    <td>
+                      <img src="<%=ICON_LEAF%>">PHP
+                      <div>
+                      </div>
+                    </td>
+                  </tr>
+                </table></div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>
