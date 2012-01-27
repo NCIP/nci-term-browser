@@ -5,29 +5,12 @@ import java.util.*;
 public class HierarchyUtils {
 	private static final String INDENT = "  ";
 	
-	public static TreeItem add(TreeItem parent, String code, String text) {
+	private static TreeItem add(TreeItem parent, String code, String text) {
 		TreeItem child = new TreeItem(code, text);
 		parent.addChild("child", child);
 		return child;
 	}
 	
-	public static TreeItem init2() {
-		TreeItem parent = new TreeItem("root", "Root");
-		add(parent, "a1", "Analysis");
-		addImplementation(add(parent, "a2", "Implementation"));
-		add(parent, "a3", "Design");
-		return parent;
-	}
-	
-	public static void addImplementation(TreeItem parent) {
-		add(parent, "b1", "PHP");
-		addVisualCPP(add(parent, "b2", "Visual C++"));
-	}
-
-	public static void addVisualCPP(TreeItem parent) {
-		add(parent, "c1", "Memory Leak problems");
-	}
-
 	public static TreeItem init() {
 		TreeItem parent = new TreeItem("root", "Root");
 		
@@ -38,7 +21,7 @@ public class HierarchyUtils {
 		return parent;
 	}
 	
-	public static void addActivity(TreeItem parent) {
+	private static void addActivity(TreeItem parent) {
 		add(parent, "C25404", "Action");
 		add(parent, "C49235", "Administrative Activity");
 		addBehavior(add(parent, "C16326", "Behavior"));
@@ -48,17 +31,17 @@ public class HierarchyUtils {
 		add(parent, "C16847", "Technique");
 	}
 	
-	public static void addBehavior(TreeItem parent) {
+	private static void addBehavior(TreeItem parent) {
 		add(parent, "C94296", "Antisocial Behavior");
 		add(parent, "C54264", "Avoidance");
 		add(parent, "C93233", "Ceremony");
 	}
 
-	public static void println(String text) {
+	private static void println(String text) {
 		System.out.println(text);
 	}
 	
-	public static void debug(TreeItem top, String indent) {
+	private static void debug(TreeItem top, String indent) {
 		println(indent + " * " + top._text + " (" + top._code + ")");
 
 		Map<String, List<TreeItem>> map = top._assocToChildMap;
@@ -99,7 +82,6 @@ public class HierarchyUtils {
 			append(buffer, indent + "      <img src=\"" + ICON_LEAF +  "\">" + top._text + "<div>");
 		else
 			append(buffer, indent + "      <a onclick=\"toggle(this)\"><img src=\"" + ICON_COLLAPSE + "\">" + top._text + "</a><div>");
-//		append(buffer, indent + "      <div>");
 
 		Iterator<String> iterator_key = keys.iterator();
 		while (iterator_key.hasNext()) {
