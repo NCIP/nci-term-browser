@@ -177,8 +177,6 @@ public class UserSessionBean extends Object {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-
-System.out.println("(*******************) SearchAction");
 boolean mapping_search = false;
 
 String single_mapping_search = (String) request.getParameter("single_mapping_search");
@@ -188,11 +186,6 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
     request.getSession().setAttribute("nav_type", "terminologis");
 	String cs_dictionary = (String) request.getParameter("dictionary");
 	String cs_version = (String) request.getParameter("version");
-
-
-System.out.println("(*******************) SearchAction single_mapping_search");
-System.out.println("(*******************) SearchAction cs_dictionary " + cs_dictionary);
-System.out.println("(*******************) SearchAction cs_version " + cs_version);
 
 }
 
@@ -511,7 +504,8 @@ mappingIteratorBean.initialize();
             } else {
                 ResolvedConceptReferencesIteratorWrapper wrapper =
                     new SearchUtils()
-                        .searchByName(schemes, versions, matchText, source,
+                        //.searchByName(schemes, versions, matchText, source,
+                        .searchByNameAndCode(schemes, versions, matchText, source,
                             matchAlgorithm, ranking, maxToReturn);
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
@@ -559,18 +553,14 @@ mappingIteratorBean.initialize();
                     if (iterator != null) {
 						try {
 							int numberOfMatches = iterator.numberRemaining();
-							System.out.println("(*) KLO Relationship search numberOfMatches: " + numberOfMatches);
 
 						} catch (Exception ex) {
-                            System.out.println("(*) KLO Relationship search throws exception.");
+                            ex.printStackTrace();
 						}
 
 
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
-
-                        System.out.println("(*) KLO Relationship iteratorBean key: " + key);
-
                         iteratorBeanManager.addIteratorBean(iteratorBean);
                     }
                 }
@@ -587,19 +577,14 @@ mappingIteratorBean.initialize();
         request.getSession().removeAttribute("type");
 
 		request.getSession().setAttribute("key", key);
-		System.out.println("(*************) setAttribute key: " + key);
 
         if (iterator != null) {
 
             int size = iteratorBean.getSize();
-
-            System.out.println("(*************) size #1: " + size);
             List list = null;
             // LexEVS API itersator.numberRemaining is inaccurate, and can cause issues.
             // the following code is a work around.
             if (size == 1) {
-
-				System.out.println("(*************) iteratorBean.getData(0, 0): " );
             	list = iteratorBean.getData(0, 0);
             	if (size != iteratorBean.getSize()) {
 					size = iteratorBean.getSize();
@@ -748,7 +733,6 @@ mappingIteratorBean.initialize();
 
     public void setSelectedResultsPerPage(String selectedResultsPerPage) {
         if (selectedResultsPerPage == null) {
-			System.out.println("(*) selectedResultsPerPage == null ??? ");
             return;
 		}
         _selectedResultsPerPage = selectedResultsPerPage;
@@ -758,8 +742,6 @@ mappingIteratorBean.initialize();
         request.getSession().setAttribute("selectedResultsPerPage",
             selectedResultsPerPage);
 
-
-        System.out.println("(*) request.getSession().setAttribute selectedResultsPerPage " + selectedResultsPerPage);
     }
 
     public String getSelectedResultsPerPage() {
@@ -1005,20 +987,7 @@ mappingIteratorBean.initialize();
         String[] ontology_list = request.getParameterValues("ontology_list");
 
         if ( ontology_list  == null ) {
-			 System.out.println("(*) multipleSearchAction ontology_list is null"); //?????
-		} else {
-			 System.out.println("(*) multipleSearchAction ontology_list != null");
-		}
-
-
-        if ( ontology_list  == null ) {
 			 ontology_list = (String[]) request.getSession().getAttribute("ontology_list");
-		}
-
-        if ( ontology_list  == null ) {
-			 System.out.println("(*) multipleSearchAction #2 ontology_list is null");
-		} else {
-			 System.out.println("(*) multipleSearchAction #2 ontology_list != null");
 		}
 
         // Called from license.jsp
@@ -1320,15 +1289,20 @@ int selected_knt = 0;
         if (searchTarget.compareTo("names") == 0) {
             long ms = System.currentTimeMillis();
             long delay = 0;
-            _logger.debug("Calling SearchUtils().searchByName " + matchText);
+            _logger.debug("Calling SearchUtils().searchByNameAndCode " + matchText);
             ResolvedConceptReferencesIteratorWrapper wrapper =
+            /*
                 new SearchUtils().searchByName(schemes, versions, matchText,
                     source, matchAlgorithm, ranking, maxToReturn);
+            */
+                new SearchUtils().searchByNameAndCode(schemes, versions, matchText,
+                    source, matchAlgorithm, ranking, maxToReturn);
+
             if (wrapper != null) {
                 iterator = wrapper.getIterator();
             }
             delay = System.currentTimeMillis() - ms;
-            _logger.debug("searchByName delay (millisec.): " + delay);
+            _logger.debug("searchByNameAndCode delay (millisec.): " + delay);
 
         } else if (searchTarget.compareTo("properties") == 0) {
             ResolvedConceptReferencesIteratorWrapper wrapper =
@@ -1348,6 +1322,7 @@ int selected_knt = 0;
                 iterator = wrapper.getIterator();
            }
         }
+
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
@@ -1427,9 +1402,7 @@ int selected_knt = 0;
 				}
 			}
 
-
             if (size == 1) {
-
                 int pageNumber = 1;
                 list = iteratorBean.getData(1);
 
@@ -1468,7 +1441,8 @@ int selected_knt = 0;
 					} else {
 						c = ref.getReferencedEntry();
 						if (c == null) {
-							c = DataUtils.getConceptByCode(coding_scheme, ref_version,
+							//c = DataUtils.getConceptByCode(coding_scheme, ref_version,
+							c = SearchUtils.getConceptByCode(coding_scheme, ref_version,
 									null, ref.getConceptCode());
 						}
 					}
@@ -1494,6 +1468,7 @@ int selected_knt = 0;
 
 
 				} else if (list != null && list.size() > 0) {
+
 					String match_size = Integer.toString(size);
 					;// Integer.toString(v.size());
 					request.getSession().setAttribute("match_size", match_size);
@@ -1507,6 +1482,7 @@ int selected_knt = 0;
 					return "search_results";
 				}
 		    } else if (size > 1) {
+
 				String match_size = Integer.toString(size);
 				;// Integer.toString(v.size());
 				request.getSession().setAttribute("match_size", match_size);
@@ -1557,6 +1533,7 @@ int selected_knt = 0;
 
         request.getSession().setAttribute("matchText",
             HTTPUtils.convertJSPString(matchText));
+
 
         return "multiple_search";
     }

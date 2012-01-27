@@ -131,7 +131,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = true;
+    private static boolean initializeValueSetHierarchy = false;
 
     // ==================================================================================
     // For customized query use
@@ -212,6 +212,8 @@ public class DataUtils {
     public static HashMap _formalName2VersionsHashMap = null;
     public static HashMap _versionReleaseDateHashMap = null;
 
+    public static Vector _source_code_schemes = null;
+
 
 
 
@@ -272,6 +274,7 @@ public class DataUtils {
 
     private static void setCodingSchemeMap() {
         _logger.debug("Initializing ...");
+        _source_code_schemes = new Vector();
         _codingSchemeHashSet = new HashSet();
         _ontologies = new ArrayList();
         // codingSchemeMap = new HashMap();
@@ -373,6 +376,15 @@ public class DataUtils {
                     try {
                         CodingScheme cs =
                             lbSvc.resolveCodingScheme(formalname, vt);
+
+                        Vector prop_quals = getSupportedPropertyQualifier(cs);
+                        if (prop_quals.contains("source-code")) {
+							if (!_source_code_schemes.contains(formalname)) {
+								_source_code_schemes.add(formalname);
+							}
+						}
+
+
 
                         _uri2CodingSchemeNameHashMap.put(cs.getCodingSchemeURI(), cs.getCodingSchemeName());
                         _uri2CodingSchemeNameHashMap.put(formalname, cs.getCodingSchemeName());
@@ -1757,16 +1769,14 @@ public class DataUtils {
 
     public HashMap getRelationshipHashMap(String scheme, String version,
         String code) {
-
+/*
 System.out.println("==================================================================");
 System.out.println("DataUtils.getRelationshipHashMap scheme: " + scheme);
 System.out.println("DataUtils.getRelationshipHashMap version: " + version);
 System.out.println("DataUtils.getRelationshipHashMap code: " + code);
 System.out.println("==================================================================");
-
+*/
         boolean isMapping = isMapping(scheme, version);
-
-System.out.println("DataUtils.getRelationshipHashMap isMapping: " + isMapping);
 
         NameAndValueList navl = null;
         if (isMapping) navl = getMappingAssociationNames(scheme, version);
@@ -4793,9 +4803,9 @@ System.out.println("vsd_str " + vsd_str);
     public static Vector getMatchedMetathesaurusCUIs(String scheme, String version,
         String ltag, String code) {
 
-System.out.println("(*) getMatchedMetathesaurusCUIs scheme: " + scheme);
-System.out.println("(*) getMatchedMetathesaurusCUIs version: " + version);
-System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
+//System.out.println("(*) getMatchedMetathesaurusCUIs scheme: " + scheme);
+//System.out.println("(*) getMatchedMetathesaurusCUIs version: " + version);
+//System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 
 
         Entity c = getConceptByCode(scheme, version, ltag, code);
@@ -5122,6 +5132,28 @@ System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
 		*/
 		return null;
 	}
+
+
+    public static Vector getSupportedPropertyQualifier(CodingScheme cs)
+    {
+		Vector v = new Vector();
+		if (cs != null) {
+			SupportedPropertyQualifier[] qualifiers = cs.getMappings().getSupportedPropertyQualifier();
+			for (int i=0; i<qualifiers.length; i++)
+			{
+				v.add(qualifiers[i].getLocalId());
+			}
+			return v;
+	    }
+	    return null;
+	}
+
+    public static boolean hasSourceCodeQualifie(String scheme) {
+	    String formalName = getFormalName(scheme);
+	    if (formalName == null) return false;
+	    if ( _source_code_schemes.contains(formalName)) return true;
+	    return false;
+    }
 
 
 }

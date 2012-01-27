@@ -176,6 +176,9 @@
             			name = "Error: Invalid version - " + version + ".";
             		} else {
            			c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
+           			
+           			//c = SearchUtils.getConceptByCode(dictionary, version, ltag, code);
+           			
             			if (c != null) {
             				request.getSession().setAttribute("concept", c);
             				request.getSession().setAttribute("code", code);
