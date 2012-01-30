@@ -9,13 +9,13 @@
 
 <%
   String basePath = request.getContextPath();
-  String ICON_LEAF = basePath + "/images/yui/treeview/ln.gif";
-  String ICON_EXPAND = basePath + "/images/yui/treeview/lp.gif";
-  String ICON_COLLAPSE = basePath + "/images/yui/treeview/lm.gif";
+  String ICON_LEAF = HierarchyUtils.getLeafIcon(basePath);
+  String ICON_EXPAND = HierarchyUtils.getExpandIcon(basePath);
+  String ICON_COLLAPSE = HierarchyUtils.getCollapseIcon(basePath);
   
-  TreeItem root = HierarchyUtils.init();
+  TreeItem root = HierarchyUtils.getSampleTree();
   StringBuffer buffer = new StringBuffer();
-  HierarchyUtils.html(buffer, root, "");
+  HierarchyUtils.getHtml(basePath, buffer, root, "", "DYEE", "DYEE");
   String tree = buffer.toString();
 %>
 
