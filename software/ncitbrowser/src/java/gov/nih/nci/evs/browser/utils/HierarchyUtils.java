@@ -11,7 +11,7 @@ public class HierarchyUtils {
 		return child;
 	}
 	
-	public static TreeItem init() {
+	public static TreeItem getSampleTree() {
 		TreeItem parent = new TreeItem("root", "Root");
 		
 		add(parent, "C12913", "Abnormal Cell");
@@ -62,13 +62,36 @@ public class HierarchyUtils {
 		buffer.append(text + "\n");
 	}
 	
-	private static final int INDENT_PIXELS = 10;
-	private static final String BASEPATH = "/ncitbrowser";
-	private static final String ICON_LEAF = BASEPATH + "/images/yui/treeview/ln.gif";
-	private static final String ICON_EXPAND = BASEPATH + "/images/yui/treeview/lp.gif";
-	private static final String ICON_COLLAPSE = BASEPATH + "/images/yui/treeview/lm.gif";
+	private static final int INDENT_PIXELS = 4;
+	private static String BASEPATH = null;
+	private static String ICON_LEAF = null;
+	private static String ICON_EXPAND = null;
+	private static String ICON_COLLAPSE = null;
+	
+	public static String getLeafIcon(String basePath) {
+		return basePath + "/images/yui/treeview/ln.gif";
+	}
 
-	public static StringBuffer html(StringBuffer buffer, TreeItem top, String indent, boolean skip) {
+	public static String getExpandIcon(String basePath) {
+		return basePath + "/images/yui/treeview/lp.gif";
+	}
+
+	public static String getCollapseIcon(String basePath) {
+		return basePath + "/images/yui/treeview/lm.gif";
+	}
+	
+	private static void init(String basePath) {
+		if (BASEPATH != null)
+			return;
+		
+		BASEPATH = basePath;
+		ICON_LEAF = getLeafIcon(basePath);
+		ICON_EXPAND = getExpandIcon(basePath);
+		ICON_COLLAPSE = getCollapseIcon(basePath);
+	}
+
+	public static StringBuffer html(StringBuffer buffer, TreeItem top, 
+			String indent, boolean skip, String dictionary, String version) {
 		Map<String, List<TreeItem>> map = top._assocToChildMap;
 		Set<String> keys = map.keySet();
 		
@@ -97,7 +120,7 @@ public class HierarchyUtils {
 				if (! skip)
 				    indent2 += "      " + INDENT;
 				//html(buffer, item, indent + "      " + INDENT, false);
-                html(buffer, item, indent2, false);
+                html(buffer, item, indent2, false, dictionary, version);
 			}
 		}
 
@@ -110,18 +133,24 @@ public class HierarchyUtils {
 		return buffer;
 	}
 	
-	public static StringBuffer html(StringBuffer buffer, TreeItem top, String indent) {
-	    return html(buffer, top, indent, true);
+	public static StringBuffer getHtml(String basePath, 
+			StringBuffer buffer, TreeItem top, String indent,
+			String dictionary, String version) {
+		init(basePath);
+	    return html(buffer, top, indent, true, dictionary, version);
 	}
 
 	public static void main(String[] args) {
-		TreeItem root = init();
+		TreeItem root = getSampleTree();
 		println(Utils.SEPARATOR);
 		debug(root, "");
 
+		String basePath = "/ncitbrowser";
+		String dictionary = "NCI Thesaurus";
+		String version = "11.09d";
 		println(Utils.SEPARATOR);
 		StringBuffer buffer = new StringBuffer();
-		html(buffer, root, "");
+		getHtml(basePath, buffer, root, "", dictionary, version);
 		println(buffer.toString());
 	}
 }
