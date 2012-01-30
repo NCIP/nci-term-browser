@@ -284,4 +284,23 @@ if (version != null) {
             return defaultValue;
         }
     }
+    
+    public static String getConceptUrl(HttpServletRequest request, 
+    	String dictionary, String version, String concept_id) {
+    	  String requestURL = request.getRequestURL().toString();
+    	  int idx = requestURL.indexOf("pages");
+    	  requestURL = requestURL.substring(0, idx);
+    	  String encoded_dictionary = dictionary.replace(" ", "%20");
+
+    	  String encoded_concept_id = concept_id;
+    	  encoded_concept_id = encoded_concept_id.replaceAll(":", "%3A");
+    	  
+    	  String url = requestURL;
+    	  url += "ConceptReport.jsp";
+    	  url += "?dictionary=" + encoded_dictionary;
+    	  if (version != null && version.length() > 0)
+    	      url += "&version=" + version;
+    	  url +="&code=" + encoded_concept_id;
+    	  return url;
+    }
 }

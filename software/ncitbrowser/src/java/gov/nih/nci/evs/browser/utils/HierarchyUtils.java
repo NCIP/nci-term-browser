@@ -2,6 +2,8 @@ package gov.nih.nci.evs.browser.utils;
 
 import java.util.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class HierarchyUtils {
 	private static final String INDENT = "  ";
 	
@@ -90,8 +92,9 @@ public class HierarchyUtils {
 		ICON_COLLAPSE = getCollapseIcon(basePath);
 	}
 
-	public static StringBuffer html(StringBuffer buffer, TreeItem top, 
-			String indent, boolean skip, String dictionary, String version) {
+	public static StringBuffer html(HttpServletRequest request, String dictionary, 
+			String version, StringBuffer buffer, TreeItem top, String indent, 
+			boolean skip) {
 		Map<String, List<TreeItem>> map = top._assocToChildMap;
 		Set<String> keys = map.keySet();
 		
@@ -115,13 +118,14 @@ public class HierarchyUtils {
     		if (isLeafNode)
     			append(buffer, indent + "      " 
     				+ "<img src=\"" + ICON_LEAF +  "\">"
-    				+ "<a href=\"//www.yahoo.com\">" + top._text + "</a>" 
+    				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) +
+    				"\">" + top._text + "</a>" 
     				+ "<div>");
     		else
     			append(buffer, indent + "      " 
     				+ "<div onclick=\"toggle(this)\">" 
     				+ "<img src=\"" + ICON_COLLAPSE + "\">" 
-    				+ "<a href=\"http://www.goggle.com\">" + top._text + "</a></div>"
+    				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a></div>"
     				+ "<div>");
 		}
     		
@@ -136,7 +140,7 @@ public class HierarchyUtils {
 				if (! skip)
 				    indent2 += "      " + INDENT;
 				//html(buffer, item, indent + "      " + INDENT, false);
-                html(buffer, item, indent2, false, dictionary, version);
+                html(request, dictionary, version, buffer, item, indent2, false);
 			}
 		}
 
@@ -149,11 +153,10 @@ public class HierarchyUtils {
 		return buffer;
 	}
 	
-	public static StringBuffer getHtml(String basePath, 
-			StringBuffer buffer, TreeItem top, String indent,
-			String dictionary, String version) {
+	public static StringBuffer getHtml(HttpServletRequest request, String dictionary, 
+		String version, String basePath, StringBuffer buffer, TreeItem top) {
 		init(basePath);
-	    return html(buffer, top, indent, true, dictionary, version);
+	    return html(request, dictionary, version, buffer, top, "", true);
 	}
 
 	public static void main(String[] args) {
@@ -166,7 +169,7 @@ public class HierarchyUtils {
 		String version = "11.09d";
 		println(Utils.SEPARATOR);
 		StringBuffer buffer = new StringBuffer();
-		getHtml(basePath, buffer, root, "", dictionary, version);
+		getHtml(null, dictionary, version, basePath, buffer, root);
 		println(buffer.toString());
 	}
 }
