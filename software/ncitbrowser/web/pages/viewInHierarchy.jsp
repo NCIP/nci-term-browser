@@ -15,7 +15,7 @@
   
   TreeItem root = HierarchyUtils.getSampleTree();
   StringBuffer buffer = new StringBuffer();
-  HierarchyUtils.getHtml(basePath, buffer, root, "", "DYEE", "DYEE");
+  HierarchyUtils.getHtml(basePath, buffer, root, "", "dictionary", "version");
   String tree = buffer.toString();
 %>
 

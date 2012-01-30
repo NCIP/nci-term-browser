@@ -103,10 +103,26 @@ public class HierarchyUtils {
     		append(buffer, indent + "    <td width=\"" + INDENT_PIXELS + "\"></td>");
     		
     		append(buffer, indent + "    <td>");
+//    		if (isLeafNode)
+//    			append(buffer, indent + "      " 
+//    				+ "<img src=\"" + ICON_LEAF +  "\">" + top._text
+//    				+ "<div>");
+//    		else
+//    			append(buffer, indent + "      " 
+//    				+ "<a onclick=\"toggle(this)\"><img src=\"" + ICON_COLLAPSE + "\">" + top._text + "</a>" 
+//    				+ "<div>");
+
     		if (isLeafNode)
-    			append(buffer, indent + "      <img src=\"" + ICON_LEAF +  "\">" + top._text + "<div>");
+    			append(buffer, indent + "      " 
+    				+ "<img src=\"" + ICON_LEAF +  "\">"
+    				+ "<a href=\"//www.yahoo.com\">" + top._text + "</a>" 
+    				+ "<div>");
     		else
-    			append(buffer, indent + "      <a onclick=\"toggle(this)\"><img src=\"" + ICON_COLLAPSE + "\">" + top._text + "</a><div>");
+    			append(buffer, indent + "      " 
+    				+ "<div onclick=\"toggle(this)\">" 
+    				+ "<img src=\"" + ICON_COLLAPSE + "\">" 
+    				+ "<a href=\"http://www.goggle.com\">" + top._text + "</a></div>"
+    				+ "<div>");
 		}
     		
 		Iterator<String> iterator_key = keys.iterator();
