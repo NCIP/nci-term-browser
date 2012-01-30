@@ -891,19 +891,7 @@ if (!hasOtherProperties) {
     %>	  
 </p>
 <%
-  String requestURL = request.getRequestURL().toString();
-  int idx = requestURL.indexOf("pages");
-  requestURL = requestURL.substring(0, idx);
-  prop_dictionary = dictionary.replace(" ", "%20");
-
-  String encoded_concept_id = concept_id;
-  encoded_concept_id = encoded_concept_id.replaceAll(":", "%3A");
-  
-  String url_text = "ConceptReport.jsp" + 
-      "?dictionary=" + prop_dictionary + 
-      // "&version=" + prop_version + 
-      "&code=" + encoded_concept_id;
-  String url = requestURL + url_text;
+  String url = JSPUtils.getConceptUrl(request, dictionary, null, concept_id);
   String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>

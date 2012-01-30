@@ -15,7 +15,7 @@
   
   TreeItem root = HierarchyUtils.getSampleTree();
   StringBuffer buffer = new StringBuffer();
-  HierarchyUtils.getHtml(basePath, buffer, root, "", "dictionary", "version");
+  HierarchyUtils.getHtml(request, "NCI Thesaurus", "11.09d", basePath, buffer, root);
   String tree = buffer.toString();
 %>
 
