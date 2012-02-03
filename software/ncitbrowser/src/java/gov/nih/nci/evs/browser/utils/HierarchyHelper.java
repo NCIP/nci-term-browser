@@ -46,7 +46,7 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class HierarchyUtils {
+public class HierarchyHelper {
 	private static final String INDENT = "  ";
 	
     // -------------------------------------------------------------------------
