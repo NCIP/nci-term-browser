@@ -151,11 +151,11 @@ public final class AjaxServlet extends HttpServlet {
         if (node_id == null || ontology_display_name == null)
             return null;
 
-        long ms = System.currentTimeMillis();
-        String max_tree_level_str =
-            NCItBrowserProperties.getProperty(
-                NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
-        int maxLevel = Integer.parseInt(max_tree_level_str);
+        Utils.StopWatch stopWatch = new Utils.StopWatch();
+//        String max_tree_level_str =
+//            NCItBrowserProperties.getProperty(
+//                NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
+//        int maxLevel = Integer.parseInt(max_tree_level_str);
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (ontology_version != null) versionOrTag.setVersion(ontology_version);
 
@@ -164,8 +164,7 @@ public final class AjaxServlet extends HttpServlet {
                 ontology_display_name, versionOrTag, node_id);
         debugJSONString("Section: search_tree", jsonString);
 
-        _logger.debug("Run time (milliseconds): "
-            + (System.currentTimeMillis() - ms));
+        _logger.debug("search_tree: " + stopWatch.getResult());
         return jsonString;
     }
 
