@@ -47,10 +47,36 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 
 public class HierarchyHelper {
-	private static final String INDENT = "  ";
-	
     // -------------------------------------------------------------------------
-	public static TreeItem getSampleTree() {
+	private static final String INDENT = "  ";
+    private final int INDENT_PIXELS = 4;
+    private String _basePath = "";
+    private String _leafIcon = "";
+    private String _expandIcon = "";
+    private String _collapseIcon = "";
+    
+    // -------------------------------------------------------------------------
+    public HierarchyHelper(String basePath) {
+        _basePath = basePath;
+        _leafIcon = _basePath + "/images/yui/treeview/ln.gif";
+        _expandIcon = _basePath + "/images/yui/treeview/lp.gif";
+        _collapseIcon = _basePath + "/images/yui/treeview/lm.gif";
+    }
+
+    public String getLeafIcon() {
+        return _leafIcon;
+    }
+
+    public String getExpandIcon() {
+        return _expandIcon;
+    }
+
+    public String getCollapseIcon() {
+        return _collapseIcon;
+    }
+    
+    // -------------------------------------------------------------------------
+	public TreeItem getSampleTree() {
 		TreeItem parent = new TreeItem("root", "Root");
 		
 		add(parent, "C12913", "Abnormal Cell");
@@ -60,7 +86,7 @@ public class HierarchyHelper {
 		return parent;
 	}
 	
-	private static void addActivity(TreeItem parent) {
+	private void addActivity(TreeItem parent) {
 		add(parent, "C25404", "Action");
 		add(parent, "C49235", "Administrative Activity");
 		addBehavior(add(parent, "C16326", "Behavior"));
@@ -70,31 +96,21 @@ public class HierarchyHelper {
 		add(parent, "C16847", "Technique");
 	}
 	
-	private static void addBehavior(TreeItem parent) {
+	private void addBehavior(TreeItem parent) {
 		add(parent, "C94296", "Antisocial Behavior");
 		add(parent, "C54264", "Avoidance");
 		add(parent, "C93233", "Ceremony");
 	}
 
     // -------------------------------------------------------------------------
-    private static TreeItem add(TreeItem parent, String code, String text) {
-        TreeItem child = new TreeItem(code, text);
-        parent.addChild("child", child);
-        return child;
-    }
-    
-	private static void println(String text) {
+	public static void debug(String text) {
 		System.out.println(text);
 	}
 	
-    private static void append(StringBuffer buffer, String text) {
-        buffer.append(text + "\n");
-    }
-    
 	public static void debug(TreeItem top, String indent) {
         if (top._expandable)
-            println(indent + "+ " + top._text + " (" + top._code + ")");
-        else println(indent + "* " + top._text + " (" + top._code + ")");
+            debug(indent + "+ " + top._text + " (" + top._code + ")");
+        else debug(indent + "* " + top._text + " (" + top._code + ")");
 
 		Map<String, List<TreeItem>> map = top._assocToChildMap;
 		Set<String> keys = map.keySet();
@@ -111,36 +127,18 @@ public class HierarchyHelper {
 	}
 	
     // -------------------------------------------------------------------------
-	private static final int INDENT_PIXELS = 4;
-	private static String BASEPATH = null;
-	private static String ICON_LEAF = null;
-	private static String ICON_EXPAND = null;
-	private static String ICON_COLLAPSE = null;
-	
-	public static String getLeafIcon(String basePath) {
-		return basePath + "/images/yui/treeview/ln.gif";
-	}
-
-	public static String getExpandIcon(String basePath) {
-		return basePath + "/images/yui/treeview/lp.gif";
-	}
-
-	public static String getCollapseIcon(String basePath) {
-		return basePath + "/images/yui/treeview/lm.gif";
-	}
-	
+    private TreeItem add(TreeItem parent, String code, String text) {
+        TreeItem child = new TreeItem(code, text);
+        parent.addChild("child", child);
+        return child;
+    }
+    
+    private void append(StringBuffer buffer, String text) {
+        buffer.append(text + "\n");
+    }
+    
     // -------------------------------------------------------------------------
-	private static void init(String basePath) {
-		if (BASEPATH != null)
-			return;
-		
-		BASEPATH = basePath;
-		ICON_LEAF = getLeafIcon(basePath);
-		ICON_EXPAND = getExpandIcon(basePath);
-		ICON_COLLAPSE = getCollapseIcon(basePath);
-	}
-
-	public static StringBuffer html(HttpServletRequest request, String dictionary, 
+	private StringBuffer getHtml(HttpServletRequest request, String dictionary, 
 			String version, StringBuffer buffer, TreeItem top, String indent, 
 			boolean skip) {
 		Map<String, List<TreeItem>> map = top._assocToChildMap;
@@ -156,14 +154,14 @@ public class HierarchyHelper {
 
     		if (isLeafNode)
     			append(buffer, indent + "      " 
-    				+ "<img src=\"" + ICON_LEAF +  "\">"
+    				+ "<img src=\"" + _leafIcon +  "\">"
     				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) +
     				"\">" + top._text + "</a>" 
     				+ "<div>");
     		else
     			append(buffer, indent + "      " 
     				+ "<div onclick=\"toggle(this)\">" 
-    				+ "<img src=\"" + ICON_COLLAPSE + "\">" 
+    				+ "<img src=\"" + _collapseIcon + "\">" 
     				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a></div>"
     				+ "<div>");
 		}
@@ -178,7 +176,7 @@ public class HierarchyHelper {
 				String indent2 = indent;
 				if (! skip)
 				    indent2 += "      " + INDENT;
-                html(request, dictionary, version, buffer, item, indent2, false);
+				getHtml(request, dictionary, version, buffer, item, indent2, false);
 			}
 		}
 
@@ -191,24 +189,26 @@ public class HierarchyHelper {
 		return buffer;
 	}
 	
-	public static StringBuffer getHtml(HttpServletRequest request, String dictionary, 
-		String version, String basePath, StringBuffer buffer, TreeItem top) {
-		init(basePath);
-	    return html(request, dictionary, version, buffer, top, "", true);
+	public String getHtml(HttpServletRequest request, String dictionary, 
+		String version, TreeItem top) {
+	    StringBuffer buffer = new StringBuffer();
+	    getHtml(request, dictionary, version, buffer, top, "", true);
+	    return buffer.toString();
 	}
 
     // -------------------------------------------------------------------------
 	public static void main(String[] args) {
-		TreeItem root = getSampleTree();
-		println(Utils.SEPARATOR);
-		debug(root, "");
+        String basePath = "/ncitbrowser";
+        String dictionary = "NCI Thesaurus";
+        String version = "11.09d";
 
-		String basePath = "/ncitbrowser";
-		String dictionary = "NCI Thesaurus";
-		String version = "11.09d";
-		println(Utils.SEPARATOR);
-		StringBuffer buffer = new StringBuffer();
-		getHtml(null, dictionary, version, basePath, buffer, root);
-		println(buffer.toString());
+        HierarchyHelper helper = new HierarchyHelper(basePath);
+		TreeItem root = helper.getSampleTree();
+		HierarchyHelper.debug(Utils.SEPARATOR);
+		HierarchyHelper.debug(root, "");
+
+//		HierarchyHelper.debug(Utils.SEPARATOR);
+//		String tree = helper.getHtml(null, dictionary, version, root);
+//		HierarchyHelper.debug(tree);
 	}
 }

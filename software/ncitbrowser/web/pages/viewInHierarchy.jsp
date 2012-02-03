@@ -10,9 +10,10 @@
 
 <%
   String basePath = request.getContextPath();
-  String ICON_LEAF = HierarchyHelper.getLeafIcon(basePath);
-  String ICON_EXPAND = HierarchyHelper.getExpandIcon(basePath);
-  String ICON_COLLAPSE = HierarchyHelper.getCollapseIcon(basePath);
+  HierarchyHelper hierarchyHelper = new HierarchyHelper(basePath);
+  String ICON_LEAF = hierarchyHelper.getLeafIcon();
+  String ICON_EXPAND = hierarchyHelper.getExpandIcon();
+  String ICON_COLLAPSE = hierarchyHelper.getCollapseIcon();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -178,10 +179,8 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
   HierarchyJSONParser parser = new HierarchyJSONParser(jsonString);
   TreeItem root = parser.getTreeItem();
   
-  //TreeItem root = HierarchyHelper.getSampleTree();
-  StringBuffer buffer = new StringBuffer();
-  HierarchyHelper.getHtml(request, ontology_display_name, ontology_version, basePath, buffer, root);
-  String tree = buffer.toString();
+  //TreeItem root = hierarchyHelper.getSampleTree();
+  String tree = hierarchyHelper.getHtml(request, ontology_display_name, ontology_version, root);
 %>
 
 
