@@ -49,12 +49,7 @@ import javax.servlet.http.HttpServletRequest;
 public class HierarchyUtils {
 	private static final String INDENT = "  ";
 	
-	private static TreeItem add(TreeItem parent, String code, String text) {
-		TreeItem child = new TreeItem(code, text);
-		parent.addChild("child", child);
-		return child;
-	}
-	
+    // -------------------------------------------------------------------------
 	public static TreeItem getSampleTree() {
 		TreeItem parent = new TreeItem("root", "Root");
 		
@@ -81,10 +76,21 @@ public class HierarchyUtils {
 		add(parent, "C93233", "Ceremony");
 	}
 
+    // -------------------------------------------------------------------------
+    private static TreeItem add(TreeItem parent, String code, String text) {
+        TreeItem child = new TreeItem(code, text);
+        parent.addChild("child", child);
+        return child;
+    }
+    
 	private static void println(String text) {
 		System.out.println(text);
 	}
 	
+    private static void append(StringBuffer buffer, String text) {
+        buffer.append(text + "\n");
+    }
+    
 	public static void debug(TreeItem top, String indent) {
         if (top._expandable)
             println(indent + "+ " + top._text + " (" + top._code + ")");
@@ -104,10 +110,7 @@ public class HierarchyUtils {
 		}
 	}
 	
-	private static void append(StringBuffer buffer, String text) {
-		buffer.append(text + "\n");
-	}
-	
+    // -------------------------------------------------------------------------
 	private static final int INDENT_PIXELS = 4;
 	private static String BASEPATH = null;
 	private static String ICON_LEAF = null;
@@ -126,6 +129,7 @@ public class HierarchyUtils {
 		return basePath + "/images/yui/treeview/lm.gif";
 	}
 	
+    // -------------------------------------------------------------------------
 	private static void init(String basePath) {
 		if (BASEPATH != null)
 			return;
@@ -148,16 +152,7 @@ public class HierarchyUtils {
     		append(buffer, indent + "<table border=0>");
     		append(buffer, indent + "  <tr>");
     		append(buffer, indent + "    <td width=\"" + INDENT_PIXELS + "\"></td>");
-    		
     		append(buffer, indent + "    <td>");
-//    		if (isLeafNode)
-//    			append(buffer, indent + "      " 
-//    				+ "<img src=\"" + ICON_LEAF +  "\">" + top._text
-//    				+ "<div>");
-//    		else
-//    			append(buffer, indent + "      " 
-//    				+ "<a onclick=\"toggle(this)\"><img src=\"" + ICON_COLLAPSE + "\">" + top._text + "</a>" 
-//    				+ "<div>");
 
     		if (isLeafNode)
     			append(buffer, indent + "      " 
@@ -183,7 +178,6 @@ public class HierarchyUtils {
 				String indent2 = indent;
 				if (! skip)
 				    indent2 += "      " + INDENT;
-				//html(buffer, item, indent + "      " + INDENT, false);
                 html(request, dictionary, version, buffer, item, indent2, false);
 			}
 		}
@@ -203,6 +197,7 @@ public class HierarchyUtils {
 	    return html(request, dictionary, version, buffer, top, "", true);
 	}
 
+    // -------------------------------------------------------------------------
 	public static void main(String[] args) {
 		TreeItem root = getSampleTree();
 		println(Utils.SEPARATOR);
