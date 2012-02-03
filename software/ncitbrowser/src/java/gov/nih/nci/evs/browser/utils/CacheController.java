@@ -1067,7 +1067,7 @@ public class CacheController {
 	    if (versionOrTag != null && versionOrTag.getVersion() != null) version = versionOrTag.getVersion();
 
 
-        if (!CacheController._instance.containsKey(getSubConceptKey(
+        if (!CacheController.getInstance().containsKey(getSubConceptKey(
             codingScheme, version, code))) {
             _logger.debug("SubConcepts Not Found In Cache.");
             TreeService treeService =
@@ -1092,7 +1092,7 @@ public class CacheController {
 
     public static String getTree(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
-        if (!CacheController._instance
+        if (!CacheController.getInstance()
             .containsKey(getTreeKey(codingScheme, code))) {
             _logger.debug("Tree Not Found In Cache.");
             TreeService treeService =
@@ -1121,7 +1121,7 @@ public class CacheController {
         String codingSchemeVersion = ref.getCodingSchemeVersion();
         String code = ref.getCode();
 
-        if (!CacheController._instance
+        if (!CacheController.getInstance()
             .containsKey(getTreeKey(codingScheme, code))) {
             _logger.debug("Tree Not Found In Cache.");
             TreeService treeService =
