@@ -60,6 +60,7 @@ public class HierarchyHelper {
     private String _expandIcon = "";
     private String _collapseIcon = "";
     private int _ctr = 0;
+    private static boolean _debug = false;  // DYEE_DEBUG
     
     // -------------------------------------------------------------------------
     public HierarchyHelper(String basePath) {
@@ -148,7 +149,8 @@ public class HierarchyHelper {
     }
     
     private void append(StringBuffer buffer, String text) {
-        // debug(text);
+        if (_debug)
+            debug(text);
         buffer.append(text + "\n");
     }
     
@@ -206,9 +208,11 @@ public class HierarchyHelper {
 	
 	public String getHtml(HttpServletRequest request, String dictionary, 
 		String version, TreeItem top) {
+        Utils.StopWatch stopWatch = new Utils.StopWatch();
 	    _ctr = 0;
 	    StringBuffer buffer = new StringBuffer();
 	    getHtml(request, dictionary, version, buffer, top, "", true);
+	    _logger.debug("getHtml: " + stopWatch.getResult());
 	    return buffer.toString();
 	}
 
