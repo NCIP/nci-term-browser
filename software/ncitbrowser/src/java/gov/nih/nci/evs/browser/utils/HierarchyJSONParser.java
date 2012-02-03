@@ -278,6 +278,6 @@ public class HierarchyJSONParser {
         TreeItem treeItem = parser.getTreeItem();
         
         parser.debug(Utils.SEPARATOR);
-        HierarchyHelper.debug(treeItem, "");
+        new HierarchyHelper().debug(treeItem, "");
     }
 }
