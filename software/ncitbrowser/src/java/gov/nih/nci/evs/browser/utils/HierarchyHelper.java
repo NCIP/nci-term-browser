@@ -42,25 +42,37 @@ package gov.nih.nci.evs.browser.utils;
  * <!-- LICENSE_TEXT_END -->
  */
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 public class HierarchyHelper {
     // -------------------------------------------------------------------------
-	private static final String INDENT = "  ";
+    private static Logger _logger = Logger.getLogger(HierarchyHelper.class);
+    private static DecimalFormat _iFormatter = new java.text.DecimalFormat("0000");
+    private static final String INDENT = "  ";
     private final int INDENT_PIXELS = 4;
     private String _basePath = "";
     private String _leafIcon = "";
     private String _expandIcon = "";
     private String _collapseIcon = "";
+    private int _ctr = 0;
     
     // -------------------------------------------------------------------------
     public HierarchyHelper(String basePath) {
+        if (basePath == null)
+            basePath = "";
         _basePath = basePath;
         _leafIcon = _basePath + "/images/yui/treeview/ln.gif";
         _expandIcon = _basePath + "/images/yui/treeview/lp.gif";
         _collapseIcon = _basePath + "/images/yui/treeview/lm.gif";
+    }
+
+    public HierarchyHelper() {
+        this(null);
     }
 
     public String getLeafIcon() {
@@ -103,11 +115,13 @@ public class HierarchyHelper {
 	}
 
     // -------------------------------------------------------------------------
-	public static void debug(String text) {
-		System.out.println(text);
+	public void debug(String text) {
+        text = _iFormatter.format(_ctr) + ": " + text; ++_ctr;
+        _logger.debug(text);
+        //System.out.println(text);
 	}
 	
-	public static void debug(TreeItem top, String indent) {
+	public void debug(TreeItem top, String indent) {
         if (top._expandable)
             debug(indent + "+ " + top._text + " (" + top._code + ")");
         else debug(indent + "* " + top._text + " (" + top._code + ")");
@@ -134,6 +148,7 @@ public class HierarchyHelper {
     }
     
     private void append(StringBuffer buffer, String text) {
+        // debug(text);
         buffer.append(text + "\n");
     }
     
@@ -145,7 +160,7 @@ public class HierarchyHelper {
 		Set<String> keys = map.keySet();
 		
 		if (! skip) {
-    		boolean isLeafNode = keys.isEmpty();
+    		boolean isLeafNode = ! top._expandable;
     
     		append(buffer, indent + "<table border=0>");
     		append(buffer, indent + "  <tr>");
@@ -191,6 +206,7 @@ public class HierarchyHelper {
 	
 	public String getHtml(HttpServletRequest request, String dictionary, 
 		String version, TreeItem top) {
+	    _ctr = 0;
 	    StringBuffer buffer = new StringBuffer();
 	    getHtml(request, dictionary, version, buffer, top, "", true);
 	    return buffer.toString();
@@ -204,11 +220,11 @@ public class HierarchyHelper {
 
         HierarchyHelper helper = new HierarchyHelper(basePath);
 		TreeItem root = helper.getSampleTree();
-		HierarchyHelper.debug(Utils.SEPARATOR);
-		HierarchyHelper.debug(root, "");
+		helper.debug(Utils.SEPARATOR);
+		helper.debug(root, "");
 
-//		HierarchyHelper.debug(Utils.SEPARATOR);
+//		helper.debug(Utils.SEPARATOR);
 //		String tree = helper.getHtml(null, dictionary, version, root);
-//		HierarchyHelper.debug(tree);
+//		helper.debug(tree);
 	}
 }
