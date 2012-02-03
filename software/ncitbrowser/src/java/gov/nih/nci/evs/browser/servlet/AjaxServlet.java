@@ -1,6 +1,7 @@
 package gov.nih.nci.evs.browser.servlet;
 
 import org.json.*;
+
 import gov.nih.nci.evs.browser.utils.*;
 
 import java.io.*;
@@ -112,7 +113,7 @@ public final class AjaxServlet extends HttpServlet {
         execute(request, response);
     }
 
-    private void debugJSONString(String msg, String jsonString) {
+    private static void debugJSONString(String msg, String jsonString) {
     	boolean debug = false;  //DYEE_DEBUG
     	if (! debug) 
     		return;
@@ -122,6 +123,50 @@ public final class AjaxServlet extends HttpServlet {
 	    _logger.debug("jsonString: " + jsonString);
 	    _logger.debug("jsonString length: " + jsonString.length());
 	    Utils.debugJSONString(jsonString);
+    }
+    
+    public static void search_tree(HttpServletResponse response, String node_id,
+        String ontology_display_name, String ontology_version) {
+        try {
+            String jsonString = search_tree(node_id,
+                ontology_display_name, ontology_version);
+            if (jsonString == null)
+                return;
+    
+            JSONObject json = new JSONObject();
+            JSONArray rootsArray = new JSONArray(jsonString);
+            json.put("root_nodes", rootsArray);
+    
+            response.setContentType("text/html");
+            response.setHeader("Cache-Control", "no-cache");
+            response.getWriter().write(json.toString());
+            response.getWriter().flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String search_tree(String node_id,
+        String ontology_display_name, String ontology_version) throws Exception {
+        if (node_id == null || ontology_display_name == null)
+            return null;
+
+        long ms = System.currentTimeMillis();
+        String max_tree_level_str =
+            NCItBrowserProperties.getProperty(
+                NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
+        int maxLevel = Integer.parseInt(max_tree_level_str);
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (ontology_version != null) versionOrTag.setVersion(ontology_version);
+
+        String jsonString =
+            CacheController.getTree(
+                ontology_display_name, versionOrTag, node_id);
+        debugJSONString("Section: search_tree", jsonString);
+
+        _logger.debug("Run time (milliseconds): "
+            + (System.currentTimeMillis() - ms));
+        return jsonString;
     }
 
     /**
@@ -134,7 +179,6 @@ public final class AjaxServlet extends HttpServlet {
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet exception occurs
      */
-
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         // Determine request by attributes
@@ -224,51 +268,7 @@ public final class AjaxServlet extends HttpServlet {
          * (System.currentTimeMillis() - ms)); return; } }
          */
         if (action.equals("search_tree")) {
-
-            if (node_id != null && ontology_display_name != null) {
-                response.setContentType("text/html");
-                response.setHeader("Cache-Control", "no-cache");
-                JSONObject json = new JSONObject();
-                try {
-                    // testing
-                    // JSONArray rootsArray =
-                    // CacheController.getInstance().getPathsToRoots(ontology_display_name,
-                    // null, node_id, true);
-
-                    String max_tree_level_str = null;
-                    int maxLevel = -1;
-                    try {
-                        max_tree_level_str =
-                            NCItBrowserProperties.getInstance().getProperty(
-                                NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
-                        maxLevel = Integer.parseInt(max_tree_level_str);
-
-                    } catch (Exception ex) {
-
-                    }
-                    CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-                    if (ontology_version != null) versionOrTag.setVersion(ontology_version);
-
-                    String jsonString =
-                        CacheController.getInstance().getTree(
-                            ontology_display_name, versionOrTag, node_id);
-
-                    debugJSONString("Section: search_tree", jsonString);
-
-                    JSONArray rootsArray = new JSONArray(jsonString);
-
-                    json.put("root_nodes", rootsArray);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                response.getWriter().write(json.toString());
-                response.getWriter().flush();
-
-                _logger.debug("Run time (milliseconds): "
-                    + (System.currentTimeMillis() - ms));
-                return;
-            }
+            search_tree(response, node_id, ontology_display_name, ontology_version);
         }
 
         else if (action.equals("build_tree")) {

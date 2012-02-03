@@ -5,6 +5,7 @@
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+<%@ page import="gov.nih.nci.evs.browser.servlet.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <%
@@ -12,11 +13,6 @@
   String ICON_LEAF = HierarchyUtils.getLeafIcon(basePath);
   String ICON_EXPAND = HierarchyUtils.getExpandIcon(basePath);
   String ICON_COLLAPSE = HierarchyUtils.getCollapseIcon(basePath);
-  
-  TreeItem root = HierarchyUtils.getSampleTree();
-  StringBuffer buffer = new StringBuffer();
-  HierarchyUtils.getHtml(request, "NCI Thesaurus", "11.09d", basePath, buffer, root);
-  String tree = buffer.toString();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -167,6 +163,28 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 }
 %>
 
+
+<%
+  String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
+  String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
+  String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
+
+  String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
+  if (ontology_display_name == null) {
+    ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+  }
+  
+  String jsonString = AjaxServlet.search_tree(ontology_node_id, ontology_display_name, ontology_version);
+  HierarchyJSONParser parser = new HierarchyJSONParser(jsonString);
+  TreeItem root = parser.getTreeItem();
+  
+  //TreeItem root = HierarchyUtils.getSampleTree();
+  StringBuffer buffer = new StringBuffer();
+  HierarchyUtils.getHtml(request, ontology_display_name, ontology_version, basePath, buffer, root);
+  String tree = buffer.toString();
+%>
+
+
         <div id="popupContentArea">
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
@@ -187,33 +205,6 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
             </tr>
           </table>
 
-          <form id="pg_form">
-            <%
-              String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
-
-              //String ontology_display_name = hierarchy_dictionary;
-        //String schema = hierarchy_schema;
-        //String version = hierarchy_version;
-
-String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
-String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
-
-//System.out.println("hierarchy.jsp ontology_version: " + ontology_version);
-
-
-String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
-if (ontology_display_name == null) {
-    ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-}
-
-            %>
-            <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
-            <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=HTTPUtils.cleanXSS(ontology_display_name)%>" />
-            <input type="hidden" id="schema" name="schema" value="<%=HTTPUtils.cleanXSS(schema)%>" />
-            <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
-
-          </form>
-          <!-- End of Tree control content -->
         </div>
       </div>
     </div>
