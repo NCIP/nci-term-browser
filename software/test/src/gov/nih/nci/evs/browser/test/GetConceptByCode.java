@@ -28,8 +28,11 @@ public class GetConceptByCode {
 //        search("GO", "September2010", "GO:0005102");
 //        search("GO", "September2010", "GO:0006281");
 //        search("GO_to_NCIt_Mapping", "1.0", "GO:0005102");
-        search("NCI Thesaurus", "10.12c", "C12434");
-        search("NCI Thesaurus", "10.11e", "C12434");
+
+//        search("NCI Thesaurus", "10.12c", "C12434");
+//        search("NCI Thesaurus", "10.11e", "C12434");
+        
+        search("NCI Thesaurus", "11.09d", "C12434");
     }
 
     public static void main(String[] args) {

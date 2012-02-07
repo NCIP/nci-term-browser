@@ -8,7 +8,7 @@ public class SetupEnv {
     private static final String PROPERTY_FILE = 
         "gov.nih.nci.evs.browser.NCItBrowserProperties";
     private static String DEFAULT_PROPERTY_FILE =
-        "C:/apps/evs/ncit/conf/NCItBrowserProperties.xml";
+        "c:/Users/yeed/apps/evs/ncit/conf/NCItBrowserProperties.xml";
     private static SetupEnv _instance = null;
     
     public static SetupEnv getInstance() {
