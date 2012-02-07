@@ -14,7 +14,8 @@ set CLASSPATH=%cp%
 set java=%JAVA_HOME%\bin\java
 set class=gov.nih.nci.evs.browser.test.MatchConceptByCode
 set class=gov.nih.nci.evs.browser.test.GetConceptByCode
-set args=-propertyFile C:/apps/evs/ncit-webapp/conf/NCItBrowserProperties.xml
+set class=gov.nih.nci.evs.browser.test.tree.LexEVSTreeTest
+set args=-propertyFile C:/Users/yeed/apps/evs/ncit-webapp/conf/NCItBrowserProperties.xml
 
 rem -------------------------------------------------------------------------------------
 @echo on
