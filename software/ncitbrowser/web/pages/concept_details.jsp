@@ -222,6 +222,10 @@
                     				boolean typeLink_isMapping2 = DataUtils.isMapping(dictionary, null);
                            	if (tree_access2 && !typeLink_isMapping2) {
                            %>
+                           
+                           
+                           
+                           
                            <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
                            <% boolean debugVIH = false; if (debugVIH) {  //DYEE_DEBUG %>
                              <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/viewInHierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
@@ -235,6 +239,10 @@
                            <% } %>
                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               View in Hierarchy</a>
+                              
+                           <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/view_in_hierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                              Test VIH</a>                        
+                              
              <%
                       }
                       boolean historyAccess = HistoryUtils.isHistoryServiceAvailable(dictionary);
