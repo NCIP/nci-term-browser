@@ -17,6 +17,11 @@ public class LexEVSTreeTest {
         try {
             _logger.debug("");
             _logger.debug(Utils.SEPARATOR);
+            _logger.debug("Method: LexEVSTreeTest.test:");
+            _logger.debug("  * codingScheme: " + codingScheme);
+            _logger.debug("  * version: " + version);
+            _logger.debug("  * code: " + code);
+            
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             if (version != null)
                 versionOrTag.setVersion(version);
