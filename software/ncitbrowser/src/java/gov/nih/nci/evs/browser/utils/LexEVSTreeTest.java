@@ -17,6 +17,7 @@ public class LexEVSTreeTest {
         try {
             _logger.debug("");
             _logger.debug(Utils.SEPARATOR);
+            _logger.debug("Note: Please ignore the following debug/exception.");
             _logger.debug("Method: LexEVSTreeTest.test:");
             _logger.debug("  * codingScheme: " + codingScheme);
             _logger.debug("  * version: " + version);
@@ -42,8 +43,10 @@ public class LexEVSTreeTest {
                 _logger.debug("Root: " + root.getCode() + " "
                     + root.getEntityDescription());
             }
+            _logger.debug("Note: Completed");
         } catch (Exception e) {
             e.printStackTrace();
+            _logger.debug("Note: Completed with errors.");
         }
     }
     
