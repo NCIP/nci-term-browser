@@ -19,7 +19,7 @@
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/autocomplete-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/treeview-min.js" ></script>
 <%
-  LexEVSTreeTest.test(); //DYEE_Test_VIH_ONLY
+  //LexEVSTreeTest.test(); //DYEE_Test_VIH_ONLY
   String basePath = request.getContextPath();
 %>
 
