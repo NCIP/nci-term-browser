@@ -80,6 +80,10 @@ import org.apache.log4j.*;
 public class SearchUtils {
     private static Logger _logger = Logger.getLogger(SearchUtils.class);
 
+    //private static String CODE_SEARCH_ALGORITHM = "LuceneQuery";
+
+    private static String CODE_SEARCH_ALGORITHM = "exactMatch";
+
     private DoubleMetaphone _doubleMetaphone = null;
 
     private int _max_str_length = 1000;
@@ -1125,7 +1129,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 stopWatch.start();
                 iterator =
                     matchConceptCode(schemes, versions, matchText, source,
-                    "LuceneQuery");
+                    CODE_SEARCH_ALGORITHM);
                 if (debug_flag)
                     _logger.debug("Match concept code delay (msec): " +
                         stopWatch.duration());
@@ -2564,7 +2568,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 
                 iterator =
                     matchConceptCode(scheme, version, matchText0, source,
-                        "LuceneQuery");
+                        CODE_SEARCH_ALGORITHM);
                 if (iterator != null) {
                     try {
                         iterator_size = iterator.numberRemaining();
@@ -3352,7 +3356,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
             if (iterator_size == 0) {
                 iterator =
                     matchConceptCode(scheme, version, matchText0, source,
-                        "LuceneQuery");
+                        CODE_SEARCH_ALGORITHM);
                 if (iterator != null) {
                     try {
                         iterator_size = iterator.numberRemaining();
@@ -3518,7 +3522,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 if (size == 0) {
                     iterator =
                         matchConceptCode(scheme, version, matchText, source,
-                            "LuceneQuery");
+                            CODE_SEARCH_ALGORITHM);
                 }
                 size = iterator.numberRemaining();
                 if (size == 0) {
@@ -3535,7 +3539,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                     w.add(iterator);
                     ResolvedConceptReferencesIterator itr1 =
                         matchConceptCode(scheme, version, matchText, source,
-                            "LuceneQuery");
+                            CODE_SEARCH_ALGORITHM);
                     if (itr1 != null)
                         w.add(itr1);
                     ResolvedConceptReferencesIterator itr2 =
@@ -3711,7 +3715,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         ResolvedConceptReferencesIterator iterator = null;
 
         iterator =
-            matchConceptCode(scheme, version, matchText, source, "LuceneQuery");
+            matchConceptCode(scheme, version, matchText, source, CODE_SEARCH_ALGORITHM);
         try {
             int size = iterator.numberRemaining();
             if (size == 0) {
@@ -4115,7 +4119,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 				cns_code = cns_code.restrictToMatchingProperties(ConvenienceMethods
 					.createLocalNameList(new String[] { "conceptCode" }),
 					propertyTypes, sourceList, contextList, qualifierList,
-					matchText, "LuceneQuery", null);
+					matchText, CODE_SEARCH_ALGORITHM, null);
 					//matchText, "exactMatch", null);
 				if (cns_code != null) cns_vec.add(cns_code);
 
