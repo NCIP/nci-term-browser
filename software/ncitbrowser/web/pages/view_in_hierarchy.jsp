@@ -8,15 +8,8 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
 <%
-  String basePath = request.getContextPath();
-  String ICON_LEAF = HierarchyUtils.getLeafIcon(basePath);
-  String ICON_EXPAND = HierarchyUtils.getExpandIcon(basePath);
-  String ICON_COLLAPSE = HierarchyUtils.getCollapseIcon(basePath);
 
-  TreeItem root = HierarchyUtils.getSampleTree();
-  StringBuffer buffer = new StringBuffer();
-  HierarchyUtils.getHtml(request, "NCI Thesaurus", "11.09d", basePath, buffer, root);
-  String tree = buffer.toString();
+String basePath = request.getContextPath();
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
