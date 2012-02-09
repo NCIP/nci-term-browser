@@ -3,6 +3,9 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 
 <%@ page import="java.util.Vector"%>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.ArrayList"%>
+
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
@@ -281,44 +284,10 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
           <form id="pg_form">
           
 
-<TABLE BORDER=0>
-<TR>
-<TD>
-<DIV id="root1">
-<IMG src="<%= request.getContextPath() %>/images/plus.gif" onClick="replace_content('root1')"/>&nbsp;root_1
-</DIV>
-</TD>
-</TR>
-
-<TR>
-<TD>
-<DIV id="root2">
-<IMG src="<%= request.getContextPath() %>/images/plus.gif" onClick="replace_content('root2')"/>&nbsp;root_2
-</DIV>
-</TD>
-</TR>
-
-<TR>
-<TD>
-<DIV id="root3">
-<IMG src="<%= request.getContextPath() %>/images/plus.gif" onClick="replace_content('root3')"/>&nbsp;root_3
-</DIV>
-</TD>
-</TR>
-
-<TR>
-<TD>
-<DIV id="root4">
-<IMG src="<%= request.getContextPath() %>/images/plus.gif" onClick="replace_content('root4')"/>&nbsp;root_4
-</DIV>
-</TD>
-</TR>
-</table>
-
+<table border=0>
 
             <%
               String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
-
 
 String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
 String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
@@ -330,7 +299,29 @@ if (ontology_display_name == null) {
     ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 }
 
-            %>
+
+                ViewInHierarchyUtil util = new ViewInHierarchyUtil();
+		List tree_data = util.getTree(ontology_display_name, ontology_version, ontology_node_id, 1);
+		
+System.out.println("***** (JSP): tree_data lines = " + 	tree_data.size());	
+		
+		
+		String html_line = new ViewInHierarchyUtil().toHTML(basePath, tree_data);
+		
+%>    
+          <%=html_line%>
+
+
+
+
+
+<tr><td><div id="C20189"><img src="/ncitbrowser/images/minus.gif" onClick="replace_content('C20189')"/>&nbsp;Property or Attribute</div></td></tr><tr><td><div id="C25447">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/minus.gif" onClick="replace_content('C25447')"/>&nbsp;Characteristic</div></td></tr><tr><td><div id="C25377">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/minus.gif" onClick="replace_content('C25377')"/>&nbsp;Appearance</div></td></tr><tr><td><div id="C37927">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/minus.gif" onClick="replace_content('C37927')"/>&nbsp;Color</div></td></tr><tr><td><div id="C48323">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Black</div></td></tr><tr><td><div id="C48333">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Blue</div></td></tr><tr><td><div id="C48332">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brown</div></td></tr><tr><td><div id="C48324">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gray</div></td></tr><tr><td><div id="C48329">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Green</div></td></tr><tr><td><div id="C48331">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Orange</div></td></tr><tr><td><div id="C48328">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pink</div></td></tr><tr><td><div id="C48327">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Purple</div></td></tr><tr><td><div id="C48326">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Red</div></td></tr><tr><td><div id="C96298">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tan</div></td></tr><tr><td><div id="C48334">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Turquoise</div></td></tr><tr><td><div id="C48325">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;White</div></td></tr><tr><td><div id="C48330">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yellow</div></td></tr><tr><td><div id="C90392">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hair Coat Color</div></td></tr><tr><td><div id="C94578">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stained Appearance</div></td></tr><tr><td><div id="C53251">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C53251')"/>&nbsp;Adverse Event Characteristics</div></td></tr><tr><td><div id="C61468">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aspect</div></td></tr><tr><td><div id="C73486">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aspect Ratio</div></td></tr><tr><td><div id="C52089">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Big-O Notation</div></td></tr><tr><td><div id="C70753">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brightness</div></td></tr><tr><td><div id="C25443">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C25443')"/>&nbsp;Capacity</div></td></tr><tr><td><div id="C41185">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C41185')"/>&nbsp;Concentration</div></td></tr><tr><td><div id="C70749">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contour</div></td></tr><tr><td><div id="C70754">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contrast</div></td></tr><tr><td><div id="C45781">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C45781')"/>&nbsp;Density</div></td></tr><tr><td><div id="C25333">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Depth</div></td></tr><tr><td><div id="C42676">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C42676')"/>&nbsp;Dimensionality</div></td></tr><tr><td><div id="C54215">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Directionality</div></td></tr><tr><td><div id="C62263">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C62263')"/>&nbsp;Diversity</div></td></tr><tr><td><div id="C25489">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dryness</div></td></tr><tr><td><div id="C73619">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C73619')"/>&nbsp;Feature</div></td></tr><tr><td><div id="C73792">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Flip Angle</div></td></tr><tr><td><div id="C75445">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gait</div></td></tr><tr><td><div id="C88214">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generation</div></td></tr><tr><td><div id="C25347">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C25347')"/>&nbsp;Height</div></td></tr><tr><td><div id="C70589">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Abundance</div></td></tr><tr><td><div id="C49145">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accuracy</div></td></tr><tr><td><div id="C64358">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alert</div></td></tr><tr><td><div id="C49033">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Alignment</div></td></tr><tr><td><div id="C25414">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aliquot</div></td></tr><tr><td><div id="C70429">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ambiguity</div></td></tr><tr><td><div id="C67505">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C67505')"/>&nbsp;Angle</div></td></tr><tr><td><div id="C25244">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C25244')"/>&nbsp;Area</div></td></tr><tr><td><div id="C61532">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C61532')"/>&nbsp;Arrangement</div></td></tr><tr><td><div id="C28025">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asymmetry</div></td></tr><tr><td><div id="C89327">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Be</div></td></tr><tr><td><div id="C93270">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Biological Profile</div></td></tr><tr><td><div id="C37919">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Blur</div></td></tr><tr><td><div id="C85883">&nbsp;&nbsp;&nbsp;&nbsp;<img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C85883')"/>&nbsp;Burden</div></td></tr><tr><td><div id="C28135">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caloric Intake</div></td></tr><tr><td><div id="C74979">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Capability</div></td></tr><tr><td><div id="C54199">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cardinality</div></td></tr><tr><td><div id="C71490">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Case Sensitive</div></td></tr><tr><td><div id="C86056">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Causing</div></td></tr><tr><td><div id="C17895">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cell Lineage</div></td></tr><tr><td><div id="C12913"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C12913')"/>&nbsp;Abnormal Cell</div></td></tr><tr><td><div id="C43431"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C43431')"/>&nbsp;Activity</div></td></tr><tr><td><div id="C12219"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C12219')"/>&nbsp;Anatomic Structure, System, or Substance</div></td></tr><tr><td><div id="C20633"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C20633')"/>&nbsp;Biochemical Pathway</div></td></tr><tr><td><div id="C17828"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C17828')"/>&nbsp;Biological Process</div></td></tr><tr><td><div id="C12218"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C12218')"/>&nbsp;Chemotherapy Regimen or Agent Combination</div></td></tr><tr><td><div id="C20181"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C20181')"/>&nbsp;Conceptual Entity</div></td></tr><tr><td><div id="C20047"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C20047')"/>&nbsp;Diagnostic or Prognostic Factor</div></td></tr><tr><td><div id="C7057"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C7057')"/>&nbsp;Disease, Disorder or Finding</div></td></tr><tr><td><div id="C1908"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C1908')"/>&nbsp;Drug, Food, Chemical or Biomedical Material</div></td></tr><tr><td><div id="C22188"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C22188')"/>&nbsp;Experimental Organism Anatomical Concept</div></td></tr><tr><td><div id="C22187"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C22187')"/>&nbsp;Experimental Organism Diagnosis</div></td></tr><tr><td><div id="C16612"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C16612')"/>&nbsp;Gene</div></td></tr><tr><td><div id="C26548"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C26548')"/>&nbsp;Gene Product</div></td></tr><tr><td><div id="C97325"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C97325')"/>&nbsp;Manufactured Object</div></td></tr><tr><td><div id="C3910"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C3910')"/>&nbsp;Molecular Abnormality</div></td></tr><tr><td><div id="C28389"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C28389')"/>&nbsp;NCI Administrative Concept</div></td></tr><tr><td><div id="C14250"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C14250')"/>&nbsp;Organism</div></td></tr><tr><td><div id="C28428"><img src="/ncitbrowser/images/plus.gif" onClick="replace_content('C28428')"/>&nbsp;Retired Concept</div></td></tr>
+
+
+
+
+</table>
+
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=HTTPUtils.cleanXSS(ontology_display_name)%>" />
             <input type="hidden" id="schema" name="schema" value="<%=HTTPUtils.cleanXSS(schema)%>" />
