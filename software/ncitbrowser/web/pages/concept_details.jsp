@@ -227,7 +227,7 @@
                            
                            
                            <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
-                           <% boolean debugVIH = true; if (debugVIH) {  //DYEE_DEBUG %>
+                           <% boolean debugVIH = false; if (debugVIH) {  //DYEE_DEBUG %>
                              <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/viewInHierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                                 DHtml</a>
                              <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/viewInHierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy');">
