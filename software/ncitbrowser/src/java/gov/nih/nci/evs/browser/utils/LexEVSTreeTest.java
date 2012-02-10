@@ -34,8 +34,11 @@ public class LexEVSTreeTest {
             LexEvsTree tree = treeService.getTree(codingScheme, versionOrTag, code);
             _logger.debug("tree.getCurrentFocus().getCode(): " + tree.getCurrentFocus().getCode());
             
-            List<LexEvsTreeNode> listEvsTreeNode =
-                EvsTreeConverterFactory.getEvsTreeConverter()
+//            List<LexEvsTreeNode> listEvsTreeNode =
+//                EvsTreeConverterFactory.getEvsTreeConverter()
+//                    .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
+            List<LexEvsTreeNode> listEvsTreeNode = 
+                treeService.getEvsTreeConverter()
                     .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
     
             for (int i = 0; i < listEvsTreeNode.size(); i++) {
