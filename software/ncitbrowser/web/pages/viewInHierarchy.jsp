@@ -30,37 +30,48 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
 
   <script language="JavaScript">
-      function toggle(node)
-      {
-        // Unfold the branch if it isn't visible
-        if (node.nextSibling.style.display == 'none')
-        {
-          // Change the image (if there is an image)
-          if (node.children.length > 0)
-          {
-            if (node.children.item(0).tagName == "IMG")
-            {
+    function toggle(node) {
+        if (node.nextSibling.style.display == 'none') { // Unfold branch
+          if (node.children.length > 0) { // Change image
+            if (node.children.item(0).tagName == "IMG") {
               node.children.item(0).src = "<%=ICON_COLLAPSE%>";
             }
           }
-
           node.nextSibling.style.display = '';
-        }
-
-        // Collapse the branch if it IS visible
-        else
-        {
-          // Change the image (if there is an image)
-          if (node.children.length > 0)
-          {
-            if (node.children.item(0).tagName == "IMG")
-            {
+        } else {
+          if (node.children.length > 0) { // Collapse branch
+            if (node.children.item(0).tagName == "IMG") { // Change image
               node.children.item(0).src = "<%=ICON_EXPAND%>";
             }
           }
-
           node.nextSibling.style.display = 'none';
         }
+      }
+
+      function addContent(nodeID) {
+          var element = document.getElementById(nodeID);
+          var parent = element.parentElement;
+          var name = element.getAttribute("name");
+          var conceptNames = new Array("Blood", "Cell", "Gene");
+          var timeStamp = new Date().getTime();
+  
+          var x = "";
+          x = x + "<div id=\"" + nodeID + "\" name=\"" + name + "\">";
+          x = x + "  <a onclick=\"toggle(this)\"><img src=\"<%=ICON_COLLAPSE%>\"> " + name + "</a><div>";
+          x = x + "  <table>";
+          for (var i=0; i<conceptNames.length; i++) {
+              var name = conceptNames[i];
+              var newID = timeStamp + "_" + i; //unique ID
+              var newName = timeStamp + ": " + name;
+              x = x + "    <tr><td>";
+              x = x + "      <div id=\"" + newID + "\" name=\"" + newName + "\">";
+              x = x + "      <img src=\"<%=ICON_EXPAND%>\" onClick=\"addContent('" + newID + "')\"/> " + newName;
+              x = x + "      </div>";
+              x = x + "    </td></tr>";
+          }
+          x = x + "  </table>";
+          x = x + "</div>";
+          parent.innerHTML=x;
       }
     </script>
   </head>

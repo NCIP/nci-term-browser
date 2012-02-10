@@ -169,18 +169,35 @@ public class HierarchyHelper {
     		append(buffer, indent + "    <td width=\"" + INDENT_PIXELS + "\"></td>");
     		append(buffer, indent + "    <td>");
 
-    		if (isLeafNode)
-    			append(buffer, indent + "      " 
-    				+ "<img src=\"" + _leafIcon +  "\">"
-    				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) +
-    				"\">" + top._text + "</a>" 
-    				+ "<div>");
-    		else
-    			append(buffer, indent + "      " 
-    				+ "<div onclick=\"toggle(this)\">" 
-    				+ "<img src=\"" + _collapseIcon + "\">" 
-    				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a></div>"
-    				+ "<div>");
+    		if (isLeafNode) {
+    		    if (! top._text.equals("...")) {
+        			append(buffer, indent + "      " 
+        				+ "<img src=\"" + _leafIcon +  "\">"
+        				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) +
+        				"\">" + top._text + "</a>" 
+        				+ "<div>");
+    		    } else {
+                    append(buffer, indent + "      " 
+                        + "<img src=\"" + _leafIcon +  "\">"
+                        + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) +
+                        "\">" + top._text + "</a>" 
+                        + "<div>");
+    		    }
+    		} else {
+    		    if (keys.size() > 0) {
+        			append(buffer, indent + "      " 
+        				+ "<div onclick=\"toggle(this)\">" 
+        				+ "<img src=\"" + _collapseIcon + "\">" 
+        				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a></div>"
+        				+ "<div>");
+    		    } else {
+                    append(buffer, indent + "      " 
+                        + "<div onclick=\"toggle(this)\">" 
+                        + "<img src=\"" + _expandIcon + "\">" 
+                        + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a></div>"
+                        + "<div>");
+    		    }
+    		}
 		}
     		
 		Iterator<String> iterator_key = keys.iterator();
