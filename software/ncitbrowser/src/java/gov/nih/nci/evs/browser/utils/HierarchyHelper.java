@@ -191,11 +191,14 @@ public class HierarchyHelper {
         				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a></div>"
         				+ "<div>");
     		    } else {
-                    append(buffer, indent + "      " 
-                        + "<div onclick=\"toggle(this)\">" 
-                        + "<img src=\"" + _expandIcon + "\">" 
-                        + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a></div>"
-                        + "<div>");
+//                    append(buffer, indent + "      <div id=\"" + top._text + "\" name=\"" + top._text + "\">");
+//                    append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + top._text  + "')\"/> " + top._text);
+//                    append(buffer, indent + "      </div><div>");
+
+                    append(buffer, indent + "      <div id=\"" + top._text + "\" name=\"" + top._text + "\">");
+                    append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + top._text  + "')\"/> "
+                            + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a>");
+                    append(buffer, indent + "      </div><div>");
     		    }
     		}
 		}
