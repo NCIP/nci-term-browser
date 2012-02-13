@@ -30,6 +30,8 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
 
   <script language="JavaScript">
+    var _idCtr = 0;
+    
     function toggle(node) {
         if (node.nextSibling.style.display == 'none') { // Unfold branch
           if (node.children.length > 0) { // Change image
@@ -53,7 +55,6 @@
           var parent = element.parentElement;
           var name = element.getAttribute("name");
           var conceptNames = new Array("Blood", "Cell", "Gene");
-          var timeStamp = new Date().getTime();
   
           var x = "";
           x = x + "<div id=\"" + nodeID + "\" name=\"" + name + "\">";
@@ -61,8 +62,8 @@
           x = x + "  <table>";
           for (var i=0; i<conceptNames.length; i++) {
               var name = conceptNames[i];
-              var newID = timeStamp + "_" + i; //unique ID
-              var newName = timeStamp + ": " + name;
+              var newID = "expand_" + _idCtr++;
+              var newName = name;
               x = x + "    <tr><td>";
               x = x + "      <div id=\"" + newID + "\" name=\"" + newName + "\">";
               x = x + "      <img src=\"<%=ICON_EXPAND%>\" onClick=\"addContent('" + newID + "')\"/> " + newName;

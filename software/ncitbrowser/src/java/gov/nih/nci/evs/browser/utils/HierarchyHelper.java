@@ -59,7 +59,7 @@ public class HierarchyHelper {
     private String _leafIcon = "";
     private String _expandIcon = "";
     private String _collapseIcon = "";
-    private int _idCtr = 1000;
+    private int _idCtr = 0;
     private int _debugCtr = 0;
     private static boolean _debug = false;  // DYEE_DEBUG
     
@@ -194,7 +194,7 @@ public class HierarchyHelper {
         				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) + "\">" + name + "</a></div>"
         				+ "<div>");
     		    } else {
-    		        String id = "expand_" + _idCtr++; 
+    		        String id = "add_" + _idCtr++; 
                     append(buffer, indent + "      <div id=\"" + id + "\" name=\"" + name + "\">");
                     append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + id  + "')\"/> "
                             + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) + "\">" + name + "</a>");
