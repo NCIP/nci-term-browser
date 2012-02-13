@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.apache.log4j.Logger;
-import org.lexevs.tree.evstree.EvsTreeConverterFactory;
 import org.lexevs.tree.model.LexEvsTree;
 import org.lexevs.tree.model.LexEvsTreeNode;
 import org.lexevs.tree.service.TreeService;
