@@ -59,7 +59,8 @@ public class HierarchyHelper {
     private String _leafIcon = "";
     private String _expandIcon = "";
     private String _collapseIcon = "";
-    private int _ctr = 0;
+    private int _idCtr = 1000;
+    private int _debugCtr = 0;
     private static boolean _debug = false;  // DYEE_DEBUG
     
     // -------------------------------------------------------------------------
@@ -117,7 +118,7 @@ public class HierarchyHelper {
 
     // -------------------------------------------------------------------------
 	public void debug(String text) {
-        text = _iFormatter.format(_ctr) + ": " + text; ++_ctr;
+        text = _iFormatter.format(_debugCtr) + ": " + text; ++_debugCtr;
         _logger.debug(text);
         //System.out.println(text);
 	}
@@ -158,9 +159,11 @@ public class HierarchyHelper {
 	private StringBuffer getHtml(HttpServletRequest request, String dictionary, 
 			String version, StringBuffer buffer, TreeItem top, String indent, 
 			boolean skip) {
+	    String code = top._code;
+	    String name = top._text;
 		Map<String, List<TreeItem>> map = top._assocToChildMap;
 		Set<String> keys = map.keySet();
-		
+
 		if (! skip) {
     		boolean isLeafNode = ! top._expandable;
     
@@ -170,17 +173,17 @@ public class HierarchyHelper {
     		append(buffer, indent + "    <td>");
 
     		if (isLeafNode) {
-    		    if (! top._text.equals("...")) {
+    		    if (! name.equals("...")) {
         			append(buffer, indent + "      " 
         				+ "<img src=\"" + _leafIcon +  "\">"
-        				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) +
-        				"\">" + top._text + "</a>" 
+        				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) +
+        				"\">" + name + "</a>" 
         				+ "<div>");
     		    } else {
                     append(buffer, indent + "      " 
                         + "<img src=\"" + _leafIcon +  "\">"
-                        + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) +
-                        "\">" + top._text + "</a>" 
+                        + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) +
+                        "\">" + name + "</a>" 
                         + "<div>");
     		    }
     		} else {
@@ -188,16 +191,13 @@ public class HierarchyHelper {
         			append(buffer, indent + "      " 
         				+ "<div onclick=\"toggle(this)\">" 
         				+ "<img src=\"" + _collapseIcon + "\">" 
-        				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a></div>"
+        				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) + "\">" + name + "</a></div>"
         				+ "<div>");
     		    } else {
-//                    append(buffer, indent + "      <div id=\"" + top._text + "\" name=\"" + top._text + "\">");
-//                    append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + top._text  + "')\"/> " + top._text);
-//                    append(buffer, indent + "      </div><div>");
-
-                    append(buffer, indent + "      <div id=\"" + top._text + "\" name=\"" + top._text + "\">");
-                    append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + top._text  + "')\"/> "
-                            + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, top._code) + "\">" + top._text + "</a>");
+    		        String id = "expand_" + _idCtr++; 
+                    append(buffer, indent + "      <div id=\"" + id + "\" name=\"" + name + "\">");
+                    append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + id  + "')\"/> "
+                            + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) + "\">" + name + "</a>");
                     append(buffer, indent + "      </div><div>");
     		    }
     		}
@@ -229,7 +229,7 @@ public class HierarchyHelper {
 	public String getHtml(HttpServletRequest request, String dictionary, 
 		String version, TreeItem top) {
         Utils.StopWatch stopWatch = new Utils.StopWatch();
-	    _ctr = 0;
+	    _debugCtr = 0;
 	    StringBuffer buffer = new StringBuffer();
 	    getHtml(request, dictionary, version, buffer, top, "", true);
 	    _logger.debug("getHtml: " + stopWatch.getResult());
