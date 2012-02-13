@@ -33,48 +33,48 @@
     var _idCtr = 0;
     
     function toggle(node) {
-        if (node.nextSibling.style.display == 'none') { // Unfold branch
-          if (node.children.length > 0) { // Change image
-            if (node.children.item(0).tagName == "IMG") {
-              node.children.item(0).src = "<%=ICON_COLLAPSE%>";
-            }
+      if (node.nextSibling.style.display == 'none') { // Unfold branch
+        if (node.children.length > 0) { // Change image
+          if (node.children.item(0).tagName == "IMG") {
+            node.children.item(0).src = "<%=ICON_COLLAPSE%>";
           }
-          node.nextSibling.style.display = '';
-        } else {
-          if (node.children.length > 0) { // Collapse branch
-            if (node.children.item(0).tagName == "IMG") { // Change image
-              node.children.item(0).src = "<%=ICON_EXPAND%>";
-            }
-          }
-          node.nextSibling.style.display = 'none';
         }
-      }
-
-      function addContent(nodeID) {
-          var element = document.getElementById(nodeID);
-          var parent = element.parentElement;
-          var name = element.getAttribute("name");
-          var conceptNames = new Array("Blood", "Cell", "Gene");
-  
-          var x = "";
-          x = x + "<div id=\"" + nodeID + "\" name=\"" + name + "\">";
-          x = x + "  <a onclick=\"toggle(this)\"><img src=\"<%=ICON_COLLAPSE%>\"> " + name + "</a><div>";
-          x = x + "  <table>";
-          for (var i=0; i<conceptNames.length; i++) {
-              var name = conceptNames[i];
-              var newID = "expand_" + _idCtr++;
-              var newName = name;
-              x = x + "    <tr><td>";
-              x = x + "      <div id=\"" + newID + "\" name=\"" + newName + "\">";
-              x = x + "      <img src=\"<%=ICON_EXPAND%>\" onClick=\"addContent('" + newID + "')\"/> " + newName;
-              x = x + "      </div>";
-              x = x + "    </td></tr>";
+        node.nextSibling.style.display = '';
+      } else {
+        if (node.children.length > 0) { // Collapse branch
+          if (node.children.item(0).tagName == "IMG") { // Change image
+            node.children.item(0).src = "<%=ICON_EXPAND%>";
           }
-          x = x + "  </table>";
-          x = x + "</div>";
-          parent.innerHTML=x;
+        }
+        node.nextSibling.style.display = 'none';
       }
-    </script>
+    }
+
+    function addContent(nodeID) {
+      var element = document.getElementById(nodeID);
+      var parent = element.parentElement;
+      var name = element.getAttribute("name");
+      var conceptNames = new Array("Blood", "Cell", "Gene");
+
+      var x = "";
+      x = x + "<div id=\"" + nodeID + "\" name=\"" + name + "\">";
+      x = x + "  <a onclick=\"toggle(this)\"><img src=\"<%=ICON_COLLAPSE%>\"> " + name + "</a><div>";
+      x = x + "  <table>";
+      for (var i=0; i<conceptNames.length; i++) {
+        var name = conceptNames[i];
+        var newID = "expand_" + _idCtr++;
+        var newName = name;
+        x = x + "    <tr><td>";
+        x = x + "      <div id=\"" + newID + "\" name=\"" + newName + "\">";
+        x = x + "      <img src=\"<%=ICON_EXPAND%>\" onClick=\"addContent('" + newID + "')\"/> " + newName;
+        x = x + "      </div>";
+        x = x + "    </td></tr>";
+      }
+      x = x + "  </table>";
+      x = x + "</div>";
+      parent.innerHTML=x;
+    }
+  </script>
   </head>
   
   <f:view>
