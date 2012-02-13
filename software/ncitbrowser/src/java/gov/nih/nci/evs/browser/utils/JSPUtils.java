@@ -288,19 +288,24 @@ if (version != null) {
     public static String getConceptUrl(HttpServletRequest request, 
     	String dictionary, String version, String concept_id) {
     	  String requestURL = request.getRequestURL().toString();
-    	  int idx = requestURL.indexOf("pages");
-    	  requestURL = requestURL.substring(0, idx);
-    	  String encoded_dictionary = dictionary.replace(" ", "%20");
+    	  return getConceptUrl(requestURL, dictionary, version, concept_id);
+    }
 
-    	  String encoded_concept_id = concept_id;
-    	  encoded_concept_id = encoded_concept_id.replaceAll(":", "%3A");
-    	  
-    	  String url = requestURL;
-    	  url += "ConceptReport.jsp";
-    	  url += "?dictionary=" + encoded_dictionary;
-    	  if (version != null && version.length() > 0)
-    	      url += "&version=" + version;
-    	  url +="&code=" + encoded_concept_id;
-    	  return url;
+    public static String getConceptUrl(String requestURL, 
+        String dictionary, String version, String concept_id) {
+          int idx = requestURL.indexOf("pages");
+          requestURL = requestURL.substring(0, idx);
+          String encoded_dictionary = dictionary.replace(" ", "%20");
+
+          String encoded_concept_id = concept_id;
+          encoded_concept_id = encoded_concept_id.replaceAll(":", "%3A");
+          
+          String url = requestURL;
+          url += "ConceptReport.jsp";
+          url += "?dictionary=" + encoded_dictionary;
+          if (version != null && version.length() > 0)
+              url += "&version=" + version;
+          url +="&code=" + encoded_concept_id;
+          return url;
     }
 }
