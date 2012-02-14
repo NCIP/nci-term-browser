@@ -125,7 +125,7 @@ public class ViewInHierarchyUtil {
 
 
 
-    private void printTreeNode(PrintWriter out, String code, String node_label, String parent_code, boolean expand) {
+    private void printTreeNode(PrintWriter out, String code, String node_label, String parent_code, boolean expandable, boolean expand) {
       String node_id = "N_" + code;
       String parent_id = null;
 
@@ -142,6 +142,13 @@ public class ViewInHierarchyUtil {
 	      out.println("    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
 	  } else {
 	      out.println("    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+	  }
+
+      if (expandable) {
+		  out.println(node_id + ".isLeaf = false;");
+          out.println(node_id + ".setDynamicLoad(loadNodeData);");
+      } else {
+		  out.println(node_id + ".isLeaf = true;");
 	  }
 
   }
@@ -182,9 +189,10 @@ public class ViewInHierarchyUtil {
 			    parent_code = parent.getCode();
 			}
 			// tree node expanded?
-		    //if (expandable == 1) expanded = true;
+			boolean bool_expandable = false;
+		    if (expandable == 1) bool_expandable = true;
 
-            printTreeNode(out, node.getCode(), node.getEntityDescription(), parent_code, expanded);
+            printTreeNode(out, node.getCode(), node.getEntityDescription(), parent_code, bool_expandable, expanded);
 
 			if (node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
 				ChildTreeNodeIterator itr = node.getChildIterator();
