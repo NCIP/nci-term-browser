@@ -226,8 +226,10 @@ public final class AjaxServlet extends HttpServlet {
 
                 debugJSONString("Section: expand_tree", json.toString());
                 response.getWriter().write(json.toString());
+                /*
                 _logger.debug("Run time (milliseconds): "
                     + (System.currentTimeMillis() - ms));
+                    */
             }
         }
 
