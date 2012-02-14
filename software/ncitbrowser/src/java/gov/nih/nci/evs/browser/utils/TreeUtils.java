@@ -1217,7 +1217,7 @@ public class TreeUtils {
                         Association child = pathsToChildren.next();
                         // KLO 091009 remove anonymous nodes
 
-                        child = processForAnonomousNodes(child);
+                        //child = processForAnonomousNodes(child);
 
                         String childNavText =
                             getDirectionalLabel(lbscm, scheme, csvt, child,
