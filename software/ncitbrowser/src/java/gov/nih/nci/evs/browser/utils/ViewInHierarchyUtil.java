@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.utils;
 
+import java.io.*;
 import java.util.*;
 
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
@@ -10,6 +11,10 @@ import org.lexevs.tree.service.TreeService;
 import org.lexevs.tree.service.TreeServiceFactory;
 
 import org.lexevs.tree.dao.iterator.ChildTreeNodeIterator;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+
 
 public class ViewInHierarchyUtil {
     private String INDENT = "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -113,6 +118,147 @@ public class ViewInHierarchyUtil {
 
 
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  View In Hierarchy Tree
+
+
+
+
+    private void printTreeNode(PrintWriter out, String code, String node_label, String parent_code, boolean expand) {
+      String node_id = "N_" + code;
+      String parent_id = null;
+
+      if (parent_code == null) {
+		  parent_id = "root";
+	  } else {
+		  parent_id = "N_" + parent_code;
+	  }
+
+      out.println("newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+
+      out.println("newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
+      if (expand) {
+	      out.println("    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
+	  } else {
+	      out.println("    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+	  }
+
+  }
+
+
+
+
+    private void printLexEvsTreeNode(PrintWriter out, LexEvsTreeNode node, LexEvsTreeNode parent) {
+		if (node == null) return;
+		try {
+			LexEvsTreeNode.ExpandableStatus node_status = node.getExpandableStatus();
+			String image = "[+]";
+			int expandable = 1;
+			if (node_status != LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+				image = ".";
+				expandable = 0;
+			}
+
+			boolean expanded = false;
+			if (node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+				ChildTreeNodeIterator itr = node.getChildIterator();
+				try {
+					if(itr != null && itr.hasNext()) {
+						expanded = true;
+					}
+				} catch (Exception e) {
+
+				}
+			}
+
+			if (expanded) {
+				image = "[-]";
+			}
+
+
+            String parent_code = null;
+            if (parent != null) {
+			    parent_code = parent.getCode();
+			}
+
+            printTreeNode(out, node.getCode(), node.getEntityDescription(), parent_code, expanded);
+
+			if (node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+				ChildTreeNodeIterator itr = node.getChildIterator();
+				if (itr != null) {
+					HashSet hset = new HashSet();
+					while(itr.hasNext()){
+						LexEvsTreeNode child = itr.next();
+
+						expanded = true;
+						String child_code = child.getCode();
+						if (!hset.contains(child_code)) {
+							hset.add(child_code);
+							printLexEvsTreeNode(out, child, node);
+						} else {
+							break;
+						}
+					}
+				}
+			}
+
+
+
+		} catch (Exception ex) {
+            //ex.printStackTrace();
+		}
+	}
+
+
+
+    public void printTree(PrintWriter out, String codingScheme, String version, String code) {
+
+
+		out.println("var newNodeDetails = \"\";");
+		out.println("var newNodeData = \"\";");
+
+        tree = new ArrayList();
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (version != null)
+            versionOrTag.setVersion(version);
+
+        TreeService treeService =
+            TreeServiceFactory.getInstance().getTreeService(
+                RemoteServerUtil.createLexBIGService());
+
+        LexEvsTree lexEvsTree = treeService.getTree(codingScheme, versionOrTag, code);
+
+        LexEvsTreeNode top_node = lexEvsTree.findNodeInTree("@@");
+        if (top_node == null) top_node = lexEvsTree.findNodeInTree("@");
+
+		LexEvsTreeNode.ExpandableStatus top_node_status = top_node.getExpandableStatus();
+		if (top_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+
+			ChildTreeNodeIterator itr = top_node.getChildIterator();
+			HashSet hset = new HashSet();
+
+			while(itr.hasNext()){
+				LexEvsTreeNode child = itr.next();
+
+				String child_code = child.getCode();
+
+				if (!hset.contains(child_code)) {
+					hset.add(child_code);
+                    printLexEvsTreeNode(out, child, null);
+				} else {
+					//System.out.println("DUPLICATES?????? " + child_code);
+					break;
+				}
+		    }
+		}
+    }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
     public List getTree(String codingScheme, String version, String code) {
 		return getTree(codingScheme, version, code, 0);
 	}
@@ -194,18 +340,14 @@ public class ViewInHierarchyUtil {
 
 	public String toHTML(String basePath, List tree_data) {
         String t = "";
-		//List list = new ArrayList();
 		for (int i=0; i<tree_data.size(); i++) {
 			String line = (String) tree_data.get(i);
 			List a = toHTML(basePath, line);
-			//list.add("<tr><td>");
 			t = t + "<tr><td>";
 			for (int k=0; k<a.size(); k++) {
 				String s = (String) a.get(k);
-				//list.add(t);
 				t = t + s;
 			}
-			//list.add("</td></tr>");
 			t = t + "</td></tr>";
 		}
         return t;
@@ -223,8 +365,9 @@ public class ViewInHierarchyUtil {
 
 		List list = new ArrayList();
 
-		String s = "<div id=\"" + code + "\">";
-		list.add(s);
+		//String s = "<div id=\"" + code + "\">";
+		//list.add(s);
+		String s = "";
 		String image_file = "plus.gif";
 		if (image.compareTo("-") == 0) {
 			image_file = "minus.gif";
@@ -236,11 +379,28 @@ public class ViewInHierarchyUtil {
 		if (image.compareTo(".") == 0) {
 		    s = buildPrefix(depth) + "&nbsp;" + name;
 
-		} else {
-		    s = buildPrefix(depth) + "<img src=\"" + basePath + "/images/" + image_file + "\" onClick=\"replace_content('" + code + "')\"/>&nbsp;" + name;
+/*
+		} else if (image.compareTo("+") == 0) {
+		    s = buildPrefix(depth) + "<a onClick=\"toggle(this)\"><img src=\"" + basePath + "/images/" + image_file + "\" /></a>&nbsp;" + name;
+
+		} else if (image.compareTo("-") == 0) {
+
+		    s = buildPrefix(depth) + "<img src=\"" + basePath + "/images/" + image_file + "\" onClick=\"collapse(this, '" +
+		        code + "', '" + name
+		        + "')\"/>&nbsp;" + name;
+
+		    //s = buildPrefix(depth) + "<a onClick=\"toggle(this)\"><img src=\"" + basePath + "/images/" + image_file + "\" /></a>&nbsp;" + name;
+*/
+
+        } else if (image.compareTo("-") == 0) {
+            s = buildPrefix(depth) + "<a onClick=\"toggle(this)\">&nbsp;<img src=\"" + basePath + "/images/" + image_file + "\" /></a><div>";
+
+        } else if (image.compareTo("+") == 0) {
+            s = buildPrefix(depth) + "<a onClick=\"toggle(this)\">&nbsp;<img src=\"" + basePath + "/images/" + image_file + "\" /></a><div>";
+
 	    }
 		list.add(s);
-		list.add("</div>");
+		//list.add("</div>");
 
         return list;
 	}
@@ -267,7 +427,7 @@ public class ViewInHierarchyUtil {
 
 
 
-    public String get_tree(String basePath, String codingScheme, String version, String code, int frmat) {
+    public String get_tree(String basePath, String codingScheme, String version, String code, int format) {
             System.out.println("\n============================= util.getTree(codingScheme, version, code, 1) ");
 			List tree_data = getTree(codingScheme, version, code, 1);
 			String html_line = toHTML(basePath, tree_data);
