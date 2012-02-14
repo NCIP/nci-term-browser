@@ -125,7 +125,7 @@ public class ViewInHierarchyUtil {
 
 
 
-    private void printTreeNode(PrintWriter out, String code, String node_label, String parent_code, boolean expandable, boolean expand) {
+    private void printTreeNode(PrintWriter out, String focus_code, String code, String node_label, String parent_code, boolean expandable, boolean expand) {
       String node_id = "N_" + code;
       String parent_id = null;
 
@@ -151,12 +151,15 @@ public class ViewInHierarchyUtil {
 		  out.println(node_id + ".isLeaf = true;");
 	  }
 
+      if (focus_code.compareTo(code) == 0) {
+          out.println(node_id + ".labelStyle = \"ygtvlabel_highlight\";");
+      }
   }
 
 
 
 
-    private void printLexEvsTreeNode(PrintWriter out, LexEvsTreeNode node, LexEvsTreeNode parent) {
+    private void printLexEvsTreeNode(PrintWriter out, String focus_code, LexEvsTreeNode node, LexEvsTreeNode parent) {
 		if (node == null) return;
 		try {
 			LexEvsTreeNode.ExpandableStatus node_status = node.getExpandableStatus();
@@ -192,7 +195,7 @@ public class ViewInHierarchyUtil {
 			boolean bool_expandable = false;
 		    if (expandable == 1) bool_expandable = true;
 
-            printTreeNode(out, node.getCode(), node.getEntityDescription(), parent_code, bool_expandable, expanded);
+            printTreeNode(out, focus_code, node.getCode(), node.getEntityDescription(), parent_code, bool_expandable, expanded);
 
 			if (node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
 				ChildTreeNodeIterator itr = node.getChildIterator();
@@ -205,7 +208,7 @@ public class ViewInHierarchyUtil {
 						String child_code = child.getCode();
 						if (!hset.contains(child_code)) {
 							hset.add(child_code);
-							printLexEvsTreeNode(out, child, node);
+							printLexEvsTreeNode(out, focus_code, child, node);
 						} else {
 							break;
 						}
@@ -255,7 +258,7 @@ public class ViewInHierarchyUtil {
 
 				if (!hset.contains(child_code)) {
 					hset.add(child_code);
-                    printLexEvsTreeNode(out, child, null);
+                    printLexEvsTreeNode(out, code, child, null);
 				} else {
 					//System.out.println("DUPLICATES?????? " + child_code);
 					break;
