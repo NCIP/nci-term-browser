@@ -196,7 +196,7 @@ public class HierarchyHelper {
     		    } else {
     		        String id = "add_" + _idCtr++; 
                     append(buffer, indent + "      <div id=\"" + id + "\" name=\"" + name + "\">");
-                    append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + id  + "')\"/> "
+                    append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + id  + "', " + "'" + code + "')\"/> "
                             + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) + "\">" + name + "</a>");
                     append(buffer, indent + "      </div><div>");
     		    }

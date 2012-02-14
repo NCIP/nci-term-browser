@@ -93,7 +93,7 @@
       }
     }
 
-    function addContent(nodeID) {
+    function addContent(nodeID, code) {
       var element = document.getElementById(nodeID);
       var parent = element.parentElement;
       var name = element.getAttribute("name");
