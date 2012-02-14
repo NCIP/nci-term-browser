@@ -181,6 +181,8 @@ public class ViewInHierarchyUtil {
             if (parent != null) {
 			    parent_code = parent.getCode();
 			}
+			// tree node expanded?
+		    //if (expandable == 1) expanded = true;
 
             printTreeNode(out, node.getCode(), node.getEntityDescription(), parent_code, expanded);
 
