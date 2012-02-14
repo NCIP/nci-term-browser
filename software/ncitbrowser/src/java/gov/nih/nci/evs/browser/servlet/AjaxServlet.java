@@ -977,21 +977,44 @@ public final class AjaxServlet extends HttpServlet {
       out.println("        </table>");
       out.println("");
       out.println("");
+
+
+
+      String release_date = DataUtils.getVersionReleaseDate(ontology_display_name, ontology_version);
+      if (ontology_display_name.compareTo("NCI Thesaurus") == 0 || ontology_display_name.compareTo("NCI_Thesaurus") == 0) {
+
       out.println("    <div>");
       out.println("      <img src=\"/ncitbrowser/images/thesaurus_popup_banner.gif\" width=\"612\" height=\"56\" alt=\"NCI Thesaurus\" title=\"\" border=\"0\" />");
       out.println("      ");
       out.println("	 ");
-      out.println("             <span class=\"texttitle-blue-rightjust-2\">11.11d (Release date: 2011-11-28-08:00)</span>");
+      out.println("             <span class=\"texttitle-blue-rightjust-2\">" + ontology_version + " (Release date: " + release_date + ")</span>");
       out.println("      ");
       out.println("");
       out.println("    </div>");
-      out.println("");
+
+      } else {
+
+
+      out.println("    <div>");
+      out.println("      <img src=\"/ncitbrowser/images/other_popup_banner.gif\" width=\"612\" height=\"56\" alt=\"" + ontology_display_name + "\" title=\"\" border=\"0\" />");
+      out.println("      <div class=\"vocabularynamepopupshort\">" + ontology_display_name );
+      out.println("      ");
+      out.println("	 ");
+      out.println("             <span class=\"texttitle-blue-rightjust\">" + ontology_version + " (Release date: " + release_date + ")</span>");
+      out.println("         ");
+      out.println(" ");
+      out.println("      </div>");
+      out.println("    </div>");
+
+      }
+
+
       out.println("");
       out.println("        <div id=\"popupContentArea\">");
       out.println("          <table width=\"580px\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\">");
       out.println("            <tr class=\"textbody\">");
       out.println("              <td class=\"pageTitle\" align=\"left\">");
-      out.println("                NCI Thesaurus Hierarchy");
+      out.println("                " + ontology_display_name + " Hierarchy");
       out.println("              </td>");
       out.println("              <td class=\"pageTitle\" align=\"right\">");
       out.println("                <font size=\"1\" color=\"red\" align=\"right\">");
@@ -1015,10 +1038,15 @@ public final class AjaxServlet extends HttpServlet {
       out.println("");
       out.println("          <form id=\"pg_form\">");
       out.println("            ");
+
+
+      // to be modified:
       out.println("            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"C37927\" />");
       out.println("            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"NCI Thesaurus\" />");
       out.println("            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"11.11d\" />");
+
+
       out.println("");
       out.println("          </form>");
       out.println("          <!-- End of Tree control content -->");
@@ -1031,58 +1059,5 @@ public final class AjaxServlet extends HttpServlet {
    }
 
 
-
-
-
-
-
-
-
-/*
-
-    public static void search_hierarchy(HttpServletRequest request, HttpServletResponse response, String node_id,
-        String ontology_display_name, String ontology_version) {
-        try {
-			String t = "";
-			//t = t + "<%@ include file=\"/pages/templates/search_hierarchy_header.html\"%>";
-
-            t = t + "<%@ include file=\""  + request.getContextPath()
-               + "/pages/templates/search_hierarchy_header.html\"%>";
-
-
-            String basePath = request.getContextPath();
-            String html_line = new ViewInHierarchyUtil().get_tree(basePath, ontology_display_name, ontology_version, node_id, 1);
-
-t = t + "function searchTree(ontology_node_id, ontology_display_name) {";
-t = t + "var root = tree.getRoot();";
-
-
-            t = t + "var dataObjPart_2 =";
-            t = t + "{label:\"Flex Programming Elements\", href:\"Part1_languages_1.html\", target:\"content\"};";
-            t = t + "var Part_2 = new YAHOO.widget.TextNode(dataObjPart_2, root, false);";
-
-            t = t + "var dataObjPart_3 =";
-            t = t + "{label:\"Flex Programming Elements\", href:\"Part1_languages_1.html\", target:\"content\"};";
-            t = t + "var Part_3 = new YAHOO.widget.TextNode(dataObjPart_3, root, false);";
-
-
-//t = t + html_line;
-
-t = t + "}";
-
-            t = t + "<%@ include file=\""  + request.getContextPath()
-               + "/pages/templates/search_hierarchy_footer.html\"%>";
-
-
-            response.setContentType("text/html");
-            response.setHeader("Cache-Control", "no-cache");
-            response.getWriter().write(t);
-            response.getWriter().flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    */
 
 }
