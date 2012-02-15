@@ -137,24 +137,24 @@ public class ViewInHierarchyUtil {
 		  parent_id = "N_" + parent_code;
 	  }
 
-      println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
-
-      println(out, "newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
+      println(out, "");
+      println(out, "      newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+      println(out, "      newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
       if (expand) {
-	      println(out, "    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
+	      println(out, "      var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
 	  } else {
-	      println(out, "    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+	      println(out, "      var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
 	  }
 
       if (expandable) {
-		  println(out, node_id + ".isLeaf = false;");
-          println(out, node_id + ".setDynamicLoad(loadNodeData);");
+		  println(out, "      " + node_id + ".isLeaf = false;");
+          println(out, "      " + node_id + ".setDynamicLoad(loadNodeData);");
       } else {
-		  println(out, node_id + ".isLeaf = true;");
+		  println(out, "      " + node_id + ".isLeaf = true;");
 	  }
 
       if (focus_code.compareTo(code) == 0) {
-          println(out, node_id + ".labelStyle = \"ygtvlabel_highlight\";");
+          println(out, "      " + node_id + ".labelStyle = \"ygtvlabel_highlight\";");
       }
   }
 
@@ -237,8 +237,8 @@ public class ViewInHierarchyUtil {
     public void printTree(PrintWriter out, String codingScheme, String version, String code) {
 
 
-		println(out, "var newNodeDetails = \"\";");
-		println(out, "var newNodeData = \"\";");
+		println(out, "      var newNodeDetails = \"\";");
+		println(out, "      var newNodeData = \"\";");
 
         tree = new ArrayList();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
