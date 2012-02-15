@@ -101,7 +101,7 @@
 
         showTreeLoadingStatus();
         var ontology_source = null;
-        var ontology_version = "11.09d"; //DYEE
+        var ontology_version = document.forms["pg_form"].ontology_version.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=build_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);
       }
     }
@@ -148,19 +148,19 @@
       if (ontology_node_id!= '') {
         showTreeLoadingStatus();
         var ontology_source = null;
-        var ontology_version = "11.09d"; //DYEE
+        var ontology_version = document.forms["pg_form"].ontology_version.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=reset_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name + '&version='+ ontology_version +'&ontology_source='+ontology_source,resetTreeCallback);
       }
     }
 
     function onClickTreeNode(ontology_node_id) {
-      var ontology_display_name = "NCI Thesaurus"; //DYEE
-      var ontology_version = "11.09d"; //DYEE
+      var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
+      var ontology_version = document.forms["pg_form"].ontology_version.value;
       load('/ncitbrowser/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id,top.opener);
     }
 
     function onClickViewEntireOntology(ontology_display_name) {
-      var ontology_display_name = "NCI Thesaurus"; //DYEE
+      var ontology_display_name = document.pg_form.ontology_display_name.value;
       tree = new YAHOO.widget.TreeView("treecontainer");
       tree.draw();
       resetRootDesc();
@@ -170,8 +170,8 @@
     function initTree() {
 
       tree = new YAHOO.widget.TreeView("treecontainer");
-      var ontology_node_id = "C32608"; //DYEE
-      var ontology_display_name = "NCI Thesaurus"; //DYEE
+      var ontology_node_id = document.forms["pg_form"].ontology_node_id.value;
+      var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
 
       if (ontology_node_id == null || ontology_node_id == "null")
       {
@@ -287,8 +287,8 @@
         failure:responseFailure
       };
 
-      var ontology_display_name = "NCI Thesaurus"; //DYEE
-      var ontology_version = "11.09d"; //DYEE
+      var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
+      var ontology_version = document.forms["pg_form"].ontology_version.value;
       var cObj = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=expand_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);
     }
 
