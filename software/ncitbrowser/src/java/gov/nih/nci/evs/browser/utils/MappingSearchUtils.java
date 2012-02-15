@@ -374,10 +374,6 @@ System.out.println("\tcontainer name: " +  containerName);
         String scheme, String version, String matchText,
         String matchAlgorithm, int maxToReturn) {
 
-System.out.println("searchByProperties scheme: " + scheme);
-System.out.println("searchByProperties version: " + version);
-
-
 		Vector schemes = new Vector();
 		schemes.add(scheme);
 		Vector versions = new Vector();
@@ -423,7 +419,6 @@ System.out.println("searchByProperties version: " + version);
         // to be modified
         SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES
 ;
-
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		MappingExtension mappingExtension = null;
 		try {
@@ -438,7 +433,7 @@ System.out.println("searchByProperties version: " + version);
         String scheme = null;
         String version = null;
 
-        System.out.println("schemes.size(): " + schemes.size() + " lcv: " + lcv);
+        //System.out.println("schemes.size(): " + schemes.size() + " lcv: " + lcv);
         int numberRemaining = -1;
         while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
 
@@ -459,19 +454,6 @@ System.out.println("searchByProperties version: " + version);
 						mappingExtension.getMapping(scheme, versionOrTag, containerName);
 
 					if (mapping != null) {
-						/*
-						mapping = mapping.restrictToMatchingProperties(
-							   propertyNames,
-							   propertyTypes,
-							   sourceList,
-							   contextList,
-							   qualifierList,
-							   matchAlgorithm,
-							   language,
-							   null,
-							   searchContext);
-                        */
-                    //CodedNodeSet.PropertyType[] propertyTypes = getAllPropertyTypes();
 
 					mapping = mapping.restrictToMatchingProperties(
 		                                propertyNames,
