@@ -84,7 +84,6 @@
 		check_r = "checked";
 %>
 <h:form id="searchTerm" styleClass="search-form" onsubmit="javascript:disableAnchor();">
-   <label for="matchText" />
    <input CLASS="searchbox-input" id="matchText" name="matchText"
       value="<%=HTTPUtils.cleanXSS(displayed_match_text)%>" onFocus="active=true"
       onBlur="active=false"
