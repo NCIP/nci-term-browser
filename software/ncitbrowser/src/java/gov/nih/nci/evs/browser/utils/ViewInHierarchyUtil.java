@@ -198,6 +198,7 @@ public class ViewInHierarchyUtil {
             printTreeNode(out, focus_code, node.getCode(), node.getEntityDescription(), parent_code, bool_expandable, expanded);
 
 			if (node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+/*
 				ChildTreeNodeIterator itr = node.getChildIterator();
 				if (itr != null) {
 					HashSet hset = new HashSet();
@@ -214,6 +215,12 @@ public class ViewInHierarchyUtil {
 						}
 					}
 				}
+*/
+                List<LexEvsTreeNode> list_children = node.getPathToRootChildren();
+                for (LexEvsTreeNode child : list_children) {
+					printLexEvsTreeNode(out, focus_code, child, node);
+				}
+
 			}
 
 
@@ -478,28 +485,6 @@ public class ViewInHierarchyUtil {
 
         String ans = new ViewInHierarchyUtil().get_tree(basePath, codingScheme, version, code, 1);
 		System.out.println(ans);
-
-/*
-        System.out.println("\n=============================");
-		List html = util.toHTML(basePath, tree_data);
-		for (int i=0; i<html.size(); i++) {
-			System.out.println((String) html.get(i));
-		}
-*/
-/*
-		System.out.println("\n=============================");
-		html_line = util.getTree(basePath, codingScheme, version, code, 1);
-		System.out.println(html_line);
-*/
-
-
-/*
-
-		tree_data = util.getTree(codingScheme, version, code, 1);
-		html_line = util.toHTML(basePath, tree_data);
-		System.out.println(html_line);
-
-*/
 
 	}
 

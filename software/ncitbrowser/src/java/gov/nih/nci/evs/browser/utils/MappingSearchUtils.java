@@ -25,6 +25,9 @@ import gov.nih.nci.evs.browser.common.*;
 import org.apache.commons.codec.language.*;
 import org.apache.log4j.*;
 import org.LexGrid.relations.Relations;
+
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
+
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext;
 
 import org.LexGrid.LexBIG.Extensions.Generic.*;
@@ -383,6 +386,17 @@ System.out.println("searchByProperties version: " + version);
 	}
 
 
+    private CodedNodeSet.PropertyType[] getAllPropertyTypes() {
+        CodedNodeSet.PropertyType[] propertyTypes =
+            new CodedNodeSet.PropertyType[4];
+        propertyTypes[0] = PropertyType.COMMENT;
+        propertyTypes[1] = PropertyType.DEFINITION;
+        propertyTypes[2] = PropertyType.GENERIC;
+        propertyTypes[3] = PropertyType.PRESENTATION;
+        return propertyTypes;
+    }
+
+
     public ResolvedConceptReferencesIteratorWrapper searchByProperties(
         Vector schemes, Vector versions, String matchText,
         String matchAlgorithm, int maxToReturn) {
@@ -445,6 +459,7 @@ System.out.println("searchByProperties version: " + version);
 						mappingExtension.getMapping(scheme, versionOrTag, containerName);
 
 					if (mapping != null) {
+						/*
 						mapping = mapping.restrictToMatchingProperties(
 							   propertyNames,
 							   propertyTypes,
@@ -455,6 +470,20 @@ System.out.println("searchByProperties version: " + version);
 							   language,
 							   null,
 							   searchContext);
+                        */
+                    //CodedNodeSet.PropertyType[] propertyTypes = getAllPropertyTypes();
+
+					mapping = mapping.restrictToMatchingProperties(
+		                                propertyNames,
+										propertyTypes,
+										sourceList,
+										contextList,
+										qualifierList,
+										matchText,
+										matchAlgorithm,
+										null,
+										SearchContext.SOURCE_OR_TARGET_CODES);
+
 
 							//Finally, resolve the Mapping.
 						itr = mapping.resolveMapping();
