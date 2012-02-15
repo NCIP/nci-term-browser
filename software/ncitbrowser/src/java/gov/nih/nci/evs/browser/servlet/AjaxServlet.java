@@ -1047,13 +1047,19 @@ public final class AjaxServlet extends HttpServlet {
       out.println("            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"11.11d\" />");
 
-/*
 
 String ontology_node_id_value = HTTPUtils.cleanXSS(node_id);
 String ontology_display_name_value = HTTPUtils.cleanXSS(ontology_display_name);
 String ontology_version_value = HTTPUtils.cleanXSS(ontology_version);
 //String scheme_value = HTTPUtils.cleanXSS(schema);
 
+
+System.out.println("ontology_node_id_value: " + ontology_node_id_value);
+System.out.println("ontology_display_name_value: " + ontology_display_name_value);
+System.out.println("ontology_version_value: " + ontology_version_value);
+
+
+/*
       out.println("            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"" + ontology_node_id_value + "\" />");
       out.println("            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"" + ontology_display_name_value + "\" />");
       //out.println("            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"" + scheme_value + "\" />");
