@@ -571,9 +571,8 @@ public final class AjaxServlet extends HttpServlet {
     private static boolean _debug = false; // DYEE_DEBUG
     
     public static void println(PrintWriter out, String text) {
-        if (! _debug)
-            return;
-        System.out.println("DBG: " + text);
+        if (_debug)
+            _logger.debug("DBG: " + text);
         out.println(text);
     }
 
