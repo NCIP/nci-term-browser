@@ -122,7 +122,9 @@ public class ViewInHierarchyUtil {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  View In Hierarchy Tree
 
-
+    public static void println(PrintWriter out, String text) {
+        gov.nih.nci.evs.browser.servlet.AjaxServlet.println(out, text);
+    }
 
 
     private void printTreeNode(PrintWriter out, String focus_code, String code, String node_label, String parent_code, boolean expandable, boolean expand) {
@@ -135,24 +137,24 @@ public class ViewInHierarchyUtil {
 		  parent_id = "N_" + parent_code;
 	  }
 
-      out.println("newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+      println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
 
-      out.println("newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
+      println(out, "newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
       if (expand) {
-	      out.println("    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
+	      println(out, "    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
 	  } else {
-	      out.println("    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+	      println(out, "    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
 	  }
 
       if (expandable) {
-		  out.println(node_id + ".isLeaf = false;");
-          out.println(node_id + ".setDynamicLoad(loadNodeData);");
+		  println(out, node_id + ".isLeaf = false;");
+          println(out, node_id + ".setDynamicLoad(loadNodeData);");
       } else {
-		  out.println(node_id + ".isLeaf = true;");
+		  println(out, node_id + ".isLeaf = true;");
 	  }
 
       if (focus_code.compareTo(code) == 0) {
-          out.println(node_id + ".labelStyle = \"ygtvlabel_highlight\";");
+          println(out, node_id + ".labelStyle = \"ygtvlabel_highlight\";");
       }
   }
 
@@ -235,8 +237,8 @@ public class ViewInHierarchyUtil {
     public void printTree(PrintWriter out, String codingScheme, String version, String code) {
 
 
-		out.println("var newNodeDetails = \"\";");
-		out.println("var newNodeData = \"\";");
+		println(out, "var newNodeDetails = \"\";");
+		println(out, "var newNodeData = \"\";");
 
         tree = new ArrayList();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
