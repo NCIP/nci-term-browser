@@ -246,11 +246,11 @@
                              <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
                              <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/dyee/yuiCheckBoxTree.jsf');">
                                 YUI</a>
+                           -->
 
                              <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
                              <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy');">
                                 VIH tab</a>
-                           -->
                             
                              <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
                            <% } %>
