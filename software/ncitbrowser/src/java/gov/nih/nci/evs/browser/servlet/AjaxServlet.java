@@ -569,10 +569,13 @@ public final class AjaxServlet extends HttpServlet {
     }
 
     private static boolean _debug = false; // DYEE_DEBUG
+    private static StringBuffer _debugBuffer = null;
 
     public static void println(PrintWriter out, String text) {
-        if (_debug)
+        if (_debug) {
             _logger.debug("DBG: " + text);
+            _debugBuffer.append(text + "\n");
+        }
         out.println(text);
     }
 
@@ -597,7 +600,10 @@ public final class AjaxServlet extends HttpServlet {
 		  return;
 	  }
 
-
+      if (_debug) {
+          _debugBuffer = new StringBuffer();
+      }
+      
       println(out, "");
       println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/yahoo-min.js\" ></script>");
       println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/event-min.js\" ></script>");
@@ -1060,10 +1066,10 @@ public final class AjaxServlet extends HttpServlet {
 
       // to be modified:
 
-      println(out, "            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"C37927\" />");
-      println(out, "            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"NCI Thesaurus\" />");
-      println(out, "            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"null\" />");
-      println(out, "            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"11.11d\" />");
+//      println(out, "            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"C37927\" />");
+//      println(out, "            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"NCI Thesaurus\" />");
+//      println(out, "            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"null\" />");
+//      println(out, "            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"11.11d\" />");
 
 
 String ontology_node_id_value = HTTPUtils.cleanXSS(node_id);
@@ -1077,12 +1083,10 @@ System.out.println("ontology_display_name_value: " + ontology_display_name_value
 System.out.println("ontology_version_value: " + ontology_version_value);
 
 
-/*
       println(out, "            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"" + ontology_node_id_value + "\" />");
       println(out, "            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"" + ontology_display_name_value + "\" />");
       //println(out, "            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"" + scheme_value + "\" />");
       println(out, "            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"" + ontology_version_value + "\" />");
-*/
 
       println(out, "");
       println(out, "          </form>");
@@ -1093,8 +1097,12 @@ System.out.println("ontology_version_value: " + ontology_version_value);
       println(out, "  ");
       println(out, "</body>");
       println(out, "</html>");
+      
+      if (_debug) {
+          _logger.debug(Utils.SEPARATOR);
+          _logger.debug("VIH HTML:\n" + _debugBuffer);
+          _debugBuffer = null;
+          _logger.debug(Utils.SEPARATOR);
+      }
    }
-
-
-
 }
