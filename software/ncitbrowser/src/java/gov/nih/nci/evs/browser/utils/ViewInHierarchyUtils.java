@@ -19,6 +19,7 @@ import org.lexevs.tree.model.LexEvsTreeNode.ExpandableStatus;
 import org.lexevs.tree.service.TreeService;
 import org.lexevs.tree.service.TreeServiceFactory;
 
+//Note: Newer version WRT to ViewInHierarchyUtil.java.
 public class ViewInHierarchyUtils {
 	int has_more_node_knt = 0;
 
@@ -121,9 +122,9 @@ public class ViewInHierarchyUtils {
 			String node_id = "N_" + code;
 		    String node_label = node.getEntityDescription();
 
-		    println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
-
-		    println(out, "newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
+		    println(out, ""); 
+		    println(out, "    newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+		    println(out, "    newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
 		    if (expanded) {
 			    println(out, "    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
 		    } else {
@@ -131,18 +132,18 @@ public class ViewInHierarchyUtils {
 		    }
 
 		    if (expandable) {
-			    println(out, node_id + ".isLeaf = false;");
+			    println(out, "    " + node_id + ".isLeaf = false;");
 			    //KLO
-			    println(out, node_id + ".ontology_node_child_count = 1;");
+			    println(out, "    " + node_id + ".ontology_node_child_count = 1;");
 
-			    println(out, node_id + ".setDynamicLoad(loadNodeData);");
+			    println(out, "    " + node_id + ".setDynamicLoad(loadNodeData);");
 		    } else {
-				println(out, node_id + ".ontology_node_child_count = 0;");
-			    println(out, node_id + ".isLeaf = true;");
+				println(out, "    " + node_id + ".ontology_node_child_count = 0;");
+			    println(out, "    " + node_id + ".isLeaf = true;");
 		    }
 
 		    if (focus_code.compareTo(code) == 0) {
-			    println(out, node_id + ".labelStyle = \"ygtvlabel_highlight\";");
+			    println(out, "    " + node_id + ".labelStyle = \"ygtvlabel_highlight\";");
 		    }
 		} catch (Exception ex) {
 
