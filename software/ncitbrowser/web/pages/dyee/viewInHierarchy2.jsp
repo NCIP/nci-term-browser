@@ -1,4 +1,3 @@
-
 <script type="text/javascript" src="/ncitbrowser/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="/ncitbrowser/js/yui/event-min.js" ></script>
 <script type="text/javascript" src="/ncitbrowser/js/yui/dom-min.js" ></script>
@@ -17,6 +16,7 @@
   <link rel="shortcut icon" href="/ncitbrowser/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" type="text/css" href="/ncitbrowser/css/yui/fonts.css" />
   <link rel="stylesheet" type="text/css" href="/ncitbrowser/css/yui/grids.css" />
+
   <link rel="stylesheet" type="text/css" href="/ncitbrowser/css/yui/code.css" />
   <link rel="stylesheet" type="text/css" href="/ncitbrowser/css/yui/tree.css" />
   <script type="text/javascript" src="/ncitbrowser/js/script.js"></script>
@@ -312,7 +312,6 @@
       var N_C12219 = new YAHOO.widget.TextNode(newNodeData, root, true);
       N_C12219.isLeaf = false;
       N_C12219.ontology_node_child_count = 1;
-      N_C12219.setDynamicLoad(loadNodeData);
 
         // - Body Part(C32221)
         newNodeDetails = "javascript:onClickTreeNode('C32221');";
@@ -320,7 +319,6 @@
         var N_C32221 = new YAHOO.widget.TextNode(newNodeData, N_C12219, true);
         N_C32221.isLeaf = false;
         N_C32221.ontology_node_child_count = 1;
-        N_C32221.setDynamicLoad(loadNodeData);
 
           // - Extremity Part(C38630)
           newNodeDetails = "javascript:onClickTreeNode('C38630');";
@@ -328,7 +326,6 @@
           var N_C38630 = new YAHOO.widget.TextNode(newNodeData, N_C32221, true);
           N_C38630.isLeaf = false;
           N_C38630.ontology_node_child_count = 1;
-          N_C38630.setDynamicLoad(loadNodeData);
 
             // - Digit(C40186)
             newNodeDetails = "javascript:onClickTreeNode('C40186');";
@@ -336,7 +333,6 @@
             var N_C40186 = new YAHOO.widget.TextNode(newNodeData, N_C38630, true);
             N_C40186.isLeaf = false;
             N_C40186.ontology_node_child_count = 1;
-            N_C40186.setDynamicLoad(loadNodeData);
 
               // + Finger(C32608)
               newNodeDetails = "javascript:onClickTreeNode('C32608');";
@@ -361,7 +357,6 @@
             var N_C38628 = new YAHOO.widget.TextNode(newNodeData, N_C38630, true);
             N_C38628.isLeaf = false;
             N_C38628.ontology_node_child_count = 1;
-            N_C38628.setDynamicLoad(loadNodeData);
 
               // + Finger(C32608)
               newNodeDetails = "javascript:onClickTreeNode('C32608');";
@@ -568,6 +563,7 @@
   
     <!-- Begin Skip Top Navigation -->
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+
     <!-- End Skip Top Navigation --> 
     <div id="popupContainer">
       <!-- nci popup banner -->
@@ -577,6 +573,7 @@
       </div>
       <!-- end nci popup banner -->
       <div id="popupMainArea">
+
         <a name="evs-content" id="evs-content"></a>
         <table class="evsLogoBg" cellspacing="0" cellpadding="0" border="0">
         <tr>
@@ -586,6 +583,7 @@
             </a>
           </td>
           <td valign="top"><div id="closeWindow"><a href="javascript:window.close();"><img src="/ncitbrowser/images/thesaurus_close_icon.gif" width="10" height="10" border="0" alt="Close Window" />&nbsp;CLOSE WINDOW</a></div></td>
+
         </tr>
         </table>
 
@@ -600,6 +598,7 @@
     </div>
 
         <div id="popupContentArea">
+
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody">
               <td class="pageTitle" align="left">
@@ -609,6 +608,7 @@
                 <font size="1" color="red" align="right">
                   <a href="javascript:printPage()"><img src="/ncitbrowser/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
                 </font>
+
               </td>
             </tr>
           </table>
@@ -618,6 +618,7 @@
             <div id="ft"></div>
           </div>
           <div id="treeStatus">
+
             <div id="bd"></div>
           </div>
           <div id="emptyRoot">
@@ -628,6 +629,7 @@
           <form id="pg_form">
             
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="C32608" />
+
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="NCI Thesaurus" />
             <input type="hidden" id="ontology_version" name="ontology_version" value="11.09d" />
 
@@ -638,4 +640,5 @@
     </div>
   
 </body>
+
 </html>
