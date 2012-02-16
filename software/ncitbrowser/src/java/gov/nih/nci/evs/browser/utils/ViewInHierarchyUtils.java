@@ -56,25 +56,25 @@ public class ViewInHierarchyUtils {
                     .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
 
         LexEvsTreeNode root = null;
-        printTree(out, code, root, listEvsTreeNode);
+        printTree(out, "", code, root, listEvsTreeNode);
 
     }
 
-    private void printTree(PrintWriter out, String focus_code, LexEvsTreeNode parent, List<LexEvsTreeNode> nodes) {
+    private void printTree(PrintWriter out, String indent, String focus_code, LexEvsTreeNode parent, List<LexEvsTreeNode> nodes) {
         for (LexEvsTreeNode node : nodes) {
            char c = ' ';
            if (node.getExpandableStatus() == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
                c = node.getPathToRootChildren() != null ? '-' : '+';
            }
-           printTreeNode(out, focus_code, node, parent);
+           printTreeNode(out, indent, focus_code, node, parent);
            List<LexEvsTreeNode> list_children = node.getPathToRootChildren();
            if (list_children != null) {
-                printTree(out, focus_code, node, list_children);
+                printTree(out, indent + "  ", focus_code, node, list_children);
            }
         }
     }
 
-    private void printTreeNode(PrintWriter out, String focus_code, LexEvsTreeNode node, LexEvsTreeNode parent) {
+    private void printTreeNode(PrintWriter out, String indent, String focus_code, LexEvsTreeNode node, LexEvsTreeNode parent) {
 		if (node == null) return;
 
 
@@ -121,34 +121,45 @@ public class ViewInHierarchyUtils {
 
 			String node_id = "N_" + code;
 		    String node_label = node.getEntityDescription();
-
+		    String indentStr = indent + "      ";
+		    String symbol = getNodeSymbol(node);
+		    
 		    println(out, ""); 
-		    println(out, "      newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
-		    println(out, "      newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
+            println(out, indentStr + "// " + symbol + " " + node_label + "(" + code + ")");
+		    println(out, indentStr + "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+		    println(out, indentStr + "newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
 		    if (expanded) {
-			    println(out, "      var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
+			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
 		    } else {
-			    println(out, "      var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
 		    }
 
 		    if (expandable) {
-			    println(out, "      " + node_id + ".isLeaf = false;");
+			    println(out, indentStr + node_id + ".isLeaf = false;");
 			    //KLO
-			    println(out, "      " + node_id + ".ontology_node_child_count = 1;");
+			    println(out, indentStr + node_id + ".ontology_node_child_count = 1;");
 
-			    println(out, "      " + node_id + ".setDynamicLoad(loadNodeData);");
+			    println(out, indentStr + node_id + ".setDynamicLoad(loadNodeData);");
 		    } else {
-				println(out, "      " + node_id + ".ontology_node_child_count = 0;");
-			    println(out, "      " + node_id + ".isLeaf = true;");
+				println(out, indentStr + node_id + ".ontology_node_child_count = 0;");
+			    println(out, indentStr + node_id + ".isLeaf = true;");
 		    }
 
 		    if (focus_code.compareTo(code) == 0) {
-			    println(out, "      " + node_id + ".labelStyle = \"ygtvlabel_highlight\";");
+			    println(out, indentStr + node_id + ".labelStyle = \"ygtvlabel_highlight\";");
 		    }
 		} catch (Exception ex) {
 
 		}
 
+    }
+    
+    private static String getNodeSymbol(LexEvsTreeNode node) {
+        String symbol = "@";
+        if (node.getExpandableStatus() == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+            symbol = node.getPathToRootChildren() != null ? "-" : "+";
+        }
+        return symbol;
     }
 
 
