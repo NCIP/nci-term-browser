@@ -908,7 +908,8 @@ public final class AjaxServlet extends HttpServlet {
 
       println(out, "      var root = tree.getRoot();");
 
-      new ViewInHierarchyUtil().printTree(out, ontology_display_name, ontology_version, node_id);
+      //new ViewInHierarchyUtil().printTree(out, ontology_display_name, ontology_version, node_id);
+      new ViewInHierarchyUtils().printTree(out, ontology_display_name, ontology_version, node_id);
 
       println(out, "             tree.draw();");
 
