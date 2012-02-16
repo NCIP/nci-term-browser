@@ -128,8 +128,12 @@ public class ViewInHierarchyUtils {
 
 		    if (expandable) {
 			    out.println(node_id + ".isLeaf = false;");
+			    //KLO
+			    out.println(node_id + ".ontology_node_child_count = 1;");
+
 			    out.println(node_id + ".setDynamicLoad(loadNodeData);");
 		    } else {
+				out.println(node_id + ".ontology_node_child_count = 0;");
 			    out.println(node_id + ".isLeaf = true;");
 		    }
 
