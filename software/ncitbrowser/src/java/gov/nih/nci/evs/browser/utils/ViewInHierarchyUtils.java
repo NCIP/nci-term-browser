@@ -139,7 +139,8 @@ public class ViewInHierarchyUtils {
 			    //KLO
 			    println(out, indentStr + node_id + ".ontology_node_child_count = 1;");
 
-			    println(out, indentStr + node_id + ".setDynamicLoad(loadNodeData);");
+			    if (node.getPathToRootChildren() == null)
+			        println(out, indentStr + node_id + ".setDynamicLoad(loadNodeData);");
 		    } else {
 				println(out, indentStr + node_id + ".ontology_node_child_count = 0;");
 			    println(out, indentStr + node_id + ".isLeaf = true;");
