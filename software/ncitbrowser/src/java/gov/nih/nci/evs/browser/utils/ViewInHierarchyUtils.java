@@ -26,6 +26,10 @@ public class ViewInHierarchyUtils {
 		has_more_node_knt = 0;
 	}
 
+    private static void println(PrintWriter out, String text) {
+        gov.nih.nci.evs.browser.servlet.AjaxServlet.println(out, text);
+    }
+    
     public ViewInHierarchyUtils(String codingScheme, String version, String code) {
 		has_more_node_knt = 0;
         try {
@@ -117,28 +121,28 @@ public class ViewInHierarchyUtils {
 			String node_id = "N_" + code;
 		    String node_label = node.getEntityDescription();
 
-		    out.println("newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+		    println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
 
-		    out.println("newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
+		    println(out, "newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
 		    if (expanded) {
-			    out.println("    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
+			    println(out, "    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
 		    } else {
-			    out.println("    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+			    println(out, "    var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
 		    }
 
 		    if (expandable) {
-			    out.println(node_id + ".isLeaf = false;");
+			    println(out, node_id + ".isLeaf = false;");
 			    //KLO
-			    out.println(node_id + ".ontology_node_child_count = 1;");
+			    println(out, node_id + ".ontology_node_child_count = 1;");
 
-			    out.println(node_id + ".setDynamicLoad(loadNodeData);");
+			    println(out, node_id + ".setDynamicLoad(loadNodeData);");
 		    } else {
-				out.println(node_id + ".ontology_node_child_count = 0;");
-			    out.println(node_id + ".isLeaf = true;");
+				println(out, node_id + ".ontology_node_child_count = 0;");
+			    println(out, node_id + ".isLeaf = true;");
 		    }
 
 		    if (focus_code.compareTo(code) == 0) {
-			    out.println(node_id + ".labelStyle = \"ygtvlabel_highlight\";");
+			    println(out, node_id + ".labelStyle = \"ygtvlabel_highlight\";");
 		    }
 		} catch (Exception ex) {
 

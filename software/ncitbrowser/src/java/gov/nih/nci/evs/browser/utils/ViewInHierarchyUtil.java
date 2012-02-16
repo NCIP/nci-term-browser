@@ -122,7 +122,7 @@ public class ViewInHierarchyUtil {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  View In Hierarchy Tree
 
-    public static void println(PrintWriter out, String text) {
+    private static void println(PrintWriter out, String text) {
         gov.nih.nci.evs.browser.servlet.AjaxServlet.println(out, text);
     }
 
