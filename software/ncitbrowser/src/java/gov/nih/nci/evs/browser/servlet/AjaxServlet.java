@@ -636,6 +636,7 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "    var emptyRootDiv;");
       println(out, "    var treeStatusDiv;");
       println(out, "    var nodes = [];");
+      println(out, "    var currOpener;");
       println(out, "");
       println(out, "    function load(url,target) {");
       println(out, "      if (target != '')");
@@ -655,6 +656,7 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "      treeStatusDiv = new YAHOO.widget.Module(\"treeStatus\", {visible:true} );");
       println(out, "      resetTreeStatus();");
       println(out, "");
+      println(out, "      currOpener = opener;");
       println(out, "      initTree();");
       println(out, "    }");
       println(out, "");
@@ -761,12 +763,10 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "    }");
       println(out, "");
       println(out, "    function onClickTreeNode(ontology_node_id) {");
-      //println(out, "      var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-      println(out, "      var ontology_display_name = " + "\"" + ontology_display_name + "\";");
-      //println(out, "      var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      println(out, "      var ontology_version = " + "\"" + ontology_version + "\";");
+      println(out, "      var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
+      println(out, "      var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
 
-      println(out, "      load('/ncitbrowser/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id,top.opener);");
+      println(out, "      load('/ncitbrowser/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id, currOpener);");
       println(out, "    }");
       println(out, "");
       println(out, "    function onClickViewEntireOntology(ontology_display_name) {");
