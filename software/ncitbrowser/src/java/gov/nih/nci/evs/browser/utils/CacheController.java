@@ -190,7 +190,7 @@ public class CacheController {
             }
         }
         if (nodeArray == null) {
-            _logger.debug("Not in cache -- calling getSubconcepts ");
+            _logger.debug("Not in cache -- calling getSubconcepts " + scheme + " (code: " + code + ")");
             map = new TreeUtils().getSubconcepts(scheme, version, code);
             nodeArray = HashMap2JSONArray(map);
 

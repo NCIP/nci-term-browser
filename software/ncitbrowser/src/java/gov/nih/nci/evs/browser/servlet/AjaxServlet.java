@@ -202,16 +202,21 @@ public final class AjaxServlet extends HttpServlet {
 
         if (action.equals("expand_tree")) {
             if (node_id != null && ontology_display_name != null) {
+
+				System.out.println("(*) EXPAND TREE NODE: " + node_id);
+
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
                 try {
 
+/*
                     // for HL7 (temporary fix)
                     ontology_display_name =
                         DataUtils.searchFormalName(ontology_display_name);
 
+*/
                     nodesArray =
                         CacheController.getInstance().getSubconcepts(
                             ontology_display_name, ontology_version, node_id);
