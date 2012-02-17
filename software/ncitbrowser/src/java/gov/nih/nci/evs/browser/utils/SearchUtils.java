@@ -4060,6 +4060,37 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 	}
 
 
+    public CodedNodeSet getCodedNodeSetContrainingCode(LexBIGService lbSvc, String codingSchemeName, CodingSchemeVersionOrTag versionOrTag, String code) {
+        try {
+			if (code == null) {
+				System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+				return null;
+			}
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    new String[] { code }, codingSchemeName);
+
+            CodedNodeSet cns = null;
+            try {
+				cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+                if (cns == null) {
+					_logger.debug("getNodeSet returns null??? " + codingSchemeName);
+					return null;
+				}
+
+                cns = cns.restrictToCodes(crefs);
+                return cns;
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public ResolvedConceptReferencesIteratorWrapper searchByNameAndCode(
         Vector<String> schemes, Vector<String> versions, String matchText,
         String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
@@ -4105,10 +4136,16 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 }
                 if (cns != null) cns_vec.add(cns);
 
+				CodedNodeSet.PropertyType[] propertyTypes = null;
+				LocalNameList sourceList = null;
+				LocalNameList contextList = null;
+				NameAndValueList qualifierList = null;
 
                 // concept code match:
+
+                /*
                 CodedNodeSet cns_code = getNodeSet(lbSvc, scheme, versionOrTag);
-                String code = matchText;
+
 				if (source != null) {
 					cns_code = restrictToSource(cns_code, source);
 				}
@@ -4121,6 +4158,11 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 					propertyTypes, sourceList, contextList, qualifierList,
 					matchText, CODE_SEARCH_ALGORITHM, null);
 					//matchText, "exactMatch", null);
+
+				*/
+				String code = matchText;
+				CodedNodeSet cns_code = getCodedNodeSetContrainingCode(lbSvc, scheme, versionOrTag, code);
+
 				if (cns_code != null) cns_vec.add(cns_code);
 
                 // source code match:
