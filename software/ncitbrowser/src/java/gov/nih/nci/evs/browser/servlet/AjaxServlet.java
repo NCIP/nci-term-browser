@@ -603,7 +603,7 @@ public final class AjaxServlet extends HttpServlet {
       if (_debug) {
           _debugBuffer = new StringBuffer();
       }
-      
+
       println(out, "");
       println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/yahoo-min.js\" ></script>");
       println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/event-min.js\" ></script>");
@@ -763,9 +763,9 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "    }");
       println(out, "");
       println(out, "    function onClickTreeNode(ontology_node_id) {");
+      out.println("       if (ontology_node_id.indexOf(\"_dot_\") != -1) return;");
       println(out, "      var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
       println(out, "      var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-
       println(out, "      load('/ncitbrowser/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id, currOpener);");
       println(out, "    }");
       println(out, "");
@@ -1002,8 +1002,6 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "");
       println(out, "");
 
-
-
       String release_date = DataUtils.getVersionReleaseDate(ontology_display_name, ontology_version);
       if (ontology_display_name.compareTo("NCI Thesaurus") == 0 || ontology_display_name.compareTo("NCI_Thesaurus") == 0) {
 
@@ -1097,7 +1095,7 @@ System.out.println("ontology_version_value: " + ontology_version_value);
       println(out, "  ");
       println(out, "</body>");
       println(out, "</html>");
-      
+
       if (_debug) {
           _logger.debug(Utils.SEPARATOR);
           _logger.debug("VIH HTML:\n" + _debugBuffer);

@@ -921,6 +921,151 @@ public class DataUtils {
     }
 
     // ==================================================================================================================================
+    public static Entity getConceptByCode(String codingSchemeName, String vers, String code) {
+        try {
+			if (code == null) {
+				System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+				return null;
+			}
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            if (lbSvc == null) {
+                System.out.println("lbSvc == null???");
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (vers != null) versionOrTag.setVersion(vers);
+
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    new String[] { code }, codingSchemeName);
+
+            CodedNodeSet cns = null;
+            try {
+				try {
+					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+                if (cns == null) {
+					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+					return null;
+				}
+
+                cns = cns.restrictToCodes(crefs);
+ 				ResolvedConceptReferenceList matches = null;
+				try {
+					matches = cns.resolveToList(null, null, null, 1);
+				} catch (Exception e) {
+					System.out.println("cns.resolveToList failed???");
+				}
+
+                if (matches == null) {
+                    System.out.println("Concept not found.");
+                    return null;
+                }
+                int count = matches.getResolvedConceptReferenceCount();
+                // Analyze the result ...
+                if (count == 0)
+                    return null;
+                if (count > 0) {
+                    try {
+                        ResolvedConceptReference ref = (ResolvedConceptReference) matches
+                                .enumerateResolvedConceptReference()
+                                .nextElement();
+                        Entity entry = ref.getReferencedEntry();
+                        return entry;
+                    } catch (Exception ex1) {
+                        System.out.println("Exception entry == null");
+                        return null;
+                    }
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+    public static String getNamespaceByCode(String codingSchemeName, String vers, String code) {
+        try {
+			if (code == null) {
+				System.out.println("Input error in DataUtils.getNamespaceByCode -- code is null.");
+				return null;
+			}
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            if (lbSvc == null) {
+                System.out.println("lbSvc == null???");
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (vers != null) versionOrTag.setVersion(vers);
+
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    new String[] { code }, codingSchemeName);
+
+            CodedNodeSet cns = null;
+            try {
+				try {
+					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+                if (cns == null) {
+					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+					return null;
+				}
+
+                cns = cns.restrictToCodes(crefs);
+ 				ResolvedConceptReferenceList matches = null;
+				try {
+					matches = cns.resolveToList(null, null, null, 1);
+				} catch (Exception e) {
+					System.out.println("cns.resolveToList failed???");
+				}
+
+                if (matches == null) {
+                    System.out.println("Concept not found.");
+                    return null;
+                }
+                int count = matches.getResolvedConceptReferenceCount();
+                // Analyze the result ...
+                if (count == 0)
+                    return null;
+                if (count > 0) {
+                    try {
+                        ResolvedConceptReference ref = (ResolvedConceptReference) matches
+                                .enumerateResolvedConceptReference()
+                                .nextElement();
+
+                        return ref.getCodeNamespace();
+                    } catch (Exception ex1) {
+                        System.out.println("getCodeNamespace failed???");
+                        return null;
+                    }
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+
 
     public static Entity getConceptByCode(String codingSchemeName,
         String vers, String ltag, String code) {
@@ -5156,5 +5301,18 @@ System.out.println("vsd_str " + vsd_str);
 	    return false;
     }
 
+    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
+        throws Exception {
+		CodedNodeSet cns = null;
+		try {
+			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+			CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
+			cns = cns.restrictToAnonymous(restrictToAnonymous);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return cns;
+	}
 
 }
