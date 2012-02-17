@@ -176,11 +176,11 @@ System.out.println("(*************) namespace: " + namespace);
 			String code = node.getCode();
 			boolean isHasMoreNode = false;
 			if (code.compareTo("...") == 0) {
+				isHasMoreNode = true;
 				has_more_node_knt++;
 				if (parent == null) {
 					code = "root" + "_dot_" + new Integer(has_more_node_knt).toString();
 				} else {
-					isHasMoreNode = true;
 				    code = parent.getCode() + "_dot_" + new Integer(has_more_node_knt).toString();
 				}
 			}
@@ -207,8 +207,10 @@ System.out.println("(*************) namespace: " + namespace);
 			    println(out, indentStr + node_id + ".isLeaf = false;");
 			    println(out, indentStr + node_id + ".ontology_node_child_count = 1;");
 
-			    if (node.getPathToRootChildren() == null && !isHasMoreNode)
+			    //if (node.getPathToRootChildren() == null && !isHasMoreNode)
+			    if (node.getPathToRootChildren() == null) {
 			        println(out, indentStr + node_id + ".setDynamicLoad(loadNodeData);");
+				}
 		    } else {
 				println(out, indentStr + node_id + ".ontology_node_child_count = 0;");
 			    println(out, indentStr + node_id + ".isLeaf = true;");
