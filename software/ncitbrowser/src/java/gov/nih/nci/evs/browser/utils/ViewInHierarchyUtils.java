@@ -198,7 +198,7 @@ System.out.println("(*************) namespace: " + namespace);
 			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
 
 		    } else if (isHasMoreNode) {
-			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
+			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
 		    } else {
 			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
 		    }
