@@ -5,7 +5,9 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.HashSet;
 
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.Utility.Constructors;
@@ -18,6 +20,9 @@ import org.lexevs.tree.model.LexEvsTreeNode;
 import org.lexevs.tree.model.LexEvsTreeNode.ExpandableStatus;
 import org.lexevs.tree.service.TreeService;
 import org.lexevs.tree.service.TreeServiceFactory;
+
+import org.lexevs.tree.dao.iterator.ChildTreeNodeIterator;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -72,6 +77,8 @@ import org.lexevs.tree.service.TreeServiceFactory;
 // Note: Version with the has more (...) nodes feature.
 
 public class ViewInHierarchyUtils {
+	private int MAX_CHILDREN = 5;
+
 	int has_more_node_knt = 0;
 
     public ViewInHierarchyUtils() {
@@ -180,7 +187,8 @@ System.out.println("(*************) namespace: " + namespace);
 				isHasMoreNode = true;
 				has_more_node_knt++;
 				if (parent == null) {
-					code = "root" + "_dot_" + new Integer(has_more_node_knt).toString();
+					//code = "root" + "_dot_" + new Integer(has_more_node_knt).toString();
+					code = parent_id + "_" + focus_code + "_dot_" + new Integer(has_more_node_knt).toString();
 				} else {
 				    code = parent.getCode() + "_dot_" + new Integer(has_more_node_knt).toString();
 				}
@@ -235,10 +243,87 @@ System.out.println("(*************) namespace: " + namespace);
         return symbol;
     }
 
+    public List<LexEvsTreeNode> getChildren(String codingScheme, String version, String parent_code, boolean from_root) {
+        // root: input parent_code = "@" or "@@";
+        List<LexEvsTreeNode> list = new ArrayList();
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        if (version != null)
+            versionOrTag.setVersion(version);
+
+        TreeService treeService =
+            TreeServiceFactory.getInstance().getTreeService(
+                RemoteServerUtil.createLexBIGService());
+
+        LexEvsTree lexEvsTree = treeService.getTree(codingScheme, versionOrTag, parent_code);
+        LexEvsTreeNode parent_node = null;
+        if (!from_root) {
+            parent_node = lexEvsTree.findNodeInTree(parent_code);
+		} else {
+			parent_node = lexEvsTree.findNodeInTree("@@");
+			if (parent_node == null) {
+				parent_node = lexEvsTree.findNodeInTree("@");
+			}
+		}
+		if (parent_node == null) return null;
+		LexEvsTreeNode.ExpandableStatus parent_node_status = parent_node.getExpandableStatus();
+		if (parent_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+
+			ChildTreeNodeIterator itr = parent_node.getChildIterator();
+			HashSet hset = new HashSet();
+
+			while(itr.hasNext()){
+				LexEvsTreeNode child = itr.next();
+				String child_code = child.getCode();
+				if (!hset.contains(child_code)) {
+					hset.add(child_code);
+                    list.add(child);
+				} else {
+					break;
+				}
+		    }
+		}
+
+		return list;
+    }
+
+    public HashMap getRemainingSubconcepts(String codingScheme, String version, String focus_code, boolean from_root) {
+        HashMap hmap = new HashMap();
+        String childNavText = "inverse_is_a";
+		long ms = System.currentTimeMillis();
+
+		TreeItem ti = new TreeItem(focus_code, "");
+		ti._expandable = false;
+
+        List<LexEvsTreeNode> list = getChildren(codingScheme, version, focus_code, from_root);
+        if (list.size() > MAX_CHILDREN) {
+			for (int i=MAX_CHILDREN; i<list.size(); i++) {
+				LexEvsTreeNode child = (LexEvsTreeNode) list.get(i);
+				TreeItem childItem =
+					new TreeItem(child.getCode(),
+						child.getEntityDescription());
+
+				childItem._expandable = false;
+				LexEvsTreeNode.ExpandableStatus child_node_status = child.getExpandableStatus();
+				if (child_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+					childItem._expandable = true;
+				}
+				ti._expandable = true;
+				ti.addChild(childNavText, childItem);
+			}
+		}
+
+        hmap.put(focus_code, ti);
+        return hmap;
+    }
+
+
 
     public static void main(String[] args) throws Exception {
-          new ViewInHierarchyUtils("NCI_Thesaurus", "11.09d", "C37927"); // Color
+        new ViewInHierarchyUtils("NCI_Thesaurus", "11.09d", "C37927"); // Color
     }
 
 }
+
+// NCI Thesaurus (code: C25447_dot_1)
+// NCI Thesaurus (code: root_C37927_dot_3)
 
