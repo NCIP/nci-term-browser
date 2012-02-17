@@ -604,6 +604,11 @@ public final class AjaxServlet extends HttpServlet {
           _debugBuffer = new StringBuffer();
       }
 
+      String localName = DataUtils.getLocalName(ontology_display_name);
+      String formalName = DataUtils.getFormalName(localName);
+      String term_browser_version = DataUtils.getMetadataValue(formalName, ontology_version, "term_browser_version");
+      String display_name = DataUtils.getMetadataValue(formalName, ontology_version, "display_name");
+
       println(out, "");
       println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/yahoo-min.js\" ></script>");
       println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/event-min.js\" ></script>");
@@ -1016,10 +1021,9 @@ public final class AjaxServlet extends HttpServlet {
 
       } else {
 
-
       println(out, "    <div>");
-      println(out, "      <img src=\"/ncitbrowser/images/other_popup_banner.gif\" width=\"612\" height=\"56\" alt=\"" + ontology_display_name + "\" title=\"\" border=\"0\" />");
-      println(out, "      <div class=\"vocabularynamepopupshort\">" + ontology_display_name );
+      println(out, "      <img src=\"/ncitbrowser/images/other_popup_banner.gif\" width=\"612\" height=\"56\" alt=\"" + display_name + "\" title=\"\" border=\"0\" />");
+      println(out, "      <div class=\"vocabularynamepopupshort\">" + display_name );
       println(out, "      ");
       println(out, "	 ");
       println(out, "             <span class=\"texttitle-blue-rightjust\">" + ontology_version + " (Release date: " + release_date + ")</span>");
@@ -1036,7 +1040,7 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "          <table width=\"580px\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\">");
       println(out, "            <tr class=\"textbody\">");
       println(out, "              <td class=\"pageTitle\" align=\"left\">");
-      println(out, "                " + ontology_display_name + " Hierarchy");
+      println(out, "                " + display_name + " Hierarchy");
       println(out, "              </td>");
       println(out, "              <td class=\"pageTitle\" align=\"right\">");
       println(out, "                <font size=\"1\" color=\"red\" align=\"right\">");
