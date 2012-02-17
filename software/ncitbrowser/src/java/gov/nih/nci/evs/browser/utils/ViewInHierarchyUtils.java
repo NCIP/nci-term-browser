@@ -85,6 +85,7 @@ public class ViewInHierarchyUtils {
 
     private String replaceNodeID(String code) {
 		code = code.replaceAll(":", "_");
+        code = code.replaceAll("-", "_");
 		return code;
 	}
 
