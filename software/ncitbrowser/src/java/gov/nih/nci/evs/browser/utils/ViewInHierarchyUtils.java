@@ -16,7 +16,7 @@ import org.lexevs.tree.service.TreeService;
 import org.lexevs.tree.service.TreeServiceFactory;
 
 import org.lexevs.tree.dao.iterator.ChildTreeNodeIterator;
-
+import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -72,6 +72,8 @@ import org.lexevs.tree.dao.iterator.ChildTreeNodeIterator;
 
 public class ViewInHierarchyUtils {
 	private int MAX_CHILDREN = 5;
+	private static Logger _logger = Logger.getLogger(DataUtils.class);
+
 
 	int has_more_node_knt = 0;
 
@@ -251,7 +253,6 @@ public class ViewInHierarchyUtils {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
-
         TreeService treeService =
             TreeServiceFactory.getInstance().getTreeService(
                 RemoteServerUtil.createLexBIGService());
@@ -266,25 +267,39 @@ public class ViewInHierarchyUtils {
 				parent_node = lexEvsTree.findNodeInTree("@");
 			}
 		}
-		if (parent_node == null) return null;
-		LexEvsTreeNode.ExpandableStatus parent_node_status = parent_node.getExpandableStatus();
-		if (parent_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
-
-			ChildTreeNodeIterator itr = parent_node.getChildIterator();
-			HashSet hset = new HashSet();
-
-			while(itr.hasNext()){
-				LexEvsTreeNode child = itr.next();
-				String child_code = child.getCode();
-				if (!hset.contains(child_code)) {
-					hset.add(child_code);
-                    list.add(child);
-				} else {
-					break;
-				}
-		    }
+		if (parent_node == null) {
+			return null;
 		}
 
+		LexEvsTreeNode.ExpandableStatus parent_node_status = parent_node.getExpandableStatus();
+		if (parent_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+			ChildTreeNodeIterator itr = parent_node.getChildIterator();
+
+			try {
+				HashSet hset = new HashSet();
+				int lcv = 0;
+
+				while(itr.hasNext()){
+					LexEvsTreeNode child = itr.next();
+					lcv++;
+					if (child != null) {
+						String child_code = child.getCode();
+						//System.out.println("(" + lcv + ") " + "getChildren child_code " + child_code );
+						if (!hset.contains(child_code)) {
+							hset.add(child_code);
+							list.add(child);
+						} else {
+							break;
+						}
+					} else {
+						break;
+					}
+				}
+			} catch (Exception ex) {
+			    //ex.printStackTrace();
+			    _logger.debug("WARNING: ChildTreeNodeIterator exception...");
+			}
+		}
 		return list;
     }
 
@@ -348,7 +363,6 @@ public class ViewInHierarchyUtils {
 		Vector v = parseData(ontology_node_id, "_");
 		for (int i=0; i<v.size(); i++) {
 			String t = (String) v.elementAt(i);
-			System.out.println(t);
 		}
         if (v.contains("root")) {
 			return restoreNodeID((String) v.elementAt(1));

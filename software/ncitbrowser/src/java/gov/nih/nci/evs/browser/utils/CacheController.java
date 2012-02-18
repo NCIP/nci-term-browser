@@ -180,7 +180,11 @@ if (code.indexOf("_dot_") != -1) {
 	code = util.getFocusCode(code);
 	boolean from_root = false;
 	map = util.getRemainingSubconcepts(scheme, version, code, from_root);
-	if (map == null) return null;
+
+	if (map == null) {
+		return null;
+	}
+
 	nodeArray = HashMap2JSONArray(map);
 	return nodeArray;
 }
@@ -745,7 +749,6 @@ if (code.indexOf("_dot_") != -1) {
                 for (TreeItem childItem : children) {
                     // printTree(childItem, focusCode, depth + 1);
                     JSONObject nodeObject = new JSONObject();
-
                     nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
                     nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                     int knt = 0;

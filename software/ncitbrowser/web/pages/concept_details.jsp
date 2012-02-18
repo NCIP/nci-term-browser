@@ -175,7 +175,8 @@
             		} else if (JSPUtils.isNull(version)) {
             			name = "Error: Invalid version - " + version + ".";
             		} else {
-           			c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
+           			//c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
+           			c = DataUtils.getConceptByCode(dictionary, version, code);
            			
            			//c = SearchUtils.getConceptByCode(dictionary, version, ltag, code);
            			
