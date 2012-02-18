@@ -175,19 +175,24 @@ public class CacheController {
         HashMap map = null;
         JSONArray nodeArray = null;
 
-if (code.indexOf("_dot_") != -1) {
-	ViewInHierarchyUtils util = new ViewInHierarchyUtils();
-	code = util.getFocusCode(code);
-	boolean from_root = false;
-	map = util.getRemainingSubconcepts(scheme, version, code, from_root);
+        // getRemainingSubconcepts
+		if (code.indexOf("_dot_") != -1) {
+			ViewInHierarchyUtils util = new ViewInHierarchyUtils();
+			code = util.getFocusCode(code);
+			boolean from_root = false;
+			if (code.indexOf("root_") != -1) {
+				from_root = true;
+			}
 
-	if (map == null) {
-		return null;
-	}
+			map = util.getRemainingSubconcepts(scheme, version, code, from_root);
 
-	nodeArray = HashMap2JSONArray(map);
-	return nodeArray;
-}
+			if (map == null) {
+				return null;
+			}
+
+			nodeArray = HashMap2JSONArray(map);
+			return nodeArray;
+		}
 
 
 

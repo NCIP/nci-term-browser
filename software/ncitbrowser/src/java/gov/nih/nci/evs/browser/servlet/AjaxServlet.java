@@ -870,6 +870,8 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "      treeStatusDiv.render();");
       println(out, "    }");
       println(out, "");
+
+/*
       println(out, "    function loadNodeData(node, fnLoadComplete) {");
       println(out, "      var id = node.data.id;");
       println(out, "");
@@ -896,6 +898,55 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "        tree.draw();");
       println(out, "        fnLoadComplete();");
       println(out, "      }");
+*/
+
+
+      out.println("    function loadNodeData(node, fnLoadComplete) {");
+      out.println("      var id = node.data.id;");
+      out.println("");
+      out.println("      var responseSuccess = function(o)");
+      out.println("      {");
+      out.println("        var path;");
+      out.println("        var dirs;");
+      out.println("        var files;");
+      out.println("        var respTxt = o.responseText;");
+      out.println("        var respObj = eval('(' + respTxt + ')');");
+      out.println("        var fileNum = 0;");
+      out.println("        var categoryNum = 0;");
+      out.println("        var pos = id.indexOf(\"_dot_\");");
+      out.println("        if ( typeof(respObj.nodes) != \"undefined\") {");
+      out.println("	    if (pos == -1) {");
+      out.println("	      for (var i=0; i < respObj.nodes.length; i++) {");
+      out.println("		var name = respObj.nodes[i].ontology_node_name;");
+      out.println("		var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.nodes[i].ontology_node_id + \"');\";");
+      out.println("		var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, href:nodeDetails };");
+      out.println("		var newNode = new YAHOO.widget.TextNode(newNodeData, node, false);");
+      out.println("		if (respObj.nodes[i].ontology_node_child_count > 0) {");
+      out.println("		    newNode.setDynamicLoad(loadNodeData);");
+      out.println("		}");
+      out.println("	      }");
+      out.println("");
+      out.println("	    } else {");
+      out.println("");
+      out.println("		var parent = node.parent;");
+      out.println("		for (var i=0; i < respObj.nodes.length; i++) {");
+      out.println("		  var name = respObj.nodes[i].ontology_node_name;");
+      out.println("		  var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.nodes[i].ontology_node_id + \"');\";");
+      out.println("		  var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, href:nodeDetails };");
+      out.println("");
+      out.println("		  var newNode = new YAHOO.widget.TextNode(newNodeData, parent, true);");
+      out.println("		  if (respObj.nodes[i].ontology_node_child_count > 0) {");
+      out.println("		     newNode.setDynamicLoad(loadNodeData);");
+      out.println("		  }");
+      out.println("		}");
+      out.println("		tree.removeNode(node,true);");
+      out.println("	    }");
+      out.println("        }");
+      out.println("        fnLoadComplete();");
+      out.println("      }");
+
+
+
       println(out, "");
       println(out, "      var responseFailure = function(o){");
       println(out, "        alert('responseFailure: ' + o.statusText);");
