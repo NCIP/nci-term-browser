@@ -1,13 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.io.*;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashSet;
+import java.util.*;
 
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.Utility.Constructors;
@@ -91,8 +85,16 @@ public class ViewInHierarchyUtils {
 
 
     private String replaceNodeID(String code) {
-		code = code.replaceAll(":", "_");
-        code = code.replaceAll("-", "_");
+		code = code.replaceAll(":", "cCc");
+        code = code.replaceAll("-", "cDc");
+        code = code.replaceAll("_", "cUc");
+		return code;
+	}
+
+    private String restoreNodeID(String code) {
+		code = code.replaceAll("cCc", ":");
+        code = code.replaceAll("cDc", "-");
+        code = code.replaceAll("cUc", "_");
 		return code;
 	}
 
@@ -119,7 +121,7 @@ public class ViewInHierarchyUtils {
 
         String namespace = DataUtils.getNamespaceByCode(codingScheme, version, code);
 
-System.out.println("(*************) namespace: " + namespace);
+//System.out.println("(*************) namespace: " + namespace);
 
         LexEvsTree tree = service.getTree(codingScheme, csvt, code, namespace);
         List<LexEvsTreeNode> listEvsTreeNode =
@@ -318,12 +320,47 @@ System.out.println("(*************) namespace: " + namespace);
 
 
 
+    public static Vector<String> parseData(String line) {
+		if (line == null) return null;
+        String tab = "|";
+        return parseData(line, tab);
+    }
+
+    public static Vector<String> parseData(String line, String tab) {
+		if (line == null) return null;
+        Vector data_vec = new Vector();
+        StringTokenizer st = new StringTokenizer(line, tab);
+        while (st.hasMoreTokens()) {
+            String value = st.nextToken();
+            if (value.compareTo("null") == 0)
+                value = " ";
+            data_vec.add(value);
+        }
+        return data_vec;
+    }
+
+
+    public String getFocusCode(String ontology_node_id) {
+		if (ontology_node_id == null) return null;
+		if (ontology_node_id.indexOf("_dot_") == -1) {
+			return ontology_node_id;
+		}
+		Vector v = parseData(ontology_node_id, "_");
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			System.out.println(t);
+		}
+        if (v.contains("root")) {
+			return restoreNodeID((String) v.elementAt(1));
+		}
+		return restoreNodeID((String) v.elementAt(0));
+	}
+
     public static void main(String[] args) throws Exception {
         new ViewInHierarchyUtils("NCI_Thesaurus", "11.09d", "C37927"); // Color
     }
 
 }
 
-// NCI Thesaurus (code: C25447_dot_1)
-// NCI Thesaurus (code: root_C37927_dot_3)
+
 

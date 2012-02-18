@@ -172,17 +172,23 @@ public class CacheController {
 			}
 		}
 
-/*
-        String retval = DataUtils.getCodingSchemeName(scheme);
-        if (retval != null) {
-            scheme = retval;
-            version = DataUtils.key2CodingSchemeVersion(scheme);
-        }
-*/
-
         HashMap map = null;
-        String key = scheme + "$" + version + "$" + code;
         JSONArray nodeArray = null;
+
+if (code.indexOf("_dot_") != -1) {
+	ViewInHierarchyUtils util = new ViewInHierarchyUtils();
+	code = util.getFocusCode(code);
+	boolean from_root = false;
+	map = util.getRemainingSubconcepts(scheme, version, code, from_root);
+	if (map == null) return null;
+	nodeArray = HashMap2JSONArray(map);
+	return nodeArray;
+}
+
+
+
+        String key = scheme + "$" + version + "$" + code;
+
         if (fromCache) {
             Element element = _cache.get(key);
             if (element != null) {
