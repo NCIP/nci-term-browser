@@ -333,6 +333,36 @@ public class ViewInHierarchyUtils {
         return hmap;
     }
 
+    public HashMap getSubconcepts(String codingScheme, String version, String focus_code) {
+        HashMap hmap = new HashMap();
+        String childNavText = "inverse_is_a";
+		long ms = System.currentTimeMillis();
+
+		TreeItem ti = new TreeItem(focus_code, "");
+		ti._expandable = false;
+
+        List<LexEvsTreeNode> list = getChildren(codingScheme, version, focus_code, false);
+        if (list.size() > 0) {
+			for (int i=0; i<list.size(); i++) {
+				LexEvsTreeNode child = (LexEvsTreeNode) list.get(i);
+				TreeItem childItem =
+					new TreeItem(child.getCode(),
+						child.getEntityDescription());
+
+				childItem._expandable = false;
+				LexEvsTreeNode.ExpandableStatus child_node_status = child.getExpandableStatus();
+				if (child_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+					childItem._expandable = true;
+				}
+				ti._expandable = true;
+				ti.addChild(childNavText, childItem);
+			}
+		}
+
+        hmap.put(focus_code, ti);
+        return hmap;
+    }
+
 
 
     public static Vector<String> parseData(String line) {

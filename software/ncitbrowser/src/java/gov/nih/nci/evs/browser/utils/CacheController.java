@@ -174,10 +174,11 @@ public class CacheController {
 
         HashMap map = null;
         JSONArray nodeArray = null;
+        ViewInHierarchyUtils util = new ViewInHierarchyUtils();
 
         // getRemainingSubconcepts
 		if (code.indexOf("_dot_") != -1) {
-			ViewInHierarchyUtils util = new ViewInHierarchyUtils();
+
 			code = util.getFocusCode(code);
 			boolean from_root = false;
 			if (code.indexOf("root_") != -1) {
@@ -206,7 +207,10 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubconcepts " + scheme + " (code: " + code + ")");
-            map = new TreeUtils().getSubconcepts(scheme, version, code);
+            //map = new TreeUtils().getSubconcepts(scheme, version, code);
+
+            map = util.getSubconcepts(scheme, version, code);
+
             nodeArray = HashMap2JSONArray(map);
 
             if (fromCache) {
