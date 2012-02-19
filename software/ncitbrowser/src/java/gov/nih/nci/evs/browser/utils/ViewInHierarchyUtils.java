@@ -149,7 +149,6 @@ public class ViewInHierarchyUtils {
         }
     }
 
-
     private void printTreeNode(PrintWriter out, String indent, String focus_code, LexEvsTreeNode node, LexEvsTreeNode parent) {
 		if (node == null) return;
 
@@ -182,7 +181,8 @@ public class ViewInHierarchyUtils {
 		    if (parent == null) {
 			    parent_id = "root";
 		    } else {
-			    parent_id = replaceNodeID("N_" + parent.getCode());
+			    //parent_id = replaceNodeID("N_" + parent.getCode());
+			    parent_id = "N_" + replaceNodeID(parent.getCode());
 		    }
 
 			String code = node.getCode();
@@ -198,40 +198,40 @@ public class ViewInHierarchyUtils {
 				}
 			}
 
-			String node_id = replaceNodeID("N_" + code);
-		    String node_label = node.getEntityDescription();
+			String node_label = "N_" + replaceNodeID(code);
+		    String node_name = node.getEntityDescription();
 		    String indentStr = indent + "      ";
 		    String symbol = getNodeSymbol(node);
 
 		    println(out, "");
-            println(out, indentStr + "// " + symbol + " " + node_label + "(" + code + ")");
+            println(out, indentStr + "// " + symbol + " " + node_name + "(" + code + ")");
 		    println(out, indentStr + "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
-		    println(out, indentStr + "newNodeData = { label:\"" + node_label + "\", id:\"" + code + "\", href:newNodeDetails };");
+		    println(out, indentStr + "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
 		    if (expanded) {
-			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
+			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
 
 		    } else if (isHasMoreNode) {
-			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
 		    } else {
-			    println(out, indentStr + "var " + node_id + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
 		    }
 
 		    if (expandable || isHasMoreNode) {
-			    println(out, indentStr + node_id + ".isLeaf = false;");
-			    println(out, indentStr + node_id + ".ontology_node_child_count = 1;");
+			    println(out, indentStr + node_label + ".isLeaf = false;");
+			    println(out, indentStr + node_label + ".ontology_node_child_count = 1;");
 
 			    //if (node.getPathToRootChildren() == null && !isHasMoreNode)
 			    if (node.getPathToRootChildren() == null) {
-			        println(out, indentStr + node_id + ".setDynamicLoad(loadNodeData);");
+			        println(out, indentStr + node_label + ".setDynamicLoad(loadNodeData);");
 				}
 		    } else {
-				println(out, indentStr + node_id + ".ontology_node_child_count = 0;");
-			    println(out, indentStr + node_id + ".isLeaf = true;");
+				println(out, indentStr + node_label + ".ontology_node_child_count = 0;");
+			    println(out, indentStr + node_label + ".isLeaf = true;");
 		    }
 
 
 		    if (focus_code.compareTo(code) == 0) {
-			    println(out, indentStr + node_id + ".labelStyle = \"ygtvlabel_highlight\";");
+			    println(out, indentStr + node_label + ".labelStyle = \"ygtvlabel_highlight\";");
 		    }
 		} catch (Exception ex) {
 
