@@ -297,8 +297,6 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 
 
 		if (isMapping) {
-			    request.getSession().setAttribute("searchTarget", searchTarget);
-
 				if (searchTarget.compareTo("names") == 0) {
 					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByCode(
 						scheme, version, matchText,
