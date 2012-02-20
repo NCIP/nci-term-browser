@@ -327,6 +327,12 @@ public class ValueSetBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
+		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
+
+        String algorithm = (String) request.getParameter("valueset_search_algorithm");
+        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
 		//System.out.println("checked_vocabularies: " + checked_vocabularies);
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
@@ -344,7 +350,6 @@ public class ValueSetBean {
         //System.out.println("view: " + VSD_view);
 
 
-        String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
 
         String selectURI = (String) request.getParameter("selectedValueSetURI");
         if (selectURI == null) {
@@ -357,11 +362,8 @@ public class ValueSetBean {
         String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
 
 		//System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
-		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
 
-        String algorithm = (String) request.getParameter("valueset_search_algorithm");
-        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
         String matchText = (String) request.getParameter("matchText");
 
