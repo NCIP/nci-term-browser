@@ -8,6 +8,7 @@ import java.net.*;
 import java.util.*;
 
 import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.Exceptions.*;
 import org.LexGrid.LexBIG.Impl.*;
 import org.LexGrid.LexBIG.Utility.LBConstants.*;
@@ -25,7 +26,7 @@ public class Bar {
         debug("");
         
         List<String> vsdDefURIs = new ArrayList<String>();
-        vsdDefURIs.add("urn://evs.MultiDomainSPL");
+        //vsdDefURIs.add("urn://evs.MultiDomainSPL");
         vsdDefURIs.add("urn://evs.MultiDomainSPL_Test2");
         
         new Bar().testGetValueSets("cell", MatchAlgorithms.LuceneQuery.name(), vsdDefURIs);
@@ -103,8 +104,22 @@ public class Bar {
             tmpStart = new Date();
             csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
             debug("* DataUtils.vector2CodingSchemeVersionReferenceList: " + format(timing(tmpStart, new Date())));
+            debugCsVersionList(csVersionList);
         }
         return csVersionList;
+    }
+    
+    private void debugCsVersionList(AbsoluteCodingSchemeVersionReferenceList csVersionList) {
+        Enumeration<AbsoluteCodingSchemeVersionReference> enumeration = 
+            (Enumeration<AbsoluteCodingSchemeVersionReference>) 
+                csVersionList.enumerateAbsoluteCodingSchemeVersionReference();
+        
+        while (enumeration.hasMoreElements()) {
+            AbsoluteCodingSchemeVersionReference ref = enumeration.nextElement();
+            String urn = ref.getCodingSchemeURN();
+            String version = ref.getCodingSchemeVersion();
+            debug("  * urn=" + urn + ", version=" + version);
+        }
     }
     
     //--------------------------------------------------------------------------
