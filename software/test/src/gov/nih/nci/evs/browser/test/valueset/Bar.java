@@ -7,7 +7,7 @@ import gov.nih.nci.evs.browser.utils.*;
 import java.net.*;
 import java.util.*;
 
-import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
+import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.Exceptions.*;
 import org.LexGrid.LexBIG.Impl.*;
 import org.LexGrid.LexBIG.Utility.LBConstants.*;
@@ -26,7 +26,7 @@ public class Bar {
         //new Bar().testGetValueSets("cell", MatchAlgorithms.LuceneQuery.name());
         new Bar().testGetValueSets("cell", MatchAlgorithms.contains.name());
     }
-
+    
     public void testGetValueSets(String matchText, String algorithm) {
         debug("* matchText: " + matchText);
         debug("* algorithm: " + algorithm);
@@ -42,22 +42,20 @@ public class Bar {
             int i = 0;
             for (String uri : vsdDefURIs) {
                 Date vsStart = new Date();
+                String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+                
                 AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
-                Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
-                if (cs_ref_vec != null) {
-                    csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
-                }
+                csVersionList = getCsVersionList(vsd_name, uri);
                 
                 ResolvedValueSetCodedNodeSet nodes =
                     vsdServ.getValueSetDefinitionEntitiesForTerm(matchText,
                         algorithm, new URI(uri), csVersionList, null);
                 Date vsStop = new Date();
                 long vsTime = vsStop.getTime() - vsStart.getTime();
-                String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
                 debug(String.format("%5s", i++ + ")") 
                     + " " + String.format("%-30s", uri)
                     + " " + String.format("%-90s", vsd_name)
-                    + " " + formatTiming(vsTime));
+                    + " " + format(vsTime));
                 if (nodes != null) {
                     if (nodeSet != null) {
                         // nodeSet = (CodedNodeSetImpl)
@@ -76,25 +74,55 @@ public class Bar {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Date stop = new Date();
-        long ta = start.getTime();
-        long tb = stop.getTime();
 
-        long diff = tb - ta;
-        debug("elapsed time: " + timing(diff));
+        debug("");
+        debug(Utils.SEPARATOR);
+        debug("elapsed time: " + format(timing(start, new Date())));
     }
 
+    //--------------------------------------------------------------------------
+    private AbsoluteCodingSchemeVersionReferenceList getCsVersionList(String vsd_name, String uri) {
+        debug(Utils.SEPARATOR);
+        debug("* vsd_name: " + vsd_name);
+        
+        AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+        
+        Date tmpStart = new Date();
+        Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
+        debug("* DataUtils.getCodingSchemeReferencesInValueSetDefinition: " + format(timing(tmpStart, new Date())));
+        
+        if (cs_ref_vec != null) {
+            tmpStart = new Date();
+            csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
+            debug("* DataUtils.vector2CodingSchemeVersionReferenceList: " + format(timing(tmpStart, new Date())));
+        }
+        return csVersionList;
+    }
+    
+    //--------------------------------------------------------------------------
     private static void debug(String text) {
         System.out.println(text);
     }
     
-    private static String formatTiming(long duration) {
-        if (duration < 1000)
-            return String.format("%5s", duration) + " msec";
-        else return String.format("%5s", duration/1000) + " sec ";
+    private static final String TIMING_FORMAT = "%6d";
+    private static final String TIMING_DECIMAL_FORMAT = "%6.2f";
+    private static final float SEC = 1000;
+    private static final float MIN = 60 * SEC;
+    private static final float HR = 60 * MIN;
+    private static String format(long duration) {
+        if (duration >= HR)
+            return String.format(TIMING_DECIMAL_FORMAT, (float) (duration / HR)) + " hr  ";
+        else if (duration >= MIN)
+            return String.format(TIMING_DECIMAL_FORMAT, (float) (duration / MIN)) + " min ";
+        else if (duration >= SEC)
+            return String.format(TIMING_DECIMAL_FORMAT, (float) (duration / SEC)) + " sec ";
+        else return String.format(TIMING_FORMAT, duration) + " msec"; 
     }
     
-    private static String timing(long duration) {
-        return (duration < 1000 ? duration + " msecs" : duration / 1000 + " seconds");
+    private static long timing(Date start, Date stop) {
+        long ta = start.getTime();
+        long tb = stop.getTime();
+        long diff = tb - ta;
+        return diff;
     }
 }
