@@ -7,6 +7,7 @@ import gov.nih.nci.evs.browser.utils.*;
 import java.net.*;
 import java.util.*;
 
+import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
 import org.LexGrid.LexBIG.Exceptions.*;
 import org.LexGrid.LexBIG.Impl.*;
 import org.LexGrid.LexBIG.Utility.LBConstants.*;
@@ -22,31 +23,41 @@ public class Bar {
         debug("EVS_SERVICE_URL: " + evsServiceUrl);
         debug("");
         debug(Utils.SEPARATOR);
-        new Bar().testGetValueSets();
+        //new Bar().testGetValueSets("cell", MatchAlgorithms.LuceneQuery.name());
+        new Bar().testGetValueSets("cell", MatchAlgorithms.contains.name());
     }
 
-    public void testGetValueSets() {
-        debug("Before VSDS init");
+    public void testGetValueSets(String matchText, String algorithm) {
+        debug("* matchText: " + matchText);
+        debug("* algorithm: " + algorithm);
+        debug("");
+        debug(Utils.SEPARATOR);
         LexEVSValueSetDefinitionServices vsdServ =
             RemoteServerUtil.getLexEVSValueSetDefinitionServices();
         CodedNodeSetImpl nodeSet = null;
+        
         Date start = new Date();
         try {
             List<String> vsdDefURIs = vsdServ.listValueSetDefinitionURIs();
             int i = 0;
             for (String uri : vsdDefURIs) {
                 Date vsStart = new Date();
+                AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+                Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
+                if (cs_ref_vec != null) {
+                    csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
+                }
+                
                 ResolvedValueSetCodedNodeSet nodes =
-                    vsdServ.getValueSetDefinitionEntitiesForTerm("cell",
-                        MatchAlgorithms.LuceneQuery.name(), new URI(uri), null,
-                        null);
+                    vsdServ.getValueSetDefinitionEntitiesForTerm(matchText,
+                        algorithm, new URI(uri), csVersionList, null);
                 Date vsStop = new Date();
                 long vsTime = vsStop.getTime() - vsStart.getTime();
                 String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
                 debug(String.format("%5s", i++ + ")") 
                     + " " + String.format("%-30s", uri)
                     + " " + String.format("%-90s", vsd_name)
-                    + " Resolve time: " + formatTiming(vsTime));
+                    + " " + formatTiming(vsTime));
                 if (nodes != null) {
                     if (nodeSet != null) {
                         // nodeSet = (CodedNodeSetImpl)
