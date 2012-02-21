@@ -20,14 +20,20 @@ public class Bar {
         String evsServiceUrl =
             NCItBrowserProperties
                 .getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+        debug(Utils.SEPARATOR);
         debug("EVS_SERVICE_URL: " + evsServiceUrl);
         debug("");
-        debug(Utils.SEPARATOR);
-        //new Bar().testGetValueSets("cell", MatchAlgorithms.LuceneQuery.name());
-        new Bar().testGetValueSets("cell", MatchAlgorithms.contains.name());
+        
+        List<String> vsdDefURIs = new ArrayList<String>();
+        vsdDefURIs.add("urn://evs.MultiDomainSPL");
+        vsdDefURIs.add("urn://evs.MultiDomainSPL_Test2");
+        
+        new Bar().testGetValueSets("cell", MatchAlgorithms.LuceneQuery.name(), vsdDefURIs);
+        new Bar().testGetValueSets("cell", MatchAlgorithms.contains.name(), vsdDefURIs);
     }
     
-    public void testGetValueSets(String matchText, String algorithm) {
+    public void testGetValueSets(String matchText, String algorithm, List<String> vsdDefURIs) {
+        debug(Utils.SEPARATOR);
         debug("* matchText: " + matchText);
         debug("* algorithm: " + algorithm);
         debug("");
@@ -38,7 +44,8 @@ public class Bar {
         
         Date start = new Date();
         try {
-            List<String> vsdDefURIs = vsdServ.listValueSetDefinitionURIs();
+            if (vsdDefURIs == null || vsdDefURIs.size() <= 0)
+                vsdDefURIs = vsdServ.listValueSetDefinitionURIs();
             int i = 0;
             for (String uri : vsdDefURIs) {
                 Date vsStart = new Date();
@@ -78,6 +85,7 @@ public class Bar {
         debug("");
         debug(Utils.SEPARATOR);
         debug("elapsed time: " + format(timing(start, new Date())));
+        debug("");
     }
 
     //--------------------------------------------------------------------------
