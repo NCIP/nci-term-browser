@@ -15,6 +15,7 @@ set java=%JAVA_HOME%\bin\java
 set class=gov.nih.nci.evs.browser.test.MatchConceptByCode
 set class=gov.nih.nci.evs.browser.test.GetConceptByCode
 set class=gov.nih.nci.evs.browser.test.tree.LexEVSTreeTest
+set class=gov.nih.nci.evs.browser.test.valueset.Bar
 set args=-propertyFile C:/Users/yeed/apps/evs/ncit-webapp/conf/NCItBrowserProperties.xml
 
 rem -------------------------------------------------------------------------------------
