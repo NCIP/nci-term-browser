@@ -90,6 +90,8 @@ public class ViewInHierarchyUtils {
 		code = code.replaceAll(":", "cCc");
         code = code.replaceAll("-", "cDc");
         code = code.replaceAll("_", "cUc");
+        code = code.replaceAll("/", "cSc");
+        code = code.replaceAll(".", "cDOTc");
 		return code;
 	}
 
@@ -97,6 +99,8 @@ public class ViewInHierarchyUtils {
 		code = code.replaceAll("cCc", ":");
         code = code.replaceAll("cDc", "-");
         code = code.replaceAll("cUc", "_");
+        code = code.replaceAll("cSc", "/");
+        code = code.replaceAll("cDOTc", ".");
 		return code;
 	}
 

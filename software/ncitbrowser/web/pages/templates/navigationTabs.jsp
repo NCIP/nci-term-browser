@@ -18,7 +18,11 @@
       String tab_valuesets_image = nav_type.equalsIgnoreCase("valuesets")
         ? "tab_valuesets_clicked.gif" : "tab_valuesets.gif";
       tab_valuesets_image = imagesPath + tab_valuesets_image;
-      String tab_valuesets_link = pagesPath + valueset_jsp_page_name + "?nav_type=valuesets";
+      
+      
+      //String tab_valuesets_link = pagesPath + valueset_jsp_page_name + "?nav_type=valuesets";
+      String tab_valuesets_link = request.getContextPath() + "/ajax?action=create_src_vs_tree";
+      
     
       String tab_mappings_image = nav_type.equalsIgnoreCase("mappings")
         ? "tab_map_clicked.gif" : "tab_map.gif";

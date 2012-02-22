@@ -131,7 +131,9 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = true;  //DYEE_DEBUG
+    private static boolean initializeValueSetHierarchy = true;
+    private static boolean valueSetHierarchyInitialized = false;
+
 
     // ==================================================================================
     // For customized query use
@@ -215,7 +217,7 @@ public class DataUtils {
     public static Vector _source_code_schemes = null;
 
 
-
+    public static HashMap sourceValueSetTree = null;
 
     // ==================================================================================
 
@@ -576,6 +578,7 @@ public class DataUtils {
         setMappingDisplayNameHashMap();
 
         if (initializeValueSetHierarchy) {
+			/*
 			_logger.error("Initializing Value Set Metadata ...");
 			getValueSetDefinitionMetadata();
 			_logger.error("Done Initializing Value Set Metadata ...");
@@ -593,8 +596,50 @@ public class DataUtils {
 			System.out.println("\tinitializeCS2vsdURIsMap ...");
 			ValueSetHierarchy.initializeCS2vsdURIs_map();
 			_logger.debug("\tDone initializing ValueSetHierarchy ...");
+
+            sourceValueSetTree = ValueSetHierarchy.getSourceValueSetTree();
+            */
+            initializeValueSetHierarchy();
 	    }
     }
+
+    private static void initializeValueSetHierarchy() {
+		if (valueSetHierarchyInitialized) return;
+
+		_logger.debug("Initializing Value Set Metadata ...");
+		getValueSetDefinitionMetadata();
+		_logger.debug("Done Initializing Value Set Metadata ...");
+		_logger.debug("\tInitializing ValueSetHierarchy ...");
+		System.out.println("\tgetValueSetSourceHierarchy ...");
+		HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
+		System.out.println("\tgetValueSetDefinitionURI2VSD_map ...");
+		HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
+		System.out.println("\tpreprocessSourceHierarchyData ...");
+		ValueSetHierarchy.preprocessSourceHierarchyData();
+		System.out.println("\tgetValueSetParticipationHashSet ...");
+		ValueSetHierarchy.getValueSetParticipationHashSet();
+		System.out.println("\tcreateVSDSource2VSDsMap ...");
+		ValueSetHierarchy.createVSDSource2VSDsMap();
+		System.out.println("\tinitializeCS2vsdURIsMap ...");
+		ValueSetHierarchy.initializeCS2vsdURIs_map();
+		_logger.debug("\tDone initializing ValueSetHierarchy ...");
+
+		valueSetHierarchyInitialized = true;
+		sourceValueSetTree = ValueSetHierarchy.getSourceValueSetTree(null, null);
+		if (sourceValueSetTree == null) {
+			_logger.debug("\t(*) sourceValueSetTree == null??? ...");
+		}
+	}
+
+
+
+    public static HashMap getSourceValueSetTree() {
+		if (sourceValueSetTree == null) {
+			initializeValueSetHierarchy();//sourceValueSetTree = ValueSetHierarchy.getSourceValueSetTree(null, null);
+		}
+		return sourceValueSetTree;
+	}
+
 
     public static String getMetadataValue(String scheme, String propertyName) {
         Vector v = getMetadataValues(scheme, propertyName);
@@ -5319,5 +5364,10 @@ System.out.println("vsd_str " + vsd_str);
 
 		return cns;
 	}
+
+
+
+
+
 
 }
