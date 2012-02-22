@@ -1257,7 +1257,9 @@ public class CacheController {
         HashMap map = null;
 		_logger.debug("Not in cache -- calling getSubValueSets ");
 
-		map = ValueSetHierarchy.getSourceValueSetTree(scheme, version);
+		//map = ValueSetHierarchy.getSourceValueSetTree(scheme, version);
+		map = ValueSetHierarchy.getSourceValueSetTree();
+
 		TreeItem root = (TreeItem) map.get("<Root>");
 		nodeArray = toJSONArray(root);
 

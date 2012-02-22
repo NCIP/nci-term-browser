@@ -362,6 +362,7 @@ System.out.println("vsd_uri: " + vsd_uri);
             }
             java.lang.String valueSetDefinitionRevisionId = null;
             AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+            /*
             Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
             if (cs_ref_vec != null) {
 				csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
@@ -369,6 +370,7 @@ System.out.println("vsd_uri: " + vsd_uri);
 System.out.println("cs_ref_vec = null??? ");
 
 			}
+			*/
 
             String csVersionTag = null;
 
@@ -456,9 +458,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             }
             java.lang.String valueSetDefinitionRevisionId = null;
             AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+            /*
             Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
             if (cs_ref_vec != null) csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
-
+            */
 
             String csVersionTag = null;
 
@@ -562,10 +565,10 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
             }
             java.lang.String valueSetDefinitionRevisionId = null;
             AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
-
+            /*
             Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
             if (cs_ref_vec != null) csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
-
+            */
             String csVersionTag = null;
 
             ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),

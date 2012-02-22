@@ -2722,6 +2722,12 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 	}
 
 
+    public static HashMap getSourceValueSetTree() {
+		return DataUtils.getSourceValueSetTree();
+	}
+
+
+
 
     public static HashMap getSourceValueSetTree(String scheme, String version) {
 
