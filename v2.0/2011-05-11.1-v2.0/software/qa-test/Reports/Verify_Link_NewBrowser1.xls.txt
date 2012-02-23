@@ -1,0 +1,230 @@
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 3:27:05 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+6	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:November2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 3:31:21 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+6	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:November2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpVisitedConceptsEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 3:38:49 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+6	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:November2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpVisitedConceptsEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 3:42:30 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+6	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:November2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 3:48:07 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+6	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:November2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 3:57:45 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 4:13:45 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 4:16:54 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 4:24:31 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+7	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+8	Expected: GO:0008150
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 4:26:11 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/9/2010 5:26:27 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+7	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+8	Expected: GO:0008150
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcesWelcomeGeneOntology(GO)isacollaborativeeffortwiththeaimofstandardizingtherepresentationofgeneandgeneproductattributesacrossspeciesanddatabases.GOcoversthreemainsubjectareas:molecularfunction,biologicalprocess,andcellularcomponent.GOdoesnotnamegenesorgeneproducts,nordoesitattempttoprovidestructuredterminologybeyonditsthreedomains.SourceHomePage:http://www.geneontology.org/index.shtmlcaBIGVKCLink:https://cabig-kc.nci.nih.gov/Vocab/KC/index.php/Gene_OntologyNCIEnterpriseVocabularyServices:TerminologyresourcesandservicesforNCIandthebiomedicalcommunity.NCIMetathesaurus:Comprehensivedatabaseof3,600,000termsfrom76terminologies.NCITermBrowser:NCIandotherterminologiesinanintegratedenvironment.NCITerminologyResources:MoreinformationonNCIdictionariesandresources.NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/10/2010 1:04:29 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/10/2010 1:05:37 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/17/2010 4:31:23 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/20/2010 3:16:19 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/20/2010 3:19:41 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/20/2010 3:59:45 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/20/2010 4:01:45 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+7	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcescellular_component(CodeGO:0005575)TermsandPropertiesGOCDefinition:Thepartofacelloritsextracellularenvironmentinwhichageneproductislocated.Ageneproductmaybelocatedinoneormorepartsofacellanditslocationmaybeasspecificasaparticularmacromolecularcomplex,thatis,astable,persistentassociationofmacromoleculesthatfunctiontogether.GeneOntologyCode:GO:0005575Synonyms&Abbreviations:(seeSynonymDetails)cellular_componentcellularcomponentcellularcomponentunknownExternalSourceCodes:OtherProperties:commentNotethat,inadditiontoformingtherootofthecellularcomponentontology,thistermisrecommendedforusefortheannotationofgeneproductswhosecellularcomponentisunknown.Notethatwhenthistermisusedforannotation,itindicatesthatnoinformationwasavailableaboutthecellularcomponentofthegeneproductannotatedasofthedatetheannotationwasmade;theevidencecodeND,nodata,isusedtoindicatethis.subsetgosubset_proksubsetgoslim_candidasubsetgoslim_genericsubsetgoslim_goasubsetgoslim_pirsubsetgoslim_plantsubsetgoslim_yeastalt_idGO:0008372xrefNIF_Subcellular:sao1337158144AdditionalConceptData:URL:http://nciterms-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=Gene%20Ontology&code=GO:0005575NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+8	Expected: GO:0008150
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcescellular_component(CodeGO:0005575)TermsandPropertiesGOCDefinition:Thepartofacelloritsextracellularenvironmentinwhichageneproductislocated.Ageneproductmaybelocatedinoneormorepartsofacellanditslocationmaybeasspecificasaparticularmacromolecularcomplex,thatis,astable,persistentassociationofmacromoleculesthatfunctiontogether.GeneOntologyCode:GO:0005575Synonyms&Abbreviations:(seeSynonymDetails)cellular_componentcellularcomponentcellularcomponentunknownExternalSourceCodes:OtherProperties:commentNotethat,inadditiontoformingtherootofthecellularcomponentontology,thistermisrecommendedforusefortheannotationofgeneproductswhosecellularcomponentisunknown.Notethatwhenthistermisusedforannotation,itindicatesthatnoinformationwasavailableaboutthecellularcomponentofthegeneproductannotatedasofthedatetheannotationwasmade;theevidencecodeND,nodata,isusedtoindicatethis.subsetgosubset_proksubsetgoslim_candidasubsetgoslim_genericsubsetgoslim_goasubsetgoslim_pirsubsetgoslim_plantsubsetgoslim_yeastalt_idGO:0008372xrefNIF_Subcellular:sao1337158144AdditionalConceptData:URL:http://nciterms-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=Gene%20Ontology&code=GO:0005575NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/20/2010 4:05:14 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/21/2010 10:29:00 AM
+
+Step	Error
+----	-----------------------------------------------------------------------
+7	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcescellular_component(CodeGO:0005575)TermsandPropertiesGOCDefinition:Thepartofacelloritsextracellularenvironmentinwhichageneproductislocated.Ageneproductmaybelocatedinoneormorepartsofacellanditslocationmaybeasspecificasaparticularmacromolecularcomplex,thatis,astable,persistentassociationofmacromoleculesthatfunctiontogether.GeneOntologyCode:GO:0005575Synonyms&Abbreviations:(seeSynonymDetails)cellular_componentcellularcomponentcellularcomponentunknownExternalSourceCodes:OtherProperties:commentNotethat,inadditiontoformingtherootofthecellularcomponentontology,thistermisrecommendedforusefortheannotationofgeneproductswhosecellularcomponentisunknown.Notethatwhenthistermisusedforannotation,itindicatesthatnoinformationwasavailableaboutthecellularcomponentofthegeneproductannotatedasofthedatetheannotationwasmade;theevidencecodeND,nodata,isusedtoindicatethis.subsetgosubset_proksubsetgoslim_candidasubsetgoslim_genericsubsetgoslim_goasubsetgoslim_pirsubsetgoslim_plantsubsetgoslim_yeastalt_idGO:0008372xrefNIF_Subcellular:sao1337158144AdditionalConceptData:URL:http://nciterms-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=Gene%20Ontology&code=GO:0005575NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+8	Expected: GO:0008150
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcescellular_component(CodeGO:0005575)TermsandPropertiesGOCDefinition:Thepartofacelloritsextracellularenvironmentinwhichageneproductislocated.Ageneproductmaybelocatedinoneormorepartsofacellanditslocationmaybeasspecificasaparticularmacromolecularcomplex,thatis,astable,persistentassociationofmacromoleculesthatfunctiontogether.GeneOntologyCode:GO:0005575Synonyms&Abbreviations:(seeSynonymDetails)cellular_componentcellularcomponentcellularcomponentunknownExternalSourceCodes:OtherProperties:commentNotethat,inadditiontoformingtherootofthecellularcomponentontology,thistermisrecommendedforusefortheannotationofgeneproductswhosecellularcomponentisunknown.Notethatwhenthistermisusedforannotation,itindicatesthatnoinformationwasavailableaboutthecellularcomponentofthegeneproductannotatedasofthedatetheannotationwasmade;theevidencecodeND,nodata,isusedtoindicatethis.subsetgosubset_proksubsetgoslim_candidasubsetgoslim_genericsubsetgoslim_goasubsetgoslim_pirsubsetgoslim_plantsubsetgoslim_yeastalt_idGO:0008372xrefNIF_Subcellular:sao1337158144AdditionalConceptData:URL:http://nciterms-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=Gene%20Ontology&code=GO:0005575NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/21/2010 10:31:08 AM
+
+Step	Error
+----	-----------------------------------------------------------------------
+7	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcescellular_component(CodeGO:0005575)TermsandPropertiesGOCDefinition:Thepartofacelloritsextracellularenvironmentinwhichageneproductislocated.Ageneproductmaybelocatedinoneormorepartsofacellanditslocationmaybeasspecificasaparticularmacromolecularcomplex,thatis,astable,persistentassociationofmacromoleculesthatfunctiontogether.GeneOntologyCode:GO:0005575Synonyms&Abbreviations:(seeSynonymDetails)cellular_componentcellularcomponentcellularcomponentunknownExternalSourceCodes:OtherProperties:commentNotethat,inadditiontoformingtherootofthecellularcomponentontology,thistermisrecommendedforusefortheannotationofgeneproductswhosecellularcomponentisunknown.Notethatwhenthistermisusedforannotation,itindicatesthatnoinformationwasavailableaboutthecellularcomponentofthegeneproductannotatedasofthedatetheannotationwasmade;theevidencecodeND,nodata,isusedtoindicatethis.subsetgosubset_proksubsetgoslim_candidasubsetgoslim_genericsubsetgoslim_goasubsetgoslim_pirsubsetgoslim_plantsubsetgoslim_yeastalt_idGO:0008372xrefNIF_Subcellular:sao1337158144AdditionalConceptData:URL:http://nciterms-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=Gene%20Ontology&code=GO:0005575NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+8	Expected: GO:0008150
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcescellular_component(CodeGO:0005575)TermsandPropertiesGOCDefinition:Thepartofacelloritsextracellularenvironmentinwhichageneproductislocated.Ageneproductmaybelocatedinoneormorepartsofacellanditslocationmaybeasspecificasaparticularmacromolecularcomplex,thatis,astable,persistentassociationofmacromoleculesthatfunctiontogether.GeneOntologyCode:GO:0005575Synonyms&Abbreviations:(seeSynonymDetails)cellular_componentcellularcomponentcellularcomponentunknownExternalSourceCodes:OtherProperties:commentNotethat,inadditiontoformingtherootofthecellularcomponentontology,thistermisrecommendedforusefortheannotationofgeneproductswhosecellularcomponentisunknown.Notethatwhenthistermisusedforannotation,itindicatesthatnoinformationwasavailableaboutthecellularcomponentofthegeneproductannotatedasofthedatetheannotationwasmade;theevidencecodeND,nodata,isusedtoindicatethis.subsetgosubset_proksubsetgoslim_candidasubsetgoslim_genericsubsetgoslim_goasubsetgoslim_pirsubsetgoslim_plantsubsetgoslim_yeastalt_idGO:0008372xrefNIF_Subcellular:sao1337158144AdditionalConceptData:URL:http://nciterms-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=Gene%20Ontology&code=GO:0005575NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
+Test: Verify_Link_NewBrowser1.xls
+Run on: 12/21/2010 10:36:45 AM
+
+Step	Error
+----	-----------------------------------------------------------------------
+7	Expected: biological_process(CodeGO:0008150)
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcescellular_component(CodeGO:0005575)TermsandPropertiesGOCDefinition:Thepartofacelloritsextracellularenvironmentinwhichageneproductislocated.Ageneproductmaybelocatedinoneormorepartsofacellanditslocationmaybeasspecificasaparticularmacromolecularcomplex,thatis,astable,persistentassociationofmacromoleculesthatfunctiontogether.GeneOntologyCode:GO:0005575Synonyms&Abbreviations:(seeSynonymDetails)cellular_componentcellularcomponentcellularcomponentunknownExternalSourceCodes:OtherProperties:commentNotethat,inadditiontoformingtherootofthecellularcomponentontology,thistermisrecommendedforusefortheannotationofgeneproductswhosecellularcomponentisunknown.Notethatwhenthistermisusedforannotation,itindicatesthatnoinformationwasavailableaboutthecellularcomponentofthegeneproductannotatedasofthedatetheannotationwasmade;theevidencecodeND,nodata,isusedtoindicatethis.subsetgosubset_proksubsetgoslim_candidasubsetgoslim_genericsubsetgoslim_goasubsetgoslim_pirsubsetgoslim_plantsubsetgoslim_yeastalt_idGO:0008372xrefNIF_Subcellular:sao1337158144AdditionalConceptData:URL:http://nciterms-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=Gene%20Ontology&code=GO:0005575NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+8	Expected: GO:0008150
+	Actual  : Found in page text: 
+GOVersion:October2010ExactMatchBeginsWithContainsName/CodePropertyRelationshipHome|ViewHierarchy|HelpEVSHomeNCIMetathesaurusBrowserNCIThesaurusBrowserNCITermBrowserNCITerminologyResourcescellular_component(CodeGO:0005575)TermsandPropertiesGOCDefinition:Thepartofacelloritsextracellularenvironmentinwhichageneproductislocated.Ageneproductmaybelocatedinoneormorepartsofacellanditslocationmaybeasspecificasaparticularmacromolecularcomplex,thatis,astable,persistentassociationofmacromoleculesthatfunctiontogether.GeneOntologyCode:GO:0005575Synonyms&Abbreviations:(seeSynonymDetails)cellular_componentcellularcomponentcellularcomponentunknownExternalSourceCodes:OtherProperties:commentNotethat,inadditiontoformingtherootofthecellularcomponentontology,thistermisrecommendedforusefortheannotationofgeneproductswhosecellularcomponentisunknown.Notethatwhenthistermisusedforannotation,itindicatesthatnoinformationwasavailableaboutthecellularcomponentofthegeneproductannotatedasofthedatetheannotationwasmade;theevidencecodeND,nodata,isusedtoindicatethis.subsetgosubset_proksubsetgoslim_candidasubsetgoslim_genericsubsetgoslim_goasubsetgoslim_pirsubsetgoslim_plantsubsetgoslim_yeastalt_idGO:0008372xrefNIF_Subcellular:sao1337158144AdditionalConceptData:URL:http://nciterms-qa.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=Gene%20Ontology&code=GO:0005575NCIHome|ContactUs|Policies|Accessibility|FOIAAServiceoftheNationalCancerInstitute
+
+
+
