@@ -96,6 +96,10 @@
           <% } %>
           <br/>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
+            <tr class="dataRowDark">
+              <th scope="col" align="left">Name</th>
+              <th scope="col" align="left">Description</th>
+            </tr>          
             <%
               Vector names = DataUtils.getMetadataValues(
                   codingScheme, "term_type_code");
@@ -105,7 +109,7 @@
                 for (int n=0; n<names.size(); n++) {
                   String name = (String) names.elementAt(n);
                   String description = (String) descriptions.elementAt(n);
-                  String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
+                  String rowColor = (n%2 == 1) ? "dataRowDark" : "dataRowLight";
               %>
                   <tr class="<%=rowColor%>">
                     <td><%=name%></td>
