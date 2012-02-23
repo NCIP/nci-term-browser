@@ -111,6 +111,11 @@ subject to the conditions specified at
           </table>
           <br/>
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
+            <tr class="dataRowDark">
+              <th scope="col" align="left">Source</th>
+              <th scope="col" align="left">&nbsp;</th>
+              <th scope="col" align="left">Description</th>
+            </tr>
             <%
               String propertyName = "html_compatable_description";
               Vector from_vec = new Vector();
@@ -124,7 +129,7 @@ subject to the conditions specified at
                   request.getSession().setAttribute("source_descriptions", abbr_vec);
               } 
               
-              int lcv = -1;
+              int lcv = 0;
               for (int n=0; n<abbr_vec.size(); n++) {
                  String t = (String) abbr_vec.elementAt(n);
                  Vector w = DataUtils.parseData(t, "|");
