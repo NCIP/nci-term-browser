@@ -76,6 +76,8 @@ public final class AjaxServlet extends HttpServlet {
      * local constants
      */
     private static final long serialVersionUID = 1L;
+    private static final int  STANDARD_VIEW = 1;
+    private static final int  TERMINOLOGY_VIEW = 2;
 
     /**
      * Validates the Init and Context parameters, configures authentication URL
@@ -286,7 +288,8 @@ public final class AjaxServlet extends HttpServlet {
 
         if (action.equals("create_src_vs_tree")) {
             create_src_vs_tree(request, response);
-
+        } else if (action.equals("create_cs_vs_tree")) {
+            create_cs_vs_tree(request, response);
         } else if (action.equals("search_hierarchy")) {
             search_hierarchy(request, response, node_id, ontology_display_name, ontology_version);
         } else if (action.equals("search_tree")) {
@@ -1149,10 +1152,18 @@ public final class AjaxServlet extends HttpServlet {
           _debugBuffer = null;
           _logger.debug(Utils.SEPARATOR);
       }
-   }
+    }
 
 
     public static void create_src_vs_tree(HttpServletRequest request, HttpServletResponse response) {
+		create_vs_tree(request, response, STANDARD_VIEW);
+	}
+
+    public static void create_cs_vs_tree(HttpServletRequest request, HttpServletResponse response) {
+		create_vs_tree(request, response, TERMINOLOGY_VIEW);
+	}
+
+    public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
       response.setContentType("text/html");
       PrintWriter out = null;
 
@@ -1418,8 +1429,6 @@ public final class AjaxServlet extends HttpServlet {
       out.println("      tree = new YAHOO.widget.TreeView(\"treecontainer\");");
 
 
-
-
       out.println("      tree.draw();");
 
 
@@ -1461,9 +1470,17 @@ public final class AjaxServlet extends HttpServlet {
       out.println("");
       out.println("");
 
-
       println(out, "            var root = tree.getRoot();");
 
+
+HashMap value_set_tree_hmap = null;
+if (view == STANDARD_VIEW) {
+	value_set_tree_hmap = DataUtils.getSourceValueSetTree();
+} else {
+	value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
+}
+
+/*
  System.out.println("calling source_tree_hmap = DataUtils.getSourceValueSetTree() ");
  HashMap source_tree_hmap = DataUtils.getSourceValueSetTree();
  if (source_tree_hmap == null) {
@@ -1471,11 +1488,10 @@ public final class AjaxServlet extends HttpServlet {
  } else {
 	 System.out.println("source_tree_hmap != null");
  }
-
-
  TreeItem root = (TreeItem) source_tree_hmap.get("<Root>");
+ */
+ TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
  new ValueSetUtils().printTree(out, root);
-
 
 
       out.println("");
@@ -1981,15 +1997,28 @@ public final class AjaxServlet extends HttpServlet {
       out.println("            <tr class=\"textbody\">");
       out.println("              <td class=\"textbody\" align=\"left\">");
       out.println("");
+
+// to be modified:
+String contentPath = request.getContextPath();
+// request.getContextPath() + "/ajax?action=create_src_vs_tree";
+
+if (view == STANDARD_VIEW) {
       out.println("                Standards View");
       out.println("                &nbsp;|");
-      out.println("                <a href=\"/ncitbrowser/pages/value_set_terminology_view.jsf?view=terminology\">Terminology View</a>");
+      out.println("                <a href=\"" + contentPath + "/ajax?action=create_cs_vs_tree\">Terminology View</a>");
+} else {
+      out.println("                <a href=\"" + contentPath + "/ajax?action=create_src_vs_tree\">Standards View</a>");
+      out.println("                &nbsp;|");
+      out.println("                Terminology View");
+}
       out.println("              </td>");
       out.println("");
       out.println("              <td align=\"right\">");
       out.println("               <font size=\"1\" color=\"red\" align=\"right\">");
       out.println("                 <a href=\"javascript:printPage()\"><img src=\"/ncitbrowser/images/printer.bmp\" border=\"0\" alt=\"Send to Printer\"><i>Send to Printer</i></a>");
       out.println("               </font>");
+
+
       out.println("              </td>");
       out.println("            </tr>");
       out.println("          </table>");
