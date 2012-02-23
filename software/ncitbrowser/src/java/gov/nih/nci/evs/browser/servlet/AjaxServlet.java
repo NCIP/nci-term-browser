@@ -1479,6 +1479,7 @@ public final class AjaxServlet extends HttpServlet {
 
 
       out.println("");
+      out.println("		 tree.collapseAll();");
       out.println("      tree.draw();");
 
 
