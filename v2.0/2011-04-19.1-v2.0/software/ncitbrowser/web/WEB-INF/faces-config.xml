@@ -1,0 +1,1455 @@
+<?xml version="1.0"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+
+  <application>
+    <message-bundle>gov.nih.nci.evs.browser.bean.Resources</message-bundle>
+    <locale-config>
+      <default-locale>en</default-locale>
+      <supported-locale>en-us</supported-locale>
+      <supported-locale>fr</supported-locale>
+      <supported-locale>es</supported-locale>
+    </locale-config>
+  </application>
+
+  <factory>
+    <application-factory>com.sun.faces.application.ApplicationFactoryImpl</application-factory>
+    <faces-context-factory>com.sun.faces.context.FacesContextFactoryImpl</faces-context-factory>
+    <lifecycle-factory>com.sun.faces.lifecycle.LifecycleFactoryImpl</lifecycle-factory>
+    <render-kit-factory>com.sun.faces.renderkit.RenderKitFactoryImpl</render-kit-factory>
+  </factory>
+
+  <navigation-rule>
+    <from-view-id>/pages/mapping_search.jsp</from-view-id>
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>no_match</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>    
+
+    <navigation-case>
+       <description>return_to_mapping_home</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>return_to_mapping_home</from-outcome>
+       <to-view-id>/pages/mapping_search.jsp</to-view-id>
+    </navigation-case>    
+    
+   </navigation-rule>   
+ 
+   <navigation-rule>
+     <from-view-id>/pages/cs_mappings.jsp</from-view-id>
+     <navigation-case>
+        <description>mapping_search_results</description>
+        <from-action>#{userSessionBean.searchAction}</from-action>
+        <from-outcome>mapping_search_results</from-outcome>
+        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+     </navigation-case>
+     
+     <navigation-case>
+        <description>no_match</description>
+        <from-action>#{userSessionBean.searchAction}</from-action>
+        <from-outcome>message</from-outcome>
+        <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+     </navigation-case>    
+ 
+     <navigation-case>
+        <description>return_to_mapping_home</description>
+        <from-action>#{userSessionBean.searchAction}</from-action>
+        <from-outcome>return_to_mapping_home</from-outcome>
+        <to-view-id>/pages/mapping_search.jsp</to-view-id>
+     </navigation-case>    
+      
+  </navigation-rule>   
+    
+  <navigation-rule>
+    <from-view-id>/pages/mapping_search_results.jsp</from-view-id>
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>no_match</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>    
+
+    <navigation-case>
+       <description>return_to_mapping_home</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>return_to_mapping_home</from-outcome>
+       <to-view-id>/pages/mapping_search.jsp</to-view-id>
+    </navigation-case>    
+
+  </navigation-rule>   
+    
+  <navigation-rule>
+    <from-view-id>/pages/mapping.jsp</from-view-id>
+    
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.acceptLicenseAgreement}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>vocabulary_home</description>
+       <from-action>#{userSessionBean.acceptLicenseAgreement}</from-action>
+       <from-outcome>vocabulary_home</from-outcome>
+       <to-view-id>/pages/vocabulary.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>single_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>single_search_results</from-outcome>
+       <to-view-id>/pages/single_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>error_message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/accept_license.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/vocabulary.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.acceptLicenseAgreement}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>vocabulary_home</description>
+       <from-action>#{userSessionBean.acceptLicenseAgreement}</from-action>
+       <from-outcome>vocabulary_home</from-outcome>
+       <to-view-id>/pages/vocabulary.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>single_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>single_search_results</from-outcome>
+       <to-view-id>/pages/single_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>error_message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+   </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/home.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>single_search_results</from-outcome>
+       <to-view-id>/pages/single_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/vocabulary_home.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>single_search_results</from-outcome>
+       <to-view-id>/pages/single_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+      
+    </navigation-case>
+
+    <navigation-case>
+       <description>no_match</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details_other_term</from-outcome>
+       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/contact_us.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/vocabulary.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>single_search_results</from-outcome>
+       <to-view-id>/pages/single_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details_other_term</from-outcome>
+       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/contact_us.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/search_results.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/multiple_search_results.jsp</from-view-id>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>license</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>license</from-outcome>
+       <to-view-id>/pages/license.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Match</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Match</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/concept_details.jsp</from-view-id>
+    <navigation-case>
+       <description>search_results</description>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>Match</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+
+     <navigation-case>
+       <description>advanced_search</description>
+       <to-view-id>/pages/advanced_search.jsp</to-view-id>
+    </navigation-case>
+
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/synonym.jsp</from-view-id>
+    <navigation-case>
+       <description>term_type_help_info</description>
+       <to-view-id>/pages/term_type_help_info.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+  <navigation-rule>
+    <from-view-id>/pages/subset.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/help.jsp</from-view-id>
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/error_handler.jsp</from-view-id>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+  <navigation-rule>
+    <from-view-id>/pages/multiple_search.jsp</from-view-id>
+
+    <navigation-case>
+       <description>show_versions</description>
+       <from-action>#{userSessionBean.showOtherVersions}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>hide_versions</description>
+       <from-action>#{userSessionBean.hideOtherVersions}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>    
+ 
+     <navigation-case>
+        <description>clear_all</description>
+        <from-action>#{userSessionBean.clearAll}</from-action>
+        <from-outcome>multiple_search</from-outcome>
+        <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>  
+    
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
+    </navigation-case>
+   
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>license</from-outcome>
+       <to-view-id>/pages/license.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>concept_details_other_term</from-outcome>
+       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>
+        
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/license.jsp</from-view-id>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details_other_term</from-outcome>
+       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>license</from-outcome>
+       <to-view-id>/pages/license.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>multiple_search</from-outcome>
+       <to-view-id>/pages/multiple_search.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>concept_details_other_term</from-outcome>
+       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+   <navigation-rule>
+     <from-view-id>/pages/vocabulary-home.jsp</from-view-id>
+     <navigation-case>
+        <description>message</description>
+        <from-action>#{userSessionBean.searchAction}</from-action>
+        <from-outcome>message</from-outcome>
+        <to-view-id>/pages/message.jsp</to-view-id>
+     </navigation-case>
+
+     <navigation-case>
+        <description>Search</description>
+        <from-action>#{userSessionBean.searchAction}</from-action>
+        <from-outcome>search_results</from-outcome>
+        <to-view-id>/pages/search_results.jsp</to-view-id>
+     </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+     <navigation-case>
+        <description>concept_details</description>
+        <from-action>#{userSessionBean.searchAction}</from-action>
+        <from-outcome>concept_details</from-outcome>
+        <to-view-id>/pages/concept_details.jsp</to-view-id>
+     </navigation-case>
+
+     <navigation-case>
+        <description>contact_us_message</description>
+        <from-action>#{userSessionBean.contactUs}</from-action>
+        <from-outcome>message</from-outcome>
+        <to-view-id>/pages/message.jsp</to-view-id>
+     </navigation-case>
+
+     <navigation-case>
+        <description>contact_us_error</description>
+        <from-action>#{userSessionBean.contactUs}</from-action>
+        <from-outcome>error</from-outcome>
+        <to-view-id>/pages/contact_us.jsp</to-view-id>
+     </navigation-case>
+   </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/message.jsp</from-view-id>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/multiple_search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>license</from-outcome>
+       <to-view-id>/pages/license.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>concept_details_other_term</from-outcome>
+       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>    
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>license</from-outcome>
+       <to-view-id>/pages/license.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details_other_term</from-outcome>
+       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/ConceptReport.jsp</from-view-id>
+    <navigation-case>
+       <description>Concept Report</description>
+       <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Message</description>
+       <from-action>#{userSessionBean.acceptLicenseAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/advanced_search.jsp</from-view-id>
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.advancedSearchAction}</from-action>
+       <from-outcome>no_match</from-outcome>
+       <to-view-id>/pages/advanced_search.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.advancedSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/advanced_search.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.advancedSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.advancedSearchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>message (Simple)</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/advanced_search.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>Search (Simple)</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details (Simple)</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+
+  </navigation-rule>
+
+  <navigation-rule>
+      <from-view-id>/pages/cart.jsp</from-view-id>
+      
+      <navigation-case>
+         <description>cart_version_selection</description>
+         <from-action>#{CartActionBean.cartVersionSelectionAction}</from-action>
+         <from-outcome>cart_version_selection</from-outcome>
+         <to-view-id>/pages/cartVersionSelection.jsp</to-view-id>
+      </navigation-case>      
+
+      <navigation-case>
+         <description>cart_version_selection</description>
+         <from-action>#{CartActionBean.cartVersionSelectionAction}</from-action>
+         <from-outcome>message</from-outcome>
+         <to-view-id>/pages/cart.jsp</to-view-id>
+      </navigation-case>         
+      
+      <navigation-case>
+         <description>add_to_cart</description>
+         <from-action>#{CartActionBean.addToCartAction}</from-action>
+      </navigation-case>
+
+      <navigation-case>
+         <description>Search</description>
+         <from-action>#{userSessionBean.searchAction}</from-action>
+         <from-outcome>search_results</from-outcome>
+         <to-view-id>/pages/search_results.jsp</to-view-id>
+      </navigation-case>
+
+      <navigation-case>
+        <description>concept_details</description>
+        <from-action>#{userSessionBean.searchAction}</from-action>
+        <from-outcome>concept_details</from-outcome>
+        <to-view-id>/pages/concept_details.jsp</to-view-id>
+      </navigation-case>
+
+      <navigation-case>
+         <from-outcome>showcart</from-outcome>
+         <to-view-id>/pages/cart.jsp</to-view-id>
+      </navigation-case>
+
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/value_set_search.jsp</from-view-id>
+    <navigation-case>
+       <description>value_set_search</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>value_set</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_search.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>all_value_sets</from-outcome>
+       <to-view-id>/pages/value_set_search.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_search.jsp</to-view-id>
+    </navigation-case>    
+    
+  </navigation-rule>
+
+
+  <navigation-rule>
+    <from-view-id>/pages/value_set_source_view.jsp</from-view-id>
+    <navigation-case>
+       <description>value_set_search</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>value_set</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_source_view.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>all_value_sets</from-outcome>
+       <to-view-id>/pages/value_set_source_view.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_source_view.jsp</to-view-id>
+    </navigation-case>    
+    
+  </navigation-rule>
+  
+  
+  <navigation-rule>
+    <from-view-id>/pages/value_set_terminology_view.jsp</from-view-id>
+    <navigation-case>
+       <description>value_set_search</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>value_set</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_terminology_view.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>all_value_sets</from-outcome>
+       <to-view-id>/pages/value_set_terminology_view.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_terminology_view.jsp</to-view-id>
+    </navigation-case>    
+    
+  </navigation-rule>
+  
+  
+  
+  
+  <navigation-rule>
+    <from-view-id>/pages/value_set_search_results.jsp</from-view-id>
+    <navigation-case>
+       <description>select_CSVersion</description>
+       <from-action>#{valueSetBean.selectCSVersionAction}</from-action>
+       <from-outcome>select_value_set</from-outcome>
+       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
+       <description>resolve_value_set</description>
+       <from-action>#{valueSetBean.resolveValueSetAction}</from-action>
+       <from-outcome>resolved_value_set</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>search_resolved_value_set</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/resolved_value_set_search_results.jsp</to-view-id>
+    </navigation-case>   
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.resolveValueSetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
+    </navigation-case>    
+    
+     <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>      
+    
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/pages/resolve_value_set.jsp</from-view-id>
+    <navigation-case>
+       <description>resolve_value_set</description>
+       <from-action>#{valueSetBean.continueResolveValueSetAction}</from-action>
+       <from-outcome>resolved_value_set</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>resolve_value_set</description>
+       <from-action>#{valueSetBean.continueResolveValueSetAction}</from-action>
+       <from-outcome>resolve_value_set</from-outcome>
+       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+    </navigation-case>
+    
+     <navigation-case>
+       <description>resolve_value_set</description>
+       <from-action>#{valueSetBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>search_resolved_value_set</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/resolved_value_set_search_results.jsp</to-view-id>
+    </navigation-case>       
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.continueResolveValueSetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/resolve_value_set.jsp</to-view-id>
+    </navigation-case>      
+    
+  </navigation-rule>
+  
+  <navigation-rule>
+    <from-view-id>/pages/resolved_value_set.jsp</from-view-id>
+    <navigation-case>
+       <description>resolve_value_set</description>
+       <from-action>#{valueSetBean.exportValueSetAction}</from-action>
+       <from-outcome>exported_value_set</from-outcome>
+       <to-view-id>/pages/exported_value_set.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>search_resolved_value_set</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/resolved_value_set_search_results.jsp</to-view-id>
+    </navigation-case>    
+
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
+    </navigation-case>  
+
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.exportValueSetAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id>
+    </navigation-case> 
+    
+  </navigation-rule>  
+    
+  <managed-bean>
+    <managed-bean-name>userSessionBean</managed-bean-name>
+    <managed-bean-class>gov.nih.nci.evs.browser.bean.UserSessionBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>ontologyBean</managed-bean-name>
+    <managed-bean-class>gov.nih.nci.evs.browser.bean.OntologyBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>licenseBean</managed-bean-name>
+    <managed-bean-class>gov.nih.nci.evs.browser.bean.LicenseBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>CartActionBean</managed-bean-name>
+    <managed-bean-class>gov.nih.nci.evs.browser.bean.CartActionBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>valueSetBean</managed-bean-name>
+    <managed-bean-class>gov.nih.nci.evs.browser.bean.ValueSetBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>iteratorBean</managed-bean-name>
+    <managed-bean-class>gov.nih.nci.evs.browser.bean.IteratorBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  
+</faces-config>
