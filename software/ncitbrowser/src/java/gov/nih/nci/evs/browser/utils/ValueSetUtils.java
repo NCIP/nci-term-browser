@@ -182,38 +182,22 @@ public class ValueSetUtils {
 		    println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
 		    println(out, "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
 
-		    System.out.println("");
-		    System.out.println("newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
-		    System.out.println("newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
-
-
 		    if (expanded) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
-			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
-
 
 		    } else if (isHasMoreNode) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
-			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
 		    } else {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
-			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
 		    }
 
 		    if (expandable || isHasMoreNode) {
 			    println(out, node_label + ".isLeaf = false;");
 			    println(out, node_label + ".ontology_node_child_count = 1;");
 
-
-			    System.out.println(node_label + ".isLeaf = false;");
-			    System.out.println(node_label + ".ontology_node_child_count = 1;");
-
 		    } else {
 				println(out, node_label + ".ontology_node_child_count = 0;");
 			    println(out, node_label + ".isLeaf = true;");
-
-				System.out.println(node_label + ".ontology_node_child_count = 0;");
-			    System.out.println(node_label + ".isLeaf = true;");
 
 		    }
 

@@ -73,9 +73,30 @@ import org.apache.log4j.*;
 public class ViewInHierarchyUtils {
 	private int MAX_CHILDREN = 5;
 	private static Logger _logger = Logger.getLogger(DataUtils.class);
+	private static Random rand = new Random();
 
 
 	int has_more_node_knt = 0;
+
+
+	private String generateRandomString() {
+		int i = rand.nextInt();
+		String t = new Integer(i).toString();
+		t = t.replace("-", "n");
+		return "_" + t;
+	}
+
+
+    private String generateID(LexEvsTreeNode node) {
+		String node_id = null;
+		if (node == null) {
+			node_id = "root";
+		} else {
+			node_id = "N_" + replaceNodeID(node.getCode());
+		}
+		return node_id;
+	}
+
 
     public ViewInHierarchyUtils() {
 		has_more_node_knt = 0;
@@ -85,7 +106,21 @@ public class ViewInHierarchyUtils {
         gov.nih.nci.evs.browser.servlet.AjaxServlet.println(out, text);
     }
 
+    private String replaceNodeID(String code) {
+		/*
+		code = code.replaceAll(":", "cCc");
+        code = code.replaceAll("-", "cDc");
+        code = code.replaceAll("_", "cUc");
+        code = code.replaceAll("/", "cSc");
+        code = code.replaceAll(".", "cEc");
+		return code;
+		*/
+		String s = "" + code.hashCode();
+		s = s.replace("-", "n");
+		return s + generateRandomString();
+	}
 
+/*
     private String replaceNodeID(String code) {
 		code = code.replaceAll(":", "cCc");
         code = code.replaceAll("-", "cDc");
@@ -94,6 +129,7 @@ public class ViewInHierarchyUtils {
         //code = code.replaceAll(".", "cEc");
 		return code;
 	}
+*/
 
     private String restoreNodeID(String code) {
 		code = code.replaceAll("cCc", ":");
@@ -135,25 +171,27 @@ public class ViewInHierarchyUtils {
                     .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
 
         LexEvsTreeNode root = null;
-        printTree(out, "", code, root, listEvsTreeNode);
+        printTree(out, "", code, root, "root", listEvsTreeNode);
 
     }
 
-    private void printTree(PrintWriter out, String indent, String focus_code, LexEvsTreeNode parent, List<LexEvsTreeNode> nodes) {
+    private void printTree(PrintWriter out, String indent, String focus_code, LexEvsTreeNode parent, String parent_node_id, List<LexEvsTreeNode> nodes) {
         for (LexEvsTreeNode node : nodes) {
            char c = ' ';
+
+           String node_id = generateID(node);
            if (node.getExpandableStatus() == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
                c = node.getPathToRootChildren() != null ? '-' : '+';
            }
-           printTreeNode(out, indent, focus_code, node, parent);
+           printTreeNode(out, indent, focus_code, node, node_id, parent, parent_node_id);
            List<LexEvsTreeNode> list_children = node.getPathToRootChildren();
            if (list_children != null) {
-                printTree(out, indent + "  ", focus_code, node, list_children);
+                printTree(out, indent + "  ", focus_code, node, node_id, list_children);
            }
         }
     }
 
-    private void printTreeNode(PrintWriter out, String indent, String focus_code, LexEvsTreeNode node, LexEvsTreeNode parent) {
+    private void printTreeNode(PrintWriter out, String indent, String focus_code, LexEvsTreeNode node, String node_id, LexEvsTreeNode parent, String parent_node_id) {
 		if (node == null) return;
 
 
@@ -181,6 +219,7 @@ public class ViewInHierarchyUtils {
 			    parent_code = parent.getCode();
 			}
 
+/*
             String parent_id = null;
 		    if (parent == null) {
 			    parent_id = "root";
@@ -188,6 +227,7 @@ public class ViewInHierarchyUtils {
 			    //parent_id = replaceNodeID("N_" + parent.getCode());
 			    parent_id = "N_" + replaceNodeID(parent.getCode());
 		    }
+*/
 
 			String code = node.getCode();
 			boolean isHasMoreNode = false;
@@ -195,14 +235,13 @@ public class ViewInHierarchyUtils {
 				isHasMoreNode = true;
 				has_more_node_knt++;
 				if (parent == null) {
-					//code = "root" + "_dot_" + new Integer(has_more_node_knt).toString();
-					code = parent_id + "_" + focus_code + "_dot_" + new Integer(has_more_node_knt).toString();
+					code = "root" + "_" + focus_code + "_dot_" + new Integer(has_more_node_knt).toString();
 				} else {
 				    code = parent.getCode() + "_dot_" + new Integer(has_more_node_knt).toString();
 				}
 			}
 
-			String node_label = "N_" + replaceNodeID(code);
+			String node_label = node_id;//"N_" + replaceNodeID(code);
 		    String node_name = node.getEntityDescription();
 		    String indentStr = indent + "      ";
 		    String symbol = getNodeSymbol(node);
@@ -212,12 +251,12 @@ public class ViewInHierarchyUtils {
 		    println(out, indentStr + "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
 		    println(out, indentStr + "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
 		    if (expanded) {
-			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", true);");
+			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_node_id + ", true);");
 
 		    } else if (isHasMoreNode) {
-			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_node_id + ", false);");
 		    } else {
-			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_id + ", false);");
+			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_node_id + ", false);");
 		    }
 
 		    if (expandable || isHasMoreNode) {
