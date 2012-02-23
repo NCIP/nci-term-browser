@@ -25,15 +25,26 @@ public class Bar {
         debug("EVS_SERVICE_URL: " + evsServiceUrl);
         debug("");
         
-        List<String> vsdDefURIs = new ArrayList<String>();
-        //vsdDefURIs.add("urn://evs.MultiDomainSPL");
-        vsdDefURIs.add("urn://evs.MultiDomainSPL_Test2");
-        
-        new Bar().testGetValueSets("cell", MatchAlgorithms.LuceneQuery.name(), vsdDefURIs);
-        new Bar().testGetValueSets("cell", MatchAlgorithms.contains.name(), vsdDefURIs);
+        new Bar().test();
     }
     
-    public void testGetValueSets(String matchText, String algorithm, List<String> vsdDefURIs) {
+    public void test() {
+        List<String> vsdDefURIs = null;
+        //vsdDefURIs = getVsdDefUris();
+        
+        //testGetValueSets("cell", MatchAlgorithms.LuceneQuery.name(), vsdDefURIs);
+        testGetValueSets("cell", MatchAlgorithms.contains.name(), vsdDefURIs);
+    }
+    
+    private List<String> getVsdDefUris() {
+        List<String> vsdDefURIs = null;
+        vsdDefURIs = new ArrayList<String>();
+        vsdDefURIs.add("urn://evs.MultiDomainSPL");
+        vsdDefURIs.add("urn://evs.MultiDomainSPL_Test2");
+        return vsdDefURIs;
+    }
+    
+    private void testGetValueSets(String matchText, String algorithm, List<String> vsdDefURIs) {
         debug(Utils.SEPARATOR);
         debug("* matchText: " + matchText);
         debug("* algorithm: " + algorithm);
