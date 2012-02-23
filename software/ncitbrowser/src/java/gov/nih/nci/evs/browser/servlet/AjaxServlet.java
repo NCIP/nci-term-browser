@@ -17,8 +17,6 @@ import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.valueSets.ValueSetDefinition;
 
 
-
-
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -285,8 +283,9 @@ public final class AjaxServlet extends HttpServlet {
          * (System.currentTimeMillis() - ms)); return; } }
          */
 
-
-        if (action.equals("create_src_vs_tree")) {
+        if (action.equals("search_value_set")) {
+            search_value_set(request, response);
+        } else if (action.equals("create_src_vs_tree")) {
             create_src_vs_tree(request, response);
         } else if (action.equals("create_cs_vs_tree")) {
             create_cs_vs_tree(request, response);
@@ -1493,6 +1492,9 @@ if (view == STANDARD_VIEW) {
  TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
  new ValueSetUtils().printTree(out, root);
 
+ String contextPath = request.getContextPath();
+ String view_str = new Integer(view).toString();
+
 
       out.println("");
       out.println("		 tree.collapseAll();");
@@ -1851,8 +1853,15 @@ if (view == STANDARD_VIEW) {
       out.println("          <div class=\"searchbox\">");
       out.println("");
       out.println("");
-      out.println("<form id=\"valueSetSearchForm\" name=\"valueSetSearchForm\" method=\"post\" action=\"/ncitbrowser/pages/value_set_source_view.jsf\" class=\"search-form-main-area\" enctype=\"application/x-www-form-urlencoded\">");
+
+
+      //out.println("<form id=\"valueSetSearchForm\" name=\"valueSetSearchForm\" method=\"post\" action=\"" + contextPath + + "/ajax?action=saerch_value_set_tree\"> "/pages/value_set_source_view.jsf\" class=\"search-form-main-area\" enctype=\"application/x-www-form-urlencoded\">");
+      out.println("<form id=\"valueSetSearchForm\" name=\"valueSetSearchForm\" method=\"post\" action=\"" + contextPath + "/ajax?action=search_value_set\" class=\"search-form-main-area\" enctype=\"application/x-www-form-urlencoded\">");
+
       out.println("<input type=\"hidden\" name=\"valueSetSearchForm\" value=\"valueSetSearchForm\" />");
+
+      out.println("<input type=\"hidden\" name=\"view\" value=\"" + view_str + "\" />");
+
       out.println("");
       out.println("");
       out.println("");
@@ -1999,15 +2008,15 @@ if (view == STANDARD_VIEW) {
       out.println("");
 
 // to be modified:
-String contentPath = request.getContextPath();
+
 // request.getContextPath() + "/ajax?action=create_src_vs_tree";
 
 if (view == STANDARD_VIEW) {
       out.println("                Standards View");
       out.println("                &nbsp;|");
-      out.println("                <a href=\"" + contentPath + "/ajax?action=create_cs_vs_tree\">Terminology View</a>");
+      out.println("                <a href=\"" + contextPath + "/ajax?action=create_cs_vs_tree\">Terminology View</a>");
 } else {
-      out.println("                <a href=\"" + contentPath + "/ajax?action=create_src_vs_tree\">Standards View</a>");
+      out.println("                <a href=\"" + contextPath + "/ajax?action=create_src_vs_tree\">Standards View</a>");
       out.println("                &nbsp;|");
       out.println("                Terminology View");
 }
@@ -2104,5 +2113,23 @@ if (view == STANDARD_VIEW) {
       out.println("</html>");
       out.println("");
   }
+
+
+    public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
+        //response.setContentType("text/html");
+        String contextPath = request.getContextPath();
+
+        String view_str = (String) request.getParameter("view");
+        System.out.println("VIEW: " + view_str);
+
+		String destination = contextPath + "/pages/value_set_search_results.jsf";
+		System.out.println("redirecting to: " + destination);
+ 		try {
+ 			response.sendRedirect(response.encodeRedirectURL(destination));
+		} catch (Exception ex) {
+			System.out.println("response.sendRedirect failed???");
+		}
+
+    }
 
 }
