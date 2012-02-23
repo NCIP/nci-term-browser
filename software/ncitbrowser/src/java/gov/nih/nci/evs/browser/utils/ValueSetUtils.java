@@ -60,6 +60,7 @@ import org.apache.log4j.*;
 public class ValueSetUtils {
 
 	private static Logger _logger = Logger.getLogger(DataUtils.class);
+	private static Random rand = new Random();
 
     public ValueSetUtils() {
 
@@ -103,26 +104,49 @@ public class ValueSetUtils {
 			// Collections.sort(children);
 			SortUtils.quickSort(children);
 			for (TreeItem childItem : children) {
-				printTree(out, childItem, null, 0);
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, null, "root", 0);
 			}
 		}
 	}
 
 
-    public void printTree(PrintWriter out, TreeItem ti, TreeItem parent, int depth) {
-        printTreeNode(out, ti, parent);
+    public void printTree(PrintWriter out, TreeItem ti, String node_id, TreeItem parent, String parent_node_id, int depth) {
+        printTreeNode(out, ti, node_id, parent, parent_node_id);
 		for (String association : ti._assocToChildMap.keySet()) {
 			List<TreeItem> children = ti._assocToChildMap.get(association);
 			// Collections.sort(children);
 			SortUtils.quickSort(children);
 			for (TreeItem childItem : children) {
-				printTree(out, childItem, ti, depth+1);
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, ti, node_id, depth+1);
 			}
 		}
 	}
 
 
-    private void printTreeNode(PrintWriter out, TreeItem node, TreeItem parent) {
+	private String generateRandomString() {
+		int i = rand.nextInt();
+		String t = new Integer(i).toString();
+		t = t.replace("-", "n");
+		return "_" + t;
+	}
+
+
+    private String generateID(TreeItem node) {
+		String node_id = null;
+		if (node == null) {
+			node_id = "root";
+		} else {
+			node_id = "N_" + replaceNodeID(node._code);
+		}
+		return node_id;
+	}
+
+
+
+
+    private void printTreeNode(PrintWriter out, TreeItem node, String node_id, TreeItem parent, String parent_node_id) {
 		if (node == null) return;
 
 		try {
@@ -139,18 +163,19 @@ public class ValueSetUtils {
             if (parent != null) {
 			    parent_code = parent._code;
 			}
-
+/*
             String parent_id = null;
 		    if (parent == null) {
 			    parent_id = "root";
 		    } else {
 			    parent_id = "N_" + replaceNodeID(parent._code);
 		    }
+*/
 
 			String code = node._code;
 			boolean isHasMoreNode = false;
 
-			String node_label = "N_" + replaceNodeID(code);
+			String node_label = node_id;//"N_" + replaceNodeID(code);
 		    String node_name = node._text;
 
 		    println(out, "");
@@ -163,16 +188,16 @@ public class ValueSetUtils {
 
 
 		    if (expanded) {
-			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_id + ", true);");
-			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_id + ", true);");
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
+			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
 
 
 		    } else if (isHasMoreNode) {
-			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_id + ", false);");
-			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_id + ", false);");
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
 		    } else {
-			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_id + ", false);");
-			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_id + ", false);");
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+			    System.out.println("var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
 		    }
 
 		    if (expandable || isHasMoreNode) {
@@ -200,21 +225,17 @@ public class ValueSetUtils {
 
 
     private String replaceNodeID(String code) {
+		/*
 		code = code.replaceAll(":", "cCc");
         code = code.replaceAll("-", "cDc");
         code = code.replaceAll("_", "cUc");
         code = code.replaceAll("/", "cSc");
         code = code.replaceAll(".", "cEc");
 		return code;
-	}
-
-    private String restoreNodeID(String code) {
-		code = code.replaceAll("cCc", ":");
-        code = code.replaceAll("cDc", "-");
-        code = code.replaceAll("cUc", "_");
-        code = code.replaceAll("cSc", "/");
-        code = code.replaceAll("cEc", ".");
-		return code;
+		*/
+		String s = "" + code.hashCode();
+		s = s.replace("-", "n");
+		return s + generateRandomString();
 	}
 
     public static void main(String[] args) throws Exception {
