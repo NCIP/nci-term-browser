@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="ncit">
+        <wb-resource deploy-path="/" source-path="/software/ncitbrowser/web"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/software/ncitbrowser/src/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/software/test/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/software/ncitbrowser/web"/>
+        <property name="context-root" value="ncitbrowser"/>
+        <property name="java-output-path" value="/ncit/build/classes"/>
+    </wb-module>
+</project-modules>
