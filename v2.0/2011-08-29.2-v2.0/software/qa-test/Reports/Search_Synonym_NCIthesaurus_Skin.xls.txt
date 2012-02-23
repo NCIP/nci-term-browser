@@ -1,0 +1,15 @@
+Test: Search_Synonym_NCIthesaurus_Skin.xls
+Run on: 12/17/2010 5:44:46 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+Test: Search_Synonym_NCIthesaurus_Skin.xls
+Run on: 12/20/2010 11:01:04 AM
+
+Step	Error
+----	-----------------------------------------------------------------------
+Test: Search_Synonym_NCIthesaurus_Skin.xls
+Run on: 12/21/2010 12:49:52 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
