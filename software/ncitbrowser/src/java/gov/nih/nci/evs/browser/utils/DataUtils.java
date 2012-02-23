@@ -218,6 +218,7 @@ public class DataUtils {
 
 
     public static HashMap sourceValueSetTree = null;
+    public static HashMap terminologyValueSetTree = null;
 
     // ==================================================================================
 
@@ -626,6 +627,7 @@ public class DataUtils {
 
 		valueSetHierarchyInitialized = true;
 		sourceValueSetTree = ValueSetHierarchy.getSourceValueSetTree(null, null);
+		terminologyValueSetTree = ValueSetHierarchy.getCodingSchemeValueSetTree(null, null);
 		if (sourceValueSetTree == null) {
 			_logger.debug("\t(*) sourceValueSetTree == null??? ...");
 		}
@@ -635,11 +637,17 @@ public class DataUtils {
 
     public static HashMap getSourceValueSetTree() {
 		if (sourceValueSetTree == null) {
-			initializeValueSetHierarchy();//sourceValueSetTree = ValueSetHierarchy.getSourceValueSetTree(null, null);
+			initializeValueSetHierarchy();
 		}
 		return sourceValueSetTree;
 	}
 
+    public static HashMap getCodingSchemeValueSetTree() {
+		if (terminologyValueSetTree == null) {
+			initializeValueSetHierarchy();
+		}
+		return terminologyValueSetTree;
+	}
 
     public static String getMetadataValue(String scheme, String propertyName) {
         Vector v = getMetadataValues(scheme, propertyName);

@@ -2777,6 +2777,9 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
         return hmap;
 	}
 
+    public static HashMap getCodingSchemeValueSetTree() {
+		return DataUtils.getCodingSchemeValueSetTree();
+	}
 
     public static TreeItem getCodingSchemeValueSetTreeBranch(String scheme, String code, String name) {
 
