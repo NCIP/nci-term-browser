@@ -1,5 +1,0 @@
-Test: New Microsoft Office Excel Worksheet.xls
-Run on: 12/9/2010 3:25:21 PM
-
-Step	Error
-----	-----------------------------------------------------------------------
