@@ -1,0 +1,27 @@
+Test: Hierarchy_BiomedGT.xls
+Run on: 12/21/2010 4:35:46 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Hierarchy_BiomedGT.xls
+Run on: 12/21/2010 4:41:37 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
+Test: Hierarchy_BiomedGT.xls
+Run on: 12/21/2010 4:45:56 PM
+
+Step	Error
+----	-----------------------------------------------------------------------
+	Test passed - No errors.
+
+
+
