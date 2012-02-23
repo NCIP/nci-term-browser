@@ -144,7 +144,7 @@ subject to the conditions specified at
 			 String rowColor = (lcv%2 == 0) ? "dataRowDark" : "dataRowLight";
 		    %>
 		      <tr class="<%=rowColor%>">
-			<td><%=abbr%></td>
+			<td scope="row"><%=abbr%></td>
 			<td>&nbsp;</td>
 			<td><%=def%></td>
 		      </tr> 
