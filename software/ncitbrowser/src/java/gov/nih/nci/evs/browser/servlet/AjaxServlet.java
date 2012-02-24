@@ -2228,10 +2228,6 @@ if (view == STANDARD_VIEW) {
         vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
         if (matchText != null) matchText = matchText.trim();
-        System.out.println("matchText: " + matchText);
-
-        System.out.println("selectValueSetSearchOption: " + selectValueSetSearchOption);
-
 		if (selectValueSetSearchOption.compareTo("Code") == 0) {
             String uri = null;
 
@@ -2261,7 +2257,6 @@ if (view == STANDARD_VIEW) {
 				    AbsoluteCodingSchemeVersionReferenceList csVersionList = null;//ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
 					List list = vsd_service.listValueSetsWithEntityCode(matchText, null, csVersionList, versionTag);
 					if (list != null) {
-						System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");
 
 						for (int j=0; j<list.size(); j++) {
 							uri = (String) list.get(j);
@@ -2330,7 +2325,7 @@ if (view == STANDARD_VIEW) {
 
 					if (checked_vocabularies == null || selected_vocabularies.contains(vsd_name)) {
 
-						System.out.println("Searching " + vsd_name + "...");
+						//System.out.println("Searching " + vsd_name + "...");
 
 						AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
 						/*
@@ -2353,9 +2348,6 @@ if (view == STANDARD_VIEW) {
 								ResolvedConceptReferencesIterator itr = cns.resolve(sortOptions, propertyNames, propertyTypes);
 								if (itr != null && itr.numberRemaining() > 0) {
 
-									System.out.println("itr.numberRemaining(): " + itr.numberRemaining());
-
-
 									AbsoluteCodingSchemeVersionReferenceList ref_list = rvs_cns.getCodingSchemeVersionRefList();
 									if (ref_list.getAbsoluteCodingSchemeVersionReferenceCount() > 0) {
 										try {
@@ -2368,8 +2360,6 @@ if (view == STANDARD_VIEW) {
 
 											String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
 											if (metadata != null) {
-
-												System.out.println(metadata);
 												v.add(metadata);
 
 											}
@@ -2377,7 +2367,6 @@ if (view == STANDARD_VIEW) {
 										} catch (Exception ex) {
 											ex.printStackTrace();
 											msg = "Unable to find any value set with name " + matchText + ".";
-											System.out.println(msg);
 											request.getSession().setAttribute("message", msg);
 											return "message";
 										}
@@ -2389,7 +2378,6 @@ if (view == STANDARD_VIEW) {
 						} catch (Exception ex) {
 							System.out.println("WARNING: getValueSetDefinitionEntitiesForTerm throws exception???");
 							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed.";
-							System.out.println(msg);
 							request.getSession().setAttribute("message", msg);
 							return "message";
 						}
@@ -2397,19 +2385,13 @@ if (view == STANDARD_VIEW) {
 				}
 
 				request.getSession().setAttribute("matched_vsds", v);
-
-System.out.println("Number of matched value sets: " + v.size());
-
 				if (v.size() == 0) {
 					msg = "No match found.";
-					System.out.println("\t(*) " + msg);
-
 					request.getSession().setAttribute("message", msg);
 					return "message";
 				} else if (v.size() == 1) {
 					request.getSession().setAttribute("vsd_uri", uri);
 				}
-
 				return "value_set";
 
 			} catch (Exception ex) {
