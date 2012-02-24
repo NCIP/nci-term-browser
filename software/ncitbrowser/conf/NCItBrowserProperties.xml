@@ -446,6 +446,11 @@
         </ConfigurableItem>
 
         <ConfigurableItem>
+                 <key>APPLICATION_VERSION_DISPLAY</key>
+                 <value>@application.version.display@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
                  <key>ANTHILL_BUILD_TAG_BUILT</key>
                  <value>@app.build.tag@</value>
         </ConfigurableItem>
