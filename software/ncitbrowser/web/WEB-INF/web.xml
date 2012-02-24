@@ -71,6 +71,18 @@
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
 
+
+   <servlet>
+      <servlet-name>RedirectServlet</servlet-name>
+      <servlet-class>RedirectServlet</servlet-class>                    
+    </servlet>
+ 
+    <servlet-mapping>
+      <servlet-name>RedirectServlet</servlet-name>
+      <url-pattern>/redirect</url-pattern>
+    </servlet-mapping>
+    
+    
     <!--  Log4j init servlet -->
 
     <servlet>
@@ -78,5 +90,7 @@
        <servlet-class>gov.nih.nci.evs.browser.servlet.Log4JServlet</servlet-class>
        <load-on-startup>1</load-on-startup>
     </servlet>
+
+
 	
 </web-app>

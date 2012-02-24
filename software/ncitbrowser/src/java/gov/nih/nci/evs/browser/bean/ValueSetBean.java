@@ -391,7 +391,7 @@ public class ValueSetBean {
             String uri = null;
 
 			try {
-				String versionTag = "PRODUCTION";
+				String versionTag = null;//"PRODUCTION";
 				if (checked_vocabularies != null) {
 					for (int k=0; k<selected_vocabularies.size(); k++) {
 						String vsd_name = (String) selected_vocabularies.elementAt(k);
@@ -413,7 +413,7 @@ public class ValueSetBean {
 						}
 					}
 			    } else {
-				    AbsoluteCodingSchemeVersionReferenceList csVersionList = ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
+				    AbsoluteCodingSchemeVersionReferenceList csVersionList = null;//ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
 					List list = vsd_service.listValueSetsWithEntityCode(matchText, null, csVersionList, versionTag);
 					if (list != null) {
 						System.out.println("valueSetSearchAction listValueSetsWithEntityCode returns " + list.size() + " VSD URIs.");
@@ -486,10 +486,12 @@ public class ValueSetBean {
 					if (checked_vocabularies == null || selected_vocabularies.contains(vsd_name)) {
 
 						AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+						/*
 						Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
 						if (cs_ref_vec != null) {
 							csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
 						}
+						*/
 
 						ResolvedValueSetCodedNodeSet rvs_cns = null;
 						SortOptionList sortOptions = null;

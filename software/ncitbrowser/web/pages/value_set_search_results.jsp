@@ -110,9 +110,10 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
     String message = (String) request.getSession().getAttribute("message");
     request.getSession().removeAttribute("message");
     
-    
-if (vsd_vec == null) {
-    message = "WARNING: Session lost. Please click on the Value Sets tab to start a new session.";
+if (message == null) {
+    if (vsd_vec == null) {
+        message = "WARNING: Session lost. Please click on the Value Sets tab to start a new session.";
+    }
 }
 
     
