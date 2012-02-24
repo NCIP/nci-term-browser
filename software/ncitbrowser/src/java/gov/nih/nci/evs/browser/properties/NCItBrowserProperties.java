@@ -79,6 +79,7 @@ public class NCItBrowserProperties {
         "TERMINOLOGY_SUBSET_DOWNLOAD_URL";
     public static final String NCIT_BUILD_INFO = "NCIT_BUILD_INFO";
     public static final String NCIT_APP_VERSION = "APPLICATION_VERSION";
+    public static final String NCIT_APP_VERSION_DISPLAY = "APPLICATION_VERSION_DISPLAY";
     public static final String ANTHILL_BUILD_TAG_BUILT =
         "ANTHILL_BUILD_TAG_BUILT";
     public static final String NCIM_URL = "NCIM_URL";

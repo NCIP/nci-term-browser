@@ -131,7 +131,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = true;
+    private static boolean initializeValueSetHierarchy = true;  //DYEE_DEBUG
     private static boolean valueSetHierarchyInitialized = false;
 
 
@@ -171,6 +171,7 @@ public class DataUtils {
     public String _term_suggestion_application_url = null;
     public String _ncitBuildInfo = null;
     public String _ncitAppVersion = null;
+    public String _ncitAppVersionDisplay = null;
     public String _ncitAnthillBuildTagBuilt = null;
     public String _evsServiceURL = null;
     public String _ncimURL = null;
@@ -2834,6 +2835,25 @@ System.out.println("============================================================
         }
 
         return _ncitAppVersion;
+    }
+    
+    public String getApplicationVersionDisplay() {
+        if (_ncitAppVersionDisplay != null)
+            return _ncitAppVersionDisplay;
+        
+        try {
+            NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
+            String value =
+                properties.getProperty(NCItBrowserProperties.NCIT_APP_VERSION_DISPLAY);
+            if (value == null)
+                return _ncitAppVersionDisplay = "";
+            String version = getApplicationVersion();
+            value = value.replace("$application.version", version);
+            return _ncitAppVersionDisplay = value;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return _ncitAppVersionDisplay = "";
+        }
     }
 
     public String getNCITAnthillBuildTagBuilt() {
