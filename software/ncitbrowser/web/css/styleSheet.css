@@ -229,6 +229,20 @@ a.hideLink
  color: #2F2F5F;
 }
 
+.vocabularynamelong_tb
+{
+ position: relative;
+ left: 30px;
+ bottom: 35px;
+ width: 336px;
+ font-family: Arial, Verdana, Helvetica, sans-serif;
+ font-size: 10px;
+ font-weight: bold;
+ color: #2F2F5F;
+ white-space: wrap;
+ padding-top: 10px;
+}
+
 .pagetitle
 {
  font-size: 18px;
