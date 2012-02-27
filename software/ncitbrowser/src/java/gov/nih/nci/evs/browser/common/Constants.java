@@ -108,6 +108,8 @@ public class Constants {
     public static final int  STANDARD_VIEW = 1;
     public static final int  TERMINOLOGY_VIEW = 2;
 
+    public static final String  TERMINOLOGY_VALUE_SET = "Terminology Value Set";
+
 
     /**
      * Constructor
