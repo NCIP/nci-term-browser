@@ -159,7 +159,7 @@ display_name_vec = DataUtils.sortOntologyInfo(display_name_vec);
 
 
 String warning_msg = (String) request.getSession().getAttribute("warning");
-
+String application_version_display = HTTPUtils.cleanXSS(new DataUtils().getApplicationVersionDisplay());
 
     
 %>
@@ -183,7 +183,10 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
  
  <!-- Thesaurus, banner search area -->
  <div class="bannerarea">
-     <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
+     <div class="banner">
+       <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a>
+       <div class="vocabularynamelong_tb"><%=application_version_display%></div>
+     </div>
      <div class="search-globalnav">
          <!-- Search box -->
          <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
