@@ -1552,6 +1552,9 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("    }");
       out.println("");
       out.println("");
+
+   // 0=unchecked, 1=some children checked, 2=all children checked
+
       out.println("   // Gets the labels of all of the fully checked nodes");
       out.println("   // Could be updated to only return checked leaf nodes by evaluating");
       out.println("   // the children collection first.");
@@ -1561,7 +1564,7 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
       out.println("            var n = nodes[i];");
       out.println("            if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
-      out.println("            //if (n.checkState === 2) {");
+      out.println("            //if (n.checkState == 2) {");
       out.println("                checkedNodes.push(n.label); // just using label for simplicity");
       out.println("");
       out.println("		    if (n.hasChildren()) {");
