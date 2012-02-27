@@ -202,6 +202,7 @@ if (vsd_vec == null) {
       
         <div class="banner">
             <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a>
+            <div class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></div>
         </div>
 
 
@@ -233,7 +234,9 @@ if (vsd_uri.indexOf("|") == -1) {
             
             if (vsd_name == null || vsd_name.compareTo("null") == 0) {
             %>
-            <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
+              <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a>
+              <div class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></div>
+              </div>
             <%
             } else {
             %>
