@@ -50,7 +50,10 @@
     <div id="main-area">
       <div class="bannerarea">
         <% if (subApp == TB) {%>
-          <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="NCI Term Browser" border="0"/></a></div>
+          <div class="banner">
+            <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="NCI Term Browser" border="0"/></a>
+            <div class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></div>
+          </div>
         <% } else if (subApp == NCIO) { %>
           <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>">
             <div class="vocabularynamebanner">

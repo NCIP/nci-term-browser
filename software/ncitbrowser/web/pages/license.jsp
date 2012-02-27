@@ -47,7 +47,10 @@
     <div id="main-area">
       <!-- Thesaurus, banner search area -->
       <div class="bannerarea">
-        <div class="banner"><a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" border="0"/></a></div>
+        <div class="banner">
+          <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" border="0"/></a>
+          <div class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></div>
+        </div>
       </div>
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
