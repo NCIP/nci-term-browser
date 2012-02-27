@@ -131,7 +131,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = true;  //DYEE_DEBUG
+    private static boolean initializeValueSetHierarchy = true;  //DYEE_DEBUG (Default: true)
     private static boolean valueSetHierarchyInitialized = false;
 
 
@@ -409,6 +409,12 @@ public class DataUtils {
 
                         NameAndValue[] nvList =
                             MetadataUtils.getMetadataProperties(cs);
+                        if (nvList == null || nvList.length <= 0) {
+                            _logger.warn("\t*******************************************************************");
+                            _logger.warn("\t*** Warning: Metadata properties are possibly not loaded.       ***");
+                            _logger.warn("\t*** MetadataUtils.getMetadataProperties(cs) returns empty list. ***");
+                            _logger.warn("\t*******************************************************************");
+                        }
                         if (cs != null && nvList != null) {
 
                             String css_local_name = css.getLocalName();
