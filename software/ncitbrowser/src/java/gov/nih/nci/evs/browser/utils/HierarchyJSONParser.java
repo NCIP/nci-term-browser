@@ -55,7 +55,7 @@ public class HierarchyJSONParser {
     private String _jsonString = "";
     private TreeItem _treeItem = null;
     private int _ctr = 0; 
-    private static boolean _debug = false;  // DYEE_DEBUG
+    private static boolean _debug = false;  // DYEE_DEBUG (default: false)
     
     // -------------------------------------------------------------------------
     public HierarchyJSONParser(String jsonString) {

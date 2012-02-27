@@ -61,7 +61,7 @@ public class HierarchyHelper {
     private String _collapseIcon = "";
     private int _idCtr = 0;
     private int _debugCtr = 0;
-    private static boolean _debug = false;  // DYEE_DEBUG
+    private static boolean _debug = false;  // DYEE_DEBUG (default: false)
     
     // -------------------------------------------------------------------------
     public HierarchyHelper(String basePath) {
