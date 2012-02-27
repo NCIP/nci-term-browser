@@ -71,7 +71,7 @@
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
 
-
+   <!--  
    <servlet>
       <servlet-name>RedirectServlet</servlet-name>
       <servlet-class>RedirectServlet</servlet-class>                    
@@ -81,6 +81,8 @@
       <servlet-name>RedirectServlet</servlet-name>
       <url-pattern>/redirect</url-pattern>
     </servlet-mapping>
+    
+    -->
     
     
     <!--  Log4j init servlet -->
