@@ -308,4 +308,12 @@ if (version != null) {
           url +="&code=" + encoded_concept_id;
           return url;
     }
+
+    private static String _applicationVersionDisplay = null;
+    public static String getApplicationVersionDisplay() {
+        if (_applicationVersionDisplay == null)
+            _applicationVersionDisplay =
+                HTTPUtils.cleanXSS(new DataUtils().getApplicationVersionDisplay());
+        return _applicationVersionDisplay;
+    }
 }
