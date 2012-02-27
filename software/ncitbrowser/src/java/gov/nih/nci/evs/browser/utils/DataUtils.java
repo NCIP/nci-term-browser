@@ -577,7 +577,9 @@ public class DataUtils {
             nv_vec = SortUtils.quickSort(nv_vec);
             for (int k = 0; k < nv_vec.size(); k++) {
                 String value = (String) nv_vec.elementAt(k);
-                _ontologies.add(new SelectItem(value, value));
+                if (!value.startsWith(Constants.TERMINOLOGY_VALUE_SET)) {
+	                _ontologies.add(new SelectItem(value, value));
+				}
             }
         }
         _formalName2NCImSABHashMap = createFormalName2NCImSABHashMap();
@@ -2842,11 +2844,11 @@ System.out.println("============================================================
 
         return _ncitAppVersion;
     }
-    
+
     public String getApplicationVersionDisplay() {
         if (_ncitAppVersionDisplay != null)
             return _ncitAppVersionDisplay;
-        
+
         try {
             NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
             String value =
