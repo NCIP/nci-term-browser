@@ -144,7 +144,7 @@ public final class AjaxServlet extends HttpServlet {
     }
 
     private static void debugJSONString(String msg, String jsonString) {
-    	boolean debug = false;  //DYEE_DEBUG
+    	boolean debug = false;  //DYEE_DEBUG (default: false)
     	if (! debug)
     		return;
     	_logger.debug(Utils.SEPARATOR);
@@ -605,7 +605,7 @@ public final class AjaxServlet extends HttpServlet {
         return false;
     }
 
-    private static boolean _debug = false; // DYEE_DEBUG
+    private static boolean _debug = false; // DYEE_DEBUG (default: false)
     private static StringBuffer _debugBuffer = null;
 
     public static void println(PrintWriter out, String text) {
