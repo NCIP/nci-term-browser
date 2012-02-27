@@ -5,7 +5,7 @@ import java.util.*;
 
 
 import org.apache.log4j.*;
-
+import gov.nih.nci.evs.browser.common.*;
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -90,6 +90,29 @@ public class ValueSetUtils {
     }
 
 
+	private String generateRandomString() {
+		int i = rand.nextInt();
+		String t = new Integer(i).toString();
+		t = t.replace("-", "n");
+		return "_" + t;
+	}
+
+
+    private String generateID(TreeItem node) {
+		String node_id = null;
+		if (node == null) {
+			node_id = "root";
+		} else {
+			node_id = "N_" + replaceNodeID(node._code);
+		}
+		return node_id;
+	}
+
+
+
+
+
+
     public void printTree(PrintWriter out, TreeItem root) {
 		System.out.println("printTree..");
 
@@ -125,25 +148,6 @@ public class ValueSetUtils {
 	}
 
 
-	private String generateRandomString() {
-		int i = rand.nextInt();
-		String t = new Integer(i).toString();
-		t = t.replace("-", "n");
-		return "_" + t;
-	}
-
-
-    private String generateID(TreeItem node) {
-		String node_id = null;
-		if (node == null) {
-			node_id = "root";
-		} else {
-			node_id = "N_" + replaceNodeID(node._code);
-		}
-		return node_id;
-	}
-
-
 
 
     private void printTreeNode(PrintWriter out, TreeItem node, String node_id, TreeItem parent, String parent_node_id) {
@@ -163,14 +167,7 @@ public class ValueSetUtils {
             if (parent != null) {
 			    parent_code = parent._code;
 			}
-/*
-            String parent_id = null;
-		    if (parent == null) {
-			    parent_id = "root";
-		    } else {
-			    parent_id = "N_" + replaceNodeID(parent._code);
-		    }
-*/
+
 
 			String code = node._code;
 			boolean isHasMoreNode = false;
@@ -206,6 +203,109 @@ public class ValueSetUtils {
 		}
 
     }
+
+
+//////////////////////////////////////////////////////////////////////
+//[#31626] Change value set hierarchy node labels.
+//    private static final int  STANDARD_VIEW = 1;
+//    private static final int  TERMINOLOGY_VIEW = 2;
+
+    public void printTree(PrintWriter out, TreeItem root, int view) {
+		if (root == null) {
+			System.out.println("(*) printTree aborted -- root is null???");
+		}
+
+		//TreeItem root = new TreeItem("<Root>", "Root node");
+		for (String association : root._assocToChildMap.keySet()) {
+			List<TreeItem> children = root._assocToChildMap.get(association);
+			// Collections.sort(children);
+			SortUtils.quickSort(children);
+			for (TreeItem childItem : children) {
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, null, "root", 0, view);
+			}
+		}
+	}
+
+
+    public void printTree(PrintWriter out, TreeItem ti, String node_id, TreeItem parent, String parent_node_id, int depth, int view) {
+        printTreeNode(out, ti, node_id, parent, parent_node_id, view);
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			// Collections.sort(children);
+			SortUtils.quickSort(children);
+			for (TreeItem childItem : children) {
+				String child_node_id = generateID(childItem);
+				printTree(out, childItem, child_node_id, ti, node_id, depth+1);
+			}
+		}
+	}
+
+
+
+
+    private void printTreeNode(PrintWriter out, TreeItem node, String node_id, TreeItem parent, String parent_node_id, int view) {
+		if (node == null) return;
+
+		try {
+			String image = "[+]";
+			boolean expandable = true;
+			if (!node._expandable) {
+				image = ".";
+				expandable = false;
+			}
+
+			boolean expanded = expandable;
+
+            String parent_code = null;
+            if (parent != null) {
+			    parent_code = parent._code;
+			}
+
+
+			String code = node._code;
+			boolean isHasMoreNode = false;
+
+			String node_label = node_id;//"N_" + replaceNodeID(code);
+		    String node_name = node._text;
+
+		    println(out, "");
+		    //KLO testing
+		    if (view == Constants.STANDARD_VIEW && parent_node_id.compareTo("root") == 0) {
+			    println(out, "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\"};");
+
+			} else {
+				println(out, "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+			    println(out, "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
+			}
+
+		    if (expanded) {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
+
+		    } else if (isHasMoreNode) {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+		    } else {
+			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+		    }
+
+		    if (expandable || isHasMoreNode) {
+			    println(out, node_label + ".isLeaf = false;");
+			    println(out, node_label + ".ontology_node_child_count = 1;");
+
+		    } else {
+				println(out, node_label + ".ontology_node_child_count = 0;");
+			    println(out, node_label + ".isLeaf = true;");
+
+		    }
+
+		} catch (Exception ex) {
+
+		}
+
+    }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 
     private String replaceNodeID(String code) {

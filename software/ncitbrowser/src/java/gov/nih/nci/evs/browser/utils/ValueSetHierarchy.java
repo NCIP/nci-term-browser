@@ -1195,7 +1195,7 @@ public class ValueSetHierarchy {
 
 	public static void populateChildrenNodes(String scheme, String version, TreeItem ti, HashSet visited_nodes) {
         if (visited_nodes.contains(ti._code)) {
-			//System.out.println("Loop detected -- code: " + ti._code);
+			System.out.println("Loop detected -- code: " + ti._code);
 			return;
 		}
 
@@ -1295,6 +1295,7 @@ public class ValueSetHierarchy {
 		return _source_hierarchy;
 	}
 
+    //hmap HashMap for quick access to child codes
     public static void populateSubconceptHashMap(HashMap hmap, TreeItem ti) {
 
         for (String association : ti._assocToChildMap.keySet()) {
@@ -1319,6 +1320,7 @@ public class ValueSetHierarchy {
 		}
 	}
 
+    //hmap HashMap for quick access to parent codes
     public static void populateSuperconceptHashMap(HashMap hmap, TreeItem ti) {
 
         for (String association : ti._assocToChildMap.keySet()) {
@@ -2277,10 +2279,6 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 							break;
 						}
 					}
-
-
-
-
 				}
 			}
 		}

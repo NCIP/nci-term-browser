@@ -3,6 +3,7 @@ package gov.nih.nci.evs.browser.servlet;
 import org.json.*;
 
 import gov.nih.nci.evs.browser.utils.*;
+import gov.nih.nci.evs.browser.common.*;
 
 import java.io.*;
 import java.util.*;
@@ -101,8 +102,8 @@ public final class AjaxServlet extends HttpServlet {
      * local constants
      */
     private static final long serialVersionUID = 1L;
-    private static final int  STANDARD_VIEW = 1;
-    private static final int  TERMINOLOGY_VIEW = 2;
+    //private static final int  STANDARD_VIEW = 1;
+    //private static final int  TERMINOLOGY_VIEW = 2;
 
     /**
      * Validates the Init and Context parameters, configures authentication URL
@@ -1182,11 +1183,11 @@ public final class AjaxServlet extends HttpServlet {
 
 
     public static void create_src_vs_tree(HttpServletRequest request, HttpServletResponse response) {
-		create_vs_tree(request, response, STANDARD_VIEW);
+		create_vs_tree(request, response, Constants.STANDARD_VIEW);
 	}
 
     public static void create_cs_vs_tree(HttpServletRequest request, HttpServletResponse response) {
-		create_vs_tree(request, response, TERMINOLOGY_VIEW);
+		create_vs_tree(request, response, Constants.TERMINOLOGY_VIEW);
 	}
 
     public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
@@ -1500,24 +1501,17 @@ public final class AjaxServlet extends HttpServlet {
 
 
 HashMap value_set_tree_hmap = null;
-if (view == STANDARD_VIEW) {
+if (view == Constants.STANDARD_VIEW) {
 	value_set_tree_hmap = DataUtils.getSourceValueSetTree();
 } else {
 	value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
 }
 
-/*
- System.out.println("calling source_tree_hmap = DataUtils.getSourceValueSetTree() ");
- HashMap source_tree_hmap = DataUtils.getSourceValueSetTree();
- if (source_tree_hmap == null) {
-	 System.out.println("source_tree_hmap == null??? ");
- } else {
-	 System.out.println("source_tree_hmap != null");
- }
- TreeItem root = (TreeItem) source_tree_hmap.get("<Root>");
- */
+
  TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
- new ValueSetUtils().printTree(out, root);
+ //new ValueSetUtils().printTree(out, root);
+ new ValueSetUtils().printTree(out, root, view);
+
 
  String contextPath = request.getContextPath();
  String view_str = new Integer(view).toString();
@@ -1962,16 +1956,34 @@ if (view == STANDARD_VIEW) {
       out.println("        Sources</a>");
       out.println("");
 
+//KLO, 022612
+	  out.println(" \r\n");
+	  out.println("      ");
+	  out.print( VisitedConceptUtils.getDisplayLink(request, true) );
+	  out.println(" \r\n");
+
 // Visited concepts -- to be implemented.
 //      out.println("      | <A href=\"#\" onmouseover=\"Tip('<ul><li><a href=\'/ncitbrowser/ConceptReport.jsp?dictionary=NCI Thesaurus&version=11.09d&code=C44256\'>Ratio &#40;NCI Thesaurus 11.09d&#41;</a><br></li></ul>',WIDTH, 300, TITLE, 'Visited Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\" onmouseout=UnTip() >Visited Concepts</A>");
 
       out.println("    </td>");
       out.println("    <td align=\"right\" valign=\"bottom\">");
+
+	  out.println("      <a href=\"");
+	  out.print( request.getContextPath() );
+	  out.println("/pages/help.jsf\" tabindex=\"16\">Help</a>\r\n");
+	  out.println("    </td>\r\n");
+	  out.println("    <td width=\"7\"></td>\r\n");
+	  out.println("  </tr>\r\n");
+	  out.println("</table>");
+
+/*
       out.println("      <a href=\"/ncitbrowser/pages/help.jsf\" tabindex=\"16\">Help</a>");
       out.println("    </td>");
       out.println("    <td width=\"7\"></td>");
       out.println("  </tr>");
       out.println("</table>");
+*/
+
       out.println("          <!-- end Global Navigation -->");
       out.println("");
       out.println("        </div> <!-- search-globalnav -->");
@@ -2038,7 +2050,7 @@ if (view == STANDARD_VIEW) {
 
 // request.getContextPath() + "/ajax?action=create_src_vs_tree";
 
-if (view == STANDARD_VIEW) {
+if (view == Constants.STANDARD_VIEW) {
       out.println("                Standards View");
       out.println("                &nbsp;|");
       out.println("                <a href=\"" + contextPath + "/ajax?action=create_cs_vs_tree\">Terminology View</a>");

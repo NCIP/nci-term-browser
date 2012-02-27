@@ -105,6 +105,9 @@ public class Constants {
     public static String TYPE_INVERSE_ROLE = "type_inverse_role";
     public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
+    public static final int  STANDARD_VIEW = 1;
+    public static final int  TERMINOLOGY_VIEW = 2;
+
 
     /**
      * Constructor
