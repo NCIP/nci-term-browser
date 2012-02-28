@@ -1201,8 +1201,7 @@ public final class AjaxServlet extends HttpServlet {
 		  return;
 	  }
 
-
-// Visited concepts -- to be implemented.
+	  String message = (String) request.getSession().getAttribute("message");
 
       out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
       out.println("<html xmlns:c=\"http://java.sun.com/jsp/jstl/core\">");
@@ -1518,7 +1517,10 @@ if (view == Constants.STANDARD_VIEW) {
 
 
       out.println("");
-      out.println("		 tree.collapseAll();");
+      if (message == null) {
+      	  out.println("		 tree.collapseAll();");
+	  }
+
       out.println("      tree.draw();");
 
 
@@ -2034,6 +2036,17 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("      <!-- Page content -->");
       out.println("      <div class=\"pagecontent\">");
       out.println("");
+
+
+      if (message != null) {
+          out.println("\r\n");
+          out.println("      <p class=\"textbodyred\">");
+          out.print(message);
+          out.println("</p>\r\n");
+          out.println("    ");
+          request.getSession().removeAttribute("message");
+      }
+
       out.println("<p class=\"textbody\">");
       out.println("View value sets organized by standards category or source terminology.");
       out.println("Standards categories group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.");
@@ -2052,9 +2065,7 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("              <td class=\"textbody\" align=\"left\">");
       out.println("");
 
-// to be modified:
 
-// request.getContextPath() + "/ajax?action=create_src_vs_tree";
 
 if (view == Constants.STANDARD_VIEW) {
       out.println("                Standards View");
@@ -2161,35 +2172,36 @@ if (view == Constants.STANDARD_VIEW) {
 
 
     public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
-        //response.setContentType("text/html");
+		// check if any checkbox is checked.
         String contextPath = request.getContextPath();
+		String view_str = (String) request.getParameter("view");
+		int view = Integer.parseInt(view_str);
+		String msg = null;
 
-        String view_str = (String) request.getParameter("view");
-        System.out.println("VIEW: " + view_str);
-
-		String destination = contextPath + "/pages/value_set_search_results.jsf";
-
- 		try {
-			String retstr = valueSetSearchAction(request);
-
-			System.out.println("(*) redirecting to: " + destination);
-
- 			response.sendRedirect(response.encodeRedirectURL(destination));
-		} catch (Exception ex) {
-			System.out.println("response.sendRedirect failed???");
-		}
-
+		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		System.out.println("checked_vocabularies: " + checked_vocabularies);
+		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
+			msg = "No value set definition is selected.";
+			System.out.println(msg);
+			request.getSession().setAttribute("message", msg);
+			create_vs_tree(request, response, view);
+		} else {
+			String destination = contextPath + "/pages/value_set_search_results.jsf";
+			try {
+				String retstr = valueSetSearchAction(request);
+				System.out.println("(*) redirecting to: " + destination);
+				response.sendRedirect(response.encodeRedirectURL(destination));
+			} catch (Exception ex) {
+				System.out.println("response.sendRedirect failed???");
+			}
+	    }
     }
 
 
     public static String valueSetSearchAction(HttpServletRequest request) {
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
-/*
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
-*/
+
         String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
@@ -2214,32 +2226,7 @@ if (view == Constants.STANDARD_VIEW) {
         String VSD_view = (String) request.getParameter("view");
         request.getSession().setAttribute("view", VSD_view);
 
-/*
-        String selectURI = (String) request.getParameter("selectedValueSetURI");
-        if (selectURI == null) {
-			selectURI = getSelectedValueSetURI();
-		}
-
-        String selectCodingScheme = getSelectedOntology(); //(String) request.getParameter("selectedOntology");
-        String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
-*/
-
-
         String matchText = (String) request.getParameter("matchText");
-/*
-        if (selectValueSetSearchOption.compareTo("CodingScheme") != 0) {
-			matchText = matchText.trim();
-
-			if (matchText.length() == 0) {
-				String message = "Please enter a search string.";
-				request.getSession().setAttribute("message", message);
-				// request.getSession().removeAttribute("matchText");
-				// request.removeAttribute("matchText");
-				return "message";
-			}
-			request.getSession().setAttribute("matchText_VSD", matchText);
-	    }
-*/
 
         Vector v = new Vector();
         LexEVSValueSetDefinitionServices vsd_service = null;
