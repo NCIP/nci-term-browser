@@ -264,8 +264,10 @@
                            -->
                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ontology_display_name=<%=dictionary%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               View in Hierarchy</a>
+                           <!-- Note: This is the original VIH link:  
                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/hierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               (Orig)</a>
+                           -->
                            <!--   
                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/view_in_hierarchy.jsf?dictionary=<%=dictionary%>&version=<%=version%>&code=<%=code%>&type=hierarchy', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               Test VIH</a>                        
