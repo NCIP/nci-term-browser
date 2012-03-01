@@ -362,7 +362,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
             <%
                 }
                 %>
-              <td class="dataCellText">
+              <td class="dataCellText" scope="row">
                  <%=name%>
               </td>
               <td class="dataCellText">
@@ -397,7 +397,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           if (con_status == null) {
           %>
 
-          <td class="dataCellText">
+          <td class="dataCellText" scope="row">
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
@@ -424,7 +424,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           } else {
           %>
 
-          <td class="dataCellText">
+          <td class="dataCellText" scope="row">
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>

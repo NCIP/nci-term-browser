@@ -407,7 +407,7 @@ target_scheme = DataUtils.getFormalName(target_scheme);
             %>
 
 <tr>
-                    <td class="datacoldark"><%=source_namespace%></td>
+                    <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="#"
       onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">

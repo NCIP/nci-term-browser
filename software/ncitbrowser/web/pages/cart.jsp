@@ -171,7 +171,7 @@
                               <tr class="dataRowLight">
                            </c:otherwise>
                         </c:choose>
-                        <td>
+                        <td scope="row">
                            <h:selectBooleanCheckbox id="checkboxId" binding="#{item.checkbox}" onclick="submit()" />
                         </td>
                         <td>
