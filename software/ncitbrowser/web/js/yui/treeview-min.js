@@ -2597,7 +2597,9 @@ YAHOO.widget.Node.prototype = {
 
         Dom.getElementsBy  (
             function (el) {
-                return (/ygtv(([tl][pmn]h?)|(content))/).test(el.className);
+            	var value = (/ygtv(([tl][pmn]h?)|(content))/).test(el.className); 
+            	//DYEE_Test: var value = (/ygtv(([tl][pmn]h?)|(content)|(check?))/).test(el.className); 
+                return value;
             } ,
             'td' ,
             self.getEl().firstChild ,
