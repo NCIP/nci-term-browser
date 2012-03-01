@@ -260,7 +260,7 @@ String key = (String) request.getSession().getAttribute("key");
             <%
                 }
                 %>
-              <td class="dataCellText">
+              <td class="dataCellText" scope="row">
                  <%=name%>
               </td>
               <td class="dataCellText">
@@ -293,7 +293,7 @@ String key = (String) request.getSession().getAttribute("key");
           if (con_status == null) {
           %>
 
-          <td class="dataCellText">
+          <td class="dataCellText" scope="row">
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
@@ -330,7 +330,7 @@ String key = (String) request.getSession().getAttribute("key");
           } else {
           %>
 
-          <td class="dataCellText">
+          <td class="dataCellText" scope="row">
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>

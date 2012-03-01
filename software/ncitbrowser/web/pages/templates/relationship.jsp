@@ -381,7 +381,7 @@ if (type != null && type.compareTo("all") == 0) {
         }
         n2++;
         %>
-              <td><%=role_name%></td>
+              <td scope="row"><%=role_name%></td>
               <td>
               <%
               if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
@@ -629,7 +629,7 @@ System.out.println("relationship.jsp inverse_associations.size(): " + inverse_as
         }
         n2++;
         %>
-              <td>
+              <td scope="row">
 
               <%
               if (role_name.compareTo("domain") != 0 && role_name.compareTo("range") != 0) {

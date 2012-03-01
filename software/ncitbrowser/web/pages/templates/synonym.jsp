@@ -80,7 +80,7 @@ if (type != null && type.compareTo("all") == 0) {
         String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
     %>
         <tr class="<%=rowColor%>">
-          <td class="dataCellText"><%=term_name%></td>
+          <td class="dataCellText" scope="row"><%=term_name%></td>
           <td class="dataCellText"><%=term_source%></td>
           <td class="dataCellText"><%=term_type%></td>
               <%

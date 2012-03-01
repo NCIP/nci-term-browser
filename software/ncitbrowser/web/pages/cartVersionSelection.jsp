@@ -143,7 +143,7 @@ System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
 
 
 
-		<td>
+		<td scope="row">
 <input type="radio" name="<%=cs_name%>" value="<%=cs_version%>" <%=checked%> tabinex="1" />
 		</td>
 

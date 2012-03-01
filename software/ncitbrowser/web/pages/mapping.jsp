@@ -508,7 +508,7 @@ if (show_rank_column) {
             %>
 
 <tr>
-                    <td class="datacoldark"><%=source_namespace%></td>
+                    <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=URLEncoder.encode(source_code,"UTF-8")%>">
       <%=source_code%>

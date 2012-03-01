@@ -279,7 +279,7 @@
                                     <%
                                     	}
                                     %>
-                                    <td class="dataCellText">
+                                    <td class="dataCellText" scope="row">
                                        <%
                                        	if (code.indexOf("@") == -1) {
                                        %> <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=coding_scheme%>&version=<%=vsn%>&code=<%=code%>"><%=code%></a>

@@ -110,10 +110,11 @@
                 for (int j=0; j<cols.size(); ++j) {
                   Object cell = cols.elementAt(j);
                   String iFormat = "", iFormatEnd = "";
+                  String rowScope = j==0 ? " scope=\"row\"" : "";
                   if (j==0 || j==2)
                     { iFormat = "<i>"; iFormatEnd = "</i>"; }
                   %>
-                    <td class="dataCellText"><%=iFormat%><%=cell%><%=iFormatEnd%></td>
+                    <td class="dataCellText"<%=rowScope%>><%=iFormat%><%=cell%><%=iFormatEnd%></td>
                   <%
                 }
             %>
