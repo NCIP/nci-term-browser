@@ -429,7 +429,7 @@ if (isMapping || isExtension) {
         <%
             }
             %>
-          <td class="dataCellText">
+          <td class="dataCellText" scope="row">
              <%=name%>
           </td>
         </tr>
@@ -462,7 +462,7 @@ if (isMapping || isExtension) {
             }
             %>
 
-          <td class="dataCellText">
+          <td class="dataCellText" scope="row">
           <%
 
           if (con_status == null) {
