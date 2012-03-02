@@ -494,9 +494,18 @@ mappingIteratorBean.initialize();
         }
 
         IteratorBean iteratorBean = null;
+        //KLO, 030212
+        /*
         String key =
             iteratorBeanManager.createIteratorKey(schemes, matchText,
                 searchTarget, matchAlgorithm, maxToReturn);
+        */
+
+        String key =
+            iteratorBeanManager.createIteratorKey(schemes, versions, matchText,
+                searchTarget, matchAlgorithm, maxToReturn);
+
+
         if (searchTarget.compareTo("names") == 0) {
             if (iteratorBeanManager.containsIteratorBean(key)) {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
@@ -515,7 +524,6 @@ mappingIteratorBean.initialize();
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
                     }
-
                 }
             }
 
@@ -577,6 +585,8 @@ mappingIteratorBean.initialize();
         request.getSession().removeAttribute("type");
 
 		request.getSession().setAttribute("key", key);
+
+		_logger.debug("searchAction Iterator key: " + key);
 
         if (iterator != null) {
 
@@ -1360,6 +1370,7 @@ int selected_knt = 0;
 
             FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().put("iteratorBean", iteratorBean);
+
 
 			try {
 				size = iterator.numberRemaining();
