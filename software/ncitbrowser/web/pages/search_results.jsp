@@ -33,6 +33,12 @@
   <!-- Begin Skip Top Navigation -->
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
+  
+request.getSession().setAttribute("no_back_to_search_results_link", "true");  
+
+System.out.println("searchResults set no_back_to_search_results_link to true");
+
+
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
     <%@ include file="/pages/templates/sub-header.jsp" %>
@@ -467,11 +473,11 @@ if (isMapping || isExtension) {
 
           if (con_status == null) {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&key=<%=key%>" ><%=name%></a>
           <%
           } else {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&key=<%=key%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           }
           %>
