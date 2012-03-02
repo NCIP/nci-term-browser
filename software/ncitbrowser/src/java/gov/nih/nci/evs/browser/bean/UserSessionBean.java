@@ -1368,6 +1368,11 @@ int selected_knt = 0;
 
             iteratorBean = new IteratorBean(iterator);
 
+
+            String itr_key = IteratorBeanManager.createIteratorKey(ontologiesToSearchOnStr, matchText, searchTarget, matchAlgorithm);
+            iteratorBean.setKey(itr_key);
+
+
             FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().put("iteratorBean", iteratorBean);
 

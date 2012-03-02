@@ -103,6 +103,24 @@ public class IteratorBeanManager extends Object {
 		return key + hashcode;
     }
 
+    public static String createIteratorKey(String ontologiesToSearchOnStr, String matchText,
+        String searchTarget, String matchAlgorithm) {
+
+        String key = "";
+        matchText = matchText.trim();
+        int hashcode = matchText.hashCode()
+            + ontologiesToSearchOnStr.hashCode()
+            + searchTarget.hashCode()
+            + matchAlgorithm.hashCode();
+
+        if (hashcode < 0) {
+			hashcode = hashcode * (-1);
+			key = key + "n";
+		}
+		return key + hashcode;
+    }
+
+
 
     public boolean addIteratorBean(IteratorBean bean) {
         String key = bean.getKey();
