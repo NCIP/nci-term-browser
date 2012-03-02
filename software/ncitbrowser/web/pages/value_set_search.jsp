@@ -218,7 +218,7 @@ if (view.compareToIgnoreCase("source") == 0) {
 		    %>    
 
 				
-		      <td class="dataCellText">
+		      <td class="dataCellText" scope="row" >
                          <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?vsd_uri=<%=uri%>"><%=name%></a>
 		      </td>
 		      
@@ -279,7 +279,7 @@ if (view.compareToIgnoreCase("source") == 0) {
  			}
  		    %>    
  
-  		      <td class="dataCellText">
+  		      <td class="dataCellText" scope="row">
   			 <%=cs%>
  		      </td>
  				
@@ -347,7 +347,7 @@ if (view.compareToIgnoreCase("source") == 0) {
  			}
  		    %>    
  
-  		      <td class="dataCellText">
+  		      <td class="dataCellText" scope="row">
   			 <%=resource%>
  		      </td>
  				

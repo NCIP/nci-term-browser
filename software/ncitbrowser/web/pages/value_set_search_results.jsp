@@ -597,7 +597,7 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
       } 
       if (vsd_vec != null && vsd_vec.size() > 1) {
 %>	
-        <td>
+        <td scope="row">
           <% if (i == 0) { %>
             <input type=radio name="valueset" value="<%=uri%>" checked >&nbsp;</input>
           <% } else { %>
