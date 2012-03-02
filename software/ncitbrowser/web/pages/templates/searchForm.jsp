@@ -48,6 +48,8 @@
 	Logger logger = Utils.getJspLogger("searchForm.jsp");
 	String search_key = (String) request.getParameter("key");
 	
+	String multiple_search_flag = (String) request.getParameter("m");
+	
 	String form_requestContextPath = request.getContextPath();
 	form_requestContextPath = form_requestContextPath.replace(
 			"//ncitbrowser//ncitbrowser", "//ncitbrowser");
@@ -165,15 +167,25 @@
                %>
                   <td height="5px;"></td>
                <%   
-               } else if (!no_back_to_search_results_link) {
+               } else {
+                  if (DataUtils.isNull(multiple_search_flag)) {
                %>
+               
                   <td valign="middle" align="left">
                      <a class="global-nav"
                         href="<%=request.getContextPath()%>/pages/search_results.jsf?dictionary=<%=HTTPUtils.cleanXSS(vocab_name)%>&version=<%=HTTPUtils.cleanXSS(srchform_version)%>&key=<%=HTTPUtils.cleanXSS(search_key)%>"
                         tabindex="6">Back to search results</a>
                   </td>
-                  
-               <%
+                  <% 
+                  } else {
+                  %>
+                  <td valign="middle" align="left">
+                     <a class="global-nav"
+                        href="<%=request.getContextPath()%>/pages/multiple_search_results.jsf"
+                        tabindex="6">Back to search results</a>
+                  </td>
+                  <%  
+                  }
                }
                %>
                   
