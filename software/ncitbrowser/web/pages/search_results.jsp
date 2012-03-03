@@ -445,9 +445,10 @@ if (isMapping || isExtension) {
                       else if (code != null && code.indexOf("@") == -1) {
                           i++;
                           
-
-        String con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion()
-               + "$" + code);
+        String con_status = null;
+        if (concept_status_hmap != null) {
+            con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion() + "$" + code);
+        }
         
         //if (status_vec != null && status_vec.elementAt(i) != null) {
         //   con_status = (String) status_vec.elementAt(i);
