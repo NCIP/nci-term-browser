@@ -33,17 +33,11 @@
 	}
 </script>
 <%
-        boolean no_back_to_search_results_link = false;
-        String t = (String) request.getSession().getAttribute("no_back_to_search_results_link"); 
-        request.getSession().removeAttribute("no_back_to_search_results_link"); 
-        
-        System.out.println("searchForm t: " + t);
-        
-        if (!DataUtils.isNull(t) && t.compareTo("true") == 0) {
-            no_back_to_search_results_link = true;
+        boolean back_to_search_results_link = false;
+        String t = (String) request.getParameter("b"); 
+        if (!DataUtils.isNull(t)) {
+            back_to_search_results_link = true;
         }
-        System.out.println("searchForm no_back_to_search_results_link: " + no_back_to_search_results_link);
-
 
 	Logger logger = Utils.getJspLogger("searchForm.jsp");
 	String search_key = (String) request.getParameter("key");
@@ -167,15 +161,15 @@
                %>
                   <td height="5px;"></td>
                <%   
-               } else {
+               } else if (back_to_search_results_link) {
                   if (DataUtils.isNull(multiple_search_flag)) {
                %>
-               
                   <td valign="middle" align="left">
                      <a class="global-nav"
                         href="<%=request.getContextPath()%>/pages/search_results.jsf?dictionary=<%=HTTPUtils.cleanXSS(vocab_name)%>&version=<%=HTTPUtils.cleanXSS(srchform_version)%>&key=<%=HTTPUtils.cleanXSS(search_key)%>"
                         tabindex="6">Back to search results</a>
                   </td>
+
                   <% 
                   } else {
                   %>
