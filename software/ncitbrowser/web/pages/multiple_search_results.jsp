@@ -374,8 +374,11 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
             } else {
 
             //String con_status = DataUtils.getConceptStatus(vocabulary_name, version, null, code);
-            String con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion()
-               + "$" + code);
+            String con_status = null;
+            if (concept_status_hmap != null) {
+                 con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion()
+                              + "$" + code);
+            }
             
             if (con_status != null) {
                 con_status = con_status.replaceAll("_", " ");
@@ -402,7 +405,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1&b=1" ><%=name%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
@@ -411,7 +414,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1&b=1" ><%=name%></a>
           <%
           }
           %>
@@ -429,7 +432,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1&b=1" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
@@ -438,7 +441,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1&b=1" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           }
           %>
