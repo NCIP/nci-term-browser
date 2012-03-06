@@ -33,11 +33,10 @@
   <!-- Begin Skip Top Navigation -->
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
-  
+
+<%  
 request.getSession().setAttribute("no_back_to_search_results_link", "true");  
-
-System.out.println("searchResults set no_back_to_search_results_link to true");
-
+%>
 
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
