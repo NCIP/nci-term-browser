@@ -1872,10 +1872,12 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("      <!-- Thesaurus, banner search area -->");
       out.println("      <div class=\"bannerarea\">");
-      out.println("        <div class=\"banner\">");
-      out.println("          <a href=\"/ncitbrowser/start.jsf\"><img src=\"/ncitbrowser/images/evs_termsbrowser_logo.gif\" width=\"383\" height=\"117\" alt=\"Thesaurus Browser Logo\" border=\"0\"/></a>");
-      out.println("          <div class=\"vocabularynamelong_tb\">" + JSPUtils.getApplicationVersionDisplay() + "</div>");
-      out.println("        </div>");
+      out.println("        <a href=\"<%=basePath%>/start.jsf\" style=\"text-decoration: none;\">");
+      out.println("          <div class=\"vocabularynamebanner_tb\">");
+      out.println("            <span class=\"vocabularynamelong_tb\">" + JSPUtils.getApplicationVersionDisplay() + "</span>");
+      out.println("          </div>");
+      out.println("        </a>");
+      
       out.println("        <div class=\"search-globalnav\">");
       out.println("          <!-- Search box -->");
       out.println("          <div class=\"searchbox-top\"><img src=\"/ncitbrowser/images/searchbox-top.gif\" width=\"352\" height=\"2\" alt=\"SearchBox Top\" /></div>");

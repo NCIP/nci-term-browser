@@ -166,6 +166,17 @@ a.hideLink
  cursor: pointer;
 }
 
+.vocabularynamebanner_tb
+{
+ float: left;
+ width: 382px;
+ height: 117px;
+ background-image: url(../images/evs_termsbrowser_logo.gif);
+ background-repeat: no-repeat;
+ text-decoration: none;
+ cursor: pointer;
+}
+
 .vocabularynamebanner_ncit
 {
  float: left;
@@ -232,15 +243,13 @@ a.hideLink
 .vocabularynamelong_tb
 {
  position: relative;
- left: 30px;
- bottom: 35px;
+ left: 29px;
+ top: 90px;
  width: 336px;
  font-family: Arial, Verdana, Helvetica, sans-serif;
  font-size: 10px;
  font-weight: bold;
  color: #2F2F5F;
- white-space: wrap;
- padding-top: 10px;
 }
 
 .pagetitle
