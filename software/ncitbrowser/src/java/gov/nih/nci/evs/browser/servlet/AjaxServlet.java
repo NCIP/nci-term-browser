@@ -1206,7 +1206,16 @@ public final class AjaxServlet extends HttpServlet {
       out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
       out.println("<html xmlns:c=\"http://java.sun.com/jsp/jstl/core\">");
       out.println("<head>");
-      out.println("  <title>NCI Thesaurus</title>");
+
+
+if (view == Constants.STANDARD_VIEW) {
+	out.println("  <title>NCI Term Browser - Value Set Source View</title>");
+} else {
+	out.println("  <title>NCI Term Browser - Value Set Terminology View</title>");
+}
+
+
+      //out.println("  <title>NCI Thesaurus</title>");
       out.println("  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">");
       out.println("");
       out.println("<style type=\"text/css\">");
