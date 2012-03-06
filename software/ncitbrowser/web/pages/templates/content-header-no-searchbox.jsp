@@ -1,11 +1,9 @@
 <div class="bannerarea">
-  <div class="banner">
-    <a href="<%=basePath%>/start.jsf">
-      <img src="<%=basePath%>/images/evs_termsbrowser_logo.gif"
-        width="383" height="117" alt="Thesaurus Browser Logo" border="0"/>
-    </a>
-    <div class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></div>
-  </div>
+  <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
+    <div class="vocabularynamebanner_tb">
+      <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
+    </div>
+  </a>
   <div class="search-globalnav">
     <img src="<%=basePath%>/images/shim.gif"
       width="1" height="80" alt="Shim" border="0"/>

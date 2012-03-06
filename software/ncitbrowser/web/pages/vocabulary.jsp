@@ -168,10 +168,11 @@ if (scheme != null) {
         %>
             <!-- Thesaurus, banner search area -->
             <div class="bannerarea">
-              <div class="banner">
-                <a href="<%=basePath%>"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" border="0"/></a>
-                <div class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></div>
-              </div>
+			  <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
+			    <div class="vocabularynamebanner_tb">
+			      <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
+			    </div>
+			  </a>
             </div>
             <!-- end Thesaurus, banner search area -->
             <!-- Quick links bar -->
