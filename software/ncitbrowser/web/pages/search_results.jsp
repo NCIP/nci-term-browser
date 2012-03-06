@@ -14,7 +14,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
-  <title>NCI Thesaurus</title>
+
+<%
+JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+String search_results_dictionary = info.dictionary;
+%>
+
+
+  <title><%=search_results_dictionary%></title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
@@ -45,21 +52,10 @@ request.getSession().setAttribute("no_back_to_search_results_link", "true");
     <div id="main-area">
 
 <%
-JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
-String search_results_dictionary = info.dictionary;
 
 boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
-
-//System.out.println("isMapping: " + isMapping);
-
 boolean isExtension = DataUtils.isExtension(search_results_dictionary, null);
-
-
-//System.out.println("isExtension: " + isExtension);
-
-
 String search_results_version = info.version;
-
 
 HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 HashMap name_hmap = new HashMap();
@@ -118,13 +114,8 @@ request.setAttribute("key", key);
           IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
                 .getSessionMap().get("iteratorBeanManager");
 
-
-
           IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
-          
-          
-          
-          
+         
 
     if (iteratorBean == null){
       _logger.warn("iteratorBean NOT FOUND???" + key);
