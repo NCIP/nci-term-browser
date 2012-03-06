@@ -53,7 +53,7 @@
 <%
 	} else {
 %>
-<title>NCI Term Browser</title>
+<title><%=dictionary%></title>
 <%
 	}
 %>
