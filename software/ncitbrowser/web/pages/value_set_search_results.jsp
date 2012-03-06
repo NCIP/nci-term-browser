@@ -209,56 +209,39 @@ if (vsd_vec == null) {
 
 <%
 } else if (vsd_vec != null) {
+    vsd_uri = (String) vsd_vec.elementAt(0);
+    if (vsd_uri.indexOf("|") == -1) {
+        uri_vsd = vsd_uri;
+    } else {
+       Vector temp_vec = DataUtils.parseData(vsd_uri);
+        vsd_name = (String) temp_vec.elementAt(0);
+        uri_vsd = (String) temp_vec.elementAt(1);
+    } 
 
-   vsd_uri = (String) vsd_vec.elementAt(0);
-   
-
-if (vsd_uri.indexOf("|") == -1) {
-    uri_vsd = vsd_uri;
-} else {
-   
-   Vector temp_vec = DataUtils.parseData(vsd_uri);
-   vsd_name = (String) temp_vec.elementAt(0);
-   uri_vsd = (String) temp_vec.elementAt(1);
-} 
-   
-
-
-
-%>
-
-    <div class="banner">
-            <%
-            
- System.out.println("JSP vsd_name: " + vsd_name);
- 
-            
-            if (vsd_name == null || vsd_name.compareTo("null") == 0) {
-            %>
-              <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a>
-              <div class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></div>
-              </div>
-            <%
-            } else {
-            %>
-	        <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(uri_vsd)%>">
-            <%
-            }
-            %>
-	<div class="vocabularynamebanner">
-		  <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
-		    <%=HTTPUtils.cleanXSS(vsd_name)%>
-		  </div>
-	</div>
-  
+    System.out.println("JSP vsd_name: " + vsd_name);
+    if (vsd_name == null || vsd_name.compareTo("null") == 0) {
+    %>
+      <div class="banner">
+        <a href="<%=basePath%>/start.jsf"><img src="<%=basePath%>/images/evs_termsbrowser_logo.gif" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a>
+        <div class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></div>
+      </div>
+    <%
+    } else {
+    %>
+      <div class="banner">
+        <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(uri_vsd)%>">
+	      <div class="vocabularynamebanner">
+            <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
+              <%=HTTPUtils.cleanXSS(vsd_name)%>
+            </div>
+          </div>
 	    </a>
-    
-
-    </div>
-
-
+      </div>
+    <%
+    }
+    %>
 <%
-} 
+}
 %>
 
 
