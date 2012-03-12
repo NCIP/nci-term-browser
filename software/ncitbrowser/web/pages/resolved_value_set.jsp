@@ -58,6 +58,8 @@
             		String description = (String) u.elementAt(2);
             		String concept_domain = (String) u.elementAt(3);
             		String sources = (String) u.elementAt(4);
+            		String supportedsources = (String) u.elementAt(5);
+            		
 
             		IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext
             				.getCurrentInstance().getExternalContext()
@@ -218,7 +220,7 @@
                            <td><b>Concept Domain</b>: <%=concept_domain%></td>
                         </tr>
                         <tr class="textbody">
-                           <td><b>Sources</b>: <%=sources%></td>
+                           <td><b>Sources</b>: <%=supportedsources%></td>
                         </tr>
                         <tr class="textbody">
                            <td>&nbsp;</td>
