@@ -17,7 +17,7 @@ if (uri_str == null) {
     uri_str = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 }
 
-System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
+System.out.println("searchForm resolvedvaluset.jsp uri_str: " + uri_str);
 
 
 

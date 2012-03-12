@@ -67,9 +67,10 @@
             }
             %>
 
-
-            <li><a href="<%= request.getContextPath() %>/start.jsf"
-              alt="NCI Term Browser">NCI Term Browser</a></li>
+            <li>
+              <a href="<%= request.getContextPath() %>/start.jsf" alt="NCI Term Browser">NCI Term Browser</a>
+            </li>
+              
             <li><a href="http://www.cancer.gov/cancertopics/terminologyresources" target="_blank"
               alt="NCI Terminology Resources">NCI Terminology Resources</a></li>
             <% if (term_suggestion_application_url2 != null && term_suggestion_application_url2.length() > 0) { %>
