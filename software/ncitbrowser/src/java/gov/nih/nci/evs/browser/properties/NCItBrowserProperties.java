@@ -69,6 +69,7 @@ public class NCItBrowserProperties {
     public static final String DEBUG_ON = "DEBUG_ON";
     public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
     public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
+    public static final String PING_LEXEVS_INTERVAL = "PING_LEXEVS_INTERVAL";
     public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
     public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
     public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
@@ -242,6 +243,20 @@ public class NCItBrowserProperties {
         if (ret_str.compareToIgnoreCase("null") == 0)
             return null;
         return ret_str;
+    }
+
+    public static int getIntProperty(String key, int defaultValue) {
+        try {
+            getInstance();  // Initializes this singleton class
+            String value = getProperty(key);
+            if (value == null || value.trim().length() <= 0)
+                throw new Exception("Property " + key + " not set.");
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            _logger.warn("Defaulting " + key + " property to " + defaultValue + ".");
+            e.printStackTrace();
+            return defaultValue;
+        }
     }
     
     public static List getDisplayItemList() {

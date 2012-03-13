@@ -401,6 +401,11 @@
         </ConfigurableItem>
 
         <ConfigurableItem>
+                 <key>PING_LEXEVS_INTERVAL</key>
+                 <value>@ping.lexevs.interval@</value>
+        </ConfigurableItem>
+        
+        <ConfigurableItem>
                  <key>MAXIMUM_RETURN</key>
                  <value>@maximum.return@</value>
         </ConfigurableItem>

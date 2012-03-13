@@ -181,6 +181,7 @@
                 <filter token="max_search_iteration" value="${max_search_iteration}"/>
                 <filter token="max_search_time_limit" value="${max_search_time_limit}"/>
                 <filter token="sort.by.score" value="${sort.by.score}"/>
+                <filter token="ping.lexevs.interval" value="${ping.lexevs.interval}"/>
             </filterset>
             <resources>
                 <file file="${bda.conf.dir}/${webapp.prop.file}"/>
