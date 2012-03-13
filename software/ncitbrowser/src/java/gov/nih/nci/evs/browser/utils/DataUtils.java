@@ -2489,6 +2489,8 @@ System.out.println("============================================================
         return v;
     }
 
+
+/*
     public Vector getSubconcepts(String scheme, String version, String code) {
         // String assocName = "hasSubtype";
         String hierarchicalAssoName = "hasSubtype";
@@ -2498,10 +2500,74 @@ System.out.println("============================================================
             && hierarchicalAssoName_vec.size() > 0) {
             hierarchicalAssoName =
                 (String) hierarchicalAssoName_vec.elementAt(0);
+
+
+System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
+
+
         }
+
+
         return getAssociationTargets(scheme, version, code,
             hierarchicalAssoName);
     }
+*/
+
+
+    public Vector getSubconcepts(String scheme, String version, String code) {
+        Vector hierarchicalAssoName_vec =
+            getHierarchyAssociationId(scheme, version);
+
+        String[] hierarchicalAssoNames = new String[hierarchicalAssoName_vec.size()];
+        for (int i=0; i<hierarchicalAssoName_vec.size(); i++) {
+			hierarchicalAssoNames[i] = (String) hierarchicalAssoName_vec.elementAt(i);
+		}
+
+        return getAssociationTargets(scheme, version, code, hierarchicalAssoNames);
+    }
+
+
+
+    public Vector getAssociationTargets(String scheme, String version,
+        String code, String[] assocNames) {
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null)
+            csvt.setVersion(version);
+        ResolvedConceptReferenceList matches = null;
+        Vector v = new Vector();
+        try {
+            // EVSApplicationService lbSvc = new
+            // RemoteServerUtil().createLexBIGService();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+            NameAndValueList nameAndValueList =
+                createNameAndValueList(assocNames, null);
+
+            NameAndValueList nameAndValueList_qualifier = null;
+            cng =
+                cng.restrictToAssociations(nameAndValueList,
+                    nameAndValueList_qualifier);
+            ConceptReference graphFocus =
+                ConvenienceMethods.createConceptReference(code, scheme);
+
+            boolean resolveForward = true;
+            boolean resolveBackward = false;
+
+            int resolveAssociationDepth = 1;
+            int maxToReturn = 1000;
+
+            ResolvedConceptReferencesIterator iterator =
+                codedNodeGraph2CodedNodeSetIterator(cng, graphFocus,
+                    resolveForward, resolveBackward, resolveAssociationDepth,
+                    maxToReturn);
+
+            v = resolveIterator(iterator, maxToReturn, code);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return v;
+    }
+
 
     public Vector getAssociationTargets(String scheme, String version,
         String code, String assocName) {
