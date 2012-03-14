@@ -35,6 +35,7 @@
 <%
         boolean back_to_search_results_link = false;
         String t = (String) request.getParameter("b"); 
+        String page_number = (String) request.getParameter("n"); 
         if (!DataUtils.isNull(t)) {
             back_to_search_results_link = true;
         }
@@ -166,7 +167,7 @@
                %>
                   <td valign="middle" align="left">
                      <a class="global-nav"
-                        href="<%=request.getContextPath()%>/pages/search_results.jsf?dictionary=<%=HTTPUtils.cleanXSS(vocab_name)%>&version=<%=HTTPUtils.cleanXSS(srchform_version)%>&key=<%=HTTPUtils.cleanXSS(search_key)%>"
+                        href="<%=request.getContextPath()%>/pages/search_results.jsf?dictionary=<%=HTTPUtils.cleanXSS(vocab_name)%>&version=<%=HTTPUtils.cleanXSS(srchform_version)%>&key=<%=HTTPUtils.cleanXSS(search_key)%>&page_number=<%=page_number%>"
                         tabindex="6">Back to search results</a>
                   </td>
 
@@ -175,7 +176,7 @@
                   %>
                   <td valign="middle" align="left">
                      <a class="global-nav"
-                        href="<%=request.getContextPath()%>/pages/multiple_search_results.jsf"
+                        href="<%=request.getContextPath()%>/pages/multiple_search_results.jsf?key=<%=HTTPUtils.cleanXSS(search_key)%>&page_number=<%=page_number%>"
                         tabindex="6">Back to search results</a>
                   </td>
                   <%  
