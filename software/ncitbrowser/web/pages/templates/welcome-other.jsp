@@ -152,7 +152,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
             <td>
               <a href="<%= request.getContextPath() %>/start.jsf" alt="NCI Term Browser">
                 <img src="<%=basePath%>/images/EVSTermsBrowserTile.gif"
-                  width="77" height="38px" alt="Bio Portal" border="0"/>
+                  width="77" height="38px" alt="NCI Term Browser" border="0"/>
               </a>
             </td>
             <td width="3px"></td>
