@@ -464,11 +464,11 @@ if (isMapping || isExtension) {
 
           if (con_status == null) {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&key=<%=key%>&b=1" ><%=name%></a>
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=name%></a>
           <%
           } else {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&key=<%=key%>&b=1" ><%=name%></a>&nbsp;(<%=con_status%>)
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           }
           %>

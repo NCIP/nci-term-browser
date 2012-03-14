@@ -276,7 +276,7 @@
 <!--            
                <FORM NAME="advancedSearchForm" METHOD="POST" CLASS="search-form" >
 -->
- <h:form id="advancedSearchForm" styleClass="search-form">            
+ <h:form id="advancedSearchForm" styleClass="search-form" >            
                
                
                 <table>
@@ -446,10 +446,17 @@ System.out.println("adv_search_version: " + adv_search_version);
                   <tr>
                       <td>&nbsp;&nbsp;&nbsp;</td>
                       <td>
+                      
                      <h:outputLabel id="rel_search_directionLabel" value="Direction" styleClass="textbody">
-                        <input type="radio" id="direction" name="direction" value="source" alt="Source" <%=check_source%> tabindex="5">Source&nbsp;
-                        <input type="radio" id="direction" name="direction" value="target" alt="Target" <%=check_target%> tabindex="5">Target&nbsp;
-                     </h:outputLabel> 
+                        <input type="radio" id="direction" name="direction" value="source" alt="Source" <%=check_source%> tabindex="5"/>Source&nbsp;
+                        <input type="radio" id="direction" name="direction" value="target" alt="Target" <%=check_target%> tabindex="5"/>Target
+                        
+                        <!--
+                        <input type="radio" id="direction" name="direction" value="dummy"  alt="dummy" tabindex="5" style="display: none;" />
+                        -->
+                        
+                     </h:outputLabel>
+
                   </td>
                 </tr>                    
                     
