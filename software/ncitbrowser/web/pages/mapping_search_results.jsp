@@ -206,10 +206,10 @@ int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 System.out.println("num_pages: " + num_pages);
 
-String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+String page_number_2 = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
-if (page_number != null) {
-    pageNum = Integer.parseInt(page_number);
+if (page_number_2 != null) {
+    pageNum = Integer.parseInt(page_number_2);
 }
 System.out.println("pageNum: " + pageNum);
 int istart = pageNum * pageSize;
