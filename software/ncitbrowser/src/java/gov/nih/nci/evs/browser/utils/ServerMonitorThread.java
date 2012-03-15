@@ -1,9 +1,11 @@
 package gov.nih.nci.evs.browser.utils;
 
-import gov.nih.nci.evs.browser.properties.*;
-import java.util.*;
-import org.LexGrid.LexBIG.LexBIGService.*;
-import org.apache.log4j.*;
+import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+
+import java.util.Date;
+
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.apache.log4j.Logger;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -53,21 +55,25 @@ import org.apache.log4j.*;
  */
 
 public class ServerMonitorThread extends Thread {
+    @SuppressWarnings("unused")
+    private static Logger _logger = Logger.getLogger(ServerMonitorThread.class);
     private static ServerMonitorThread _instance = null;
-    private Boolean _isThreadRunning = false;
-	private boolean _isLexEVSRunning = true;
 	private long _interval = 1000 * 
 	    NCItBrowserProperties.getIntProperty(
 	        NCItBrowserProperties.PING_LEXEVS_INTERVAL, 600);
 	private String _message = "";
-	private static Logger _logger = Logger.getLogger(ServerMonitorThread.class);
+	private static boolean _enabled = 
+	    NCItBrowserProperties.getBooleanProperty(
+	        NCItBrowserProperties.PING_LEXEVS_ENABLED, true);
+    private Boolean _isThreadRunning = false;
+    private boolean _isLexEVSRunning = true;
 	
 	static {
-	    ServerMonitorThread.getInstance().start();
+	    if (_enabled) //DYEE_DEBUG (Default: _enabled)
+	        ServerMonitorThread.getInstance().start();
 	}
 	
 	private ServerMonitorThread() {
-	    //_interval = 5000; //DYEE
 	}
 	
 	public static ServerMonitorThread getInstance() {

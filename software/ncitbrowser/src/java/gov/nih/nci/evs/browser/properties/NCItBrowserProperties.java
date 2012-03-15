@@ -69,6 +69,7 @@ public class NCItBrowserProperties {
     public static final String DEBUG_ON = "DEBUG_ON";
     public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
     public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
+    public static final String PING_LEXEVS_ENABLED = "PING_LEXEVS_ENABLED";
     public static final String PING_LEXEVS_INTERVAL = "PING_LEXEVS_INTERVAL";
     public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
     public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
@@ -250,7 +251,7 @@ public class NCItBrowserProperties {
             getInstance();  // Initializes this singleton class
             String value = getProperty(key);
             if (value == null || value.trim().length() <= 0)
-                throw new Exception("Property " + key + " not set.");
+                throw new Exception("Property " + key + " is not set.");
             return Integer.parseInt(value);
         } catch (Exception e) {
             _logger.warn("Defaulting " + key + " property to " + defaultValue + ".");
@@ -259,6 +260,20 @@ public class NCItBrowserProperties {
         }
     }
     
+    public static boolean getBooleanProperty(String key, boolean defaultValue) {
+        try {
+            getInstance();  // Initializes this singleton class
+            String value = getProperty(key);
+            if (value == null || value.trim().length() <= 0)
+                throw new Exception("Property " + key + " is not set.");
+            return Boolean.parseBoolean(value);
+        } catch (Exception e) {
+            _logger.warn("Defaulting " + key + " property to " + defaultValue + ".");
+            e.printStackTrace();
+            return defaultValue;
+        }
+    }
+
     public static List getDisplayItemList() {
         return _displayItemList;
     }
