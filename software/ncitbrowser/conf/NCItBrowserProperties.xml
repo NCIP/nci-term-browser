@@ -401,6 +401,11 @@
         </ConfigurableItem>
 
         <ConfigurableItem>
+                 <key>PING_LEXEVS_ENABLED</key>
+                 <value>@ping.lexevs.enabled@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
                  <key>PING_LEXEVS_INTERVAL</key>
                  <value>@ping.lexevs.interval@</value>
         </ConfigurableItem>
