@@ -282,6 +282,18 @@ a.hideLink
 }
 
 /* ---------- end nci banner ------------------ */
+.lexevs-status
+{
+ position: relative;
+ left: 12px;
+ top: 3px;
+ width: 350px;
+ font-family: Arial, Verdana, Helvetica, sans-serif;
+ font-size: 10px;
+ font-weight: bold;
+ color: #FFFFFF;
+ //text-decoration: blink;
+}
 
 .texttitle-blue
 {
@@ -554,7 +566,7 @@ a.hideLink
 /* ------------ Quick links ------------ */
 #quicklinksholder
 {
- margin-left: 570px;
+ margin-left: 225px;
  padding-top: 7px;
 }
 

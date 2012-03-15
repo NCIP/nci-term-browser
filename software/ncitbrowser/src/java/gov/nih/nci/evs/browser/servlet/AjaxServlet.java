@@ -2012,6 +2012,15 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("      <!-- Quick links bar -->");
       out.println("");
       out.println("<div class=\"bluebar\">");
+      out.println("  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+      out.println("  <tr>");
+      out.println("    <td>");
+      out.println("      <div class=\"lexevs-status\">");
+      out.println("        " + ServerMonitorThread.getInstance().getMessage());
+      out.println("      </div>");
+      out.println("    </td>");
+      out.println("    <td>");  
+      out.println("");
       out.println("  <div id=\"quicklinksholder\">");
       out.println("      <ul id=\"quicklinks\"");
       out.println("        onmouseover=\"document.quicklinksimg.src='/ncitbrowser/images/quicklinks-active.gif';\"");
@@ -2026,9 +2035,6 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("            <li><a href=\"http://localhost/ncimbrowserncimbrowser\" target=\"_blank\"");
       out.println("              alt=\"NCI Metathesaurus\">NCI Metathesaurus Browser</a></li>");
       out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
       out.println("            <li><a href=\"/ncitbrowser/start.jsf\"");
       out.println("              alt=\"NCI Term Browser\">NCI Term Browser</a></li>");
       out.println("            <li><a href=\"http://www.cancer.gov/cancertopics/terminologyresources\" target=\"_blank\"");
@@ -2041,6 +2047,11 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("        </li>");
       out.println("      </ul>");
       out.println("  </div>");
+      out.println("");      
+      out.println("      </td>");
+      out.println("    </tr>");
+      out.println("  </table>");    
+      out.println("");
       out.println("</div>");
       out.println("      <!-- end Quick links bar -->");
       out.println("");

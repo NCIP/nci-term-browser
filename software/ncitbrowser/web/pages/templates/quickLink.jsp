@@ -42,6 +42,15 @@
 
 
 <div class="bluebar">
+  <table border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td>
+        <div class="lexevs-status">
+          <%= ServerMonitorThread.getInstance().getMessage() %>
+        </div>
+      </td>
+      <td>
+
   <div id="quicklinksholder">
       <ul id="quicklinks"
         onmouseover="document.quicklinksimg.src='<%=basePath%>/images/quicklinks-active.gif';"
@@ -81,4 +90,8 @@
         </li>
       </ul>
   </div>
+  
+      </td>
+    </tr>
+  </table>
 </div>
