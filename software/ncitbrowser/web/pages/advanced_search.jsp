@@ -47,6 +47,8 @@
     src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
   <script type="text/javascript"
     src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
+    
+    
   <script type="text/javascript">
     function refresh() {
 
@@ -445,17 +447,16 @@ System.out.println("adv_search_version: " + adv_search_version);
                     
                   <tr>
                       <td>&nbsp;&nbsp;&nbsp;</td>
-                      <td>
-                      
+                      <td class="textbody">
+                      Direction&nbsp;
+                     <!--
                      <h:outputLabel id="rel_search_directionLabel" value="Direction" styleClass="textbody">
+                      -->
                         <input type="radio" id="direction" name="direction" value="source" alt="Source" <%=check_source%> tabindex="5"/>Source&nbsp;
                         <input type="radio" id="direction" name="direction" value="target" alt="Target" <%=check_target%> tabindex="5"/>Target
-                        
-                        <!--
-                        <input type="radio" id="direction" name="direction" value="dummy"  alt="dummy" tabindex="5" style="display: none;" />
-                        -->
-                        
+                      <!--  
                      </h:outputLabel>
+                     -->
 
                   </td>
                 </tr>                    
