@@ -93,6 +93,7 @@ public class RemoteServerUtil {
             // _logger.error("\t-- trying to connect to " + url + " instead.");
             ex.printStackTrace();
         }
+        ServerMonitorThread.getInstance().monitor(null, "createLexBIGService");
         return null;// createLexBIGService(url);
     }
 
@@ -118,10 +119,12 @@ public class RemoteServerUtil {
                 (LexEVSApplicationService) ApplicationServiceProvider
                     .getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
             lexevsService = registerAllSecurityTokens(lexevsService);
+            ServerMonitorThread.getInstance().monitor(lexevsService, "createLexBIGService:2");
             return (LexBIGService) lexevsService;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ServerMonitorThread.getInstance().monitor(null, "createLexBIGService:2");
         return null;
     }
 
@@ -195,11 +198,13 @@ public class RemoteServerUtil {
             }
 
             _logger.debug("Connected to " + serviceUrl);
+            ServerMonitorThread.getInstance().monitor(lexevsService, "createLexBIGService:3");
             return (LexBIGService) lexevsService;
         } catch (Exception e) {
             _logger.error("Unable to connected to " + serviceUrl);
             e.printStackTrace();
         }
+        ServerMonitorThread.getInstance().monitor(null, "createLexBIGService:3");
         return null;
     }
 
@@ -223,6 +228,7 @@ public class RemoteServerUtil {
             // _logger.error("\t-- trying to connect to " + url + " instead.");
             ex.printStackTrace();
         }
+        ServerMonitorThread.getInstance().monitor(null, "createLexBIGService:4");
         return null;// createLexBIGService(url);
     }
 
@@ -249,10 +255,12 @@ public class RemoteServerUtil {
                     .getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
             if (registerSecurityTokens)
                 lexevsService = registerAllSecurityTokens(lexevsService);
+            ServerMonitorThread.getInstance().monitor(lexevsService, "createLexBIGService:5");
             return (LexBIGService) lexevsService;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ServerMonitorThread.getInstance().monitor(null, "createLexBIGService:5");
         return null;
     }
 
@@ -268,6 +276,7 @@ public class RemoteServerUtil {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        ServerMonitorThread.getInstance().monitor(null, "getLexEVSDistributed");
         return null;
 	}
 
@@ -277,11 +286,12 @@ public class RemoteServerUtil {
 			LexEVSDistributed distributed =
 				(LexEVSDistributed)
 				ApplicationServiceProvider.getApplicationServiceFromUrl(serviceUrl, "EvsServiceInfo");
-
+	        ServerMonitorThread.getInstance().monitor(distributed, "getLexEVSDistributed:2");
 			return distributed;
 		} catch (Exception e) {
             e.printStackTrace();
         }
+        ServerMonitorThread.getInstance().monitor(null, "getLexEVSDistributed");
         return null;
 	}
 
