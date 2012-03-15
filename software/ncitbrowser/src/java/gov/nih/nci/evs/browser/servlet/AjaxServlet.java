@@ -1525,6 +1525,52 @@ if (view == Constants.STANDARD_VIEW) {
  String view_str = new Integer(view).toString();
 
 
+//[#31914] Search option and algorithm in value set search box are not preserved in session.
+String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
+String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
+
+
+System.out.println("*** OPTION: " + option);
+System.out.println("*** ALGORITHM: " + algorithm);
+
+
+String option_code = "";
+String option_name = "";
+if (DataUtils.isNull(option)) {
+	option_code = "checked";
+} else {
+	if (option.compareToIgnoreCase("Code") == 0) {
+		option_code = "checked";
+	}
+	if (option.compareToIgnoreCase("Name") == 0) {
+		option_name = "checked";
+	}
+}
+
+
+String algorithm_exactMatch = "";
+String algorithm_startsWith = "";
+String algorithm_contains = "";
+if (DataUtils.isNull(algorithm)) {
+	algorithm_exactMatch = "checked";
+} else {
+	if (algorithm.compareToIgnoreCase("exactMatch") == 0) {
+		algorithm_exactMatch = "checked";
+	}
+
+	if (algorithm.compareToIgnoreCase("startsWith") == 0) {
+		algorithm_startsWith = "checked";
+	}
+
+	if (algorithm.compareToIgnoreCase("contains") == 0) {
+		algorithm_contains = "checked";
+	}
+}
+
+
+
+
+
       out.println("");
       if (message == null) {
       	  out.println("		 tree.collapseAll();");
@@ -1886,7 +1932,7 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("            <span class=\"vocabularynamelong_tb\">" + JSPUtils.getApplicationVersionDisplay() + "</span>");
       out.println("          </div>");
       out.println("        </a>");
-      
+
       out.println("        <div class=\"search-globalnav\">");
       out.println("          <!-- Search box -->");
       out.println("          <div class=\"searchbox-top\"><img src=\"/ncitbrowser/images/searchbox-top.gif\" width=\"352\" height=\"2\" alt=\"SearchBox Top\" /></div>");
@@ -1934,9 +1980,9 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("        <td align=\"left\" class=\"textbody\">");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"exactMatch\" alt=\"Exact Match\" checked tabindex=\"3\">Exact Match&nbsp;");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"startsWith\" alt=\"Begins With\"  tabindex=\"3\">Begins With&nbsp;");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\"  tabindex=\"3\">Contains");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"exactMatch\" alt=\"Exact Match\" " + algorithm_exactMatch + " tabindex=\"3\">Exact Match&nbsp;");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"startsWith\" alt=\"Begins With\" " + algorithm_startsWith + " tabindex=\"3\">Begins With&nbsp;");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\">Contains");
       out.println("        </td>");
       out.println("        </tr>");
       out.println("");
@@ -1945,10 +1991,8 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("        </tr>");
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("          <td align=\"left\" class=\"textbody\">");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" checked");
-      out.println("                  alt=\"Code\" tabindex=\"1\" >Code&nbsp;");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\"");
-      out.println("                  alt=\"Name\" tabindex=\"1\" >Name");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"1\" >Code&nbsp;");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" tabindex=\"1\" >Name");
       out.println("          </td>");
       out.println("        </tr>");
       out.println("      </table>");
@@ -2194,6 +2238,14 @@ if (view == Constants.STANDARD_VIEW) {
 
 
     public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
+
+        String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
+		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
+
+        String algorithm = (String) request.getParameter("valueset_search_algorithm");
+        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+
+
 		// check if any checkbox is checked.
         String contextPath = request.getContextPath();
 		String view_str = (String) request.getParameter("view");
@@ -2225,9 +2277,16 @@ if (view == Constants.STANDARD_VIEW) {
 		String msg = null;
 
         String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
+
+        if (DataUtils.isNull(selectValueSetSearchOption)) {
+			selectValueSetSearchOption = "Name";
+		}
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
         String algorithm = (String) request.getParameter("valueset_search_algorithm");
+        if (DataUtils.isNull(algorithm)) {
+			algorithm = "exactMatch";
+		}
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");

@@ -317,8 +317,6 @@ public class ValueSetBean {
 	}
 
 
-
-
     public String valueSetSearchAction() {
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
@@ -335,6 +333,7 @@ public class ValueSetBean {
 
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
 		//System.out.println("checked_vocabularies: " + checked_vocabularies);
+
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
@@ -348,7 +347,6 @@ public class ValueSetBean {
         String VSD_view = (String) request.getParameter("view");
         request.getSession().setAttribute("view", VSD_view);
         //System.out.println("view: " + VSD_view);
-
 
 
         String selectURI = (String) request.getParameter("selectedValueSetURI");
