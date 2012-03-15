@@ -5,6 +5,7 @@ import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 import java.util.Date;
 
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 import org.apache.log4j.Logger;
 
 /**
@@ -92,7 +93,7 @@ public class ServerMonitorThread extends Thread {
 	    
 		while (true) {
 			try {
-				monitor();
+		        monitor(RemoteServerUtil.createLexBIGService(), "ServerMonitorThread");
 				sleep(_interval);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -100,24 +101,20 @@ public class ServerMonitorThread extends Thread {
 		}
 	}
 	
-	private void monitor() {
-        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        boolean isRunning = lbSvc != null;
-	    
-        setRunning(isRunning);
-        //_logger.debug("_isLexEVSRunning: " + _isLexEVSRunning);
-	}
-	
     public boolean isRunning() {
         return _isLexEVSRunning;
     }
 
-	public void setRunning(boolean isRunning) {
+	public void setRunning(boolean isRunning, String msg) {
+	    if (msg != null && msg.length() > 0)
+	        _logger.debug("isRunning(" + isRunning + "): " + msg);
         boolean prevIsRunning = _isLexEVSRunning;
         if (isRunning == prevIsRunning)
             return;
+
         _isLexEVSRunning = isRunning;
         updateMessage(isRunning);
+        _logger.debug("_isLexEVSRunning: " + _isLexEVSRunning);
 	}
 	
     public String getMessage() {
@@ -129,4 +126,26 @@ public class ServerMonitorThread extends Thread {
             _message = "&nbsp;";
         else _message = "LexEVS is currently down since " + new Date() + ".";
 	}
+
+    public void monitor(LexBIGService service, String msg) {
+        try {
+            boolean isRunning = service != null;
+            service.getLastUpdateTime();
+            setRunning(isRunning, msg);
+        } catch (Exception e) {
+            _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+            setRunning(false, msg);
+        }
+    }
+    
+    public void monitor(LexEVSDistributed service, String msg) {
+        try {
+            boolean isRunning = service != null;
+            service.getLastUpdateTime();
+            setRunning(isRunning, msg);
+        } catch (Exception e) {
+            _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+            setRunning(false, msg);
+        }
+    }
 }
