@@ -540,18 +540,22 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
               </td>
             </tr>
           </table>
-          <!-- Tree content -->
-          <div id="rootDesc">
-            <div id="bd"></div>
-            <div id="ft"></div>
-          </div>
-          <div id="treeStatus">
-            <div id="bd"></div>
-          </div>
-          <div id="emptyRoot">
-            <div id="bd"></div>
-          </div>
-          <div id="treecontainer"></div>
+          <% if (! ServerMonitorThread.getInstance().isRunning()) { %>
+              <div class="textbodyredregular"><%= ServerMonitorThread.getInstance().getMessage() %></div>
+          <% } else { %>
+	          <!-- Tree content -->
+	          <div id="rootDesc">
+	            <div id="bd"></div>
+	            <div id="ft"></div>
+	          </div>
+	          <div id="treeStatus">
+	            <div id="bd"></div>
+	          </div>
+	          <div id="emptyRoot">
+	            <div id="bd"></div>
+	          </div>
+	          <div id="treecontainer"></div>
+          <% } %>
 
           <form id="pg_form">
             <%

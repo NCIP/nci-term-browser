@@ -152,27 +152,30 @@ public class ViewInHierarchyUtils {
     }
 
     public void printTree(PrintWriter out, String codingScheme, String version, String code) {
-        TreeService service =
-                TreeServiceFactory.getInstance().getTreeService(
-                    RemoteServerUtil.createLexBIGService());
-
-        long start = System.currentTimeMillis();
-        CodingSchemeVersionOrTag csvt = null;
-        if (version != null && version.length() > 0)
-            csvt = Constructors.createCodingSchemeVersionOrTagFromVersion(version);
-
-        String namespace = DataUtils.getNamespaceByCode(codingScheme, version, code);
-
-//System.out.println("(*************) namespace: " + namespace);
-
-        LexEvsTree tree = service.getTree(codingScheme, csvt, code, namespace);
-        List<LexEvsTreeNode> listEvsTreeNode =
-                service.getEvsTreeConverter()
-                    .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
-
-        LexEvsTreeNode root = null;
-        printTree(out, "", code, root, "root", listEvsTreeNode);
-
+        try {
+            TreeService service =
+                    TreeServiceFactory.getInstance().getTreeService(
+                        RemoteServerUtil.createLexBIGService());
+    
+            long start = System.currentTimeMillis();
+            CodingSchemeVersionOrTag csvt = null;
+            if (version != null && version.length() > 0)
+                csvt = Constructors.createCodingSchemeVersionOrTagFromVersion(version);
+    
+            String namespace = DataUtils.getNamespaceByCode(codingScheme, version, code);
+    
+    //System.out.println("(*************) namespace: " + namespace);
+    
+            LexEvsTree tree = service.getTree(codingScheme, csvt, code, namespace);
+            List<LexEvsTreeNode> listEvsTreeNode =
+                    service.getEvsTreeConverter()
+                        .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
+    
+            LexEvsTreeNode root = null;
+            printTree(out, "", code, root, "root", listEvsTreeNode);
+        } catch (Exception e) {
+            _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+        }
     }
 
     private void printTree(PrintWriter out, String indent, String focus_code, LexEvsTreeNode parent, String parent_node_id, List<LexEvsTreeNode> nodes) {
