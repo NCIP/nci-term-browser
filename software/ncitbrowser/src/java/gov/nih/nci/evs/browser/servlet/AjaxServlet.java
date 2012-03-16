@@ -1139,7 +1139,7 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "          </table>");
       
       if (! ServerMonitorThread.getInstance().isRunning()) {
-          println(out, "            <div class=\"textbodyredregular\">" + ServerMonitorThread.getInstance().getMessage() + "</div>");
+          println(out, "            <div class=\"textbodyredsmall\">" + ServerMonitorThread.getInstance().getMessage() + "</div>");
       } else {      
           println(out, "            <!-- Tree content -->");
           println(out, "            <div id=\"rootDesc\">");

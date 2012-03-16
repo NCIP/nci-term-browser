@@ -381,6 +381,14 @@ a.hideLink
  font-weight: bold;
 }
 
+.textbodyredsmall
+{
+ font-size: 10px;
+ color: #A90101;
+ font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
+ font-weight: bold;
+}
+
 .textbodysmall
 {
  font-size: 10px;
