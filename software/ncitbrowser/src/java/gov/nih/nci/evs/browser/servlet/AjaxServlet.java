@@ -1137,18 +1137,24 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "              </td>");
       println(out, "            </tr>");
       println(out, "          </table>");
-      println(out, "          <!-- Tree content -->");
-      println(out, "          <div id=\"rootDesc\">");
-      println(out, "            <div id=\"bd\"></div>");
-      println(out, "            <div id=\"ft\"></div>");
-      println(out, "          </div>");
-      println(out, "          <div id=\"treeStatus\">");
-      println(out, "            <div id=\"bd\"></div>");
-      println(out, "          </div>");
-      println(out, "          <div id=\"emptyRoot\">");
-      println(out, "            <div id=\"bd\"></div>");
-      println(out, "          </div>");
-      println(out, "          <div id=\"treecontainer\"></div>");
+      
+      if (! ServerMonitorThread.getInstance().isRunning()) {
+          println(out, "            <div class=\"textbodyredregular\">" + ServerMonitorThread.getInstance().getMessage() + "</div>");
+      } else {      
+          println(out, "            <!-- Tree content -->");
+          println(out, "            <div id=\"rootDesc\">");
+          println(out, "              <div id=\"bd\"></div>");
+          println(out, "              <div id=\"ft\"></div>");
+          println(out, "            </div>");
+          println(out, "            <div id=\"treeStatus\">");
+          println(out, "              <div id=\"bd\"></div>");
+          println(out, "            </div>");
+          println(out, "            <div id=\"emptyRoot\">");
+          println(out, "              <div id=\"bd\"></div>");
+          println(out, "            </div>");
+          println(out, "            <div id=\"treecontainer\"></div>");
+      }
+      
       println(out, "");
       println(out, "          <form id=\"pg_form\">");
       println(out, "            ");
