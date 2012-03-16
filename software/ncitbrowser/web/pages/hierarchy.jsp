@@ -541,7 +541,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
             </tr>
           </table>
           <% if (! ServerMonitorThread.getInstance().isRunning()) { %>
-              <div class="textbodyredregular"><%= ServerMonitorThread.getInstance().getMessage() %></div>
+              <div class="textbodyredsmall"><%= ServerMonitorThread.getInstance().getMessage() %></div>
           <% } else { %>
 	          <!-- Tree content -->
 	          <div id="rootDesc">

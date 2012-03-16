@@ -68,6 +68,7 @@ public class ServerMonitorThread extends Thread {
 	        NCItBrowserProperties.PING_LEXEVS_ENABLED, true);
     private Boolean _isThreadRunning = false;
     private boolean _isLexEVSRunning = true;
+    private boolean _debug = false;  //DYEE_DEBUG (Default: false)
 	
 	static {
 	    if (_enabled) //DYEE_DEBUG (Default: _enabled)
@@ -106,7 +107,7 @@ public class ServerMonitorThread extends Thread {
     }
 
 	public void setRunning(boolean isRunning, String msg) {
-	    if (msg != null && msg.length() > 0)
+	    if (_debug && msg != null && msg.length() > 0)
 	        _logger.debug("isRunning(" + isRunning + "): " + msg);
         boolean prevIsRunning = _isLexEVSRunning;
         if (isRunning == prevIsRunning)
