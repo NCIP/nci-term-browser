@@ -5446,7 +5446,7 @@ System.out.println("vsd_str " + vsd_str);
 	    return null;
 	}
 
-    public static boolean hasSourceCodeQualifie(String scheme) {
+    public static boolean hasSourceCodeQualifier(String scheme) {
 	    String formalName = getFormalName(scheme);
 	    if (formalName == null) return false;
 	    if ( _source_code_schemes.contains(formalName)) return true;

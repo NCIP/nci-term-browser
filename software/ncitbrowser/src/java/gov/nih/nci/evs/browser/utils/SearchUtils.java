@@ -4091,6 +4091,34 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         }
     }
 
+
+    private boolean includeInQuickUnion(CodedNodeSet cns) {
+		if (cns == null) return false;
+		try {
+			ResolvedConceptReferenceList list =	cns.resolveToList(null, null, null, null, false, -1);
+			for (int i=0; i<list.getResolvedConceptReferenceCount(); i++) {
+				ResolvedConceptReference rcr = list.getResolvedConceptReference(i);
+				String name = rcr.getEntityDescription().getContent();
+				String code = rcr.getConceptCode();
+				if (name.compareTo(code) == 0) {
+					System.out.println("Code: " + code + "   Name: " + name);
+					return false;
+				}
+			}
+		} catch (Exception ex) {
+
+		}
+		return true;
+	}
+
+
+
+// [#31975] Simple Search for concept in HUGO brings concept list with duplicate concepts.
+// Problem: QuickUnionIterator does not have a capability to filter out deplicated matches
+//          HUGO header concepts (non-leaf) have code equaling name, causing duplicated matches.
+//          Solution: check if code same as name in cns_code and determine whether to
+//              add to cns_vec accordingly.
+
     public ResolvedConceptReferencesIteratorWrapper searchByNameAndCode(
         Vector<String> schemes, Vector<String> versions, String matchText,
         String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
@@ -4163,12 +4191,16 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 				String code = matchText;
 				CodedNodeSet cns_code = getCodedNodeSetContrainingCode(lbSvc, scheme, versionOrTag, code);
 
-				if (cns_code != null) cns_vec.add(cns_code);
+                if (cns_code != null && includeInQuickUnion(cns_code)) {
+					cns_vec.add(cns_code);
+				}
+
+				//if (cns_code != null) cns_vec.add(cns_code);
 
                 // source code match:
                 CodedNodeSet cns_src_code = null;
 
-					if (DataUtils.hasSourceCodeQualifie(scheme)) {
+				if (DataUtils.hasSourceCodeQualifier(scheme)) {
 					String sourceAbbr = source;
 
 					qualifierList = null;
