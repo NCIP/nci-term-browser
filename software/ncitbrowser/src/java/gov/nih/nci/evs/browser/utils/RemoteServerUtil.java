@@ -80,7 +80,7 @@ public class RemoteServerUtil {
     public static LexBIGService createLexBIGService() {
         String url = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
 
-        url = "http://localhost:8080/lexevsapi60";
+        //url = "http://localhost:8080/lexevsapi60";
 
         NCItBrowserProperties properties = null;
         try {
