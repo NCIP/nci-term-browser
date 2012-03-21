@@ -848,6 +848,13 @@ TV.prototype = {
                     node.collapse();
                 }
                 break;
+            case 67: // c key
+            	if (node.checked != undefined) {
+	            	if (node.checked)
+	            		node.uncheck();
+	            	else node.check();
+            	}
+            	break;
             default:
                 break;
         }
