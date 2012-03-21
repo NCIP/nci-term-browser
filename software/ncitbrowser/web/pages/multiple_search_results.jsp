@@ -198,7 +198,7 @@ System.out.println("num_pages: " + num_pages);
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
-if (page_number != null) {
+if (page_number != null && page_number.length() > 0 && ! page_number.equals("null")) {
     pageNum = Integer.parseInt(page_number);
 }
 System.out.println("pageNum: " + pageNum);
