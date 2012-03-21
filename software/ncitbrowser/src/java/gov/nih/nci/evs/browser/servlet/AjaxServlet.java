@@ -1240,7 +1240,8 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css\" />");
       out.println("");
       out.println("<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js\"></script>");
-      out.println("<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.9.0/build/treeview/treeview-min.js\"></script>");
+      //Before(GF31982): out.println("<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.9.0/build/treeview/treeview-min.js\"></script>");
+      out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/treeview-min.js\" ></script>"); //GF31982
       out.println("");
       out.println("");
       out.println("<!-- Dependency -->");
@@ -1301,7 +1302,8 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("      }");
       out.println("");
       out.println("");
-      out.println("      window.location.href=\"/ncitbrowser/pages/value_set_source_view.jsf?refresh=1\"");
+      out.println("      window.location.href=\"/ncitbrowser/pages/value_set_source_view.jsf?refresh=1\""); //Before(GF31982)
+      //GF31982(Not Sure): out.println("      window.location.href=\"/ncitbrowser/ajax?action=create_src_vs_tree?refresh=1\"");
       out.println("          + \"&nav_type=valuesets\" + \"&opt=\"+ selectValueSetSearchOption;");
       out.println("");
       out.println("    }");
@@ -1917,7 +1919,8 @@ if (DataUtils.isNull(algorithm)) {
       out.println("    <td><a href=\"/ncitbrowser/pages/multiple_search.jsf?nav_type=terminologies\">");
       out.println("      <img name=\"tab_terms\" src=\"/ncitbrowser/images/tab_terms.gif\"");
       out.println("        border=\"0\" alt=\"Terminologies\" title=\"Terminologies\" /></a></td>");
-      out.println("    <td><a href=\"/ncitbrowser/pages/value_set_source_view.jsf?nav_type=valuesets\">");
+      //Before(GF31982): out.println("    <td><a href=\"/ncitbrowser/pages/value_set_source_view.jsf?nav_type=valuesets\">");
+      out.println("    <td><a href=\"/ncitbrowser/ajax?action=create_src_vs_tree\">"); //GF31982
       out.println("      <img name=\"tab_valuesets\" src=\"/ncitbrowser/images/tab_valuesets_clicked.gif\"");
       out.println("        border=\"0\" alt=\"Value Sets\" title=\"ValueSets\" /></a></td>");
       out.println("    <td><a href=\"/ncitbrowser/pages/mapping_search.jsf?nav_type=mappings\">");
