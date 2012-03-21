@@ -77,7 +77,7 @@
             %>
 
             <li>
-              <a href="<%= request.getContextPath() %>/start.jsf" alt="NCI Term Browser">NCI Term Browser</a>
+              <a href="<%= request.getContextPath() %>/termbrowser.jsf" alt="NCI Term Browser">NCI Term Browser</a>
             </li>
               
             <li><a href="http://www.cancer.gov/cancertopics/terminologyresources" target="_blank"
