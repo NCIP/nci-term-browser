@@ -848,7 +848,7 @@ TV.prototype = {
                     node.collapse();
                 }
                 break;
-            case 67: // c key
+            case KEY.SPACE:
             	if (node.checked != undefined) {
 	            	if (node.checked)
 	            		node.uncheck();
