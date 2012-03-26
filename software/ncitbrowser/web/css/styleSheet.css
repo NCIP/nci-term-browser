@@ -282,7 +282,8 @@ a.hideLink
 }
 
 /* ---------- end nci banner ------------------ */
-.lexevs-status
+
+.quicklink-status
 {
  position: relative;
  left: 12px;
@@ -293,6 +294,22 @@ a.hideLink
  font-weight: bold;
  color: #FFFFFF;
  //text-decoration: blink;
+}
+
+.lexevs-status
+{
+ position: relative;
+ left: 0px;
+ top: 0px;
+ width: 740px;
+ height: 30px;
+ font-family: Arial, Verdana, Helvetica, sans-serif;
+ font-size: 14px;
+ font-weight: bold;
+ color: #FFFFFF;
+ //text-decoration: blink;
+ text-align: center;
+ vertical-align: middle;
 }
 
 .texttitle-blue
@@ -560,6 +577,13 @@ a.hideLink
 .bluebar
 {
  background-image: url(../images/quicklinks.gif);
+ background-repeat: repeat-x;
+ height: 32px;
+}
+
+.redbar
+{
+ background-image: url(../images/quicklinksRed.gif);
  background-repeat: repeat-x;
  height: 32px;
 }
