@@ -103,6 +103,8 @@ public class ServerMonitorThread extends Thread {
 	}
 	
     public boolean isRunning() {
+        //Quick test.
+        monitor(RemoteServerUtil.createLexBIGService(), "ServerMonitorThread2");
         return _isLexEVSRunning;
     }
 
@@ -123,10 +125,13 @@ public class ServerMonitorThread extends Thread {
     }
 
     private void updateMessage(boolean isRunning) {
-        if (isRunning)
-            _message = "";        
-        else _message = ">>> The server is temporarily not available, as of "
-            + new Date() + ". <<<";
+        if (isRunning) {
+            _message = "";
+            return;
+        } 
+        
+        _message = "*** The server is temporarily not available, as of "
+            + new Date() + ". ***";
 	}
 
     public void monitor(LexBIGService service, String msg) {

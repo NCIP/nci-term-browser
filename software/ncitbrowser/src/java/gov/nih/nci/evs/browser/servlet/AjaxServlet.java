@@ -2067,11 +2067,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("<div class=\"bluebar\">");
       out.println("  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
       out.println("  <tr>");
-      out.println("    <td>");
-      out.println("      <div class=\"lexevs-status\">");
-      out.println("        " + ServerMonitorThread.getInstance().getMessage());
-      out.println("      </div>");
-      out.println("    </td>");
+      out.println("    <td><div class=\"quicklink-status\">&nbsp;</div></td>");
       out.println("    <td>");  
       out.println("");
       out.println("  <div id=\"quicklinksholder\">");
@@ -2106,6 +2102,19 @@ if (DataUtils.isNull(algorithm)) {
       out.println("  </table>");    
       out.println("");
       out.println("</div>");
+
+      if (! ServerMonitorThread.getInstance().isRunning()) {
+      out.println("    <div class=\"redbar\">");
+      out.println("      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+      out.println("        <tr>");
+      out.println("          <td class=\"lexevs-status\">");
+      out.println("            " + ServerMonitorThread.getInstance().getMessage());
+      out.println("          </td>");
+      out.println("        </tr>");
+      out.println("      </table>");
+      out.println("    </div>");
+      }
+  
       out.println("      <!-- end Quick links bar -->");
       out.println("");
       out.println("      <!-- Page content -->");
