@@ -124,8 +124,9 @@ public class ServerMonitorThread extends Thread {
 
     private void updateMessage(boolean isRunning) {
         if (isRunning)
-            _message = "&nbsp;";
-        else _message = "LexEVS is temporarily down, as of " + new Date() + ".";
+            _message = "";        
+        else _message = ">>> The server is temporarily not available, as of "
+            + new Date() + ". <<<";
 	}
 
     public void monitor(LexBIGService service, String msg) {
