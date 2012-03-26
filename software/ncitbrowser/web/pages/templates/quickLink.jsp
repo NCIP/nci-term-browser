@@ -43,9 +43,9 @@
 
 <div class="bluebar">
   <table border="0" cellspacing="0" cellpadding="0">
-    <tr><td><div class="quicklink-status">
-      &nbsp;
-    </div></td><td>
+    <tr>
+      <td><div class="quicklink-status">&nbsp;</div></td>
+      <td>
 
   <div id="quicklinksholder">
       <ul id="quicklinks"
