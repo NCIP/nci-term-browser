@@ -44,7 +44,14 @@
 <div class="bluebar">
   <table border="0" cellspacing="0" cellpadding="0">
     <tr>
-      <td><div class="quicklink-status">&nbsp;</div></td>
+      <td><div class="quicklink-status">
+        <% boolean debug = false; if (debug) {  //DYEE_DEBUG (default: false) %>
+          <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/deprecated/valueSetTmp.jsf');">
+            VS Tmp
+          </a>
+        <% } %>
+        &nbsp;
+      </div></td>
       <td>
 
   <div id="quicklinksholder">
