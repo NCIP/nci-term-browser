@@ -148,6 +148,7 @@
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
 
+<!--
       <DisplayItem>
             <propertyName>UMLS_CUI</propertyName>
             <itemLabel>NCI Metathesaurus CUI</itemLabel>
@@ -155,6 +156,7 @@
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
+-->
 
        <DisplayItem>
             <propertyName>FULL_SYN</propertyName>

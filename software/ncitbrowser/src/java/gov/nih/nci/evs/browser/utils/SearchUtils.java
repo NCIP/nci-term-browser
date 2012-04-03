@@ -4101,7 +4101,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 				String name = rcr.getEntityDescription().getContent();
 				String code = rcr.getConceptCode();
 				if (name.compareTo(code) == 0) {
-					System.out.println("Code: " + code + "   Name: " + name);
 					return false;
 				}
 			}

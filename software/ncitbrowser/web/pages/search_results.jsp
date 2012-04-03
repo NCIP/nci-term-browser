@@ -132,9 +132,14 @@ if (num_pages * pageSize < size) num_pages++;
 System.out.println("num_pages: " + num_pages);
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
-if (page_number != null) {
+
+if (!DataUtils.isNull(page_number)) {
+//  if (page_number != null) {
     pageNum = Integer.parseInt(page_number);
+} else {
+    pageNum = 0;
 }
+
 System.out.println("pageNum: " + pageNum);
 int istart = pageNum * pageSize;
 int page_num = pageNum;
