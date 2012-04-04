@@ -1765,7 +1765,7 @@ int selected_knt = 0;
         } else if (searchType != null
             && searchType.compareTo("Relationship") == 0) {
 
-			System.out.println("relationship search: " + 	searchType);
+			System.out.println("(*) searchType search: " + 	searchType);
 
             if (rel_search_association != null
                 && rel_search_association.compareTo("ALL") == 0)
@@ -1776,6 +1776,9 @@ int selected_knt = 0;
                 if (rel_search_rela.length() == 0)
                     rel_search_rela = null;
             }
+
+            System.out.println("(*) rel_search_association: " + 	rel_search_association);
+
 
             /*
              * String rel_search_direction = (String)
@@ -1816,6 +1819,10 @@ int selected_knt = 0;
 
             if (iteratorBeanManager.containsIteratorBean(key)) {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
+
+             System.out.println("(*) Retrieving search results from cache: key: " + key);
+
+
                 iterator = iteratorBean.getIterator();
             } else {
 
@@ -1833,6 +1840,9 @@ int selected_knt = 0;
 					//String assocName = OntologyBean.convertAssociationName(scheme, null, rel_search_association);
 
 					String assocName = rel_search_association;
+
+
+System.out.println("(*) assocName: " + assocName);
 
 
 					//_logger.debug("Converting " + rel_search_association + " to " + assocName);
@@ -1879,10 +1889,23 @@ int selected_knt = 0;
                         maxToReturn);
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
-
-
                 }
                 if (iterator != null) {
+
+						try {
+							int numberRemaining = iterator.numberRemaining();
+
+							//if (numberRemaining == 0) {
+							//	iterator = null;
+							//}
+
+							System.out.println("(*) numberRemaining: " + numberRemaining);
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+
+
                     iteratorBean = new IteratorBean(iterator);
                     iteratorBean.setKey(key);
                     iteratorBean.setMatchText(matchText);
