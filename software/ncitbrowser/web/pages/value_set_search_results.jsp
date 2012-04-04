@@ -208,7 +208,7 @@ if (vsd_vec == null) {
 
 
 <%
-} else if (vsd_vec != null) {
+} else if (vsd_vec != null && vsd_vec.size() > 0) {
     vsd_uri = (String) vsd_vec.elementAt(0);
     if (vsd_uri.indexOf("|") == -1) {
         uri_vsd = vsd_uri;

@@ -1137,10 +1137,10 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "              </td>");
       println(out, "            </tr>");
       println(out, "          </table>");
-      
+
       if (! ServerMonitorThread.getInstance().isRunning()) {
           println(out, "            <div class=\"textbodyredsmall\">" + ServerMonitorThread.getInstance().getMessage() + "</div>");
-      } else {      
+      } else {
           println(out, "            <!-- Tree content -->");
           println(out, "            <div id=\"rootDesc\">");
           println(out, "              <div id=\"bd\"></div>");
@@ -1154,7 +1154,7 @@ public final class AjaxServlet extends HttpServlet {
           println(out, "            </div>");
           println(out, "            <div id=\"treecontainer\"></div>");
       }
-      
+
       println(out, "");
       println(out, "          <form id=\"pg_form\">");
       println(out, "            ");
@@ -2068,7 +2068,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
       out.println("  <tr>");
       out.println("    <td><div class=\"quicklink-status\">&nbsp;</div></td>");
-      out.println("    <td>");  
+      out.println("    <td>");
       out.println("");
       out.println("  <div id=\"quicklinksholder\">");
       out.println("      <ul id=\"quicklinks\"");
@@ -2096,10 +2096,10 @@ if (DataUtils.isNull(algorithm)) {
       out.println("        </li>");
       out.println("      </ul>");
       out.println("  </div>");
-      out.println("");      
+      out.println("");
       out.println("      </td>");
       out.println("    </tr>");
-      out.println("  </table>");    
+      out.println("  </table>");
       out.println("");
       out.println("</div>");
 
@@ -2114,7 +2114,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("      </table>");
       out.println("    </div>");
       }
-  
+
       out.println("      <!-- end Quick links bar -->");
       out.println("");
       out.println("      <!-- Page content -->");
@@ -2342,20 +2342,29 @@ if (view == Constants.STANDARD_VIEW) {
 						String vsd_name = (String) selected_vocabularies.elementAt(k);
 						String vsd_uri = DataUtils.getValueSetDefinitionURIByName(vsd_name);
 
-						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
-						if (vsd_uri != null) {
+						System.out.println("vsd_name: " + vsd_name + " (vsd_uri: " + vsd_uri + ")");
 
-							AbsoluteCodingSchemeVersionReference acsvr = vsd_service.isEntityInValueSet(matchText,
-								  new URI(vsd_uri),
-								  null,
-								  versionTag);
-							if (acsvr != null) {
-								String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-								if (metadata != null) {
-									v.add(metadata);
+                        try {
+							//ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
+							if (vsd_uri != null) {
+                                ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
+								AbsoluteCodingSchemeVersionReference acsvr = vsd_service.isEntityInValueSet(matchText,
+									  new URI(vsd_uri),
+									  null,
+									  versionTag);
+								if (acsvr != null) {
+									String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+									if (metadata != null) {
+										v.add(metadata);
+									}
 								}
+							} else {
+								System.out.println("WARNING: Unable to find vsd_uri for " + vsd_name);
 							}
+						} catch (Exception ex) {
+                            System.out.println("WARNING: vsd_service.getValueSetDefinition threw exception: " + vsd_name);
 						}
+
 					}
 			    } else {
 				    AbsoluteCodingSchemeVersionReferenceList csVersionList = null;//ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
@@ -2480,8 +2489,9 @@ if (view == Constants.STANDARD_VIEW) {
 
 
 						} catch (Exception ex) {
-							System.out.println("WARNING: getValueSetDefinitionEntitiesForTerm throws exception???");
-							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed.";
+							//System.out.println("WARNING: getValueSetDefinitionEntitiesForTerm throws exception???");
+							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed. (VSD URI: " + uri + ")";
+							System.out.println(msg);
 							request.getSession().setAttribute("message", msg);
 							return "message";
 						}
