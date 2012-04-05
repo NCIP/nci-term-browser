@@ -341,7 +341,7 @@
                 </td></tr>
 
                 <tr valign="top" align="left"><td align="left" class="textbody">
-                Concepts searching for have:
+                Concepts searched for have:
                 </td></tr>
 
                 <tr valign="top" align="left"><td align="left" class="textbody">
@@ -448,10 +448,16 @@
 
                 <tr>
                     <td>&nbsp;</td>
-                    <td class="textbody"><p>(Example: [<i>Finger</i>]-->(<i>Anatomic_Structure_Is_Physical_Part_Of</i>)-->[<i>Hand</i>]. 
-                    Here, <i>Finger</i> and <i>Hand</i> are the source and target concept
-                    participated in the above relationship, respectively.)
-                    </p></td>
+                    <td class="textbody">
+                         <table>
+                             <tr><td class="textbody">
+                                Example: [<i>Finger</i>]-->(<i>Anatomic_Structure_Is_Physical_Part_Of</i>)-->[<i>Hand</i>]. 
+                             </td></tr>
+                             <tr><td class="textbody">
+                          &nbsp;&nbsp;&nbsp;&nbsp;<i>Finger</i> is the &quot;source&quot; concept in this relationship, <i>Hand</i> is the &quot;target.&quot;
+                             </td></tr>
+                         </table> 
+                    </td>
                 </tr> 
                     
                   <% } else { %>
