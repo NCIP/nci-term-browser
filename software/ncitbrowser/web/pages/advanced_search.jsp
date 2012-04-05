@@ -274,10 +274,7 @@
             <% } %>
 
             <tr class="textbody"><td>
-            
-<!--            
-               <FORM NAME="advancedSearchForm" METHOD="POST" CLASS="search-form" >
--->
+
  <h:form id="advancedSearchForm" styleClass="search-form" >            
                
                
@@ -344,7 +341,7 @@
                 </td></tr>
 
                 <tr valign="top" align="left"><td align="left" class="textbody">
-                Concepts with this value in:
+                Concepts searching for have:
                 </td></tr>
 
                 <tr valign="top" align="left"><td align="left" class="textbody">
@@ -365,7 +362,7 @@
                     <tr>
                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                       <td>
-                        <h:outputLabel id="selectPropertyLabel" value="Property" styleClass="textbody">
+                        <h:outputLabel id="selectPropertyLabel" value="Select one:" styleClass="textbody">
                           <select id="selectProperty" name="selectProperty" size="1" tabindex="6">
                           <%
                             t = "ALL";
@@ -400,9 +397,8 @@
                     <tr>
                       <td>&nbsp;&nbsp;&nbsp;</td>
                       <td>
+<h:outputLabel id="rel_search_associationLabel" value="Select one:" styleClass="textbody">
 
-                        <h:outputLabel id="rel_search_associationLabel" value="Relationship" styleClass="textbody">
-                        
                           <select id="rel_search_association" name="rel_search_association" size="1">
                           <%
                             t = "ALL";
@@ -414,11 +410,6 @@
                           <%} %>
 
                           <%
-                          
-System.out.println("adv_search_vocabulary: " + adv_search_vocabulary);
-System.out.println("adv_search_version: " + adv_search_version);
-//KLO, 010611                          
-//Vector association_vec = OntologyBean.getSupportedAssociationNames(adv_search_vocabulary, adv_search_version);
                             
                             Vector association_vec = OntologyBean.getSupportedAssociationNamesAndIDs(adv_search_vocabulary, adv_search_version);
                              
@@ -440,28 +431,28 @@ System.out.println("adv_search_version: " + adv_search_version);
                             
                           %>
                           </select>
-                        </h:outputLabel>
+                          </h:outputLabel>
                       </td>
                     </tr>
                     
                     
                   <tr>
-                      <td>&nbsp;&nbsp;&nbsp;</td>
-                      <td class="textbody">
-                      Direction&nbsp;
-                     <!--
-                     <h:outputLabel id="rel_search_directionLabel" value="Direction" styleClass="textbody">
-                      -->
-                        <input type="radio" id="direction" name="direction" value="source" alt="Source" <%=check_source%> tabindex="5"/>Source&nbsp;
-                        <input type="radio" id="direction" name="direction" value="target" alt="Target" <%=check_target%> tabindex="5"/>Target
-                      <!--  
-                     </h:outputLabel>
-                     -->
+                      <td>&nbsp;</td>
+                   <td class="textbody">
+                      with a
+                        <input type="radio" id="direction" name="direction" value="target" alt="Source" <%=check_source%> tabindex="5"/>source&nbsp;
+                        <input type="radio" id="direction" name="direction" value="source" alt="Target" <%=check_target%> tabindex="5"/>target&nbsp; 
+                        concept name matching the search criteria specified above.
+                   </td>
+                </tr> 
 
-                  </td>
-                </tr>                    
-                    
-                    
+                <tr>
+                    <td>&nbsp;</td>
+                    <td class="textbody"><p>(Example: [<i>Finger</i>]-->(<i>Anatomic_Structure_Is_Physical_Part_Of</i>)-->[<i>Hand</i>]. 
+                    Here, <i>Finger</i> and <i>Hand</i> are the source and target concept
+                    participated in the above relationship, respectively.)
+                    </p></td>
+                </tr> 
                     
                   <% } else { %>
                     <input type="hidden" name="selectProperty" id="selectProperty" value="<%=HTTPUtils.cleanXSS(selectProperty)%>">
@@ -472,8 +463,35 @@ System.out.println("adv_search_version: " + adv_search_version);
 
                   <% }%>
 
+
+
+                
+
                   </table>
                 </td></tr>
+
+
+<% if (selectSearchOption.compareTo("Relationship") != 0) { %>
+
+                <tr>
+                
+<% if (selectSearchOption.compareTo("Property") == 0) { %>                
+                
+                    <td class="textbody">&nbsp;with its value matching the search criteria specified above.</td>
+<%                    
+} else {
+%>
+                    <td class="textbody">&nbsp;matching the search criteria specified above.</td>
+<%
+}
+%>                    
+                    
+                    <td></td>
+                </tr> 
+                
+<%
+}
+%>
 
               </table>
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
@@ -481,9 +499,7 @@ System.out.println("adv_search_version: " + adv_search_version);
               <input type="hidden" name="version" id="version" value="<%=HTTPUtils.cleanXSS(adv_search_version)%>">
 
               <input type="hidden" name="adv_search_type" id="adv_search_type" value="<%=HTTPUtils.cleanXSS(adv_search_type)%>" />
-<!--
-            </form>
- -->           
+         
             </h:form>
             
           </td></tr>
