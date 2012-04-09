@@ -1936,7 +1936,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
       out.println("      <!-- Thesaurus, banner search area -->");
       out.println("      <div class=\"bannerarea\">");
-      out.println("        <a href=\"<%=basePath%>/start.jsf\" style=\"text-decoration: none;\">");
+      out.println("        <a href=\"/ncitbrowser/start.jsf\" style=\"text-decoration: none;\">");
       out.println("          <div class=\"vocabularynamebanner_tb\">");
       out.println("            <span class=\"vocabularynamelong_tb\">" + JSPUtils.getApplicationVersionDisplay() + "</span>");
       out.println("          </div>");
