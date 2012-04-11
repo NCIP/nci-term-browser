@@ -507,13 +507,14 @@ if (search_results_version != null) {
     
       <!-- Page content -->
       <div class="pagecontent">
-      
+
+
+
 <p class="textbody">
 View value sets organized by supported standard or source terminology.  
 Top standards labels group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.  
 Search or browse each from its home page, or search all value sets at once from this page (very slow).
 </p>      
-      
       
        <div id="popupContentArea">
      
@@ -568,17 +569,19 @@ if (ontology_display_name == null) {
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
 
           </form>
-         
 
         </div> <!-- popupContentArea -->
-        <div class="popupContentAreaWithoutBorder">   
-          <%@ include file="/pages/templates/nciFooter.jsp" %>
-        </div> <!-- popupContentAreaWithoutBorder -->
+        <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div> <!-- pagecontent -->
-    </div>
+
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>
 </body>
 </html>
+
+
+
+
+
