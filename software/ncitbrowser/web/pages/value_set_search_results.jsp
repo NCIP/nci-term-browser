@@ -308,7 +308,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{valueSetSearch_requestContextPath}/images/search.gif"
-      alt="Search"
+      alt="Search Value Set"
       styleClass="searchbox-btn"
       tabindex="2">
     </h:commandButton>
