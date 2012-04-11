@@ -93,7 +93,7 @@
 			    <td><%=tab2%></td>
 			    <td><li>
 			      For all EVS resources, services and contacts see the 
-			      EVS Web site <a href="http://evs.nci.nih.gov/">http://evs.nci.nih.gov/</a>.
+			      EVS Web site <a href="http://evs.nci.nih.gov/" target="_blank">http://evs.nci.nih.gov/</a>.
 			    </li></td>
 			  </tr>
 			</table>
