@@ -352,9 +352,12 @@
                 <li><b>Relationship</b> button will return concepts 
                     that have relationships to concepts that match by 
                     name/code (e.g., an exact relationship search on 
-                    <font face="courier">toe</font> does not return 
-                    the concept <i>toe</i>, but does return <i>toenail</i> 
-                    and other related concepts).</li>
+                    <font face="courier">hand</font> does not return 
+                    the concept <i>Hand</i>, but does return <i>Finger</i> 
+                    and other related concepts that have relationships
+                    that point to <i>Hand</i>; note that the <i>Hand</i> 
+                    concept’s Relationships tab shows relationships that 
+                    point from <i>Hand</i> to other concepts).</li>
               </ul>
             </li>
             <li><b>Search</b> button starts a search.</li>
