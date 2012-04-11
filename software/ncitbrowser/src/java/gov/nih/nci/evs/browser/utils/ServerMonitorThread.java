@@ -102,13 +102,21 @@ public class ServerMonitorThread extends Thread {
 		}
 	}
 	
-    public boolean isRunning() {
+    public boolean isLexEVSRunning() {
+        if (! _enabled) {
+            // Note: Pretend it is running fine to avoid displaying warning message.
+            return true;
+        }
+        
         //Quick test.
         monitor(RemoteServerUtil.createLexBIGService(), "ServerMonitorThread2");
         return _isLexEVSRunning;
     }
 
-	public void setRunning(boolean isRunning, String msg) {
+	public void setLexEVSRunning(boolean isRunning, String msg) {
+        if (! _enabled)
+            return;
+
 	    if (_debug && msg != null && msg.length() > 0)
 	        _logger.debug("isRunning(" + isRunning + "): " + msg);
         boolean prevIsRunning = _isLexEVSRunning;
@@ -135,24 +143,28 @@ public class ServerMonitorThread extends Thread {
 	}
 
     public void monitor(LexBIGService service, String msg) {
+        if (! _enabled)
+            return;
         try {
             boolean isRunning = service != null;
             service.getLastUpdateTime();
-            setRunning(isRunning, msg);
+            setLexEVSRunning(isRunning, msg);
         } catch (Exception e) {
             _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
-            setRunning(false, msg);
+            setLexEVSRunning(false, msg);
         }
     }
     
     public void monitor(LexEVSDistributed service, String msg) {
+        if (! _enabled)
+            return;
         try {
             boolean isRunning = service != null;
             service.getLastUpdateTime();
-            setRunning(isRunning, msg);
+            setLexEVSRunning(isRunning, msg);
         } catch (Exception e) {
             _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
-            setRunning(false, msg);
+            setLexEVSRunning(false, msg);
         }
     }
 }

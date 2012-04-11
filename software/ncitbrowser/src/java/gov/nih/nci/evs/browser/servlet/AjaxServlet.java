@@ -1138,7 +1138,7 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "            </tr>");
       println(out, "          </table>");
 
-      if (! ServerMonitorThread.getInstance().isRunning()) {
+      if (! ServerMonitorThread.getInstance().isLexEVSRunning()) {
           println(out, "            <div class=\"textbodyredsmall\">" + ServerMonitorThread.getInstance().getMessage() + "</div>");
       } else {
           println(out, "            <!-- Tree content -->");
@@ -2103,7 +2103,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
       out.println("</div>");
 
-      if (! ServerMonitorThread.getInstance().isRunning()) {
+      if (! ServerMonitorThread.getInstance().isLexEVSRunning()) {
       out.println("    <div class=\"redbar\">");
       out.println("      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
       out.println("        <tr>");

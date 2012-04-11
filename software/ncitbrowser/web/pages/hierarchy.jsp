@@ -540,7 +540,9 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
               </td>
             </tr>
           </table>
-          <% if (! ServerMonitorThread.getInstance().isRunning()) { %>
+          <%
+              if (! ServerMonitorThread.getInstance().isLexEVSRunning()) {
+          %>
               <div class="textbodyredsmall"><%= ServerMonitorThread.getInstance().getMessage() %></div>
           <% } else { %>
 	          <!-- Tree content -->
