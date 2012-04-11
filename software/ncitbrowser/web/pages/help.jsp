@@ -75,6 +75,30 @@
               </td>
             </tr>
           </table>
+          
+          <p>
+            <b>NCI Enterprise Vocabulary Services (EVS)</b> provides 
+            terminology content, tools, and services to NCI and the 
+            biomedical research community.
+			<table class="textbody" border="0" cellspacing="0" cellpadding="0">
+			  <tr>
+			    <td><%=tab2%></td>
+			    <td><li>
+			      For browser support or suggestions, use the browser's 
+			      <a href="/ncitbrowser/pages/contact_us.jsf">Contact Us</a>
+			      page.
+			    </li></td>
+			  </tr>
+			  <tr>
+			    <td><%=tab2%></td>
+			    <td><li>
+			      For all EVS resources, services and contacts see the 
+			      EVS Web site <a href="http://evs.nci.nih.gov/">http://evs.nci.nih.gov/</a>.
+			    </li></td>
+			  </tr>
+			</table>
+          </p>
+          
           <p>
             <b>NCI Term Browser</b> provides a consistent, user-friendly 
             tool to browse, search and retrieve all of the biomedical 
