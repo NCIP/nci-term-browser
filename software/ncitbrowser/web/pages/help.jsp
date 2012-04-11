@@ -102,23 +102,22 @@
           <p>
             <b>NCI Term Browser</b> provides a consistent, user-friendly 
             tool to browse, search and retrieve all of the biomedical 
-            terminologies hosted by National Cancer Institute Enterprise 
-            Vocabulary Services (NCI EVS), including both NCI Thesaurus 
-            (NCIt) and the NCI Metathesaurus (NCIm), which itself 
-            includes more than 70 terminologies.
+            terminologies hosted by EVS, including both NCI Thesaurus (NCIt) 
+            and the NCI Metathesaurus (NCIm), which itself includes more 
+            than 70 terminologies. The 2.0 release added support for 
+            value sets – flat lists of terms from one or more terminologies 
+            used for a particular coding purpose – and mappings between 
+            terminologies to support data translation and cross-reference. 
+            This 2.1 release improves support for those new features, 
+            especially in the new value set tree that allows selective 
+            search of multiple value sets.  Other additions include a 
+            “Back to search results” link to return to your last results 
+            page, an Advanced Search option to search relationship source 
+            or target concept values, and showing the browser and 
+            terminology server versions in the main NCI Term Browser 
+            banner.
           </p>
-          <p>
-            This new version of the <b>NCI Term Browser</b> adds new 
-            functionalities, including retrieving and querying Value 
-            Sets and Mappings, performing Advanced Searches, using a 
-            Cart and Data Export, and searching in multiple versions 
-            of a particular terminology.  All of these new functionalities 
-            are discussed below.
-          </p>
-          <p>
-            <b>Get in touch:</b> To get help or to offer suggestions, use 
-            the browser's <a href="<%= contactUsUrl %>">Contact Us</a> page. 
-          </p>
+          
           <p>
             This help file provides basic information about how to 
             use the NCI Term Browser effectively, as well as links 
@@ -126,6 +125,7 @@
             typeface font conventions are used for describing search 
             and the browser interface:
           </p>
+
           <table class="textbody" border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td><%=tab2%></td><td><li><b>Bold:</b></li></td>
