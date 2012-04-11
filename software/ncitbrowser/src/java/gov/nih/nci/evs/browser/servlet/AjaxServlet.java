@@ -2308,6 +2308,7 @@ if (view == Constants.STANDARD_VIEW) {
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
@@ -2454,6 +2455,8 @@ if (view == Constants.STANDARD_VIEW) {
 						CodedNodeSet.PropertyType[] propertyTypes = null;
 
 						try {
+							System.out.println("URI: " + uri);
+
 							rvs_cns = vsd_service.getValueSetDefinitionEntitiesForTerm(matchText, algorithm, new URI(uri), csVersionList, null);
 
 							if (rvs_cns != null) {
@@ -2493,6 +2496,8 @@ if (view == Constants.STANDARD_VIEW) {
 							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed. (VSD URI: " + uri + ")";
 							System.out.println(msg);
 							request.getSession().setAttribute("message", msg);
+
+							ex.printStackTrace();
 							return "message";
 						}
 					}

@@ -4947,7 +4947,7 @@ System.out.println("vsd_str " + vsd_str);
 
                 if (isActive != null && isActive.equals(Boolean.TRUE)) {
                 	String uri = css.getCodingSchemeURI();
-                	if (uri.compareTo(urn) == 0) {
+                	if (uri != null && uri.compareTo(urn) == 0) {
 						String representsVersion = css.getRepresentsVersion();
 						v.add(representsVersion);
 					}
@@ -5077,9 +5077,16 @@ System.out.println("vsd_str " + vsd_str);
                 	String uri = css.getCodingSchemeURI();
                 	if (uri.compareTo(urn) == 0) {
 						String representsVersion = css.getRepresentsVersion();
+
 						if (tag != null) {
 							String cs_tag = getVocabularyVersionTag(uri, representsVersion);
-							if (cs_tag.compareToIgnoreCase(tag) == 0) {
+
+							if (cs_tag == null) {
+								System.out.println("(*) WARNING: getVocabularyVersionTag returns null " + uri);
+								System.out.println("(*) WARNING: getVocabularyVersionTag tag " + tag);
+							}
+
+							if (cs_tag != null && cs_tag.compareToIgnoreCase(tag) == 0) {
 								v.add(representsVersion);
 							}
 						} else {
