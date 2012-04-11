@@ -421,6 +421,13 @@
               phrase "(Retired Concept") next to the name of the concept
               in the Results listing.</li>
             <li>Click on the preferred name to see a concept's details.</li>
+            <li>A <b>Back to search results</b> link appears in the search 
+              box when you leave the results page for other pages in the 
+              Terminologies tab; click on the link to return to that last 
+              results page.  If you run a new search or switch to another 
+              main browser tab, that results page is lost and the link 
+              disappears.
+            </li>
           </ul>
         </div>
 
