@@ -56,7 +56,7 @@ System.out.println("searchForm resolvedvaluset.jsp uri_str: " + uri_str);
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{form_requestContextPath}/images/search.gif"
-      alt="Search"
+      alt="Search Value Set"
       styleClass="searchbox-btn"
       tabindex="2">
     </h:commandButton>
