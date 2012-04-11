@@ -118,7 +118,7 @@ if (_selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	      onclick="javascript:cursor_wait();"
 	      image="#{valueSetSearch_requestContextPath}/images/search.gif"
           styleClass="searchbox-btn"
-	      alt="Search"
+	      alt="Search Value Sets"
 	      tabindex="2">
 	    </h:commandButton>
 
