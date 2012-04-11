@@ -172,13 +172,17 @@
               within a mapping set such as the PDQ to NCIt Mapping: 
               National Cancer Institute Thesaurus (201010).</li>
           </ul>
+
           <p>
             These 3 tabs will appear at the top of every Term Browser 
             page you are on, and the tab that is highlighted indicates 
-            which section of the Term Browser you are in.  The 
+            which section of the Term Browser you are in.  The
             <b>NCI Term Browser</b> icon above the tabs always leads 
-            back to the main Terminologies home page.
+            back to the main Terminologies home page. 
+            The Term Browser and LexEVS terminology server versions 
+            are displayed in the browser’s home page banner.
           </p>
+
           <p>
             The NCI Term Browser home page contains a <b>Search Box</b>
             in the upper right hand corner. This Search Box has different 
