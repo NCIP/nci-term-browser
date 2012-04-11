@@ -117,6 +117,11 @@ String cs_mappings_dictionary = HTTPUtils.cleanXSS(info3.dictionary);
 String cs_mappings_version = HTTPUtils.cleanXSS(info3.version);  
 String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + info3.version;
 
+
+System.out.println("cs_mappings.jsp info3.dictionary: " + info3.dictionary);
+
+
+
   if (JSPUtils.isNull(info3.dictionary)) {
       %>
 	    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">

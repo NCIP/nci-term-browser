@@ -85,43 +85,82 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
  String mapping_term_browser_version =
                 DataUtils.getMetadataValue(mapping_dictionary, mapping_version,
                     "term_browser_version");
-%>
 
+ JSPUtils.JSPHeaderInfoMore info3 = new JSPUtils.JSPHeaderInfoMore(request); 
+ String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + info3.version;
+
+ String release_date = DataUtils.getVersionReleaseDate(mapping_dictionary, mapping_version);
+ boolean display_release_date = true;
+ if (release_date == null || release_date.compareTo("") == 0) {
+     display_release_date = false;
+ }
+ 
+ 
+%>
 
  
  <div class="bannerarea">
+ 
+<% 
+   if (info3.dictionary.compareTo("NCI Thesaurus") == 0) {
+%>
+ 	 <a href="<%=nciturl%>" style="text-decoration: none;">
+ 	      <div class="vocabularynamebanner_ncit">
+ 
+ <%	      
+ 	 String content_header_other_dictionary = HTTPUtils.cleanXSS(info3.dictionary);
+ 	 String content_header_other_version = HTTPUtils.cleanXSS(info3.version);
+ 
+ 	 release_date = DataUtils.getVersionReleaseDate(content_header_other_dictionary, content_header_other_version);
+ 	 display_release_date = true;
+ 	 if (release_date == null || release_date.compareTo("") == 0) {
+ 	     display_release_date = false;
+ 	 }
+ 	 if (display_release_date) {
+ %>	 
+ 	 
+ 	     <span class="vocabularynamelong_ncit">Version: <%=HTTPUtils.cleanXSS(info3.term_browser_version)%> (Release date: <%=release_date%>)</span>
+ <%
+ 	 } else {
+ %>	 
+ 	     <span class="vocabularynamelong_ncit">Version:&nbsp;<%=HTTPUtils.cleanXSS(info3.term_browser_version)%></span>
+ <%
+ 	 }
+ %>	      
+ 		 
+ 	     </div>
+ 	 </a>
+ 	 
+<% 
+} else {
+%>
  
      <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_dictionary)%>">
        <div class="vocabularynamebanner">
            <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(mapping_display_name)%>px; font-family : Arial">
              <%=HTTPUtils.cleanXSS(mapping_display_name)%>
            </div>
+
+<%
+	 if (display_release_date) {
+	 %>
+	     <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(mapping_term_browser_version)%> (Release date: <%=release_date%>)</div>
+	 <%
+	 } else {
+	 %>
+	     <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(mapping_term_browser_version)%> </div>
+	 <%
+	 }
+%>	 
+	 
   
-  
-  
-           
- <%              
- 
- 
- String release_date = DataUtils.getVersionReleaseDate(mapping_dictionary, mapping_version);
- boolean display_release_date = true;
- if (release_date == null || release_date.compareTo("") == 0) {
-     display_release_date = false;
- }
- if (display_release_date) {
- %>
-     <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(mapping_term_browser_version)%> (Release date: <%=release_date%>)</div>
- <%
- } else {
- %>
-     <div class="vocabularynamelong">Version:&nbsp;<%=HTTPUtils.cleanXSS(mapping_term_browser_version)%> </div>
- <%
- }
-%> 
-           
-           
      </div>
-   </a>
+     
+   </a>  
+
+<%              
+}
+%> 
 
          
 	 <div class="search-globalnav"><!-- Search box -->
@@ -137,6 +176,10 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
 		   file="/pages/templates/menuBar-termbrowserhome.jsp"%> <!-- end Global Navigation -->
 	 </div>
  </div>
+ 
+ 
+ 
+ 
  <!-- end Thesaurus, banner search area -->
  <!-- Quick links bar -->
  <%@ include file="/pages/templates/quickLink.jsp"%>
