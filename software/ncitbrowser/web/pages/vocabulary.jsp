@@ -288,7 +288,12 @@ if (display_release_date) {
                                 
       <% if (hasValueSet) { %>
         <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
+        <!--
         <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
+        -->
+        <a href="<%= request.getContextPath() %>/ajax?action=create_cs_vs_tree&dictionary=<%=HTTPUtils.cleanXSS(menubar_scheme)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
+
+
       <% } %>
       
       <% if (hasMapping) { %>
