@@ -49,6 +49,18 @@
             <a name="evs-content" id="evs-content"></a>
             <div class="texttitle-blue">Contact Us</div>
             <hr></hr>
+            <p><b>NCI Enterprise Vocabulary Services (EVS)</b> provides 
+              terminology content, tools, and services to NCI and the 
+              biomedical research community.
+              <ul>
+                <li>For other EVS resources, services and contacts see 
+                  the EVS Web site <a href="http://evs.nci.nih.gov/" target="_blank">http://evs.nci.nih.gov/</a>.
+                </li>
+                <li>For browser support or suggestions, try the options
+                  on this page.
+                </li>
+              </ul>
+            </p>
             <p><b>You can request help or make suggestions by filling out the
               online form below, or by using any one of these contact points:
             </b></p>
@@ -84,11 +96,7 @@
               For questions related to NCI’s Cancer.gov Web site,
               see the
               <a href="http://www.cancer.gov/help" target="_blank" alt="Cancer.gov help">
-                Cancer.gov help page</a>. &nbsp;
-              For help and other questions concerning NCI Enterprise Vocabulary
-              Services (EVS),
-              see the <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">
-                EVS Web site</a>.
+                Cancer.gov help page</a>.
             </p>
 
             <%
