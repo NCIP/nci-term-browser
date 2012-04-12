@@ -246,6 +246,20 @@ public class NCItBrowserProperties {
         return ret_str;
     }
 
+    public static String getStringProperty(String key, String defaultValue) {
+        try {
+            getInstance();  // Initializes this singleton class
+            String value = getProperty(key);
+            if (value == null || value.trim().length() <= 0)
+                throw new Exception("Property " + key + " is not set.");
+            return value;
+        } catch (Exception e) {
+            _logger.warn("Defaulting " + key + " property to " + defaultValue + ".");
+            e.printStackTrace();
+            return defaultValue;
+        }
+    }
+
     public static int getIntProperty(String key, int defaultValue) {
         try {
             getInstance();  // Initializes this singleton class

@@ -11,8 +11,8 @@
   we turn them off as a foundation for YUI
   CSS treatments. */
 body {
-	margin:0;
-	padding:0;
+    margin:0;
+    padding:0;
 }
 </style>
 
@@ -28,16 +28,16 @@ body {
 
 <!-- Source file -->
 <!--
-	If you require only basic HTTP transaction support, use the
-	connection_core.js file.
+    If you require only basic HTTP transaction support, use the
+    connection_core.js file.
 -->
 <script src="http://yui.yahooapis.com/2.9.0/build/connection/connection_core-min.js"></script>
 
 <!--
-	Use the full connection.js if you require the following features:
-	- Form serialization.
-	- File Upload using the iframe transport.
-	- Cross-domain(XDR) transactions.
+    Use the full connection.js if you require the following features:
+    - Form serialization.
+    - File Upload using the iframe transport.
+    - Cross-domain(XDR) transactions.
 -->
 <script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
 
@@ -53,12 +53,12 @@ body {
 .ygtvcheck2 { background: url(/ncitbrowser/images/yui/treeview/check2.gif) 0 0 no-repeat; width:16px; height:20px; float:left; cursor:pointer; }
 
 
-.ygtv-edit-TaskNode  {	width: 190px;}
-.ygtv-edit-TaskNode .ygtvcancel, .ygtv-edit-TextNode .ygtvok  {	border:none;}
+.ygtv-edit-TaskNode  {  width: 190px;}
+.ygtv-edit-TaskNode .ygtvcancel, .ygtv-edit-TextNode .ygtvok  { border:none;}
 .ygtv-edit-TaskNode .ygtv-button-container { float: right;}
-.ygtv-edit-TaskNode .ygtv-input  input{	width: 140px;}
+.ygtv-edit-TaskNode .ygtv-input  input{ width: 140px;}
 .whitebg {
-	background-color:white;
+    background-color:white;
 }
 </style>
 
@@ -104,39 +104,39 @@ body {
        //initTree();
     }
 
-	//handler for expanding all nodes
-	YAHOO.util.Event.on("expand_all", "click", function(e) {
-	     //expandEntireTree();
+    //handler for expanding all nodes
+    YAHOO.util.Event.on("expand_all", "click", function(e) {
+         //expandEntireTree();
 
-	     tree.expandAll();
-		//YAHOO.util.Event.preventDefault(e);
-	});
+         tree.expandAll();
+        //YAHOO.util.Event.preventDefault(e);
+    });
 
-	//handler for collapsing all nodes
-	YAHOO.util.Event.on("collapse_all", "click", function(e) {
-		tree.collapseAll();
-		//YAHOO.util.Event.preventDefault(e);
-	});
+    //handler for collapsing all nodes
+    YAHOO.util.Event.on("collapse_all", "click", function(e) {
+        tree.collapseAll();
+        //YAHOO.util.Event.preventDefault(e);
+    });
 
-	//handler for checking all nodes
-	YAHOO.util.Event.on("check_all", "click", function(e) {
-		check_all();
-		//YAHOO.util.Event.preventDefault(e);
-	});
+    //handler for checking all nodes
+    YAHOO.util.Event.on("check_all", "click", function(e) {
+        check_all();
+        //YAHOO.util.Event.preventDefault(e);
+    });
 
-	//handler for unchecking all nodes
-	YAHOO.util.Event.on("uncheck_all", "click", function(e) {
-		uncheck_all();
-		//YAHOO.util.Event.preventDefault(e);
-	});
+    //handler for unchecking all nodes
+    YAHOO.util.Event.on("uncheck_all", "click", function(e) {
+        uncheck_all();
+        //YAHOO.util.Event.preventDefault(e);
+    });
 
 
 
-	YAHOO.util.Event.on("getchecked", "click", function(e) {
+    YAHOO.util.Event.on("getchecked", "click", function(e) {
                //alert("Checked nodes: " + YAHOO.lang.dump(getCheckedNodes()), "info", "example");
-		//YAHOO.util.Event.preventDefault(e);
+        //YAHOO.util.Event.preventDefault(e);
 
-	});
+    });
 
 
     function addTreeNode(rootNode, nodeInfo) {
@@ -254,1671 +254,1365 @@ body {
     function initTree() {
 
         tree = new YAHOO.widget.TreeView("treecontainer");
-	tree.setNodesProperty('propagateHighlightUp',true);
-	tree.setNodesProperty('propagateHighlightDown',true);
-	tree.subscribe('keydown',tree._onKeyDownEvent);
+    tree.setNodesProperty('propagateHighlightUp',true);
+    tree.setNodesProperty('propagateHighlightDown',true);
+    tree.subscribe('keydown',tree._onKeyDownEvent);
 
 
 
 
-		    tree.subscribe("expand", function(node) {
+            tree.subscribe("expand", function(node) {
 
-			YAHOO.util.UserAction.keydown(document.body, { keyCode: 39 });
+            YAHOO.util.UserAction.keydown(document.body, { keyCode: 39 });
 
-		    });
+            });
 
 
 
-		    tree.subscribe("collapse", function(node) {
-			//alert("Collapsing " + node.label );
+            tree.subscribe("collapse", function(node) {
+            //alert("Collapsing " + node.label );
 
-			YAHOO.util.UserAction.keydown(document.body, { keyCode: 109 });
-		    });
+            YAHOO.util.UserAction.keydown(document.body, { keyCode: 109 });
+            });
 
-		    // By default, trees with TextNodes will fire an event for when the label is clicked:
-		    tree.subscribe("checkClick", function(node) {
-			//alert(node.data.myNodeId + " label was checked");
-		    });
+            // By default, trees with TextNodes will fire an event for when the label is clicked:
+            tree.subscribe("checkClick", function(node) {
+            //alert(node.data.myNodeId + " label was checked");
+            });
 
 
             var root = tree.getRoot();
 
 newNodeData = { label:"Clinical Data Interchange Standards Consortium Terminology", id:"TVS_CDISC"};
-var N_1487619242_n967610599 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_1487619242_n967610599.isLeaf = false;
-N_1487619242_n967610599.ontology_node_child_count = 1;
+var N_1487619242_n573977265 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_1487619242_n573977265.isLeaf = false;
+N_1487619242_n573977265.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C81222');";
 newNodeData = { label:"CDISC ADaM Terminology", id:"http://ncit:C81222", href:newNodeDetails };
-var N_346975166_n1992959330 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n967610599, true);
-N_346975166_n1992959330.isLeaf = false;
-N_346975166_n1992959330.ontology_node_child_count = 1;
+var N_346975166_n1142351184 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n573977265, true);
+N_346975166_n1142351184.isLeaf = false;
+N_346975166_n1142351184.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C81223');";
 newNodeData = { label:"CDISC ADaM Date Imputation Flag Terminology", id:"http://ncit:C81223", href:newNodeDetails };
-var N_346975167_1004411740 = new YAHOO.widget.TaskNode(newNodeData, N_346975166_n1992959330, false);
-N_346975167_1004411740.ontology_node_child_count = 0;
-N_346975167_1004411740.isLeaf = true;
+var N_346975167_2133656227 = new YAHOO.widget.TaskNode(newNodeData, N_346975166_n1142351184, false);
+N_346975167_2133656227.ontology_node_child_count = 0;
+N_346975167_2133656227.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C81224');";
 newNodeData = { label:"CDISC ADaM Derivation Type Terminology", id:"http://ncit:C81224", href:newNodeDetails };
-var N_346975168_n1953781510 = new YAHOO.widget.TaskNode(newNodeData, N_346975166_n1992959330, false);
-N_346975168_n1953781510.ontology_node_child_count = 0;
-N_346975168_n1953781510.isLeaf = true;
+var N_346975168_n1588776588 = new YAHOO.widget.TaskNode(newNodeData, N_346975166_n1142351184, false);
+N_346975168_n1588776588.ontology_node_child_count = 0;
+N_346975168_n1588776588.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C81225');";
 newNodeData = { label:"CDISC ADaM Parameter Type Terminology", id:"http://ncit:C81225", href:newNodeDetails };
-var N_346975169_n2108465069 = new YAHOO.widget.TaskNode(newNodeData, N_346975166_n1992959330, false);
-N_346975169_n2108465069.ontology_node_child_count = 0;
-N_346975169_n2108465069.isLeaf = true;
+var N_346975169_n1262985552 = new YAHOO.widget.TaskNode(newNodeData, N_346975166_n1142351184, false);
+N_346975169_n1262985552.ontology_node_child_count = 0;
+N_346975169_n1262985552.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C81226');";
 newNodeData = { label:"CDISC ADaM Time Imputation Flag Terminology", id:"http://ncit:C81226", href:newNodeDetails };
-var N_346975170_650893252 = new YAHOO.widget.TaskNode(newNodeData, N_346975166_n1992959330, false);
-N_346975170_650893252.ontology_node_child_count = 0;
-N_346975170_650893252.isLeaf = true;
+var N_346975170_1338853688 = new YAHOO.widget.TaskNode(newNodeData, N_346975166_n1142351184, false);
+N_346975170_1338853688.ontology_node_child_count = 0;
+N_346975170_1338853688.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C77527');";
 newNodeData = { label:"CDISC CDASH Terminology", id:"http://ncit:C77527", href:newNodeDetails };
-var N_346233279_n1346096756 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n967610599, true);
-N_346233279_n1346096756.isLeaf = false;
-N_346233279_n1346096756.ontology_node_child_count = 1;
+var N_346233279_n2074676292 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n573977265, true);
+N_346233279_n2074676292.isLeaf = false;
+N_346233279_n2074676292.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78418');";
 newNodeData = { label:"CDISC CDASH Concomitant Medication Dose Form Terminology", id:"http://ncit:C78418", href:newNodeDetails };
-var N_346262079_2130704443 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262079_2130704443.ontology_node_child_count = 0;
-N_346262079_2130704443.isLeaf = true;
+var N_346262079_n468939714 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262079_n468939714.ontology_node_child_count = 0;
+N_346262079_n468939714.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78417');";
 newNodeData = { label:"CDISC CDASH Concomitant Medication Dose Units Terminology", id:"http://ncit:C78417", href:newNodeDetails };
-var N_346262078_n472721167 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262078_n472721167.ontology_node_child_count = 0;
-N_346262078_n472721167.isLeaf = true;
+var N_346262078_1696739268 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262078_1696739268.ontology_node_child_count = 0;
+N_346262078_1696739268.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78419');";
 newNodeData = { label:"CDISC CDASH Concomitant Medication Dosing Frequency per Interval Terminology", id:"http://ncit:C78419", href:newNodeDetails };
-var N_346262080_1453938204 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262080_1453938204.ontology_node_child_count = 0;
-N_346262080_1453938204.isLeaf = true;
+var N_346262080_n211132192 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262080_n211132192.ontology_node_child_count = 0;
+N_346262080_n211132192.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78420');";
 newNodeData = { label:"CDISC CDASH Concomitant Medication Route of Administration Terminology", id:"http://ncit:C78420", href:newNodeDetails };
-var N_346262102_1055870457 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262102_1055870457.ontology_node_child_count = 0;
-N_346262102_1055870457.isLeaf = true;
+var N_346262102_n1333807278 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262102_n1333807278.ontology_node_child_count = 0;
+N_346262102_n1333807278.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78422');";
 newNodeData = { label:"CDISC CDASH ECG Original Units Terminology", id:"http://ncit:C78422", href:newNodeDetails };
-var N_346262104_484506131 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262104_484506131.ontology_node_child_count = 0;
-N_346262104_484506131.isLeaf = true;
+var N_346262104_843131583 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262104_843131583.ontology_node_child_count = 0;
+N_346262104_843131583.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78426');";
 newNodeData = { label:"CDISC CDASH Exposure Dose Form Terminology", id:"http://ncit:C78426", href:newNodeDetails };
-var N_346262108_n1717922316 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262108_n1717922316.ontology_node_child_count = 0;
-N_346262108_n1717922316.isLeaf = true;
+var N_346262108_n304569395 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262108_n304569395.ontology_node_child_count = 0;
+N_346262108_n304569395.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78424');";
 newNodeData = { label:"CDISC CDASH Exposure Dosing Frequency per Interval Terminology", id:"http://ncit:C78424", href:newNodeDetails };
-var N_346262106_276654254 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262106_276654254.ontology_node_child_count = 0;
-N_346262106_276654254.isLeaf = true;
+var N_346262106_581665481 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262106_581665481.ontology_node_child_count = 0;
+N_346262106_581665481.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78425');";
 newNodeData = { label:"CDISC CDASH Exposure Route of Administration Terminology", id:"http://ncit:C78425", href:newNodeDetails };
-var N_346262107_n2008514508 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262107_n2008514508.ontology_node_child_count = 0;
-N_346262107_n2008514508.isLeaf = true;
+var N_346262107_1425874631 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262107_1425874631.ontology_node_child_count = 0;
+N_346262107_1425874631.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C83004');";
 newNodeData = { label:"CDISC CDASH Substance Usage Never Current Former Terminology", id:"http://ncit:C83004", href:newNodeDetails };
-var N_347032766_735002440 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_347032766_735002440.ontology_node_child_count = 0;
-N_347032766_735002440.isLeaf = true;
+var N_347032766_91510002 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_347032766_91510002.ontology_node_child_count = 0;
+N_347032766_91510002.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78428');";
 newNodeData = { label:"CDISC CDASH Total Volume Administration Unit Terminology", id:"http://ncit:C78428", href:newNodeDetails };
-var N_346262110_1579889897 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262110_1579889897.ontology_node_child_count = 0;
-N_346262110_1579889897.isLeaf = true;
+var N_346262110_1002177286 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262110_1002177286.ontology_node_child_count = 0;
+N_346262110_1002177286.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78423');";
 newNodeData = { label:"CDISC CDASH Units for Exposure Terminology", id:"http://ncit:C78423", href:newNodeDetails };
-var N_346262105_1573568440 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262105_1573568440.ontology_node_child_count = 0;
-N_346262105_1573568440.isLeaf = true;
+var N_346262105_n721915690 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262105_n721915690.ontology_node_child_count = 0;
+N_346262105_n721915690.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78430');";
 newNodeData = { label:"CDISC CDASH Units for Planned Exposure Terminology", id:"http://ncit:C78430", href:newNodeDetails };
-var N_346262133_n108958760 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262133_n108958760.ontology_node_child_count = 0;
-N_346262133_n108958760.isLeaf = true;
+var N_346262133_n1310028440 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262133_n1310028440.ontology_node_child_count = 0;
+N_346262133_n1310028440.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78427');";
 newNodeData = { label:"CDISC CDASH Unit for Duration of Treatment Interruption Terminology", id:"http://ncit:C78427", href:newNodeDetails };
-var N_346262109_n736953140 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262109_n736953140.ontology_node_child_count = 0;
-N_346262109_n736953140.isLeaf = true;
+var N_346262109_183304862 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262109_183304862.ontology_node_child_count = 0;
+N_346262109_183304862.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78421');";
 newNodeData = { label:"CDISC CDASH Unit of Drug Dispensed or Returned Terminology", id:"http://ncit:C78421", href:newNodeDetails };
-var N_346262103_2037008493 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262103_2037008493.ontology_node_child_count = 0;
-N_346262103_2037008493.isLeaf = true;
+var N_346262103_n1696560429 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262103_n1696560429.ontology_node_child_count = 0;
+N_346262103_n1696560429.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78429');";
 newNodeData = { label:"CDISC CDASH Unit of Measure for Flow Rate Terminology", id:"http://ncit:C78429", href:newNodeDetails };
-var N_346262111_1924660450 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262111_1924660450.ontology_node_child_count = 0;
-N_346262111_1924660450.isLeaf = true;
+var N_346262111_n25416745 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262111_n25416745.ontology_node_child_count = 0;
+N_346262111_n25416745.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78431');";
 newNodeData = { label:"CDISC CDASH Vital Signs Position of Subject Terminology", id:"http://ncit:C78431", href:newNodeDetails };
-var N_346262134_1130289832 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n1346096756, false);
-N_346262134_1130289832.ontology_node_child_count = 0;
-N_346262134_1130289832.isLeaf = true;
+var N_346262134_1954457025 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262134_1954457025.ontology_node_child_count = 0;
+N_346262134_1954457025.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C67497');";
 newNodeData = { label:"CDISC Glossary Terminology", id:"http://ncit:C67497", href:newNodeDetails };
-var N_345309014_332963086 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n967610599, false);
-N_345309014_332963086.ontology_node_child_count = 0;
-N_345309014_332963086.isLeaf = true;
+var N_345309014_n1990975453 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n573977265, false);
+N_345309014_n1990975453.ontology_node_child_count = 0;
+N_345309014_n1990975453.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C82590');";
 newNodeData = { label:"CDISC Observation Class Terminology", id:"http://ncit:C82590", href:newNodeDetails };
-var N_347008055_2054009075 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n967610599, false);
-N_347008055_2054009075.ontology_node_child_count = 0;
-N_347008055_2054009075.isLeaf = true;
+var N_347008055_n268972743 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n573977265, false);
+N_347008055_n268972743.ontology_node_child_count = 0;
+N_347008055_n268972743.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66830');";
 newNodeData = { label:"CDISC SDTM Terminology", id:"http://ncit:C66830", href:newNodeDetails };
-var N_345282874_1209308853 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n967610599, true);
-N_345282874_1209308853.isLeaf = false;
-N_345282874_1209308853.ontology_node_child_count = 1;
+var N_345282874_1152700394 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n573977265, true);
+N_345282874_1152700394.isLeaf = false;
+N_345282874_1152700394.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66767');";
 newNodeData = { label:"CDISC SDTM Action Taken with Study Treatment Terminology", id:"http://ncit:C66767", href:newNodeDetails };
-var N_345282013_n1726493453 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282013_n1726493453.ontology_node_child_count = 0;
-N_345282013_n1726493453.isLeaf = true;
+var N_345282013_n1132595156 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282013_n1132595156.ontology_node_child_count = 0;
+N_345282013_n1132595156.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66768');";
 newNodeData = { label:"CDISC SDTM Adverse Event Outcome Terminology", id:"http://ncit:C66768", href:newNodeDetails };
-var N_345282014_n141258100 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282014_n141258100.ontology_node_child_count = 0;
-N_345282014_n141258100.isLeaf = true;
+var N_345282014_64084854 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282014_64084854.ontology_node_child_count = 0;
+N_345282014_64084854.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66780');";
 newNodeData = { label:"CDISC SDTM Age Group Terminology", id:"http://ncit:C66780", href:newNodeDetails };
-var N_345282068_1637694916 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282068_1637694916.ontology_node_child_count = 0;
-N_345282068_1637694916.isLeaf = true;
+var N_345282068_n156494961 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282068_n156494961.ontology_node_child_count = 0;
+N_345282068_n156494961.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74456');";
 newNodeData = { label:"CDISC SDTM Anatomical Location Terminology", id:"http://ncit:C74456", href:newNodeDetails };
-var N_346143037_n1442578610 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346143037_n1442578610.ontology_node_child_count = 0;
-N_346143037_n1442578610.isLeaf = true;
+var N_346143037_n1141222627 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346143037_n1141222627.ontology_node_child_count = 0;
+N_346143037_n1141222627.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C71148');";
 newNodeData = { label:"CDISC SDTM Body Position Terminology", id:"http://ncit:C71148", href:newNodeDetails };
-var N_346050752_2045422656 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346050752_2045422656.ontology_node_child_count = 0;
-N_346050752_2045422656.isLeaf = true;
+var N_346050752_n720271701 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346050752_n720271701.ontology_node_child_count = 0;
+N_346050752_n720271701.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74558');";
 newNodeData = { label:"CDISC SDTM Category For Disposition Event Terminology", id:"http://ncit:C74558", href:newNodeDetails };
-var N_346144000_1631141804 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346144000_1631141804.ontology_node_child_count = 0;
-N_346144000_1631141804.isLeaf = true;
+var N_346144000_121912681 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346144000_121912681.ontology_node_child_count = 0;
+N_346144000_121912681.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66797');";
 newNodeData = { label:"CDISC SDTM Category for Inclusion And Or Exclusion Terminology", id:"http://ncit:C66797", href:newNodeDetails };
-var N_345282106_1885264455 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282106_1885264455.ontology_node_child_count = 0;
-N_345282106_1885264455.isLeaf = true;
+var N_345282106_n230508427 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282106_n230508427.ontology_node_child_count = 0;
+N_345282106_n230508427.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66784');";
 newNodeData = { label:"CDISC SDTM Common Terminology Criteria for Adverse Event Grade Terminology", id:"http://ncit:C66784", href:newNodeDetails };
-var N_345282072_128451150 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282072_128451150.ontology_node_child_count = 0;
-N_345282072_128451150.isLeaf = true;
+var N_345282072_2120223320 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282072_2120223320.ontology_node_child_count = 0;
+N_345282072_2120223320.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C87162');";
 newNodeData = { label:"CDISC SDTM Common Terminology Criteria for Adverse Event Grade Terminology Version 4.0", id:"http://ncit:C87162", href:newNodeDetails };
-var N_347153075_1644200998 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_347153075_1644200998.ontology_node_child_count = 0;
-N_347153075_1644200998.isLeaf = true;
+var N_347153075_1247883767 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_347153075_1247883767.ontology_node_child_count = 0;
+N_347153075_1247883767.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66785');";
 newNodeData = { label:"CDISC SDTM Control Type Terminology", id:"http://ncit:C66785", href:newNodeDetails };
-var N_345282073_n1472002100 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282073_n1472002100.ontology_node_child_count = 0;
-N_345282073_n1472002100.isLeaf = true;
+var N_345282073_24089391 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282073_24089391.ontology_node_child_count = 0;
+N_345282073_24089391.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66787');";
 newNodeData = { label:"CDISC SDTM Diagnosis Group Terminology", id:"http://ncit:C66787", href:newNodeDetails };
-var N_345282075_1006750594 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282075_1006750594.ontology_node_child_count = 0;
-N_345282075_1006750594.isLeaf = true;
+var N_345282075_n1984582395 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282075_n1984582395.ontology_node_child_count = 0;
+N_345282075_n1984582395.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66788');";
 newNodeData = { label:"CDISC SDTM Dictionary Name Terminology", id:"http://ncit:C66788", href:newNodeDetails };
-var N_345282076_138317332 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282076_138317332.ontology_node_child_count = 0;
-N_345282076_138317332.isLeaf = true;
+var N_345282076_875501689 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282076_875501689.ontology_node_child_count = 0;
+N_345282076_875501689.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78732');";
 newNodeData = { label:"CDISC SDTM Drug Accountability Test Terminology by Code", id:"http://ncit:C78732", href:newNodeDetails };
-var N_346265018_n1630509702 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346265018_n1630509702.ontology_node_child_count = 0;
-N_346265018_n1630509702.isLeaf = true;
+var N_346265018_n1296079912 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346265018_n1296079912.ontology_node_child_count = 0;
+N_346265018_n1296079912.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78731');";
 newNodeData = { label:"CDISC SDTM Drug Accountability Test Terminology by Name", id:"http://ncit:C78731", href:newNodeDetails };
-var N_346265017_n263463529 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346265017_n263463529.ontology_node_child_count = 0;
-N_346265017_n263463529.isLeaf = true;
+var N_346265017_17656863 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346265017_17656863.ontology_node_child_count = 0;
+N_346265017_17656863.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C71150');";
 newNodeData = { label:"CDISC SDTM ECG Finding Terminology", id:"http://ncit:C71150", href:newNodeDetails };
-var N_346050775_702661088 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346050775_702661088.ontology_node_child_count = 0;
-N_346050775_702661088.isLeaf = true;
+var N_346050775_n289170104 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346050775_n289170104.ontology_node_child_count = 0;
+N_346050775_n289170104.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C71151');";
 newNodeData = { label:"CDISC SDTM ECG Test Method Terminology", id:"http://ncit:C71151", href:newNodeDetails };
-var N_346050776_1085692974 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346050776_1085692974.ontology_node_child_count = 0;
-N_346050776_1085692974.isLeaf = true;
+var N_346050776_1769352128 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346050776_1769352128.ontology_node_child_count = 0;
+N_346050776_1769352128.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C71152');";
 newNodeData = { label:"CDISC SDTM ECG Test Name Terminology", id:"http://ncit:C71152", href:newNodeDetails };
-var N_346050777_296966064 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346050777_296966064.ontology_node_child_count = 0;
-N_346050777_296966064.isLeaf = true;
+var N_346050777_n1858827593 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346050777_n1858827593.ontology_node_child_count = 0;
+N_346050777_n1858827593.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C71153');";
 newNodeData = { label:"CDISC SDTM ECG Test Terminology by Code", id:"http://ncit:C71153", href:newNodeDetails };
-var N_346050778_756605594 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346050778_756605594.ontology_node_child_count = 0;
-N_346050778_756605594.isLeaf = true;
+var N_346050778_n1062785096 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346050778_n1062785096.ontology_node_child_count = 0;
+N_346050778_n1062785096.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66790');";
 newNodeData = { label:"CDISC SDTM Ethnic Group Terminology", id:"http://ncit:C66790", href:newNodeDetails };
-var N_345282099_n620575948 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282099_n620575948.ontology_node_child_count = 0;
-N_345282099_n620575948.isLeaf = true;
+var N_345282099_n1552324628 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282099_n1552324628.ontology_node_child_count = 0;
+N_345282099_n1552324628.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78735');";
 newNodeData = { label:"CDISC SDTM Evaluator Terminology", id:"http://ncit:C78735", href:newNodeDetails };
-var N_346265021_1291922700 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346265021_1291922700.ontology_node_child_count = 0;
-N_346265021_1291922700.isLeaf = true;
+var N_346265021_n1660080786 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346265021_n1660080786.ontology_node_child_count = 0;
+N_346265021_n1660080786.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74560');";
 newNodeData = { label:"CDISC SDTM Fitzpatrick Skin Classification Terminology", id:"http://ncit:C74560", href:newNodeDetails };
-var N_346144023_n75793286 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346144023_n75793286.ontology_node_child_count = 0;
-N_346144023_n75793286.isLeaf = true;
+var N_346144023_755907185 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346144023_755907185.ontology_node_child_count = 0;
+N_346144023_755907185.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C76348');";
 newNodeData = { label:"CDISC SDTM Marital Status Terminology", id:"http://ncit:C76348", href:newNodeDetails };
-var N_346201629_n1356207082 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346201629_n1356207082.ontology_node_child_count = 0;
-N_346201629_n1356207082.isLeaf = true;
+var N_346201629_561352676 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346201629_561352676.ontology_node_child_count = 0;
+N_346201629_561352676.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C85492');";
 newNodeData = { label:"CDISC SDTM Method Terminology", id:"http://ncit:C85492", href:newNodeDetails };
-var N_347096469_1106456829 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_347096469_1106456829.ontology_node_child_count = 0;
-N_347096469_1106456829.isLeaf = true;
+var N_347096469_n626074317 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_347096469_n626074317.ontology_node_child_count = 0;
+N_347096469_n626074317.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C85495');";
 newNodeData = { label:"CDISC SDTM Microbiology Susceptibility Testing Result Category Terminology", id:"http://ncit:C85495", href:newNodeDetails };
-var N_347096472_n241071370 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_347096472_n241071370.ontology_node_child_count = 0;
-N_347096472_n241071370.isLeaf = true;
+var N_347096472_171034536 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_347096472_171034536.ontology_node_child_count = 0;
+N_347096472_171034536.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C85491');";
 newNodeData = { label:"CDISC SDTM Microorganism Terminology", id:"http://ncit:C85491", href:newNodeDetails };
-var N_347096468_n202946123 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_347096468_n202946123.ontology_node_child_count = 0;
-N_347096468_n202946123.isLeaf = true;
+var N_347096468_805242477 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_347096468_805242477.ontology_node_child_count = 0;
+N_347096468_805242477.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78738');";
 newNodeData = { label:"CDISC SDTM Never/Current/Former Classification Terminology", id:"http://ncit:C78738", href:newNodeDetails };
-var N_346265024_469500183 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346265024_469500183.ontology_node_child_count = 0;
-N_346265024_469500183.isLeaf = true;
+var N_346265024_2135841665 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346265024_2135841665.ontology_node_child_count = 0;
+N_346265024_2135841665.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C85493');";
 newNodeData = { label:"CDISC SDTM Pharmacokinetic Parameter Terminology", id:"http://ncit:C85493", href:newNodeDetails };
-var N_347096470_n1496224021 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_347096470_n1496224021.ontology_node_child_count = 0;
-N_347096470_n1496224021.isLeaf = true;
+var N_347096470_1763440941 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_347096470_1763440941.ontology_node_child_count = 0;
+N_347096470_1763440941.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C85839');";
 newNodeData = { label:"CDISC SDTM Pharmacokinetic Parameter Terminology by Code", id:"http://ncit:C85839", href:newNodeDetails };
-var N_347100134_n547534785 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_347100134_n547534785.ontology_node_child_count = 0;
-N_347100134_n547534785.isLeaf = true;
+var N_347100134_550233504 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_347100134_550233504.ontology_node_child_count = 0;
+N_347100134_550233504.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C85494');";
 newNodeData = { label:"CDISC SDTM Pharmacokinetic Parameter Unit of Measure Terminology", id:"http://ncit:C85494", href:newNodeDetails };
-var N_347096471_166985093 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_347096471_166985093.ontology_node_child_count = 0;
-N_347096471_166985093.isLeaf = true;
+var N_347096471_n1080465168 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_347096471_n1080465168.ontology_node_child_count = 0;
+N_347096471_n1080465168.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C95121');";
 newNodeData = { label:"CDISC SDTM Physical Properties Test Code Terminology", id:"http://ncit:C95121", href:newNodeDetails };
-var N_348016889_n1901255227 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_348016889_n1901255227.ontology_node_child_count = 0;
-N_348016889_n1901255227.isLeaf = true;
+var N_348016889_255751452 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_348016889_255751452.ontology_node_child_count = 0;
+N_348016889_255751452.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C95120');";
 newNodeData = { label:"CDISC SDTM Physical Properties Test Name Terminology", id:"http://ncit:C95120", href:newNodeDetails };
-var N_348016888_n14226014 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_348016888_n14226014.ontology_node_child_count = 0;
-N_348016888_n14226014.isLeaf = true;
+var N_348016888_n716501720 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_348016888_n716501720.ontology_node_child_count = 0;
+N_348016888_n716501720.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74457');";
 newNodeData = { label:"CDISC SDTM Race Terminology", id:"http://ncit:C74457", href:newNodeDetails };
-var N_346143038_n874697542 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346143038_n874697542.ontology_node_child_count = 0;
-N_346143038_n874697542.isLeaf = true;
+var N_346143038_n1346924043 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346143038_n1346924043.ontology_node_child_count = 0;
+N_346143038_n1346924043.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66727');";
 newNodeData = { label:"CDISC SDTM Reason for Non-Completion Terminology", id:"http://ncit:C66727", href:newNodeDetails };
-var N_345281889_882946238 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281889_882946238.ontology_node_child_count = 0;
-N_345281889_882946238.isLeaf = true;
+var N_345281889_n1732162641 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281889_n1732162641.ontology_node_child_count = 0;
+N_345281889_n1732162641.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78736');";
 newNodeData = { label:"CDISC SDTM Reference Range Indicator", id:"http://ncit:C78736", href:newNodeDetails };
-var N_346265022_n1983838215 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346265022_n1983838215.ontology_node_child_count = 0;
-N_346265022_n1983838215.isLeaf = true;
+var N_346265022_n804916737 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346265022_n804916737.ontology_node_child_count = 0;
+N_346265022_n804916737.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78737');";
 newNodeData = { label:"CDISC SDTM Relationship Type Terminology", id:"http://ncit:C78737", href:newNodeDetails };
-var N_346265023_35823037 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346265023_35823037.ontology_node_child_count = 0;
-N_346265023_35823037.isLeaf = true;
+var N_346265023_1342147687 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346265023_1342147687.ontology_node_child_count = 0;
+N_346265023_1342147687.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66728');";
 newNodeData = { label:"CDISC SDTM Relation to Reference Period Terminology", id:"http://ncit:C66728", href:newNodeDetails };
-var N_345281890_295011949 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281890_295011949.ontology_node_child_count = 0;
-N_345281890_295011949.isLeaf = true;
+var N_345281890_n765208742 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281890_n765208742.ontology_node_child_count = 0;
+N_345281890_n765208742.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66769');";
 newNodeData = { label:"CDISC SDTM Severity Intensity Scale for Adverse Event Terminology", id:"http://ncit:C66769", href:newNodeDetails };
-var N_345282015_n656036987 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282015_n656036987.ontology_node_child_count = 0;
-N_345282015_n656036987.isLeaf = true;
+var N_345282015_1230308773 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282015_1230308773.ontology_node_child_count = 0;
+N_345282015_1230308773.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66733');";
 newNodeData = { label:"CDISC SDTM Size Terminology", id:"http://ncit:C66733", href:newNodeDetails };
-var N_345281916_1990942995 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281916_1990942995.ontology_node_child_count = 0;
-N_345281916_1990942995.isLeaf = true;
+var N_345281916_n1031232147 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281916_n1031232147.ontology_node_child_count = 0;
+N_345281916_n1031232147.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74561');";
 newNodeData = { label:"CDISC SDTM Skin Type Terminology", id:"http://ncit:C74561", href:newNodeDetails };
-var N_346144024_n774303980 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346144024_n774303980.ontology_node_child_count = 0;
-N_346144024_n774303980.isLeaf = true;
+var N_346144024_871395347 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346144024_871395347.ontology_node_child_count = 0;
+N_346144024_871395347.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78733');";
 newNodeData = { label:"CDISC SDTM Specimen Condition Terminology", id:"http://ncit:C78733", href:newNodeDetails };
-var N_346265019_651858308 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346265019_651858308.ontology_node_child_count = 0;
-N_346265019_651858308.isLeaf = true;
+var N_346265019_n2048096394 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346265019_n2048096394.ontology_node_child_count = 0;
+N_346265019_n2048096394.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78734');";
 newNodeData = { label:"CDISC SDTM Specimen Type Terminology", id:"http://ncit:C78734", href:newNodeDetails };
-var N_346265020_1069146166 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346265020_1069146166.ontology_node_child_count = 0;
-N_346265020_1069146166.isLeaf = true;
+var N_346265020_n418913753 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346265020_n418913753.ontology_node_child_count = 0;
+N_346265020_n418913753.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74559');";
 newNodeData = { label:"CDISC SDTM Subject Characteristic Code Terminology", id:"http://ncit:C74559", href:newNodeDetails };
-var N_346144001_n725737206 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346144001_n725737206.ontology_node_child_count = 0;
-N_346144001_n725737206.isLeaf = true;
+var N_346144001_n123364309 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346144001_n123364309.ontology_node_child_count = 0;
+N_346144001_n123364309.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66734');";
 newNodeData = { label:"CDISC SDTM Submission Domain Abbreviation Terminology", id:"http://ncit:C66734", href:newNodeDetails };
-var N_345281917_n3096510 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281917_n3096510.ontology_node_child_count = 0;
-N_345281917_n3096510.isLeaf = true;
+var N_345281917_1177577070 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281917_1177577070.ontology_node_child_count = 0;
+N_345281917_1177577070.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66783');";
 newNodeData = { label:"CDISC SDTM System Organ Class Terminology", id:"http://ncit:C66783", href:newNodeDetails };
-var N_345282071_1656679304 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282071_1656679304.ontology_node_child_count = 0;
-N_345282071_1656679304.isLeaf = true;
+var N_345282071_1271860235 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282071_1271860235.ontology_node_child_count = 0;
+N_345282071_1271860235.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66735');";
 newNodeData = { label:"CDISC SDTM Trial Blinding Schema Terminology", id:"http://ncit:C66735", href:newNodeDetails };
-var N_345281918_n1875201912 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281918_n1875201912.ontology_node_child_count = 0;
-N_345281918_n1875201912.isLeaf = true;
+var N_345281918_n814381772 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281918_n814381772.ontology_node_child_count = 0;
+N_345281918_n814381772.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66736');";
 newNodeData = { label:"CDISC SDTM Trial Indication Type Terminology", id:"http://ncit:C66736", href:newNodeDetails };
-var N_345281919_1818670788 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281919_1818670788.ontology_node_child_count = 0;
-N_345281919_1818670788.isLeaf = true;
+var N_345281919_520899650 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281919_520899650.ontology_node_child_count = 0;
+N_345281919_520899650.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66737');";
 newNodeData = { label:"CDISC SDTM Trial Phase Terminology", id:"http://ncit:C66737", href:newNodeDetails };
-var N_345281920_n226139551 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281920_n226139551.ontology_node_child_count = 0;
-N_345281920_n226139551.isLeaf = true;
+var N_345281920_n275955378 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281920_n275955378.ontology_node_child_count = 0;
+N_345281920_n275955378.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66738');";
 newNodeData = { label:"CDISC SDTM Trial Summary Parameter Terminology by Code", id:"http://ncit:C66738", href:newNodeDetails };
-var N_345281921_n1786149424 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281921_n1786149424.ontology_node_child_count = 0;
-N_345281921_n1786149424.isLeaf = true;
+var N_345281921_n1078417831 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281921_n1078417831.ontology_node_child_count = 0;
+N_345281921_n1078417831.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C67152');";
 newNodeData = { label:"CDISC SDTM Trial Summary Parameter Terminology by Name", id:"http://ncit:C67152", href:newNodeDetails };
-var N_345306002_n861380369 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345306002_n861380369.ontology_node_child_count = 0;
-N_345306002_n861380369.isLeaf = true;
+var N_345306002_n434716399 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345306002_n434716399.ontology_node_child_count = 0;
+N_345306002_n434716399.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66739');";
 newNodeData = { label:"CDISC SDTM Trial Type Terminology", id:"http://ncit:C66739", href:newNodeDetails };
-var N_345281922_n293140057 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345281922_n293140057.ontology_node_child_count = 0;
-N_345281922_n293140057.isLeaf = true;
+var N_345281922_315522307 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345281922_315522307.ontology_node_child_count = 0;
+N_345281922_315522307.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66770');";
 newNodeData = { label:"CDISC SDTM Unit for Vital Sign Result Terminology", id:"http://ncit:C66770", href:newNodeDetails };
-var N_345282037_452269335 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_345282037_452269335.ontology_node_child_count = 0;
-N_345282037_452269335.isLeaf = true;
+var N_345282037_1574131656 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_345282037_1574131656.ontology_node_child_count = 0;
+N_345282037_1574131656.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C71620');";
 newNodeData = { label:"CDISC SDTM Unit of Measure Terminology", id:"http://ncit:C71620", href:newNodeDetails };
-var N_346055487_n2056008905 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346055487_n2056008905.ontology_node_child_count = 0;
-N_346055487_n2056008905.isLeaf = true;
+var N_346055487_1961803972 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346055487_1961803972.ontology_node_child_count = 0;
+N_346055487_1961803972.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C76351');";
 newNodeData = { label:"CDISC Skin Classification Terminology", id:"http://ncit:C76351", href:newNodeDetails };
-var N_346201653_n1624515007 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1209308853, false);
-N_346201653_n1624515007.ontology_node_child_count = 0;
-N_346201653_n1624515007.isLeaf = true;
+var N_346201653_238399765 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
+N_346201653_238399765.ontology_node_child_count = 0;
+N_346201653_238399765.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C77526');";
 newNodeData = { label:"CDISC SEND Terminology", id:"http://ncit:C77526", href:newNodeDetails };
-var N_346233278_1064040559 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n967610599, true);
-N_346233278_1064040559.isLeaf = false;
-N_346233278_1064040559.ontology_node_child_count = 1;
+var N_346233278_n1311102133 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n573977265, true);
+N_346233278_n1311102133.isLeaf = false;
+N_346233278_n1311102133.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66781');";
 newNodeData = { label:"CDISC SDTM Age Unit Terminology", id:"http://ncit:C66781", href:newNodeDetails };
-var N_345282069_418832086 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345282069_418832086.ontology_node_child_count = 0;
-N_345282069_418832086.isLeaf = true;
+var N_345282069_830000938 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345282069_830000938.ontology_node_child_count = 0;
+N_345282069_830000938.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66786');";
 newNodeData = { label:"CDISC SDTM Country Terminology", id:"http://ncit:C66786", href:newNodeDetails };
-var N_345282074_n298324722 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345282074_n298324722.ontology_node_child_count = 0;
-N_345282074_n298324722.isLeaf = true;
+var N_345282074_n1531431244 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345282074_n1531431244.ontology_node_child_count = 0;
+N_345282074_n1531431244.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C71113');";
 newNodeData = { label:"CDISC SDTM Frequency Terminology", id:"http://ncit:C71113", href:newNodeDetails };
-var N_346050654_n1954498148 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_346050654_n1954498148.ontology_node_child_count = 0;
-N_346050654_n1954498148.isLeaf = true;
+var N_346050654_42479041 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_346050654_42479041.ontology_node_child_count = 0;
+N_346050654_42479041.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C65047');";
 newNodeData = { label:"CDISC SDTM Laboratory Test Terminology by Code", id:"http://ncit:C65047", href:newNodeDetails };
-var N_345245433_1118597441 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345245433_1118597441.ontology_node_child_count = 0;
-N_345245433_1118597441.isLeaf = true;
+var N_345245433_n965284344 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345245433_n965284344.ontology_node_child_count = 0;
+N_345245433_n965284344.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C67154');";
 newNodeData = { label:"CDISC SDTM Laboratory Test Terminology by Name", id:"http://ncit:C67154", href:newNodeDetails };
-var N_345306004_n2092309154 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345306004_n2092309154.ontology_node_child_count = 0;
-N_345306004_n2092309154.isLeaf = true;
+var N_345306004_n1946157265 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345306004_n1946157265.ontology_node_child_count = 0;
+N_345306004_n1946157265.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66789');";
 newNodeData = { label:"CDISC SDTM Not Done Terminology", id:"http://ncit:C66789", href:newNodeDetails };
-var N_345282077_n301823148 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345282077_n301823148.ontology_node_child_count = 0;
-N_345282077_n301823148.isLeaf = true;
+var N_345282077_741914300 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345282077_741914300.ontology_node_child_count = 0;
+N_345282077_741914300.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66726');";
 newNodeData = { label:"CDISC SDTM Pharmaceutical Dosage Form Terminology", id:"http://ncit:C66726", href:newNodeDetails };
-var N_345281888_n1763148154 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345281888_n1763148154.ontology_node_child_count = 0;
-N_345281888_n1763148154.isLeaf = true;
+var N_345281888_922021395 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345281888_922021395.ontology_node_child_count = 0;
+N_345281888_922021395.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66729');";
 newNodeData = { label:"CDISC SDTM Route of Administration Terminology", id:"http://ncit:C66729", href:newNodeDetails };
-var N_345281891_n1638304000 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345281891_n1638304000.ontology_node_child_count = 0;
-N_345281891_n1638304000.isLeaf = true;
+var N_345281891_n711549189 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345281891_n711549189.ontology_node_child_count = 0;
+N_345281891_n711549189.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66731');";
 newNodeData = { label:"CDISC SDTM Sex of Individual Terminology", id:"http://ncit:C66731", href:newNodeDetails };
-var N_345281914_n381605242 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345281914_n381605242.ontology_node_child_count = 0;
-N_345281914_n381605242.isLeaf = true;
+var N_345281914_n325098131 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345281914_n325098131.ontology_node_child_count = 0;
+N_345281914_n325098131.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66732');";
 newNodeData = { label:"CDISC SDTM Sex of Study Group Terminology", id:"http://ncit:C66732", href:newNodeDetails };
-var N_345281915_64629796 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345281915_64629796.ontology_node_child_count = 0;
-N_345281915_64629796.isLeaf = true;
+var N_345281915_1805492989 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345281915_1805492989.ontology_node_child_count = 0;
+N_345281915_1805492989.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66741');";
 newNodeData = { label:"CDISC SDTM Vital Sign Terminology by Code", id:"http://ncit:C66741", href:newNodeDetails };
-var N_345281945_1182451540 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345281945_1182451540.ontology_node_child_count = 0;
-N_345281945_1182451540.isLeaf = true;
+var N_345281945_n998708709 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345281945_n998708709.ontology_node_child_count = 0;
+N_345281945_n998708709.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C67153');";
 newNodeData = { label:"CDISC SDTM Vital Sign Terminology by Name", id:"http://ncit:C67153", href:newNodeDetails };
-var N_345306003_2040047584 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345306003_2040047584.ontology_node_child_count = 0;
-N_345306003_2040047584.isLeaf = true;
+var N_345306003_n561951809 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345306003_n561951809.ontology_node_child_count = 0;
+N_345306003_n561951809.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C66742');";
 newNodeData = { label:"CDISC SDTM Yes No Unknown or Not Applicable Response Terminology", id:"http://ncit:C66742", href:newNodeDetails };
-var N_345281946_937939260 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_345281946_937939260.ontology_node_child_count = 0;
-N_345281946_937939260.isLeaf = true;
+var N_345281946_n290399215 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_345281946_n290399215.ontology_node_child_count = 0;
+N_345281946_n290399215.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C77529');";
 newNodeData = { label:"CDISC SEND Biospecimens Terminology", id:"http://ncit:C77529", href:newNodeDetails };
-var N_346233281_n842910098 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_346233281_n842910098.ontology_node_child_count = 0;
-N_346233281_n842910098.isLeaf = true;
+var N_346233281_n863104052 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_346233281_n863104052.ontology_node_child_count = 0;
+N_346233281_n863104052.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C88026');";
 newNodeData = { label:"CDISC SEND Body System Terminology", id:"http://ncit:C88026", href:newNodeDetails };
-var N_347181785_926397392 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347181785_926397392.ontology_node_child_count = 0;
-N_347181785_926397392.isLeaf = true;
+var N_347181785_n261631282 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347181785_n261631282.ontology_node_child_count = 0;
+N_347181785_n261631282.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89960');";
 newNodeData = { label:"CDISC SEND Body Weight Gain Test Code Terminology", id:"http://ncit:C89960", href:newNodeDetails };
-var N_347220343_1783109944 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220343_1783109944.ontology_node_child_count = 0;
-N_347220343_1783109944.isLeaf = true;
+var N_347220343_744534793 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220343_744534793.ontology_node_child_count = 0;
+N_347220343_744534793.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89959');";
 newNodeData = { label:"CDISC SEND Body Weight Gain Test Name Terminology", id:"http://ncit:C89959", href:newNodeDetails };
-var N_347220321_n1615450422 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220321_n1615450422.ontology_node_child_count = 0;
-N_347220321_n1615450422.isLeaf = true;
+var N_347220321_1196492751 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220321_1196492751.ontology_node_child_count = 0;
+N_347220321_1196492751.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89962');";
 newNodeData = { label:"CDISC SEND Body Weight Test Code Terminology", id:"http://ncit:C89962", href:newNodeDetails };
-var N_347220345_1728472041 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220345_1728472041.ontology_node_child_count = 0;
-N_347220345_1728472041.isLeaf = true;
+var N_347220345_n255467374 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220345_n255467374.ontology_node_child_count = 0;
+N_347220345_n255467374.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89961');";
 newNodeData = { label:"CDISC SEND Body Weight Test Name Terminology", id:"http://ncit:C89961", href:newNodeDetails };
-var N_347220344_n1317493226 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220344_n1317493226.ontology_node_child_count = 0;
-N_347220344_n1317493226.isLeaf = true;
+var N_347220344_949728025 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220344_949728025.ontology_node_child_count = 0;
+N_347220344_949728025.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89963');";
 newNodeData = { label:"CDISC SEND Category for Clinical Observation Terminology", id:"http://ncit:C89963", href:newNodeDetails };
-var N_347220346_1608752283 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220346_1608752283.ontology_node_child_count = 0;
-N_347220346_1608752283.isLeaf = true;
+var N_347220346_665834032 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220346_665834032.ontology_node_child_count = 0;
+N_347220346_665834032.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90018');";
 newNodeData = { label:"CDISC SEND Consciousness State Terminology", id:"http://ncit:C90018", href:newNodeDetails };
-var N_347866949_n1699730342 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866949_n1699730342.ontology_node_child_count = 0;
-N_347866949_n1699730342.isLeaf = true;
+var N_347866949_414396691 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866949_414396691.ontology_node_child_count = 0;
+N_347866949_414396691.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89964');";
 newNodeData = { label:"CDISC SEND Death Diagnosis Object of Measurement Terminology", id:"http://ncit:C89964", href:newNodeDetails };
-var N_347220347_n1401495992 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220347_n1401495992.ontology_node_child_count = 0;
-N_347220347_n1401495992.isLeaf = true;
+var N_347220347_n706882828 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220347_n706882828.ontology_node_child_count = 0;
+N_347220347_n706882828.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89966');";
 newNodeData = { label:"CDISC SEND Death Diagnosis Test Code Terminology", id:"http://ncit:C89966", href:newNodeDetails };
-var N_347220349_n1128961602 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220349_n1128961602.ontology_node_child_count = 0;
-N_347220349_n1128961602.isLeaf = true;
+var N_347220349_n892006855 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220349_n892006855.ontology_node_child_count = 0;
+N_347220349_n892006855.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89965');";
 newNodeData = { label:"CDISC SEND Death Diagnosis Test Name Terminology", id:"http://ncit:C89965", href:newNodeDetails };
-var N_347220348_2094055976 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220348_2094055976.ontology_node_child_count = 0;
-N_347220348_2094055976.isLeaf = true;
+var N_347220348_1389840112 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220348_1389840112.ontology_node_child_count = 0;
+N_347220348_1389840112.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90012');";
 newNodeData = { label:"CDISC SEND Electrocardiogram Category Terminology", id:"http://ncit:C90012", href:newNodeDetails };
-var N_347866943_n1186349892 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866943_n1186349892.ontology_node_child_count = 0;
-N_347866943_n1186349892.isLeaf = true;
+var N_347866943_423427196 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866943_423427196.ontology_node_child_count = 0;
+N_347866943_423427196.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90013');";
 newNodeData = { label:"CDISC SEND Electrocardiogram Lead Terminology", id:"http://ncit:C90013", href:newNodeDetails };
-var N_347866944_1143765931 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866944_1143765931.ontology_node_child_count = 0;
-N_347866944_1143765931.isLeaf = true;
+var N_347866944_113338419 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866944_113338419.ontology_node_child_count = 0;
+N_347866944_113338419.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89970');";
 newNodeData = { label:"CDISC SEND Food and Water Consumption Test Code Terminology", id:"http://ncit:C89970", href:newNodeDetails };
-var N_347220374_257042751 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220374_257042751.ontology_node_child_count = 0;
-N_347220374_257042751.isLeaf = true;
+var N_347220374_1607339849 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220374_1607339849.ontology_node_child_count = 0;
+N_347220374_1607339849.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89969');";
 newNodeData = { label:"CDISC SEND Food and Water Consumption Test Name Terminology", id:"http://ncit:C89969", href:newNodeDetails };
-var N_347220352_733490209 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220352_733490209.ontology_node_child_count = 0;
-N_347220352_733490209.isLeaf = true;
+var N_347220352_42436970 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220352_42436970.ontology_node_child_count = 0;
+N_347220352_42436970.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C77808');";
 newNodeData = { label:"CDISC SEND Laboratory Animal Species Terminology", id:"http://ncit:C77808", href:newNodeDetails };
-var N_346236101_1593207397 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_346236101_1593207397.ontology_node_child_count = 0;
-N_346236101_1593207397.isLeaf = true;
+var N_346236101_364951178 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_346236101_364951178.ontology_node_child_count = 0;
+N_346236101_364951178.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C77530');";
 newNodeData = { label:"CDISC SEND Laboratory Animal Strain Terminology", id:"http://ncit:C77530", href:newNodeDetails };
-var N_346233303_1139789400 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_346233303_1139789400.ontology_node_child_count = 0;
-N_346233303_1139789400.isLeaf = true;
+var N_346233303_1349829844 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_346233303_1349829844.ontology_node_child_count = 0;
+N_346233303_1349829844.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89972');";
 newNodeData = { label:"CDISC SEND Macroscopic Findings Test Code Terminology", id:"http://ncit:C89972", href:newNodeDetails };
-var N_347220376_311219602 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220376_311219602.ontology_node_child_count = 0;
-N_347220376_311219602.isLeaf = true;
+var N_347220376_n543646180 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220376_n543646180.ontology_node_child_count = 0;
+N_347220376_n543646180.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89971');";
 newNodeData = { label:"CDISC SEND Macroscopic Findings Test Name Terminology", id:"http://ncit:C89971", href:newNodeDetails };
-var N_347220375_n639105094 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220375_n639105094.ontology_node_child_count = 0;
-N_347220375_n639105094.isLeaf = true;
+var N_347220375_n336706962 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220375_n336706962.ontology_node_child_count = 0;
+N_347220375_n336706962.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89975');";
 newNodeData = { label:"CDISC SEND Method of Termination Terminology", id:"http://ncit:C89975", href:newNodeDetails };
-var N_347220379_n770358854 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220379_n770358854.ontology_node_child_count = 0;
-N_347220379_n770358854.isLeaf = true;
+var N_347220379_n396089707 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220379_n396089707.ontology_node_child_count = 0;
+N_347220379_n396089707.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89974');";
 newNodeData = { label:"CDISC SEND Microscopic Findings Test Code Terminology", id:"http://ncit:C89974", href:newNodeDetails };
-var N_347220378_n606798934 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220378_n606798934.ontology_node_child_count = 0;
-N_347220378_n606798934.isLeaf = true;
+var N_347220378_1423163011 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220378_1423163011.ontology_node_child_count = 0;
+N_347220378_1423163011.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89973');";
 newNodeData = { label:"CDISC SEND Microscopic Findings Test Name Terminology", id:"http://ncit:C89973", href:newNodeDetails };
-var N_347220377_1256645653 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220377_1256645653.ontology_node_child_count = 0;
-N_347220377_1256645653.isLeaf = true;
+var N_347220377_1443392844 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220377_1443392844.ontology_node_child_count = 0;
+N_347220377_1443392844.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90017');";
 newNodeData = { label:"CDISC SEND Microscopic Histopathology Result Category Terminology", id:"http://ncit:C90017", href:newNodeDetails };
-var N_347866948_858046259 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866948_858046259.ontology_node_child_count = 0;
-N_347866948_858046259.isLeaf = true;
+var N_347866948_n789298691 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866948_n789298691.ontology_node_child_count = 0;
+N_347866948_n789298691.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89977');";
 newNodeData = { label:"CDISC SEND Organ Measurement Test Code Terminology", id:"http://ncit:C89977", href:newNodeDetails };
-var N_347220381_n1237673073 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220381_n1237673073.ontology_node_child_count = 0;
-N_347220381_n1237673073.isLeaf = true;
+var N_347220381_875371776 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220381_875371776.ontology_node_child_count = 0;
+N_347220381_875371776.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89976');";
 newNodeData = { label:"CDISC SEND Organ Measurement Test Name Terminology", id:"http://ncit:C89976", href:newNodeDetails };
-var N_347220380_n582382007 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220380_n582382007.ontology_node_child_count = 0;
-N_347220380_n582382007.isLeaf = true;
+var N_347220380_n585293772 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220380_n585293772.ontology_node_child_count = 0;
+N_347220380_n585293772.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C77528');";
 newNodeData = { label:"CDISC SEND Pre-Clinical Units of Measure Terminology", id:"http://ncit:C77528", href:newNodeDetails };
-var N_346233280_600999602 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_346233280_600999602.ontology_node_child_count = 0;
-N_346233280_600999602.isLeaf = true;
+var N_346233280_1080513939 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_346233280_1080513939.ontology_node_child_count = 0;
+N_346233280_1080513939.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90000');";
 newNodeData = { label:"CDISC SEND Severity Terminology", id:"http://ncit:C90000", href:newNodeDetails };
-var N_347866910_1946827048 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866910_1946827048.ontology_node_child_count = 0;
-N_347866910_1946827048.isLeaf = true;
+var N_347866910_n1450845687 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866910_n1450845687.ontology_node_child_count = 0;
+N_347866910_n1450845687.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90001');";
 newNodeData = { label:"CDISC SEND Specimen Spatial Organization Terminology", id:"http://ncit:C90001", href:newNodeDetails };
-var N_347866911_n1209168919 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866911_n1209168919.ontology_node_child_count = 0;
-N_347866911_n1209168919.isLeaf = true;
+var N_347866911_n1626591057 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866911_n1626591057.ontology_node_child_count = 0;
+N_347866911_n1626591057.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89968');";
 newNodeData = { label:"CDISC SEND Standardized Disposition Term Terminology", id:"http://ncit:C89968", href:newNodeDetails };
-var N_347220351_552646555 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220351_552646555.ontology_node_child_count = 0;
-N_347220351_552646555.isLeaf = true;
+var N_347220351_1974176906 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220351_1974176906.ontology_node_child_count = 0;
+N_347220351_1974176906.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90002');";
 newNodeData = { label:"CDISC SEND Study Category Terminology", id:"http://ncit:C90002", href:newNodeDetails };
-var N_347866912_540590656 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866912_540590656.ontology_node_child_count = 0;
-N_347866912_540590656.isLeaf = true;
+var N_347866912_1656984153 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866912_1656984153.ontology_node_child_count = 0;
+N_347866912_1656984153.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89967');";
 newNodeData = { label:"CDISC SEND Study Design Terminology", id:"http://ncit:C89967", href:newNodeDetails };
-var N_347220350_n412010201 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220350_n412010201.ontology_node_child_count = 0;
-N_347220350_n412010201.isLeaf = true;
+var N_347220350_n255876738 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220350_n255876738.ontology_node_child_count = 0;
+N_347220350_n255876738.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90003');";
 newNodeData = { label:"CDISC SEND Study Type Terminology", id:"http://ncit:C90003", href:newNodeDetails };
-var N_347866913_1711733003 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866913_1711733003.ontology_node_child_count = 0;
-N_347866913_1711733003.isLeaf = true;
+var N_347866913_617701301 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866913_617701301.ontology_node_child_count = 0;
+N_347866913_617701301.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89981');";
 newNodeData = { label:"CDISC SEND Subject Characteristic Test Code Terminology", id:"http://ncit:C89981", href:newNodeDetails };
-var N_347220406_847099001 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220406_847099001.ontology_node_child_count = 0;
-N_347220406_847099001.isLeaf = true;
+var N_347220406_n965762436 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220406_n965762436.ontology_node_child_count = 0;
+N_347220406_n965762436.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89980');";
 newNodeData = { label:"CDISC SEND Subject Characteristic Test Name Terminology", id:"http://ncit:C89980", href:newNodeDetails };
-var N_347220405_719324968 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220405_719324968.ontology_node_child_count = 0;
-N_347220405_719324968.isLeaf = true;
+var N_347220405_806138765 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220405_806138765.ontology_node_child_count = 0;
+N_347220405_806138765.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90009');";
 newNodeData = { label:"CDISC SEND Trial Summary Parameter Code Terminology", id:"http://ncit:C90009", href:newNodeDetails };
-var N_347866919_1047639427 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866919_1047639427.ontology_node_child_count = 0;
-N_347866919_1047639427.isLeaf = true;
+var N_347866919_n1040850043 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866919_n1040850043.ontology_node_child_count = 0;
+N_347866919_n1040850043.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90007');";
 newNodeData = { label:"CDISC SEND Trial Summary Parameter Terminology", id:"http://ncit:C90007", href:newNodeDetails };
-var N_347866917_n1153655120 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866917_n1153655120.ontology_node_child_count = 0;
-N_347866917_n1153655120.isLeaf = true;
+var N_347866917_n1409448110 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866917_n1409448110.ontology_node_child_count = 0;
+N_347866917_n1409448110.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90004');";
 newNodeData = { label:"CDISC SEND Tumor Findings Histopathology Result Category Terminology", id:"http://ncit:C90004", href:newNodeDetails };
-var N_347866914_n1065137883 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866914_n1065137883.ontology_node_child_count = 0;
-N_347866914_n1065137883.isLeaf = true;
+var N_347866914_1322600501 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866914_1322600501.ontology_node_child_count = 0;
+N_347866914_1322600501.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C88025');";
 newNodeData = { label:"CDISC SEND Tumor Findings Results Terminology", id:"http://ncit:C88025", href:newNodeDetails };
-var N_347181784_2014392395 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347181784_2014392395.ontology_node_child_count = 0;
-N_347181784_2014392395.isLeaf = true;
+var N_347181784_n1909630793 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347181784_n1909630793.ontology_node_child_count = 0;
+N_347181784_n1909630793.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90006');";
 newNodeData = { label:"CDISC SEND Tumor Findings Test Code Terminology", id:"http://ncit:C90006", href:newNodeDetails };
-var N_347866916_n1831586201 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866916_n1831586201.ontology_node_child_count = 0;
-N_347866916_n1831586201.isLeaf = true;
+var N_347866916_1143815942 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866916_1143815942.ontology_node_child_count = 0;
+N_347866916_1143815942.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90005');";
 newNodeData = { label:"CDISC SEND Tumor Findings Test Name Terminology", id:"http://ncit:C90005", href:newNodeDetails };
-var N_347866915_37912980 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347866915_37912980.ontology_node_child_count = 0;
-N_347866915_37912980.isLeaf = true;
+var N_347866915_n1390483684 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347866915_n1390483684.ontology_node_child_count = 0;
+N_347866915_n1390483684.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89982');";
 newNodeData = { label:"CDISC SEND Version Terminology", id:"http://ncit:C89982", href:newNodeDetails };
-var N_347220407_n1037399940 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_1064040559, false);
-N_347220407_n1037399940.ontology_node_child_count = 0;
-N_347220407_n1037399940.isLeaf = true;
+var N_347220407_n772259780 = new YAHOO.widget.TaskNode(newNodeData, N_346233278_n1311102133, false);
+N_347220407_n772259780.ontology_node_child_count = 0;
+N_347220407_n772259780.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C83187');";
 newNodeData = { label:"CDISC Variable Terminology", id:"http://ncit:C83187", href:newNodeDetails };
-var N_347033978_n2024600541 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n967610599, false);
-N_347033978_n2024600541.ontology_node_child_count = 0;
-N_347033978_n2024600541.isLeaf = true;
+var N_347033978_n610465458 = new YAHOO.widget.TaskNode(newNodeData, N_1487619242_n573977265, false);
+N_347033978_n610465458.ontology_node_child_count = 0;
+N_347033978_n610465458.isLeaf = true;
 
 newNodeData = { label:"DICOM Terminology", id:"TVS_DICOM"};
-var N_1488685838_1179750957 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_1488685838_1179750957.isLeaf = false;
-N_1488685838_1179750957.ontology_node_child_count = 1;
+var N_1488685838_1459567215 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_1488685838_1459567215.isLeaf = false;
+N_1488685838_1459567215.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C69186');";
 newNodeData = { label:"DICOM Terminology", id:"http://ncit:C69186", href:newNodeDetails };
-var N_345365681_n1668180167 = new YAHOO.widget.TaskNode(newNodeData, N_1488685838_1179750957, false);
-N_345365681_n1668180167.ontology_node_child_count = 0;
-N_345365681_n1668180167.isLeaf = true;
+var N_345365681_1570120571 = new YAHOO.widget.TaskNode(newNodeData, N_1488685838_1459567215, false);
+N_345365681_1570120571.ontology_node_child_count = 0;
+N_345365681_1570120571.isLeaf = true;
 
 newNodeData = { label:"FDA Terminology", id:"TVS_FDA"};
-var N_n217443307_892492391 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_n217443307_892492391.isLeaf = false;
-N_n217443307_892492391.ontology_node_child_count = 1;
-
-newNodeDetails = "javascript:onClickTreeNode('urn://evs.MultiDomainSPL_Test2');";
-newNodeData = { label:"Test for VSE created Value Set", id:"urn://evs.MultiDomainSPL_Test2", href:newNodeDetails };
-var N_n199622008_653448232 = new YAHOO.widget.TaskNode(newNodeData, N_n217443307_892492391, true);
-N_n199622008_653448232.isLeaf = false;
-N_n199622008_653448232.ontology_node_child_count = 1;
+var N_n217443307_1739222229 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_n217443307_1739222229.isLeaf = false;
+N_n217443307_1739222229.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C63923');";
 newNodeData = { label:"FDA Established Names and Unique Ingredient Identifier Codes Terminology", id:"http://ncit:C63923", href:newNodeDetails };
-var N_345194434_n417228048 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_653448232, false);
-N_345194434_n417228048.ontology_node_child_count = 0;
-N_345194434_n417228048.isLeaf = true;
+var N_345194434_n1480147386 = new YAHOO.widget.TaskNode(newNodeData, N_n217443307_1739222229, false);
+N_345194434_n1480147386.ontology_node_child_count = 0;
+N_345194434_n1480147386.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54447');";
 newNodeData = { label:"FDA Individual Case Safety Report Terminology", id:"http://ncit:C54447", href:newNodeDetails };
-var N_344295965_n544561689 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_653448232, true);
-N_344295965_n544561689.isLeaf = false;
-N_344295965_n544561689.ontology_node_child_count = 1;
+var N_344295965_1649266612 = new YAHOO.widget.TaskNode(newNodeData, N_n217443307_1739222229, true);
+N_344295965_1649266612.isLeaf = false;
+N_344295965_1649266612.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54583');";
 newNodeData = { label:"Adverse Event Outcome ICSR Terminology", id:"http://ncit:C54583", href:newNodeDetails };
-var N_344297046_n1766034025 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297046_n1766034025.ontology_node_child_count = 0;
-N_344297046_n1766034025.isLeaf = true;
+var N_344297046_n91980967 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297046_n91980967.ontology_node_child_count = 0;
+N_344297046_n91980967.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54595');";
 newNodeData = { label:"Device Usage ICSR Terminology", id:"http://ncit:C54595", href:newNodeDetails };
-var N_344297079_1435645556 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297079_1435645556.ontology_node_child_count = 0;
-N_344297079_1435645556.isLeaf = true;
+var N_344297079_34629030 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297079_34629030.ontology_node_child_count = 0;
+N_344297079_34629030.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C94849');";
 newNodeData = { label:"Dose Denominator Qualifier ICSR Terminology", id:"http://ncit:C94849", href:newNodeDetails };
-var N_347993895_n246509217 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_347993895_n246509217.ontology_node_child_count = 0;
-N_347993895_n246509217.isLeaf = true;
+var N_347993895_1884680429 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_347993895_1884680429.ontology_node_child_count = 0;
+N_347993895_1884680429.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54590');";
 newNodeData = { label:"Location Of Event Occurrence ICSR Terminology", id:"http://ncit:C54590", href:newNodeDetails };
-var N_344297074_295215347 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297074_295215347.ontology_node_child_count = 0;
-N_344297074_295215347.isLeaf = true;
+var N_344297074_n1361759082 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297074_n1361759082.ontology_node_child_count = 0;
+N_344297074_n1361759082.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C88088');";
 newNodeData = { label:"Observation ICSR Terminology", id:"http://ncit:C88088", href:newNodeDetails };
-var N_347181973_n1870413712 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_347181973_n1870413712.ontology_node_child_count = 0;
-N_347181973_n1870413712.isLeaf = true;
+var N_347181973_259728666 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_347181973_259728666.ontology_node_child_count = 0;
+N_347181973_259728666.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54585');";
 newNodeData = { label:"Occupation ICSR Terminology", id:"http://ncit:C54585", href:newNodeDetails };
-var N_344297048_n698755671 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297048_n698755671.ontology_node_child_count = 0;
-N_344297048_n698755671.isLeaf = true;
+var N_344297048_1556038556 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297048_1556038556.ontology_node_child_count = 0;
+N_344297048_1556038556.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54584');";
 newNodeData = { label:"Operator of Medical Device ICSR Terminology", id:"http://ncit:C54584", href:newNodeDetails };
-var N_344297047_n447975212 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297047_n447975212.ontology_node_child_count = 0;
-N_344297047_n447975212.isLeaf = true;
+var N_344297047_n465222921 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297047_n465222921.ontology_node_child_count = 0;
+N_344297047_n465222921.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54593');";
 newNodeData = { label:"Reason For Non-Evaluation ICSR Terminology", id:"http://ncit:C54593", href:newNodeDetails };
-var N_344297077_1902511428 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297077_1902511428.ontology_node_child_count = 0;
-N_344297077_1902511428.isLeaf = true;
+var N_344297077_1759208230 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297077_1759208230.ontology_node_child_count = 0;
+N_344297077_1759208230.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54587');";
 newNodeData = { label:"Report Source ICSR Terminology", id:"http://ncit:C54587", href:newNodeDetails };
-var N_344297050_n1117565627 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297050_n1117565627.ontology_node_child_count = 0;
-N_344297050_n1117565627.isLeaf = true;
+var N_344297050_n1584462134 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297050_n1584462134.ontology_node_child_count = 0;
+N_344297050_n1584462134.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54580');";
 newNodeData = { label:"Type of Event ICSR Terminology", id:"http://ncit:C54580", href:newNodeDetails };
-var N_344297043_n1124506862 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297043_n1124506862.ontology_node_child_count = 0;
-N_344297043_n1124506862.isLeaf = true;
+var N_344297043_n208615665 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297043_n208615665.ontology_node_child_count = 0;
+N_344297043_n208615665.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54592');";
 newNodeData = { label:"Type Of Follow-Up ICSR Terminology", id:"http://ncit:C54592", href:newNodeDetails };
-var N_344297076_1286629540 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297076_1286629540.ontology_node_child_count = 0;
-N_344297076_1286629540.isLeaf = true;
+var N_344297076_n140045353 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297076_n140045353.ontology_node_child_count = 0;
+N_344297076_n140045353.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54598');";
 newNodeData = { label:"Type Of Manufacturer ICSR Terminology", id:"http://ncit:C54598", href:newNodeDetails };
-var N_344297082_n1066599918 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297082_n1066599918.ontology_node_child_count = 0;
-N_344297082_n1066599918.isLeaf = true;
+var N_344297082_n1003411828 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297082_n1003411828.ontology_node_child_count = 0;
+N_344297082_n1003411828.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54594');";
 newNodeData = { label:"Type Of Remedial Action ICSR Terminology", id:"http://ncit:C54594", href:newNodeDetails };
-var N_344297078_1389651398 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297078_1389651398.ontology_node_child_count = 0;
-N_344297078_1389651398.isLeaf = true;
+var N_344297078_838024597 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297078_838024597.ontology_node_child_count = 0;
+N_344297078_838024597.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54591');";
 newNodeData = { label:"Type of Reportable Event ICSR Terminology", id:"http://ncit:C54591", href:newNodeDetails };
-var N_344297075_n41109752 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297075_n41109752.ontology_node_child_count = 0;
-N_344297075_n41109752.isLeaf = true;
+var N_344297075_1796291619 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297075_1796291619.ontology_node_child_count = 0;
+N_344297075_1796291619.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54596');";
 newNodeData = { label:"Type Of Reporter ICSR Terminology", id:"http://ncit:C54596", href:newNodeDetails };
-var N_344297080_114693816 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297080_114693816.ontology_node_child_count = 0;
-N_344297080_114693816.isLeaf = true;
+var N_344297080_1506907983 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297080_1506907983.ontology_node_child_count = 0;
+N_344297080_1506907983.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54588');";
 newNodeData = { label:"Type Of Report ICSR Terminology", id:"http://ncit:C54588", href:newNodeDetails };
-var N_344297051_n1335739919 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n544561689, false);
-N_344297051_n1335739919.ontology_node_child_count = 0;
-N_344297051_n1335739919.isLeaf = true;
+var N_344297051_296792068 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1649266612, false);
+N_344297051_296792068.ontology_node_child_count = 0;
+N_344297051_296792068.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C62596');";
 newNodeData = { label:"FDA Medical Device Terminology", id:"http://ncit:C62596", href:newNodeDetails };
-var N_345161019_209541558 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_653448232, true);
-N_345161019_209541558.isLeaf = false;
-N_345161019_209541558.ontology_node_child_count = 1;
+var N_345161019_1987061883 = new YAHOO.widget.TaskNode(newNodeData, N_n217443307_1739222229, true);
+N_345161019_1987061883.isLeaf = false;
+N_345161019_1987061883.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54577');";
 newNodeData = { label:"FDA Medical Device Component Or Accessory Terminology", id:"http://ncit:C54577", href:newNodeDetails };
-var N_344297019_n1408267370 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_209541558, false);
-N_344297019_n1408267370.ontology_node_child_count = 0;
-N_344297019_n1408267370.isLeaf = true;
+var N_344297019_79479154 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_1987061883, false);
+N_344297019_79479154.ontology_node_child_count = 0;
+N_344297019_79479154.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C91802');";
 newNodeData = { label:"FDA Medical Device Evaluation Conclusions Terminology", id:"http://ncit:C91802", href:newNodeDetails };
-var N_347904391_n1912252580 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_209541558, false);
-N_347904391_n1912252580.ontology_node_child_count = 0;
-N_347904391_n1912252580.isLeaf = true;
+var N_347904391_1478312266 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_1987061883, false);
+N_347904391_1478312266.ontology_node_child_count = 0;
+N_347904391_1478312266.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C91800');";
 newNodeData = { label:"FDA Medical Device Evaluation Methods Terminology", id:"http://ncit:C91800", href:newNodeDetails };
-var N_347904389_n1133049842 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_209541558, false);
-N_347904389_n1133049842.ontology_node_child_count = 0;
-N_347904389_n1133049842.isLeaf = true;
+var N_347904389_n1633552343 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_1987061883, false);
+N_347904389_n1633552343.ontology_node_child_count = 0;
+N_347904389_n1633552343.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C91801');";
 newNodeData = { label:"FDA Medical Device Evaluation Results Terminology", id:"http://ncit:C91801", href:newNodeDetails };
-var N_347904390_38929632 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_209541558, false);
-N_347904390_38929632.ontology_node_child_count = 0;
-N_347904390_38929632.isLeaf = true;
+var N_347904390_1228139075 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_1987061883, false);
+N_347904390_1228139075.ontology_node_child_count = 0;
+N_347904390_1228139075.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54451');";
 newNodeData = { label:"FDA Medical Device Problem Codes Terminology", id:"http://ncit:C54451", href:newNodeDetails };
-var N_344295990_1971305824 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_209541558, false);
-N_344295990_1971305824.ontology_node_child_count = 0;
-N_344295990_1971305824.isLeaf = true;
+var N_344295990_1954010343 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_1987061883, false);
+N_344295990_1954010343.ontology_node_child_count = 0;
+N_344295990_1954010343.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54450');";
 newNodeData = { label:"FDA Patient Problem Codes Terminology", id:"http://ncit:C54450", href:newNodeDetails };
-var N_344295989_n612057514 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_209541558, false);
-N_344295989_n612057514.ontology_node_child_count = 0;
-N_344295989_n612057514.isLeaf = true;
+var N_344295989_n1426220311 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_1987061883, false);
+N_344295989_n1426220311.ontology_node_child_count = 0;
+N_344295989_n1426220311.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54452');";
 newNodeData = { label:"FDA SPL Terminology", id:"http://ncit:C54452", href:newNodeDetails };
-var N_344295991_n730942025 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_653448232, true);
-N_344295991_n730942025.isLeaf = false;
-N_344295991_n730942025.ontology_node_child_count = 1;
+var N_344295991_506294390 = new YAHOO.widget.TaskNode(newNodeData, N_n217443307_1739222229, true);
+N_344295991_506294390.isLeaf = false;
+N_344295991_506294390.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C73600');";
 newNodeData = { label:"FDA SPL Business Operation Terminology", id:"http://ncit:C73600", href:newNodeDetails };
-var N_346115007_1684160587 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_346115007_1684160587.ontology_node_child_count = 0;
-N_346115007_1684160587.isLeaf = true;
+var N_346115007_n1210804560 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_346115007_n1210804560.ontology_node_child_count = 0;
+N_346115007_n1210804560.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54453');";
 newNodeData = { label:"FDA SPL Color Terminology", id:"http://ncit:C54453", href:newNodeDetails };
-var N_344295992_n2073545024 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344295992_n2073545024.ontology_node_child_count = 0;
-N_344295992_n2073545024.isLeaf = true;
+var N_344295992_n49722644 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344295992_n49722644.ontology_node_child_count = 0;
+N_344295992_n49722644.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54459');";
 newNodeData = { label:"FDA SPL DEA Schedule Terminology", id:"http://ncit:C54459", href:newNodeDetails };
-var N_344295998_n2093871814 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344295998_n2093871814.ontology_node_child_count = 0;
-N_344295998_n2093871814.isLeaf = true;
+var N_344295998_925488347 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344295998_925488347.ontology_node_child_count = 0;
+N_344295998_925488347.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C87299');";
 newNodeData = { label:"FDA SPL Document Type Terminology", id:"http://ncit:C87299", href:newNodeDetails };
-var N_347154136_71859232 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_347154136_71859232.ontology_node_child_count = 0;
-N_347154136_71859232.isLeaf = true;
+var N_347154136_411683080 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_347154136_411683080.ontology_node_child_count = 0;
+N_347154136_411683080.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54455');";
 newNodeData = { label:"FDA SPL Drug Route of Administration Terminology", id:"http://ncit:C54455", href:newNodeDetails };
-var N_344295994_813806252 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344295994_813806252.ontology_node_child_count = 0;
-N_344295994_813806252.isLeaf = true;
+var N_344295994_n1037336846 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344295994_n1037336846.ontology_node_child_count = 0;
+N_344295994_n1037336846.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C73339');";
 newNodeData = { label:"FDA SPL Flavor Terminology", id:"http://ncit:C73339", href:newNodeDetails };
-var N_346112226_1636624689 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_346112226_1636624689.ontology_node_child_count = 0;
-N_346112226_1636624689.isLeaf = true;
+var N_346112226_n853929017 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_346112226_n853929017.ontology_node_child_count = 0;
+N_346112226_n853929017.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54599');";
 newNodeData = { label:"FDA SPL Limitation of Use Terminology", id:"http://ncit:C54599", href:newNodeDetails };
-var N_344297083_2130393852 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344297083_2130393852.ontology_node_child_count = 0;
-N_344297083_2130393852.isLeaf = true;
+var N_344297083_571190001 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344297083_571190001.ontology_node_child_count = 0;
+N_344297083_571190001.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C73582');";
 newNodeData = { label:"FDA SPL Marketing Category Terminology", id:"http://ncit:C73582", href:newNodeDetails };
-var N_346114296_671526499 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_346114296_671526499.ontology_node_child_count = 0;
-N_346114296_671526499.isLeaf = true;
+var N_346114296_1662635688 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_346114296_1662635688.ontology_node_child_count = 0;
+N_346114296_1662635688.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54619');";
 newNodeData = { label:"FDA SPL Medical Product Intent of Use Terminology", id:"http://ncit:C54619", href:newNodeDetails };
-var N_344297796_1219998747 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344297796_1219998747.ontology_node_child_count = 0;
-N_344297796_1219998747.isLeaf = true;
+var N_344297796_2016694623 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344297796_2016694623.ontology_node_child_count = 0;
+N_344297796_2016694623.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54457');";
 newNodeData = { label:"FDA SPL Package Type Terminology", id:"http://ncit:C54457", href:newNodeDetails };
-var N_344295996_168982768 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344295996_168982768.ontology_node_child_count = 0;
-N_344295996_168982768.isLeaf = true;
+var N_344295996_2141287233 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344295996_2141287233.ontology_node_child_count = 0;
+N_344295996_2141287233.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54456');";
 newNodeData = { label:"FDA SPL Pharmaceutical Dosage Form Terminology", id:"http://ncit:C54456", href:newNodeDetails };
-var N_344295995_n1255677753 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344295995_n1255677753.ontology_node_child_count = 0;
-N_344295995_n1255677753.isLeaf = true;
+var N_344295995_1023438064 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344295995_1023438064.ontology_node_child_count = 0;
+N_344295995_1023438064.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54600');";
 newNodeData = { label:"FDA SPL Pharmacokinetic Effect Consequences Terminology", id:"http://ncit:C54600", href:newNodeDetails };
-var N_344297756_1009289160 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344297756_1009289160.ontology_node_child_count = 0;
-N_344297756_1009289160.isLeaf = true;
+var N_344297756_880518409 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344297756_880518409.ontology_node_child_count = 0;
+N_344297756_880518409.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54458');";
 newNodeData = { label:"FDA SPL Potency Terminology", id:"http://ncit:C54458", href:newNodeDetails };
-var N_344295997_1159543050 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344295997_1159543050.ontology_node_child_count = 0;
-N_344295997_1159543050.isLeaf = true;
+var N_344295997_n510525342 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344295997_n510525342.ontology_node_child_count = 0;
+N_344295997_n510525342.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54454');";
 newNodeData = { label:"FDA SPL Shape Terminology", id:"http://ncit:C54454", href:newNodeDetails };
-var N_344295993_n587039008 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344295993_n587039008.ontology_node_child_count = 0;
-N_344295993_n587039008.isLeaf = true;
+var N_344295993_n1746235768 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344295993_n1746235768.ontology_node_child_count = 0;
+N_344295993_n1746235768.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54618');";
 newNodeData = { label:"FDA SPL Type of Drug Interaction Terminology", id:"http://ncit:C54618", href:newNodeDetails };
-var N_344297795_1661739020 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_344297795_1661739020.ontology_node_child_count = 0;
-N_344297795_1661739020.isLeaf = true;
+var N_344297795_1465991337 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_344297795_1465991337.ontology_node_child_count = 0;
+N_344297795_1465991337.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C92951');";
 newNodeData = { label:"FDA SPL Unit of Measure Terminology", id:"http://ncit:C92951", href:newNodeDetails };
-var N_347935297_n117695930 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_347935297_n117695930.ontology_node_child_count = 0;
-N_347935297_n117695930.isLeaf = true;
+var N_347935297_n1076174515 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_347935297_n1076174515.ontology_node_child_count = 0;
+N_347935297_n1076174515.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C87300');";
 newNodeData = { label:"FDA SPL Unit of Presentation Terminology", id:"http://ncit:C87300", href:newNodeDetails };
-var N_347154809_n1950746510 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_347154809_n1950746510.ontology_node_child_count = 0;
-N_347154809_n1950746510.isLeaf = true;
+var N_347154809_n855202637 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_347154809_n855202637.ontology_node_child_count = 0;
+N_347154809_n855202637.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:MoA');";
 newNodeData = { label:"NDFRT Mechanism of Action ", id:"http://ndfrt:MoA", href:newNodeDetails };
-var N_542640421_n994605907 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_542640421_n994605907.ontology_node_child_count = 0;
-N_542640421_n994605907.isLeaf = true;
+var N_542640421_751465558 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_542640421_751465558.ontology_node_child_count = 0;
+N_542640421_751465558.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:PE');";
 newNodeData = { label:"NDFRT Physiologic Effects", id:"http://ndfrt:PE", href:newNodeDetails };
-var N_433146575_1840993757 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_433146575_1840993757.ontology_node_child_count = 0;
-N_433146575_1840993757.isLeaf = true;
+var N_433146575_1761931591 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_433146575_1761931591.ontology_node_child_count = 0;
+N_433146575_1761931591.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:SC');";
 newNodeData = { label:"NDFRT Structural Class", id:"http://ndfrt:SC", href:newNodeDetails };
-var N_433146666_n448650935 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n730942025, false);
-N_433146666_n448650935.ontology_node_child_count = 0;
-N_433146666_n448650935.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:MoA');";
-newNodeData = { label:"NDFRT Mechanism of Action ", id:"http://ndfrt:MoA", href:newNodeDetails };
-var N_542640421_n1269743282 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_653448232, false);
-N_542640421_n1269743282.ontology_node_child_count = 0;
-N_542640421_n1269743282.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:PE');";
-newNodeData = { label:"NDFRT Physiologic Effects", id:"http://ndfrt:PE", href:newNodeDetails };
-var N_433146575_466231092 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_653448232, false);
-N_433146575_466231092.ontology_node_child_count = 0;
-N_433146575_466231092.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:SC');";
-newNodeData = { label:"NDFRT Structural Class", id:"http://ndfrt:SC", href:newNodeDetails };
-var N_433146666_n320721030 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_653448232, false);
-N_433146666_n320721030.ontology_node_child_count = 0;
-N_433146666_n320721030.isLeaf = true;
+var N_433146666_n404010803 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_433146666_n404010803.ontology_node_child_count = 0;
+N_433146666_n404010803.isLeaf = true;
 
 newNodeData = { label:"Individual Case Safety Report Terminology", id:"TVS_ICSR"};
-var N_1849281127_n1275741002 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_1849281127_n1275741002.isLeaf = false;
-N_1849281127_n1275741002.ontology_node_child_count = 1;
+var N_1849281127_558550728 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_1849281127_558550728.isLeaf = false;
+N_1849281127_558550728.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54447');";
 newNodeData = { label:"FDA Individual Case Safety Report Terminology", id:"http://ncit:C54447", href:newNodeDetails };
-var N_344295965_n937282740 = new YAHOO.widget.TaskNode(newNodeData, N_1849281127_n1275741002, true);
-N_344295965_n937282740.isLeaf = false;
-N_344295965_n937282740.ontology_node_child_count = 1;
+var N_344295965_1986790225 = new YAHOO.widget.TaskNode(newNodeData, N_1849281127_558550728, true);
+N_344295965_1986790225.isLeaf = false;
+N_344295965_1986790225.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54583');";
 newNodeData = { label:"Adverse Event Outcome ICSR Terminology", id:"http://ncit:C54583", href:newNodeDetails };
-var N_344297046_n490026206 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297046_n490026206.ontology_node_child_count = 0;
-N_344297046_n490026206.isLeaf = true;
+var N_344297046_1061085159 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297046_1061085159.ontology_node_child_count = 0;
+N_344297046_1061085159.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54595');";
 newNodeData = { label:"Device Usage ICSR Terminology", id:"http://ncit:C54595", href:newNodeDetails };
-var N_344297079_n1504381908 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297079_n1504381908.ontology_node_child_count = 0;
-N_344297079_n1504381908.isLeaf = true;
+var N_344297079_336214041 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297079_336214041.ontology_node_child_count = 0;
+N_344297079_336214041.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C94849');";
 newNodeData = { label:"Dose Denominator Qualifier ICSR Terminology", id:"http://ncit:C94849", href:newNodeDetails };
-var N_347993895_n1650042837 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_347993895_n1650042837.ontology_node_child_count = 0;
-N_347993895_n1650042837.isLeaf = true;
+var N_347993895_243530634 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_347993895_243530634.ontology_node_child_count = 0;
+N_347993895_243530634.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54590');";
 newNodeData = { label:"Location Of Event Occurrence ICSR Terminology", id:"http://ncit:C54590", href:newNodeDetails };
-var N_344297074_1034309314 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297074_1034309314.ontology_node_child_count = 0;
-N_344297074_1034309314.isLeaf = true;
+var N_344297074_n125218123 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297074_n125218123.ontology_node_child_count = 0;
+N_344297074_n125218123.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C88088');";
 newNodeData = { label:"Observation ICSR Terminology", id:"http://ncit:C88088", href:newNodeDetails };
-var N_347181973_1923772378 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_347181973_1923772378.ontology_node_child_count = 0;
-N_347181973_1923772378.isLeaf = true;
+var N_347181973_n1165760147 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_347181973_n1165760147.ontology_node_child_count = 0;
+N_347181973_n1165760147.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54585');";
 newNodeData = { label:"Occupation ICSR Terminology", id:"http://ncit:C54585", href:newNodeDetails };
-var N_344297048_1280841809 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297048_1280841809.ontology_node_child_count = 0;
-N_344297048_1280841809.isLeaf = true;
+var N_344297048_1298200125 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297048_1298200125.ontology_node_child_count = 0;
+N_344297048_1298200125.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54584');";
 newNodeData = { label:"Operator of Medical Device ICSR Terminology", id:"http://ncit:C54584", href:newNodeDetails };
-var N_344297047_133317259 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297047_133317259.ontology_node_child_count = 0;
-N_344297047_133317259.isLeaf = true;
+var N_344297047_123805772 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297047_123805772.ontology_node_child_count = 0;
+N_344297047_123805772.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54593');";
 newNodeData = { label:"Reason For Non-Evaluation ICSR Terminology", id:"http://ncit:C54593", href:newNodeDetails };
-var N_344297077_n1852534818 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297077_n1852534818.ontology_node_child_count = 0;
-N_344297077_n1852534818.isLeaf = true;
+var N_344297077_n700415697 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297077_n700415697.ontology_node_child_count = 0;
+N_344297077_n700415697.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54587');";
 newNodeData = { label:"Report Source ICSR Terminology", id:"http://ncit:C54587", href:newNodeDetails };
-var N_344297050_n1720865636 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297050_n1720865636.ontology_node_child_count = 0;
-N_344297050_n1720865636.isLeaf = true;
+var N_344297050_605509013 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297050_605509013.ontology_node_child_count = 0;
+N_344297050_605509013.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54580');";
 newNodeData = { label:"Type of Event ICSR Terminology", id:"http://ncit:C54580", href:newNodeDetails };
-var N_344297043_578186680 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297043_578186680.ontology_node_child_count = 0;
-N_344297043_578186680.isLeaf = true;
+var N_344297043_n691898298 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297043_n691898298.ontology_node_child_count = 0;
+N_344297043_n691898298.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54592');";
 newNodeData = { label:"Type Of Follow-Up ICSR Terminology", id:"http://ncit:C54592", href:newNodeDetails };
-var N_344297076_n1986741831 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297076_n1986741831.ontology_node_child_count = 0;
-N_344297076_n1986741831.isLeaf = true;
+var N_344297076_1574928888 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297076_1574928888.ontology_node_child_count = 0;
+N_344297076_1574928888.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54598');";
 newNodeData = { label:"Type Of Manufacturer ICSR Terminology", id:"http://ncit:C54598", href:newNodeDetails };
-var N_344297082_1881049377 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297082_1881049377.ontology_node_child_count = 0;
-N_344297082_1881049377.isLeaf = true;
+var N_344297082_n416543220 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297082_n416543220.ontology_node_child_count = 0;
+N_344297082_n416543220.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54594');";
 newNodeData = { label:"Type Of Remedial Action ICSR Terminology", id:"http://ncit:C54594", href:newNodeDetails };
-var N_344297078_166024163 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297078_166024163.ontology_node_child_count = 0;
-N_344297078_166024163.isLeaf = true;
+var N_344297078_1856971592 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297078_1856971592.ontology_node_child_count = 0;
+N_344297078_1856971592.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54591');";
 newNodeData = { label:"Type of Reportable Event ICSR Terminology", id:"http://ncit:C54591", href:newNodeDetails };
-var N_344297075_n971406034 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297075_n971406034.ontology_node_child_count = 0;
-N_344297075_n971406034.isLeaf = true;
+var N_344297075_n2069669628 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297075_n2069669628.ontology_node_child_count = 0;
+N_344297075_n2069669628.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54596');";
 newNodeData = { label:"Type Of Reporter ICSR Terminology", id:"http://ncit:C54596", href:newNodeDetails };
-var N_344297080_n2023592286 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297080_n2023592286.ontology_node_child_count = 0;
-N_344297080_n2023592286.isLeaf = true;
+var N_344297080_n517387381 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297080_n517387381.ontology_node_child_count = 0;
+N_344297080_n517387381.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54588');";
 newNodeData = { label:"Type Of Report ICSR Terminology", id:"http://ncit:C54588", href:newNodeDetails };
-var N_344297051_n1765789426 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n937282740, false);
-N_344297051_n1765789426.ontology_node_child_count = 0;
-N_344297051_n1765789426.isLeaf = true;
+var N_344297051_893722770 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_1986790225, false);
+N_344297051_893722770.ontology_node_child_count = 0;
+N_344297051_893722770.isLeaf = true;
 
 newNodeData = { label:"NCI Terminology", id:"TVS_NCI"};
-var N_n217435642_n303515379 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_n217435642_n303515379.isLeaf = false;
-N_n217435642_n303515379.ontology_node_child_count = 1;
+var N_n217435642_n1541388752 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_n217435642_n1541388752.isLeaf = false;
+N_n217435642_n1541388752.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:Neoplasm');";
 newNodeData = { label:"NCIt Neoplasm Tree", id:"http://ncit:Neoplasm", href:newNodeDetails };
-var N_n751234993_n1639049896 = new YAHOO.widget.TaskNode(newNodeData, N_n217435642_n303515379, false);
-N_n751234993_n1639049896.ontology_node_child_count = 0;
-N_n751234993_n1639049896.isLeaf = true;
+var N_n751234993_1261635856 = new YAHOO.widget.TaskNode(newNodeData, N_n217435642_n1541388752, false);
+N_n751234993_1261635856.ontology_node_child_count = 0;
+N_n751234993_1261635856.isLeaf = true;
 
 newNodeData = { label:"NCPDP Terminology", id:"TVS_NCPDP"};
-var N_1497754457_n491010687 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_1497754457_n491010687.isLeaf = false;
-N_1497754457_n491010687.ontology_node_child_count = 1;
+var N_1497754457_n1155360830 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_1497754457_n1155360830.isLeaf = false;
+N_1497754457_n1155360830.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89415');";
 newNodeData = { label:"National Council for Prescription Drug Programs Terminology", id:"http://ncit:C89415", href:newNodeDetails };
-var N_347215388_n145598690 = new YAHOO.widget.TaskNode(newNodeData, N_1497754457_n491010687, true);
-N_347215388_n145598690.isLeaf = false;
-N_347215388_n145598690.ontology_node_child_count = 1;
+var N_347215388_311976366 = new YAHOO.widget.TaskNode(newNodeData, N_1497754457_n1155360830, true);
+N_347215388_311976366.isLeaf = false;
+N_347215388_311976366.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89507');";
 newNodeData = { label:"NCPDP DEA Schedule Terminology", id:"http://ncit:C89507", href:newNodeDetails };
-var N_347216320_n751520703 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_n145598690, false);
-N_347216320_n751520703.ontology_node_child_count = 0;
-N_347216320_n751520703.isLeaf = true;
+var N_347216320_2048436622 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_311976366, false);
+N_347216320_2048436622.ontology_node_child_count = 0;
+N_347216320_2048436622.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C91101');";
 newNodeData = { label:"NCPDP Measurement Unit Code Terminology", id:"http://ncit:C91101", href:newNodeDetails };
-var N_347897663_1650948803 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_n145598690, false);
-N_347897663_1650948803.ontology_node_child_count = 0;
-N_347897663_1650948803.isLeaf = true;
+var N_347897663_596212496 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_311976366, false);
+N_347897663_596212496.ontology_node_child_count = 0;
+N_347897663_596212496.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89510');";
 newNodeData = { label:"NCPDP Quantity Unit of Measure Terminology", id:"http://ncit:C89510", href:newNodeDetails };
-var N_347216344_n1666427298 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_n145598690, false);
-N_347216344_n1666427298.ontology_node_child_count = 0;
-N_347216344_n1666427298.isLeaf = true;
+var N_347216344_n732896747 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_311976366, false);
+N_347216344_n732896747.ontology_node_child_count = 0;
+N_347216344_n732896747.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89508');";
 newNodeData = { label:"NCPDP Strength Form Terminology", id:"http://ncit:C89508", href:newNodeDetails };
-var N_347216321_1805317110 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_n145598690, false);
-N_347216321_1805317110.ontology_node_child_count = 0;
-N_347216321_1805317110.isLeaf = true;
+var N_347216321_1262242766 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_311976366, false);
+N_347216321_1262242766.ontology_node_child_count = 0;
+N_347216321_1262242766.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89509');";
 newNodeData = { label:"NCPDP Strength Unit of Measure Terminology", id:"http://ncit:C89509", href:newNodeDetails };
-var N_347216322_n807632756 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_n145598690, false);
-N_347216322_n807632756.ontology_node_child_count = 0;
-N_347216322_n807632756.isLeaf = true;
+var N_347216322_1106644042 = new YAHOO.widget.TaskNode(newNodeData, N_347215388_311976366, false);
+N_347216322_1106644042.ontology_node_child_count = 0;
+N_347216322_1106644042.isLeaf = true;
 
 newNodeData = { label:"NDFRT Terminology", id:"TVS_NDFRT"};
-var N_1497775076_114468153 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_1497775076_114468153.isLeaf = false;
-N_1497775076_114468153.ontology_node_child_count = 1;
-
-newNodeDetails = "javascript:onClickTreeNode('urn://evs.MultiDomainSPL_Test2');";
-newNodeData = { label:"Test for VSE created Value Set", id:"urn://evs.MultiDomainSPL_Test2", href:newNodeDetails };
-var N_n199622008_n832343593 = new YAHOO.widget.TaskNode(newNodeData, N_1497775076_114468153, true);
-N_n199622008_n832343593.isLeaf = false;
-N_n199622008_n832343593.ontology_node_child_count = 1;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C63923');";
-newNodeData = { label:"FDA Established Names and Unique Ingredient Identifier Codes Terminology", id:"http://ncit:C63923", href:newNodeDetails };
-var N_345194434_613796059 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_n832343593, false);
-N_345194434_613796059.ontology_node_child_count = 0;
-N_345194434_613796059.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54447');";
-newNodeData = { label:"FDA Individual Case Safety Report Terminology", id:"http://ncit:C54447", href:newNodeDetails };
-var N_344295965_n1167599539 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_n832343593, true);
-N_344295965_n1167599539.isLeaf = false;
-N_344295965_n1167599539.ontology_node_child_count = 1;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54583');";
-newNodeData = { label:"Adverse Event Outcome ICSR Terminology", id:"http://ncit:C54583", href:newNodeDetails };
-var N_344297046_n1818622378 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297046_n1818622378.ontology_node_child_count = 0;
-N_344297046_n1818622378.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54595');";
-newNodeData = { label:"Device Usage ICSR Terminology", id:"http://ncit:C54595", href:newNodeDetails };
-var N_344297079_n802574814 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297079_n802574814.ontology_node_child_count = 0;
-N_344297079_n802574814.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C94849');";
-newNodeData = { label:"Dose Denominator Qualifier ICSR Terminology", id:"http://ncit:C94849", href:newNodeDetails };
-var N_347993895_1432552037 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_347993895_1432552037.ontology_node_child_count = 0;
-N_347993895_1432552037.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54590');";
-newNodeData = { label:"Location Of Event Occurrence ICSR Terminology", id:"http://ncit:C54590", href:newNodeDetails };
-var N_344297074_1837888467 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297074_1837888467.ontology_node_child_count = 0;
-N_344297074_1837888467.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C88088');";
-newNodeData = { label:"Observation ICSR Terminology", id:"http://ncit:C88088", href:newNodeDetails };
-var N_347181973_639718746 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_347181973_639718746.ontology_node_child_count = 0;
-N_347181973_639718746.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54585');";
-newNodeData = { label:"Occupation ICSR Terminology", id:"http://ncit:C54585", href:newNodeDetails };
-var N_344297048_129220689 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297048_129220689.ontology_node_child_count = 0;
-N_344297048_129220689.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54584');";
-newNodeData = { label:"Operator of Medical Device ICSR Terminology", id:"http://ncit:C54584", href:newNodeDetails };
-var N_344297047_n1099902350 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297047_n1099902350.ontology_node_child_count = 0;
-N_344297047_n1099902350.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54593');";
-newNodeData = { label:"Reason For Non-Evaluation ICSR Terminology", id:"http://ncit:C54593", href:newNodeDetails };
-var N_344297077_n299676092 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297077_n299676092.ontology_node_child_count = 0;
-N_344297077_n299676092.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54587');";
-newNodeData = { label:"Report Source ICSR Terminology", id:"http://ncit:C54587", href:newNodeDetails };
-var N_344297050_n256295873 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297050_n256295873.ontology_node_child_count = 0;
-N_344297050_n256295873.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54580');";
-newNodeData = { label:"Type of Event ICSR Terminology", id:"http://ncit:C54580", href:newNodeDetails };
-var N_344297043_1307780568 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297043_1307780568.ontology_node_child_count = 0;
-N_344297043_1307780568.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54592');";
-newNodeData = { label:"Type Of Follow-Up ICSR Terminology", id:"http://ncit:C54592", href:newNodeDetails };
-var N_344297076_1028666717 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297076_1028666717.ontology_node_child_count = 0;
-N_344297076_1028666717.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54598');";
-newNodeData = { label:"Type Of Manufacturer ICSR Terminology", id:"http://ncit:C54598", href:newNodeDetails };
-var N_344297082_n1243458368 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297082_n1243458368.ontology_node_child_count = 0;
-N_344297082_n1243458368.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54594');";
-newNodeData = { label:"Type Of Remedial Action ICSR Terminology", id:"http://ncit:C54594", href:newNodeDetails };
-var N_344297078_202916366 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297078_202916366.ontology_node_child_count = 0;
-N_344297078_202916366.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54591');";
-newNodeData = { label:"Type of Reportable Event ICSR Terminology", id:"http://ncit:C54591", href:newNodeDetails };
-var N_344297075_n1618386356 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297075_n1618386356.ontology_node_child_count = 0;
-N_344297075_n1618386356.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54596');";
-newNodeData = { label:"Type Of Reporter ICSR Terminology", id:"http://ncit:C54596", href:newNodeDetails };
-var N_344297080_1609848432 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297080_1609848432.ontology_node_child_count = 0;
-N_344297080_1609848432.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54588');";
-newNodeData = { label:"Type Of Report ICSR Terminology", id:"http://ncit:C54588", href:newNodeDetails };
-var N_344297051_n1937415227 = new YAHOO.widget.TaskNode(newNodeData, N_344295965_n1167599539, false);
-N_344297051_n1937415227.ontology_node_child_count = 0;
-N_344297051_n1937415227.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C62596');";
-newNodeData = { label:"FDA Medical Device Terminology", id:"http://ncit:C62596", href:newNodeDetails };
-var N_345161019_n1849194899 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_n832343593, true);
-N_345161019_n1849194899.isLeaf = false;
-N_345161019_n1849194899.ontology_node_child_count = 1;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54577');";
-newNodeData = { label:"FDA Medical Device Component Or Accessory Terminology", id:"http://ncit:C54577", href:newNodeDetails };
-var N_344297019_1376441709 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_n1849194899, false);
-N_344297019_1376441709.ontology_node_child_count = 0;
-N_344297019_1376441709.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C91802');";
-newNodeData = { label:"FDA Medical Device Evaluation Conclusions Terminology", id:"http://ncit:C91802", href:newNodeDetails };
-var N_347904391_n501266538 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_n1849194899, false);
-N_347904391_n501266538.ontology_node_child_count = 0;
-N_347904391_n501266538.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C91800');";
-newNodeData = { label:"FDA Medical Device Evaluation Methods Terminology", id:"http://ncit:C91800", href:newNodeDetails };
-var N_347904389_236369620 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_n1849194899, false);
-N_347904389_236369620.ontology_node_child_count = 0;
-N_347904389_236369620.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C91801');";
-newNodeData = { label:"FDA Medical Device Evaluation Results Terminology", id:"http://ncit:C91801", href:newNodeDetails };
-var N_347904390_n1066982787 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_n1849194899, false);
-N_347904390_n1066982787.ontology_node_child_count = 0;
-N_347904390_n1066982787.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54451');";
-newNodeData = { label:"FDA Medical Device Problem Codes Terminology", id:"http://ncit:C54451", href:newNodeDetails };
-var N_344295990_260730214 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_n1849194899, false);
-N_344295990_260730214.ontology_node_child_count = 0;
-N_344295990_260730214.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54450');";
-newNodeData = { label:"FDA Patient Problem Codes Terminology", id:"http://ncit:C54450", href:newNodeDetails };
-var N_344295989_n1732902827 = new YAHOO.widget.TaskNode(newNodeData, N_345161019_n1849194899, false);
-N_344295989_n1732902827.ontology_node_child_count = 0;
-N_344295989_n1732902827.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54452');";
-newNodeData = { label:"FDA SPL Terminology", id:"http://ncit:C54452", href:newNodeDetails };
-var N_344295991_n172937644 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_n832343593, true);
-N_344295991_n172937644.isLeaf = false;
-N_344295991_n172937644.ontology_node_child_count = 1;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C73600');";
-newNodeData = { label:"FDA SPL Business Operation Terminology", id:"http://ncit:C73600", href:newNodeDetails };
-var N_346115007_n191413534 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_346115007_n191413534.ontology_node_child_count = 0;
-N_346115007_n191413534.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54453');";
-newNodeData = { label:"FDA SPL Color Terminology", id:"http://ncit:C54453", href:newNodeDetails };
-var N_344295992_n1581794990 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344295992_n1581794990.ontology_node_child_count = 0;
-N_344295992_n1581794990.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54459');";
-newNodeData = { label:"FDA SPL DEA Schedule Terminology", id:"http://ncit:C54459", href:newNodeDetails };
-var N_344295998_2078332922 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344295998_2078332922.ontology_node_child_count = 0;
-N_344295998_2078332922.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C87299');";
-newNodeData = { label:"FDA SPL Document Type Terminology", id:"http://ncit:C87299", href:newNodeDetails };
-var N_347154136_1527713719 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_347154136_1527713719.ontology_node_child_count = 0;
-N_347154136_1527713719.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54455');";
-newNodeData = { label:"FDA SPL Drug Route of Administration Terminology", id:"http://ncit:C54455", href:newNodeDetails };
-var N_344295994_2022723362 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344295994_2022723362.ontology_node_child_count = 0;
-N_344295994_2022723362.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C73339');";
-newNodeData = { label:"FDA SPL Flavor Terminology", id:"http://ncit:C73339", href:newNodeDetails };
-var N_346112226_577576962 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_346112226_577576962.ontology_node_child_count = 0;
-N_346112226_577576962.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54599');";
-newNodeData = { label:"FDA SPL Limitation of Use Terminology", id:"http://ncit:C54599", href:newNodeDetails };
-var N_344297083_n1921192171 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344297083_n1921192171.ontology_node_child_count = 0;
-N_344297083_n1921192171.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C73582');";
-newNodeData = { label:"FDA SPL Marketing Category Terminology", id:"http://ncit:C73582", href:newNodeDetails };
-var N_346114296_n2071845925 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_346114296_n2071845925.ontology_node_child_count = 0;
-N_346114296_n2071845925.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54619');";
-newNodeData = { label:"FDA SPL Medical Product Intent of Use Terminology", id:"http://ncit:C54619", href:newNodeDetails };
-var N_344297796_n1840926157 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344297796_n1840926157.ontology_node_child_count = 0;
-N_344297796_n1840926157.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54457');";
-newNodeData = { label:"FDA SPL Package Type Terminology", id:"http://ncit:C54457", href:newNodeDetails };
-var N_344295996_n2128331011 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344295996_n2128331011.ontology_node_child_count = 0;
-N_344295996_n2128331011.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54456');";
-newNodeData = { label:"FDA SPL Pharmaceutical Dosage Form Terminology", id:"http://ncit:C54456", href:newNodeDetails };
-var N_344295995_1219902503 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344295995_1219902503.ontology_node_child_count = 0;
-N_344295995_1219902503.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54600');";
-newNodeData = { label:"FDA SPL Pharmacokinetic Effect Consequences Terminology", id:"http://ncit:C54600", href:newNodeDetails };
-var N_344297756_n1595615310 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344297756_n1595615310.ontology_node_child_count = 0;
-N_344297756_n1595615310.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54458');";
-newNodeData = { label:"FDA SPL Potency Terminology", id:"http://ncit:C54458", href:newNodeDetails };
-var N_344295997_n1584129970 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344295997_n1584129970.ontology_node_child_count = 0;
-N_344295997_n1584129970.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54454');";
-newNodeData = { label:"FDA SPL Shape Terminology", id:"http://ncit:C54454", href:newNodeDetails };
-var N_344295993_n1079855673 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344295993_n1079855673.ontology_node_child_count = 0;
-N_344295993_n1079855673.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C54618');";
-newNodeData = { label:"FDA SPL Type of Drug Interaction Terminology", id:"http://ncit:C54618", href:newNodeDetails };
-var N_344297795_283717530 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_344297795_283717530.ontology_node_child_count = 0;
-N_344297795_283717530.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C92951');";
-newNodeData = { label:"FDA SPL Unit of Measure Terminology", id:"http://ncit:C92951", href:newNodeDetails };
-var N_347935297_1944732452 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_347935297_1944732452.ontology_node_child_count = 0;
-N_347935297_1944732452.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C87300');";
-newNodeData = { label:"FDA SPL Unit of Presentation Terminology", id:"http://ncit:C87300", href:newNodeDetails };
-var N_347154809_1991587337 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_347154809_1991587337.ontology_node_child_count = 0;
-N_347154809_1991587337.isLeaf = true;
+var N_1497775076_1850527801 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_1497775076_1850527801.isLeaf = false;
+N_1497775076_1850527801.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:MoA');";
 newNodeData = { label:"NDFRT Mechanism of Action ", id:"http://ndfrt:MoA", href:newNodeDetails };
-var N_542640421_n1533943450 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_542640421_n1533943450.ontology_node_child_count = 0;
-N_542640421_n1533943450.isLeaf = true;
+var N_542640421_789844708 = new YAHOO.widget.TaskNode(newNodeData, N_1497775076_1850527801, false);
+N_542640421_789844708.ontology_node_child_count = 0;
+N_542640421_789844708.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:PE');";
 newNodeData = { label:"NDFRT Physiologic Effects", id:"http://ndfrt:PE", href:newNodeDetails };
-var N_433146575_n463068432 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_433146575_n463068432.ontology_node_child_count = 0;
-N_433146575_n463068432.isLeaf = true;
+var N_433146575_n1786637040 = new YAHOO.widget.TaskNode(newNodeData, N_1497775076_1850527801, false);
+N_433146575_n1786637040.ontology_node_child_count = 0;
+N_433146575_n1786637040.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:SC');";
 newNodeData = { label:"NDFRT Structural Class", id:"http://ndfrt:SC", href:newNodeDetails };
-var N_433146666_n1523762637 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_n172937644, false);
-N_433146666_n1523762637.ontology_node_child_count = 0;
-N_433146666_n1523762637.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:MoA');";
-newNodeData = { label:"NDFRT Mechanism of Action ", id:"http://ndfrt:MoA", href:newNodeDetails };
-var N_542640421_n1975489372 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_n832343593, false);
-N_542640421_n1975489372.ontology_node_child_count = 0;
-N_542640421_n1975489372.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:PE');";
-newNodeData = { label:"NDFRT Physiologic Effects", id:"http://ndfrt:PE", href:newNodeDetails };
-var N_433146575_2094550049 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_n832343593, false);
-N_433146575_2094550049.ontology_node_child_count = 0;
-N_433146575_2094550049.isLeaf = true;
-
-newNodeDetails = "javascript:onClickTreeNode('http://ndfrt:SC');";
-newNodeData = { label:"NDFRT Structural Class", id:"http://ndfrt:SC", href:newNodeDetails };
-var N_433146666_178259775 = new YAHOO.widget.TaskNode(newNodeData, N_n199622008_n832343593, false);
-N_433146666_178259775.ontology_node_child_count = 0;
-N_433146666_178259775.isLeaf = true;
+var N_433146666_n1322907061 = new YAHOO.widget.TaskNode(newNodeData, N_1497775076_1850527801, false);
+N_433146666_n1322907061.ontology_node_child_count = 0;
+N_433146666_n1322907061.isLeaf = true;
 
 newNodeData = { label:"NICHD Pediatric Terminology", id:"TVS_NICHD"};
-var N_1497920822_1170000992 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_1497920822_1170000992.isLeaf = false;
-N_1497920822_1170000992.ontology_node_child_count = 1;
+var N_1497920822_n26818283 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_1497920822_n26818283.isLeaf = false;
+N_1497920822_n26818283.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C90259');";
 newNodeData = { label:"National Institute of Child Health and Human Development Pediatric Terminology", id:"http://ncit:C90259", href:newNodeDetails };
-var N_347868996_1017175970 = new YAHOO.widget.TaskNode(newNodeData, N_1497920822_1170000992, true);
-N_347868996_1017175970.isLeaf = false;
-N_347868996_1017175970.ontology_node_child_count = 1;
+var N_347868996_1726454512 = new YAHOO.widget.TaskNode(newNodeData, N_1497920822_n26818283, true);
+N_347868996_1726454512.isLeaf = false;
+N_347868996_1726454512.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C96388');";
 newNodeData = { label:"NICHD Childhood Immunization Terminology", id:"http://ncit:C96388", href:newNodeDetails };
-var N_348048795_1957942666 = new YAHOO.widget.TaskNode(newNodeData, N_347868996_1017175970, false);
-N_348048795_1957942666.ontology_node_child_count = 0;
-N_348048795_1957942666.isLeaf = true;
+var N_348048795_642291612 = new YAHOO.widget.TaskNode(newNodeData, N_347868996_1726454512, false);
+N_348048795_642291612.ontology_node_child_count = 0;
+N_348048795_642291612.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C97150');";
 newNodeData = { label:"NICHD Neurological Development Terminology", id:"http://ncit:C97150", href:newNodeDetails };
-var N_348076563_n537721124 = new YAHOO.widget.TaskNode(newNodeData, N_347868996_1017175970, false);
-N_348076563_n537721124.ontology_node_child_count = 0;
-N_348076563_n537721124.isLeaf = true;
+var N_348076563_2037180169 = new YAHOO.widget.TaskNode(newNodeData, N_347868996_1726454512, false);
+N_348076563_2037180169.ontology_node_child_count = 0;
+N_348076563_2037180169.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C89506');";
 newNodeData = { label:"NICHD Newborn Screening Terminology", id:"http://ncit:C89506", href:newNodeDetails };
-var N_347216319_853988941 = new YAHOO.widget.TaskNode(newNodeData, N_347868996_1017175970, false);
-N_347216319_853988941.ontology_node_child_count = 0;
-N_347216319_853988941.isLeaf = true;
+var N_347216319_n1583743354 = new YAHOO.widget.TaskNode(newNodeData, N_347868996_1726454512, false);
+N_347216319_n1583743354.ontology_node_child_count = 0;
+N_347216319_n1583743354.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C92712');";
 newNodeData = { label:"NICHD Pregnancy and Childbirth Terminology", id:"http://ncit:C92712", href:newNodeDetails };
-var N_347933252_1616826267 = new YAHOO.widget.TaskNode(newNodeData, N_347868996_1017175970, false);
-N_347933252_1616826267.ontology_node_child_count = 0;
-N_347933252_1616826267.isLeaf = true;
+var N_347933252_n254455284 = new YAHOO.widget.TaskNode(newNodeData, N_347868996_1726454512, false);
+N_347933252_n254455284.ontology_node_child_count = 0;
+N_347933252_n254455284.isLeaf = true;
 
 newNodeData = { label:"UCUM Terminology", id:"TVS_UCUM"};
-var N_1849638676_n201337153 = new YAHOO.widget.TaskNode(newNodeData, root, true);
-N_1849638676_n201337153.isLeaf = false;
-N_1849638676_n201337153.ontology_node_child_count = 1;
+var N_1849638676_n1142236083 = new YAHOO.widget.TaskNode(newNodeData, root, true);
+N_1849638676_n1142236083.isLeaf = false;
+N_1849638676_n1142236083.ontology_node_child_count = 1;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C67567');";
 newNodeData = { label:"Unified Code for Units of Measure Terminology", id:"http://ncit:C67567", href:newNodeDetails };
-var N_345309882_n1966666154 = new YAHOO.widget.TaskNode(newNodeData, N_1849638676_n201337153, false);
-N_345309882_n1966666154.ontology_node_child_count = 0;
-N_345309882_n1966666154.isLeaf = true;
+var N_345309882_1211493727 = new YAHOO.widget.TaskNode(newNodeData, N_1849638676_n1142236083, false);
+N_345309882_1211493727.ontology_node_child_count = 0;
+N_345309882_1211493727.isLeaf = true;
 
-		 tree.collapseAll();
+         tree.collapseAll();
       tree.draw();
     }
 
@@ -1962,9 +1656,9 @@ N_345309882_n1966666154.isLeaf = true;
             //if (n.checkState == 2) {
                 checkedNodes.push(n.label); // just using label for simplicity
 
-		    if (n.hasChildren()) {
-			checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
-		    }
+            if (n.hasChildren()) {
+            checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
+            }
 
             }
         }
@@ -2090,20 +1784,20 @@ N_345309882_n1966666154.isLeaf = true;
                     //alert(respObj.root_nodes.length);
 
                     var root = tree.getRoot();
-		    if (respObj.root_nodes.length == 0) {
-		      //showEmptyRoot();
-		    } else {
+            if (respObj.root_nodes.length == 0) {
+              //showEmptyRoot();
+            } else {
 
 
 
 
-		      for (var i=0; i < respObj.root_nodes.length; i++) {
-			 var nodeInfo = respObj.root_nodes[i];
-	                 //alert("calling addTreeBranch ");
+              for (var i=0; i < respObj.root_nodes.length; i++) {
+             var nodeInfo = respObj.root_nodes[i];
+                     //alert("calling addTreeBranch ");
 
-			 addTreeBranch(ontology_node_id, root, nodeInfo);
-		      }
-		    }
+             addTreeBranch(ontology_node_id, root, nodeInfo);
+              }
+            }
               }
         }
       }
@@ -2187,7 +1881,7 @@ N_345309882_n1966666154.isLeaf = true;
 
 
 
-<% String basePath = request.getContextPath(); %>
+
 <body onLoad="document.forms.valueSetSearchForm.matchText.focus();">
   <script type="text/javascript" src="/ncitbrowser/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="/ncitbrowser/js/tip_centerwindow.js"></script>
@@ -2265,7 +1959,7 @@ N_345309882_n1966666154.isLeaf = true;
 
       <!-- Thesaurus, banner search area -->
       <div class="bannerarea">
-        <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
+        <a href="/ncitbrowser/start.jsf" style="text-decoration: none;">
           <div class="vocabularynamebanner_tb">
             <span class="vocabularynamelong_tb">Version 2.1 (using LexEVS 6.0)</span>
           </div>
@@ -2322,8 +2016,8 @@ N_345309882_n1966666154.isLeaf = true;
         </tr>
         <tr valign="top" align="left">
           <td align="left" class="textbody">
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" checked alt="Code" tabindex="1" >Code&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name"  alt="Name" tabindex="1" >Name
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code"  alt="Code" tabindex="1" >Code&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" checked alt="Name" tabindex="1" >Name
           </td>
         </tr>
       </table>
@@ -2458,10 +2152,10 @@ Search or browse a value set from its home page, or search all value sets at onc
 
 
 <div id="expandcontractdiv">
-	<a id="expand_all" href="#">Expand all</a>
-	<a id="collapse_all" href="#">Collapse all</a>
-	<a id="check_all" href="#">Check all</a>
-	<a id="uncheck_all" href="#">Uncheck all</a>
+    <a id="expand_all" href="#">Expand all</a>
+    <a id="collapse_all" href="#">Collapse all</a>
+    <a id="check_all" href="#">Check all</a>
+    <a id="uncheck_all" href="#">Uncheck all</a>
 </div>
 
 

@@ -28,6 +28,7 @@
 <%@ page import="org.LexGrid.commonTypes.PropertyQualifier" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="javax.faces.model.SelectItem" %>
+
 <%
     String ncim_url = new DataUtils().getNCImURL();
     String quicklink_dictionary = (String) request.getSession().getAttribute("dictionary");
@@ -46,9 +47,8 @@
     <tr>
       <td><div class="quicklink-status">
         <% boolean debug = false; if (debug) {  //DYEE_DEBUG (default: false) %>
-          <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/deprecated/valueSetTmp.jsf');">
-            VS Tmp
-          </a>
+          <%= NCItBrowserProperties.getStringProperty(NCItBrowserProperties.EVS_SERVICE_URL, "") %>
+          | <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/pages/deprecated/valueSetTmp.jsf');">VS Tmp</a>
         <% } %>
         &nbsp;
       </div></td>
