@@ -150,7 +150,7 @@ public class ServerMonitorThread extends Thread {
             service.getLastUpdateTime();
             setLexEVSRunning(isRunning, msg);
         } catch (Exception e) {
-            _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+            error(e);
             setLexEVSRunning(false, msg);
         }
     }
@@ -163,8 +163,21 @@ public class ServerMonitorThread extends Thread {
             service.getLastUpdateTime();
             setLexEVSRunning(isRunning, msg);
         } catch (Exception e) {
-            _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+            error(e);
             setLexEVSRunning(false, msg);
         }
+    }
+    
+    private void error(Exception e) {
+        //Note: Trying to solve Kim's problem with this method.
+        //  He is getting exceptions when log4j tries to print an error message.
+        String msg = "";
+        if (e != null)
+            msg = e.getClass().getSimpleName() + ": " + e.getMessage();
+        else msg = "Exception e == " + e;
+        
+        if (_logger != null)
+            _logger.error(msg);
+        else System.out.println(msg);
     }
 }
