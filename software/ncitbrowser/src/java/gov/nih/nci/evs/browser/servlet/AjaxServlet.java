@@ -3300,17 +3300,34 @@ String term_browser_version = info.term_browser_version;
 String display_name = info.display_name;
  String basePath = request.getContextPath();
 
+/*
+<a href="/ncitbrowser/pages/home.jsf?version=12.02d" style="text-decoration: none;">
+	<div class="vocabularynamebanner_ncit">
+	    <span class="vocabularynamelong_ncit">Version: 12.02d (Release date: 2012-02-27-08:00)</span>
+	</div>
+</a>
 
-
+*/
+String release_date = DataUtils.getVersionReleaseDate(scheme, version);
 if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 
+
+
+      out.println("<a href=\"/ncitbrowser/pages/home.jsf?version=" + version + "\" style=\"text-decoration: none;\">");
+      out.println("	<div class=\"vocabularynamebanner_ncit\">");
+      out.println("	    <span class=\"vocabularynamelong_ncit\">Version: " + version + " (Release date: " + release_date + ")</span>");
+      out.println("	</div>");
+      out.println("</a>");
+
+
+      /*
           out.write("\r\n");
           out.write("    <div class=\"banner\"><a href=\"");
           out.print(basePath);
           out.write("\"><img src=\"");
           out.print(basePath);
           out.write("/images/thesaurus_browser_logo.jpg\" width=\"383\" height=\"117\" alt=\"Thesaurus Browser Logo\" border=\"0\"/></a></div>\r\n");
-
+      */
 } else {
 
           out.write("\r\n");
@@ -3346,7 +3363,7 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
           out.write("                      </div>\r\n");
           out.write("                      \r\n");
 
-String release_date = DataUtils.getVersionReleaseDate(scheme, version);
+
 boolean display_release_date = true;
 if (release_date == null || release_date.compareTo("") == 0) {
     display_release_date = false;
