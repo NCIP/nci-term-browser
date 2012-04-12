@@ -32,8 +32,6 @@
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
         Sources</a> 
    
-  
-   
       <c:choose>	
         <c:when test="${sessionScope.CartActionBean.count>0}">
           | <a href="<%= request.getContextPath() %>/pages/cart.jsf" tabindex="14">Cart</a>
