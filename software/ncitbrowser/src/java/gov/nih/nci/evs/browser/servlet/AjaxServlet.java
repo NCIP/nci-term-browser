@@ -2279,18 +2279,38 @@ if (view == Constants.STANDARD_VIEW) {
 		request.getSession().removeAttribute("checked_vocabularies");
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
-        if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
-			msg = "No value set definition is selected.";
-			System.out.println(msg);
-			request.getSession().setAttribute("message", msg);
 
+        String matchText = (String) request.getParameter("matchText");
+        matchText = matchText.trim();
+        request.getSession().setAttribute("matchText", matchText);
 
-			String ontology_display_name = (String) request.getParameter("ontology_display_name");
-			String ontology_version = (String) request.getParameter("ontology_version");
+		String ontology_display_name = (String) request.getParameter("ontology_display_name");
+		String ontology_version = (String) request.getParameter("ontology_version");
+
 
 System.out.println("search_value_set ontology_display_name: " + ontology_display_name);
 System.out.println("search_value_set ontology_version: " + ontology_version);
 
+
+		if (matchText.compareTo("") == 0) {
+			msg = "Please enter a search string.";
+			System.out.println(msg);
+			request.getSession().setAttribute("message", msg);
+
+
+			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+			} else {
+			    create_vs_tree(request, response, view);
+			}
+			return;
+		}
+
+
+        if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
+			msg = "No value set definition is selected.";
+			System.out.println(msg);
+			request.getSession().setAttribute("message", msg);
 
 
 			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
