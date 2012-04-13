@@ -2204,9 +2204,9 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("          <form id=\"pg_form\">");
       out.println("");
       out.println("            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"null\" />");
-      out.println("            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"null\" />");
+      //out.println("            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"null\" />");
-      out.println("            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"null\" />");
+      //out.println("            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
       out.println("          </form>");
       out.println("");
@@ -2287,6 +2287,12 @@ if (view == Constants.STANDARD_VIEW) {
 
 			String ontology_display_name = (String) request.getParameter("ontology_display_name");
 			String ontology_version = (String) request.getParameter("ontology_version");
+
+System.out.println("search_value_set ontology_display_name: " + ontology_display_name);
+System.out.println("search_value_set ontology_version: " + ontology_version);
+
+
+
 			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
 				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
 			} else {
@@ -3476,6 +3482,13 @@ if (display_release_date) {
       out.println("                <input type=\"hidden\" name=\"referer\" id=\"referer\" value=\"http%3A%2F%2Flocalhost%3A8080%2Fncitbrowser%2Fpages%2Fresolved_value_set_search_results.jsf\">");
       out.println("                <input type=\"hidden\" id=\"nav_type\" name=\"nav_type\" value=\"valuesets\" />");
       out.println("                <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
+
+      out.println("            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"" + dictionary + "\" />");
+      out.println("            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"" + dictionary + "\" />");
+      out.println("            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"" + version + "\" />");
+
+
+
       out.println("");
       out.println("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"j_id22:j_id23\" />");
       out.println("</form>");
