@@ -1963,6 +1963,11 @@ if (DataUtils.isNull(algorithm)) {
 
       out.println("<input type=\"hidden\" name=\"view\" value=\"" + view_str + "\" />");
 
+        String matchText = (String) request.getParameter("matchText");
+        matchText = matchText.trim();
+        request.getSession().setAttribute("matchText", matchText);
+
+
       out.println("");
       out.println("");
       out.println("");
@@ -1976,7 +1981,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
       out.println("                  <input CLASS=\"searchbox-input-2\"");
       out.println("                    name=\"matchText\"");
-      out.println("                    value=\"\"");
+      out.println("                    value=\"" + matchText + "\"");
       out.println("                    onFocus=\"active = true\"");
       out.println("                    onBlur=\"active = false\"");
       out.println("                    onkeypress=\"return submitEnter('valueSetSearchForm:valueset_search',event)\"");
