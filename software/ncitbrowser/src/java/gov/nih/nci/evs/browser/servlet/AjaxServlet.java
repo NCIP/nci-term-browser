@@ -2848,7 +2848,7 @@ System.out.println("search_value_set ontology_version: " + ontology_version);
       out.println("");
       out.println("        tree = new YAHOO.widget.TreeView(\"treecontainer\");");
 
-      out.println("         pre_check();");
+      //out.println("         pre_check();");
 
 
       out.println("	tree.setNodesProperty('propagateHighlightUp',true);");
@@ -3228,7 +3228,9 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
       out.println("");
       out.println("");
-      out.println("<body onLoad=\"pre_check();\">");
+      //out.println("<body>");
+      out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
+
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
