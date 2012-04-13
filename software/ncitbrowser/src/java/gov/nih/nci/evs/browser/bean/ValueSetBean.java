@@ -332,9 +332,13 @@ public class ValueSetBean {
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
-		//System.out.println("checked_vocabularies: " + checked_vocabularies);
+		System.out.println("checked_vocabularies: " + checked_vocabularies);
+        if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
+            checked_vocabularies = (String) request.getSession().getAttribute("checked_vocabularies");
+            System.out.println("checked_vocabularies(session): " + checked_vocabularies);
+        }
 
-		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
+		if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
