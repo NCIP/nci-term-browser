@@ -242,6 +242,17 @@ if (vsd_vec == null) {
     }
     %>
 <%
+} else {
+%>
+
+    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
+      <div class="vocabularynamebanner_tb">
+        <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
+      </div>
+    </a>
+  
+  
+<%
 }
 %>
 
