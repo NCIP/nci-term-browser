@@ -145,10 +145,13 @@ public class ServerMonitorThread extends Thread {
     public void monitor(LexBIGService service, String msg) {
         if (! _enabled)
             return;
+        if (service == null) {
+            setLexEVSRunning(false, msg);
+            return;
+        }
         try {
-            boolean isRunning = service != null;
             service.getLastUpdateTime();
-            setLexEVSRunning(isRunning, msg);
+            setLexEVSRunning(true, msg);
         } catch (Exception e) {
             error(e);
             setLexEVSRunning(false, msg);
@@ -158,10 +161,13 @@ public class ServerMonitorThread extends Thread {
     public void monitor(LexEVSDistributed service, String msg) {
         if (! _enabled)
             return;
+        if (service == null) {
+            setLexEVSRunning(false, msg);
+            return;
+        }
         try {
-            boolean isRunning = service != null;
             service.getLastUpdateTime();
-            setLexEVSRunning(isRunning, msg);
+            setLexEVSRunning(true, msg);
         } catch (Exception e) {
             error(e);
             setLexEVSRunning(false, msg);
