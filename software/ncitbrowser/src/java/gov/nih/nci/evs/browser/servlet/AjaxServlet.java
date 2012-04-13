@@ -2282,7 +2282,17 @@ if (view == Constants.STANDARD_VIEW) {
 			msg = "No value set definition is selected.";
 			System.out.println(msg);
 			request.getSession().setAttribute("message", msg);
-			create_vs_tree(request, response, view);
+
+
+			String ontology_display_name = (String) request.getParameter("ontology_display_name");
+			String ontology_version = (String) request.getParameter("ontology_version");
+			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+			} else {
+			    create_vs_tree(request, response, view);
+			}
+
+
 		} else {
 			String destination = contextPath + "/pages/value_set_search_results.jsf";
 			try {
