@@ -2276,6 +2276,7 @@ if (view == Constants.STANDARD_VIEW) {
 		int view = Integer.parseInt(view_str);
 		String msg = null;
 
+		request.getSession().removeAttribute("checked_vocabularies");
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
         if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
@@ -2299,11 +2300,11 @@ if (view == Constants.STANDARD_VIEW) {
 				String retstr = valueSetSearchAction(request);
 				System.out.println("(*) redirecting to: " + destination);
 				response.sendRedirect(response.encodeRedirectURL(destination));
+	            request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 			} catch (Exception ex) {
 				System.out.println("response.sendRedirect failed???");
 			}
 	    }
-        request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
     }
 
 
