@@ -176,8 +176,13 @@ public class ServerMonitorThread extends Thread {
             msg = e.getClass().getSimpleName() + ": " + e.getMessage();
         else msg = "Exception e == " + e;
         
-        if (_logger != null)
-            _logger.error(msg);
-        else System.out.println(msg);
+        if (_logger != null) {
+            try {
+                _logger.error(msg);
+            } catch (Exception e1) {
+                System.out.println(e1.getMessage());
+                System.out.println(msg);
+            }
+        } else System.out.println(msg);
     }
 }
