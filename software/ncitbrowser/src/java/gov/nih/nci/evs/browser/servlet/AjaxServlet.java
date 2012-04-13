@@ -2324,6 +2324,19 @@ System.out.println("search_value_set ontology_version: " + ontology_version);
 			String destination = contextPath + "/pages/value_set_search_results.jsf";
 			try {
 				String retstr = valueSetSearchAction(request);
+
+				//KLO, 041312
+				if (retstr.compareTo("message") == 0) {
+
+					if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+						create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+					} else {
+						create_vs_tree(request, response, view);
+					}
+					return;
+				}
+
+
 				System.out.println("(*) redirecting to: " + destination);
 				response.sendRedirect(response.encodeRedirectURL(destination));
 	            request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
@@ -3450,6 +3463,12 @@ if (display_release_date) {
 
       out.println("<input type=\"hidden\" name=\"view\" value=\"" + view_str + "\" />");
 
+
+String matchText = (String) request.getSession().getAttribute("matchText");
+if (DataUtils.isNull(matchText)) {
+	matchText = "";
+}
+
       out.println("");
       out.println("");
       out.println("");
@@ -3463,7 +3482,7 @@ if (display_release_date) {
       out.println("");
       out.println("                  <input CLASS=\"searchbox-input-2\"");
       out.println("                    name=\"matchText\"");
-      out.println("                    value=\"\"");
+      out.println("                    value=\"" + matchText + "\"");
       out.println("                    onFocus=\"active = true\"");
       out.println("                    onBlur=\"active = false\"");
       out.println("                    onkeypress=\"return submitEnter('valueSetSearchForm:valueset_search',event)\"");
