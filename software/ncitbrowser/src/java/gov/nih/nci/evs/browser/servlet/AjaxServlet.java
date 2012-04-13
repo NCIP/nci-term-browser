@@ -2278,7 +2278,7 @@ if (view == Constants.STANDARD_VIEW) {
 
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
-		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
+        if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
 			msg = "No value set definition is selected.";
 			System.out.println(msg);
 			request.getSession().setAttribute("message", msg);
@@ -2293,6 +2293,7 @@ if (view == Constants.STANDARD_VIEW) {
 				System.out.println("response.sendRedirect failed???");
 			}
 	    }
+        request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
     }
 
 
