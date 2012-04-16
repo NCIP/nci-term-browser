@@ -1964,7 +1964,11 @@ if (DataUtils.isNull(algorithm)) {
       out.println("<input type=\"hidden\" name=\"view\" value=\"" + view_str + "\" />");
 
         String matchText = (String) request.getParameter("matchText");
-        matchText = matchText.trim();
+        if (DataUtils.isNull(matchText)) {
+			matchText = "";
+		} else {
+			matchText = matchText.trim();
+		}
         request.getSession().setAttribute("matchText", matchText);
 
 
