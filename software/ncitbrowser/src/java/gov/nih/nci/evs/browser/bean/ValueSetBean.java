@@ -398,20 +398,20 @@ public class ValueSetBean {
 					for (int k=0; k<selected_vocabularies.size(); k++) {
 						String vsd_name = (String) selected_vocabularies.elementAt(k);
 						String vsd_uri = DataUtils.getValueSetDefinitionURIByName(vsd_name);
-
-						ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
 						if (vsd_uri != null) {
-
-							AbsoluteCodingSchemeVersionReference acsvr = vsd_service.isEntityInValueSet(matchText,
-								  new URI(vsd_uri),
-								  null,
-								  versionTag);
-							if (acsvr != null) {
-								String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-								if (metadata != null) {
-									v.add(metadata);
+							ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
+							if (vsd != null) {
+								AbsoluteCodingSchemeVersionReference acsvr = vsd_service.isEntityInValueSet(matchText,
+									  new URI(vsd_uri),
+									  null,
+									  versionTag);
+								if (acsvr != null) {
+									String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+									if (metadata != null) {
+										v.add(metadata);
+									}
 								}
-							}
+						    }
 						}
 					}
 			    } else {
