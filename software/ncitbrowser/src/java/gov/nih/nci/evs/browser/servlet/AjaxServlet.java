@@ -2290,7 +2290,11 @@ if (view == Constants.STANDARD_VIEW) {
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
 
         String matchText = (String) request.getParameter("matchText");
-        matchText = matchText.trim();
+        if (DataUtils.isNull(matchText)) {
+			matchText = "";
+		} else {
+			matchText = matchText.trim();
+		}
         request.getSession().setAttribute("matchText", matchText);
 
 		String ontology_display_name = (String) request.getParameter("ontology_display_name");
