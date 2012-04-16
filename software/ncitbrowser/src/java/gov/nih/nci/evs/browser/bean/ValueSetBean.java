@@ -368,27 +368,25 @@ public class ValueSetBean {
 
 
         String matchText = (String) request.getParameter("matchText");
+        if (DataUtils.isNull(matchText)) {
+			matchText = "";
+		} else {
+			matchText = matchText.trim();
+		}
+		request.getSession().setAttribute("matchText", matchText);
 
         if (selectValueSetSearchOption.compareTo("CodingScheme") != 0) {
-			matchText = matchText.trim();
-
 			if (matchText.length() == 0) {
 				String message = "Please enter a search string.";
 				request.getSession().setAttribute("message", message);
-				// request.getSession().removeAttribute("matchText");
-				// request.removeAttribute("matchText");
 				return "message";
 			}
 			request.getSession().setAttribute("matchText_VSD", matchText);
 	    }
 
-
         Vector v = new Vector();
         LexEVSValueSetDefinitionServices vsd_service = null;
         vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-
-        if (matchText != null) matchText = matchText.trim();
-
 		if (selectValueSetSearchOption.compareTo("Code") == 0) {
             String uri = null;
 
