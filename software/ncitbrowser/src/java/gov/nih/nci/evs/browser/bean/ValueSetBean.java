@@ -365,8 +365,6 @@ public class ValueSetBean {
 
 		//System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
 
-
-
         String matchText = (String) request.getParameter("matchText");
         if (DataUtils.isNull(matchText)) {
 			matchText = "";
