@@ -220,7 +220,7 @@ if (display_release_date) {
     value="<%=termbrowser_displayed_match_text%>"
     onFocus="active = true"
     onBlur="active = false"
-    onkeypress="return submitEnter('mappingSearch:mapping_search',event)"
+    onkeypress="return submitEnter('mappingSearch:search',event)"
     tabindex="1"
   />
   <h:commandButton
