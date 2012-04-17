@@ -282,6 +282,31 @@
              <input type="hidden" id="cart_dictionary" name="cart_dictionary" value="<%=HTTPUtils.cleanXSS(dictionary)%>" />
              <input type="hidden" id="cart_version" name="cart_version" value="<%=HTTPUtils.cleanXSS(version)%>" />
              <input type="hidden" id="cart_code" name="cart_code" value="<%=HTTPUtils.cleanXSS(code)%>" />
+             
+<%
+String b = (String) request.getParameter("b");
+String n = (String) request.getParameter("n");
+String m = (String) request.getParameter("m");
+String key = (String) request.getParameter("key");
+
+if (!DataUtils.isNull(b)) {  
+    if (DataUtils.isNull(n)) {
+        n = "1";
+    }
+%>
+             <input type="hidden" id="b" name="b" value="<%=b%>" />
+             <input type="hidden" id="n" name="n" value="<%=n%>" />
+             <input type="hidden" id="key" name="key" value="<%=key%>" />
+<%  
+    if (!DataUtils.isNull(m)) {
+    %>
+        <input type="hidden" id="m" name="m" value="<%=m%>" />
+    <%
+    }
+
+
+}
+%>
  
                   
                   </h:form>               

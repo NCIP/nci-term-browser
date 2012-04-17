@@ -331,6 +331,25 @@ public class CartActionBean {
         // Rebuild version selected lists
         _initDisplayItems();
 
+
+
+String b = (String) request.getParameter("b");
+String n = (String) request.getParameter("n");
+String m = (String) request.getParameter("m");
+String key = (String) request.getParameter("key");
+
+if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
+
+	request.getSession().setAttribute("b", b);
+	request.getSession().setAttribute("n", n);
+	request.getSession().setAttribute("key", key);
+
+    if (!DataUtils.isNull(m)) {
+		request.getSession().setAttribute("m", m);
+	}
+
+}
+
 		return "concept_details";
     }
 
