@@ -655,6 +655,9 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/connection-min.js\" ></script>");
       //println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/autocomplete-min.js\" ></script>");
       println(out, "<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/treeview-min.js\" ></script>");
+
+
+
       println(out, "");
       println(out, "");
       println(out, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
@@ -668,7 +671,13 @@ public final class AjaxServlet extends HttpServlet {
       println(out, "  <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/yui/grids.css\" />");
       println(out, "  <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/yui/code.css\" />");
       println(out, "  <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/yui/tree.css\" />");
+
+
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/script.js\"></script>");
+      println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/search.js\"></script>");
+      println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/dropdown.js\"></script>");
+
+
       println(out, "");
       println(out, "  <script language=\"JavaScript\">");
       println(out, "");
@@ -1294,6 +1303,11 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/script.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tasknode.js\"></script>");
+
+      println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/search.js\"></script>");
+      println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/dropdown.js\"></script>");
+
+
       out.println("");
       out.println("  <script type=\"text/javascript\">");
       out.println("");
@@ -2085,6 +2099,8 @@ if (DataUtils.isNull(algorithm)) {
       out.println("    <td><div class=\"quicklink-status\">&nbsp;</div></td>");
       out.println("    <td>");
       out.println("");
+
+      /*
       out.println("  <div id=\"quicklinksholder\">");
       out.println("      <ul id=\"quicklinks\"");
       out.println("        onmouseover=\"document.quicklinksimg.src='/ncitbrowser/images/quicklinks-active.gif';\"");
@@ -2111,6 +2127,9 @@ if (DataUtils.isNull(algorithm)) {
       out.println("        </li>");
       out.println("      </ul>");
       out.println("  </div>");
+      */
+      addQuickLink(request, out);
+
       out.println("");
       out.println("      </td>");
       out.println("    </tr>");
@@ -2682,6 +2701,10 @@ System.out.println("search_value_set ontology_version: " + ontology_version);
       out.println("");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/script.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tasknode.js\"></script>");
+
+      println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/search.js\"></script>");
+      println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/dropdown.js\"></script>");
+
       out.println("");
       out.println("  <script type=\"text/javascript\">");
       out.println("");
@@ -3706,6 +3729,8 @@ if (DataUtils.isNull(matchText)) {
       out.println("    <td><div class=\"quicklink-status\">&nbsp;</div></td>");
       out.println("    <td>");
       out.println("");
+
+      /*
       out.println("  <div id=\"quicklinksholder\">");
       out.println("      <ul id=\"quicklinks\"");
       out.println("        onmouseover=\"document.quicklinksimg.src='/ncitbrowser/images/quicklinks-active.gif';\"");
@@ -3732,6 +3757,10 @@ if (DataUtils.isNull(matchText)) {
       out.println("        </li>");
       out.println("      </ul>");
       out.println("  </div>");
+      */
+      addQuickLink(request, out);
+
+
       out.println("");
       out.println("      </td>");
       out.println("    </tr>");
@@ -3894,6 +3923,91 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("</html>");
       out.println("");
   }
+
+
+
+
+    public static void addQuickLink(HttpServletRequest request, PrintWriter out) {
+
+		String basePath = request.getContextPath();
+		String ncim_url = new DataUtils().getNCImURL();
+		String quicklink_dictionary = (String) request.getSession().getAttribute("dictionary");
+		quicklink_dictionary = DataUtils.getFormalName(quicklink_dictionary);
+		String term_suggestion_application_url2 = "";
+		String dictionary_encoded2 = "";
+		if (quicklink_dictionary != null) {
+			term_suggestion_application_url2 = DataUtils.getMetadataValue(quicklink_dictionary, "term_suggestion_application_url");
+			dictionary_encoded2 = DataUtils.replaceAll(quicklink_dictionary, " ", "%20");
+		}
+
+
+              out.write("  <div id=\"quicklinksholder\">\r\n");
+              out.write("      <ul id=\"quicklinks\"\r\n");
+              out.write("        onmouseover=\"document.quicklinksimg.src='");
+              out.print(basePath);
+              out.write("/images/quicklinks-active.gif';\"\r\n");
+              out.write("        onmouseout=\"document.quicklinksimg.src='");
+              out.print(basePath);
+              out.write("/images/quicklinks-inactive.gif';\">\r\n");
+              out.write("        <li>\r\n");
+              out.write("          <a href=\"#\" tabindex=\"-1\"><img src=\"");
+              out.print(basePath);
+              out.write("/images/quicklinks-inactive.gif\" width=\"162\"\r\n");
+              out.write("            height=\"18\" border=\"0\" name=\"quicklinksimg\" alt=\"Quick Links\" />\r\n");
+              out.write("          </a>\r\n");
+              out.write("          <ul>\r\n");
+              out.write("            <li><a href=\"http://evs.nci.nih.gov/\" tabindex=\"-1\" target=\"_blank\"\r\n");
+              out.write("              alt=\"Enterprise Vocabulary Services\">EVS Home</a></li>\r\n");
+              out.write("            <li><a href=\"");
+              out.print(ncim_url);
+              out.write("\" tabindex=\"-1\" target=\"_blank\"\r\n");
+              out.write("              alt=\"NCI Metathesaurus\">NCI Metathesaurus Browser</a></li>\r\n");
+              out.write("\r\n");
+              out.write("            ");
+
+            if (quicklink_dictionary == null || quicklink_dictionary.compareTo("NCI Thesaurus") != 0) {
+
+              out.write("\r\n");
+              out.write("\r\n");
+              out.write("            <li><a href=\"");
+              out.print( request.getContextPath() );
+              out.write("/index.jsp\" tabindex=\"-1\"\r\n");
+              out.write("              alt=\"NCI Thesaurus Browser\">NCI Thesaurus Browser</a></li>\r\n");
+              out.write("\r\n");
+              out.write("            ");
+
+            }
+
+              out.write("\r\n");
+              out.write("\r\n");
+              out.write("            <li>\r\n");
+              out.write("              <a href=\"");
+              out.print( request.getContextPath() );
+              out.write("/termbrowser.jsf\" tabindex=\"-1\" alt=\"NCI Term Browser\">NCI Term Browser</a>\r\n");
+              out.write("            </li>\r\n");
+              out.write("              \r\n");
+              out.write("            <li><a href=\"http://www.cancer.gov/cancertopics/terminologyresources\" tabindex=\"-1\" target=\"_blank\"\r\n");
+              out.write("              alt=\"NCI Terminology Resources\">NCI Terminology Resources</a></li>\r\n");
+              out.write("            ");
+ if (term_suggestion_application_url2 != null && term_suggestion_application_url2.length() > 0) {
+              out.write("\r\n");
+              out.write("              <li><a href=\"");
+              out.print(term_suggestion_application_url2);
+              out.write("?dictionary=");
+              out.print(dictionary_encoded2);
+              out.write("\" tabindex=\"-1\" target=\"_blank\" alt=\"Term Suggestion\">Term Suggestion</a></li>\r\n");
+              out.write("            ");
+ }
+              out.write("\r\n");
+              out.write("\r\n");
+              out.write("          </ul>\r\n");
+              out.write("        </li>\r\n");
+              out.write("      </ul>\r\n");
+              out.write("  </div>\r\n");
+
+	  }
+
+
 
 
 }
