@@ -80,6 +80,12 @@
 
 String valueSetSearch_requestContextPath = request.getContextPath();
 String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
+
+
+System.out.println("value_set_search_results.jsp selected_ValueSetSearchOption: " + selected_ValueSetSearchOption);
+
+
+
 Vector vsd_vec = null;
 String vsd_uri = (String) request.getParameter("vsd_uri"); 
 
@@ -129,7 +135,7 @@ if (message == null) {
     String check_src = "";
     
     // to be modified
-    String valueset_search_algorithm = null;
+    String valueset_search_algorithm = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("valueset_search_algorithm")); ;
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";
     if (valueset_search_algorithm == null || valueset_search_algorithm.compareTo("exactMatch") == 0)
@@ -148,7 +154,7 @@ if (message == null) {
         selectValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption");
     }
                
-    if (selectValueSetSearchOption == null || selectValueSetSearchOption.compareTo("null") == 0) {
+    if (DataUtils.isNull(selectValueSetSearchOption)) {
         selectValueSetSearchOption = "Code";
     }
 
@@ -160,11 +166,15 @@ if (message == null) {
         check_name = "checked";        
     else if (selectValueSetSearchOption.compareTo("Source") == 0)
         check_src = "checked";
+        
+        
     String valueset_match_text = (String) request.getSession().getAttribute("matchText_VSD");
-    if (valueset_match_text == null) valueset_match_text = "";
-    if (valueset_match_text != null && valueset_match_text.compareTo("null") == 0) valueset_match_text = "";
-    
-  
+    if (DataUtils.isNull(valueset_match_text)) {
+        valueset_match_text = (String) request.getSession().getAttribute("matchText");
+    }
+    if (DataUtils.isNull(valueset_match_text)) {
+        valueset_match_text = "";
+    }    
     
     
 %>
