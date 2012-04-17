@@ -3938,14 +3938,17 @@ System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
 							//System.out.println("\trelation.getSourceCodingScheme(): " + relation.getSourceCodingScheme());
 							//System.out.println("\trelation.getTargetCodingScheme(): " + relation.getTargetCodingScheme());
 
+                            if (!isNull(codingScheme)) {
 
-                            if (codingScheme.compareTo(getFormalName(relation.getSourceCodingScheme())) == 0 ||
-                                codingScheme.compareTo(getFormalName(relation.getTargetCodingScheme())) == 0) {
-								v.add(label);
-								//System.out.println("\tadding " + label);
+								if (codingScheme.compareTo(getFormalName(relation.getSourceCodingScheme())) == 0 ||
+									codingScheme.compareTo(getFormalName(relation.getTargetCodingScheme())) == 0) {
+									v.add(label);
+									//System.out.println("\tadding " + label);
 
-								break;
-							}
+									break;
+								}
+
+						    }
 						}
 					}
 				} catch (Exception ex) {

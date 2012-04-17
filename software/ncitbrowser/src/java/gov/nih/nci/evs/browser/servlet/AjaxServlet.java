@@ -1554,12 +1554,22 @@ if (view == Constants.STANDARD_VIEW) {
 
 
 //[#31914] Search option and algorithm in value set search box are not preserved in session.
-String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
-String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
+//String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
+//String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
+
+String option = (String) request.getParameter("selectValueSetSearchOption");
+String algorithm = (String) request.getParameter("valueset_search_algorithm");
 
 
-System.out.println("*** OPTION: " + option);
-System.out.println("*** ALGORITHM: " + algorithm);
+        String matchText = (String) request.getParameter("matchText");
+        if (DataUtils.isNull(matchText)) {
+			matchText = "";
+		} else {
+			matchText = matchText.trim();
+		}
+        request.getSession().setAttribute("matchText", matchText);
+
+
 
 
 String option_code = "";
@@ -1595,6 +1605,18 @@ if (DataUtils.isNull(algorithm)) {
 	}
 }
 
+
+System.out.println("*** OPTION: " + option);
+System.out.println("*** ALGORITHM: " + algorithm);
+
+System.out.println("*** matchText: " + matchText);
+
+System.out.println("AjaxServlet option_code: " + option_code);
+System.out.println("AjaxServlet option_name: " + option_name);
+
+System.out.println("AjaxServlet algorithm_exactMatch: " + algorithm_exactMatch);
+System.out.println("AjaxServlet algorithm_startsWith: " + algorithm_startsWith);
+System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
 
 
 
@@ -1977,13 +1999,7 @@ if (DataUtils.isNull(algorithm)) {
 
       out.println("<input type=\"hidden\" name=\"view\" value=\"" + view_str + "\" />");
 
-        String matchText = (String) request.getParameter("matchText");
-        if (DataUtils.isNull(matchText)) {
-			matchText = "";
-		} else {
-			matchText = matchText.trim();
-		}
-        request.getSession().setAttribute("matchText", matchText);
+
 
 
       out.println("");
@@ -2291,11 +2307,18 @@ if (view == Constants.STANDARD_VIEW) {
 
     public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
 
+
+System.out.println("(*** AjaxServlet ***) search_value_set ...");
+
         String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
         String algorithm = (String) request.getParameter("valueset_search_algorithm");
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+
+
+System.out.println("(*** AjaxServlet ***) selectValueSetSearchOption ..." + selectValueSetSearchOption);
+System.out.println("(*** AjaxServlet ***) search_value_set ...algorithm " + algorithm);
 
 
 		// check if any checkbox is checked.
@@ -2315,6 +2338,10 @@ if (view == Constants.STANDARD_VIEW) {
 			matchText = matchText.trim();
 		}
         request.getSession().setAttribute("matchText", matchText);
+
+
+System.out.println("(*** AjaxServlet ***) search_value_set ...matchText " + matchText);
+
 
 		String ontology_display_name = (String) request.getParameter("ontology_display_name");
 		String ontology_version = (String) request.getParameter("ontology_version");
@@ -2943,8 +2970,14 @@ System.out.println("search_value_set ontology_version: " + ontology_version);
 
  String contextPath = request.getContextPath();
  String view_str = new Integer(view).toString();
- String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
- String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
+
+ //String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
+ //String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
+
+
+ String option = (String) request.getParameter("selectValueSetSearchOption");
+ String algorithm = (String) request.getParameter("valueset_search_algorithm");
+
 
 
 String option_code = "";
