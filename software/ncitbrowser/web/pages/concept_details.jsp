@@ -214,8 +214,12 @@
             			request.getSession().setAttribute("singleton", "false");
             %>
             <!-- Page content -->
-            <div class="pagecontentLittlePadding">      
-                  <h:form style="margin:0px 0px 0px 0px;">          
+            <div class="pagecontentLittlePadding"> 
+            
+            
+                  <h:form style="margin:0px 0px 0px 0px;">  
+                  
+                  
                   <table border="0" width="720px" style="margin:0px 0px 0px 0px;">
                      <tr class="global-nav"> 
                         <td width="25%"></td>                       
@@ -293,12 +297,20 @@ if (!DataUtils.isNull(b)) {
     if (DataUtils.isNull(n)) {
         n = "1";
     }
+    
+    request.getSession().setAttribute("b", b);
+    request.getSession().setAttribute("n", n);
+    request.getSession().setAttribute("key", key);
+    
+    
 %>
              <input type="hidden" id="b" name="b" value="<%=b%>" />
              <input type="hidden" id="n" name="n" value="<%=n%>" />
              <input type="hidden" id="key" name="key" value="<%=key%>" />
+             
 <%  
     if (!DataUtils.isNull(m)) {
+        request.getSession().setAttribute("m", m);
     %>
         <input type="hidden" id="m" name="m" value="<%=m%>" />
     <%
@@ -307,9 +319,8 @@ if (!DataUtils.isNull(b)) {
 
 }
 %>
- 
+                  </h:form>  
                   
-                  </h:form>               
                <a name="evs-content" id="evs-content"></a>
                <table border="0" cellpadding="0" cellspacing="0" width="700px">
                   <tr>
@@ -399,8 +410,9 @@ if (!DataUtils.isNull(b)) {
                <%
                	}
                %>
-               <%@ include file="/pages/templates/nciFooter.jsp"%>
-           
+              <%@ include file="/pages/templates/nciFooter.jsp"%>
+
+
             </div> <!--  End pagecontentLittlePadding -->         
          </div> <!--  End main-area -->
          <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>

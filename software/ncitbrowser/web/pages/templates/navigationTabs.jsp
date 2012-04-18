@@ -3,6 +3,10 @@
 <table cellspacing="0" cellpadding="0" border="0">
   <tr>
     <%
+    
+ 
+   
+    
       String imagesPath = request.getContextPath() + "/images/";
       String pagesPath = request.getContextPath() + "/pages/";
       String term_jsp_page_name = "multiple_search.jsf";
@@ -13,7 +17,8 @@
       String tab_terms_image = nav_type.equalsIgnoreCase("terminologies")
         ? "tab_terms_clicked.gif" : "tab_terms.gif";
       tab_terms_image = imagesPath + tab_terms_image;
-      String tab_terms_link = pagesPath + term_jsp_page_name + "?nav_type=terminologies";   
+      String tab_terms_link = pagesPath + term_jsp_page_name + "?nav_type=terminologies";
+      
       
       String tab_valuesets_image = nav_type.equalsIgnoreCase("valuesets")
         ? "tab_valuesets_clicked.gif" : "tab_valuesets.gif";
