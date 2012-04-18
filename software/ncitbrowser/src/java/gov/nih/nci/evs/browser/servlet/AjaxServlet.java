@@ -2333,20 +2333,11 @@ if (view == Constants.STANDARD_VIEW) {
 
 
     public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
-
-
-System.out.println("(*** AjaxServlet ***) search_value_set ...");
-
         String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
         String algorithm = (String) request.getParameter("valueset_search_algorithm");
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
-
-
-System.out.println("(*** AjaxServlet ***) selectValueSetSearchOption ..." + selectValueSetSearchOption);
-System.out.println("(*** AjaxServlet ***) search_value_set ...algorithm " + algorithm);
-
 
 		// check if any checkbox is checked.
         String contextPath = request.getContextPath();
@@ -2366,17 +2357,8 @@ System.out.println("(*** AjaxServlet ***) search_value_set ...algorithm " + algo
 		}
         request.getSession().setAttribute("matchText", matchText);
 
-
-System.out.println("(*** AjaxServlet ***) search_value_set ...matchText " + matchText);
-
-
 		String ontology_display_name = (String) request.getParameter("ontology_display_name");
 		String ontology_version = (String) request.getParameter("ontology_version");
-
-
-System.out.println("search_value_set ontology_display_name: " + ontology_display_name);
-System.out.println("search_value_set ontology_version: " + ontology_version);
-
 
 		if (matchText.compareTo("") == 0) {
 			msg = "Please enter a search string.";
