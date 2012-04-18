@@ -1558,7 +1558,30 @@ if (view == Constants.STANDARD_VIEW) {
 //String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
 
 String option = (String) request.getParameter("selectValueSetSearchOption");
+if (DataUtils.isNull(option)) {
+	option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
+}
+
+if (DataUtils.isNull(option)) {
+	option = "Code";
+}
+request.getSession().setAttribute("selectValueSetSearchOption", option);
+
+
+
 String algorithm = (String) request.getParameter("valueset_search_algorithm");
+if (DataUtils.isNull(algorithm)) {
+	algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
+}
+
+if (DataUtils.isNull(algorithm)) {
+	algorithm = "exactMatch";
+}
+request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+
+
+
+
 
 
         String matchText = (String) request.getParameter("matchText");
