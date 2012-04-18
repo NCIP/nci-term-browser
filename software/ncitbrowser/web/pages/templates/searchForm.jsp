@@ -33,21 +33,18 @@
 	}
 </script>
 <%
-        String search_key = (String) request.getParameter("key");
         boolean back_to_search_results_link = false;
+        String search_key = (String) request.getParameter("key");
         String t = (String) request.getParameter("b"); 
         String page_number = (String) request.getParameter("n"); 
-        
         
         if (DataUtils.isNull(t)) {
 		t = (String) request.getSession().getAttribute("b"); 
 		page_number = (String) request.getSession().getAttribute("n"); 
 		search_key = (String) request.getSession().getAttribute("key"); 
-		request.getSession().removeAttribute("b"); 
-		request.getSession().removeAttribute("n"); 
-		//request.getSession().removeAttribute("key"); 
+		//request.getSession().removeAttribute("b"); 
+		//request.getSession().removeAttribute("n"); 
 	}        
-       
         
         if (!DataUtils.isNull(t)) {
             back_to_search_results_link = true;
@@ -59,7 +56,7 @@
 	String multiple_search_flag = (String) request.getParameter("m");
 	if (DataUtils.isNull(multiple_search_flag)) {
 	    multiple_search_flag = (String) request.getSession().getAttribute("m"); 
-	    request.getSession().removeAttribute("m"); 
+	    //request.getSession().removeAttribute("m"); 
 	}
 	
 	String form_requestContextPath = request.getContextPath();
