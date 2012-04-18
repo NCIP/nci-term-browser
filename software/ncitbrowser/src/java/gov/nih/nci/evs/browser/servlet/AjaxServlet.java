@@ -1563,6 +1563,10 @@ String algorithm = (String) request.getParameter("valueset_search_algorithm");
 
         String matchText = (String) request.getParameter("matchText");
         if (DataUtils.isNull(matchText)) {
+			matchText = (String) request.getSession().getAttribute("matchText");
+		}
+
+		if (DataUtils.isNull(matchText)) {
 			matchText = "";
 		} else {
 			matchText = matchText.trim();
