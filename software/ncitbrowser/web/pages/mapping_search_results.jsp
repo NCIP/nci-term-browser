@@ -172,8 +172,11 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
 		 <div class="searchbox-bottom"><img
 		   src="<%=base_Path%>/images/searchbox-bottom.gif" width="352" height="2"
 		   alt="SearchBox Bottom" /></div>
-		 <!-- end Search box --> <!-- Global Navigation --> <%@ include
-		   file="/pages/templates/menuBar-termbrowser.jsp"%> <!-- end Global Navigation -->
+		 <!-- end Search box --> 
+		 <!-- Global Navigation -->
+		 <% request.setAttribute("globalNavHeight", "13"); %> 
+		 <%@ include file="/pages/templates/menuBar-termbrowser.jsp"%> 
+		 <!-- end Global Navigation -->
 	 </div>
  </div>
  
