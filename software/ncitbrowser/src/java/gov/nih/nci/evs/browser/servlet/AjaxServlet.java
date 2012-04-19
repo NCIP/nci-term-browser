@@ -2126,6 +2126,17 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("        Sources</a>");
       out.println("");
 
+
+
+ String cart_size = (String) request.getSession().getAttribute("cart_size");
+ if (!DataUtils.isNull(cart_size)) {
+          out.write("|");
+          out.write("                        <a href=\"");
+          out.print(request.getContextPath());
+          out.write("/pages/cart.jsf\" tabindex=\"16\">Cart</a>\r\n");
+ }
+
+
 //KLO, 022612
 	  out.println(" \r\n");
 	  out.println("      ");
@@ -3789,6 +3800,15 @@ if (DataUtils.isNull(matchText)) {
  }
 
 
+ String cart_size = (String) request.getSession().getAttribute("cart_size");
+ if (!DataUtils.isNull(cart_size)) {
+          out.write("|");
+          out.write("                        <a href=\"");
+          out.print(request.getContextPath());
+          out.write("/pages/cart.jsf\" tabindex=\"16\">Cart</a>\r\n");
+ }
+
+
           out.write("                         ");
           out.print( VisitedConceptUtils.getDisplayLink(request, isPipeDisplayed) );
           out.write("\r\n");
@@ -3798,6 +3818,8 @@ if (DataUtils.isNull(matchText)) {
           out.print(request.getContextPath());
           out.write("/pages/help.jsf\" tabindex=\"16\">Help</a>\r\n");
           out.write("                      </td>\r\n");
+
+
           out.write("                      <td width=\"7\" valign=\"bottom\"></td>\r\n");
           out.write("                    </tr>\r\n");
           out.write("                  </table>\r\n");
