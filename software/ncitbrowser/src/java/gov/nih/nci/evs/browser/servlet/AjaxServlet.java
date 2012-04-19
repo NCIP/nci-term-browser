@@ -1688,7 +1688,7 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("");
 
    // 0=unchecked, 1=some children checked, 2=all children checked
-
+/*
       out.println("   // Gets the labels of all of the fully checked nodes");
       out.println("   // Could be updated to only return checked leaf nodes by evaluating");
       out.println("   // the children collection first.");
@@ -1697,8 +1697,8 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("        checkedNodes = [];");
       out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
       out.println("            var n = nodes[i];");
-      out.println("            if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
-      out.println("            //if (n.checkState == 2) {");
+      out.println("            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
+      out.println("            if (n.checkState == 2) {");
       out.println("                checkedNodes.push(n.label); // just using label for simplicity");
       out.println("");
       out.println("		    if (n.hasChildren()) {");
@@ -1713,6 +1713,32 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("");
       out.println("       return checkedNodes;");
       out.println("    }");
+*/
+
+
+      out.println("   // Gets the labels of all of the fully checked nodes");
+      out.println("   // Could be updated to only return checked leaf nodes by evaluating");
+      out.println("   // the children collection first.");
+
+      out.println("    function getCheckedNodes(nodes) {");
+      out.println("        nodes = nodes || tree.getRoot().children;");
+      out.println("        checkedNodes = [];");
+      out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
+      out.println("            var n = nodes[i];");
+      out.println("            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
+      out.println("            if (n.checkState == 2) {");
+      out.println("                checkedNodes.push(n.label); // just using label for simplicity");
+      out.println("            }");
+      out.println("		       if (n.hasChildren()) {");
+      out.println("			      checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));");
+      out.println("		       }");
+      out.println("        }");
+      out.println("        var checked_vocabularies = document.forms[\"valueSetSearchForm\"].checked_vocabularies;");
+      out.println("        checked_vocabularies.value = checkedNodes;");
+      out.println("        return checkedNodes;");
+      out.println("    }");
+
+
       out.println("");
       out.println("");
       out.println("");
@@ -3081,29 +3107,51 @@ if (DataUtils.isNull(algorithm)) {
 
    // 0=unchecked, 1=some children checked, 2=all children checked
 
+
+/*
+    function getCheckedNodes(nodes) {
+        nodes = nodes || tree.getRoot().children;
+        checkedNodes = [];
+        for(var i=0, l=nodes.length; i<l; i=i+1) {
+            var n = nodes[i];
+            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked
+            if (n.checkState == 2) {
+                checkedNodes.push(n.label); // just using label for simplicity
+            }
+
+            if (n.hasChildren()) {
+		        checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
+            }
+        }
+
+       //var checked_vocabularies = document.forms["valueSetSearchForm"].checked_vocabularies;
+       //checked_vocabularies.value = checkedNodes;
+
+
+       return checkedNodes;
+    }
+
+*/
       out.println("   // Gets the labels of all of the fully checked nodes");
       out.println("   // Could be updated to only return checked leaf nodes by evaluating");
       out.println("   // the children collection first.");
+
       out.println("    function getCheckedNodes(nodes) {");
       out.println("        nodes = nodes || tree.getRoot().children;");
       out.println("        checkedNodes = [];");
       out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
       out.println("            var n = nodes[i];");
-      out.println("            if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
-      out.println("            //if (n.checkState == 2) {");
+      out.println("            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
+      out.println("            if (n.checkState == 2) {");
       out.println("                checkedNodes.push(n.label); // just using label for simplicity");
-      out.println("");
-      out.println("		    if (n.hasChildren()) {");
-      out.println("			checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));");
-      out.println("		    }");
-      out.println("");
       out.println("            }");
+      out.println("		       if (n.hasChildren()) {");
+      out.println("			      checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));");
+      out.println("		       }");
       out.println("        }");
-      out.println("");
-      out.println("       var checked_vocabularies = document.forms[\"valueSetSearchForm\"].checked_vocabularies;");
-      out.println("       checked_vocabularies.value = checkedNodes;");
-      out.println("");
-      out.println("       return checkedNodes;");
+      out.println("        var checked_vocabularies = document.forms[\"valueSetSearchForm\"].checked_vocabularies;");
+      out.println("        checked_vocabularies.value = checkedNodes;");
+      out.println("        return checkedNodes;");
       out.println("    }");
       out.println("");
       out.println("");
