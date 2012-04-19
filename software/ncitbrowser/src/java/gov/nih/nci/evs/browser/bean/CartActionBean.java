@@ -349,9 +349,18 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 	}
 
 }
-
+        updateCartSizeSessionVariable(request);
 		return "concept_details";
     }
+
+    public void updateCartSizeSessionVariable(HttpServletRequest request) {
+        if (_cart.size() == 0) {
+			request.getSession().removeAttribute("cart_size");
+		}
+        String cartSize = new Integer(_cart.size()).toString();
+        request.getSession().setAttribute("cart_size", cartSize);
+	}
+
 
     /**
      * Remove concept(s) from the Cart
@@ -359,6 +368,11 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
      */
     public String removeFromCart() {
     	_messageflag = false;
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
 
     	if (getCount() < 1) {
         	_messageflag = true;
@@ -376,6 +390,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
             }
     	}
 
+    	updateCartSizeSessionVariable(request);
         return "showcart";
     }
 
