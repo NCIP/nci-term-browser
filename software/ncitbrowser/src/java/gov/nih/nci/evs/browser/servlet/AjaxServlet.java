@@ -1714,6 +1714,10 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("       return checkedNodes;");
       out.println("    }");
 */
+      out.println("    function getCheckedVocabularies(nodes) {");
+      out.println("       getCheckedNodes(nodes);");
+      out.println("       getPartialCheckedNodes(nodes);");
+      out.println("    }");
 
 
       out.println("   // Gets the labels of all of the fully checked nodes");
@@ -1722,10 +1726,9 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
 
       out.println("    function getCheckedNodes(nodes) {");
       out.println("        nodes = nodes || tree.getRoot().children;");
-      out.println("        checkedNodes = [];");
+      out.println("        var checkedNodes = [];");
       out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
       out.println("            var n = nodes[i];");
-      out.println("            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
       out.println("            if (n.checkState == 2) {");
       out.println("                checkedNodes.push(n.label); // just using label for simplicity");
       out.println("            }");
@@ -1733,8 +1736,28 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("			      checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));");
       out.println("		       }");
       out.println("        }");
+      //out.println("		   checkedNodes = checkedNodes.concat(\",\");");
       out.println("        var checked_vocabularies = document.forms[\"valueSetSearchForm\"].checked_vocabularies;");
       out.println("        checked_vocabularies.value = checkedNodes;");
+      out.println("        return checkedNodes;");
+      out.println("    }");
+
+
+      out.println("    function getPartialCheckedNodes(nodes) {");
+      out.println("        nodes = nodes || tree.getRoot().children;");
+      out.println("        var checkedNodes = [];");
+      out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
+      out.println("            var n = nodes[i];");
+      out.println("            if (n.checkState == 1) {");
+      out.println("                checkedNodes.push(n.label); // just using label for simplicity");
+      out.println("            }");
+      out.println("		       if (n.hasChildren()) {");
+      out.println("			      checkedNodes = checkedNodes.concat(getPartialCheckedNodes(n.children));");
+      out.println("		       }");
+      out.println("        }");
+      //out.println("		   checkedNodes = checkedNodes.concat(\",\");");
+      out.println("        var partial_checked_vocabularies = document.forms[\"valueSetSearchForm\"].partial_checked_vocabularies;");
+      out.println("        partial_checked_vocabularies.value = checkedNodes;");
       out.println("        return checkedNodes;");
       out.println("    }");
 
@@ -2059,6 +2082,8 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("");
       out.println("");
       out.println("            <input type=\"hidden\" id=\"checked_vocabularies\" name=\"checked_vocabularies\" value=\"\" />");
+      out.println("            <input type=\"hidden\" id=\"partial_checked_vocabularies\" name=\"partial_checked_vocabularies\" value=\"\" />");
+
       out.println("");
       out.println("");
       out.println("");
@@ -2075,7 +2100,7 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("                    tabindex=\"1\"/>");
       out.println("");
       out.println("");
-      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search Value Sets\" onclick=\"javascript:getCheckedNodes();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
+      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search Value Sets\" onclick=\"javascript:getCheckedVocabularies();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
       out.println("");
       out.println("");
       out.println("    </td>");
@@ -2385,6 +2410,11 @@ if (view == Constants.STANDARD_VIEW) {
 		request.getSession().removeAttribute("checked_vocabularies");
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
+
+		request.getSession().removeAttribute("partial_checked_vocabularies");
+		String partial_checked_vocabularies = (String) request.getParameter("partial_checked_vocabularies");
+		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
+
 
         String matchText = (String) request.getParameter("matchText");
         if (DataUtils.isNull(matchText)) {
@@ -3143,16 +3173,23 @@ if (DataUtils.isNull(algorithm)) {
     }
 
 */
+
+
+      out.println("    function getCheckedVocabularies(nodes) {");
+      out.println("       getCheckedNodes(nodes);");
+      out.println("       getPartialCheckedNodes(nodes);");
+      out.println("    }");
+
+
       out.println("   // Gets the labels of all of the fully checked nodes");
       out.println("   // Could be updated to only return checked leaf nodes by evaluating");
       out.println("   // the children collection first.");
 
       out.println("    function getCheckedNodes(nodes) {");
       out.println("        nodes = nodes || tree.getRoot().children;");
-      out.println("        checkedNodes = [];");
+      out.println("        var checkedNodes = [];");
       out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
       out.println("            var n = nodes[i];");
-      out.println("            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
       out.println("            if (n.checkState == 2) {");
       out.println("                checkedNodes.push(n.label); // just using label for simplicity");
       out.println("            }");
@@ -3160,10 +3197,31 @@ if (DataUtils.isNull(algorithm)) {
       out.println("			      checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));");
       out.println("		       }");
       out.println("        }");
+      //out.println("		   checkedNodes = checkedNodes.concat(\",\");");
       out.println("        var checked_vocabularies = document.forms[\"valueSetSearchForm\"].checked_vocabularies;");
       out.println("        checked_vocabularies.value = checkedNodes;");
       out.println("        return checkedNodes;");
       out.println("    }");
+
+
+      out.println("    function getPartialCheckedNodes(nodes) {");
+      out.println("        nodes = nodes || tree.getRoot().children;");
+      out.println("        var checkedNodes = [];");
+      out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
+      out.println("            var n = nodes[i];");
+      out.println("            if (n.checkState == 1) {");
+      out.println("                checkedNodes.push(n.label); // just using label for simplicity");
+      out.println("            }");
+      out.println("		       if (n.hasChildren()) {");
+      out.println("			      checkedNodes = checkedNodes.concat(getPartialCheckedNodes(n.children));");
+      out.println("		       }");
+      out.println("        }");
+      //out.println("		   checkedNodes = checkedNodes.concat(\",\");");
+      out.println("        var partial_checked_vocabularies = document.forms[\"valueSetSearchForm\"].partial_checked_vocabularies;");
+      out.println("        partial_checked_vocabularies.value = checkedNodes;");
+      out.println("        return checkedNodes;");
+      out.println("    }");
+
       out.println("");
       out.println("");
       out.println("");
@@ -3610,6 +3668,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("");
       out.println("");
       out.println("            <input type=\"hidden\" id=\"checked_vocabularies\" name=\"checked_vocabularies\" value=\"\" />");
+      out.println("            <input type=\"hidden\" id=\"partial_checked_vocabularies\" name=\"partial_checked_vocabularies\" value=\"\" />");
       out.println("");
       out.println("");
       out.println("");
@@ -3626,7 +3685,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("                    tabindex=\"1\"/>");
       out.println("");
       out.println("");
-      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search Value Sets\" onclick=\"javascript:getCheckedNodes();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
+      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search Value Sets\" onclick=\"javascript:getCheckedVocabularies();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
       out.println("");
       out.println("");
       out.println("    </td>");
