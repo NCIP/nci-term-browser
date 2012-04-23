@@ -77,7 +77,7 @@
 </form>
 <%
 
-
+String vd_uri = null;
 String valueSetSearch_requestContextPath = request.getContextPath();
 String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
 
@@ -203,9 +203,6 @@ String vsd_name = "null";
 if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
 
 
-if (vsd_vec == null) {
-
-}
 
 %>
 
@@ -229,6 +226,12 @@ if (vsd_vec == null) {
     } 
 
     System.out.println("JSP vsd_name: " + vsd_name);
+    System.out.println("JSP uri_vsd:  " + uri_vsd);
+    
+    if (vsd_vec.size() == 1) {
+        vd_uri = uri_vsd;
+    }
+    
     if (vsd_name == null || vsd_name.compareTo("null") == 0) {
     %>
 	  <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
@@ -275,7 +278,6 @@ if (vsd_vec == null) {
 <%
 if (vsd_vec != null && vsd_vec.size() == 1) {
 
-
     String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
         .cleanXSS((String) request.getSession().getAttribute("matchText"));
 
@@ -283,7 +285,6 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 
     String userAgent = request.getHeader("user-agent");
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");
-
 
     String uri_str = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
     
@@ -369,7 +370,11 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 
     <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>" />
 <%
-if (uri_str != null) {
+if (vd_uri != null) {
+%>
+    <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vd_uri%>" />
+<%
+} else if (uri_str != null) {
 %>
 <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=uri_str%>" />
 <%
