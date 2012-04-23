@@ -1215,6 +1215,14 @@ public final class AjaxServlet extends HttpServlet {
       response.setContentType("text/html");
       PrintWriter out = null;
 
+
+		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		System.out.println("checked_vocabularies: " + checked_vocabularies);
+
+		String partial_checked_vocabularies = (String) request.getParameter("partial_checked_vocabularies");
+		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
+
+
       try {
       	  out = response.getWriter();
       } catch (Exception ex) {
@@ -1653,6 +1661,12 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       	  out.println("		 tree.collapseAll();");
 	  }
 
+
+      //initializeNodeCheckState(out);
+
+      out.println("      initializeNodeCheckState();");
+
+
       out.println("      tree.draw();");
 
 
@@ -1719,6 +1733,8 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("       getPartialCheckedNodes(nodes);");
       out.println("    }");
 
+      writeInitialize(out);
+      initializeNodeCheckState(out);
 
       out.println("   // Gets the labels of all of the fully checked nodes");
       out.println("   // Could be updated to only return checked leaf nodes by evaluating");
@@ -1976,7 +1992,11 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("");
       out.println("");
       out.println("");
+
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
+      //out.println("<body onLoad=\"initialize();\">");
+
+
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
@@ -2137,6 +2157,13 @@ System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
       out.println("");
       out.println("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"j_id22:j_id23\" />");
       out.println("</form>");
+
+
+
+      addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
+
+
+
       out.println("          </div> <!-- searchbox -->");
       out.println("");
       out.println("          <div class=\"searchbox-bottom\"><img src=\"/ncitbrowser/images/searchbox-bottom.gif\" width=\"352\" height=\"2\" alt=\"SearchBox Bottom\" /></div>");
@@ -2335,13 +2362,15 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("          <div id=\"treecontainer\" class=\"ygtv-checkbox\"></div>");
       out.println("");
       out.println("          <form id=\"pg_form\">");
-      out.println("");
       out.println("            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"null\" />");
-      //out.println("            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"null\" />");
-      //out.println("            <input type=\"hidden\" id=\"ontology_version\" name=\"ontology_version\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
       out.println("          </form>");
+
+
+
+
+
       out.println("");
       out.println("");
       out.println("        </div> <!-- popupContentArea -->");
@@ -2723,6 +2752,14 @@ if (view == Constants.STANDARD_VIEW) {
       response.setContentType("text/html");
       PrintWriter out = null;
 
+
+		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		System.out.println("checked_vocabularies: " + checked_vocabularies);
+
+		String partial_checked_vocabularies = (String) request.getParameter("partial_checked_vocabularies");
+		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
+
+
       try {
       	  out = response.getWriter();
       } catch (Exception ex) {
@@ -3095,6 +3132,8 @@ if (DataUtils.isNull(algorithm)) {
       	  out.println("		 tree.collapseAll();");
 	  }
 
+      out.println("      initializeNodeCheckState();");
+
       out.println("      tree.draw();");
 
 
@@ -3180,6 +3219,8 @@ if (DataUtils.isNull(algorithm)) {
       out.println("       getPartialCheckedNodes(nodes);");
       out.println("    }");
 
+      writeInitialize(out);
+      initializeNodeCheckState(out);
 
       out.println("   // Gets the labels of all of the fully checked nodes");
       out.println("   // Could be updated to only return checked leaf nodes by evaluating");
@@ -3437,7 +3478,11 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
       out.println("");
       //out.println("<body>");
+
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
+
+      //out.println("<body onLoad=\"initialize();\">");
+
 
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
@@ -3664,6 +3709,9 @@ if (DataUtils.isNull(matchText)) {
 	matchText = "";
 }
 
+
+
+
       out.println("");
       out.println("");
       out.println("");
@@ -3729,6 +3777,10 @@ if (DataUtils.isNull(matchText)) {
       out.println("");
       out.println("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"j_id22:j_id23\" />");
       out.println("</form>");
+
+      addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
+
+
       out.println("          </div> <!-- searchbox -->");
       out.println("");
       out.println("          <div class=\"searchbox-bottom\"><img src=\"/ncitbrowser/images/searchbox-bottom.gif\" width=\"352\" height=\"2\" alt=\"SearchBox Bottom\" /></div>");
@@ -4045,6 +4097,9 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("            <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
       out.println("          </form>");
       out.println("");
+
+
+
       out.println("");
       out.println("        </div> <!-- popupContentArea -->");
       out.println("");
@@ -4096,6 +4151,43 @@ if (view == Constants.STANDARD_VIEW) {
   }
 
 
+   public static void addHiddenForm(PrintWriter out, String checkedNodes, String partialCheckedNodes) {
+      out.println("   <form id=\"hidden_form\">");
+      out.println("      <input type=\"hidden\" id=\"checkedNodes\" name=\"checkedNodes\" value=\"" + checkedNodes + "\" />");
+      out.println("      <input type=\"hidden\" id=\"partialCheckedNodes\" name=\"partialCheckedNodes\" value=\"" + partialCheckedNodes + "\" />");
+      out.println("   </form>");
+   }
+
+   public static void writeInitialize(PrintWriter out) {
+      out.println("   function initialize() {");
+      out.println("	     tree = new YAHOO.widget.TreeView(\"treecontainer\");");
+      out.println("	     initializeNodeCheckState();");
+      out.println("	     tree.expandAll();");
+      out.println("	     tree.draw();");
+      out.println("   }");
+   }
+
+
+   public static void initializeNodeCheckState(PrintWriter out) {
+      out.println("   function initializeNodeCheckState(nodes) {");
+      out.println("       nodes = nodes || tree.getRoot().children;");
+      out.println("       var checkedNodes = document.forms[\"hidden_form\"].checkedNodes.value;");
+      out.println("       var partialCheckedNodes = document.forms[\"hidden_form\"].partialCheckedNodes.value;");
+      out.println("       for(var i=0, l=nodes.length; i<l; i=i+1) {");
+      out.println("            var n = nodes[i];");
+      out.println("");
+      out.println("            if (checkedNodes.indexOf(n.label) != -1) {");
+      out.println("                n.setCheckState(2);");
+      out.println("            } else if (partialCheckedNodes.indexOf(n.label) != -1) {");
+      out.println("                n.setCheckState(1);");
+      out.println("            }");
+      out.println("");
+      out.println("            if (n.hasChildren()) {");
+      out.println("		        initializeNodeCheckState(n.children);");
+      out.println("            }");
+      out.println("        }");
+      out.println("   }");
+   }
 
 
     public static void addQuickLink(HttpServletRequest request, PrintWriter out) {
