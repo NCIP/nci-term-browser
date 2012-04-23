@@ -174,26 +174,26 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                 <tr>
                   <td>
                   <img src="<%= request.getContextPath() %>/images/selectAll.gif"
-                    name="selectAll" alt="selectAll"
+                    name="selectAll" alt="selectAll" tabindex="11"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
 
                   &nbsp;&nbsp; 
                   <img src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
-                    name="selectAllButNCIm" alt="selectAllButNCIm"
+                    name="selectAllButNCIm" alt="selectAllButNCIm" tabindex="12"
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
 
                   &nbsp;&nbsp; 
                   <h:commandButton id="clear" value="clearall"
                     action="#{userSessionBean.clearAll}"
                     image="#{requestContextPath}/images/clear.gif"
-                    alt="reset">
+                    alt="reset" tabindex="13">
                   </h:commandButton>
                   
                   &nbsp;&nbsp; 
                   <h:commandButton id="multi_search" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{requestContextPath}/images/search.gif"
-                    alt="Search">
+                    alt="Search" tabindex="14">
                   </h:commandButton>
                   </td>
                 </tr>
@@ -544,26 +544,26 @@ if (hide_counter == 1) {
                 <tr>
                   <td>
                     <img src="<%= request.getContextPath() %>/images/selectAll.gif"
-                    name="selectAll" alt="selectAll"
+                    name="selectAll" alt="selectAll" tabindex="15"
                     onClick="checkAll(document.searchTerm.ontology_list)" />
 
                   &nbsp;&nbsp; 
                     <img src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
-                    name="selectAllExceptNCIm" alt="selectAllButNCIm"
+                    name="selectAllExceptNCIm" alt="selectAllButNCIm" tabindex="16" 
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
 
                   &nbsp;&nbsp; 
                   <h:commandButton id="clearall" value="clearall"
                     action="#{userSessionBean.clearAll}"
                     image="#{requestContextPath}/images/clear.gif"
-                    alt="reset">
+                    alt="reset" tabindex="17" >
                   </h:commandButton>
                   
                   &nbsp;&nbsp; 
                   <h:commandButton id="multipleSearch" value="Search"
                     action="#{userSessionBean.multipleSearchAction}"
                     image="#{requestContextPath}/images/search.gif"
-                    alt="Search">
+                    alt="Search" tabindex="18">
                   </h:commandButton>
                   
                   </td>
