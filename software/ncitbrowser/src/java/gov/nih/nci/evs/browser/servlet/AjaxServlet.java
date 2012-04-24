@@ -1212,6 +1212,11 @@ public final class AjaxServlet extends HttpServlet {
 	}
 
     public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
+
+	  request.getSession().removeAttribute("b");
+	  request.getSession().removeAttribute("m");
+
+
       response.setContentType("text/html");
       PrintWriter out = null;
 
@@ -2749,6 +2754,10 @@ if (view == Constants.STANDARD_VIEW) {
 
 
     public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String dictionary, String version) {
+
+	  request.getSession().removeAttribute("b");
+	  request.getSession().removeAttribute("m");
+
       response.setContentType("text/html");
       PrintWriter out = null;
 

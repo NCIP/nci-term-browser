@@ -32,7 +32,7 @@
       String tab_mappings_image = nav_type.equalsIgnoreCase("mappings")
         ? "tab_map_clicked.gif" : "tab_map.gif";
       tab_mappings_image = imagesPath + tab_mappings_image;
-      String tab_mappings_link = pagesPath + mapping_jsp_page_name + "?nav_type=mappings";
+      String tab_mappings_link = pagesPath + mapping_jsp_page_name + "?nav_type=mappings&b=0&m=0";
     %>
 
     <%-- 
