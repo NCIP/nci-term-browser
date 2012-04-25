@@ -62,7 +62,7 @@
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
             <tr class="textbody"><td align="left">
 <p>
-Certain generated map sets will make use of a map rank to provide additional information regarding the quality of individual maps within the set. It can be thought of as a score, where the a value of 1 indicates a highest quality map within the set and lower numbers indicate increasingly lower quality maps. The intention is to provide applications with as much information as possible (e.g. every known connection between two vocabularies) while also providing them the ability to choose a “quality threshold” below which lower quality maps will not be considered. The threshold must be tuned for each use case.
+Certain generated map sets will make use of a map rank to provide additional information regarding the quality of individual maps within the set. It can be thought of as a score, where the a value of 1 indicates a highest quality map within the set and higher numbers indicate increasingly lower quality maps. The intention is to provide applications with as much information as possible (e.g. every known connection between two vocabularies) while also providing them the ability to choose a “quality threshold” below which lower quality maps will not be considered. The threshold must be tuned for each use case.
 </p>
 
 <p>
