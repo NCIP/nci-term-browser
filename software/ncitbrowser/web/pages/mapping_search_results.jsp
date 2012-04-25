@@ -401,16 +401,7 @@ if (show_rank_column) {
      upper_bound = pageSize;
      
  }
- 
- 
- System.out.println("(**************** list.size(): " + list.size());
- 
- System.out.println("(**************** upper_bound: " + upper_bound);
- 
-  System.out.println("(**************** istart: " + istart);
-  
-  System.out.println("(**************** iend: " + iend);
- 
+
                 
                 //for (int lcv=0; lcv<upper_bound; lcv++) {
   for (int lcv=0; lcv<list.size(); lcv++) {
@@ -456,7 +447,7 @@ target_scheme = DataUtils.getFormalName(target_scheme);
                     <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>&b=0&m=0'">
       <%=source_code%>
 </a>
 
@@ -480,7 +471,7 @@ if (show_rank_column) {
         <td class="datacoldark">
 
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>&b=0&m=0'">
       <%=target_code%>
 </a>
 
