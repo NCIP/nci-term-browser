@@ -1558,6 +1558,8 @@ if (view == Constants.STANDARD_VIEW) {
 
 
  TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
+
+ //
  //new ValueSetUtils().printTree(out, root);
  new ValueSetUtils().printTree(out, root, view);
 

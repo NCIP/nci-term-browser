@@ -110,6 +110,23 @@ public class ValueSetUtils {
 
 
 
+      private List<TreeItem> Move_NCIt_to_Top(List<TreeItem> children) {
+		  List<TreeItem> new_children = new ArrayList<TreeItem>();
+
+		  for (TreeItem childItem : children) {
+			  if (childItem._text.compareTo("NCI Thesaurus") == 0) {
+				  new_children.add(childItem);
+			  }
+		  }
+
+		  for (TreeItem childItem : children) {
+			  if (childItem._text.compareTo("NCI Thesaurus") != 0) {
+				  new_children.add(childItem);
+			  }
+		  }
+		  return new_children;
+	  }
+
 
 
 
@@ -124,8 +141,12 @@ public class ValueSetUtils {
 		//TreeItem root = new TreeItem("<Root>", "Root node");
 		for (String association : root._assocToChildMap.keySet()) {
 			List<TreeItem> children = root._assocToChildMap.get(association);
+
 			// Collections.sort(children);
 			SortUtils.quickSort(children);
+
+			//children = Move_NCIt_to_Top(children);
+
 			for (TreeItem childItem : children) {
 				String child_node_id = generateID(childItem);
 				printTree(out, childItem, child_node_id, null, "root", 0);
@@ -325,6 +346,12 @@ System.out.println("(*) ValueSetUtils.printTree dictionary: " + dictionary);
 			List<TreeItem> children = root._assocToChildMap.get(association);
 			// Collections.sort(children);
 			SortUtils.quickSort(children);
+
+			if (view == Constants.TERMINOLOGY_VIEW) {
+				children = Move_NCIt_to_Top(children);
+			}
+
+
 			for (TreeItem childItem : children) {
 				String child_node_id = generateID(childItem);
 				printTree(out, childItem, child_node_id, null, "root", 0, view);
