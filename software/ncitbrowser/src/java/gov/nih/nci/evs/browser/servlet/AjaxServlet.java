@@ -3837,7 +3837,7 @@ if (DataUtils.isNull(matchText)) {
  boolean vocabulary_isMapping = DataUtils.isMapping(scheme, null);
 
 
-          out.write("                  <table class=\"global-nav\" border=\"0\" width=\"100%\" height=\"37px\" cellpadding=\"0\" cellspacing=\"0\">\r\n");
+          out.write("                  <table class=\"global-nav\" border=\"0\" width=\"100%\" height=\"30px\" cellpadding=\"0\" cellspacing=\"0\">\r\n");
           out.write("                    <tr>\r\n");
           out.write("                      <td valign=\"bottom\">\r\n");
           out.write("                         ");
