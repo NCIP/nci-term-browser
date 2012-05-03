@@ -3979,6 +3979,17 @@ System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
 
 		List list = new ArrayList();
 		try {
+			LexBIGService distributed = RemoteServerUtil.createLexBIGService();
+			MappingExtension mappingExtension = (MappingExtension)
+				distributed.getGenericExtension("MappingExtension");
+
+            boolean isMappingCS = mappingExtension.isMappingCodingScheme(scheme, csvt);
+            Boolean bool_obj = new Boolean(isMappingCS);
+			_isMappingHashMap.put(scheme, bool_obj);
+			return bool_obj;
+
+//[#32124] GO to NCIt Map does not appear on the Mapping tab.
+			/*
 			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
 			Relations[] relations = cs.getRelations();
@@ -3994,6 +4005,8 @@ System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
 					return false;
 				}
 			}
+			*/
+
 		} catch (Exception ex) {
 			_isMappingHashMap.put(scheme, Boolean.FALSE);
             return false;
