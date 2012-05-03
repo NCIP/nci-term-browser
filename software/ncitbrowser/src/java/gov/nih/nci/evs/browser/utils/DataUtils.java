@@ -4006,13 +4006,13 @@ System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
 				}
 			}
 			*/
-
+			
 		} catch (Exception ex) {
 			_isMappingHashMap.put(scheme, Boolean.FALSE);
             return false;
         }
-        _isMappingHashMap.put(scheme, Boolean.TRUE);
-        return true;
+//DYEE        _isMappingHashMap.put(scheme, Boolean.TRUE);
+//DYEE        return true;
     }
 
 
