@@ -579,6 +579,7 @@ public class DataUtils {
                 String value = (String) nv_vec.elementAt(k);
                 if (!value.startsWith(Constants.TERMINOLOGY_VALUE_SET)) {
 	                _ontologies.add(new SelectItem(value, value));
+	                System.out.println("(#) DataUtils _ontologies " + value);
 				}
             }
         }
@@ -3986,7 +3987,7 @@ System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
             boolean isMappingCS = mappingExtension.isMappingCodingScheme(scheme, csvt);
             Boolean bool_obj = new Boolean(isMappingCS);
 			_isMappingHashMap.put(scheme, bool_obj);
-			return bool_obj;
+			return isMappingCS;
 
 //[#32124] GO to NCIt Map does not appear on the Mapping tab.
 			/*
@@ -4006,13 +4007,11 @@ System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
 				}
 			}
 			*/
-			
+
 		} catch (Exception ex) {
 			_isMappingHashMap.put(scheme, Boolean.FALSE);
             return false;
         }
-//DYEE        _isMappingHashMap.put(scheme, Boolean.TRUE);
-//DYEE        return true;
     }
 
 

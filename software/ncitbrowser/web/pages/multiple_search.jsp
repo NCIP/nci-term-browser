@@ -256,6 +256,14 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     if (DataUtils.isNull(display_name)) {
                         //if (display_name == null || display_name.compareTo("null") == 0)
                         display_name = DataUtils.getLocalName(scheme);
+                        
+System.out.println("(WARNING) display_name_vec " + label + " 	display_name not defined in metadata. set display_name to " + display_name); 	    
+                        
+                        
+                    } else {
+                    
+ System.out.println("(*) display_name_vec " + label + " 	display_name: " + display_name); 	    
+                   
                     }
  
                     String sort_category = DataUtils.getMetadataValue(
@@ -267,6 +275,8 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		    if (!info.isProduction()) {
 		        System.out.println("Non-production version: " + scheme + " version: " + version);
 		    }
+		    
+		    
                     
                   }
                   
