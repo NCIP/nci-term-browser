@@ -1642,7 +1642,7 @@ int selected_knt = 0;
 
         String searchTarget = (String) request.getParameter("searchTarget");
 
-        System.out.println("(************) advancedSearchAction searchTarget: " + searchTarget);
+        //System.out.println("(************) advancedSearchAction searchTarget: " + searchTarget);
 
 
         String matchText = (String) request.getParameter("matchText");

@@ -579,7 +579,7 @@ public class DataUtils {
                 String value = (String) nv_vec.elementAt(k);
                 if (!value.startsWith(Constants.TERMINOLOGY_VALUE_SET)) {
 	                _ontologies.add(new SelectItem(value, value));
-	                System.out.println("(#) DataUtils _ontologies " + value);
+	                //System.out.println("(#) DataUtils _ontologies " + value);
 				}
             }
         }
