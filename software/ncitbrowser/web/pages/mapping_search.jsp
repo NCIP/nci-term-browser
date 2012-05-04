@@ -88,8 +88,6 @@ if (ontologiesToSearchOn == null) {
 
 if (display_name_vec == null) {
 
-System.out.println("mapping_search.jsp display_name_vec == null ");
-
   display_name_vec = new Vector();
   List ontology_list = DataUtils.getOntologyList();
 
@@ -112,10 +110,6 @@ System.out.println("mapping_search.jsp display_name_vec == null ");
 
     OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
     display_name_vec.add(info);
-
-
-System.out.println("mapping_search.jsp add to display_name_vec " + label);
-
 
 	 if (!info.isProduction()) {
 	     System.out.println("Non-production version: " + scheme + " version: " + version);
@@ -361,15 +355,9 @@ or search from there.  It is not yet possible to search more than one mapping da
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <%
-                      
-System.out.println("\ndisplay_name_vec size: " + display_name_vec.size());
-                    
-                      
                       int mapping_cs_knt = 0;
                       for (int i = 0; i < display_name_vec.size(); i++) {
-                      
-                      
-                      
+                     
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                        
                         String display_name = info.getDisplayName();
@@ -379,16 +367,8 @@ System.out.println("\ndisplay_name_vec size: " + display_name_vec.size());
                         
                         boolean isMapping = DataUtils.isMapping(scheme, version);
                         
-                        
-System.out.println("mapping_search.jsp: " + display_name + " label: " + label + " scheme: " + scheme + " version: " + version + "  isMapping: " + isMapping );
-                       
-                        
                         if (isMapping) {
-                        
- System.out.println("mapping_search.jsp: mapping " + label);
-                       
-                        
-                                mapping_cs_knt++;
+                               mapping_cs_knt++;
                        
 				String http_label = null;
 				String http_scheme = null;

@@ -260,11 +260,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 System.out.println("(WARNING) display_name_vec " + label + " 	display_name not defined in metadata. set display_name to " + display_name); 	    
                         
                         
-                    } else {
-                    
- System.out.println("(*) display_name_vec " + label + " 	display_name: " + display_name); 	    
-                   
-                    }
+                    } 
  
                     String sort_category = DataUtils.getMetadataValue(
                         scheme, version, "vocabulary_sort_category");
