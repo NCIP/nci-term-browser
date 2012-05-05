@@ -194,7 +194,6 @@ int size = iteratorBean.getSize();
 List list = null;
 int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
-System.out.println("num_pages: " + num_pages);
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
@@ -210,8 +209,6 @@ if (!DataUtils.isNull(page_number)) {
     pageNum = 0;
 }
 
-
-System.out.println("pageNum: " + pageNum);
 int istart = pageNum * pageSize;
 int page_num = pageNum;
 if (page_num == 0) {
@@ -225,8 +222,6 @@ try {
    int prev_size = size;
    size = iteratorBean.getSize();
    
-System.out.println( "(*) prev_size: " + prev_size);
-System.out.println( "(*) size: " + size);
 
 
    if (size != prev_size) {
@@ -243,7 +238,7 @@ System.out.println( "(*) size: " + size);
 
    }
 } catch (Exception ex) {
-   System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+   //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
 
 

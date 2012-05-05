@@ -76,9 +76,6 @@
             		IteratorBean iteratorBean = iteratorBeanManager
             				.getIteratorBean(resolved_vs_key);
             		if (iteratorBean == null) {
-            			System.out.println("(*) iteratorBean with key "
-            					+ resolved_vs_key + " NOT found.");
-
             			ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request
             					.getSession().getAttribute(
             							"ResolvedConceptReferencesIterator");
@@ -90,22 +87,15 @@
             			iteratorBeanManager.addIteratorBean(iteratorBean);
 
             			int itr_size = iteratorBean.getSize();
-            			System.out.println("itr_size: " + itr_size);
-            			Integer obj = new Integer(itr_size);
+           			Integer obj = new Integer(itr_size);
             			String itr_size_str = obj.toString();
-            			System.out.println("itr_size_str: " + itr_size_str);
-            			request.getSession().setAttribute("itr_size_str",
+           			request.getSession().setAttribute("itr_size_str",
             					itr_size_str);
 
             		} else {
-            			System.out.println("(*) iteratorBean with key "
-            					+ resolved_vs_key + " found.");
-            			int itr_size = iteratorBean.getSize();
-            			System.out.println("itr_size: " + itr_size);
+           			int itr_size = iteratorBean.getSize();
             			Integer obj = new Integer(itr_size);
             			String itr_size_str = obj.toString();
-            			System.out.println("itr_size_str: " + itr_size_str);
-
             		}
 
             		String resultsPerPage = (String) request
@@ -141,15 +131,10 @@
             		int size = iteratorBean.getSize();
             		numRemaining = size;
 
-            		System.out.println("\npage_num: " + page_num);
-            		System.out.println("size: " + size);
-            		System.out.println("pageSize: " + pageSize);
-
             		int num_pages = size / pageSize;
             		if (num_pages * pageSize < size)
             			num_pages++;
 
-            		System.out.println("num_pages: " + num_pages + "\n");
 
             		int istart = (page_num - 1) * pageSize;
             		if (istart < 0)

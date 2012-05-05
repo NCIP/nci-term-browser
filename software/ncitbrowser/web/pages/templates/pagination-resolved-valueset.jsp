@@ -15,9 +15,7 @@ String match_size = Integer.toString(numRemaining);
 String prev_page_num_str = Integer.toString(prev_page_num);
 String next_page_num_str = Integer.toString(next_page_num);
 
-System.out.println("pagination-mapping.jsp page_num: " + page_num);
-System.out.println("pagination-mapping.jsp prev_page_num_str: " + prev_page_num_str);
-System.out.println("pagination-mapping.jsp next_page_num_str: " + next_page_num_str);
+
 %>
 
 

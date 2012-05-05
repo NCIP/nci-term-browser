@@ -10,20 +10,15 @@
     if (vsdUri == null) vsdUri = (String) request.getSession().getAttribute("vsd_uri");
     
 String vsd_name = null;  
-System.out.println("content-header-resolvedvalueset.jsp vsdUri: " + vsdUri);
-
 
 ValueSetDefinition selected_vsd = (ValueSetDefinition) request.getSession().getAttribute("selected_vsd");
 
 if (vsdUri != null && vsdUri.compareTo("null") != 0 && vsdUri.indexOf("|") != -1) {
 
-System.out.println("(1) vsdUri: " + vsdUri);
-
     Vector w = DataUtils.parseData(vsdUri);
     
     for (int k=0; k<w.size(); k++) {
        String t = (String) w.elementAt(k);
-       System.out.println("(" + k + ") " + t);
     }    
     
     vsdUri = (String) w.elementAt(1);
@@ -40,21 +35,12 @@ System.out.println("(1) vsdUri: " + vsdUri);
 } else if (vsdUri != null) {
     String metadata = DataUtils.getValueSetDefinitionMetadata(vsdUri);
     
-System.out.println("(2) metadata: " + metadata);    
-    
     Vector metadata_vec = DataUtils.parseData(metadata);
-    
-    
-    for (int k=0; k<metadata_vec.size(); k++) {
-       String t = (String) metadata_vec.elementAt(k);
-       System.out.println("(" + k + ") " + t);
-    }
+
     vsd_name = (String) metadata_vec.elementAt(0);
     request.getSession().setAttribute("vsd_uri", vsdUri); 
 }
  
-System.out.println("vsd_name: " + vsd_name);
-System.out.println("vsdUri: " + vsdUri);
 
   
 %>
@@ -75,7 +61,7 @@ if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
 <%		  
 } else {
 
-System.out.println("Using small font.");
+
 %>
 
 

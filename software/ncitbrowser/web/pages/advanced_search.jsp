@@ -180,19 +180,12 @@
             bean = new SearchStatusBean(adv_search_vocabulary);
             FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("searchStatusBean", bean);
             
-            System.out.println("bean_obj == null???");
             adv_search_algorithm = bean.getAlgorithm();
-            System.out.println("adv_search_algorithm " + adv_search_algorithm);
 
         } else {
-        
-            System.out.println("bean_obj != null???");
-        
+       
             bean = (SearchStatusBean) bean_obj;
             adv_search_algorithm = bean.getAlgorithm();
-            
-            System.out.println("adv_search_algorithm " + adv_search_algorithm);
-            
             adv_search_source = bean.getSelectedSource();
             selectProperty = bean.getSelectedProperty();
             search_string = bean.getMatchText();

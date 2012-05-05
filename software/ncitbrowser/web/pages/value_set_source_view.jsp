@@ -668,7 +668,6 @@ body {
     String valueset_search_algorithm = null;
     valueset_search_algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
     if (valueset_search_algorithm == null) valueset_search_algorithm = "";
-    System.out.println("JSP valueset_search_algorithm " + valueset_search_algorithm);   
     
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";

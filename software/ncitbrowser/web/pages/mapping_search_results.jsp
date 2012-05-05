@@ -73,8 +73,6 @@ String mapping_scheme = info.dictionary;
 String mapping_dictionary = info.dictionary;
 String mapping_version = info.version;
 
-System.out.println("(*) mapping_search_results.jsp dictionary: " + mapping_dictionary);
-System.out.println("(*) mapping_search_results.jsp version: " + mapping_version);
 _logger.debug("mapping_search_results.jsp dictionary: " + mapping_dictionary);
 _logger.debug("mapping_search_results.jsp version: " + mapping_version);
 
@@ -231,7 +229,6 @@ int numRemaining = 0;
 
 
 String key = (String) request.getAttribute("key");
-System.out.println("(++++++++++++++++++++) search results.jsp key: " + key);
 if (key == null) {
     key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 }
@@ -250,14 +247,12 @@ int size = iteratorBean.getSize();
 List list = null;
 int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
-System.out.println("num_pages: " + num_pages);
 
 String page_number_2 = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
 if (page_number_2 != null) {
     pageNum = Integer.parseInt(page_number_2);
 }
-System.out.println("pageNum: " + pageNum);
 int istart = pageNum * pageSize;
 int page_num = pageNum;
 if (page_num == 0) {
@@ -270,10 +265,6 @@ try {
    list = iteratorBean.getData(istart, iend);
    int prev_size = size;
    size = iteratorBean.getSize();
-   
-System.out.println( "(*) prev_size: " + prev_size);
-System.out.println( "(*) size: " + size);
-
 
    if (size != prev_size) {
 	if (iend > size) {
@@ -289,7 +280,7 @@ System.out.println( "(*) size: " + size);
 
    }
 } catch (Exception ex) {
-   System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+   //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
 
 
@@ -391,7 +382,7 @@ if (show_rank_column) {
 
 
  if (list == null) {
-  System.out.println("list == null???");
+   //System.out.println("list == null???");
  } else {
 
                 //for (int lcv=0; lcv<list.size(); lcv++) {

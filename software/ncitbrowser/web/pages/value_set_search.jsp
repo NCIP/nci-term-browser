@@ -81,8 +81,6 @@ if (selected_ValueSetSearchOption == null) {
     selected_ValueSetSearchOption = "Code";
 }
 
-System.out.println("selected_ValueSetSearchOption: " + selected_ValueSetSearchOption);
-
 
 String name = null;
 String uri = null;
@@ -92,7 +90,6 @@ String src_str = null;
 
 
 String conceptDomain = (String) request.getSession().getAttribute("conceptDomain");
-System.out.println("value_set_search.jsp conceptDomain: " + conceptDomain);
 if (conceptDomain == null) conceptDomain = "";
 
     String message = (String) request.getSession().getAttribute("message");
@@ -254,9 +251,7 @@ if (view.compareToIgnoreCase("source") == 0) {
  
         while (it.hasNext()) {
                 String cs = (String) it.next();
-                
- System.out.println("CS: " + cs);               
-                
+               
  		Vector vsd_vector = (Vector) csURN2ValueSetMetadataHashMap.get(cs);
                  
                  for (int i=0; i<vsd_vector.size(); i++) {

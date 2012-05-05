@@ -81,11 +81,6 @@ String vd_uri = null;
 String valueSetSearch_requestContextPath = request.getContextPath();
 String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
 
-
-System.out.println("value_set_search_results.jsp selected_ValueSetSearchOption: " + selected_ValueSetSearchOption);
-
-
-
 Vector vsd_vec = null;
 String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri")); 
 
@@ -224,10 +219,7 @@ if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
         vsd_name = (String) temp_vec.elementAt(0);
         uri_vsd = (String) temp_vec.elementAt(1);
     } 
-
-    System.out.println("JSP vsd_name: " + vsd_name);
-    System.out.println("JSP uri_vsd:  " + uri_vsd);
-    
+  
     if (vsd_vec.size() == 1) {
         vd_uri = uri_vsd;
     }
@@ -291,8 +283,6 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     if (uri_str == null) {
         uri_str = (String) request.getSession().getAttribute("vsd_uri");
     }
-
-    System.out.println("searchFom resolvedvaluset.jsp uri_str: " + uri_str);
 
 
     String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
