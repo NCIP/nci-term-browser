@@ -1221,10 +1221,10 @@ public final class AjaxServlet extends HttpServlet {
       PrintWriter out = null;
 
 
-		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
 
-		String partial_checked_vocabularies = (String) request.getParameter("partial_checked_vocabularies");
+		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
 		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
 
 
@@ -1572,7 +1572,7 @@ if (view == Constants.STANDARD_VIEW) {
 //String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
 //String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
 
-String option = (String) request.getParameter("selectValueSetSearchOption");
+String option = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 if (DataUtils.isNull(option)) {
 	option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
 }
@@ -1584,7 +1584,7 @@ request.getSession().setAttribute("selectValueSetSearchOption", option);
 
 
 
-String algorithm = (String) request.getParameter("valueset_search_algorithm");
+String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
 if (DataUtils.isNull(algorithm)) {
 	algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
 }
@@ -1599,7 +1599,7 @@ request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (DataUtils.isNull(matchText)) {
 			matchText = (String) request.getSession().getAttribute("matchText");
 		}
@@ -2431,28 +2431,28 @@ if (view == Constants.STANDARD_VIEW) {
 
 
     public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
-        String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
+        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
-        String algorithm = (String) request.getParameter("valueset_search_algorithm");
+        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		// check if any checkbox is checked.
         String contextPath = request.getContextPath();
-		String view_str = (String) request.getParameter("view");
+		String view_str = HTTPUtils.cleanXSS((String) request.getParameter("view"));
 		int view = Integer.parseInt(view_str);
 		String msg = null;
 
 		request.getSession().removeAttribute("checked_vocabularies");
-		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
 
 		request.getSession().removeAttribute("partial_checked_vocabularies");
-		String partial_checked_vocabularies = (String) request.getParameter("partial_checked_vocabularies");
+		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
 		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
 
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (DataUtils.isNull(matchText)) {
 			matchText = "";
 		} else {
@@ -2460,8 +2460,8 @@ if (view == Constants.STANDARD_VIEW) {
 		}
         request.getSession().setAttribute("matchText", matchText);
 
-		String ontology_display_name = (String) request.getParameter("ontology_display_name");
-		String ontology_version = (String) request.getParameter("ontology_version");
+		String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("ontology_display_name"));
+		String ontology_version = request.getParameter((String) request.getParameter("ontology_version"));
 
 		if (matchText.compareTo("") == 0) {
 			msg = "Please enter a search string.";
@@ -2522,20 +2522,20 @@ if (view == Constants.STANDARD_VIEW) {
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
 
-        String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
+        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 
         if (DataUtils.isNull(selectValueSetSearchOption)) {
 			selectValueSetSearchOption = "Name";
 		}
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
-        String algorithm = (String) request.getParameter("valueset_search_algorithm");
+        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
         if (DataUtils.isNull(algorithm)) {
 			algorithm = "exactMatch";
 		}
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
-		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
@@ -2551,10 +2551,10 @@ if (view == Constants.STANDARD_VIEW) {
 		System.out.println("selected_vocabularies count: " + selected_vocabularies.size());
 
 
-        String VSD_view = (String) request.getParameter("view");
+        String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
         request.getSession().setAttribute("view", VSD_view);
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
 
         Vector v = new Vector();
         LexEVSValueSetDefinitionServices vsd_service = null;
@@ -2764,10 +2764,10 @@ if (view == Constants.STANDARD_VIEW) {
       PrintWriter out = null;
 
 
-		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
 
-		String partial_checked_vocabularies = (String) request.getParameter("partial_checked_vocabularies");
+		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
 		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
 
 
@@ -3099,8 +3099,8 @@ if (view == Constants.STANDARD_VIEW) {
  //String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
 
 
- String option = (String) request.getParameter("selectValueSetSearchOption");
- String algorithm = (String) request.getParameter("valueset_search_algorithm");
+ String option = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
+ String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
 
 
 

@@ -87,7 +87,7 @@ System.out.println("value_set_search_results.jsp selected_ValueSetSearchOption: 
 
 
 Vector vsd_vec = null;
-String vsd_uri = (String) request.getParameter("vsd_uri"); 
+String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri")); 
 
 String selectedvalueset = null;
 if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 

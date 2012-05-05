@@ -34,9 +34,9 @@
 </script>
 <%
         boolean back_to_search_results_link = false;
-        String search_key = (String) request.getParameter("key");
-        String t = (String) request.getParameter("b"); 
-        String page_number = (String) request.getParameter("n"); 
+        String search_key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
+        String t = HTTPUtils.cleanXSS((String) request.getParameter("b")); 
+        String page_number = HTTPUtils.cleanXSS((String) request.getParameter("n")); 
         
         if (DataUtils.isNull(t)) {
 		t = (String) request.getSession().getAttribute("b"); 
@@ -53,7 +53,7 @@
 	Logger logger = Utils.getJspLogger("searchForm.jsp");
 	
 	
-	String multiple_search_flag = (String) request.getParameter("m");
+	String multiple_search_flag = HTTPUtils.cleanXSS((String) request.getParameter("m"));
 	if (DataUtils.isNull(multiple_search_flag)) {
 	    multiple_search_flag = (String) request.getSession().getAttribute("m"); 
 	    //request.getSession().removeAttribute("m"); 
