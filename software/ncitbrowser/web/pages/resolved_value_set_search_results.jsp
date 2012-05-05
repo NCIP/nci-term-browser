@@ -52,9 +52,6 @@
 <%
 HashMap name_hmap = new HashMap();
 String valueSetSearch_requestContextPath = request.getContextPath();
-
-System.out.println("valueSetSearch_requestContextPath: " + valueSetSearch_requestContextPath);
-
 String message = (String) request.getSession().getAttribute("message");  
 request.getSession().removeAttribute("message");  
 
@@ -62,8 +59,6 @@ String vsd_uri = (String) request.getSession().getAttribute("selectedvalueset");
 if (vsd_uri == null) {
 vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 }
-
-System.out.println("results page -- vsd_uri " + vsd_uri);
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
 String checked = "";

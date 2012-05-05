@@ -11,7 +11,6 @@ JSPUtils.JSPHeaderInfo relationship_info = new JSPUtils.JSPHeaderInfo(request);
 Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
 String scheme_curr = relationship_info.dictionary;
 String version_curr = relationship_info.version;
-System.out.println("(*) relationship.jsp version_curr: " + version_curr);
 String version_parameter = "";
 if (version_curr != null && ! version_curr.equalsIgnoreCase("null"))
     version_parameter = "&version=" + version_curr;
@@ -26,30 +25,18 @@ String code_curr = (String) request.getSession().getAttribute("code");
     if (code_curr == null) {
         code_curr = HTTPUtils.cleanXSS((String) request.getParameter("code"));
     }
-    
-System.out.println("(**********************************************************)");   
-System.out.println("(*) relationship tab scheme_curr: " + scheme_curr);
-System.out.println("(*) relationship tab version_curr: " + version_curr);
-System.out.println("(*) relationship tab code_curr: " + code_curr);
-System.out.println("(**********************************************************)");   
   
 
     HashMap hmap = null;
     if (isMapping) {
-System.out.println("*** (MAPPING)");     
             hmap = new MappingSearchUtils().getMappingRelationshipHashMap(scheme_curr, version_curr, code_curr);
     } else {
-    
-System.out.println("*** (NOT MAPPING)"); 
             hmap = new DataUtils().getRelationshipHashMap(scheme_curr, version_curr, code_curr);
 /*    
 	    hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
 	    if (hmap == null) {
 	      DataUtils util = new DataUtils();
-System.out.println("*** Calling getRelationshipHashMap scheme_curr " + scheme_curr);   
-System.out.println("*** Calling getRelationshipHashMap version_curr " + version_curr);   
-System.out.println("*** Calling getRelationshipHashMap code_curr " + code_curr);   
-	      
+     
 	      hmap = util.getRelationshipHashMap(scheme_curr, version_curr, code_curr);
 	    }
 	    
@@ -68,18 +55,6 @@ System.out.println("*** Calling getRelationshipHashMap code_curr " + code_curr);
     ArrayList associations = (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
     ArrayList inverse_roles = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ROLE);
     ArrayList inverse_associations = (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
-
-if (associations == null) {
-   System.out.println("TYPE_ASSOCIATION == null"); 
-} else {
-   System.out.println("TYPE_ASSOCIATION != null size:"  + associations.size()); 
-}
-
-if (inverse_associations == null) {
-   System.out.println("TYPE_INVERSE_ASSOCIATION == null"); 
-} else {
-   System.out.println("TYPE_INVERSE_ASSOCIATION != null size:"  + inverse_associations.size()); 
-}
 
 
     ArrayList concepts = null;
@@ -439,9 +414,6 @@ if (type != null && type.compareTo("all") == 0) {
      }
 
 
-System.out.println("(*) relationship.jsp display_inverse_relationships: " + display_inverse_relationships);
-
-
 if (!isMapping) {
 
 
@@ -568,9 +540,6 @@ if (!isMapping) {
 
   <%
     int n2 = 0;
-
-System.out.println("relationship.jsp inverse_associations.size(): " + inverse_associations.size());
-
 
     for (int i=0; i<inverse_associations.size(); i++) {
       String s = (String) inverse_associations.get(i);

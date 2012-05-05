@@ -93,8 +93,6 @@ if (search_results_dictionary == null || search_results_dictionary.compareTo("NC
 
 key = (String) request.getSession().getAttribute("key");
 
-System.out.println("key: " + key);
-
 
 String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 if (resultsPerPage == null) {
@@ -119,7 +117,6 @@ request.setAttribute("key", key);
 
     if (iteratorBean == null){
       _logger.warn("iteratorBean NOT FOUND???" + key);
-      System.out.println("iteratorBean NOT FOUND???" + key);
     }
 String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
  
@@ -129,7 +126,6 @@ int size = iteratorBean.getSize();
 List list = null;
 int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
-System.out.println("num_pages: " + num_pages);
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
@@ -140,7 +136,6 @@ if (!DataUtils.isNull(page_number)) {
     pageNum = 0;
 }
 
-System.out.println("pageNum: " + pageNum);
 int istart = pageNum * pageSize;
 int page_num = pageNum;
 if (page_num == 0) {
@@ -155,10 +150,6 @@ try {
    list = iteratorBean.getData(istart, iend);
    int prev_size = size;
    size = iteratorBean.getSize();
-   
-System.out.println( "(*) prev_size: " + prev_size);
-System.out.println( "(*) size: " + size);
-
 
    if (size != prev_size) {
 	if (iend > size) {
@@ -176,7 +167,7 @@ System.out.println( "(*) size: " + size);
 
    }
 } catch (Exception ex) {
-   System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+   //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
 
 
@@ -239,7 +230,6 @@ String match_size = new Integer(size).toString();
 
           if (iteratorBean != null) {
 	      size = iteratorBean.getSize();
-	      System.out.println("iteratorBean size: " + size);
 	      match_size = new Integer(size).toString();
 	      
           }
@@ -278,10 +268,8 @@ String match_size = new Integer(size).toString();
 int expected_count = (iend - istart) + 1;
 int actual_count = list.size();
 if (expected_count != actual_count) {
-    System.out.println("expected_count != actual_count???");	  
     if (actual_count < expected_count) {
         int upper_bound = istart + actual_count;
-        System.out.println("upper_bound " + upper_bound);
         
 	iend_str = new Integer(upper_bound).toString();
 	match_size = new Integer(upper_bound).toString();

@@ -17,10 +17,6 @@ if (uri_str == null) {
     uri_str = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 }
 
-System.out.println("searchForm resolvedvaluset.jsp uri_str: " + uri_str);
-
-
-
   String termbrowser_displayed_match_text = HTTPUtils.convertJSPString(match_text);
   String searchform_requestContextPath = request.getContextPath();
   searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");

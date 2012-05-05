@@ -149,11 +149,6 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
     show_rank_column = false;
 }   
 
-System.out.println("mapping_cs_uri: " + mapping_cs_uri);
-System.out.println("mapping_cs_version: " + mapping_cs_version);
-System.out.println("mapping_cs_name: " + mapping_cs_name);
-System.out.println("code_curr: " + code_curr);
-
 
            List list = new MappingSearchUtils().getMappingRelationship(
                        mapping_cs_uri, mapping_cs_version, code_curr, 1);
@@ -314,10 +309,6 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
     show_rank_column = false;
 }   
 
-System.out.println("mapping_cs_uri: " + mapping_cs_uri);
-System.out.println("mapping_cs_version: " + mapping_cs_version);
-System.out.println("mapping_cs_name: " + mapping_cs_name);
-System.out.println("code_curr: " + code_curr);           
 
            List list = new MappingSearchUtils().getMappingRelationship(
                        mapping_cs_uri, mapping_cs_version, code_curr, -1);

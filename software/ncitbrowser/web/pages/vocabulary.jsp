@@ -47,7 +47,6 @@
       <%
 JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
 String vocabulary_version = info.version;
-//System.out.println("(***** vocabulary.jsp) vocabulary_version: " + vocabulary_version);
 
         String menubar_scheme = null;
         String menubar_scheme0 = null;

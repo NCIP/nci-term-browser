@@ -447,27 +447,10 @@
 JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 String search_results_dictionary = info.dictionary;
 
-//System.out.println("********* search_results.jsp search_results_dictionary: " + search_results_dictionary);
-
-
 boolean isMapping = DataUtils.isMapping(search_results_dictionary, null);
-
-//System.out.println("isMapping: " + isMapping);
-
 boolean isExtension = DataUtils.isExtension(search_results_dictionary, null);
 
-
-//System.out.println("isExtension: " + isExtension);
-
-
 String search_results_version = info.version;
-
-//System.out.println("********* search_results.jsp search_results_version: " + search_results_version);
-
-
-  //boolean hasValueSet = ValueSetHierarchy.hasValueSet(search_results_dictionary);
-  //boolean hasMapping = DataUtils.hasMapping(search_results_dictionary);
-
 
 HashMap hmap = DataUtils.getNamespaceId2CodingSchemeFormalNameMapping();
 HashMap name_hmap = new HashMap();
@@ -476,7 +459,6 @@ String short_vocabulary_name = null;
 String coding_scheme_version = null;
 
 String key = (String) request.getAttribute("key");
-System.out.println("search results.jsp key: " + key);
 if (key == null) {
     key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 }

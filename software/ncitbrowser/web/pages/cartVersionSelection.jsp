@@ -97,8 +97,7 @@ int k = -1;
             
 		    String coding_scheme_ref_str = (String) coding_scheme_ref_vec.elementAt(i);
 int lcv = i+1;		    
-System.out.println("(" + lcv + ")" + coding_scheme_ref_str);		    
-		    
+	    
 		    
 		    String coding_scheme_name_version = coding_scheme_ref_str;
 		    
@@ -110,10 +109,6 @@ System.out.println("(" + lcv + ")" + coding_scheme_ref_str);
 		    
 		    
 		    String cs_version = (String) u.elementAt(1);
-		    
-System.out.println("resolve_value_set.jsp cs_name: " + cs_name);
-
-System.out.println("resolve_value_set.jsp cs_version: " + cs_version);
 		    
 		    String cs_tag = DataUtils.getVocabularyVersionTag(cs_name, cs_version);
 		    if (cs_tag == null) cs_tag = "";

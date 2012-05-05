@@ -82,10 +82,6 @@ _logger.debug("mapping.jsp dictionary: " + mapping_dictionary);
 _logger.debug("mapping.jsp version: " + mapping_version);
 
 
-System.out.println("mapping.jsp dictionary: " + mapping_dictionary);
-System.out.println("mapping.jsp version: " + mapping_version);
-
-
 if (mapping_version != null) {
     request.getSession().setAttribute("version", mapping_version);
 }
@@ -146,13 +142,10 @@ int prevSortBy = MappingData.COL_SOURCE_CODE;
 
 String sortByStr = HTTPUtils.cleanXSS((String) request.getParameter("sortBy"));
 
-System.out.println("****************** sortByStr: " + sortByStr);
 
 if (sortByStr != null  && sortByStr.compareTo("null") != 0 ) {
     sortBy = Integer.parseInt(sortByStr);
 }
-
-System.out.println("SORT_BY: " + sortBy);
 
 
 String prevSortByStr = (String) request.getSession().getAttribute("sortBy");
@@ -176,8 +169,7 @@ if (bean == null) {
 
         try {
             numRemaining = iterator.numberRemaining();
-            System.out.println("numRemaining: " + numRemaining);
-            
+           
             bean = new MappingIteratorBean(iterator);
             
         } catch (Exception ex) {
@@ -196,7 +188,6 @@ if (bean == null) {
         try {
             bean.setIterator(iterator);
             numRemaining = iterator.numberRemaining();
-            System.out.println("MappingIteratorBean: numRemaining " + numRemaining);
 	    //bean.initialize();
 	    scheme2MappingIteratorBeanMap.put(mapping_schema, bean);            
             
@@ -218,7 +209,6 @@ if (resultsPerPage != null && resultsPerPage.compareTo("null") != 0) {
 
 
 int pageSize = bean.getPageSize();
-System.out.println("(*) pageSize: " + pageSize);
 
 String selectedResultsPerPage = new Integer(pageSize).toString();
 
@@ -235,14 +225,9 @@ bean.setPageSize(pageSize);
 int size = bean.getSize();
 
 
-System.out.println("\npage_num: " + page_num);
-System.out.println("size: " + size);
-System.out.println("pageSize: " + pageSize);
-
 int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 
-System.out.println("num_pages: " + num_pages + "\n");
 
 int istart = (page_num - 1) * pageSize;
 if (istart < 0) istart = 0;
@@ -254,15 +239,11 @@ if (iend > size) iend = size-1;
 
 
 List list = null;
-System.out.println("calling bean.getData ...");
 try {
    list = bean.getData(istart, iend);
 } catch (Exception ex) {
-   System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+   //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
-System.out.println("exiting bean.getData ...");
-
-
 
 String mapping_selectedPageSize = (String) request.getSession().getAttribute("selectedPageSize");
 
@@ -468,7 +449,7 @@ if (show_rank_column) {
 
 
  if (list == null) {
-  System.out.println("list == null???");
+    //System.out.println("list == null???");
  } else {
 
                 for (int lcv=0; lcv<list.size(); lcv++) {

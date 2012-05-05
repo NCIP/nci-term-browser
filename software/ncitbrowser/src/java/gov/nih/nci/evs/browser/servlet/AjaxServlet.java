@@ -230,9 +230,6 @@ public final class AjaxServlet extends HttpServlet {
 
         if (action.equals("expand_tree")) {
             if (node_id != null && ontology_display_name != null) {
-
-				System.out.println("(*) EXPAND TREE NODE: " + node_id);
-
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
@@ -371,8 +368,6 @@ public final class AjaxServlet extends HttpServlet {
             }
 
             response.getWriter().write(json.toString());
-            //System.out.println(json.toString());
-
             _logger.debug("Run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
             return;
@@ -389,10 +384,10 @@ public final class AjaxServlet extends HttpServlet {
                         CacheController.getInstance().getSubValueSets(
                             ontology_display_name, ontology_version, node_id);
                     if (nodesArray != null) {
-						System.out.println("expand_vs_tree nodesArray != null");
+						//System.out.println("expand_vs_tree nodesArray != null");
                         json.put("nodes", nodesArray);
                     } else {
-						System.out.println("expand_vs_tree nodesArray == null???");
+						//System.out.println("expand_vs_tree nodesArray == null???");
 					}
 
                 } catch (Exception e) {
@@ -415,10 +410,10 @@ public final class AjaxServlet extends HttpServlet {
                         CacheController.getInstance().getSourceValueSetTree(
                             ontology_display_name, ontology_version, true);
                     if (nodesArray != null) {
-						System.out.println("expand_entire_vs_tree nodesArray != null");
+						//System.out.println("expand_entire_vs_tree nodesArray != null");
                         json.put("root_nodes", nodesArray);
                     } else {
-						System.out.println("expand_entire_vs_tree nodesArray == null???");
+						//System.out.println("expand_entire_vs_tree nodesArray == null???");
 					}
 
                 } catch (Exception e) {
@@ -440,10 +435,10 @@ public final class AjaxServlet extends HttpServlet {
                         CacheController.getInstance().getCodingSchemeValueSetTree(
                             ontology_display_name, ontology_version, true);
                     if (nodesArray != null) {
-						System.out.println("expand_entire_vs_tree nodesArray != null");
+						//System.out.println("expand_entire_vs_tree nodesArray != null");
                         json.put("root_nodes", nodesArray);
                     } else {
-						System.out.println("expand_entire_vs_tree nodesArray == null???");
+						//System.out.println("expand_entire_vs_tree nodesArray == null???");
 					}
 
                 } catch (Exception e) {
@@ -492,8 +487,6 @@ public final class AjaxServlet extends HttpServlet {
 			if (node_id != null) {
 				ValueSetDefinition vsd = ValueSetHierarchy.findValueSetDefinitionByURI(vsd_uri);
 				if (vsd == null) {
-					System.out.println("(****) coding scheme name: " + node_id);
-
 				   try {
 					   //
 					    nodesArray = CacheController.getInstance().getRootValueSets(node_id, null);
@@ -502,7 +495,7 @@ public final class AjaxServlet extends HttpServlet {
 						if (nodesArray != null) {
 							json.put("nodes", nodesArray);
 						} else {
-							System.out.println("expand_vs_tree nodesArray == null???");
+							//System.out.println("expand_vs_tree nodesArray == null???");
 						}
 
 					} catch (Exception e) {
@@ -549,8 +542,6 @@ public final class AjaxServlet extends HttpServlet {
             }
 
             response.getWriter().write(json.toString());
-            //System.out.println(json.toString());
-
             _logger.debug("Run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
             return;
@@ -564,17 +555,12 @@ public final class AjaxServlet extends HttpServlet {
                 JSONArray nodesArray = null;
 				nodesArray = CacheController.getInstance().expand_src_vs_tree(node_id);
 
-				if (nodesArray == null) {
-                    System.out.println("(*) CacheController returns nodesArray == null");
-				}
-
-
                 try {
                     if (nodesArray != null) {
-						System.out.println("expand_src_vs_tree nodesArray != null");
+						//System.out.println("expand_src_vs_tree nodesArray != null");
                         json.put("nodes", nodesArray);
                     } else {
-						System.out.println("expand_src_vs_tree nodesArray == null???");
+						//System.out.println("expand_src_vs_tree nodesArray == null???");
 					}
 
                 } catch (Exception e) {
@@ -1222,11 +1208,7 @@ public final class AjaxServlet extends HttpServlet {
 
 
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-		System.out.println("checked_vocabularies: " + checked_vocabularies);
-
 		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
-		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
-
 
       try {
       	  out = response.getWriter();
@@ -1646,21 +1628,6 @@ if (DataUtils.isNull(algorithm)) {
 		algorithm_contains = "checked";
 	}
 }
-
-
-System.out.println("*** OPTION: " + option);
-System.out.println("*** ALGORITHM: " + algorithm);
-
-System.out.println("*** matchText: " + matchText);
-
-System.out.println("AjaxServlet option_code: " + option_code);
-System.out.println("AjaxServlet option_name: " + option_name);
-
-System.out.println("AjaxServlet algorithm_exactMatch: " + algorithm_exactMatch);
-System.out.println("AjaxServlet algorithm_startsWith: " + algorithm_startsWith);
-System.out.println("AjaxServlet algorithm_contains: " + algorithm_contains);
-
-
 
 
       out.println("");

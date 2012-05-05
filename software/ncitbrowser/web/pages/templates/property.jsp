@@ -56,7 +56,6 @@
 
   } catch (Exception ex) {
     // Do nothing
-    System.out.println("(*) property.jsp curr_concept.isIsActive() throws exception.");
   }
 
   if ((type.compareTo("properties") == 0 || type.compareTo("all") == 0) &&
@@ -202,8 +201,6 @@ if (concept_status != null) {
 	}
 }
 
-//System.out.println("concept_status: " + concept_status);
-
 if (bool_obj != null ) {
      if (!bool_obj.equals(Boolean.TRUE) && concept_status == null) {
          concept_status = "Inactive";
@@ -254,7 +251,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 
 //[#26722] Support cross-linking of individual source vocabularies with NCI Metathesaurus.
-// System.out.println("properties_to_display.size(): " + properties_to_display.size());
 
   HashMap<String, String> label2URL = new HashMap<String, String>();
   HashMap<String, String> label2Linktext = new HashMap<String, String>();

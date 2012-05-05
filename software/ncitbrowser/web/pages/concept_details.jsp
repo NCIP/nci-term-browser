@@ -45,7 +45,6 @@
 	}
 	String deprecatedVersion = info.version_deprecated;
 	String version = info.version;
-	System.out.println("concept_details.jsp version: " + version);
 	request.setAttribute("version", version);
 	if (dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
@@ -115,9 +114,6 @@
             				request.getSession().setAttribute("code", code);
             			} else {
             				code = (String) request.getSession().getAttribute("code");
-            			}
-            			if (code == null) {
-            				System.out.println("WARNING: concept_details.jsp code: "	+ code);
             			}
             		}
            		

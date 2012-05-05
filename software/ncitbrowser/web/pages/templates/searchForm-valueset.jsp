@@ -40,7 +40,6 @@
     String _valueset_search_algorithm = null;
     _valueset_search_algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
     if (_valueset_search_algorithm == null) _valueset_search_algorithm = "";
-    System.out.println("JSP _valueset_search_algorithm " + _valueset_search_algorithm);   
     
 
     String _check__e = "", _check__b = "", _check__s = "" , _check__c ="";
