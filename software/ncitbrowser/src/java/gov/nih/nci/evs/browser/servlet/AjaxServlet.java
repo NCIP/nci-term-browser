@@ -2407,7 +2407,11 @@ if (view == Constants.STANDARD_VIEW) {
 		// check if any checkbox is checked.
         String contextPath = request.getContextPath();
 		String view_str = HTTPUtils.cleanXSS((String) request.getParameter("view"));
-		int view = Integer.parseInt(view_str);
+
+		int view = Constants.STANDARD_VIEW;
+		if (!DataUtils.isNull(view_str)) {
+		    view = Integer.parseInt(view_str);
+		}
 		String msg = null;
 
 		request.getSession().removeAttribute("checked_vocabularies");
