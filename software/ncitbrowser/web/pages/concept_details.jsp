@@ -288,10 +288,10 @@
              <input type="hidden" id="cart_code" name="cart_code" value="<%=HTTPUtils.cleanXSS(code)%>" />
              
 <%
-String b = (String) request.getParameter("b");
-String n = (String) request.getParameter("n");
-String m = (String) request.getParameter("m");
-String key = (String) request.getParameter("key");
+String b = HTTPUtils.cleanXSS((String) request.getParameter("b"));
+String n = HTTPUtils.cleanXSS((String) request.getParameter("n"));
+String m = HTTPUtils.cleanXSS((String) request.getParameter("m"));
+String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 
 if (!DataUtils.isNull(b)) {  
     if (DataUtils.isNull(n)) {
