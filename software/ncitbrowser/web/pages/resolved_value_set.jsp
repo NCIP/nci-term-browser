@@ -98,8 +98,8 @@
             			String itr_size_str = obj.toString();
             		}
 
-            		String resultsPerPage = (String) request
-            				.getParameter("resultsPerPage");
+            		String resultsPerPage =  HTTPUtils.cleanXSS((String) request
+            				.getParameter("resultsPerPage"));
             		if (resultsPerPage == null) {
             			resultsPerPage = (String) request.getSession()
             					.getAttribute("resultsPerPage");

@@ -1,11 +1,11 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.*"%>
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 
 <%
-String home = request.getParameter("home");
+String home =  HTTPUtils.cleanXSS((String) request.getParameter("home"));
 String context_path = request.getContextPath();
 String ncimurl = NCItBrowserProperties.getNCIM_URL();
 String redirect_url = null;
