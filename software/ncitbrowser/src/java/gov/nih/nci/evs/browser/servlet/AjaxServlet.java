@@ -216,12 +216,12 @@ public final class AjaxServlet extends HttpServlet {
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         // Determine request by attributes
-        String action = request.getParameter("action");// DataConstants.ACTION);
-        String node_id = request.getParameter("ontology_node_id");// DataConstants.ONTOLOGY_NODE_ID);
+        String action = HTTPUtils.cleanXSS(request.getParameter("action"));// DataConstants.ACTION);
+        String node_id = HTTPUtils.cleanXSS(request.getParameter("ontology_node_id"));// DataConstants.ONTOLOGY_NODE_ID);
         String ontology_display_name =
-            request.getParameter("ontology_display_name");// DataConstants.ONTOLOGY_DISPLAY_NAME);
+            HTTPUtils.cleanXSS(request.getParameter("ontology_display_name"));// DataConstants.ONTOLOGY_DISPLAY_NAME);
 
-        String ontology_version = request.getParameter("version");
+        String ontology_version = HTTPUtils.cleanXSS(request.getParameter("version"));
         if (ontology_version == null) {
 			ontology_version = DataUtils.getVocabularyVersionByTag(ontology_display_name, "PRODUCTION");
 		}
@@ -1188,9 +1188,9 @@ public final class AjaxServlet extends HttpServlet {
 	}
 
     public static void create_cs_vs_tree(HttpServletRequest request, HttpServletResponse response) {
-		String dictionary = (String) request.getParameter("dictionary");
+		String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 		if (!DataUtils.isNull(dictionary)) {
-			String version = (String) request.getParameter("version");
+			String version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 			create_vs_tree(request, response, Constants.TERMINOLOGY_VIEW, dictionary, version);
 		} else {
 		    create_vs_tree(request, response, Constants.TERMINOLOGY_VIEW);
