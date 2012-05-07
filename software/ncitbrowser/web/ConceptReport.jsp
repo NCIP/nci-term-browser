@@ -17,9 +17,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
  <body>
    <%
-   String dictionary = (String) request.getParameter("dictionary");
-   String code = (String) request.getParameter("code");
-   String version = (String) request.getParameter("version");
+   String dictionary =  HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+   String code =  HTTPUtils.cleanXSS((String) request.getParameter("code"));
+   String version =  HTTPUtils.cleanXSS((String) request.getParameter("version"));
    String version_parameter = "";
    if (version != null && ! version.equalsIgnoreCase("null"))
        version_parameter = "&version=" + version;
