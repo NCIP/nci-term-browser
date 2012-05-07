@@ -126,7 +126,7 @@ public final class ValueSetServlet extends HttpServlet {
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         // Determine request by attributes
-        String uri = request.getParameter("valueset");
+        String uri = HTTPUtils.cleanXSS(request.getParameter("valueset"));
 
         long ms = System.currentTimeMillis();
 
