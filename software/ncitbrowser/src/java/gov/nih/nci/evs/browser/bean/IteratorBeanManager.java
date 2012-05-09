@@ -62,6 +62,8 @@ public class IteratorBeanManager extends Object {
     }
 
 
+
+
     public String createIteratorKey(Vector schemes, String matchText,
         String searchTarget, String matchAlgorithm, int maxReturn) {
         String maxReturn_str = Integer.toString(maxReturn);
@@ -85,8 +87,15 @@ public class IteratorBeanManager extends Object {
 
         String key = "";
         matchText = matchText.trim();
+
+// [#32150] NCI Thesaurus searches with a different criteria but same search string do not return proper results
+//        int hashcode = matchText.hashCode()
+//           + searchTarget.hashCode();
+
         int hashcode = matchText.hashCode()
-            + searchTarget.hashCode();
+           + searchTarget.hashCode() + matchAlgorithm.hashCode();
+
+
         for (int i = 0; i < schemes.size(); i++) {
             String scheme = (String) schemes.elementAt(i);
             String version = (String) versions.elementAt(i);

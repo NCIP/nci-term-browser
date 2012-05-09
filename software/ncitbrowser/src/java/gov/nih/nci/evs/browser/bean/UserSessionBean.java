@@ -172,7 +172,6 @@ public class UserSessionBean extends Object {
 
 
     public String searchAction() {
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -243,7 +242,6 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 			}
             return "message";
         }
-
 
         boolean ranking = true;
         String scheme = null;
@@ -505,6 +503,7 @@ mappingIteratorBean.initialize();
             iteratorBeanManager.createIteratorKey(schemes, versions, matchText,
                 searchTarget, matchAlgorithm, maxToReturn);
 
+System.out.println("KEY: " + key);
 
         if (searchTarget.compareTo("names") == 0) {
             if (iteratorBeanManager.containsIteratorBean(key)) {
