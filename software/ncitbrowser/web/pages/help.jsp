@@ -948,15 +948,6 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
-            <tr>
-              <td><h2><a name="mappingSets">Mapping Sets</a></h2></td>
-              <td align="right">
-                <a href="#"><img src="<%=arrowImage%>" 
-                  width="16" height="16" border="0" alt="top" /></a>
-              </td>
-            </tr>
-          </table>
           <p>          
             The <b>Mappings</b> tab covers special mappings created 
             between pairs of terminologies, showing how some or all 
