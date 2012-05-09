@@ -57,7 +57,8 @@ import org.apache.log4j.Logger;
 
 public class ServerMonitorThread extends Thread {
     @SuppressWarnings("unused")
-    private static Logger _logger = Logger.getLogger(ServerMonitorThread.class);
+    private static Logger _logger = null; //Logger.getLogger(ServerMonitorThread.class);
+    private static String _className = ServerMonitorThread.class.getSimpleName();
     private static ServerMonitorThread _instance = null;
 	private long _interval = 1000 * 
 	    NCItBrowserProperties.getIntProperty(
@@ -78,6 +79,14 @@ public class ServerMonitorThread extends Thread {
 	private ServerMonitorThread() {
 	}
 	
+	private static void debug(String text) {
+	    if (_logger == null) {
+	        System.out.println(_className + ": " + text);
+	    } else {
+	        _logger.debug(text);
+	    }
+	}
+	
 	public static ServerMonitorThread getInstance() {
 	    if (_instance == null)
 	        _instance = new ServerMonitorThread();
@@ -94,7 +103,8 @@ public class ServerMonitorThread extends Thread {
 	    
 		while (true) {
 			try {
-		        monitor(RemoteServerUtil.createLexBIGService(), "ServerMonitorThread");
+			    LexBIGService service = RemoteServerUtil.createLexBIGService();
+		        monitor(service, "ServerMonitorThread");
 				sleep(_interval);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -109,7 +119,8 @@ public class ServerMonitorThread extends Thread {
         }
         
         //Quick test.
-        monitor(RemoteServerUtil.createLexBIGService(), "ServerMonitorThread2");
+        LexBIGService service = RemoteServerUtil.createLexBIGService();
+        monitor(service, "ServerMonitorThread2");
         return _isLexEVSRunning;
     }
 
@@ -118,14 +129,14 @@ public class ServerMonitorThread extends Thread {
             return;
 
 	    if (_debug && msg != null && msg.length() > 0)
-	        _logger.debug("isRunning(" + isRunning + "): " + msg);
+	        debug("isRunning(" + isRunning + "): " + msg);
         boolean prevIsRunning = _isLexEVSRunning;
         if (isRunning == prevIsRunning)
             return;
 
         _isLexEVSRunning = isRunning;
         updateMessage(isRunning);
-        _logger.debug("_isLexEVSRunning: " + _isLexEVSRunning);
+        debug("_isLexEVSRunning: " + _isLexEVSRunning);
 	}
 	
     public String getMessage() {
@@ -182,13 +193,11 @@ public class ServerMonitorThread extends Thread {
             msg = e.getClass().getSimpleName() + ": " + e.getMessage();
         else msg = "Exception e == " + e;
         
-        if (_logger != null) {
-            try {
-                _logger.error(msg);
-            } catch (Exception e1) {
-                System.out.println(e1.getMessage());
-                System.out.println(msg);
-            }
-        } else System.out.println(msg);
+        try {
+            debug(msg);
+        } catch (Exception e1) {
+            System.out.println(_className + ": " + e1.getMessage());
+            System.out.println(_className + ": " + msg);
+        }
     }
 }
