@@ -32,6 +32,13 @@
   String license_page__match_text = HTTPUtils.convertJSPString(matchText);
   String searchTarget = (String) request.getAttribute("searchTarget");
   String matchAlgorithm = (String) request.getAttribute("algorithm");
+  
+  
+  String delimitedValues = "";
+  if (unacceptedLicensesCS != null) {
+      delimitedValues = unacceptedLicensesCS.getDelimitedValues();
+  } 
+  
 
   if (scheme != null) scheme = scheme.replaceAll("%20", " ");
 %>
@@ -81,7 +88,7 @@
             <input type="hidden" id="ontology_list_str" name="ontology_list_str" value="<%=ontology_list_str%>" />
             <input type="hidden" id="scheme" name="scheme" value="<%=scheme%>" />
             <input type="hidden" id="version" name="version" value="<%=version%>" />            
-            <input type="hidden" id="acceptedLicenses" name="acceptedLicenses" value="<%=unacceptedLicensesCS.getDelimitedValues()%>" />            
+            <input type="hidden" id="acceptedLicenses" name="acceptedLicenses" value="<%=delimitedValues%>" />            
             <input type="hidden" id="searchTarget" name="searchTarget" value="<%=searchTarget%>" />
 
           </h:form>
