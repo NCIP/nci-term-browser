@@ -101,7 +101,7 @@ public class LicenseUtils {
         boolean isLicensed = LicenseBean.isLicensed(scheme, version);
         if (! isLicensed)
             return false;
-        
+
         LicenseBean licenseBean =
             (LicenseBean) request.getSession().getAttribute("licenseBean");
         if (licenseBean == null) {
@@ -132,6 +132,7 @@ public class LicenseUtils {
             _schemes.add(new LexEVSUtils.CScheme(scheme, version));
         }
 
+/*
         public String getReviewAndAcceptMessage() {
             StringBuffer buffer = new StringBuffer();
             buffer.append("To access <b>");
@@ -152,8 +153,41 @@ public class LicenseUtils {
             buffer.append("copyright/license statement below:");
             return buffer.toString();
         }
+*/
+
+
+        public String getReviewAndAcceptMessage() {
+            StringBuffer buffer = new StringBuffer();
+            if (_schemes == null) {
+				buffer.append("No terminology is selected. Press <b>Cancel</b> to return to the home page.");
+
+			} else {
+
+				buffer.append("To access <b>");
+				Vector<String> list = _schemes.getCodingSchemes();
+				list = Utils.unique(list);
+
+				int n = list.size();
+				for (int i = 0; i < n; ++i) {
+					String scheme = list.get(i);
+					if (n > 1 && i == (n - 1))
+						buffer.append(" and ");
+					else if (i > 0)
+						buffer.append(", ");
+					buffer.append(DataUtils
+						.getMetadataValue(scheme, "display_name"));
+				}
+				buffer.append("</b>, please review and accept the ");
+				buffer.append("copyright/license statement below:");
+
+		    }
+            return buffer.toString();
+        }
+
 
         public String getLicenseMessages(int maxChars) {
+			if (_schemes == null) return "";
+
             StringBuffer buffer = new StringBuffer();
             HashSet<String> hset = new HashSet<String>();
 
@@ -181,6 +215,7 @@ public class LicenseUtils {
         }
 
         public String getButtonMessage() {
+			if (_schemes == null) return "";
             return "If and only if you agree to these terms and conditions,"
                 + " click the Accept button to proceed.";
         }
