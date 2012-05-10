@@ -35,11 +35,14 @@
   
   
   String delimitedValues = "";
+  boolean rendered = false;
+  String fontColor = "class=\"textbodyred\"";
   if (unacceptedLicensesCS != null) {
       delimitedValues = unacceptedLicensesCS.getDelimitedValues();
+      rendered = true;
+      fontColor = "";
   } 
   
-
   if (scheme != null) scheme = scheme.replaceAll("%20", " ");
 %>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -67,18 +70,22 @@
       <!-- Page content -->
       <div class="pagecontent">
         <a name="evs-content" id="evs-content"></a>
-        <p><%= helper.getReviewAndAcceptMessage() %></p>
-        <textarea cols="87" rows="15" readonly align="left"><%= helper.getLicenseMessages(87) %></textarea>
+        <p <%=fontColor%>><%= helper.getReviewAndAcceptMessage() %></p>
+        <% if (rendered) { %>
+          <textarea cols="87" rows="15" readonly align="left"><%= helper.getLicenseMessages(87) %></textarea>
+        <% } %>
         <p><%= helper.getButtonMessage() %></p>
           <h:form>
-            <h:commandButton
-              id="search"
-              value="Search"
-              action="#{userSessionBean.multipleSearchAction}"
-              image="/images/accept.gif"
-              alt="Search">
-            </h:commandButton>
-            &nbsp;&nbsp;
+            <% if (rendered) { %>
+              <h:commandButton
+                id="search"
+                value="Search"
+                action="#{userSessionBean.multipleSearchAction}"
+                image="/images/accept.gif"
+                alt="Search">
+              </h:commandButton>
+              &nbsp;&nbsp;
+            <% } %>
             <a href="<%= request.getContextPath() %>/start.jsf">
               <img src="<%= request.getContextPath() %>/images/cancel.gif" border="0" alt="Cancel"/>
             </a>
