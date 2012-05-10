@@ -159,7 +159,7 @@ public class LicenseUtils {
         public String getReviewAndAcceptMessage() {
             StringBuffer buffer = new StringBuffer();
             if (_schemes == null) {
-				buffer.append("No terminology is selected. Press <b>Cancel</b> to return to the home page.");
+				buffer.append("No terminology is selected. Please press <b>Cancel</b> to return to the home page.");
 
 			} else {
 
