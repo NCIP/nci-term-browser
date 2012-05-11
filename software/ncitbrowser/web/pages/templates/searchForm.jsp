@@ -38,12 +38,16 @@
         String t = HTTPUtils.cleanXSS((String) request.getParameter("b")); 
         String page_number = HTTPUtils.cleanXSS((String) request.getParameter("n")); 
         
+        if (!DataUtils.isNull(page_number) && !DataUtils.isInteger(page_number)) {
+            page_number = "1";
+        }
+        
+     
+        
         if (DataUtils.isNull(t)) {
 		t = (String) request.getSession().getAttribute("b"); 
 		page_number = (String) request.getSession().getAttribute("n"); 
 		search_key = (String) request.getSession().getAttribute("key"); 
-		//request.getSession().removeAttribute("b"); 
-		//request.getSession().removeAttribute("n"); 
 	}        
         
         if (!DataUtils.isNull(t)) {
@@ -54,9 +58,13 @@
 	
 	
 	String multiple_search_flag = HTTPUtils.cleanXSS((String) request.getParameter("m"));
+        if (!DataUtils.isNull(multiple_search_flag) && !DataUtils.isInteger(multiple_search_flag)) {
+            multiple_search_flag = "1";
+        }	
+	
+	
 	if (DataUtils.isNull(multiple_search_flag)) {
 	    multiple_search_flag = (String) request.getSession().getAttribute("m"); 
-	    //request.getSession().removeAttribute("m"); 
 	}
 	
 	String form_requestContextPath = request.getContextPath();

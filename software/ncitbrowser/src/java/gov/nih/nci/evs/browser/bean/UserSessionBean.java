@@ -583,6 +583,9 @@ System.out.println("KEY: " + key);
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
 
+
+
+
 		request.getSession().setAttribute("key", key);
 
 		_logger.debug("searchAction Iterator key: " + key);
@@ -614,6 +617,11 @@ System.out.println("KEY: " + key);
                     .debug("UserSessionBean request.getSession().setAttribute dictionary: "
                         + scheme);
 
+
+        //KLO, 051012
+        request.getSession().removeAttribute("n");
+        request.getSession().removeAttribute("b");
+        request.getSession().removeAttribute("m");
 
 
                 return "search_results";
@@ -683,6 +691,11 @@ System.out.println("KEY: " + key);
 					request.getSession().setAttribute("concept", c);
 					request.getSession().setAttribute("type", "properties");
 					request.getSession().setAttribute("new_search", Boolean.TRUE);
+
+        //KLO, 051012
+        request.getSession().removeAttribute("n");
+        request.getSession().removeAttribute("b");
+        request.getSession().removeAttribute("m");
 
 					return "concept_details";
 			    }
@@ -1115,6 +1128,9 @@ int selected_knt = 0;
                 request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
                 request.getSession().setAttribute("matchText",
                     HTTPUtils.convertJSPString(matchText));
+
+
+
                 return "multiple_search";
             } else {
 
@@ -1149,6 +1165,8 @@ int selected_knt = 0;
             request.getSession().setAttribute("message", message);
             request.getSession().setAttribute("matchText",
                 HTTPUtils.convertJSPString(matchText));
+
+
 
             return "multiple_search";
         }
@@ -1438,6 +1456,15 @@ int selected_knt = 0;
 						request.getSession().setAttribute("new_search",
 							Boolean.TRUE);
 						// route to multiple_search_results.jsp
+
+
+
+        //KLO, 051012
+        request.getSession().removeAttribute("n");
+        request.getSession().removeAttribute("b");
+        request.getSession().removeAttribute("m");
+
+
 						return "search_results";
 					}
 
@@ -1479,6 +1506,12 @@ int selected_knt = 0;
 					request.setAttribute("dictionary", coding_scheme);
 					request.setAttribute("version", ref_version);
 
+
+        //KLO, 051012
+        request.getSession().removeAttribute("n");
+        request.getSession().removeAttribute("b");
+        request.getSession().removeAttribute("m");
+
 					return "concept_details";
 
 
@@ -1494,6 +1527,14 @@ int selected_knt = 0;
 						HTTPUtils.convertJSPString(matchText));
 
 					_logger.debug("Start to render search_results ... ");
+
+
+        //KLO, 051012
+        request.getSession().removeAttribute("n");
+        request.getSession().removeAttribute("b");
+        request.getSession().removeAttribute("m");
+
+
 					return "search_results";
 				}
 		    } else if (size > 1) {
@@ -1508,6 +1549,14 @@ int selected_knt = 0;
 					HTTPUtils.convertJSPString(matchText));
 
 				_logger.debug("Start to render search_results ... ");
+
+
+        //KLO, 051012
+        request.getSession().removeAttribute("n");
+        request.getSession().removeAttribute("b");
+        request.getSession().removeAttribute("m");
+
+
 				return "search_results";
 			}
 

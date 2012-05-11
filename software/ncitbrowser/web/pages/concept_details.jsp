@@ -287,6 +287,20 @@
 String b = HTTPUtils.cleanXSS((String) request.getParameter("b"));
 String n = HTTPUtils.cleanXSS((String) request.getParameter("n"));
 String m = HTTPUtils.cleanXSS((String) request.getParameter("m"));
+
+
+        if (!DataUtils.isNull(b) && !DataUtils.isInteger(b)) {
+            b = "1";
+        }
+        
+        if (!DataUtils.isNull(n) && !DataUtils.isInteger(n)) {
+            n = "1";
+        }
+
+        if (!DataUtils.isNull(m) && !DataUtils.isInteger(m)) {
+            m = "1";
+        }
+
 String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 
 if (!DataUtils.isNull(b)) {  
