@@ -5491,6 +5491,16 @@ System.out.println("vsd_str " + vsd_str);
 
 
 
+	public static boolean isInteger( String input )
+	{
+	   if (input == null) return false;
+	   try {
+		  Integer.parseInt( input );
+		  return true;
+	   } catch( Exception e) {
+		  return false;
+	   }
+	}
 
 
 
