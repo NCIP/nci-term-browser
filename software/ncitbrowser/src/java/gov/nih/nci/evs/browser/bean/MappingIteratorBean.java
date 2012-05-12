@@ -244,6 +244,11 @@ public class MappingIteratorBean extends Object {
 
         if (_list.size() == 0) return arrayList;
 
+        // bound checking for idx1
+        if (idx1 > _list.size()-1) {
+            idx1 = _list.size()-1;
+        }
+        
 		if (idx2 > _list.size()-1) {
 			idx2 = _list.size()-1;
 		}
