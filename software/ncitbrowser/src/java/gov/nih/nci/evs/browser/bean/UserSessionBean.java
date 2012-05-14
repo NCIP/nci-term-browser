@@ -292,13 +292,19 @@ if (scheme != null) {
 
 
 
-
-
-
 				version = (String) request.getParameter("version");
 				if (version == null) {
 					version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
 				}
+
+				else {
+                    if (!DataUtils.validateCodingSchemeVersion(scheme, version)) {
+						String message = "Unable to identify vocabulary " + scheme + " version: " + version;
+						request.getSession().setAttribute("message", message);
+						return "message";
+					}
+				}
+
 		    }
 	    }
 
