@@ -2417,9 +2417,11 @@ if (view == Constants.STANDARD_VIEW) {
 		String view_str = HTTPUtils.cleanXSS((String) request.getParameter("view"));
 
 		int view = Constants.STANDARD_VIEW;
-		if (!DataUtils.isNull(view_str)) {
-		    view = Integer.parseInt(view_str);
+		boolean isInteger = DataUtils.isInteger(view_str);
+		if (isInteger) {
+			view = Integer.parseInt(view_str);
 		}
+
 		String msg = null;
 
 		request.getSession().removeAttribute("checked_vocabularies");
