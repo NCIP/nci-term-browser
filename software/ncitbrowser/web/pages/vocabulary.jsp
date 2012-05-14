@@ -80,6 +80,10 @@ if (scheme != null) {
   boolean hasMapping = DataUtils.hasMapping(scheme);
 
 
+request.getSession().removeAttribute("n");
+request.getSession().removeAttribute("b");
+request.getSession().removeAttribute("m");
+
 
  boolean tree_access_allowed = true;
  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {

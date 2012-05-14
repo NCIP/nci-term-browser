@@ -36,6 +36,13 @@
   requestContextPath = requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
   boolean display_cabig_approval_indicator_note = false;
   Integer curr_sort_category = null;
+  
+request.getSession().removeAttribute("n");
+request.getSession().removeAttribute("b");
+request.getSession().removeAttribute("m");
+  
+  
+  
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
