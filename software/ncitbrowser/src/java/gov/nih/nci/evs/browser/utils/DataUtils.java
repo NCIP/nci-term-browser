@@ -1656,6 +1656,23 @@ public class DataUtils {
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+    public static boolean validateCodingSchemeVersion(String codingScheme, String version) {
+		if (version == null) return true;
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        versionOrTag.setVersion(version);
+        CodingScheme cs = null;
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
+            return true;
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+        }
+        return false;
+    }
+*/
+
     protected static CodingScheme getCodingScheme(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
 
