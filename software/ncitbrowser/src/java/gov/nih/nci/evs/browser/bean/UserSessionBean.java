@@ -1330,6 +1330,28 @@ int selected_knt = 0;
         boolean designationOnly = false;
         boolean excludeDesignation = true;
         ResolvedConceptReferencesIterator iterator = null;
+
+
+ // validate vocvabulary names:
+
+
+for (int lcv=0; lcv<schemes.size(); lcv++) {
+	String check_formal_name = (String) schemes.elementAt(lcv);
+	check_formal_name = DataUtils.getFormalName(check_formal_name);
+	if (check_formal_name == null) {
+		String message = "Unable to identify vocabulary: " + check_formal_name;
+		request.getSession().setAttribute("message", message);
+	    return "multiple_search";
+	}
+}
+
+
+
+
+
+
+
+
         if (searchTarget.compareTo("names") == 0) {
             long ms = System.currentTimeMillis();
             long delay = 0;
