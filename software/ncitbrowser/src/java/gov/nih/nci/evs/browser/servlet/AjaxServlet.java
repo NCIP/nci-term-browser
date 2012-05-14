@@ -217,6 +217,14 @@ public final class AjaxServlet extends HttpServlet {
             throws IOException, ServletException {
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));// DataConstants.ACTION);
+
+
+if (action == null) {
+	action = "create_src_vs_tree";
+}
+
+
+
         String node_id = HTTPUtils.cleanXSS(request.getParameter("ontology_node_id"));// DataConstants.ONTOLOGY_NODE_ID);
         String ontology_display_name =
             HTTPUtils.cleanXSS(request.getParameter("ontology_display_name"));// DataConstants.ONTOLOGY_DISPLAY_NAME);
