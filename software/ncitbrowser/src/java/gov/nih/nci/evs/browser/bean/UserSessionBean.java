@@ -278,6 +278,23 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 				if (scheme == null) {
 					scheme = Constants.CODING_SCHEME_NAME;
 				}
+
+
+
+if (scheme != null) {
+	String check_formal_name = DataUtils.getFormalName(scheme);
+	if (check_formal_name == null) {
+		String message = "Unable to identify vocabulary: " + scheme;
+		request.getSession().setAttribute("message", message);
+	    return "message";
+	}
+}
+
+
+
+
+
+
 				version = (String) request.getParameter("version");
 				if (version == null) {
 					version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
