@@ -1710,24 +1710,39 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         }
 
         String direction = (String) request.getParameter("direction");
+        //051512 KLO AppScan
+        if (direction == null || direction.length() == 0) {
+			direction = "source";
+		}
+		bean.setDirection(direction);
 
         String matchType = (String) request.getParameter("adv_search_type");
-
+        //051512 KLO AppScan
+        if (matchType == null || matchType.length() == 0) {
+			matchType = "Name";
+		}
         bean.setSearchType(matchType);
 
         String matchAlgorithm =
             (String) request.getParameter("adv_search_algorithm");
-
-
+        //051512 KLO AppScan
+        if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
+			matchAlgorithm = "exactMatch";
+		}
         bean.setAlgorithm(matchAlgorithm);
 
-        bean.setDirection(direction);
-
         String source = (String) request.getParameter("adv_search_source");
+        //051512 KLO AppScan
+        if (source == null || source.length() == 0) {
+			source = "ALL";
+		}
         bean.setSelectedSource(source);
 
         String selectSearchOption =
             (String) request.getParameter("selectSearchOption");
+        if (selectSearchOption == null || selectSearchOption.length() == 0) {
+			selectSearchOption = "Name";
+		}
         bean.setSelectedSearchOption(selectSearchOption);
         //request.getSession().setAttribute("selectSearchOption", selectSearchOption);
 
