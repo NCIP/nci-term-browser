@@ -235,6 +235,7 @@
       
                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ontology_display_name=<%=dictionary%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               View in Hierarchy</a>
+                           <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
              <%
                       }
                       boolean historyAccess = HistoryUtils.isHistoryServiceAvailable(dictionary);
