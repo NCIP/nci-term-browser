@@ -150,9 +150,8 @@ body {
 
 	//handler for expanding all nodes
 	YAHOO.util.Event.on("expand_all", "click", function(e) {
-	     expandEntireTree();
-	
-	     //	tree.expandAll();
+	        expandEntireTree();
+		//tree.expandAll();
 		//YAHOO.util.Event.preventDefault(e);
 	});
 	
@@ -187,9 +186,6 @@ body {
 	
 	
     function addTreeNode(rootNode, nodeInfo) {
-    
-      //alert("clicking on " + nodeInfo.ontology_node_id);
-      
       var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
 
       if (nodeInfo.ontology_node_id.indexOf("TVS_") >= 0) {
@@ -218,9 +214,7 @@ body {
               for (var i=0; i < respObj.root_nodes.length; i++) {
                 var nodeInfo = respObj.root_nodes[i];
                 var expand = false;
-                //addTreeNode(root, nodeInfo, expand);
-                
-                addTreeNode(root, nodeInfo);
+                addTreeNode(root, nodeInfo, expand);
               }
             }
 
@@ -242,7 +236,7 @@ body {
       if (ontology_display_name!='') {
         var ontology_source = null;
         var ontology_version = document.forms["pg_form"].ontology_version.value;
-        var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=build_src_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);
+        var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=build_cs_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);
       }
     }
 
@@ -289,12 +283,11 @@ body {
       }
     }
 
+
     function onClickTreeNode(ontology_node_id) {
-        //alert("onClickTreeNode " + ontology_node_id);
         window.location = '<%= request.getContextPath() %>/pages/value_set_treenode_redirect.jsf?ontology_node_id=' + ontology_node_id;
     }
-    
-    
+
     function onClickViewEntireOntology(ontology_display_name) {
       var ontology_display_name = document.pg_form.ontology_display_name.value;
       tree = new YAHOO.widget.TreeView("treecontainer");
@@ -307,11 +300,8 @@ body {
         tree = new YAHOO.widget.TreeView("treecontainer");
 	tree.setNodesProperty('propagateHighlightUp',true);
 	tree.setNodesProperty('propagateHighlightDown',true);
-	//YEED: Commented the following line.  Instead of opening the folder 
-	//  when the user selected the label of the value set root node, the 
-	//  following error message is displayed:
-    //    * HTTP Status 404 - /ncitbrowser/pages/null
-	//YEED: tree.subscribe('clickEvent',tree.onEventToggleHighlight);
+	
+	tree.subscribe('clickEvent',tree.onEventToggleHighlight);
 	tree.subscribe('keydown',tree._onKeyDownEvent);
 		
 	
@@ -414,14 +404,15 @@ body {
             if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked
             //if (n.checkState === 2) {
                 checkedNodes.push(n.label); // just using label for simplicity
-
-		    if (n.hasChildren()) {
-			checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
-		    }                
-                
+            }
+ 
+            if (n.hasChildren()) {
+		checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
             }
         }
-  		
+ 
+ 
+ 		
        var checked_vocabularies = document.forms["valueSetSearchForm"].checked_vocabularies;
        checked_vocabularies.value = checkedNodes;
 
@@ -470,7 +461,7 @@ body {
 
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
       var ontology_version = document.forms["pg_form"].ontology_version.value;
-      var cObj = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_src_vs_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);
+      var cObj = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_cs_vs_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);
     }
 
 
@@ -519,12 +510,58 @@ body {
         var ontology_source = null;//document.pg_form.ontology_source.value;
         var ontology_version = document.forms["pg_form"].ontology_version.value;
         var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=search_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);
-
       }
     }
 
 
+    function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {
+      var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
+      
+      var newNodeData;
+      if (ontology_node_id.indexOf("TVS_") >= 0) {
+          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id };
+      } else {
+          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+      }        
+      
+      var expand = false;
+      var childNodes = nodeInfo.children_nodes;
 
+      if (childNodes.length > 0) {
+          expand = true;
+      }
+      var newNode = new YAHOO.widget.TaskNode(newNodeData, rootNode, expand);
+      if (nodeInfo.ontology_node_id == ontology_node_id) {
+          newNode.labelStyle = "ygtvlabel_highlight";
+      }
+
+      if (nodeInfo.ontology_node_id == ontology_node_id) {
+         newNode.isLeaf = true;
+         if (nodeInfo.ontology_node_child_count > 0) {
+             newNode.isLeaf = false;
+             newNode.setDynamicLoad(loadNodeData);
+         } else {
+             tree.draw();
+         }
+
+      } else {
+          if (nodeInfo.ontology_node_id != ontology_node_id) {
+          if (nodeInfo.ontology_node_child_count == 0 && nodeInfo.ontology_node_id != ontology_node_id) {
+        newNode.isLeaf = true;
+          } else if (childNodes.length == 0) {
+        newNode.setDynamicLoad(loadNodeData);
+          }
+        }
+      }
+
+      tree.draw();
+      for (var i=0; i < childNodes.length; i++) {
+         var childnodeInfo = childNodes[i];
+         addTreeBranch(ontology_node_id, newNode, childnodeInfo);
+      }
+    }
+    
+    
     function expandEntireTree() {
         tree = new YAHOO.widget.TreeView("treecontainer");
         //tree.draw();
@@ -573,61 +610,16 @@ body {
 
       if (ontology_display_name!='') {
         var ontology_source = null;
+        var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
         var ontology_version = document.forms["pg_form"].ontology_version.value;
-        var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_entire_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);
+        var request = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_entire_cs_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);
 
       }
-    }
+    }    
     
     
     
-
-    function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {
-      var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
-      
-      var newNodeData;
-      if (ontology_node_id.indexOf("TVS_") >= 0) {
-          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id };
-      } else {
-          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
-      }        
-      
-      var expand = false;
-      var childNodes = nodeInfo.children_nodes;
-
-      if (childNodes.length > 0) {
-          expand = true;
-      }
-      var newNode = new YAHOO.widget.TaskNode(newNodeData, rootNode, expand);
-      if (nodeInfo.ontology_node_id == ontology_node_id) {
-          newNode.labelStyle = "ygtvlabel_highlight";
-      }
-
-      if (nodeInfo.ontology_node_id == ontology_node_id) {
-         newNode.isLeaf = true;
-         if (nodeInfo.ontology_node_child_count > 0) {
-             newNode.isLeaf = false;
-             newNode.setDynamicLoad(loadNodeData);
-         } else {
-             tree.draw();
-         }
-
-      } else {
-          if (nodeInfo.ontology_node_id != ontology_node_id) {
-          if (nodeInfo.ontology_node_child_count == 0 && nodeInfo.ontology_node_id != ontology_node_id) {
-        newNode.isLeaf = true;
-          } else if (childNodes.length == 0) {
-        newNode.setDynamicLoad(loadNodeData);
-          }
-        }
-      }
-
-      tree.draw();
-      for (var i=0; i < childNodes.length; i++) {
-         var childnodeInfo = childNodes[i];
-         addTreeBranch(ontology_node_id, newNode, childnodeInfo);
-      }
-    }
+    
     YAHOO.util.Event.addListener(window, "load", init);
     
     YAHOO.util.Event.onDOMReady(initTree);
@@ -828,36 +820,38 @@ body {
 View value sets organized by standards category or source terminology. 
 Standards categories group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies. 
 Search or browse a value set from its home page, or search all value sets at once from this page (very slow) to find which ones contain a particular code or term.
-</p> 
-
+</p>       
+      
         <div id="popupContentArea">
           <a name="evs-content" id="evs-content"></a>
-          
+  
           <table width="580px" cellpadding="3" cellspacing="0" border="0">
-
           
             <% if (message != null) { request.getSession().removeAttribute("message"); %>
               <tr class="textbodyred"><td>
                 <p class="textbodyred">&nbsp;<%=message%></p>
-              </td>
-              <td>&nbsp;</td>
-             </tr>
+              </td></tr>
             <% } %>
-                       
+          
             <tr class="textbody">
+            
+            
               <td class="textbody" align="left">
-                <% String view = "source"; %>
-                Standards View
-                &nbsp;| 
-                <a href="<%=request.getContextPath() %>/pages/value_set_terminology_view.jsf?view=terminology">Terminology View</a>
+                <% String view = "terminology"; %>
+                <a href="<%=request.getContextPath() %>/pages/value_set_source_view.jsf?&view=source">Standards View</a>
+                &nbsp;|
+                Terminology View
               </td>
             
               <td align="right">
-               <font size="1" color="red" align="right">
-                 <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
-               </font>
+                <font size="1" color="red" align="right">
+                  <a href="javascript:printPage()"><img src="<%= request.getContextPath() %>/images/printer.bmp" border="0" alt="Send to Printer"><i>Send to Printer</i></a>
+                </font>
               </td>
+              
             </tr>
+            
+            
           </table>
         
           <hr/>
