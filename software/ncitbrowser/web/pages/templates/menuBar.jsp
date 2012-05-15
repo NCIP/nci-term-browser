@@ -17,9 +17,18 @@
 
   String menubar_dictionary = HTTPUtils.cleanXSS(DataUtils.getCodingSchemeName( dictionaryName0 ));
   String menubar_version = HTTPUtils.cleanXSS(DataUtils.getCodingSchemeVersion( dictionaryName0 ));
-  String formalName = DataUtils.getFormalName(menubar_dictionary);
-  boolean validDictionary = formalName != null;
-  System.out.println("DYEE: formalName=" + formalName + ", validDictionary=" + validDictionary);
+  
+  String menubar_formalname = null;
+  if (menubar_dictionary != null) {
+      menubar_formalname = DataUtils.getFormalName(menubar_dictionary);
+  }
+  boolean showMenuItems = true;
+  if (menubar_dictionary == null || menubar_formalname == null) {
+      showMenuItems = false;
+  }
+  if (menubar_version != null && !DataUtils.validateCodingSchemeVersion(menubar_formalname, menubar_version)) {
+      showMenuItems = false;
+  }  
 
   boolean menubar_isMapping = DataUtils.isMapping(menubar_dictionary, null);
   //Vector mapping_scheme_vec = DataUtils.getMappingCodingSchemes(menubar_dictionary);
@@ -53,7 +62,7 @@
         <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="11">
           Mapping</a>
       <% } else if (tree_access_allowed) { %>
-        <% if (validDictionary) { %>
+        <% if (showMenuItems) { %>
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
           <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=hdr_dictionary0%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
             Hierarchy</a>
