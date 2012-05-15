@@ -202,7 +202,16 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
         ResolvedConceptReferencesIterator iterator = null;
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
+        // 051512 KLO AppScan
+        if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
+			matchAlgorithm = "exactMatch";
+		}
+
         String searchTarget = (String) request.getParameter("searchTarget");
+        // 051512 KLO AppScan
+        if (searchTarget == null || searchTarget.length() == 0) {
+			searchTarget = "names";
+		}
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
