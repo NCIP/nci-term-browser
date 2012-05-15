@@ -45,6 +45,12 @@
 	}
 	String deprecatedVersion = info.version_deprecated;
 	String version = info.version;
+	
+	//AppScan KLO 051512
+	if (version == null) {
+	    version = DataUtils.getVocabularyVersionByTag(dictionary, "PRODUCTION");
+	}
+	
 	request.setAttribute("version", version);
 	if (dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
