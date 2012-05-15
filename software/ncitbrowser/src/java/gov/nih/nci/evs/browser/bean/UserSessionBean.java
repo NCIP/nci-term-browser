@@ -1695,8 +1695,21 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
                 .getExternalContext().getRequest();
 
         String scheme = (String) request.getParameter("dictionary");
-        String version = (String) request.getParameter("version");
+	    if (scheme == null || DataUtils.getFormalName(scheme) == null) {
+			String message = "Invalid vocabulary name.";
+			request.setAttribute("message", message);
+			return "message";
+		}
 
+        String version = (String) request.getParameter("version");
+        if (version != null) {
+			boolean isVersionValid = DataUtils.validateCodingSchemeVersion(scheme, version);
+			if (!isVersionValid) {
+				String message = "Invalid vocabulary version.";
+				request.setAttribute("message", message);
+				return "message";
+			}
+		}
 
         SearchStatusBean bean =
             (SearchStatusBean) FacesContext.getCurrentInstance()
