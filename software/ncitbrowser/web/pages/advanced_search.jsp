@@ -233,13 +233,13 @@
 
     String check_n2 = "", check_c2 = "", check_p2 = "" , check_r2 ="";
 
-    if (selectSearchOption == null || selectSearchOption.compareTo("Name") == 0)
+    if (selectSearchOption == null || selectSearchOption.compareToIgnoreCase("Name") == 0)
       check_n2 = "checked";
-    else if (selectSearchOption.compareTo("Code") == 0)
+    else if (selectSearchOption.compareToIgnoreCase("Code") == 0)
         check_c2 = "checked";
-    else if (selectSearchOption.compareTo("Property") == 0)
+    else if (selectSearchOption.compareToIgnoreCase("Property") == 0)
       check_p2 = "checked";
-    else if (selectSearchOption.compareTo("Relationship") == 0)
+    else if (selectSearchOption.compareToIgnoreCase("Relationship") == 0)
       check_r2 = "checked";
       
 
