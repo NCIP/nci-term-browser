@@ -1052,16 +1052,26 @@ System.out.println("KEY: " + key);
             matchText = (String) request.getSession().getAttribute("matchText");
         }
 
-
-
         String multiple_search_error =
             (String) request.getSession().getAttribute(
                 "multiple_search_no_match_error");
         request.getSession().removeAttribute("multiple_search_no_match_error");
 
         String matchAlgorithm = (String) request.getParameter("algorithm");
+
+        //KLO 051512 AppScan
+        if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
+			matchAlgorithm = "exactMatch";
+		}
+
         request.getSession().setAttribute("algorithm", matchAlgorithm);
+
         String searchTarget = (String) request.getParameter("searchTarget");
+        //KLO 051512 AppScan
+        if (searchTarget == null || searchTarget.length() == 0) {
+			searchTarget = "names";
+		}
+
         request.getSession().setAttribute("searchTarget", searchTarget);
 
         String initial_search = (String) request.getParameter("initial_search");
@@ -1188,11 +1198,10 @@ int selected_knt = 0;
             request.getSession().setAttribute("message", message);
             request.getSession().setAttribute("matchText",
                 HTTPUtils.convertJSPString(matchText));
-
-
-
             return "multiple_search";
         }
+
+
 
         // KLO, 012610
         else if (searchTarget.compareTo("relationships") == 0
