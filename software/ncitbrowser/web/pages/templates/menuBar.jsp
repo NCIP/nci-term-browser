@@ -15,8 +15,8 @@
   dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#40;", "(");
   dictionaryName0 = DataUtils.replaceAll(dictionaryName0, "&#41;", ")");
 
-  String menubar_dictionary = DataUtils.getCodingSchemeName( dictionaryName0 );
-  String menubar_version = DataUtils.getCodingSchemeVersion( dictionaryName0 );
+  String menubar_dictionary = HTTPUtils.cleanXSS(DataUtils.getCodingSchemeName( dictionaryName0 ));
+  String menubar_version = HTTPUtils.cleanXSS(DataUtils.getCodingSchemeVersion( dictionaryName0 ));
   String formalName = DataUtils.getFormalName(menubar_dictionary);
   boolean validDictionary = formalName != null;
   System.out.println("DYEE: formalName=" + formalName + ", validDictionary=" + validDictionary);
@@ -27,11 +27,12 @@
   boolean hasValueSet = ValueSetHierarchy.hasValueSet(menubar_dictionary);
   boolean hasMapping = DataUtils.hasMapping(menubar_dictionary);
 
-  if (menubar_version == null) menubar_version = menuBar_info.version;
+  if (menubar_version == null) menubar_version = menuBar_info.version; // HTTPUtils.cleanXSS already performed in JSPUtils.JSPHeaderInfo
   //System.out.println("menuBar.jsp menubar_version: " + menubar_version);
 
   String hdr_dictionary0 = menuBar_info.dictionary;
   if (hdr_dictionary0 == null) hdr_dictionary0 = ""; // Set to empty string
+  hdr_dictionary0 = HTTPUtils.cleanXSS(hdr_dictionary0);
 
   boolean tree_access_allowed = true;
   if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(hdr_dictionary0)) {
@@ -49,12 +50,12 @@
     <td align="left">
       <% if (menubar_isMapping) { %>
         <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
-        <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="11">
+        <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="11">
           Mapping</a>
       <% } else if (tree_access_allowed) { %>
         <% if (validDictionary) { %>
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
-          <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(hdr_dictionary0)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
+          <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=hdr_dictionary0%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
             Hierarchy</a>
         <% } %>
         
@@ -64,16 +65,16 @@
         <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
         
         <!--
-        <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
+        <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="15">Value Sets</a>
         -->
-        <a href="<%= request.getContextPath() %>/ajax?action=create_cs_vs_tree&dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Value Sets</a>
+        <a href="<%= request.getContextPath() %>/ajax?action=create_cs_vs_tree&dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="15">Value Sets</a>
       
       
       <% } %>
       
       <% if (hasMapping) { %>
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
-          <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=HTTPUtils.cleanXSS(menubar_dictionary)%>&version=<%=HTTPUtils.cleanXSS(menubar_version)%>" tabindex="15">Maps</a>      
+          <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="15">Maps</a>      
       <% } %>
 
       <c:choose>
