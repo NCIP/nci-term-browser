@@ -3184,6 +3184,8 @@ System.out.println("hierarchicalAssoName: " + hierarchicalAssoName);
     }
 
     public static String replaceAll(String s, String t1, String t2) {
+		// AppScan
+		if (s == null) return s;
         s = s.replaceAll(t1, t2);
         return s;
     }
@@ -5286,7 +5288,8 @@ System.out.println("vsd_str " + vsd_str);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
 
-            return lbscm.getDistinctNamespacesOfCode(codingScheme, csvt, code);
+            List<String> list = lbscm.getDistinctNamespacesOfCode(codingScheme, csvt, code);
+            return list;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

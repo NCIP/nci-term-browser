@@ -52,7 +52,8 @@
 	}
 	
 	request.setAttribute("version", version);
-	if (dictionary.compareTo("NCI Thesaurus") == 0) {
+	// AppScan
+	if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 %>
 <title>NCI Thesaurus</title>
 <%
@@ -196,8 +197,8 @@
             		}
           		
             		
-            		if (dictionary.compareTo("NCI Thesaurus") == 0
-            				|| dictionary.compareTo("NCI_Thesaurus") == 0) {
+            		if (dictionary != null && (dictionary.compareTo("NCI Thesaurus") == 0
+            				|| dictionary.compareTo("NCI_Thesaurus") == 0)) {
                %>
                <%@ include file="/pages/templates/content-header-other.jsp"%>
                <%
