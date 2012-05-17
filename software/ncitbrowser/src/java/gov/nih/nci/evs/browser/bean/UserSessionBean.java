@@ -542,11 +542,25 @@ System.out.println("KEY: " + key);
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
+/*
                 ResolvedConceptReferencesIteratorWrapper wrapper =
                     new SearchUtils()
                         //.searchByName(schemes, versions, matchText, source,
                         .searchByNameAndCode(schemes, versions, matchText, source,
                             matchAlgorithm, ranking, maxToReturn);
+*/
+
+                ResolvedConceptReferencesIteratorWrapper wrapper = null;
+                try {
+                    wrapper = new SearchUtils()
+                        //.searchByName(schemes, versions, matchText, source,
+                        .searchByNameAndCode(schemes, versions, matchText, source,
+                            matchAlgorithm, ranking, maxToReturn);
+				} catch (Exception ex) {
+
+				}
+
+
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
 
@@ -563,10 +577,18 @@ System.out.println("KEY: " + key);
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-                ResolvedConceptReferencesIteratorWrapper wrapper =
+                ResolvedConceptReferencesIteratorWrapper wrapper = null;
+                try {
+                    wrapper =
                     new SearchUtils().searchByProperties(schemes, versions,
                         matchText, source, matchAlgorithm, excludeDesignation,
                         ranking, maxToReturn);
+				} catch (Exception ex) {
+
+				}
+
+
+
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
                     if (iterator != null) {
@@ -583,10 +605,18 @@ System.out.println("KEY: " + key);
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-                ResolvedConceptReferencesIteratorWrapper wrapper =
+				ResolvedConceptReferencesIteratorWrapper wrapper = null;
+                try {
+                    wrapper =
                     new SearchUtils().searchByAssociations(schemes, versions,
                         matchText, source, matchAlgorithm, designationOnly,
                         ranking, maxToReturn);
+
+				} catch (Exception ex) {
+
+				}
+
+
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
                     if (iterator != null) {
