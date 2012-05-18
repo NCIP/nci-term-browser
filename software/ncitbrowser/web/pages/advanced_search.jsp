@@ -368,15 +368,17 @@
 
                           <%
                             Vector property_vec = OntologyBean.getSupportedPropertyNames(adv_search_vocabulary, adv_search_version);
-                            for (int i=0; i<property_vec.size(); i++) {
-                              t = (String) property_vec.elementAt(i);
-                              if (t.compareTo(selectProperty) == 0) {
-                          %>
-                                <option value="<%=t%>" selected><%=t%></option>
-                          <%  } else { %>
-                                <option value="<%=t%>"><%=t%></option>
-                          <%
-                              }
+                            if (property_vec != null) {
+				    for (int i=0; i<property_vec.size(); i++) {
+				      t = (String) property_vec.elementAt(i);
+				      if (t.compareTo(selectProperty) == 0) {
+				  %>
+					<option value="<%=t%>" selected><%=t%></option>
+				  <%  } else { %>
+					<option value="<%=t%>"><%=t%></option>
+				  <%
+				      }
+				    }
                             }
                           %>
                           </select>
@@ -405,21 +407,22 @@
                           <%
                             
                             Vector association_vec = OntologyBean.getSupportedAssociationNamesAndIDs(adv_search_vocabulary, adv_search_version);
-                             
-                            for (int i=0; i<association_vec.size(); i++) {
-                              t = (String) association_vec.elementAt(i);
-                              
-                              Vector name_and_id_vec = DataUtils.parseData(t);
-                              String association_name = (String) name_and_id_vec.elementAt(0);
-                              String association_id = (String) name_and_id_vec.elementAt(1);
-                                                            
-                              if (association_id.compareTo(rel_search_association) == 0) {
-                          %>
-                                <option value="<%=association_id%>" selected><%=association_name%></option>
-                          <%  } else { %>
-                                <option value="<%=association_id%>"><%=association_name%></option>
-                          <%
-                              }
+                            if (association_vec != null) {
+				    for (int i=0; i<association_vec.size(); i++) {
+				      t = (String) association_vec.elementAt(i);
+
+				      Vector name_and_id_vec = DataUtils.parseData(t);
+				      String association_name = (String) name_and_id_vec.elementAt(0);
+				      String association_id = (String) name_and_id_vec.elementAt(1);
+
+				      if (association_id.compareTo(rel_search_association) == 0) {
+				  %>
+					<option value="<%=association_id%>" selected><%=association_name%></option>
+				  <%  } else { %>
+					<option value="<%=association_id%>"><%=association_name%></option>
+				  <%
+				      }
+				    }
                             }
                             
                           %>
