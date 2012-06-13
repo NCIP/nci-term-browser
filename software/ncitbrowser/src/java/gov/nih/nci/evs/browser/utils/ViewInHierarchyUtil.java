@@ -124,6 +124,7 @@ public class ViewInHierarchyUtil {
 
     private static void println(PrintWriter out, String text) {
         gov.nih.nci.evs.browser.servlet.AjaxServlet.println(out, text);
+
     }
 
 

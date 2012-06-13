@@ -156,21 +156,21 @@ public class ViewInHierarchyUtils {
             TreeService service =
                     TreeServiceFactory.getInstance().getTreeService(
                         RemoteServerUtil.createLexBIGService());
-    
+
             long start = System.currentTimeMillis();
             CodingSchemeVersionOrTag csvt = null;
             if (version != null && version.length() > 0)
                 csvt = Constructors.createCodingSchemeVersionOrTagFromVersion(version);
-    
+
             String namespace = DataUtils.getNamespaceByCode(codingScheme, version, code);
-    
+
     //System.out.println("(*************) namespace: " + namespace);
-    
+
             LexEvsTree tree = service.getTree(codingScheme, csvt, code, namespace);
             List<LexEvsTreeNode> listEvsTreeNode =
                     service.getEvsTreeConverter()
                         .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
-    
+
             LexEvsTreeNode root = null;
             printTree(out, "", code, root, "root", listEvsTreeNode);
         } catch (Exception e) {
@@ -252,6 +252,12 @@ public class ViewInHierarchyUtils {
 		    println(out, "");
             println(out, indentStr + "// " + symbol + " " + node_name + "(" + code + ")");
 		    println(out, indentStr + "newNodeDetails = \"javascript:onClickTreeNode('" + code + "');\";");
+
+		    //	[GF#32225] View-In-Hierarchy page fails to render on tree node label containing double quote characters. KLO, 061312
+		    if (node_name.indexOf("\"") != -1) {
+				node_name = replaceAll(node_name, "\"", "'");
+			}
+
 		    println(out, indentStr + "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
 		    if (expanded) {
 			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_node_id + ", true);");
@@ -444,6 +450,22 @@ public class ViewInHierarchyUtils {
 			return restoreNodeID((String) v.elementAt(1));
 		}
 		return restoreNodeID((String) v.elementAt(0));
+	}
+
+
+    public static String replaceAll(String t, String s1, String s2) {
+		int n = t.indexOf(s1);
+		while (n != -1) {
+            if (n > 0) {
+				t = t.substring(0, n) + s2 + t.substring(n+s1.length(), t.length());
+			} else {
+				t = s2 + t.substring(n+s1.length(), t.length());
+			}
+			n = t.indexOf(s1);
+
+		}
+
+		return t;
 	}
 
     public static void main(String[] args) throws Exception {
