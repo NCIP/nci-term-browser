@@ -4,9 +4,6 @@
   <tr>
     <%
     
- 
-   
-    
       String imagesPath = request.getContextPath() + "/images/";
       String pagesPath = request.getContextPath() + "/pages/";
       String term_jsp_page_name = "multiple_search.jsf";
@@ -25,8 +22,8 @@
       tab_valuesets_image = imagesPath + tab_valuesets_image;
       
       
-      //String tab_valuesets_link = pagesPath + valueset_jsp_page_name + "?nav_type=valuesets";
-      String tab_valuesets_link = request.getContextPath() + "/ajax?action=create_src_vs_tree";
+      //String tab_valueset_link = pagesPath + valueset_jsp_page_name + "?nav_type=valuesets";
+      String tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree";
       
     
       String tab_mappings_image = nav_type.equalsIgnoreCase("mappings")
@@ -44,7 +41,7 @@
     <td><a href="<%=HTTPUtils.cleanXSS(tab_terms_link)%>">
       <img name="tab_terms" src="<%=tab_terms_image%>"
         border="0" alt="Terminologies" title="Terminologies" /></a></td>
-    <td><a href="<%=HTTPUtils.cleanXSS(tab_valuesets_link)%>">
+    <td><a href="<%=HTTPUtils.cleanXSS(tab_valueset_link)%>">
       <img name="tab_valuesets" src="<%=tab_valuesets_image%>"
         border="0" alt="Value Sets" title="ValueSets" /></a></td>
     <td><a href="<%=HTTPUtils.cleanXSS(tab_mappings_link)%>">

@@ -109,6 +109,7 @@ public class Constants {
     public static final int  TERMINOLOGY_VIEW = 2;
 
     public static final String  TERMINOLOGY_VALUE_SET = "Terminology Value Set";
+    public static final String  TERMINOLOGY_VALUE_SET_NAME = "Terminology_Value_Set.owl";
 
 
     /**

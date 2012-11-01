@@ -1665,10 +1665,6 @@ public class TreeUtils {
 
     public static ResolvedConceptReferenceList getHierarchyRoots(
         String codingScheme, String version) {
-
-System.out.println("scheme: " + codingScheme);
-System.out.println("version: " + version);
-
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
@@ -1695,9 +1691,10 @@ System.out.println("version: " + version);
             return rcrl;
 
         } catch (Exception ex) {
-			ex.printStackTrace();
-
-			System.out.println("lbscm.getHierarchyRoots throws exception???");
+			//ex.printStackTrace();
+			System.out.println("scheme: " + codingScheme);
+			System.out.println("version: " + version);
+			System.out.println("ERROR: lbscm.getHierarchyRoots throws exception???");
             return null;
         }
     }
