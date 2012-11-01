@@ -4,7 +4,8 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%
   String terminology_subset_download_url = new DataUtils().getTerminologySubsetDownloadURL();
   String term_subset_link = null;
@@ -15,6 +16,10 @@
     term_subset_link = "href=\"" + terminology_subset_download_url +
       "\" target=\"_blank\" alt=\"Terminology Subset Download\"";
   }
+  
+  String tab_valuesets_link = request.getContextPath() + "/ajax?action=create_src_vs_tree";
+  
+  
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
@@ -49,7 +54,12 @@
           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
           Terminology Subset (C54443)</a>. These subset concepts are linked to subset-member concepts through
           over 20,000 association relationships. Many of these subsets are now also available as
-          <a href="<%=request.getContextPath()%>/pages/value_set_source_view.jsf?nav_type=valuesets">Value Sets</a>.
+          <a href="<%=HTTPUtils.cleanXSS(tab_valuesets_link)%>">Value Sets</a>.
+          
+          <%-- [#32405] Bad link on Subset Summary page.
+          <a href="<%=request.getContextPath()%>/pages/value_set_source_view.jsf?nav_type=valuesets">
+          --%>
+          
         </p>
         <p>
           Most of these subsets are federal and international coding standards maintained in active collaboration with our FDA, CDISC, and other

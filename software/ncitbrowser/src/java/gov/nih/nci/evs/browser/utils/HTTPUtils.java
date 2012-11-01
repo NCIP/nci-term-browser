@@ -316,42 +316,4 @@ public class HTTPUtils {
         return (HttpServletRequest) FacesContext.getCurrentInstance()
             .getExternalContext().getRequest();
     }
-    
-    public static void redirectError(String msg) {
-        try {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = facesContext.getExternalContext();
-            HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-            
-            request.getSession().setAttribute("message", msg);
-            String contextPath = request.getContextPath();
-            String destination = contextPath + "/pages/message.jsf";
-
-            // This also works too:
-            // HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
-            // response.sendRedirect(response.encodeRedirectURL(destination));
-            // facesContext.responseComplete();
-
-            externalContext.redirect(destination);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public static void forwardError(String msg) {
-        // Currently, does not work
-        try {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ExternalContext externalContext = facesContext.getExternalContext();
-            HttpServletRequest request = (HttpServletRequest) externalContext.getRequest();
-            
-            request.getSession().setAttribute("message", msg);
-            String nextJSP = "/pages/message.jsf";
-            
-            externalContext.dispatch(nextJSP);
-            facesContext.responseComplete();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

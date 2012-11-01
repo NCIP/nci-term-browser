@@ -107,12 +107,10 @@ public class MailUtils extends Object {
             error.append(indent + "* detailed description\n");
             ++ctr;
         }
-
         if (from == null || from.length() <= 0) {
             error.append(indent + "* your e-mail address\n");
             ++ctr;
         }
-
         if (error.length() > 0) {
             String s = "Warning: Your message was not sent.\n";
             if (ctr > 1)
@@ -151,7 +149,6 @@ public class MailUtils extends Object {
         // Sets the from and to addresses.
         InternetAddress addressFrom = new InternetAddress(from);
         msg.setFrom(addressFrom);
-        //KLO 053012
         //msg.setRecipient(Message.RecipientType.BCC, addressFrom);
 
         InternetAddress[] addressTo = new InternetAddress[recipients.length];

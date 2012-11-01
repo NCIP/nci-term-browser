@@ -544,7 +544,13 @@ if (action == null) {
 
                 if (nodesArray != null) {
                     json.put("root_nodes", nodesArray);
-                }
+                } else {
+					_logger.debug("*** AjaxServlet build_src_vs_tree returns null???");
+					System.out.println("*** AjaxServlet build_src_vs_tree returns null???");
+				}
+
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1547,11 +1553,13 @@ if (view == Constants.STANDARD_VIEW) {
 }
 
 
- TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
-
- //
- //new ValueSetUtils().printTree(out, root);
- new ValueSetUtils().printTree(out, root, view);
+ //TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
+ //new ValueSetUtils().printTree(out, root, view);
+ TreeItem root = null;
+ if (value_set_tree_hmap != null) {
+	 root = (TreeItem) value_set_tree_hmap.get("<Root>");
+	 new ValueSetUtils().printTree(out, root, view);
+ }
 
 
  String contextPath = request.getContextPath();

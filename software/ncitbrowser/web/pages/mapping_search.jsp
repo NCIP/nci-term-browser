@@ -27,6 +27,8 @@
   }
 %>
 <%
+  int mapping_cs_knt = 0;
+
   String mapping_scheme_and_version = (String) request.getSession().getAttribute("scheme_and_version");
   if (mapping_scheme_and_version == null) {
       mapping_scheme_and_version = "";
@@ -338,6 +340,9 @@ if (mapping_error_msg != null) {
              request.getSession().removeAttribute("hide_ontology_list");
 if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
 %>
+
+
+
            
             <span class="textbody">
 Select a mapping data set to search here, or click on a mapping data set name to go to its home page and browse
@@ -355,7 +360,7 @@ or search from there.  It is not yet possible to search more than one mapping da
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <%
-                      int mapping_cs_knt = 0;
+                      
                       for (int i = 0; i < display_name_vec.size(); i++) {
                      
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
@@ -368,7 +373,7 @@ or search from there.  It is not yet possible to search more than one mapping da
                         boolean isMapping = DataUtils.isMapping(scheme, version);
                         
                         if (isMapping) {
-                               mapping_cs_knt++;
+                                mapping_cs_knt++;
                        
 				String http_label = null;
 				String http_scheme = null;
@@ -427,9 +432,22 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
                   </td>
                 </tr> 
            
+<%           
+    if (mapping_cs_knt == 0) {
+%>  
+        <tr><td class="textbody">&nbsp;&nbsp;&nbsp;&nbsp;No mapping data is available.</td></tr>
+<%  
+    }
+%>    
+          
+           
             </table>
 
 <p></p>
+
+<%           
+    if (mapping_cs_knt > 0) {
+%>  
 
           <table class="termstable" border="0">
                 <tr>
@@ -444,7 +462,10 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
                   </td>
                 </tr>
           </table>
-          
+
+<%  
+    }
+%>             
 <%
 }
 %>
