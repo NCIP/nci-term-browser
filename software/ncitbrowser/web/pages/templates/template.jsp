@@ -35,6 +35,11 @@
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
     <f:view>
+    
+    <!-- Begin Skip Top Navigation -->
+      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+    <!-- End Skip Top Navigation -->         
+    
       <%@ include file="/pages/templates/header.jsp" %>
       <div class="center-page">
         <%@ include file="/pages/templates/sub-header.jsp" %>

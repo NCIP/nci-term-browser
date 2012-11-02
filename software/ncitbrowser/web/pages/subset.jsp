@@ -6,6 +6,8 @@
 <%@ page import="org.LexGrid.concepts.Entity" %>
 
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="gov.nih.nci.evs.browser.common.*" %>
+
 <%
   String terminology_subset_download_url = new DataUtils().getTerminologySubsetDownloadURL();
   String term_subset_link = null;
@@ -17,7 +19,11 @@
       "\" target=\"_blank\" alt=\"Terminology Subset Download\"";
   }
   
-  String tab_valuesets_link = request.getContextPath() + "/ajax?action=create_src_vs_tree";
+  String ncit_scheme = Constants.NCI_THESAURUS;//.replace(" ", "%20");
+  String ncit_version = DataUtils.getVocabularyVersionByTag(Constants.NCI_THESAURUS, "PRODUCTION");
+  
+  String tab_valuesets_link = request.getContextPath() + "/ajax?action=create_cs_vs_tree&dictionary=" + ncit_scheme
+                              + "&version=" + ncit_version;
   
   
 %>
