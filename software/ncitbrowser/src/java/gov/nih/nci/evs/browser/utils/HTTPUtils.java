@@ -144,9 +144,14 @@ public class HTTPUtils {
 			size = MIN_FONT_SIZE;
 		else {
 			// Calculate an intermediate font size
+			/*
 			size = MIN_FONT_SIZE
 					+ Math.round((MAX_FONT_SIZE / MAX_STR_LEN)
 							/ (MIN_FONT_SIZE / value.length()));
+		    */
+			size = MIN_FONT_SIZE
+					+ Math.round(((float) MAX_FONT_SIZE / (float) MAX_STR_LEN)
+							/ ((float) MIN_FONT_SIZE / (float) value.length()));
 		}
     	return size;
     }

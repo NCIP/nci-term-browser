@@ -3207,7 +3207,7 @@ if (lbSvc == null) {
         }
 
         if (key.indexOf("%20") != -1) {
-            key.replaceAll("%20", " ");
+            key = key.replaceAll("%20", " ");
         }
 
         if (_csnv2codingSchemeNameMap == null) {
@@ -3230,7 +3230,7 @@ if (lbSvc == null) {
         if (_csnv2VersionMap == null)
             setCodingSchemeMap();
         if (key.indexOf("%20") != -1) {
-            key.replaceAll("%20", " ");
+            key = key.replaceAll("%20", " ");
         }
 
         if (_csnv2VersionMap == null) {
