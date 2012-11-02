@@ -18,13 +18,24 @@
     term_subset_link = "href=\"" + terminology_subset_download_url +
       "\" target=\"_blank\" alt=\"Terminology Subset Download\"";
   }
-  
-  String ncit_scheme = Constants.NCI_THESAURUS;//.replace(" ", "%20");
-  String ncit_version = DataUtils.getVocabularyVersionByTag(Constants.NCI_THESAURUS, "PRODUCTION");
+
+  JSPUtils.JSPHeaderInfo subset_info = new JSPUtils.JSPHeaderInfo(request);
+  String subset_dictionaryName0 = null;
+  String subset_dictionaryName = subset_info.dictionary;
+  if (subset_dictionaryName == null) subset_dictionaryName = (String) request.getSession().getAttribute("dictionary");
+  if (subset_dictionaryName == null) subset_dictionaryName = Constants.CODING_SCHEME_NAME;
+
+  subset_dictionaryName0 = subset_dictionaryName;
+  subset_dictionaryName = subset_dictionaryName.replaceAll(" ", "%20");
+
+  subset_dictionaryName0 = DataUtils.replaceAll(subset_dictionaryName0, "&#40;", "(");
+  subset_dictionaryName0 = DataUtils.replaceAll(subset_dictionaryName0, "&#41;", ")");
+
+  String ncit_scheme = HTTPUtils.cleanXSS(DataUtils.getCodingSchemeName( subset_dictionaryName0 ));
+  String ncit_version = HTTPUtils.cleanXSS(subset_info.version);
   
   String tab_valuesets_link = request.getContextPath() + "/ajax?action=create_cs_vs_tree&dictionary=" + ncit_scheme
                               + "&version=" + ncit_version;
-  
   
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
