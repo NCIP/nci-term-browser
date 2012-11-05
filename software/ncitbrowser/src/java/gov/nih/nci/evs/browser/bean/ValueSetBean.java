@@ -352,12 +352,13 @@ public class ValueSetBean {
         request.getSession().setAttribute("view", VSD_view);
         //System.out.println("view: " + VSD_view);
 
-
+/*
         String selectURI = (String) request.getParameter("selectedValueSetURI");
         if (selectURI == null) {
 			selectURI = getSelectedValueSetURI();
 		}
 		//System.out.println("(*) valueSetSearchAction selectURI: " + selectURI);
+*/
 
         String selectCodingScheme = getSelectedOntology(); //(String) request.getParameter("selectedOntology");
         //System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
@@ -925,7 +926,7 @@ String key = vsd_uri;
 		}
 
 
-        long time = System.currentTimeMillis();
+        //long time = System.currentTimeMillis();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 		ResolvedValueSetDefinition rvsd = null;
 		int lcv = 0;
@@ -979,10 +980,11 @@ String key = vsd_uri;
 
 
     public String exportValueSetAction() {
+		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-
+        */
 
         return "exported_value_set";
 
@@ -1311,10 +1313,11 @@ String key = vsd_uri;
 
 
 	public String searchAction() {
+		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-
+        */
 
 		return "search_results";
 	}

@@ -236,7 +236,7 @@ public class ValueSetUtils {
 		    }
 
 		} catch (Exception ex) {
-
+            ex.printStackTrace();
 		}
 
     }
@@ -297,7 +297,7 @@ public class ValueSetUtils {
 
 
 		} catch (Exception ex) {
-
+            ex.printStackTrace();
 		}
 
     }
@@ -448,7 +448,7 @@ System.out.println("(*) ValueSetUtils.printTree dictionary: " + dictionary);
 		    }
 
 		} catch (Exception ex) {
-
+            ex.printStackTrace();
 		}
 
     }

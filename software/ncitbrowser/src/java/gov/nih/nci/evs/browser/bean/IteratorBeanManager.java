@@ -83,7 +83,7 @@ public class IteratorBeanManager extends Object {
 
     public String createIteratorKey(Vector schemes, Vector versions, String matchText,
         String searchTarget, String matchAlgorithm, int maxReturn) {
-        String maxReturn_str = Integer.toString(maxReturn);
+        //String maxReturn_str = Integer.toString(maxReturn);
 
         String key = "";
         matchText = matchText.trim();

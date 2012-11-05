@@ -1593,7 +1593,7 @@ public class TreeUtils {
                 }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
