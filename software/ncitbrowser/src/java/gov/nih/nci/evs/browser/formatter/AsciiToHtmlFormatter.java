@@ -115,9 +115,15 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
                 v.add(null);
 
             String rowColor = "reportTableRowLight";
+            /*
             if (row >= 0) {
                 //rowColor = row % 2 == 1 ? "reportTableRowDark" : "reportTableRowLight";
                 rowColor = row % 2 != 0 ? "reportTableRowDark" : "reportTableRowLight";
+			}
+			*/
+			int n = row / 2;
+			if (2 * n == row) {
+				rowColor = "reportTableRowDark";
 			}
 
             out.writeln_indent("<tr class=\"" + rowColor + "\">");

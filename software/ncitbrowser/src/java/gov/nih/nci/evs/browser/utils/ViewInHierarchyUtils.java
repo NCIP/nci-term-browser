@@ -289,7 +289,7 @@ public class ViewInHierarchyUtils {
 			    println(out, indentStr + node_label + ".labelStyle = \"ygtvlabel_highlight\";");
 		    }
 		} catch (Exception ex) {
-
+            ex.printStackTrace();
 		}
 
     }

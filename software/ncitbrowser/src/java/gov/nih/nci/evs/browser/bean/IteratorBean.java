@@ -228,7 +228,7 @@ public class IteratorBean extends Object {
 		}
 
         _logger.debug("Retrieving data (from: " + idx1 + " to: " + idx2 + ")");
-        long ms = System.currentTimeMillis();
+        //long ms = System.currentTimeMillis();
         long dt = 0;
         long total_delay = 0;
         int upper_bound = idx2;

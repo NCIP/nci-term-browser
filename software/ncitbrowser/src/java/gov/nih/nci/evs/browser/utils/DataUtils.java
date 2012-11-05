@@ -567,6 +567,7 @@ public class DataUtils {
                                 + " possibly due to missing security token.");
                         _logger.error("\t\tAccess to " + formalname
                             + " denied.");
+                        ex.printStackTrace();
                     }
 
                 } else {
@@ -4252,7 +4253,7 @@ if (lbSvc == null) {
 					}
 				}
 			} catch (Exception ex) {
-
+                ex.printStackTrace();
 			}
 
 		} catch (Exception ex) {

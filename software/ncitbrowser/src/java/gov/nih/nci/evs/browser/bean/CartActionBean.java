@@ -1193,7 +1193,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 
         _messageflag = false;
 
-        SearchCart search = new SearchCart();
+        //SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         StringBuffer sb = new StringBuffer();
 

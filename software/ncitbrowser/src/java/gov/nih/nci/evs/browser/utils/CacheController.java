@@ -667,7 +667,7 @@ public class CacheController {
             }
 
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
         return nodesArray;
     }

@@ -855,9 +855,11 @@ System.out.println("KEY: " + key);
     }
 
     public String linkAction() {
+		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
+        */
         return "";
     }
 
@@ -987,7 +989,7 @@ System.out.println("KEY: " + key);
             // _logger.warn("ontologySelectionChanged; event.getNewValue() == null ");
             return;
         }
-        String newValue = (String) event.getNewValue();
+        //String newValue = (String) event.getNewValue();
 
         HttpServletResponse response =
             (HttpServletResponse) FacesContext.getCurrentInstance()
@@ -2239,32 +2241,35 @@ System.out.println("(*) assocName: " + assocName);
 	//resolveValueSetAction
 
     public String resolveValueSetAction() {
+		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-
+        */
         return "resolve_value_set";
 
 	}
 
 
     public String continueResolveValueSetAction() {
+		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-
+        */
         return "resolved_value_set";
 
 	}
 
 
     public String exportValueSetAction() {
+		/*
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-
+        */
         return "exported_value_set";
 
 	}

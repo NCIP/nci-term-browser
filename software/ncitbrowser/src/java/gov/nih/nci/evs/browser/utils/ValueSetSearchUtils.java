@@ -286,7 +286,7 @@ public class ValueSetSearchUtils
                 }
             }
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             // return null;
         }
         return list;
