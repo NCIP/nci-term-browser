@@ -81,7 +81,8 @@ public class ViewInHierarchyUtils {
 
 	private String generateRandomString() {
 		int i = rand.nextInt();
-		String t = new Integer(i).toString();
+		//String t = new Integer(i).toString();
+		String t = Integer.valueOf(i).toString();
 		t = t.replace("-", "n");
 		return "_" + t;
 	}
@@ -144,6 +145,7 @@ public class ViewInHierarchyUtils {
     public ViewInHierarchyUtils(String codingScheme, String version, String code) {
 		has_more_node_knt = 0;
         try {
+			System.setProperty("file.encoding", "UTF8");
 			PrintWriter pw = new PrintWriter(System.out, true);
             printTree(pw, codingScheme, version, code);
         } catch (Exception e) {
@@ -238,7 +240,8 @@ public class ViewInHierarchyUtils {
 				isHasMoreNode = true;
 				has_more_node_knt++;
 				if (parent == null) {
-					code = "root" + "_" + focus_code + "_dot_" + new Integer(has_more_node_knt).toString();
+					//code = "root" + "_" + focus_code + "_dot_" + new Integer(has_more_node_knt).toString();
+					code = "root" + "_" + focus_code + "_dot_" + Integer.valueOf(has_more_node_knt).toString();
 				} else {
 				    code = parent.getCode() + "_dot_" + new Integer(has_more_node_knt).toString();
 				}

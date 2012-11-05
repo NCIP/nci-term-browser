@@ -387,7 +387,7 @@ public class QuickUnionIteratorWrapper implements ResolvedConceptReferencesItera
     /**
      * The Class IteratorSizeComparator.
      */
-    private class IteratorSizeComparator implements
+    private static class IteratorSizeComparator implements
             Comparator<ResolvedConceptReferencesIterator> {
         /*
          * (non-Javadoc)
@@ -404,7 +404,7 @@ public class QuickUnionIteratorWrapper implements ResolvedConceptReferencesItera
         }
     }
 
-    private class IteratorWrapperSizeComparator implements
+    private static class IteratorWrapperSizeComparator implements
             Comparator<ResolvedConceptReferencesIteratorWrapper> {
         /*
          * (non-Javadoc)

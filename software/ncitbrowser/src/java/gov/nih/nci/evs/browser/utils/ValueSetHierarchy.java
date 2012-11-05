@@ -86,7 +86,7 @@ public class ValueSetHierarchy {
 	public static HashSet _valueSetParticipationHashSet = null;
 
     //public static String SOURCE_SCHEME = "Terminology Value Set";
-    public static String SOURCE_SCHEME = "Terminology_Value_Set.owl";
+    public static final String SOURCE_SCHEME = "Terminology_Value_Set.owl";
     public static String SOURCE_VERSION = null;
 
 	public static HashMap _source_hierarchy = null;
@@ -550,8 +550,8 @@ public class ValueSetHierarchy {
     }
 
 
-    public static JSONArray HashMap2JSONArray(HashMap hmap) {
-        JSONObject json = new JSONObject();
+    public static JSONArray hashMap2JSONArray(HashMap hmap) {
+        //JSONObject json = new JSONObject();
         JSONArray nodesArray = null;
         try {
             nodesArray = new JSONArray();
@@ -778,7 +778,7 @@ public class ValueSetHierarchy {
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
-        Vector v = new Vector();
+        //Vector v = new Vector();
         try {
 			Entity concept = getConceptByCode(scheme, version, null, code);
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
@@ -945,7 +945,7 @@ public class ValueSetHierarchy {
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
-        Vector v = new Vector();
+        //Vector v = new Vector();
         try {
 
 			Entity concept = getConceptByCode(scheme, version, null, code);
@@ -1154,8 +1154,10 @@ public class ValueSetHierarchy {
                 cns =
                     lbSvc.getCodingSchemeConcepts(codingSchemeName,
                         versionOrTag);
+                if (cns == null) return null;
             } catch (Exception e1) {
                 e1.printStackTrace();
+                return null;
             }
 
             cns = cns.restrictToCodes(crefs);
@@ -1413,8 +1415,10 @@ public class ValueSetHierarchy {
 
             try {
                 cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+                if (cns == null) return null;
             } catch (Exception e1) {
                 e1.printStackTrace();
+                return null;
             }
 
             HashMap hmap = new HashMap();
@@ -1664,7 +1668,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 		TreeItem root = new TreeItem("<Root>", "Root node");
 
         List <TreeItem> children = new ArrayList();
-        Vector root_source_vec = new Vector();
+        //Vector root_source_vec = new Vector();
 		for (int k=0; k<source_in_cs_vsd_vec.size(); k++) {
 			String src = (String) source_in_cs_vsd_vec.elementAt(k);
 			// check has children
@@ -1795,7 +1799,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 		TreeItem root = new TreeItem("<Root>", "Root node");
 
         List <TreeItem> children = new ArrayList();
-        Vector root_source_vec = new Vector();
+        //Vector root_source_vec = new Vector();
 		for (int k=0; k<source_vec.size(); k++) {
 			String src = (String) source_vec.elementAt(k);
 			// check has children
@@ -1889,6 +1893,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
             CodingSchemeRenderingList csrl = null;
             try {
                 csrl = lbSvc.getSupportedCodingSchemes();
+                if (csrl == null) return null;
             } catch (LBInvocationException ex) {
                 ex.printStackTrace();
                 System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..."
@@ -1899,13 +1904,17 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
             for (int i = 0; i < csrs.length; i++) {
                 int j = i + 1;
                 CodingSchemeRendering csr = csrs[i];
+
                 CodingSchemeSummary css = csr.getCodingSchemeSummary();
                 String formalname = css.getFormalName();
 
                 Boolean isActive = null;
+                /*
                 if (csr == null) {
                     System.out.println("\tcsr == null???");
-                } else if (csr.getRenderingDetail() == null) {
+                } else
+                */
+                if (csr.getRenderingDetail() == null) {
                     System.out.println("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
                     System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
@@ -2909,7 +2918,7 @@ if (rcrl == null) {
 	    return ti;
 	}
 
-	public static List SortCSVSDTree(List <TreeItem> branch) {
+	public static List sortCSVSDTree(List <TreeItem> branch) {
 		if (branch == null) return null;
 		if (branch.size() == 1) return null;
 
@@ -2947,7 +2956,7 @@ System.out.println("************* getCodingSchemeValueSetTree *************");
 		HashMap hmap = getRootValueSets();
 		TreeItem root = (TreeItem) hmap.get("<Root>");
 
-		JSONArray nodesArray = new JSONArray();
+		//JSONArray nodesArray = new JSONArray();
 
 		for (String association : root._assocToChildMap.keySet()) {
 			 List<TreeItem> children = root._assocToChildMap.get(association);
@@ -2992,7 +3001,7 @@ System.out.println("************* getCodingSchemeValueSetTree *************");
 		// bubble NCI Thesaurus node to the top
 
 		if (branch.size() > 1) {
-			branch = SortCSVSDTree(branch);
+			branch = sortCSVSDTree(branch);
 		}
 
 		if (super_root != null) {
@@ -3010,7 +3019,7 @@ System.out.println("************* getCodingSchemeValueSetTree *************");
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static void main(String[] args) throws Exception {
-		ValueSetHierarchy test = new ValueSetHierarchy();
+		//ValueSetHierarchy test = new ValueSetHierarchy();
         String cs_url = "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#";
 	    HashMap root_hmap = ValueSetHierarchy.getRootValueSets(cs_url);
 	    if (root_hmap != null) {

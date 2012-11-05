@@ -152,7 +152,7 @@ public class ValueSetBean {
 	public List getOntologyList() {
 		if (ontologyList != null) return ontologyList;
 		Vector v = new Vector();
-		HashSet hset = new HashSet();
+		//HashSet hset = new HashSet();
 		ontologyList = new ArrayList();
 
 /*
@@ -390,6 +390,30 @@ public class ValueSetBean {
 
 			try {
 				String versionTag = null;//"PRODUCTION";
+
+					for (int k=0; k<selected_vocabularies.size(); k++) {
+						String vsd_name = (String) selected_vocabularies.elementAt(k);
+						String vsd_uri = DataUtils.getValueSetDefinitionURIByName(vsd_name);
+						if (vsd_uri != null) {
+							ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
+							if (vsd != null) {
+								AbsoluteCodingSchemeVersionReference acsvr = vsd_service.isEntityInValueSet(matchText,
+									  new URI(vsd_uri),
+									  null,
+									  versionTag);
+								if (acsvr != null) {
+									String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
+									if (metadata != null) {
+										v.add(metadata);
+									}
+								}
+						    }
+						}
+					}
+
+
+				/*
+
 				if (checked_vocabularies != null) {
 					for (int k=0; k<selected_vocabularies.size(); k++) {
 						String vsd_name = (String) selected_vocabularies.elementAt(k);
@@ -447,6 +471,8 @@ public class ValueSetBean {
 						}
 					}
 			    }
+			    */
+
 
 
 				request.getSession().setAttribute("matched_vsds", v);
@@ -1026,7 +1052,7 @@ String key = vsd_uri;
 			response.setContentLength(xml_str.length());
 
 			ServletOutputStream ouputStream = response.getOutputStream();
-			ouputStream.write(xml_str.getBytes(), 0, xml_str.length());
+			ouputStream.write(xml_str.getBytes("UTF8"), 0, xml_str.length());
 			ouputStream.flush();
 			ouputStream.close();
 
@@ -1101,7 +1127,7 @@ String key = vsd_uri;
 
 					response.setContentLength(sb.length());
 					ServletOutputStream ouputStream = response.getOutputStream();
-					ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+					ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
 					ouputStream.flush();
 					ouputStream.close();
 
@@ -1255,6 +1281,7 @@ String key = vsd_uri;
 			}
 		} catch (Exception ex)	{
 			sb.append("WARNING: Export to CVS action failed.");
+			ex.printStackTrace();
 		}
 
 
@@ -1272,7 +1299,7 @@ String key = vsd_uri;
 
 		try {
 			ServletOutputStream ouputStream = response.getOutputStream();
-			ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+			ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
 			ouputStream.flush();
 			ouputStream.close();
 		} catch (Exception ex) {

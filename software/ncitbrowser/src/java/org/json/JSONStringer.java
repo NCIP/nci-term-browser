@@ -39,15 +39,15 @@ import java.io.StringWriter;
  * <code>endObject</code> methods which make and bound object values. All of
  * these methods return the JSONWriter instance, permitting cascade style. For
  * example,
- * 
+ *
  * <pre>
  * myString =
  *     new JSONStringer().object().key(&quot;JSON&quot;).value(&quot;Hello, World!&quot;).endObject()
  *         .toString();
  * </pre>
- * 
+ *
  * which produces the string
- * 
+ *
  * <pre>
  * {&quot;JSON&quot;:&quot;Hello, World!&quot;}
  * </pre>
@@ -57,7 +57,7 @@ import java.io.StringWriter;
  * you. Objects and arrays can be nested up to 20 levels deep.
  * <p>
  * This can sometimes be easier than using a JSONObject to build a string.
- * 
+ *
  * @author JSON.org
  * @version 2
  */
@@ -75,10 +75,11 @@ public class JSONStringer extends JSONWriter {
      * problem in the construction of the JSON text (such as the calls to
      * <code>array</code> were not properly balanced with calls to
      * <code>endArray</code>).
-     * 
+     *
      * @return The JSON text.
      */
     public String toString() {
-        return this.mode == 'd' ? this.writer.toString() : null;
+        //return this.mode == 'd' ? this.writer.toString() : null;
+        return this.mode == 'd' ? this.writer.toString() : "";
     }
 }

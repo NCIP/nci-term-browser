@@ -51,11 +51,11 @@ import java.io.*;
  * coersion for you.
  * <p>
  * The <code>put</code> methods adds values to an object. For example,
- * 
+ *
  * <pre>
  * myString = new JSONObject().put(&quot;JSON&quot;, &quot;Hello, World!&quot;).toString();
  * </pre>
- * 
+ *
  * produces the string <code>{"JSON": "Hello, World"}</code>.
  * <p>
  * The texts produced by the <code>toString</code> methods strictly conform to
@@ -80,7 +80,7 @@ import java.io.*;
  * <li>Comments written in the slashshlash, slashstar, and hash conventions will
  * be ignored.</li>
  * </ul>
- * 
+ *
  * @author JSON.org
  * @version 2
  */
@@ -98,7 +98,7 @@ public class JSONObject implements Serializable {
         /**
          * There is only intended to be a single instance of the NULL object, so
          * the clone method returns itself.
-         * 
+         *
          * @return NULL.
          */
         protected final Object clone() {
@@ -107,7 +107,7 @@ public class JSONObject implements Serializable {
 
         /**
          * A Null object is equal to the null value and to itself.
-         * 
+         *
          * @param object An object to test for nullness.
          * @return true if the object parameter is the JSONObject.NULL object or
          *         null.
@@ -118,7 +118,7 @@ public class JSONObject implements Serializable {
 
         /**
          * Get the "null" string value.
-         * 
+         *
          * @return The string "null".
          */
         public String toString() {
@@ -150,7 +150,7 @@ public class JSONObject implements Serializable {
      * Construct a JSONObject from a subset of another JSONObject. An array of
      * strings is used to identify the keys that should be copied. Missing keys
      * are ignored.
-     * 
+     *
      * @param jo A JSONObject.
      * @param sa An array of strings.
      * @exception JSONException If a value is a non-finite number.
@@ -164,7 +164,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Construct a JSONObject from a JSONTokener.
-     * 
+     *
      * @param x A JSONTokener object containing the source string.
      * @throws JSONException If there is a syntax error in the source string.
      */
@@ -224,7 +224,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Construct a JSONObject from a Map.
-     * 
+     *
      * @param map A map object that can be used to initialize the contents of
      *        the JSONObject.
      */
@@ -238,7 +238,7 @@ public class JSONObject implements Serializable {
      * the names array, and the values will be the field values associated with
      * those keys in the object. If a key is not found or not visible, then it
      * will not be copied into the new JSONObject.
-     * 
+     *
      * @param object An object that has fields that should be used to make a
      *        JSONObject.
      * @param names An array of strings, the names of the fields to be used from
@@ -255,6 +255,7 @@ public class JSONObject implements Serializable {
                 this.put(name, value);
             } catch (Exception e) {
                 /* forget about it */
+                e.printStackTrace();
             }
         }
     }
@@ -262,7 +263,7 @@ public class JSONObject implements Serializable {
     /**
      * Construct a JSONObject from a string. This is the most commonly used
      * JSONObject constructor.
-     * 
+     *
      * @param string A string beginning with <code>{</code>&nbsp;<small>(left
      *        brace)</small> and ending with <code>}</code>&nbsp;<small>(right
      *        brace)</small>.
@@ -278,7 +279,7 @@ public class JSONObject implements Serializable {
      * is stored under the key to hold all of the accumulated values. If there
      * is already a JSONArray, then the new value is appended to it. In
      * contrast, the put method replaces the previous value.
-     * 
+     *
      * @param key A key string.
      * @param value An object to be accumulated under the key.
      * @return this.
@@ -303,7 +304,7 @@ public class JSONObject implements Serializable {
      * JSONObject, then the key is put in the JSONObject with its value being a
      * JSONArray containing the value parameter. If the key was already
      * associated with a JSONArray, then the value parameter is appended to it.
-     * 
+     *
      * @param key A key string.
      * @param value An object to be accumulated under the key.
      * @return this.
@@ -327,7 +328,7 @@ public class JSONObject implements Serializable {
     /**
      * Produce a string from a double. The string "null" will be returned if the
      * number is not finite.
-     * 
+     *
      * @param d A double.
      * @return A String.
      */
@@ -352,7 +353,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get the value object associated with a key.
-     * 
+     *
      * @param key A key string.
      * @return The object associated with the key.
      * @throws JSONException if the key is not found.
@@ -367,7 +368,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get the boolean value associated with a key.
-     * 
+     *
      * @param key A key string.
      * @return The truth.
      * @throws JSONException if the value is not a Boolean or the String "true"
@@ -388,7 +389,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get the double value associated with a key.
-     * 
+     *
      * @param key A key string.
      * @return The numeric value.
      * @throws JSONException if the key is not found or if the value is not a
@@ -408,7 +409,7 @@ public class JSONObject implements Serializable {
     /**
      * Get the int value associated with a key. If the number value is too large
      * for an int, it will be clipped.
-     * 
+     *
      * @param key A key string.
      * @return The integer value.
      * @throws JSONException if the key is not found or if the value cannot be
@@ -422,7 +423,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get the JSONArray value associated with a key.
-     * 
+     *
      * @param key A key string.
      * @return A JSONArray which is the value.
      * @throws JSONException if the key is not found or if the value is not a
@@ -439,7 +440,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get the JSONObject value associated with a key.
-     * 
+     *
      * @param key A key string.
      * @return A JSONObject which is the value.
      * @throws JSONException if the key is not found or if the value is not a
@@ -457,7 +458,7 @@ public class JSONObject implements Serializable {
     /**
      * Get the long value associated with a key. If the number value is too long
      * for a long, it will be clipped.
-     * 
+     *
      * @param key A key string.
      * @return The long value.
      * @throws JSONException if the key is not found or if the value cannot be
@@ -471,7 +472,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get the string associated with a key.
-     * 
+     *
      * @param key A key string.
      * @return A string which is the value.
      * @throws JSONException if the key is not found.
@@ -482,7 +483,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Determine if the JSONObject contains a specific key.
-     * 
+     *
      * @param key A key string.
      * @return true if the key exists in the JSONObject.
      */
@@ -493,7 +494,7 @@ public class JSONObject implements Serializable {
     /**
      * Determine if the value associated with the key is null or if there is no
      * value.
-     * 
+     *
      * @param key A key string.
      * @return true if there is no value associated with the key or if the value
      *         is the JSONObject.NULL object.
@@ -504,7 +505,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get an enumeration of the keys of the JSONObject.
-     * 
+     *
      * @return An iterator of the keys.
      */
     public Iterator keys() {
@@ -513,7 +514,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get the number of keys stored in the JSONObject.
-     * 
+     *
      * @return The number of keys in the JSONObject.
      */
     public int length() {
@@ -523,7 +524,7 @@ public class JSONObject implements Serializable {
     /**
      * Produce a JSONArray containing the names of the elements of this
      * JSONObject.
-     * 
+     *
      * @return A JSONArray containing the key strings, or null if the JSONObject
      *         is empty.
      */
@@ -538,7 +539,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Produce a string from a Number.
-     * 
+     *
      * @param n A Number
      * @return A String.
      * @throws JSONException If n is a non-finite number.
@@ -565,7 +566,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Get an optional value associated with a key.
-     * 
+     *
      * @param key A key string.
      * @return An object which is the value, or null if there is no value.
      */
@@ -576,7 +577,7 @@ public class JSONObject implements Serializable {
     /**
      * Get an optional boolean associated with a key. It returns false if there
      * is no such key, or if the value is not Boolean.TRUE or the String "true".
-     * 
+     *
      * @param key A key string.
      * @return The truth.
      */
@@ -588,7 +589,7 @@ public class JSONObject implements Serializable {
      * Get an optional boolean associated with a key. It returns the
      * defaultValue if there is no such key, or if it is not a Boolean or the
      * String "true" or "false" (case insensitive).
-     * 
+     *
      * @param key A key string.
      * @param defaultValue The default.
      * @return The truth.
@@ -604,7 +605,7 @@ public class JSONObject implements Serializable {
     /**
      * Put a key/value pair in the JSONObject, where the value will be a
      * JSONArray which is produced from a Collection.
-     * 
+     *
      * @param key A key string.
      * @param value A Collection value.
      * @return this.
@@ -619,7 +620,7 @@ public class JSONObject implements Serializable {
      * Get an optional double associated with a key, or NaN if there is no such
      * key or if its value is not a number. If the value is a string, an attempt
      * will be made to evaluate it as a number.
-     * 
+     *
      * @param key A string which is the key.
      * @return An object which is the value.
      */
@@ -631,7 +632,7 @@ public class JSONObject implements Serializable {
      * Get an optional double associated with a key, or the defaultValue if
      * there is no such key or if its value is not a number. If the value is a
      * string, an attempt will be made to evaluate it as a number.
-     * 
+     *
      * @param key A key string.
      * @param defaultValue The default.
      * @return An object which is the value.
@@ -650,7 +651,7 @@ public class JSONObject implements Serializable {
      * Get an optional int value associated with a key, or zero if there is no
      * such key or if the value is not a number. If the value is a string, an
      * attempt will be made to evaluate it as a number.
-     * 
+     *
      * @param key A key string.
      * @return An object which is the value.
      */
@@ -662,7 +663,7 @@ public class JSONObject implements Serializable {
      * Get an optional int value associated with a key, or the default if there
      * is no such key or if the value is not a number. If the value is a string,
      * an attempt will be made to evaluate it as a number.
-     * 
+     *
      * @param key A key string.
      * @param defaultValue The default.
      * @return An object which is the value.
@@ -678,7 +679,7 @@ public class JSONObject implements Serializable {
     /**
      * Get an optional JSONArray associated with a key. It returns null if there
      * is no such key, or if its value is not a JSONArray.
-     * 
+     *
      * @param key A key string.
      * @return A JSONArray which is the value.
      */
@@ -690,7 +691,7 @@ public class JSONObject implements Serializable {
     /**
      * Get an optional JSONObject associated with a key. It returns null if
      * there is no such key, or if its value is not a JSONObject.
-     * 
+     *
      * @param key A key string.
      * @return A JSONObject which is the value.
      */
@@ -703,7 +704,7 @@ public class JSONObject implements Serializable {
      * Get an optional long value associated with a key, or zero if there is no
      * such key or if the value is not a number. If the value is a string, an
      * attempt will be made to evaluate it as a number.
-     * 
+     *
      * @param key A key string.
      * @return An object which is the value.
      */
@@ -715,7 +716,7 @@ public class JSONObject implements Serializable {
      * Get an optional long value associated with a key, or the default if there
      * is no such key or if the value is not a number. If the value is a string,
      * an attempt will be made to evaluate it as a number.
-     * 
+     *
      * @param key A key string.
      * @param defaultValue The default.
      * @return An object which is the value.
@@ -732,7 +733,7 @@ public class JSONObject implements Serializable {
      * Get an optional string associated with a key. It returns an empty string
      * if there is no such key. If the value is not a string and is not null,
      * then it is coverted to a string.
-     * 
+     *
      * @param key A key string.
      * @return A string which is the value.
      */
@@ -743,7 +744,7 @@ public class JSONObject implements Serializable {
     /**
      * Get an optional string associated with a key. It returns the defaultValue
      * if there is no such key.
-     * 
+     *
      * @param key A key string.
      * @param defaultValue The default.
      * @return A string which is the value.
@@ -755,7 +756,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Put a key/boolean pair in the JSONObject.
-     * 
+     *
      * @param key A key string.
      * @param value A boolean which is the value.
      * @return this.
@@ -768,7 +769,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Put a key/double pair in the JSONObject.
-     * 
+     *
      * @param key A key string.
      * @param value A double which is the value.
      * @return this.
@@ -781,34 +782,36 @@ public class JSONObject implements Serializable {
 
     /**
      * Put a key/int pair in the JSONObject.
-     * 
+     *
      * @param key A key string.
      * @param value An int which is the value.
      * @return this.
      * @throws JSONException If the key is null.
      */
     public JSONObject put(String key, int value) throws JSONException {
-        put(key, new Integer(value));
+        //put(key, new Integer(value));
+        put(key, Integer.valueOf(value));
         return this;
     }
 
     /**
      * Put a key/long pair in the JSONObject.
-     * 
+     *
      * @param key A key string.
      * @param value A long which is the value.
      * @return this.
      * @throws JSONException If the key is null.
      */
     public JSONObject put(String key, long value) throws JSONException {
-        put(key, new Long(value));
+        //put(key, new Long(value));
+        put(key, Long.valueOf(value));
         return this;
     }
 
     /**
      * Put a key/value pair in the JSONObject, where the value will be a
      * JSONObject which is produced from a Map.
-     * 
+     *
      * @param key A key string.
      * @param value A Map value.
      * @return this.
@@ -822,7 +825,7 @@ public class JSONObject implements Serializable {
     /**
      * Put a key/value pair in the JSONObject. If the value is null, then the
      * key will be removed from the JSONObject if it is present.
-     * 
+     *
      * @param key A key string.
      * @param value An object which is the value. It should be of one of these
      *        types: Boolean, Double, Integer, JSONArray, JSONObject, Long,
@@ -847,7 +850,7 @@ public class JSONObject implements Serializable {
     /**
      * Put a key/value pair in the JSONObject, but only if the key and the value
      * are both non-null.
-     * 
+     *
      * @param key A key string.
      * @param value An object which is the value. It should be of one of these
      *        types: Boolean, Double, Integer, JSONArray, JSONObject, Long,
@@ -867,7 +870,7 @@ public class JSONObject implements Serializable {
      * right places. A backslash will be inserted within </, allowing JSON text
      * to be delivered in HTML. In JSON text, a string cannot contain a control
      * character or an unescaped quote or backslash.
-     * 
+     *
      * @param string A String
      * @return A String correctly formatted for insertion in a JSON text.
      */
@@ -929,7 +932,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Remove a name and its value, if present.
-     * 
+     *
      * @param key The name to be removed.
      * @return The value that was associated with the name, or null if there was
      *         no value.
@@ -940,7 +943,7 @@ public class JSONObject implements Serializable {
 
     /**
      * Throw an exception if the object is an NaN or infinite number.
-     * 
+     *
      * @param o The object to test.
      * @throws JSONException If o is a non-finite number.
      */
@@ -963,7 +966,7 @@ public class JSONObject implements Serializable {
     /**
      * Produce a JSONArray containing the values of the members of this
      * JSONObject.
-     * 
+     *
      * @param names A JSONArray containing a list of key strings. This
      *        determines the sequence of the values in the result.
      * @return A JSONArray of values.
@@ -986,7 +989,7 @@ public class JSONObject implements Serializable {
      * then null will be returned instead.
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
-     * 
+     *
      * @return a printable, displayable, portable, transmittable representation
      *         of the object, beginning with <code>{</code>&nbsp;<small>(left
      *         brace)</small> and ending with <code>}</code>&nbsp;<small>(right
@@ -1009,7 +1012,8 @@ public class JSONObject implements Serializable {
             sb.append('}');
             return sb.toString();
         } catch (Exception e) {
-            return null;
+            //return null;
+            return "";
         }
     }
 
@@ -1017,7 +1021,7 @@ public class JSONObject implements Serializable {
      * Make a prettyprinted JSON text of this JSONObject.
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
-     * 
+     *
      * @param indentFactor The number of spaces to add to each level of
      *        indentation.
      * @return a printable, displayable, portable, transmittable representation
@@ -1034,7 +1038,7 @@ public class JSONObject implements Serializable {
      * Make a prettyprinted JSON text of this JSONObject.
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
-     * 
+     *
      * @param indentFactor The number of spaces to add to each level of
      *        indentation.
      * @param indent The indentation of the top level.
@@ -1096,7 +1100,7 @@ public class JSONObject implements Serializable {
      * common case), then a text will be produced by the rules.
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
-     * 
+     *
      * @param value The value to be serialized.
      * @return a printable, displayable, transmittable representation of the
      *         object, beginning with <code>{</code>&nbsp;<small>(left
@@ -1105,7 +1109,8 @@ public class JSONObject implements Serializable {
      * @throws JSONException If the value is or contains an invalid number.
      */
     static String valueToString(Object value) throws JSONException {
-        if (value == null || value.equals(null)) {
+        //if (value == null || value.equals(null)) {
+		if (value == null) {
             return "null";
         }
         if (value instanceof JSONString) {
@@ -1115,9 +1120,11 @@ public class JSONObject implements Serializable {
             } catch (Exception e) {
                 throw new JSONException(e);
             }
+            /*
             if (o instanceof String) {
                 return (String) o;
             }
+            */
             throw new JSONException("Bad value from toJSONString: " + o);
         }
         if (value instanceof Number) {
@@ -1134,7 +1141,7 @@ public class JSONObject implements Serializable {
      * Make a prettyprinted JSON text of an object value.
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
-     * 
+     *
      * @param value The value to be serialized.
      * @param indentFactor The number of spaces to add to each level of
      *        indentation.
@@ -1147,15 +1154,18 @@ public class JSONObject implements Serializable {
      */
     static String valueToString(Object value, int indentFactor, int indent)
             throws JSONException {
-        if (value == null || value.equals(null)) {
+        //if (value == null || value.equals(null)) {
+		if (value == null) {
             return "null";
         }
         try {
             if (value instanceof JSONString) {
                 Object o = ((JSONString) value).toJSONString();
+                /*
                 if (o instanceof String) {
                     return (String) o;
                 }
+                */
             }
         } catch (Exception e) {
             /* forget about it */
@@ -1180,7 +1190,7 @@ public class JSONObject implements Serializable {
      * compactness, no whitespace is added.
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
-     * 
+     *
      * @return The writer.
      * @throws JSONException
      */

@@ -1563,7 +1563,8 @@ if (view == Constants.STANDARD_VIEW) {
 
 
  String contextPath = request.getContextPath();
- String view_str = new Integer(view).toString();
+// String view_str = new Integer(view).toString();
+String view_str = Integer.valueOf(view).toString();
 
 
 //[#31914] Search option and algorithm in value set search box are not preserved in session.
@@ -3082,7 +3083,8 @@ if (view == Constants.STANDARD_VIEW) {
 
 
  String contextPath = request.getContextPath();
- String view_str = new Integer(view).toString();
+ //String view_str = new Integer(view).toString();
+ String view_str = Integer.valueOf(view).toString();
 
  //String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
  //String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");

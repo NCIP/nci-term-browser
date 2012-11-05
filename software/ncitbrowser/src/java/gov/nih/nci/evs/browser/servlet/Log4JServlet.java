@@ -63,6 +63,8 @@ public class Log4JServlet extends HttpServlet {
     /* (non-Javadoc)
      * @see javax.servlet.GenericServlet#init()
      */
+
+     /*
     public void init() throws ServletException {
 
         String logfile = System.getProperty("gov.nih.nci.evs.browser.NCItlog4jProperties");
@@ -91,7 +93,8 @@ public class Log4JServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-
     }
+    */
+
 
 } // End Log4JServlet

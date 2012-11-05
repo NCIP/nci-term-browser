@@ -71,7 +71,7 @@ public class UrlAsciiToTextFormatter extends AsciiToTextFormatter implements
         URL url = new URL(fileUrl);
         _logger.debug("fileUrl: " + fileUrl);
         InputStream is = url.openStream();
-        InputStreamReader isr = new InputStreamReader(is);
+        InputStreamReader isr = new InputStreamReader(is, "UTF8");
         BufferedReader br = new BufferedReader(isr);
         return br;
     }

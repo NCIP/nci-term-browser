@@ -322,7 +322,7 @@ public class IteratorBean extends Object {
             osWriter.write("(" + k + ") " + ref.getConceptCode() + ":"
                 + ref.getEntityDescription().getContent() + "\n");
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
     }
 

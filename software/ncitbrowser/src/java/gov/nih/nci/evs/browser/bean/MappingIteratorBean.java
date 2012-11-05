@@ -92,6 +92,9 @@ public class MappingIteratorBean extends Object {
     private String _key = null;
     private boolean _timeout = false;
 
+    //static final long MILLISECONDS_PER_MINUTE = 60L * 1000;
+
+
 	public MappingIteratorBean() {
 	}
 
@@ -248,7 +251,7 @@ public class MappingIteratorBean extends Object {
         if (idx1 > _list.size()-1) {
             idx1 = _list.size()-1;
         }
-        
+
 		if (idx2 > _list.size()-1) {
 			idx2 = _list.size()-1;
 		}
@@ -465,7 +468,8 @@ public class MappingIteratorBean extends Object {
 				dt = System.currentTimeMillis() - ms;
 				ms = System.currentTimeMillis();
 				total_delay = total_delay + dt;
-				if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+				//if (total_delay > (long) (NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000)) {
+				if (total_delay > Constants.MILLISECONDS_PER_MINUTE * NCItBrowserProperties.getPaginationTimeOut()) {
 					_timeout = true;
 					_logger.debug("Time out at: " + _lastResolved);
 					break;
@@ -545,7 +549,7 @@ System.out.println("end of getData size: " + _size);
             osWriter.write("(" + k + ") " + ref.getConceptCode() + ":"
                 + ref.getEntityDescription().getContent() + "\n");
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
     }
 

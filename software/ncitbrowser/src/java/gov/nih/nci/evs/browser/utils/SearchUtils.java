@@ -466,8 +466,10 @@ public class SearchUtils {
             // EVSApplicationService lbSvc = rsu.createLexBIGService();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-            if (csrl == null)
+            if (csrl == null) {
                 _logger.warn("csrl is NULL");
+                return v;
+			}
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
             for (int i = 0; i < csrs.length; i++) {
@@ -711,8 +713,10 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ ref.getCon
                 cns =
                     lbSvc.getCodingSchemeConcepts(codingSchemeName,
                         versionOrTag);
+                if (cns == null) return null;
             } catch (Exception e1) {
                 e1.printStackTrace();
+                return null;
             }
 
             cns = cns.restrictToCodes(crefs);
@@ -1405,7 +1409,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
     public static CodedNodeSet matchConceptCode_CNS(
         String scheme, String version, String code) throws Exception {
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        Vector v = new Vector();
+        //Vector v = new Vector();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
@@ -2401,13 +2405,20 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         Vector schemes, Vector versions, String matchText, String source,
         String matchAlgorithm, boolean excludeDesignation, boolean ranking,
         int maxToReturn) {
+
+
+		if (matchAlgorithm == null || matchText == null) {
+			return null;
+		}
+
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
         matchText0 = matchText0.trim();
 
         _logger.debug("searchByProperties..." + matchText);
 
-        if (matchText == null || matchText.length() == 0) {
+        //if (matchText == null || matchText.length() == 0) {
+		if (matchText.length() == 0) {
             return null;
         }
 
@@ -2442,11 +2453,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                     versionOrTag.setVersion(version);
 
                 try {
-                    if (lbSvc == null) {
-                        _logger.warn("lbSvc = null");
-                        return null;
-                    }
-
                     //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
                     cns = getNodeSet(lbSvc, scheme, versionOrTag);
 
@@ -2696,6 +2702,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         String matchAlgorithm, boolean designationOnly, boolean ranking,
         int maxToReturn) {
 
+		if (matchText == null) return null;
+
 		Vector codingSchemeNames = new Vector();
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
@@ -2709,7 +2717,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         boolean timeout = false;
 
         boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
+        //if (matchText == null || matchText.length() == 0) {
+		if (matchText.length() == 0) {
             return null;
         }
 
@@ -2754,11 +2763,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 // i++;
 
                 try {
-                    if (lbSvc == null) {
-                        _logger.warn("lbSvc = null");
-                        return null;
-                    }
-
                     // KLO, 022410 change failed
                     //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
 
@@ -2805,13 +2809,13 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                             // codesToRemove)
                             // cns = cns2.difference(cns);
 
-                            if (cns != null) {
+                            //if (cns != null) {
 								/*
                                 cns =
                                     filterOutAnonymousClasses(lbSvc, scheme,
                                         cns);
                                 */
-                                if (cns != null) {
+                                //if (cns != null) {
                                     cns_vec.add(cns);
                                     codingSchemeNames.add(scheme);
 
@@ -2821,8 +2825,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 											containsMapping = true;
 										}
 								    }
-                                }
-                            }
+                                //}
+                            //}
                         } catch (Exception ex) {
                             // return null;
                         }
@@ -2836,7 +2840,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 ms = System.currentTimeMillis();
                 total_delay = total_delay + dt;
 
-                if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+                //if (total_delay > (long) (NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000)) {
+				if (total_delay > Constants.MILLISECONDS_PER_MINUTE * NCItBrowserProperties.getPaginationTimeOut()) {
                     message =
                         "WARNING: Search is incomplete -- please enter more specific search criteria.";
                     // cont_flag = false;
@@ -3179,6 +3184,9 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         String[] property_types, String[] property_names, String source,
         String matchAlgorithm, boolean excludeDesignation, boolean ranking,
         int maxToReturn) {
+
+		if (matchText == null) return null;
+
         boolean restrictToProperties = false;
         CodedNodeSet.PropertyType[] propertyTypes = null;
         LocalNameList propertyNames = null;
@@ -3216,7 +3224,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
         matchText0 = matchText0.trim();
-        if (matchText == null || matchText.length() == 0) {
+        //if (matchText == null || matchText.length() == 0) {
+		if (matchText.length() == 0) {
             return null;
         }
         matchText = matchText.trim();
@@ -3242,11 +3251,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 versionOrTag.setVersion(version);
 
             try {
-                if (lbSvc == null) {
-                    _logger.warn("lbSvc = null");
-                    return null;
-                }
-
                 cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
 
                 if (cns != null) {
@@ -3349,7 +3353,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 
                     _logger.debug("Number of matches: " + iterator_size);
                 } catch (Exception ex) {
-
+                    ex.printStackTrace();
                 }
             }
 
@@ -3779,6 +3783,9 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
          * _logger.debug("searchByAssociations association_qualifier_values: " +
          * str); } }
          */
+
+        if (matchText == null) return null;
+
         NameAndValueList associationList = null;
         if (associationsToNavigate != null) {
             associationList =
@@ -3802,7 +3809,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         boolean timeout = false;
 
         boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
+        //if (matchText == null || matchText.length() == 0) {
+        if (matchText.length() == 0) {
             return null;
         }
 
@@ -3835,11 +3843,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 versionOrTag.setVersion(version);
 
             try {
-                if (lbSvc == null) {
-                    _logger.warn("lbSvc = null");
-                    return null;
-                }
-
                 // KLO, 022410 change failed
                 //cns = lbSvc.getNodeSet(scheme, versionOrTag, null);
                 cns = getNodeSet(lbSvc, scheme, versionOrTag);
@@ -3882,7 +3885,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
             ms = System.currentTimeMillis();
             total_delay = total_delay + dt;
 
-            if (total_delay > NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000) {
+            //if (total_delay > (long) (NCItBrowserProperties.getPaginationTimeOut() * 60 * 1000)) {
+			if (total_delay > Constants.MILLISECONDS_PER_MINUTE * NCItBrowserProperties.getPaginationTimeOut()) {
                 message =
                     "WARNING: Search is incomplete -- please enter more specific search criteria.";
             }
@@ -4001,14 +4005,14 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 
     //KLO, 091211
     public Boolean isCodeInCodingScheme(String scheme, String version, String code) {
-
+        Boolean retval = null;
         CodedNodeSet cns = null;
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 
             if (lbSvc == null) {
                 _logger.warn("lbSvc = null");
-                return null;
+                return retval;
             }
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             if (version != null) {
@@ -4023,7 +4027,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 		} catch (Exception ex) {
             ex.printStackTrace();
 		}
-		return null;
+		return retval;
 	}
 
 

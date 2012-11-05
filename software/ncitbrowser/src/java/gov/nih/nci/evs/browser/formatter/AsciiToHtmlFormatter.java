@@ -53,8 +53,13 @@ import org.apache.log4j.*;
  * @version 1.0
  */
 
-public class AsciiToHtmlFormatter extends FileFormatterBase 
+
+
+
+
+public class AsciiToHtmlFormatter extends FileFormatterBase
     implements FormatterConstant {
+
     private static Logger _logger = Logger
         .getLogger(AsciiToHtmlFormatter.class);
 
@@ -109,7 +114,12 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
             for (int i = 0; i < numMissingCells; ++i)
                 v.add(null);
 
-            String rowColor = row % 2 == 1 ? "reportTableRowDark" : "reportTableRowLight";
+            String rowColor = "reportTableRowLight";
+            if (row >= 0) {
+                //rowColor = row % 2 == 1 ? "reportTableRowDark" : "reportTableRowLight";
+                rowColor = row % 2 != 0 ? "reportTableRowDark" : "reportTableRowLight";
+			}
+
             out.writeln_indent("<tr class=\"" + rowColor + "\">");
             String bgColor = "";
             if (extensible_col >= 0) {
