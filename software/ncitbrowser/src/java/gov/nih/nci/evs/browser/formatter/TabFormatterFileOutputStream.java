@@ -49,7 +49,7 @@ import java.io.*;
  * @version 1.0
  */
 
-public class TabFormatterFileOutputStream extends TabFormatterBase 
+public class TabFormatterFileOutputStream extends TabFormatterBase
 {
 	private FileOutputStream _out = null;
 
@@ -64,7 +64,7 @@ public class TabFormatterFileOutputStream extends TabFormatterBase
 
     public String write(String text) throws Exception {
         text = super.write(text);
-        _out.write(text.getBytes());
+        _out.write(text.getBytes("UTF8"));
         return text;
     }
 }

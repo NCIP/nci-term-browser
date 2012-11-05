@@ -98,12 +98,12 @@ public class Constants {
 
     public static final String TREE_ACCESS_ALLOWED = "tree_access_allowed";
 
-    public static String TYPE_ROLE = "type_role";
-    public static String TYPE_ASSOCIATION = "type_association";
-    public static String TYPE_SUPERCONCEPT = "type_superconcept";
-    public static String TYPE_SUBCONCEPT = "type_subconcept";
-    public static String TYPE_INVERSE_ROLE = "type_inverse_role";
-    public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
+    public static final String TYPE_ROLE = "type_role";
+    public static final String TYPE_ASSOCIATION = "type_association";
+    public static final String TYPE_SUPERCONCEPT = "type_superconcept";
+    public static final String TYPE_SUBCONCEPT = "type_subconcept";
+    public static final String TYPE_INVERSE_ROLE = "type_inverse_role";
+    public static final String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
     public static final int  STANDARD_VIEW = 1;
     public static final int  TERMINOLOGY_VIEW = 2;
@@ -111,6 +111,7 @@ public class Constants {
     public static final String  TERMINOLOGY_VALUE_SET = "Terminology Value Set";
     public static final String  TERMINOLOGY_VALUE_SET_NAME = "Terminology_Value_Set.owl";
 
+    public static final long MILLISECONDS_PER_MINUTE = 60L * 1000;
 
     /**
      * Constructor

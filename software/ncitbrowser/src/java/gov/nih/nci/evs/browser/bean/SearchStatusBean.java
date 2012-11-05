@@ -325,10 +325,10 @@ public class SearchStatusBean extends Object {
             _relationshipList =
                 OntologyBean.getAssociationNameList(_codingSchemeName, _version);
             _relationshipList.add(0, new SelectItem("ALL", "ALL"));
-            if (_relationshipList != null && _relationshipList.size() > 0) {
+            //if (_relationshipList != null && _relationshipList.size() > 0) {
                 _selectedRelationship =
                     ((SelectItem) _relationshipList.get(0)).getLabel();
-            }
+            //}
         }
         return _relationshipList;
     }

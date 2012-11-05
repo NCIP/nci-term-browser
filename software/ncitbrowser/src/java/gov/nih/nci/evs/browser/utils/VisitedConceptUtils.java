@@ -49,9 +49,9 @@ import org.apache.log4j.*;
 /**
  * @author EVS Team
  * @version 1.0
- * 
+ *
  *          Modification history Initial implementation kim.ong@ngc.com
- * 
+ *
  */
 
 public class VisitedConceptUtils {
@@ -72,7 +72,7 @@ public class VisitedConceptUtils {
             this.name = name;
             this.value = name + " (" + scheme + " " + version + ")";
         }
-        
+
         public String getValue() {
             return value;
         }
@@ -177,7 +177,7 @@ public class VisitedConceptUtils {
         return strbuf.toString();
     }
 
-    public static String getDisplayLink(HttpServletRequest request, 
+    public static String getDisplayLink(HttpServletRequest request,
         Boolean[] displaySeparator) {
         //Note: Boolean[] displaySeparator is a hack to return the
         //  state of the display separate.
@@ -194,13 +194,14 @@ public class VisitedConceptUtils {
             value = pipe + " " + value;
         return value;
     }
-    
-    public static String getDisplayLink(HttpServletRequest request, 
+
+    public static String getDisplayLink(HttpServletRequest request,
         boolean displaySeparator) {
-        Boolean[] isPipeDisplayed = new Boolean[] { new Boolean(displaySeparator) };
+        //Boolean[] isPipeDisplayed = new Boolean[] { new Boolean(displaySeparator) };
+        Boolean[] isPipeDisplayed = new Boolean[] { Boolean.valueOf(displaySeparator) };
         return getDisplayLink(request, isPipeDisplayed);
     }
-    
+
     public static String getDisplayLink(HttpServletRequest request) {
         return getDisplayLink(request, false);
     }

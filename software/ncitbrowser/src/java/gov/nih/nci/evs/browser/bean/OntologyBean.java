@@ -73,6 +73,20 @@ public class OntologyBean {
     private static Vector _property_type_vec = null;
     private static Vector _source_vec = null;
 
+
+
+   private OntologyBean(){
+
+   }
+
+   public static OntologyBean getInstance(){
+         return OntologyBeanClassHolder.instance;
+   }
+
+   private static class OntologyBeanClassHolder{
+         private static final OntologyBean instance = new OntologyBean();
+   }
+
     public static List getRELAList(String codingSchemeName) {
 		if (codingSchemeName == null) return null;
         if (_rela_list != null)
@@ -258,7 +272,7 @@ public class OntologyBean {
                             version));
 
             MetadataPropertyList mdpl = lbsm.resolve();
-            Set<String> relas = new HashSet<String>();
+            //Set<String> relas = new HashSet<String>();
             int rela_count = 0;
             for (int i = 0; i < mdpl.getMetadataPropertyCount(); i++) {
                 MetadataProperty prop = mdpl.getMetadataProperty(i);
@@ -516,6 +530,7 @@ public class OntologyBean {
                     w.add(name);
                 } catch (Exception e) {
                     w.add("<NOT ASSIGNED>");
+                    return w;
                 }
             }
         } catch (Exception ex) {
@@ -533,7 +548,7 @@ public class OntologyBean {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
-        Vector w = new Vector();
+        //Vector w = new Vector();
 
         try {
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -674,7 +689,7 @@ System.out.println("localId: " + name + " content: " + content + " entityCode " 
         if (version != null)
             csvt.setVersion(version);
 
-		List list = new ArrayList();
+		//List list = new ArrayList();
 		try {
 			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 			CodingScheme cs = lbSvc.resolveCodingScheme(codingSchemeName, csvt);

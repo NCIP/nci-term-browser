@@ -503,7 +503,7 @@ mappingIteratorBean.initialize();
         versions.add(version);
 
 
-        Utils.StopWatch stopWatch = new Utils.StopWatch();
+        //Utils.StopWatch stopWatch = new Utils.StopWatch();
         Vector<org.LexGrid.concepts.Entity> v = null;
 
         boolean excludeDesignation = true;
@@ -1844,7 +1844,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             maxToReturn = Integer.parseInt(max_str);
         } catch (Exception ex) {
         }
-        Utils.StopWatch stopWatch = new Utils.StopWatch();
+        //Utils.StopWatch stopWatch = new Utils.StopWatch();
         Vector<org.LexGrid.concepts.Entity> v = null;
 
         boolean excludeDesignation = true;

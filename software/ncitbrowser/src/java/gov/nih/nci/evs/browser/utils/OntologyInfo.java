@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.utils;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -154,7 +155,7 @@ public class OntologyInfo {
         return _sortCategory;
     }
 
-    public static class ComparatorImpl implements Comparator<OntologyInfo> {
+    public static class ComparatorImpl implements Serializable, Comparator<OntologyInfo> {
         public int compare(OntologyInfo info1, OntologyInfo info2) {
             int sortCategory1 = info1.getSortCategory();
             int sortCategory2 = info2.getSortCategory();

@@ -6,42 +6,42 @@ import org.apache.log4j.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
- * Copyright 2008,2009 NGIT. This software was developed in conjunction 
- * with the National Cancer Institute, and so to the extent government 
- * employees are co-authors, any rights in such works shall be subject 
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
  * to Title 17 of the United States Code, section 105.
- * Redistribution and use in source and binary forms, with or without 
- * modification, are permitted provided that the following conditions 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
  * are met:
- *   1. Redistributions of source code must retain the above copyright 
- *      notice, this list of conditions and the disclaimer of Article 3, 
- *      below. Redistributions in binary form must reproduce the above 
- *      copyright notice, this list of conditions and the following 
- *      disclaimer in the documentation and/or other materials provided 
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
  *      with the distribution.
- *   2. The end-user documentation included with the redistribution, 
+ *   2. The end-user documentation included with the redistribution,
  *      if any, must include the following acknowledgment:
- *      "This product includes software developed by NGIT and the National 
+ *      "This product includes software developed by NGIT and the National
  *      Cancer Institute."   If no such end-user documentation is to be
  *      included, this acknowledgment shall appear in the software itself,
  *      wherever such third-party acknowledgments normally appear.
- *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must 
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
  *      not be used to endorse or promote products derived from this software.
  *   4. This license does not authorize the incorporation of this software
- *      into any third party proprietary programs. This license does not 
- *      authorize the recipient to use any trademarks owned by either NCI 
- *      or NGIT 
- *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED 
- *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES 
- *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE 
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
  *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
- *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, 
- *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
- *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
- *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
- *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
- *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
- *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *      POSSIBILITY OF SUCH DAMAGE.
  * <!-- LICENSE_TEXT_END -->
  */
@@ -49,9 +49,9 @@ import org.apache.log4j.*;
 /**
  * @author EVS Team
  * @version 1.0
- * 
+ *
  *          Modification history Initial implementation kim.ong@ngc.com
- * 
+ *
  */
 
 public class NCItBrowserProperties {
@@ -66,7 +66,7 @@ public class NCItBrowserProperties {
     private static HashMap _configurableItemMap;
 
     // KLO
-    public static final String DEBUG_ON = "DEBUG_ON";
+    public static String DEBUG_ON = "DEBUG_ON";
     public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
     public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
     public static final String PING_LEXEVS_ENABLED = "PING_LEXEVS_ENABLED";
@@ -95,16 +95,16 @@ public class NCItBrowserProperties {
         "MINIMUM_SEARCH_STRING_LENGTH";
     public static final String SLIDING_WINDOW_HALF_WIDTH =
         "SLIDING_WINDOW_HALF_WIDTH";
-    public static final String STANDARD_FTP_REPORT_URL = 
+    public static final String STANDARD_FTP_REPORT_URL =
         "STANDARD_FTP_REPORT_URL";
-    public static final String STANDARD_FTP_REPORT_INFO = 
+    public static final String STANDARD_FTP_REPORT_INFO =
         "STANDARD_FTP_REPORT_INFO";
-    public static int STANDARD_FTP_REPORT_INFO_MAX = 20;
+    public static final int STANDARD_FTP_REPORT_INFO_MAX = 20;
 
     private static NCItBrowserProperties _browserProperties = null;
     private static Properties _properties = new Properties();
 
-    public static boolean _debugOn = false;
+    public static  boolean _debugOn = false;
     private static int _maxToReturn = 1000;
     private static int _maxTreeLevel = 1000;
     private static String _service_url = null;
@@ -124,7 +124,7 @@ public class NCItBrowserProperties {
 
     private static int _sliding_window_half_width = 5;
     private static String _standard_ftp_report_url = "";
-    private static Vector<StandardFtpReportInfo> _standard_ftp_report_info_list = 
+    private static Vector<StandardFtpReportInfo> _standard_ftp_report_info_list =
         new Vector<StandardFtpReportInfo>();
 
     /**
@@ -135,9 +135,9 @@ public class NCItBrowserProperties {
 
     /**
      * Gets the single instance of NCItBrowserProperties.
-     * 
+     *
      * @return single instance of NCItBrowserProperties
-     * 
+     *
      * @throws Exception the exception
      */
     public static NCItBrowserProperties getInstance() throws Exception {
@@ -273,7 +273,7 @@ public class NCItBrowserProperties {
             return defaultValue;
         }
     }
-    
+
     public static boolean getBooleanProperty(String key, boolean defaultValue) {
         try {
             getInstance();  // Initializes this singleton class

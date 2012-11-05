@@ -265,7 +265,7 @@ public class QuickUnionIterator implements ResolvedConceptReferencesIterator {
     /**
      * The Class IteratorSizeComparator.
      */
-    private class IteratorSizeComparator implements
+    private static class IteratorSizeComparator implements
             Comparator<ResolvedConceptReferencesIterator> {
 
         /*

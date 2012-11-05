@@ -129,6 +129,7 @@ public class ValueSetSearchUtils
 
             if (itr == null) {
 				System.out.println("vds.resolveValueSetDefinition returns null???");
+				return;
 			}
 
 			int count = 0;
@@ -199,11 +200,11 @@ public class ValueSetSearchUtils
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
             }
 
             CodingSchemeRenderingList csrl = null;
             try {
-
                 csrl = lbSvc.getSupportedCodingSchemes();
 
             } catch (LBInvocationException ex) {
@@ -227,9 +228,13 @@ public class ValueSetSearchUtils
                 System.out.println(formalname);
 
                 Boolean isActive = null;
+                /*
                 if (csr == null) {
                     _logger.warn("\tcsr == null???");
-                } else if (csr.getRenderingDetail() == null) {
+                } else
+                */
+
+                if (csr.getRenderingDetail() == null) {
                     _logger.warn("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
                     _logger
@@ -289,9 +294,11 @@ public class ValueSetSearchUtils
 
 
       public static Boolean isCodeInValueSet(String code, String codingScheme, String vsd_uri) {
+		  Boolean retval = null;
 		  try {
 				String URL = "http://ncias-q541-v.nci.nih.gov:29080/lexevsapi60";
 				URL = "http://localhost:19280/lexevsapi60";
+
 				LexEVSDistributed distributed =
 					(LexEVSDistributed)
 					ApplicationServiceProvider.getApplicationServiceFromUrl(URL, "EvsServiceInfo");
@@ -322,13 +329,15 @@ public class ValueSetSearchUtils
 				ex.printStackTrace();
 		  }
 
-          return null;
+          return retval;
 	  }
 
 
 
     public ResolvedConceptReferencesIteratorWrapper searchByCode(
         String vsd_uri, String matchText, int maxToReturn) {
+
+		if (matchText == null) return null;
         String matchText0 = matchText;
         String matchAlgorithm0 = "exactMatch";
         matchText0 = matchText0.trim();
@@ -343,7 +352,8 @@ System.out.println("============================ searchByCode ==================
         boolean debug_flag = false;
 
         boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
+        //if (matchText == null || matchText.length() == 0) {
+		if (matchText.length() == 0) {
             return null;
         }
 
@@ -425,6 +435,9 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
     public ResolvedConceptReferencesIteratorWrapper searchByName(
         String vsd_uri, String matchText, String matchAlgorithm, int maxToReturn) {
+
+		if (matchText == null) return null;
+
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
         matchText0 = matchText0.trim();
@@ -437,7 +450,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         boolean debug_flag = false;
 
         boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
+        if (matchText.length() == 0) {
             return null;
         }
 
@@ -532,6 +545,8 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
     public ResolvedConceptReferencesIteratorWrapper searchByProperties(
         String vsd_uri, String matchText, boolean excludeDesignation, String matchAlgorithm, int maxToReturn) {
+		if (matchText == null) return null;
+
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
         matchText0 = matchText0.trim();
@@ -544,7 +559,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         boolean debug_flag = false;
 
         boolean preprocess = true;
-        if (matchText == null || matchText.length() == 0) {
+        if (matchText.length() == 0) {
             return null;
         }
 

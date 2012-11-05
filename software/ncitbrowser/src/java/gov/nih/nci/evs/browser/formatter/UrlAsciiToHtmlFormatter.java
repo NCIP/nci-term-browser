@@ -82,7 +82,7 @@ public class UrlAsciiToHtmlFormatter extends AsciiToHtmlFormatter implements
         URL url = new URL(fileUrl);
         _logger.debug("fileUrl: " + fileUrl);
         InputStream is = url.openStream();
-        InputStreamReader isr = new InputStreamReader(is);
+        InputStreamReader isr = new InputStreamReader(is, "UTF8");
         BufferedReader br = new BufferedReader(isr);
         return br;
     }
@@ -101,7 +101,7 @@ public class UrlAsciiToHtmlFormatter extends AsciiToHtmlFormatter implements
         throws Exception {
         if (textfile == null)
             return "";
-        
+
         String delimiter = "\t";
         UrlAsciiToHtmlFormatter formatter = new UrlAsciiToHtmlFormatter();
         formatter.setNcitUrl(ncitUrl);
@@ -112,7 +112,7 @@ public class UrlAsciiToHtmlFormatter extends AsciiToHtmlFormatter implements
         return formatter.getValue();
     }
 
-    
+
     public static String generate(String textfile, int[] ncitCodeColumns)
             throws Exception {
         return generate(textfile, ncitCodeColumns, DEFAULT_URL);

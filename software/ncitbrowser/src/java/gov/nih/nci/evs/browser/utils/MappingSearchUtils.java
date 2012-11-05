@@ -653,7 +653,7 @@ System.out.println("\tcontainer name: " +  containerName);
     public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
         List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator, SearchContext context) {
 
-System.out.println("(***********) getRestrictedMappingDataIterator ...");
+//System.out.println("(***********) getRestrictedMappingDataIterator ...");
 if (searchResultsIterator == null) return null;
 
 		try {
@@ -704,8 +704,9 @@ if (searchResultsIterator == null) return null;
             //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
             ConceptReferenceList codeList = new ConceptReferenceList();
 
-System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrieving refs");
+//System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrieving refs");
 
+/*
 			if (searchResultsIterator != null) {
 				int lcv = 0;
 				while(searchResultsIterator.hasNext()){
@@ -719,6 +720,17 @@ System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrie
 			} else {
 				System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
 			}
+*/
+
+				int lcv = 0;
+				while(searchResultsIterator.hasNext()){
+					ResolvedConceptReference[] refs = searchResultsIterator.next(100).getResolvedConceptReference();
+					for(ResolvedConceptReference ref : refs){
+						lcv++;
+						System.out.println("(" + lcv + ") " + ref.getEntityDescription().getContent() + "(" + ref.getCode() + ")");
+						codeList.addConceptReference((ConceptReference) ref);
+					}
+				}
 
             mapping = mapping.restrictToCodes(codeList, context);
             ResolvedConceptReferencesIterator itr = mapping.resolveMapping(sortOptionList);

@@ -92,7 +92,8 @@ public class ValueSetUtils {
 
 	private String generateRandomString() {
 		int i = rand.nextInt();
-		String t = new Integer(i).toString();
+		//String t = new Integer(i).toString();
+		String t = Integer.valueOf(i).toString();
 		t = t.replace("-", "n");
 		return "_" + t;
 	}
@@ -135,8 +136,8 @@ public class ValueSetUtils {
 
 		if (root == null) {
 			System.out.println("(*) printTree aborted -- root is null???");
+			return;
 		}
-
 
 		//TreeItem root = new TreeItem("<Root>", "Root node");
 		for (String association : root._assocToChildMap.keySet()) {
@@ -317,6 +318,7 @@ System.out.println("(*) ValueSetUtils.printTree dictionary: " + dictionary);
 
 		if (root == null) {
 			System.out.println("(*) printTree aborted -- root is null???");
+			return;
 		}
 
 		for (String association : root._assocToChildMap.keySet()) {
@@ -339,6 +341,7 @@ System.out.println("(*) ValueSetUtils.printTree dictionary: " + dictionary);
     public void printTree(PrintWriter out, TreeItem root, int view) {
 		if (root == null) {
 			System.out.println("(*) printTree aborted -- root is null???");
+			return;
 		}
 
 		//TreeItem root = new TreeItem("<Root>", "Root node");

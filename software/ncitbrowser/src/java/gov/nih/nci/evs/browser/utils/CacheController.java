@@ -191,7 +191,7 @@ public class CacheController {
 				return null;
 			}
 
-			nodeArray = HashMap2JSONArray(map);
+			nodeArray = hashMap2JSONArray(map);
 			return nodeArray;
 		}
 
@@ -212,7 +212,7 @@ public class CacheController {
 
             //map = util.getSubconcepts(scheme, version, code);
 
-            nodeArray = HashMap2JSONArray(map);
+            nodeArray = hashMap2JSONArray(map);
 
             if (fromCache) {
                 try {
@@ -256,7 +256,7 @@ public class CacheController {
             _logger.debug("Not in cache -- calling getSubValueSets ");
 
             map = ValueSetHierarchy.getSubValueSets(scheme, code);
-            nodeArray = HashMap2JSONArray(map);
+            nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
                 try {
@@ -286,7 +286,7 @@ public class CacheController {
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
             map = ValueSetHierarchy.getSubValueSets(code);
-            nodeArray = HashMap2JSONArray(map);
+            nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
 				try {
@@ -317,7 +317,7 @@ public class CacheController {
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
             map = ValueSetHierarchy.getSubValueSets(null, code);
-            nodeArray = HashMap2JSONArray(map);
+            nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
                 try {
@@ -727,7 +727,7 @@ public class CacheController {
 					System.out.println("ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes returns NULL???");
 				}
 
-				nodesArray = HashMap2JSONArray(hmap);
+				nodesArray = hashMap2JSONArray(hmap);
                 element = new Element(key, nodesArray);
                 _cache.put(element);
             } catch (Exception ex) {
@@ -741,9 +741,9 @@ public class CacheController {
 
 
 
-    public JSONArray HashMap2JSONArray(HashMap hmap) {
+    public JSONArray hashMap2JSONArray(HashMap hmap) {
 
-        JSONObject json = new JSONObject();
+        //JSONObject json = new JSONObject();
         JSONArray nodesArray = null;
         try {
             nodesArray = new JSONArray();
@@ -990,7 +990,7 @@ public class CacheController {
                                 node_id, childItem));
                             nodesArray.put(nodeObject);
                         } catch (Exception ex) {
-
+                            ex.printStackTrace();
                         }
                     }
                 } else {
@@ -1022,7 +1022,7 @@ public class CacheController {
                                 node_id, childItem));
                             nodesArray.put(nodeObject);
                         } catch (Exception ex) {
-
+                            ex.printStackTrace();
                         }
                     }
 
@@ -1149,23 +1149,28 @@ public class CacheController {
 
             //LexEvsTree tree = treeService.getTree(codingScheme, null, code);
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-            if (codingSchemeVersion != null) versionOrTag.setVersion(codingSchemeVersion);
+            if (codingSchemeVersion != null) {
+				versionOrTag.setVersion(codingSchemeVersion);
+			}
             LexEvsTree tree = treeService.getTree(codingScheme, versionOrTag, code);
-
+            if (tree == null) return;
             String json =
                 treeService.getJsonConverter().buildJsonPathFromRootTree(
                     tree.getCurrentFocus());
 
            // _cache.put(new Element(getTreeKey(tree), json));
+           String treeKey = getTreeKey(tree, codingSchemeVersion);
+           if (treeKey == null) return;
 
-           _cache.put(new Element(getTreeKey(tree, codingSchemeVersion), json));
+           _cache.put(new Element(treeKey, json));
         }
     }
-
+/*
     private static String getTreeKey(LexEvsTree tree) {
         return getTreeKey(tree.getCodingScheme(), tree.getCurrentFocus()
             .getCode());
     }
+*/
 
     private static String getTreeKey(LexEvsTree tree, String version) {
         return getTreeKey(tree.getCodingScheme(), version, tree.getCurrentFocus()
@@ -1241,10 +1246,12 @@ public class CacheController {
         JSONArray nodeArray = null;
 
         String retval = DataUtils.getCodingSchemeName(scheme);
+        /*
         if (retval != null) {
             scheme = retval;
             version = DataUtils.key2CodingSchemeVersion(scheme);
         }
+        */
 
         if (fromCache) {
             Element element = _cache.get(key);

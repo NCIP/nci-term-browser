@@ -139,14 +139,14 @@ public class DataUtils {
     // ==================================================================================
     // For customized query use
 
-    public static int ALL = 0;
-    public static int PREFERRED_ONLY = 1;
-    public static int NON_PREFERRED_ONLY = 2;
+    public static final int ALL = 0;
+    public static final int PREFERRED_ONLY = 1;
+    public static final int NON_PREFERRED_ONLY = 2;
 
-    private static int RESOLVE_SOURCE = 1;
-    private static int RESOLVE_TARGET = -1;
-    private static int RESTRICT_SOURCE = -1;
-    private static int RESTRICT_TARGET = 1;
+    private static final int RESOLVE_SOURCE = 1;
+    private static final int RESOLVE_TARGET = -1;
+    private static final int RESTRICT_SOURCE = -1;
+    private static final int RESTRICT_TARGET = 1;
 
     public static final int SEARCH_NAME_CODE = 1;
     public static final int SEARCH_DEFINITION = 2;
@@ -159,12 +159,12 @@ public class DataUtils {
         Arrays.asList(new String[] { "a", "an", "and", "by", "for", "of", "on",
             "in", "nos", "the", "to", "with" });
 
-    public static String TYPE_ROLE = "type_role";
-    public static String TYPE_ASSOCIATION = "type_association";
-    public static String TYPE_SUPERCONCEPT = "type_superconcept";
-    public static String TYPE_SUBCONCEPT = "type_subconcept";
-    public static String TYPE_INVERSE_ROLE = "type_inverse_role";
-    public static String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
+    public static final String TYPE_ROLE = "type_role";
+    public static final String TYPE_ASSOCIATION = "type_association";
+    public static final String TYPE_SUPERCONCEPT = "type_superconcept";
+    public static final String TYPE_SUBCONCEPT = "type_subconcept";
+    public static final String TYPE_INVERSE_ROLE = "type_inverse_role";
+    public static final String TYPE_INVERSE_ASSOCIATION = "type_inverse_association";
 
 
     public String _ncicbContactURL = null;
@@ -204,7 +204,7 @@ public class DataUtils {
 
     public static HashMap _codingSchemeTagHashMap = null;
 
-    public static HashMap _valueSetDefinitionHierarchyHashMap = null;
+    public static final HashMap _valueSetDefinitionHierarchyHashMap = null;
     public static Vector  _availableValueSetDefinitionSources = null;
     public static Vector  _valueSetDefinitionHierarchyRoots = null;
 
@@ -314,6 +314,7 @@ public class DataUtils {
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return;
             }
             CodingSchemeRenderingList csrl = null;
             try {
@@ -337,9 +338,13 @@ public class DataUtils {
 				}
 
                 Boolean isActive = null;
+                /*
                 if (csr == null) {
                     _logger.warn("\tcsr == null???");
-                } else if (csr.getRenderingDetail() == null) {
+                } else
+                */
+
+                if (csr.getRenderingDetail() == null) {
                     _logger.warn("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
                     _logger
@@ -379,8 +384,7 @@ public class DataUtils {
 					}
 
                     try {
-                        CodingScheme cs =
-                            lbSvc.resolveCodingScheme(formalname, vt);
+                        CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
 
                         Vector prop_quals = getSupportedPropertyQualifier(cs);
                         if (prop_quals.contains("source-code")) {
@@ -395,7 +399,9 @@ public class DataUtils {
                         _codingSchemeName2URIHashMap.put(cs.getCodingSchemeName(), cs.getCodingSchemeURI());
 
                         boolean isMapping = isMapping(cs.getCodingSchemeName(), representsVersion);
-                        _isMappingHashMap.put(cs.getCodingSchemeName(), new Boolean(isMapping));
+                        //_isMappingHashMap.put(cs.getCodingSchemeName(), new Boolean(isMapping));
+
+                        _isMappingHashMap.put(cs.getCodingSchemeName(), Boolean.valueOf(isMapping));
 
                         String[] localnames = cs.getLocalName();
                         for (int m = 0; m < localnames.length; m++) {
@@ -414,7 +420,8 @@ public class DataUtils {
                             _logger.warn("\t*** MetadataUtils.getMetadataProperties(cs) returns empty list. ***");
                             _logger.warn("\t*******************************************************************");
                         }
-                        if (cs != null && nvList != null) {
+                        //if (cs != null && nvList != null) {
+						if (nvList != null) {
 
                             String css_local_name = css.getLocalName();
                             boolean localname_exist = false;
@@ -1016,6 +1023,7 @@ public class DataUtils {
 
 				} catch (Exception e) {
 					e.printStackTrace();
+					return null;
 				}
 
                 if (cns == null) {
@@ -1093,6 +1101,7 @@ public class DataUtils {
 
 				} catch (Exception e) {
 					e.printStackTrace();
+					return null;
 				}
 
                 if (cns == null) {
@@ -1517,6 +1526,7 @@ if (codingSchemeName == null) {
 
 if (lbSvc == null) {
 	System.out.println("lbSvc == null ??? " + ltag);
+	return null;
 }
 
 
@@ -1629,8 +1639,11 @@ if (lbSvc == null) {
             // EVSApplicationService lbSvc = rsu.createLexBIGService();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
-            if (csrl == null)
+            if (csrl == null) {
                 _logger.warn("csrl is NULL");
+                return v;
+
+			}
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
             for (int i = 0; i < csrs.length; i++) {
@@ -2796,7 +2809,7 @@ if (lbSvc == null) {
 
     public static Vector getSynonyms(String scheme, String version, String tag,
         String code) {
-        Vector v = new Vector();
+        //Vector v = new Vector();
         Entity concept = getConceptByCode(scheme, version, tag, code);
         // KLO, 091009
         // getSynonyms(concept);
@@ -3122,7 +3135,8 @@ if (lbSvc == null) {
 
         for (int i = 0; i < csrs.length; i++) {
             CodingSchemeRendering csr = csrs[i];
-            if (csr != null && csr.getRenderingDetail() != null) {
+            //if (csr != null && csr.getRenderingDetail() != null) {
+			if (csr != null) {
                 Boolean isActive = null;
                 if (csr == null) {
                     _logger.warn("\tcsr == null???");
@@ -3132,10 +3146,11 @@ if (lbSvc == null) {
                     _logger
                         .warn("\tcsr.getRenderingDetail().getVersionStatus() == null");
                 } else {
-
-                    isActive =
-                        csr.getRenderingDetail().getVersionStatus().equals(
-                            CodingSchemeVersionStatus.ACTIVE);
+                    if (csr.getRenderingDetail() != null) {
+						isActive =
+							csr.getRenderingDetail().getVersionStatus().equals(
+								CodingSchemeVersionStatus.ACTIVE);
+					}
                 }
 
                 // if (isActive != null && isActive.equals(Boolean.TRUE))
@@ -3604,13 +3619,16 @@ if (lbSvc == null) {
 
             try {
                 cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+                if (cns == null) return null;
             } catch (Exception e1) {
                 e1.printStackTrace();
+                return null;
             }
 
-            cns = cns.restrictToCodes(crefs);
+            //cns = cns.restrictToCodes(crefs);
 
             try {
+				cns = cns.restrictToCodes(crefs);
                 LocalNameList propertyNames = new LocalNameList();
                 propertyNames.addEntry(propertyName);
                 CodedNodeSet.PropertyType[] propertyTypes = null;
@@ -3670,7 +3688,7 @@ if (lbSvc == null) {
                 e.printStackTrace();
             }
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
         return null;
     }
@@ -3697,11 +3715,14 @@ if (lbSvc == null) {
                 cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
             } catch (Exception e1) {
                 e1.printStackTrace();
+                return null;
             }
 
-            cns = cns.restrictToCodes(crefs);
+            //cns = cns.restrictToCodes(crefs);
 
             try {
+				cns = cns.restrictToCodes(crefs);
+
                 LocalNameList propertyNames = new LocalNameList();
                 if (propertyName != null) propertyNames.addEntry(propertyName);
                 CodedNodeSet.PropertyType[] propertyTypes = null;
@@ -3717,7 +3738,7 @@ if (lbSvc == null) {
                         propertyNames, propertyTypes, resolveObjects,
                         maxToReturn);
 
-                HashMap hmap = new HashMap();
+                //HashMap hmap = new HashMap();
                 if (rcrl == null) {
                     _logger.warn("Concep not found.");
                     return null;
@@ -3892,6 +3913,7 @@ if (lbSvc == null) {
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
             }
 
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -4061,14 +4083,16 @@ if (lbSvc == null) {
         if (version != null)
             csvt.setVersion(version);
 
-		List list = new ArrayList();
+		//List list = new ArrayList();
 		try {
 			LexBIGService distributed = RemoteServerUtil.createLexBIGService();
 			MappingExtension mappingExtension = (MappingExtension)
 				distributed.getGenericExtension("MappingExtension");
 
             boolean isMappingCS = mappingExtension.isMappingCodingScheme(scheme, csvt);
-            Boolean bool_obj = new Boolean(isMappingCS);
+            Boolean bool_obj = Boolean.valueOf(isMappingCS);//   new Boolean(isMappingCS);
+
+
 			_isMappingHashMap.put(scheme, bool_obj);
 			return isMappingCS;
 
@@ -4648,7 +4672,7 @@ if (lbSvc == null) {
 
 
 	public static String getValueSetDefinitionURIByName(String vsd_name) {
-		Vector v = new Vector();
+		//Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
@@ -5037,6 +5061,7 @@ if (lbSvc == null) {
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return v;
             }
             CodingSchemeRenderingList csrl = null;
             try {
@@ -5165,6 +5190,7 @@ if (lbSvc == null) {
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return v;
             }
             CodingSchemeRenderingList csrl = null;
             try {
@@ -5287,8 +5313,8 @@ if (lbSvc == null) {
 		}
 
 
-        Vector cs_name_vec = new Vector();
-        Vector cs_version_vec = new Vector();
+        //Vector cs_name_vec = new Vector();
+        //Vector cs_version_vec = new Vector();
         HashSet hset = new HashSet();
 
         HashMap csnv2codesMap = new HashMap();
@@ -5437,11 +5463,14 @@ if (lbSvc == null) {
 							_codingSchemeTagHashMap = new HashMap();
 						}
 						String key = null;
+						/*
 						if (version == null) {
 							key = codingSchemeName + "$null";
 						} else {
 							key = codingSchemeName + "$" + version;
 						}
+						*/
+						key = codingSchemeName + "$" + version;
 						_codingSchemeTagHashMap.put(key, tag_str);
 						return tag_str;
 					}

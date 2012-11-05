@@ -53,7 +53,11 @@ import org.apache.log4j.*;
  */
 
 public abstract class FileFormatterBase {
-    protected static Logger _logger = Logger.getLogger(FileFormatterBase.class);
+
+
+
+
+    protected static final Logger _logger = Logger.getLogger(FileFormatterBase.class);
 
     public abstract Boolean convert(String textfile, String delimiter)
             throws Exception;
@@ -72,7 +76,7 @@ public abstract class FileFormatterBase {
         File file = new File(filename);
         FileInputStream fis = new FileInputStream(file);
         BufferedInputStream bis = new BufferedInputStream(fis);
-        BufferedReader br = new BufferedReader(new InputStreamReader(bis));
+        BufferedReader br = new BufferedReader(new InputStreamReader(bis, "UTF8"));
         return br;
     }
 
@@ -101,7 +105,10 @@ public abstract class FileFormatterBase {
             throws Exception {
         BufferedReader br = getBufferReader(textfile);
         String line = br.readLine();
-        Vector<String> v = parseData(line, delimiter);
+        Vector<String> v = null;
+        if (line != null) {
+        	v = parseData(line, delimiter);
+		}
         br.close();
         return v;
     }
@@ -113,26 +120,31 @@ public abstract class FileFormatterBase {
 
         // Header line
         String line = br.readLine();
-        Vector<String> v = parseData(line, delimiter);
-        for (int i = 0; i < v.size(); i++)
-            maxChars.add(new Integer(0));
+        Vector<String> v = null;
+        if (line != null) {
+			v = parseData(line, delimiter);
+			for (int i = 0; i < v.size(); i++)
+				//maxChars.add(new Integer(0));
+				maxChars.add(Integer.valueOf(0));
 
-        while (true) {
-            line = br.readLine();
-            if (line == null)
-                break;
-            if (line.length() <= 0)
-                continue;
-            v = parseData(line, delimiter);
-            for (int k = 0; k < v.size(); k++) {
-                String s = v.elementAt(k);
-                int numChar = s.length();
-                int maxChar = maxChars.elementAt(k);
-                if (maxChar < numChar) {
-                    maxChars.setElementAt(new Integer(numChar), k);
-                }
-            }
-        }
+			while (true) {
+				line = br.readLine();
+				if (line == null)
+					break;
+				if (line.length() <= 0)
+					continue;
+				v = parseData(line, delimiter);
+				for (int k = 0; k < v.size(); k++) {
+					String s = v.elementAt(k);
+					int numChar = s.length();
+					int maxChar = maxChars.elementAt(k);
+					if (maxChar < numChar) {
+						//maxChars.setElementAt(new Integer(numChar), k);
+						maxChars.setElementAt(Integer.valueOf(numChar), k);
+					}
+				}
+			}
+	    }
 
         br.close();
         return maxChars;

@@ -758,8 +758,9 @@ public class TreeUtils {
 
             // return getAssociatedConcepts(scheme, version, code, assocName,
             // !associationsNavigatedFwd);
-            if (associationsToNavigate != null
-                && associationsToNavigate.length == 1) {
+            //if (associationsToNavigate != null
+            //    && associationsToNavigate.length == 1) {
+			if (associationsToNavigate.length == 1) {
                 if (associationsToNavigate[0].compareTo("subClassOf") == 0) {
                     return getAssociatedConcepts(scheme, version, code,
                         "subClassOf", true);
@@ -973,7 +974,7 @@ public class TreeUtils {
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
-        Vector v = new Vector();
+        //Vector v = new Vector();
         try {
 			Entity concept = getConceptByCode(scheme, version, null, code);
 			if (concept == null) return null;
@@ -1145,7 +1146,7 @@ public class TreeUtils {
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
-        Vector v = new Vector();
+        //Vector v = new Vector();
         try {
 
 			Entity concept = getConceptByCode(scheme, version, null, code);
@@ -1343,8 +1344,10 @@ public class TreeUtils {
                 cns =
                     lbSvc.getCodingSchemeConcepts(codingSchemeName,
                         versionOrTag);
+                if (cns == null) return null;
             } catch (Exception e1) {
                 e1.printStackTrace();
+                return null;
             }
 
             cns = cns.restrictToCodes(crefs);
@@ -1808,7 +1811,7 @@ public class TreeUtils {
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
-        Vector v = new Vector();
+        //Vector v = new Vector();
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             LexBIGServiceConvenienceMethods lbscm =
@@ -1926,7 +1929,7 @@ public class TreeUtils {
             }
         }
 
-        List list = ResolvedConceptReferenceList2List(roots);
+        List list = resolvedConceptReferenceList2List(roots);
         SortUtils.quickSort(list);
         return list;
     }
@@ -1946,7 +1949,7 @@ public class TreeUtils {
             list = cns.resolveToList(null, null, null, 500);// .getResolvedConceptReference();
             if (list == null)
                 return null;
-            return ResolvedConceptReferenceList2List(list);
+            return resolvedConceptReferenceList2List(list);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -2035,12 +2038,12 @@ public class TreeUtils {
                 modified_roots.addResolvedConceptReference(rcr);
             }
         }
-        List list = ResolvedConceptReferenceList2List(modified_roots);
+        List list = resolvedConceptReferenceList2List(modified_roots);
         SortUtils.quickSort(list);
         return list;
     }
 
-    public List ResolvedConceptReferenceList2List(
+    public List resolvedConceptReferenceList2List(
         ResolvedConceptReferenceList rcrl) {
         ArrayList list = new ArrayList();
         for (int i = 0; i < rcrl.getResolvedConceptReferenceCount(); i++) {
@@ -2245,34 +2248,40 @@ public class TreeUtils {
 		ti._expandable = false;
 
 		TreeItem root = null;
-		Iterator it = hmap1.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			root = (TreeItem) hmap1.get(key);
-			if (root != null) {
-				for (String association : root._assocToChildMap.keySet()) {
-					List<TreeItem> children = root._assocToChildMap.get(association);
-					for (TreeItem childItem : children) {
-						ti.addChild(association, childItem);
-						ti._expandable = true;
+		Iterator it = null;
+		if (hmap1 != null) {
+			it = hmap1.keySet().iterator();
+			while (it.hasNext()) {
+				String key = (String) it.next();
+				root = (TreeItem) hmap1.get(key);
+				if (root != null) {
+					for (String association : root._assocToChildMap.keySet()) {
+						List<TreeItem> children = root._assocToChildMap.get(association);
+						for (TreeItem childItem : children) {
+							ti.addChild(association, childItem);
+							ti._expandable = true;
+						}
 					}
 				}
 			}
-		}
-		it = hmap2.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			root = (TreeItem) hmap2.get(key);
-			if (root != null) {
-				for (String association : root._assocToChildMap.keySet()) {
-					List<TreeItem> children = root._assocToChildMap.get(association);
-					for (TreeItem childItem : children) {
-						ti.addChild(association, childItem);
-						ti._expandable = true;
+	    }
+
+	    if (hmap2 != null) {
+			it = hmap2.keySet().iterator();
+			while (it.hasNext()) {
+				String key = (String) it.next();
+				root = (TreeItem) hmap2.get(key);
+				if (root != null) {
+					for (String association : root._assocToChildMap.keySet()) {
+						List<TreeItem> children = root._assocToChildMap.get(association);
+						for (TreeItem childItem : children) {
+							ti.addChild(association, childItem);
+							ti._expandable = true;
+						}
 					}
 				}
 			}
-		}
+	    }
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", ti);
 		return hmap;

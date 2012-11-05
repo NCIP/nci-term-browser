@@ -370,7 +370,10 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
         if (_cart.size() == 0) {
 			request.getSession().removeAttribute("cart_size");
 		}
-        String cartSize = new Integer(_cart.size()).toString();
+        //String cartSize = new Integer(_cart.size()).toString();
+
+        String cartSize = Integer.valueOf(_cart.size()).toString();
+
         request.getSession().setAttribute("cart_size", cartSize);
 	}
 
@@ -624,7 +627,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
                     + XML_FILE_NAME);
             response.setContentLength(buf.length());
             ServletOutputStream ouputStream = response.getOutputStream();
-            ouputStream.write(buf.toString().getBytes(), 0, buf.length());
+            ouputStream.write(buf.toString().getBytes("UTF8"), 0, buf.length());
             ouputStream.flush();
             ouputStream.close();
 
@@ -697,7 +700,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
                     + CSV_FILE_NAME);
             response.setContentLength(sb.length());
             ServletOutputStream ouputStream = response.getOutputStream();
-            ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+            ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
             ouputStream.flush();
             ouputStream.close();
 
@@ -712,7 +715,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
      * Subclass to hold contents of the cart
      * @author garciawa2
      */
-    public class Concept {
+    public static class Concept {
         private String code = null;
         private String codingScheme = null;
         private String nameSpace = null;
@@ -841,7 +844,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
      * Class to hold a unique scheme version
      * @author garciaw
      */
-    public class SchemeVersion {
+    public static class SchemeVersion {
         private String uri = null;
         private String codingScheme = null;
         private String version = null;
@@ -901,6 +904,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 		return false;
 	}
 
+/*
 	private boolean inSelectedlist(String uri, String version) {
 		for (int x = 0; x < _selectedVersionItems.size(); x++) {
 			if (_selectedVersionItems.get(x).contains(uri + "|" + version))
@@ -908,6 +912,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 		}
 		return false;
 	}
+*/
 
 	public String dumpSelectedlist() {
 		StringBuffer sb = new StringBuffer();
@@ -1055,7 +1060,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
      * Utility class that helps check for duplicate entries
      * @author garciaw
      */
-    public class DuplicateCheck {
+    public static class DuplicateCheck {
 
     	private ArrayList<String> list = null;
 
@@ -1279,7 +1284,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
                     + CSV_FILE_NAME);
             response.setContentLength(sb.length());
             ServletOutputStream ouputStream = response.getOutputStream();
-            ouputStream.write(sb.toString().getBytes(), 0, sb.length());
+            ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
             ouputStream.flush();
             ouputStream.close();
 
