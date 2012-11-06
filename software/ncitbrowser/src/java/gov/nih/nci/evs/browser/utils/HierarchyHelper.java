@@ -44,6 +44,9 @@ package gov.nih.nci.evs.browser.utils;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.Map;
+import java.util.Map.Entry;
+
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -62,7 +65,7 @@ public class HierarchyHelper {
     private int _idCtr = 0;
     private int _debugCtr = 0;
     private static boolean _debug = false;  // DYEE_DEBUG (default: false)
-    
+
     // -------------------------------------------------------------------------
     public HierarchyHelper(String basePath) {
         if (basePath == null)
@@ -88,18 +91,18 @@ public class HierarchyHelper {
     public String getCollapseIcon() {
         return _collapseIcon;
     }
-    
+
     // -------------------------------------------------------------------------
 	public TreeItem getSampleTree() {
 		TreeItem parent = new TreeItem("root", "Root");
-		
+
 		add(parent, "C12913", "Abnormal Cell");
 		addActivity(add(parent, "C43431", "Activity"));
 		add(parent, "C12219", "Anatomic Structure, System, or Substance");
 
 		return parent;
 	}
-	
+
 	private void addActivity(TreeItem parent) {
 		add(parent, "C25404", "Action");
 		add(parent, "C49235", "Administrative Activity");
@@ -109,7 +112,7 @@ public class HierarchyHelper {
 		add(parent, "C17706", "Physical Activity");
 		add(parent, "C16847", "Technique");
 	}
-	
+
 	private void addBehavior(TreeItem parent) {
 		add(parent, "C94296", "Antisocial Behavior");
 		add(parent, "C54264", "Avoidance");
@@ -122,42 +125,49 @@ public class HierarchyHelper {
         _logger.debug(text);
         //System.out.println(text);
 	}
-	
+
+
 	public void debug(TreeItem top, String indent) {
         if (top._expandable)
             debug(indent + "+ " + top._text + " (" + top._code + ")");
         else debug(indent + "* " + top._text + " (" + top._code + ")");
 
 		Map<String, List<TreeItem>> map = top._assocToChildMap;
+		/*
 		Set<String> keys = map.keySet();
 		Iterator<String> iterator_key = keys.iterator();
+		*/
+		//Iterator<String> iterator_key = map.entrySet().iterator();
+		Iterator iterator_key = map.entrySet().iterator();
 		while (iterator_key.hasNext()) {
-			String key = iterator_key.next();
-			List<TreeItem> items = map.get(key);
+			Entry thisEntry = (Entry) iterator_key.next();
+			String key = (String) thisEntry.getKey();
+			List<TreeItem> items = (ArrayList) thisEntry.getValue();
+
 			Iterator<TreeItem> iterator_treeItem = items.iterator();
 			while (iterator_treeItem.hasNext()) {
-				TreeItem item = iterator_treeItem.next(); 
+				TreeItem item = iterator_treeItem.next();
 				debug(item, indent + INDENT);
 			}
 		}
 	}
-	
+
     // -------------------------------------------------------------------------
     private TreeItem add(TreeItem parent, String code, String text) {
         TreeItem child = new TreeItem(code, text);
         parent.addChild("child", child);
         return child;
     }
-    
+
     private void append(StringBuffer buffer, String text) {
         if (_debug)
             debug(text);
         buffer.append(text + "\n");
     }
-    
+
     // -------------------------------------------------------------------------
-	private StringBuffer getHtml(HttpServletRequest request, String dictionary, 
-			String version, StringBuffer buffer, TreeItem top, String indent, 
+	private StringBuffer getHtml(HttpServletRequest request, String dictionary,
+			String version, StringBuffer buffer, TreeItem top, String indent,
 			boolean skip) {
 	    String code = top._code;
 	    String name = top._text;
@@ -166,7 +176,7 @@ public class HierarchyHelper {
 
 		if (! skip) {
     		boolean isLeafNode = ! top._expandable;
-    
+
     		append(buffer, indent + "<table border=0>");
     		append(buffer, indent + "  <tr>");
     		append(buffer, indent + "    <td width=\"" + INDENT_PIXELS + "\"></td>");
@@ -174,27 +184,27 @@ public class HierarchyHelper {
 
     		if (isLeafNode) {
     		    if (! name.equals("...")) {
-        			append(buffer, indent + "      " 
+        			append(buffer, indent + "      "
         				+ "<img src=\"" + _leafIcon +  "\">"
         				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) +
-        				"\">" + name + "</a>" 
+        				"\">" + name + "</a>"
         				+ "<div>");
     		    } else {
-                    append(buffer, indent + "      " 
+                    append(buffer, indent + "      "
                         + "<img src=\"" + _leafIcon +  "\">"
                         + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) +
-                        "\">" + name + "</a>" 
+                        "\">" + name + "</a>"
                         + "<div>");
     		    }
     		} else {
     		    if (keys.size() > 0) {
-        			append(buffer, indent + "      " 
-        				+ "<div onclick=\"toggle(this)\">" 
-        				+ "<img src=\"" + _collapseIcon + "\">" 
+        			append(buffer, indent + "      "
+        				+ "<div onclick=\"toggle(this)\">"
+        				+ "<img src=\"" + _collapseIcon + "\">"
         				+ "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) + "\">" + name + "</a></div>"
         				+ "<div>");
     		    } else {
-    		        String id = "add_" + _idCtr++; 
+    		        String id = "add_" + _idCtr++;
                     append(buffer, indent + "      <div id=\"" + id + "\" name=\"" + name + "\">");
                     append(buffer, indent + "        <img src=\"" + _expandIcon + "\" onClick=\"addContent('" + id  + "', " + "'" + code + "')\"/> "
                             + "<a href=\"" + JSPUtils.getConceptUrl(request, dictionary, version, code) + "\">" + name + "</a>");
@@ -202,14 +212,14 @@ public class HierarchyHelper {
     		    }
     		}
 		}
-    		
+
 		Iterator<String> iterator_key = keys.iterator();
 		while (iterator_key.hasNext()) {
 			String key = iterator_key.next();
 			List<TreeItem> items = map.get(key);
 			Iterator<TreeItem> iterator_treeItem = items.iterator();
 			while (iterator_treeItem.hasNext()) {
-				TreeItem item = iterator_treeItem.next(); 
+				TreeItem item = iterator_treeItem.next();
 				String indent2 = indent;
 				if (! skip)
 				    indent2 += "      " + INDENT;
@@ -225,8 +235,8 @@ public class HierarchyHelper {
 		}
 		return buffer;
 	}
-	
-	public String getHtml(HttpServletRequest request, String dictionary, 
+
+	public String getHtml(HttpServletRequest request, String dictionary,
 		String version, TreeItem top) {
         Utils.StopWatch stopWatch = new Utils.StopWatch();
 	    _debugCtr = 0;

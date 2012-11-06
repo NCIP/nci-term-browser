@@ -186,11 +186,11 @@ public class CacheController {
 			}
 
 			map = util.getRemainingSubconcepts(scheme, version, code, from_root);
-
+/*
 			if (map == null) {
 				return null;
 			}
-
+*/
 			nodeArray = hashMap2JSONArray(map);
 			return nodeArray;
 		}
@@ -722,11 +722,11 @@ public class CacheController {
             try {
 
 				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
-
+/*
 				if (hmap == null) {
 					System.out.println("ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes returns NULL???");
 				}
-
+*/
 				nodesArray = hashMap2JSONArray(hmap);
                 element = new Element(key, nodesArray);
                 _cache.put(element);
@@ -1160,7 +1160,7 @@ public class CacheController {
 
            // _cache.put(new Element(getTreeKey(tree), json));
            String treeKey = getTreeKey(tree, codingSchemeVersion);
-           if (treeKey == null) return;
+           //if (treeKey == null) return;
 
            _cache.put(new Element(treeKey, json));
         }
@@ -1245,7 +1245,7 @@ public class CacheController {
         String key = "src_vs_tree";
         JSONArray nodeArray = null;
 
-        String retval = DataUtils.getCodingSchemeName(scheme);
+        // retval = DataUtils.getCodingSchemeName(scheme);
         /*
         if (retval != null) {
             scheme = retval;

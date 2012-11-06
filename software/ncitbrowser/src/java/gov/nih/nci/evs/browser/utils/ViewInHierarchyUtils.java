@@ -159,7 +159,7 @@ public class ViewInHierarchyUtils {
                     TreeServiceFactory.getInstance().getTreeService(
                         RemoteServerUtil.createLexBIGService());
 
-            long start = System.currentTimeMillis();
+            //long start = System.currentTimeMillis();
             CodingSchemeVersionOrTag csvt = null;
             if (version != null && version.length() > 0)
                 csvt = Constructors.createCodingSchemeVersionOrTagFromVersion(version);
@@ -218,11 +218,12 @@ public class ViewInHierarchyUtils {
 					expanded = true;
 				}
 			}
-
+/*
             String parent_code = null;
             if (parent != null) {
 			    parent_code = parent.getCode();
 			}
+*/
 
 /*
             String parent_id = null;
@@ -243,7 +244,8 @@ public class ViewInHierarchyUtils {
 					//code = "root" + "_" + focus_code + "_dot_" + new Integer(has_more_node_knt).toString();
 					code = "root" + "_" + focus_code + "_dot_" + Integer.valueOf(has_more_node_knt).toString();
 				} else {
-				    code = parent.getCode() + "_dot_" + new Integer(has_more_node_knt).toString();
+				    //code = parent.getCode() + "_dot_" + new Integer(has_more_node_knt).toString();
+				    code = parent.getCode() + "_dot_" + Integer.valueOf(has_more_node_knt).toString();
 				}
 			}
 
@@ -361,7 +363,7 @@ public class ViewInHierarchyUtils {
     public HashMap getRemainingSubconcepts(String codingScheme, String version, String focus_code, boolean from_root) {
         HashMap hmap = new HashMap();
         String childNavText = "inverse_is_a";
-		long ms = System.currentTimeMillis();
+		//long ms = System.currentTimeMillis();
 
 		TreeItem ti = new TreeItem(focus_code, "");
 		ti._expandable = false;
@@ -391,7 +393,7 @@ public class ViewInHierarchyUtils {
     public HashMap getSubconcepts(String codingScheme, String version, String focus_code) {
         HashMap hmap = new HashMap();
         String childNavText = "inverse_is_a";
-		long ms = System.currentTimeMillis();
+		//long ms = System.currentTimeMillis();
 
 		TreeItem ti = new TreeItem(focus_code, "");
 		ti._expandable = false;

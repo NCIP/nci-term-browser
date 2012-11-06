@@ -388,10 +388,10 @@ public class ViewInHierarchyUtil {
 
 	public List toHTML(String basePath, String line) {
 		Vector v = parseData(line);
-		String expandable = (String) v.elementAt(0);
+		//String expandable = (String) v.elementAt(0);
 		String depth = (String) v.elementAt(1);
 		String image = (String) v.elementAt(2);
-		String code = (String) v.elementAt(3);
+		//String code = (String) v.elementAt(3);
 		String name = (String) v.elementAt(4);
 
 		List list = new ArrayList();
@@ -406,7 +406,7 @@ public class ViewInHierarchyUtil {
 			image_file = "leaf.gif";
 		}
 
-		int level = Integer.parseInt(depth);
+		//int level = Integer.parseInt(depth);
 		if (image.compareTo(".") == 0) {
 		    s = buildPrefix(depth) + "&nbsp;" + name;
 

@@ -238,7 +238,8 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
             return "message";
         }
 
-        if (matchText != null && matchText.length() < 3
+        //if (matchText != null && matchText.length() < 3
+        if (matchText.length() < 3
               //&& matchAlgorithm.compareTo("contains") == 0) {
 			  && matchAlgorithm.compareTo("exactMatch") != 0) {
             String message = "Please enter a search string of length no less than 3.";
@@ -2544,7 +2545,7 @@ System.out.println("(*) assocName: " + assocName);
 		try {
 			int numberRemaining = iterator.numberRemaining();
 			System.out.println("getFirstResolvedConceptReference numberRemaining: " + numberRemaining);
-			while (iterator != null && iterator.hasNext()) {
+			while (iterator.hasNext()) {
 				//ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
 				//return refs[0];
 				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();

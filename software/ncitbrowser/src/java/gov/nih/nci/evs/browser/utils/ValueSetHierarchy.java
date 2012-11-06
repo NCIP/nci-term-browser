@@ -87,7 +87,7 @@ public class ValueSetHierarchy {
 
     //public static String SOURCE_SCHEME = "Terminology Value Set";
     public static final String SOURCE_SCHEME = "Terminology_Value_Set.owl";
-    public static String SOURCE_VERSION = null;
+    public static final String SOURCE_VERSION;// = null;
 
 	public static HashMap _source_hierarchy = null;
 	public static HashMap _source_subconcept_map = null;
@@ -133,11 +133,22 @@ public class ValueSetHierarchy {
 
 
     public ValueSetHierarchy() {
+		/*
         SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
         System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
-
-        _valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+        if (_valueSetDefinitionURI2VSD_map == null) {
+        	_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+	    }
+	    */
     }
+
+    static {
+		SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
+		System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
+        if (_valueSetDefinitionURI2VSD_map == null) {
+        	_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+	    }
+	}
 
     public static String getValueSetDecription(String uri) {
 		if (_valueSetDefinitionURI2VSD_map == null) {
@@ -174,9 +185,11 @@ public class ValueSetHierarchy {
 
 
     public static String getSourceSchemeVersion() {
+		/*
 		if (SOURCE_VERSION == null) {
 			SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
 		}
+		*/
 		return SOURCE_VERSION;
 	}
 
@@ -209,7 +222,8 @@ public class ValueSetHierarchy {
                     if (tags == null)
                         return version;
 
-                    if (tags != null && tags.length > 0) {
+                    //if (tags != null && tags.length > 0) {
+					if (tags.length > 0) {
                         for (int j = 0; j < tags.length; j++) {
                             String version_tag = (String) tags[j];
 
@@ -1501,7 +1515,7 @@ public class ValueSetHierarchy {
     public static HashMap getValueSetDefinitionNodesWithSource(String src) {
 		createVSDSource2VSDsMap();
 
-		String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
+		//String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
 		//TreeItem root = new TreeItem(src, src + " (" + text + ")");
 		TreeItem root = new TreeItem(src, src);
 		root._expandable = false;
@@ -1615,7 +1629,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 		String formalName = DataUtils.getFormalName(scheme);
 		String codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
 
-		HashMap source_hier = getValueSetSourceHierarchy();
+		//HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_in_cs_vsd_vec = new Vector();
         HashMap source2VSD_map = new HashMap();
         HashMap uri2VSD_map = new HashMap();
@@ -1751,7 +1765,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 	public static HashMap getRootValueSets(boolean bySource) {
 		if (!bySource) return getRootValueSets();
 
-		HashMap source_hier = getValueSetSourceHierarchy();
+		//HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_vec = new Vector();
         HashSet source_set = new HashSet();
 
@@ -2125,7 +2139,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 
 		codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
 
-		HashMap source_hier = getValueSetSourceHierarchy();
+		//HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_in_cs_vsd_vec = new Vector();
         HashMap source2VSD_map = new HashMap();
         HashMap uri2VSD_map = new HashMap();
@@ -2242,10 +2256,12 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		/*
 		if (root == null) {
 			System.out.println("root == null???");
 			return null;
 		}
+		*/
 		root._expandable = false;
 		if (children.size() > 0) {
 			root._expandable = true;
@@ -2263,7 +2279,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 
     // code: parent vsd_uri
 	public static HashMap getSubValueSets(String vsd_uri) {
-		HashMap source_hier = getValueSetSourceHierarchy();
+		//HashMap source_hier = getValueSetSourceHierarchy();
 		createVSDSource2VSDsMap();
 		Vector sub_src_vec = new Vector();
 		HashSet hset = new HashSet();
@@ -2322,11 +2338,18 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 
 
     public static void assignTreeNodeExpandable(HashMap hmap) {
+		/*
 		Iterator it = hmap.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
-
 			TreeItem ti = (TreeItem) hmap.get(key);
+		*/
+		Iterator it = hmap.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry entry = (Entry) it.next();
+			String key = (String) entry.getKey();
+			TreeItem ti = (TreeItem) entry.getValue();
+
 			for (String association : ti._assocToChildMap.keySet()) {
 				List<TreeItem> children = ti._assocToChildMap.get(association);
 				for (TreeItem childItem : children) {
@@ -2348,10 +2371,17 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 	}
 
     public static void assignValueSetNodeExpandable(HashMap hmap) {
+/*
 		Iterator it = hmap.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
 			TreeItem ti = (TreeItem) hmap.get(key);
+*/
+		Iterator it = hmap.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry entry = (Entry) it.next();
+			String key = (String) entry.getKey();
+			TreeItem ti = (TreeItem) entry.getValue();
 			for (String association : ti._assocToChildMap.keySet()) {
 				List<TreeItem> children = ti._assocToChildMap.get(association);
 				for (TreeItem childItem : children) {
@@ -2424,10 +2454,18 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
     }
 
     public static boolean hasChildren(HashMap hmap) {
+/*
 		Iterator it = hmap.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
 			TreeItem ti = (TreeItem) hmap.get(key);
+*/
+		Iterator it = hmap.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry entry = (Entry) it.next();
+			String key = (String) entry.getKey();
+			TreeItem ti = (TreeItem) entry.getValue();
+
 			int k = 0;
 			for (String association : ti._assocToChildMap.keySet()) {
 				List<TreeItem> children = ti._assocToChildMap.get(association);
@@ -2451,8 +2489,8 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
         int count = 0;
         try {
 
-System.out.println("*** SOURCE_SCHEME: " + SOURCE_SCHEME);
-System.out.println("*** SOURCE_VERSION: " + SOURCE_VERSION);
+//System.out.println("*** SOURCE_SCHEME: " + SOURCE_SCHEME);
+//System.out.println("*** SOURCE_VERSION: " + SOURCE_VERSION);
 
 
 			rcrl = TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
@@ -2924,11 +2962,11 @@ if (rcrl == null) {
 
 		List <TreeItem> new_branch = new ArrayList();
 
-		TreeItem ncit_node = null;
+		//TreeItem ncit_node = null;
 		for (int i=0; i<branch.size(); i++) {
 			TreeItem ti = (TreeItem) branch.get(i);
 			if (ti._text.compareTo("NCI Thesaurus") == 0) {
-				ncit_node = ti;
+				//ncit_node = ti;
 				new_branch.add(ti);
 				break;
 			}

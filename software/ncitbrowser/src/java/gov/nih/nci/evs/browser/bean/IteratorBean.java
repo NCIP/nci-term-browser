@@ -206,7 +206,8 @@ public class IteratorBean extends Object {
 		try {
 			int numberRemaining = iterator.numberRemaining();
 			//System.out.println("getFirstResolvedConceptReference numberRemaining: " + numberRemaining);
-			while (iterator != null && iterator.hasNext()) {
+			//while (iterator != null && iterator.hasNext()) {
+			while (iterator.hasNext()) {
 				//ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
 				//return refs[0];
 				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();

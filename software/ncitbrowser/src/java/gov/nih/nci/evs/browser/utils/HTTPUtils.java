@@ -125,7 +125,8 @@ public class HTTPUtils {
     	String nciturl = null;
     	if (link.contains("/ncitbrowser")) return link;
     	if (link.endsWith("/"))	link = nciturl + "ncitbrowser";
-    	link = nciturl + "/ncitbrowser";
+    	//link = nciturl + "/ncitbrowser";
+    	else link = nciturl + "/ncitbrowser";
     	return link;
     }
 

@@ -577,8 +577,9 @@ public class DataUtils {
                 }
             }
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             // return null;
+            //System.out.println("WARNING: setCodingSchemeMap threw exception.");
         }
         if (nv_vec.size() > 0) {
             nv_vec = SortUtils.quickSort(nv_vec);
@@ -634,10 +635,13 @@ public class DataUtils {
 
 		_logger.debug("Done Initializing Value Set Metadata ...");
 		_logger.debug("\tInitializing ValueSetHierarchy ...");
+		/*
 		System.out.println("\tgetValueSetSourceHierarchy ...");
 		HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
 		System.out.println("\tgetValueSetDefinitionURI2VSD_map ...");
 		HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
+		*/
+
 		System.out.println("\tpreprocessSourceHierarchyData ...");
 		ValueSetHierarchy.preprocessSourceHierarchyData();
 		System.out.println("\tgetValueSetParticipationHashSet ...");
@@ -1192,8 +1196,8 @@ public class DataUtils {
         Vector superconcept_vec =
             getAssociationSourceCodes(scheme, version, code,
                 hierarchicalAssoName);
-        if (superconcept_vec == null)
-            return null;
+        //if (superconcept_vec == null)
+        //    return null;
         // SortUtils.quickSort(superconcept_vec, SortUtils.SORT_BY_CODE);
         return superconcept_vec;
 
@@ -1310,7 +1314,10 @@ public class DataUtils {
 
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
-            String desc = null;
+
+            /*
+            String desc = "<not found>";
+
             try {
                 desc =
                     lbscm
@@ -1320,9 +1327,9 @@ public class DataUtils {
                         .getContent();
 
             } catch (Exception e) {
-                desc = "<not found>";
-
+                e.printStackTrace();
             }
+            */
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -1372,7 +1379,8 @@ public class DataUtils {
             lbscm.setLexBIGService(lbSvc);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
-            String desc = null;
+            /*
+            String desc = "<not found>";
             try {
                 desc =
                     lbscm
@@ -1381,8 +1389,9 @@ public class DataUtils {
                         .getResolvedConceptReference(0).getEntityDescription()
                         .getContent();
             } catch (Exception e) {
-                desc = "<not found>";
+                e.printStackTrace();
             }
+            */
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -1448,10 +1457,13 @@ public class DataUtils {
     public static String getVersion(String scheme) {
         String info = getReleaseDate(scheme);
         // String version = getVocabularyVersionByTag(scheme, "PRODUCTION");
-
+/*
         String full_name = DataUtils.getMetadataValue(scheme, "full_name");
-        if (full_name == null || full_name.compareTo("null") == 0)
+        if (full_name == null || full_name.compareTo("null") == 0) {
             full_name = scheme;
+		}
+*/
+
         String version =
             getMetadataValue(scheme, "term_browser_version");
 
@@ -1518,8 +1530,8 @@ if (codingSchemeName == null) {
 	codingSchemeName = "NCI Thesaurus";
 }
 
-        if (codingSchemeName == null)
-            return null;
+        //if (codingSchemeName == null)
+        //    return null;
         String version = null;
         int knt = 0;
         try {
@@ -1551,7 +1563,8 @@ if (lbSvc == null) {
                     if (tags == null)
                         return version;
 
-                    if (tags != null && tags.length > 0) {
+                    //if (tags != null && tags.length > 0) {
+					if (tags.length > 0) {
                         for (int j = 0; j < tags.length; j++) {
                             String version_tag = (String) tags[j];
 
@@ -3139,9 +3152,13 @@ if (lbSvc == null) {
             //if (csr != null && csr.getRenderingDetail() != null) {
 			if (csr != null) {
                 Boolean isActive = null;
+                /*
                 if (csr == null) {
                     _logger.warn("\tcsr == null???");
-                } else if (csr.getRenderingDetail() == null) {
+                } else
+                */
+
+                if (csr.getRenderingDetail() == null) {
                     _logger.warn("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
                     _logger
@@ -3317,14 +3334,15 @@ if (lbSvc == null) {
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        //} else if (concepts != null && concepts.size() == 1) {
+		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else { //if (concepts != null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3340,14 +3358,15 @@ if (lbSvc == null) {
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        //} else if (concepts != null && concepts.size() == 1) {
+		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {//if (concepts != null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3363,14 +3382,15 @@ if (lbSvc == null) {
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        //} else if (concepts != null && concepts.size() == 1) {
+		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {//if (concepts != null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3385,14 +3405,15 @@ if (lbSvc == null) {
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        //} else if (concepts != null && concepts.size() == 1) {
+		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {//if (concepts != null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3408,14 +3429,15 @@ if (lbSvc == null) {
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        //} else if (concepts != null && concepts.size() == 1) {
+		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {//if (concepts != null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3430,14 +3452,15 @@ if (lbSvc == null) {
 
         if (concepts == null || concepts.size() <= 0) {
             _logger.debug(label + "(none)");
-        } else if (concepts != null && concepts.size() == 1) {
+        //} else if (concepts != null && concepts.size() == 1) {
+		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
             Vector ret_vec = DataUtils.parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
             _logger.debug(label + " " + cName + "(" + cCode + ")");
-        } else if (concepts != null) {
+        } else {//if (concepts != null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
@@ -3634,7 +3657,7 @@ if (lbSvc == null) {
                 propertyNames.addEntry(propertyName);
                 CodedNodeSet.PropertyType[] propertyTypes = null;
 
-                long ms = System.currentTimeMillis(), delay = 0;
+                //long ms = System.currentTimeMillis(), delay = 0;
                 SortOptionList sortOptions = null;
                 LocalNameList filterOptions = null;
                 boolean resolveObjects = true; // needs to be set to true
@@ -3728,7 +3751,7 @@ if (lbSvc == null) {
                 if (propertyName != null) propertyNames.addEntry(propertyName);
                 CodedNodeSet.PropertyType[] propertyTypes = null;
 
-                long ms = System.currentTimeMillis(), delay = 0;
+                //long ms = System.currentTimeMillis(), delay = 0;
                 SortOptionList sortOptions = null;
                 LocalNameList filterOptions = null;
                 boolean resolveObjects = true; // needs to be set to true
@@ -3961,19 +3984,31 @@ if (lbSvc == null) {
 		return hmap;
 	}
 
-
-
-
-
-    private static void dumpHashMap(HashMap hmap) {
+/*
+    private static void dumpHashMap(HashMap<String, String> hmap) {
 		_logger.warn("\n\n");
 		if (hmap == null) return;
-		Iterator it = hmap.keySet().iterator();
+		//Iterator it = hmap.keySet().iterator();
+		Iterator it = hmap.entrySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
 			String value = (String) hmap.get(key);
 		}
 	}
+*/
+
+    private static void dumpHashMap(HashMap<String, String> hmap) {
+		_logger.warn("\n\n");
+		if (hmap == null) return;
+
+		Set<Map.Entry<String, String>> set = hmap.entrySet();
+		for (Map.Entry<String, String> me : set) {
+		    System.out.print(me.getKey() + ": ");
+		    System.out.println(me.getValue());
+		}
+    }
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -4257,7 +4292,7 @@ if (lbSvc == null) {
 			}
 
 		} catch (Exception ex) {
-
+            ex.printStackTrace();
 		}
 		return v;
 	}
@@ -4569,8 +4604,10 @@ if (lbSvc == null) {
 
 		String version = null;
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        /*
         if (version != null)
             csvt.setVersion(version);
+        */
 
 		Vector conceptDomainName_vec = new Vector();
 		try {
@@ -5345,10 +5382,15 @@ if (lbSvc == null) {
 			}
 		}
 
-		Iterator it = csnv2codesMap.keySet().iterator();
+		//Iterator it = csnv2codesMap.keySet().iterator();
+		Iterator it = csnv2codesMap.entrySet().iterator();
 		while (it.hasNext()) {
-			String key = (String) it.next();
+			Entry thisEntry = (Entry) it.next();
+			//String key = (String) it.next();
+			String key = (String) thisEntry.getKey();
+
 			ArrayList alist = (ArrayList) csnv2codesMap.get(key);
+
 			Vector u = DataUtils.parseData(key, "$");
 			String scheme = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
@@ -5444,7 +5486,8 @@ if (lbSvc == null) {
 						if (tags == null)
 							return "NOT ASSIGNED";
 
-						if (tags != null && tags.length > 0) {
+						//if (tags != null && tags.length > 0) {
+						if (tags.length > 0) {
 							tag_str = "";
 							for (int j = 0; j < tags.length; j++) {
 								String version_tag = (String) tags[j];

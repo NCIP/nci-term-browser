@@ -338,15 +338,15 @@ public class ValueSetSearchUtils
         String vsd_uri, String matchText, int maxToReturn) {
 
 		if (matchText == null) return null;
-        String matchText0 = matchText;
+        //String matchText0 = matchText;
         String matchAlgorithm0 = "exactMatch";
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
 
         _logger.debug("searchByCode ..." + matchText);
 
 System.out.println("============================ searchByCode ====================================");
 
-        long ms = System.currentTimeMillis(), delay = 0;
+        //long ms = System.currentTimeMillis(), delay = 0;
         long tnow = System.currentTimeMillis();
         long total_delay = 0;
         boolean debug_flag = false;
@@ -438,13 +438,13 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
 		if (matchText == null) return null;
 
-        String matchText0 = matchText;
+        //String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
 
         _logger.debug("searchByName ..." + matchText);
 
-        long ms = System.currentTimeMillis(), delay = 0;
+        //long ms = System.currentTimeMillis(), delay = 0;
         long tnow = System.currentTimeMillis();
         long total_delay = 0;
         boolean debug_flag = false;
@@ -547,13 +547,13 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         String vsd_uri, String matchText, boolean excludeDesignation, String matchAlgorithm, int maxToReturn) {
 		if (matchText == null) return null;
 
-        String matchText0 = matchText;
+        //String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
 
         _logger.debug("searchByProperties ..." + matchText);
 
-        long ms = System.currentTimeMillis(), delay = 0;
+        //long ms = System.currentTimeMillis(), delay = 0;
         long tnow = System.currentTimeMillis();
         long total_delay = 0;
         boolean debug_flag = false;
@@ -668,21 +668,13 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 	}
 
 
-
-
-
-
-
 	public static void main(String[] args) {
-
 		try {
-
            System.out.println("Calling getEntireAbsoluteCodingSchemeVersionReferenceList ...");
-
            AbsoluteCodingSchemeVersionReferenceList list1 = getEntireAbsoluteCodingSchemeVersionReferenceList();
-
-
-
+           if (list1 != null) {
+			   System.out.println("Count: " + list1.getAbsoluteCodingSchemeVersionReferenceCount());
+		   }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
