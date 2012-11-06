@@ -146,6 +146,7 @@ public class SortComparator implements Comparator<Object> {
     }
 */
 
+/*
     private String replaceCharacter(String s, char from, char to) {
 		if (s == null) return null;
 		int ascii_from = (int) from;
@@ -163,6 +164,25 @@ public class SortComparator implements Comparator<Object> {
 		}
 	    return t;
 	}
+*/
+    private String replaceCharacter(String s, char from, char to) {
+		if (s == null) return null;
+		int ascii_from = (int) from;
+		int ascii_to   = (int) to;
+		StringBuffer t = new StringBuffer();
+		for (int i=0; i<s.length(); i++) {
+			char c = s.charAt(i);
+			int ascii_c = (int) c;
+
+			if (ascii_c == ascii_from) {
+				t.append(to);
+			} else {
+				t.append(c);
+			}
+		}
+	    return t.toString();
+	}
+
 
     public int compare(Object object1, Object object2) {
         // case insensitive sort

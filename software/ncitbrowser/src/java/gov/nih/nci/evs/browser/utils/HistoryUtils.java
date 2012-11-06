@@ -63,8 +63,7 @@ import org.apache.log4j.*;
 
 public class HistoryUtils {
     private static Logger _logger = Logger.getLogger(HistoryUtils.class);
-    private static DateFormat _dataFormatter =
-        new SimpleDateFormat("yyyy-MM-dd");
+    private static DateFormat _dataFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public static Vector<String> getTableHeader() {
         Vector<String> v = new Vector<String>();
@@ -144,6 +143,9 @@ public class HistoryUtils {
 
         Vector<String> v = new Vector<String>();
         HashSet<String> hset = new HashSet<String>();
+
+        DateFormat dataFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
         while (enumeration.hasMoreElements()) {
             NCIChangeEvent event = (NCIChangeEvent) enumeration.nextElement();
 
@@ -169,7 +171,9 @@ public class HistoryUtils {
                 }
             }
 
-            String info = type + "|" + _dataFormatter.format(date) + "|" + desc;
+            //String info = type + "|" + _dataFormatter.format(date) + "|" + desc;
+            String info = type + "|" + dataFormatter.format(date) + "|" + desc;
+
             if (hset.contains(info))
                 continue;
             v.add(info);
