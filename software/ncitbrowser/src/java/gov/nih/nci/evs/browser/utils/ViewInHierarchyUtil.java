@@ -359,7 +359,7 @@ public class ViewInHierarchyUtil {
 		   }
 		}
 	}
-
+/*
 	private String buildPrefix(String depth_str) {
 		int depth = Integer.parseInt(depth_str);
 		String prefix = "";
@@ -368,7 +368,19 @@ public class ViewInHierarchyUtil {
 		}
 		return prefix;
 	}
+*/
 
+	private String buildPrefix(String depth_str) {
+		int depth = Integer.parseInt(depth_str);
+		StringBuffer prefix = new StringBuffer();
+		for (int i = 0; i < depth; i++) {
+			prefix.append(INDENT);
+		}
+		return prefix.toString();
+	}
+
+
+/*
 	public String toHTML(String basePath, List tree_data) {
         String t = "";
 		for (int i=0; i<tree_data.size(); i++) {
@@ -383,7 +395,22 @@ public class ViewInHierarchyUtil {
 		}
         return t;
 	}
+*/
 
+	public String toHTML(String basePath, List tree_data) {
+        StringBuffer t = new StringBuffer();
+		for (int i=0; i<tree_data.size(); i++) {
+			String line = (String) tree_data.get(i);
+			List a = toHTML(basePath, line);
+			t.append("<tr><td>");
+			for (int k=0; k<a.size(); k++) {
+				String s = (String) a.get(k);
+				t.append(s);
+			}
+			t.append("</tr></td>");
+		}
+        return t.toString();
+	}
 
 
 	public List toHTML(String basePath, String line) {
