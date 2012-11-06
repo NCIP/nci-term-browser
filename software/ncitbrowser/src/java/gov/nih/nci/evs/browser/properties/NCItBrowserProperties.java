@@ -141,7 +141,7 @@ public class NCItBrowserProperties {
      * @throws Exception the exception
      */
     public static NCItBrowserProperties getInstance() throws Exception {
-        if (_browserProperties == null) {
+        //if (_browserProperties == null) {
             synchronized (NCItBrowserProperties.class) {
 
                 if (_browserProperties == null) {
@@ -230,7 +230,7 @@ public class NCItBrowserProperties {
                         STANDARD_FTP_REPORT_INFO, STANDARD_FTP_REPORT_INFO_MAX);
                 }
             }
-        }
+        //}
 
         return _browserProperties;
     }

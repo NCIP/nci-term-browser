@@ -334,13 +334,21 @@ public class ViewInHierarchyUtil {
 		return tree_data;
     }
 
-
+/*
 	private String buildPrefix(int depth) {
 		String prefix = "";
 		for (int i = 0; i < depth; i++) {
 			prefix = prefix + " -> ";
 		}
 		return prefix;
+	}
+*/
+	private String buildPrefix(int depth) {
+		StringBuffer prefix = new StringBuffer();
+		for (int i = 0; i < depth; i++) {
+			prefix.append(" -> ");
+		}
+		return prefix.toString();
 	}
 
 

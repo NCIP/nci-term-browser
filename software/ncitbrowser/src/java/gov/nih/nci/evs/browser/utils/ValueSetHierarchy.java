@@ -517,6 +517,7 @@ public class ValueSetHierarchy {
 		String description = "";
 		String domain = "";
 		String src_str = "";
+		StringBuffer buf = new StringBuffer();
 
 		uri = vsd.getValueSetDefinitionURI();
 		name = vsd.getValueSetDefinitionName();
@@ -533,8 +534,11 @@ public class ValueSetHierarchy {
 
 		while (sourceEnum.hasMoreElements()) {
 			Source src = (Source) sourceEnum.nextElement();
-			src_str = src_str + src.getContent() + ";";
+			//src_str = src_str + src.getContent() + ";";
+			buf.append(src.getContent() + ";");
 		}
+		src_str = buf.toString();
+
 		if (src_str.length() > 0) {
 			src_str = src_str.substring(0, src_str.length()-1);
 		}
