@@ -1,6 +1,8 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.util.*;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
@@ -669,7 +671,7 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            String hier_id = hierarchyDefn.getLocalId();
+            //String hier_id = hierarchyDefn.getLocalId();
 
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -2075,7 +2077,7 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            String hier_id = hierarchyDefn.getLocalId();
+            //String hier_id = hierarchyDefn.getLocalId();
 
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -2113,7 +2115,7 @@ public class TreeUtils {
                 return null;
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            String hier_id = hierarchyDefn.getLocalId();
+            //String hier_id = hierarchyDefn.getLocalId();
 
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
@@ -2214,10 +2216,14 @@ public class TreeUtils {
 
 
     public static void relabelTreeNodes(HashMap hmap) {
-		Iterator it = hmap.keySet().iterator();
+		//Iterator it = hmap.keySet().iterator();
+		Iterator it = hmap.entrySet().iterator();
 		while (it.hasNext()) {
-			String key = (String) it.next();
-			TreeItem ti = (TreeItem) hmap.get(key);
+            Entry thisEntry = (Entry) it.next();
+			String key = (String) thisEntry.getKey();
+			//TreeItem ti = (TreeItem) hmap.get(key);
+			TreeItem ti = (TreeItem) thisEntry.getValue();
+
 			for (String association : ti._assocToChildMap.keySet()) {
 				List<TreeItem> children = ti._assocToChildMap.get(association);
 				for (TreeItem childItem : children) {
@@ -2250,10 +2256,18 @@ public class TreeUtils {
 		TreeItem root = null;
 		Iterator it = null;
 		if (hmap1 != null) {
+/*
 			it = hmap1.keySet().iterator();
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				root = (TreeItem) hmap1.get(key);
+*/
+
+			it = hmap1.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry thisEntry = (Entry) it.next();
+				String key = (String) thisEntry.getKey();
+				root = (TreeItem) thisEntry.getValue();
 				if (root != null) {
 					for (String association : root._assocToChildMap.keySet()) {
 						List<TreeItem> children = root._assocToChildMap.get(association);
@@ -2267,10 +2281,18 @@ public class TreeUtils {
 	    }
 
 	    if (hmap2 != null) {
+			/*
 			it = hmap2.keySet().iterator();
 			while (it.hasNext()) {
 				String key = (String) it.next();
 				root = (TreeItem) hmap2.get(key);
+			*/
+			it = hmap2.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry thisEntry = (Entry) it.next();
+				String key = (String) thisEntry.getKey();
+				root = (TreeItem) thisEntry.getValue();
+
 				if (root != null) {
 					for (String association : root._assocToChildMap.keySet()) {
 						List<TreeItem> children = root._assocToChildMap.get(association);

@@ -2468,7 +2468,8 @@ if (view == Constants.STANDARD_VIEW) {
 		}
 
 
-        if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
+        //if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
+        if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
 			msg = "No value set definition is selected.";
 			System.out.println(msg);
 			request.getSession().setAttribute("message", msg);
@@ -2535,8 +2536,7 @@ if (view == Constants.STANDARD_VIEW) {
 			return "message";
 		}
 
-		Vector selected_vocabularies = new Vector();
-		selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+		Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
 
 		System.out.println("selected_vocabularies count: " + selected_vocabularies.size());
 

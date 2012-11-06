@@ -417,7 +417,7 @@ System.out.println("\tcontainer name: " +  containerName);
         NameAndValueList qualifierList = null;
         String language = null;
         // to be modified
-        SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES
+        //SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES
 ;
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		MappingExtension mappingExtension = null;
@@ -559,10 +559,10 @@ System.out.println("\tcontainer name: " +  containerName);
 		String language = null;
 
 
-        CodedNodeSet.PropertyType[] propertyTypes = null;
+        //CodedNodeSet.PropertyType[] propertyTypes = null;
         LocalNameList propertyNames = null;
         LocalNameList sourceList = null;
-        propertyTypes = getAllNonPresentationPropertyTypes();
+        //propertyTypes = getAllNonPresentationPropertyTypes();
 
         LocalNameList contextList = null;
         NameAndValueList qualifierList = null;

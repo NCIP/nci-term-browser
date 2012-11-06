@@ -333,20 +333,27 @@ public class ValueSetBean {
 
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
 		System.out.println("checked_vocabularies: " + checked_vocabularies);
-        if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
+        //if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
+        if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
             checked_vocabularies = (String) request.getSession().getAttribute("checked_vocabularies");
             System.out.println("checked_vocabularies(session): " + checked_vocabularies);
         }
 
-		if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
+		//if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
+		if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
 			return "message";
 		}
 
-		Vector selected_vocabularies = new Vector();
-		selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+		//Vector selected_vocabularies = new Vector();
+		//selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+		Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
 
+		int selected_vocabularies_size = 0;
+		if (selected_vocabularies != null) {
+			selected_vocabularies_size = selected_vocabularies.size();
+		}
 
         String VSD_view = (String) request.getParameter("view");
         request.getSession().setAttribute("view", VSD_view);
@@ -362,7 +369,7 @@ public class ValueSetBean {
 
         String selectCodingScheme = getSelectedOntology(); //(String) request.getParameter("selectedOntology");
         //System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
-        String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
+        //String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
 
 		//System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
 
@@ -386,13 +393,13 @@ public class ValueSetBean {
         Vector v = new Vector();
         LexEVSValueSetDefinitionServices vsd_service = null;
         vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-		if (selectValueSetSearchOption.compareTo("Code") == 0) {
+		if (selectValueSetSearchOption.compareTo("Code") == 0 && selected_vocabularies != null) {
             String uri = null;
 
 			try {
 				String versionTag = null;//"PRODUCTION";
 
-					for (int k=0; k<selected_vocabularies.size(); k++) {
+					for (int k=0; k<selected_vocabularies_size; k++) {
 						String vsd_name = (String) selected_vocabularies.elementAt(k);
 						String vsd_uri = DataUtils.getValueSetDefinitionURIByName(vsd_name);
 						if (vsd_uri != null) {
@@ -508,8 +515,8 @@ public class ValueSetBean {
 					uri = (String) uri_vec.elementAt(i);
 
 					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
-					if (checked_vocabularies == null || selected_vocabularies.contains(vsd_name)) {
-
+					//if (checked_vocabularies == null || selected_vocabularies.contains(vsd_name)) {
+					if (selected_vocabularies.contains(vsd_name)) {
 						AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
 						/*
 						Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");

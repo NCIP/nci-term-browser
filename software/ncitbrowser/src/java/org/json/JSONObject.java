@@ -1166,6 +1166,7 @@ public class JSONObject implements Serializable {
                     return (String) o;
                 }
                 */
+                return (String) o;
             }
         } catch (Exception e) {
             /* forget about it */

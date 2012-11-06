@@ -314,8 +314,8 @@ public class HistoryUtils {
                                 .createConceptReference(code, null));
                         Enumeration<? extends NCIChangeEvent> enumeration =
                             list.enumerateEntry();
-                        Vector<String> v = new Vector<String>();
-                        HashSet<String> hset = new HashSet<String>();
+                        //Vector<String> v = new Vector<String>();
+                        //HashSet<String> hset = new HashSet<String>();
                         while (enumeration.hasMoreElements()) {
                             NCIChangeEvent event2 = (NCIChangeEvent) enumeration.nextElement();
                             String con_code = event2.getConceptcode();

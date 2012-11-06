@@ -273,6 +273,7 @@ public class SearchUtils {
             lbscm.setLexBIGService(lbSvc);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
+            /*
             String desc = null;
             try {
                 desc =
@@ -284,6 +285,7 @@ public class SearchUtils {
             } catch (Exception e) {
                 desc = "<not found>";
             }
+            */
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -325,6 +327,7 @@ public class SearchUtils {
             lbscm.setLexBIGService(lbSvc);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
+            /*
             String desc = null;
             try {
                 desc =
@@ -336,6 +339,7 @@ public class SearchUtils {
             } catch (Exception e) {
                 desc = "<not found>";
             }
+            */
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -462,7 +466,7 @@ public class SearchUtils {
 
         Vector<String> v = new Vector();
         try {
-            RemoteServerUtil rsu = new RemoteServerUtil();
+            //RemoteServerUtil rsu = new RemoteServerUtil();
             // EVSApplicationService lbSvc = rsu.createLexBIGService();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
@@ -782,8 +786,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
             (String) hierarchicalAssoName_vec.elementAt(0);
         Vector superconcept_vec =
             getAssociationSources(scheme, version, code, hierarchicalAssoName);
-        if (superconcept_vec == null)
-            return null;
+        //if (superconcept_vec == null)
+        //    return null;
         return superconcept_vec;
 
     }
@@ -1750,8 +1754,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         // Score all items ...
 
         int knt = 0, nloops = 0;
-        long msTotal = System.currentTimeMillis(), msTotal_toSortNext = 0, msTotal_sorted =
-            0;
+        //long msTotal = System.currentTimeMillis(),
+        long msTotal_toSortNext = 0, msTotal_sorted = 0;
         while (toSort.hasNext()) {
             ++nloops;
             // Working in chunks of 100.
@@ -2682,7 +2686,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 				decorator.setAssociationQualifierNameAndValueList(associationQualifierNameAndValueList);
 			}
 			decorator.setMaxToReturn(maxToReturn);
-
+/*
 
 			try {
 				int numberRemaining = decorator.numberRemaining();
@@ -2690,7 +2694,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-
+*/
 			return decorator;
 		} catch (Exception ex) {
 			return null;
@@ -2707,7 +2711,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 		Vector codingSchemeNames = new Vector();
         String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
 
         boolean containsMapping = false;
         _logger.debug("searchByAssociations..." + matchText);
@@ -2892,13 +2896,14 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 						ResolvedConceptReferencesIterator quickUnionIterator =
 							new QuickUnionIterator(cns_vec, sortCriteria, null,
 								restrictToProperties, null, resolveConcepts);
-
+                        /*
 						try {
 							int quickIteratorNumberRemaining = quickUnionIterator.numberRemaining();
 
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
+						*/
 
 
 /*
@@ -3215,10 +3220,11 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         _logger.debug("searchByProperties source: " + source);
         _logger.debug("searchByProperties excludeDesignation: "
             + excludeDesignation);
-
+/*
         if (source != null)
             sourceList =
                 ConvenienceMethods.createLocalNameList(new String[] { source });
+ */
         NameAndValueList qualifierList = null;
 
         String matchText0 = matchText;
@@ -3663,7 +3669,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 
         Vector<String> v = null;
 
-        if (code != null && code.compareTo("") != 0) {
+        //if (code != null && code.compareTo("") != 0) {
+		if (code.compareTo("") != 0) {
             qualifierList = new NameAndValueList();
             NameAndValue nv = new NameAndValue();
             nv.setName("source-code");
@@ -3798,9 +3805,9 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                     association_qualifier_values);
         }
 
-        String matchText0 = matchText;
+        //String matchText0 = matchText;
         String matchAlgorithm0 = matchAlgorithm;
-        matchText0 = matchText0.trim();
+        //matchText0 = matchText0.trim();
         String message = null;
 
         long ms = System.currentTimeMillis();
