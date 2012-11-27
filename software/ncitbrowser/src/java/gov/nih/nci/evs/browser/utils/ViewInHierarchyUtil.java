@@ -111,8 +111,6 @@ public class ViewInHierarchyUtil {
 		tree_data = new ArrayList();
 
 		tree_data = getTree(codingScheme, version, code, 1);
-
-		System.out.println("(********* getTree returns " + tree_data.size());
 		return toHTML(basePath, tree_data);
 	}
 
@@ -278,7 +276,6 @@ public class ViewInHierarchyUtil {
 					hset.add(child_code);
                     printLexEvsTreeNode(out, code, child, null);
 				} else {
-					//System.out.println("DUPLICATES?????? " + child_code);
 					break;
 				}
 		    }
@@ -324,8 +321,6 @@ public class ViewInHierarchyUtil {
 					hset.add(child_code);
                     printLexEvsTreeNode(child, 0);
 				} else {
-
-					System.out.println("DUPLICATES?????? " + child_code);
 					break;
 				}
 		    }
@@ -494,10 +489,8 @@ public class ViewInHierarchyUtil {
 
 
     public String get_tree(String basePath, String codingScheme, String version, String code, int format) {
-            System.out.println("\n============================= util.getTree(codingScheme, version, code, 1) ");
 			List tree_data = getTree(codingScheme, version, code, 1);
 			String html_line = toHTML(basePath, tree_data);
-			System.out.println(html_line);
 			return html_line;
     }
 
@@ -510,14 +503,12 @@ public class ViewInHierarchyUtil {
         String code = "C37927";
         String basePath = "/ncitbrowser";
 
-        System.out.println("\n============================= util.getTree(codingScheme, version, code) ");
 		List tree = new ViewInHierarchyUtil().getTree(codingScheme, version, code);
 		for (int i=0; i<tree.size(); i++) {
 			int j = i+1;
 			System.out.println("(" + j + ")" + (String) tree.get(i));
 		}
 
-        System.out.println("\n============================= util.getTree(codingScheme, version, code, 1) ");
         ViewInHierarchyUtil util = new ViewInHierarchyUtil();
 		List tree_data = util.getTree(codingScheme, version, code, 1);
 		for (int i=0; i<tree_data.size(); i++) {

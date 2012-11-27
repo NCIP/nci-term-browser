@@ -66,7 +66,7 @@ public class NCItBrowserProperties {
     private static HashMap _configurableItemMap;
 
     // KLO
-    public static String DEBUG_ON = "DEBUG_ON";
+    public static final String DEBUG_ON = "DEBUG_ON";
     public static final String EVS_SERVICE_URL = "EVS_SERVICE_URL";
     public static final String LG_CONFIG_FILE = "LG_CONFIG_FILE";
     public static final String PING_LEXEVS_ENABLED = "PING_LEXEVS_ENABLED";

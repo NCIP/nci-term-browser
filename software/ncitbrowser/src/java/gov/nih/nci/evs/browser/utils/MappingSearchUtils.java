@@ -120,7 +120,6 @@ public class MappingSearchUtils {
 			while (relations.hasMoreElements()) {
 				Relations relation = (Relations) relations.nextElement();
 				Boolean isMapping = relation.getIsMapping();
-				System.out.println("isMapping: " + isMapping);
 				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
  					relationsContainerName = relation.getContainerName();
 					break;
@@ -130,8 +129,6 @@ public class MappingSearchUtils {
 			if (relationsContainerName == null) {
 				System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
-			} else {
-				System.out.println("relationsContainerName " + relationsContainerName);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -192,22 +189,18 @@ public class MappingSearchUtils {
     public ResolvedConceptReferencesIteratorWrapper searchByCode(
         Vector schemes, Vector versions, String matchText,
         String matchAlgorithm, SearchContext searchContext, int maxToReturn) {
-
-System.out.println("==============================  MappingSearchUtils searchByCode");
-
-
 		if (matchText == null || matchText.trim().length() == 0)
 			return null;
 
 		matchText = matchText.trim();
 		_logger.debug("searchByCode ... " + matchText);
 
+/*
 		if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
 		{
 		   matchAlgorithm = new SearchUtils().findBestContainsAlgorithm(matchText);
 		}
-		System.out.println("matchAlgorithm: " + matchAlgorithm);
-
+*/
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		MappingExtension mappingExtension = null;
 		try {
@@ -225,12 +218,7 @@ System.out.println("==============================  MappingSearchUtils searchByC
         while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
             scheme = (String) schemes.elementAt(lcv);
             version = (String) versions.elementAt(lcv);
-
-System.out.println(scheme + " (version: " +  version + ")");
-
 			String containerName = getMappingRelationsContainerName(scheme, version);
-System.out.println("\tcontainer name: " +  containerName);
-
 			if (containerName != null) {
 				try {
 
@@ -247,20 +235,13 @@ System.out.println("\tcontainer name: " +  containerName);
 
 						ConceptReferenceList codeList = new ConceptReferenceList();
 						ConceptReference ref = new ConceptReference();
-
-						System.out.println("ref.setConceptCode: " + matchText);
 						ref.setConceptCode(matchText);
  						codeList.addConceptReference(ref);
-
-                        System.out.println("mapping.restrictToCodes: " + matchText);
-
                         mapping = mapping.restrictToCodes(codeList, searchContext);
 						itr = mapping.resolveMapping();
 						if (itr != null) {
 							try {
 								numberRemaining = itr.numberRemaining();
-								System.out.println("\tsearchByCode matches: " + numberRemaining);
-
 							} catch (Exception ex) {
 								ex.printStackTrace();
 							}
@@ -356,7 +337,6 @@ System.out.println("\tcontainer name: " +  containerName);
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					//return null;
 				}
 		    }
 		    lcv++;
@@ -433,7 +413,6 @@ System.out.println("\tcontainer name: " +  containerName);
         String scheme = null;
         String version = null;
 
-        //System.out.println("schemes.size(): " + schemes.size() + " lcv: " + lcv);
         int numberRemaining = -1;
         while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
 
@@ -581,7 +560,6 @@ System.out.println("\tcontainer name: " +  containerName);
         String scheme = null;
         String version = null;
 
-        System.out.println("schemes.size(): " + schemes.size() + " lcv: " + lcv);
         int numberRemaining = -1;
         while (itr == null && numberRemaining == -1 && lcv < schemes.size()) {
 
@@ -653,14 +631,13 @@ System.out.println("\tcontainer name: " +  containerName);
     public static ResolvedConceptReferencesIterator getRestrictedMappingDataIterator(String scheme, String version,
         List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator, SearchContext context) {
 
-//System.out.println("(***********) getRestrictedMappingDataIterator ...");
 if (searchResultsIterator == null) return null;
 
 		try {
 			int numRemaining = searchResultsIterator.numberRemaining();
-			System.out.println("(***********) searchResultsIterator passing number of matches: " + numRemaining);
+			System.out.println("searchResultsIterator passing number of matches: " + numRemaining);
 		} catch (Exception e) {
-			System.out.println("searchResultsIterator.numberRemaining() throws exception???");
+			e.printStackTrace();
 			return null;
 		}
 
@@ -681,7 +658,6 @@ if (searchResultsIterator == null) return null;
 			while (relations.hasMoreElements()) {
 				Relations relation = (Relations) relations.nextElement();
 				Boolean isMapping = relation.getIsMapping();
-				System.out.println("isMapping: " + isMapping);
 				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
  					relationsContainerName = relation.getContainerName();
 					break;
@@ -691,8 +667,6 @@ if (searchResultsIterator == null) return null;
 			if (relationsContainerName == null) {
 				System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
-			} else {
-				System.out.println("relationsContainerName " + relationsContainerName);
 			}
 
 			MappingExtension mappingExtension = (MappingExtension)
@@ -703,8 +677,6 @@ if (searchResultsIterator == null) return null;
 
             //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
             ConceptReferenceList codeList = new ConceptReferenceList();
-
-//System.out.println("getRestrictedMappingDataIterator Step 5 while loop -- retrieving refs");
 
 /*
 			if (searchResultsIterator != null) {
@@ -737,9 +709,7 @@ if (searchResultsIterator == null) return null;
 			return itr;
 
 		} catch (Exception ex) {
-			//ex.printStackTrace();
-			System.out.println("getRestrictedMappingDataIterator throws exceptions???");
-
+			ex.printStackTrace();
 		}
 		return null;
 	}
@@ -766,13 +736,9 @@ if (searchResultsIterator == null) return null;
 			}
 
 		} catch (Exception ex) {
-			//ex.printStackTrace();
-			System.out.println("iterator.numberRemaining() throws exceptions???");
+			ex.printStackTrace();
 			return null;
 		}
-
-		System.out.println("(*) getMappingRelationship numberRemaining " + numberRemaining);
-
 
 /*
 		MappingIteratorBean mappingIteratorBean = new MappingIteratorBean(
@@ -855,9 +821,6 @@ if (searchResultsIterator == null) return null;
 		SearchContext searchContext = SearchContext.SOURCE_OR_TARGET_CODES;
 		if (direction == 1) searchContext = SearchContext.SOURCE_CODES;
         else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
-
-System.out.println("direction: " + direction);
-
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         LexBIGServiceConvenienceMethods lbscm =
             new DataUtils().createLexBIGServiceConvenienceMethods(lbSvc);
@@ -928,8 +891,6 @@ System.out.println("direction: " + direction);
 */
 String relaValue = associationName;
 
-System.out.println("relaValue: " + relaValue);
-
 									String s =
 										relaValue + "|" + pt + "|"
 											 + ac.getConceptCode() + "|"
@@ -951,6 +912,9 @@ System.out.println("relaValue: " + relaValue);
 
 									}
 
+									StringBuffer buf = new StringBuffer();
+									buf.append(s);
+
 									if (ac.getAssociationQualifiers() != null) {
 										String qualifiers = "";
 										for (NameAndValue qual : ac
@@ -960,19 +924,19 @@ System.out.println("relaValue: " + relaValue);
 											String qualifier_value = qual.getContent();
 											qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
 										}
-										s = s + "|" + qualifiers;
+										//s = s + "|" + qualifiers;
+										buf.append("|" + qualifiers);
 									}
 
 
                                     if (direction == -1) {
-									    s = s + "|" + ref.getCodeNamespace();
+									    //s = s + "|" + ref.getCodeNamespace();
+									    buf.append("|" + ref.getCodeNamespace());
 									} else {
-										s = s + "|" + ac.getCodeNamespace();
+										//s = s + "|" + ac.getCodeNamespace();
+										buf.append("|" + ac.getCodeNamespace());
 									}
-
-
-System.out.println(s);
-
+									s = buf.toString();
 									list.add(s);
 
 								}

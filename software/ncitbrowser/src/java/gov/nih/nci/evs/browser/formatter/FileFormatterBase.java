@@ -55,8 +55,6 @@ import org.apache.log4j.*;
 public abstract class FileFormatterBase {
 
 
-
-
     protected static final Logger _logger = Logger.getLogger(FileFormatterBase.class);
 
     public abstract Boolean convert(String textfile, String delimiter)

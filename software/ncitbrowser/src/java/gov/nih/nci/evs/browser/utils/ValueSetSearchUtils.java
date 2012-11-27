@@ -120,13 +120,11 @@ public class ValueSetSearchUtils
 				rvsd = vds.resolveValueSetDefinition(vsd, csvList, null, null);
 
 			} catch (Exception ex) {
-				System.out.println("??? vds.resolveValueSetDefinition throws exception");
+				ex.printStackTrace();
 				return;
 			}
 
 			ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-			System.out.println("Definition Resolve Time: " + (System.currentTimeMillis() - time));
-
             if (itr == null) {
 				System.out.println("vds.resolveValueSetDefinition returns null???");
 				return;
@@ -135,12 +133,6 @@ public class ValueSetSearchUtils
 			int count = 0;
 
 			time = System.currentTimeMillis();
-			/*
-			while(itr.hasNext()){
-				count += itr.next(1000).getResolvedConceptReferenceCount();
-			}
-			*/
-
 		    while(itr.hasNext()){
 				ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
 				for(ResolvedConceptReference ref : refs){
@@ -178,7 +170,7 @@ public class ValueSetSearchUtils
                 System.out.println(sb.toString());
 
 			} catch (Exception ex) {
-				System.out.println("??? vds.resolveValueSetDefinition throws exception");
+				ex.printStackTrace();
 				return;
 			}
 
@@ -215,18 +207,11 @@ public class ValueSetSearchUtils
             }
 
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
-
-            System.out.println("csrs.length: " + csrs.length);
-
-
             for (int i = 0; i < csrs.length; i++) {
                 int j = i + 1;
                 CodingSchemeRendering csr = csrs[i];
                 CodingSchemeSummary css = csr.getCodingSchemeSummary();
                 String formalname = css.getFormalName();
-
-                System.out.println(formalname);
-
                 Boolean isActive = null;
                 /*
                 if (csr == null) {
@@ -272,7 +257,6 @@ public class ValueSetSearchUtils
                         acsvr.setCodingSchemeURN(cs.getCodingSchemeURI());
                         acsvr.setCodingSchemeVersion(representsVersion);
 
-                        System.out.println(cs.getCodingSchemeURI() + " " + representsVersion);
                         list.addAbsoluteCodingSchemeVersionReference(acsvr);
 
                     } catch (Exception ex) {
@@ -343,9 +327,6 @@ public class ValueSetSearchUtils
         //matchText0 = matchText0.trim();
 
         _logger.debug("searchByCode ..." + matchText);
-
-System.out.println("============================ searchByCode ====================================");
-
         //long ms = System.currentTimeMillis(), delay = 0;
         long tnow = System.currentTimeMillis();
         long total_delay = 0;
@@ -358,10 +339,6 @@ System.out.println("============================ searchByCode ==================
         }
 
         matchText = matchText.trim();
-
-System.out.println("matchText: " + matchText);
-System.out.println("vsd_uri: " + vsd_uri);
-
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
         try {
@@ -415,17 +392,11 @@ System.out.println("cs_ref_vec = null??? ");
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
-
-System.out.println("ERROR: searchByCode throws exceptions.");
-
 			return null;
 		}
 
         total_delay = System.currentTimeMillis() - tnow;
         _logger.debug("Total search delay: (millisec.): " + total_delay);
-
-System.out.println("Total search delay: (millisec.): " + total_delay);
-
         return new ResolvedConceptReferencesIteratorWrapper(iterator);
 
     }
@@ -459,7 +430,6 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         {
             matchAlgorithm = findBestContainsAlgorithm(matchText);
         }
-        System.out.println("findBestContainsAlgorithm matchAlgorithm: " + matchAlgorithm);
 
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
@@ -494,17 +464,13 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             CodedNodeSet.SearchDesignationOption option = null;
             String language = null;
-
-System.out.println("Step 1 restrictToAnonymous");
             cns = cns.restrictToAnonymous(CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY);
-System.out.println("Step 2 restrictToMatchingDesignations");
             cns = cns.restrictToMatchingDesignations(matchText, option, matchAlgorithm, language);
             SortOptionList sortOptions = null;
             LocalNameList filterOptions = null;
             LocalNameList propertyNames = null;
             CodedNodeSet.PropertyType[] propertyTypes = null;
             boolean resolveObjects = false;
-System.out.println("Step 3 resolve");
             iterator = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
 
 		} catch (Exception ex) {
@@ -514,10 +480,6 @@ System.out.println("Step 3 resolve");
 
         total_delay = System.currentTimeMillis() - tnow;
         _logger.debug("Total search delay: (millisec.): " + total_delay);
-
-
-System.out.println("Total search delay: (millisec.): " + total_delay);
-
         return new ResolvedConceptReferencesIteratorWrapper(iterator);
 
     }
@@ -568,8 +530,6 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
         {
             matchAlgorithm = findBestContainsAlgorithm(matchText);
         }
-        System.out.println("findBestContainsAlgorithm matchAlgorithm: " + matchAlgorithm);
-
         CodedNodeSet cns = null;
         ResolvedConceptReferencesIterator iterator = null;
         try {
@@ -602,12 +562,7 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
             CodedNodeSet.SearchDesignationOption option = null;
             String language = null;
-
-System.out.println("Step 1 restrictToAnonymous");
             cns = cns.restrictToAnonymous(CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY);
-System.out.println("Step 2 restrictToMatchingDesignations");
-
-
 			LocalNameList propertyNames = new LocalNameList();
 			CodedNodeSet.PropertyType[] propertyTypes = null;
 			if (!excludeDesignation) {
@@ -625,7 +580,6 @@ System.out.println("Step 2 restrictToMatchingDesignations");
             LocalNameList filterOptions = null;
             propertyNames = null;
             boolean resolveObjects = false;
-System.out.println("Step 3 resolve");
             iterator = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
 
 		} catch (Exception ex) {
@@ -635,9 +589,6 @@ System.out.println("Step 3 resolve");
 
         total_delay = System.currentTimeMillis() - tnow;
         _logger.debug("Total search delay: (millisec.): " + total_delay);
-
-System.out.println("Total search delay: (millisec.): " + total_delay);
-
         return new ResolvedConceptReferencesIteratorWrapper(iterator);
 
     }
@@ -670,7 +621,6 @@ System.out.println("Total search delay: (millisec.): " + total_delay);
 
 	public static void main(String[] args) {
 		try {
-           System.out.println("Calling getEntireAbsoluteCodingSchemeVersionReferenceList ...");
            AbsoluteCodingSchemeVersionReferenceList list1 = getEntireAbsoluteCodingSchemeVersionReferenceList();
            if (list1 != null) {
 			   System.out.println("Count: " + list1.getAbsoluteCodingSchemeVersionReferenceCount());

@@ -60,25 +60,25 @@ public class ServerMonitorThread extends Thread {
     private static Logger _logger = null; //Logger.getLogger(ServerMonitorThread.class);
     private static String _className = ServerMonitorThread.class.getSimpleName();
     private static ServerMonitorThread _instance = null;
-	private long _interval = 1000 * 
+	private long _interval = 1000 *
 	    NCItBrowserProperties.getIntProperty(
 	        NCItBrowserProperties.PING_LEXEVS_INTERVAL, 600);
 	private String _message = "";
-	private static boolean _enabled = 
+	private static boolean _enabled =
 	    NCItBrowserProperties.getBooleanProperty(
 	        NCItBrowserProperties.PING_LEXEVS_ENABLED, true);
     private Boolean _isThreadRunning = false;
     private boolean _isLexEVSRunning = true;
     private boolean _debug = false;  //DYEE_DEBUG (Default: false)
-	
+
 	static {
 	    if (_enabled) //DYEE_DEBUG (Default: _enabled)
 	        ServerMonitorThread.getInstance().start();
 	}
-	
+
 	private ServerMonitorThread() {
 	}
-	
+
 	private static void debug(String text) {
 	    if (_logger == null) {
 	        System.out.println(_className + ": " + text);
@@ -86,13 +86,13 @@ public class ServerMonitorThread extends Thread {
 	        _logger.debug(text);
 	    }
 	}
-	
+
 	public static ServerMonitorThread getInstance() {
 	    if (_instance == null)
 	        _instance = new ServerMonitorThread();
 	    return _instance;
 	}
-	
+
 	public void run() {
 	    synchronized(_isThreadRunning) {
 	        //Note: Ensures only one instance of this method is running.
@@ -100,7 +100,7 @@ public class ServerMonitorThread extends Thread {
     	        return;
     	    _isThreadRunning = true;
 	    }
-	    
+
 		while (true) {
 			try {
 			    LexBIGService service = RemoteServerUtil.createLexBIGService();
@@ -111,13 +111,13 @@ public class ServerMonitorThread extends Thread {
 			}
 		}
 	}
-	
+
     public boolean isLexEVSRunning() {
         if (! _enabled) {
             // Note: Pretend it is running fine to avoid displaying warning message.
             return true;
         }
-        
+
         //Quick test.
         LexBIGService service = RemoteServerUtil.createLexBIGService();
         monitor(service, "ServerMonitorThread2");
@@ -138,7 +138,7 @@ public class ServerMonitorThread extends Thread {
         updateMessage(isRunning);
         debug("_isLexEVSRunning: " + _isLexEVSRunning);
 	}
-	
+
     public String getMessage() {
         return _message;
     }
@@ -147,8 +147,8 @@ public class ServerMonitorThread extends Thread {
         if (isRunning) {
             _message = "";
             return;
-        } 
-        
+        }
+
         _message = "*** The server is temporarily not available, as of "
             + new Date() + ". ***";
 	}
@@ -168,7 +168,7 @@ public class ServerMonitorThread extends Thread {
             setLexEVSRunning(false, msg);
         }
     }
-    
+
     public void monitor(LexEVSDistributed service, String msg) {
         if (! _enabled)
             return;
@@ -184,15 +184,20 @@ public class ServerMonitorThread extends Thread {
             setLexEVSRunning(false, msg);
         }
     }
-    
+
     private void error(Exception e) {
         //Note: Trying to solve Kim's problem with this method.
         //  He is getting exceptions when log4j tries to print an error message.
         String msg = "";
         if (e != null)
             msg = e.getClass().getSimpleName() + ": " + e.getMessage();
-        else msg = "Exception e == " + e;
-        
+        else {
+			//msg = "Exception e == " + e;
+
+			msg = "Exception thrown ";
+
+		}
+
         try {
             debug(msg);
         } catch (Exception e1) {

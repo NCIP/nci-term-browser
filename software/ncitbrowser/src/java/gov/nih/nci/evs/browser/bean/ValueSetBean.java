@@ -173,11 +173,8 @@ public class ValueSetBean {
         Iterator it = ValueSetHierarchy._valueSetParticipationHashSet.iterator();
         while (it.hasNext()) {
 			String cs = (String) it.next();
-			System.out.println(cs);
 			String formalName = DataUtils.getFormalName(cs);
 			String codingSchemeName = DataUtils.uri2CodingSchemeName(formalName);
-
-			System.out.println("ValueSet cs root: " + codingSchemeName);
 			v.add(codingSchemeName);
 		}
 
@@ -264,7 +261,6 @@ public class ValueSetBean {
 
 	public void setSelectedValueSetURI(String selectedValueSetURI) {
 		this.selectedValueSetURI = selectedValueSetURI;
-		System.out.println("setSelectedValueSetURI: " + selectedValueSetURI);
 	}
 
 	public List getValueSetURIList() {
@@ -332,8 +328,6 @@ public class ValueSetBean {
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
-		System.out.println("checked_vocabularies: " + checked_vocabularies);
-        //if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
         if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
             checked_vocabularies = (String) request.getSession().getAttribute("checked_vocabularies");
             System.out.println("checked_vocabularies(session): " + checked_vocabularies);
@@ -357,21 +351,8 @@ public class ValueSetBean {
 
         String VSD_view = (String) request.getParameter("view");
         request.getSession().setAttribute("view", VSD_view);
-        //System.out.println("view: " + VSD_view);
-
-/*
-        String selectURI = (String) request.getParameter("selectedValueSetURI");
-        if (selectURI == null) {
-			selectURI = getSelectedValueSetURI();
-		}
-		//System.out.println("(*) valueSetSearchAction selectURI: " + selectURI);
-*/
 
         String selectCodingScheme = getSelectedOntology(); //(String) request.getParameter("selectedOntology");
-        //System.out.println("valueSetSearchAction selectCodingScheme: " + selectCodingScheme);
-        //String selectConceptDomain = getSelectedConceptDomain(); //(String) request.getParameter("selectConceptDomain");
-
-		//System.out.println("(*) valueSetSearchAction selectValueSetSearchOption: " + selectValueSetSearchOption);
 
         String matchText = (String) request.getParameter("matchText");
         if (DataUtils.isNull(matchText)) {
@@ -496,7 +477,6 @@ public class ValueSetBean {
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				System.out.println("vsd_service.listValueSetsWithEntityCode throws exceptions???");
 			}
 
 			msg = "Unexpected errors encountered; search by code failed.";
@@ -565,7 +545,7 @@ public class ValueSetBean {
 
 
 						} catch (Exception ex) {
-							System.out.println("WARNING: getValueSetDefinitionEntitiesForTerm throws exception???");
+							ex.printStackTrace();
 							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed.";
 							request.getSession().setAttribute("message", msg);
 							return "message";
@@ -577,9 +557,6 @@ public class ValueSetBean {
 
 				if (v.size() == 0) {
 					msg = "No match found.";
-
-					System.out.println("\t(*) " + msg);
-
 					request.getSession().setAttribute("message", msg);
 					return "message";
 				} else if (v.size() == 1) {
@@ -589,8 +566,7 @@ public class ValueSetBean {
 				return "value_set";
 
 			} catch (Exception ex) {
-				//ex.printStackTrace();
-				System.out.println("vsd_service.getValueSetDefinitionEntitiesForTerm throws exceptions???");
+				ex.printStackTrace();
 			}
 
 			msg = "Unexpected errors encountered; search by name failed.";
@@ -661,7 +637,6 @@ public class ValueSetBean {
 				String value = matchText;
 				String source_uri = null;
 
-System.out.println("(*) selectValueSetSearchOption source: " + value);
 Vector schemes = new Vector();
 Vector versions = new Vector();
 schemes.add(ValueSetHierarchy.SOURCE_SCHEME);
@@ -697,7 +672,7 @@ SortUtils.quickSort(w);
 
 
 			} catch (Exception ex) {
-				System.out.println("WARNING: getValueSetDefinitionsWithSource throws exception???");
+				ex.printStackTrace();
 				msg = "getValueSetDefinitionsWithSource throws exception -- search by \"" + matchText + "\" failed.";
 				request.getSession().setAttribute("message", msg);
 				return "message";
@@ -749,24 +724,9 @@ SortUtils.quickSort(w);
 		}
         //String uri = (String) request.getParameter("valueset");
 
-        System.out.println("selectCSVersionAction: selected value set " + uri);
-		//request.getSession().setAttribute("selectedvalueset", uri);
+
 		request.getSession().setAttribute("vsd_uri", uri);
 
-
-/*
-        String selectedvalueset = (String) request.getParameter("valueset");
-
-
-        String[] valuesets = (String[]) request.getParameterValues("valueset");
-        if (valuesets != null && valuesets.length > 0) {
-            selectedvalueset = valuesets[0];
-		}
-
-        System.out.println("selectCSVersionAction: selected value set " + selectedvalueset);
-		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
-
-*/
         return "select_value_set";
 	}
 
@@ -826,10 +786,11 @@ String key = vsd_uri;
 
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
 
+        StringBuffer buf = new StringBuffer();
+
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
 
-			System.out.println("(*) coding_scheme_ref: " + t);
 			String delim = "|";
 			if (t.indexOf("|") == -1) {
 				delim = "$";
@@ -840,13 +801,15 @@ String key = vsd_uri;
 			if (version == null || version.compareTo("null") == 0) {
 				version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
 			}
-			key = key + "|" + uri + "$" + version;
+			//key = key + "|" + uri + "$" + version;
+			buf.append("|" + uri + "$" + version);
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
+		key = key + buf.toString();
 
         request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 
-        long time = System.currentTimeMillis();
+        //long time = System.currentTimeMillis();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 		ResolvedValueSetDefinition rvsd = null;
 		int lcv = 0;
@@ -881,7 +844,7 @@ String key = vsd_uri;
 				return "resolved_value_set";
 		    }
 		} catch (Exception ex) {
-			System.out.println("??? vds.resolveValueSetDefinition throws exception");
+			ex.printStackTrace();
 		}
 
 		String msg = "Unable to resolve the value set " + vsd_uri;
@@ -918,7 +881,7 @@ Vector ref_vec = new Vector();
 
 
 String key = vsd_uri;
-
+StringBuffer buf = new StringBuffer();
 
         for (int i=0; i<cs_name_vec.size(); i++) {
 			String cs_name = (String) cs_name_vec.elementAt(i);
@@ -928,9 +891,11 @@ String key = vsd_uri;
 			if (version != null) {
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
 				ref_vec.add(cs_name + "$" + version);
-				key = key + "|" + cs_name + "$" + version;
+				//key = key + "|" + cs_name + "$" + version;
+				buf.append("|" + cs_name + "$" + version);
 		    }
 		}
+		key = key + buf.toString();
 
 
         //long time = System.currentTimeMillis();
@@ -975,7 +940,7 @@ String key = vsd_uri;
 
 
 		} catch (Exception ex) {
-			System.out.println("??? vds.resolveValueSetDefinition throws exception");
+			ex.printStackTrace();
 		}
 
 		String msg = "Unable to resolve the value set " + vsd_uri;
@@ -1097,7 +1062,6 @@ String key = vsd_uri;
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
-			//System.out.println("coding_scheme_ref " + t);
 			String delim = "$";
 			if (t.indexOf("$") == -1) delim = "|";
 			Vector u = DataUtils.parseData(t, delim);
@@ -1168,16 +1132,11 @@ String key = vsd_uri;
 		if (definitions == null) return null;
 		for (int i=0; i<definitions.length; i++) {
 			Definition definition = definitions[i];
-
-			System.out.println(definition.getPropertyName());
-			System.out.println(definition.getValue().getContent());
-
 			Source[] sources = definition.getSource();
 			for (int j=0; j<sources.length; j++)
 			{
 				Source src = sources[j];
 				String src_name = src.getContent();
-				System.out.println("\tsrc_name: " + src_name);
 				if (src_name.compareTo("NCI") == 0) {
 					v.add(definition.getValue().getContent());
 				}
@@ -1186,8 +1145,6 @@ String key = vsd_uri;
 			PropertyQualifier[] qualifiers = definition.getPropertyQualifier();
 			for (int j=0; j<qualifiers.length; j++)
 			{
-				System.out.println("\tQualifier name: " + qualifiers[j].getPropertyQualifierName());
-				System.out.println("\tQualifier value: " + qualifiers[j].getValue().getContent());
 				String qualifier_value = qualifiers[j].getValue().getContent();
 				if (qualifier_value.compareTo("NCI") == 0) {
 					v.add(definition.getValue().getContent());
@@ -1229,7 +1186,6 @@ String key = vsd_uri;
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
-			//System.out.println("(*) coding_scheme_ref: " + t);
 			String delim = "$";
 			if (t.indexOf("$") == -1) delim = "|";
 			Vector u = DataUtils.parseData(t, delim);
@@ -1454,14 +1410,8 @@ String key = vsd_uri;
         }
 
 		request.getSession().setAttribute("key", key);
-
-		System.out.println("(*************) setAttribute key: " + key);
-
         if (iterator != null) {
             request.getSession().setAttribute("key", key);
-            //request.setAttribute("key", key);
-            //System.out.println("(*************) setAttribute key: " + key);
-
             int numberRemaining = 0;
             try {
                 numberRemaining = iterator.numberRemaining();
@@ -1484,11 +1434,6 @@ String key = vsd_uri;
                 List list = iteratorBean.getData(1);
                 ResolvedConceptReference ref =
                     (ResolvedConceptReference) list.get(0);
-
-System.out.println("ref.getCodingSchemeURI(): " + ref.getCodingSchemeURI());
-System.out.println("ref.getCodingSchemeVersion(): " + ref.getCodingSchemeVersion());
-System.out.println("ref.getEntityDescription().getContent(): " + ref.getEntityDescription().getContent());
-System.out.println("ref.getConceptCode(): " + ref.getConceptCode());
 
                 Entity c = null;
                 if (ref == null) {
@@ -1517,9 +1462,6 @@ System.out.println("ref.getConceptCode(): " + ref.getConceptCode());
                     c = ref.getReferencedEntry();
 
                     if (c == null) {
-
-System.out.println("ref.getConceptCode(): " + ref.getConceptCode());
-
 
                            // to be modified
                            c = DataUtils.getConceptByCode(ref.getCodingSchemeURI(), null, null,

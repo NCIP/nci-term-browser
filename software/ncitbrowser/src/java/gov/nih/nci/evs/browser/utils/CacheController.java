@@ -70,33 +70,37 @@ import org.apache.log4j.*;
 
 public class CacheController {
     private static Logger _logger = Logger.getLogger(CacheController.class);
-    public static final String ONTOLOGY_ADMINISTRATORS =
-        "ontology_administrators";
+    public static final String ONTOLOGY_ADMINISTRATORS = "ontology_administrators";
     public static final String ONTOLOGY_FILE = "ontology_file";
     public static final String ONTOLOGY_FILE_ID = "ontology_file_id";
     public static final String ONTOLOGY_DISPLAY_NAME = "ontology_display_name";
     public static final String ONTOLOGY_NODE = "ontology_node";
     public static final String ONTOLOGY_NODE_ID = "ontology_node_id";
     public static final String ONTOLOGY_NODE_SCHEME = "ontology_node_scheme";
-
-
     public static final String ONTOLOGY_SOURCE = "ontology_source";
-
     public static final String ONTOLOGY_NODE_NAME = "ontology_node_name";
-    public static final String ONTOLOGY_NODE_PARENT_ASSOC =
-        "ontology_node_parent_assoc";
-    public static final String ONTOLOGY_NODE_CHILD_COUNT =
-        "ontology_node_child_count";
-    public static final String ONTOLOGY_NODE_DEFINITION =
-        "ontology_node_definition";
+    public static final String ONTOLOGY_NODE_PARENT_ASSOC = "ontology_node_parent_assoc";
+    public static final String ONTOLOGY_NODE_CHILD_COUNT = "ontology_node_child_count";
+    public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
     public static final String CHILDREN_NODES = "children_nodes";
 
     private static CacheController _instance = null;
-    private static Cache _cache = null;
     private static CacheManager _cacheManager = null;
+    private static Cache _cache = null;
 
+
+    static {
+		String cacheName = "treeCache";
+		_cacheManager = getCacheManager();
+        if (!_cacheManager.cacheExists(cacheName)) {
+            _cacheManager.addCache(cacheName);
+			_logger.debug("cache added");
+        }
+        _cache = _cacheManager.getCache(cacheName);
+    }
+
+/*
     public CacheController(String cacheName) {
-        _cacheManager = getCacheManager();
         if (!_cacheManager.cacheExists(cacheName)) {
             _cacheManager.addCache(cacheName);
         }
@@ -113,6 +117,12 @@ public class CacheController {
         }
         return _instance;
     }
+*/
+    public static CacheController getInstance() {
+		return new CacheController();
+	}
+
+
 
     private static CacheManager getCacheManager() {
         if (_cacheManager != null)
@@ -131,6 +141,10 @@ public class CacheController {
         }
         return null;
     }
+
+
+
+
 
     public String[] getCacheNames() {
         return getCacheManager().getCacheNames();

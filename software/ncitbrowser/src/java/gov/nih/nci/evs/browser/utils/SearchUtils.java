@@ -103,7 +103,7 @@ public class SearchUtils {
     private static HashMap _codingSchemeMap = null;
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
-    private static String _url = null;
+    //private static String _url = null;
 
     public static int ALL = 0;
     public static int PREFERRED_ONLY = 1;
@@ -136,7 +136,7 @@ public class SearchUtils {
     }
 
     public SearchUtils(String url) {
-        SearchUtils._url = url;
+        //SearchUtils._url = url;
         initializeSortParameters();
     }
 
@@ -1439,9 +1439,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                     null, resolveConcepts);
             return filterIterator(iterator, scheme, version, code);
         } catch (Exception e) {
-            //e.printStackTrace();
-            System.out.println("ERROR: matchConceptCode throws exception " + scheme + " " + version + " " + code);
-
+            e.printStackTrace();
             return null;
         }
     }
@@ -1734,7 +1732,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
             String word = (String) compareWords.get(k);
             compareCodes.add(word);
         }
-        String target = "";
+        //String target = "";
+        StringBuffer buf = new StringBuffer();
         if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
             compareCodes = new ArrayList<String>();
             for (int k = 0; k < compareWords.size(); k++) {
@@ -1743,11 +1742,14 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 compareCodes.add(doubleMetaphonecode);
                 // _logger.debug("*** DoubleMetaphoneLuceneQuery word " + word +
                 // " code: " + doubleMetaphone.encode(word));
-                target = target + doubleMetaphonecode;
+                //target = target + doubleMetaphonecode;
+                buf.append(doubleMetaphonecode);
                 if (k < compareWords.size() - 1)
-                    target = target + " ";
+                    //target = target + " ";
+                    buf.append(" ");
             }
         }
+        String target = buf.toString();
         // Create a bucket to store results.
         Map<String, ScoredTerm> scoredResult =
             new TreeMap<String, ScoredTerm>();
@@ -1859,17 +1861,21 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 
         List<String> compareWords = toScoreWords(searchTerm);
         List<String> compareCodes = new ArrayList<String>(compareWords.size());
-        String target = "";
+        //String target = "";
+        StringBuffer buf = new StringBuffer();
         if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
             for (int k = 0; k < compareWords.size(); k++) {
                 String word = (String) compareWords.get(k);
                 String doubleMetaphonecode = doubleMetaphoneEncode(word);
                 compareCodes.set(k, doubleMetaphonecode);
-                target = target + doubleMetaphonecode;
+                //target = target + doubleMetaphonecode;
+                buf.append(doubleMetaphonecode);
                 if (k < compareWords.size() - 1)
-                    target = target + " ";
+                    //target = target + " ";
+                    buf.append(" ");
             }
         }
+        String target = buf.toString();
 
         // Create a bucket to store results.
         Map<String, ScoredTerm> scoredResult =
@@ -1965,7 +1971,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         float totalWords = wordsToCompare.size();
         float matchScore = 0;
         float position = 0;
-        String s = "";
+        //String s = "";
+        StringBuffer buf = new StringBuffer();
         int k = 0;
         for (Iterator<String> words = wordsToCompare.listIterator(); words
             .hasNext(); position++) {
@@ -1982,11 +1989,14 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                     matchScore += ((position / 10) + 1);
                 }
             }
-            s = s + word;
+            //s = s + word;
+            buf.append(word);
             if (k < wordsToCompare.size() - 1)
-                s = s + " ";
+                //s = s + " ";
+                buf.append(" ");
             k++;
         }
+        String s = buf.toString();
 
         if (s.indexOf(target) == -1) {
             return (float) 0.0;
@@ -4063,7 +4073,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
             boolean preferredOnly = false;
 			cns = cns.restrictToMatchingDesignations(matchText, preferredOnly, algorithm, null);
 			list = cns.resolveToList(null, null, null, -1);
-            System.out.println("number of matches: " + list.getResolvedConceptReferenceCount());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

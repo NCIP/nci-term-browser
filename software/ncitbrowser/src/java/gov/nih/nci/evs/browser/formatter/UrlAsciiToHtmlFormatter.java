@@ -118,6 +118,7 @@ public class UrlAsciiToHtmlFormatter extends AsciiToHtmlFormatter implements
         return generate(textfile, ncitCodeColumns, DEFAULT_URL);
     }
 
+/*
     public static void main(String[] args) {
         try {
             generate(CDISC_SDTM_REPORT_URL, CDISC_SDTM_NCIT_COLUMNS);
@@ -137,4 +138,5 @@ public class UrlAsciiToHtmlFormatter extends AsciiToHtmlFormatter implements
             e.printStackTrace();
         }
     }
+*/
 }

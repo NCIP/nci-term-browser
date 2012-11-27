@@ -176,7 +176,6 @@ public class MappingIteratorBean extends Object {
                 _size = 0;
             } else {
                 _size = _iterator.numberRemaining();
-                System.out.println("(***) MappingIteratorBean numberRemaining: " + _size);
             }
             _pageNumber = 1;
             _list = new ArrayList();
@@ -312,8 +311,6 @@ public class MappingIteratorBean extends Object {
 			while (_iterator != null && _iterator.hasNext()) {
 				//KLO 03/05/11
 				if (idx2 <= _list.size()) {
-
-					System.out.println("Calling copyData #1 idx1: " + idx1 + "   idx2: " + idx2);
 					return copyData(idx1, idx2);
 				}
 
@@ -334,10 +331,6 @@ public class MappingIteratorBean extends Object {
 						} else {
 							description = ref.getEntityDescription().getContent();
 						}
-
-						//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
-						//	+ ", Namespace: " + ref.getCodeNamespace());
-
 						sourceCode = ref.getCode();
 						sourceName = description;
 						sourceCodingScheme = ref.getCodingSchemeName();
@@ -351,8 +344,6 @@ public class MappingIteratorBean extends Object {
 						if(assocs != null){
 							for(Association assoc : assocs.getAssociation()){
 								associationName = assoc.getAssociationName();
-
-								//System.out.println("\tassociationName: " + associationName);
 								int lcv = 0;
 								for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
 									lcv++;
@@ -361,9 +352,6 @@ public class MappingIteratorBean extends Object {
 									} else {
 										description = ac.getEntityDescription().getContent();
 									}
-									//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
-									//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
-									//System.out.println("====================================================");
 									targetCode = ac.getCode();
 									targetName = description;
 									targetCodingScheme = ac.getCodingSchemeName();
@@ -382,7 +370,6 @@ public class MappingIteratorBean extends Object {
 										}
 									}
 
-									//System.out.println("\t\tREL: " + rel + " score: " + score);
 									mappingData = new MappingData(
 										sourceCode,
 										sourceName,
@@ -408,7 +395,6 @@ public class MappingIteratorBean extends Object {
 							for(Association assoc : assocs.getAssociation()){
 								associationName = assoc.getAssociationName();
 
-								//System.out.println("\tassociationName: " + associationName);
 								int lcv = 0;
 								for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
 									lcv++;
@@ -417,9 +403,6 @@ public class MappingIteratorBean extends Object {
 									} else {
 										description = ac.getEntityDescription().getContent();
 									}
-									//System.out.println("\t(" + lcv + ") Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
-									//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
-									//System.out.println("====================================================");
 									targetCode = ac.getCode();
 									targetName = description;
 									targetCodingScheme = ac.getCodingSchemeName();
@@ -438,7 +421,6 @@ public class MappingIteratorBean extends Object {
 										}
 									}
 
-									System.out.println("\t\tREL: " + rel + " score: " + score);
 									mappingData = new MappingData(
 										sourceCode,
 										sourceName,
@@ -479,15 +461,11 @@ public class MappingIteratorBean extends Object {
 
 
         } catch (Exception ex) {
-            //ex.printStackTrace();
-
             ex.printStackTrace();
-            System.out.println("getData exception???");
         }
 
         if (_list.size() > _size) {
 			_size = _list.size();
-			System.out.println("Upper bound breached -- reset _size to " + _size);
 		}
 		return copyData(idx1, idx2);
 		/*
@@ -520,8 +498,6 @@ if (_list.size() == 0) return rcr_list;
 
         _logger.debug("getData Run time (ms): "
             + (System.currentTimeMillis() - ms));
-
-System.out.println("end of getData size: " + _size);
 
         return rcr_list;
 

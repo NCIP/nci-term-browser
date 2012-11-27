@@ -89,58 +89,70 @@ public class OntologyBean {
 
     public static List getRELAList(String codingSchemeName) {
 		if (codingSchemeName == null) return null;
+		/*
         if (_rela_list != null)
             return _rela_list;
-        _rela_list = new ArrayList();
+            */
+        List rela_list = new ArrayList();
+        /*
         if (_rela_vec == null) {
             _rela_vec = getRELAs(codingSchemeName, null);
         }
-        _rela_list.add(new SelectItem("", ""));
-        for (int k = 0; k < _rela_vec.size(); k++) {
-            String value = (String) _rela_vec.elementAt(k);
-            _rela_list.add(new SelectItem(value, value));
+        */
+        Vector rela_vec = getRELAs(codingSchemeName, null);
+        rela_list.add(new SelectItem("", ""));
+        for (int k = 0; k < rela_vec.size(); k++) {
+            String value = (String) rela_vec.elementAt(k);
+            rela_list.add(new SelectItem(value, value));
         }
-        return _rela_list;
+        return rela_list;
     }
 
     public static List getRELAList(String codingSchemeName, String version) {
 		if (codingSchemeName == null) return null;
+		/*
         if (_rela_list != null)
             return _rela_list;
-        _rela_list = new ArrayList();
+            */
+        List rela_list = new ArrayList();
+        /*
         if (_rela_vec == null) {
             _rela_vec = getRELAs(codingSchemeName, version);
         }
-        _rela_list.add(new SelectItem("", ""));
-        for (int k = 0; k < _rela_vec.size(); k++) {
-            String value = (String) _rela_vec.elementAt(k);
-            _rela_list.add(new SelectItem(value, value));
+        */
+        Vector rela_vec = getRELAs(codingSchemeName, version);
+        rela_list.add(new SelectItem("", ""));
+        for (int k = 0; k < rela_vec.size(); k++) {
+            String value = (String) rela_vec.elementAt(k);
+            rela_list.add(new SelectItem(value, value));
         }
-        return _rela_list;
+        return rela_list;
     }
 
 
     public static Vector getAssociationNames(String codingSchemeName) {
 		if (codingSchemeName == null) return null;
+		/*
         if (_association_name_vec != null) {
             return _association_name_vec;
         }
+        */
         CodingScheme cs = getCodingScheme(codingSchemeName, null);
-        _association_name_vec = getSupportedAssociationNames(cs);
-
-        return _association_name_vec;
+        Vector association_name_vec = getSupportedAssociationNames(cs);
+        return association_name_vec;
     }
 
 
     public static Vector getAssociationNames(String codingSchemeName, String version) {
 		if (codingSchemeName == null) return null;
+		/*
         if (_association_name_vec != null) {
             return _association_name_vec;
         }
+        */
         CodingScheme cs = getCodingScheme(codingSchemeName, version);
-        _association_name_vec = getSupportedAssociationNames(cs);
-
-        return _association_name_vec;
+        Vector association_name_vec = getSupportedAssociationNames(cs);
+        return association_name_vec;
     }
 
     public static List getAssociationNameList(String codingSchemeName) {
@@ -153,80 +165,80 @@ public class OntologyBean {
 		if (codingSchemeName == null) return null;
         if (_association_name_list != null)
             return _association_name_list;
-        _association_name_list = new ArrayList();
+        List association_name_list = new ArrayList();
         CodingScheme cs = getCodingScheme(codingSchemeName, version);
         if (_association_name_vec == null) {
             _association_name_vec = getSupportedAssociationNames(cs);
         }
         for (int k = 0; k < _association_name_vec.size(); k++) {
             String value = (String) _association_name_vec.elementAt(k);
-            _association_name_list.add(new SelectItem(value, value));
+            association_name_list.add(new SelectItem(value, value));
         }
-        return _association_name_list;
+        return association_name_list;
     }
 
     public static List getPropertyNameList(String codingSchemeName) {
 		if (codingSchemeName == null) return null;
         if (_property_name_list != null)
             return _property_name_list;
-        _property_name_list = new ArrayList();
-        _property_name_list.add(new SelectItem("ALL", "ALL"));
+        List property_name_list = new ArrayList();
+        property_name_list.add(new SelectItem("ALL", "ALL"));
 
         CodingScheme cs = getCodingScheme(codingSchemeName, null);
         Vector<String> properties = getSupportedPropertyNames(cs);
         for (int k = 0; k < properties.size(); k++) {
             String value = (String) properties.elementAt(k);
-            _property_name_list.add(new SelectItem(value, value));
+            property_name_list.add(new SelectItem(value, value));
         }
-        return _property_name_list;
+        return property_name_list;
     }
 
     public static List getPropertyNameList(String codingSchemeName, String version) {
 		if (codingSchemeName == null) return null;
         if (_property_name_list != null)
             return _property_name_list;
-        _property_name_list = new ArrayList();
-        _property_name_list.add(new SelectItem("ALL", "ALL"));
+        List property_name_list = new ArrayList();
+        property_name_list.add(new SelectItem("ALL", "ALL"));
 
         CodingScheme cs = getCodingScheme(codingSchemeName, version);
         Vector<String> properties = getSupportedPropertyNames(cs);
         for (int k = 0; k < properties.size(); k++) {
             String value = (String) properties.elementAt(k);
-            _property_name_list.add(new SelectItem(value, value));
+            property_name_list.add(new SelectItem(value, value));
         }
-        return _property_name_list;
+        return property_name_list;
     }
 
     public static List getSourceList(String codingSchemeName) {
 		if (codingSchemeName == null) return null;
         if (_source_list != null)
             return _source_list;
-        _source_list = new ArrayList();
+        List source_list = new ArrayList();
         CodingScheme cs = getCodingScheme(codingSchemeName, null);
-        _source_list.add(new SelectItem("ALL", "ALL"));
+        source_list.add(new SelectItem("ALL", "ALL"));
 
         Vector<String> sources = getSupportedSources(cs);
         for (int k = 0; k < sources.size(); k++) {
             String value = (String) sources.elementAt(k);
-            _source_list.add(new SelectItem(value, value));
+            source_list.add(new SelectItem(value, value));
         }
-        return _source_list;
+        return source_list;
     }
 
     public static List getSourceList(String codingSchemeName, String version) {
 		if (codingSchemeName == null) return null;
         if (_source_list != null)
             return _source_list;
-        _source_list = new ArrayList();
+        List source_list = new ArrayList();
         CodingScheme cs = getCodingScheme(codingSchemeName, version);
-        _source_list.add(new SelectItem("ALL", "ALL"));
+        source_list.add(new SelectItem("ALL", "ALL"));
 
         Vector<String> sources = getSupportedSources(cs);
         for (int k = 0; k < sources.size(); k++) {
             String value = (String) sources.elementAt(k);
-            _source_list.add(new SelectItem(value, value));
+            source_list.add(new SelectItem(value, value));
         }
-        return _source_list;
+        return source_list;
     }
 
     public static List getPropertyTypeList(String codingSchemeName) {
@@ -239,15 +251,15 @@ public class OntologyBean {
 		if (codingSchemeName == null) return null;
         if (_property_type_list != null)
             return _property_type_list;
-        _property_type_list = new ArrayList();
-        _property_type_list.add(new SelectItem("ALL", "ALL"));
+        List property_type_list = new ArrayList();
+        property_type_list.add(new SelectItem("ALL", "ALL"));
 
         Vector<String> propertytypes = getSupportedPropertyTypes();
         for (int k = 0; k < propertytypes.size(); k++) {
             String value = (String) propertytypes.elementAt(k);
-            _property_type_list.add(new SelectItem(value, value));
+            property_type_list.add(new SelectItem(value, value));
         }
-        return _property_type_list;
+        return property_type_list;
     }
 
     public static Vector getRELAs(String codingSchemeName) {

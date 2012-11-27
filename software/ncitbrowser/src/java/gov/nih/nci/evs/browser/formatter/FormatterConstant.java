@@ -78,6 +78,7 @@ public interface FormatterConstant {
     public static final String FDA_UNII_REPORT_URL = FTP_URL
         + "/FDA/UNII/FDA-UNII_NCIt_Subsets.txt";
 
+/*
     public static final int[] CDISC_SDTM_NCIT_COLUMNS = new int[] { 0, 1 };
     public static final int[] CDISC_SUBSET_NCIT_COLUMNS = new int[] { 1, 3 };
     public static final int[] CDRH_NCIT_COLUMNS = new int[] { 1, 3, 9 };
@@ -85,5 +86,6 @@ public interface FormatterConstant {
     public static final int[] FDA_UNII_NCIT_COLUMNS = new int[] { 2 };
     public static final int[] ICS_SUBSET_NCIT_COLUMNS = new int[] { 1, 3 };
     public static final int[] SPL_NCIT_COLUMNS = new int[] { 1, 3 };
+*/
 
 }

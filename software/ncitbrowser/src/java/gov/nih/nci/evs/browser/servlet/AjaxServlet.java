@@ -392,11 +392,8 @@ if (action == null) {
                         CacheController.getInstance().getSubValueSets(
                             ontology_display_name, ontology_version, node_id);
                     if (nodesArray != null) {
-						//System.out.println("expand_vs_tree nodesArray != null");
-                        json.put("nodes", nodesArray);
-                    } else {
-						//System.out.println("expand_vs_tree nodesArray == null???");
-					}
+                       json.put("nodes", nodesArray);
+                    }
 
                 } catch (Exception e) {
                 }
@@ -418,13 +415,10 @@ if (action == null) {
                         CacheController.getInstance().getSourceValueSetTree(
                             ontology_display_name, ontology_version, true);
                     if (nodesArray != null) {
-						//System.out.println("expand_entire_vs_tree nodesArray != null");
                         json.put("root_nodes", nodesArray);
-                    } else {
-						//System.out.println("expand_entire_vs_tree nodesArray == null???");
-					}
-
+                    }
                 } catch (Exception e) {
+					e.printStackTrace();
                 }
                 response.getWriter().write(json.toString());
                 _logger.debug("Run time (milliseconds): "
@@ -443,11 +437,8 @@ if (action == null) {
                         CacheController.getInstance().getCodingSchemeValueSetTree(
                             ontology_display_name, ontology_version, true);
                     if (nodesArray != null) {
-						//System.out.println("expand_entire_vs_tree nodesArray != null");
                         json.put("root_nodes", nodesArray);
-                    } else {
-						//System.out.println("expand_entire_vs_tree nodesArray == null???");
-					}
+                    }
 
                 } catch (Exception e) {
                 }
@@ -502,8 +493,6 @@ if (action == null) {
 
 						if (nodesArray != null) {
 							json.put("nodes", nodesArray);
-						} else {
-							//System.out.println("expand_vs_tree nodesArray == null???");
 						}
 
 					} catch (Exception e) {
@@ -546,7 +535,6 @@ if (action == null) {
                     json.put("root_nodes", nodesArray);
                 } else {
 					_logger.debug("*** AjaxServlet build_src_vs_tree returns null???");
-					System.out.println("*** AjaxServlet build_src_vs_tree returns null???");
 				}
 
 
@@ -571,12 +559,8 @@ if (action == null) {
 
                 try {
                     if (nodesArray != null) {
-						//System.out.println("expand_src_vs_tree nodesArray != null");
                         json.put("nodes", nodesArray);
-                    } else {
-						//System.out.println("expand_src_vs_tree nodesArray == null???");
-					}
-
+                    }
                 } catch (Exception e) {
 					e.printStackTrace();
 
@@ -2435,8 +2419,6 @@ if (view == Constants.STANDARD_VIEW) {
 
 		request.getSession().removeAttribute("checked_vocabularies");
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-		System.out.println("checked_vocabularies: " + checked_vocabularies);
-
 		request.getSession().removeAttribute("partial_checked_vocabularies");
 		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
 		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
@@ -2498,12 +2480,10 @@ if (view == Constants.STANDARD_VIEW) {
 					return;
 				}
 
-
-				System.out.println("(*) redirecting to: " + destination);
 				response.sendRedirect(response.encodeRedirectURL(destination));
 	            request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 			} catch (Exception ex) {
-				System.out.println("response.sendRedirect failed???");
+				ex.printStackTrace();
 			}
 	    }
     }
@@ -2528,7 +2508,6 @@ if (view == Constants.STANDARD_VIEW) {
 
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 
-		System.out.println("checked_vocabularies: " + checked_vocabularies);
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
 			System.out.println(msg);
@@ -2537,10 +2516,6 @@ if (view == Constants.STANDARD_VIEW) {
 		}
 
 		Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
-
-		System.out.println("selected_vocabularies count: " + selected_vocabularies.size());
-
-
         String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
         request.getSession().setAttribute("view", VSD_view);
 
@@ -2561,8 +2536,6 @@ if (view == Constants.STANDARD_VIEW) {
 						String vsd_name = (String) selected_vocabularies.elementAt(k);
 						String vsd_uri = DataUtils.getValueSetDefinitionURIByName(vsd_name);
 
-						System.out.println("vsd_name: " + vsd_name + " (vsd_uri: " + vsd_uri + ")");
-
                         try {
 							//ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
 							if (vsd_uri != null) {
@@ -2577,11 +2550,9 @@ if (view == Constants.STANDARD_VIEW) {
 										v.add(metadata);
 									}
 								}
-							} else {
-								System.out.println("WARNING: Unable to find vsd_uri for " + vsd_name);
 							}
 						} catch (Exception ex) {
-                            System.out.println("WARNING: vsd_service.getValueSetDefinition threw exception: " + vsd_name);
+                            ex.printStackTrace();
 						}
 
 					}
@@ -2635,7 +2606,6 @@ if (view == Constants.STANDARD_VIEW) {
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				System.out.println("vsd_service.listValueSetsWithEntityCode throws exceptions???");
 			}
 
 			msg = "Unexpected errors encountered; search by code failed.";
@@ -2656,25 +2626,13 @@ if (view == Constants.STANDARD_VIEW) {
 					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
 
 					if (checked_vocabularies == null || selected_vocabularies.contains(vsd_name)) {
-
-						//System.out.println("Searching " + vsd_name + "...");
-
 						AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
-						/*
-						Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(uri, "PRODUCTION");
-						if (cs_ref_vec != null) {
-							csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
-						}
-						*/
-
 						ResolvedValueSetCodedNodeSet rvs_cns = null;
 						SortOptionList sortOptions = null;
 						LocalNameList propertyNames = null;
 						CodedNodeSet.PropertyType[] propertyTypes = null;
 
 						try {
-							System.out.println("URI: " + uri);
-
 							rvs_cns = vsd_service.getValueSetDefinitionEntitiesForTerm(matchText, algorithm, new URI(uri), csVersionList, null);
 
 							if (rvs_cns != null) {
@@ -2710,7 +2668,6 @@ if (view == Constants.STANDARD_VIEW) {
 
 
 						} catch (Exception ex) {
-							//System.out.println("WARNING: getValueSetDefinitionEntitiesForTerm throws exception???");
 							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed. (VSD URI: " + uri + ")";
 							System.out.println(msg);
 							request.getSession().setAttribute("message", msg);
@@ -2732,8 +2689,7 @@ if (view == Constants.STANDARD_VIEW) {
 				return "value_set";
 
 			} catch (Exception ex) {
-				//ex.printStackTrace();
-				System.out.println("vsd_service.getValueSetDefinitionEntitiesForTerm throws exceptions???");
+				ex.printStackTrace();
 			}
 
 			msg = "Unexpected errors encountered; search by name failed.";
@@ -2753,10 +2709,7 @@ if (view == Constants.STANDARD_VIEW) {
       response.setContentType("text/html");
       PrintWriter out = null;
 
-
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-		System.out.println("checked_vocabularies: " + checked_vocabularies);
-
 		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
 		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
 

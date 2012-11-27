@@ -200,13 +200,10 @@ public class IteratorBean extends Object {
 
     public ResolvedConceptReference getFirstResolvedConceptReference(ResolvedConceptReferencesIterator iterator) {
 		if (iterator == null) {
-			System.out.println("UserSessionBean.iterator == null getFirstResolvedConceptReference returns null???");
 			return null;
 		}
 		try {
 			int numberRemaining = iterator.numberRemaining();
-			//System.out.println("getFirstResolvedConceptReference numberRemaining: " + numberRemaining);
-			//while (iterator != null && iterator.hasNext()) {
 			while (iterator.hasNext()) {
 				//ResolvedConceptReference[] refs = iterator.next(1).getResolvedConceptReference();
 				//return refs[0];
@@ -224,7 +221,6 @@ public class IteratorBean extends Object {
 
     public List getData(int idx1, int idx2) {
         if (_list.size() > 0 && idx2 <= _list.size()) {
-			//System.out.println("Copying data " + idx1 + " to: " + idx2 + ")");
 			return copyData(idx1, idx2);
 		}
 
@@ -241,16 +237,6 @@ public class IteratorBean extends Object {
             int lcv = 0;
 
 			while (_iterator != null && _iterator.hasNext()) {
-
-/*
-                if (lcv > count) break;
-
-				if (idx2 <= _list.size()) {
-					System.out.println("Calling copyData #1 idx1: " + idx1 + "   idx2: " + idx2);
-					return copyData(idx1, idx2);
-				}
-*/
-
 				ResolvedConceptReference[] refs =
 					_iterator.next(_maxReturn).getResolvedConceptReference();
 
@@ -278,20 +264,16 @@ public class IteratorBean extends Object {
 						break;
 					}
 
-				} else {
-					System.out.println("refs == null???");
 				}
 			}
 
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            System.out.println("getData exception???");
         }
 
         if (_list.size() > _size) {
 			_size = _list.size();
-			System.out.println("Upper bound breached -- reset _size to " + _size);
 		}
 		return copyData(idx1, idx2);
     }
@@ -302,7 +284,6 @@ public class IteratorBean extends Object {
     protected void displayRef(ResolvedConceptReference ref) {
 
 		if (ref == null) {
-			System.out.println("displayRef ERROR: ref == null???");
 			return;
 		}
 

@@ -529,8 +529,6 @@ public class MetadataUtils {
 					int context_array_size = context_array.length;
 					String cs_name = context_array[context_array_size-1].toString();
 					hmap.put(cs_name, prop.getValue());
-
-					System.out.println(codingSchemeName + "   " + cs_name + " --> " + prop.getValue());
                 }
             }
             return hmap;

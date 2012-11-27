@@ -79,35 +79,44 @@ public class SearchCart {
     // Local variables
     private static Logger _logger = Logger.getLogger(SearchUtils.class);
     private static LexBIGService lbSvc = null;
-    private static LexBIGServiceConvenienceMethods lbscm = null;
+    //private static LexBIGServiceConvenienceMethods lbscm = null;
 
     // Local constants
     private static final int RESOLVEASSOCIATIONDEPTH = 1;
     private static final int MAXTORETURN = 1000;
     private static final String LB_EXTENSION = "LexBIGServiceConvenienceMethods";
-    private static enum Direction { 
-    	FORWARD, REVERSE;    	
+    private static enum Direction {
+    	FORWARD, REVERSE;
     	public boolean test() {
     		if (ordinal() == FORWARD.ordinal()) return true;
     		return false;
     	}
     }
-   
+
     /**
      * Constructor
-     * @throws LBException 
+     * @throws LBException
      */
-	public SearchCart() throws LBException {
+
+
+	public SearchCart() {//throws LBException {
 		// Setup lexevs service
+		/*
 		if (lbSvc == null) {
 			lbSvc = RemoteServerUtil.createLexBIGService();
 		}
+		*/
+
 		// Setup lexevs generic extension
+		/*
 		lbscm = (LexBIGServiceConvenienceMethods) lbSvc
 				.getGenericExtension(LB_EXTENSION);
 		lbscm.setLexBIGService(lbSvc);
+		*/
+
 	}
 
+//LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
     /**
      * Get concept Entity by code
      * @param codingScheme
@@ -120,9 +129,10 @@ public class SearchCart {
         ResolvedConceptReferencesIterator iterator = null;
 
         try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             if (version != null) csvt.setVersion(version);
-        	
+
             cns = lbSvc.getCodingSchemeConcepts(codingScheme, csvt);
             ConceptReferenceList crefs =
                 createConceptReferenceList(new String[] { code }, codingScheme);
@@ -170,16 +180,16 @@ public class SearchCart {
      * Returns list of Parent Concepts
      * @param ref
      * @return
-     * @throws LBException 
+     * @throws LBException
      */
-    public Vector<Entity> getParentConcepts(ResolvedConceptReference ref) throws Exception {    	
+    public Vector<Entity> getParentConcepts(ResolvedConceptReference ref) throws Exception {
         String scheme = ref.getCodingSchemeName();
         String version = ref.getCodingSchemeVersion();
-        String code = ref.getCode();        
-        Direction dir = getCodingSchemeDirection(ref);        
+        String code = ref.getCode();
+        Direction dir = getCodingSchemeDirection(ref);
         Vector<String> assoNames = getAssociationNames(scheme, version);
         Vector<Entity> superconcepts = getAssociatedConcepts(scheme, version,
-                code, assoNames, dir.test());       
+                code, assoNames, dir.test());
         return superconcepts;
     }
 
@@ -226,6 +236,7 @@ public class SearchCart {
             Vector<Entity> v = new Vector<Entity>();
 
             try {
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
                 CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
 
@@ -331,6 +342,7 @@ public class SearchCart {
     public Vector<String> getAssociationNames(String scheme, String version) {
         Vector<String> association_vec = new Vector<String>();
         try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             versionOrTag.setVersion(version);
             CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);
@@ -357,35 +369,37 @@ public class SearchCart {
     public Property[] getCommentValues(ResolvedConceptReference ref) {
         return returnProperties(ref.getReferencedEntry().getComment());
     }
-    
+
     /**
      * Determine direction of Coding Scheme
-     * 
+     *
      * @param ref
      * @return
      * @throws LBException
      */
     public Direction getCodingSchemeDirection(ResolvedConceptReference ref)
         throws Exception {
-    	
+
     	Direction direction = Direction.FORWARD;
-    	
+
     	// Create a version object
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-        versionOrTag.setVersion(ref.getCodingSchemeVersion());    	
-    	
+        versionOrTag.setVersion(ref.getCodingSchemeVersion());
+
         // Get Coding Scheme
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
     	CodingScheme cs = lbSvc.resolveCodingScheme(ref.getCodingSchemeName(), versionOrTag);
     	if (cs == null) {
     		throw new Exception("getTreeDirection(): CodingScheme is null!");
     	}
 
     	// Get hierarchy
-        SupportedHierarchy[] hierarchies = cs.getMappings().getSupportedHierarchy();   	
+        SupportedHierarchy[] hierarchies = cs.getMappings().getSupportedHierarchy();
         if (hierarchies == null || hierarchies.length < 1) {
         	throw new Exception("getTreeDirection(): hierarchies is null!");
-        }    
-        
+        }
+
         if (hierarchies[0].isIsForwardNavigable())
         	direction = Direction.REVERSE;
         else
@@ -394,8 +408,8 @@ public class SearchCart {
         _logger.debug("getTreeDirection() = " + direction);
 
         return direction;
-    }    
-    
+    }
+
     /**
      * Returns the coding scheme's URI
      * @param scheme
@@ -403,12 +417,12 @@ public class SearchCart {
      * @return
      * @throws Exception
      */
-    public String getSchemeURI(String scheme, String version) throws Exception {    
+    public String getSchemeURI(String scheme, String version) throws Exception {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         versionOrTag.setVersion(version);
-        CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);    
+        CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);
     	return cs.getCodingSchemeURI();
-    }    
+    }
 
     /**
      * Returns the coding scheme production version
@@ -417,36 +431,38 @@ public class SearchCart {
      * @return
      * @throws Exception
      */
-    public String getDefaultSchemeVersion(String scheme) throws Exception {    
-        CodingScheme cs = lbSvc.resolveCodingScheme(scheme,null);    
+    public String getDefaultSchemeVersion(String scheme) throws Exception {
+        CodingScheme cs = lbSvc.resolveCodingScheme(scheme,null);
     	return cs.getRepresentsVersion();
-    }   
-    
+    }
+
     /**
      * Returns list of all versions associated with a scheme
      * @param uri
      * @return
      * @throws Exception
      */
-    public ArrayList<String> getSchemeVersions(String uri) throws Exception { 
+    public ArrayList<String> getSchemeVersions(String uri) throws Exception {
     	ArrayList<String> list = new ArrayList<String>();
+
+    	LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
         CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
         CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
 
         for (int i = 0; i < csrs.length; i++) {
             CodingSchemeRendering csr = csrs[i];
-            String status = csr.getRenderingDetail().getVersionStatus().value(); 
+            String status = csr.getRenderingDetail().getVersionStatus().value();
             CodingSchemeSummary css = csr.getCodingSchemeSummary();
-            if (status.equals("active")) {      
-	            if (css.getCodingSchemeURI().equals(uri)) 
+            if (status.equals("active")) {
+	            if (css.getCodingSchemeURI().equals(uri))
 	            	list.add(css.getRepresentsVersion());
             }
         }
-    	
+
     	return list;
-    }    
-    
+    }
+
     // -----------------------------------------------------
     // Internal utility methods
     // -----------------------------------------------------
@@ -470,8 +486,8 @@ public class SearchCart {
             nvList.addNameAndValue(nv);
         }
         return nvList;
-    }    
-    
+    }
+
     /**
      * @param properties
      * @return

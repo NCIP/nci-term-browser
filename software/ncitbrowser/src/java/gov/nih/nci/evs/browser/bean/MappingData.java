@@ -42,6 +42,7 @@ public class MappingData
     public static final int COL_SOURCE_NAMESPACE = 3;
     public static final int COL_REL = 4;
     public static final int COL_SCORE = 5;
+    public static final int COL_TARGET_CODE = 6;
     public static final int COL_TARGET_NAME = 7;
     public static final int COL_TARGET_NAMESPACE = 8;
 

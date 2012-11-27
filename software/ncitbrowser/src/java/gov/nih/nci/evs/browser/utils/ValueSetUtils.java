@@ -132,8 +132,6 @@ public class ValueSetUtils {
 
 
     public void printTree(PrintWriter out, TreeItem root) {
-		System.out.println("printTree..");
-
 		if (root == null) {
 			System.out.println("(*) printTree aborted -- root is null???");
 			return;
@@ -218,9 +216,10 @@ public class ValueSetUtils {
 
 		    if (expanded) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
-
+/*
 		    } else if (isHasMoreNode) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+*/
 		    } else {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
 		    }
@@ -274,9 +273,10 @@ public class ValueSetUtils {
 
 		    if (expanded) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
-
+/*
 		    } else if (isHasMoreNode) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+*/
 		    } else {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
 		    }
@@ -310,12 +310,6 @@ public class ValueSetUtils {
 //    private static final int  TERMINOLOGY_VIEW = 2;
 
     public void printTree(PrintWriter out, TreeItem root, int view, String dictionary) {
-
-
-System.out.println("(*) ValueSetUtils.printTree dictionary: " + dictionary);
-
-
-
 		if (root == null) {
 			System.out.println("(*) printTree aborted -- root is null???");
 			return;
@@ -326,7 +320,6 @@ System.out.println("(*) ValueSetUtils.printTree dictionary: " + dictionary);
 			SortUtils.quickSort(children);
 			for (TreeItem childItem : children) {
 				String scheme = childItem._text;
-				System.out.println("scheme: " + scheme + "  dictionary: " + dictionary);
 				if (scheme.compareTo(dictionary) == 0) {
 					String child_node_id = generateID(childItem);
 					printTree(out, childItem, child_node_id, null, "root", 0, view);
@@ -430,9 +423,10 @@ System.out.println("(*) ValueSetUtils.printTree dictionary: " + dictionary);
 
 		    if (expanded) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
-
+/*
 		    } else if (isHasMoreNode) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
+*/
 		    } else {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
 		    }

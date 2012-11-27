@@ -1,6 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.util.*;
+import java.io.Serializable;
 
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
@@ -265,8 +266,7 @@ public class QuickUnionIterator implements ResolvedConceptReferencesIterator {
     /**
      * The Class IteratorSizeComparator.
      */
-    private static class IteratorSizeComparator implements
-            Comparator<ResolvedConceptReferencesIterator> {
+    private static class IteratorSizeComparator implements java.io.Serializable, Comparator<ResolvedConceptReferencesIterator> {
 
         /*
          * (non-Javadoc)
