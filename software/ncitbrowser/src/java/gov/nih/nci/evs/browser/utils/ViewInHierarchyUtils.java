@@ -144,13 +144,29 @@ public class ViewInHierarchyUtils {
 
     public ViewInHierarchyUtils(String codingScheme, String version, String code) {
 		has_more_node_knt = 0;
+		/*
         try {
-			System.setProperty("file.encoding", "UTF8");
+			System.setProperty("file.encoding", "UTF-8");
 			PrintWriter pw = new PrintWriter(System.out, true);
             printTree(pw, codingScheme, version, code);
+
         } catch (Exception e) {
             System.out.println(e.getClass().getName() + ": " + e.getMessage());
         }
+        */
+
+
+		try {
+			System.setProperty("file.encoding", "UTF-8");
+			PrintWriter pw  = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"), true);
+			printTree(pw, codingScheme, version, code);
+		}
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+
+
     }
 
     public void printTree(PrintWriter out, String codingScheme, String version, String code) {
@@ -165,9 +181,6 @@ public class ViewInHierarchyUtils {
                 csvt = Constructors.createCodingSchemeVersionOrTagFromVersion(version);
 
             String namespace = DataUtils.getNamespaceByCode(codingScheme, version, code);
-
-    //System.out.println("(*************) namespace: " + namespace);
-
             LexEvsTree tree = service.getTree(codingScheme, csvt, code, namespace);
             List<LexEvsTreeNode> listEvsTreeNode =
                     service.getEvsTreeConverter()
@@ -266,9 +279,10 @@ public class ViewInHierarchyUtils {
 		    println(out, indentStr + "newNodeData = { label:\"" + node_name + "\", id:\"" + code + "\", href:newNodeDetails };");
 		    if (expanded) {
 			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_node_id + ", true);");
-
+/*
 		    } else if (isHasMoreNode) {
 			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_node_id + ", false);");
+*/
 		    } else {
 			    println(out, indentStr + "var " + node_label + " = new YAHOO.widget.TextNode(newNodeData, " + parent_node_id + ", false);");
 		    }

@@ -8,8 +8,6 @@
  scheme = DataUtils.getFormalName(scheme);
 
  String tab_version = typeLinks_info.version;
- //System.out.println("typeLink.jsp tab_version: " + version);
-
  boolean typeLink_isMapping = DataUtils.isMapping(scheme, null);
 
  

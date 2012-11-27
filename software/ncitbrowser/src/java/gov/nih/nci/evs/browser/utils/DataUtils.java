@@ -228,6 +228,14 @@ public class DataUtils {
         // setCodingSchemeMap();
     }
 
+    static {
+		setCodingSchemeMap();
+
+		if (_valueSetDefinitionMetadata == null) {
+			_valueSetDefinitionMetadata = getValueSetDefinitionMetadata();
+        }
+	}
+
     public static List getOntologyList() {
         if (_ontologies == null)
             setCodingSchemeMap();
@@ -578,8 +586,6 @@ public class DataUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // return null;
-            //System.out.println("WARNING: setCodingSchemeMap threw exception.");
         }
         if (nv_vec.size() > 0) {
             nv_vec = SortUtils.quickSort(nv_vec);
@@ -587,7 +593,6 @@ public class DataUtils {
                 String value = (String) nv_vec.elementAt(k);
                 if (!value.startsWith(Constants.TERMINOLOGY_VALUE_SET) && !value.startsWith(Constants.TERMINOLOGY_VALUE_SET_NAME)) {
 	                _ontologies.add(new SelectItem(value, value));
-	                //System.out.println("(#) DataUtils _ontologies " + value);
 				}
             }
         }
@@ -635,12 +640,6 @@ public class DataUtils {
 
 		_logger.debug("Done Initializing Value Set Metadata ...");
 		_logger.debug("\tInitializing ValueSetHierarchy ...");
-		/*
-		System.out.println("\tgetValueSetSourceHierarchy ...");
-		HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
-		System.out.println("\tgetValueSetDefinitionURI2VSD_map ...");
-		HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
-		*/
 
 		System.out.println("\tpreprocessSourceHierarchyData ...");
 		ValueSetHierarchy.preprocessSourceHierarchyData();
@@ -1041,7 +1040,7 @@ public class DataUtils {
 				try {
 					matches = cns.resolveToList(null, null, null, 1);
 				} catch (Exception e) {
-					System.out.println("cns.resolveToList failed???");
+					e.printStackTrace();
 				}
 
                 if (matches == null) {
@@ -1060,7 +1059,7 @@ public class DataUtils {
                         Entity entry = ref.getReferencedEntry();
                         return entry;
                     } catch (Exception ex1) {
-                        System.out.println("Exception entry == null");
+                        ex1.printStackTrace();
                         return null;
                     }
                 }
@@ -1119,7 +1118,7 @@ public class DataUtils {
 				try {
 					matches = cns.resolveToList(null, null, null, 1);
 				} catch (Exception e) {
-					System.out.println("cns.resolveToList failed???");
+					e.printStackTrace();
 				}
 
                 if (matches == null) {
@@ -1138,7 +1137,7 @@ public class DataUtils {
 
                         return ref.getCodeNamespace();
                     } catch (Exception ex1) {
-                        System.out.println("getCodeNamespace failed???");
+                        ex1.printStackTrace();
                         return null;
                     }
                 }
@@ -1577,8 +1576,6 @@ if (lbSvc == null) {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            //System.out.println(" getVocabularyVersionByTag throws exception???");
-
         }
         _logger.warn("Version corresponding to tag " + ltag + " is not found "
             + " in " + codingSchemeName);
@@ -1890,7 +1887,9 @@ if (lbSvc == null) {
     public static String getPropertyQualfierValues(
         org.LexGrid.commonTypes.Property p) {
 
+        StringBuffer buf = new StringBuffer();
         String s = "";
+
         PropertyQualifier[] qualifiers = p.getPropertyQualifier();
         if (qualifiers != null && qualifiers.length > 0) {
             for (int j = 0; j < qualifiers.length; j++) {
@@ -1900,12 +1899,15 @@ if (lbSvc == null) {
                 if (qualifier_name.compareTo("label") != 0) {
 					String qualifier_value = q.getValue().getContent();
 
-					s = s + qualifier_name + ": " + qualifier_value;
+					//s = s + qualifier_name + ": " + qualifier_value;
+					buf.append(qualifier_name + ": " + qualifier_value);
 					if (j < qualifiers.length - 1)
-						s = s + "; ";
+						//s = s + "; ";
+						buf.append("; ");
 				}
             }
         }
+        s = buf.toString();
         return s;
     }
 
@@ -2291,29 +2293,34 @@ if (lbSvc == null) {
                                                     replaceAssociationNameByRela(
                                                         ac, associationName);
 
-
                                                 String s =
                                                     relaValue + "|" + pt + "|"
                                                         + ac.getConceptCode() + "|"
                                                         + ac.getCodingSchemeName();
 
+                                                StringBuffer sb = new StringBuffer();
                                                 if (isMapping) {
 													if (ac.getAssociationQualifiers() != null) {
-														String qualifiers = "";
+														//String qualifiers = "";
+														StringBuffer buf = new StringBuffer();
 														for (NameAndValue qual : ac
 																.getAssociationQualifiers()
 																.getNameAndValue()) {
 															String qualifier_name = qual.getName();
 															String qualifier_value = qual.getContent();
-															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
-
-														    //System.out.println("qualifiers: " + qualifiers);
+															//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+															buf.append((qualifier_name + ":" + qualifier_value) + "$");
 
 														}
-														s = s + "|" + qualifiers;
+														String qualifiers = buf.toString();
+
+														//s = s + "|" + qualifiers;
+														sb.append("|" + qualifiers);
 													}
-													s = s + "|" + ac.getCodeNamespace();
+													//s = s + "|" + ac.getCodeNamespace();
+													sb.append("|" + ac.getCodeNamespace());
 												}
+												s = s + sb.toString();
 
 
                                                 if (isRole) {
@@ -2330,7 +2337,6 @@ if (lbSvc == null) {
                                                     // + s);
                                                     associationList.add(s);
 
-                                                    //System.out.println("Add to association list: " + s);
                                                 }
 
                                             }
@@ -2471,28 +2477,33 @@ if (lbSvc == null) {
                                                     replaceAssociationNameByRela(
                                                         ac, associationName);
 
-
-
-
                                                 String s =
                                                     relaValue + "|" + pt + "|"
                                                          + ac.getConceptCode() + "|"
                                                          + ac.getCodingSchemeName();
 
+                                                StringBuffer sb = new StringBuffer();
+
 
                                                 if (isMapping) {
 													if (ac.getAssociationQualifiers() != null) {
-														String qualifiers = "";
+														//String qualifiers = "";
+														StringBuffer buf = new StringBuffer();
 														for (NameAndValue qual : ac
 																.getAssociationQualifiers()
 																.getNameAndValue()) {
 															String qualifier_name = qual.getName();
 															String qualifier_value = qual.getContent();
-															qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+															//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+															buf.append((qualifier_name + ":" + qualifier_value) + "$");
 														}
-														s = s + "|" + qualifiers;
+														String qualifiers = buf.toString();
+														//s = s + "|" + qualifiers;
+														sb.append("|" + qualifiers);
 													}
-													s = s + "|" + ac.getCodeNamespace();
+													//s = s + "|" + ac.getCodeNamespace();
+													sb.append("|" + ac.getCodeNamespace());
+													s = s + sb.toString();
 												}
 
                                                 if (isRole) {
@@ -2500,7 +2511,6 @@ if (lbSvc == null) {
                                                 } else {
                                                     inverse_associationList
                                                         .add(s);
-                                                    //System.out.println("Add to inverse_associationList list: " + s);
                                                 }
                                             }
 
@@ -3608,12 +3618,19 @@ if (lbSvc == null) {
 
     // [#25034] Remove hyperlink from instances on the Relationship tab. (KLO,
     // 121709)
+    public static Vector getNonConcept2ConceptAssociation() {
+        Vector nonConcept2ConceptAssociations = new Vector();
+            nonConcept2ConceptAssociations.add("domain");
+            nonConcept2ConceptAssociations.add("range");
+            nonConcept2ConceptAssociations.add("instance");
+        return nonConcept2ConceptAssociations;
+	}
+
+
+
     public static boolean isNonConcept2ConceptAssociation(String associationName) {
         if (_nonConcept2ConceptAssociations == null) {
-            _nonConcept2ConceptAssociations = new Vector();
-            _nonConcept2ConceptAssociations.add("domain");
-            _nonConcept2ConceptAssociations.add("range");
-            _nonConcept2ConceptAssociations.add("instance");
+            _nonConcept2ConceptAssociations = getNonConcept2ConceptAssociation();
         }
         if (associationName == null)
             return false;
@@ -3690,14 +3707,19 @@ if (lbSvc == null) {
                             _logger
                                 .debug(c.getEntityDescription().getContent());
                             Property[] properties = c.getProperty();
-                            String values = "";
+                            //String values = "";
+                            StringBuffer buf = new StringBuffer();
                             for (int j = 0; j < properties.length; j++) {
                                 Property prop = properties[j];
-                                values = values + prop.getValue().getContent();
+                                //values = values + prop.getValue().getContent();
+                                buf.append(prop.getValue().getContent());
+
                                 if (j < properties.length - 1) {
-                                    values = values + "; ";
+                                    //values = values + "; ";
+                                    buf.append("; ");
                                 }
                             }
+                            String values = buf.toString();
                             hmap.put(rcr.getCode(), values);
                         }
                     }
@@ -3806,8 +3828,6 @@ if (lbSvc == null) {
 
         for (int j = 0; j < properties.length; j++) {
             Property prop = properties[j];
-            //int i = j+1;
-            //System.out.println("(" + i + ")" + prop.getPropertyName());
 
             if (prop.getPropertyName().compareTo(propertyName) == 0) {
                 v.add(prop.getValue().getContent());
@@ -3822,19 +3842,27 @@ if (lbSvc == null) {
         String s = "";
         if (v.size() == 0)
             return s;
-        s = (String) v.elementAt(0);
+
+        StringBuffer buf = new StringBuffer();
+        buf.append((String) v.elementAt(0));
+
+        //s = (String) v.elementAt(0);
         for (int i = 1; i < v.size(); i++) {
             String next = (String) v.elementAt(i);
-            s = s + "; " + next;
+            //s = s + "; " + next;
+            buf.append("; " + next);
         }
-        return s;
+        return buf.toString();
+        //return s;
     }
 
     public static String replaceInnerEvalExpressions(String s, Vector from_vec,
         Vector to_vec) {
         String openExp = "<%=";
         String closeExp = "%>";
-        String t = "";
+        //String t = "";
+
+        StringBuffer buf = new StringBuffer();
 
         int idx = s.indexOf(openExp);
         if (idx == -1)
@@ -3842,7 +3870,9 @@ if (lbSvc == null) {
 
         while (idx != -1) {
             String lhs = s.substring(0, idx);
-            t = t + lhs;
+            //t = t + lhs;
+
+            buf.append(lhs);
 
             String res = s.substring(idx + 3, s.length());
             int idx2 = s.indexOf(closeExp);
@@ -3860,13 +3890,14 @@ if (lbSvc == null) {
                 }
             }
 
-            t = t + expression;
-
+            //t = t + expression;
+            buf.append(expression);
             String rhs = s.substring(idx2 + 2, s.length());
 
             s = rhs;
             idx = s.indexOf(openExp);
         }
+        String t = buf.toString();
         t = t + s;
         return t;
     }
@@ -3876,7 +3907,8 @@ if (lbSvc == null) {
             return s;
         String openExp = "<%=";
         String closeExp = "%>";
-        String t = "";
+        //String t = "";
+        StringBuffer buf = new StringBuffer();
 
         int idx = s.indexOf(openExp);
         if (idx == -1)
@@ -3884,7 +3916,8 @@ if (lbSvc == null) {
 
         while (idx != -1) {
             String lhs = s.substring(0, idx);
-            t = t + lhs;
+            //t = t + lhs;
+            buf.append(lhs);
 
             String res = s.substring(idx + 3, s.length());
             int idx2 = s.indexOf(closeExp);
@@ -3896,13 +3929,15 @@ if (lbSvc == null) {
                 expression = contextPath;
             }
 
-            t = t + expression;
+            //t = t + expression;
+            buf.append(expression);
 
             String rhs = s.substring(idx2 + 2, s.length());
 
             s = rhs;
             idx = s.indexOf(openExp);
         }
+        String t = buf.toString();
         t = t + s;
         return t;
     }
@@ -4033,17 +4068,11 @@ if (lbSvc == null) {
         if (_codingScheme2MappingCodingSchemes == null) {
 			_codingScheme2MappingCodingSchemes = new HashMap();
 		}
-
-
-//System.out.println("getMappingCodingSchemes: " + codingScheme);
         String formalName = getFormalName(codingScheme);
 
         if (_codingScheme2MappingCodingSchemes.containsKey(formalName)) {
 			return (Vector) _codingScheme2MappingCodingSchemes.get(formalName);
 		}
-
-//System.out.println("getMappingCodingSchemes formalname: " + codingScheme);
-
 		Vector v = new Vector();
 		List ontology_list = getOntologyList();
 		LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
@@ -4056,10 +4085,6 @@ if (lbSvc == null) {
 			String version = key2CodingSchemeVersion(value);
 
 			if (isMapping(scheme, version)) {
-
-//System.out.println("getMappingCodingSchemes: label " + label);
-
-
 				try {
 
 					CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
@@ -4072,9 +4097,6 @@ if (lbSvc == null) {
 						Boolean bool_obj = relation.isIsMapping();
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
 
-							//System.out.println("\trelation.getSourceCodingScheme(): " + relation.getSourceCodingScheme());
-							//System.out.println("\trelation.getTargetCodingScheme(): " + relation.getTargetCodingScheme());
-
                             if (!isNull(codingScheme)) {
                                 String src_cs_name = relation.getSourceCodingScheme();
                                 String target_cs_name = relation.getTargetCodingScheme();
@@ -4085,7 +4107,6 @@ if (lbSvc == null) {
 										if (codingScheme.compareTo(getFormalName(relation.getSourceCodingScheme())) == 0 ||
 											codingScheme.compareTo(getFormalName(relation.getTargetCodingScheme())) == 0) {
 											v.add(label);
-											//System.out.println("\tadding " + label);
 											break;
 										}
 									}
@@ -4170,7 +4191,6 @@ if (lbSvc == null) {
 			//return ServiceUtility.isSupplement(codingScheme, tagOrVersion);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			System.out.println("DataUtils SupplementExtension.isSupplement throws exeption???");
 		}
 		return false;
 	}
@@ -4218,9 +4238,6 @@ if (lbSvc == null) {
 					} else {
 						description = ref.getEntityDescription().getContent();
 					}
-					//System.out.println("Code: " + ref.getCode() + ", Description: " + description + " Hash: " + ref.hashCode() + " " + "Coding Scheme: " + ref.getCodingSchemeName() + ", Version: " + ref.getCodingSchemeVersion()
-					//    + ", Namespace: " + ref.getCodeNamespace());
-
                     sourceCode = ref.getCode();
                     sourceName = description;
                     sourceCodingScheme = ref.getCodingSchemeName();
@@ -4233,8 +4250,6 @@ if (lbSvc == null) {
 						//PrintUtility.print(ref.getSourceOf(), depth+1);
 
 						for(Association assoc : assocs.getAssociation()){
-							//System.out.println(buildPrefix(depth) + "Association: " + assoc.getAssociationName() + " Container: " + assoc.getRelationsContainerName());
-
 							associationName = assoc.getAssociationName();
 
 							for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
@@ -4245,9 +4260,6 @@ if (lbSvc == null) {
 								} else {
 									description = ac.getEntityDescription().getContent();
 								}
-								//System.out.println(buildPrefix(depth) + "Code: " + ac.getCode() + ", Description: " + description + " Hash: " + ac.hashCode() + " " +
-								//   "Coding Scheme: " + ac.getCodingSchemeName() + ", Version: " + ac.getCodingSchemeVersion() + ", Namespace: " + ac.getCodeNamespace());
-
 								targetCode = ac.getCode();
 								targetName = description;
 								targetCodingScheme = ac.getCodingSchemeName();
@@ -4496,10 +4508,8 @@ if (lbSvc == null) {
 			while (relations.hasMoreElements()) {
 				Relations relation = (Relations) relations.nextElement();
 				Boolean isMapping = relation.getIsMapping();
-				System.out.println("isMapping: " + isMapping);
 				if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
  					relationsContainerName = relation.getContainerName();
-					//System.out.println(relationsContainerName);
 					break;
 				}
 			}
@@ -4550,7 +4560,6 @@ if (lbSvc == null) {
 						NameAndValue vNameAndValue = new NameAndValue();
 						vNameAndValue.setName(name);
 						navList.addNameAndValue(vNameAndValue);
-						//System.out.println("getMappingAssociationNames " + name);
 					}
 					return navList;
 				} else {
@@ -4577,8 +4586,6 @@ if (lbSvc == null) {
 
 			//output is all of the mapping ontologies that this code participates in.
 			for(AbsoluteCodingSchemeVersionReference ref : mappingSchemes.getAbsoluteCodingSchemeVersionReference()){
-				//System.out.println("URI: " + ref.getCodingSchemeURN());
-				//System.out.println("Version: " + ref.getCodingSchemeVersion());
 				v.add(ref.getCodingSchemeURN() + "|" + ref.getCodingSchemeVersion());
 			}
 
@@ -4636,8 +4643,7 @@ if (lbSvc == null) {
 				conceptDomainName_vec.add(entity.getEntityDescription().getContent());
 			}
 		} catch (Exception ex) {
-			//ex.printStackTrace();
-			System.out.println("Unable to resolve " + scheme + "  -- concept domain may not be available.");
+			ex.printStackTrace();
 		}
 		conceptDomainName_vec = SortUtils.quickSort(conceptDomainName_vec);
 		return conceptDomainName_vec;
@@ -4737,9 +4743,6 @@ if (lbSvc == null) {
 
         for (int i=0; i<vsd_vec.size(); i++) {
 		    String vsd_str = (String) vsd_vec.elementAt(i);
-
-//System.out.println("vsd_str " + vsd_str);
-
 		    Vector u = parseData(vsd_str);
 		    String name = (String) u.elementAt(0);
 		    String uri = (String) u.elementAt(1);
@@ -4806,9 +4809,6 @@ if (lbSvc == null) {
 						Vector v = (Vector) hmap.get(src);
 						if (!v.contains(vsd_str)) {
 							v.add(vsd_str);
-
-							//System.out.println("hmap " + src);
-
 							hmap.put(src, v);
 						}
 					} else {
@@ -4838,7 +4838,6 @@ if (lbSvc == null) {
                 if (codingSchemes != null) {
 					//output is all of the mapping ontologies that this code participates in.
 					for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
-						//System.out.println("URI: " + ref.getCodingSchemeURN());
 						v.add(ref.getCodingSchemeURN());
 					}
 					return SortUtils.quickSort(v);
@@ -4849,12 +4848,10 @@ if (lbSvc == null) {
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition throws exceptions.");
 			}
 			return v;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition throws exceptions.");
 		}
 		return null;
 	}
@@ -4925,9 +4922,10 @@ if (lbSvc == null) {
 	}
 
 
-
+/*
     public static Vector getAvailableValueSetDefinitionSources() {
 		if (_availableValueSetDefinitionSources != null) return _availableValueSetDefinitionSources;
+
 		_availableValueSetDefinitionSources = new Vector();
 		HashSet hset = new HashSet();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -4949,15 +4947,36 @@ if (lbSvc == null) {
 		}
 		return SortUtils.quickSort(_availableValueSetDefinitionSources);
 	}
+*/
+
+    public static Vector getAvailableValueSetDefinitionSources() {
+		if (_availableValueSetDefinitionSources != null) return _availableValueSetDefinitionSources;
+
+		Vector availableValueSetDefinitionSources = new Vector();
+		HashSet hset = new HashSet();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        if (list == null) return null;
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+			while (sourceEnum.hasMoreElements()) {
+				Source src = (Source) sourceEnum.nextElement();
+				String src_str = src.getContent();
+				if (!hset.contains(src_str)) {
+					hset.add(src_str);
+					availableValueSetDefinitionSources.add(src_str);
+				}
+			}
+		}
+		return SortUtils.quickSort(availableValueSetDefinitionSources);
+	}
 
 
 
     public static void printValueSetDefinitionHierarchyNode(int level, String root) {
-		String indent = "";
-		for (int i=0; i<level; i++) {
-			indent = indent + "\t";
-		}
-		//System.out.println(indent + root);
 		Vector children = (Vector) _valueSetDefinitionHierarchyHashMap.get(root);
 		if (children != null) {
 			for (int j=0; j<children.size(); j++) {
@@ -4967,7 +4986,7 @@ if (lbSvc == null) {
 		}
 	}
 
-
+/*
 	public static Vector getValueSetDefinitionMetadata() {
 		if (_valueSetDefinitionMetadata != null) return _valueSetDefinitionMetadata;
 		_valueSetDefinitionMetadata = new Vector();
@@ -4983,10 +5002,33 @@ if (lbSvc == null) {
 			}
 			SortUtils.quickSort(_valueSetDefinitionMetadata);
 	    } catch (Exception ex) {
-			System.out.println("WARNING: getValueSetDefinitionMetadata throws exception -- VSDs might not be present.");
+			ex.printStackTrace();
 		}
 		return _valueSetDefinitionMetadata;
 	}
+*/
+
+	public static Vector getValueSetDefinitionMetadata() {
+		if (_valueSetDefinitionMetadata != null) return _valueSetDefinitionMetadata;
+		Vector valueSetDefinitionMetadata = new Vector();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		try {
+			List list = vsd_service.listValueSetDefinitionURIs();
+			if (list == null || list.size() == 0) return null;
+			for (int i=0; i<list.size(); i++) {
+				String uri = (String) list.get(i);
+				ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+				String metadata = getValueSetDefinitionMetadata(vsd);
+				valueSetDefinitionMetadata.add(metadata);
+			}
+			SortUtils.quickSort(valueSetDefinitionMetadata);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return valueSetDefinitionMetadata;
+	}
+
+
 
 	public static String getValueSetDefinitionMetadata(String vsd_uri) {
 		ValueSetDefinition vsd = findValueSetDefinitionByURI(vsd_uri);
@@ -5002,7 +5044,9 @@ if (lbSvc == null) {
 		String description = "";
 		String domain = "";
 		String src_str = "";
-		String supportedSourceStr = "";
+
+		//String supportedSourceStr = "";
+		StringBuffer buf = new StringBuffer();
 
 		uri = vsd.getValueSetDefinitionURI();
 		name = vsd.getValueSetDefinitionName();
@@ -5044,8 +5088,11 @@ if (lbSvc == null) {
 
 		while (supportedSourceEnum.hasMoreElements()) {
 			SupportedSource src = (SupportedSource) supportedSourceEnum.nextElement();
-			supportedSourceStr = supportedSourceStr + src.getContent() + ";";
+			//supportedSourceStr = supportedSourceStr + src.getContent() + ";";
+			buf.append(src.getContent() + ";");
 		}
+		String supportedSourceStr = buf.toString();
+
 		if (supportedSourceStr.length() > 0) {
 			supportedSourceStr = supportedSourceStr.substring(0, supportedSourceStr.length()-1);
 		}
@@ -5070,9 +5117,7 @@ if (lbSvc == null) {
 				//output is all of the mapping ontologies that this code participates in.
 				for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
 					String urn = ref.getCodingSchemeURN();
-					//System.out.println("URI: " + ref.getCodingSchemeURN());
 					if (!hset.contains(urn)) {
-					//System.out.println("Version: " + ref.getCodingSchemeVersion());
 					    v.add(ref.getCodingSchemeURN());
 					    hset.add(urn);
 				    }
@@ -5136,7 +5181,6 @@ if (lbSvc == null) {
 
 
     public static Vector getCodingSchemeReferencesInValueSetDefinition(String uri) {
-		System.out.println("getCodingSchemeReferencesInValueSetDefinition: " + uri);
 		HashSet hset = new HashSet();
 	    if (uri.indexOf("|") != -1) {
 			Vector u = DataUtils.parseData(uri);
@@ -5182,9 +5226,6 @@ if (lbSvc == null) {
 			Vector u = DataUtils.parseData(s);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
-
-//System.out.println("(***) URI: " + uri + " version: " + version);
-
 			AbsoluteCodingSchemeVersionReference vAbsoluteCodingSchemeVersionReference
 			    = new AbsoluteCodingSchemeVersionReference();
 			vAbsoluteCodingSchemeVersionReference.setCodingSchemeURN(uri);
@@ -5282,14 +5323,7 @@ if (lbSvc == null) {
 
     public static Vector getMatchedMetathesaurusCUIs(String scheme, String version,
         String ltag, String code) {
-
-//System.out.println("(*) getMatchedMetathesaurusCUIs scheme: " + scheme);
-//System.out.println("(*) getMatchedMetathesaurusCUIs version: " + version);
-//System.out.println("(*) getMatchedMetathesaurusCUIs code: " + code);
-
-
         Entity c = getConceptByCode(scheme, version, ltag, code);
-        //Entity c = getConceptWithProperty(scheme, version, code, "NCI_META_CUI");
         if (c != null) {
             Vector v = getConceptPropertyValues(c, "NCI_META_CUI");
             if (v == null || v.size() == 0) {
@@ -5406,8 +5440,6 @@ if (lbSvc == null) {
 					extension.getProperty(scheme, csvt, propertyName, Arrays.asList(a));
 
 				for (Entry<String, String> entry : propertyMap.entrySet()) {
-					//System.out.println("Code: " + entry.getKey());
-					//System.out.println(" - Property: " + entry.getValue());
 					hmap.put(key + "$" + entry.getKey(), entry.getValue());
 				}
 			} catch (Exception ex) {

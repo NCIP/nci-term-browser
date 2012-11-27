@@ -198,7 +198,10 @@ if (version != null) {
 
         Vector<String> ontologies_to_search_on =
             DataUtils.parseData(ontologiesToSearchOn);
-        String value = "";
+
+        //String value = "";
+        StringBuffer buf = new StringBuffer();
+
         for (int i = 0; i < ontologies_to_search_on.size(); i++) {
             String s = ontologies_to_search_on.elementAt(i);
             String csName = DataUtils.key2CodingSchemeName(s);
@@ -218,9 +221,11 @@ if (version != null) {
                 }
             }
             displayName += " (" + term_browser_version + ")";
-            value = value + displayName + "<br/>";
+            //value = value + displayName + "<br/>";
+            buf.append(displayName + "<br/>");
         }
-        return value;
+        return buf.toString();
+        //return value;
     }
 
     public static String getPipeSeparator(Boolean[] display) {
@@ -284,14 +289,14 @@ if (version != null) {
             return defaultValue;
         }
     }
-    
-    public static String getConceptUrl(HttpServletRequest request, 
+
+    public static String getConceptUrl(HttpServletRequest request,
     	String dictionary, String version, String concept_id) {
     	  String requestURL = request.getRequestURL().toString();
     	  return getConceptUrl(requestURL, dictionary, version, concept_id);
     }
 
-    public static String getConceptUrl(String requestURL, 
+    public static String getConceptUrl(String requestURL,
         String dictionary, String version, String concept_id) {
           int idx = requestURL.indexOf("pages");
           requestURL = requestURL.substring(0, idx);
@@ -299,7 +304,7 @@ if (version != null) {
 
           String encoded_concept_id = concept_id;
           encoded_concept_id = encoded_concept_id.replaceAll(":", "%3A");
-          
+
           String url = requestURL;
           url += "ConceptReport.jsp";
           url += "?dictionary=" + encoded_dictionary;

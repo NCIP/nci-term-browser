@@ -60,6 +60,9 @@ import org.apache.log4j.*;
 public class AsciiToHtmlFormatter extends FileFormatterBase
     implements FormatterConstant {
 
+
+
+
     private static Logger _logger = Logger
         .getLogger(AsciiToHtmlFormatter.class);
 
@@ -286,6 +289,7 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         }
     }
 
+/*
     public static void main(String[] args) {
         test(CDISC_SDTM_FILE, CDISC_SDTM_NCIT_COLUMNS);
         test(CDISC_SUBSET_FILE, CDISC_SUBSET_NCIT_COLUMNS);
@@ -296,4 +300,5 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         test(SPL_FILE, SPL_NCIT_COLUMNS);
         _logger.debug("Done");
     }
+*/
 }

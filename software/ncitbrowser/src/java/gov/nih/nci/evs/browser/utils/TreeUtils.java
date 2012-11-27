@@ -981,7 +981,6 @@ public class TreeUtils {
 			Entity concept = getConceptByCode(scheme, version, null, code);
 			if (concept == null) return null;
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
-			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 			focus.setCodingSchemeName(entityCodeNamespace);
             String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
@@ -1155,7 +1154,6 @@ public class TreeUtils {
 			if (concept == null) return null;
 
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
-			//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 			focus.setCodingSchemeName(entityCodeNamespace);
             String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
@@ -1442,11 +1440,13 @@ public class TreeUtils {
             String dirName = assoc.getDirectionalName();
             if (dirName != null)
                 try {
-                    rAssoc.setDirectionalName(lbscm.isForwardName(scheme, csvt,
-                        dirName) ? lbscm.getAssociationReverseName(assoc
-                        .getAssociationName(), scheme, csvt) : lbscm
-                        .getAssociationReverseName(assoc.getAssociationName(),
-                            scheme, csvt));
+					/*
+                    rAssoc.setDirectionalName(lbscm.isForwardName(scheme, csvt, dirName) ?
+                         lbscm.getAssociationReverseName(assoc.getAssociationName(), scheme, csvt):
+                         lbscm.getAssociationReverseName(assoc.getAssociationName(), scheme, csvt));
+                    */
+                    rAssoc.setDirectionalName(lbscm.getAssociationReverseName(assoc.getAssociationName(), scheme, csvt));
+
                 } catch (LBException e) {
                 }
 
@@ -1683,7 +1683,6 @@ public class TreeUtils {
             lbscm.setLexBIGService(lbSvc);
             String hierarchyID = getHierarchyID(codingScheme, version);
 
-            System.out.println("hierarchyID: " + hierarchyID);
             ResolvedConceptReferenceList rcrl = lbscm.getHierarchyRoots(codingScheme, versionOrTag,
                 hierarchyID);
 
@@ -1696,10 +1695,7 @@ public class TreeUtils {
             return rcrl;
 
         } catch (Exception ex) {
-			//ex.printStackTrace();
-			System.out.println("scheme: " + codingScheme);
-			System.out.println("version: " + version);
-			System.out.println("ERROR: lbscm.getHierarchyRoots throws exception???");
+			ex.printStackTrace();
             return null;
         }
     }
@@ -2140,13 +2136,8 @@ public class TreeUtils {
 				Entity concept = getConceptByCode(scheme, version, null, code);
 				if (concept != null) {
 					String entityCodeNamespace = concept.getEntityCodeNamespace();
-					//System.out.println("getEntityCodeNamespace returns: " + concept.getEntityCodeNamespace());
 					ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 					focus.setCodingSchemeName(entityCodeNamespace);
-					//String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
-
-					//ConceptReference graphFocus =
-					//    ConvenienceMethods.createConceptReference(code, scheme);
 					matches =
 						cng.resolveAsList(focus, associationsNavigatedFwd,
 							!associationsNavigatedFwd, 1, 1, new LocalNameList(),
@@ -2238,14 +2229,6 @@ public class TreeUtils {
 	}
 
 	public static HashMap combine(HashMap hmap1, HashMap hmap2) {
-
-		if (hmap1 == null) {
-			System.out.println("(********) hmap1 == null" );
-		}
-		if (hmap2 == null) {
-			System.out.println("(********) hmap2 == null" );
-		}
-
 		if (hmap1 == null && hmap2 == null) return null;
 		if (hmap1 == null && hmap2 != null) return hmap2;
 		if (hmap2 == null && hmap1 != null) return hmap1;

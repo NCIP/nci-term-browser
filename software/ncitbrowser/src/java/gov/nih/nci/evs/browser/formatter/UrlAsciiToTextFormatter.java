@@ -86,6 +86,7 @@ public class UrlAsciiToTextFormatter extends AsciiToTextFormatter implements
         formatter.convert(textfile, delimiter);
     }
 
+/*
     public static void main(String[] args) {
         try {
             generate(CDISC_SDTM_REPORT_URL, CDISC_SDTM_NCIT_COLUMNS);
@@ -105,4 +106,5 @@ public class UrlAsciiToTextFormatter extends AsciiToTextFormatter implements
             e.printStackTrace();
         }
     }
+*/
 }

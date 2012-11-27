@@ -105,6 +105,7 @@ public class AsciiToTextFormatter extends FileFormatterBase implements
         }
     }
 
+/*
     public static void main(String[] args) {
         test(CDISC_SDTM_FILE, CDISC_SDTM_NCIT_COLUMNS);
         test(CDISC_SUBSET_FILE, CDISC_SUBSET_NCIT_COLUMNS);
@@ -115,4 +116,5 @@ public class AsciiToTextFormatter extends FileFormatterBase implements
         test(SPL_FILE, SPL_NCIT_COLUMNS);
         _logger.debug("Done");
     }
+*/
 }

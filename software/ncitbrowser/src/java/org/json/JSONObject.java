@@ -114,6 +114,13 @@ public class JSONObject implements Serializable {
          */
         public boolean equals(Object object) {
             return object == null || object == this;
+            /*
+            if (this == null && object == null) return true;
+            if (this != null && object == null) return false;
+            if (this == null && object != null) return false;
+            if (this.toString().compareTo(object.toString()) == 0) return true;
+            return false;
+            */
         }
 
         /**

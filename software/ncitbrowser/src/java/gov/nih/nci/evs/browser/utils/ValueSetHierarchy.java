@@ -82,54 +82,39 @@ import org.json.*;
 
 public class ValueSetHierarchy {
 	public static AbsoluteCodingSchemeVersionReferenceList _csVersionList = null;
+    private static Logger _logger = Logger.getLogger(ValueSetHierarchy.class);
 
-	public static HashSet _valueSetParticipationHashSet = null;
-
+    public static final LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
     //public static String SOURCE_SCHEME = "Terminology Value Set";
     public static final String SOURCE_SCHEME = "Terminology_Value_Set.owl";
     public static final String SOURCE_VERSION;// = null;
+    public static final String ONTOLOGY_NODE_ID = "ontology_node_id";
+    public static final String ONTOLOGY_NODE_NAME = "ontology_node_name";
+    public static final String ONTOLOGY_NODE_PARENT_ASSOC = "ontology_node_parent_assoc";
+    public static final String ONTOLOGY_NODE_CHILD_COUNT = "ontology_node_child_count";
+    public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
+    public static final String CHILDREN_NODES = "children_nodes";
 
+	public static HashSet _valueSetParticipationHashSet = null;
 	public static HashMap _source_hierarchy = null;
 	public static HashMap _source_subconcept_map = null;
 	public static HashMap _source_superconcept_map = null;
-
-
-    static LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
-    private static Logger _logger = Logger.getLogger(ValueSetHierarchy.class);
-
-
-    public static final String ONTOLOGY_NODE_ID = "ontology_node_id";
-
-    public static final String ONTOLOGY_NODE_NAME = "ontology_node_name";
-    public static final String ONTOLOGY_NODE_PARENT_ASSOC =
-        "ontology_node_parent_assoc";
-    public static final String ONTOLOGY_NODE_CHILD_COUNT =
-        "ontology_node_child_count";
-    public static final String ONTOLOGY_NODE_DEFINITION =
-        "ontology_node_definition";
-    public static final String CHILDREN_NODES = "children_nodes";
-
     public static HashMap _valueSetDefinitionHierarchyHashMap = null;
     public static Vector  _availableValueSetDefinitionSources = null;
     public static Vector  _valueSetDefinitionHierarchyRoots = null;
-
-    //public static Vector  _valueSetDefinitionSourceListing = null;
     public static HashMap _valueSetDefinitionSourceCode2Name_map = null;
-
     public static HashMap _vsd_source_to_vsds_map = null;
     public static HashMap _valueSetDefinitionURI2VSD_map = null;
+    public static HashMap _cs2vsdURIs_map = null;
+    public static HashMap _subValueSet_hmap = null;
+    public static HashMap vsdURI2CodingSchemeURNs = null;
+
 
 	//private static String URL = "http://bmidev4:19280/lexevsapi60";
 	//private static String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
 	//private static String URL = "http://ncias-q532-v.nci.nih.gov:29080/lexevsapi60";
-
-	private static String URL = "http://localhost:8080/lexevsapi60";
-
-    public static HashMap _cs2vsdURIs_map = null;
-    public static HashMap _subValueSet_hmap = null;
-
-
-    public static HashMap vsdURI2CodingSchemeURNs = null;
+	//private static String URL = "http://localhost:8080/lexevsapi60";
+    //public static Vector  _valueSetDefinitionSourceListing = null;
 
 
     public ValueSetHierarchy() {
@@ -144,16 +129,47 @@ public class ValueSetHierarchy {
 
     static {
 		SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
-		System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
+		//System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
         if (_valueSetDefinitionURI2VSD_map == null) {
         	_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
 	    }
+
+	    if (_availableValueSetDefinitionSources == null) {
+	        _availableValueSetDefinitionSources = findAvailableValueSetDefinitionSources();
+		}
+
+		if (_source_hierarchy == null) {
+			_source_hierarchy = getValueSetSourceHierarchy(SOURCE_SCHEME, SOURCE_VERSION);
+		}
+
+		if (_vsd_source_to_vsds_map == null) {
+		    _vsd_source_to_vsds_map = createVSDSource2VSDsMap();
+		}
+
+/*
+	    if (_valueSetParticipationHashSet == null) {
+	    	_valueSetParticipationHashSet = getValueSetParticipationHashSet();
+		}
+*/
+        /*
+        preprocessSourceHierarchyData();
+        */
+
+/*
+        if (_csVersionList == null) {
+			_csVersionList = getAbsoluteCodingSchemeVersionReferenceList();
+		}
+*/
+
 	}
 
     public static String getValueSetDecription(String uri) {
+		/*
 		if (_valueSetDefinitionURI2VSD_map == null) {
 			_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
 		}
+		*/
+
 		ValueSetDefinition vsd = (ValueSetDefinition) _valueSetDefinitionURI2VSD_map.get(uri);
 		if (vsd == null) {
 		    return null;
@@ -165,9 +181,11 @@ public class ValueSetHierarchy {
 	}
 
     public static Vector getValueSetDecriptionSources(String uri) {
+		/*
 		if (_valueSetDefinitionURI2VSD_map == null) {
 			_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
 		}
+		*/
 		Vector source_vec = new Vector();
 		ValueSetDefinition vsd = (ValueSetDefinition) _valueSetDefinitionURI2VSD_map.get(uri);
 		if (vsd == null) return null;
@@ -381,9 +399,11 @@ public class ValueSetHierarchy {
     }
 
     public static HashMap getValueSetDefinitionURI2VSD_map() {
+		/*
 		if (_valueSetDefinitionURI2VSD_map != null) {
 			return _valueSetDefinitionURI2VSD_map;
 		}
+		*/
 		_valueSetDefinitionURI2VSD_map = new HashMap();
 
 		try {
@@ -394,7 +414,7 @@ public class ValueSetHierarchy {
 			try {
 				list = vsd_service.listValueSetDefinitionURIs();
 			} catch (Exception ex) {
-				System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+				ex.printStackTrace();
 				return null;
 			}
 
@@ -443,9 +463,11 @@ public class ValueSetHierarchy {
 	}
 
     public static Vector getValueSetDefinitionsBySource(String source) {
+
 		if (_availableValueSetDefinitionSources != null) {
 			if (!_availableValueSetDefinitionSources.contains(source)) return null;
 		}
+
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
         List list = null;//vsd_service.listValueSetDefinitionURIs();
@@ -453,7 +475,7 @@ public class ValueSetHierarchy {
 		try {
 			list = vsd_service.listValueSetDefinitionURIs();
 	    } catch (Exception ex) {
-			System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 			return v;
 		}
 
@@ -477,9 +499,43 @@ public class ValueSetHierarchy {
 	}
 
 
+    public static Vector findAvailableValueSetDefinitionSources() {
+		Vector v = new Vector();
+		HashSet hset = new HashSet();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = null;//vsd_service.listValueSetDefinitionURIs();
+		try {
+			list = vsd_service.listValueSetDefinitionURIs();
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+			return new Vector();
+		}
+
+        if (list == null) return null;
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+			while (sourceEnum.hasMoreElements()) {
+				Source src = (Source) sourceEnum.nextElement();
+				String src_str = src.getContent();
+				if (!hset.contains(src_str)) {
+					hset.add(src_str);
+					v.add(src_str);
+				}
+			}
+		}
+		return v;
+	}
+
 
     public static Vector getAvailableValueSetDefinitionSources() {
 		if (_availableValueSetDefinitionSources != null) return _availableValueSetDefinitionSources;
+		_availableValueSetDefinitionSources = findAvailableValueSetDefinitionSources();
+		return _availableValueSetDefinitionSources;
+		/*
+
 		_availableValueSetDefinitionSources = new Vector();
 		HashSet hset = new HashSet();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -487,7 +543,7 @@ public class ValueSetHierarchy {
 		try {
 			list = vsd_service.listValueSetDefinitionURIs();
 	    } catch (Exception ex) {
-			System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 			return new Vector();
 		}
 
@@ -507,6 +563,7 @@ public class ValueSetHierarchy {
 			}
 		}
 		return _availableValueSetDefinitionSources;
+		*/
 	}
 
 
@@ -581,7 +638,6 @@ public class ValueSetHierarchy {
                 List<TreeItem> children = ti._assocToChildMap.get(association);
                 // Collections.sort(children);
                 for (TreeItem childItem : children) {
-                    // printTree(childItem, focusCode, depth + 1);
                     JSONObject nodeObject = new JSONObject();
                     nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
                     nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
@@ -612,6 +668,7 @@ public class ValueSetHierarchy {
     }
 
     public static void printTree(TreeItem ti, String focusCode, int depth) {
+		/*
         StringBuffer indent = new StringBuffer();
         for (int i = 0; i < depth * 2; i++)
             indent.append("| ");
@@ -622,11 +679,12 @@ public class ValueSetHierarchy {
                 .append(':').append(
                     ti._text.length() > 64 ? ti._text.substring(0, 62) + "..."
                         : ti._text).append(ti._expandable ? " [+]" : "");
-        System.out.println(codeAndText.toString());
+        //System.out.println(codeAndText.toString());
 
         indent.append("| ");
+        */
         for (String association : ti._assocToChildMap.keySet()) {
-            System.out.println(indent.toString() + association);
+            //System.out.println(indent.toString() + association);
             List<TreeItem> children = ti._assocToChildMap.get(association);
             Collections.sort(children);
             for (TreeItem childItem : children) {
@@ -1272,7 +1330,7 @@ public class ValueSetHierarchy {
 	}
 
     public static boolean hasSubSourceInSourceHierarchy(String src) {
-		if (_source_subconcept_map == null) preprocessSourceHierarchyData();
+		//if (_source_subconcept_map == null) preprocessSourceHierarchyData();
 		if (_source_subconcept_map.containsKey(src)) {
 			return true;
 		}
@@ -1280,7 +1338,7 @@ public class ValueSetHierarchy {
 	}
 
     public static boolean hasValueSetsInSource(String src) {
-		if (_source_subconcept_map == null) preprocessSourceHierarchyData();
+		//if (_source_subconcept_map == null) preprocessSourceHierarchyData();
 		if (_source_subconcept_map.containsKey(src)) {
 			return true;
 		}
@@ -1289,7 +1347,7 @@ public class ValueSetHierarchy {
 
 
     public static void preprocessSourceHierarchyData() {
-		_source_hierarchy = getValueSetSourceHierarchy(SOURCE_SCHEME, SOURCE_VERSION);
+		//_source_hierarchy = getValueSetSourceHierarchy(SOURCE_SCHEME, SOURCE_VERSION);
 
 		_source_subconcept_map = new HashMap();
 		populateSubconceptHashMap(_source_hierarchy, _source_subconcept_map);//, root);
@@ -1307,9 +1365,8 @@ public class ValueSetHierarchy {
 
 	public static HashMap getValueSetSourceHierarchy(String scheme, String version) {
 		if (_source_hierarchy != null) return _source_hierarchy;
-
+/*
 		_source_hierarchy = new HashMap();
-		//_valueSetDefinitionSourceListing = getCodeList(SOURCE_SCHEME, SOURCE_VERSION);
 		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(scheme, version);
 
 		// value set source coding scheme
@@ -1322,8 +1379,6 @@ public class ValueSetHierarchy {
 		if (roots != null) {
 			for (int i=0; i<roots.getResolvedConceptReferenceCount(); i++) {
 				ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
-				//System.out.println("\tRoot: " + rcr.getEntityDescription().getContent() + " (" + rcr.getConceptCode() + ")");
-
 				TreeItem root_node = new TreeItem(rcr.getConceptCode(), rcr.getEntityDescription().getContent());
 
 				populateChildrenNodes(scheme, version, root_node, visited_nodes);
@@ -1338,9 +1393,37 @@ public class ValueSetHierarchy {
 
 		_source_superconcept_map = new HashMap();
 		populateSuperconceptHashMap(_source_hierarchy, _source_superconcept_map);//, root);
+*/
 
+		HashMap hmap = new HashMap();
+		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(scheme, version);
 
-		return _source_hierarchy;
+		// value set source coding scheme
+		ResolvedConceptReferenceList roots = getHierarchyRoots(scheme, version);
+
+		HashSet visited_nodes = new HashSet();
+
+		TreeItem ti = new TreeItem("<Root>", "Root node");
+		ti._expandable = false;
+		if (roots != null) {
+			for (int i=0; i<roots.getResolvedConceptReferenceCount(); i++) {
+				ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
+				TreeItem root_node = new TreeItem(rcr.getConceptCode(), rcr.getEntityDescription().getContent());
+
+				populateChildrenNodes(scheme, version, root_node, visited_nodes);
+				ti.addChild("inverse_is_a", root_node);
+				ti._expandable = true;
+			}
+		}
+		hmap.put("<Root>", ti);
+
+		_source_subconcept_map = new HashMap();
+		populateSubconceptHashMap(hmap, _source_subconcept_map);//, root);
+
+		_source_superconcept_map = new HashMap();
+		populateSuperconceptHashMap(hmap, _source_superconcept_map);//, root);
+
+		return hmap;
 	}
 
     //hmap HashMap for quick access to child codes
@@ -1474,6 +1557,63 @@ public class ValueSetHierarchy {
 
 
 
+    static {
+		vsdURI2CodingSchemeURNs = new HashMap();
+		try {
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			List list = null;
+			try {
+				list = vsd_service.listValueSetDefinitionURIs();
+
+				for (int i=0; i<list.size(); i++) {
+					String uri = (String) list.get(i);
+					java.net.URI valueSetDefinitionURI = new URI(uri);
+					Vector v = new Vector();
+					try {
+						//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+						AbsoluteCodingSchemeVersionReferenceList codingSchemes =
+							vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
+
+						if (codingSchemes != null) {
+							//output is all of the mapping ontologies that this code participates in.
+							for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
+								v.add(ref.getCodingSchemeURN());
+							}
+							v = SortUtils.quickSort(v);
+							vsdURI2CodingSchemeURNs.put(uri, v);
+							//return SortUtils.quickSort(v);
+						} else {
+							System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition returns null (URI: "
+							   + uri + ").");
+						}
+
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+
+				}
+
+
+
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+
+    public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
+		if (vsdURI2CodingSchemeURNs != null && vsdURI2CodingSchemeURNs.containsKey(uri)) {
+			return (Vector) vsdURI2CodingSchemeURNs.get(uri);
+		}
+		return null;
+	}
+/*
+
     public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
 		if (vsdURI2CodingSchemeURNs == null) {
 			vsdURI2CodingSchemeURNs = new HashMap();
@@ -1514,10 +1654,10 @@ public class ValueSetHierarchy {
 		}
 		return null;
 	}
-
+*/
 
     public static HashMap getValueSetDefinitionNodesWithSource(String src) {
-		createVSDSource2VSDsMap();
+		//createVSDSource2VSDsMap();
 
 		//String text = (String) _valueSetDefinitionSourceCode2Name_map.get(src);
 		//TreeItem root = new TreeItem(src, src + " (" + text + ")");
@@ -1545,7 +1685,67 @@ public class ValueSetHierarchy {
 	}
 
 
+    public static HashMap createVSDSource2VSDsMap() {
 
+		HashMap vsd_source_to_vsds_map = new HashMap();
+
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		List list = null;
+		try {
+			list = vsd_service.listValueSetDefinitionURIs();
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+			return vsd_source_to_vsds_map;
+		}
+
+		for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+
+			String vsd_uri = vsd.getValueSetDefinitionURI();
+			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
+
+			while (sourceEnum.hasMoreElements()) {
+				Source source = (Source) sourceEnum.nextElement();
+				String src_str = source.getContent();
+
+				Vector vsd_vec = new Vector();
+				if (vsd_source_to_vsds_map.containsKey(src_str)) {
+					vsd_vec = (Vector) vsd_source_to_vsds_map.get(src_str);
+				}
+				boolean found = false;
+				for (int j=0; j<vsd_vec.size(); j++) {
+					ValueSetDefinition next_vsd = (ValueSetDefinition) vsd_vec.elementAt(j);
+					if (next_vsd.getValueSetDefinitionURI().compareTo(vsd_uri) == 0) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					vsd_vec.add(vsd);
+				}
+				vsd_source_to_vsds_map.put(src_str, vsd_vec);
+			}
+		}
+
+		Iterator it = vsd_source_to_vsds_map.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry thisEntry = (Entry) it.next();
+			String src_str = (String) thisEntry.getKey();
+			Vector vsd_vec = (Vector) thisEntry.getValue();
+			for (int i=0; i<vsd_vec.size(); i++) {
+				ValueSetDefinition vsd = (ValueSetDefinition) vsd_vec.elementAt(i);
+				System.out.println("\t" + vsd.getValueSetDefinitionName());
+			}
+		}
+
+		return vsd_source_to_vsds_map;
+
+	}
+
+
+
+/*
     public static void createVSDSource2VSDsMap() {
 		if (_vsd_source_to_vsds_map != null) return;
 
@@ -1556,7 +1756,7 @@ public class ValueSetHierarchy {
 		try {
 			list = vsd_service.listValueSetDefinitionURIs();
 	    } catch (Exception ex) {
-			System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 			return;
 		}
 
@@ -1602,11 +1802,14 @@ public class ValueSetHierarchy {
 
 	}
 
+*/
 
 	public static boolean hasValueSetDefinitionsWithSource(String src) {
+		/*
 		if (_vsd_source_to_vsds_map == null) {
-			createVSDSource2VSDsMap();
+			_vsd_source_to_vsds_map = createVSDSource2VSDsMap();
 		}
+		*/
 		if (_vsd_source_to_vsds_map.containsKey(src)) {
 			return true;
 		}
@@ -1615,9 +1818,11 @@ public class ValueSetHierarchy {
 
 
 	public static Vector getValueSetDefinitionsWithSource(String src) {
+		/*
 		if (_vsd_source_to_vsds_map == null) {
 			createVSDSource2VSDsMap();
 		}
+		*/
 		return (Vector) _vsd_source_to_vsds_map.get(src);
 	}
 
@@ -1625,10 +1830,6 @@ public class ValueSetHierarchy {
 
 
 	public static HashMap getRootValueSets(String scheme) {
-
-System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
-
-
 		if (DataUtils._codingSchemeName2URIHashMap == null) DataUtils.initializeCodingSchemeMap();
 		String formalName = DataUtils.getFormalName(scheme);
 		String codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
@@ -1645,7 +1846,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 		try {
 			list = vsd_service.listValueSetDefinitionURIs();
 	    } catch (Exception ex) {
-			System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 			return null;
 		}
 
@@ -1782,7 +1983,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 		try {
 			list = vsd_service.listValueSetDefinitionURIs();
 	    } catch (Exception ex) {
-			System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 			return null;
 		}
 
@@ -1898,11 +2099,13 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
         return hmap;
 	}
 
-
+/*
     public static AbsoluteCodingSchemeVersionReferenceList getAbsoluteCodingSchemeVersionReferenceList() {
+
         if (_valueSetParticipationHashSet == null) {
-			getValueSetParticipationHashSet();
+			_valueSetParticipationHashSet = getValueSetParticipationHashSet();
 		}
+
         if (_csVersionList != null) return _csVersionList;
 		_csVersionList = new AbsoluteCodingSchemeVersionReferenceList();
         try {
@@ -1914,8 +2117,6 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
                 if (csrl == null) return null;
             } catch (LBInvocationException ex) {
                 ex.printStackTrace();
-                System.out.println("lbSvc.getSupportedCodingSchemes() FAILED..."
-                    + ex.getCause());
                 return _csVersionList;
             }
             CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
@@ -1927,11 +2128,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
                 String formalname = css.getFormalName();
 
                 Boolean isActive = null;
-                /*
-                if (csr == null) {
-                    System.out.println("\tcsr == null???");
-                } else
-                */
+
                 if (csr.getRenderingDetail() == null) {
                     System.out.println("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
@@ -1965,21 +2162,97 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 							AbsoluteCodingSchemeVersionReference csv_ref = new AbsoluteCodingSchemeVersionReference();
 							csv_ref.setCodingSchemeURN(cs.getCodingSchemeURI());
 							csv_ref.setCodingSchemeVersion(representsVersion);
-
-							System.out.println(cs.getCodingSchemeURI() + " (version: " + representsVersion + ")");
-
 							_csVersionList.addAbsoluteCodingSchemeVersionReference(csv_ref);
 						}
                     } catch (Exception ex) {
-
+                        ex.printStackTrace();
                     }
                 }
             }
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             // return null;
         }
         return _csVersionList;
+    }
+*/
+
+    public static AbsoluteCodingSchemeVersionReferenceList getAbsoluteCodingSchemeVersionReferenceList() {
+
+        if (_valueSetParticipationHashSet == null) {
+			_valueSetParticipationHashSet = getValueSetParticipationHashSet();
+		}
+
+		if (_csVersionList != null) return _csVersionList;
+
+
+		AbsoluteCodingSchemeVersionReferenceList csVersionList = new AbsoluteCodingSchemeVersionReferenceList();
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) return null;
+            CodingSchemeRenderingList csrl = null;
+            try {
+                csrl = lbSvc.getSupportedCodingSchemes();
+                if (csrl == null) return null;
+            } catch (LBInvocationException ex) {
+                ex.printStackTrace();
+                return csVersionList;
+            }
+            CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+            for (int i = 0; i < csrs.length; i++) {
+                int j = i + 1;
+                CodingSchemeRendering csr = csrs[i];
+
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                String formalname = css.getFormalName();
+
+                Boolean isActive = null;
+
+                if (csr.getRenderingDetail() == null) {
+                    System.out.println("\tcsr.getRenderingDetail() == null");
+                } else if (csr.getRenderingDetail().getVersionStatus() == null) {
+                    System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
+                } else {
+                    isActive =
+                        csr.getRenderingDetail().getVersionStatus().equals(
+                            CodingSchemeVersionStatus.ACTIVE);
+                }
+
+                String representsVersion = css.getRepresentsVersion();
+                boolean includeInactive = false;
+
+                if ((includeInactive && isActive == null)
+                    || (isActive != null && isActive.equals(Boolean.TRUE))
+                    || (includeInactive && (isActive != null && isActive
+                        .equals(Boolean.FALSE)))) {
+
+
+                    CodingSchemeVersionOrTag vt =
+                        new CodingSchemeVersionOrTag();
+                    vt.setVersion(representsVersion);
+
+                    try {
+                        CodingScheme cs =
+                            lbSvc.resolveCodingScheme(formalname, vt);
+
+                        String cs_uri = cs.getCodingSchemeURI();
+                        if (_valueSetParticipationHashSet.contains(cs_uri)) {
+
+							AbsoluteCodingSchemeVersionReference csv_ref = new AbsoluteCodingSchemeVersionReference();
+							csv_ref.setCodingSchemeURN(cs.getCodingSchemeURI());
+							csv_ref.setCodingSchemeVersion(representsVersion);
+							csVersionList.addAbsoluteCodingSchemeVersionReference(csv_ref);
+						}
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // return null;
+        }
+        return csVersionList;
     }
 
 
@@ -1989,8 +2262,9 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 
         if (_valueSetParticipationHashSet == null) {
             //return null;
-            getValueSetParticipationHashSet();
+            _valueSetParticipationHashSet = getValueSetParticipationHashSet();
 		}
+
 
         Vector root_cs_vec = new Vector();
         Iterator it = _valueSetParticipationHashSet.iterator();
@@ -2042,9 +2316,9 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 
 
 	public static HashSet getValueSetParticipationHashSet() {
-
 		if (_valueSetParticipationHashSet != null) return _valueSetParticipationHashSet;
-		_valueSetParticipationHashSet = new HashSet();
+        HashSet valueSetParticipationHashSet = new HashSet();
+		//if (_valueSetParticipationHashSet != null) return _valueSetParticipationHashSet;
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 		try {
 			List list = null;//vsd_service.listValueSetDefinitionURIs();
@@ -2052,7 +2326,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 			try {
 				list = vsd_service.listValueSetDefinitionURIs();
 			} catch (Exception ex) {
-				System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+				ex.printStackTrace();
 				return null;
 			}
 
@@ -2062,22 +2336,27 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 				Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
 				for (int j=0; j<cs_vec.size(); j++) {
 					String cs = (String) cs_vec.elementAt(j);
-					if (!_valueSetParticipationHashSet.contains(cs)) {
-						_valueSetParticipationHashSet.add(cs);
+					if (!valueSetParticipationHashSet.contains(cs)) {
+						valueSetParticipationHashSet.add(cs);
 					}
 				}
 			}
 		} catch (Exception ex) {
-			System.out.println("WARNING: getValueSetParticipationHashSet throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 		}
-		return _valueSetParticipationHashSet;
+		return valueSetParticipationHashSet;
 	}
 
 
 
 	public static boolean hasValueSet(String cs_name) {
+	    if (_valueSetParticipationHashSet == null) {
+	    	_valueSetParticipationHashSet = getValueSetParticipationHashSet();
+		}
+
 		String scheme = DataUtils.getFormalName(cs_name);
 		scheme = DataUtils.codingSchemeName2URI(scheme);
+		/*
 
 		if (_valueSetParticipationHashSet == null) {
             _valueSetParticipationHashSet = new HashSet();
@@ -2087,7 +2366,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 			try {
 				list = vsd_service.listValueSetDefinitionURIs();
 			} catch (Exception ex) {
-				System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+				ex.printStackTrace();
 				return false;
 			}
 
@@ -2102,6 +2381,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 				}
 		    }
 		}
+		*/
 
 		boolean retval = _valueSetParticipationHashSet.contains(scheme);
 		return retval;
@@ -2158,7 +2438,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
 		try {
 			list = vsd_service.listValueSetDefinitionURIs();
 	    } catch (Exception ex) {
-			System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 			return null;
 		}
 
@@ -2284,7 +2564,7 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
     // code: parent vsd_uri
 	public static HashMap getSubValueSets(String vsd_uri) {
 		//HashMap source_hier = getValueSetSourceHierarchy();
-		createVSDSource2VSDsMap();
+		//createVSDSource2VSDsMap();
 		Vector sub_src_vec = new Vector();
 		HashSet hset = new HashSet();
 
@@ -2492,11 +2772,6 @@ System.out.println("ValueSetHierarchy getRootValueSets scheme " + scheme);
         ResolvedConceptReferenceList rcrl = null;//TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
         int count = 0;
         try {
-
-//System.out.println("*** SOURCE_SCHEME: " + SOURCE_SCHEME);
-//System.out.println("*** SOURCE_VERSION: " + SOURCE_VERSION);
-
-
 			rcrl = TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
 
 
@@ -2506,7 +2781,7 @@ if (rcrl == null) {
 			count = rcrl.getResolvedConceptReferenceCount();
 }
 		} catch (Exception ex) {
-			System.out.println("WARNING: TreeUtils.getHierarchyRoots throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 			return null;
 		}
 
@@ -2662,8 +2937,12 @@ if (rcrl == null) {
 
 
     public static void initializeCS2vsdURIs_map() {
-        HashSet hset = getValueSetParticipationHashSet();
-        Iterator it = hset.iterator();
+        //HashSet hset = getValueSetParticipationHashSet();
+        if (_valueSetParticipationHashSet == null) {
+            _valueSetParticipationHashSet = getValueSetParticipationHashSet();
+	    }
+
+        Iterator it = _valueSetParticipationHashSet.iterator();
         while (it.hasNext()) {
 			String cs_uri = (String) it.next();
 			String cs_name = DataUtils.getFormalName(cs_uri);
@@ -2686,7 +2965,9 @@ if (rcrl == null) {
 		long ms = System.currentTimeMillis();
 		Vector v = new Vector();
 		String cs_uri = DataUtils.codingSchemeName2URI(codingSchemeName);
-		_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+
+		//_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
+
 		Iterator it = _valueSetDefinitionURI2VSD_map.keySet().iterator();
 		while (it.hasNext()) {
 			String vsd_uri = (String) it.next();
@@ -2707,8 +2988,8 @@ if (rcrl == null) {
 
 
     public static Vector getVSDRootsBySource(String src_str) {
-		createVSDSource2VSDsMap();
-		if (_source_subconcept_map == null) preprocessSourceHierarchyData();
+		//createVSDSource2VSDsMap();
+		//if (_source_subconcept_map == null) preprocessSourceHierarchyData();
 		Vector vsd_vec = (Vector) _vsd_source_to_vsds_map.get(src_str);
 		if (vsd_vec != null && vsd_vec.size() > 0) {
 			return vsd_vec;
@@ -2735,7 +3016,7 @@ if (rcrl == null) {
 
 
     public static Vector getVSDChildrenNodesBySource(String vsd_uri) {
-		createVSDSource2VSDsMap();
+		//createVSDSource2VSDsMap();
 		if (_source_subconcept_map == null) return null;
 
 		// find srcs for vsd_uri
@@ -2889,7 +3170,7 @@ if (rcrl == null) {
 		try {
 			vs_roots = (TreeItem) src_vs_tree_hmap.get("<Root>");
 	    } catch (Exception ex) {
-			System.out.println("WARNING: createVSDSource2VSDsMap throws exceptions -- VSDs may not be present.");
+			ex.printStackTrace();
 			return null;
 		}
 		for (String association : vs_roots._assocToChildMap.keySet()) {
@@ -2936,9 +3217,6 @@ if (rcrl == null) {
 	}
 
     public static TreeItem getCodingSchemeValueSetTreeBranch(String scheme, String code, String name) {
-
-		//System.out.println("CS ValueSetTreeBranch " + scheme + " VSD: " + code + " " + name);
-
 		TreeItem ti = new TreeItem(code, name);
 		ti._expandable = false;
 		List <TreeItem> children = new ArrayList();
@@ -2988,10 +3266,6 @@ if (rcrl == null) {
 
 
     public static HashMap getCodingSchemeValueSetTree(String scheme, String version) {
-
-System.out.println("************* getCodingSchemeValueSetTree *************");
-
-
 		List <TreeItem> branch = new ArrayList();
 		TreeItem super_root = new TreeItem("<Root>", "Root node");
 
@@ -3009,11 +3283,7 @@ System.out.println("************* getCodingSchemeValueSetTree *************");
 				 TreeItem cs_vs_root = new TreeItem(code, name);
    				 cs_vs_root._expandable = false;
 				 List <TreeItem> cs_vs_root_children = new ArrayList();
-
 				 String node_id = code;
-
-				 System.out.println("(*) coding scheme: " + node_id);
-
 				 try {
 				     HashMap cs_hmap = getRootValueSets(node_id);
 				     TreeItem temp_root = (TreeItem) cs_hmap.get("<Root>");

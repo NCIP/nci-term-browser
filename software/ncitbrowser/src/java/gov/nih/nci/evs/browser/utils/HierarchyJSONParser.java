@@ -228,12 +228,19 @@ public class HierarchyJSONParser {
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
             int amt = amount(token, '"');
+
+            StringBuffer buf = new StringBuffer();
+            buf.append(token);
+
             // Note: For cases where ',' is between '"'.
             while (amt % 2 != 0 && tokenizer.hasMoreTokens()) {
                 String token2 = tokenizer.nextToken();
                 amt += amount(token2, '"');
-                token += token2;
+                //token += token2;
+
+                buf.append(token2);
             }
+            token = buf.toString();
             add(map, token);
         }
         return map;
