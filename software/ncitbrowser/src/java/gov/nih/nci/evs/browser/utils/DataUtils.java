@@ -155,9 +155,11 @@ public class DataUtils {
     public static final int SEARCH_ROLE_VALUE = 6;
     public static final int SEARCH_ASSOCIATION_VALUE = 7;
 
+/*
     private static final List<String> STOP_WORDS =
         Arrays.asList(new String[] { "a", "an", "and", "by", "for", "of", "on",
             "in", "nos", "the", "to", "with" });
+*/
 
     public static final String TYPE_ROLE = "type_role";
     public static final String TYPE_ASSOCIATION = "type_association";
@@ -234,6 +236,15 @@ public class DataUtils {
 		if (_valueSetDefinitionMetadata == null) {
 			_valueSetDefinitionMetadata = getValueSetDefinitionMetadata();
         }
+
+        if (_namespace2CodingScheme == null) {
+            _namespace2CodingScheme = getNamespaceId2CodingSchemeFormalNameMapping();
+		}
+
+		if (_defaultOntologiesToSearchOnStr == null) {
+            _defaultOntologiesToSearchOnStr = getDefaultOntologiesToSearchOnStr();
+		}
+
 	}
 
     public static List getOntologyList() {
@@ -242,6 +253,7 @@ public class DataUtils {
         return _ontologies;
     }
 
+/*
     public static String getDefaultOntologiesToSearchOnStr() {
         if (_ontologies == null)
             setCodingSchemeMap();
@@ -257,6 +269,30 @@ public class DataUtils {
         }
         return _defaultOntologiesToSearchOnStr;
     }
+*/
+
+
+    public static String getDefaultOntologiesToSearchOnStr() {
+		if (_defaultOntologiesToSearchOnStr != null) return _defaultOntologiesToSearchOnStr;
+        if (_ontologies == null) setCodingSchemeMap();
+
+        //_defaultOntologiesToSearchOnStr = "|";
+        StringBuffer buf = new StringBuffer();
+        buf.append("|");
+        for (int i = 0; i < _ontologies.size(); i++) {
+            SelectItem item = (SelectItem) _ontologies.get(i);
+            String value = (String) item.getValue();
+            if (value.indexOf("Metathesaurus") == -1) {
+                //_defaultOntologiesToSearchOnStr = _defaultOntologiesToSearchOnStr + value + "|";
+                buf.append(value + "|");
+            }
+        }
+        return buf.toString();//_defaultOntologiesToSearchOnStr;
+    }
+
+
+
+
 
     private static boolean isCodingSchemeSupported(String codingSchemeName) {
         if (_codingSchemeHashSet == null)
@@ -3132,7 +3168,7 @@ if (lbSvc == null) {
         return null;
     }
 
-    public static HashMap getNamespaceId2CodingSchemeFormalNameMapping() {
+    private static HashMap getNamespaceId2CodingSchemeFormalNameMapping() {
         if (_namespace2CodingScheme != null) {
             return _namespace2CodingScheme;
         }
@@ -3228,7 +3264,7 @@ if (lbSvc == null) {
             }
         }
 
-        _namespace2CodingScheme = hmap;
+        //_namespace2CodingScheme = hmap;
         return hmap;
     }
 

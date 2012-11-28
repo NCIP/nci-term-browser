@@ -1107,7 +1107,7 @@ public class TreeUtils {
                         }
                     }
                 } else {
-                    _logger.warn("WARNING: childAssociationList == null.");
+                    //_logger.warn("WARNING: childAssociationList == null.");
                 }
             }
             hmap.put(code, ti);
@@ -1280,7 +1280,7 @@ public class TreeUtils {
                         }
                     }
                 } else {
-                    _logger.warn("WARNING: childAssociationList == null.");
+                    //_logger.warn("WARNING: childAssociationList == null.");
                 }
             }
             hmap.put(code, ti);
