@@ -3168,7 +3168,7 @@ if (lbSvc == null) {
         return null;
     }
 
-    private static HashMap getNamespaceId2CodingSchemeFormalNameMapping() {
+    public static HashMap getNamespaceId2CodingSchemeFormalNameMapping() {
         if (_namespace2CodingScheme != null) {
             return _namespace2CodingScheme;
         }
