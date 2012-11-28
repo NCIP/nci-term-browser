@@ -106,7 +106,7 @@ public class ValueSetHierarchy {
     public static HashMap _vsd_source_to_vsds_map = null;
     public static HashMap _valueSetDefinitionURI2VSD_map = null;
     public static HashMap _cs2vsdURIs_map = null;
-    public static HashMap _subValueSet_hmap = null;
+    protected static HashMap _subValueSet_hmap = null;
     public static HashMap vsdURI2CodingSchemeURNs = null;
 
 
@@ -127,7 +127,14 @@ public class ValueSetHierarchy {
 	    */
     }
 
+
+
     static {
+
+		if (vsdURI2CodingSchemeURNs == null) {
+			vsdURI2CodingSchemeURNs = getVsdURI2CodingSchemeURNs();
+		}
+
 		SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
 		//System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
         if (_valueSetDefinitionURI2VSD_map == null) {
@@ -144,6 +151,10 @@ public class ValueSetHierarchy {
 
 		if (_vsd_source_to_vsds_map == null) {
 		    _vsd_source_to_vsds_map = createVSDSource2VSDsMap();
+		}
+
+		if (_subValueSet_hmap == null) {
+			_subValueSet_hmap = getSubValueSetsFromSourceCodingScheme();
 		}
 
 /*
@@ -1557,6 +1568,56 @@ public class ValueSetHierarchy {
 
 
 
+
+    public static HashMap getVsdURI2CodingSchemeURNs() {
+
+		HashMap hmap = new HashMap();
+		try {
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			List list = null;
+			try {
+				list = vsd_service.listValueSetDefinitionURIs();
+
+				for (int i=0; i<list.size(); i++) {
+					String uri = (String) list.get(i);
+					java.net.URI valueSetDefinitionURI = new URI(uri);
+					Vector v = new Vector();
+					try {
+						//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+						AbsoluteCodingSchemeVersionReferenceList codingSchemes =
+							vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
+
+						if (codingSchemes != null) {
+							//output is all of the mapping ontologies that this code participates in.
+							for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
+								v.add(ref.getCodingSchemeURN());
+							}
+							v = SortUtils.quickSort(v);
+							hmap.put(uri, v);
+							//return SortUtils.quickSort(v);
+						} else {
+							System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition returns null (URI: "
+							   + uri + ").");
+						}
+
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+
+				}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return hmap;
+	}
+
+/*
+
     static {
 		vsdURI2CodingSchemeURNs = new HashMap();
 		try {
@@ -1604,7 +1665,7 @@ public class ValueSetHierarchy {
 			ex.printStackTrace();
 		}
 	}
-
+*/
 
     public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
 		if (vsdURI2CodingSchemeURNs != null && vsdURI2CodingSchemeURNs.containsKey(uri)) {
@@ -2389,6 +2450,67 @@ public class ValueSetHierarchy {
 
 
 
+    public static CodedNodeSet getNodeSet(String scheme, String version) {
+		CodedNodeSet cns = null;
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) versionOrTag.setVersion(version);
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+			CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
+			cns = cns.restrictToAnonymous(restrictToAnonymous);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+ 	    return cns;
+    }
+
+
+    public static Vector getCodesInNodeSet(CodedNodeSet cns) {
+		if (cns == null) return null;
+        Vector v = new Vector();
+
+        SortOptionList sortOptions = null;
+        LocalNameList filterOptions = null;
+        LocalNameList propertyNames = null;
+        CodedNodeSet.PropertyType[] propertyTypes = null;
+        boolean resolveObjects = false;
+        int maxToReturn = -1;
+    	ResolvedConceptReferenceList rcrl = null;
+    	try {
+			rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames, propertyTypes,
+				 resolveObjects, maxToReturn);
+			for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
+				ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+				v.add(rcr.getConceptCode());
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return v;
+	}
+
+
+
+    private static HashMap getSubValueSetsFromSourceCodingScheme() {
+		HashMap subValueSet_hmap = new HashMap();
+
+        CodedNodeSet cns = getNodeSet(SOURCE_SCHEME, SOURCE_VERSION);
+        if (cns == null) return null;
+
+        Vector codes = getCodesInNodeSet(cns);
+        for (int i=0; i<codes.size(); i++) {
+			String code = (String) codes.elementAt(i);
+			HashMap code_hmap = new TreeUtils().getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
+			if (code_hmap != null) {
+				subValueSet_hmap.put(code, code_hmap);
+		    }
+		}
+		return subValueSet_hmap;
+    }
+
+/*
     public static HashMap getSubValueSetsFromSourceCodingScheme(String code) {
 		if (_subValueSet_hmap == null) {
 			_subValueSet_hmap = new HashMap();
@@ -2402,6 +2524,22 @@ public class ValueSetHierarchy {
 		}
 		return hmap;
 	}
+*/
+
+    public static HashMap getSubValueSetsFromSourceCodingScheme(String code) {
+		if (_subValueSet_hmap == null) {
+			_subValueSet_hmap = getSubValueSetsFromSourceCodingScheme();
+		}
+		if (_subValueSet_hmap == null) {
+			return null;
+		}
+		if (_subValueSet_hmap.containsKey(code)) {
+			return ((HashMap) _subValueSet_hmap.get(code));
+		}
+		return null;
+	}
+
+
 
     // code: value set URI
 	public static HashMap getSubValueSets(String scheme, String code) {
