@@ -1,13 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<%@ page import="javax.imageio.ImageIO" %>
+<%@ page import="java.awt.image.BufferedImage" %>
+<%@ page import="java.io.*" %>
+
+
+<%@ page import="nl.captcha.Captcha" %>
+
+<html>
   <head>
     <title>NCI Term Browser</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -19,17 +28,50 @@
 
   </head>
   <%
+    String errorMsg = (String) request.getSession().getAttribute("errorMsg");
+    if (errorMsg != null) {
+        request.removeAttribute("errorMsg");
+    }  
+  
+  String retry = (String) request.getSession().getAttribute("retry");
+  if (retry != null && retry.compareTo("true") == 0) {
+        request.getSession().removeAttribute("retry");
+  }
+  
+  Captcha captcha = (Captcha) request.getSession().getAttribute("captcha");
+// if (captcha == null) {
+  	captcha = new Captcha.Builder(200, 50)
+	        .addText()
+	        .addBackground()
+	        //.addNoise()
+		.gimp()
+		//.addBorder()
+                .build();
+	request.getSession().setAttribute(Captcha.NAME, captcha);
+// }
+
+ 
     String ncicb_contact_url = new DataUtils().getNCICBContactURL();
+/*    
     String subject = HTTPUtils.cleanXSS(request.getParameter("subject"));
     String message = HTTPUtils.cleanXSS(request.getParameter("message"));
     String emailaddress = HTTPUtils.cleanXSS(request.getParameter("emailaddress"));
+*/
+
+    String answer = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("answer"));
+    String subject = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("subject"));
+    String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("message"));
+    String emailaddress = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("emailaddress"));
+    
+    if (answer == null) answer = "";
     if (subject == null) subject = "";
     if (message == null) message = "";
     if (emailaddress == null) emailaddress = "";
+    
     String errorType = (String) request.getAttribute("errorType");
     if (errorType == null) errorType = "";
     boolean userError = errorType.equalsIgnoreCase("user");
-    String errorMsg = (String) request.getAttribute("errorMsg");
+    //String errorMsg = (String) request.getAttribute("errorMsg");
     if (errorMsg == null) errorMsg = "";
   %>
   <body onLoad="document.forms.searchTerm.matchText.focus();">
@@ -83,7 +125,7 @@
             </table>
             <p>
 
-              Telephone support is available Monday to Friday, 8 am – 8 pm
+              Telephone support is available Monday to Friday, 8 am to 8 pm
               Eastern Time, excluding government holidays. You may leave a
               message, send an email, or submit a support request via the Web
               at any time.  Please include:
@@ -100,13 +142,21 @@
             </p>
 
             <%
+            
+           
               String color = "";
-              if (userError)
-                color = "style=\"color:#FF0000;\"";
+              if (userError) {
+                  color = "style=\"color:#FF0000;\"";
+              }
+              else if (errorMsg != null && errorMsg.length() > 0) {
+                  color = "style=\"color:#FF0000;\"";
+              }
             %>
             <p><b>Online Form</b></p>
+                 To use this web form, please fill in every box below and then click on Submit.
+            </p>
             <p <%= color %>>
-              To use this web form, please fill in every box below and then click on “Submit”.
+           
               <%
                 if (errorMsg != null && errorMsg.length() > 0) {
                     errorMsg = errorMsg.replaceAll("&lt;br/&gt;", "\n");
@@ -121,7 +171,30 @@
                 }
               %>
             </p>
+
+            
             <h:form>
+            
+<p>            
+      <table>      
+      <tr>
+      <td class="textbody">
+             <img src="<c:url value="/simpleCaptcha.png"  />" alt="simpleCaptcha.png">
+             
+       &nbsp;<h:commandLink value="Unable to read this image?" action="#{userSessionBean.regenerateCaptchaImage}" />
+       <br/>             
+      </td>
+      </tr>
+      
+      <tr>
+      <td class="textbody"> 
+          Enter the characters appearing in the above image: <i class="warningMsgColor">*</i> 
+          <input type="text" id="answer" name="answer" value="<%=HTTPUtils.cleanXSS(answer)%>"/>&nbsp;
+      </td>
+      </tr>  
+      </table>              
+</p>            
+            
               <p>
                 <% if (userError) %> <i style="color:#FF0000;">* Required)</i>
                 <i>Subject of your email:</i>
@@ -145,8 +218,20 @@
                 alt="Submit"
                 action="#{userSessionBean.contactUs}" >
               </h:commandButton>
-              &nbsp;&nbsp;<INPUT type="reset" value="Clear" alt="Clear">
+              &nbsp;&nbsp;
+
+              <h:commandButton
+                id="reset"
+                value="Clear"
+                alt="Clear"
+                action="#{userSessionBean.resetContactUsForm}" >
+              </h:commandButton>
+              
+              <!--<INPUT type="reset" value="Clear" alt="Clear">-->
+              
             </h:form>
+            
+            
             <a href="http://www.cancer.gov/global/web/policies/page2" target="_blank"
                 alt="National Cancer Institute Policies">
               <i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i>
