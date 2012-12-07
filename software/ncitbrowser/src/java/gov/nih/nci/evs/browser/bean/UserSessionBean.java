@@ -24,7 +24,7 @@ import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.commonTypes.Source;
 
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext;
-
+import nl.captcha.Captcha;
 
 
 /**
@@ -891,35 +891,165 @@ mappingIteratorBean.initialize();
         return _selectedAlgorithm;
     }
 
+
+    private String validateCaptcha(HttpServletRequest request,
+        String returnIncompleteState) throws Exception {
+        Captcha captcha = (Captcha) request.getSession().getAttribute(Captcha.NAME);
+        if (captcha == null) {
+            captcha = new Captcha.Builder(200, 50).addText().addBackground()
+                // .addNoise()
+                .gimp()
+                // .addBorder()
+                .build();
+            request.getSession().setAttribute(Captcha.NAME, captcha);
+        }
+
+        // Do this so we can capture non-Latin chars
+        request.setCharacterEncoding("UTF-8");
+        String answer = request.getParameter("answer");
+        if (answer == null || answer.length() == 0) {
+            throw new NoReloadException(
+                "Please enter the characters appearing in the image.");
+        }
+
+        request.getSession().removeAttribute("reload");
+        if (!captcha.isCorrect(answer))
+            throw new InvalidCaptChaInputException(
+                "WARNING: The string you entered does not match"
+                    + " with what is shown in the image.");
+
+        request.getSession().removeAttribute(Captcha.NAME);
+        return null;
+    }
+
+    private class NoReloadException extends Exception {
+        private static final long serialVersionUID = 1L;
+        public NoReloadException(String text) {
+            super(text);
+        }
+    }
+
+
+    private class InvalidCaptChaInputException extends Exception {
+        private static final long serialVersionUID = 2L;
+        public InvalidCaptChaInputException(String text) {
+            super(text);
+        }
+    }
+
+
+    public String resetContactUsForm() throws Exception {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+        /*
+			String answer = request.getParameter("answer");
+            String subject = request.getParameter("subject");
+            String message = request.getParameter("message");
+            String from    = request.getParameter("emailaddress");
+        */
+		request.getSession().setAttribute("answer", "");
+		request.getSession().setAttribute("subject", "");
+		request.getSession().setAttribute("message", "");
+		request.getSession().setAttribute("emailaddress", "");
+		request.getSession().setAttribute("retry", "true");
+
+        return "retry";
+	}
+
+
+    public String regenerateCaptchaImage() throws Exception {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+			String answer = request.getParameter("answer");
+            String subject = request.getParameter("subject");
+            String message = request.getParameter("message");
+            String from    = request.getParameter("emailaddress");
+
+		request.getSession().setAttribute("answer", answer);
+		request.getSession().setAttribute("subject", subject);
+		request.getSession().setAttribute("message", message);
+		request.getSession().setAttribute("emailaddress", from);
+
+		request.getSession().setAttribute("retry", "true");
+
+        return "retry";
+	}
+
+	public boolean isNull(String s) {
+		if (s == null) return true;
+		s = s.trim();
+		if (s.compareTo("") == 0) return true;
+		return false;
+	}
+
+
     public String contactUs() throws Exception {
+
         String msg = "Your message was successfully sent.";
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        request.getSession().removeAttribute("errorMsg");
+        request.getSession().removeAttribute("errorType");
+        request.getSession().removeAttribute("retry");
+
+		String answer = request.getParameter("answer");
+		String subject = request.getParameter("subject");
+		String message = request.getParameter("message");
+		String from    = request.getParameter("emailaddress");
+
+		request.getSession().setAttribute("answer", answer);
+		request.getSession().setAttribute("subject", subject);
+		request.getSession().setAttribute("message", message);
+		request.getSession().setAttribute("emailaddress", from);
+
+		if (isNull(answer) || isNull(subject) || isNull(message) || isNull(from)) {
+			msg = Constants.PLEASE_COMPLETE_DATA_ENTRIES;
+			request.getSession().setAttribute("errorMsg", msg);
+			request.getSession().setAttribute("retry", "true");
+			return "retry";
+		}
+
+		boolean emailAddressValid = MailUtils.isValidEmailAddress(from);
+		if (!emailAddressValid) {
+			msg = Constants.INVALID_EMAIL_ADDRESS;
+			request.getSession().setAttribute("errorMsg", msg);
+			request.getSession().setAttribute("retry", "true");
+			return "retry";
+		}
+
         try {
-            String subject = request.getParameter("subject");
-            String message = request.getParameter("message");
-            String from = request.getParameter("emailaddress");
+    		String retstr = validateCaptcha(request, "incomplete");
             String recipients[] = MailUtils.getRecipients();
             MailUtils.postMail(from, recipients, subject, message);
-        } catch (UserInputException e) {
+			request.getSession().setAttribute("message", msg);
+
+        } catch (NoReloadException e) {
             msg = e.getMessage();
-            request.setAttribute("errorMsg", Utils.toHtml(msg));
-            request.setAttribute("errorType", "user");
-            return "error";
+            request.getSession().setAttribute("errorMsg", Utils.toHtml(msg));
+            request.getSession().setAttribute("errorType", "user");
+            return "retry";
+
+        } catch (InvalidCaptChaInputException e) {
+            msg = e.getMessage();
+            request.getSession().setAttribute("errorMsg", Utils.toHtml(msg));
+            request.getSession().setAttribute("answer", "");
+            request.getSession().setAttribute("errorType", "user");
+            return "retry";
+
         } catch (Exception e) {
-            msg = "System Error: Your message was not sent.\n";
+            msg = "Your message was not sent.\n";
             msg += "    (If possible, please contact NCI systems team.)\n";
             msg += "\n";
             msg += e.getMessage();
-            request.setAttribute("errorMsg", Utils.toHtml(msg));
-            request.setAttribute("errorType", "system");
+            request.getSession().setAttribute("errorMsg", Utils.toHtml(msg));
+            request.getSession().setAttribute("errorType", "system");
             e.printStackTrace();
             return "error";
         }
-
-        request.getSession().setAttribute("message", Utils.toHtml(msg));
         return "message";
     }
 

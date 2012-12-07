@@ -113,6 +113,10 @@ public class Constants {
 
     public static final long MILLISECONDS_PER_MINUTE = 60L * 1000;
 
+    public static final String PLEASE_COMPLETE_DATA_ENTRIES = "Please complete data entries.";
+    public static final String INVALID_EMAIL_ADDRESS = "Invalid email address.";
+
+
     /**
      * Constructor
      */

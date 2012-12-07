@@ -78,6 +78,19 @@ public class MailUtils extends Object {
         return value;
     }
 
+
+public static boolean isValidEmailAddress(String email) {
+   boolean result = true;
+   try {
+      InternetAddress emailAddr = new InternetAddress(email);
+      emailAddr.validate();
+   } catch (AddressException ex) {
+      result = false;
+   }
+   return result;
+}
+
+/*
     public static boolean isValidEmailAddress(String text) {
         int posOfAtChar = text.indexOf('@');
         int posOfDotChar = text.lastIndexOf('.');
@@ -92,6 +105,7 @@ public class MailUtils extends Object {
             return false;
         return true;
     }
+*/
 
     private static void postMailValidation(String from, String recipients[],
         String subject, String message) throws UserInputException {
