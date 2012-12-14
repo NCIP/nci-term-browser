@@ -15,6 +15,7 @@
 
 
 <%@ page import="nl.captcha.Captcha" %>
+<%@ page import="nl.captcha.audio.AudioCaptcha" %>
 
 <html>
   <head>
@@ -26,11 +27,39 @@
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/dropdown.js"></script>
 
+    <script>
+    /* Add bogus req param to url so that reloading will (hopefully) load a different .wav file. */
+
+    function getContextPath() {
+	return "<%=request.getContextPath()%>";
+    }
+
+    function loadAudio() {
+        var path = getContextPath() + "/audio.wav?bogus=";
+        document.getElementById("audioCaptcha").src = path + new Date().getTime();
+        document.getElementById("audioSupport").innerHTML = document.createElement('audio').canPlayType("audio/wav");
+    }
+    
+    </script>
+
+
   </head>
   <%
+  
+    String captcha_option = "default";
+    String alt_captcha_option = "audio";
+    String opt = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("captcha_option"));
+    if (opt != null && opt.compareTo("audio") == 0) {
+          captcha_option = "audio";
+          alt_captcha_option = "default";
+    }    
+
+  Captcha captcha = (Captcha) request.getSession().getAttribute("captcha");
+  AudioCaptcha ac = null;  
+  
     String errorMsg = (String) request.getSession().getAttribute("errorMsg");
     if (errorMsg != null) {
-        request.removeAttribute("errorMsg");
+        request.getSession().removeAttribute("errorMsg");
     }  
   
   String retry = (String) request.getSession().getAttribute("retry");
@@ -38,8 +67,7 @@
         request.getSession().removeAttribute("retry");
   }
   
-  Captcha captcha = (Captcha) request.getSession().getAttribute("captcha");
-// if (captcha == null) {
+if (captcha_option.compareTo("default") == 0) {
   	captcha = new Captcha.Builder(200, 50)
 	        .addText()
 	        .addBackground()
@@ -48,20 +76,45 @@
 		//.addBorder()
                 .build();
 	request.getSession().setAttribute(Captcha.NAME, captcha);
-// }
-
- 
-    String ncicb_contact_url = new DataUtils().getNCICBContactURL();
-/*    
-    String subject = HTTPUtils.cleanXSS(request.getParameter("subject"));
-    String message = HTTPUtils.cleanXSS(request.getParameter("message"));
-    String emailaddress = HTTPUtils.cleanXSS(request.getParameter("emailaddress"));
+} else {
+/*
+	ac = new AudioCaptcha.Builder()
+	     .addAnswer()
+	     .addNoise()
+	     .build(); 
+	request.getSession().setAttribute(AudioCaptcha.NAME, ac);     
 */
+}
 
-    String answer = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("answer"));
+
+    
+/*    
+    String alt_captcha_option = "audio";
+    String opt = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
+    if (opt != null && opt.compareTo("audio") == 0) {
+        captcha_option = "audio";
+        alt_captcha_option = "default";
+    }
+*/    
+    
+    System.out.println("captcha_option: " + captcha_option);
+    System.out.println("alt_captcha_option: " + alt_captcha_option);
+    
+    
+    String ncicb_contact_url = new DataUtils().getNCICBContactURL();
+    String answer  = "";
     String subject = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("subject"));
     String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("message"));
     String emailaddress = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("emailaddress"));
+    
+    String refresh = (String) request.getParameter("refresh");
+    if (refresh != null) {
+	     answer = "";
+	     subject = HTTPUtils.cleanXSS((String) request.getParameter("subject"));
+	     message = HTTPUtils.cleanXSS((String) request.getParameter("message"));
+	     emailaddress = HTTPUtils.cleanXSS((String) request.getParameter("emailaddress"));
+    }
+    
     
     if (answer == null) answer = "";
     if (subject == null) subject = "";
@@ -74,7 +127,9 @@
     //String errorMsg = (String) request.getAttribute("errorMsg");
     if (errorMsg == null) errorMsg = "";
   %>
-  <body onLoad="document.forms.searchTerm.matchText.focus();">
+    
+  <body onload="loadAudio()">
+  
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
@@ -83,6 +138,12 @@
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
     <!-- End Skip Top Navigation -->     
       <%@ include file="/pages/templates/header.jsp" %>
+      
+      
+      <span id="ctx" style="display:none;"><%=request.getContextPath()%></span>
+      
+      
+      
       <div class="center-page">
         <%@ include file="/pages/templates/sub-header.jsp" %>
         <div id="main-area">
@@ -173,10 +234,17 @@
             </p>
 
             
-            <h:form>
+            <h:form id="contact_form" >
             
 <p>            
-      <table>      
+      <table> 
+      
+      
+<%
+String answer_label = "Enter the characters appearing in the above image";
+
+if (captcha_option.compareTo("default") == 0) {
+%>
       <tr>
       <td class="textbody">
              <img src="<c:url value="/simpleCaptcha.png"  />" alt="simpleCaptcha.png">
@@ -185,13 +253,43 @@
        <br/>             
       </td>
       </tr>
-      
+
+       
+
+<%
+} else {
+      answer_label = "Enter the numbers you hear from the audio";
+%>
+
+<tr>
+<td>
+<p class="textbody">Click  
+<a href="<%=request.getContextPath()%>/audio.wav ">here</a> to listen to the audio. 
+</td>
+</tr>
+
+
+<%
+} 
+%>
+
       <tr>
       <td class="textbody"> 
-          Enter the characters appearing in the above image: <i class="warningMsgColor">*</i> 
+          <%=answer_label%>: <i class="warningMsgColor">*</i> 
           <input type="text" id="answer" name="answer" value="<%=HTTPUtils.cleanXSS(answer)%>"/>&nbsp;
       </td>
-      </tr>  
+      </tr> 
+      
+      
+      <tr>
+      <td class="textbody">
+       <h:commandLink value="Prefer an alternative form of CAPTCHA?" action="#{userSessionBean.switchCaptchaMode}" />
+       <br/>             
+      </td>
+      </tr>
+      
+      
+
       </table>              
 </p>            
             
@@ -212,6 +310,7 @@
               <input class="textbody" size="100" name="emailaddress" alt="Email Address" value="<%= emailaddress %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
               <br/><br/>
 
+
               <h:commandButton
                 id="mail"
                 value="Submit"
@@ -219,6 +318,8 @@
                 action="#{userSessionBean.contactUs}" >
               </h:commandButton>
               &nbsp;&nbsp;
+
+
 
               <h:commandButton
                 id="reset"
@@ -228,6 +329,12 @@
               </h:commandButton>
               
               <!--<INPUT type="reset" value="Clear" alt="Clear">-->
+
+
+
+<input type="hidden" name="captcha_option" id="captcha_option" value="<%=alt_captcha_option%>">
+
+
               
             </h:form>
             

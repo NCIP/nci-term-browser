@@ -511,6 +511,15 @@
        <from-outcome>error</from-outcome>
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>
+    
+    <navigation-case>
+       <description>reset captcha mode</description>
+       <from-action>#{userSessionBean.switchCaptchaMode}</from-action>
+       <from-outcome>resetCaptcha</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>    
+    
+    
   </navigation-rule>
 
   <navigation-rule>

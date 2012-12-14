@@ -98,6 +98,7 @@ public class ValueSetSearchUtils
             return "literalContains";
     }
 
+/*
 	public static void resolveValueSetDefinition(ValueSetDefinition vsd) {
         //String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
         //String URL = "http://ncias-d499-v.nci.nih.gov:29080/lexevsapi60";
@@ -150,7 +151,9 @@ public class ValueSetSearchUtils
 		}
 
 	}
+*/
 
+/*
 	public static void exportValueSetDefinition(ValueSetDefinition vsd) {
         //String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
         //String URL = "http://ncias-d499-v.nci.nih.gov:29080/lexevsapi60";
@@ -182,7 +185,7 @@ public class ValueSetSearchUtils
 		}
 
 	}
-
+*/
 
       public static AbsoluteCodingSchemeVersionReferenceList getEntireAbsoluteCodingSchemeVersionReferenceList() {
         boolean includeInactive = false;
@@ -276,7 +279,7 @@ public class ValueSetSearchUtils
         return list;
     }
 
-
+/*
       public static Boolean isCodeInValueSet(String code, String codingScheme, String vsd_uri) {
 		  Boolean retval = null;
 		  try {
@@ -315,7 +318,7 @@ public class ValueSetSearchUtils
 
           return retval;
 	  }
-
+*/
 
 
     public ResolvedConceptReferencesIteratorWrapper searchByCode(

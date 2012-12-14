@@ -25,6 +25,9 @@ import org.LexGrid.commonTypes.Source;
 
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext;
 import nl.captcha.Captcha;
+//import nl.captcha.audio.*;
+
+import nl.captcha.audio.AudioCaptcha;
 
 
 /**
@@ -913,14 +916,55 @@ mappingIteratorBean.initialize();
         }
 
         request.getSession().removeAttribute("reload");
-        if (!captcha.isCorrect(answer))
+        if (!captcha.isCorrect(answer)) {
             throw new InvalidCaptChaInputException(
                 "WARNING: The string you entered does not match"
-                    + " with what is shown in the image.");
+                    + " with what is shown in the image. Please try again.");
+
+		} else {
+			System.out.println("Correct Captcha answer: " + answer);
+		}
 
         request.getSession().removeAttribute(Captcha.NAME);
         return null;
     }
+
+
+    private String validateAudioCaptcha(HttpServletRequest request,
+        String returnIncompleteState) throws Exception {
+
+        AudioCaptcha captcha = (AudioCaptcha) request.getSession().getAttribute(AudioCaptcha.NAME);
+        if (captcha == null) {
+			AudioCaptcha ac = new AudioCaptcha.Builder()
+				.addAnswer()
+				.addNoise()
+				.build();
+
+			request.getSession().setAttribute(AudioCaptcha.NAME, ac);
+		}
+
+        // Do this so we can capture non-Latin chars
+        request.setCharacterEncoding("UTF-8");
+        String answer = request.getParameter("answer");
+
+        if (answer == null || answer.length() == 0) {
+            throw new NoReloadException(
+                "Please enter the numbers you heard in the audio.");
+        }
+
+        request.getSession().removeAttribute("reload");
+        if (!captcha.isCorrect(answer)) {
+            throw new InvalidCaptChaInputException(
+                "WARNING: The numbers you entered does not match"
+                    + " with what is set in the audio. Please try again.");
+		} else {
+			System.out.println("Correct AudioCaptcha answer: " + answer);
+		}
+
+        request.getSession().removeAttribute(AudioCaptcha.NAME);
+        return null;
+    }
+
 
     private class NoReloadException extends Exception {
         private static final long serialVersionUID = 1L;
@@ -1021,8 +1065,25 @@ mappingIteratorBean.initialize();
 			return "retry";
 		}
 
+        String captcha_option = (String) request.getParameter("captcha_option");
+        if (isNull(captcha_option)) {
+			captcha_option = "default";
+		}
+		if (captcha_option.compareTo("audio") == 0) {
+			captcha_option = "default";
+		} else {
+			captcha_option = "audio";
+		}
+
+
         try {
-    		String retstr = validateCaptcha(request, "incomplete");
+    		String retstr = null;
+    		if (captcha_option.compareTo("audio") == 0) {
+				retstr = validateAudioCaptcha(request, "incomplete");
+			} else {
+				retstr = validateCaptcha(request, "incomplete");
+			}
+
             String recipients[] = MailUtils.getRecipients();
             MailUtils.postMail(from, recipients, subject, message);
 			request.getSession().setAttribute("message", msg);
@@ -2660,4 +2721,28 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 		}
 		return null;
     }
+
+	public String switchCaptchaMode() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String answer = request.getParameter("answer");
+		String subject = request.getParameter("subject");
+		String message = request.getParameter("message");
+		String from    = request.getParameter("emailaddress");
+
+		request.getSession().setAttribute("answer", answer);
+		request.getSession().setAttribute("subject", subject);
+		request.getSession().setAttribute("message", message);
+		request.getSession().setAttribute("emailaddress", from);
+
+        String captcha_option = (String) request.getParameter("captcha_option");
+        if (isNull(captcha_option)) {
+			captcha_option = "default";
+		}
+        request.getSession().setAttribute("captcha_option", captcha_option);
+        return "resetCaptcha";
+	}
+
 }

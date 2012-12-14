@@ -68,6 +68,7 @@
 	<servlet>
 	<servlet-name>AudioCaptcha</servlet-name>
 	<servlet-class>nl.captcha.servlet.AudioCaptchaServlet</servlet-class>
+	<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet>
