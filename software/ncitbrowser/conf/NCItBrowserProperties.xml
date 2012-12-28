@@ -269,6 +269,39 @@
             <hyperlinkText>see NCBI EntrezGene info</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
+       
+       <DisplayItem>
+            <propertyName>OMIM_Number</propertyName>
+            <itemLabel>OMIM Number</itemLabel>
+            <url>http://omim.org/entry/</url>
+            <hyperlinkText>see OMIM info</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem>
+       
+       <DisplayItem>
+            <propertyName>CHEBI_ID</propertyName>
+            <itemLabel>ChEBI ID</itemLabel>
+            <url>http://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString=</url>
+            <hyperlinkText>see ChEBI info</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem>
+       
+	   <DisplayItem>
+            <propertyName>HGNC_ID</propertyName>
+            <itemLabel>HGNC ID</itemLabel>
+            <url>http://www.genenames.org/data/hgnc_data.php?hgnc_id=</url>
+            <hyperlinkText>see HGNC info</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem> 
+       
+	   <DisplayItem>
+            <propertyName>miRBase_ID</propertyName>
+            <itemLabel>miRBase ID</itemLabel>
+            <url>http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=</url>
+            <hyperlinkText>see miRBase info</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem>
+       
 
        <DisplayItem>
             <propertyName>NCI_META_CUI</propertyName>
