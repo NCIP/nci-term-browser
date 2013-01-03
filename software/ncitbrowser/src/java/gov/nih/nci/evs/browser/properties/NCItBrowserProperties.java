@@ -101,10 +101,15 @@ public class NCItBrowserProperties {
         "STANDARD_FTP_REPORT_INFO";
     public static final int STANDARD_FTP_REPORT_INFO_MAX = 20;
 
+    public static final String AUDIO_CAPTCHA_BACKGROUND_NOISE_ON = "AUDIO_CAPTCHA_BACKGROUND_NOISE_ON";
+
     private static NCItBrowserProperties _browserProperties = null;
     private static Properties _properties = new Properties();
 
     public static  boolean _debugOn = false;
+    public static  boolean _audio_captcha_background_noise_on = true;
+
+
     private static int _maxToReturn = 1000;
     private static int _maxTreeLevel = 1000;
     private static String _service_url = null;
@@ -149,6 +154,10 @@ public class NCItBrowserProperties {
                     loadProperties();
 
                     _debugOn = Boolean.parseBoolean(getProperty(DEBUG_ON));
+
+                    if (getProperty(AUDIO_CAPTCHA_BACKGROUND_NOISE_ON) != null) {
+                    	_audio_captcha_background_noise_on = Boolean.parseBoolean(getProperty(AUDIO_CAPTCHA_BACKGROUND_NOISE_ON));
+					}
 
                     String max_str =
                         _browserProperties
@@ -360,5 +369,9 @@ public class NCItBrowserProperties {
 
     public static Vector<StandardFtpReportInfo> getStandardFtpReportInfoList() {
         return _standard_ftp_report_info_list;
+    }
+
+    public static boolean isAudioCaptchaBackgroundNoiseOn() {
+        return _audio_captcha_background_noise_on;
     }
 }

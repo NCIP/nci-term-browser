@@ -183,6 +183,7 @@
                 <filter token="sort.by.score" value="${sort.by.score}"/>
                 <filter token="ping.lexevs.enabled" value="${ping.lexevs.enabled}"/>
                 <filter token="ping.lexevs.interval" value="${ping.lexevs.interval}"/>
+                <filter token="audio_captcha_background_noise_on" value="${audio_captcha_background_noise_on}"/>
             </filterset>
             <resources>
                 <file file="${bda.conf.dir}/${webapp.prop.file}"/>

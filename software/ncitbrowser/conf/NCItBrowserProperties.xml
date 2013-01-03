@@ -562,6 +562,11 @@
             <value><![CDATA[@standard.ftp.report.info.3@]]></value>
         </ConfigurableItem>
 
+        <ConfigurableItem>
+                 <key>AUDIO_CAPTCHA_BACKGROUND_NOISE_ON</key>
+                 <value>@audio_captcha_background_noise_on@</value>
+        </ConfigurableItem>
+        
         <!-- Standard FTP Report List (End) ================================ -->
 
     </ConfigurableItems>
