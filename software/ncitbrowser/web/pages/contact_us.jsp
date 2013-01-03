@@ -8,6 +8,7 @@
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 
 <%@ page import="javax.imageio.ImageIO" %>
 <%@ page import="java.awt.image.BufferedImage" %>
@@ -45,7 +46,13 @@
 
   </head>
   <%
-  
+    boolean audio_captcha_background_noise_on = true;
+    String audio_captcha_str = "audio.wav";
+    if (!NCItBrowserProperties.isAudioCaptchaBackgroundNoiseOn()) {
+        audio_captcha_background_noise_on = false;
+        audio_captcha_str = "nci.audio.wav";
+    }
+    
     String captcha_option = "default";
     String alt_captcha_option = "audio";
     String opt = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("captcha_option"));
@@ -263,8 +270,10 @@ if (captcha_option.compareTo("default") == 0) {
 
 <tr>
 <td>
-<p class="textbody">Click  
-<a href="<%=request.getContextPath()%>/audio.wav ">here</a> to listen to the audio. 
+<p class="textbody">Click 
+
+
+<a href="<%=request.getContextPath()%>/<%=audio_captcha_str%> ">here</a> to listen to the audio. 
 </td>
 </tr>
 
