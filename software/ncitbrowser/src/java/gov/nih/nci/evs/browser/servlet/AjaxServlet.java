@@ -2295,9 +2295,9 @@ if (DataUtils.isNull(algorithm)) {
 if (view == Constants.STANDARD_VIEW) {
       out.println("                Standards View");
       out.println("                &nbsp;|");
-      out.println("                <a href=\"" + contextPath + "/ajax?action=create_cs_vs_tree\">Terminology View</a>");
+      out.println("                <a href=\"" + contextPath + "/ajax?action=create_cs_vs_tree\" tabindex=\"99\" >Terminology View</a>");
 } else {
-      out.println("                <a href=\"" + contextPath + "/ajax?action=create_src_vs_tree\">Standards View</a>");
+      out.println("                <a href=\"" + contextPath + "/ajax?action=create_src_vs_tree\" tabindex=\"100\">Standards View</a>");
       out.println("                &nbsp;|");
       out.println("                Terminology View");
 }
@@ -2324,10 +2324,10 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("");
       out.println("<div id=\"expandcontractdiv\">");
-      out.println("	<a id=\"expand_all\" href=\"#\">Expand all</a>");
-      out.println("	<a id=\"collapse_all\" href=\"#\">Collapse all</a>");
-      out.println("	<a id=\"check_all\" href=\"#\">Check all</a>");
-      out.println("	<a id=\"uncheck_all\" href=\"#\">Uncheck all</a>");
+      out.println("	<a id=\"expand_all\" href=\"#\" tabindex=\"101\" >Expand all</a>");
+      out.println("	<a id=\"collapse_all\" href=\"#\" tabindex=\"102\">Collapse all</a>");
+      out.println("	<a id=\"check_all\" href=\"#\" tabindex=\"103\">Check all</a>");
+      out.println("	<a id=\"uncheck_all\" href=\"#\" tabindex=\"104\">Uncheck all</a>");
       out.println("</div>");
       out.println("");
       out.println("");
@@ -4031,10 +4031,10 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("");
       out.println("<div id=\"expandcontractdiv\">");
-      out.println("	<a id=\"expand_all\" href=\"#\">Expand all</a>");
-      out.println("	<a id=\"collapse_all\" href=\"#\">Collapse all</a>");
-      out.println("	<a id=\"check_all\" href=\"#\">Check all</a>");
-      out.println("	<a id=\"uncheck_all\" href=\"#\">Uncheck all</a>");
+      out.println("	<a id=\"expand_all\" href=\"#\" tabindex=\"101\" >Expand all</a>");
+      out.println("	<a id=\"collapse_all\" href=\"#\" tabindex=\"102\">Collapse all</a>");
+      out.println("	<a id=\"check_all\" href=\"#\" tabindex=\"103\">Check all</a>");
+      out.println("	<a id=\"uncheck_all\" href=\"#\" tabindex=\"104\">Uncheck all</a>");
       out.println("</div>");
       out.println("");
       out.println("");
