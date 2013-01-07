@@ -59,7 +59,6 @@
           <%=tab%> <a href="#conceptDetails">Concept Details</a><br/>
           <a href="#mappingsTab">Mappings Tab</a><br/>
           <%=tab%> <a href="#mappingSearchBox">Using the Search Box</a><br/>
-          <%=tab%> <a href="#mappingSets">Mapping Sets</a><br/>
           <a href="#additionalInformation">Additional Information</a><br/>
         </p>
 
