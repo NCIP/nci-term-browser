@@ -48,7 +48,11 @@
           <%@ include file="/pages/templates/content-header.jsp" %>
           <!-- Page content -->
           <div class="pagecontent">
+          
+            <a name="evs-content" id="evs-content"></a>  
+          
             <jsp:include page="<%=content_page%>" />
+            
             <%@ include file="/pages/templates/nciFooter.jsp" %>
           </div>
           <!-- end Page content -->
