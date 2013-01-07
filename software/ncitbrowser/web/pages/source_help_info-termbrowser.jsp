@@ -91,11 +91,9 @@ use of which is restricted under the UMLS license agreement
 </li>
 <li>
 <b>SNOMED CT</b>: The International Health Terminology Standards Development Organisation (IHTSDO) allows use of SNOMED CT in NCI Enterprise Vocabulary Services, 
-but requires licensing for other purposes 
-(see 
-		    <a href="http://www.ihtsdo.org/join-us/use-snomed-ct-licenses/" target="_blank"
-		      alt="SNOMED CT License">http://www.ihtsdo.org/join-us/use-snomed-ct-licenses/</a>
-). 
+but requires licensing for other purposes.
+Terms of use for SNOMED CT are contained in Appendix 2, SNOMED CT Affiliate Licence Agreement, of the License for Use of the UMLS Metathesaurus.
+(see <a href="http://www.nlm.nih.gov/research/umls/knowledge_sources/metathesaurus/release/license_agreement_snomed.html" target="_blank" alt="SNOMED CT License">http://www.nlm.nih.gov/research/umls/knowledge_sources/metathesaurus/release/license_agreement_snomed.html</a>).
 </li>
 <li>
 <b>UMLS Semantic Network</b>: The National Library of Medicine makes the UMLS Semantic Network freely available without charge on request, 
