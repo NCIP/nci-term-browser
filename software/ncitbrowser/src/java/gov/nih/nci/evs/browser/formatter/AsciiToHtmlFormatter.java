@@ -95,7 +95,7 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
         headings.add(0, "#");
         out.writeln_indent("<tr class=\"reportTableHeader\">");
         for (String heading : headings)
-            out.writeln_inden1("<th class=\"reportTableCellText\">" + heading
+            out.writeln_inden1("<th scope=\"col\" class=\"reportTableCellText\">" + heading
                 + "</th>");
         out.writeln_undent("</tr>");
 
@@ -147,7 +147,7 @@ public class AsciiToHtmlFormatter extends FileFormatterBase
                     value = "&nbsp;";
                 else if (_ncitCodeColumns.contains(col - 1)) // -1 from # column
                     value = getNCItCodeUrl(value);
-                out.writeln_inden1("<td class=\"reportTableCellText\"" + bgColor + ">"
+                out.writeln_inden1("<td scope=\"row\" class=\"reportTableCellText\"" + bgColor + ">"
                     + value + "</td>");
             }
             out.writeln_undent("</tr>");
