@@ -2071,8 +2071,6 @@ if (DataUtils.isNull(algorithm)) {
       out.println("<input type=\"hidden\" name=\"view\" value=\"" + view_str + "\" />");
 
 
-
-
       out.println("");
       out.println("");
       out.println("");
@@ -2118,28 +2116,28 @@ if (DataUtils.isNull(algorithm)) {
       out.println("        </tr>");
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("          <td align=\"left\" class=\"textbody\">");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"1\" >Code&nbsp;");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" tabindex=\"1\" >Name");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"4\" >Code&nbsp;");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" tabindex=\"4\" >Name&nbsp;");
       out.println("          </td>");
       out.println("        </tr>");
+
       out.println("      </table>");
       out.println("    </td>");
       out.println("  </tr>");
       out.println("</table>");
-      out.println("                <input type=\"hidden\" name=\"referer\" id=\"referer\" value=\"http%3A%2F%2Flocalhost%3A8080%2Fncitbrowser%2Fpages%2Fresolved_value_set_search_results.jsf\">");
+
+      //out.println("                <input type=\"hidden\" name=\"referer\" id=\"referer\" value=\"http%3A%2F%2Flocalhost%3A8080%2Fncitbrowser%2Fpages%2Fresolved_value_set_search_results.jsf\">");
       out.println("                <input type=\"hidden\" id=\"nav_type\" name=\"nav_type\" value=\"valuesets\" />");
       out.println("                <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
-      out.println("");
-      out.println("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"j_id22:j_id23\" />");
+      //out.println("");
+
+      //out.println("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"j_id22:j_id23\" />");
       out.println("</form>");
 
-
-
-      addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
-
-
+      //addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
 
       out.println("          </div> <!-- searchbox -->");
+
       out.println("");
       out.println("          <div class=\"searchbox-bottom\"><img src=\"/ncitbrowser/images/searchbox-bottom.gif\" width=\"352\" height=\"2\" alt=\"SearchBox Bottom\" /></div>");
       out.println("          <!-- end Search box -->");
@@ -2184,20 +2182,17 @@ if (DataUtils.isNull(algorithm)) {
 	  out.println("  </tr>\r\n");
 	  out.println("</table>");
 
-/*
-      out.println("      <a href=\"/ncitbrowser/pages/help.jsf\" tabindex=\"16\">Help</a>");
-      out.println("    </td>");
-      out.println("    <td width=\"7\"></td>");
-      out.println("  </tr>");
-      out.println("</table>");
-*/
-
       out.println("          <!-- end Global Navigation -->");
       out.println("");
       out.println("        </div> <!-- search-globalnav -->");
       out.println("      </div> <!-- bannerarea -->");
       out.println("");
       out.println("      <!-- end Thesaurus, banner search area -->");
+
+
+//addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
+
+
       out.println("      <!-- Quick links bar -->");
       out.println("");
       out.println("<div class=\"bluebar\">");
@@ -2207,34 +2202,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("    <td>");
       out.println("");
 
-      /*
-      out.println("  <div id=\"quicklinksholder\">");
-      out.println("      <ul id=\"quicklinks\"");
-      out.println("        onmouseover=\"document.quicklinksimg.src='/ncitbrowser/images/quicklinks-active.gif';\"");
-      out.println("        onmouseout=\"document.quicklinksimg.src='/ncitbrowser/images/quicklinks-inactive.gif';\">");
-      out.println("        <li>");
-      out.println("          <a href=\"#\" tabindex=\"-1\"><img src=\"/ncitbrowser/images/quicklinks-inactive.gif\" width=\"162\"");
-      out.println("            height=\"18\" border=\"0\" name=\"quicklinksimg\" alt=\"Quick Links\" />");
-      out.println("          </a>");
-      out.println("          <ul>");
-      out.println("            <li><a href=\"http://evs.nci.nih.gov/\" tabindex=\"-1\" target=\"_blank\"");
-      out.println("              alt=\"Enterprise Vocabulary Services\">EVS Home</a></li>");
-      out.println("            <li><a href=\"http://localhost/ncimbrowserncimbrowser\" tabindex=\"-1\" target=\"_blank\"");
-      out.println("              alt=\"NCI Metathesaurus\">NCI Metathesaurus Browser</a></li>");
-      out.println("");
-      out.println("            <li><a href=\"/ncitbrowser/start.jsf\" tabindex=\"-1\"");
-      out.println("              alt=\"NCI Term Browser\">NCI Term Browser</a></li>");
-      out.println("            <li><a href=\"http://www.cancer.gov/cancertopics/terminologyresources\" tabindex=\"-1\" target=\"_blank\"");
-      out.println("              alt=\"NCI Terminology Resources\">NCI Terminology Resources</a></li>");
-      out.println("");
-      out.println("              <li><a href=\"http://ncitermform.nci.nih.gov/ncitermform/?dictionary=NCI%20Thesaurus\" tabindex=\"-1\" target=\"_blank\" alt=\"Term Suggestion\">Term Suggestion</a></li>");
-      out.println("");
-      out.println("");
-      out.println("          </ul>");
-      out.println("        </li>");
-      out.println("      </ul>");
-      out.println("  </div>");
-      */
+
       addQuickLink(request, out);
 
       out.println("");
@@ -2262,13 +2230,10 @@ if (DataUtils.isNull(algorithm)) {
       out.println("      <div class=\"pagecontent\">");
       out.println("");
 
-
       if (message != null) {
-          out.println("\r\n");
-          out.println("      <p class=\"textbodyred\">");
+          out.println("<p class=\"textbodyred\">");
           out.print(message);
-          out.println("</p>\r\n");
-          out.println("    ");
+          out.println("</p>");
           request.getSession().removeAttribute("message");
       }
 
@@ -2392,6 +2357,10 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("  </div> <!-- center-page -->");
       out.println("");
+
+      addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
+
+
       out.println("</body>");
       out.println("</html>");
       out.println("");
@@ -3733,44 +3702,19 @@ if (DataUtils.isNull(matchText)) {
       out.println("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"j_id22:j_id23\" />");
       out.println("</form>");
 
-      addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
+      //addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
 
 
       out.println("          </div> <!-- searchbox -->");
       out.println("");
       out.println("          <div class=\"searchbox-bottom\"><img src=\"/ncitbrowser/images/searchbox-bottom.gif\" width=\"352\" height=\"2\" alt=\"SearchBox Bottom\" /></div>");
       out.println("          <!-- end Search box -->");
+
+
       out.println("          <!-- Global Navigation -->");
       out.println("");
 
 
-
-/*
-      out.println("<table class=\"global-nav\" border=\"0\" width=\"100%\" height=\"37px\" cellpadding=\"0\" cellspacing=\"0\">");
-      out.println("  <tr>");
-      out.println("    <td align=\"left\" valign=\"bottom\">");
-      out.println("      <a href=\"#\" onclick=\"javascript:window.open('/ncitbrowser/pages/source_help_info-termbrowser.jsf',");
-      out.println("        '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');\" tabindex=\"13\">");
-      out.println("        Sources</a>");
-      out.println("");
-
-
-	  out.println(" \r\n");
-	  out.println("      ");
-	  out.print( VisitedConceptUtils.getDisplayLink(request, true) );
-	  out.println(" \r\n");
-
-      out.println("    </td>");
-      out.println("    <td align=\"right\" valign=\"bottom\">");
-
-	  out.println("      <a href=\"");
-	  out.print( request.getContextPath() );
-	  out.println("/pages/help.jsf\" tabindex=\"16\">Help</a>\r\n");
-	  out.println("    </td>\r\n");
-	  out.println("    <td width=\"7\"></td>\r\n");
-	  out.println("  </tr>\r\n");
-	  out.println("</table>");
-*/
  boolean hasValueSet = ValueSetHierarchy.hasValueSet(scheme);
  boolean hasMapping = DataUtils.hasMapping(scheme);
 
@@ -3908,34 +3852,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("    <td>");
       out.println("");
 
-      /*
-      out.println("  <div id=\"quicklinksholder\">");
-      out.println("      <ul id=\"quicklinks\"");
-      out.println("        onmouseover=\"document.quicklinksimg.src='/ncitbrowser/images/quicklinks-active.gif';\"");
-      out.println("        onmouseout=\"document.quicklinksimg.src='/ncitbrowser/images/quicklinks-inactive.gif';\">");
-      out.println("        <li>");
-      out.println("          <a href=\"#\" tabindex=\"-1\"><img src=\"/ncitbrowser/images/quicklinks-inactive.gif\" width=\"162\"");
-      out.println("            height=\"18\" border=\"0\" name=\"quicklinksimg\" alt=\"Quick Links\" />");
-      out.println("          </a>");
-      out.println("          <ul>");
-      out.println("            <li><a href=\"http://evs.nci.nih.gov/\" tabindex=\"-1\" target=\"_blank\"");
-      out.println("              alt=\"Enterprise Vocabulary Services\">EVS Home</a></li>");
-      out.println("            <li><a href=\"http://localhost/ncimbrowserncimbrowser\" tabindex=\"-1\" target=\"_blank\"");
-      out.println("              alt=\"NCI Metathesaurus\">NCI Metathesaurus Browser</a></li>");
-      out.println("");
-      out.println("            <li><a href=\"/ncitbrowser/start.jsf\" tabindex=\"-1\"");
-      out.println("              alt=\"NCI Term Browser\">NCI Term Browser</a></li>");
-      out.println("            <li><a href=\"http://www.cancer.gov/cancertopics/terminologyresources\" tabindex=\"-1\" target=\"_blank\"");
-      out.println("              alt=\"NCI Terminology Resources\">NCI Terminology Resources</a></li>");
-      out.println("");
-      out.println("              <li><a href=\"http://ncitermform.nci.nih.gov/ncitermform/?dictionary=NCI%20Thesaurus\" tabindex=\"-1\" target=\"_blank\" alt=\"Term Suggestion\">Term Suggestion</a></li>");
-      out.println("");
-      out.println("");
-      out.println("          </ul>");
-      out.println("        </li>");
-      out.println("      </ul>");
-      out.println("  </div>");
-      */
+
       addQuickLink(request, out);
 
 
@@ -3994,18 +3911,6 @@ if (DataUtils.isNull(matchText)) {
       out.println("            <tr class=\"textbody\">");
       out.println("              <td class=\"textbody\" align=\"left\">");
       out.println("");
-
-/*
-if (view == Constants.STANDARD_VIEW) {
-      out.println("                Standards View");
-      out.println("                &nbsp;|");
-      out.println("                <a href=\"" + contextPath + "/ajax?action=create_cs_vs_tree\">Terminology View</a>");
-} else {
-      out.println("                <a href=\"" + contextPath + "/ajax?action=create_src_vs_tree\">Standards View</a>");
-      out.println("                &nbsp;|");
-      out.println("                Terminology View");
-}
-*/
 
 
       out.println("              </td>");
@@ -4100,6 +4005,9 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("  </div> <!-- center-page -->");
       out.println("");
+
+      addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
+
       out.println("</body>");
       out.println("</html>");
       out.println("");
