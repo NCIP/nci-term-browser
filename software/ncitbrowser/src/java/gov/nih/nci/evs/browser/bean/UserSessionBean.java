@@ -2247,20 +2247,32 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 
 						try {
 							int numberRemaining = iterator.numberRemaining();
-   						    System.out.println("(*) numberRemaining: " + numberRemaining);
+							if (numberRemaining == 0) {
+								iterator = null;
+							} else {
+   						    	System.out.println("(*) numberRemaining: " + numberRemaining);
+
+								iteratorBean = new IteratorBean(iterator);
+								iteratorBean.setKey(key);
+								iteratorBean.setMatchText(matchText);
+								iteratorBeanManager.addIteratorBean(iteratorBean);
+
+								request.getSession().setAttribute("key", key);
+						    }
 
 						} catch (Exception ex) {
-							ex.printStackTrace();
+							//ex.printStackTrace();
+							//020713 KLO
+							iterator = null;
 						}
-
-
+/*
                     iteratorBean = new IteratorBean(iterator);
                     iteratorBean.setKey(key);
                     iteratorBean.setMatchText(matchText);
                     iteratorBeanManager.addIteratorBean(iteratorBean);
 
                     request.getSession().setAttribute("key", key);
-
+*/
                 }
             }
 
@@ -2373,9 +2385,21 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
                 request.getSession().setAttribute("dictionary", scheme);
                 // Concept c = (Concept) v.elementAt(0);
                 int pageNumber = 1;
-                List list = iteratorBean.getData(1);
-                ResolvedConceptReference ref =
-                    (ResolvedConceptReference) list.get(0);
+
+                List list = null;
+                ResolvedConceptReference ref = null;
+                try {
+					list = iteratorBean.getData(1);
+                    ref = (ResolvedConceptReference) list.get(0);
+
+				} catch (Exception ex) {
+					String message = "No match found.";
+					if (matchAlgorithm.compareTo("exactMatch") == 0) {
+						message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;
+					}
+					request.setAttribute("message", message);
+					return "no_match";
+				}
 
                 Entity c = null;
                 if (ref == null) {
