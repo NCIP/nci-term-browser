@@ -178,15 +178,15 @@ int istart_plus_pageSize = istart+pageSize;
 
 
 String istart_str = Integer.toString(istart+1);    
-String iend_str = new Integer(iend).toString();
+String iend_str = Integer.valueOf(iend).toString();
 
 if (iend >= istart+pageSize-1) {
     iend = istart+pageSize-1;
     list = iteratorBean.getData(istart, iend);
-    iend_str = new Integer(iend+1).toString();
+    iend_str = Integer.valueOf(iend+1).toString();
 }
 
-String match_size = new Integer(size).toString();
+String match_size = Integer.valueOf(size).toString();
    
 
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
@@ -230,7 +230,7 @@ String match_size = new Integer(size).toString();
 
           if (iteratorBean != null) {
 	      size = iteratorBean.getSize();
-	      match_size = new Integer(size).toString();
+	      match_size = Integer.valueOf(size).toString();
 	      
           }
 
@@ -247,8 +247,8 @@ String match_size = new Integer(size).toString();
 	  int numberRemaining_after = iteratorBean.getSize();
  
   	  if (numberRemaining_before != numberRemaining_after) {
-		iend_str = new Integer(numberRemaining_after).toString();
-		match_size = new Integer(numberRemaining_after).toString();
+		iend_str = Integer.valueOf(numberRemaining_after).toString();
+		match_size = Integer.valueOf(numberRemaining_after).toString();
 		size = iteratorBean.getSize();
 		iend = page_num * page_size;
 		istart = iend - page_size;
@@ -271,8 +271,8 @@ if (expected_count != actual_count) {
     if (actual_count < expected_count) {
         int upper_bound = istart + actual_count;
         
-	iend_str = new Integer(upper_bound).toString();
-	match_size = new Integer(upper_bound).toString();
+	iend_str = Integer.valueOf(upper_bound).toString();
+	match_size = Integer.valueOf(upper_bound).toString();
         
     }
 }

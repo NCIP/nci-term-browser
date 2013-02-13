@@ -168,9 +168,9 @@ public class ValueSetBean {
 	    }
 */
 
-
-        if (ValueSetHierarchy._valueSetParticipationHashSet == null) return null;
-        Iterator it = ValueSetHierarchy._valueSetParticipationHashSet.iterator();
+        HashSet hset = ValueSetHierarchy.get_valueSetParticipationHashSet();
+        if (hset == null) return null;
+        Iterator it = hset.iterator();
         while (it.hasNext()) {
 			String cs = (String) it.next();
 			String formalName = DataUtils.getFormalName(cs);

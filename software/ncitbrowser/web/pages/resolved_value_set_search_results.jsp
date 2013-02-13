@@ -138,7 +138,7 @@ String key = (String) request.getSession().getAttribute("key");
 
           if (iteratorBean != null) {
 	      size = iteratorBean.getSize();
-	      match_size = new Integer(size).toString();
+	      match_size = Integer.valueOf(size).toString();
           }
 
           if (iend > size-1) iend = size-1;
@@ -153,8 +153,8 @@ String key = (String) request.getSession().getAttribute("key");
 	  List list = iteratorBean.getData(istart, iend);
 	  int numberRemaining_after = iteratorBean.getSize();
 	  if (numberRemaining_before != numberRemaining_after) {
-		iend_str = new Integer(numberRemaining_after).toString();
-		match_size = new Integer(numberRemaining_after).toString();
+		iend_str = Integer.valueOf(numberRemaining_after).toString();
+		match_size = Integer.valueOf(numberRemaining_after).toString();
 	  }
 	  
 

@@ -487,7 +487,7 @@ mappingIteratorBean.initialize();
             source = "ALL";
         }
 
-        if (NCItBrowserProperties._debugOn) {
+        if (NCItBrowserProperties.get_debugOn()) {
             try {
                 _logger.debug(Utils.SEPARATOR);
                 _logger.debug("* criteria: " + matchText);
@@ -966,7 +966,7 @@ mappingIteratorBean.initialize();
     }
 
 
-    private class NoReloadException extends Exception {
+    private static class NoReloadException extends Exception {
         private static final long serialVersionUID = 1L;
         public NoReloadException(String text) {
             super(text);
@@ -974,7 +974,7 @@ mappingIteratorBean.initialize();
     }
 
 
-    private class InvalidCaptChaInputException extends Exception {
+    private static class InvalidCaptChaInputException extends Exception {
         private static final long serialVersionUID = 2L;
         public InvalidCaptChaInputException(String text) {
             super(text);
@@ -1462,7 +1462,7 @@ int selected_knt = 0;
             source = "ALL";
         }
 
-        if (NCItBrowserProperties._debugOn) {
+        if (NCItBrowserProperties.get_debugOn()) {
             try {
                 _logger.debug(Utils.SEPARATOR);
                 _logger.debug("* criteria: " + matchText);
@@ -1793,7 +1793,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 
 					request.setAttribute("algorithm", matchAlgorithm);
 					coding_scheme =
-						(String) DataUtils._localName2FormalNameHashMap
+						(String) DataUtils.get_localName2FormalNameHashMap()
 							.get(coding_scheme);
 
 					String convertJSPString = HTTPUtils.convertJSPString(matchText);
@@ -2025,7 +2025,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         bean.setMatchText(matchText);
 
 
-        if (NCItBrowserProperties._debugOn) {
+        if (NCItBrowserProperties.get_debugOn()) {
             _logger.debug(Utils.SEPARATOR);
             _logger.debug("* criteria: " + matchText);
             _logger.debug("* source: " + source);

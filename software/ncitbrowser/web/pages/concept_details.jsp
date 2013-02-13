@@ -229,8 +229,8 @@
                         <td align="right" width="75%">
                            <%
                            	Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE };
-                           	boolean tree_access2 = !DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(dictionary);
-                    				boolean typeLink_isMapping2 = DataUtils.isMapping(dictionary, null);
+                           	boolean tree_access2 = !DataUtils.get_vocabulariesWithoutTreeAccessHashSet().contains(dictionary);
+                    		boolean typeLink_isMapping2 = DataUtils.isMapping(dictionary, null);
                            	if (tree_access2 && !typeLink_isMapping2) {
                            %>
       
@@ -334,7 +334,7 @@ if (!DataUtils.isNull(b)) {
                      <td class="textbodyred">
                   <%
                   	if (namespace_list != null && namespace_list.size() > 1) {
-                  		String count_str = new Integer(namespace_list.size()).toString();
+                  		String count_str = Integer.valueOf(namespace_list.size()).toString();
                   		count_str = "(Note: Code " + code + " is found in " + count_str + " different namespaces.)";
                   %>
                      <%=count_str%>

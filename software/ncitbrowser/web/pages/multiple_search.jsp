@@ -338,7 +338,7 @@ System.out.println("(WARNING) display_name_vec " + label + " 	display_name not d
                         boolean isMapping = DataUtils.isMapping(scheme, version);
                         if (!isMapping) {
  
-				String http_label = null;
+				//String http_label = null;
 				String http_scheme = null;
 				String http_version = null;
 
@@ -349,8 +349,8 @@ System.out.println("(WARNING) display_name_vec " + label + " 	display_name not d
         String cabig_approval_indicator = getCabigIndicator(display_status, basePath);
         display_cabig_approval_indicator_note |= display_status;
         
-				if (label != null)
-				  http_label = label.replaceAll(" ", "%20");
+				//if (label != null)
+				//  http_label = label.replaceAll(" ", "%20");
 				if (scheme != null)
 				  http_scheme = scheme.replaceAll(" ", "%20");
 				if (version != null)
@@ -362,7 +362,7 @@ System.out.println("(WARNING) display_name_vec " + label + " 	display_name not d
             <td width="25px"></td>
             <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="<%=CABIG_APPROVED_MSG %>" /></td>
           </tr>
-        <% } curr_sort_category = new Integer(sort_category); %>
+        <% } curr_sort_category = Integer.valueOf(sort_category); %>
         
 				<tr>
 				  <td width="25px"></td>

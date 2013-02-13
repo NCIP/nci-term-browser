@@ -87,14 +87,14 @@
             			iteratorBeanManager.addIteratorBean(iteratorBean);
 
             			int itr_size = iteratorBean.getSize();
-           			Integer obj = new Integer(itr_size);
+           			Integer obj = Integer.valueOf(itr_size);
             			String itr_size_str = obj.toString();
            			request.getSession().setAttribute("itr_size_str",
             					itr_size_str);
 
             		} else {
            			int itr_size = iteratorBean.getSize();
-            			Integer obj = new Integer(itr_size);
+            			Integer obj = Integer.valueOf(itr_size);
             			String itr_size_str = obj.toString();
             		}
 

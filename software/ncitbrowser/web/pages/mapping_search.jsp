@@ -375,7 +375,7 @@ or search from there.  It is not yet possible to search more than one mapping da
                         if (isMapping) {
                                 mapping_cs_knt++;
                        
-				String http_label = null;
+				//String http_label = null;
 				String http_scheme = null;
 				String http_version = null;
 				
@@ -391,8 +391,8 @@ or search from there.  It is not yet possible to search more than one mapping da
 				}     
 				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
-				if (label != null)
-				  http_label = label.replaceAll(" ", "%20");
+				//if (label != null)
+				// http_label = label.replaceAll(" ", "%20");
 				if (scheme != null)
 				  http_scheme = scheme.replaceAll(" ", "%20");
 				if (version != null)

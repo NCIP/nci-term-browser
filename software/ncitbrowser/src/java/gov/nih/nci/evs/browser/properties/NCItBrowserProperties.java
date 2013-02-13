@@ -106,9 +106,8 @@ public class NCItBrowserProperties {
     private static NCItBrowserProperties _browserProperties = null;
     private static Properties _properties = new Properties();
 
-    public static  boolean _debugOn = false;
-    public static  boolean _audio_captcha_background_noise_on = true;
-
+    private static boolean _debugOn = false;
+    private static boolean _audio_captcha_background_noise_on = true;
 
     private static int _maxToReturn = 1000;
     private static int _maxTreeLevel = 1000;
@@ -145,7 +144,105 @@ public class NCItBrowserProperties {
      *
      * @throws Exception the exception
      */
+
+
+    static {
+		try {
+			_browserProperties = new NCItBrowserProperties();
+			loadProperties();
+
+			_debugOn = Boolean.parseBoolean(getProperty(DEBUG_ON));
+
+			if (getProperty(AUDIO_CAPTCHA_BACKGROUND_NOISE_ON) != null) {
+				_audio_captcha_background_noise_on = Boolean.parseBoolean(getProperty(AUDIO_CAPTCHA_BACKGROUND_NOISE_ON));
+			}
+
+			String max_str =
+				_browserProperties
+					.getProperty(_browserProperties.MAXIMUM_RETURN);
+			_maxToReturn = Integer.parseInt(max_str);
+
+			String max_tree_level_str =
+				_browserProperties
+					.getProperty(_browserProperties.MAXIMUM_TREE_LEVEL);
+			_maxTreeLevel = Integer.parseInt(max_tree_level_str);
+
+			_service_url =
+				_browserProperties
+					.getProperty(_browserProperties.EVS_SERVICE_URL);
+			// _logger.info("EVS_SERVICE_URL: " + service_url);
+
+			_lg_config_file =
+				_browserProperties
+					.getProperty(_browserProperties.LG_CONFIG_FILE);
+			// _logger.info("LG_CONFIG_FILE: " + lg_config_file);
+
+			_sort_by_score =
+				_browserProperties
+					.getProperty(_browserProperties.SORT_BY_SCORE);
+			_ncicb_contact_url =
+				_browserProperties
+					.getProperty(_browserProperties.NCICB_CONTACT_URL);
+			_mail_smtp_server =
+				_browserProperties
+					.getProperty(_browserProperties.MAIL_SMTP_SERVER);
+			_terminology_subset_download_url =
+				_browserProperties
+					.getProperty(_browserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
+			_term_suggestion_application_url =
+				_browserProperties
+					.getProperty(_browserProperties.TERM_SUGGESTION_APPLICATION_URL);
+			_license_page_option =
+				_browserProperties
+					.getProperty(_browserProperties.LICENSE_PAGE_OPTION);
+			_ncim_url =
+				_browserProperties
+					.getProperty(_browserProperties.NCIM_URL);
+			_ncit_url =
+				_browserProperties
+					.getProperty(_browserProperties.NCIT_URL);
+
+			String pagination_time_out_str =
+				_browserProperties
+					.getProperty(_browserProperties.PAGINATION_TIME_OUT);
+			if (pagination_time_out_str != null) {
+				_pagination_time_out =
+					Integer.parseInt(pagination_time_out_str);
+			}
+
+			String minimum_search_string_length_str =
+				_browserProperties
+					.getProperty(_browserProperties.MINIMUM_SEARCH_STRING_LENGTH);
+			if (minimum_search_string_length_str != null) {
+				int min_search_string_length =
+					Integer.parseInt(minimum_search_string_length_str);
+				if (min_search_string_length > 1) {
+					_minimum_search_string_length =
+						min_search_string_length;
+				}
+			}
+			String sliding_window_half_width_str =
+				_browserProperties
+					.getProperty(_browserProperties.SLIDING_WINDOW_HALF_WIDTH);
+			if (sliding_window_half_width_str != null) {
+				int sliding_window_halfwidth =
+					Integer.parseInt(sliding_window_half_width_str);
+				if (sliding_window_halfwidth > 1) {
+					_sliding_window_half_width =
+						sliding_window_halfwidth;
+				}
+			}
+			_standard_ftp_report_url = getProperty(STANDARD_FTP_REPORT_URL);
+			_standard_ftp_report_info_list = StandardFtpReportInfo.parse(
+				STANDARD_FTP_REPORT_INFO, STANDARD_FTP_REPORT_INFO_MAX);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+
     public static NCItBrowserProperties getInstance() throws Exception {
+		/*
         //if (_browserProperties == null) {
             synchronized (NCItBrowserProperties.class) {
 
@@ -240,9 +337,15 @@ public class NCItBrowserProperties {
                 }
             }
         //}
-
+        */
         return _browserProperties;
     }
+
+
+    public static boolean get_debugOn() {
+		return _debugOn;
+	}
+
 
     // public String getProperty(String key) throws Exception{
     public static String getProperty(String key) throws Exception {

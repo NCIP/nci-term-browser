@@ -1,4 +1,6 @@
 <%@ page import="java.util.*" %>
+<%@ page import="java.util.Map.Entry" %>
+
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
@@ -736,17 +738,21 @@ if (!hasExternalSourceCodes) {
     <%
       boolean hasOtherProperties = false;
       Vector prop_name_value_vec0 = new Vector();
-      Set keyset0 = hmap.keySet();
-      Iterator iterator0 = keyset0.iterator();
+      
+      //Set keyset0 = hmap.keySet();
+      //Iterator iterator0 = keyset0.iterator();
+      Iterator iterator0 = hmap.entrySet().iterator();
       while (iterator0.hasNext()) {
-         String prop_name = (String) iterator0.next();
-         Vector value_vec = (Vector) hmap.get(prop_name);
+         Entry thisEntry = (Entry) iterator0.next();
+         String prop_name = (String) thisEntry.getKey();
+         Vector value_vec = (Vector) thisEntry.getValue();
          for (int k=0; k<value_vec.size(); k++) {
              String value = (String) value_vec.elementAt(k);
              prop_name_value_vec0.add(prop_name + "|" + value);
          }
       }
-      iterator0 = keyset0.iterator();
+      
+      //iterator0 = keyset0.iterator();
       n = 0;
 
       for (int k=0; k<prop_name_value_vec0.size(); k++) {
@@ -774,18 +780,18 @@ if (!hasOtherProperties) {
   <table class="datatable">
     <%
       Vector prop_name_value_vec = new Vector();
-      Set keyset = hmap.keySet();
-      Iterator iterator = keyset.iterator();
+      Iterator iterator = hmap.entrySet().iterator();
       while (iterator.hasNext()) {
-         String prop_name = (String) iterator.next();
-         Vector value_vec = (Vector) hmap.get(prop_name);
+         Entry thisEntry = (Entry) iterator.next();
+         String prop_name = (String) thisEntry.getKey();
+         Vector value_vec = (Vector) thisEntry.getValue();
          for (int k=0; k<value_vec.size(); k++) {
              String value = (String) value_vec.elementAt(k);
              prop_name_value_vec.add(prop_name + "|" + value);
          }
       }
       prop_name_value_vec = SortUtils.quickSort(prop_name_value_vec);
-      iterator = keyset.iterator();
+      //iterator = keyset.iterator();
       n = 0;
 
       for (int k=0; k<prop_name_value_vec.size(); k++) {

@@ -81,7 +81,7 @@ import org.json.*;
 
 
 public class ValueSetHierarchy {
-	public static AbsoluteCodingSchemeVersionReferenceList _csVersionList = null;
+	private static AbsoluteCodingSchemeVersionReferenceList _csVersionList = null;
     private static Logger _logger = Logger.getLogger(ValueSetHierarchy.class);
 
     public static final LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
@@ -95,20 +95,19 @@ public class ValueSetHierarchy {
     public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
     public static final String CHILDREN_NODES = "children_nodes";
 
-	public static HashSet _valueSetParticipationHashSet = null;
-	public static HashMap _source_hierarchy = null;
-	public static HashMap _source_subconcept_map = null;
-	public static HashMap _source_superconcept_map = null;
-    public static HashMap _valueSetDefinitionHierarchyHashMap = null;
-    public static Vector  _availableValueSetDefinitionSources = null;
-    public static Vector  _valueSetDefinitionHierarchyRoots = null;
-    public static HashMap _valueSetDefinitionSourceCode2Name_map = null;
-    public static HashMap _vsd_source_to_vsds_map = null;
-    public static HashMap _valueSetDefinitionURI2VSD_map = null;
-    public static HashMap _cs2vsdURIs_map = null;
-    protected static HashMap _subValueSet_hmap = null;
-    public static HashMap vsdURI2CodingSchemeURNs = null;
-
+    private static HashSet _valueSetParticipationHashSet = null;
+    private static HashMap _source_hierarchy = null;
+    private static HashMap _source_subconcept_map = null;
+    private static HashMap _source_superconcept_map = null;
+    private static HashMap _valueSetDefinitionHierarchyHashMap = null;
+    private static Vector  _availableValueSetDefinitionSources = null;
+    private static Vector  _valueSetDefinitionHierarchyRoots = null;
+    private static HashMap _valueSetDefinitionSourceCode2Name_map = null;
+    private static HashMap _vsd_source_to_vsds_map = null;
+    private static HashMap _valueSetDefinitionURI2VSD_map = null;
+    private static HashMap _cs2vsdURIs_map = null;
+    private static HashMap _subValueSet_hmap = null;
+    private static HashMap vsdURI2CodingSchemeURNs = null;
 
 	//private static String URL = "http://bmidev4:19280/lexevsapi60";
 	//private static String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
@@ -136,6 +135,9 @@ public class ValueSetHierarchy {
 		}
 
 		SOURCE_VERSION = DataUtils.getVocabularyVersionByTag(SOURCE_SCHEME, "PRODUCTION");
+
+		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(SOURCE_SCHEME, SOURCE_VERSION);
+
 		//System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
         if (_valueSetDefinitionURI2VSD_map == null) {
         	_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
@@ -174,6 +176,12 @@ public class ValueSetHierarchy {
 
 	}
 
+
+    public static HashMap get_valueSetDefinitionSourceCode2Name_map() {
+		return _valueSetDefinitionSourceCode2Name_map;
+	}
+
+
     public static String getValueSetDecription(String uri) {
 		/*
 		if (_valueSetDefinitionURI2VSD_map == null) {
@@ -190,6 +198,12 @@ public class ValueSetHierarchy {
 		}
 		return vsd.getEntityDescription().getContent();
 	}
+
+
+    public static HashSet get_valueSetParticipationHashSet() {
+		return _valueSetParticipationHashSet;
+	}
+
 
     public static Vector getValueSetDecriptionSources(String uri) {
 		/*
@@ -1407,7 +1421,7 @@ public class ValueSetHierarchy {
 */
 
 		HashMap hmap = new HashMap();
-		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(scheme, version);
+		//_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(scheme, version);
 
 		// value set source coding scheme
 		ResolvedConceptReferenceList roots = getHierarchyRoots(scheme, version);
@@ -1891,9 +1905,11 @@ public class ValueSetHierarchy {
 
 
 	public static HashMap getRootValueSets(String scheme) {
-		if (DataUtils._codingSchemeName2URIHashMap == null) DataUtils.initializeCodingSchemeMap();
+		if (DataUtils.get_codingSchemeName2URIHashMap() == null) {
+			DataUtils.initializeCodingSchemeMap();
+		}
 		String formalName = DataUtils.getFormalName(scheme);
-		String codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
+		String codingSchemeURN = (String) DataUtils.get_codingSchemeName2URIHashMap().get(formalName);
 
 		//HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_in_cs_vsd_vec = new Vector();
@@ -2319,7 +2335,9 @@ public class ValueSetHierarchy {
 
     //build_cs_vs_tree
 	public static HashMap getRootValueSets() {
-		if (DataUtils._codingSchemeName2URIHashMap == null) DataUtils.initializeCodingSchemeMap();
+		if (DataUtils.get_codingSchemeName2URIHashMap() == null) {
+			DataUtils.initializeCodingSchemeMap();
+		}
 
         if (_valueSetParticipationHashSet == null) {
             //return null;
@@ -2559,7 +2577,7 @@ public class ValueSetHierarchy {
 		String codingSchemeURN = null;
 		String formalName = DataUtils.getFormalName(scheme);
 
-		codingSchemeURN = (String) DataUtils._codingSchemeName2URIHashMap.get(formalName);
+		codingSchemeURN = (String) DataUtils.get_codingSchemeName2URIHashMap().get(formalName);
 
 		//HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_in_cs_vsd_vec = new Vector();
@@ -2834,9 +2852,11 @@ public class ValueSetHierarchy {
 	}
 
     public static boolean isValueSetSourceNode(String node_id) {
+		/*
        if (_valueSetDefinitionSourceCode2Name_map == null) {
 		   _valueSetDefinitionSourceCode2Name_map = getCodeHashMap(SOURCE_SCHEME, SOURCE_VERSION);
 	   }
+	   */
 	   if (_valueSetDefinitionSourceCode2Name_map.containsKey(node_id)) return true;
 	   return false;
 	}
