@@ -365,9 +365,8 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
  
 		        String scheme = DataUtils.getCodingSchemeName( label );
 		        String version = DataUtils.getCodingSchemeVersion( label );
-
                        
-				String http_label = null;
+				//String http_label = null;
 				String http_scheme = null;
 				String http_version = null;
 				
@@ -385,8 +384,9 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
 				}     
 				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
-				if (label != null)
-				  http_label = label.replaceAll(" ", "%20");
+				//if (label != null)
+				//  http_label = label.replaceAll(" ", "%20");
+				  
 				if (scheme != null)
 				  http_scheme = scheme.replaceAll(" ", "%20");
 				if (version != null)

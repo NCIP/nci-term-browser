@@ -210,7 +210,7 @@ if (resultsPerPage != null && resultsPerPage.compareTo("null") != 0) {
 
 int pageSize = bean.getPageSize();
 
-String selectedResultsPerPage = new Integer(pageSize).toString();
+String selectedResultsPerPage = Integer.valueOf(pageSize).toString();
 
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
@@ -296,7 +296,7 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
                  Source Code
               <%
               } else {
-                  String s = new Integer(MappingData.COL_SOURCE_CODE).toString();
+                  String s = Integer.valueOf(MappingData.COL_SOURCE_CODE).toString();
               %>
 
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
@@ -315,7 +315,7 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
                  Source Name
               <%
               } else {
-                  String s = new Integer(MappingData.COL_SOURCE_NAME).toString();
+                  String s = Integer.valueOf(MappingData.COL_SOURCE_NAME).toString();
               %>
 
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
@@ -335,7 +335,7 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
                  REL
               <%
               } else {
-                  String s = new Integer(MappingData.COL_REL).toString();
+                  String s = Integer.valueOf(MappingData.COL_REL).toString();
               %>
 
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
@@ -364,7 +364,7 @@ if (show_rank_column) {
                  
               <%
               } else {
-                  String s = new Integer(MappingData.COL_SCORE).toString();
+                  String s = Integer.valueOf(MappingData.COL_SCORE).toString();
               %>
 
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
@@ -398,7 +398,7 @@ if (show_rank_column) {
                  Target Code
               <%
               } else {
-                  String s = new Integer(MappingData.COL_TARGET_CODE).toString();
+                  String s = Integer.valueOf(MappingData.COL_TARGET_CODE).toString();
               %>
 
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
@@ -417,7 +417,7 @@ if (show_rank_column) {
                  Target Name
               <%
               } else {
-                  String s = new Integer(MappingData.COL_TARGET_NAME).toString();
+                  String s = Integer.valueOf(MappingData.COL_TARGET_NAME).toString();
               %>
 
                 <a href="<%=request.getContextPath() %>/pages/mapping.jsf?nav_type=mappings&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>&sortBy=<%=s%>">
@@ -468,7 +468,7 @@ if (show_rank_column) {
 
 
         rel = mappingData.getRel();
-        score = new Integer(mappingData.getScore()).toString();
+        score = Integer.valueOf(mappingData.getScore()).toString();
         target_code = mappingData.getTargetCode();
         target_name = mappingData.getTargetName();
         target_namespace = mappingData.getTargetCodeNamespace();

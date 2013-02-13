@@ -217,7 +217,7 @@ if (show_rank_column) {
         }
 
 		rel = mappingData.getRel();
-		score = new Integer(mappingData.getScore()).toString();
+		score = Integer.valueOf(mappingData.getScore()).toString();
 		target_code = mappingData.getTargetCode();
 		target_name = mappingData.getTargetName();
 		target_namespace = mappingData.getTargetCodeNamespace();
@@ -374,7 +374,7 @@ if (show_rank_column) {
 		    source_namespace = short_name;
 		}
 		rel = mappingData.getRel();
-		score = new Integer(mappingData.getScore()).toString();
+		score = Integer.valueOf(mappingData.getScore()).toString();
 		target_code = mappingData.getTargetCode();
 		target_name = mappingData.getTargetName();
 		target_namespace = mappingData.getTargetCodeNamespace();

@@ -179,50 +179,50 @@ public class DataUtils {
     public String _evsServiceURL = null;
     public String _ncimURL = null;
 
-    public static HashMap _namespace2CodingScheme = null;
 
-    public static HashMap _formalName2LocalNameHashMap = null;
-    public static HashMap _localName2FormalNameHashMap = null;
-    public static HashMap _formalName2MetadataHashMap = null;
-    public static HashMap _displayName2FormalNameHashMap = null;
+    private static HashMap _namespace2CodingScheme = null;
 
-    public static HashMap _formalNameVersion2LocalNameHashMap = null;
-    public static HashMap _localNameVersion2FormalNameVersionHashMap = null;
-    public static HashMap _formalNameVersion2MetadataHashMap = null;
-    public static HashMap _displayNameVersion2FormalNameVersionHashMap = null;
-    public static HashMap _uri2CodingSchemeNameHashMap = null;
-    public static HashMap _codingSchemeName2URIHashMap = null;
+    private static HashMap _formalName2LocalNameHashMap = null;
+    private static HashMap _localName2FormalNameHashMap = null;
+    private static HashMap _formalName2MetadataHashMap = null;
+    private static HashMap _displayName2FormalNameHashMap = null;
 
-    public static Vector _nonConcept2ConceptAssociations = null;
-    public static String _defaultOntologiesToSearchOnStr = null;
+    private static HashMap _formalNameVersion2LocalNameHashMap = null;
+    private static HashMap _localNameVersion2FormalNameVersionHashMap = null;
+    private static HashMap _formalNameVersion2MetadataHashMap = null;
+    private static HashMap _displayNameVersion2FormalNameVersionHashMap = null;
+    private static HashMap _uri2CodingSchemeNameHashMap = null;
+    private static HashMap _codingSchemeName2URIHashMap = null;
 
-    public static HashSet _vocabulariesWithConceptStatusHashSet = null;
-    public static HashSet _vocabulariesWithoutTreeAccessHashSet = null;
+    private static Vector _nonConcept2ConceptAssociations = null;
+    private static String _defaultOntologiesToSearchOnStr = null;
 
-    public static HashMap _formalName2NCImSABHashMap = null;
+    private static HashSet _vocabulariesWithConceptStatusHashSet = null;
+    private static HashSet _vocabulariesWithoutTreeAccessHashSet = null;
 
-    public static HashMap _isMappingHashMap = null;
-    public static HashMap _mappingDisplayNameHashMap = null;
+    private static HashMap _formalName2NCImSABHashMap = null;
 
-    public static HashMap _codingSchemeTagHashMap = null;
+    private static HashMap _isMappingHashMap = null;
+    private static HashMap _mappingDisplayNameHashMap = null;
 
-    public static final HashMap _valueSetDefinitionHierarchyHashMap = null;
-    public static Vector  _availableValueSetDefinitionSources = null;
-    public static Vector  _valueSetDefinitionHierarchyRoots = null;
+    private static HashMap _codingSchemeTagHashMap = null;
 
-    public static HashMap _codingScheme2MappingCodingSchemes = null;
+    private static final HashMap _valueSetDefinitionHierarchyHashMap = null;
+    private static Vector  _availableValueSetDefinitionSources = null;
+    private static Vector  _valueSetDefinitionHierarchyRoots = null;
 
-    public static Vector _valueSetDefinitionMetadata = null;
+    private static HashMap _codingScheme2MappingCodingSchemes = null;
 
-
-    public static HashMap _formalName2VersionsHashMap = null;
-    public static HashMap _versionReleaseDateHashMap = null;
-
-    public static Vector _source_code_schemes = null;
+    private static Vector _valueSetDefinitionMetadata = null;
 
 
-    public static HashMap sourceValueSetTree = null;
-    public static HashMap terminologyValueSetTree = null;
+    private static HashMap _formalName2VersionsHashMap = null;
+    private static HashMap _versionReleaseDateHashMap = null;
+
+    private static Vector _source_code_schemes = null;
+
+    private static HashMap sourceValueSetTree = null;
+    private static HashMap terminologyValueSetTree = null;
 
     // ==================================================================================
 
@@ -252,6 +252,7 @@ public class DataUtils {
             setCodingSchemeMap();
         return _ontologies;
     }
+
 
 /*
     public static String getDefaultOntologiesToSearchOnStr() {
@@ -291,7 +292,14 @@ public class DataUtils {
     }
 
 
+    public static HashMap get_localName2FormalNameHashMap() {
+		return _localName2FormalNameHashMap;
+	}
 
+
+    public static HashSet get_vocabulariesWithoutTreeAccessHashSet() {
+		return _vocabulariesWithoutTreeAccessHashSet;
+	}
 
 
     private static boolean isCodingSchemeSupported(String codingSchemeName) {
@@ -300,6 +308,10 @@ public class DataUtils {
         return _codingSchemeHashSet.contains(codingSchemeName);
     }
 
+
+    public static HashMap get_codingSchemeName2URIHashMap() {
+		return _codingSchemeName2URIHashMap;
+	}
 
 
      private static void setMappingDisplayNameHashMap() {
@@ -319,7 +331,6 @@ public class DataUtils {
 	public static void initializeCodingSchemeMap() {
 		setCodingSchemeMap();
 	}
-
 
     private static void setCodingSchemeMap() {
         _logger.debug("Initializing ...");

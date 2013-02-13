@@ -291,22 +291,22 @@ int istart_plus_pageSize = istart+pageSize;
 
 
 String istart_str = Integer.toString(istart+1);    
-String iend_str = new Integer(iend).toString();
+String iend_str = Integer.valueOf(iend).toString();
 
 if (iend >= istart+pageSize-1) {
     iend = istart+pageSize-1;
     list = iteratorBean.getData(istart, iend);
-    iend_str = new Integer(iend+1).toString();
+    iend_str = Integer.valueOf(iend+1).toString();
 }
 
 
 if (iend+1 > size) {
     iend = size;
-    iend_str = new Integer(iend).toString();
+    iend_str = Integer.valueOf(iend).toString();
 }
 
 
-String match_size = new Integer(size).toString();
+String match_size = Integer.valueOf(size).toString();
     
 
 int next_page_num = page_num + 1;
@@ -410,7 +410,7 @@ if (show_rank_column) {
         }
 
         rel = mappingData.getRel();
-        score = new Integer(mappingData.getScore()).toString();
+        score = Integer.valueOf(mappingData.getScore()).toString();
         target_code = mappingData.getTargetCode();
         target_name = mappingData.getTargetName();
         target_namespace = mappingData.getTargetCodeNamespace();

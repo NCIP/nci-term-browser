@@ -4,6 +4,8 @@
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.io.*" %>
 <%@ page import="java.util.*"%>
+<%@ page import="java.util.Map.Entry"%>
+
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
@@ -232,7 +234,7 @@ if (view.compareToIgnoreCase("source") == 0) {
 <%           
  } else if (view.compareToIgnoreCase("terminology") == 0) { 
      HashMap csURN2ValueSetMetadataHashMap = DataUtils.getCodingSchemeURN2ValueSetMetadataHashMap(vsd_vec); 
-     Iterator it = csURN2ValueSetMetadataHashMap.keySet().iterator();
+     Iterator it = csURN2ValueSetMetadataHashMap.entrySet().iterator();
      
      
 %>          
@@ -250,9 +252,11 @@ if (view.compareToIgnoreCase("source") == 0) {
  
  
         while (it.hasNext()) {
-                String cs = (String) it.next();
-               
- 		Vector vsd_vector = (Vector) csURN2ValueSetMetadataHashMap.get(cs);
+                //String cs = (String) it.next();
+		Entry thisEntry = (Entry) it.next();
+		String cs = (String) thisEntry.getKey();                
+ 		//Vector vsd_vector = (Vector) csURN2ValueSetMetadataHashMap.get(cs);
+ 		Vector vsd_vector = (Vector) thisEntry.getValue();
                  
                  for (int i=0; i<vsd_vector.size(); i++) {
              
@@ -305,7 +309,7 @@ if (view.compareToIgnoreCase("source") == 0) {
   } else if (view.compareToIgnoreCase("source") == 0) { 
   
      HashMap src2ValueSetMetadataHashMap = DataUtils.getSource2ValueSetMetadataHashMap(vsd_vec); 
-     Iterator it = src2ValueSetMetadataHashMap.keySet().iterator();
+     Iterator it = src2ValueSetMetadataHashMap.entrySet().iterator();
      
      
 %>          
@@ -318,11 +322,11 @@ if (view.compareToIgnoreCase("source") == 0) {
  
  
         while (it.hasNext()) {
-                String resource = (String) it.next();
-              
- 		Vector vsd_vector = (Vector) src2ValueSetMetadataHashMap.get(resource);
- 
-                 for (int i=0; i<vsd_vector.size(); i++) {
+		Entry thisEntry = (Entry) it.next();
+		String resource = (String) thisEntry.getKey();                
+ 		Vector vsd_vector = (Vector) thisEntry.getValue();
+                 
+                for (int i=0; i<vsd_vector.size(); i++) {
              
  		    String vsd_string = (String) vsd_vector.elementAt(i);
  		    Vector u = DataUtils.parseData(vsd_string);

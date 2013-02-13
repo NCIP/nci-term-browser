@@ -44,7 +44,7 @@
   hdr_dictionary0 = HTTPUtils.cleanXSS(hdr_dictionary0);
 
   boolean tree_access_allowed = true;
-  if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(hdr_dictionary0)) {
+  if (DataUtils.get_vocabulariesWithoutTreeAccessHashSet().contains(hdr_dictionary0)) {
       tree_access_allowed = false;
   }
 

@@ -33,7 +33,7 @@ if (vsd != null) {
 
     
 } else {
-    if (ValueSetHierarchy._valueSetDefinitionSourceCode2Name_map.containsKey(ontology_node_id)) {
+    if (ValueSetHierarchy.get_valueSetDefinitionSourceCode2Name_map().containsKey(ontology_node_id)) {
         redirect_url = context_path + "/pages/concept_details.jsf?dictionary="
             + source_scheme
             + "&version="

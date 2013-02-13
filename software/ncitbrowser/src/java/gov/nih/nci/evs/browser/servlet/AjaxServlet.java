@@ -3719,7 +3719,7 @@ if (DataUtils.isNull(matchText)) {
  boolean hasMapping = DataUtils.hasMapping(scheme);
 
  boolean tree_access_allowed = true;
- if (DataUtils._vocabulariesWithoutTreeAccessHashSet.contains(scheme)) {
+ if (DataUtils.get_vocabulariesWithoutTreeAccessHashSet().contains(scheme)) {
      tree_access_allowed = false;
  }
  boolean vocabulary_isMapping = DataUtils.isMapping(scheme, null);
