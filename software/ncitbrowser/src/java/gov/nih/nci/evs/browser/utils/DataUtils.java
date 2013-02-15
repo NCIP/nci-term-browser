@@ -131,7 +131,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = true;  //DYEE_DEBUG (Default: true)
+    private static boolean initializeValueSetHierarchy = true;
     private static boolean valueSetHierarchyInitialized = false;
 
     private static boolean hasNoValueSet = false;
@@ -154,12 +154,6 @@ public class DataUtils {
     public static final int SEARCH_PROPERTY_VALUE = 3;
     public static final int SEARCH_ROLE_VALUE = 6;
     public static final int SEARCH_ASSOCIATION_VALUE = 7;
-
-/*
-    private static final List<String> STOP_WORDS =
-        Arrays.asList(new String[] { "a", "an", "and", "by", "for", "of", "on",
-            "in", "nos", "the", "to", "with" });
-*/
 
     public static final String TYPE_ROLE = "type_role";
     public static final String TYPE_ASSOCIATION = "type_association";

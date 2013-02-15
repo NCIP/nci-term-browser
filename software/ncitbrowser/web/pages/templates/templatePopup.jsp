@@ -41,6 +41,11 @@
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   </head>
   <body>
+
+    <!-- Begin Skip Top Navigation -->
+      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+  
+  
     <div id="popupContainer">
       <!-- nci popup banner -->
       <div class="ncipopupbanner">
@@ -82,6 +87,9 @@
           </table>
         </div>
       <% } %>
+
+<a name="evs-content" id="evs-content"></a>      
+      
       <jsp:include page="<%=content_page%>" />
     </div>
   </body>
