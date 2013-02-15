@@ -44,8 +44,7 @@
 
     <!-- Begin Skip Top Navigation -->
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
-  
-  
+    
     <div id="popupContainer">
       <!-- nci popup banner -->
       <div class="ncipopupbanner">
@@ -65,6 +64,7 @@
         </tr>
         </table>
       </div>
+      
       <% if (is_display_app_logo) { %>
         <div>
           <table background="<%=basePath%>/images/termbrowser_popup_banner-middle.gif" cellspacing="0" cellpadding="0" border="0">
