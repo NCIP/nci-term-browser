@@ -921,8 +921,6 @@ mappingIteratorBean.initialize();
                 "WARNING: The string you entered does not match"
                     + " with what is shown in the image. Please try again.");
 
-		} else {
-			System.out.println("Correct Captcha answer: " + answer);
 		}
 
         request.getSession().removeAttribute(Captcha.NAME);
@@ -957,8 +955,6 @@ mappingIteratorBean.initialize();
             throw new InvalidCaptChaInputException(
                 "WARNING: The numbers you entered does not match"
                     + " with what is set in the audio. Please try again.");
-		} else {
-			System.out.println("Correct AudioCaptcha answer: " + answer);
 		}
 
         request.getSession().removeAttribute(AudioCaptcha.NAME);
@@ -1701,7 +1697,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             if (size == 1) {
             	list = iteratorBean.getData(0, 0);
             	if (list == null || list.size() == 0) {
-					    System.out.println("WARNING: Iterator is empty." );
+					    //System.out.println("WARNING: Iterator is empty." );
 						String msg =
 							"No match found.";
 						request.getSession().setAttribute("message", msg);
@@ -1999,7 +1995,6 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         String rel_search_association =
             (String) request.getParameter("rel_search_association");
 
-
         bean.setSelectedAssociation(rel_search_association);
 
         String rel_search_rela =
@@ -2132,10 +2127,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             }
 
         } else if (searchType != null
-            && searchType.compareTo("Relationship") == 0) {
+            && searchType.compareToIgnoreCase("Relationship") == 0) {
+
+			request.getSession().setAttribute("selectSearchOption", "Relationship");
+
             if (rel_search_association != null
-                && rel_search_association.compareTo("ALL") == 0)
+                && rel_search_association.compareTo("ALL") == 0) {
                 rel_search_association = null;
+			}
 
             if (rel_search_rela != null) {
                 rel_search_rela = rel_search_rela.trim();
@@ -2200,7 +2199,6 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 					//String assocName = OntologyBean.convertAssociationName(scheme, null, rel_search_association);
 
 					String assocName = rel_search_association;
-
 					//_logger.debug("Converting " + rel_search_association + " to " + assocName);
                     associationsToNavigate =
                         new String[] { assocName };
@@ -2227,10 +2225,6 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
                             }
                         }
                     }
-
-                } else {
-                    _logger.warn("(*) qualifiers == null");
-
                 }
 
                 wrapper =
@@ -2250,19 +2244,22 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 							if (numberRemaining == 0) {
 								iterator = null;
 							} else {
-   						    	System.out.println("(*) numberRemaining: " + numberRemaining);
-
-								iteratorBean = new IteratorBean(iterator);
-								iteratorBean.setKey(key);
-								iteratorBean.setMatchText(matchText);
-								iteratorBeanManager.addIteratorBean(iteratorBean);
-
-								request.getSession().setAttribute("key", key);
+   						    	//System.out.println("(UserSessionBean) numerRemaining: " + numberRemaining);
+            					if (iterator.hasNext()) {
+									iteratorBean = new IteratorBean(iterator);
+									iteratorBean.setKey(key);
+									iteratorBean.setMatchText(matchText);
+									iteratorBeanManager.addIteratorBean(iteratorBean);
+									request.getSession().setAttribute("key", key);
+								} else {
+									iterator = null;
+								}
 						    }
 
 						} catch (Exception ex) {
 							//ex.printStackTrace();
 							//020713 KLO
+							//System.out.println("(UserSessionBean) Exception set iterator = null: " );
 							iterator = null;
 						}
 /*
@@ -2350,9 +2347,10 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         request.getSession().removeAttribute("type");
 
         if (iterator != null) {
+
             int size = iteratorBean.getSize();
 
-            // LexEVS API itersator.numberRemaining is inaccurate, and can cause issues.
+            // LexEVS API iterator.numberRemaining is inaccurate, and can cause issues.
             // the following code is a work around.
             if (size == 1) {
             	List list = iteratorBean.getData(0, 0);
@@ -2368,18 +2366,16 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
                 .getRefererParmDecode(request));
 
             if (size > 1) {
-
                 request.getSession().setAttribute("search_results", v);
-
                 String match_size = Integer.toString(size);
                 ;// Integer.toString(v.size());
                 request.getSession().setAttribute("match_size", match_size);
                 request.getSession().setAttribute("page_string", "1");
 
                 request.setAttribute("version", version);
-
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
                 return "search_results";
+
             } else if (size == 1) {
                 request.getSession().setAttribute("singleton", "true");
                 request.getSession().setAttribute("dictionary", scheme);
@@ -2428,7 +2424,6 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
                 return "concept_details";
             }
         }
-
         String message = "No match found.";
         if (matchAlgorithm.compareTo("exactMatch") == 0) {
             message = Constants.ERROR_NO_MATCH_FOUND_TRY_OTHER_ALGORITHMS;

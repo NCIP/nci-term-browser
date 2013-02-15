@@ -232,17 +232,14 @@ public class IteratorBean extends Object {
         _timeout = false;
 
         try {
-
             int count = (idx2 - idx1) + 1;
             int lcv = 0;
-
 			while (_iterator != null && _iterator.hasNext()) {
+
 				ResolvedConceptReference[] refs =
 					_iterator.next(_maxReturn).getResolvedConceptReference();
 
-
 				if (refs != null) {
-
 					for (ResolvedConceptReference ref : refs) {
 
 						_lastResolved++;
@@ -263,7 +260,6 @@ public class IteratorBean extends Object {
 					if (_list.size() > idx2 && lcv > _stopping_rule) {
 						break;
 					}
-
 				}
 			}
 
@@ -361,7 +357,9 @@ public class IteratorBean extends Object {
      public List copyData(int idx1, int idx2) {
 		List arrayList = new ArrayList();
 
-        if (_list.size() == 0) return arrayList;
+        if (_list.size() == 0) {
+			return arrayList;
+		}
 
         // bound checking for idx1
 		if (idx1 > _list.size()-1) {
@@ -377,7 +375,9 @@ public class IteratorBean extends Object {
 		for (int i=idx1; i<=idx2; i++) {
 			ResolvedConceptReference ref = (ResolvedConceptReference) _list.get(i);
 			arrayList.add(ref);
-			if (i > _list.size()) break;
+			if (i > _list.size()) {
+				break;
+			}
 		}
 
 		return arrayList;

@@ -211,7 +211,6 @@
         }
     }
 
-
     if (rel_search_association == null) rel_search_association = "ALL";
     if (rel_search_rela == null) rel_search_rela = " ";
     if (selectProperty == null) selectProperty = "ALL";
@@ -242,7 +241,6 @@
     else if (selectSearchOption.compareToIgnoreCase("Relationship") == 0)
       check_r2 = "checked";
       
-
 
     String check_source = "", check_target = "";
     direction = (String) request.getSession().getAttribute("direction");

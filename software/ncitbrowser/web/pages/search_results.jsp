@@ -19,8 +19,6 @@
 JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 String search_results_dictionary = info.dictionary;
 %>
-
-
   <title><%=search_results_dictionary%></title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
@@ -140,42 +138,41 @@ int istart = pageNum * pageSize;
 int page_num = pageNum;
 if (page_num == 0) {
     page_num++;
+    
 } else {
     istart = (pageNum-1) * pageSize;
 }
-int iend = istart + pageSize - 1;
 
+int iend = istart + pageSize - 1;
+//if (page_num == 1 && iend > size) {
+//    iend = size - 1;
+//}
 
 try {
    list = iteratorBean.getData(istart, iend);
    int prev_size = size;
    size = iteratorBean.getSize();
-
    if (size != prev_size) {
 	if (iend > size) {
 	    iend = size;
-
 	}
-       list = iteratorBean.getData(istart, size);
+        list = iteratorBean.getData(istart, size);
        
    } else {
-
 	if (iend > size) {
 	    iend = size;
-
 	}
 
    }
+   
 } catch (Exception ex) {
-   //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+   System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
-
 
 num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 
 int istart_plus_pageSize = istart+pageSize;
-
 
 String istart_str = Integer.toString(istart+1);    
 String iend_str = Integer.valueOf(iend).toString();
@@ -185,6 +182,7 @@ if (iend >= istart+pageSize-1) {
     list = iteratorBean.getData(istart, iend);
     iend_str = Integer.valueOf(iend+1).toString();
 }
+
 
 String match_size = Integer.valueOf(size).toString();
    
