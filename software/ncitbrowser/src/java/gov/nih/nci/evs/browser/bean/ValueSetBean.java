@@ -321,16 +321,16 @@ public class ValueSetBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
+        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
-        String algorithm = (String) request.getParameter("valueset_search_algorithm");
+        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
-		String checked_vocabularies = (String) request.getParameter("checked_vocabularies");
+		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
         if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
             checked_vocabularies = (String) request.getSession().getAttribute("checked_vocabularies");
-            System.out.println("checked_vocabularies(session): " + checked_vocabularies);
+            //System.out.println("checked_vocabularies(session): " + checked_vocabularies);
         }
 
 		//if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
@@ -349,12 +349,12 @@ public class ValueSetBean {
 			selected_vocabularies_size = selected_vocabularies.size();
 		}
 
-        String VSD_view = (String) request.getParameter("view");
+        String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
         request.getSession().setAttribute("view", VSD_view);
 
         String selectCodingScheme = getSelectedOntology(); //(String) request.getParameter("selectedOntology");
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (DataUtils.isNull(matchText)) {
 			matchText = "";
 		} else {
@@ -711,12 +711,12 @@ SortUtils.quickSort(w);
 
         String selectedvalueset = null;
         String uri = null;
-        String multiplematches = (String) request.getParameter("multiplematches");
+        String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
         if (multiplematches != null) {
-			selectedvalueset = (String) request.getParameter("valueset");
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("valueset"));
 			uri = selectedvalueset;
 		} else {
-			uri = (String) request.getParameter("vsd_uri");
+			uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 			if (uri.indexOf("|") != -1) {
 				Vector u = DataUtils.parseData(uri);
 				uri = (String) u.elementAt(1);
@@ -739,11 +739,11 @@ SortUtils.quickSort(w);
 
         String selectedvalueset = null;
         //String selectedvalueset = (String) request.getParameter("valueset");
-        String multiplematches = (String) request.getParameter("multiplematches");
+        String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
         if (multiplematches != null) {
-			selectedvalueset = (String) request.getParameter("valueset");
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("valueset"));
 		} else {
-			selectedvalueset = (String) request.getParameter("vsd_uri");
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 			if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
 				Vector u = DataUtils.parseData(selectedvalueset);
 				selectedvalueset = (String) u.elementAt(1);
@@ -859,7 +859,7 @@ String key = vsd_uri;
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String vsd_uri = (String) request.getParameter("vsd_uri");
+        String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
         if (vsd_uri == null) {
 			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
@@ -886,7 +886,7 @@ StringBuffer buf = new StringBuffer();
         for (int i=0; i<cs_name_vec.size(); i++) {
 			String cs_name = (String) cs_name_vec.elementAt(i);
 
-			String version = (String) request.getParameter(cs_name);
+			String version = HTTPUtils.cleanXSS((String) request.getParameter(cs_name));
 
 			if (version != null) {
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
@@ -988,11 +988,11 @@ StringBuffer buf = new StringBuffer();
 
 
         String selectedvalueset = null;
-       String multiplematches = (String) request.getParameter("multiplematches");
+       String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
         if (multiplematches != null) {
-			selectedvalueset = (String) request.getParameter("valueset");
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("valueset"));
 		} else {
-			selectedvalueset = (String) request.getParameter("vsd_uri");
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 			if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
 				Vector u = DataUtils.parseData(selectedvalueset);
 				selectedvalueset = (String) u.elementAt(1);
@@ -1047,7 +1047,7 @@ StringBuffer buf = new StringBuffer();
 		String valueSetDefinitionRevisionId = null;
         String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
 
-        String uri = (String) request.getParameter("vsd_uri");
+        String uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
         if (uri == null) {
             uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
@@ -1055,7 +1055,7 @@ StringBuffer buf = new StringBuffer();
         if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
 			String msg = "No coding scheme reference is selected.";
 			request.getSession().setAttribute("message", msg);
-			System.out.println(msg);
+			//System.out.println(msg);
 			return;// "resolve_value_set";
 		}
 
@@ -1292,13 +1292,13 @@ StringBuffer buf = new StringBuffer();
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String vsd_uri = (String) request.getParameter("vsd_uri");
+        String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
         if (vsd_uri == null) {
 			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
 
         request.getSession().setAttribute("vsd_uri", vsd_uri);
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         request.getSession().setAttribute("matchText_RVS", matchText);
 
         if (matchText != null)
@@ -1315,8 +1315,8 @@ StringBuffer buf = new StringBuffer();
         }
         request.getSession().setAttribute("matchText", matchText);
 
-        String matchAlgorithm = (String) request.getParameter("algorithm");
-        String searchTarget = (String) request.getParameter("searchTarget");
+        String matchAlgorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
+        String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);

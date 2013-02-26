@@ -495,7 +495,7 @@ public class ViewInHierarchyUtil {
     }
 
 
-
+/*
 	public static void main(String[] args) throws Exception {
 
         String codingScheme = "NCI Thesaurus";
@@ -524,7 +524,7 @@ public class ViewInHierarchyUtil {
 		System.out.println(ans);
 
 	}
-
+*/
 }
 
 

@@ -181,13 +181,13 @@ public class UserSessionBean extends Object {
 
 boolean mapping_search = false;
 
-String single_mapping_search = (String) request.getParameter("single_mapping_search");
+String single_mapping_search = HTTPUtils.cleanXSS((String) request.getParameter("single_mapping_search"));
 if (single_mapping_search != null && single_mapping_search.compareTo("true") == 0) {
 	mapping_search = true;
 
     request.getSession().setAttribute("nav_type", "terminologis");
-	String cs_dictionary = (String) request.getParameter("dictionary");
-	String cs_version = (String) request.getParameter("version");
+	String cs_dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+	String cs_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 
 }
 
@@ -204,13 +204,13 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
         }
         ResolvedConceptReferencesIterator iterator = null;
 
-        String matchAlgorithm = (String) request.getParameter("algorithm");
+        String matchAlgorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
         // 051512 KLO AppScan
         if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
 			matchAlgorithm = "exactMatch";
 		}
 
-        String searchTarget = (String) request.getParameter("searchTarget");
+        String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
         // 051512 KLO AppScan
         if (searchTarget == null || searchTarget.length() == 0) {
 			searchTarget = "names";
@@ -220,7 +220,7 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (matchText != null) {
             matchText = matchText.trim();
             request.getSession().setAttribute("matchText", matchText);
@@ -260,7 +260,7 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
         String scheme = null;
         String version = null;
 
-		String scheme_and_version = (String) request.getParameter("scheme_and_version");
+		String scheme_and_version = HTTPUtils.cleanXSS((String) request.getParameter("scheme_and_version"));
 		if (scheme_and_version != null) {
 			Vector cs_version_vec = DataUtils.parseData(scheme_and_version, "$");
 			scheme = (String) cs_version_vec.elementAt(0);
@@ -271,7 +271,7 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 			request.getSession().setAttribute("version", version);
 
 		} else {
-			scheme = request.getParameter("scheme");
+			scheme = HTTPUtils.cleanXSS((String)request.getParameter("scheme"));
 
 			//String searchaction_dictionary = request.getParameter("dictionary");
 
@@ -279,7 +279,7 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 				scheme = (String) request.getSession().getAttribute("scheme");
 			}
 			if (scheme == null) {
-				scheme = (String) request.getParameter("dictionary");
+				scheme = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 			}
 
             if (mapping_search) {
@@ -305,7 +305,7 @@ if (scheme != null) {
 
 
 
-				version = (String) request.getParameter("version");
+				version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 				if (version == null) {
 					version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
 				}
@@ -482,7 +482,7 @@ mappingIteratorBean.initialize();
         }
 
         request.getSession().setAttribute("ranking", Boolean.toString(ranking));
-        String source = (String) request.getParameter("source");
+        String source = HTTPUtils.cleanXSS((String) request.getParameter("source"));
         if (source == null) {
             source = "ALL";
         }
@@ -909,7 +909,7 @@ mappingIteratorBean.initialize();
 
         // Do this so we can capture non-Latin chars
         request.setCharacterEncoding("UTF-8");
-        String answer = request.getParameter("answer");
+        String answer = HTTPUtils.cleanXSS((String) request.getParameter("answer"));
         if (answer == null || answer.length() == 0) {
             throw new NoReloadException(
                 "Please enter the characters appearing in the image.");
@@ -943,7 +943,7 @@ mappingIteratorBean.initialize();
 
         // Do this so we can capture non-Latin chars
         request.setCharacterEncoding("UTF-8");
-        String answer = request.getParameter("answer");
+        String answer = HTTPUtils.cleanXSS((String) request.getParameter("answer"));
 
         if (answer == null || answer.length() == 0) {
             throw new NoReloadException(
@@ -982,12 +982,7 @@ mappingIteratorBean.initialize();
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-        /*
-			String answer = request.getParameter("answer");
-            String subject = request.getParameter("subject");
-            String message = request.getParameter("message");
-            String from    = request.getParameter("emailaddress");
-        */
+
 		request.getSession().setAttribute("answer", "");
 		request.getSession().setAttribute("subject", "");
 		request.getSession().setAttribute("message", "");
@@ -1002,10 +997,10 @@ mappingIteratorBean.initialize();
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-			String answer = request.getParameter("answer");
-            String subject = request.getParameter("subject");
-            String message = request.getParameter("message");
-            String from    = request.getParameter("emailaddress");
+			String answer = HTTPUtils.cleanXSS((String) request.getParameter("answer"));
+            String subject = HTTPUtils.cleanXSS(request.getParameter("subject"));
+            String message = HTTPUtils.cleanXSS(request.getParameter("message"));
+            String from    = HTTPUtils.cleanXSS(request.getParameter("emailaddress"));
 
 		request.getSession().setAttribute("answer", answer);
 		request.getSession().setAttribute("subject", subject);
@@ -1036,10 +1031,10 @@ mappingIteratorBean.initialize();
         request.getSession().removeAttribute("errorType");
         request.getSession().removeAttribute("retry");
 
-		String answer = request.getParameter("answer");
-		String subject = request.getParameter("subject");
-		String message = request.getParameter("message");
-		String from    = request.getParameter("emailaddress");
+		String answer = HTTPUtils.cleanXSS((String) request.getParameter("answer"));
+		String subject = HTTPUtils.cleanXSS((String) request.getParameter("subject"));
+		String message = HTTPUtils.cleanXSS((String) request.getParameter("message"));
+		String from    = HTTPUtils.cleanXSS((String) request.getParameter("emailaddress"));
 
 		request.getSession().setAttribute("answer", answer);
 		request.getSession().setAttribute("subject", subject);
@@ -1061,7 +1056,7 @@ mappingIteratorBean.initialize();
 			return "retry";
 		}
 
-        String captcha_option = (String) request.getParameter("captcha_option");
+        String captcha_option = HTTPUtils.cleanXSS((String) request.getParameter("captcha_option"));
         if (isNull(captcha_option)) {
 			captcha_option = "default";
 		}
@@ -1218,8 +1213,8 @@ mappingIteratorBean.initialize();
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-        String dictionary = (String) request.getParameter("dictionary");
-        String code = (String) request.getParameter("code");
+        String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+        String code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
 
         if (dictionary != null && code != null) {
             LicenseBean licenseBean =
@@ -1261,7 +1256,7 @@ mappingIteratorBean.initialize();
 		}
 
         // Called from license.jsp
-        String acceptedLicensesStr = (String) request.getParameter("acceptedLicenses");
+        String acceptedLicensesStr = HTTPUtils.cleanXSS((String) request.getParameter("acceptedLicenses"));
         if (acceptedLicensesStr != null) {
             LexEVSUtils.CSchemes acceptedLicenses =
                 LexEVSUtils.CSchemes.toSchemes(acceptedLicensesStr);
@@ -1269,7 +1264,7 @@ mappingIteratorBean.initialize();
                 LicenseUtils.acceptLicenses(request, acceptedLicenses);
         }
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (matchText != null) {
             matchText = matchText.trim();
             request.getSession().setAttribute("matchText", matchText);
@@ -1282,7 +1277,7 @@ mappingIteratorBean.initialize();
                 "multiple_search_no_match_error");
         request.getSession().removeAttribute("multiple_search_no_match_error");
 
-        String matchAlgorithm = (String) request.getParameter("algorithm");
+        String matchAlgorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
 
         //KLO 051512 AppScan
         if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
@@ -1291,7 +1286,7 @@ mappingIteratorBean.initialize();
 
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
-        String searchTarget = (String) request.getParameter("searchTarget");
+        String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
         //KLO 051512 AppScan
         if (searchTarget == null || searchTarget.length() == 0) {
 			searchTarget = "names";
@@ -1299,7 +1294,7 @@ mappingIteratorBean.initialize();
 
         request.getSession().setAttribute("searchTarget", searchTarget);
 
-        String initial_search = (String) request.getParameter("initial_search");
+        String initial_search = HTTPUtils.cleanXSS((String) request.getParameter("initial_search"));
 
         //String[] ontology_list = request.getParameterValues("ontology_list");
 
@@ -1453,7 +1448,7 @@ int selected_knt = 0;
         }
 
         boolean ranking = true;
-        String source = (String) request.getParameter("source");
+        String source = HTTPUtils.cleanXSS((String) request.getParameter("source"));
         if (source == null) {
             source = "ALL";
         }
@@ -1474,7 +1469,7 @@ int selected_knt = 0;
 
         if (ontology_list == null) {
             ontology_list_str =
-                (String) request.getParameter("ontology_list_str"); // from
+                HTTPUtils.cleanXSS((String) request.getParameter("ontology_list_str")); // from
                                                                     // multiple_search_results
                                                                     // (hidden
                                                                     // variable)
@@ -1900,8 +1895,8 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
         // update LicenseBean
-        String dictionary = (String) request.getParameter("dictionary");
-        String version = (String) request.getParameter("version");
+        String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+        String version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 
         LicenseBean licenseBean =
             (LicenseBean) request.getSession().getAttribute("licenseBean");
@@ -1924,14 +1919,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String scheme = (String) request.getParameter("dictionary");
+        String scheme = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 	    if (scheme == null || DataUtils.getFormalName(scheme) == null) {
 			String message = "Invalid vocabulary name.";
 			request.setAttribute("message", message);
 			return "message";
 		}
 
-        String version = (String) request.getParameter("version");
+        String version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
         if (version != null) {
 			boolean isVersionValid = DataUtils.validateCodingSchemeVersion(scheme, version);
 			if (!isVersionValid) {
@@ -1952,14 +1947,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             request.getSession().setAttribute("searchStatusBean", bean);
         }
 
-        String direction = (String) request.getParameter("direction");
+        String direction = HTTPUtils.cleanXSS((String) request.getParameter("direction"));
         //051512 KLO AppScan
         if (direction == null || direction.length() == 0) {
 			direction = "source";
 		}
 		bean.setDirection(direction);
 
-        String matchType = (String) request.getParameter("adv_search_type");
+        String matchType = HTTPUtils.cleanXSS((String) request.getParameter("adv_search_type"));
         //051512 KLO AppScan
         if (matchType == null || matchType.length() == 0) {
 			matchType = "Name";
@@ -1967,14 +1962,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         bean.setSearchType(matchType);
 
         String matchAlgorithm =
-            (String) request.getParameter("adv_search_algorithm");
+            HTTPUtils.cleanXSS((String) request.getParameter("adv_search_algorithm"));
         //051512 KLO AppScan
         if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
 			matchAlgorithm = "exactMatch";
 		}
         bean.setAlgorithm(matchAlgorithm);
 
-        String source = (String) request.getParameter("adv_search_source");
+        String source = HTTPUtils.cleanXSS((String) request.getParameter("adv_search_source"));
         //051512 KLO AppScan
         if (source == null || source.length() == 0) {
 			source = "ALL";
@@ -1982,23 +1977,23 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         bean.setSelectedSource(source);
 
         String selectSearchOption =
-            (String) request.getParameter("selectSearchOption");
+            HTTPUtils.cleanXSS((String) request.getParameter("selectSearchOption"));
         if (selectSearchOption == null || selectSearchOption.length() == 0) {
 			selectSearchOption = "Name";
 		}
         bean.setSelectedSearchOption(selectSearchOption);
         //request.getSession().setAttribute("selectSearchOption", selectSearchOption);
 
-        String selectProperty = (String) request.getParameter("selectProperty");
+        String selectProperty = HTTPUtils.cleanXSS((String) request.getParameter("selectProperty"));
         bean.setSelectedProperty(selectProperty);
 
         String rel_search_association =
-            (String) request.getParameter("rel_search_association");
+            HTTPUtils.cleanXSS((String) request.getParameter("rel_search_association"));
 
         bean.setSelectedAssociation(rel_search_association);
 
         String rel_search_rela =
-            (String) request.getParameter("rel_search_rela");
+            HTTPUtils.cleanXSS((String) request.getParameter("rel_search_rela"));
         bean.setSelectedRELA(rel_search_rela);
 
         FacesContext.getCurrentInstance().getExternalContext().getRequestMap()
@@ -2008,8 +2003,8 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         //KLO 041411
         request.getSession().setAttribute("searchStatusBean", bean);
 
-        String searchTarget = (String) request.getParameter("searchTarget");
-        String matchText = (String) request.getParameter("matchText");
+        String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (matchText == null || matchText.length() == 0) {
             String message = "Please enter a search string.";
             // request.getSession().setAttribute("message", message);
@@ -2066,7 +2061,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         SearchFields searchFields = null;
         String key = null;
 
-        String searchType = (String) request.getParameter("selectSearchOption");
+        String searchType = HTTPUtils.cleanXSS((String) request.getParameter("selectSearchOption"));
         _logger.debug("SearchUtils.java searchType: " + searchType);
 
         if (searchType != null && searchType.compareTo("Property") == 0) {
@@ -2078,7 +2073,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
              */
 
             String property_type =
-                (String) request.getParameter("selectPropertyType");
+                HTTPUtils.cleanXSS((String) request.getParameter("selectPropertyType"));
             if (property_type != null && property_type.compareTo("ALL") == 0) {
                 property_type = null;
             }
@@ -2475,14 +2470,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 
         request.getSession().setAttribute("matchText", matchText);
 
-        String matchAlgorithm = (String) request.getParameter("algorithm");
-        String searchTarget = (String) request.getParameter("searchTarget");
+        String matchAlgorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
+        String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
@@ -2531,14 +2526,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 
         request.getSession().setAttribute("matchText", matchText);
 
-        String matchAlgorithm = (String) request.getParameter("algorithm");
-        String searchTarget = (String) request.getParameter("searchTarget");
+        String matchAlgorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
+        String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
@@ -2592,14 +2587,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = (String) request.getParameter("matchText");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 
         request.getSession().setAttribute("matchText", matchText);
 
-        String matchAlgorithm = (String) request.getParameter("algorithm");
-        String searchTarget = (String) request.getParameter("searchTarget");
+        String matchAlgorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
+        String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
@@ -2746,17 +2741,17 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-		String answer = request.getParameter("answer");
-		String subject = request.getParameter("subject");
-		String message = request.getParameter("message");
-		String from    = request.getParameter("emailaddress");
+		String answer = HTTPUtils.cleanXSS((String) request.getParameter("answer"));
+		String subject = HTTPUtils.cleanXSS((String) request.getParameter("subject"));
+		String message = HTTPUtils.cleanXSS((String) request.getParameter("message"));
+		String from    = HTTPUtils.cleanXSS((String) request.getParameter("emailaddress"));
 
 		request.getSession().setAttribute("answer", answer);
 		request.getSession().setAttribute("subject", subject);
 		request.getSession().setAttribute("message", message);
 		request.getSession().setAttribute("emailaddress", from);
 
-        String captcha_option = (String) request.getParameter("captcha_option");
+        String captcha_option = HTTPUtils.cleanXSS((String) request.getParameter("captcha_option"));
         if (isNull(captcha_option)) {
 			captcha_option = "default";
 		}

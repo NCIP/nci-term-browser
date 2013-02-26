@@ -148,7 +148,7 @@ public class QuickUnionIteratorWrapper implements ResolvedConceptReferencesItera
                     _logger
                         .error("QuickUnionIteratorWrapper constructor - cns.resolve throws exception???");
                     //ex.printStackTrace();
-                    System.out.println("WARNING: QuickUnionIteratorWrapper constructor - cns.resolve throws exception???");
+                    //System.out.println("WARNING: QuickUnionIteratorWrapper constructor - cns.resolve throws exception???");
 
                 }
             }

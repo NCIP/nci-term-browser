@@ -166,7 +166,8 @@ try {
    }
    
 } catch (Exception ex) {
-   System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+   //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
+   ex.printStackTrace();
 }
 
 num_pages = size / pageSize;

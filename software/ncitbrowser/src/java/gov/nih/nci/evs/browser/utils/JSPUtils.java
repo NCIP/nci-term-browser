@@ -80,8 +80,8 @@ public class JSPUtils {
             if (debug)
                 _logger.debug(Utils.SEPARATOR_DASHES);
 
-            String dictionary = request.getParameter("dictionary");
-            String version = request.getParameter("version");
+            String dictionary =  HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+            String version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
             debugDV(prefix + "Request Parameters: ", dictionary, version);
 
             dictionary = (String) request.getAttribute("dictionary");
@@ -98,8 +98,8 @@ public class JSPUtils {
                 debugAllVersions(request);
             if (debug)
                 _logger.debug(Utils.SEPARATOR);
-            dictionary = request.getParameter("dictionary");
-            version = request.getParameter("version");
+            dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+            version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 
 
  //KLO testing AppScan fix:
@@ -246,14 +246,14 @@ if (version != null) {
 
         JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 
-        String vsd_view = (String) request.getParameter("view");
+        String vsd_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
         if (vsd_view != null) return "valuesets";
 
-        String vsd_uri = (String) request.getParameter("vsd_uri");
+        String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
         String dictionary = info.dictionary;
         String version = info.version;
 
-        String nav_type = (String) request.getParameter("nav_type");
+        String nav_type = HTTPUtils.cleanXSS((String) request.getParameter("nav_type"));
         if (debug) {
             _logger.debug(Utils.SEPARATOR);
             _logger.debug("nav_type (Parameter): " + nav_type);

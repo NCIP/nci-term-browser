@@ -98,94 +98,6 @@ public class ValueSetSearchUtils
             return "literalContains";
     }
 
-/*
-	public static void resolveValueSetDefinition(ValueSetDefinition vsd) {
-        //String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
-        //String URL = "http://ncias-d499-v.nci.nih.gov:29080/lexevsapi60";
-
-        //String URL = "http://ncias-q541-v.nci.nih.gov:29080/lexevsapi60";
-        String URL = "http://localhost:8080/lexevsapi60";
-
-		LexEVSDistributed distributed = null;
-		LexEVSValueSetDefinitionServices vds = null;
-		try {
-		    vds = RemoteServerUtil.getLexEVSValueSetDefinitionServices(URL);
-
-			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-			//csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("urn:lsid:nlm.nih.gov:semnet", "3.2"));
-			csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference("Automobiles", "1.0"));
-
-			long time = System.currentTimeMillis();
-			ResolvedValueSetDefinition rvsd = null;
-			try {
-				rvsd = vds.resolveValueSetDefinition(vsd, csvList, null, null);
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				return;
-			}
-
-			ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-            if (itr == null) {
-				System.out.println("vds.resolveValueSetDefinition returns null???");
-				return;
-			}
-
-			int count = 0;
-
-			time = System.currentTimeMillis();
-		    while(itr.hasNext()){
-				ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
-				for(ResolvedConceptReference ref : refs){
-					count++;
-					displayRef(count, ref);
-				}
-			}
-
-			System.out.println("Result Return Time: " + (System.currentTimeMillis() - time));
-			System.out.println("Results returned: " + count);
-
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-			return;
-		}
-
-	}
-*/
-
-/*
-	public static void exportValueSetDefinition(ValueSetDefinition vsd) {
-        //String URL = "http://ncias-d488-v.nci.nih.gov:29080/lexevsapi60";
-        //String URL = "http://ncias-d499-v.nci.nih.gov:29080/lexevsapi60";
-
-        //String URL = "http://ncias-q541-v.nci.nih.gov:29080/lexevsapi60";
-        String URL = "http://localhost:8080/lexevsapi60";
-
-		LexEVSDistributed distributed = null;
-		LexEVSValueSetDefinitionServices vds = null;
-		try {
-		    vds = RemoteServerUtil.getLexEVSValueSetDefinitionServices(URL);
-
-			long time = System.currentTimeMillis();
-			String valueSetDefinitionRevisionId = null;
-			try {
-				StringBuffer sb = vds.exportValueSetDefinition(vsd);
-                System.out.println(sb.toString());
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				return;
-			}
-
-			System.out.println("Result Return Time: " + (System.currentTimeMillis() - time));
-
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-			return;
-		}
-
-	}
-*/
 
       public static AbsoluteCodingSchemeVersionReferenceList getEntireAbsoluteCodingSchemeVersionReferenceList() {
         boolean includeInactive = false;
@@ -352,15 +264,6 @@ public class ValueSetSearchUtils
             }
             java.lang.String valueSetDefinitionRevisionId = null;
             AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
-            /*
-            Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
-            if (cs_ref_vec != null) {
-				csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
-			} else {
-System.out.println("cs_ref_vec = null??? ");
-
-			}
-			*/
 
             String csVersionTag = null;
 
@@ -368,13 +271,13 @@ System.out.println("cs_ref_vec = null??? ");
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
             if (rvs_cns == null) {
-				System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
+				//System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
                 return null;
             }
 
             cns = rvs_cns.getCodedNodeSet();
             if (cns == null) {
-				System.out.println("getCodedNodeSet returns null???");
+				//System.out.println("getCodedNodeSet returns null???");
                 return null;
             }
 
@@ -455,13 +358,13 @@ System.out.println("cs_ref_vec = null??? ");
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
             if (rvs_cns == null) {
-				System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
+				//System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
                 return null;
             }
 
             cns = rvs_cns.getCodedNodeSet();
             if (cns == null) {
-				System.out.println("getCodedNodeSet returns null???");
+				//System.out.println("getCodedNodeSet returns null???");
                 return null;
             }
 
@@ -553,13 +456,13 @@ System.out.println("cs_ref_vec = null??? ");
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
             if (rvs_cns == null) {
-				System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
+				//System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
                 return null;
             }
 
             cns = rvs_cns.getCodedNodeSet();
             if (cns == null) {
-				System.out.println("getCodedNodeSet returns null???");
+				//System.out.println("getCodedNodeSet returns null???");
                 return null;
             }
 
@@ -621,7 +524,7 @@ System.out.println("cs_ref_vec = null??? ");
         return false;
 	}
 
-
+/*
 	public static void main(String[] args) {
 		try {
            AbsoluteCodingSchemeVersionReferenceList list1 = getEntireAbsoluteCodingSchemeVersionReferenceList();
@@ -632,6 +535,6 @@ System.out.println("cs_ref_vec = null??? ");
 			ex.printStackTrace();
 		}
 	  }
-
+*/
 }
 

@@ -736,11 +736,7 @@ public class CacheController {
             try {
 
 				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
-/*
-				if (hmap == null) {
-					System.out.println("ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes returns NULL???");
-				}
-*/
+
 				nodesArray = hashMap2JSONArray(hmap);
                 element = new Element(key, nodesArray);
                 _cache.put(element);
@@ -1067,9 +1063,6 @@ public class CacheController {
             List<TreeItem> children = ti._assocToChildMap.get(association);
 			for (int i = 0; i < children.size(); i++) {
 				TreeItem childItem = (TreeItem) children.get(i);
-
-				System.out.println("VS: " + childItem._text);
-
 				int knt = 0;
 				if (childItem._expandable) {
 					knt = 1;

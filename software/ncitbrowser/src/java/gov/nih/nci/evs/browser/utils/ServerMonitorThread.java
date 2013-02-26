@@ -81,7 +81,7 @@ public class ServerMonitorThread extends Thread {
 
 	private static void debug(String text) {
 	    if (_logger == null) {
-	        System.out.println(_className + ": " + text);
+	        //System.out.println(_className + ": " + text);
 	    } else {
 	        _logger.debug(text);
 	    }
@@ -201,8 +201,9 @@ public class ServerMonitorThread extends Thread {
         try {
             debug(msg);
         } catch (Exception e1) {
-            System.out.println(_className + ": " + e1.getMessage());
-            System.out.println(_className + ": " + msg);
+            //System.out.println(_className + ": " + e1.getMessage());
+            //System.out.println(_className + ": " + msg);
+            e1.printStackTrace();
         }
     }
 }

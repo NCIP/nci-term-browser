@@ -643,27 +643,6 @@ public class DataUtils {
         setMappingDisplayNameHashMap();
 
         if (initializeValueSetHierarchy) {
-			/*
-			_logger.error("Initializing Value Set Metadata ...");
-			getValueSetDefinitionMetadata();
-			_logger.error("Done Initializing Value Set Metadata ...");
-			_logger.error("\tInitializing ValueSetHierarchy ...");
-			System.out.println("\tgetValueSetSourceHierarchy ...");
-			HashMap src_hier_hashmap = ValueSetHierarchy.getValueSetSourceHierarchy();
-			System.out.println("\tgetValueSetDefinitionURI2VSD_map ...");
-			HashMap vsduri2vsd_hashmap = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
-			System.out.println("\tpreprocessSourceHierarchyData ...");
-			ValueSetHierarchy.preprocessSourceHierarchyData();
-			System.out.println("\tgetValueSetParticipationHashSet ...");
-			ValueSetHierarchy.getValueSetParticipationHashSet();
-			System.out.println("\tcreateVSDSource2VSDsMap ...");
-			ValueSetHierarchy.createVSDSource2VSDsMap();
-			System.out.println("\tinitializeCS2vsdURIsMap ...");
-			ValueSetHierarchy.initializeCS2vsdURIs_map();
-			_logger.debug("\tDone initializing ValueSetHierarchy ...");
-
-            sourceValueSetTree = ValueSetHierarchy.getSourceValueSetTree();
-            */
             initializeValueSetHierarchy();
 	    }
     }
@@ -682,13 +661,13 @@ public class DataUtils {
 		_logger.debug("Done Initializing Value Set Metadata ...");
 		_logger.debug("\tInitializing ValueSetHierarchy ...");
 
-		System.out.println("\tpreprocessSourceHierarchyData ...");
+		//System.out.println("\tpreprocessSourceHierarchyData ...");
 		ValueSetHierarchy.preprocessSourceHierarchyData();
-		System.out.println("\tgetValueSetParticipationHashSet ...");
+		//System.out.println("\tgetValueSetParticipationHashSet ...");
 		ValueSetHierarchy.getValueSetParticipationHashSet();
-		System.out.println("\tcreateVSDSource2VSDsMap ...");
+		//System.out.println("\tcreateVSDSource2VSDsMap ...");
 		ValueSetHierarchy.createVSDSource2VSDsMap();
-		System.out.println("\tinitializeCS2vsdURIsMap ...");
+		//System.out.println("\tinitializeCS2vsdURIsMap ...");
 		ValueSetHierarchy.initializeCS2vsdURIs_map();
 		_logger.debug("\tDone initializing ValueSetHierarchy ...");
 
@@ -1045,14 +1024,14 @@ public class DataUtils {
     public static Entity getConceptByCode(String codingSchemeName, String vers, String code) {
         try {
 			if (code == null) {
-				System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+				//System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
 
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
-                System.out.println("lbSvc == null???");
+                //System.out.println("lbSvc == null???");
                 return null;
             }
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -1072,7 +1051,7 @@ public class DataUtils {
 				}
 
                 if (cns == null) {
-					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+					//System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
 					return null;
 				}
 
@@ -1085,7 +1064,7 @@ public class DataUtils {
 				}
 
                 if (matches == null) {
-                    System.out.println("Concept not found.");
+                    //System.out.println("Concept not found.");
                     return null;
                 }
                 int count = matches.getResolvedConceptReferenceCount();
@@ -1123,14 +1102,14 @@ public class DataUtils {
     public static String getNamespaceByCode(String codingSchemeName, String vers, String code) {
         try {
 			if (code == null) {
-				System.out.println("Input error in DataUtils.getNamespaceByCode -- code is null.");
+				//System.out.println("Input error in DataUtils.getNamespaceByCode -- code is null.");
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
 
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
-                System.out.println("lbSvc == null???");
+                //System.out.println("lbSvc == null???");
                 return null;
             }
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -1150,7 +1129,7 @@ public class DataUtils {
 				}
 
                 if (cns == null) {
-					System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+					//System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
 					return null;
 				}
 
@@ -1163,7 +1142,7 @@ public class DataUtils {
 				}
 
                 if (matches == null) {
-                    System.out.println("Concept not found.");
+                    //System.out.println("Concept not found.");
                     return null;
                 }
                 int count = matches.getResolvedConceptReferenceCount();
@@ -1578,7 +1557,7 @@ if (codingSchemeName == null) {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
 if (lbSvc == null) {
-	System.out.println("lbSvc == null ??? " + ltag);
+	//System.out.println("lbSvc == null ??? " + ltag);
 	return null;
 }
 
@@ -1969,9 +1948,6 @@ if (lbSvc == null) {
         } else if (property_type.compareToIgnoreCase("DEFINITION") == 0) {
             properties = concept.getDefinition();
 
-        } else {
-            System.out.println("WARNING: property_type not found -- "
-                + property_type);
         }
 
         if (properties == null || properties.length == 0)
@@ -2162,7 +2138,7 @@ if (lbSvc == null) {
 		Entity concept = getConceptByCode(scheme, version, null, code);
 		if (concept == null) {
 			if (!isMapping) {
-				System.out.println("*** WARNING: concept not found in: " + scheme + " version: " + version + " code: " + code);
+				//System.out.println("*** WARNING: concept not found in: " + scheme + " version: " + version + " code: " + code);
 				return null;
 		    }
 		} else {
@@ -4555,7 +4531,7 @@ if (lbSvc == null) {
 				}
 			}
 			if (relationsContainerName == null) {
-				System.out.println("WARNING: Mapping container not found in " + scheme);
+				//System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
 			}
 
@@ -4591,7 +4567,7 @@ if (lbSvc == null) {
 			Relations[] relations = cs.getRelations();
 			for (int i = 0; i < relations.length; i++) {
 				Relations relation = relations[i];
-				System.out.println(relation.getContainerName());
+				//System.out.println(relation.getContainerName());
                 Boolean isMapping = relation.isIsMapping();
                 if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
 					AssociationPredicate[] associationPredicates = relation.getAssociationPredicate();
@@ -4677,7 +4653,7 @@ if (lbSvc == null) {
 			int maxToReturn = 1000;
             ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects, maxToReturn);
 
-            System.out.println("Number of concept domains: " + rcrl.getResolvedConceptReferenceCount());
+            //System.out.println("Number of concept domains: " + rcrl.getResolvedConceptReferenceCount());
             for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 				ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 				Entity entity = rcr.getReferencedEntry();
@@ -4883,8 +4859,8 @@ if (lbSvc == null) {
 					}
 					return SortUtils.quickSort(v);
 			    } else {
-					System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition returns null (URI: "
-					   + uri + ").");
+					//System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition returns null (URI: "
+					//   + uri + ").");
 				}
 
 			} catch (Exception ex) {
@@ -5249,8 +5225,8 @@ if (lbSvc == null) {
 				w = SortUtils.quickSort(w);
 				return w;
 		    } else {
-				System.out.println("WARNING: DataUtils.getCodingSchemeReferencesInValueSetDefinition returns null? (URI: "
-				   + uri + ").");
+				//System.out.println("WARNING: DataUtils.getCodingSchemeReferencesInValueSetDefinition returns null? (URI: "
+				//   + uri + ").");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -5337,11 +5313,6 @@ if (lbSvc == null) {
 
 						if (tag != null) {
 							String cs_tag = getVocabularyVersionTag(uri, representsVersion);
-
-							if (cs_tag == null) {
-								System.out.println("(*) WARNING: getVocabularyVersionTag returns null " + uri);
-								System.out.println("(*) WARNING: getVocabularyVersionTag tag " + tag);
-							}
 
 							if (cs_tag != null && cs_tag.compareToIgnoreCase(tag) == 0) {
 								v.add(representsVersion);

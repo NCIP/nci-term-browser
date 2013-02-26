@@ -1686,12 +1686,6 @@ public class TreeUtils {
             ResolvedConceptReferenceList rcrl = lbscm.getHierarchyRoots(codingScheme, versionOrTag,
                 hierarchyID);
 
-            if (rcrl == null) {
-				System.out.println("lbscm.getHierarchyRoots: codingScheme " + codingScheme);
-				System.out.println("lbscm.getHierarchyRoots: version " + version);
-				System.out.println("lbscm.getHierarchyRoots returns NULL???");
-			}
-
             return rcrl;
 
         } catch (Exception ex) {
