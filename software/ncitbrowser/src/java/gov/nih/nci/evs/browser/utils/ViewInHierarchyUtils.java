@@ -144,18 +144,6 @@ public class ViewInHierarchyUtils {
 
     public ViewInHierarchyUtils(String codingScheme, String version, String code) {
 		has_more_node_knt = 0;
-		/*
-        try {
-			System.setProperty("file.encoding", "UTF-8");
-			PrintWriter pw = new PrintWriter(System.out, true);
-            printTree(pw, codingScheme, version, code);
-
-        } catch (Exception e) {
-            System.out.println(e.getClass().getName() + ": " + e.getMessage());
-        }
-        */
-
-
 		try {
 			System.setProperty("file.encoding", "UTF-8");
 			PrintWriter pw  = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"), true);

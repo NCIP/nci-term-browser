@@ -88,8 +88,8 @@
  }
 
  boolean vocabulary_home_isMapping = DataUtils.isMapping(scheme, null);
- System.out.println("menubar scheme: " + scheme);
- System.out.println("vocabulary_home_isMapping: " + vocabulary_home_isMapping);
+ //System.out.println("menubar scheme: " + scheme);
+ //System.out.println("vocabulary_home_isMapping: " + vocabulary_home_isMapping);
 
     String term_browser_version = info.term_browser_version;
     if (term_browser_version == null) term_browser_version = "N/A";

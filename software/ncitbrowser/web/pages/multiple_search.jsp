@@ -261,23 +261,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     if (DataUtils.isNull(display_name)) {
                         //if (display_name == null || display_name.compareTo("null") == 0)
                         display_name = DataUtils.getLocalName(scheme);
-                        
-System.out.println("(WARNING) display_name_vec " + label + " 	display_name not defined in metadata. set display_name to " + display_name); 	    
-                        
-                        
-                    } 
+                   } 
  
                     String sort_category = DataUtils.getMetadataValue(
                         scheme, version, "vocabulary_sort_category");
                     
                     OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
                     display_name_vec.add(info);
-  
-		    if (!info.isProduction()) {
-		        System.out.println("Non-production version: " + scheme + " version: " + version);
-		    }
-		    
-		    
                     
                   }
                   
@@ -298,7 +288,7 @@ System.out.println("(WARNING) display_name_vec " + label + " 	display_name not d
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
 		     if (info.getHasMultipleVersions()) {
-			 System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
+			 //System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
 		     } 
 		     
 		     if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {

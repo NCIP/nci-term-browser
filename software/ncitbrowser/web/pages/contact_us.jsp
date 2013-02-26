@@ -83,30 +83,8 @@ if (captcha_option.compareTo("default") == 0) {
 		//.addBorder()
                 .build();
 	request.getSession().setAttribute(Captcha.NAME, captcha);
-} else {
-/*
-	ac = new AudioCaptcha.Builder()
-	     .addAnswer()
-	     .addNoise()
-	     .build(); 
-	request.getSession().setAttribute(AudioCaptcha.NAME, ac);     
-*/
-}
-
-
-    
-/*    
-    String alt_captcha_option = "audio";
-    String opt = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
-    if (opt != null && opt.compareTo("audio") == 0) {
-        captcha_option = "audio";
-        alt_captcha_option = "default";
-    }
-*/    
-    
-    System.out.println("captcha_option: " + captcha_option);
-    System.out.println("alt_captcha_option: " + alt_captcha_option);
-    
+}    
+   
     
     String ncicb_contact_url = new DataUtils().getNCICBContactURL();
     String answer  = "";
@@ -114,15 +92,14 @@ if (captcha_option.compareTo("default") == 0) {
     String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("message"));
     String emailaddress = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("emailaddress"));
     
-    String refresh = (String) request.getParameter("refresh");
+    String refresh = HTTPUtils.cleanXSS((String) request.getParameter("refresh"));
     if (refresh != null) {
 	     answer = "";
 	     subject = HTTPUtils.cleanXSS((String) request.getParameter("subject"));
 	     message = HTTPUtils.cleanXSS((String) request.getParameter("message"));
 	     emailaddress = HTTPUtils.cleanXSS((String) request.getParameter("emailaddress"));
     }
-    
-    
+        
     if (answer == null) answer = "";
     if (subject == null) subject = "";
     if (message == null) message = "";

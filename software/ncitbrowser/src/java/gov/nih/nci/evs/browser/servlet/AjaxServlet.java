@@ -609,7 +609,7 @@ if (action == null) {
       while (parameters.hasMoreElements())
       {
          param = (String) parameters.nextElement();
-         String paramValue = request.getParameter(param);
+         String paramValue = HTTPUtils.cleanXSS((String) request.getParameter(param));
       }
       response.setContentType("text/html");
       PrintWriter out = null;
@@ -2389,8 +2389,8 @@ if (view == Constants.STANDARD_VIEW) {
 		request.getSession().removeAttribute("checked_vocabularies");
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 		request.getSession().removeAttribute("partial_checked_vocabularies");
-		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
-		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
+		//String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
+		//System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
 
 
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
@@ -2406,7 +2406,7 @@ if (view == Constants.STANDARD_VIEW) {
 
 		if (matchText.compareTo("") == 0) {
 			msg = "Please enter a search string.";
-			System.out.println(msg);
+			//System.out.println(msg);
 			request.getSession().setAttribute("message", msg);
 
 
@@ -2422,7 +2422,7 @@ if (view == Constants.STANDARD_VIEW) {
         //if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
         if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
 			msg = "No value set definition is selected.";
-			System.out.println(msg);
+			//System.out.println(msg);
 			request.getSession().setAttribute("message", msg);
 
 
@@ -2479,7 +2479,7 @@ if (view == Constants.STANDARD_VIEW) {
 
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
-			System.out.println(msg);
+			//System.out.println(msg);
 			request.getSession().setAttribute("message", msg);
 			return "message";
 		}
@@ -2638,7 +2638,7 @@ if (view == Constants.STANDARD_VIEW) {
 
 						} catch (Exception ex) {
 							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed. (VSD URI: " + uri + ")";
-							System.out.println(msg);
+							//System.out.println(msg);
 							request.getSession().setAttribute("message", msg);
 
 							ex.printStackTrace();
@@ -2680,7 +2680,7 @@ if (view == Constants.STANDARD_VIEW) {
 
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
-		System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
+		//System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
 
 
       try {

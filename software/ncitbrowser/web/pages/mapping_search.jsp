@@ -114,7 +114,7 @@ if (display_name_vec == null) {
     display_name_vec.add(info);
 
 	 if (!info.isProduction()) {
-	     System.out.println("Non-production version: " + scheme + " version: " + version);
+	     //System.out.println("Non-production version: " + scheme + " version: " + version);
 	 }
 
   }
@@ -136,7 +136,7 @@ if (display_name_vec == null) {
   for (int k = 0; k < display_name_vec.size(); k++) { 
      OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
      if (info.getHasMultipleVersions()) {
-	 System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
+	 //System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
      } 
 
      if (ontologiesToSearchOn.indexOf(info.getLabel()) != -1) {

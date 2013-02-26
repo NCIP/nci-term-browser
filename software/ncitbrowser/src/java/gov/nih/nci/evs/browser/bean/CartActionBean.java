@@ -276,9 +276,9 @@ public class CartActionBean {
         version = (String)request.getSession().getAttribute(_version);
 */
 
-        codingScheme = request.getParameter("cart_dictionary");
-        version = request.getParameter("cart_version");
-        code = request.getParameter("cart_code");
+        codingScheme = HTTPUtils.cleanXSS((String) request.getParameter("cart_dictionary"));
+        version = HTTPUtils.cleanXSS((String) request.getParameter("cart_version"));
+        code = HTTPUtils.cleanXSS((String) request.getParameter("cart_code"));
 
 
         Entity curr_concept = DataUtils.getConceptByCode(codingScheme,
@@ -332,9 +332,9 @@ public class CartActionBean {
         _initDisplayItems();
 
 
-String b = (String) request.getParameter("b");
-String n = (String) request.getParameter("n");
-String m = (String) request.getParameter("m");
+String b = HTTPUtils.cleanXSS((String) request.getParameter("b"));
+String n = HTTPUtils.cleanXSS((String) request.getParameter("n"));
+String m = HTTPUtils.cleanXSS((String) request.getParameter("m"));
 
         if (!DataUtils.isInteger(b)) {
             b = "0";
@@ -349,7 +349,7 @@ String m = (String) request.getParameter("m");
         }
 
 
-String key = (String) request.getParameter("key");
+String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 
 if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 
@@ -583,7 +583,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 				String cs_uri = (String) u.elementAt(0);
 				if (!uri_hset.contains(cs_uri)) {
 					uri_hset.add(cs_uri);
-					String version = (String) request.getParameter(cs_uri);
+					String version = HTTPUtils.cleanXSS((String) request.getParameter(cs_uri));
 					if (version != null) {
 						csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_uri, version));
 				    }
@@ -1101,8 +1101,8 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-		String format = (String) request.getParameter("format");
-		System.out.println("cartVersionSelectionAction format: " + format);
+		String format = HTTPUtils.cleanXSS((String) request.getParameter("format"));
+		//System.out.println("cartVersionSelectionAction format: " + format);
 
 		request.getSession().setAttribute("format", format);
 
@@ -1183,7 +1183,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 			if (!uri_hset.contains(cs_uri)) {
 				uri_hset.add(cs_uri);
 				uri_vec.add(cs_uri);
-				String version = (String) request.getParameter(cs_uri);
+				String version = HTTPUtils.cleanXSS((String) request.getParameter(cs_uri));
 				if (version != null) {
 					cs_uri2version_map.put(cs_uri, version);
 				}

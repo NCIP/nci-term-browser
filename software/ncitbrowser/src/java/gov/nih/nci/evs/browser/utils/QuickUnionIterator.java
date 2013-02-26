@@ -107,7 +107,7 @@ public class QuickUnionIterator implements ResolvedConceptReferencesIterator {
                     _logger
                         .error("QuickUnionIterator constructor - cns.resolve throws exception???");
                     //ex.printStackTrace();
-                    System.out.println("WARNING: QuickUnionIteratorWrapper constructor - cns.resolve throws exception???");
+                    //System.out.println("WARNING: QuickUnionIteratorWrapper constructor - cns.resolve throws exception???");
                 }
             }
         }

@@ -127,7 +127,7 @@ public class MappingSearchUtils {
 			}
 
 			if (relationsContainerName == null) {
-				System.out.println("WARNING: Mapping container not found in " + scheme);
+				//System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
 			}
 		} catch (Exception ex) {
@@ -329,7 +329,7 @@ public class MappingSearchUtils {
 						itr = mapping.resolveMapping();
 						try {
 							numberRemaining = itr.numberRemaining();
-							System.out.println("Number of matches: " + numberRemaining);
+							//System.out.println("Number of matches: " + numberRemaining);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
@@ -450,7 +450,7 @@ public class MappingSearchUtils {
 						itr = mapping.resolveMapping();
 						try {
 							numberRemaining = itr.numberRemaining();
-							System.out.println("Number of matches: " + numberRemaining);
+							//System.out.println("Number of matches: " + numberRemaining);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
@@ -594,7 +594,7 @@ public class MappingSearchUtils {
 						itr = mapping.resolveMapping();
 						try {
 							numberRemaining = itr.numberRemaining();
-							System.out.println("Number of matches: " + numberRemaining);
+							//System.out.println("Number of matches: " + numberRemaining);
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
@@ -632,7 +632,7 @@ public class MappingSearchUtils {
         List<MappingSortOption> sortOptionList, ResolvedConceptReferencesIterator searchResultsIterator, SearchContext context) {
 
 if (searchResultsIterator == null) return null;
-
+/*
 		try {
 			int numRemaining = searchResultsIterator.numberRemaining();
 			System.out.println("searchResultsIterator passing number of matches: " + numRemaining);
@@ -640,7 +640,7 @@ if (searchResultsIterator == null) return null;
 			e.printStackTrace();
 			return null;
 		}
-
+*/
 
 		CodingSchemeVersionOrTag versionOrTag =
 			new CodingSchemeVersionOrTag();
@@ -665,7 +665,7 @@ if (searchResultsIterator == null) return null;
 			}
 
 			if (relationsContainerName == null) {
-				System.out.println("WARNING: Mapping container not found in " + scheme);
+				//System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
 			}
 
@@ -678,28 +678,14 @@ if (searchResultsIterator == null) return null;
             //ConceptReferenceList codeList (to be derived based on ResolvedConceptReferencesIterator searchResultsIterator)
             ConceptReferenceList codeList = new ConceptReferenceList();
 
-/*
-			if (searchResultsIterator != null) {
-				int lcv = 0;
-				while(searchResultsIterator.hasNext()){
-					ResolvedConceptReference[] refs = searchResultsIterator.next(100).getResolvedConceptReference();
-					for(ResolvedConceptReference ref : refs){
-						lcv++;
-						System.out.println("(" + lcv + ") " + ref.getEntityDescription().getContent() + "(" + ref.getCode() + ")");
-						codeList.addConceptReference((ConceptReference) ref);
-					}
-				}
-			} else {
-				System.out.println("resolved_value_set.jsp ResolvedConceptReferencesIterator == NULL???");
-			}
-*/
+
 
 				int lcv = 0;
 				while(searchResultsIterator.hasNext()){
 					ResolvedConceptReference[] refs = searchResultsIterator.next(100).getResolvedConceptReference();
 					for(ResolvedConceptReference ref : refs){
 						lcv++;
-						System.out.println("(" + lcv + ") " + ref.getEntityDescription().getContent() + "(" + ref.getCode() + ")");
+						//System.out.println("(" + lcv + ") " + ref.getEntityDescription().getContent() + "(" + ref.getCode() + ")");
 						codeList.addConceptReference((ConceptReference) ref);
 					}
 				}

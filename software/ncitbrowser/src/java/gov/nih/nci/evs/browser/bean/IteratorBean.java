@@ -209,7 +209,7 @@ public class IteratorBean extends Object {
 				//return refs[0];
 				ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
 				if (ref == null) {
-					System.out.println("(*) UserSessionBean.broken iterator getFirstResolvedConceptReference returns null???");
+					//System.out.println("(*) UserSessionBean.broken iterator getFirstResolvedConceptReference returns null???");
 				}
 				return ref;
 			}

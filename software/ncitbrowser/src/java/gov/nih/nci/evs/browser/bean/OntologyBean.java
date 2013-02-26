@@ -342,7 +342,7 @@ public class OntologyBean {
                 cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
             } catch (Exception ex2) {
                 cs = null;
-                System.out.println("ERROR: Unable to resolve coding scheme -- " + codingScheme + "(version: " + version + ")");
+                //System.out.println("ERROR: Unable to resolve coding scheme -- " + codingScheme + "(version: " + version + ")");
             }
 
         } catch (Exception ex) {
@@ -398,7 +398,7 @@ public class OntologyBean {
 
     private static Vector getSupportedSources(CodingScheme cs) {
         if (cs == null) {
-			System.out.println("calling OntologyBean getSupportedSources cs == null ??? " );
+			//System.out.println("calling OntologyBean getSupportedSources cs == null ??? " );
             return null;
 		}
         Vector v = new Vector();
@@ -651,19 +651,7 @@ public class OntologyBean {
 				String id = sa.getLocalId();
 				String name = sa.getContent();
 				String t = name + "|" + id;
-/*
-String content = sa.getContent();
-String entityCode = sa.getEntityCode();
-String namespace = sa.getEntityCodeNamespace();
-System.out.println("localId: " + name + " content: " + content + " entityCode " + entityCode + " getEntityCodeNamespace() " + namespace);
 
-				try {
-					lbscm.getAssociationNameFromAssociationCode(
-						codingSchemeName, versionOrTag, sa.getLocalId());
-				} catch (Exception ex) {
-                    _logger.debug("lbscm.getAssociationNameFromAssociationCode threw exception.");
-				}
-*/
 				//_association_name_vec.add(name);
 				if (name != null && name.compareTo("") != 0 && id != null && id.compareTo("") != 0) {
 					_association_name_vec.add(name + "|" + id);

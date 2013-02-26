@@ -4083,7 +4083,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
     public CodedNodeSet getCodedNodeSetContrainingCode(LexBIGService lbSvc, String codingSchemeName, CodingSchemeVersionOrTag versionOrTag, String code) {
         try {
 			if (code == null) {
-				System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+				//System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class

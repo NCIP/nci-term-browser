@@ -236,7 +236,7 @@ public class HTTPUtils {
             int i = 0;
             while (enumeration.hasMoreElements()) {
                 String name = (String) enumeration.nextElement();
-                Object value = request.getParameter(name);
+                Object value = cleanXSS((String) request.getParameter(name));
                 _logger.debug("  " + i + ") " + name + ": " + value);
                 ++i;
             }
@@ -298,7 +298,7 @@ public class HTTPUtils {
     public static String getRefererParmDecode(HttpServletRequest request) {
         String refurl = "N/A";
         try {
-            String iref = request.getParameter(REFERER);
+            String iref = cleanXSS((String) request.getParameter(REFERER));
             if (iref != null)
                 refurl =
                     URLDecoder.decode(request.getParameter(REFERER), "UTF-8");

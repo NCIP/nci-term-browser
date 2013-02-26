@@ -369,9 +369,9 @@ public class MetadataUtils {
             String version = DataUtils.key2CodingSchemeVersion(value);
             String name = DataUtils.getMetadataValue(scheme, "display_name");
 
-            if (name == null || name.compareTo("") == 0) {
-				System.out.println("(*) WARNING: getSupportedVocabularyMetadataValues -- " + scheme + " does not have a display_name property.");
-			}
+            //if (name == null || name.compareTo("") == 0) {
+				//System.out.println("(*) WARNING: getSupportedVocabularyMetadataValues -- " + scheme + " does not have a display_name property.");
+			//}
 
             String urn = null;
 
