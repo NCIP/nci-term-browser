@@ -73,6 +73,8 @@ import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 public class MappingIteratorBean extends Object {
     private static Logger _logger = Logger.getLogger(MappingIteratorBean.class);
     private static int DEFAULT_MAX_RETURN = 100;
+    private static int INITIAL_ITERATOR_RESOLUTION = 500;
+
     private ResolvedConceptReferencesIterator _iterator = null;
     private int _size = 0;
     private List _list = null;
@@ -171,14 +173,168 @@ public class MappingIteratorBean extends Object {
     }
 
     public void initialize() {
+
+		MappingData mappingData = null;
+
+		String sourceCode = null;
+		String sourceName = null;
+		String sourceCodingScheme = null;
+		String sourceCodingSchemeVesion = null;
+		String sourceCodeNamespace = null;
+		String associationName = null;
+		String rel = null;
+		int score = 0;
+		String targetCode = null;
+		String targetName = null;
+		String targetCodingScheme = null;
+		String targetCodingSchemeVesion = null;
+		String targetCodeNamespace = null;
+
+
         try {
             if (_iterator == null) {
                 _size = 0;
             } else {
+				_list = new ArrayList();
                 _size = _iterator.numberRemaining();
+
+
+                //KLO, work-around #2
+                int knt = 0;
+                while (_iterator != null && _iterator.hasNext()) {
+					knt++;
+					if (knt > INITIAL_ITERATOR_RESOLUTION) break;
+
+					ResolvedConceptReference ref = _iterator.next();
+
+					_lastResolved++;
+
+					//upper_bound = _lastResolved;
+
+					String description;
+
+					if(ref.getEntityDescription() == null) {
+						description = "NOT AVAILABLE";
+					} else {
+						description = ref.getEntityDescription().getContent();
+					}
+					sourceCode = ref.getCode();
+					sourceName = description;
+					sourceCodingScheme = ref.getCodingSchemeName();
+					sourceCodingSchemeVesion = ref.getCodingSchemeVersion();
+					sourceCodeNamespace = ref.getCodeNamespace();
+
+					rel = null;
+					score = 0;
+
+					AssociationList assocs = ref.getSourceOf();
+					if(assocs != null){
+						for(Association assoc : assocs.getAssociation()){
+							associationName = assoc.getAssociationName();
+							int lcv = 0;
+							for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+								lcv++;
+								if(ac.getEntityDescription() == null) {
+									description = "NOT AVAILABLE";
+								} else {
+									description = ac.getEntityDescription().getContent();
+								}
+								targetCode = ac.getCode();
+								targetName = description;
+								targetCodingScheme = ac.getCodingSchemeName();
+								targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+								targetCodeNamespace = ac.getCodeNamespace();
+
+								if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+									for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+										String qualifier_name = qual.getName();
+										String qualifier_value = qual.getContent();
+										if (qualifier_name.compareTo("rel") == 0) {
+											rel = qualifier_value;
+										} else if (qualifier_name.compareTo("score") == 0) {
+											score = Integer.parseInt(qualifier_value);
+										}
+									}
+								}
+
+								mappingData = new MappingData(
+									sourceCode,
+									sourceName,
+									sourceCodingScheme,
+									sourceCodingSchemeVesion,
+									sourceCodeNamespace,
+									associationName,
+									rel,
+									score,
+									targetCode,
+									targetName,
+									targetCodingScheme,
+									targetCodingSchemeVesion,
+									targetCodeNamespace);
+								_list.add(mappingData);
+
+							}
+						}
+					}
+
+					assocs = ref.getTargetOf();
+					if(assocs != null){
+						for(Association assoc : assocs.getAssociation()){
+							associationName = assoc.getAssociationName();
+
+							int lcv = 0;
+							for(AssociatedConcept ac : assoc.getAssociatedConcepts().getAssociatedConcept()){
+								lcv++;
+								if(ac.getEntityDescription() == null) {
+									description = "NOT AVAILABLE";
+								} else {
+									description = ac.getEntityDescription().getContent();
+								}
+								targetCode = ac.getCode();
+								targetName = description;
+								targetCodingScheme = ac.getCodingSchemeName();
+								targetCodingSchemeVesion = ac.getCodingSchemeVersion();
+								targetCodeNamespace = ac.getCodeNamespace();
+
+								if (ac.getAssociationQualifiers() != null && ac.getAssociationQualifiers().getNameAndValue() != null) {
+									for (NameAndValue qual : ac.getAssociationQualifiers().getNameAndValue()) {
+										String qualifier_name = qual.getName();
+										String qualifier_value = qual.getContent();
+										if (qualifier_name.compareTo("rel") == 0) {
+											rel = qualifier_value;
+										} else if (qualifier_name.compareTo("score") == 0) {
+											score = Integer.parseInt(qualifier_value);
+										}
+									}
+								}
+
+								mappingData = new MappingData(
+									sourceCode,
+									sourceName,
+									sourceCodingScheme,
+									sourceCodingSchemeVesion,
+									sourceCodeNamespace,
+									associationName,
+									rel,
+									score,
+									targetCode,
+									targetName,
+									targetCodingScheme,
+									targetCodingSchemeVesion,
+									targetCodeNamespace);
+								_list.add(mappingData);
+
+							}
+						}
+					}
+
+				}
+                if (knt > _size) _size = knt;
             }
+
+
             _pageNumber = 1;
-            _list = new ArrayList();
+            //_list = new ArrayList();
 
             _pageSize = Constants.DEFAULT_PAGE_SIZE;
             _numberOfPages = _size / _pageSize;
@@ -306,6 +462,11 @@ public class MappingIteratorBean extends Object {
         long total_delay = 0;
         int upper_bound = idx2;
         _timeout = false;
+
+//KLO, work-around #2
+		if (idx2 <= _list.size()) {
+			return copyData(idx1, idx2);
+		}
 
         try {
 			while (_iterator != null && _iterator.hasNext()) {

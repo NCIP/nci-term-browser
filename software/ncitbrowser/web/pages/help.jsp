@@ -107,7 +107,7 @@
             value sets – flat lists of terms from one or more terminologies 
             used for a particular coding purpose – and mappings between 
             terminologies to support data translation and cross-reference. 
-            This 2.1 release improves support for those new features, 
+            This 2.2 release improves support for those new features, 
             especially in the new value set tree that allows selective 
             search of multiple value sets.  Other additions include a 
             “Back to search results” link to return to your last results 
@@ -508,7 +508,7 @@
             <li><b>Relationship</b> search offers a drop-down list 
               of all specific relationships associated with the home 
               terminology source, so that they can be selected and 
-              searched individually or all together.  Radio buttons 
+              searched individually or altogether.  Radio buttons 
               specify whether the search expression should match 
               relationship source or target concepts (e.g., in the 
               relationship [<i>Finger</i>] --&gt;
@@ -999,7 +999,7 @@
             Searching using the <b>Search Box</b> on either the 
             <b>Mappings</b> tab or on a particular Mapping Set's home 
             page works, on the surface, the same way as on the 
-            <b>Terminologies</b> tab: the <b>TextBox</b>, the 
+            <b>Terminologies</b> tab: the <b>Text Box</b>, the 
             <b>Match method radio buttons</b>, and the <b>Match 
             target radio buttons</b> all function the same way as 
             with the <b>Terminologies</b> tab. The one exception to 
@@ -1101,8 +1101,8 @@
           </table>
           <p>
             For information on known issues, 
-            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.1+Release+Notes" target="_blank">
-              see NCI Term Browser 2.1 Release Notes</a>.
+            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.2+Release+Notes" target="_blank">
+              see NCI Term Browser 2.2 Release Notes</a>.
             Additional information about EVS can be found on the
             <a href="http://evs.nci.nih.gov/" target="_blank">EVS Web</a> and 
             <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank">EVS Wiki sites</a>.
