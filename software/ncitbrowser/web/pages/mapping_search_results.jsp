@@ -270,7 +270,7 @@ try {
 	if (iend > size) {
 	    iend = size;
 	}
-       list = iteratorBean.getData(istart, size);
+       //list = iteratorBean.getData(istart, size);
        
    } else {
 
@@ -279,6 +279,10 @@ try {
 	}
 
    }
+ 
+   
+   list = iteratorBean.getData(istart, iend);
+   
 } catch (Exception ex) {
    //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
@@ -382,7 +386,7 @@ if (show_rank_column) {
 
 
  if (list == null) {
-   //System.out.println("list == null???");
+     System.out.println("MAPPING RESULT PAGE list == null???");
  } else {
 
                 //for (int lcv=0; lcv<list.size(); lcv++) {
@@ -395,6 +399,10 @@ if (show_rank_column) {
 
                 
                 //for (int lcv=0; lcv<upper_bound; lcv++) {
+ 
+System.out.println("MAPPING RESULT PAGE list.size() " + list.size());
+                
+                
   for (int lcv=0; lcv<list.size(); lcv++) {
                     mappingData = (MappingData) list.get(lcv);
         source_code = mappingData.getSourceCode();
