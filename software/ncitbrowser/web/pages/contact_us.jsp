@@ -1,36 +1,50 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <%@ page contentType="text/html;charset=windows-1252"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
+<%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
+
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
-
-<%@ page import="javax.imageio.ImageIO" %>
-<%@ page import="java.awt.image.BufferedImage" %>
-<%@ page import="java.io.*" %>
-
 
 <%@ page import="nl.captcha.Captcha" %>
 <%@ page import="nl.captcha.audio.AudioCaptcha" %>
 
-<html>
+
+
+<%!
+  private static final String TELEPHONE = Constants.TELEPHONE;
+  private static final String MAIL_TO = Constants.MAIL_TO;
+  private static final String NCICB_URL = Constants.NCICB_URL;
+  
+  // List of attribute name(s):
+    public static final String SUBJECT = "subject";
+    public static final String EMAIL_MSG = "message";
+    public static final String EMAIL_ADDRESS = "emailaddress";
+    public static final String WARNING_TYPE = "warning_type";
+
+    public static final String WARNINGS = "warnings";
+    public static final String ANSWER = "answer";  
+  
+%>
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns:c="http://java.sun.com/jsp/jstl/core">
   <head>
-    <title>NCI Term Browser</title>
+    <title>NCI Metathesaurus</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
     <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/dropdown.js"></script>
-
+    <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+    
+    
     <script>
-    /* Add bogus req param to url so that reloading will (hopefully) load a different .wav file. */
-
     function getContextPath() {
 	return "<%=request.getContextPath()%>";
     }
@@ -40,12 +54,14 @@
         document.getElementById("audioCaptcha").src = path + new Date().getTime();
         document.getElementById("audioSupport").innerHTML = document.createElement('audio').canPlayType("audio/wav");
     }
-    
     </script>
-
-
+    
+    
   </head>
   <%
+  
+    //String warnings = (String) request.getSession().getAttribute("warnings");
+
     boolean audio_captcha_background_noise_on = true;
     String audio_captcha_str = "audio.wav";
     if (!NCItBrowserProperties.isAudioCaptchaBackgroundNoiseOn()) {
@@ -63,17 +79,20 @@
 
   Captcha captcha = (Captcha) request.getSession().getAttribute("captcha");
   AudioCaptcha ac = null;  
+  boolean isUserError = false;
   
     String errorMsg = (String) request.getSession().getAttribute("errorMsg");
     if (errorMsg != null) {
         request.getSession().removeAttribute("errorMsg");
+        isUserError = true;
     }  
   
   String retry = (String) request.getSession().getAttribute("retry");
   if (retry != null && retry.compareTo("true") == 0) {
         request.getSession().removeAttribute("retry");
   }
-  
+
+/*  
 if (captcha_option.compareTo("default") == 0) {
   	captcha = new Captcha.Builder(200, 50)
 	        .addText()
@@ -83,147 +102,120 @@ if (captcha_option.compareTo("default") == 0) {
 		//.addBorder()
                 .build();
 	request.getSession().setAttribute(Captcha.NAME, captcha);
-}    
+} 
+*/   
+    
+    System.out.println("captcha_option: " + captcha_option);
+    System.out.println("alt_captcha_option: " + alt_captcha_option);  
+    
+    //String ncicb_contact_url = new DataUtils().getNCICBContactURL();
+    
+    String subject = (String) request.getSession().getAttribute("subject");
+    String message = (String) request.getSession().getAttribute("message");
+    String emailaddress = (String) request.getSession().getAttribute("emailaddress");
    
-    
-    String ncicb_contact_url = new DataUtils().getNCICBContactURL();
     String answer  = "";
-    String subject = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("subject"));
-    String message = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("message"));
-    String emailaddress = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("emailaddress"));
-    
-    String refresh = HTTPUtils.cleanXSS((String) request.getParameter("refresh"));
-    if (refresh != null) {
-	     answer = "";
-	     subject = HTTPUtils.cleanXSS((String) request.getParameter("subject"));
-	     message = HTTPUtils.cleanXSS((String) request.getParameter("message"));
-	     emailaddress = HTTPUtils.cleanXSS((String) request.getParameter("emailaddress"));
-    }
-        
-    if (answer == null) answer = "";
     if (subject == null) subject = "";
     if (message == null) message = "";
     if (emailaddress == null) emailaddress = "";
-    
-    String errorType = (String) request.getAttribute("errorType");
-    if (errorType == null) errorType = "";
-    boolean userError = errorType.equalsIgnoreCase("user");
-    //String errorMsg = (String) request.getAttribute("errorMsg");
+    //String errorMsg = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("errorMsg"));
     if (errorMsg == null) errorMsg = "";
-  %>
+    boolean error = errorMsg.length() > 0;
     
-  <body onload="loadAudio()">
-  
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
-    <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+
+    String color = ""; 
+    if (error)
+      color = "style=\"color:#FF0000;\"";
+    
+  %>
+  <body onLoad="document.forms.searchTerm.matchText.focus();">
+      <script type="text/javascript"
+        src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
+      <script type="text/javascript"
+        src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
+      <script type="text/javascript"
+        src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
+
+
     <f:view>
-    <!-- Begin Skip Top Navigation -->
-      <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
-    <!-- End Skip Top Navigation -->     
+      <!-- Begin Skip Top Navigation -->
+        <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+      <!-- End Skip Top Navigation -->
       <%@ include file="/pages/templates/header.jsp" %>
-      
-      
-      <span id="ctx" style="display:none;"><%=request.getContextPath()%></span>
-      
-      
-      
       <div class="center-page">
         <%@ include file="/pages/templates/sub-header.jsp" %>
         <div id="main-area">
-        <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
+          <%@ include file="/pages/templates/content-header.jsp" %>
           <div class="pagecontent">
             <a name="evs-content" id="evs-content"></a>
             <div class="texttitle-blue">Contact Us</div>
             <hr></hr>
-            <p><b>NCI Enterprise Vocabulary Services (EVS)</b> provides 
-              terminology content, tools, and services to NCI and the 
-              biomedical research community.
-              <ul>
-                <li>For other EVS resources, services and contacts see 
-                  the EVS Web site <a href="http://evs.nci.nih.gov/" target="_blank">http://evs.nci.nih.gov/</a>.
-                </li>
-                <li>For browser support or suggestions, try the options
-                  on this page.
-                </li>
-              </ul>
-            </p>
-            <p><b>You can request help or make suggestions by filling out the
-              online form below, or by using any one of these contact points:
-            </b></p>
-            <table class="textbody">
-              <tr>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td>Telephone:</td>
-                <td>240-276-5541 or Toll-Free: 1-888-478-4423</td>
-              </tr>
-              <tr>
-                <td/>
-                <td>Email:</td>
-                <td><a href="mailto:ncicbiit@mail.nih.gov">ncicbiit@mail.nih.gov</a></td>
-              </tr>
-              <tr>
-                <td/>
-                <td>Web Page:</td>
-                <td><a href="http://ncicb.nci.nih.gov/support" target="_blank" alt="NCICB Support">http://ncicb.nci.nih.gov/support</a></td>
-              </tr>
-            </table>
-            <p>
 
-              Telephone support is available Monday to Friday, 8 am to 8 pm
-              Eastern Time, excluding government holidays. You may leave a
-              message, send an email, or submit a support request via the Web
-              at any time.  Please include:
-              <ul>
-                <li>Your contact information;</li>
-                <li>Reference to the NCIt Browser; and</li>
-                <li>A detailed description of your problem or suggestion.</li>
-              </ul>
+<%
+if (errorMsg != null && errorMsg.compareTo("") != 0) {
+%>
+<p class="textbodyred">&nbsp;<b><%=errorMsg%></b></p>
+<%
+}
+%>
 
-              For questions related to NCI’s Cancer.gov Web site,
-              see the
-              <a href="http://www.cancer.gov/help" target="_blank" alt="Cancer.gov help">
-                Cancer.gov help page</a>.
-            </p>
+  <div>
+    <b>You can request help or make suggestions by filling out the
+      online form below, or by using any one of these contact points:
+    </b>
+  </div>
+  <br/>
 
-            <%
-            
-           
-              String color = "";
-              if (userError) {
-                  color = "style=\"color:#FF0000;\"";
-              }
-              else if (errorMsg != null && errorMsg.length() > 0) {
-                  color = "style=\"color:#FF0000;\"";
-              }
-            %>
-            <p><b>Online Form</b></p>
-                 To use this web form, please fill in every box below and then click on Submit.
-            </p>
-            <p <%= color %>>
-           
-              <%
-                if (errorMsg != null && errorMsg.length() > 0) {
-                    errorMsg = errorMsg.replaceAll("&lt;br/&gt;", "\n");
-                    String[] list = Utils.toStrings(errorMsg, "\n", false, false);
-                    for (int i=0; i<list.length; ++i) {
-                      String text = list[i];
-                      text = Utils.toHtml(text); // For leading spaces (indentation)
-              %>
-                      <br/><i style="color:#FF0000;"><%= text %></i>
-              <%
-                    }
-                }
-              %>
-            </p>
+  <table class="textbody">
+    <tr>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td>Telephone:</td>
+      <td><%=TELEPHONE%></td>
+    </tr>
+    <tr>
+      <td/>
+      <td>Email:</td>
+      <td><a href="mailto:<%=MAIL_TO%>"><%=MAIL_TO%></a></td>
+    </tr>
+    <tr>
+      <td/>
+      <td>Web Page:</td>
+      <td><a href="<%=NCICB_URL%>" target="_blank"><%=NCICB_URL%></a></td>
+    </tr>
+  </table>
+  <br/>
 
-            
-            <h:form id="contact_form" >
-            
-<p>            
-      <table> 
-      
-      
+  <div>
+    Telephone support is available Monday to Friday, 8 am - 8 pm 
+    Eastern Time, excluding government holidays. You may leave a 
+    message, send an email, or submit a support request via the Web
+    at any time.  Please include: 
+    <ul>
+      <li>Your contact information;</li>
+      <li>Reference to the Term Suggestions Application; and</li>
+      <li>A detailed description of your problem or suggestion.</li>
+    </ul>
+
+    For questions related to NCI's Cancer.gov Web site,
+    see the
+    <a href="http://www.cancer.gov/help" target="_blank">
+      Cancer.gov help page</a>. &nbsp;
+    For help and other questions concerning NCI Enterprise Vocabulary
+    Services (EVS),
+    see the <a href="http://evs.nci.nih.gov/" target="_blank">
+      EVS Web site</a>.
+  </div>
+
+
+  <p><b>Online Form</b></p>
+  <p class="textbody">
+    To use this web form, please fill in every box below and then click on 'Submit'. 
+  </p>
+  
+  <h:form>
+  
+<p>
+<table>
 <%
 String answer_label = "Enter the characters appearing in the above image";
 
@@ -231,7 +223,7 @@ if (captcha_option.compareTo("default") == 0) {
 %>
       <tr>
       <td class="textbody">
-             <img src="<c:url value="/nci.simpleCaptcha.png" />" alt="nci.simpleCaptcha.png">
+             <img src="<c:url value="/nci.simpleCaptcha.png"  />" alt="simpleCaptcha.png">
              
        &nbsp;<h:commandLink value="Unable to read this image?" action="#{userSessionBean.regenerateCaptchaImage}" />
        <br/>             
@@ -261,7 +253,7 @@ if (captcha_option.compareTo("default") == 0) {
 
       <tr>
       <td class="textbody"> 
-          <%=answer_label%>: <i class="warningMsgColor">*</i> 
+          <%=answer_label%>: <i style="color:#FF0000;">*</i>
           <input type="text" id="answer" name="answer" value="<%=HTTPUtils.cleanXSS(answer)%>"/>&nbsp;
       </td>
       </tr> 
@@ -273,62 +265,52 @@ if (captcha_option.compareTo("default") == 0) {
        <br/>             
       </td>
       </tr>
+     
+
+      </table>  
       
+</p>    
+  
+    <p>
+      <i>Subject of your email:</i><i style="color:#FF0000;">*</i>
+    </p>
+    <input class="textbody" size="100" name="subject" alt="Subject" value="<%= subject %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
+    <p>
+      <i>Detailed description of your problem or suggestion (no attachments):</i><i style="color:#FF0000;">*</i>
+    </p>
+    <TEXTAREA class="textbody" Name="<%= EMAIL_MSG %>" rows="4" cols="98"><%= message %></TEXTAREA>
+    <p>
+      <i>Your e-mail address:</i><i style="color:#FF0000;">*</i>
+    </p>
+    <input class="textbody" size="100" name="<%= EMAIL_ADDRESS %>" alt="<%= EMAIL_ADDRESS %>" value="<%= emailaddress %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
+    
+    <p>
+       <i style="color:#FF0000;">* Required</i>
+    </p> 
+    
+    <br/><br/>
       
+    <h:commandButton
+      id="clear"
+      value="clear"
+      image="/images/clear.gif"
+      action="#{userSessionBean.clearContactUs}"
+      alt="clear">
+    </h:commandButton>
+    <img src="/images/spacer.gif" width="1" />
+    <h:commandButton
+      id="mail"
+      value="submit"
+      image="/images/submit.gif"
+      action="#{userSessionBean.contactUs}"
+      alt="submit" >
+    </h:commandButton>
+    
+<input type="hidden" name="alt_captcha_option" id="alt_captcha_option" value="<%=alt_captcha_option%>">
+<input type="hidden" name="captcha_option" id="captcha_option" value="<%=captcha_option%>">
 
-      </table>              
-</p>            
-            
-              <p>
-                <% if (userError) %> <i style="color:#FF0000;">* Required)</i>
-                <i>Subject of your email:</i>
-              </p>
-              <input class="textbody" size="100" name="subject" alt="Subject" value="<%= subject %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
-              <p>
-                <% if (userError) %> <i style="color:#FF0000;">* Required)</i>
-                <i>Detailed description of your problem or suggestion (no attachments):</i>
-              </p>
-              <TEXTAREA class="textbody" Name="message" alt="Message" rows="4" cols="98"><%= message %></TEXTAREA>
-              <p>
-                <% if (userError) %> <i style="color:#FF0000;">* Required)</i>
-                <i>Your e-mail address:</i>
-              </p>
-              <input class="textbody" size="100" name="emailaddress" alt="Email Address" value="<%= emailaddress %>" onFocus="active = true" onBlur="active = false" onKeyPress="return ifenter(event,this.form)">
-              <br/><br/>
-
-
-              <h:commandButton
-                id="mail"
-                value="Submit"
-                alt="Submit"
-                action="#{userSessionBean.contactUs}" >
-              </h:commandButton>
-              &nbsp;&nbsp;
-
-
-
-              <h:commandButton
-                id="reset"
-                value="Clear"
-                alt="Clear"
-                action="#{userSessionBean.resetContactUsForm}" >
-              </h:commandButton>
-              
-              <!--<INPUT type="reset" value="Clear" alt="Clear">-->
-
-
-
-<input type="hidden" name="captcha_option" id="captcha_option" value="<%=alt_captcha_option%>">
-
-
-              
-            </h:form>
-            
-            
-            <a href="http://www.cancer.gov/global/web/policies/page2" target="_blank"
-                alt="National Cancer Institute Policies">
-              <i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i>
-            </a>
+  </h:form>
+            <a href="http://www.cancer.gov/global/web/policies/page2" target="_blank" alt="Privacy Policy"><i>Privacy Policy on E-mail Messages Sent to the NCI Web Site</i></a>
             <%@ include file="/pages/templates/nciFooter.jsp" %>
           </div>
           <!-- end Page content -->
