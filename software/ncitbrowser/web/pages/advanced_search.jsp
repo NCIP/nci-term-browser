@@ -163,6 +163,7 @@
     if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
         selectSearchOption = "Property";
     }
+   
     if (direction == null) direction = "source";
 
     SearchStatusBean bean = null;
@@ -193,7 +194,7 @@
             rel_search_rela = bean.getSelectedRELA();
             
             direction = bean.getDirection();
-            
+           
             //KLO
             adv_search_type = bean.getSearchType();
             selectSearchOption = adv_search_type;
@@ -217,7 +218,11 @@
     if (adv_search_source == null) adv_search_source = "ALL";
     if (search_string == null) search_string = "";
     if (adv_search_algorithm == null) adv_search_algorithm = "exactMatch";
-    if (direction == null) direction = "source";
+    
+    
+    if (direction == null) {
+         direction = "source";
+    }
 
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";
@@ -243,13 +248,15 @@
       
 
     String check_source = "", check_target = "";
-    direction = (String) request.getSession().getAttribute("direction");
+    
+    
     if (direction == null || direction.compareTo("source") == 0)
         check_source = "checked";
-    else if (direction.compareTo("target") == 0)
+    else //if (direction.compareTo("target") == 0)
         check_target= "checked";
-        
-        
+ 
+
+ 
 %>
         <div class="pagecontent">
           <a name="evs-content" id="evs-content"></a>
@@ -434,8 +441,8 @@
                       <td>&nbsp;</td>
                    <td class="textbody">
                       with a
-                        <input type="radio" id="direction" name="direction" value="target" alt="Source" <%=check_source%> tabindex="5"/>source&nbsp;
-                        <input type="radio" id="direction" name="direction" value="source" alt="Target" <%=check_target%> tabindex="5"/>target&nbsp; 
+                        <input type="radio" id="direction" name="direction" value="source" alt="Source" <%=check_source%> tabindex="5"/>source&nbsp;
+                        <input type="radio" id="direction" name="direction" value="target" alt="Target" <%=check_target%> tabindex="5"/>target&nbsp; 
                         concept name matching the search criteria specified above.
                    </td>
                 </tr> 
