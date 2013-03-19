@@ -1736,12 +1736,16 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             request.getSession().setAttribute("searchStatusBean", bean);
         }
 
+
         String direction = HTTPUtils.cleanXSS((String) request.getParameter("direction"));
         //051512 KLO AppScan
         if (direction == null || direction.length() == 0) {
 			direction = "source";
 		}
+
 		bean.setDirection(direction);
+
+		//request.getSession().setAttribute("direction", direction);
 
         String matchType = HTTPUtils.cleanXSS((String) request.getParameter("adv_search_type"));
         //051512 KLO AppScan
@@ -1913,7 +1917,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         } else if (searchType != null
             && searchType.compareToIgnoreCase("Relationship") == 0) {
 
-			request.getSession().setAttribute("selectSearchOption", "Relationship");
+			//request.getSession().setAttribute("selectSearchOption", "Relationship");
 
             if (rel_search_association != null
                 && rel_search_association.compareTo("ALL") == 0) {
@@ -1939,8 +1943,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
              * = Constants.SEARCH_TARGET; //direction = true; }
              */
 
+/*
             int search_direction = Constants.SEARCH_SOURCE;
             if (direction != null && direction.compareToIgnoreCase("target") == 0) {
+				search_direction = Constants.SEARCH_TARGET;
+			}
+*/
+            int search_direction = Constants.SEARCH_SOURCE;
+            if (direction != null && direction.compareToIgnoreCase("source") == 0) {
 				search_direction = Constants.SEARCH_TARGET;
 			}
 
@@ -2673,7 +2683,6 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         String returnIncompleteState) throws Exception {
         Captcha captcha = (Captcha) request.getSession().getAttribute(Captcha.NAME);
         if (captcha == null) {
-			System.out.println("@@@@@@@@@@@@@@ captcha == null @@@@@@@@@@@@@@@");
             captcha = new Captcha.Builder(200, 50).addText().addBackground()
                 // .addNoise()
                 .gimp()
