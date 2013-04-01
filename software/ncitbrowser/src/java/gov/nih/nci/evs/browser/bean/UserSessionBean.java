@@ -1476,7 +1476,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
                 iterator = wrapper.getIterator();
             }
             delay = System.currentTimeMillis() - ms;
-            _logger.debug("searchByNameAndCode delay (millisec.): " + delay);
+            _logger.debug("searchByCode delay (millisec.): " + delay);
 
         } else if (searchTarget.compareTo("properties") == 0) {
             ResolvedConceptReferencesIteratorWrapper wrapper =
