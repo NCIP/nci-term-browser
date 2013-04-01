@@ -1440,9 +1440,6 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 
 
 
-
-
-
         if (searchTarget.compareTo("names") == 0) {
             long ms = System.currentTimeMillis();
             long delay = 0;
@@ -1453,6 +1450,26 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
                     source, matchAlgorithm, ranking, maxToReturn);
             */
                 new SearchUtils().searchByNameAndCode(schemes, versions, matchText,
+                    source, matchAlgorithm, ranking, maxToReturn);
+
+            if (wrapper != null) {
+                iterator = wrapper.getIterator();
+            }
+            delay = System.currentTimeMillis() - ms;
+            _logger.debug("searchByNameAndCode delay (millisec.): " + delay);
+
+
+
+        } else if (searchTarget.compareTo("codes") == 0) {
+            long ms = System.currentTimeMillis();
+            long delay = 0;
+            _logger.debug("Calling CodeSearchUtils().searchByCode " + matchText);
+            ResolvedConceptReferencesIteratorWrapper wrapper =
+            /*
+                new SearchUtils().searchByName(schemes, versions, matchText,
+                    source, matchAlgorithm, ranking, maxToReturn);
+            */
+                new CodeSearchUtils().searchByCode(schemes, versions, matchText,
                     source, matchAlgorithm, ranking, maxToReturn);
 
             if (wrapper != null) {
