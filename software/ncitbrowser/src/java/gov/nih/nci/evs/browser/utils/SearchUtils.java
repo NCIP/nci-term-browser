@@ -80,6 +80,10 @@ import org.apache.log4j.*;
 public class SearchUtils {
     private static Logger _logger = Logger.getLogger(SearchUtils.class);
 
+    public static final String SEARCH_BY_NAME_ONLY = "SEARCH_BY_NAME_ONLY";//1;
+    public static final String SEARCH_BY_CODE_ONLY = "SEARCH_BY_CODE_ONLY";//2;
+    public static final String SEARCH_BY_NAME_AND_CODE = "SEARCH_BY_NAME_AND_CODE";//3;
+
     //private static String CODE_SEARCH_ALGORITHM = "LuceneQuery";
 
     private static String CODE_SEARCH_ALGORITHM = "exactMatch";
@@ -4083,7 +4087,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
     public CodedNodeSet getCodedNodeSetContrainingCode(LexBIGService lbSvc, String codingSchemeName, CodingSchemeVersionOrTag versionOrTag, String code) {
         try {
 			if (code == null) {
-				//System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
@@ -4300,4 +4303,144 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         }
     }
 
+
+    public ResolvedConceptReferencesIteratorWrapper searchByNameOrCode(
+        Vector<String> schemes, Vector<String> versions, String matchText,
+        String source, String matchAlgorithm, boolean ranking, int maxToReturn, String searchTarget) {
+        if (searchTarget == null) searchTarget = SEARCH_BY_NAME_ONLY;
+        try {
+            if (matchText == null || matchText.trim().length() == 0)
+                return null;
+
+            Utils.StopWatch stopWatch = new Utils.StopWatch();
+            Utils.StopWatch stopWatchTotal = new Utils.StopWatch();
+            boolean debug_flag = false;
+
+            matchText = matchText.trim();
+            _logger.debug("searchByName ... " + matchText);
+
+            // p11.1-q11.1  // /100{WBC}
+            if (matchAlgorithm.compareToIgnoreCase("contains") == 0)
+            {
+                matchAlgorithm = findBestContainsAlgorithm(matchText);
+            }
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            Vector<CodedNodeSet> cns_vec = new Vector<CodedNodeSet>();
+
+            for (int i = 0; i < schemes.size(); i++) {
+                stopWatch.start();
+                String scheme = (String) schemes.elementAt(i);
+                CodingSchemeVersionOrTag versionOrTag =
+                    new CodingSchemeVersionOrTag();
+                String version = (String) versions.elementAt(i);
+                if (version != null) {
+                    versionOrTag.setVersion(version);
+				}
+
+                //Name search
+                if (searchTarget.compareToIgnoreCase(SEARCH_BY_CODE_ONLY) != 0) {
+					CodedNodeSet cns = getNodeSet(lbSvc, scheme, versionOrTag);
+					if (cns != null) {
+						cns = cns.restrictToMatchingDesignations(matchText,
+								null, matchAlgorithm, null);
+						cns = restrictToSource(cns, source);
+					}
+					if (cns != null) {
+						cns_vec.add(cns);
+					}
+				} else {
+
+					CodedNodeSet.PropertyType[] propertyTypes = null;
+					LocalNameList sourceList = null;
+					LocalNameList contextList = null;
+					NameAndValueList qualifierList = null;
+
+					String code = matchText;
+					CodedNodeSet cns_code = getCodedNodeSetContrainingCode(lbSvc, scheme, versionOrTag, code);
+
+					if (cns_code != null && includeInQuickUnion(cns_code)) {
+						cns_vec.add(cns_code);
+					}
+
+					// source code match:
+					CodedNodeSet cns_src_code = null;
+
+					if (DataUtils.hasSourceCodeQualifier(scheme)) {
+						String sourceAbbr = source;
+
+						qualifierList = null;
+						if (code != null && code.compareTo("") != 0) {
+							qualifierList = new NameAndValueList();
+							NameAndValue nv = new NameAndValue();
+							nv.setName("source-code");
+							nv.setContent(code);
+							qualifierList.addNameAndValue(nv);
+						}
+
+						LocalNameList propertyLnL = null;
+						// sourceLnL
+						Vector<String> w2 = new Vector<String>();
+						LocalNameList sourceLnL = null;
+
+						if (sourceAbbr != null && (sourceAbbr.compareTo("*") == 0
+							|| sourceAbbr.compareToIgnoreCase("ALL") == 0)) {
+							sourceLnL = null;
+						} else if (sourceAbbr != null) {
+							w2.add(sourceAbbr);
+							sourceLnL = vector2LocalNameList(w2);
+						}
+
+						SortOptionList sortCriteria = null;// Constructors.createSortOptionList(new
+														   // String[]{"matchToQuery", "code"});
+						contextList = null;
+
+						try {
+							cns_src_code = getNodeSet(lbSvc, scheme, versionOrTag);
+							CodedNodeSet.PropertyType[] types =
+								new PropertyType[] { PropertyType.PRESENTATION };
+							cns_src_code =
+								cns_src_code.restrictToProperties(propertyLnL, types, sourceLnL,
+									contextList, qualifierList);
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+					if (cns_src_code != null) cns_vec.add(cns_src_code);
+				}
+			}
+			if (debug_flag)
+				_logger.debug("searchByNameAndCode QuickUnion delay (msec): " + stopWatch.duration());
+
+            SortOptionList sortCriteria = null;
+            LocalNameList restrictToProperties = new LocalNameList();
+            boolean resolveConcepts = false;
+            if (ranking) {
+                sortCriteria = null;// Constructors.createSortOptionList(new
+                                    // String[]{"matchToQuery"});
+            } else {
+                sortCriteria = Constructors .createSortOptionList(
+                    new String[] { "entityDescription" }); // code
+                _logger.debug("*** Sort alphabetically...");
+            }
+
+            stopWatch.start();
+            if (debug_flag)
+                _logger
+                    .debug("Calling cns.resolve to resolve the union CNS ... ");
+
+            ResolvedConceptReferencesIterator iterator =
+                new QuickUnionIterator(cns_vec, sortCriteria, null,
+                    restrictToProperties, null, resolveConcepts);
+            if (debug_flag)
+                _logger.debug("Resolve CNS union delay (msec): " +
+                    stopWatch.duration());
+
+            _logger.debug("Total search delay (msec): " +
+                stopWatchTotal.duration());
+            return new ResolvedConceptReferencesIteratorWrapper(iterator);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

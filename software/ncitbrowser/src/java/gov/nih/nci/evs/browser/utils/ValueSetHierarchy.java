@@ -132,7 +132,6 @@ public class ValueSetHierarchy {
 
 		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(SOURCE_SCHEME, SOURCE_VERSION);
 
-		//System.out.println("SOURCE_VERSION: " + SOURCE_VERSION);
         if (_valueSetDefinitionURI2VSD_map == null) {
         	_valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
 	    }
@@ -677,7 +676,6 @@ public class ValueSetHierarchy {
 
     public static void printTree(HashMap hmap) {
         if (hmap == null) {
-            //System.out.println("ERROR printTree -- hmap is null.");
             return;
         }
         Object[] objs = hmap.keySet().toArray();
@@ -688,7 +686,6 @@ public class ValueSetHierarchy {
 
     public static void printTree(TreeItem ti, String focusCode, int depth) {
         for (String association : ti._assocToChildMap.keySet()) {
-            //System.out.println(indent.toString() + association);
             List<TreeItem> children = ti._assocToChildMap.get(association);
             Collections.sort(children);
             for (TreeItem childItem : children) {
@@ -1305,7 +1302,6 @@ public class ValueSetHierarchy {
 
 	public static void populateChildrenNodes(String scheme, String version, TreeItem ti, HashSet visited_nodes) {
         if (visited_nodes.contains(ti._code)) {
-			//System.out.println("Loop detected -- code: " + ti._code);
 			return;
 		}
 
@@ -1686,19 +1682,6 @@ public class ValueSetHierarchy {
 				vsd_source_to_vsds_map.put(src_str, vsd_vec);
 			}
 		}
-        /*
-		Iterator it = vsd_source_to_vsds_map.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry thisEntry = (Entry) it.next();
-			String src_str = (String) thisEntry.getKey();
-			Vector vsd_vec = (Vector) thisEntry.getValue();
-			for (int i=0; i<vsd_vec.size(); i++) {
-				ValueSetDefinition vsd = (ValueSetDefinition) vsd_vec.elementAt(i);
-				System.out.println("\t" + vsd.getValueSetDefinitionName());
-			}
-		}
-		*/
-
 		return vsd_source_to_vsds_map;
 
 	}
@@ -2036,9 +2019,7 @@ public class ValueSetHierarchy {
                 Boolean isActive = null;
 
                 if (csr.getRenderingDetail() == null) {
-                    //System.out.println("\tcsr.getRenderingDetail() == null");
                 } else if (csr.getRenderingDetail().getVersionStatus() == null) {
-                    //System.out.println("\tcsr.getRenderingDetail().getVersionStatus() == null");
                 } else {
                     isActive =
                         csr.getRenderingDetail().getVersionStatus().equals(
@@ -2391,7 +2372,6 @@ public class ValueSetHierarchy {
 		}
 
 		if (root_vsd == null) {
-			//System.out.println("Error: VSD " + code + " not found.");
 			return null;
 		}
 

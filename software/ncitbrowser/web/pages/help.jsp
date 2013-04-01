@@ -340,11 +340,13 @@
             <li><b>Match target radio buttons</b> select what category 
                 of concept information is searched 
               <ul>
-                <li><b>Name/Code</b> button is the default: Search text 
-                    is matched to a concept's preferred name, synonyms, 
-                    acronyms, or codes. Unless stated otherwise, all 
+                <li><b>Name</b> button is the default: Search text 
+                    is matched to a concept's preferred name, synonyms, or
+                    acronyms. Unless stated otherwise, all 
                     search examples in this Help page use the default 
-                    name/code search.</li>
+                    name search.</li>
+                <li><b>Code</b> button is for searching concepts by code: Search text 
+                    is matched to a concept code, or source code. The search is case-insensitive.</li>                   
                 <li><b>Property</b> button will match to other direct 
                     property attributes of a concept, such as 
                     definitions.</li>

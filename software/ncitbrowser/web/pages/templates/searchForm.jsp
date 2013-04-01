@@ -108,9 +108,11 @@
 
 	String searchTarget = (String) request.getSession().getAttribute(
 			"searchTarget");
-	String check_n = "", check_p = "", check_r = "";
+	String check_n = "", check_cd = "", check_p = "", check_r = "";
 	if (searchTarget == null || searchTarget.compareTo("names") == 0)
 		check_n = "checked";
+	else if (searchTarget == null || searchTarget.compareTo("codes") == 0)
+		check_cd = "checked";		
 	else if (searchTarget.compareTo("properties") == 0)
 		check_p = "checked";
 	else
@@ -155,9 +157,15 @@
       </tr>
       <tr valign="top" align="left">
          <td align="left" class="textbody" colspan="2">
-            <input type="radio" name="searchTarget" id="searchTarget1"
+         
+            <input type="radio" name="searchTarget" id="searchTarget0"
                value="names" alt="Names" <%=HTTPUtils.cleanXSS(check_n)%> tabindex="5" />
-            <label for="searchTarget1">Name/Code&nbsp;</label>   
+            <label for="searchTarget0">Name&nbsp;</label> 
+            
+            <input type="radio" name="searchTarget" id="searchTarget1"
+               value="codes" alt="Codes" <%=HTTPUtils.cleanXSS(check_cd)%> tabindex="5" />
+            <label for="searchTarget1">Code&nbsp;</label> 
+            
             <input type="radio" name="searchTarget" id="searchTarget2"
                value="properties" alt="Properties" <%=HTTPUtils.cleanXSS(check_p)%>
                tabindex="5" />

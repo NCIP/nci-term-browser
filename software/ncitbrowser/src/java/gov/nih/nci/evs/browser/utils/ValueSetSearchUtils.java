@@ -271,13 +271,11 @@ public class ValueSetSearchUtils
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
             if (rvs_cns == null) {
-				//System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
                 return null;
             }
 
             cns = rvs_cns.getCodedNodeSet();
             if (cns == null) {
-				//System.out.println("getCodedNodeSet returns null???");
                 return null;
             }
 
@@ -358,13 +356,11 @@ public class ValueSetSearchUtils
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
             if (rvs_cns == null) {
-				//System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
                 return null;
             }
 
             cns = rvs_cns.getCodedNodeSet();
             if (cns == null) {
-				//System.out.println("getCodedNodeSet returns null???");
                 return null;
             }
 
@@ -456,13 +452,11 @@ public class ValueSetSearchUtils
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
             if (rvs_cns == null) {
-				//System.out.println("getCodedNodeSetForValueSetDefinition returns null???");
                 return null;
             }
 
             cns = rvs_cns.getCodedNodeSet();
             if (cns == null) {
-				//System.out.println("getCodedNodeSet returns null???");
                 return null;
             }
 

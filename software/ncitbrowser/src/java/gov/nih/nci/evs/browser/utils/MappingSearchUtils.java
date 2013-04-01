@@ -947,5 +947,33 @@ String relaValue = associationName;
 
 	}
 
+    public ResolvedConceptReferencesIteratorWrapper searchByNameOrCode(
+        String scheme, String version, String matchText,
+        String matchAlgorithm, int maxToReturn, String searchTarget) {
+		if (scheme == null) return null;
 
+		Vector schemes = new Vector();
+		schemes.add(scheme);
+		Vector versions = new Vector();
+		versions.add(version);
+		if (searchTarget == SearchUtils.SEARCH_BY_CODE_ONLY) {
+	        return searchByCode(
+         			schemes, versions, matchText,
+         			matchAlgorithm, SearchContext.SOURCE_OR_TARGET_CODES, maxToReturn);
+		} else {
+			return searchByName(schemes, versions, matchText, matchAlgorithm, maxToReturn);
+		}
+    }
+
+    public ResolvedConceptReferencesIteratorWrapper searchByNameOrCode(
+        Vector schemes, Vector versions, String matchText,
+        String matchAlgorithm, int maxToReturn, String searchTarget) {
+		if (searchTarget == SearchUtils.SEARCH_BY_CODE_ONLY) {
+ 	        return searchByCode(
+         			schemes, versions, matchText,
+         			matchAlgorithm, SearchContext.SOURCE_OR_TARGET_CODES, maxToReturn);
+		} else {
+			return searchByName(schemes, versions, matchText, matchAlgorithm, maxToReturn);
+		}
+    }
 }
