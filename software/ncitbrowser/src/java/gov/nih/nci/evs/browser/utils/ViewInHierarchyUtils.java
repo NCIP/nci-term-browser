@@ -343,7 +343,6 @@ public class ViewInHierarchyUtils {
 					lcv++;
 					if (child != null) {
 						String child_code = child.getCode();
-						//System.out.println("(" + lcv + ") " + "getChildren child_code " + child_code );
 						if (!hset.contains(child_code)) {
 							hset.add(child_code);
 							list.add(child);

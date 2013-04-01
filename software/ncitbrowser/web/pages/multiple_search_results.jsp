@@ -69,9 +69,11 @@ request.getSession().setAttribute("matchText", match_text);
        check_c = "checked";
 
     String searchTarget = (String) request.getSession().getAttribute("searchTarget");
-    String check_n = "", check_p = "" , check_r ="";
+    String check_n = "", check_cd ="", check_p = "" , check_r ="";
     if (searchTarget == null || searchTarget.compareTo("names") == 0)
       check_n = "checked";
+    else if (searchTarget.compareTo("codes") == 0)
+      check_cd= "checked";      
     else if (searchTarget.compareTo("properties") == 0)
       check_p= "checked";
     else
@@ -123,7 +125,8 @@ request.getSession().setAttribute("matchText", match_text);
                 </tr>
                 <tr valign="top" align="left">
                   <td align="left" class="textbody">
-                    <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name/Code&nbsp;
+                    <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%>>Name&nbsp;
+                    <input type="radio" name="searchTarget" value="codes" alt="Codes" <%=check_cd%>>Code&nbsp;
                     <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%>>Property&nbsp;
                     <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%>>Relationship&nbsp;
                   </td>

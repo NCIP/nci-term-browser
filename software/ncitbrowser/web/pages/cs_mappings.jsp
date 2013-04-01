@@ -254,9 +254,11 @@ String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) req
         <input type="radio" name="algorithm" value="contains" alt="Contains" <%=check_c%> tabindex="4">Contains&nbsp;
         <%
           String searchTarget = (String) request.getSession().getAttribute("searchTarget");
-          String check_n = "", check_p = "" , check_r ="";
+          String check_n = "", check_cd = "", check_p = "" , check_r ="";
           if (searchTarget == null || searchTarget.compareTo("names") == 0)
             check_n = "checked";
+          else if (searchTarget.compareTo("codes") == 0)
+            check_cd= "checked";            
           else if (searchTarget.compareTo("properties") == 0)
             check_p= "checked";
           else
@@ -269,7 +271,8 @@ String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) req
     </tr>
     <tr valign="top" align="left">
       <td align="left" class="textbody">
-        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%> tabindex="5">Name/Code&nbsp;
+        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%> tabindex="5">Name&nbsp;
+        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_cd%> tabindex="5">Code&nbsp;
         <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%> tabindex="5">Property&nbsp;
         <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%> tabindex="5">Relationship&nbsp;
       </td>

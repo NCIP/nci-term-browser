@@ -133,7 +133,6 @@ public class ValueSetUtils {
 
     public void printTree(PrintWriter out, TreeItem root) {
 		if (root == null) {
-			//System.out.println("(*) printTree aborted -- root is null???");
 			return;
 		}
 
@@ -311,7 +310,6 @@ public class ValueSetUtils {
 
     public void printTree(PrintWriter out, TreeItem root, int view, String dictionary) {
 		if (root == null) {
-			//System.out.println("(*) printTree aborted -- root is null???");
 			return;
 		}
 
@@ -333,7 +331,6 @@ public class ValueSetUtils {
 
     public void printTree(PrintWriter out, TreeItem root, int view) {
 		if (root == null) {
-			//System.out.println("(*) printTree aborted -- root is null???");
 			return;
 		}
 

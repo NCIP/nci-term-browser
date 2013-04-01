@@ -63,23 +63,6 @@ public class IteratorBeanManager extends Object {
 
 
 
-/*
-    public String createIteratorKey(Vector schemes, String matchText,
-        String searchTarget, String matchAlgorithm, int maxReturn) {
-        String maxReturn_str = Integer.toString(maxReturn);
-        String key = matchText.trim();
-        key = key + "|" + searchTarget + "|" + matchAlgorithm;
-        for (int i = 0; i < schemes.size(); i++) {
-            String scheme = (String) schemes.elementAt(i);
-            key = key + "|" + scheme;
-        }
-        key = key + "|" + maxReturn_str;
-        int randomNumber = _random.nextInt();
-        String randomNumber_str = Integer.toString(randomNumber);
-        key = key + "|" + randomNumber_str;
-        return key;
-    }
-*/
     public String createIteratorKey(Vector schemes, String matchText,
         String searchTarget, String matchAlgorithm, int maxReturn) {
         String maxReturn_str = Integer.toString(maxReturn);
@@ -102,7 +85,6 @@ public class IteratorBeanManager extends Object {
     public String createIteratorKey(Vector schemes, Vector versions, String matchText,
         String searchTarget, String matchAlgorithm, int maxReturn) {
         //String maxReturn_str = Integer.toString(maxReturn);
-
 
         String key = "";
         matchText = matchText.trim();

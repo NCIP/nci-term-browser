@@ -304,7 +304,6 @@ if (scheme != null) {
 }
 
 
-
 				version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 				if (version == null) {
 					version = DataUtils.getVocabularyVersionByTag(scheme, "PRODUCTION");
@@ -332,9 +331,48 @@ if (scheme != null) {
 
 		if (isMapping) {
 				if (searchTarget.compareTo("names") == 0) {
+					/*
 					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByCode(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn);
+					*/
+					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByNameOrCode(
+						scheme, version, matchText,
+						matchAlgorithm, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
+
+
+					if (wrapper != null) {
+						iterator = wrapper.getIterator();
+					}
+
+                    if (iterator != null) {
+						try {
+							int numberRemaining = iterator.numberRemaining();
+							if (numberRemaining == 0) {
+								iterator = null;
+							}
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+				    }
+
+					if (iterator == null) {
+						wrapper = new MappingSearchUtils().searchByName(
+							scheme, version, matchText,
+							matchAlgorithm, maxToReturn);
+						if (wrapper != null) {
+							iterator = wrapper.getIterator();
+						} else {
+							iterator = null;
+						}
+					}
+
+				} else if (searchTarget.compareTo("codes") == 0) {
+					//ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByCode(
+					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByNameOrCode(
+						scheme, version, matchText,
+						matchAlgorithm, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
 
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
@@ -364,9 +402,7 @@ if (scheme != null) {
 					}
 
 
-
-
-				} else if (searchTarget.compareTo("properties") == 0) {
+				} else if (searchTarget.compareTo("codes") == 0) {
 
 					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByProperties(
 						scheme, version, matchText,
@@ -528,13 +564,6 @@ mappingIteratorBean.initialize();
         }
 
         IteratorBean iteratorBean = null;
-        //KLO, 030212
-        /*
-        String key =
-            iteratorBeanManager.createIteratorKey(schemes, matchText,
-                searchTarget, matchAlgorithm, maxToReturn);
-        */
-
         String key =
             iteratorBeanManager.createIteratorKey(schemes, versions, matchText,
                 searchTarget, matchAlgorithm, maxToReturn);
@@ -543,24 +572,48 @@ mappingIteratorBean.initialize();
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-/*
-                ResolvedConceptReferencesIteratorWrapper wrapper =
-                    new SearchUtils()
-                        //.searchByName(schemes, versions, matchText, source,
-                        .searchByNameAndCode(schemes, versions, matchText, source,
-                            matchAlgorithm, ranking, maxToReturn);
-*/
-
                 ResolvedConceptReferencesIteratorWrapper wrapper = null;
                 try {
                     wrapper = new SearchUtils()
                         //.searchByName(schemes, versions, matchText, source,
-                        .searchByNameAndCode(schemes, versions, matchText, source,
-                            matchAlgorithm, ranking, maxToReturn);
+                        .searchByNameOrCode(schemes, versions, matchText, source,
+                            matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
 				} catch (Exception ex) {
 
 				}
 
+                if (wrapper != null) {
+                    iterator = wrapper.getIterator();
+
+                    if (iterator != null) {
+                        iteratorBean = new IteratorBean(iterator);
+                        iteratorBean.setKey(key);
+                        iteratorBeanManager.addIteratorBean(iteratorBean);
+                    }
+                }
+            }
+
+        } else if (searchTarget.compareTo("codes") == 0) {
+            if (iteratorBeanManager.containsIteratorBean(key)) {
+                iteratorBean = iteratorBeanManager.getIteratorBean(key);
+                iterator = iteratorBean.getIterator();
+            } else {
+                ResolvedConceptReferencesIteratorWrapper wrapper = null;
+                try {
+					/*
+                    wrapper = new SearchUtils()
+                        //.searchByName(schemes, versions, matchText, source,
+                        .searchByNameOrCode(schemes, versions, matchText, source,
+                            matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
+                    */
+
+					wrapper = new CodeSearchUtils().searchByCode(
+						schemes, versions, matchText,
+						source, matchAlgorithm, ranking, maxToReturn, false);
+
+				} catch (Exception ex) {
+
+				}
 
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
