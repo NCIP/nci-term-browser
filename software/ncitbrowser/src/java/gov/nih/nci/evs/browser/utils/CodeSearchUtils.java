@@ -456,7 +456,7 @@ import org.apache.commons.codec.language.*;
 					version, matchText, source, searchInactive);
 				CodedNodeSet cns_2 = getCodedNodeSetContainingSourceCode(
 					scheme, version, source, code, maxToReturn, searchInactive);
-                cns = cns.union(cns_2);
+                cns = union(cns, cns_2);
 				if (cns != null) {
 					cns_vec.add(cns);
 				}
