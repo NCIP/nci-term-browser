@@ -74,6 +74,38 @@
        if (test == "" || test == "null")
          checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus');
      }
+     
+     
+    function onCodeButtonPressed(formname) {
+          var algorithmObj = document.forms[formname].algorithm;
+	  for (var j=0; j<algorithmObj.length; j++) {
+		  algorithm = algorithmObj[j].value;
+		  if (algorithm == "exactMatch") {
+			 algorithmObj[j].checked = true;
+			 break;
+		  }
+	  }
+    }
+
+    function getSearchTarget(formname) {
+          var searchTargetObj = document.forms[formname].searchTarget;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+	      if (searchTargetObj[j].checked == true) {
+	          return searchTargetObj[j].value;
+	      }
+	  }
+    }
+
+
+    function onAlgorithmChanged(formname) {
+          var target = getSearchTarget(formname);
+          if (target != "codes") return;
+          var targetObj = document.forms[formname].searchTarget;
+          targetObj[0].checked = true;
+    }     
+          
+     
+     
   </script>
 <%
     request.getSession().removeAttribute("dictionary");
@@ -250,9 +282,9 @@ String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) req
   <table border="0" cellspacing="0" cellpadding="0">
     <tr valign="top" align="left">
       <td align="left" class="textbody">
-        <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4">Exact Match&nbsp;
-        <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4">Begins With&nbsp;
-        <input type="radio" name="algorithm" value="contains" alt="Contains" <%=check_c%> tabindex="4">Contains&nbsp;
+        <input type="radio" id="exactMatch" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4">Exact Match&nbsp;
+        <input type="radio" id="startsWith" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4" onclick="onAlgorithmChanged('mappingSearch');">Begins With&nbsp;
+        <input type="radio" id="contains" name="algorithm" value="contains" alt="Contains" <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('mappingSearch');">Contains&nbsp;
         <%
           String searchTarget = (String) request.getSession().getAttribute("searchTarget");
           String check_n = "", check_cd = "", check_p = "" , check_r ="";
@@ -272,10 +304,10 @@ String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) req
     </tr>
     <tr valign="top" align="left">
       <td align="left" class="textbody">
-        <input type="radio" name="searchTarget" value="names" alt="Names" <%=check_n%> tabindex="5">Name&nbsp;
-        <input type="radio" name="searchTarget" value="codes" alt="Codes" <%=check_cd%> tabindex="5">Code&nbsp;
-        <input type="radio" name="searchTarget" value="properties" alt="Properties" <%=check_p%> tabindex="5">Property&nbsp;
-        <input type="radio" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%> tabindex="5">Relationship&nbsp;
+        <input type="radio" id="names" name="searchTarget" value="names" alt="Names" <%=check_n%> tabindex="5">Name&nbsp;
+        <input type="radio" id="codes" name="searchTarget" value="codes" alt="Codes" <%=check_cd%> tabindex="5" onclick="onCodeButtonPressed('mappingSearch');">Code&nbsp;
+        <input type="radio" id="properties" name="searchTarget" value="properties" alt="Properties" <%=check_p%> tabindex="5">Property&nbsp;
+        <input type="radio" id="relationships" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%> tabindex="5">Relationship&nbsp;
       </td>
     </tr>
   </table>

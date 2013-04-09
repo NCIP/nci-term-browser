@@ -374,7 +374,14 @@ public class ValueSetBean {
         Vector v = new Vector();
         LexEVSValueSetDefinitionServices vsd_service = null;
         vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+System.out.println("(***) ValueSetBean selectValueSetSearchOption: " + selectValueSetSearchOption);
+
 		if (selectValueSetSearchOption.compareTo("Code") == 0 && selected_vocabularies != null) {
+
+System.out.println("(***) ValueSetBean selectValueSetSearchOption: " + selectValueSetSearchOption + " = by Code");
+
+
             String uri = null;
 
 			try {
@@ -486,6 +493,8 @@ public class ValueSetBean {
 
 		} else if (selectValueSetSearchOption.compareTo("Name") == 0) {
 
+System.out.println("(***) ValueSetBean selectValueSetSearchOption: " + selectValueSetSearchOption + " = by Name");
+
             String uri = null;
 			try {
 
@@ -576,6 +585,9 @@ public class ValueSetBean {
 		}
 
 		else if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
+
+System.out.println("(***) ValueSetBean selectValueSetSearchOption: " + selectValueSetSearchOption + " = by CodingScheme");
+
             String uri = null;
 			if (selectCodingScheme != null) {
 
@@ -625,6 +637,10 @@ public class ValueSetBean {
 			return "value_set";
 
 		} else if (selectValueSetSearchOption.compareTo("Source") == 0) {
+
+System.out.println("(***) ValueSetBean selectValueSetSearchOption: " + selectValueSetSearchOption + " = by Source");
+
+
 			request.getSession().removeAttribute("selected_vsd");
 
 			String uri = null;

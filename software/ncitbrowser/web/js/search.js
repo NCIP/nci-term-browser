@@ -100,3 +100,5 @@ function setSize() {
    document.forms[0].term.size=15;
   }
 }
+
+

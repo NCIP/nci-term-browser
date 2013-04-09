@@ -38,6 +38,38 @@
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/tree.css" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   <script type="text/javascript">
+  
+
+    function onCodeButtonPressed(formname) {
+          var algorithmObj = document.forms[formname].algorithm;
+	  for (var j=0; j<algorithmObj.length; j++) {
+		  algorithm = algorithmObj[j].value;
+		  if (algorithm == "exactMatch") {
+			 algorithmObj[j].checked = true;
+			 break;
+		  }
+	  }
+    }
+
+    function getSearchTarget(formname) {
+          var searchTargetObj = document.forms[formname].searchTarget;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+	      if (searchTargetObj[j].checked == true) {
+	          return searchTargetObj[j].value;
+	      }
+	  }
+    }
+
+
+    function onAlgorithmChanged(formname) {
+          var target = getSearchTarget(formname);
+          if (target != "codes") return;
+          var targetObj = document.forms[formname].searchTarget;
+          targetObj[0].checked = true;
+    }       
+  
+  
+  
     function refresh() {      
       var selectValueSetSearchOptionObj = document.forms["valueSetSearchForm"].selectValueSetSearchOption;
       for (var i=0; i<selectValueSetSearchOptionObj.length; i++) {
@@ -45,7 +77,13 @@
             selectValueSetSearchOption = selectValueSetSearchOptionObj[i].value;
         }
       }
+ 
+      if (selectValueSetSearchOption == "Code") {
+           //valueset_search_algorithm
       
+           algorithm = "exactMatch";
+      }
+ 
       var view = document.forms["view_form"].view.value;
      
       if (view == "source") {
@@ -331,9 +369,9 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
   <table border="0" cellspacing="0" cellpadding="0" width="340px">
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
-        <input type="radio" name="algorithm" id="algorithm1" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4"/><label for="algorithm1">Exact Match&nbsp;</label>
-        <input type="radio" name="algorithm" id="algorithm2" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4"/><label for="algorithm2">Begins With&nbsp;</label>
-        <input type="radio" name="algorithm" id="algorithm3" value="contains" alt="Contains" <%=check_c%> tabindex="4"/><label for="algorithm3">Contains</label>
+        <input type="radio" name="algorithm" id="exactMatch" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4"/><label for="exactMatch">Exact Match&nbsp;</label>
+        <input type="radio" name="algorithm" id="startsWith" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="startsWith">Begins With&nbsp;</label>
+        <input type="radio" name="algorithm" id="contains" value="contains" alt="Contains" <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="contains">Contains</label>
       </td>
     </tr>
     
@@ -348,9 +386,9 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     </tr>
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
-        <input type="radio" name="searchTarget" id="searchTarget0" value="code" alt="Code" <%=check_cd%> tabindex="5"/><label for="searchTarget0">Code&nbsp;</label>
-        <input type="radio" name="searchTarget" id="searchTarget1" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="searchTarget1">Name&nbsp;</label>
-        <input type="radio" name="searchTarget" id="searchTarget2" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="searchTarget2">Property</label>
+        <input type="radio" name="searchTarget" id="names" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="names">Name&nbsp;</label>
+        <input type="radio" name="searchTarget" id="codes" value="codes" alt="Code" <%=check_cd%> tabindex="5" onclick="onCodeButtonPressed('resolvedValueSetSearchForm');" /><label for="codes">Code&nbsp;</label>
+        <input type="radio" name="searchTarget" id="properties" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="properties">Property</label>
       </td>
     </tr>
 
@@ -431,9 +469,9 @@ if (vd_uri != null) {
     
         <tr valign="top" align="left">
         <td align="left" class="textbody">  
-                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
-                     <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
-                     <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
+                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
+                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
+                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
         </td>
         </tr>
         <%
@@ -443,11 +481,14 @@ if (vd_uri != null) {
             <td height="1px" bgcolor="#2F2F5F" align="left"></td>
         </tr>
         <tr valign="top" align="left">
-          <td align="left" class="textbody">     
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
-                  alt="Code" tabindex="1" onclick="javascript:refresh()" >Code&nbsp;
+          <td align="left" class="textbody"> 
+          
                 <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
-                  alt="Name" tabindex="1" onclick="javascript:refresh()" >Name
+                  alt="Name" tabindex="1" onclick="javascript:refresh()" >Name&nbsp;
+          
+          
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
+                  alt="Code" tabindex="1" onclick="javascript:refresh()" >Code
           </td>
         </tr>
       </table>
