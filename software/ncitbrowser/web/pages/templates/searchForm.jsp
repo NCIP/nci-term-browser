@@ -31,6 +31,47 @@
 		if (obj6 != null)
 			obj6.removeAttribute('href');
 	}
+	
+	
+	
+	
+	
+    function onCodeButtonPressed(formname) {
+	  var algorithmObj = document.forms[formname].algorithm;
+	  for (var j=0; j<algorithmObj.length; j++) {
+		  algorithm = algorithmObj[j].value;
+		  if (algorithm == "exactMatch") {
+			 algorithmObj[j].checked = true;
+		  }
+	  }
+    }
+
+    function getSearchTarget(formname) {
+          var searchTargetObj = document.forms[formname].searchTarget;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+	      if (searchTargetObj[j].checked == true) {
+	         return searchTargetObj[j].value;
+	      }
+	  }
+    }
+
+    function onAlgorithmChanged(formname) {
+      var curr_target = getSearchTarget(formname);
+      if (curr_target != "codes") return;
+
+          var searchTargetObj = document.forms[formname].searchTarget;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+		  target = searchTargetObj[j].value;
+		  if (target == "codes") {
+			  searchTargetObj[0].checked = true;
+			  return;
+		  }
+	  }
+    }	
+	
+	
+	
+	
 </script>
 <%
         boolean back_to_search_results_link = false;
@@ -139,16 +180,25 @@
    <table border="0" cellspacing="0" cellpadding="0" width="340px">
       <tr valign="top" align="left">
          <td align="left" class="textbody" colspan="2">
+         
+            <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4">Exact Match&nbsp;
+            <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');">Begins With&nbsp;
+            <input type="radio" name="algorithm" value="contains"   alt="Contains"    <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');">Contains
+            
+            <!--
             <input type="radio" name="algorithm" id="algorithm1"
                value="exactMatch" alt="Exact Match" <%=HTTPUtils.cleanXSS(check_e)%>
                tabindex="4" />
             <label for="algorithm1">Exact Match&nbsp;</label>
             <input type="radio" name="algorithm" id="algorithm2" value="startsWith" alt="Begins With"
-               <%=HTTPUtils.cleanXSS(check_s)%> tabindex="4" />
+               <%=HTTPUtils.cleanXSS(check_s)%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');"/>
             <label for="algorithm2">Begins With&nbsp;</label>
             <input type="radio" name="algorithm" id="algorithm3" value="contains" alt="Contains" <%=HTTPUtils.cleanXSS(check_c)%>
-               tabindex="4" />
+               tabindex="4" onclick="onAlgorithmChanged('searchTerm');"/>
             <label for="algorithm3">Contains</label>
+            -->
+            
+            
          </td>
       </tr>
       <tr align="left">
@@ -157,23 +207,31 @@
       </tr>
       <tr valign="top" align="left">
          <td align="left" class="textbody" colspan="2">
+
+	  <input type="radio" id="searchTarget" name="searchTarget" value="names"         alt="Name"         <%=check_n%>  tabindex="5">Name&nbsp;
+	  <input type="radio" id="searchTarget" name="searchTarget" value="codes"         alt="Code"         <%=check_cd%> tabindex="5" onclick="onCodeButtonPressed('searchTerm');" >Code&nbsp;
+	  <input type="radio" id="searchTarget" name="searchTarget" value="properties"    alt="Property"     <%=check_p%>  tabindex="5">Property&nbsp;
+	  <input type="radio" id="searchTarget" name="searchTarget" value="relationships" alt="Relationship" <%=check_r%>  tabindex="5">Relationship
          
-            <input type="radio" name="searchTarget" id="searchTarget0"
+            <!--
+            <input type="radio" name="searchTarget" id="searchTarget"
                value="names" alt="Names" <%=HTTPUtils.cleanXSS(check_n)%> tabindex="5" />
             <label for="searchTarget0">Name&nbsp;</label> 
             
-            <input type="radio" name="searchTarget" id="searchTarget1"
-               value="codes" alt="Codes" <%=HTTPUtils.cleanXSS(check_cd)%> tabindex="5" />
+            <input type="radio" name="searchTarget" id="searchTarget"
+               value="codes" alt="Codes" <%=HTTPUtils.cleanXSS(check_cd)%> tabindex="5" onclick="onCodeButtonPressed('searchTerm');" />
             <label for="searchTarget1">Code&nbsp;</label> 
             
-            <input type="radio" name="searchTarget" id="searchTarget2"
+            <input type="radio" name="searchTarget" id="searchTarget"
                value="properties" alt="Properties" <%=HTTPUtils.cleanXSS(check_p)%>
                tabindex="5" />
             <label for="searchTarget2">Property&nbsp;</label>   
-            <input type="radio" name="searchTarget" id="searchTarget3"
+            <input type="radio" name="searchTarget" id="searchTarget"
                value="relationships" alt="Relationships" <%=HTTPUtils.cleanXSS(check_r)%>
                tabindex="5" />
-            <label for="searchTarget3">Relationship</label>               
+            <label for="searchTarget3">Relationship</label> 
+            -->
+            
          </td>
       </tr>
       <tr>

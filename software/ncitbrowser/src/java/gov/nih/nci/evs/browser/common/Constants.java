@@ -121,6 +121,12 @@ public class Constants {
     public static final String INVALID_EMAIL_ADDRESS = "Invalid email address.";
 
 
+    public static final String CODE = "codes";
+    public static final String NAME = "names";
+    public static final String PROPERTY = "properties";
+    public static final String RELATIONSHIP = "relationahips";
+
+
     /**
      * Constructor
      */

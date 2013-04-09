@@ -2106,8 +2106,8 @@ if (DataUtils.isNull(algorithm)) {
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("        <td align=\"left\" class=\"textbody\">");
       out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"exactMatch\" alt=\"Exact Match\" " + algorithm_exactMatch + " tabindex=\"3\">Exact Match&nbsp;");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"startsWith\" alt=\"Begins With\" " + algorithm_startsWith + " tabindex=\"3\">Begins With&nbsp;");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\">Contains");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"startsWith\" alt=\"Begins With\" " + algorithm_startsWith + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Begins With&nbsp;");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Contains");
       out.println("        </td>");
       out.println("        </tr>");
       out.println("");
@@ -2116,8 +2116,8 @@ if (DataUtils.isNull(algorithm)) {
       out.println("        </tr>");
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("          <td align=\"left\" class=\"textbody\">");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"4\" >Code&nbsp;");
       out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" tabindex=\"4\" >Name&nbsp;");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"4\" onclick=\"onVSCodeButtonPressed();\">Code&nbsp;");
       out.println("          </td>");
       out.println("        </tr>");
 
@@ -3537,14 +3537,7 @@ if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
       out.println("</a>");
 
 
-      /*
-          out.write("\r\n");
-          out.write("    <div class=\"banner\"><a href=\"");
-          out.print(basePath);
-          out.write("\"><img src=\"");
-          out.print(basePath);
-          out.write("/images/thesaurus_browser_logo.jpg\" width=\"383\" height=\"117\" alt=\"Thesaurus Browser Logo\" border=\"0\"/></a></div>\r\n");
-      */
+
 } else {
 
           out.write("\r\n");
@@ -3666,12 +3659,12 @@ if (DataUtils.isNull(matchText)) {
       out.println("  <tr valign=\"top\" align=\"left\">");
       out.println("    <td>");
       out.println("      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin: 0px\">");
-      out.println("");
+
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("        <td align=\"left\" class=\"textbody\">");
       out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"exactMatch\" alt=\"Exact Match\" " + algorithm_exactMatch + " tabindex=\"3\">Exact Match&nbsp;");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"startsWith\" alt=\"Begins With\" " + algorithm_startsWith + " tabindex=\"3\">Begins With&nbsp;");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\">Contains");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"startsWith\" alt=\"Begins With\" " + algorithm_startsWith + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Begins With&nbsp;");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Contains");
       out.println("        </td>");
       out.println("        </tr>");
       out.println("");
@@ -3680,10 +3673,12 @@ if (DataUtils.isNull(matchText)) {
       out.println("        </tr>");
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("          <td align=\"left\" class=\"textbody\">");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"1\" >Code&nbsp;");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" tabindex=\"1\" >Name");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" tabindex=\"1\" >Name&nbsp;");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"1\" onclick=\"onVSCodeButtonPressed();\">Code&nbsp;");
       out.println("          </td>");
       out.println("        </tr>");
+
+
       out.println("      </table>");
       out.println("    </td>");
       out.println("  </tr>");

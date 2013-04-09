@@ -1,5 +1,166 @@
-//function alert() {} 
+    function onCodeButtonPressed(formname) {
+          var algorithmObj = document.forms[formname].getElementsByName("algorithm");
+ 
+	  for (var j=0; j<algorithmObj.length; j++) {
+		  algorithm = algorithmObj[j].value;
+		  if (algorithm == "exactMatch") {
+			 algorithmObj[j].checked = true;
+		  }
+	  }
+    }
 
+    function getSearchTarget(formname) {
+         var searchTargetObj = document.forms[formname].getElementsByName("searchTarget");
+	  for (var j=0; j<searchTargetObj.length; j++) {
+	      if (searchTargetObj[j].checked == true) {
+	         return searchTargetObj[j].value;
+	      }
+	  }
+    }
+
+    function onAlgorithmChanged(formname) {
+      var curr_target = getSearchTarget(formname);
+      if (curr_target != "codes") return;
+
+          var searchTargetObj = document.forms[formname].getElementsByName("searchTarget");
+	  for (var j=0; j<searchTargetObj.length; j++) {
+		  target = searchTargetObj[j].value;
+		  if (target == "codes") {
+			  searchTargetObj[0].checked = true;
+			  return;
+		  }
+	  }
+    }
+    
+
+
+    function onCodeButtonPressed() {
+	  var algorithmObj = document.forms["advancedSearchForm"].adv_search_algorithm;
+	  for (var j=0; j<algorithmObj.length; j++) {
+		  algorithm = algorithmObj[j].value;
+		  if (algorithm == "exactMatch") {
+			 algorithmObj[j].checked = true;
+		  }
+	  }
+	  refresh();
+    }
+
+    function getSearchTarget() {
+      var searchTargetObj = document.forms["advancedSearchForm"].selectSearchOption;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+	      if (searchTargetObj[j].checked == true) {
+	         return searchTargetObj[j].value;
+	      }
+	  }
+    }
+
+    function onAlgorithmChanged() {
+      var curr_target = getSearchTarget();
+      if (curr_target != "Code") return;
+
+      var searchTargetObj = document.forms["advancedSearchForm"].selectSearchOption;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+		  target = searchTargetObj[j].value;
+		  if (target == "Code") {
+			  searchTargetObj[0].checked = true;
+			  return;
+		  }
+	  }
+    }
+    
+
+
+    function onVSCodeButtonPressed() {
+	  var algorithmObj = document.forms["valueSetSearchForm"].valueset_search_algorithm;
+	  for (var j=0; j<algorithmObj.length; j++) {
+		  algorithm = algorithmObj[j].value;
+		  if (algorithm == "exactMatch") {
+			 algorithmObj[j].checked = true;
+		  }
+	  }
+    }
+
+    function getVSSearchTarget() {
+      var searchTargetObj = document.forms["valueSetSearchForm"].selectValueSetSearchOption;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+	      if (searchTargetObj[j].checked == true) {
+	         return searchTargetObj[j].value;
+	      }
+	  }
+    }
+
+    function onVSAlgorithmChanged() {
+      var curr_target = getVSSearchTarget();
+      if (curr_target != "Code") return;
+
+      var searchTargetObj = document.forms["valueSetSearchForm"].selectValueSetSearchOption;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+		  target = searchTargetObj[j].value;
+		  if (target == "Code") {
+			  searchTargetObj[0].checked = true;
+			  return;
+		  }
+	  }
+    }
+    
+
+    function refresh(type) {
+      if (type == "target") {
+          onCodeButtonPressed();
+      } else if (type == "algorithm") {
+          onAlgorithmChanged(); 
+      }
+
+      var dictionary = document.forms["advancedSearchForm"].dictionary.value;
+
+      var text = escape(document.forms["advancedSearchForm"].matchText.value);
+      
+      algorithm = "exactMatch";
+      var algorithmObj = document.forms["advancedSearchForm"].adv_search_algorithm;
+      for (var i=0; i<algorithmObj.length; i++) {
+        if (algorithmObj[i].checked) {
+          algorithm = algorithmObj[i].value;
+        }
+      }
+      var adv_search_source = document.forms["advancedSearchForm"].adv_search_source.value;
+
+      var selectSearchOption = "";
+      var selectSearchOptionObj = document.forms["advancedSearchForm"].selectSearchOption;
+      for (var i=0; i<selectSearchOptionObj.length; i++) {
+        if (selectSearchOptionObj[i].checked) {
+          selectSearchOption = selectSearchOptionObj[i].value;
+        }
+      }
+
+      var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
+      var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
+      var _version = document.forms["advancedSearchForm"].version.value;
+
+
+      var direction = "";
+      var directionObj = document.forms["advancedSearchForm"].direction;
+      for (var i=0; i<directionObj.length; i++) {
+        if (directionObj[i].checked) {
+          direction = directionObj[i].value;
+        }
+      }
+      
+      
+      window.location.href="/ncitbrowser/pages/advanced_search.jsf?refresh=1"
+          + "&opt="+ selectSearchOption
+          + "&text="+ text
+          + "&algorithm="+ algorithm
+          + "&sab="+ adv_search_source
+          + "&prop="+ selectProperty
+          + "&rel="+ rel_search_association
+          + "&dir="+ direction
+          + "&dictionary="+ dictionary
+          + "&version="+ _version;
+    }
+    
+    
+    
+   
 function checkAll(field)
 {
 for (i = 0; i < field.length; i++)

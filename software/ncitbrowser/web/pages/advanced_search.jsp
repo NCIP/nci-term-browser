@@ -50,28 +50,66 @@
     
     
   <script type="text/javascript">
+  
+  
+    function onCodeButtonPressed() {
+	  var algorithmObj = document.forms["advancedSearchForm"].adv_search_algorithm;
+	  algorithmObj[0].checked = true;
+	  refresh();
+    }
+
+    function getSearchTarget() {
+      var searchTargetObj = document.forms["advancedSearchForm"].selectSearchOption;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+	      if (searchTargetObj[j].checked == true) {
+	         return searchTargetObj[j].value;
+	      }
+	  }
+    }
+
+    function onAlgorithmChanged() {
+      var curr_target = getSearchTarget();
+      if (curr_target != "Code") return;
+
+      var searchTargetObj = document.forms["advancedSearchForm"].selectSearchOption;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+		  target = searchTargetObj[j].value;
+		  if (target == "Code") {
+			  searchTargetObj[0].checked = true;
+			  break;
+		  }
+	  }
+    }  
+  
+  
     function refresh() {
 
       var dictionary = document.forms["advancedSearchForm"].dictionary.value;
 
       var text = escape(document.forms["advancedSearchForm"].matchText.value);
+ 
+       var selectSearchOption = "";
+       var selectSearchOptionObj = document.forms["advancedSearchForm"].selectSearchOption;
+       for (var i=0; i<selectSearchOptionObj.length; i++) {
+         if (selectSearchOptionObj[i].checked) {
+           selectSearchOption = selectSearchOptionObj[i].value;
+           break;
+         }
+      }
       
-      algorithm = "exactMatch";
+     
+      var algorithm = "exactMatch";
       var algorithmObj = document.forms["advancedSearchForm"].adv_search_algorithm;
       for (var i=0; i<algorithmObj.length; i++) {
         if (algorithmObj[i].checked) {
-          algorithm = algorithmObj[i].value;
+           algorithm = algorithmObj[i].value;
+           break;
         }
-      }
+      }      
+     
+ 
       var adv_search_source = document.forms["advancedSearchForm"].adv_search_source.value;
 
-      var selectSearchOption = "";
-      var selectSearchOptionObj = document.forms["advancedSearchForm"].selectSearchOption;
-      for (var i=0; i<selectSearchOptionObj.length; i++) {
-        if (selectSearchOptionObj[i].checked) {
-          selectSearchOption = selectSearchOptionObj[i].value;
-        }
-      }
 
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
@@ -98,6 +136,108 @@
           + "&dictionary="+ dictionary
           + "&version="+ _version;
     }
+    
+    
+    
+    function refresh_code() {
+
+      var dictionary = document.forms["advancedSearchForm"].dictionary.value;
+
+      var text = escape(document.forms["advancedSearchForm"].matchText.value);
+ 
+      var selectSearchOption = "Code";
+      var algorithm = "exactMatch";
+      var adv_search_source = document.forms["advancedSearchForm"].adv_search_source.value;
+
+
+      var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
+      var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
+      var _version = document.forms["advancedSearchForm"].version.value;
+
+
+      var direction = "";
+      var directionObj = document.forms["advancedSearchForm"].direction;
+      for (var i=0; i<directionObj.length; i++) {
+        if (directionObj[i].checked) {
+          direction = directionObj[i].value;
+        }
+      }
+      
+      
+      window.location.href="/ncitbrowser/pages/advanced_search.jsf?refresh=1"
+          + "&opt="+ selectSearchOption
+          + "&text="+ text
+          + "&algorithm="+ algorithm
+          + "&sab="+ adv_search_source
+          + "&prop="+ selectProperty
+          + "&rel="+ rel_search_association
+          + "&dir="+ direction
+          + "&dictionary="+ dictionary
+          + "&version="+ _version;
+    }    
+    
+     function refresh_algorithm() {
+
+      var dictionary = document.forms["advancedSearchForm"].dictionary.value;
+
+      var text = escape(document.forms["advancedSearchForm"].matchText.value);
+ 
+       var algorithm = "exactMatch";
+       var algorithmObj = document.forms["advancedSearchForm"].adv_search_algorithm;
+       for (var i=0; i<algorithmObj.length; i++) {
+         if (algorithmObj[i].checked) {
+            algorithm = algorithmObj[i].value;
+            break;
+         }
+      }  
+
+       var selectSearchOption = "";
+       var selectSearchOptionObj = document.forms["advancedSearchForm"].selectSearchOption;
+       for (var i=0; i<selectSearchOptionObj.length; i++) {
+         if (selectSearchOptionObj[i].checked) {
+           selectSearchOption = selectSearchOptionObj[i].value;
+           break;
+         }
+      }
+      
+      if (algorithm != "exactMatch"  && selectSearchOption == "Code") {
+          selectSearchOption = "Name";
+          //selectSearchOptionObj[0].checked;
+          //return;
+      }
+            
+      
+      var adv_search_source = document.forms["advancedSearchForm"].adv_search_source.value;
+
+
+      var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
+      var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
+      var _version = document.forms["advancedSearchForm"].version.value;
+
+
+      var direction = "";
+      var directionObj = document.forms["advancedSearchForm"].direction;
+      for (var i=0; i<directionObj.length; i++) {
+        if (directionObj[i].checked) {
+          direction = directionObj[i].value;
+        }
+      }
+      
+      
+      window.location.href="/ncitbrowser/pages/advanced_search.jsf?refresh=1"
+          + "&opt="+ selectSearchOption
+          + "&text="+ text
+          + "&algorithm="+ algorithm
+          + "&sab="+ adv_search_source
+          + "&prop="+ selectProperty
+          + "&rel="+ rel_search_association
+          + "&dir="+ direction
+          + "&dictionary="+ dictionary
+          + "&version="+ _version;
+    }    
+    
+    
+    
   </script>
   <%!
     private static Logger _logger = Utils.getJspLogger("advanced_search.jsp");
@@ -290,9 +430,9 @@
                   <tr><td>
                      <table border="0" cellspacing="0" cellpadding="0">
                     <tr valign="top" align="left"><td align="left" class="textbody">
-                      <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
-                      <input type="radio" name="adv_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
-                      <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
+                      <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3" >Exact Match&nbsp;
+                      <input type="radio" name="adv_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3" onclick="refresh_algorithm()"; >Begins With&nbsp;
+                      <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3" onclick="refresh_algorithm()"; >Contains
                     </td></tr>
                   </table>
                 </td></tr>
@@ -344,7 +484,7 @@
 
                 <tr valign="top" align="left"><td align="left" class="textbody">
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Name" alt="Name" <%=check_n2%> onclick="javascript:refresh()" tabindex="5">Name&nbsp;
-                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Code" alt="Code" <%=check_c2%> onclick="javascript:refresh()" tabindex="5">Code&nbsp;
+                  <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Code" alt="Code" <%=check_c2%> onclick="refresh_code()" tabindex="5">Code&nbsp;
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()" tabindex="5">Property&nbsp;
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()" tabindex="5">Relationship
                 </td></tr>
