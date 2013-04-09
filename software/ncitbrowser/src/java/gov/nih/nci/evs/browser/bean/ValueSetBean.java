@@ -1365,7 +1365,7 @@ StringBuffer buf = new StringBuffer();
             iteratorBeanManager.createIteratorKey(schemes, matchText,
                 searchTarget, matchAlgorithm, maxToReturn);
 
-        if (searchTarget.compareTo("code") == 0) {
+        if (searchTarget.compareTo("codes") == 0) {
             if (iteratorBeanManager.containsIteratorBean(key)) {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
