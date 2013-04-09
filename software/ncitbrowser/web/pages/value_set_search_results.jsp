@@ -78,14 +78,7 @@
         }
       }
  
-      //if (selectValueSetSearchOption == "Code") {
-           //valueset_search_algorithm
-      
-      //     algorithm = "exactMatch";
-      //}
- 
       var view = document.forms["view_form"].view.value;
-     
       if (view == "source") {
           window.location.href="/ncitbrowser/pages/value_set_source_view.jsf?refresh=1"
               + "&nav_type=valuesets" + "&opt="+ selectValueSetSearchOption;
