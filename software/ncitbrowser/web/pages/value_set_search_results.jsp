@@ -40,33 +40,7 @@
   <script type="text/javascript">
   
 
-    function onCodeButtonPressed(formname) {
-          var algorithmObj = document.forms[formname].algorithm;
-	  for (var j=0; j<algorithmObj.length; j++) {
-		  algorithm = algorithmObj[j].value;
-		  if (algorithm == "exactMatch") {
-			 algorithmObj[j].checked = true;
-			 break;
-		  }
-	  }
-    }
 
-    function getSearchTarget(formname) {
-          var searchTargetObj = document.forms[formname].searchTarget;
-	  for (var j=0; j<searchTargetObj.length; j++) {
-	      if (searchTargetObj[j].checked == true) {
-	          return searchTargetObj[j].value;
-	      }
-	  }
-    }
-
-
-    function onAlgorithmChanged(formname) {
-          var target = getSearchTarget(formname);
-          if (target != "codes") return;
-          var targetObj = document.forms[formname].searchTarget;
-          targetObj[0].checked = true;
-    }       
   
   
   
@@ -94,10 +68,42 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/wz_tooltip.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
+  
+  <script type="text/javascript">
+    
+    function onCodeButtonPressed(formname) {
+          var algorithmObj = document.forms[formname].algorithm;
+	  for (var j=0; j<algorithmObj.length; j++) {
+		  algorithm = algorithmObj[j].value;
+		  if (algorithm == "exactMatch") {
+			 algorithmObj[j].checked = true;
+			 break;
+		  }
+	  }
+    }
+
+    function getSearchTarget(formname) {
+          var searchTargetObj = document.forms[formname].searchTarget;
+	  for (var j=0; j<searchTargetObj.length; j++) {
+	      if (searchTargetObj[j].checked == true) {
+	          return searchTargetObj[j].value;
+	      }
+	  }
+    }
+
+
+    function onAlgorithmChanged(formname) {
+          var target = getSearchTarget(formname);
+          if (target != "codes") return;
+          var targetObj = document.forms[formname].searchTarget;
+          targetObj[0].checked = true;
+    }         
+  
+  </script>
+  
 <%!
   private static Logger _logger = Utils.getJspLogger("value_set_search_results.jsp");
 %>
-
     
     
 <form id="view_form">
