@@ -5577,6 +5577,10 @@ if (lbSvc == null) {
 		return false;
 	}
 
+    public static boolean isNullOrBlank(String value) {
+		if (value == null || value.compareTo("null") == 0 || || value.compareTo("") == 0) return true;
+		return false;
+	}
 
 	public static Vector getNonProductionOntologies(Vector v, String scheme) {
 		Vector u = new Vector();

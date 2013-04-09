@@ -34,12 +34,17 @@ if (uri_str == null) {
       
         String searchTarget = (String) request.getSession().getAttribute("searchTarget");
         String check_n = "", check_p = "" , check_cd ="";
-        if (searchTarget == null || searchTarget.compareTo("code") == 0)
-          check_cd = "checked";
-        else if (searchTarget.compareTo("names") == 0)
-          check_n = "checked";
-        else if (searchTarget.compareTo("properties") == 0)
+        
+
+    if (DataUtils.isNullOrBlank(searchTarget)) {
+        check_n = "checked";
+    } else if (searchTarget.compareTo("codes") == 0) {
+        check_cd = "checked";
+    } else if (searchTarget.compareTo("names") == 0) {
+        check_n = "checked";
+    } else if (searchTarget.compareTo("properties") == 0)
           check_p= "checked";
+    }
   
       
 %>
@@ -64,9 +69,9 @@ if (uri_str == null) {
 
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
-        <input type="radio" name="algorithm" id="algorithm1" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4"/><label for="algorithm1">Exact Match&nbsp;</label>
-        <input type="radio" name="algorithm" id="algorithm2" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4"/><label for="algorithm2">Begins With&nbsp;</label>
-        <input type="radio" name="algorithm" id="algorithm3" value="contains" alt="Contains" <%=check_c%> tabindex="4"/><label for="algorithm3">Contains</label>
+        <input type="radio" name="algorithm" id="exactMatch" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4"/><label for="exactMatch">Exact Match&nbsp;</label>
+        <input type="radio" name="algorithm" id="startsWith" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="startsWith">Begins With&nbsp;</label>
+        <input type="radio" name="algorithm" id="contains" value="contains" alt="Contains" <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="contains">Contains</label>
       </td>
     </tr>  
     
@@ -82,9 +87,9 @@ if (uri_str == null) {
 
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
-        <input type="radio" name="searchTarget" id="searchTarget0" value="code" alt="Code" <%=check_cd%> tabindex="5"/><label for="searchTarget0">Code&nbsp;</label>
-        <input type="radio" name="searchTarget" id="searchTarget1" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="searchTarget1">Name&nbsp;</label>
-        <input type="radio" name="searchTarget" id="searchTarget2" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="searchTarget2">Property</label>
+        <input type="radio" name="searchTarget" id="names" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="names">Name&nbsp;</label>
+        <input type="radio" name="searchTarget" id="codes" value="codes" alt="Code" <%=check_cd%> tabindex="5" onclick="onCodeButtonPressed('resolvedValueSetSearchForm');" /><label for="codes">Code&nbsp;</label>
+        <input type="radio" name="searchTarget" id="properties" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="properties">Property</label>
       </td>
     </tr>
     
