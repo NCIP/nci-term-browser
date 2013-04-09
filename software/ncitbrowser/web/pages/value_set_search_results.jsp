@@ -188,7 +188,7 @@ if (message == null) {
     }
                
     if (DataUtils.isNull(selectValueSetSearchOption)) {
-        selectValueSetSearchOption = "Code";
+        selectValueSetSearchOption = "Name";
     }
 
     if (selectValueSetSearchOption.compareTo("CodingScheme") == 0)
@@ -338,7 +338,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
         String check_n = "";
         String check_p = "";
         check_cd ="";
-        if (searchTarget == null || searchTarget.compareTo("code") == 0)
+        if (searchTarget == null || searchTarget.compareTo("codes") == 0)
           check_cd = "checked";
         else if (searchTarget.compareTo("names") == 0)
           check_n = "checked";

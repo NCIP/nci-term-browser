@@ -1561,7 +1561,7 @@ if (DataUtils.isNull(option)) {
 }
 
 if (DataUtils.isNull(option)) {
-	option = "Code";
+	option = "Name";
 }
 request.getSession().setAttribute("selectValueSetSearchOption", option);
 
@@ -1600,7 +1600,7 @@ request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 String option_code = "";
 String option_name = "";
 if (DataUtils.isNull(option)) {
-	option_code = "checked";
+	option_name = "checked";
 } else {
 	if (option.compareToIgnoreCase("Code") == 0) {
 		option_code = "checked";
@@ -2116,7 +2116,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("        </tr>");
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("          <td align=\"left\" class=\"textbody\">");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" tabindex=\"4\" >Name&nbsp;");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" checked tabindex=\"4\"  >Name&nbsp;");
       out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"4\" onclick=\"onVSCodeButtonPressed();\">Code&nbsp;");
       out.println("          </td>");
       out.println("        </tr>");
@@ -3673,8 +3673,8 @@ if (DataUtils.isNull(matchText)) {
       out.println("        </tr>");
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("          <td align=\"left\" class=\"textbody\">");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" tabindex=\"1\" >Name&nbsp;");
-      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"1\" onclick=\"onVSCodeButtonPressed();\">Code&nbsp;");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Name\" " + option_name + " alt=\"Name\" checked tabindex=\"4\"  >Name&nbsp;");
+      out.println("                <input type=\"radio\" id=\"selectValueSetSearchOption\" name=\"selectValueSetSearchOption\" value=\"Code\" " + option_code + " alt=\"Code\" tabindex=\"4\" onclick=\"onVSCodeButtonPressed();\">Code&nbsp;");
       out.println("          </td>");
       out.println("        </tr>");
 
