@@ -5578,7 +5578,7 @@ if (lbSvc == null) {
 	}
 
     public static boolean isNullOrBlank(String value) {
-		if (value == null || value.compareTo("null") == 0 || || value.compareTo("") == 0) return true;
+		if (value == null || value.compareTo("null") == 0 || value.compareTo("") == 0) return true;
 		return false;
 	}
 
