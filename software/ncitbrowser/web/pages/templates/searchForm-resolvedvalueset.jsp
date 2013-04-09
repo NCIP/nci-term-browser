@@ -42,7 +42,7 @@ if (uri_str == null) {
         check_cd = "checked";
     } else if (searchTarget.compareTo("names") == 0) {
         check_n = "checked";
-    } else if (searchTarget.compareTo("properties") == 0)
+    } else if (searchTarget.compareTo("properties") == 0) {
           check_p= "checked";
     }
   
