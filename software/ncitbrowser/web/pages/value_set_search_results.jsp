@@ -187,7 +187,7 @@ if (message == null) {
         selectValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption");
     }
                
-    if (DataUtils.isNull(selectValueSetSearchOption)) {
+    if (DataUtils.isNullOrBlank(selectValueSetSearchOption)) {
         selectValueSetSearchOption = "Name";
     }
 
