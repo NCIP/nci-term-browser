@@ -65,9 +65,8 @@
           targetObj[0].checked = true;
     }         
   
+  </script>
   
-  
-
 
   <%!
     private static Logger _logger = Utils.getJspLogger("resolved_value_set_search_results.jsp");
