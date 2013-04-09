@@ -78,11 +78,11 @@
         }
       }
  
-      if (selectValueSetSearchOption == "Code") {
+      //if (selectValueSetSearchOption == "Code") {
            //valueset_search_algorithm
       
-           algorithm = "exactMatch";
-      }
+      //     algorithm = "exactMatch";
+      //}
  
       var view = document.forms["view_form"].view.value;
      
@@ -335,15 +335,21 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
       
       
         String searchTarget = (String) request.getSession().getAttribute("searchTarget");
+        
         String check_n = "";
         String check_p = "";
         check_cd ="";
-        if (searchTarget == null || searchTarget.compareTo("codes") == 0)
-          check_cd = "checked";
-        else if (searchTarget.compareTo("names") == 0)
-          check_n = "checked";
-        else if (searchTarget.compareTo("properties") == 0)
-          check_p= "checked";
+        
+    if (DataUtils.isNullOrBlank(searchTarget)) {
+        check_n = "checked";
+    } else if (searchTarget.compareTo("codes") == 0) {
+        check_cd = "checked";
+    } else if (searchTarget.compareTo("names") == 0) {
+        check_n = "checked";
+    } else if (searchTarget.compareTo("properties") == 0) {
+        check_p = "checked";
+    }        
+
   
 %>
 
