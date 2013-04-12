@@ -1,3 +1,10 @@
+<%--L
+  Copyright Northrop Grumman Information Technology.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
+L--%>
+
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties" %>
 
 <FORM NAME="paginationForm" METHOD="POST" action="<%=request.getContextPath() %>/pages/multiple_search_results.jsf?" >
