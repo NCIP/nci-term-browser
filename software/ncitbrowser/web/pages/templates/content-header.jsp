@@ -1,3 +1,10 @@
+<%--L
+  Copyright Northrop Grumman Information Technology.
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
+L--%>
+
 <!-- Thesaurus, banner search area -->
 <div class="bannerarea">
     <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="97" alt="Thesaurus Browser Logo" border="0"/></a></div>
