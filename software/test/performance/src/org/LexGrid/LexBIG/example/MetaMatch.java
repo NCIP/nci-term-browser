@@ -1,3 +1,10 @@
+/*L
+ * Copyright Northrop Grumman Information Technology.
+ *
+ * Distributed under the OSI-approved BSD 3-Clause License.
+ * See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
+ */
+
 /*
  * Copyright: (c) 2004-2007 Mayo Foundation for Medical Education and
  * Research (MFMER). All rights reserved. MAYO, MAYO CLINIC, and the
