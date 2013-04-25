@@ -17,7 +17,7 @@ Getting Started
 
 * Fork the repository on GitHub to publish any proposed changes
 
-* Submit a ticket for your issue at `tracker`_ ,
+* Submit a ticket for your issue at `tracker`_,
   assuming one does not already exist.
 
   - Click `here`_ to get a new account.
