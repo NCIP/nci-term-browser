@@ -1,16 +1,16 @@
-Welcome to the nci-term-browser Project!
+Welcome to the NCI Term Browser Project!
 ==============================
 
 The NCIt Browser is a web-based terminology browser that allows users to browse and search 
 the NCI Thesaurus (NCIt), including content from other sources included in or linked to from NCIt. 
 The terminology information published through the NCIt Browser is retrieved via LexEVS.
 
-nci-term-browser is developed in Java and requires Apache Ant for building.
+NCI Term Browser is developed in Java and requires Apache Ant for building.
 
-nci-term-browser is distributed under the BSD 3-Clause License.
+NCI Term Browser is distributed under the BSD 3-Clause License.
 Please see the NOTICE and LICENSE files for details.
 
-You will find more details about nci-term-browser in the following links:
+You will find more details about NCI Term Browser in the following links:
 
  * [Home Page] (https://wiki.nci.nih.gov/x/0pLB)
  * [Code Repository] (https://github.com/NCIP/nci-term-browser)
@@ -18,8 +18,8 @@ You will find more details about nci-term-browser in the following links:
  * [Documentation] (https://wiki.nci.nih.gov/x/0pLB)
  * [Installation Instructions] (https://wiki.nci.nih.gov/x/V4DQAw)
  
-An NCI hosted instance of nci-term-browser is publicly available at:
+An NCI hosted instance of NCI Term Browser is publicly available at:
 
-[Production Instance] (http://ncit.nci.nih.gov)
+[Production Instance] (http://nciterms.nci.nih.gov)
  
-Please join us in further developing and improving nci-term-browser.
+Please join us in further developing and improving NCI Term Browser.
