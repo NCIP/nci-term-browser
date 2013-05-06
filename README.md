@@ -1,9 +1,8 @@
 Welcome to the NCI Term Browser Project!
 ==============================
 
-The NCIt Browser is a web-based terminology browser that allows users to browse and search 
-the NCI Thesaurus (NCIt), including content from other sources included in or linked to from NCIt. 
-The terminology information published through the NCIt Browser is retrieved via LexEVS.
+The NCI Term Browser is a web-based browser that allows users to search all terminologies, value sets and mappings 
+on the LexEVS terminology server, to browse individual sources, and to easily follow the many links that connect them.
 
 NCI Term Browser is developed in Java and requires Apache Ant for building.
 
