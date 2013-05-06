@@ -11,7 +11,7 @@ Please see the NOTICE and LICENSE files for details.
 
 You will find more details about NCI Term Browser in the following links:
 
- * [Home Page] (https://wiki.nci.nih.gov/x/0pLB)
+ * [Community Wiki] (https://wiki.nci.nih.gov/x/0pLB)
  * [Code Repository] (https://github.com/NCIP/nci-term-browser)
  * [Issue Tracker] (https://gforge.nci.nih.gov/tracker/?group_id=547)
  * [Documentation] (https://wiki.nci.nih.gov/x/0pLB)
