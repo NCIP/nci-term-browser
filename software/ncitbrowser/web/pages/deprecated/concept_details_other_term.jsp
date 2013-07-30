@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page import="java.util.List" %>
@@ -41,7 +34,7 @@ L--%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>NCI Term Browser</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleSheet.css" />
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/script.js"></script>
   <script type="text/javascript" src="<%=request.getContextPath()%>/js/search.js"></script>

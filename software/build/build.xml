@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<!--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L-->
-
 <project name="build" default="usage" basedir="." xmlns:bda="antlib:gov.nih.nci.bdalite">
 
     <description>
@@ -191,6 +184,7 @@ L-->
                 <filter token="ping.lexevs.enabled" value="${ping.lexevs.enabled}"/>
                 <filter token="ping.lexevs.interval" value="${ping.lexevs.interval}"/>
                 <filter token="audio_captcha_background_noise_on" value="${audio_captcha_background_noise_on}"/>
+                <filter token="ncbo_api_key" value="${ncbo_api_key}"/>
             </filterset>
             <resources>
                 <file file="${bda.conf.dir}/${webapp.prop.file}"/>

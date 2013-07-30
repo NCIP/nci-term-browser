@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -39,7 +32,7 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Thesaurus</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   
   
@@ -726,7 +719,7 @@ body {
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           <div class="searchbox">
 
-<h:form id="valueSetSearchForm" styleClass="search-form-main-area">  
+<h:form id="valueSetSearchForm" styleClass="search-form-main-area" acceptcharset="UTF-8">  
 
 
             <input type="hidden" id="checked_vocabularies" name="checked_vocabularies" value="" />
@@ -884,7 +877,7 @@ Search or browse a value set from its home page, or search all value sets at onc
           
           <div id="treecontainer" class="ygtv-checkbox"></div>
           
-          <form id="pg_form">
+          <form id="pg_form" enctype="application/x-www-form-urlencoded;charset=UTF-8">
             <%
               String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
               String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));

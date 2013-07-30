@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -42,7 +35,7 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Term Browser - Mapping Search</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -70,6 +63,7 @@ L--%>
 
 String base_Path = request.getContextPath();
 HashMap display_name_hmap = new HashMap();
+
 
 HashMap scheme2MappingIteratorBeanMap = null;
 ResolvedConceptReferencesIterator iterator = null;
@@ -100,7 +94,8 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
      display_release_date = false;
  }
  
- 
+          
+
 %>
 
  
@@ -228,8 +223,10 @@ if (mapping_results_msg != null) {
 
 
 
-String selectedResultsPerPage = resultsPerPage;
 
+
+
+String selectedResultsPerPage = resultsPerPage;
 
 String base_path = request.getContextPath();
 int numRemaining = 0;
@@ -294,7 +291,6 @@ try {
    //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
 
-
 num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 
@@ -326,9 +322,6 @@ String prev_page_num_str = Integer.toString(prev_page_num);
 String next_page_num_str = Integer.toString(next_page_num);
 
 //====================================================================================================
-
-
-
 
 boolean show_rank_column = true;
 String map_rank_applicable = DataUtils.getMetadataValue(mapping_scheme, mapping_version, "map_rank_applicable");
@@ -393,22 +386,17 @@ if (show_rank_column) {
 
 
  if (list == null) {
-     System.out.println("MAPPING RESULT PAGE list == null???");
+     //System.out.println("MAPPING RESULT PAGE list == null???");
  } else {
 
-                //for (int lcv=0; lcv<list.size(); lcv++) {
                 
  int upper_bound = list.size();
  if (upper_bound > pageSize) {
      upper_bound = pageSize;
      
  }
-
-                
-                //for (int lcv=0; lcv<upper_bound; lcv++) {
- 
-System.out.println("MAPPING RESULT PAGE list.size() " + list.size());
-                
+               
+            
                 
   for (int lcv=0; lcv<list.size(); lcv++) {
                     mappingData = (MappingData) list.get(lcv);

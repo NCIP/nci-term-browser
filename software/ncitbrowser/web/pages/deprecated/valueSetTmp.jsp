@@ -1,15 +1,8 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Term Browser - Value Set Source View</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <style type="text/css">
 /*margin and padding on body element
@@ -1977,7 +1970,7 @@ N_345309882_1211493727.isLeaf = true;
           <div class="searchbox">
 
 
-<form id="valueSetSearchForm" name="valueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_value_set" class="search-form-main-area" enctype="application/x-www-form-urlencoded">
+<form id="valueSetSearchForm" name="valueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_value_set" class="search-form-main-area" enctype="application/x-www-form-urlencoded" charset=UTF-8">
 <input type="hidden" name="valueSetSearchForm" value="valueSetSearchForm" />
 <input type="hidden" name="view" value="1" />
 
@@ -2171,7 +2164,7 @@ Search or browse a value set from its home page, or search all value sets at onc
 
           <div id="treecontainer" class="ygtv-checkbox"></div>
 
-          <form id="pg_form">
+          <form id="pg_form" enctype="application/x-www-form-urlencoded;charset=UTF-8">
 
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="null" />
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="null" />

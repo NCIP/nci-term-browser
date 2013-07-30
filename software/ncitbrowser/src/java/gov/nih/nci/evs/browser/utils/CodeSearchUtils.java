@@ -1,10 +1,3 @@
-/*L
- * Copyright Northrop Grumman Information Technology.
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
- */
-
 package gov.nih.nci.evs.browser.utils;
 
 import java.util.*;
@@ -28,7 +21,45 @@ import org.apache.commons.codec.language.*;
 
 
 /**
- * 
+ * <!-- LICENSE_TEXT_START -->
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
+ * to Title 17 of the United States Code, section 105.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *   2. The end-user documentation included with the redistribution,
+ *      if any, must include the following acknowledgment:
+ *      "This product includes software developed by NGIT and the National
+ *      Cancer Institute."   If no such end-user documentation is to be
+ *      included, this acknowledgment shall appear in the software itself,
+ *      wherever such third-party acknowledgments normally appear.
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
+ *      not be used to endorse or promote products derived from this software.
+ *   4. This license does not authorize the incorporation of this software
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
+ *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *      POSSIBILITY OF SUCH DAMAGE.
+ * <!-- LICENSE_TEXT_END -->
  */
 
 /**
@@ -40,6 +71,7 @@ import org.apache.commons.codec.language.*;
  */
  public class CodeSearchUtils {
     private static Logger _logger = Logger.getLogger(CodeSearchUtils.class);
+    private static final boolean CASE_SENSITIVE = true;
 
     public CodeSearchUtils() {
 
@@ -103,12 +135,10 @@ import org.apache.commons.codec.language.*;
         return cns;
     }
 
-    private CodedNodeSet restrictToActiveStatus(CodedNodeSet cns,
+    private static CodedNodeSet restrictToActiveStatus(CodedNodeSet cns,
         boolean activeOnly) {
-        if (cns == null)
-            return null;
-        if (!activeOnly)
-            return cns; // no restriction, do nothing
+        if (cns == null) return null;
+        if (!activeOnly) return cns; // no restriction, do nothing
         try {
             cns =
                 cns.restrictToStatus(CodedNodeSet.ActiveOption.ACTIVE_ONLY,
@@ -135,8 +165,10 @@ import org.apache.commons.codec.language.*;
     public CodedNodeSet getCodedNodeSetContainingSourceCode(
         String scheme, String version, String sourceAbbr, String code,
         int maxToReturn, boolean searchInactive) {
-        if (sourceAbbr == null || code == null)
+
+        if (sourceAbbr == null || code == null) {
             return null;
+		}
 
         LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -159,6 +191,7 @@ import org.apache.commons.codec.language.*;
             qualifierList.addNameAndValue(nv);
         }
 
+
         LocalNameList propertyLnL = null;
         // sourceLnL
         Vector<String> w2 = new Vector<String>();
@@ -180,6 +213,8 @@ import org.apache.commons.codec.language.*;
             }
             CodedNodeSet.PropertyType[] types =
                 new PropertyType[] { PropertyType.PRESENTATION };
+
+
             cns =
                 cns.restrictToProperties(propertyLnL, types, sourceLnL,
                     contextList, qualifierList);
@@ -187,10 +222,13 @@ import org.apache.commons.codec.language.*;
             if (cns != null) {
                 boolean activeOnly = !searchInactive;
                 cns = restrictToActiveStatus(cns, activeOnly);
+                if (cns == null) {
+					return null;
+				}
             }
-
         } catch (Exception e) {
             // getLogger().error("ERROR: Exception in findConceptWithSourceCodeMatching.");
+            e.printStackTrace();
             return null;
         }
         return cns;
@@ -274,13 +312,15 @@ import org.apache.commons.codec.language.*;
      public ResolvedConceptReferencesIteratorWrapper searchByCode(String scheme,
          String version, String matchText, String source, String matchAlgorithm,
          boolean ranking, int maxToReturn) {
-
+/*
+		 if (searchAllSources(source)) {
+			 return SimpleSearchUtils.search(scheme, version, matchText, SimpleSearchUtils.BY_CODE, null);
+		 }
+*/
          ResolvedConceptReferencesIterator iterator = null;
-         iterator =
-             matchConceptCode(scheme, version, matchText, source, "LuceneQuery");
+         iterator = matchConceptCode(scheme, version, matchText, source, "LuceneQuery");
          try {
              int size = iterator.numberRemaining();
-             System.out.println("matchConceptCode returns: " + size);
              if (size == 0) {
                  iterator =
                      findConceptWithSourceCodeMatching(scheme, version, source,
@@ -294,7 +334,53 @@ import org.apache.commons.codec.language.*;
          return null;
     }
 
-    public CodedNodeSet getCodedNodeSetContainingCode(String scheme,
+
+    public static CodedNodeSet getCodedNodeSetContainingCode(String codingSchemeName, String vers, String code,
+                                                String source, boolean searchInactive) {
+        try {
+			if (code == null) {
+				return null;
+			}
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            if (lbSvc == null) {
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (vers != null) versionOrTag.setVersion(vers);
+
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    new String[] { code }, codingSchemeName);
+
+            CodedNodeSet cns = null;
+            try {
+				cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+				cns = cns.restrictToCodes(crefs);
+
+				if (cns != null) {
+					boolean activeOnly = !searchInactive;
+					cns = restrictToActiveStatus(cns, activeOnly);
+				}
+				cns = restrictToSource(cns, source);
+				return cns;
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean searchAllSources(String source) {
+		if (source != null && source.compareTo("ALL") != 0) return false;
+		return true;
+	}
+
+
+
+    public CodedNodeSet findCodedNodeSetContainingCode(String scheme,
         String version, String matchText, String source, boolean searchInactive) {
         LexBIGService lbs = RemoteServerUtil.createLexBIGService();
         if (lbs == null) return null;
@@ -333,10 +419,25 @@ import org.apache.commons.codec.language.*;
 
     public ResolvedConceptReferencesIterator matchConceptCode(String scheme,
         String version, String matchText, String source, String matchAlgorithm) {
-        ResolvedConceptReferencesIterator iterator = null;
 
-        CodedNodeSet cns = getCodedNodeSetContainingCode(scheme,
-             version, matchText, source, false);
+    	return matchConceptCode(scheme, version, matchText, source, matchAlgorithm, CASE_SENSITIVE);
+
+	}
+
+
+
+    public ResolvedConceptReferencesIterator matchConceptCode(String scheme,
+        String version, String matchText, String source, String matchAlgorithm, boolean caseSensitive) {
+        ResolvedConceptReferencesIterator iterator = null;
+        CodedNodeSet cns = null;
+        if (caseSensitive) {
+			cns = getCodedNodeSetContainingCode(scheme,
+				 version, matchText, source, false);
+	    } else {
+			cns = findCodedNodeSetContainingCode(scheme,
+				 version, matchText, source, false);
+
+		}
 
 		LocalNameList restrictToProperties = new LocalNameList();
 		SortOptionList sortCriteria = null;
@@ -365,31 +466,67 @@ import org.apache.commons.codec.language.*;
     public ResolvedConceptReferencesIteratorWrapper searchByCode(
         Vector<String> schemes, Vector<String> versions, String matchText,
         String source, String matchAlgorithm, boolean ranking, int maxToReturn) {
+/*
+		if (searchAllSources(source)) {
+			return SimpleSearchUtils.search(schemes, versions, matchText, SimpleSearchUtils.BY_CODE, null);
+		}
+*/
 		return searchByCode(
 			schemes,  versions, matchText,
-			source, matchAlgorithm, ranking, maxToReturn, false);
+			source, matchAlgorithm, ranking, maxToReturn, false, CASE_SENSITIVE);
 	}
 
 	public CodedNodeSet union(CodedNodeSet cns, CodedNodeSet cns_2) {
 		if (cns == null && cns_2 == null) return null;
-		if (cns != null && cns_2 == null) return cns;
-		if (cns == null && cns_2 != null) return cns_2;
-		try {
-			cns = cns.union(cns_2);
-			return cns;
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-		}
+		else if (cns != null && cns_2 == null) return cns;
+		else if (cns == null && cns_2 != null) return cns_2;
+		else {
+			try {
+				if (cns == null) return null;
+				cns = cns.union(cns_2);
+				return cns;
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+	    }
 		return null;
 	}
 
+    public static ConceptReferenceList createConceptReferenceList(
+        String[] codes, String codingSchemeName) {
+        if (codes == null) {
+            return null;
+        }
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.length; i++) {
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(codes[i]);
+            list.addConceptReference(cr);
+        }
+        return list;
+    }
 
+////////////////////////////////
+// main method
+////////////////////////////////
     public ResolvedConceptReferencesIteratorWrapper searchByCode(
         Vector<String> schemes, Vector<String> versions, String matchText,
         String source, String matchAlgorithm, boolean ranking, int maxToReturn, boolean activeOnly) {
+/*
+		if (searchAllSources(source)) {
+			return SimpleSearchUtils.search(schemes, versions, matchText, SimpleSearchUtils.BY_CODE, null);
+		}
+*/
+		return searchByCode(schemes, versions, matchText,
+            source, matchAlgorithm, ranking, maxToReturn, activeOnly, CASE_SENSITIVE);
+    }
+
+    public ResolvedConceptReferencesIteratorWrapper searchByCode(
+        Vector<String> schemes, Vector<String> versions, String matchText,
+        String source, String matchAlgorithm, boolean ranking, int maxToReturn, boolean activeOnly, boolean caseSensitive) {
 
 		if (matchText == null || matchText.trim().length() == 0) return null;
-		System.out.println("matchText: " + matchText);
 
 		LocalNameList contextList = null;
 		NameAndValueList qualifierList = null;
@@ -400,29 +537,32 @@ import org.apache.commons.codec.language.*;
 		LocalNameList restrictToProperties = new LocalNameList();
 		CodedNodeSet.PropertyType[] propertyTypes = null;
 		boolean resolveConcepts = false;
-		CodedNodeSet.PropertyType[] types = new PropertyType[] { PropertyType.PRESENTATION };
+		//CodedNodeSet.PropertyType[] types = new PropertyType[] { PropertyType.PRESENTATION };
         Vector<CodedNodeSet> cns_vec = new Vector<CodedNodeSet>();
 
         try {
             matchText = matchText.trim();
             String code = matchText;
-            if (matchAlgorithm.compareToIgnoreCase("contains") == 0) {
-                matchAlgorithm = findBestContainsAlgorithm(matchText);
-            }
 
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             for (int i = 0; i < schemes.size(); i++) {
                 String scheme = (String) schemes.elementAt(i);
                 String version = (String) versions.elementAt(i);
-                System.out.println("scheme: " + scheme);
 				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
 				if (version != null)
 					versionOrTag.setVersion(version);
 
                 boolean searchInactive = !activeOnly;
                 // Match concept code:
-				CodedNodeSet cns = getCodedNodeSetContainingCode(scheme,
-					version, matchText, source, searchInactive);
+                CodedNodeSet cns = null;
+
+                if (caseSensitive) {
+					cns = getCodedNodeSetContainingCode(scheme,
+						version, matchText, source, searchInactive);
+				} else {
+					cns = findCodedNodeSetContainingCode(scheme,
+						version, matchText, source, searchInactive);
+				}
+
 				CodedNodeSet cns_2 = getCodedNodeSetContainingSourceCode(
 					scheme, version, source, code, maxToReturn, searchInactive);
                 cns = union(cns, cns_2);
@@ -430,6 +570,7 @@ import org.apache.commons.codec.language.*;
 					cns_vec.add(cns);
 				}
 			}
+
 			ResolvedConceptReferencesIterator iterator =
 				new QuickUnionIterator(cns_vec, sortCriteria, null,
 					restrictToProperties, null, resolveConcepts);

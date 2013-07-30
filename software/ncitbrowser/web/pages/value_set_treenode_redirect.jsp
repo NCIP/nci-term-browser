@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ page import="java.util.*" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
@@ -26,27 +19,30 @@ String source_version = ValueSetHierarchy.getSourceSchemeVersion();
 HashMap hmap = ValueSetHierarchy.getValueSetSourceHierarchy();
 HashMap VSDURI2VSD_map = ValueSetHierarchy.getValueSetDefinitionURI2VSD_map();
 
-
 String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("ontology_node_id"));
 
 ontology_node_id = ValueSetHierarchy.getValueSetURI(ontology_node_id);
-//ontology_node_id = ValueSetHierarchy.getCodingSchemeName(ontology_node_id);
+
 
 ValueSetDefinition vsd = ValueSetHierarchy.findValueSetDefinitionByURI(ontology_node_id);
 
 
 if (vsd != null) {
-    redirect_url = context_path + "/pages/value_set_search_results.jsf?vsd_uri=" + ontology_node_id;
+    redirect_url = context_path + "/ajax?action=create_src_vs_tree&vsd_uri=" + ontology_node_id;
 
     
 } else {
     if (ValueSetHierarchy.get_valueSetDefinitionSourceCode2Name_map().containsKey(ontology_node_id)) {
+    /*
         redirect_url = context_path + "/pages/concept_details.jsf?dictionary="
             + source_scheme
             + "&version="
             + source_version
             + "&code=" 
             + ontology_node_id;
+     */
+           
+        redirect_url = context_path + "/ajax?action=create_src_vs_tree&vsd_uri=" + ontology_node_id;
 
             
     } else {
@@ -57,8 +53,6 @@ if (vsd != null) {
             + HTTPUtils.cleanXSS(formalname)
             + "&version="
             + version;
-   
-            
     }
     
 

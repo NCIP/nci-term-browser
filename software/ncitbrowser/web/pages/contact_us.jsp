@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -43,7 +36,7 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
   <head>
     <title>NCI Thesaurus</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
     <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -84,6 +77,9 @@ L--%>
           alt_captcha_option = "default";
     }    
 
+  String test_option = "invalid_option";
+
+
   Captcha captcha = (Captcha) request.getSession().getAttribute("captcha");
   AudioCaptcha ac = null;  
   boolean isUserError = false;
@@ -99,23 +95,6 @@ L--%>
         request.getSession().removeAttribute("retry");
   }
 
-/*  
-if (captcha_option.compareTo("default") == 0) {
-  	captcha = new Captcha.Builder(200, 50)
-	        .addText()
-	        .addBackground()
-	        //.addNoise()
-		.gimp()
-		//.addBorder()
-                .build();
-	request.getSession().setAttribute(Captcha.NAME, captcha);
-} 
-*/   
-    
-    System.out.println("captcha_option: " + captcha_option);
-    System.out.println("alt_captcha_option: " + alt_captcha_option);  
-    
-    //String ncicb_contact_url = new DataUtils().getNCICBContactURL();
     
     String subject = (String) request.getSession().getAttribute("subject");
     String message = (String) request.getSession().getAttribute("message");
@@ -125,7 +104,6 @@ if (captcha_option.compareTo("default") == 0) {
     if (subject == null) subject = "";
     if (message == null) message = "";
     if (emailaddress == null) emailaddress = "";
-    //String errorMsg = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getAttribute("errorMsg"));
     if (errorMsg == null) errorMsg = "";
     boolean error = errorMsg.length() > 0;
     
@@ -304,7 +282,7 @@ if (captcha_option.compareTo("default") == 0) {
       action="#{userSessionBean.clearContactUs}"
       alt="clear">
     </h:commandButton>
-    <img src="/images/spacer.gif" width="1" />
+    <img src="<%=basePath%>/images/spacer.gif" width="1" />
     <h:commandButton
       id="mail"
       value="submit"

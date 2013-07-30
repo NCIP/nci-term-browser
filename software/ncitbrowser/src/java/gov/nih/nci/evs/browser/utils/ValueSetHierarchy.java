@@ -1,14 +1,12 @@
-/*L
- * Copyright Northrop Grumman Information Technology.
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
- */
-
 package gov.nih.nci.evs.browser.utils;
 
-import gov.nih.nci.system.client.ApplicationServiceProvider;
+import java.io.*;
+import java.net.URI;
+import java.text.*;
+import java.util.*;
+import java.sql.*;
 
+import gov.nih.nci.system.client.ApplicationServiceProvider;
 import org.LexGrid.LexBIG.DataModel.Collections.AbsoluteCodingSchemeVersionReferenceList;
 import org.LexGrid.LexBIG.Utility.Constructors;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
@@ -24,15 +22,6 @@ import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.valueSets.types.DefinitionOperator;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 import org.lexgrid.valuesets.dto.ResolvedValueSetDefinition;
-
-
-import java.io.*;
-import java.net.URI;
-
-import java.text.*;
-import java.util.*;
-import java.sql.*;
-//import javax.faces.model.*;
 
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
@@ -696,6 +685,7 @@ public class ValueSetHierarchy {
             List<TreeItem> children = ti._assocToChildMap.get(association);
             Collections.sort(children);
             for (TreeItem childItem : children) {
+				System.out.println("[" + ti._text + "] -- ( " + association + " ) --> [" + childItem._text + "]");
                 printTree(childItem, focusCode, depth + 1);
 			}
         }
@@ -2199,7 +2189,8 @@ public class ValueSetHierarchy {
 		    }
 		}
 		*/
-
+		//KLO, 062213
+        if (_valueSetParticipationHashSet == null) return false;
 		boolean retval = _valueSetParticipationHashSet.contains(scheme);
 		return retval;
     }
@@ -2213,6 +2204,9 @@ public class ValueSetHierarchy {
 		try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
+if (lbSvc == null) {
+	return null;
+}
 			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
 			CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
 			cns = cns.restrictToAnonymous(restrictToAnonymous);
@@ -2665,11 +2659,11 @@ public class ValueSetHierarchy {
 			rcrl = TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
 
 
-if (rcrl == null) {
-	//System.out.println("*** TreeUtils.getHierarchyRoots returns NULL???: ");
-} else {
-			count = rcrl.getResolvedConceptReferenceCount();
-}
+		if (rcrl == null) {
+			//System.out.println("*** TreeUtils.getHierarchyRoots returns NULL???: ");
+		} else {
+					count = rcrl.getResolvedConceptReferenceCount();
+		}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
@@ -2870,8 +2864,6 @@ if (rcrl == null) {
 		}
 
 		_cs2vsdURIs_map.put(codingSchemeName, v);
-		//System.out.println("getValueSetDefinitionURIsForCodingScheme " + codingSchemeName);
-		//System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
 		return v;
 	}
 
@@ -3024,8 +3016,8 @@ if (rcrl == null) {
 		ti._expandable = false;
 		List <TreeItem> children = new ArrayList();
 
-		HashMap src_vs_tree_root_hamp = expand_src_vs_tree_exclude_src_nodes(vsd.getValueSetDefinitionURI());
-		TreeItem src_vs_tree_root = (TreeItem) src_vs_tree_root_hamp.get("<Root>");
+		HashMap src_vs_tree_root_hmap = expand_src_vs_tree_exclude_src_nodes(vsd.getValueSetDefinitionURI());
+		TreeItem src_vs_tree_root = (TreeItem) src_vs_tree_root_hmap.get("<Root>");
 		for (String asso_name : src_vs_tree_root._assocToChildMap.keySet()) {
 		    List<TreeItem> child_nodes = src_vs_tree_root._assocToChildMap.get(asso_name);
 		    for (TreeItem child_item : child_nodes) {
@@ -3072,8 +3064,8 @@ if (rcrl == null) {
 				 top_node._expandable = false;
 				 List <TreeItem> top_branch = new ArrayList();
 
-				 HashMap src_vs_tree_root_hamp = expand_src_vs_tree_exclude_src_nodes(code);
-				 TreeItem src_vs_tree_root = (TreeItem) src_vs_tree_root_hamp.get("<Root>");
+				 HashMap src_vs_tree_root_hmap = expand_src_vs_tree_exclude_src_nodes(code);
+				 TreeItem src_vs_tree_root = (TreeItem) src_vs_tree_root_hmap.get("<Root>");
 				 for (String asso_name : src_vs_tree_root._assocToChildMap.keySet()) {
 					 List<TreeItem> child_nodes = src_vs_tree_root._assocToChildMap.get(asso_name);
 					 for (TreeItem child_item : child_nodes) {
@@ -3216,9 +3208,6 @@ if (rcrl == null) {
         return hmap;
 	}
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static void main(String[] args) throws Exception {
 		//ValueSetHierarchy test = new ValueSetHierarchy();

@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
@@ -20,23 +13,30 @@ L--%>
     <%
          String codingschemeversion = HTTPUtils.cleanXSS(info.version);
          String message = null;
-         boolean isVersionValid = DataUtils.validateCodingSchemeVersion(info.dictionary, info.version);
-         if (!isVersionValid) {
-             message = "WARNING: Invalid version number detected. Please correct it before proceeding any further.";
+         boolean show_content = true;
+         
+	 if (!DataUtils.isNullOrBlank(info.dictionary) && DataUtils.isNullOrBlank(DataUtils.getFormalName(info.dictionary))) {
+             message = Constants.UNIDENTIFIABLE_VOCABULARY;
+             show_content = false;
+             
+         } else {       
+	     boolean isVersionValid = DataUtils.validateCodingSchemeVersion(info.dictionary, info.version);
+	     if (!isVersionValid) {
+	         message = "WARNING: Invalid version number detected. Please correct it before proceeding any further.";
+	     }
          }
-
     %>
     
-    
     <%-- <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(info.version)%></div></td> --%>
-    
-    
-    
     
   </tr></table>
   <hr/>
 
 <%
+
+
+
+
 Vector from_vec = new Vector();
 Vector to_vec = new Vector();
 from_vec.add("ncim_url");
@@ -76,7 +76,9 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
 
   <table border="0">
 
-      <% 
+      <%
+
+
       if (message != null) {
       %>
       <tr><td>
@@ -86,10 +88,13 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
       }
       %>
       
+  <% if (show_content) { %>
   
     <tr>
       <td class="textbody">
+      
         <%=html_compatable_description_value%>
+        
         <%
         if (source_url_value != null) {
         %>
@@ -194,6 +199,9 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
               More information on NCI dictionaries and resources.
             </td>
           </tr>
+          
+<% } %>          
+          
         </table>
       </td>
     </tr>

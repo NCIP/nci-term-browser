@@ -1,10 +1,3 @@
-/*L
- * Copyright Northrop Grumman Information Technology.
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
- */
-
 package gov.nih.nci.evs.browser.servlet;
 
 import nl.captcha.servlet.*;
@@ -46,8 +39,11 @@ public class NCISimpleCaptchaServlet extends SimpleCaptchaServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private static int _width = 200;
-    private static int _height = 50;
+    //private static int _width = 200;
+    //private static int _height = 50;
+
+    private int _width = 200;
+    private int _height = 50;
 
     //private static final List<Color> COLORS = new ArrayList<Color>(2);
     private static final List<Color> COLORS = new ArrayList<Color>(1);

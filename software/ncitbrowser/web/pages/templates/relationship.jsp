@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ page import="java.util.*" %>
 <%@ page import="gov.nih.nci.evs.browser.properties.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
@@ -204,10 +197,10 @@ if (type != null && type.compareTo("all") == 0) {
      if (roles != null && roles.size() > 0)
      {
   %>
-       <b>Role Relationships:</b>
+       <b><%=Constants.ROLE_LABEL%></b>&nbsp;<%=Constants.ROLE_LABEL_2%>:
 
   <br/>
-  <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
+  <i><%=Constants.ROLE_DESCRIPTION_LABEL%></i>
   <table class="dataTable">
 
     <%
@@ -258,7 +251,7 @@ if (type != null && type.compareTo("all") == 0) {
   <%
      } else if (roles == null || roles.size() == 0) {
   %>
-       <b>Role Relationships: </b><i>(none)</i>
+       <b><%=Constants.ROLE_LABEL%></b>&nbsp;<%=Constants.ROLE_LABEL_2%>: <i>(none)</i>
   <%
      }
   %>
@@ -274,9 +267,9 @@ if (type != null && type.compareTo("all") == 0) {
 <%
   if (associations != null && associations.size() > 0) {
 %>
-    <b>Associations:</b>
+    <b><%=Constants.ASSOCIATION_LABEL%></b>&nbsp;<%=Constants.ASSOCIATION_LABEL_2%>:
 <br/>
-<i>(Associations are true only for the current concept.)</i>
+<i><%=Constants.ASSOCIATION_DESCRIPTION_LABEL%></i>
 <table class="dataTable">
 
 
@@ -404,7 +397,7 @@ if (type != null && type.compareTo("all") == 0) {
 <%
   } else if (associations == null || associations.size() == 0) {
     %>
-    <b>Associations: </b><i>(none)</i>
+    <b><%=Constants.ASSOCIATION_LABEL%></b>&nbsp;<%=Constants.ASSOCIATION_LABEL_2%>: <i>(none)</i>
     <%
   }
 %>
@@ -419,6 +412,7 @@ if (type != null && type.compareTo("all") == 0) {
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;
      }
+     
 
 
 if (!isMapping) {
@@ -427,10 +421,10 @@ if (!isMapping) {
      if (inverse_roles != null && inverse_roles.size() > 0 && display_inverse_relationships)
      {
   %>
-       <b>Inverse Role Relationships:</b>
+       <b><%=Constants.INVERSE_ROLE_LABEL%></b>&nbsp;<%=Constants.INVERSE_ROLE_LABEL_2%>:
 
   <br/>
-  <i>(Roles are true for current concept and descendants, may be inherited from parent(s).)</i>
+  <i><%=Constants.INVERSE_ROLE_DESCRIPTION_LABEL%></i>
   <table class="dataTable">
 
 
@@ -511,7 +505,7 @@ if (!isMapping) {
   <%
      } else if (inverse_roles == null || inverse_roles.size() == 0 || !display_inverse_relationships) {
   %>
-       <b>Inverse Role Relationships: </b><i>(none)</i>
+       <b><%=Constants.INVERSE_ROLE_LABEL%></b>&nbsp;<%=Constants.INVERSE_ROLE_LABEL_2%>: <i>(none)</i>
   <%
      }
   %>
@@ -526,9 +520,9 @@ if (!isMapping) {
 <%
   if (inverse_associations != null && inverse_associations.size() > 0 && display_inverse_relationships) {
 %>
-    <b>Inverse Associations:</b>
+    <b><%=Constants.INVERSE_ASSOCIATION_LABEL%></b>&nbsp;<%=Constants.INVERSE_ASSOCIATION_LABEL_2%>:
 <br/>
-<i>(Associations are true only for the current concept.)</i>
+<i><%=Constants.INVERSE_ASSOCIATION_DESCRIPTION_LABEL%></i>
 <table class="dataTable">
 
   <%
@@ -659,7 +653,7 @@ if (!isMapping) {
 <%
   } else if (inverse_associations == null || inverse_associations.size() == 0 || !display_inverse_relationships) {
     %>
-    <b>Inverse Associations: </b><i>(none)</i>
+    <b><%=Constants.INVERSE_ASSOCIATION_LABEL%></b>&nbsp;<%=Constants.INVERSE_ASSOCIATION_LABEL_2%>: <i>(none)</i>
     <%
   }
 %>

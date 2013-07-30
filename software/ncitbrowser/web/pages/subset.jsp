@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -49,12 +42,31 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Thesaurus - Subsets</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/dropdown.js"></script>
+  
+  
+<style type="text/css"> 
+div.img1 
+{ 
+margin: 0px 0px 0px 0px; 
+border: 0px solid #A9A9A9; 
+float: left; 
+} 
+div.img2 
+{ 
+margin: 0px 0px 0px 0px; 
+border: 0px solid #A9A9A9; 
+float: left; 
+} 
+</style> 
+  
+  
+  
 </head>
 <body onLoad="document.forms.searchTerm.matchText.focus();">
 <f:view>
@@ -148,6 +160,7 @@ L--%>
               <br/><br/>
             </td>
           </tr>
+          
           <tr>
             <td>
               <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/page7" target="_blank"
@@ -167,6 +180,42 @@ L--%>
               of data related to medications, supplies, and services within the healthcare system.
             </td>
           </tr>
+          
+          <tr>
+          
+          </tr>
+              <td></td><td></td>
+          <tr>
+            <td>
+
+ <div>
+     <div class="img1">
+              <a href="http://evs.nci.nih.gov/ftp1/NICHD/About.html" target="_blank"
+                  alt="National Council for Prescription Drug Programs">
+                <img src="<%=basePath%>/images/NCS_new.jpg" border="0"   height="30" width="110" 
+                  alt="National Children's Study (NCS) Pediatric Terminology"/>
+              </a>     
+     </div>
+     <div class="img2">
+              <a href="http://evs.nci.nih.gov/ftp1/NICHD/About.html" target="_blank"
+                  alt="National Council for Prescription Drug Programs">
+                <img src="<%=basePath%>/images/NICHD_new.jpg" border="0" height="25" width="90" 
+                  alt="National Institute of Child Health and Human Development (NICHD) Pediatric Terminology"/>
+              </a>     
+     </div>    
+ </div>
+               
+  
+            </td>
+            <td class="textbody" valign="top">
+              <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/page7" target="_blank"
+                  alt="Federal Medication Terminologies">Pediatric Terminology:
+              </a>
+              The National Children's Study (NCS) and the National Institute of Child Health and Human Development (NICHD) are working with EVS to provide standardized coding for pediatric clinical trial and other research activities.
+            </td>
+          </tr>         
+          
+          
         </table>
         <p>
           EVS is developing extended methods to create, browse, download, and have direct computer API access to these and other NCIt subsets.

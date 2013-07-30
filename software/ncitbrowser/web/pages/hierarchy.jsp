@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=windows-1252"%>
@@ -33,7 +26,7 @@ L--%>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
   <title>Vocabulary Hierarchy</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/fonts.css" />
@@ -460,6 +453,8 @@ L--%>
         </table>
 
 <%
+//response.setContentType("text/html;charset=utf-8");
+
 JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
 String hierarchy_dictionary = info.dictionary;
 String hierarchy_version = info.version;
@@ -566,7 +561,7 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
 	          <div id="treecontainer"></div>
           <% } %>
 
-          <form id="pg_form">
+          <form id="pg_form" enctype="application/x-www-form-urlencoded;charset=UTF-8">
             <%
               String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
 

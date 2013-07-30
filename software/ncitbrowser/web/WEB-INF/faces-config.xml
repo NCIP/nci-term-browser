@@ -1,12 +1,5 @@
 <?xml version="1.0"?>
 
-<!--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L-->
-
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
@@ -1530,6 +1523,40 @@ L-->
        <to-view-id>/pages/contact_us.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
+  
+  
+  <navigation-rule>
+    <from-view-id>/pages/value_set_entity_search_results.jsp</from-view-id>
+    <navigation-case>
+       <description>value_set_search</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>value_set</from-outcome>
+       <to-view-id>/pages/value_set_entity_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_entity_search_results.jsp</to-view-id>
+    </navigation-case>
+    
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>all_value_sets</from-outcome>
+       <to-view-id>/pages/value_set_entity_search_results.jsp</to-view-id>
+    </navigation-case>    
+    
+    <navigation-case>
+       <description>error</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_entity_search_results.jsp</to-view-id>
+    </navigation-case>    
+    
+  </navigation-rule>
+
   
   
   <managed-bean>

@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L-->
-
 <root>
     <DisplayItems>
         <DisplayItem>
@@ -327,14 +320,6 @@ L-->
        </DisplayItem>
 
        <DisplayItem>
-            <propertyName>OMIM_Number</propertyName>
-            <itemLabel>OMIM Number</itemLabel>
-            <url>http://www.ncbi.nlm.nih.gov:80/entrez/dispomim.cgi?id=</url>
-            <hyperlinkText>see OMIM info</hyperlinkText>
-            <isExternalCode>true</isExternalCode>
-       </DisplayItem>
-
-       <DisplayItem>
             <propertyName>PDQ_Closed_Trial_Search_ID</propertyName>
             <itemLabel>PDQ Closed Trial Search ID</itemLabel>
             <url>http://www.cancer.gov/Search/ClinicalTrialsLink.aspx?idtype=1&amp;closed=1&amp;id=</url>
@@ -572,6 +557,11 @@ L-->
         <ConfigurableItem>
                  <key>AUDIO_CAPTCHA_BACKGROUND_NOISE_ON</key>
                  <value>@audio_captcha_background_noise_on@</value>
+        </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>NCBO_API_KEY</key>
+                 <value>@ncbo_api_key@</value>
         </ConfigurableItem>
         
         <!-- Standard FTP Report List (End) ================================ -->

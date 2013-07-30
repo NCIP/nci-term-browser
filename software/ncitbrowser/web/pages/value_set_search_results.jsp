@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -19,6 +12,9 @@ L--%>
 <%@ page import="org.apache.log4j.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices" %>
+<%@ page import="org.LexGrid.valueSets.ValueSetDefinition" %>
+<%@ page import="org.LexGrid.concepts.Entity" %>
+
 
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/yahoo-min.js" ></script>
 <script type="text/javascript" src="<%= request.getContextPath() %>/js/yui/event-min.js" ></script>
@@ -36,7 +32,7 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Term Browser - Value Set Search</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/yui/fonts.css" />
@@ -109,7 +105,7 @@ L--%>
 %>
     
     
-<form id="view_form">
+<form id="view_form" enctype="application/x-www-form-urlencoded;charset=UTF-8">
 <%
      String VSD_view = (String) request.getSession().getAttribute("view");
 %>
@@ -122,27 +118,25 @@ String valueSetSearch_requestContextPath = request.getContextPath();
 String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
 
 Vector vsd_vec = null;
-String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri")); 
+String value_set_tab = HTTPUtils.cleanXSS((String) request.getParameter("value_set_tab"));
+
+
+String root_vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("root_vsd_uri")); 
+String vsd_uri = null;
+
+if (value_set_tab != null && value_set_tab.compareToIgnoreCase("true") == 0) {
+    root_vsd_uri = null; 
+}
+
 
 String selectedvalueset = null;
-if (vsd_uri != null && vsd_uri.compareTo("null") != 0) { 
-    String vsd_metadata = DataUtils.getValueSetDefinitionMetadata(DataUtils.findValueSetDefinitionByURI(vsd_uri));
-    vsd_vec = new Vector();
-    vsd_vec.add(vsd_metadata);
-    
-} else {
-    vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
-    if (vsd_vec != null && vsd_vec.size() == 1) {
+vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
+if (vsd_vec != null && vsd_vec.size() == 1) {
 	vsd_uri = (String) vsd_vec.elementAt(0);
-	
 	Vector temp_vec = DataUtils.parseData(vsd_uri);
 	selectedvalueset = (String) temp_vec.elementAt(1);
-    }
-}   
-
-  
-    
-    
+	root_vsd_uri = (String) temp_vec.elementAt(0);
+}
     String searchform_requestContextPath = request.getContextPath();
     searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
@@ -150,14 +144,8 @@ if (vsd_uri != null && vsd_uri.compareTo("null") != 0) {
 
     String message = (String) request.getSession().getAttribute("message");
     request.getSession().removeAttribute("message");
-    
-if (message == null) {
-    if (vsd_vec == null) {
-        message = "WARNING: Session lost. Please click on the Value Sets tab to start a new session.";
-    }
-}
 
-    
+   
     String t = null;
     
     String selected_cs = "";
@@ -225,9 +213,6 @@ if (message == null) {
     <div id="main-area">
    
    
-
-   
-   
       <!-- Thesaurus, banner search area -->
       <div class="bannerarea">
       
@@ -236,20 +221,55 @@ String uri_vsd = null;
 String vsd_name = "null";
 
 if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
+	if (root_vsd_uri != null) {
+	    ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(root_vsd_uri);
+
+	    if (vsd != null) {
+		    vsd_name = vsd.getValueSetDefinitionName();  
+	    } else {
+		    //isValueSet = false;
+		    Entity entity = DataUtils.getConceptByCode(Constants.TERMINOLOGY_VALUE_SET_NAME, null, root_vsd_uri); 
+		    if (entity != null) {
+			vsd_name = entity.getEntityDescription().getContent();
+		    }
+	    }	      
+	      
+	      
+	      
+	%>
+
+	      <div class="banner">
+	      <!--
+		<a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?root_vsd_uri=<%=HTTPUtils.cleanXSS(root_vsd_uri)%>">
+               -->
+
+		<a class="vocabularynamebanner" href="<%=request.getContextPath()%>/ajax?action=create_src_vs_tree&vsd_uri=<%=HTTPUtils.cleanXSS(root_vsd_uri)%>">
+ 
+		      <div class="vocabularynamebanner">
+		    <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
+		      <%=HTTPUtils.cleanXSS(vsd_name)%>
+		    </div>
+		  </div>
+		    </a>
+	      </div>
 
 
-
-%>
-
-      
-    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
-      <div class="vocabularynamebanner_tb">
-        <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
-      </div>
-    </a>
+	<%
+	}  else {
+	%>
 
 
-<%
+	    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
+	      <div class="vocabularynamebanner_tb">
+		<span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
+	      </div>
+	    </a>
+
+
+	<%
+	}
+	
+
 } else if (vsd_vec != null && vsd_vec.size() > 0) {
     vsd_uri = (String) vsd_vec.elementAt(0);
     if (vsd_uri.indexOf("|") == -1) {
@@ -266,11 +286,14 @@ if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
     
     if (vsd_name == null || vsd_name.compareTo("null") == 0) {
     %>
+    
 	  <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
 	    <div class="vocabularynamebanner_tb">
 	      <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
 	    </div>
 	  </a>
+	  
+	  
     <%
     } else {
     %>
@@ -288,16 +311,32 @@ if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
     %>
 <%
 } else {
-%>
+	if (root_vsd_uri != null) {
+	%>
 
-    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
-      <div class="vocabularynamebanner_tb">
-        <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
-      </div>
-    </a>
-  
-  
-<%
+	      <div class="banner">
+		<a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(uri_vsd)%>">
+		      <div class="vocabularynamebanner">
+		    <div class="vocabularynameshort" STYLE="font-size: <%=HTTPUtils.maxFontSize(vsd_name)%>px; font-family : Arial">
+		      <%=HTTPUtils.cleanXSS(vsd_name)%>
+		    </div>
+		  </div>
+		    </a>
+	      </div>
+
+
+	<%
+	}  else {
+	%>
+	    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
+	      <div class="vocabularynamebanner_tb">
+		<span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
+	      </div>
+	    </a>
+
+
+	<%
+	}
 }
 %>
 
@@ -358,11 +397,11 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 
 <div class="searchbox">
 
-<h:form id="resolvedValueSetSearchForm" styleClass="search-form">   
+<h:form id="resolvedValueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">   
   <div class="textbody"> 
     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=match_text%>" onFocus="active=true"
         onBlur="active=false"  onkeypress="return submitEnter('resolvedValueSetSearchForm:resolvedvalueset_search',event)" tabindex="1"/>
-    <h:commandButton id="resolvedvalueset_search" value="Search" action="#{valueSetBean.resolvedValueSetSearchAction}"
+    <h:commandButton id="resolvedvalueset_search" value="Search concepts in value set" action="#{valueSetBean.resolvedValueSetSearchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{valueSetSearch_requestContextPath}/images/search.gif"
@@ -432,7 +471,7 @@ if (vd_uri != null) {
           
           <div class="searchbox">
           
-<h:form id="valueSetSearchForm" styleClass="search-form-main-area">      
+<h:form id="valueSetSearchForm" styleClass="search-form-main-area" acceptcharset="UTF-8">      
               <%-- <div class="textbody"> --%>
 <table border="0" cellspacing="0" cellpadding="0" style="margin: 2px" >
   <tr valign="top" align="left">
@@ -458,7 +497,7 @@ if (vd_uri != null) {
                   onclick="javascript:cursor_wait();"
                   image="#{valueSetSearch_requestContextPath}/images/search.gif"
                     styleClass="searchbox-btn"
-                  alt="Search"
+                  alt="Search value sets containing matched concepts"
                   tabindex="2">
                 </h:commandButton>
                 
@@ -543,13 +582,13 @@ if (vd_uri != null) {
                   <td class="texttitle-blue">Matched Value Sets:</td>
                 </tr>
             <% } %>
-            <% if (message != null) { %>
+            <% if (!DataUtils.isNullOrBlank(message)) {%>
               <tr class="textbodyred"><td>
               <p class="textbodyred">&nbsp;<%=message%></p>
               </td></tr>
             <% } else { %>
 
- <h:form id="valueSetSearchResultsForm" styleClass="search-form">            
+ <h:form id="valueSetSearchResultsForm" styleClass="search-form" acceptcharset="UTF-8">            
             <tr class="textbody"><td>
               <% if (vsd_vec != null && vsd_vec.size() == 1) { %>
                 <div id="message" class="textbody">
@@ -612,7 +651,7 @@ if (vd_uri != null) {
 if (vsd_vec != null && vsd_vec.size() > 1) {
 %> 
 		<th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
-        <th class="dataTableHeader" scope="col" align="left">Name</th>
+        <th class="dataTableHeader" scope="col" align="left">Value Set</th>
         <!--
         <th class="dataTableHeader" scope="col" align="left">URI</th>
         <th class="dataTableHeader" scope="col" align="left">Description</th>
@@ -698,11 +737,9 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 <%		
 } else {
 %>		      
-		      
 		      <td class="dataCellText">
-                         <a href="<%=request.getContextPath() %>/pages/value_set_search_results.jsf?vsd_uri=<%=uri%>"><%=name%></a>
+                         <a href="<%=request.getContextPath() %>/ajax?action=create_src_vs_tree&vsd_uri=<%=uri%>"><%=name%></a>
 		      </td>
-		      
 
 		      <td class="dataCellText">
 			 <%=cd%>

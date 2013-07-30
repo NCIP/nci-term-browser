@@ -1,10 +1,3 @@
-/*L
- * Copyright Northrop Grumman Information Technology.
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
- */
-
 package gov.nih.nci.evs.browser.utils;
 
 
@@ -76,6 +69,8 @@ import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.PropertyType;
 import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 
+import org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService;
+import org.lexgrid.resolvedvalueset.impl.LexEVSResolvedValueSetServiceImpl;
 
 
 public class ValueSetSearchUtils
@@ -204,12 +199,7 @@ public class ValueSetSearchUtils
 		  try {
 				String URL = "http://ncias-q541-v.nci.nih.gov:29080/lexevsapi60";
 				URL = "http://localhost:19280/lexevsapi60";
-
-				LexEVSDistributed distributed =
-					(LexEVSDistributed)
-					ApplicationServiceProvider.getApplicationServiceFromUrl(URL, "EvsServiceInfo");
-
-				LexEVSValueSetDefinitionServices vds = distributed.getLexEVSValueSetDefinitionServices();
+				LexEVSValueSetDefinitionServices vds = RemoteServerUtil.getLexEVSValueSetDefinitionServices(URL);
 
                 java.lang.String valueSetDefinitionRevisionId = null;
                 AbsoluteCodingSchemeVersionReferenceList csVersionList = getEntireAbsoluteCodingSchemeVersionReferenceList();
@@ -524,6 +514,146 @@ public class ValueSetSearchUtils
         if (cs_vec.contains(codingSchemeName)) return true;
         return false;
 	}
+
+
+    public static Vector getCodingSchemeVersionsByURN(String urn) {
+        try {
+			Vector v = new Vector();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+                _logger
+                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return v;
+            }
+            CodingSchemeRenderingList csrl = null;
+            try {
+                csrl = lbSvc.getSupportedCodingSchemes();
+            } catch (LBInvocationException ex) {
+                ex.printStackTrace();
+                _logger.error("lbSvc.getSupportedCodingSchemes() FAILED..."
+                    + ex.getCause());
+                return null;
+            }
+            CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+            for (int i = 0; i < csrs.length; i++) {
+                int j = i + 1;
+                CodingSchemeRendering csr = csrs[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                Boolean isActive =
+                        csr.getRenderingDetail().getVersionStatus().equals(
+                            CodingSchemeVersionStatus.ACTIVE);
+
+                if (isActive != null && isActive.equals(Boolean.TRUE)) {
+                	String uri = css.getCodingSchemeURI();
+                	String formalName = css.getFormalName();
+
+                	if (uri.compareTo(urn) == 0 || urn.compareTo(formalName) == 0) {
+						String representsVersion = css.getRepresentsVersion();
+						v.add(representsVersion);
+					}
+				}
+			}
+			return v;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchResolvedValueSetCodingSchemes(String checked_vocabularies,
+        String matchText, String matchAlgorithm) {
+
+		return searchResolvedValueSetCodingSchemes(checked_vocabularies, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+	}
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchResolvedValueSetCodingSchemes(String checked_vocabularies,
+        String matchText, int searchOption, String matchAlgorithm) {
+		if (checked_vocabularies == null) return null;
+		Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+
+		// find versions
+		Vector schemes = new Vector();
+		Vector versions = new Vector();
+		for (int i=0; i<selected_vocabularies.size(); i++) {
+			String selected_vocabulary = (String) selected_vocabularies.elementAt(i);
+			Vector u = getCodingSchemeVersionsByURN(selected_vocabulary);
+			if (u != null) {
+				for (int j=0; j<u.size(); j++) {
+					String version = (String) u.elementAt(j);
+					schemes.add(selected_vocabulary);
+					versions.add(version);
+				}
+		    } else {
+				System.out.println("\tgetCodingSchemeVersionsByURN returns null???");
+			}
+		}
+		/*
+		// performs search
+		ResolvedConceptReferencesIteratorWrapper wrapper = null;
+		if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
+			try {
+				wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, searchOption, matchAlgorithm);
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} else {
+			String source = "ALL";
+			boolean ranking = false;
+			int maxToReturn = -1;
+			if (searchOption == SimpleSearchUtils.BY_NAME) {
+				wrapper = new SearchUtils().searchByNameOrCode(
+						schemes, versions, matchText,
+						source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
+			} else {
+				//071513
+				wrapper = new SearchUtils().searchByNameOrCode(
+						schemes, versions, matchText,
+						source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
+			}
+		}
+		return wrapper;
+		*/
+		ResolvedConceptReferencesIteratorWrapper wrapper = null;
+        if (searchOption == SimpleSearchUtils.BY_NAME) {
+			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
+				try {
+					wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, searchOption, matchAlgorithm);
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			} else {
+				String source = "ALL";
+				boolean ranking = false;
+				int maxToReturn = -1;
+					wrapper = new SearchUtils().searchByNameOrCode(
+							schemes, versions, matchText,
+							source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
+			}
+
+		} else if (searchOption == SimpleSearchUtils.BY_CODE) {
+			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.CODES)) {
+				try {
+					wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, searchOption, matchAlgorithm);
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			} else {
+				String source = "ALL";
+				boolean ranking = false;
+				int maxToReturn = -1;
+					wrapper = new SearchUtils().searchByNameOrCode(
+							schemes, versions, matchText,
+							source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
+			}
+		}
+		return wrapper;
+	}
+
 
 /*
 	public static void main(String[] args) {

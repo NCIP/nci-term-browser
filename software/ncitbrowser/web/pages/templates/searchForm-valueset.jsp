@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="org.lexgrid.valuesets.LexEVSValueSetDefinitionServices" %>
 
@@ -89,7 +82,7 @@ _valueset_match_text = (String) request.getSession().getAttribute("matchText_VSD
 if (_valueset_match_text == null) _valueset_match_text = "";
 
 %>
-<h:form id="valueSetSearchForm" styleClass="search-form">   
+<h:form id="valueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">   
 
 <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
 
@@ -124,7 +117,7 @@ if (_selectValueSetSearchOption.compareTo("CodingScheme") == 0) {
 	      onclick="javascript:cursor_wait();"
 	      image="#{valueSetSearch_requestContextPath}/images/search.gif"
           styleClass="searchbox-btn"
-	      alt="Search Value Sets"
+	      alt="Search concepts in value set"
 	      tabindex="2">
 	    </h:commandButton>
 

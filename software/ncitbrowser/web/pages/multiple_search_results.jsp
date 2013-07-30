@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -25,7 +18,7 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
   <head>
     <title>NCI Term Browser</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
     <script type="text/javascript" src="<%= request.getContextPath() %>/js/search.js"></script>
@@ -89,6 +82,8 @@ L--%>
       <!-- Main box -->
       <div id="main-area">
  <%
+boolean reindex_required = false;
+String ontologiesToSearchOnStr = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("ontologiesToSearchOnStr"));
 
 String requestContextPath = request.getContextPath();
 requestContextPath = requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
@@ -125,7 +120,7 @@ request.getSession().setAttribute("matchText", match_text);
       check_r = "checked";
 %>
       <!-- Thesaurus, banner search area -->
-      <h:form styleClass="search-form-main-area" id="searchTerm">
+      <h:form styleClass="search-form-main-area" id="searchTerm" acceptcharset="UTF-8">
       <div class="bannerarea">
 	    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
 	      <div class="vocabularynamebanner_tb">
@@ -178,6 +173,9 @@ request.getSession().setAttribute("matchText", match_text);
         <input type="radio" id="codes" name="searchTarget" value="codes" alt="Codes" <%=check_cd%> tabindex="5" onclick="onCodeButtonPressed('searchTerm');">Code&nbsp;
         <input type="radio" id="properties" name="searchTarget" value="properties" alt="Properties" <%=check_p%> tabindex="5">Property&nbsp;
         <input type="radio" id="relationships" name="searchTarget" value="relationships" alt="Relationships" <%=check_r%> tabindex="5">Relationship&nbsp;
+
+
+<input type="hidden" name="selected_vocabularies" id="selected_vocabularies" value="<%=ontologiesToSearchOnStr%>">
                   
                   </td>
                 </tr>
@@ -216,6 +214,7 @@ if (resultsPerPage == null) {
 }
 
 String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
+request.getSession().removeAttribute("contains_warning_msg");
 
 String selectedResultsPerPage = resultsPerPage;
 request.getSession().removeAttribute("dictionary");
@@ -250,12 +249,6 @@ if (num_pages * pageSize < size) num_pages++;
 
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
-/*
-if (page_number != null && page_number.length() > 0 && ! page_number.equals("null")) {
-    pageNum = Integer.parseInt(page_number);
-}
-*/
-
 if (!DataUtils.isNull(page_number)) {
     pageNum = Integer.parseInt(page_number);
 } else {
@@ -275,8 +268,6 @@ try {
    int prev_size = size;
    size = iteratorBean.getSize();
    
-
-
    if (size != prev_size) {
 	if (iend > size) {
 	    iend = size;
@@ -317,8 +308,6 @@ int next_page_num = page_num + 1;
 int prev_page_num = page_num - 1;
 String prev_page_num_str = Integer.toString(prev_page_num);
 String next_page_num_str = Integer.toString(next_page_num);
-
-//====================================================================================================
 
 
 %>
@@ -361,8 +350,13 @@ String next_page_num_str = Integer.toString(next_page_num);
           <tr>
             <td class="textbody">
               <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-<%              
+<%
+
+
+
+
 if (size > 0) {
+
 %>
                 <th class="dataTableHeader" scope="col" align="left">Concept</th>
                 <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
@@ -371,8 +365,7 @@ if (size > 0) {
 %>
                 
                 <%
-   //list = iteratorBean.getData(istart, iend);
-    
+  
 
     boolean timeout = iteratorBean.getTimeout();
     String message = iteratorBean.getMessage();
@@ -393,55 +386,108 @@ if (size > 0) {
 
 HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_Status");
 
+
     for (int i=0; i<list.size(); i++) {
+   
         ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
-              if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
         String code = rcr.getConceptCode();
-        String name = rcr.getEntityDescription().getContent();
-        String version = rcr.getCodingSchemeVersion();
-
-        String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
-        if (vocabulary_name == null) {
-      vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+        String name = "";
+        String version = null;
+        
+        if (rcr != null) {
+            if (rcr.getConceptCode() == null) {
+                reindex_required = true;
+            }
+            if (rcr.getEntityDescription() == null) {
+            
+	         Entity entity = SearchUtils.getConceptByCode(rcr.getCodeNamespace(),
+		   null, null, rcr.getConceptCode());
+		 if (entity != null && entity.getEntityDescription() != null) { 
+	         	name = entity.getEntityDescription().getContent(); 
+	         } else {
+	                name = rcr.getConceptCode();
+	         }
+                 //name = rcr.getConceptCode();
+                 reindex_required = true;
+            }  else {
+                 name = rcr.getEntityDescription().getContent();
+            }
         }
+       
+        if (rcr != null && code != null) {
+		version = rcr.getCodingSchemeVersion();
+		String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+		if (vocabulary_name == null) {
+		    vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+		}
 
-        String short_vocabulary_name = null;
-        if (name_hmap.containsKey(vocabulary_name)) {
-      short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
-        } else {
-      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, version, "display_name");
-      if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
-          short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-      }
-      name_hmap.put(vocabulary_name, short_vocabulary_name);
-        }
-        String version_parameter = "";
-        if (version != null && version.length() > 0)
-            version_parameter = "&version=" + version;
-		String version_parameter_display = DataUtils.getMetadataValue(vocabulary_name, version,
-        	"term_browser_version");
-		if (version_parameter_display != null && version_parameter_display.length() > 0)
-			version_parameter_display = " (" + version_parameter_display + ")";
-		else version_parameter_display = "";
-
-            if (code == null || code.indexOf("@") != -1) {
-            if (i % 2 == 0) {
-            %>
-              <tr class="dataRowDark">
-            <%
-                } else {
-            %>
-              <tr class="dataRowLight">
-            <%
+		String short_vocabulary_name = null;
+		if (name_hmap.containsKey(vocabulary_name)) {
+	      		short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
+		} else {
+	      		short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, version, "display_name");
+	      		if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+		  		short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+	      		}
+	      		name_hmap.put(vocabulary_name, short_vocabulary_name);
+        	}
+      
+        
+		String version_parameter = "";
+		if (version != null && version.length() > 0) {
+                	version_parameter = "&version=" + version;
                 }
-                %>
-              <td class="dataCellText" scope="row">
-                 <%=name%>
-              </td>
-              <td class="dataCellText">
-                 <%=short_vocabulary_name%><%=version_parameter_display%>
-              </td>
-            </tr>
+                
+		String version_parameter_display = DataUtils.getMetadataValue(vocabulary_name, version, "term_browser_version");
+        	
+		if (version_parameter_display != null && version_parameter_display.length() > 0)
+		    version_parameter_display = " (" + version_parameter_display + ")";
+		else {
+		    version_parameter_display = "";
+		}
+
+           if (code.indexOf("@") != -1 && name.compareTo("") == 0) {
+
+		    if (i % 2 == 0) {
+		    %>
+		      <tr class="dataRowDark">
+		    <%
+			} else {
+		    %>
+		      <tr class="dataRowLight">
+		    <%
+			}
+			%>
+		      <td class="dataCellText" scope="row">
+			 <%=code%>
+		      </td>
+		      <td class="dataCellText">
+			 <%=short_vocabulary_name%><%=version_parameter_display%>
+		      </td>
+		    </tr>
+		    
+           <%
+
+           } else if (code.indexOf("@") != -1 && name.compareTo("") != 0) {
+
+		    if (i % 2 == 0) {
+		    %>
+		      <tr class="dataRowDark">
+		    <%
+			} else {
+		    %>
+		      <tr class="dataRowLight">
+		    <%
+			}
+			%>
+		      <td class="dataCellText" scope="row">
+			 <%=name%>
+		      </td>
+		      <td class="dataCellText">
+			 <%=short_vocabulary_name%><%=version_parameter_display%>
+		      </td>
+		    </tr>
+		    
             <%
             } else {
 
@@ -469,6 +515,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
         <%
             }
             %>
+            
           <%
           if (con_status == null) {
           %>
@@ -539,6 +586,15 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           </tr>
         </table>
 
+<%
+    if (reindex_required) {
+%>
+      <p class="textbodyred">WARNING: Lucene index may have not been setup properly.</p>
+<%
+    } 
+%>
+
+    
 <%        
         if (size > 0) {
 %>        
@@ -554,7 +610,10 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 <%          
         }
 %>        
-        
+  
+  
+  
+  
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div> <!-- end Page content -->
     </div> <!-- end main-area -->    

@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%
 
@@ -57,14 +50,14 @@ if (uri_str == null) {
 %>
   
   
-<h:form id="resolvedValueSetSearchForm" styleClass="search-form">   
+<h:form id="resolvedValueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">   
     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=match_text%>" onFocus="active=true"
         onBlur="active=false"  onkeypress="return submitEnter('resolvedValueSetSearchForm:resolvedvalueset_search',event)" tabindex="1"/>
     <h:commandButton id="resolvedvalueset_search" value="Search" action="#{valueSetBean.resolvedValueSetSearchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{form_requestContextPath}/images/search.gif"
-      alt="Search Value Set"
+      alt="Search concepts in value set"
       styleClass="searchbox-btn"
       tabindex="2">
     </h:commandButton>
@@ -96,7 +89,10 @@ if (uri_str == null) {
       <td align="left" class="textbody" colspan="2">
         <input type="radio" name="searchTarget" id="names" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="names">Name&nbsp;</label>
         <input type="radio" name="searchTarget" id="codes" value="codes" alt="Code" <%=check_cd%> tabindex="5" onclick="onCodeButtonPressed('resolvedValueSetSearchForm');" /><label for="codes">Code&nbsp;</label>
+        <!--
         <input type="radio" name="searchTarget" id="properties" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="properties">Property</label>
+        -->
+        
       </td>
     </tr>
     

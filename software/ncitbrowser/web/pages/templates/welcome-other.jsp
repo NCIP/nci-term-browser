@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
@@ -24,11 +17,17 @@ L--%>
     <!-- <td><div class="texttitle-blue-rightJust">Version: <%=HTTPUtils.cleanXSS(vocablary_version_value) %></div></td> -->
 <%
     if (isMapping) {
+         String requestContextPath = request.getContextPath();
+
 %>
       <td align="right">
       <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(scheme)%>&version=<%=vocablary_version_value%>">
       <img src="<%=basePath%>/images/ViewMapping.gif" alt="View Mapping" style="border-style:none;"/>
       </a>
+      &nbsp;
+      <a href="<%=request.getContextPath() %>/ajax?action=export_mapping&dictionary=<%=HTTPUtils.cleanXSS(scheme)%>&version=<%=vocablary_version_value%>">
+      <img src="<%=basePath%>/images/exportcsv.gif" alt="Export Mapping" style="border-style:none;"/>
+      </a> 
       </td>
 
 <%
@@ -66,12 +65,18 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
 }
 
 
+
+
 %>
   <table border="0">
     <tr>
       <td class="textbody" width="388px" valign="top" align="left">
       <%
-        if (html_compatable_description_value == null) {
+	if (DataUtils.isNullOrBlank(scheme)) {
+      %>
+            <p class="textbodyred">&nbsp;<b><%=Constants.UNIDENTIFIABLE_VOCABULARY%></b></p>
+      <%      
+	} else if (html_compatable_description_value == null) {
       %>
             <%=HTTPUtils.cleanXSS(scheme)%>
         <%

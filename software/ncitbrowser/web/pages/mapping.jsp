@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -37,7 +30,7 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Term Browser - Mapping</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -287,9 +280,21 @@ String map_rank_applicable = DataUtils.getMetadataValue(mapping_schema, mapping_
 if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) {
     show_rank_column = false;
 }
-
-
 %>
+
+                              <table class="textbody" border="0" width="95%">
+                                 <tr >
+                                    <td align="left">&nbsp;&nbsp;</td>
+                                    <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td align="right">                               
+      <a href="<%=request.getContextPath() %>/ajax?action=export_mapping&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>">
+      Export CSV
+      </a>  
+      </td>
+
+                                 </tr>
+                              </table>
+                              
 
           <table class="datatable">
 

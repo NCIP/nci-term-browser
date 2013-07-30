@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -27,7 +20,7 @@ JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 String search_results_dictionary = info.dictionary;
 %>
   <title><%=search_results_dictionary%></title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -196,6 +189,8 @@ String match_size = Integer.valueOf(size).toString();
    
 
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
+          request.getSession().removeAttribute("contains_warning_msg");
+          
           int next_page_num = page_num + 1;
           int prev_page_num = page_num - 1;
           String prev_page_num_str = Integer.toString(prev_page_num);
@@ -361,7 +356,8 @@ if (isMapping || isExtension) {
 //to be modified:
                   Vector status_vec = DataUtils.getConceptStatusByConceptCodes(search_results_dictionary, search_results_version, null, code_vec);
 */                  
-                  
+
+
 HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_Status");
                   
                   
@@ -371,48 +367,45 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
                       Object obj = list.get(k);
                       ResolvedConceptReference rcr = null;
 
-if (obj == null) {
-   _logger.warn("rcr == null???");
-} else {
-   rcr = (ResolvedConceptReference) obj;
-}
+                      if (obj != null) {
+                      
+			      rcr = (ResolvedConceptReference) obj;
+			      String code = rcr.getConceptCode();
+                    
+                      
+                      	coding_scheme_version = rcr.getCodingSchemeVersion();
+			if (isMapping || isExtension) {
 
-                      if (rcr != null) {
-                      String code = rcr.getConceptCode();
-                      coding_scheme_version = rcr.getCodingSchemeVersion();
+			    //vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
+			    vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodeNamespace());
+			    if (vocabulary_name == null) {
+			      vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
+			    }
 
-if (isMapping || isExtension) {
-
-    //vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
-    vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodeNamespace());
-    if (vocabulary_name == null) {
-      vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
-    }
-
-    short_vocabulary_name = null;
-    if (name_hmap.containsKey(vocabulary_name)) {
-      short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
-    } else {
-      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, coding_scheme_version, "display_name");
-      if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
-        short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
-      }
-      name_hmap.put(vocabulary_name, short_vocabulary_name);
-    }
-}
+			    short_vocabulary_name = null;
+			    if (name_hmap.containsKey(vocabulary_name)) {
+			      short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
+			    } else {
+			      short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, coding_scheme_version, "display_name");
+			      if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+				short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
+			      }
+			      name_hmap.put(vocabulary_name, short_vocabulary_name);
+			    }
+			}
 
 
-                      String name = "null";
+                      String name = "";
                       if (rcr.getEntityDescription() != null) {
                           name = rcr.getEntityDescription().getContent();
                       } else {
-      Entity entity = SearchUtils.getConceptByCode(rcr.getCodeNamespace(),
-           null, null, rcr.getConceptCode());
-      name = entity.getEntityDescription().getContent();
-
-
+			      Entity entity = SearchUtils.getConceptByCode(rcr.getCodeNamespace(), null, null, rcr.getConceptCode());
+			      if (entity != null && entity.getEntityDescription() != null) {
+			      	  name = entity.getEntityDescription().getContent();
+			      } 
                       }
-                      if (code == null || code.indexOf("@") != -1) {
+                      
+                      if (code == null) {
                           i++;
         if (i % 2 == 0) {
         %>
@@ -423,7 +416,7 @@ if (isMapping || isExtension) {
           <tr class="dataRowLight">
         <%
             }
-            %>
+        %>
           <td class="dataCellText" scope="row">
              <%=name%>
           </td>
@@ -431,21 +424,39 @@ if (isMapping || isExtension) {
           <%
                       }
 
-                      else if (code != null && code.indexOf("@") == -1) {
+                      else if (code != null && code.indexOf("@") != -1 && name.compareTo("") == 0) {
+                          i++;
+        if (i % 2 == 0) {
+        %>
+          <tr class="dataRowDark">
+        <%
+            } else {
+        %>
+          <tr class="dataRowLight">
+        <%
+            }
+        %>
+          <td class="dataCellText" scope="row">
+             <%=code%>
+          </td>
+        </tr>
+          <%
+                      }
+                      
+                      else if (code != null) { // && code.indexOf("@") == -1) {
                           i++;
                           
-        String con_status = null;
-        if (concept_status_hmap != null) {
-            con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion() + "$" + code);
-        }
-        
-        //if (status_vec != null && status_vec.elementAt(i) != null) {
-        //   con_status = (String) status_vec.elementAt(i);
-        if (con_status != null) {
-           con_status = con_status.replaceAll("_", " ");
-        }
+                        if (name.compareTo("") == 0) {
+                             name = "Not available";
+                        }
+			String con_status = null;
+			if (concept_status_hmap != null) {
+			    con_status = (String) concept_status_hmap.get(rcr.getCodingSchemeName() + "$" + rcr.getCodingSchemeVersion() + "$" + code);
+			}
+			if (con_status != null) {
+			    con_status = con_status.replaceAll("_", " ");
+			}
               
-
 
         if (i % 2 == 0) {
         %>

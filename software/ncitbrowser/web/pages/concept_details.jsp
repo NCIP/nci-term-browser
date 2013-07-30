@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -39,10 +32,16 @@ L--%>
 <%@ page import="org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods"%>
 <%@ page import="org.LexGrid.LexBIG.Extensions.Generic.MappingExtension"%>
 
+<%@ page import="gov.nih.nci.evs.browser.properties.*"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.*"%>
+
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
 <%
+        response.setContentType("text/html;charset=utf-8");
+
 	JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 	String dictionary = info.dictionary;
 	if (dictionary != null) {
@@ -70,7 +69,55 @@ L--%>
 <%
 	}
 %>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+
+<%
+        boolean view_graph_link = false;
+        String ncbo_id = null;
+        String is_virtual = "true";
+        
+        RESTClient client = new RESTClient();
+        HashMap formalName2VirtualIdMap = (HashMap) request.getSession().getAttribute("formalName2VirtualIdMap");
+        if (formalName2VirtualIdMap == null) {
+            formalName2VirtualIdMap = DataUtils.getFormalName2VirtualIdMap();
+            request.getSession().setAttribute("formalName2VirtualIdMap", formalName2VirtualIdMap);
+        }
+    
+        String virtualId = null;
+        if (formalName2VirtualIdMap != null) {
+		virtualId = (String) formalName2VirtualIdMap.get(dictionary);
+		if (virtualId != null) {
+		    HashMap version2IdMap = client.getVersion2IdMap(virtualId);
+		    if (version2IdMap != null && version2IdMap.containsKey(version)) {
+			String t = (String) version2IdMap.get(version);
+			Vector id_vec = DataUtils.parseData(t);
+			if (id_vec.size() == 1) {
+			    ncbo_id = (String) id_vec.elementAt(0);
+			} else {
+			    ncbo_id = (String) id_vec.elementAt(id_vec.size()-1);
+			}
+			if (ncbo_id != null) {
+			    view_graph_link = true;
+			}
+		    } else {
+		        //System.out.println("WARNING: " + dictionary + " (version: " + version + ") not found in NCBO Bioportal.");
+		    }
+		}
+        }
+        
+        // To be removed (set to true) when api_key is setup on anthill. 
+        boolean to_be_removed = false;
+        if (!to_be_removed) {
+		if (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0) {
+		    ncbo_id = "1032";
+		    view_graph_link = true;
+		}
+        }
+        
+%>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/styleSheet.css" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/script.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/search.js"></script>
@@ -80,6 +127,20 @@ L--%>
    <script type="text/javascript" src="<%=request.getContextPath()%>/js/wz_tooltip.js"></script>
    <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_centerwindow.js"></script>
    <script type="text/javascript" src="<%=request.getContextPath()%>/js/tip_followscroll.js"></script>
+   
+   <script type="text/javascript">
+	var newwindow;
+	function popup_window(url)
+	{
+		newwindow=window.open(
+		url, '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');
+		if (window.focus) {
+		    newwindow.focus();
+		}
+	}
+   </script>
+  
+   
    <f:view>
               
       <!-- Begin Skip Top Navigation -->
@@ -227,7 +288,7 @@ L--%>
             <div class="pagecontentLittlePadding"> 
             
             
-                  <h:form style="margin:0px 0px 0px 0px;">  
+                  <h:form style="margin:0px 0px 0px 0px;" acceptcharset="UTF-8"> 
                   
                   
                   <table border="0" width="720px" style="margin:0px 0px 0px 0px;">
@@ -246,6 +307,8 @@ L--%>
                            <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
              <%
                       }
+                      
+                      
                       boolean historyAccess = HistoryUtils.isHistoryServiceAvailable(dictionary);
                       if (historyAccess) {
              %>
@@ -254,8 +317,37 @@ L--%>
                               View History</a> <%
  	                   }
              %>
-                     <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
+
+
+<%
+if (ncbo_id != null) {                    
+%>
+                          <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
+<!--
+	<a href="#" onclick="javascript:window.open('http://bioportal.bioontology.org/flex/BasicFlexoViz?ontology=<%=ncbo_id%>&nodeid=<%=code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
+-->
+
+
+<!--
+	<a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/exit_app.jsf?ncbo_id=<%=ncbo_id%>&code=<%=code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
+-->
+
+<!--
+	<a href="#" onclick="javascript:popup_window('<%=request.getContextPath()%>/pages/exit_app.jsf?ncbo_id=<%=ncbo_id%>&code=<%=code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
+-->
+
+
+	<a href="#" onclick="javascript:popup_window('<%=request.getContextPath()%>/pages/BasicFlexoViz.jsf?ncbo_id=<%=ncbo_id%>&code=<%=code%>&virtual=<%=is_virtual%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12"
+	 title="This link displays a graph that recapitulates some information in the Relationships tab in a visual format.">
+	View Graph</a>  
+
+
+<%
+}                  
+%>
+
                      
+                     <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>                     
                     
                      <h:commandLink action="#{CartActionBean.addToCart}" value="Add to Cart">
                         <f:setPropertyActionListener target="#{CartActionBean.entity}" value="concept" />
@@ -274,7 +366,8 @@ L--%>
              %>
                            <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
                            <a href="<%=term_suggestion_application_url%>?dictionary=<%=HTTPUtils.cleanXSS(cd_dictionary)%>&code=<%=HTTPUtils.cleanXSS(code)%>"
-                              target="_blank" alt="Term Suggestion">Suggest Changes</a> <%
+                              target="_blank" alt="Term Suggestion">Suggest Changes</a> 
+             <%
  	                  }
              %>
                         </td>
@@ -290,6 +383,7 @@ L--%>
 String b = HTTPUtils.cleanXSS((String) request.getParameter("b"));
 String n = HTTPUtils.cleanXSS((String) request.getParameter("n"));
 String m = HTTPUtils.cleanXSS((String) request.getParameter("m"));
+String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
 
 
         if (!DataUtils.isNull(b) && !DataUtils.isInteger(b)) {
@@ -305,6 +399,13 @@ String m = HTTPUtils.cleanXSS((String) request.getParameter("m"));
         }
 
 String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
+
+if (!DataUtils.isNull(vse)) {
+%>
+    <input type="hidden" id="vse" name="vse" value="<%=vse%>" />
+<%
+}
+
 
 if (!DataUtils.isNull(b)) {  
     if (DataUtils.isNull(n)) {
@@ -332,8 +433,9 @@ if (!DataUtils.isNull(b)) {
 
 }
 %>
+
                   </h:form>  
-                  
+ 
                <a name="evs-content" id="evs-content"></a>
                <table border="0" cellpadding="0" cellspacing="0" width="700px">
                   <tr>

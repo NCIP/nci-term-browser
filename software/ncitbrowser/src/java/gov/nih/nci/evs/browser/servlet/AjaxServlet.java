@@ -1,10 +1,3 @@
-/*L
- * Copyright Northrop Grumman Information Technology.
- *
- * Distributed under the OSI-approved BSD 3-Clause License.
- * See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
- */
-
 package gov.nih.nci.evs.browser.servlet;
 
 import org.json.*;
@@ -51,9 +44,61 @@ import org.LexGrid.concepts.Definition;
 import org.LexGrid.commonTypes.PropertyQualifier;
 import org.LexGrid.commonTypes.Property;
 
+import gov.nih.nci.evs.browser.bean.*;
+
+
+import javax.faces.FactoryFinder;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContextFactory;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+
 
 /**
- * 
+ * <!-- LICENSE_TEXT_START -->
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
+ * to Title 17 of the United States Code, section 105.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *   2. The end-user documentation included with the redistribution,
+ *      if any, must include the following acknowledgment:
+ *      "This product includes software developed by NGIT and the National
+ *      Cancer Institute."   If no such end-user documentation is to be
+ *      included, this acknowledgment shall appear in the software itself,
+ *      wherever such third-party acknowledgments normally appear.
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
+ *      not be used to endorse or promote products derived from this software.
+ *   4. This license does not authorize the incorporation of this software
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
+ *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *      POSSIBILITY OF SUCH DAMAGE.
+ * <!-- LICENSE_TEXT_END -->
  */
 
 /**
@@ -192,6 +237,21 @@ if (action == null) {
 	action = "create_src_vs_tree";
 }
 
+if (action.compareTo("values") == 0) {
+	resolveValueSetAction(request, response);
+	return;
+}
+
+if (action.compareTo("versions") == 0) {
+	selectCSVersionAction(request, response);
+	return;
+}
+
+if (action.compareTo("xmldefinitions") == 0) {
+	exportVSDToXMLAction(request, response);
+	return;
+}
+
 
 
         String node_id = HTTPUtils.cleanXSS(request.getParameter("ontology_node_id"));// DataConstants.ONTOLOGY_NODE_ID);
@@ -285,7 +345,11 @@ if (action == null) {
          * (System.currentTimeMillis() - ms)); return; } }
          */
 
-        if (action.equals("search_value_set")) {
+        if (action.equals("export_mapping")) {
+            export_mapping(request, response);
+        } else if (action.equals("value_set_home")) {
+            value_set_home(request, response);
+        } else if (action.equals("search_value_set")) {
             search_value_set(request, response);
         } else if (action.equals("create_src_vs_tree")) {
             create_src_vs_tree(request, response);
@@ -617,7 +681,7 @@ if (action == null) {
       println(out, "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">");
       println(out, "  <head>");
       println(out, "  <title>Vocabulary Hierarchy</title>");
-      println(out, "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">");
+      println(out, "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
       println(out, "  <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/styleSheet.css\" />");
       println(out, "  <link rel=\"shortcut icon\" href=\"/ncitbrowser/favicon.ico\" type=\"image/x-icon\" />");
       println(out, "  <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/yui/fonts.css\" />");
@@ -1118,7 +1182,7 @@ if (action == null) {
       }
 
       println(out, "");
-      println(out, "          <form id=\"pg_form\">");
+      println(out, "          <form id=\"pg_form\" enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
       println(out, "            ");
 
 
@@ -1164,42 +1228,79 @@ if (action == null) {
 		}
 	}
 
+
     public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
+		Object obj = request.getParameter("vsd_uri");
+
+		String vsd_uri = null;
+		if (obj != null) {
+			vsd_uri = HTTPUtils.cleanXSS((String) obj);
+		}
+		create_vs_tree(request, response, view, vsd_uri);
+	}
+
+
+
+
+
+//////////////////////////
+//  create_vs_tree
+//////////////////////////
+
+
+    public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String vsd_uri) {
+		String root_vsd_uri = vsd_uri;
+		String vsd_name = null;
+		boolean isValueSet = false;
+		ValueSetDefinition vsd = null;
+
+        String vsd_description =  "DESCRIPTION NOT AVAILABLE";
+		if (vsd_uri != null) {
+			vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+			if (vsd != null) {
+					vsd_name = vsd.getValueSetDefinitionName();
+					isValueSet = true;
+					vsd_description = ValueSetHierarchy.getValueSetDecription(vsd_uri);
+			} else {
+					Entity entity = DataUtils.getConceptByCode(Constants.TERMINOLOGY_VALUE_SET_NAME, null, vsd_uri);
+					if (entity != null) {
+						vsd_name = entity.getEntityDescription().getContent();
+					}
+					vsd_description = DataUtils.getTerminologyValueSetDescription(vsd_uri);
+			}
+	    }
 
 	  request.getSession().removeAttribute("b");
 	  request.getSession().removeAttribute("m");
 
-
       response.setContentType("text/html");
       PrintWriter out = null;
 
-
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
-
+	  String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+	  String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
       try {
       	  out = response.getWriter();
       } catch (Exception ex) {
 		  ex.printStackTrace();
 		  return;
 	  }
-
 	  String message = (String) request.getSession().getAttribute("message");
-
       out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
       out.println("<html xmlns:c=\"http://java.sun.com/jsp/jstl/core\">");
       out.println("<head>");
 
 
-if (view == Constants.STANDARD_VIEW) {
-	out.println("  <title>NCI Term Browser - Value Set Source View</title>");
+if (DataUtils.isNull(vsd_uri)) {
+	if (view == Constants.STANDARD_VIEW) {
+		out.println("  <title>NCI Term Browser - Value Set Source View</title>");
+	} else {
+		out.println("  <title>NCI Term Browser - Value Set Terminology View</title>");
+	}
 } else {
-	out.println("  <title>NCI Term Browser - Value Set Terminology View</title>");
+	out.println("  <title>NCI Term Browser - Value Set " + vsd_uri + " </title>");
 }
 
-
-      //out.println("  <title>NCI Thesaurus</title>");
-      out.println("  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">");
+      out.println("  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
       out.println("");
       out.println("<style type=\"text/css\">");
       out.println("/*margin and padding on body element");
@@ -1457,11 +1558,6 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("      tree.draw();");
 
 
-//      out.println("      buildTree('', ontology_display_name);");
-
-
-
-
       out.println("    }");
       out.println("");
       out.println("    function initTree() {");
@@ -1499,26 +1595,49 @@ if (view == Constants.STANDARD_VIEW) {
 
 
 HashMap value_set_tree_hmap = null;
-if (view == Constants.STANDARD_VIEW) {
-	value_set_tree_hmap = DataUtils.getSourceValueSetTree();
+Boolean value_set_tab = Boolean.TRUE;
+
+TreeItem root = null;
+
+if (DataUtils.isNull(vsd_uri)) {
+	/*
+	if (view == Constants.STANDARD_VIEW) {
+		value_set_tree_hmap = DataUtils.getSourceValueSetTree();
+	} else if (view == Constants.TERMINOLOGY_VIEW){
+		value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
+	}
+	 if (value_set_tree_hmap != null) {
+		 root = (TreeItem) value_set_tree_hmap.get("<Root>");
+		 new ValueSetUtils().printTree(out, root, view, value_set_tab);
+	 }
+	 */
+
+	if (view == Constants.STANDARD_VIEW) {
+		out.println(DataUtils.getSourceValueSetTreeStringBuffer().toString());
+	} else if (view == Constants.TERMINOLOGY_VIEW){
+		out.println(DataUtils.getCodingSchemeValueSetTreeStringBuffer().toString());
+	}
+
 } else {
-	value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
+	value_set_tab = Boolean.FALSE;
+	if (view == Constants.STANDARD_VIEW) {
+		value_set_tree_hmap = DataUtils.getSourceValueSetTree(vsd_uri);
+	} else {
+		value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree(vsd_uri);
+	}
+
+	 if (value_set_tree_hmap != null) {
+		 root = (TreeItem) value_set_tree_hmap.get("<Root>");
+		 new ValueSetUtils().printTree(out, root, view, value_set_tab);
+	 }
+
 }
 
 
- //TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
- //new ValueSetUtils().printTree(out, root, view);
- TreeItem root = null;
- if (value_set_tree_hmap != null) {
-	 root = (TreeItem) value_set_tree_hmap.get("<Root>");
-	 new ValueSetUtils().printTree(out, root, view);
- }
 
 
  String contextPath = request.getContextPath();
-// String view_str = new Integer(view).toString();
-String view_str = Integer.valueOf(view).toString();
-
+  String view_str = Integer.valueOf(view).toString();
 
 //[#31914] Search option and algorithm in value set search box are not preserved in session.
 //String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
@@ -1547,10 +1666,6 @@ if (DataUtils.isNull(algorithm)) {
 request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 
-
-
-
-
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (DataUtils.isNull(matchText)) {
 			matchText = (String) request.getSession().getAttribute("matchText");
@@ -1562,8 +1677,6 @@ request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 			matchText = matchText.trim();
 		}
         request.getSession().setAttribute("matchText", matchText);
-
-
 
 
 String option_code = "";
@@ -1601,18 +1714,20 @@ if (DataUtils.isNull(algorithm)) {
 
 
       out.println("");
-      if (message == null) {
+      //if (message == null) {
+	  if (message == null && DataUtils.isNull(vsd_uri)) {
       	  out.println("		 tree.collapseAll();");
 	  }
 
-
-      //initializeNodeCheckState(out);
-
+if (DataUtils.isNull(vsd_uri)) {
       out.println("      initializeNodeCheckState();");
-
+} else if (DataUtils.isNull(message)) {
+	  out.println("      initializeNodeCheckState();");
+} else if (!message.startsWith("No value set definition")) {
+	  out.println("      initializeNodeCheckState();");
+}
 
       out.println("      tree.draw();");
-
 
       out.println("    }");
       out.println("");
@@ -1646,39 +1761,14 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
 
    // 0=unchecked, 1=some children checked, 2=all children checked
-/*
-      out.println("   // Gets the labels of all of the fully checked nodes");
-      out.println("   // Could be updated to only return checked leaf nodes by evaluating");
-      out.println("   // the children collection first.");
-      out.println("    function getCheckedNodes(nodes) {");
-      out.println("        nodes = nodes || tree.getRoot().children;");
-      out.println("        checkedNodes = [];");
-      out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
-      out.println("            var n = nodes[i];");
-      out.println("            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked");
-      out.println("            if (n.checkState == 2) {");
-      out.println("                checkedNodes.push(n.label); // just using label for simplicity");
-      out.println("");
-      out.println("		    if (n.hasChildren()) {");
-      out.println("			checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));");
-      out.println("		    }");
-      out.println("");
-      out.println("            }");
-      out.println("        }");
-      out.println("");
-      out.println("       var checked_vocabularies = document.forms[\"valueSetSearchForm\"].checked_vocabularies;");
-      out.println("       checked_vocabularies.value = checkedNodes;");
-      out.println("");
-      out.println("       return checkedNodes;");
-      out.println("    }");
-*/
+
       out.println("    function getCheckedVocabularies(nodes) {");
       out.println("       getCheckedNodes(nodes);");
       out.println("       getPartialCheckedNodes(nodes);");
       out.println("    }");
 
       writeInitialize(out);
-      initializeNodeCheckState(out);
+      initializeNodeCheckState(out, value_set_tab);
 
       out.println("   // Gets the labels of all of the fully checked nodes");
       out.println("   // Could be updated to only return checked leaf nodes by evaluating");
@@ -1721,11 +1811,6 @@ if (DataUtils.isNull(algorithm)) {
       out.println("        return checkedNodes;");
       out.println("    }");
 
-
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
       out.println("    function loadNodeData(node, fnLoadComplete) {");
       out.println("      var id = node.data.id;");
       out.println("");
@@ -1819,6 +1904,23 @@ if (DataUtils.isNull(algorithm)) {
       out.println("    }");
       out.println("");
       out.println("");
+
+
+//KLO
+/*
+      out.println("function initialize_tree() {");
+
+      out.println("    alert(\"onload\");");
+
+      out.println("    tree = new YAHOO.widget.TreeView(\"treecontainer\");");
+      out.println("    tree.expandAll();");
+      out.println("    check_all();");
+      out.println("    tree.draw();");
+      out.println("}");
+*/
+
+
+
       out.println("");
       out.println("    function expandEntireTree() {");
       out.println("        tree = new YAHOO.widget.TreeView(\"treecontainer\");");
@@ -1841,10 +1943,6 @@ if (DataUtils.isNull(algorithm)) {
       out.println("		    if (respObj.root_nodes.length == 0) {");
       out.println("		      //showEmptyRoot();");
       out.println("		    } else {");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
       out.println("		      for (var i=0; i < respObj.root_nodes.length; i++) {");
       out.println("			 var nodeInfo = respObj.root_nodes[i];");
       out.println("	                 //alert(\"calling addTreeBranch \");");
@@ -1926,29 +2024,21 @@ if (DataUtils.isNull(algorithm)) {
       out.println("    YAHOO.util.Event.addListener(window, \"load\", init);");
       out.println("");
       out.println("    YAHOO.util.Event.onDOMReady(initTree);");
+
       out.println("");
       out.println("");
       out.println("  </script>");
       out.println("");
       out.println("</head>");
       out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
 
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
-      //out.println("<body onLoad=\"initialize();\">");
-
+      //out.println("<body onLoad=\"initialize_tree();\">");
 
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
+
       out.println("  <!-- Begin Skip Top Navigation -->");
       out.println("  <a href=\"#evs-content\" class=\"hideLink\" accesskey=\"1\" title=\"Skip repetitive navigation links\">skip navigation links</A>");
       out.println("  <!-- End Skip Top Navigation -->");
@@ -2001,7 +2091,6 @@ if (DataUtils.isNull(algorithm)) {
       out.println("    <td><a href=\"/ncitbrowser/pages/multiple_search.jsf?nav_type=terminologies\">");
       out.println("      <img name=\"tab_terms\" src=\"/ncitbrowser/images/tab_terms.gif\"");
       out.println("        border=\"0\" alt=\"Terminologies\" title=\"Terminologies\" /></a></td>");
-      //Before(GF31982): out.println("    <td><a href=\"/ncitbrowser/pages/value_set_source_view.jsf?nav_type=valuesets\">");
       out.println("    <td><a href=\"/ncitbrowser/ajax?action=create_src_vs_tree\">"); //GF31982
       out.println("      <img name=\"tab_valuesets\" src=\"/ncitbrowser/images/tab_valuesets_clicked.gif\"");
       out.println("        border=\"0\" alt=\"Value Sets\" title=\"ValueSets\" /></a></td>");
@@ -2018,11 +2107,22 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
       out.println("      <!-- Thesaurus, banner search area -->");
       out.println("      <div class=\"bannerarea\">");
-      out.println("        <a href=\"/ncitbrowser/start.jsf\" style=\"text-decoration: none;\">");
-      out.println("          <div class=\"vocabularynamebanner_tb\">");
-      out.println("            <span class=\"vocabularynamelong_tb\">" + JSPUtils.getApplicationVersionDisplay() + "</span>");
-      out.println("          </div>");
-      out.println("        </a>");
+
+      if (DataUtils.isNull(vsd_uri)) {
+		  out.println("        <a href=\"/ncitbrowser/start.jsf\" style=\"text-decoration: none;\">");
+		  out.println("            <div class=\"vocabularynamebanner_tb\">");
+		  out.println("               <span class=\"vocabularynamelong_tb\">" + JSPUtils.getApplicationVersionDisplay() + "</span>");
+		  out.println("            </div>");
+		  out.println("        </a>");
+	  } else {
+		  out.println("        <a class=\"vocabularynamebanner\" href=\"/ncitbrowser/ajax?action=create_src_vs_tree&vsd_uri=" + vsd_uri + "\">");
+		  out.println("	             <div class=\"vocabularynamebanner\">");
+		  out.println("                <div class=\"vocabularynameshort\" STYLE=\"font-size: 22px; font-family : Arial\">");
+		  out.println(                     vsd_name);
+		  out.println("                </div>");
+		  out.println("              </div>");
+		  out.println("	       </a>");
+	  }
 
       out.println("        <div class=\"search-globalnav\">");
       out.println("          <!-- Search box -->");
@@ -2031,24 +2131,20 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
       out.println("");
 
+///////////////
+// searchbox
+///////////////
 
-      //out.println("<form id=\"valueSetSearchForm\" name=\"valueSetSearchForm\" method=\"post\" action=\"" + contextPath + + "/ajax?action=saerch_value_set_tree\"> "/pages/value_set_source_view.jsf\" class=\"search-form-main-area\" enctype=\"application/x-www-form-urlencoded\">");
-      out.println("<form id=\"valueSetSearchForm\" name=\"valueSetSearchForm\" method=\"post\" action=\"" + contextPath + "/ajax?action=search_value_set\" class=\"search-form-main-area\" enctype=\"application/x-www-form-urlencoded\">");
+      out.println("<form id=\"valueSetSearchForm\" name=\"valueSetSearchForm\" method=\"post\" action=\"" + contextPath + "/ajax?action=search_value_set\" class=\"search-form-main-area\" enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
 
       out.println("<input type=\"hidden\" name=\"valueSetSearchForm\" value=\"valueSetSearchForm\" />");
-
       out.println("<input type=\"hidden\" name=\"view\" value=\"" + view_str + "\" />");
 
-
-      out.println("");
-      out.println("");
-      out.println("");
       out.println("            <input type=\"hidden\" id=\"checked_vocabularies\" name=\"checked_vocabularies\" value=\"\" />");
       out.println("            <input type=\"hidden\" id=\"partial_checked_vocabularies\" name=\"partial_checked_vocabularies\" value=\"\" />");
+      out.println("            <input type=\"hidden\" id=\"value_set_home\" name=\"value_set_home\" value=\"true\" />");
+      out.println("            <input type=\"hidden\" name=\"vsd_uri\" value=\"" + vsd_uri + "\" />");
 
-      out.println("");
-      out.println("");
-      out.println("");
       out.println("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin: 2px\" >");
       out.println("  <tr valign=\"top\" align=\"left\">");
       out.println("    <td align=\"left\" class=\"textbody\">");
@@ -2062,7 +2158,7 @@ if (DataUtils.isNull(algorithm)) {
       out.println("                    tabindex=\"1\"/>");
       out.println("");
       out.println("");
-      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search Value Sets\" onclick=\"javascript:getCheckedVocabularies();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
+      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search value sets containing matched concepts\" onclick=\"javascript:getCheckedVocabularies();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
       out.println("");
       out.println("");
       out.println("    </td>");
@@ -2198,32 +2294,98 @@ if (DataUtils.isNull(algorithm)) {
       out.println("      <!-- Page content -->");
       out.println("      <div class=\"pagecontent\">");
       out.println("");
-
-      if (message != null) {
+/*
+      if (!DataUtils.isNull(message)) {
           out.println("<p class=\"textbodyred\">");
           out.print(message);
           out.println("</p>");
-          request.getSession().removeAttribute("message");
+          //request.getSession().removeAttribute("message");
+      }
+*/
+      if (!DataUtils.isNullOrBlank(message)) {
+		  out.println("\r\n");
+		  out.println("      <p class=\"textbodyred\">");
+		  out.print(message);
+		  out.println("</p>\r\n");
+		  out.println("    ");
+		  request.getSession().removeAttribute("message");
       }
 
-      out.println("<p class=\"textbody\">");
-      out.println("View value sets organized by standards category or source terminology.");
-      out.println("Standards categories group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.");
-      out.println("Search or browse a value set from its home page, or search all value sets at once from this page (very slow) to find which ones contain a particular code or term.");
-      out.println("</p>");
+
+      if (DataUtils.isNull(vsd_uri)) {
+		  out.println("<p class=\"textbody\">");
+		  out.println("View value sets organized by standards category or source terminology.");
+		  out.println("Standards categories group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.");
+		  out.println("Search or browse a value set from its home page, or search all value sets at once from this page (very slow) to find which ones contain a particular code or term.");
+		  out.println("</p>");
+	  }
+
       out.println("");
       out.println("        <div id=\"popupContentArea\">");
       out.println("          <a name=\"evs-content\" id=\"evs-content\"></a>");
       out.println("");
-      out.println("          <table width=\"580px\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\">");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
+
+      //out.println("          <table width=\"580px\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\">");
+
+      out.println("      <table class=\"datatableValueSet\" summary=\"\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">");
+
+      //out.println("                    <tr><td colspan=\"2\">");
+      //out.println("&nbsp;");
+      //out.println("                    </td></tr>");
+
+//(***)
+      if (!DataUtils.isNull(vsd_uri)) {
+
+
+		  if (isValueSet) {
+			  out.println("            <tr class=\"textbody\">");
+			  out.println("                      <td>");
+			  out.println("                         <div class=\"texttitle-blue\">Welcome</div>");
+			  out.println("                      </td>");
+
+			  out.println("                      <td class=\"dataCellText\" align=\"right\">");
+
+			  out.println("<a href=\"/ncitbrowser/ajax?action=values&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/values.gif\" alt=\"Values\" border=\"0\" tabindex=\"2\"></a>");
+			  out.println("&nbsp;");
+			  out.println("<a href=\"/ncitbrowser/ajax?action=versions&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/versions.gif\" alt=\"Versions\" border=\"0\" tabindex=\"2\"></a>");
+			  out.println("&nbsp;");
+			  out.println("<a href=\"/ncitbrowser/ajax?action=xmldefinitions&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/xmldefinitions.gif\" alt=\"XML Definition\" border=\"0\" tabindex=\"2\"></a>");
+
+              out.println("                      </td>");
+              out.println("            </tr>");
+		  } else {
+			  out.println("            <tr class=\"textbody\">");
+			  out.println("                      <td>");
+			  out.println("                         <div class=\"texttitle-blue\">Welcome</div>");
+			  out.println("                      </td>");
+
+			  out.println("                      <td class=\"dataCellText\" align=\"right\">");
+			  out.println("&nbsp;");
+              out.println("                       </td>");
+              out.println("            </tr>");
+		  }
+
+
+		  out.println("                    <tr><td colspan=\"2\" align=\"left\"><b>");
+		  out.println(vsd_name);
+		  out.println("                    </b></td></tr>");
+
+		  out.println("                    <tr><td colspan=\"2\" align=\"left\">");
+		  out.println(vsd_description);
+		  out.println("                    </td></tr>");
+
+	  }
+
+      //out.println("                    <tr><td colspan=\"2\">");
+     //out.println("                      <hr/>");
+      //out.println("                    </td></tr>");
+
+
+if (DataUtils.isNull(vsd_uri)) {
+
       out.println("            <tr class=\"textbody\">");
       out.println("              <td class=\"textbody\" align=\"left\">");
       out.println("");
-
 
 
 if (view == Constants.STANDARD_VIEW) {
@@ -2245,6 +2407,9 @@ if (view == Constants.STANDARD_VIEW) {
 
       out.println("              </td>");
       out.println("            </tr>");
+}
+
+
       out.println("          </table>");
       out.println("");
       out.println("          <hr/>");
@@ -2270,16 +2435,11 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("          <div id=\"treecontainer\" class=\"ygtv-checkbox\"></div>");
       out.println("");
-      out.println("          <form id=\"pg_form\">");
+      out.println("          <form id=\"pg_form\"  enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
       out.println("            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
       out.println("          </form>");
-
-
-
-
-
       out.println("");
       out.println("");
       out.println("        </div> <!-- popupContentArea -->");
@@ -2335,6 +2495,114 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
   }
 
+///////////////////////////
+// search_value_set
+///////////////////////////
+
+/*
+    public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
+        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
+		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
+
+        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
+        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+
+		// check if any checkbox is checked.
+        String contextPath = request.getContextPath();
+		String view_str = HTTPUtils.cleanXSS((String) request.getParameter("view"));
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+		String root_vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("root_vsd_uri"));
+
+		int view = Constants.STANDARD_VIEW;
+		boolean isInteger = DataUtils.isInteger(view_str);
+		if (isInteger) {
+			view = Integer.parseInt(view_str);
+		}
+
+if (vsd_uri != null && root_vsd_uri == null) {
+	root_vsd_uri = vsd_uri;
+}
+
+		String msg = null;
+		request.getSession().removeAttribute("checked_vocabularies");
+		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		request.getSession().removeAttribute("partial_checked_vocabularies");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        if (DataUtils.isNull(matchText)) {
+			matchText = "";
+		} else {
+			matchText = matchText.trim();
+		}
+        request.getSession().setAttribute("matchText", matchText);
+
+		String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("ontology_display_name"));
+		String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("ontology_version"));
+
+		if (matchText.compareTo("") == 0) {
+			msg = "Please enter a search string.";
+			request.getSession().setAttribute("message", msg);
+			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+			} else {
+			    create_vs_tree(request, response, view);
+			}
+			return;
+		}
+
+        if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
+			msg = "No value set definition is selected.";
+			request.getSession().setAttribute("message", msg);
+			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+			} else {
+                vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+                if (DataUtils.isNull(vsd_uri)) {
+					create_vs_tree(request, response, view);
+				} else {
+					create_vs_tree(request, response, view, vsd_uri);
+				}
+			}
+		} else {
+			try {
+				String retstr = valueSetSearchAction(request);
+				//KLO, 041312
+				if (retstr.compareTo("message") == 0) {
+					if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+						create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+					} else {
+ 					    create_vs_tree(request, response, view);
+					}
+					return;
+				}
+
+
+Vector matched_vsds = (Vector) request.getSession().getAttribute("matched_vsds");
+
+
+				String destination = contextPath + "/pages/value_set_search_results.jsf";
+
+if (matched_vsds != null && matched_vsds.size() == 1) {
+	String s = (String) matched_vsds.elementAt(0);
+	Vector u = DataUtils.parseData(s);
+	root_vsd_uri = (String) u.elementAt(0);
+
+} else {
+    System.out.println("Search value set: root_vsd_uri " + root_vsd_uri);
+}
+
+				if (!DataUtils.isNull(vsd_uri)) {
+					destination = contextPath + "/pages/value_set_search_results.jsf?value_set_tab=false&root_vsd_uri=" + root_vsd_uri;
+				}
+
+				response.sendRedirect(response.encodeRedirectURL(destination));
+	            request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+	    }
+    }
+*/
+
 
     public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
@@ -2346,6 +2614,8 @@ if (view == Constants.STANDARD_VIEW) {
 		// check if any checkbox is checked.
         String contextPath = request.getContextPath();
 		String view_str = HTTPUtils.cleanXSS((String) request.getParameter("view"));
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+		String root_vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("root_vsd_uri"));
 
 		int view = Constants.STANDARD_VIEW;
 		boolean isInteger = DataUtils.isInteger(view_str);
@@ -2353,15 +2623,14 @@ if (view == Constants.STANDARD_VIEW) {
 			view = Integer.parseInt(view_str);
 		}
 
-		String msg = null;
+		if (vsd_uri != null && root_vsd_uri == null) {
+			root_vsd_uri = vsd_uri;
+		}
 
+		String msg = null;
 		request.getSession().removeAttribute("checked_vocabularies");
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 		request.getSession().removeAttribute("partial_checked_vocabularies");
-		//String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
-		//System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
-
-
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (DataUtils.isNull(matchText)) {
 			matchText = "";
@@ -2371,14 +2640,11 @@ if (view == Constants.STANDARD_VIEW) {
         request.getSession().setAttribute("matchText", matchText);
 
 		String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("ontology_display_name"));
-		String ontology_version = request.getParameter((String) request.getParameter("ontology_version"));
+		String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("ontology_version"));
 
 		if (matchText.compareTo("") == 0) {
 			msg = "Please enter a search string.";
-			//System.out.println(msg);
 			request.getSession().setAttribute("message", msg);
-
-
 			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
 				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
 			} else {
@@ -2387,39 +2653,55 @@ if (view == Constants.STANDARD_VIEW) {
 			return;
 		}
 
-
-        //if (checked_vocabularies == null || (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0)) { //DYEE
         if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
 			msg = "No value set definition is selected.";
-			//System.out.println(msg);
 			request.getSession().setAttribute("message", msg);
-
-
 			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
 				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
 			} else {
-			    create_vs_tree(request, response, view);
+                vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+                if (DataUtils.isNull(vsd_uri)) {
+					create_vs_tree(request, response, view);
+				} else {
+					create_vs_tree(request, response, view, vsd_uri);
+				}
 			}
-
-
 		} else {
-			String destination = contextPath + "/pages/value_set_search_results.jsf";
 			try {
 				String retstr = valueSetSearchAction(request);
-
 				//KLO, 041312
 				if (retstr.compareTo("message") == 0) {
-
 					if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
 						create_vs_tree(request, response, view, ontology_display_name, ontology_version);
 					} else {
-						create_vs_tree(request, response, view);
+ 					    create_vs_tree(request, response, view);
 					}
 					return;
 				}
 
+//Vector matched_vsds = (Vector) request.getSession().getAttribute("matched_vsds");
+
+				//String destination = contextPath + "/pages/value_set_search_results.jsf";
+
+				String destination = contextPath + "/pages/value_set_entity_search_results.jsf";
+
+/*
+if (matched_vsds != null && matched_vsds.size() == 1) {
+	String s = (String) matched_vsds.elementAt(0);
+	Vector u = DataUtils.parseData(s);
+	root_vsd_uri = (String) u.elementAt(0);
+
+} else {
+    System.out.println("Search value set: root_vsd_uri " + root_vsd_uri);
+}
+*/
+
+				if (!DataUtils.isNull(vsd_uri)) {
+					destination = contextPath + "/pages/value_set_entity_search_results.jsf?value_set_tab=false&root_vsd_uri=" + root_vsd_uri;
+				}
+
 				response.sendRedirect(response.encodeRedirectURL(destination));
-	            request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
+	            //request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -2427,6 +2709,8 @@ if (view == Constants.STANDARD_VIEW) {
     }
 
 
+
+/*
     public static String valueSetSearchAction(HttpServletRequest request) {
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
@@ -2442,6 +2726,7 @@ if (view == Constants.STANDARD_VIEW) {
         if (DataUtils.isNull(algorithm)) {
 			algorithm = "exactMatch";
 		}
+
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
@@ -2534,6 +2819,7 @@ if (view == Constants.STANDARD_VIEW) {
 				request.getSession().setAttribute("matched_vsds", v);
 				if (v.size() == 0) {
 					msg = "No match found.";
+					msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
 					request.getSession().setAttribute("message", msg);
 					return "message";
 				} else if (v.size() == 1) {
@@ -2595,10 +2881,12 @@ if (view == Constants.STANDARD_VIEW) {
 											}
 
 										} catch (Exception ex) {
+
 											ex.printStackTrace();
 											msg = "Unable to find any value set with name " + matchText + ".";
 											request.getSession().setAttribute("message", msg);
 											return "message";
+
 										}
 									}
 								}
@@ -2606,12 +2894,12 @@ if (view == Constants.STANDARD_VIEW) {
 
 
 						} catch (Exception ex) {
-							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed. (VSD URI: " + uri + ")";
-							//System.out.println(msg);
-							request.getSession().setAttribute("message", msg);
 
+							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed. (VSD URI: " + uri + ")";
+							request.getSession().setAttribute("message", msg);
 							ex.printStackTrace();
 							return "message";
+
 						}
 					}
 				}
@@ -2636,6 +2924,105 @@ if (view == Constants.STANDARD_VIEW) {
 
 		}
 		return "value_set";
+    }
+*/
+
+
+    public static String valueSetSearchAction(HttpServletRequest request) {
+		java.lang.String valueSetDefinitionRevisionId = null;
+		String msg = null;
+
+        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
+
+        if (DataUtils.isNull(selectValueSetSearchOption)) {
+			selectValueSetSearchOption = "Name";
+		}
+		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
+
+        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
+        if (DataUtils.isNull(algorithm)) {
+			algorithm = "exactMatch";
+		}
+
+        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+
+		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		if (checked_vocabularies != null) {
+			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
+		}
+
+		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
+			msg = "No value set definition is selected.";
+			request.getSession().setAttribute("message", msg);
+			return "message";
+		}
+
+		//Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+        String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
+        request.getSession().setAttribute("view", VSD_view);
+
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+
+        //LexEVSValueSetDefinitionServices vsd_service = null;
+        //vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+        if (matchText != null) matchText = matchText.trim();
+
+        //ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
+        //    matchText, "contains");
+
+        int searchOption = SimpleSearchUtils.BY_CODE;
+        if (selectValueSetSearchOption.compareTo("Name") == 0) {
+			searchOption = SimpleSearchUtils.BY_NAME;
+		}
+
+        ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
+            matchText, searchOption, algorithm);
+
+        if (wrapper == null) {
+			msg = "No match found.";
+			if (searchOption == SimpleSearchUtils.BY_CODE) {
+   			    msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
+			}
+			request.getSession().setAttribute("message", msg);
+			return "message";
+		} else {
+			ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
+			if (iterator == null) {
+				msg = "No match found.";
+				if (searchOption == SimpleSearchUtils.BY_CODE) {
+					msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
+				}
+				request.getSession().setAttribute("message", msg);
+				return "message";
+			}
+			try {
+				int numRemaining = iterator.numberRemaining();
+				if (numRemaining == 0) {
+					msg = "No match found.";
+					if (searchOption == SimpleSearchUtils.BY_CODE) {
+						msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
+					}
+					request.getSession().setAttribute("message", msg);
+					return "message";
+				}
+			} catch (Exception ex) {
+				msg = "No match found.";
+				if (searchOption == SimpleSearchUtils.BY_CODE) {
+					msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
+				}
+				request.getSession().setAttribute("message", msg);
+				return "message";
+			}
+
+			IteratorBean iteratorBean = new IteratorBean(iterator);
+            String key = IteratorBeanManager.createIteratorKey(checked_vocabularies, matchText,
+                selectValueSetSearchOption, algorithm);
+            iteratorBean.setKey(key);
+			request.getSession().setAttribute("value_set_entity_search_results", iteratorBean);
+			return "value_set";
+		}
+
     }
 
 
@@ -2668,7 +3055,7 @@ if (view == Constants.STANDARD_VIEW) {
 	  out.println("  <title>" + dictionary + " value set</title>");
 
       //out.println("  <title>NCI Thesaurus</title>");
-      out.println("  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">");
+      out.println("  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
       out.println("");
       out.println("<style type=\"text/css\">");
       out.println("/*margin and padding on body element");
@@ -2969,8 +3356,6 @@ if (view == Constants.STANDARD_VIEW) {
 
  TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
  new ValueSetUtils().printTree(out, root, Constants.TERMINOLOGY_VIEW, dictionary);
-
- //new ValueSetUtils().printTree(out, root, Constants.TERMINOLOGY_VIEW);
 
 
  String contextPath = request.getContextPath();
@@ -3309,6 +3694,19 @@ if (DataUtils.isNull(algorithm)) {
       out.println("    }");
       out.println("");
       out.println("");
+
+/*
+      out.println("function initialize_tree() {");
+
+      out.println("    alert(\"onload\");");
+
+      out.println("    tree = new YAHOO.widget.TreeView(\"treecontainer\");");
+      out.println("    tree.expandAll();");
+      out.println("    check_all();");
+      out.println("    tree.draw();");
+      out.println("}");
+*/
+
       out.println("");
       out.println("");
       out.println("    function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {");
@@ -3374,8 +3772,7 @@ if (DataUtils.isNull(algorithm)) {
 
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
 
-      //out.println("<body onLoad=\"initialize();\">");
-
+      //out.println("<body onLoad=\"initialize_tree();\">");
 
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
@@ -3583,7 +3980,7 @@ if (display_release_date) {
       out.println("");
       out.println("");
 
-      out.println("<form id=\"valueSetSearchForm\" name=\"valueSetSearchForm\" method=\"post\" action=\"" + contextPath + "/ajax?action=search_value_set\" class=\"search-form-main-area\" enctype=\"application/x-www-form-urlencoded\">");
+      out.println("<form id=\"valueSetSearchForm\" name=\"valueSetSearchForm\" method=\"post\" action=\"" + contextPath + "/ajax?action=search_value_set\" class=\"search-form-main-area\" enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
 
       out.println("<input type=\"hidden\" name=\"valueSetSearchForm\" value=\"valueSetSearchForm\" />");
 
@@ -3619,7 +4016,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("                    tabindex=\"1\"/>");
       out.println("");
       out.println("");
-      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search Value Sets\" onclick=\"javascript:getCheckedVocabularies();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
+      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search value sets containing matched concepts\" onclick=\"javascript:getCheckedVocabularies();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
       out.println("");
       out.println("");
       out.println("    </td>");
@@ -3828,15 +4225,15 @@ if (DataUtils.isNull(matchText)) {
       out.println("</div>");
 
       if (! ServerMonitorThread.getInstance().isLexEVSRunning()) {
-      out.println("    <div class=\"redbar\">");
-      out.println("      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
-      out.println("        <tr>");
-      out.println("          <td class=\"lexevs-status\">");
-      out.println("            " + ServerMonitorThread.getInstance().getMessage());
-      out.println("          </td>");
-      out.println("        </tr>");
-      out.println("      </table>");
-      out.println("    </div>");
+		  out.println("    <div class=\"redbar\">");
+		  out.println("      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">");
+		  out.println("        <tr>");
+		  out.println("          <td class=\"lexevs-status\">");
+		  out.println("            " + ServerMonitorThread.getInstance().getMessage());
+		  out.println("          </td>");
+		  out.println("        </tr>");
+		  out.println("      </table>");
+		  out.println("    </div>");
       }
 
       out.println("      <!-- end Quick links bar -->");
@@ -3845,24 +4242,15 @@ if (DataUtils.isNull(matchText)) {
       out.println("      <div class=\"pagecontent\">");
       out.println("");
 
-
-      if (message != null) {
-          out.println("\r\n");
-          out.println("      <p class=\"textbodyred\">");
-          out.print(message);
-          out.println("</p>\r\n");
-          out.println("    ");
-          request.getSession().removeAttribute("message");
+      if (!DataUtils.isNullOrBlank(message)) {
+		  out.println("\r\n");
+		  out.println("      <p class=\"textbodyred\">");
+		  out.print(message);
+		  out.println("</p>\r\n");
+		  out.println("    ");
+		  request.getSession().removeAttribute("message");
       }
 
-// to be modified
-/*
-      out.println("<p class=\"textbody\">");
-      out.println("View value sets organized by standards category or source terminology.");
-      out.println("Standards categories group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.");
-      out.println("Search or browse a value set from its home page, or search all value sets at once from this page (very slow) to find which ones contain a particular code or term.");
-      out.println("</p>");
-*/
       out.println("");
       out.println("        <div id=\"popupContentArea\">");
       out.println("          <a name=\"evs-content\" id=\"evs-content\"></a>");
@@ -3912,7 +4300,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("");
       out.println("          <div id=\"treecontainer\" class=\"ygtv-checkbox\"></div>");
       out.println("");
-      out.println("          <form id=\"pg_form\">");
+      out.println("          <form id=\"pg_form\" enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
       out.println("");
       out.println("            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"null\" />");
       out.println("            <input type=\"hidden\" id=\"ontology_display_name\" name=\"ontology_display_name\" value=\"" + dictionary + "\" />");
@@ -3922,10 +4310,10 @@ if (DataUtils.isNull(matchText)) {
       out.println("          </form>");
       out.println("");
 
-
-
       out.println("");
       out.println("        </div> <!-- popupContentArea -->");
+
+
       out.println("");
       out.println("");
       out.println("<div class=\"textbody\">");
@@ -3979,7 +4367,7 @@ if (DataUtils.isNull(matchText)) {
 
 
    public static void addHiddenForm(PrintWriter out, String checkedNodes, String partialCheckedNodes) {
-      out.println("   <form id=\"hidden_form\">");
+      out.println("   <form id=\"hidden_form\" enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
       out.println("      <input type=\"hidden\" id=\"checkedNodes\" name=\"checkedNodes\" value=\"" + checkedNodes + "\" />");
       out.println("      <input type=\"hidden\" id=\"partialCheckedNodes\" name=\"partialCheckedNodes\" value=\"" + partialCheckedNodes + "\" />");
       out.println("   </form>");
@@ -3994,8 +4382,17 @@ if (DataUtils.isNull(matchText)) {
       out.println("   }");
    }
 
+/*
+      * checkState
+      * 0=unchecked, 1=some children checked, 2=all children checked
+      * @type int
+*/
 
    public static void initializeNodeCheckState(PrintWriter out) {
+	   initializeNodeCheckState(out, Boolean.TRUE);
+   }
+
+   public static void initializeNodeCheckState(PrintWriter out, Boolean value_set_tab) {
       out.println("   function initializeNodeCheckState(nodes) {");
       out.println("       nodes = nodes || tree.getRoot().children;");
       out.println("       var checkedNodes = document.forms[\"hidden_form\"].checkedNodes.value;");
@@ -4003,11 +4400,18 @@ if (DataUtils.isNull(matchText)) {
       out.println("       for(var i=0, l=nodes.length; i<l; i=i+1) {");
       out.println("            var n = nodes[i];");
       out.println("");
-      out.println("            if (checkedNodes.indexOf(n.label) != -1) {");
-      out.println("                n.setCheckState(2);");
-      out.println("            } else if (partialCheckedNodes.indexOf(n.label) != -1) {");
-      out.println("                n.setCheckState(1);");
-      out.println("            }");
+
+      if (value_set_tab.equals(Boolean.TRUE)) {
+		  out.println("            if (checkedNodes.indexOf(n.label) != -1) {");
+		  out.println("                n.setCheckState(2);");
+		  out.println("            } else if (partialCheckedNodes.indexOf(n.label) != -1) {");
+		  out.println("                n.setCheckState(1);");
+		  out.println("            }");
+	  } else {
+          out.println("                n.setCheckState(2);");
+	  }
+
+
       out.println("");
       out.println("            if (n.hasChildren()) {");
       out.println("		        initializeNodeCheckState(n.children);");
@@ -4100,4 +4504,340 @@ if (DataUtils.isNull(matchText)) {
 
 
 
+    public void selectCSVersionAction(HttpServletRequest request, HttpServletResponse response) {
+        String selectedvalueset = null;
+        String uri = null;
+        String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
+        if (multiplematches != null) {
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("valueset"));
+			uri = selectedvalueset;
+		} else {
+			uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			if (uri.indexOf("|") != -1) {
+				Vector u = DataUtils.parseData(uri);
+				uri = (String) u.elementAt(1);
+			}
+		}
+		request.getSession().setAttribute("vsd_uri", uri);
+
+        try {
+			String nextJSP = "/pages/resolve_value_set.jsf";
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+			dispatcher.forward(request,response);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+    public void resolveValueSetAction(HttpServletRequest request, HttpServletResponse response) {
+        String selectedvalueset = null;
+        //String selectedvalueset = (String) request.getParameter("valueset");
+        String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
+        if (multiplematches != null) {
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("valueset"));
+		} else {
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
+				Vector u = DataUtils.parseData(selectedvalueset);
+				selectedvalueset = (String) u.elementAt(1);
+			}
+	    }
+        String vsd_uri = selectedvalueset;
+		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
+
+
+String key = vsd_uri;
+
+        request.getSession().setAttribute("vsd_uri", vsd_uri);
+        String[] coding_scheme_ref = null;
+
+        Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
+        if (w != null) {
+			coding_scheme_ref = new String[w.size()];
+			for (int i=0; i<w.size(); i++) {
+				String s = (String) w.elementAt(i);
+				coding_scheme_ref[i] = s;
+
+			}
+		}
+
+        if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
+			String msg = "No PRODUCTION version of coding scheme is available.";
+			request.getSession().setAttribute("message", msg);
+
+			try {
+				String nextJSP = "/pages/resolve_value_set.jsf";
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+				dispatcher.forward(request,response);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			return;
+			//return "resolve_value_set";
+		}
+
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+
+        StringBuffer buf = new StringBuffer();
+
+        for (int i=0; i<coding_scheme_ref.length; i++) {
+			String t = coding_scheme_ref[i];
+
+			String delim = "|";
+			if (t.indexOf("|") == -1) {
+				delim = "$";
+			}
+			Vector u = DataUtils.parseData(t, delim);
+			String uri = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+			if (version == null || version.compareTo("null") == 0) {
+				version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
+			}
+			//key = key + "|" + uri + "$" + version;
+			buf.append("|" + uri + "$" + version);
+            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
+		}
+		key = key + buf.toString();
+
+        request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+
+        //long time = System.currentTimeMillis();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		ResolvedValueSetDefinition rvsd = null;
+		int lcv = 0;
+		try {
+			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
+			if(rvsd != null) {
+				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+				IteratorBeanManager iteratorBeanManager = null;
+
+				if (FacesContext.getCurrentInstance() != null &&
+				    FacesContext.getCurrentInstance().getExternalContext() != null &&
+				    FacesContext.getCurrentInstance().getExternalContext().getSessionMap() != null) {
+					 iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().get("iteratorBeanManager");
+				}
+
+				if (iteratorBeanManager == null) {
+					iteratorBeanManager = new IteratorBeanManager();
+					request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
+				}
+
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+
+				IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+				if (iteratorBean == null) {
+					iteratorBean = new IteratorBean(itr);
+					iteratorBean.initialize();
+					iteratorBean.setKey(key);
+					iteratorBeanManager.addIteratorBean(iteratorBean);
+				}
+
+                request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+				request.getSession().setAttribute("resolved_vs_key", key);
+
+				try {
+					String nextJSP = "/pages/resolved_value_set.jsf";
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+					dispatcher.forward(request,response);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				//return "resolved_value_set";
+				return;
+		    }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		String msg = "Unable to resolve the value set " + vsd_uri;
+		request.getSession().setAttribute("message", msg);
+
+        try {
+			String nextJSP = "/pages/resolved_value_set.jsf";
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+			dispatcher.forward(request,response);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+        //return "resolved_value_set";
+	}
+
+    public String valueSetDefinition2XMLString(String uri) {
+
+        LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        String s = null;
+        String valueSetDefinitionRevisionId = null;
+        try {
+			URI valueSetDefinitionURI = new URI(uri);
+			StringBuffer buf = vsd_service.exportValueSetDefinition(valueSetDefinitionURI, valueSetDefinitionRevisionId);
+            s = buf.toString();
+        } catch (Exception ex) {
+           ex.printStackTrace();
+        }
+		return s;
+	}
+
+
+    public void exportVSDToXMLAction(HttpServletRequest request, HttpServletResponse response) {
+       String selectedvalueset = null;
+       String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
+        if (multiplematches != null) {
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("valueset"));
+		} else {
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
+				Vector u = DataUtils.parseData(selectedvalueset);
+				selectedvalueset = (String) u.elementAt(1);
+			}
+	    }
+        String uri = selectedvalueset;
+		request.getSession().setAttribute("selectedvalueset", uri);
+
+        String xml_str = valueSetDefinition2XMLString(uri);
+
+		try {
+			response.setContentType("text/xml");
+
+			String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+			vsd_name = vsd_name.replaceAll(" ", "_");
+			vsd_name = vsd_name + ".xml";
+
+		    response.setHeader("Content-Disposition", "attachment; filename="
+					+ vsd_name);
+
+			response.setContentLength(xml_str.length());
+
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(xml_str.getBytes("UTF8"), 0, xml_str.length());
+			ouputStream.flush();
+			ouputStream.close();
+
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+
+		FacesContext.getCurrentInstance().responseComplete();
+
+	}
+
+
+    public static void value_set_home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		try {
+			response.setContentType("text/plain");
+			PrintWriter out = null;
+
+		    try {
+			    out = response.getWriter();
+		    } catch (Exception ex) {
+			    ex.printStackTrace();
+			    return;
+		    }
+
+			String vsd_uri =  HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			//String response_str = "This is a test " + vsd_uri;
+
+	        int view = Constants.STANDARD_VIEW;
+		    HashMap value_set_tree_hmap = DataUtils.getSourceValueSetTree(vsd_uri);
+			TreeItem root = null;
+			Boolean value_set_tab = Boolean.FALSE;
+			if (value_set_tree_hmap != null) {
+				 root = (TreeItem) value_set_tree_hmap.get("<Root>");
+			     new ValueSetUtils().printTree(out, root, view, value_set_tab);
+			}
+
+			out.flush();
+			out.close();
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+    public void export_mapping(HttpServletRequest request, HttpServletResponse response) {
+        String mapping_schema = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+        String mapping_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
+
+        ResolvedConceptReferencesIterator iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version);
+		int numRemaining = 0;
+		if (iterator != null) {
+			try {
+				numRemaining = iterator.numberRemaining();
+				//System.out.println("number of records: " + numRemaining);
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+        StringBuffer sb = new StringBuffer();
+        try {
+			sb.append("Source Code,");
+			sb.append("Source Name,");
+			sb.append("Source Coding Scheme,");
+			sb.append("Source Coding Scheme Version,");
+			sb.append("Source Coding Scheme Namespace,");
+
+			sb.append("Association Name,");
+			sb.append("REL,");
+			sb.append("Map Rank,");
+
+			sb.append("Target Code,");
+			sb.append("Target Name,");
+			sb.append("Target Coding Scheme,");
+			sb.append("Target Coding Scheme Version,");
+			sb.append("Target Coding Scheme Namespace");
+			sb.append("\r\n");
+
+			MappingIteratorBean bean = new MappingIteratorBean(iterator);
+            List list = bean.getData(0, numRemaining-1);
+            for (int k=0; k<list.size(); k++) {
+				MappingData mappingData = (MappingData) list.get(k);
+				sb.append("\"" + mappingData.getSourceCode() + "\",");
+				sb.append("\"" + mappingData.getSourceName() + "\",");
+				sb.append("\"" + mappingData.getSourceCodingScheme() + "\",");
+				sb.append("\"" + mappingData.getSourceCodingSchemeVersion() + "\",");
+				sb.append("\"" + mappingData.getSourceCodeNamespace() + "\",");
+
+				sb.append("\"" + mappingData.getAssociationName() + "\",");
+				sb.append("\"" + mappingData.getRel() + "\",");
+				sb.append("\"" + mappingData.getScore() + "\",");
+
+				sb.append("\"" + mappingData.getTargetCode() + "\",");
+				sb.append("\"" + mappingData.getTargetName() + "\",");
+				sb.append("\"" + mappingData.getTargetCodingScheme() + "\",");
+				sb.append("\"" + mappingData.getTargetCodingSchemeVersion() + "\",");
+				sb.append("\"" + mappingData.getTargetCodeNamespace() + "\"");
+				sb.append("\r\n");
+			}
+		} catch (Exception ex)	{
+			sb.append("WARNING: Export to CVS action failed.");
+			ex.printStackTrace();
+		}
+
+		String filename = mapping_schema + "_" + mapping_version;
+		filename = filename.replaceAll(" ", "_");
+		filename = filename + ".csv";
+
+		response.setContentType("text/csv");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ filename);
+
+		response.setContentLength(sb.length());
+
+		try {
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes("UTF-8"), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			sb.append("WARNING: Export to CVS action failed.");
+		}
+		FacesContext.getCurrentInstance().responseComplete();
+		return;
+	}
 }

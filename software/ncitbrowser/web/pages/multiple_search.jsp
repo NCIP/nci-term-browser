@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -41,7 +34,7 @@ L--%>
   
   String requestContextPath = request.getContextPath();
   requestContextPath = requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
-  boolean display_cabig_approval_indicator_note = false;
+  //boolean display_cabig_approval_indicator_note = false;
   Integer curr_sort_category = null;
   
 request.getSession().removeAttribute("n");
@@ -55,7 +48,7 @@ request.getSession().removeAttribute("m");
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Term Browser</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -193,7 +186,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
   <div class="center-page">
-    <h:form id="searchTerm">
+    <h:form id="searchTerm" acceptcharset="UTF-8">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
     <div id="main-area">
@@ -217,14 +210,14 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
           <table class="termstable" border="0">
                 <tr>
                   <td>
-                  <img src="<%= request.getContextPath() %>/images/selectAll.gif"
-                    name="selectAll" alt="selectAll" tabindex="111"
-                    onClick="checkAll(document.searchTerm.ontology_list)" />
-
-                  &nbsp;&nbsp; 
                   <img src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
                     name="selectAllButNCIm" alt="selectAllButNCIm" tabindex="112"
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
+
+                  &nbsp;&nbsp; 
+                  <img src="<%= request.getContextPath() %>/images/selectAll.gif"
+                    name="selectAll" alt="selectAll" tabindex="111"
+                    onClick="checkAll(document.searchTerm.ontology_list)" />
 
                   &nbsp;&nbsp; 
                   <h:commandButton id="clear" value="clearall"
@@ -251,7 +244,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                 <p class="textbodyred">&nbsp;<%=warning_msg%></p>
              <%
              }
-    
 	     if (unsupported_vocabulary_message != null && unsupported_vocabulary_message.compareTo("null") != 0) {
 	        request.getSession().removeAttribute("unsupported_vocabulary_message"); 
              %>
@@ -323,7 +315,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		     }
 		  }
 
-
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
 		     if (info.getHasMultipleVersions()) {
@@ -366,17 +357,16 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
  
                         boolean isMapping = DataUtils.isMapping(scheme, version);
                         if (!isMapping) {
- 
+
 				//String http_label = null;
 				String http_scheme = null;
 				String http_version = null;
 
-        String status = DataUtils.getMetadataValue(
-            scheme, version, "cabig_approval_status");
-        boolean display_status = status != null && 
-          status.trim().length() > 0;
-        String cabig_approval_indicator = getCabigIndicator(display_status, basePath);
-        display_cabig_approval_indicator_note |= display_status;
+        //String status = DataUtils.getMetadataValue(scheme, version, "cabig_approval_status");
+        //boolean display_status = status != null && status.trim().length() > 0;
+        
+        //String cabig_approval_indicator = getCabigIndicator(display_status, basePath);
+        //display_cabig_approval_indicator_note |= display_status;
         
 				//if (label != null)
 				//  http_label = label.replaceAll(" ", "%20");
@@ -389,7 +379,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
         <% if (curr_sort_category != null && sort_category != curr_sort_category.intValue()) { %>
           <tr>
             <td width="25px"></td>
-            <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="<%=CABIG_APPROVED_MSG %>" /></td>
+            <td></td>
           </tr>
         <% } curr_sort_category = Integer.valueOf(sort_category); %>
         
@@ -433,20 +423,20 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				if (scheme.compareTo("NCI Thesaurus") == 0) {
 				    String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + version;
 				  %>
-                    <a href="<%=nciturl%>"><%=display_label%></a><%=cabig_approval_indicator%>
+                    <a href="<%=nciturl%>"><%=display_label%></a>
 				  <%
 				} else if (scheme.compareToIgnoreCase("NCI Metathesaurus") == 0) {
 				    String ncimurl = NCItBrowserProperties.getNCIM_URL();
 				  %>
 				    <a href="<%=ncimurl%>" target="_blank"><%=display_label%>
 				      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=display_label%>" />
-				    </a><%=cabig_approval_indicator%>
+				    </a>
 				  <%
 				} else {
 				  %>
 				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
 				      <%=display_label%>
-				    </a><%=cabig_approval_indicator%>
+				    </a>
 				  <%
 				}
 				  %>
@@ -559,19 +549,7 @@ if (hide_counter == 1) {
                      <%
                       }
                      %>
-                     <% if (display_cabig_approval_indicator_note) { %>
-                       <tr>
-                         <td width="25px"></td>
-                         <td><img src="<%=basePath%>/images/shim.gif" width="1" height="7" alt="<%=CABIG_APPROVED_MSG %>" /></td>
-                       </tr>                     
-                       <tr>
-                         <td width="25px"></td>
-                         <td class="termstable">
-                           <img src="<%=basePath%>/images/shim.gif" width="20" height="1" alt="<%=CABIG_APPROVED_MSG %>" />
-                           <b class="textbody">*</b> <%=CABIG_APPROVED_MSG%>.
-                         </td>
-                       </tr>
-                     <% } %>
+                     
                     </table>
                   </td>
                 </tr>
@@ -583,15 +561,15 @@ if (hide_counter == 1) {
                 
                 <tr>
                   <td>
-                    <img src="<%= request.getContextPath() %>/images/selectAll.gif"
-                    name="selectAll" alt="selectAll" tabindex="115"
-                    onClick="checkAll(document.searchTerm.ontology_list)" />
-
-                  &nbsp;&nbsp; 
                     <img src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
                     name="selectAllExceptNCIm" alt="selectAllButNCIm" tabindex="116" 
                     onClick="checkAllButOne(document.searchTerm.ontology_list, 'Metathesaurus')" />
 
+                  &nbsp;&nbsp; 
+                    <img src="<%= request.getContextPath() %>/images/selectAll.gif"
+                    name="selectAll" alt="selectAll" tabindex="115"
+                    onClick="checkAll(document.searchTerm.ontology_list)" />
+                    
                   &nbsp;&nbsp; 
                   <h:commandButton id="clearall" value="clearall"
                     action="#{userSessionBean.clearAll}"

@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ page import="gov.nih.nci.evs.browser.properties.*"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.*"%>
 <%@ page import="gov.nih.nci.evs.browser.bean.*"%>
@@ -82,23 +75,33 @@ L--%>
 </script>
 <%
         boolean back_to_search_results_link = false;
+        boolean value_set_entity_search = false;
         String search_key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
+        
         String t = HTTPUtils.cleanXSS((String) request.getParameter("b")); 
+        String t2 = HTTPUtils.cleanXSS((String) request.getParameter("vse")); 
+        String vse = null;
+        
+        if (!DataUtils.isNull(t2)) {
+            value_set_entity_search = true;
+            
+vse = t2;            
+           
+            
+        }
+        
         String page_number = HTTPUtils.cleanXSS((String) request.getParameter("n")); 
         
         if (!DataUtils.isNull(page_number) && !DataUtils.isInteger(page_number)) {
             page_number = "1";
         }
         
-     
-        
         if (DataUtils.isNull(t)) {
 		t = (String) request.getSession().getAttribute("b"); 
 		page_number = (String) request.getSession().getAttribute("n"); 
 		search_key = (String) request.getSession().getAttribute("key"); 
 	}        
-        
-        if (!DataUtils.isNull(t)) {
+        if (!DataUtils.isNull(t) || !DataUtils.isNull(t2)) {
             back_to_search_results_link = true;
         }
 
@@ -166,7 +169,7 @@ L--%>
 	else
 		check_r = "checked";
 %>
-<h:form id="searchTerm" styleClass="search-form" onsubmit="javascript:disableAnchor();">
+<h:form id="searchTerm" styleClass="search-form" onsubmit="javascript:disableAnchor();" acceptcharset="UTF-8">
    <input CLASS="searchbox-input" id="matchText" name="matchText"
       value="<%=HTTPUtils.cleanXSS(displayed_match_text)%>" onFocus="active=true"
       onBlur="active=false"
@@ -256,33 +259,45 @@ L--%>
                if (DataUtils.isNull(search_key)) {
                %>
                   <td height="5px;"></td>
+                  
                <%   
                } else if (back_to_search_results_link) {
-                  if (DataUtils.isNull(multiple_search_flag)) {
-               %>
-                  <td valign="middle" align="left">
-                     <a class="global-nav"
-                        href="<%=request.getContextPath()%>/pages/search_results.jsf?dictionary=<%=HTTPUtils.cleanXSS(vocab_name)%>&version=<%=HTTPUtils.cleanXSS(srchform_version)%>&key=<%=HTTPUtils.cleanXSS(search_key)%>&page_number=<%=page_number%>"
-                        tabindex="6">Back to search results</a>
-                  </td>
-
-                  <% 
-                  } else {
+              
+                   if (value_set_entity_search) {
+                   
                   %>
                   <td valign="middle" align="left">
                      <a class="global-nav"
-                        href="<%=request.getContextPath()%>/pages/multiple_search_results.jsf?key=<%=HTTPUtils.cleanXSS(search_key)%>&page_number=<%=page_number%>"
-                        tabindex="6">Back to search results</a>
+                        href="<%=request.getContextPath()%>/pages/value_set_entity_search_results.jsf?key=<%=HTTPUtils.cleanXSS(search_key)%>&page_number=<%=page_number%>&vse=<%=vse%>"
+                        tabindex="6" title="Back to search results">Back to search results</a>
                   </td>
-                  <%  
-                  }
+                  <% 
+                  } else {              
+			  if (DataUtils.isNull(multiple_search_flag)) {
+			  %>
+			  <td valign="middle" align="left">
+			     <a class="global-nav"
+				href="<%=request.getContextPath()%>/pages/search_results.jsf?dictionary=<%=HTTPUtils.cleanXSS(vocab_name)%>&version=<%=HTTPUtils.cleanXSS(srchform_version)%>&key=<%=HTTPUtils.cleanXSS(search_key)%>&page_number=<%=page_number%>"
+				tabindex="6" title="Back to search results">Back to search results</a>
+			  </td>
+			  <% 
+			  } else {
+			  %>
+			  <td valign="middle" align="left">
+			     <a class="global-nav"
+				href="<%=request.getContextPath()%>/pages/multiple_search_results.jsf?key=<%=HTTPUtils.cleanXSS(search_key)%>&page_number=<%=page_number%>"
+				tabindex="6" title="Back to search results">Back to search results</a>
+			  </td>
+			  <%  
+			  }
+	   	  }
                }
                %>
                   
                   <td valign="middle" align="right">
-                     <a class="global-nav"
+                     <a class="textbodyredsmall"
                         href="<%=request.getContextPath()%>/pages/advanced_search.jsf?dictionary=<%=HTTPUtils.cleanXSS(vocab_name)%>&version=<%=HTTPUtils.cleanXSS(srchform_version)%>"
-                        tabindex="6"> Advanced Search </a>
+                        tabindex="6" title="Advanced Search"> Advanced Search </a>
                   </td>
                </tr>
             </table>

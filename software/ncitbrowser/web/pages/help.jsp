@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -13,7 +6,7 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Term Browser</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -114,7 +107,7 @@ L--%>
             value sets – flat lists of terms from one or more terminologies 
             used for a particular coding purpose – and mappings between 
             terminologies to support data translation and cross-reference. 
-            This 2.2 release improves support for those new features, 
+            This 2.3 release improves support for those new features, 
             especially in the new value set tree that allows selective 
             search of multiple value sets.  Other additions include a 
             “Back to search results” link to return to your last results 
@@ -904,18 +897,34 @@ L--%>
           </ul>
 
           <p>
+          <!--
             When a Values Set search is run, <b>Matched Value Sets</b>
             are displayed by name. Select the radio button in front of 
             the value set you wish to view. Then you can choose the 
             Values button, Versions button or XML definitions button 
-            to view the values in that set. 
+            to view the values in that set.
+          -->
+
+            When a Values Set search is run, <b>Matched Value Sets</b>
+            are displayed by name, along with the name of code of each corresponding 
+            matched concept and the name and version
+            of the vocabulary to which the concept belongs. Click on   
+            the value set you wish to view. Then you can choose the 
+            Values button, Versions button or XML definitions button 
+            to view the values in that set.
+
+            Click on a concept <b>Name</b>
+              to see a concept's details (the details of the concept 
+              are the same as outlined in <b>Terminology-Concept Details</b>,
+              above).
+          
           </p>
           <p>
             Some details: 
           </p>
           
           <ul>
-           <li>All matching value sets are returned.</li>
+           <li>All matching value sets and concepts are returned.</li>
            <li>If there are too many to show on one page, you can page 
              through the results with a default of 50 per page. To change 
              the default number, use the <b>Show results per page</b>
@@ -983,6 +992,11 @@ L--%>
             results of a search) by clicking on the red box called 
             <b>View Mapping</b> or by clicking on the link that says 
             <b>Mapping</b> right underneath the Search Box.
+            
+            You can also export mapping contents to a file in CSV format readable from Excel by clicking on the red box called  
+            <b>Export CSV</b>. 
+
+
           </p>
           <p>
             A mapping set's home page will also have a description 
@@ -1110,8 +1124,8 @@ L--%>
           </table>
           <p>
             For information on known issues, 
-            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.2+Release+Notes" target="_blank">
-              see NCI Term Browser 2.2 Release Notes</a>.
+            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.3+Release+Notes" target="_blank">
+              see NCI Term Browser 2.3 Release Notes</a>.
             Additional information about EVS can be found on the
             <a href="http://evs.nci.nih.gov/" target="_blank">EVS Web</a> and 
             <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank">EVS Wiki sites</a>.

@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -33,6 +26,8 @@ L--%>
     JSPUtils.JSPHeaderInfo info2 = new JSPUtils.JSPHeaderInfo(request);
     String adv_search_vocabulary = info2.dictionary;
     String adv_search_version = info2.version;
+    
+  String new_algorithm = "I feel lucky";  
      
 %>     
      
@@ -40,7 +35,7 @@ L--%>
   <title><%=adv_search_vocabulary%></title>
   
   
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -196,7 +191,7 @@ L--%>
             algorithm = algorithmObj[i].value;
             break;
          }
-      }  
+       }  
 
        var selectSearchOption = "";
        var selectSearchOptionObj = document.forms["advancedSearchForm"].selectSearchOption;
@@ -205,22 +200,18 @@ L--%>
            selectSearchOption = selectSearchOptionObj[i].value;
            break;
          }
-      }
+       }
       
-      if (algorithm != "exactMatch"  && selectSearchOption == "Code") {
+      
+      if (algorithm != "exactMatch" && selectSearchOption == "Code") {
           selectSearchOption = "Name";
-          //selectSearchOptionObj[0].checked;
-          //return;
       }
             
       
       var adv_search_source = document.forms["advancedSearchForm"].adv_search_source.value;
-
-
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
       var _version = document.forms["advancedSearchForm"].version.value;
-
 
       var direction = "";
       var directionObj = document.forms["advancedSearchForm"].direction;
@@ -229,8 +220,6 @@ L--%>
           direction = directionObj[i].value;
         }
       }
-      
-      
       window.location.href="/ncitbrowser/pages/advanced_search.jsf?refresh=1"
           + "&opt="+ selectSearchOption
           + "&text="+ text
@@ -270,7 +259,7 @@ L--%>
     
     String refresh = HTTPUtils.cleanXSS((String) request.getParameter("refresh"));
     boolean refresh_page = false;
-    if (refresh != null) {
+    if (!DataUtils.isNull(refresh)) {
         refresh_page = true;
     }
 
@@ -287,10 +276,12 @@ L--%>
     String direction = null;
 
     if (refresh_page) {
+    
         // Note: Called when the user selects "Search By" fields.
         selectSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
         search_string = HTTPUtils.cleanXSS((String) request.getParameter("text"));
         adv_search_algorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
+        
         adv_search_source = HTTPUtils.cleanXSS((String) request.getParameter("sab"));
         rel_search_association = HTTPUtils.cleanXSS((String) request.getParameter("rel"));
         direction = HTTPUtils.cleanXSS((String) request.getParameter("dir"));
@@ -298,7 +289,18 @@ L--%>
         rel_search_rela = HTTPUtils.cleanXSS((String) request.getParameter("rela"));
         selectProperty = HTTPUtils.cleanXSS((String) request.getParameter("prop"));
         
-        adv_search_type = selectSearchOption;
+	if (adv_search_algorithm.compareToIgnoreCase("lucene") == 0) { 
+	    if (selectSearchOption.compareToIgnoreCase("Code") != 0) { 
+		selectSearchOption = "Name";
+	    }
+	    selectProperty = null;
+	    rel_search_association = null;
+	    adv_search_source = null;
+	    direction = null;
+	    rel_search_rela = null;
+	}
+
+	adv_search_type = selectSearchOption;
 
 
     } else {
@@ -307,7 +309,7 @@ L--%>
         direction = (String) request.getSession().getAttribute("direction");
     }
 
-    if (selectSearchOption == null || selectSearchOption.compareTo("null") == 0) {
+    if (DataUtils.isNull(selectSearchOption)) {
         selectSearchOption = "Property";
     }
    
@@ -371,13 +373,12 @@ L--%>
          direction = "source";
     }
 
-
     String check__e = "", check__b = "", check__s = "" , check__c ="";
     if (adv_search_algorithm == null || adv_search_algorithm.compareTo("exactMatch") == 0)
         check__e = "checked";
     else if (adv_search_algorithm.compareTo("startsWith") == 0)
         check__s= "checked";
-    else if (adv_search_algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0)
+    else if (adv_search_algorithm.compareToIgnoreCase("lucene") == 0)
         check__b= "checked";
     else
         check__c = "checked";
@@ -420,7 +421,7 @@ L--%>
 
             <tr class="textbody"><td>
 
- <h:form id="advancedSearchForm" styleClass="search-form" >            
+ <h:form id="advancedSearchForm" styleClass="search-form" acceptcharset="UTF-8">            
                
                
                 <table>
@@ -437,12 +438,27 @@ L--%>
                   <tr><td>
                      <table border="0" cellspacing="0" cellpadding="0">
                     <tr valign="top" align="left"><td align="left" class="textbody">
-                      <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3" >Exact Match&nbsp;
+                      <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3" onclick="refresh_algorithm()"; >Exact Match&nbsp;
                       <input type="radio" name="adv_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3" onclick="refresh_algorithm()"; >Begins With&nbsp;
                       <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3" onclick="refresh_algorithm()"; >Contains
+                      
+<%
+String luceneSearch = "<a href=\"#\" onmouseover=\"Tip('<h4>Match Algorithm</h4><table><tr><td>Wildcard (multiple characters)</b>: heart*</td></tr><tr>       <td><b>Wildcard (single character)</b>: he?rt</td></tr><tr><td><b>Fuzzy match</b>: heart~</td></tr><tr><td><b>Boolean</b>: heart AND attack</td></tr><td><b>Boosting</b>: heart^5 AND attack</td></tr><tr><td><b>Negation</b>: heart -attack</td></tr><tr><td><b>Code Field</b>: code:118797008 AND heart</td></tr></table>')\" onmouseout=\"UnTip()\" >Lucene Search</a>";
+%>
+                      
+                      <input type="radio" name="adv_search_algorithm" value="lucene" alt="Lucene" <%=check__b%> tabindex="3" onclick="refresh_algorithm()"; >
+                      <!--
+                      <%=luceneSearch%>
+                      -->
+                      Lucene
                     </td></tr>
                   </table>
                 </td></tr>
+
+
+<%
+if (adv_search_algorithm.compareToIgnoreCase("lucene") != 0) {
+%>
 
                 <tr><td>
                   <h:outputLabel id="rel_search_source_Label" value="Source" styleClass="textbody">
@@ -484,6 +500,24 @@ L--%>
                 <tr><td>
                   &nbsp;&nbsp;
                 </td></tr>
+                
+                
+                
+                
+<%
+} else {
+%>
+
+    <input type="hidden" name="adv_search_source" id="adv_search_source" value="<%=HTTPUtils.cleanXSS(adv_search_source)%>">
+
+
+
+
+
+<%
+}
+%>
+                
 
                 <tr valign="top" align="left"><td align="left" class="textbody">
                 Concepts searched for have:
@@ -492,8 +526,25 @@ L--%>
                 <tr valign="top" align="left"><td align="left" class="textbody">
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Name" alt="Name" <%=check_n2%> onclick="javascript:refresh()" tabindex="5">Name&nbsp;
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Code" alt="Code" <%=check_c2%> onclick="refresh_code()" tabindex="5">Code&nbsp;
+
+<%
+if (adv_search_algorithm.compareToIgnoreCase("lucene") != 0) {
+ 
+     
+%>
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()" tabindex="5">Property&nbsp;
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()" tabindex="5">Relationship
+<%
+} else {
+%>
+
+
+
+
+<%
+}
+%>
+
                 </td></tr>
 
                 <tr><td>
@@ -646,6 +697,60 @@ L--%>
 <%
 }
 %>
+
+<%
+if (adv_search_algorithm.compareToIgnoreCase("lucene") == 0 && selectSearchOption.compareTo("Name") == 0) { 
+%>
+
+<tr><td>
+<p>
+<table>
+   <tr><td class="textbody">&nbsp;Examples:</td></tr>
+   <tr>
+       <td class="textbody">&nbsp;&nbsp;
+<i>Wildcard (multiple characters): heart*</i>
+       </td>
+   </tr>
+   <tr>
+       <td class="textbody">&nbsp;&nbsp;
+<i>Wildcard (single character): he?rt</i>
+       </td>
+   </tr>
+   <tr>
+       <td class="textbody">&nbsp;&nbsp;
+<i>Fuzzy match: heart~</i>
+       </td>
+   </tr>
+   <tr>
+       <td class="textbody">&nbsp;&nbsp;
+<i>Boolean: heart AND attack</i>
+       </td>
+   </tr>
+       <td class="textbody">&nbsp;&nbsp;
+<i>Boosting: heart^5 AND attack</i>
+       </td>
+   </tr>
+   <tr>
+       <td class="textbody">&nbsp;&nbsp;
+<i>Negation: heart -attack</i>
+       </td>
+   </tr>
+<!--
+   <tr>
+       <td class="textbody">
+<i>Code Field: code:118797008 AND heart</i>
+       </td>
+   </tr>
+-->
+</table>
+</p>
+</td></tr>
+
+<%
+}
+%>
+
+
 
               </table>
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">

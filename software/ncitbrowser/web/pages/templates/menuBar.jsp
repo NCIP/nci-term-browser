@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ page import="java.util.*"%>
 <%@ page import="gov.nih.nci.evs.browser.common.*"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.*"%>
@@ -92,7 +85,8 @@ L--%>
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
           <a href="<%= request.getContextPath() %>/pages/cs_mappings.jsf?dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="15">Maps</a>      
       <% } %>
-
+      
+ 
       <c:choose>
         <c:when test="${sessionScope.CartActionBean.count>0}">
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
@@ -102,6 +96,9 @@ L--%>
 
       <%=VisitedConceptUtils.getDisplayLink(request, isPipeDisplayed)%>
     </td>
+    
+    
+    
     <td align="right">
       <a href="<%= request.getContextPath() %>/pages/help.jsf" tabindex="16">Help</a>
     </td>

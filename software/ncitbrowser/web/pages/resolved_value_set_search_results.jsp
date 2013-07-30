@@ -1,10 +1,3 @@
-<%--L
-  Copyright Northrop Grumman Information Technology.
-
-  Distributed under the OSI-approved BSD 3-Clause License.
-  See http://ncip.github.com/nci-term-browser/LICENSE.txt for details.
-L--%>
-
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -25,7 +18,7 @@ L--%>
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
   <title>NCI Term Browser - Value Set Search</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/css/styleSheet.css" />
   <link rel="shortcut icon" href="<%= request.getContextPath() %>/favicon.ico" type="image/x-icon" />
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/script.js"></script>
@@ -110,7 +103,7 @@ String checked = "";
           
           <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
           
-      <%
+<%
 
 
 String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
@@ -199,14 +192,28 @@ String key = (String) request.getSession().getAttribute("key");
 	  }
 	  
 
-      if (message != null) {
-      %>
-      <p class="textbodyred"><%=message%></p>
-      <% 
-      }
-      
+      boolean no_match = false;
+ 
+     
       %>
         <table width="700px">
+<%
+	      if (!DataUtils.isNull(message)) {
+		    if (message.startsWith("No match found")) {
+			no_match = true;
+		    } 
+%>
+			<tr class="textbodyred"><td>
+		      <p class="textbodyred">&nbsp;<%=message%></p>
+			</td></tr>
+	      <%}%>	
+			
+			
+			
+<% 
+if (!no_match) {           
+%>        
+        
           <tr>
             <td>
               <table>
@@ -249,12 +256,12 @@ String key = (String) request.getSession().getAttribute("key");
     boolean timeout = iteratorBean.getTimeout();
     message = iteratorBean.getMessage();
 
-    if (message != null) {
+    if (!DataUtils.isNull(message)) {
       %>
       <p class="textbodyred"><%=message%></p>
       <%
-    message = null;
-    iteratorBean.setMessage(message);
+	    message = null;
+	    iteratorBean.setMessage(message);
 
     } else if (timeout) {
       %>
@@ -414,9 +421,19 @@ String key = (String) request.getSession().getAttribute("key");
               </table>
             </td>
           </tr>
+          
+          
+ <%
+ }
+ %>
+          
+          
+          
         </table>
 <% 
 
+
+    
 if(message == null || message.compareTo("null") == 0) {
 
 
@@ -424,8 +441,7 @@ if(message == null || message.compareTo("null") == 0) {
 %>        
         <%@ include file="/pages/templates/pagination-valueset-results.jsp" %>
 <%       
-    
-}  
+}
 %>
        
         <%@ include file="/pages/templates/nciFooter.jsp" %>
