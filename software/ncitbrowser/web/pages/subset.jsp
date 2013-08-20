@@ -89,9 +89,18 @@ float: left;
           defining the nature of the subset, and these are hierarchically organized under the parent concept
           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
           Terminology Subset (C54443)</a>. These subset concepts are linked to subset-member concepts through
-          over 20,000 association relationships. Most of these subsets are now also available as
+          over 20,000 association relationships. 
+
+          Most of these subsets are now also available as
           <a href="<%=HTTPUtils.cleanXSS(tab_valuesets_link)%>">Value Sets</a>.
           
+          <!--
+          Most of these subsets are now also available as
+          <a href="https://wiki.nci.nih.gov/display/VKC/Common+Terminology+Services+2">
+          Common Terminology Services Release 2 (CTS 2) standard</a> 
+          Value Sets.
+          -->
+        
           <%-- [#32405] Bad link on Subset Summary page.
           <a href="<%=request.getContextPath()%>/pages/value_set_source_view.jsf?nav_type=valuesets">
           --%>
@@ -100,7 +109,12 @@ float: left;
         <p>
           Most NCIt subsets are federal and international coding standards maintained in active collaboration with our FDA, CDISC, and other
           partners. They are currently distributed largely as tab-delimited data and Excel spreadsheet files accessible
-          from the EVS FTP site. Below are five important subset collections currently presented on these Cancer.gov Web pages:
+          from the 
+          <a href="http://evs.nci.nih.gov/ftp1">
+          EVS FTP
+          </a>
+          site. 
+          Below are five important subset collections currently presented on these Cancer.gov Web pages:
         </p>
         <table width="670px" border="0">
           <tr>
