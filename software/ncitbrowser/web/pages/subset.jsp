@@ -85,11 +85,11 @@ float: left;
         <div class="texttitle-blue">NCI Thesaurus Subsets</div>
         <hr>
         <p>
-          There are over 100 specially defined subsets in NCI Thesaurus. Each has its own NCIt concept,
+          There are over 200 specially defined subsets in NCI Thesaurus. Each has its own NCIt concept,
           defining the nature of the subset, and these are hierarchically organized under the parent concept
           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
           Terminology Subset (C54443)</a>. These subset concepts are linked to subset-member concepts through
-          over 20,000 association relationships. Many of these subsets are now also available as
+          over 20,000 association relationships. Most of these subsets are now also available as
           <a href="<%=HTTPUtils.cleanXSS(tab_valuesets_link)%>">Value Sets</a>.
           
           <%-- [#32405] Bad link on Subset Summary page.
@@ -98,9 +98,9 @@ float: left;
           
         </p>
         <p>
-          Most of these subsets are federal and international coding standards maintained in active collaboration with our FDA, CDISC, and other
+          Most NCIt subsets are federal and international coding standards maintained in active collaboration with our FDA, CDISC, and other
           partners. They are currently distributed largely as tab-delimited data and Excel spreadsheet files accessible
-          via FTP. Below are four important subset collections currently presented on these Cancer.gov Web pages:
+          from the EVS FTP site. Below are five important subset collections currently presented on these Cancer.gov Web pages:
         </p>
         <table width="670px" border="0">
           <tr>
@@ -219,9 +219,6 @@ float: left;
         </table>
         <p>
           EVS is developing extended methods to create, browse, download, and have direct computer API access to these and other NCIt subsets.
-          Click
-          <a href="<%= request.getContextPath() %>/pages/list_standard_reports.jsf">here</a>
-          to see the new download page for Terminology Subset Reports.
         </p>
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div>
