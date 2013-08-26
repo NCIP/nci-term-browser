@@ -91,7 +91,7 @@
 			  <tr>
 			    <td><%=tab2%></td>
 			    <td><li>
-			      For all EVS resources, services and contacts see the 
+			      For all EVS resources, services and contacts, see the 
 			      EVS Web site <a href="http://evs.nci.nih.gov/" target="_blank">http://evs.nci.nih.gov/</a>.
 			    </li></td>
 			  </tr>
@@ -99,23 +99,22 @@
           </p>
           
           <p>
-            <b>NCI Term Browser</b> provides a consistent, user-friendly 
-            tool to browse, search and retrieve all of the biomedical 
-            terminologies hosted by EVS, including both NCI Thesaurus (NCIt) 
-            and the NCI Metathesaurus (NCIm), which itself includes more 
-            than 70 terminologies. The 2.0 release added support for 
-            value sets – flat lists of terms from one or more terminologies 
-            used for a particular coding purpose – and mappings between 
-            terminologies to support data translation and cross-reference. 
-            This 2.3 release improves support for those new features, 
-            especially in the new value set tree that allows selective 
-            search of multiple value sets.  Other additions include a 
-            “Back to search results” link to return to your last results 
-            page, an Advanced Search option to search relationship source 
-            or target concept values, and showing the browser and 
-            terminology server versions in the main NCI Term Browser 
-            banner.
-          </p>
+            <b>NCI Term Browser</b> provides a consistent, user-friendly tool to browse, search and retrieve 
+			all of the biomedical terminologies hosted by EVS, including both NCI 
+			Thesaurus (NCIt) and the NCI Metathesaurus (NCIm), which itself includes 
+			more than 70 terminologies. The 2.0 release added support for value sets 
+			– flat lists of terms from one or more terminologies used for 
+			a particular coding purpose – and mappings between terminologies 
+			to support data translation and cross-reference. 
+			This 2.3 release improves support for those new features, 
+			especially in the improved presentation and search of  
+			value sets 
+			and the option to export mapping data. 
+			The Search box separates Name and Code search, search performance 
+			is better, and single-terminology Advanced Search offers new 
+			Lucene options to search with wildcards, negation, boolean operators, 
+			and fuzzy matching. 
+		 </p>
           
           <p>
             This help file provides basic information about how to 
@@ -165,11 +164,11 @@
               searching within each of the NCI hosted terminologies, 
               or within multiple terminologies.</li>
             <li>The <b>Value Sets</b> tab allows browsing and searching 
-              within all value sets (i.e., the CDISC SEND Terminology, 
-              the FDA SPL Terminology, etc.) available on the NCI server.</li>
+              within all value sets, such as the CDISC SDTM Terminology or 
+              the FDA SPL Terminology, available on the NCI server.</li>
             <li>The <b>Mappings</b> tab allows browsing and searching 
-              within a mapping set such as the PDQ to NCIt Mapping: 
-              National Cancer Institute Thesaurus (201010).</li>
+              within a mapping set such as the PDQ to NCIt Mapping or 
+              the NCIt to ChEBI Mapping.</li>
           </ul>
 
           <p>
@@ -191,13 +190,13 @@
           <p>
             Several links appear below the <b>Search Box</b>.  Most 
             appear only in certain tabs or other settings, but these 
-            appear on all tabs:
+            appear on the home pages of all tabs:
           </p>
           <ul>
             <li><b>Sources</b> always appears at the left, and gives 
-              information about all terminologies including the 
-              descriptions appearing on each individual terminology's 
-              home page.</li>
+              information about all terminologies and mappings including the 
+              descriptions that appear on their individual home pages.
+			</li>
             <li><b>Visited Concepts</b> will appear under the Search 
               box once you start visiting individual concept pages. 
               It shows the concept name, terminology, and version for
@@ -261,22 +260,26 @@
             list on the <b>Terminologies</b> tab are four buttons: 
           </p>
           <ul>
-            <li><b>Select All</b> button: includes all terminologies
-              for searching, leaving their check boxes checked.</li>
-            <li><b>All but NCIm</b> button: includes all terminologies
-              except NCI Metathesaurus (NCIm); this is to aid a quick 
-              search since the time to retrieve search results may be 
-              affected when a search within the NCIm is included.</li>
-            <li><b>Clear</b> button: unselects all terminologies and 
+            <li><b>All but NCIm</b> button: Includes all terminologies
+              except NCI Metathesaurus (NCIm); this is to 
+              search the standalone terminologies more quickly, 
+			  without also searching the more than 70 terminologies in NCIm.
+			</li>
+			
+			<li><b>Select All</b> button: Includes all terminologies for searching, 
+			making their check boxes checked.
+			</li>
+			
+            <li><b>Clear</b> button: Unselects all terminologies and 
               clears their check boxes.</li>
-            <li><b>Search</b> button: starts a search in the same way
+            <li><b>Search</b> button: Starts a search in the same way
               as the Search button in the search box (see below).</li>
           </ul>
           <p>
             The <b>Sources</b> link at the top of the NCI Term Browser
-            home page gives information about all terminologies, 
-            including the terminology descriptions appearing 
-            correspondingly on each individual terminology's home page. 
+            home page gives information about all terminologies and mappings, 
+            including the descriptions that appear 
+            on their individual home pages. 
           </p>
         </div>
 
@@ -300,7 +303,7 @@
           </p>
 
           <ul>
-            <li><b>Text Box</b>: Enter the exact string of characters 
+            <li><b>Text Box</b>: Enter the string of characters 
                 you want to search for.
               <ul>
                 <li>Search is not case sensitive (e.g., <font face="courier">aids</font>
@@ -311,14 +314,24 @@
                      but not <i>NAT2 Gene</i>).</li>
                 <li>Do not use quotes - they will be searched for 
                    literally, as characters to be matched.</li>
-                <li>Searching for multiple words does not search on each
-                   word separately. To match, all words have to be found 
-                   in the same order you provided. For example, if you do
+                <li>Search multiple words requires that all search words be found in 
+				    target terms.  There are two different methods used:
+<ul>
+<li>
+	Method 1: For Exact Match and Begins With methods, and for all Property and Relationship targets, the words must be found together in the order entered with no separation.
+</li>
+<li>	
+	Method 2: Contains search on Name, however, now looks for those words separately. A special index makes these searches faster and more flexible than before, while still ranking best matches first.
+</li>
+</ul>				   
+				   For example, if you do
                    a <b>Contains</b> search on <font face="courier">Melanoma Corneal</font>,
-                   no results will be returned, but if you search on
-                   <font face="courier">Corneal Melanoma</font> you get
-                   the detail page for <i>Corneal Melanoma</i>.</li>
-              </ul>
+                   no results will be returned, for any option covered under Method 1,but with
+				   Method 2 you will match
+				                      <font face="courier"><i>Corneal Melanoma</i></font>.
+					Refinement of these methods is ongoing; for updates and current details, see NCI Term Browser 2.3 Release Notes.
+                </li>
+			  </ul>
             </li>
             <li><b>Match method radio buttons</b> select how your 
                 search string will be matched.
@@ -326,19 +339,21 @@
                 <li><b>Exact Match</b> button is the default: Only terms 
                     or codes that are identical will match.</li>
                 <li><b>Begins With</b> button can be selected to find all 
-                    terms or codes that start with the words or characters 
-                    you enter.</li>
+                    terms that start with the words or characters 
+                    you enter. Codes cannot be searched this way.</li>
                 <li><b>Contains</b> button will search for what you enter 
                     anywhere within a term or code (e.g., 
                     <font face="courier">carcinoma</font> will match 
-                    <i>adenocarcinoma)</i>.</li>
+                    <i>adenocarcinoma)</i>.
+					For multiple word search, see description in the preceding section.
+				</li>
                 <li>Concept Codes will only match if they exactly match 
                     what you enter, even if you select <b>Begins With</b>
                     or <b>Contains</b> buttons.</li>
               </ul>
             </li>
             <li><b>Match target radio buttons</b> select what category 
-                of concept information is searched 
+                of concept information is searched. 
               <ul>
                 <li><b>Name</b> button is the default: Search text 
                     is matched to a concept's preferred name, synonyms, or
@@ -498,8 +513,11 @@
             key differences:
           </p>
           <ul>
-            <li><b>Code</b> and <b>Name</b> are searched separately.</li>
-            <li><b>Source</b>: Some terminologies include content from 
+		    <li><b>Lucene</b>: This option, new to the Term Browser 2.3 release, 
+			allows use of Name search options not available elsewhere, 
+			including wildcards, Boolean operators, negation, and fuzzy search 
+			(click the radio button to see examples).</li>
+		    <li><b>Source</b>: Some terminologies include content from 
               more than one contributing source.  You can choose to 
               limit search to one contributing source, or stay with 
               the default of all, using the pull down menu.</li>
@@ -550,9 +568,9 @@
                   directly related to this concept as parents, children, 
                   or in other ways.  Note: For some sources, the browser 
                   adds inverse relationships not asserted bidirectionally 
-                  in the source data file; this is often useful for 
-                  navigational purposes, but might be confusing, and 
-                  will be evaluated for adjustments in future releases.</li>
+                  in the source data file; this is often useful for informational and 
+                  navigational purposes, but is sometimes confusing, and 
+                  will continue to be evaluated for adjustments in future releases.</li>
                 <li><b>Mappings</b>: Gives the mapping relationships, 
                   if any, to other vocabularies.</li>
                 <li><b>View All</b>: Combines all of the concept details 
@@ -564,7 +582,12 @@
               Concepts are often found in several different places. 
               The focus concept will be bold, underlined, and 
               colored red.</li>
-            <li>A <b>Suggest changes</b> link appears in the upper 
+			<li><b>View Graph</b>: Click the link to see an interactive 
+			graphic presentation of some information available in the 
+			<b>Relationships</b> tab.  
+			This uses a widget from the National Center for Biomedical Ontology (NCBO), 
+			and is not available for all terminologies.</li> 
+			<li>A <b>Suggest changes</b> link appears in the upper 
               right of all concept details pages of sources for 
               which NCI can handle such requests. It goes to a 
               special suggestion page with source and concept 
@@ -600,7 +623,7 @@
                 <li>At each level, concepts are listed alphabetically by 
                   concept preferred name.</li>
                 <li>Browse through the levels by clicking on the + next 
-                  to each concept.</li>
+                  to each concept that has child concepts.</li>
                 <li>Click on the concept name itself to see the concept's 
                   details in the main browser window.</li>
               </ul>
@@ -612,7 +635,7 @@
               on the <b>Mappings</b> tab below).</li>
             <li>Click on the <b>Value Sets</b> link at the top of the 
               page to bring up a separate window showing a hierarchy 
-              of the value sets of the terminology.  Clicking on the 
+              of the value sets defined using the terminology.  Clicking on the 
               name of a value set will bring up that value set's home 
               page.  Terminologies that do not have value sets will 
               not have the <b>Value Sets</b> link (see the information 
@@ -676,8 +699,8 @@
                </ul>
             </li>
             <li>
-              Exporting of the concepts you have accumulated on the 
-              <b>Cart</b> page can be done in two formats:
+              Exporting the concepts you have accumulated in the 
+              <b>Cart</b> can be done in two formats:
               <ul>
                 <li><b>Export XML</b> will export cart contents in 
                   XML format.</li>
@@ -708,9 +731,7 @@
           <p>
             The <b>Value Sets</b> tab of the NCI Term Browser home 
             page lists the value sets, which are flat lists of member 
-            concepts. We hope to extend what can be offered in the 
-            future, but this currently offers the basic information. 
-            Value sets are available in two different views:
+            concepts. Value sets are available in two different views:
           </p>
           <ul>
             <li>
@@ -726,9 +747,8 @@
                   next to entries having lower levels.</li>
                 <li>If you select one of the top-level authority 
                   entries, such as CDISC or FDA, you will go to 
-                  a concept for that authority in the Terminology 
-                  Value Set terminology, a small new NCI terminology 
-                  used to help organize value set information.</li>
+                  a home page for that authority with descriptive text 
+				  and a listing of value sets.</li>
               </ul>
             </li>
           </ul>
@@ -751,17 +771,17 @@
           </p>
           <ul>
             <li>
-              <a name="valueBullet"><b>Values</b></a>
-              lists all concepts contained in this 
+              <b>Values</b> lists all concepts contained in this 
                 value set, using the production version of each 
-                participating terminology.  The listing shows:
+                participating terminology. The listing shows:
               <ul> 
-                <li>Name</li>
-                <li>Description</li>
-                <li>Concept Domain</li>
-                <li>Sources</li>
+                <li>Name:  A descriptive name</li>
+                <li>Description: A plain text description of the nature of the value set</li>
+                <li>Concept Domain: The type of meaning represented.</li>
+                <li>Sources: The authority or origin of the contents.</li>
                 <li>
-                  Concepts
+                  Concepts: The individual concept values that comprise 
+				  the value set, presented as follows:
                   <ul>
                     <li>The first 50 concepts of the value set are 
                       listed. Use the <b>Show &lt;n&gt; results per page</b>
@@ -777,8 +797,11 @@
                   </ul>
                 </li>
               </ul>
-              <br/>There are two options for exporting all of the 
-                values from the displayed set:<br/><br/>
+              <br/>
+			  There are two options for exporting all of the 
+              values from the displayed set:
+			  <br/>
+			  <br/>
               <ul>
                 <li><b>Export XML</b> will open or save the value set 
                   in a tagged XML format.</li>
@@ -826,126 +849,47 @@
               </td>
             </tr>
           </table>
+		  <p>
+		  The <b>Search Box</b> on either the <b>Value Sets</b> tab 
+		  or on a particular 
+		  Value Set's home page works the same way as on the 
+		  <b>Terminologies</b> tab: the <b>Text Box</b>, the <b>Match method radio buttons</b>, 
+		  and the <b>Match target radio buttons</b> all function the same way 
+		  as with the <b>Terminologies</b> tab. The one exception to note is 
+		  that only Name and Code match targets are supported, 
+		  and Code is the initial default. 
+		  </p>
           <p>
-            The <b>Search Box</b>, in the upper right corner of the 
-            Value Sets tab, lets you enter all or part of what you 
-            are looking for and how you want to search for it. You 
-            can search all value sets at once, or individual value 
-            sets separately. 
-          </p>
-          <p>
-            1. Search all value sets at once to determine which ones 
-            contain a match to your search string. This is how search 
-            works when you first come to the Value Sets tab. Some details:
-          </p>
-               
+		  Value Set search results, however, are presented differently, 
+		  because matching concepts are members of one or more selected value sets, 
+		  but also come from a particular terminology source. The result page 
+		  indicates the search expression and selected value sets, and then 
+		  presents a table of matching concepts with four columns:
+		  </p>     
           <ul>
             <li>
-              <b>Text Box</b>: Enter the exact string of characters 
-                you want to search for.
-              <ul> 
-                <li>Search is not case sensitive (e.g., 
-                  <font face="courier">aids</font> will match <i>aids</i>, 
-                  <i>Aids</i>, and <i>AIDS</i>).</li>
-                <li>There are no wildcard characters. All characters are 
-                  matched literally (e.g., searching for <b>Begins With</b>
-                  <font face="courier">NAT2*</font> will match <i>NAT2*5 Allele</i>
-                  but not <i>NAT2 Gene</i>).</li>
-                <li>Do not use quotes - they will be searched for literally, 
-                  as characters to be matched.</li>
-                <li>Searching for multiple words does not search on each 
-                  word separately. To match, all words have to be found 
-                  in the same order you provided. For example, if you do 
-                  a <b>Contains</b> search on <font face="courier">Canis Brucella</font>, 
-                  no results will be returned, but if you search on 
-                  <font face="courier">Brucella Canis</font> you get the 
-                  Value Set(s) that contain that concept.</li>
-              </ul>
-            </li>
-            <li>
-              <b>Match method radio buttons</b> select how your search 
-                string will be matched. 
-              <ul>
-                <li><b>Exact Match</b> is the default: Only terms or 
-                  codes that are identical will match.</li>
-                <li><b>Begins With</b> can be selected to find all terms 
-                  or codes that start with the words or characters you enter.</li>
-                <li><b>Contains</b> will search for what you enter 
-                  anywhere within a term or code (e.g., 
-                  <font face="courier">carcinoma</font> will match 
-                  <i>adenocarcinoma)</i>.</li>
-                <li>Concept Codes will only match if they exactly match 
-                  what you enter, even if you select <b>Begins With</b>
-                  or <b>Contains</b>.</li>
-              </ul> 
-            </li>
-            <li>
-              <b>Match target radio buttons</b> select what category of 
-                concept information is searched
-              <ul>
-                <li><b>Code</b> - this is the default: Enter the concept 
-                  code (e.g., C81209) that you wish to find. Value sets 
-                  containing at least one concept with that concept code 
-                  will be returned (e.g., CDISC Terminology.)</li>
-                <li><b>Name</b> - enter all or part of the search phrase 
-                  of the concept you wish to find (e.g., Month Day Imputed). 
-                  NOTE: the name search is not intended to find the value 
-                  set name, but rather a specific concept name contained 
-                  within a value set.</li>
-              </ul>
-            </li>
-          </ul>
-
-          <p>
-          <!--
-            When a Values Set search is run, <b>Matched Value Sets</b>
-            are displayed by name. Select the radio button in front of 
-            the value set you wish to view. Then you can choose the 
-            Values button, Versions button or XML definitions button 
-            to view the values in that set.
-          -->
-
-            When a Values Set search is run, <b>Matched Value Sets</b>
-            are displayed by name, along with the name of code of each corresponding 
-            matched concept and the name and version
-            of the vocabulary to which the concept belongs. Click on   
-            the value set you wish to view. Then you can choose the 
-            Values button, Versions button or XML definitions button 
-            to view the values in that set.
-
-            Click on a concept <b>Name</b>
-              to see a concept's details (the details of the concept 
-              are the same as outlined in <b>Terminology-Concept Details</b>,
-              above).
-          
-          </p>
-          <p>
-            Some details: 
-          </p>
-          
+			<b>Value Set</b>: The value set the matching concept is in.  Click on it to visit the value set’s home page. Where a parent value set combines multiple child value sets, matching concepts will be listed twice, for both the parent and the child.
+			</li>
+			<li>
+			<b>Vocabulary</b>: The source terminology for this concept, including its version in parentheses.
+			</li>
+		    <li>
+			<b>Name</b>: The name of the concept.  
+			Click on it to see a concept's details (the details of the concept 
+			are the same as outlined in Terminology-Concept Details, earlier in this Help).
+			</li>			
+			<li>
+			<b>Code</b>: The code of the concept. 
+			</li>
+		  </ul>	
+		<p>Some details:</p>
           <ul>
-           <li>All matching value sets and concepts are returned.</li>
-           <li>If there are too many to show on one page, you can page 
-             through the results with a default of 50 per page. To change 
-             the default number, use the <b>Show results per page</b>
-             drop-down menu at the bottom of the page.</li>
-          </ul>
-          <p>
-            2. Search <b><i>within</i></b> a Values Set. Once you have 
-            selected a Values Set to view, e.g., CDISC ADaM Terminology, 
-            you can search for specific values within that set. The 
-            search box works the same as described above, with one 
-            additional target radio button:
-          </p>
-          <ul>
-           <li><b>Property</b> - enter all or part of the text you want 
-             to find (e.g., Quantitative Concept).</li>
-          </ul>
-          <p>
-            The matched values will appear in the results list. Select 
-            the <b>Concept Name</b> to view the details for that concept. 
-            See <a href="#conceptDetails">Concept Details</a> for further information.
-          </p>
+            <li>
+	      	All matching value sets and concepts are returned.
+			<li>
+		    If there are too many to show on one page, you can page through the results with a default of 50 per page. To change the default number, use the Show results per page drop-down menu at the bottom of the page.	</li>
+		    </li>
+		  </ul>
         </div>
 
         <%-- -------------------------------------------------------------- --%>        
@@ -1044,18 +988,16 @@
             with eight columns:
           </p>
           <ul>
-            <li><b>Source</b>: the source terminology which has been 
+            <li><b>Source</b>: the source terminology that has been 
               mapped to a target terminology (for a PDQ to NCIt mapping, 
               for example, the <b>source</b> will always be "PDQ," 
               since PDQ is the source terminology and NCIt is the 
               target terminology).</li>
             <li><b>Source Code</b>: the concept code of a concept in 
-              a source terminology which has been mapped to a concept 
-              in the target terminology (for example, the <b>source code</b>
-              CDR00000038833 of the PDQ concept "melanoma" that has 
+              a source terminology (for example, the <b>source code</b>
+              CDR0000038833 of the PDQ concept "melanoma" that has 
               been mapped to the target NCIt concept "Melanoma").</li>
             <li><b>Source Name</b>: the name of a concept in a source 
-              terminology which has been mapped to a concept in a target 
               terminology (for example, the PDQ concept with the 
               <b>source name</b> "melanoma" has been mapped to the 
               NCIt concept "Melanoma").</li>
