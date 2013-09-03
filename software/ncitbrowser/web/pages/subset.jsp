@@ -222,7 +222,10 @@ float: left;
   
             </td>
             <td class="textbody" valign="top">
+            <!--
               <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/page7" target="_blank"
+             --> 
+              <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/pediatric" target="_blank"
                   alt="Federal Medication Terminologies">Pediatric Terminology:
               </a>
               The National Children's Study (NCS) and the National Institute of Child Health and Human Development (NICHD) are working with EVS to provide standardized coding for pediatric clinical trial and other research activities.
