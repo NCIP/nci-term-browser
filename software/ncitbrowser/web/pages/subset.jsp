@@ -204,14 +204,14 @@ float: left;
 
  <div>
      <div class="img1">
-              <a href="http://evs.nci.nih.gov/ftp1/NICHD/About.html" target="_blank"
+              <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/pediatric" target="_blank"
                   alt="National Council for Prescription Drug Programs">
                 <img src="<%=basePath%>/images/NCS_new.jpg" border="0"   height="30" width="110" 
                   alt="National Children's Study (NCS) Pediatric Terminology"/>
               </a>     
      </div>
      <div class="img2">
-              <a href="http://evs.nci.nih.gov/ftp1/NICHD/About.html" target="_blank"
+              <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/pediatric" target="_blank"
                   alt="National Council for Prescription Drug Programs">
                 <img src="<%=basePath%>/images/NICHD_new.jpg" border="0" height="25" width="90" 
                   alt="National Institute of Child Health and Human Development (NICHD) Pediatric Terminology"/>
@@ -222,9 +222,6 @@ float: left;
   
             </td>
             <td class="textbody" valign="top">
-            <!--
-              <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/page7" target="_blank"
-             --> 
               <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/pediatric" target="_blank"
                   alt="Federal Medication Terminologies">Pediatric Terminology:
               </a>

@@ -441,15 +441,7 @@
                       <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3" onclick="refresh_algorithm()"; >Exact Match&nbsp;
                       <input type="radio" name="adv_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3" onclick="refresh_algorithm()"; >Begins With&nbsp;
                       <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3" onclick="refresh_algorithm()"; >Contains
-                      
-<%
-String luceneSearch = "<a href=\"#\" onmouseover=\"Tip('<h4>Match Algorithm</h4><table><tr><td>Wildcard (multiple characters)</b>: heart*</td></tr><tr>       <td><b>Wildcard (single character)</b>: he?rt</td></tr><tr><td><b>Fuzzy match</b>: heart~</td></tr><tr><td><b>Boolean</b>: heart AND attack</td></tr><td><b>Boosting</b>: heart^5 AND attack</td></tr><tr><td><b>Negation</b>: heart -attack</td></tr><tr><td><b>Code Field</b>: code:118797008 AND heart</td></tr></table>')\" onmouseout=\"UnTip()\" >Lucene Search</a>";
-%>
-                      
                       <input type="radio" name="adv_search_algorithm" value="lucene" alt="Lucene" <%=check__b%> tabindex="3" onclick="refresh_algorithm()"; >
-                      <!--
-                      <%=luceneSearch%>
-                      -->
                       Lucene
                     </td></tr>
                   </table>
@@ -507,13 +499,7 @@ if (adv_search_algorithm.compareToIgnoreCase("lucene") != 0) {
 <%
 } else {
 %>
-
     <input type="hidden" name="adv_search_source" id="adv_search_source" value="<%=HTTPUtils.cleanXSS(adv_search_source)%>">
-
-
-
-
-
 <%
 }
 %>
@@ -532,14 +518,11 @@ if (adv_search_algorithm.compareToIgnoreCase("lucene") != 0) {
      
 %>
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Code" alt="Code" <%=check_c2%> onclick="refresh_code()" tabindex="5">Code&nbsp;
-
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Property" alt="Property" <%=check_p2%> onclick="javascript:refresh()" tabindex="5">Property&nbsp;
                   <input type="radio" id="selectSearchOption" name="selectSearchOption" value="Relationship" alt="Relationship" <%=check_r2%> onclick="javascript:refresh()" tabindex="5">Relationship
 <%
 } else {
 %>
-
-
 
 
 <%
