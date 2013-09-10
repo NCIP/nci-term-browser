@@ -46,8 +46,10 @@ import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
 import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.lexgrid.valuesets.impl.LexEVSValueSetDefinitionServicesImpl;
 
 import gov.nih.nci.evs.browser.utils.*;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -451,6 +453,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
         return null;
     }
 
+
     /**
      * Export cart in XML format
      * @return
@@ -477,6 +480,8 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
         	return null;
     	}
 
+    	LexEVSValueSetDefinitionServices vsd_service = null;
+
         // Get Entities to be exported and build export XML string
         // in memory
 
@@ -486,8 +491,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
         	versionList = getSchemeVersionList(search);
 
         	// Setup lexbig service
-    		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil
-				.getLexEVSValueSetDefinitionServices();
+    		vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
             //instantiate the mappings
             Mappings maps = new Mappings();
@@ -573,6 +577,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
                 }
             }
 
+/*
 			// Add list of coding schemes version reference
 			AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
 			HashSet uri_hset = new HashSet();
@@ -589,16 +594,21 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 				    }
 				}
 			}
-
+*/
             // Build a buffer holding the XML data
 
             StringBuffer buf = null;
             InputStream reader = null;
 
-            try {
-	    		reader = vsd_service.exportValueSetResolution(vsd, null,
-	    			csvList, null, false);
+            HashMap<String, ValueSetDefinition> referencedVSDs = null;
+            String csVersionTag = null;
+            boolean failOnAllErrors = false;
 
+            //public InputStream exportValueSetResolution(ValueSetDefinition valueSetDefinition, HashMap<String, ValueSetDefinition> referencedVSDs, AbsoluteCodingSchemeVersionReferenceList csVersionList, String csVersionTag, boolean failOnAllErrors)
+/*
+            try {
+	    		//reader = vsd_service.exportValueSetResolution(vsd, null, csvList, null, false);
+                reader = vsd_service.exportValueSetResolution(vsd, referencedVSDs, csvList, csVersionTag, failOnAllErrors);
 				if (reader != null) {
 					buf = new StringBuffer();
 					for (int c = reader.read(); c != -1; c = reader.read()) {
@@ -608,11 +618,28 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 					buf = new StringBuffer("<error>exportValueSetResolution returned null.</error>");
 				}
             } catch (Exception e) {
+				e.printStackTrace();
 				buf = new StringBuffer("<error>The VSD export service is not supported by your current LexEVS setup.</error>");
 				buf.append("<!-- " + e.getMessage() + " -->");
 			} finally {
 				try {
 					reader.close();
+				} catch (Exception e) {
+					new StringBuffer("<error>" + e.getMessage() + "</error>");
+				}
+			}
+*/
+
+			// [GF#32966] Unable to Export XML from CART
+            try {
+				buf = vsd_service.exportValueSetDefinition(vsd);
+
+            } catch (Exception e) {
+				buf = new StringBuffer("<error>The VSD export service is not supported by your current LexEVS setup.</error>");
+				buf.append("<!-- " + e.getMessage() + " -->");
+			} finally {
+				try {
+					//reader.close();
 				} catch (Exception e) {
 					new StringBuffer("<error>" + e.getMessage() + "</error>");
 				}
@@ -1298,7 +1325,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
     public void formatListener(ActionEvent evt) {
         FacesContext ctx = FacesContext.getCurrentInstance();
         String format = (String) ctx.getExternalContext().getRequestParameterMap().get("format");
-        System.out.println("formatListener format: " + format);
+        //System.out.println("formatListener format: " + format);
     }
 
 } // End of CartActionBean
