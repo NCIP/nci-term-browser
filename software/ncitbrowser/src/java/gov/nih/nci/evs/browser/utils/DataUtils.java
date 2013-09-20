@@ -235,6 +235,8 @@ public class DataUtils {
 
     private static HashMap _listOfCodingSchemeVersionsUsedInResolutionHashMap = null;
 
+    private static HashMap _RVSCSFormalName2VersionHashMap = null;
+
 
     // ==================================================================================
 
@@ -473,6 +475,12 @@ public class DataUtils {
 		return null;
 	}
 
+	public static Vector getRVSCSVersionsByFormalName(String RVSCS_formalname) {
+		if (!_RVSCSFormalName2VersionHashMap.containsKey(RVSCS_formalname)) return null;
+		return (Vector) _RVSCSFormalName2VersionHashMap.get(RVSCS_formalname);
+    }
+
+
     private static void setCodingSchemeMap() {
 		//LexEVSResolvedValueSetServiceImpl lexEVSResolvedValueSetService = new LexEVSResolvedValueSetServiceImpl();
 
@@ -504,6 +512,7 @@ public class DataUtils {
         _formalName2VersionsHashMap = new HashMap();
         _versionReleaseDateHashMap = new HashMap();
         _listOfCodingSchemeVersionsUsedInResolutionHashMap = new HashMap();
+        _RVSCSFormalName2VersionHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -578,10 +587,23 @@ public class DataUtils {
 					}
 
                     try {
+
                         CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
                         if (isResolvedValueSetCodingScheme(cs)) {
 							String cs_uri = cs.getCodingSchemeURI();
 							String cs_name = cs.getCodingSchemeName();
+
+							String cs_version = cs.getRepresentsVersion();
+
+							String cs_formalname = cs.getFormalName();
+							Vector w = (Vector) _RVSCSFormalName2VersionHashMap.get(cs_formalname);
+							if (w == null) {
+								w = new Vector();
+							}
+							w.add(cs_version);
+							System.out.println("(*) " + cs_formalname + " -> " + cs_version);
+
+							_RVSCSFormalName2VersionHashMap.put(cs_formalname, w);
 
 							HashMap hmap = new HashMap();
 							AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(cs_name);
@@ -593,8 +615,6 @@ public class DataUtils {
 								}
 								_listOfCodingSchemeVersionsUsedInResolutionHashMap.put(cs_name, hmap);
 							}
-
-
 
                         } else {
 

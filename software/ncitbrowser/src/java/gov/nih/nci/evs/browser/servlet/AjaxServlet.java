@@ -2933,6 +2933,10 @@ if (matched_vsds != null && matched_vsds.size() == 1) {
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
 
+
+long ms = System.currentTimeMillis();
+
+
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 
         if (DataUtils.isNull(selectValueSetSearchOption)) {
@@ -2977,8 +2981,17 @@ if (matched_vsds != null && matched_vsds.size() == 1) {
 			searchOption = SimpleSearchUtils.BY_NAME;
 		}
 
+System.out.println(checked_vocabularies);
+
+System.out.println("AjaxServlet valueSetSearchAction involking ValueSetSearchUtils -- " + matchText + ", " + algorithm);
+_logger.debug("AjaxServlet valueSetSearchAction involking ValueSetSearchUtils -- " + matchText + ", " + algorithm);
+
         ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
             matchText, searchOption, algorithm);
+
+System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+_logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
+
 
         if (wrapper == null) {
 			msg = "No match found.";

@@ -516,6 +516,14 @@ public class ValueSetSearchUtils
 	}
 
 
+	public static Vector getCodingSchemeVersionsByURN(String RVSCS_formalname) {
+		if (RVSCS_formalname == null) return null;
+		return DataUtils.getRVSCSVersionsByFormalName(RVSCS_formalname);
+	}
+
+
+
+/*
     public static Vector getCodingSchemeVersionsByURN(String urn) {
         try {
 			Vector v = new Vector();
@@ -546,8 +554,9 @@ public class ValueSetSearchUtils
                 if (isActive != null && isActive.equals(Boolean.TRUE)) {
                 	String uri = css.getCodingSchemeURI();
                 	String formalName = css.getFormalName();
+                	String localName = css.getLocalName();
 
-                	if (uri.compareTo(urn) == 0 || urn.compareTo(formalName) == 0) {
+                	if (urn.compareTo(formalName) == 0 || urn.compareTo(localName) == 0 || urn.compareTo(uri) == 0 ) {
 						String representsVersion = css.getRepresentsVersion();
 						v.add(representsVersion);
 					}
@@ -559,24 +568,27 @@ public class ValueSetSearchUtils
 		}
 		return null;
 	}
-
+*/
 
     public ResolvedConceptReferencesIteratorWrapper searchResolvedValueSetCodingSchemes(String checked_vocabularies,
         String matchText, String matchAlgorithm) {
-
 		return searchResolvedValueSetCodingSchemes(checked_vocabularies, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
 	}
 
 
     public ResolvedConceptReferencesIteratorWrapper searchResolvedValueSetCodingSchemes(String checked_vocabularies,
         String matchText, int searchOption, String matchAlgorithm) {
+		ResolvedConceptReferencesIteratorWrapper wrapper = null;
+
+long ms = System.currentTimeMillis();
+
 		if (checked_vocabularies == null) return null;
 		Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
-
 		// find versions
 		Vector schemes = new Vector();
 		Vector versions = new Vector();
 		for (int i=0; i<selected_vocabularies.size(); i++) {
+			int k = i+1;
 			String selected_vocabulary = (String) selected_vocabularies.elementAt(i);
 			Vector u = getCodingSchemeVersionsByURN(selected_vocabulary);
 			if (u != null) {
@@ -586,9 +598,13 @@ public class ValueSetSearchUtils
 					versions.add(version);
 				}
 		    } else {
-				System.out.println("\tgetCodingSchemeVersionsByURN returns null???");
+				//System.out.println("\tgetCodingSchemeVersionsByURN returns null ??? " + selected_vocabulary);
 			}
 		}
+
+_logger.debug("\tComponent run time (ms) of searching for all resovled value set coding scheme versions: " + (System.currentTimeMillis() - ms));
+System.out.println("\tComponent run time (ms) of searching for all resovled value set coding scheme versions: " + (System.currentTimeMillis() - ms));
+
 		/*
 		// performs search
 		ResolvedConceptReferencesIteratorWrapper wrapper = null;
@@ -616,11 +632,17 @@ public class ValueSetSearchUtils
 		}
 		return wrapper;
 		*/
-		ResolvedConceptReferencesIteratorWrapper wrapper = null;
+
+
         if (searchOption == SimpleSearchUtils.BY_NAME) {
 			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 				try {
+
+_logger.debug("searchResolvedValueSetCodingSchemes by name using search extension -- " + matchText + ", " + matchAlgorithm);
+System.out.println("searchResolvedValueSetCodingSchemes by name using search extension -- " + matchText + ", " + matchAlgorithm);
+
 					wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, searchOption, matchAlgorithm);
+
 
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -629,6 +651,10 @@ public class ValueSetSearchUtils
 				String source = "ALL";
 				boolean ranking = false;
 				int maxToReturn = -1;
+
+_logger.debug("searchResolvedValueSetCodingSchemes by name using regular search API -- " + matchText + ", " + matchAlgorithm);
+System.out.println("searchResolvedValueSetCodingSchemes by name using regular search API -- " + matchText + ", " + matchAlgorithm);
+
 					wrapper = new SearchUtils().searchByNameOrCode(
 							schemes, versions, matchText,
 							source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
@@ -637,6 +663,10 @@ public class ValueSetSearchUtils
 		} else if (searchOption == SimpleSearchUtils.BY_CODE) {
 			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.CODES)) {
 				try {
+
+_logger.debug("searchResolvedValueSetCodingSchemes by code using search extension -- " + matchText + ", " + matchAlgorithm);
+System.out.println("searchResolvedValueSetCodingSchemes by code using search extension -- " + matchText + ", " + matchAlgorithm);
+
 					wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, searchOption, matchAlgorithm);
 
 				} catch (Exception ex) {
@@ -646,26 +676,23 @@ public class ValueSetSearchUtils
 				String source = "ALL";
 				boolean ranking = false;
 				int maxToReturn = -1;
+
+_logger.debug("searchResolvedValueSetCodingSchemes by name using regular search API -- " + matchText + ", " + matchAlgorithm);
+System.out.println("searchResolvedValueSetCodingSchemes by name using regular search API -- " + matchText + ", " + matchAlgorithm);
+
 					wrapper = new SearchUtils().searchByNameOrCode(
 							schemes, versions, matchText,
 							source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
+
 			}
 		}
+
+
+_logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
+System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
+
+
 		return wrapper;
 	}
-
-
-/*
-	public static void main(String[] args) {
-		try {
-           AbsoluteCodingSchemeVersionReferenceList list1 = getEntireAbsoluteCodingSchemeVersionReferenceList();
-           if (list1 != null) {
-			   System.out.println("Count: " + list1.getAbsoluteCodingSchemeVersionReferenceCount());
-		   }
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	  }
-*/
 }
 

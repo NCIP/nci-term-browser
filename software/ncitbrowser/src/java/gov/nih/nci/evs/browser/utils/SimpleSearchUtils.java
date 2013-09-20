@@ -204,8 +204,25 @@ public class SimpleSearchUtils {
 		return search(schemes, versions, matchText, searchOption, algorithm);
     }
 
+
+    private void printNumberOfMatches(ResolvedConceptReferencesIterator iterator) {
+		if (iterator == null) {
+			System.out.println("Iterator is null");
+			return;
+		}
+		try {
+			int numRemaining = iterator.numberRemaining();
+			System.out.println("Number of matches: " + numRemaining);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+
     public ResolvedConceptReferencesIteratorWrapper search(
         Vector<String> schemes, Vector<String> versions, String matchText, int searchOption, String algorithm) throws LBException {
+			System.out.println("search by " + matchText + ", algorithm: " + algorithm);
+
 	    if (schemes == null|| versions == null) return null;
 	    if (schemes.size() != versions.size()) return null;
 	    if (schemes.size() == 0) return null;
@@ -232,6 +249,7 @@ public class SimpleSearchUtils {
         for (int i=0; i<schemes.size(); i++) {
 			String scheme = (String) schemes.elementAt(i);
 			String version = (String) versions.elementAt(i);
+			System.out.println("\t" + scheme + " (" + version + ")");
 			CodingSchemeReference ref = new CodingSchemeReference();
 			ref.setCodingScheme(scheme);
 
@@ -241,15 +259,12 @@ public class SimpleSearchUtils {
 		    }
 			includes.add(ref);
 		}
-		/*
-		if (searchOption == BY_CODE) {
-			matchText = "code:" + matchText;
-		}
-		*/
 
 		ResolvedConceptReferencesIterator iterator = null;
 		try {
 			iterator = searchExtension.search(matchText, includes, converToMatchAlgorithm(searchOption, algorithm));
+			printNumberOfMatches(iterator);
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
