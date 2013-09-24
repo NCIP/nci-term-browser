@@ -855,9 +855,11 @@
 		  Value Set's home page works the same way as on the 
 		  <b>Terminologies</b> tab: the <b>Text Box</b>, the <b>Match method radio buttons</b>, 
 		  and the <b>Match target radio buttons</b> all function the same way 
-		  as with the <b>Terminologies</b> tab. The one exception to note is 
-		  that only Name and Code match targets are supported, 
-		  and Code is the initial default. 
+		  as with the <b>Terminologies</b> tab. 
+		  The one exception to note is 
+		  that only Name and Code match targets are supported; 
+		  as elsewhere, 
+		  Name is the initial default.
 		  </p>
           <p>
 		  Value Set search results, however, are presented differently, 
