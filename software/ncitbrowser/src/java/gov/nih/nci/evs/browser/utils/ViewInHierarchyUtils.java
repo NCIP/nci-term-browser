@@ -18,6 +18,16 @@ import org.lexevs.tree.service.TreeServiceFactory;
 import org.lexevs.tree.dao.iterator.ChildTreeNodeIterator;
 import org.apache.log4j.*;
 
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSApplicationService;
+
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -72,11 +82,18 @@ import org.apache.log4j.*;
 
 public class ViewInHierarchyUtils {
 	private int MAX_CHILDREN = 5;
-	private static Logger _logger = Logger.getLogger(DataUtils.class);
+	private static Logger _logger = Logger.getLogger(ViewInHierarchyUtils.class);
 	private static Random rand = new Random();
 
 
 	int has_more_node_knt = 0;
+
+	public String rt_1 = null;
+	public String rt_2 = null;
+	public String rt_3 = null;
+	public String rt_4 = null;
+	public String rt = null;
+
 
 
 	private String generateRandomString() {
@@ -103,8 +120,9 @@ public class ViewInHierarchyUtils {
 		has_more_node_knt = 0;
 	}
 
+
     private static void println(PrintWriter out, String text) {
-        gov.nih.nci.evs.browser.servlet.AjaxServlet.println(out, text);
+        out.println(text);
     }
 
     private String replaceNodeID(String code) {
@@ -157,29 +175,141 @@ public class ViewInHierarchyUtils {
 
     }
 
+
+
+    public static String getNamespaceByCode(String codingSchemeName, String vers, String code) {
+        try {
+			if (code == null) {
+				//System.out.println("Input error in DataUtils.getNamespaceByCode -- code is null.");
+				return null;
+			}
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            if (lbSvc == null) {
+                //System.out.println("lbSvc == null???");
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (vers != null) versionOrTag.setVersion(vers);
+
+            ConceptReferenceList crefs = createConceptReferenceList(
+                    new String[] { code }, codingSchemeName);
+
+            CodedNodeSet cns = null;
+            try {
+				try {
+					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+
+                if (cns == null) {
+					//System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+					return null;
+				}
+
+                cns = cns.restrictToCodes(crefs);
+ 				ResolvedConceptReferenceList matches = null;
+				try {
+					matches = cns.resolveToList(null, null, null, 1);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+                if (matches == null) {
+                    //System.out.println("Concept not found.");
+                    return null;
+                }
+                int count = matches.getResolvedConceptReferenceCount();
+                // Analyze the result ...
+                if (count == 0)
+                    return null;
+                if (count > 0) {
+                    try {
+                        ResolvedConceptReference ref = (ResolvedConceptReference) matches
+                                .enumerateResolvedConceptReference()
+                                .nextElement();
+
+                        return ref.getCodeNamespace();
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
+                        return null;
+                    }
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+
+
+
     public void printTree(PrintWriter out, String codingScheme, String version, String code) {
         try {
+			long ms_0 = System.currentTimeMillis();
+			long ms = System.currentTimeMillis();
+
             TreeService service =
                     TreeServiceFactory.getInstance().getTreeService(
                         RemoteServerUtil.createLexBIGService());
 
-            //long start = System.currentTimeMillis();
+            rt_1 = "" + (System.currentTimeMillis() - ms);
+			//System.out.println("Setup TreeService run time (ms): " + rt_1);
+			ms = System.currentTimeMillis();
+
             CodingSchemeVersionOrTag csvt = null;
             if (version != null && version.length() > 0)
                 csvt = Constructors.createCodingSchemeVersionOrTagFromVersion(version);
 
-            String namespace = DataUtils.getNamespaceByCode(codingScheme, version, code);
+            String namespace = getNamespaceByCode(codingScheme, version, code);
             LexEvsTree tree = service.getTree(codingScheme, csvt, code, namespace);
+
+            rt_2 = "" + (System.currentTimeMillis() - ms);
+            //System.out.println("TreeService.getTree  run time (ms): " + rt_2);
+            ms = System.currentTimeMillis();
+
             List<LexEvsTreeNode> listEvsTreeNode =
                     service.getEvsTreeConverter()
                         .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
 
+            rt_3 = "" + (System.currentTimeMillis() - ms);
+            //System.out.println("TreeService.buildEvsTreePathFromRootTree  run time (ms): " + rt_3);
+            ms = System.currentTimeMillis();
             LexEvsTreeNode root = null;
             printTree(out, "", code, root, "root", listEvsTreeNode);
+
+            rt_4 = "" + (System.currentTimeMillis() - ms);
+			//System.out.println("printTree run time (ms): " + rt_4);
+
+            rt = "" + (System.currentTimeMillis() - ms_0);
+			//System.out.println("Total run time (ms): " + rt);
+
+
         } catch (Exception e) {
             _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
+
+    public Vector getReponseTimes() {
+		Vector v = new Vector();
+		v.add(rt_1);
+		v.add(rt_2);
+		v.add(rt_3);
+		v.add(rt_4);
+		v.add(rt);
+		return v;
+
+
+	}
 
     private void printTree(PrintWriter out, String indent, String focus_code, LexEvsTreeNode parent, String parent_node_id, List<LexEvsTreeNode> nodes) {
         for (LexEvsTreeNode node : nodes) {
@@ -474,11 +604,66 @@ public class ViewInHierarchyUtils {
 		return t;
 	}
 
+    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
+        throws Exception {
+		CodedNodeSet cns = null;
+		try {
+			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
+			CodedNodeSet.AnonymousOption restrictToAnonymous = CodedNodeSet.AnonymousOption.NON_ANONYMOUS_ONLY;
+			cns = cns.restrictToAnonymous(restrictToAnonymous);
+	    } catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return cns;
+	}
+
+    public static ConceptReferenceList createConceptReferenceList(
+        String[] codes, String codingSchemeName) {
+        if (codes == null) {
+            return null;
+        }
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.length; i++) {
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(codes[i]);
+            list.addConceptReference(cr);
+        }
+        return list;
+    }
+
+    public static ConceptReferenceList createConceptReferenceList(Vector codes,
+        String codingSchemeName) {
+        if (codes == null) {
+            return null;
+        }
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.size(); i++) {
+            String code = (String) codes.elementAt(i);
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(code);
+            list.addConceptReference(cr);
+        }
+        return list;
+    }
+
+
     public static void main(String[] args) throws Exception {
-        new ViewInHierarchyUtils("NCI_Thesaurus", "11.09d", "C37927"); // Color
+		//Melanoma (Code C3224)
+        //new ViewInHierarchyUtils("NCI_Thesaurus", "13.08d", "C37927"); // Color
+        String codingscheme = "NCI_Thesaurus";
+        String version = "13.08d";
+        String code = "C3224";
+        if (args.length > 0) {
+			code = args[0];
+		}
+        new ViewInHierarchyUtils("NCI_Thesaurus", "13.08d", code);
     }
 
 }
 
+// com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema
 
 

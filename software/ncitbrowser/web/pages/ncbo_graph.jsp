@@ -62,29 +62,7 @@ var hasProductInstall = DetectFlashVer(6, 0, 65);
 // Version check based upon the values defined in globals
 var hasRequestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 
-if ( hasProductInstall && !hasRequestedVersion ) {
-	// DO NOT MODIFY THE FOLLOWING FOUR LINES
-	// Location visited after installation is complete if installation is required
-	var MMPlayerType = (isIE == true) ? "ActiveX" : "PlugIn";
-	var MMredirectURL = window.location;
-    document.title = document.title.slice(0, 47) + " - Flash Player Installation";
-    var MMdoctitle = document.title;
-
-	AC_FL_RunContent(
-		"src", "playerProductInstall",
-		"FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
-		"width", "100%",
-		"height", "100%",
-		"align", "middle",
-		"id", "BasicFlexoViz",
-		"quality", "high",
-		"bgcolor", "#ffffff",
-		"name", "BasicFlexoViz",
-		"allowScriptAccess","sameDomain",
-		"type", "application/x-shockwave-flash",
-		"pluginspage", "http://www.adobe.com/go/getflashplayer"
-	);
-} else if (hasRequestedVersion) {
+if ( hasProductInstall && hasRequestedVersion ) {
 	// if we've detected an acceptable version embed the Flash Content SWF when all tests are passed
 	AC_FL_RunContent(
 			"src", "BasicFlexoViz?v=2.3.4.1",
@@ -102,9 +80,9 @@ if ( hasProductInstall && !hasRequestedVersion ) {
 	);
   } else {
   	// flash is too old or we can't detect the plugin
-    var alternateContent = '<br/>This website requires the Adobe Flash Player.  '
-    + 'Please download and install the Flash plug-in and try again.  '
-   	+ '<a href=http://www.adobe.com/go/getflash/>Get Flash</a><br/>';
+    var alternateContent = '<br/>This website requires an updated version of Adobe Flash Player.  '
+    + 'Please download and install the Flash plug-in from http://www.adobe.com/go/getflash/ and try again.  '
+   	+ '<br/>';
     document.write(alternateContent);
   }
 // -->
