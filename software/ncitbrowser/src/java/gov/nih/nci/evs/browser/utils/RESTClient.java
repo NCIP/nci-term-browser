@@ -90,11 +90,6 @@ public class RESTClient{
     public static String extractValue(String line, String open_tag, String close_tag)
     {
 		boolean debug = false;
-		if (open_tag.compareTo("<id>") == 0 && line.indexOf(open_tag) != -1) {
-			//System.out.println(line);
-			//debug = true;
-		}
-
 		if (line == null) return null;
 		line = line.trim();
 
@@ -269,16 +264,6 @@ public class RESTClient{
 				boolean retval = file.createNewFile();
 				if (!retval) return;
 			}
-			/*
-
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-		    for (int i=0; i<v.size(); i++) {
-			    String sCurrentLine = (String) v.elementAt(i);
-			    bw.write(sCurrentLine + "\n");
-			}
-			bw.close();
-			*/
 			pw = new PrintWriter(file, "UTF-8");
 		    for (int i=0; i<v.size(); i++) {
 			    String sCurrentLine = (String) v.elementAt(i);
@@ -375,7 +360,6 @@ public class RESTClient{
 			  if (s != null) {
 				  hmap.put(curr_key, s);
 			  }
-			  //curr_value_vec = new Vector();
 		  }
 	  }
 
@@ -409,22 +393,6 @@ public class RESTClient{
 	  return keys;
   }
 
-/*
-  public static Vector getValues(HashMap hmap) {
-	  Vector values = new Vector();
-	  HashSet hset = new HashSet();
-	  Set<Map.Entry<String, String>> set = hmap.entrySet();
-	  for (Map.Entry<String, String> me: set) {
-		  String value = me.getValue();
-		  if (!hset.contains(value)) {
-			  hset.add(value);
-			  values.add(value);
-		  }
-	  }
-	  values = SortUtils.quickSort(values);
-	  return values;
-  }
-*/
 
   public static Vector getValues(HashMap hmap) {
 	  return getValues(hmap, null);
@@ -504,14 +472,7 @@ public class RESTClient{
 		  return null;
 	  }
 	  v = SortUtils.quickSort(v);
-	  /*
-	  String s = (String) v.elementAt(0);
-	  if (v.size() == 1) return s;
-	  for (int i=1; i<v.size(); i++) {
-		  String t = (String) v.elementAt(i);
-		  s = s + "|" + t;
-	  }
-	  */
+
 	  StringBuffer buf = new StringBuffer();
 	  buf.append((String) v.elementAt(0));
 	  if (v.size() == 1) return buf.toString();
@@ -574,6 +535,9 @@ public class RESTClient{
 	  }
   }
 
+
+
+
 	  public static void main(String[] args)
 	  {
 		 String API_KEY = "?";//"YourAPIKey";  //Login to BioPortal (http://bioportal.bioontology.org/login) to get your API key
@@ -618,9 +582,6 @@ public class RESTClient{
 		 dumpHashMap(hmap);
 
 		 dumpHashMap(inverseHashMap(hmap));
-
-
-
 		 getLatestOntologiesUrl = "http://rest.bioontology.org/bioportal/ontologies/versions/1032?apikey=";
 
 		 //Call Search REST URL and Parse results
@@ -635,68 +596,7 @@ public class RESTClient{
 		 export_REST_content(filename, v);
 		 hmap = parse_REST_content(v, RESTClient.ID, RESTClient.VERSION_NUMBER);
 		 dumpHashMap(inverseHashMap(hmap));
-
-
-		 /*
-
-		 String filename = "test_nci.out";
-		 export_REST_content(filename, v);
-
-
-		 HashMap hmap = parse_REST_content(v, RESTClient.ID, RESTClient.ONTOLOGY_ID);
-		 System.out.println("\n\n" + RESTClient.ID + " to " + RESTClient.ONTOLOGY_ID + " mapping:");
-		 dumpHashMap(hmap);
-
-
-  Vector keys = getKeys(hmap, "1032");
-  System.out.println("Key size: " + keys.size());
-
-
-  dumpHashMap(inverseHashMap(hmap));
-
-
-
-/*
-
-		 System.out.println("\n\n" + RESTClient.ONTOLOGY_ID + " to " + RESTClient.ID + " mapping:");
-		 dumpHashMap(inverseHashMap(hmap));
-
-*/
-
-
          System.out.println("\n\n");
-/*
-		 hmap = parse_REST_content(v, RESTClient.ID, RESTClient.ONTOLOGY_ID, VALUE_TO_KEY_HASHMAP);
-		 System.out.println("\n\n" + RESTClient.ONTOLOGY_ID + " to " + RESTClient.ID + " mapping:");
-		 dumpHashMap(hmap);
-*/
-
-
-/*
-
-		 hmap = parse_REST_content(v, RESTClient.ID, RESTClient.VERSION_NUMBER);
-		 System.out.println("\n\n" + RESTClient.ID + " to " + RESTClient.VERSION_NUMBER + " mapping:");
-		 dumpHashMap(hmap);
-
-
-         System.out.println("\n\n");
-
-		 hmap = parse_REST_content(v, RESTClient.ID, RESTClient.VERSION_NUMBER, VALUE_TO_KEY_HASHMAP);
-		 System.out.println("\n\n" + RESTClient.VERSION_NUMBER + " to " + RESTClient.ID + " mapping:");
-		 dumpHashMap(hmap);
-
-
-         Vector value_label_vec = new Vector();
-         value_label_vec.add("displayLabel");
-         value_label_vec.add("abbreviation");
-         HashMap id_hmap = parse_REST_content(v, RESTClient.ONTOLOGY_ID, value_label_vec);
-
-         //dump_HashMap(id_hmap);
-
-         dumpHashMap(id_hmap);
-*/
-
-
          HashMap map1 = new RESTClient().getVirtualId2NamesMap(API_KEY);
          dumpHashMap(map1);
 
@@ -705,12 +605,6 @@ public class RESTClient{
 
          Vector ncit_names = getValues(map1, "1032");
          dumpVector(ncit_names);
-
-
-
 	  }
-
-
-
 }
 

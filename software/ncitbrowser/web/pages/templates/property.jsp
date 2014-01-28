@@ -43,6 +43,7 @@
   JSPUtils.JSPHeaderInfo prop_info = new JSPUtils.JSPHeaderInfo(request);
   String prop_dictionary = prop_info.dictionary;
   String prop_version = prop_info.version;
+  String prop_ns = null;
     
   List displayItemList = null;
   Entity curr_concept = null;
@@ -55,6 +56,7 @@
     request.getSession().setAttribute("code", curr_concept.getEntityCode());
     
     bool_obj = curr_concept.isIsActive();
+    prop_ns = curr_concept.getEntityCodeNamespace();
 
   } catch (Exception ex) {
     // Do nothing
@@ -221,13 +223,14 @@ if ((bool_obj != null && !bool_obj.equals(Boolean.TRUE)  && concept_status != nu
 	%>            
 		    <%=link%>
 	<%            
+	            String prop_dictionary_nm = DataUtils.getCSName(prop_dictionary); 
 		    for (int i=0; i<descendantCodes.size(); i++) {
 		    	   String t = (String) descendantCodes.elementAt(i);
 		    	   Vector w = DataUtils.parseData(t);
 		    	   String descendantName = (String) w.elementAt(0);
 		    	   String descendantCode = (String) w.elementAt(1);
 	%>
-		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary%>&code=<%=descendantCode%>">
+		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary_nm%>&code=<%=descendantCode%>">
 			      <%=descendantName%>
 		      </a>
 	<%              
@@ -317,7 +320,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       if (value_vec != null && value_vec.size() > 1 && propName_label.compareTo("NCI Metathesaurus CUI") != 0) {
           %>
           <b><%=propName_label%></b>:
-          <table class="datatable">
+          <table class="datatable_960">
           <%
       }
       
@@ -552,7 +555,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         } else {
            
 %>
-            <table class="datatable">
+            <table class="datatable_960">
            
                 <b>NCI Metathesaurus CUI:</b>
 <%                
@@ -595,7 +598,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 <b>Synonyms &amp; Abbreviations:</b>
 <a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=synonym">(see Synonym Details)</a>
 
-<table class="datatable">
+<table class="datatable_960">
 <%
     HashSet hset2 = new HashSet();
     Vector synonym_values = new Vector();
@@ -677,7 +680,7 @@ if (!hasExternalSourceCodes) {
 } else {
 %>
   <b>External Source Codes:&nbsp;</b>
-  <table class="datatable">
+  <table class="datatable_960">
     <%
       n = 0;
       for (int i=0; i<external_source_codes.size(); i++) {
@@ -777,7 +780,7 @@ if (!hasOtherProperties) {
 
 
   <b>Other Properties:</b>
-  <table class="datatable">
+  <table class="datatable_960">
     <%
       Vector prop_name_value_vec = new Vector();
       Iterator iterator = hmap.entrySet().iterator();
@@ -877,7 +880,7 @@ if (!hasOtherProperties) {
           if (isDefined.equals(Boolean.TRUE)) is_defined = "Yes";
     %>
 	  <b>Additional Concept Data:</b>&nbsp;
-	  <table class="datatable">
+	  <table class="datatable_960">
 	    <tr class="dataRowLight">
 	      <td><%=defined_label%>&nbsp;<%=is_defined%></td>
 	      <td>&nbsp;</td>
@@ -893,11 +896,12 @@ if (!hasOtherProperties) {
     %>	  
 </p>
 <%
-  String url = JSPUtils.getConceptUrl(request, dictionary, null, concept_id);
+  String version_null = null;
+  String url = JSPUtils.getBookmarkUrl(request, dictionary, version_null, concept_id, prop_ns);
   String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>
-   <table class="datatable" border="0" cellpadding="0" cellspacing="0" width="700px">
+   <table class="datatable_960" border="0" cellpadding="0" cellspacing="0" width="700px">
       <tr>
          <td class="dataRowLight">URL: <%=url%></td>
       </tr>

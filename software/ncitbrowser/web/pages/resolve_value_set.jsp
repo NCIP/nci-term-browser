@@ -42,10 +42,10 @@
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
     <!-- End Skip Top Navigation -->  
     <%@ include file="/pages/templates/header.jsp" %>
-    <div class="center-page">
+    <div class="center-page_960">
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
-      <div id="main-area">
+      <div id="main-area_960">
         <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp" %>
         
 <%
@@ -95,7 +95,7 @@ String prev_cs_urn = "";
 
  <h:form id="resolveValueSetForm" styleClass="search-form" acceptcharset="UTF-8">            
                
-              <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+              <table class="dataTable_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <th class="dataTableHeader" scope="col" align="left">&nbsp;</th>
                 <th class="dataTableHeader" scope="col" align="left">Coding Scheme</th>
                 <th class="dataTableHeader" scope="col" align="left">Version</th>
@@ -202,7 +202,7 @@ int lcv = i+1;
       </div>
       <!-- end Page content -->
     </div>
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>

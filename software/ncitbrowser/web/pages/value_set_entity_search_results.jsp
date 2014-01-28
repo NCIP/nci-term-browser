@@ -294,12 +294,12 @@ String vsd_name = "null";
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
      <!-- Thesaurus, banner search area -->
-      <div class="bannerarea">
+      <div class="bannerarea_960">
       
       
     <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
@@ -309,7 +309,7 @@ String vsd_name = "null";
     </a>
 
 
-        <div class="search-globalnav">
+        <div class="search-globalnav_960">
           <!-- Search box -->
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           
@@ -364,7 +364,7 @@ String vsd_name = "null";
 
           <div class="searchbox">
           
-<h:form id="valueSetSearchForm" styleClass="search-form-main-area" acceptcharset="UTF-8">      
+<h:form id="valueSetSearchForm" styleClass="search-form-main-area_960" acceptcharset="UTF-8">      
               <%-- <div class="textbody"> --%>
 <table border="0" cellspacing="0" cellpadding="0" style="margin: 2px" >
   <tr valign="top" align="left">
@@ -450,8 +450,8 @@ String vsd_name = "null";
           <!-- Global Navigation -->
           <%@ include file="/pages/templates/menuBar-termbrowserhome.jsp" %>
           <!-- end Global Navigation -->
-        </div> <!-- search-globalnav -->
-      </div> <!-- bannerarea -->
+        </div> <!-- search-globalnav_960 -->
+      </div> <!-- bannerarea_960 -->
       
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
@@ -527,7 +527,7 @@ String vsd_name = "null";
     <input type="hidden" name="valueset" value="<%=vsd_uri%>">&nbsp;</input>
 
  
-    <table class="datatableValueSet" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+    <table class="datatable_960ValueSet_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
        <th class="dataTableHeader" scope="col" align="left">Value Set</th>
         <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
         <!--
@@ -618,12 +618,13 @@ for (int i=0; i<list.size(); i++) {
 		      <td class="dataCellText">
 		         <%
 			 if (DataUtils.isNull(entity_cs_version) || entity_cs_version.compareTo("") == 0) {
+			     String entity_cs_nm = DataUtils.getCSName(entity_cs);
 			 %>
-			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=entity_name%></a>
+			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=entity_name%></a>
                          <%
                          } else {
                          %>
-			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs%>&version=<%=entity_cs_version%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=entity_name%></a>
+			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&version=<%=entity_cs_version%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=entity_name%></a>
                          <%
                          }
                          %>
@@ -675,10 +676,10 @@ for (int i=0; i<list.size(); i++) {
           <%@ include file="/pages/templates/nciFooter.jsp" %>
         </div>
       </div> <!-- pagecontent -->
-    </div> <!-- main-area -->
+    </div> <!-- main-area_960 -->
     <!-- end Main box -->
-  </div> <!-- center-page -->
-  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+  </div> <!-- center-page_960 -->
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
 </body>
 </html>

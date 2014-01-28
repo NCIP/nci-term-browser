@@ -58,10 +58,10 @@
     }
   %>
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
   <%
     String dictionary = info.dictionary;
     String version = info.version;
@@ -126,7 +126,7 @@
     }
   %>
   <!-- Thesaurus, banner search area -->
-  <div class="bannerarea">
+  <div class="bannerarea_960">
     <% if (menubar_version == null) { %>
       <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/vocabulary_home.jsf?dictionary=<%=HTTPUtils.cleanXSS(dictionary)%>&scheme=<%=HTTPUtils.cleanXSS(menubar_scheme)%>">
     <% } else { %>
@@ -139,7 +139,7 @@
           <div class="vocabularynamelong">Version: <%=HTTPUtils.cleanXSS(term_browser_version)%></div>
         </div>
       </a>
-      <div class="search-globalnav">
+      <div class="search-globalnav_960">
       <!-- Search box -->
       <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
       <div class="searchbox"><%@ include file="/pages/templates/searchForm.jsp" %></div>
@@ -248,7 +248,7 @@
     </div>
     <!-- end Main box -->
   </div>
-  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
 <br/>
 </body>

@@ -22,9 +22,6 @@ if (type != null && type.compareTo("all") == 0) {
 <%    
 }
 %>         
-      
-      
-      
       </td>
     </tr>
   </table>
@@ -70,6 +67,7 @@ if (type != null && type.compareTo("all") == 0) {
         String term_type = (String) synonym_data.elementAt(1);
         String term_source = (String) synonym_data.elementAt(2);
         String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
+        String term_source_nm = DataUtils.getCSName(term_source_formal_name);
 
         if (term_source_formal_name == null)
       term_source_formal_name = DataUtils.getFormalName(term_source);
@@ -87,7 +85,7 @@ if (type != null && type.compareTo("all") == 0) {
                 if (term_source_formal_name != null && term_source_code != null) {
                   String url_str = request.getContextPath() +
                       "/pages/concept_details.jsf?dictionary=" +
-                      term_source_formal_name + "&code=" + term_source_code;
+                      term_source_nm + "&code=" + term_source_code;
               %>
                 <td><a href="<%= url_str %>"><%= term_source_code %></a></td>
               <%} else {%>

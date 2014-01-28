@@ -207,14 +207,14 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
    
    
       <!-- Thesaurus, banner search area -->
-      <div class="bannerarea">
+      <div class="bannerarea_960">
       
 <%
 String uri_vsd = null;
@@ -341,7 +341,7 @@ if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
 %>
 
 
-        <div class="search-globalnav">
+        <div class="search-globalnav_960">
           <!-- Search box -->
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           
@@ -471,7 +471,7 @@ if (vd_uri != null) {
           
           <div class="searchbox">
           
-<h:form id="valueSetSearchForm" styleClass="search-form-main-area" acceptcharset="UTF-8">      
+<h:form id="valueSetSearchForm" styleClass="search-form-main-area_960" acceptcharset="UTF-8">      
               <%-- <div class="textbody"> --%>
 <table border="0" cellspacing="0" cellpadding="0" style="margin: 2px" >
   <tr valign="top" align="left">
@@ -560,8 +560,8 @@ if (vd_uri != null) {
           <!-- Global Navigation -->
           <%@ include file="/pages/templates/menuBar-termbrowserhome.jsp" %>
           <!-- end Global Navigation -->
-        </div> <!-- search-globalnav -->
-      </div> <!-- bannerarea -->
+        </div> <!-- search-globalnav_960 -->
+      </div> <!-- bannerarea_960 -->
       
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
@@ -645,7 +645,7 @@ if (vd_uri != null) {
  %>
 
  
-              <table class="datatableValueSet" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+              <table class="datatable_960ValueSet_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 <%
 if (vsd_vec != null && vsd_vec.size() > 1) {
@@ -839,10 +839,10 @@ if (vsd_uri.indexOf("|") != -1) {
           <%@ include file="/pages/templates/nciFooter.jsp" %>
         </div>
       </div> <!-- pagecontent -->
-    </div> <!-- main-area -->
+    </div> <!-- main-area_960 -->
     <!-- end Main box -->
-  </div> <!-- center-page -->
-  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+  </div> <!-- center-page_960 -->
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
 </body>
 </html>

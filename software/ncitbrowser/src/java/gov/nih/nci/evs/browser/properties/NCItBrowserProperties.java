@@ -3,6 +3,7 @@ package gov.nih.nci.evs.browser.properties;
 import java.util.*;
 
 import org.apache.log4j.*;
+import gov.nih.nci.evs.browser.common.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -104,6 +105,7 @@ public class NCItBrowserProperties {
     public static final String AUDIO_CAPTCHA_BACKGROUND_NOISE_ON = "AUDIO_CAPTCHA_BACKGROUND_NOISE_ON";
 
     public static final String NCBO_API_KEY = "NCBO_API_KEY";
+    public static final String NCBO_WIDGET_INFO = "NCBO_WIDGET_INFO";
 
     private static NCItBrowserProperties _browserProperties = null;
     private static Properties _properties = new Properties();
@@ -111,6 +113,7 @@ public class NCItBrowserProperties {
     private static boolean _debugOn = false;
     private static boolean _audio_captcha_background_noise_on = true;
     private static String _ncbo_api_key = null;
+    private static String _ncbo_widget_info = null;
 
     private static int _maxToReturn = 1000;
     private static int _maxTreeLevel = 1000;
@@ -199,6 +202,14 @@ public class NCItBrowserProperties {
 			_ncbo_api_key =
 				_browserProperties
 					.getProperty(_browserProperties.NCBO_API_KEY);
+
+			_ncbo_widget_info =
+				_browserProperties
+					.getProperty(_browserProperties.NCBO_WIDGET_INFO);
+
+			if (_ncbo_widget_info == null || _ncbo_widget_info.compareTo("${ncbo_widget_info}") == 0) {
+				_ncbo_widget_info = Constants.DEFAULT_NCBO_WIDGET_INFO;
+			}
 
 			_license_page_option =
 				_browserProperties
@@ -466,6 +477,9 @@ public class NCItBrowserProperties {
         return _ncbo_api_key;
     }
 
+    public static String getNCBO_WIDGET_INFO() {
+        return _ncbo_widget_info;
+    }
 
     public static int getPaginationTimeOut() {
         return _pagination_time_out;

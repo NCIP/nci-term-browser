@@ -6,6 +6,7 @@
   JSPUtils.JSPHeaderInfo menuBar_info = new JSPUtils.JSPHeaderInfo(request);
   String dictionaryName0 = null;
   String dictionaryName = menuBar_info.dictionary;
+  
   if (dictionaryName == null) dictionaryName = (String) request.getSession().getAttribute("dictionary");
   if (dictionaryName == null) dictionaryName = Constants.CODING_SCHEME_NAME;
 
@@ -37,10 +38,17 @@
   boolean hasMapping = DataUtils.hasMapping(menubar_dictionary);
 
   if (menubar_version == null) menubar_version = menuBar_info.version; // HTTPUtils.cleanXSS already performed in JSPUtils.JSPHeaderInfo
-  //System.out.println("menuBar.jsp menubar_version: " + menubar_version);
 
   String hdr_dictionary0 = menuBar_info.dictionary;
-  if (hdr_dictionary0 == null) hdr_dictionary0 = ""; // Set to empty string
+
+  if (hdr_dictionary0 == null) {
+      hdr_dictionary0 = ""; // Set to empty string
+  }
+  
+  //11202103,, KLO
+  //hdr_dictionary0 = DataUtils.uri2CodingSchemeName(hdr_dictionary0);
+  hdr_dictionary0 = DataUtils.getCSName(hdr_dictionary0);
+  
   hdr_dictionary0 = HTTPUtils.cleanXSS(hdr_dictionary0);
 
   boolean tree_access_allowed = true;
@@ -53,6 +61,8 @@
   Boolean hideAdvancedSearchLink2 = (Boolean) request.getAttribute("hideAdvancedSearchLink");
   if (hideAdvancedSearchLink2 != null && hideAdvancedSearchLink2)
       adjustedHeight = "height=\"42\"";
+      
+     
 %>
 <table class="global-nav" border="0" width="100%" height="15px" <%=adjustedHeight%> cellpadding="0" cellspacing="0">
   <tr valign="bottom">
@@ -62,7 +72,11 @@
         <a href="<%=request.getContextPath() %>/pages/mapping.jsf?dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="11">
           Mapping</a>
       <% } else if (tree_access_allowed) { %>
-        <% if (showMenuItems) { %>
+        <% if (showMenuItems) { 
+		  if (DataUtils.isNull(hdr_dictionary0)) {
+		       hdr_dictionary0 = "NCI_Thesaurus";
+		  }        
+        %>
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
           <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/hierarchy.jsf?dictionary=<%=hdr_dictionary0%>&version=<%=menubar_version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
             Hierarchy</a>
@@ -72,10 +86,7 @@
 
       <% if (hasValueSet) { %>
         <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>
-        
-        <!--
-        <a href="<%= request.getContextPath() %>/pages/value_set_hierarchy.jsf?dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="15">Value Sets</a>
-        -->
+
         <a href="<%= request.getContextPath() %>/ajax?action=create_cs_vs_tree&dictionary=<%=menubar_dictionary%>&version=<%=menubar_version%>" tabindex="15">Value Sets</a>
       
       

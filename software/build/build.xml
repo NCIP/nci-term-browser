@@ -185,6 +185,7 @@
                 <filter token="ping.lexevs.interval" value="${ping.lexevs.interval}"/>
                 <filter token="audio_captcha_background_noise_on" value="${audio_captcha_background_noise_on}"/>
                 <filter token="ncbo_api_key" value="${ncbo_api_key}"/>
+                <filter token="ncbo_widget_info" value="${ncbo_widget_info}"/>
             </filterset>
             <resources>
                 <file file="${bda.conf.dir}/${webapp.prop.file}"/>

@@ -70,14 +70,21 @@ import java.io.*;
 public class TreeItem implements Serializable, Comparable<TreeItem> {
     public String _code = null;
     public String _text = null;
+
+    public String _ns = "na";
+    public String _id = null;  // tree_node_id
+
     public String _auis = null;
     public boolean _expandable = false;
+
+
     public Map<String, List<TreeItem>> _assocToChildMap =
         new TreeMap<String, List<TreeItem>>();
 
     public boolean equals(Object o) {
         return o instanceof TreeItem
-            && _code.compareTo(((TreeItem) o)._code) == 0;
+            && _code.compareTo(((TreeItem) o)._code) == 0
+            && _ns.compareTo(((TreeItem) o)._ns) == 0;
     }
 
     public int compareTo(TreeItem ti) {
@@ -104,6 +111,31 @@ public class TreeItem implements Serializable, Comparable<TreeItem> {
         _text = text;
         _auis = auiText;
     }
+
+    public TreeItem(String code, String text, String ns, String auiText) {
+        super();
+        _code = code;
+        _ns = ns;
+        _text = text;
+        _auis = auiText;
+    }
+
+    public TreeItem(String code, String text, String ns, String id, String auiText) {
+        super();
+        _code = code;
+        _ns = ns;
+        _text = text;
+        _id = id;
+        _auis = auiText;
+    }
+
+    public void setNs(String ns) {
+		_ns = ns;
+	}
+
+    public void setId(String id) {
+		_id = id;
+	}
 
     public void addAll(String assocText, List<TreeItem> children) {
         for (TreeItem item : children)
@@ -133,6 +165,8 @@ public class TreeItem implements Serializable, Comparable<TreeItem> {
     public int hashCode() {
 		int hashcode = 0;
 		if (_code != null) hashcode = hashcode + _code.hashCode();
+		if (_ns != null && _ns.compareTo("na") != 0) hashcode = hashcode + _ns.hashCode();
+		if (_id != null) hashcode = hashcode + _id.hashCode();
 		if (_text != null) hashcode = hashcode + _text.hashCode();
 		if (_auis != null) hashcode = hashcode + _auis.hashCode();
 		if (_expandable) {
@@ -145,6 +179,10 @@ public class TreeItem implements Serializable, Comparable<TreeItem> {
     	String s = _text;
     	if (_code != null && _code.length() > 0)
     		s += " (" + _code + ")";
+
+    	if (_ns != null && _ns.length() > 0 && _ns.compareTo("na") != 0)
+    		s += " (" + _ns + ")";
+
     	return s;
     }
 }

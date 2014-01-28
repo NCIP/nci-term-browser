@@ -237,6 +237,12 @@ public class DataUtils {
 
     private static HashMap _RVSCSFormalName2VersionHashMap = null;
 
+    private static HashMap _formalName2DisplayNameHashMap = null;
+
+    private static HashMap _visualizationWidgetHashMap = null;
+
+    private static String _api_key = null;
+
 
     // ==================================================================================
 
@@ -259,7 +265,18 @@ public class DataUtils {
             _defaultOntologiesToSearchOnStr = getDefaultOntologiesToSearchOnStr();
 		}
 
+		if (_visualizationWidgetHashMap == null) {
+            _visualizationWidgetHashMap = getNCBOWidgetString();
+		}
+
+		_api_key = NCItBrowserProperties.getNCBO_API_KEY();
+
+
 		updateListOfCodingSchemeVersionsUsedInResolutionHashMap();
+	}
+
+	public static String getAPIKey() {
+		return _api_key;
 	}
 
     public static List getOntologyList() {
@@ -355,10 +372,10 @@ public class DataUtils {
 
     public static HashMap getDefaultFormalName2VirtualIdMap() {
 		HashMap formalName2VirtualIdMap = new HashMap();
-		formalName2VirtualIdMap.put("NCIT", "1032");
-		formalName2VirtualIdMap.put("NCIt", "1032");
-		formalName2VirtualIdMap.put("NCI_Thesaurus", "1032");
-		formalName2VirtualIdMap.put("NCI Thesaurus", "1032");
+		formalName2VirtualIdMap.put("NCIT", Constants.NCIT_NCBO_ID);
+		formalName2VirtualIdMap.put("NCIt", Constants.NCIT_NCBO_ID);
+		formalName2VirtualIdMap.put("NCI_Thesaurus", Constants.NCIT_NCBO_ID);
+		formalName2VirtualIdMap.put("NCI Thesaurus", Constants.NCIT_NCBO_ID);
 	    return formalName2VirtualIdMap;
 	}
 
@@ -390,16 +407,16 @@ public class DataUtils {
 
 		// NCI Thesaurus --> 1032
 		if (!formalName2VirtualIdMap.containsKey("NCIT")) {
-			formalName2VirtualIdMap.put("NCIT", "1032");
+			formalName2VirtualIdMap.put("NCIT", Constants.NCIT_NCBO_ID);
 		}
 		if (!formalName2VirtualIdMap.containsKey("NCIt")) {
-			formalName2VirtualIdMap.put("NCIt", "1032");
+			formalName2VirtualIdMap.put("NCIt", Constants.NCIT_NCBO_ID);
 		}
 		if (!formalName2VirtualIdMap.containsKey("NCI_Thesaurus")) {
-			formalName2VirtualIdMap.put("NCI_Thesaurus", "1032");
+			formalName2VirtualIdMap.put("NCI_Thesaurus", Constants.NCIT_NCBO_ID);
 		}
 		if (!formalName2VirtualIdMap.containsKey("NCI Thesaurus")) {
-			formalName2VirtualIdMap.put("NCI Thesaurus", "1032");
+			formalName2VirtualIdMap.put("NCI Thesaurus", Constants.NCIT_NCBO_ID);
 		}
 		return formalName2VirtualIdMap;
 	}
@@ -513,6 +530,7 @@ public class DataUtils {
         _versionReleaseDateHashMap = new HashMap();
         _listOfCodingSchemeVersionsUsedInResolutionHashMap = new HashMap();
         _RVSCSFormalName2VersionHashMap = new HashMap();
+        _formalName2DisplayNameHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
         boolean includeInactive = false;
@@ -601,7 +619,7 @@ public class DataUtils {
 								w = new Vector();
 							}
 							w.add(cs_version);
-							System.out.println("(*) " + cs_formalname + " -> " + cs_version);
+							//System.out.println("(*) " + cs_formalname + " -> " + cs_version);
 
 							_RVSCSFormalName2VersionHashMap.put(cs_formalname, w);
 
@@ -747,9 +765,8 @@ public class DataUtils {
                             String displayName =
                                 getMetadataValue(formalname, "display_name");
                             _logger.debug("\tdisplay_name: " + displayName);
-                            _displayName2FormalNameHashMap.put(displayName,
-                                formalname);
-
+                            _displayName2FormalNameHashMap.put(displayName, formalname);
+                            _formalName2DisplayNameHashMap.put(formalname, displayName);
                             _displayNameVersion2FormalNameVersionHashMap.put(displayName + "$" + representsVersion,
                                 formalname + "$" + representsVersion);
 
@@ -6143,4 +6160,254 @@ if (lbSvc == null) {
 		return (String) hmap.get(coding_scheme_name);
 	}
 
+
+    public static Entity getConceptByCode(String codingSchemeName, String vers, String code, String ns, boolean use_ns) {
+        try {
+			if (code == null) {
+				//System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+				return null;
+			}
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            if (lbSvc == null) {
+                //System.out.println("lbSvc == null???");
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (vers != null) versionOrTag.setVersion(vers);
+
+            ConceptReferenceList crefs = null;
+            if (use_ns) {
+                 crefs = createConceptReferenceList(new String[] { code }, codingSchemeName, ns);
+			} else {
+				 crefs = createConceptReferenceList(new String[] { code }, codingSchemeName);
+			}
+
+            CodedNodeSet cns = null;
+            try {
+				try {
+					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+
+                if (cns == null) {
+					//System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
+					return null;
+				}
+
+                cns = cns.restrictToCodes(crefs);
+ 				ResolvedConceptReferenceList matches = null;
+				try {
+					matches = cns.resolveToList(null, null, null, 1);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+                if (matches == null) {
+                    //System.out.println("Concept not found.");
+                    return null;
+                }
+                int count = matches.getResolvedConceptReferenceCount();
+                // Analyze the result ...
+                if (count == 0)
+                    return null;
+                if (count > 0) {
+                    try {
+                        ResolvedConceptReference ref = (ResolvedConceptReference) matches
+                                .enumerateResolvedConceptReference()
+                                .nextElement();
+                        Entity entry = ref.getReferencedEntry();
+                        return entry;
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
+                        return null;
+                    }
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
+    public static ConceptReferenceList createConceptReferenceList(
+        String[] codes, String codingSchemeName, String ns) {
+        if (codes == null) {
+            return null;
+        }
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.length; i++) {
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(codes[i]);
+            if (ns != null) {
+				cr.setCodeNamespace(ns);
+			}
+
+            list.addConceptReference(cr);
+        }
+        return list;
+    }
+
+/*
+	public static String getNCBOOntologyInfo(String ncbo_widget_info, String ncbo_id) {
+        Vector v = parseData(ncbo_widget_info, ";");
+        for (int i=0; i<v.size(); i++) {
+			String info = (String) v.elementAt(i);
+			if (info.startsWith(ncbo_id + "|")) return info;
+		}
+		return null;
+	}
+
+	public static String getNCBOOntologyName(String ncbo_ontology_info) {
+        Vector v = parseData(ncbo_ontology_info);
+		return (String) v.elementAt(1);
+	}
+
+	public static String getNCBONamespace(String ncbo_ontology_info) {
+        Vector v = parseData(ncbo_ontology_info);
+        if (v.size() == 3) {
+			return (String) v.elementAt(2);
+		} else {
+            String ncbo_id = (String) v.elementAt(0);
+            if (ncbo_id.compareTo(NCIT_NCBO_ID) == 0) {
+				return Constants.NCIT_NAMESPACE;
+			}
+			String abbreviation = (String) v.elementAt(1);
+			return Constants.NCBO_PURL + abbreviation + "/"; //#
+		}
+	}
+
+//ncbo_widget_info=1032|NCIT|http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#;1415|CTCAE|http://purl.bioontology.org/ontolog/CTCAE#;1070|GO|http://purl.bioontology.org/ontolog/GO#;1343|HL7|http://purl.bioontology.org/ontolog/HL7#;1528|HUGO|http://purl.bioontology.org/ontolog/HUGO#;1553|ICD10CM|http://purl.bioontology.org/ontolog/ICD10CM#;1101|ICD9CM|http://purl.bioontology.org/ontolog/ICD9CM#;1350|LOINC|http://purl.bioontology.org/ontolog/LOINC#;1000|MA|http://purl.bioontology.org/ontolog/MA#;1083|NPO|http://purl.bioontology.org/ontolog/NPO#;1352|NDFRT|http://purl.bioontology.org/ontolog/NDFRT#;1349|PDQ|http://purl.bioontology.org/ontolog/PDQ#;1057|RADLEX|http://purl.bioontology.org/ontolog/RADLEX#;1353|SNOMEDCT|http://purl.bioontology.org/ontolog/SNOMEDCT#;
+
+	public static String getNCBOId(String vocabularyName) {
+		String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
+		if (ncbo_widget_info == null) return null;
+
+		//System.out.println(ncbo_widget_info);
+		//System.out.println(vocabularyName);
+
+		String formalName = searchFormalName(vocabularyName);
+		//System.out.println(formalName);
+
+		if (formalName.compareTo("NCI_Thesaurus") == 0 || formalName.compareTo("NCI Thesaurus") == 0) {
+			return Constants.NCIT_NCBO_ID;
+		}
+
+        Vector v = parseData(ncbo_widget_info, ";");
+        for (int i=0; i<v.size(); i++) {
+			String info = (String) v.elementAt(i);
+			Vector u = parseData(info);
+			String abbreviation = (String) u.elementAt(1);
+			//System.out.println(abbreviation);
+			if (_localName2FormalNameHashMap.containsKey(abbreviation)) {
+				String value = (String) _localName2FormalNameHashMap.get(abbreviation);
+				//System.out.println("value: " + value + " formalName: " + formalName);
+				if (formalName.compareTo(value) == 0)
+				{
+					return (String) u.elementAt(0);
+				}
+			}
+		}
+		return null;
+	}
+
+*/
+	public static String getCSName(String vocabularyName) {
+        if (_uri2CodingSchemeNameHashMap == null) setCodingSchemeMap();
+		String formalname = getFormalName(vocabularyName);
+		if (_uri2CodingSchemeNameHashMap.get(formalname) == null) return formalname;
+		String t = (String) _uri2CodingSchemeNameHashMap.get(formalname);
+		return t;
+	}
+
+	public static String getDisplayName(String vocabularyName) {
+        if (_formalName2DisplayNameHashMap == null) setCodingSchemeMap();
+		String formalname = getFormalName(vocabularyName);
+		if (_formalName2DisplayNameHashMap.get(formalname) == null) return formalname;
+		String t = (String) _formalName2DisplayNameHashMap.get(formalname);
+		return t;
+	}
+
+//==========================================================================================
+
+
+    public static HashMap getNCBOWidgetString() {
+		String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
+		if (ncbo_widget_info == null) return null;
+		return parseNCBOWidgetString(ncbo_widget_info);
+	}
+
+    public static HashMap parseNCBOWidgetString(String s) {
+		HashMap hmap = new HashMap();
+		Vector v = parseData(s, ";");
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			int n = t.indexOf("|");
+			String key = t.substring(0, n);
+			String value = t.substring(n+1, t.length());
+			//System.out.println(key + "==>" + value);
+			hmap.put(key, value);
+		}
+		return hmap;
+	}
+
+    public static boolean visualizationWidgetSupported(String dictionary) {
+		String csName = getCSName(dictionary);
+		if (csName == null) return false;
+		if (_visualizationWidgetHashMap == null) return false;
+		if (_visualizationWidgetHashMap.containsKey(csName)) return true;
+		return false;
+	}
+
+
+	public static String getNCBOOntologyId(String dictionary) {
+		boolean bool = visualizationWidgetSupported(dictionary);
+		if (!bool) return null;
+		String csName = getCSName(dictionary);
+		String ncbo_widget_info_str = (String) _visualizationWidgetHashMap.get(csName);
+		if (ncbo_widget_info_str == null) return null;
+		Vector v = parseData(ncbo_widget_info_str);
+		if (v == null) return null;
+		return (String) v.elementAt(0);
+	}
+
+	public static String getNCBOOntologyAbbreviation(String dictionary) {
+		boolean bool = visualizationWidgetSupported(dictionary);
+		if (!bool) return null;
+		String csName = getCSName(dictionary);
+		String ncbo_widget_info_str = (String) _visualizationWidgetHashMap.get(csName);
+		if (ncbo_widget_info_str == null) return null;
+		Vector v = parseData(ncbo_widget_info_str);
+		if (v == null) return null;
+		return (String) v.elementAt(1);
+	}
+
+	public static String createVisualizationWidgetURL(String abbreviation, String code) {
+		String api_key = NCItBrowserProperties.getNCBO_API_KEY();
+		if (abbreviation.compareTo(Constants.NCIT) == 0) {
+			return NCBO_WIDGET_QUERY_STRING + abbreviation + "&class="
+			       + HTTPUtils.encode(Constants.NCIT_NAMESPACE + code)
+			       + "&apikey=" + getAPIKey();
+		} else {
+			return NCBO_WIDGET_QUERY_STRING + abbreviation + "&class="
+			       + HTTPUtils.encode(Constants.NCBO_PURL + abbreviation + "/" + code)
+			       + "&apikey=" + getAPIKey();
+		}
+	}
+
+    public static String getVisualizationWidgetURL(String dictionary, String code) {
+		String abbreviation = getNCBOOntologyAbbreviation(dictionary);
+		if (abbreviation == null) return null;
+		return createVisualizationWidgetURL(abbreviation, code);
+	}
 }
+

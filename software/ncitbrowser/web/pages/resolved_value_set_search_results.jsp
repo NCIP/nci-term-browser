@@ -77,10 +77,10 @@
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
     <!-- End Skip Top Navigation -->  
     <%@ include file="/pages/templates/header.jsp" %>
-    <div class="center-page">
+    <div class="center-page_960">
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
-      <div id="main-area">
+      <div id="main-area_960">
         <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp" %>
         
 <%
@@ -316,11 +316,15 @@ if (!no_match) {
             String con_status = DataUtils.getConceptStatus(vocabulary_name, null, null, code);
 
             if (con_status != null) {
-          con_status = con_status.replaceAll("_", " ");
+          	con_status = con_status.replaceAll("_", " ");
             }
 
-            String vocabulary_name_encoded = null;
-            if (vocabulary_name != null) vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
+            //String vocabulary_name_encoded = null;
+            String vocabulary_nm = null;
+            if (vocabulary_name != null) {
+                //vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
+                vocabulary_nm = DataUtils.getCSName(vocabulary_name);
+            }
 
             if (i % 2 == 0) {
         %>
@@ -340,7 +344,7 @@ if (!no_match) {
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus" + "&version=" + cs_version + "&code=" + code;
@@ -356,7 +360,7 @@ if (!no_match) {
                    
               } else {
            %>
-                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
+                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
            <%
               
               }
@@ -377,7 +381,7 @@ if (!no_match) {
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus" + "&version=" + cs_version + "&code=" + code;
@@ -393,7 +397,7 @@ if (!no_match) {
                     
                } else {
             %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
             <%
                
                }
@@ -451,7 +455,7 @@ if(message == null || message.compareTo("null") == 0) {
     
     
     
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>

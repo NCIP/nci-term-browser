@@ -243,10 +243,10 @@
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
     <!-- End Skip Top Navigation -->  
     <%@ include file="/pages/templates/header.jsp" %>
-    <div class="center-page">
+    <div class="center-page_960">
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
-      <div id="main-area">
+      <div id="main-area_960">
       
         <%-- Simple Search Link Version: <%@ include file="/pages/templates/content-header-alt.jsp" %> --%>
         
@@ -751,7 +751,7 @@ if (adv_search_algorithm.compareToIgnoreCase("lucene") == 0 && selectSearchOptio
       </div>
       <!-- end Page content -->
     </div>
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>

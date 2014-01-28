@@ -162,15 +162,15 @@ request.getSession().removeAttribute("m");
 
       %>
       <%@ include file="/pages/templates/header.jsp" %>
-      <div class="center-page">
+      <div class="center-page_960">
         <%@ include file="/pages/templates/sub-header.jsp"%> <!-- Main box -->
-        <div id="main-area">
+        <div id="main-area_960">
         <%
           if (LicenseUtils.isLicensedAndNotAccepted(request, scheme, version)) {
             LicenseUtils.WebPageHelper helper = new LicenseUtils.WebPageHelper(scheme, version);
         %>
             <!-- Thesaurus, banner search area -->
-            <div class="bannerarea">
+            <div class="bannerarea_960">
 			  <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
 			    <div class="vocabularynamebanner_tb">
 			      <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
@@ -213,7 +213,7 @@ request.getSession().removeAttribute("m");
         %>
               <!-- Thesaurus, banner search area -->
 
-              <div class="bannerarea">
+              <div class="bannerarea_960">
 <%
 
 
@@ -262,7 +262,7 @@ if (display_release_date) {
 }
 %>
 
-                <div class="search-globalnav">
+                <div class="search-globalnav_960">
                   <!-- Search box -->
                   <div class="searchbox-top"><img
                     src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
@@ -332,9 +332,9 @@ if (display_release_date) {
                 <%@ include file="/pages/templates/nciFooter.jsp" %>
               </div>
         <% } %>
-        </div><!-- end main-area -->
-      </div><!-- end center-page -->
-      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+        </div><!-- end main-area_960 -->
+      </div><!-- end center-page_960 -->
+      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     </f:view>
     <br/>
   </body>

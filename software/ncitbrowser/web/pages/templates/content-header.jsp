@@ -2,7 +2,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.JSPUtils" %>
 <!-- Thesaurus, banner search area -->
-<div class="bannerarea">
+<div class="bannerarea_960">
 <%
   JSPUtils.JSPHeaderInfoMore info3 = new JSPUtils.JSPHeaderInfoMore(request);
   String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + info3.version;
@@ -79,7 +79,7 @@ if (display_release_date) {
   }
 %>
 <% if (! JSPUtils.isNull(info3.dictionary)) { %>
-  <div class="search-globalnav">
+  <div class="search-globalnav_960">
     <!-- Search box -->
     <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
     <div class="searchbox"><%@ include file="searchForm.jsp"%></div>

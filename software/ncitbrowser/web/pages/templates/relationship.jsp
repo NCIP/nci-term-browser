@@ -98,6 +98,8 @@ if (type != null && type.compareTo("all") == 0) {
 
       label = "Parent Concepts:";
       concepts = superconcepts;
+      String scheme_curr_nm = DataUtils.getCSName(scheme_curr);
+      
       if (concepts == null || concepts.size() <= 0)
       {
     %>
@@ -108,9 +110,10 @@ if (type != null && type.compareTo("all") == 0) {
           Vector ret_vec = DataUtils.parseData(s, "|");
           String cName = (String) ret_vec.elementAt(0);
           String cCode = (String) ret_vec.elementAt(1);
+          
     %>
           <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%><%=version_parameter%>&code=<%=cCode%>">
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&code=<%=cCode%>">
             <%=cName%>
           </a>
     <%
@@ -125,10 +128,11 @@ if (type != null && type.compareTo("all") == 0) {
           String cName = (String) ret_vec.elementAt(0);
           String cCode = (String) ret_vec.elementAt(1);
           String rowColor = (i%2 == 0) ? "dataRowDark" : "dataRowLight";
+         
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%><%=version_parameter%>&code=<%=cCode%>">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>
@@ -158,7 +162,7 @@ if (type != null && type.compareTo("all") == 0) {
           String cCode = (String) ret_vec.elementAt(1);
     %>
           <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%><%=version_parameter%>&code=<%=cCode%>">
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&code=<%=cCode%>">
             <%=cName%>
           </a>
     <%
@@ -176,7 +180,7 @@ if (type != null && type.compareTo("all") == 0) {
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr%><%=version_parameter%>&code=<%=cCode%>">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>
@@ -439,7 +443,7 @@ if (!isMapping) {
         String target_coding_scheme_name = (String) ret_vec.elementAt(3);
 
         if (target_coding_scheme_name != null) {
-            target_coding_scheme_name = DataUtils.getFormalName(target_coding_scheme_name);
+            target_coding_scheme_name = DataUtils.getCSName(target_coding_scheme_name);
         }
 
         if (n1 % 2 == 0) {

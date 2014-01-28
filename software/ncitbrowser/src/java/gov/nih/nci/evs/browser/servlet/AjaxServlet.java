@@ -1102,8 +1102,8 @@ if (action.compareTo("xmldefinitions") == 0) {
       println(out, "    <div id=\"popupContainer\">");
       println(out, "      <!-- nci popup banner -->");
       println(out, "      <div class=\"ncipopupbanner\">");
-      println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/nci-banner-1.gif\" width=\"440\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" /></a>");
-      println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/spacer.gif\" width=\"48\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" class=\"print-header\" /></a>");
+      println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/nci-banner-1.gif\" width=\"556\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" /></a>");
+      println(out, "        <a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\"><img src=\"/ncitbrowser/images/spacer.gif\" width=\"60\" height=\"39\" border=\"0\" alt=\"National Cancer Institute\" class=\"print-header\" /></a>");
       println(out, "      </div>");
       println(out, "      <!-- end nci popup banner -->");
       println(out, "      <div id=\"popupMainArea\">");
@@ -1661,7 +1661,7 @@ if (DataUtils.isNull(algorithm)) {
 }
 
 if (DataUtils.isNull(algorithm)) {
-	algorithm = "exactMatch";
+	algorithm = Constants.DEFAULT_SEARCH_ALGORITHM;//"exactMatch";
 }
 request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
@@ -1696,6 +1696,8 @@ if (DataUtils.isNull(option)) {
 String algorithm_exactMatch = "";
 String algorithm_startsWith = "";
 String algorithm_contains = "";
+
+/*
 if (DataUtils.isNull(algorithm)) {
 	algorithm_exactMatch = "checked";
 } else {
@@ -1711,7 +1713,23 @@ if (DataUtils.isNull(algorithm)) {
 		algorithm_contains = "checked";
 	}
 }
+*/
 
+if (DataUtils.isNull(algorithm)) {
+	algorithm_contains = "checked";
+} else {
+	if (algorithm.compareToIgnoreCase("exactMatch") == 0) {
+		algorithm_exactMatch = "checked";
+	}
+
+	if (algorithm.compareToIgnoreCase("startsWith") == 0) {
+		algorithm_startsWith = "checked";
+	}
+
+	if (algorithm.compareToIgnoreCase("contains") == 0) {
+		algorithm_contains = "checked";
+	}
+}
 
       out.println("");
       //if (message == null) {
@@ -2033,7 +2051,6 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("");
 
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
-      //out.println("<body onLoad=\"initialize_tree();\">");
 
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
@@ -2047,32 +2064,32 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("<div class=\"ncibanner\">");
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
-      out.println("      width=\"440\" height=\"39\" border=\"0\"");
+      out.println("      width=\"556\" height=\"39\" border=\"0\"");
       out.println("      alt=\"National Cancer Institute\"/>");
       out.println("  </a>");
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/spacer.gif\"");
-      out.println("      width=\"48\" height=\"39\" border=\"0\"");
+      out.println("      width=\"60\" height=\"39\" border=\"0\"");
       out.println("      alt=\"National Cancer Institute\" class=\"print-header\"/>");
       out.println("  </a>");
       out.println("  <a href=\"http://www.nih.gov\" target=\"_blank\" >");
       out.println("    <img src=\"/ncitbrowser/images/tagline_nologo.gif\"");
-      out.println("      width=\"173\" height=\"39\" border=\"0\"");
+      out.println("      width=\"219\" height=\"39\" border=\"0\"");
       out.println("      alt=\"U.S. National Institutes of Health\"/>");
       out.println("  </a>");
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/cancer-gov.gif\"");
-      out.println("      width=\"99\" height=\"39\" border=\"0\"");
+      out.println("      width=\"125\" height=\"39\" border=\"0\"");
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
       out.println("</div>");
       out.println("<!-- end nci banner -->");
       out.println("");
-      out.println("  <div class=\"center-page\">");
+      out.println("  <div class=\"center-page_960\">");
       out.println("    <!-- EVS Logo -->");
       out.println("<div>");
       out.println("  <img src=\"/ncitbrowser/images/evs-logo-swapped.gif\" alt=\"EVS Logo\"");
-      out.println("       width=\"745\" height=\"26\" border=\"0\"");
+      out.println("       width=\"941\" height=\"26\" border=\"0\"");
       out.println("       usemap=\"#external-evs\" />");
       out.println("  <map id=\"external-evs\" name=\"external-evs\">");
       out.println("    <area shape=\"rect\" coords=\"0,0,140,26\"");
@@ -2100,13 +2117,13 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("  </tr>");
       out.println("</table>");
       out.println("");
-      out.println("<div class=\"mainbox-top\"><img src=\"/ncitbrowser/images/mainbox-top.gif\" width=\"745\" height=\"5\" alt=\"\"/></div>");
+      out.println("<div class=\"mainbox-top\"><img src=\"/ncitbrowser/images/mainbox-top.gif\" width=\"941\" height=\"5\" alt=\"\"/></div>");
       out.println("<!-- end EVS Logo -->");
       out.println("    <!-- Main box -->");
-      out.println("    <div id=\"main-area\">");
+      out.println("    <div id=\"main-area_960\">");
       out.println("");
       out.println("      <!-- Thesaurus, banner search area -->");
-      out.println("      <div class=\"bannerarea\">");
+      out.println("      <div class=\"bannerarea_960\">");
 
       if (DataUtils.isNull(vsd_uri)) {
 		  out.println("        <a href=\"/ncitbrowser/start.jsf\" style=\"text-decoration: none;\">");
@@ -2124,7 +2141,7 @@ if (DataUtils.isNull(vsd_uri)) {
 		  out.println("	       </a>");
 	  }
 
-      out.println("        <div class=\"search-globalnav\">");
+      out.println("        <div class=\"search-globalnav_960\">");
       out.println("          <!-- Search box -->");
       out.println("          <div class=\"searchbox-top\"><img src=\"/ncitbrowser/images/searchbox-top.gif\" width=\"352\" height=\"2\" alt=\"SearchBox Top\" /></div>");
       out.println("          <div class=\"searchbox\">");
@@ -2317,9 +2334,21 @@ if (DataUtils.isNull(vsd_uri)) {
 		  out.println("View value sets organized by standards category or source terminology.");
 		  out.println("Standards categories group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.");
 		  out.println("Search or browse a value set from its home page, or search all value sets at once from this page (very slow) to find which ones contain a particular code or term.");
-out.println("Many of these value sets are subsets of NCI Thesaurus that are developed jointly with EVS partners as federal and international coding standards (see the <a href=http://ncit.nci.nih.gov/ncitbrowser/pages/subset.jsf>NCI Thesaurus Subsets</a> page).");
+//out.println("Many of these value sets are subsets of NCI Thesaurus that are developed jointly with EVS partners as federal and international coding standards (see the <a href=http://ncit.nci.nih.gov/ncitbrowser/pages/subset.jsf>NCI Thesaurus Subsets</a> page).");
+//out.println("Many of these value sets are subsets of NCI Thesaurus that are developed jointly with EVS partners as federal and international coding standards (see the ");
+
+out.println(" <a href=\"");
+out.print( request.getContextPath() );
+out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
+
 		  out.println("</p>");
 	  }
+
+
+	  out.println("      <a href=\"");
+	  out.print( request.getContextPath() );
+
+
 
       out.println("");
       out.println("        <div id=\"popupContentArea\">");
@@ -2328,7 +2357,7 @@ out.println("Many of these value sets are subsets of NCI Thesaurus that are deve
 
       //out.println("          <table width=\"580px\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\">");
 
-      out.println("      <table class=\"datatableValueSet\" summary=\"\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">");
+      out.println("      <table class=\"datatableValueSet_960\" summary=\"\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">");
 
       //out.println("                    <tr><td colspan=\"2\">");
       //out.println("&nbsp;");
@@ -2448,7 +2477,7 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("<div class=\"textbody\">");
       out.println("<!-- footer -->");
-      out.println("<div class=\"footer\" style=\"width:720px\">");
+      out.println("<div class=\"footer\" style=\"width:920px\">");
       out.println("  <ul>");
       out.println("    <li><a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\">NCI Home</a> |</li>");
       out.println("    <li><a href=\"/ncitbrowser/pages/contact_us.jsf\">Contact Us</a> |</li>");
@@ -2483,7 +2512,7 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("      </div> <!-- pagecontent -->");
       out.println("    </div> <!--  main-area -->");
-      out.println("    <div class=\"mainbox-bottom\"><img src=\"/ncitbrowser/images/mainbox-bottom.gif\" width=\"745\" height=\"5\" alt=\"Mainbox Bottom\" /></div>");
+      out.println("    <div class=\"mainbox-bottom\"><img src=\"/ncitbrowser/images/mainbox-bottom.gif\" width=\"941\" height=\"5\" alt=\"Mainbox Bottom\" /></div>");
       out.println("");
       out.println("  </div> <!-- center-page -->");
       out.println("");
@@ -2946,7 +2975,7 @@ long ms = System.currentTimeMillis();
 
         String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
         if (DataUtils.isNull(algorithm)) {
-			algorithm = "exactMatch";
+			algorithm = Constants.DEFAULT_SEARCH_ALGORITHM;//"exactMatch";
 		}
 
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
@@ -3403,7 +3432,8 @@ String algorithm_exactMatch = "";
 String algorithm_startsWith = "";
 String algorithm_contains = "";
 if (DataUtils.isNull(algorithm)) {
-	algorithm_exactMatch = "checked";
+	//algorithm_exactMatch = "checked";
+	algorithm_contains = "checked";
 } else {
 	if (algorithm.compareToIgnoreCase("exactMatch") == 0) {
 		algorithm_exactMatch = "checked";
@@ -3778,24 +3808,14 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
       out.println("</head>");
       out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
       //out.println("<body>");
 
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
 
-      //out.println("<body onLoad=\"initialize_tree();\">");
-
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
+
       out.println("  <!-- Begin Skip Top Navigation -->");
       out.println("  <a href=\"#evs-content\" class=\"hideLink\" accesskey=\"1\" title=\"Skip repetitive navigation links\">skip navigation links</A>");
       out.println("  <!-- End Skip Top Navigation -->");
@@ -3804,35 +3824,35 @@ if (DataUtils.isNull(algorithm)) {
       out.println("<div class=\"ncibanner\">");
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
-      out.println("      width=\"440\" height=\"39\" border=\"0\"");
+      out.println("      width=\"556\" height=\"39\" border=\"0\"");
       out.println("      alt=\"National Cancer Institute\"/>");
       out.println("  </a>");
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/spacer.gif\"");
-      out.println("      width=\"48\" height=\"39\" border=\"0\"");
+      out.println("      width=\"60\" height=\"39\" border=\"0\"");
       out.println("      alt=\"National Cancer Institute\" class=\"print-header\"/>");
       out.println("  </a>");
       out.println("  <a href=\"http://www.nih.gov\" target=\"_blank\" >");
       out.println("    <img src=\"/ncitbrowser/images/tagline_nologo.gif\"");
-      out.println("      width=\"173\" height=\"39\" border=\"0\"");
+      out.println("      width=\"219\" height=\"39\" border=\"0\"");
       out.println("      alt=\"U.S. National Institutes of Health\"/>");
       out.println("  </a>");
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">");
       out.println("    <img src=\"/ncitbrowser/images/cancer-gov.gif\"");
-      out.println("      width=\"99\" height=\"39\" border=\"0\"");
+      out.println("      width=\"125\" height=\"39\" border=\"0\"");
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
       out.println("</div>");
       out.println("<!-- end nci banner -->");
       out.println("");
-      out.println("  <div class=\"center-page\">");
+      out.println("  <div class=\"center-page_960\">");
       out.println("    <!-- EVS Logo -->");
       out.println("<div>");
 
 
 // to be modified
       out.println("  <img src=\"/ncitbrowser/images/evs-logo-swapped.gif\" alt=\"EVS Logo\"");
-      out.println("       width=\"745\" height=\"26\" border=\"0\"");
+      out.println("       width=\"941\" height=\"26\" border=\"0\"");
       out.println("       usemap=\"#external-evs\" />");
       out.println("  <map id=\"external-evs\" name=\"external-evs\">");
       out.println("    <area shape=\"rect\" coords=\"0,0,140,26\"");
@@ -3870,16 +3890,16 @@ if (DataUtils.isNull(algorithm)) {
 
 
       out.println("");
-      out.println("<div class=\"mainbox-top\"><img src=\"/ncitbrowser/images/mainbox-top.gif\" width=\"745\" height=\"5\" alt=\"\"/></div>");
+      out.println("<div class=\"mainbox-top\"><img src=\"/ncitbrowser/images/mainbox-top.gif\" width=\"941\" height=\"5\" alt=\"\"/></div>");
       out.println("<!-- end EVS Logo -->");
       out.println("    <!-- Main box -->");
-      out.println("    <div id=\"main-area\">");
+      out.println("    <div id=\"main-area_960\">");
       out.println("");
 
 
 
       out.println("      <!-- Thesaurus, banner search area -->");
-      out.println("      <div class=\"bannerarea\">");
+      out.println("      <div class=\"bannerarea_960\">");
 
 
 /*
@@ -3987,7 +4007,7 @@ if (display_release_date) {
 
 
 
-      out.println("        <div class=\"search-globalnav\">");
+      out.println("        <div class=\"search-globalnav_960\">");
       out.println("          <!-- Search box -->");
       out.println("          <div class=\"searchbox-top\"><img src=\"/ncitbrowser/images/searchbox-top.gif\" width=\"352\" height=\"2\" alt=\"SearchBox Top\" /></div>");
       out.println("          <div class=\"searchbox\">");
@@ -4332,7 +4352,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("");
       out.println("<div class=\"textbody\">");
       out.println("<!-- footer -->");
-      out.println("<div class=\"footer\" style=\"width:720px\">");
+      out.println("<div class=\"footer\" style=\"width:920px\">");
       out.println("  <ul>");
       out.println("    <li><a href=\"http://www.cancer.gov\" target=\"_blank\" alt=\"National Cancer Institute\">NCI Home</a> |</li>");
       out.println("    <li><a href=\"/ncitbrowser/pages/contact_us.jsf\">Contact Us</a> |</li>");
@@ -4367,7 +4387,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("");
       out.println("      </div> <!-- pagecontent -->");
       out.println("    </div> <!--  main-area -->");
-      out.println("    <div class=\"mainbox-bottom\"><img src=\"/ncitbrowser/images/mainbox-bottom.gif\" width=\"745\" height=\"5\" alt=\"Mainbox Bottom\" /></div>");
+      out.println("    <div class=\"mainbox-bottom\"><img src=\"/ncitbrowser/images/mainbox-bottom.gif\" width=\"941\" height=\"5\" alt=\"Mainbox Bottom\" /></div>");
       out.println("");
       out.println("  </div> <!-- center-page -->");
       out.println("");

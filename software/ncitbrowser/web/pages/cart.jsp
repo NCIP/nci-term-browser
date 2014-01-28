@@ -75,10 +75,10 @@
      			String subsetsUrl = request.getContextPath()	+ "/pages/subset.jsf";
         %>
         <%@ include file="/pages/templates/header.jsp"%>
-        <div class="center-page">
+        <div class="center-page_960">
             <%@ include file="/pages/templates/sub-header.jsp"%>
             <!-- Main box -->
-            <div id="main-area">
+            <div id="main-area_960">
                <%@ include file="/pages/templates/content-header-no-searchbox.jsp"%>
                <!-- Page content -->
                <div class="pagecontent">
@@ -185,9 +185,9 @@
                   <br />
                   <%@ include file="/pages/templates/nciFooter.jsp"%>
                </div> <!-- End of pagecontent -->
-            </div> <!-- End main-area -->
-            <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-         </div> <!-- End center-page -->
+            </div> <!-- End main-area_960 -->
+            <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+         </div> <!-- End center-page_960 -->
       </h:form>
    </f:view>
 </body>

@@ -435,8 +435,8 @@
     <div id="popupContainer">
       <!-- nci popup banner -->
       <div class="ncipopupbanner">
-        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/nci-banner-1.gif" width="440" height="39" border="0" alt="National Cancer Institute" /></a>
-        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/spacer.gif" width="48" height="39" border="0" alt="National Cancer Institute" class="print-header" /></a>
+        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/nci-banner-1.gif" width="556" height="39" border="0" alt="National Cancer Institute" /></a>
+        <a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute"><img src="<%=basePath%>/images/spacer.gif" width="60" height="39" border="0" alt="National Cancer Institute" class="print-header" /></a>
       </div>
       <!-- end nci popup banner -->
       <div id="popupMainArea">
@@ -458,8 +458,6 @@
 JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
 String hierarchy_dictionary = info.dictionary;
 String hierarchy_version = info.version;
-
-//System.out.println("hierarchy.jsp hierarchy_version: " + hierarchy_version);
 
 String hierarchy_schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
 if (hierarchy_dictionary != null && hierarchy_schema == null) hierarchy_schema = hierarchy_dictionary;
@@ -564,12 +562,13 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
           <form id="pg_form" enctype="application/x-www-form-urlencoded;charset=UTF-8">
             <%
               String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
-
-              //String ontology_display_name = hierarchy_dictionary;
-        //String schema = hierarchy_schema;
-        //String version = hierarchy_version;
-
+/*
 String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
+//11202013, KLO
+if (DataUtils.isNull(schema)) {
+    schema = "NCI_Thesaurus";
+}
+
 String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 
 //System.out.println("hierarchy.jsp ontology_version: " + ontology_version);
@@ -579,12 +578,38 @@ String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter(
 if (ontology_display_name == null) {
     ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 }
+*/
+
+
+String ontology_display_name = info.dictionary;
+String ontology_version = info.version;
+
+System.out.println("(**) hierarchy.jsp ontology_display_name: " + ontology_display_name);
+System.out.println("(**) hierarchy.jsp ontology_version: " + ontology_version);
+String schema = ontology_display_name;
+
+//11202013, KLO
+//ontology_display_name = DataUtils.uri2CodingSchemeName(ontology_display_name);
+ontology_display_name = DataUtils.getCSName(ontology_display_name);
+if (DataUtils.isNull(ontology_display_name)) {
+    ontology_display_name = "NCI_Thesaurus";
+}
+
+String ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
 
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=HTTPUtils.cleanXSS(ontology_display_name)%>" />
             <input type="hidden" id="schema" name="schema" value="<%=HTTPUtils.cleanXSS(schema)%>" />
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
+
+<%
+   if (ns != null && ns.compareTo("na") != 0) {
+%>
+            <input type="hidden" id="ontology_node_ns" name="ontology_node_ns" value="<%=HTTPUtils.cleanXSS(ns)%>" />
+<%
+   }
+%>
 
           </form>
           <!-- End of Tree control content -->

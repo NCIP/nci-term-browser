@@ -702,24 +702,24 @@ body {
   <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
     
       <!-- Thesaurus, banner search area -->
-      <div class="bannerarea">
+      <div class="bannerarea_960">
 	    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
 	      <div class="vocabularynamebanner_tb">
 	        <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
 	      </div>
 	    </a>
-        <div class="search-globalnav">
+        <div class="search-globalnav_960">
           <!-- Search box -->
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           <div class="searchbox">
 
-<h:form id="valueSetSearchForm" styleClass="search-form-main-area" acceptcharset="UTF-8">  
+<h:form id="valueSetSearchForm" styleClass="search-form-main-area_960" acceptcharset="UTF-8">  
 
 
             <input type="hidden" id="checked_vocabularies" name="checked_vocabularies" value="" />
@@ -805,8 +805,8 @@ body {
           <%@ include file="/pages/templates/menuBar-termbrowserhome.jsp" %>
           <!-- end Global Navigation -->
               
-        </div> <!-- search-globalnav -->
-      </div> <!-- bannerarea -->
+        </div> <!-- search-globalnav_960 -->
+      </div> <!-- bannerarea_960 -->
       
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
@@ -905,10 +905,10 @@ Search or browse a value set from its home page, or search all value sets at onc
 
         
       </div> <!-- pagecontent -->
-    </div> <!--  main-area -->
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div> <!--  main-area_960 -->
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
 
-  </div> <!-- center-page -->
+  </div> <!-- center-page_960 -->
 </f:view>
 </body>
 </html>

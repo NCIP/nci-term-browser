@@ -147,7 +147,9 @@ vse = t2;
 			.cleanXSS((String) request.getSession().getAttribute(
 					"algorithm"));
 
+
 	String check_e = "", check_b = "", check_s = "", check_c = "";
+	/*
 	if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
 		check_e = "checked";
 	else if (algorithm.compareTo("startsWith") == 0)
@@ -156,6 +158,17 @@ vse = t2;
 		check_b = "checked";
 	else
 		check_c = "checked";
+        */
+
+	if (algorithm == null || algorithm.compareTo("contains") == 0)
+		check_c = "checked";
+	else if (algorithm.compareTo("startsWith") == 0)
+		check_s = "checked";
+	else if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0)
+		check_b = "checked";
+	else if (algorithm.compareTo("exactMatch") == 0)
+		check_e = "checked";
+		
 
 	String searchTarget = (String) request.getSession().getAttribute(
 			"searchTarget");

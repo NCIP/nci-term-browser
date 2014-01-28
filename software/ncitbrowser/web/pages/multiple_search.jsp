@@ -185,19 +185,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <h:form id="searchTerm" acceptcharset="UTF-8">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
         <input type="hidden" name="initial_search" value="true" />
-
-
-
         <%@ include file="/pages/templates/content-header-termbrowserhome.jsp" %>
-        
-        
-        
         
         <!-- Page content -->
         <div class="pagecontent">
@@ -207,7 +201,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
           
           <div class="tabTableContentContainer">
 
-          <table class="termstable" border="0">
+          <table class="termstable_960" border="0">
                 <tr>
                   <td>
                   <img src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
@@ -266,7 +260,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
             </span>
             
             
-            <table class="termstable" border="0">
+            <table class="termstable_960" border="0">
 
               <tr>
               <%
@@ -286,21 +280,24 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                     String label = (String) item.getLabel();
                     
                     String scheme = DataUtils.key2CodingSchemeName(value);
+                    String short_scheme_name = DataUtils.uri2CodingSchemeName(scheme);
+                    
                     String version = DataUtils.key2CodingSchemeVersion(value);
   
-                    String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
+                    //String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
+                    String display_name = DataUtils.getMetadataValue(short_scheme_name, version, "display_name");
                     if (DataUtils.isNull(display_name)) {
                         //if (display_name == null || display_name.compareTo("null") == 0)
                         display_name = DataUtils.getLocalName(scheme);
-                   } 
+                    } 
  
                     String sort_category = DataUtils.getMetadataValue(
                         scheme, version, "vocabulary_sort_category");
-                    
-                    OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
+                         //KLO, 11202013
+		    
+		    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
                     display_name_vec.add(info);
-                    
-                  }
+                 }
                   
  
 		  for (int i = 0; i < display_name_vec.size(); i++) { 
@@ -352,7 +349,8 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                         String display_name = info.getDisplayName();
                         String label = info.getLabel();
                         String label2 = "|" + label + "|";
-                        String scheme = info.getCodingScheme();
+                        
+                        String scheme = info.getCodingScheme(); 
                         String version = info.getVersion();
  
                         boolean isMapping = DataUtils.isMapping(scheme, version);
@@ -411,10 +409,14 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				   
 				<%
 
-				String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
-				if (full_name == null || full_name.compareTo("null") == 0) 
+				//String full_name = DataUtils.getMetadataValue(scheme, version, "full_name");
+				String full_name = DataUtils.getMetadataValue(DataUtils.getFormalName(scheme), version, "full_name");
+				if (full_name == null || full_name.compareTo("null") == 0) {
 				    full_name = scheme;
+				}    
+				    
 				String term_browser_version = DataUtils.getMetadataValue(scheme, version, "term_browser_version");
+			
 				if (term_browser_version == null || term_browser_version.compareTo("null") == 0) {
 				    term_browser_version = version;
 				}     
@@ -433,6 +435,10 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				    </a>
 				  <%
 				} else {
+				
+				
+				
+				
 				  %>
 				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
 				      <%=display_label%>
@@ -600,12 +606,12 @@ if (hide_counter == 1) {
           </div> <!-- end tabTableContentContainer -->
           <%@ include file="/pages/templates/nciFooter.jsp"%>
         </div> <!-- end Page content -->
-    </div> <!-- end main-area -->
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div> <!-- end main-area_960 -->
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
 
 </h:form>
 
-  </div> <!-- end center-page -->
+  </div> <!-- end center-page_960 -->
   <br>
 </f:view>
 <%

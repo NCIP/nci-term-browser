@@ -17,7 +17,8 @@
 
 <%
 JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
-String search_results_dictionary = info.dictionary;
+//KLO, 012714
+String search_results_dictionary = DataUtils.getCSName(info.dictionary);
 %>
   <title><%=search_results_dictionary%></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -44,10 +45,10 @@ request.getSession().setAttribute("no_back_to_search_results_link", "true");
 %>
 
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
 
 <%
 
@@ -60,6 +61,7 @@ HashMap name_hmap = new HashMap();
 String vocabulary_name = null;
 String short_vocabulary_name = null;
 String coding_scheme_version = null;
+String ns = null;
 
 String key = (String) request.getSession().getAttribute("key");
 if (key == null) {
@@ -371,6 +373,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
                       
 			      rcr = (ResolvedConceptReference) obj;
 			      String code = rcr.getConceptCode();
+			      ns = rcr.getCodeNamespace(); 
                     
                       
                       	coding_scheme_version = rcr.getCodingSchemeVersion();
@@ -404,6 +407,8 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 			      	  name = entity.getEntityDescription().getContent();
 			      } 
                       }
+                      
+                      
                       
                       if (code == null) {
                           i++;
@@ -474,11 +479,11 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           if (con_status == null) {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=name%></a>
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=name%></a>
           <%
           } else {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           }
           %>
@@ -516,7 +521,7 @@ if (isMapping || isExtension) {
       </div>
       <!-- end Page content -->
     </div>
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>

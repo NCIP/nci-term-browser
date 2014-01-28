@@ -1,7 +1,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <!-- Thesaurus, banner search area -->
-<div class="bannerarea">
+<div class="bannerarea_960">
 <%
   JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
   if (info.dictionary == null || info.dictionary.compareTo("NCI Thesaurus") == 0) {
@@ -47,7 +47,7 @@ if (display_release_date) {
   }
 %>
   
-<div class="search-globalnav"><!-- Search box -->
+<div class="search-globalnav_960"><!-- Search box -->
 <div class="searchbox-top"><img
   src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2"
   alt="SearchBox Top" /></div>

@@ -151,6 +151,8 @@ public class VisitedConceptUtils {
                 versionParameterDisplay = term_browser_version;
             }
 
+            formalName = DataUtils.getCSName(formalName);
+
             line =
                 "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
                     + formalName + versionParameter + "&code=" + code + "\\'>"

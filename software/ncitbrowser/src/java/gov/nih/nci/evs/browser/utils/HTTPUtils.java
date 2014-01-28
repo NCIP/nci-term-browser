@@ -322,4 +322,15 @@ public class HTTPUtils {
         return (HttpServletRequest) FacesContext.getCurrentInstance()
             .getExternalContext().getRequest();
     }
+
+
+	public static String encode(String in) {
+		String retVal = "";
+		try {
+		    retVal = URLEncoder.encode(in, "UTF8");
+		} catch (UnsupportedEncodingException ex) {
+		    ex.printStackTrace();
+		}
+		return retVal;
+	}
 }

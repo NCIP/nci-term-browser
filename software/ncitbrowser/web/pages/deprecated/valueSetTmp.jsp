@@ -410,9 +410,9 @@ N_346262103_n1696560429.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78429');";
 newNodeData = { label:"CDISC CDASH Unit of Measure for Flow Rate Terminology", id:"http://ncit:C78429", href:newNodeDetails };
-var N_346262111_n25416745 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
-N_346262111_n25416745.ontology_node_child_count = 0;
-N_346262111_n25416745.isLeaf = true;
+var N_346262111_n25416941 = new YAHOO.widget.TaskNode(newNodeData, N_346233279_n2074676292, false);
+N_346262111_n25416941.ontology_node_child_count = 0;
+N_346262111_n25416941.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C78431');";
 newNodeData = { label:"CDISC CDASH Vital Signs Position of Subject Terminology", id:"http://ncit:C78431", href:newNodeDetails };
@@ -468,8 +468,8 @@ var N_346050752_n720271701 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_
 N_346050752_n720271701.ontology_node_child_count = 0;
 N_346050752_n720271701.isLeaf = true;
 
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74558');";
-newNodeData = { label:"CDISC SDTM Category For Disposition Event Terminology", id:"http://ncit:C74558", href:newNodeDetails };
+newNodeDetails = "javascript:onClickTreeNode('http://ncit:C94158');";
+newNodeData = { label:"CDISC SDTM Category For Disposition Event Terminology", id:"http://ncit:C94158", href:newNodeDetails };
 var N_346144000_121912681 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
 N_346144000_121912681.ontology_node_child_count = 0;
 N_346144000_121912681.isLeaf = true;
@@ -558,8 +558,8 @@ var N_346265021_n1660080786 = new YAHOO.widget.TaskNode(newNodeData, N_345282874
 N_346265021_n1660080786.ontology_node_child_count = 0;
 N_346265021_n1660080786.isLeaf = true;
 
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74560');";
-newNodeData = { label:"CDISC SDTM Fitzpatrick Skin Classification Terminology", id:"http://ncit:C74560", href:newNodeDetails };
+newNodeDetails = "javascript:onClickTreeNode('http://ncit:C94160');";
+newNodeData = { label:"CDISC SDTM Fitzpatrick Skin Classification Terminology", id:"http://ncit:C94160", href:newNodeDetails };
 var N_346144023_755907185 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
 N_346144023_755907185.ontology_node_child_count = 0;
 N_346144023_755907185.isLeaf = true;
@@ -666,8 +666,8 @@ var N_345281916_n1031232147 = new YAHOO.widget.TaskNode(newNodeData, N_345282874
 N_345281916_n1031232147.ontology_node_child_count = 0;
 N_345281916_n1031232147.isLeaf = true;
 
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74561');";
-newNodeData = { label:"CDISC SDTM Skin Type Terminology", id:"http://ncit:C74561", href:newNodeDetails };
+newNodeDetails = "javascript:onClickTreeNode('http://ncit:C94161');";
+newNodeData = { label:"CDISC SDTM Skin Type Terminology", id:"http://ncit:C94161", href:newNodeDetails };
 var N_346144024_871395347 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
 N_346144024_871395347.ontology_node_child_count = 0;
 N_346144024_871395347.isLeaf = true;
@@ -684,8 +684,8 @@ var N_346265020_n418913753 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_
 N_346265020_n418913753.ontology_node_child_count = 0;
 N_346265020_n418913753.isLeaf = true;
 
-newNodeDetails = "javascript:onClickTreeNode('http://ncit:C74559');";
-newNodeData = { label:"CDISC SDTM Subject Characteristic Code Terminology", id:"http://ncit:C74559", href:newNodeDetails };
+newNodeDetails = "javascript:onClickTreeNode('http://ncit:C94159');";
+newNodeData = { label:"CDISC SDTM Subject Characteristic Code Terminology", id:"http://ncit:C94159", href:newNodeDetails };
 var N_346144001_n123364309 = new YAHOO.widget.TaskNode(newNodeData, N_345282874_1152700394, false);
 N_346144001_n123364309.ontology_node_child_count = 0;
 N_346144001_n123364309.isLeaf = true;
@@ -1356,9 +1356,9 @@ N_344297795_1465991337.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C92951');";
 newNodeData = { label:"FDA SPL Unit of Measure Terminology", id:"http://ncit:C92951", href:newNodeDetails };
-var N_347935297_n1076174515 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
-N_347935297_n1076174515.ontology_node_child_count = 0;
-N_347935297_n1076174515.isLeaf = true;
+var N_347935297_n1076194115 = new YAHOO.widget.TaskNode(newNodeData, N_344295991_506294390, false);
+N_347935297_n1076194115.ontology_node_child_count = 0;
+N_347935297_n1076194115.isLeaf = true;
 
 newNodeDetails = "javascript:onClickTreeNode('http://ncit:C87300');";
 newNodeData = { label:"FDA SPL Unit of Presentation Terminology", id:"http://ncit:C87300", href:newNodeDetails };
@@ -1899,38 +1899,38 @@ N_345309882_1211493727.isLeaf = true;
 <div class="ncibanner">
   <a href="http://www.cancer.gov" target="_blank">
     <img src="/ncitbrowser/images/logotype.gif"
-      width="440" height="39" border="0"
+      width="556" height="39" border="0"
       alt="National Cancer Institute"/>
   </a>
   <a href="http://www.cancer.gov" target="_blank">
     <img src="/ncitbrowser/images/spacer.gif"
-      width="48" height="39" border="0"
+      width="60" height="39" border="0"
       alt="National Cancer Institute" class="print-header"/>
   </a>
   <a href="http://www.nih.gov" target="_blank" >
     <img src="/ncitbrowser/images/tagline_nologo.gif"
-      width="173" height="39" border="0"
+      width="219" height="39" border="0"
       alt="U.S. National Institutes of Health"/>
   </a>
   <a href="http://www.cancer.gov" target="_blank">
     <img src="/ncitbrowser/images/cancer-gov.gif"
-      width="99" height="39" border="0"
+      width="125" height="39" border="0"
       alt="www.cancer.gov"/>
   </a>
 </div>
 <!-- end nci banner -->
 
-  <div class="center-page">
+  <div class="center-page_960">
     <!-- EVS Logo -->
 <div>
   <img src="/ncitbrowser/images/evs-logo-swapped.gif" alt="EVS Logo"
-       width="745" height="26" border="0"
+       width="941" height="26" border="0"
        usemap="#external-evs" />
   <map id="external-evs" name="external-evs">
     <area shape="rect" coords="0,0,140,26"
       href="/ncitbrowser/start.jsf" target="_self"
       alt="NCI Term Browser" />
-    <area shape="rect" coords="520,0,745,26"
+    <area shape="rect" coords="520,0,941,26"
       href="http://evs.nci.nih.gov/" target="_blank"
       alt="Enterprise Vocabulary Services" />
   </map>
@@ -1952,25 +1952,25 @@ N_345309882_1211493727.isLeaf = true;
   </tr>
 </table>
 
-<div class="mainbox-top"><img src="/ncitbrowser/images/mainbox-top.gif" width="745" height="5" alt=""/></div>
+<div class="mainbox-top"><img src="/ncitbrowser/images/mainbox-top.gif" width="941" height="5" alt=""/></div>
 <!-- end EVS Logo -->
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
 
       <!-- Thesaurus, banner search area -->
-      <div class="bannerarea">
+      <div class="bannerarea_960">
         <a href="/ncitbrowser/start.jsf" style="text-decoration: none;">
           <div class="vocabularynamebanner_tb">
             <span class="vocabularynamelong_tb">Version 2.1 (using LexEVS 6.0)</span>
           </div>
         </a>
-        <div class="search-globalnav">
+        <div class="search-globalnav_960">
           <!-- Search box -->
           <div class="searchbox-top"><img src="/ncitbrowser/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           <div class="searchbox">
 
 
-<form id="valueSetSearchForm" name="valueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_value_set" class="search-form-main-area" enctype="application/x-www-form-urlencoded" charset=UTF-8">
+<form id="valueSetSearchForm" name="valueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_value_set" class="search-form-main-area_960" enctype="application/x-www-form-urlencoded" charset=UTF-8">
 <input type="hidden" name="valueSetSearchForm" value="valueSetSearchForm" />
 <input type="hidden" name="view" value="1" />
 
@@ -2062,8 +2062,8 @@ N_345309882_1211493727.isLeaf = true;
 </table>
           <!-- end Global Navigation -->
 
-        </div> <!-- search-globalnav -->
-      </div> <!-- bannerarea -->
+        </div> <!-- search-globalnav_960 -->
+      </div> <!-- bannerarea_960 -->
 
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
@@ -2179,7 +2179,7 @@ Search or browse a value set from its home page, or search all value sets at onc
 
 <div class="textbody">
 <!-- footer -->
-<div class="footer" style="width:720px">
+<div class="footer" style="width:920px">
   <ul>
     <li><a href="http://www.cancer.gov" target="_blank" alt="National Cancer Institute">NCI Home</a> |</li>
     <li><a href="/ncitbrowser/pages/contact_us.jsf">Contact Us</a> |</li>
@@ -2213,10 +2213,10 @@ Search or browse a value set from its home page, or search all value sets at onc
 
 
       </div> <!-- pagecontent -->
-    </div> <!--  main-area -->
-    <div class="mainbox-bottom"><img src="/ncitbrowser/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div> <!--  main-area_960 -->
+    <div class="mainbox-bottom"><img src="/ncitbrowser/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
 
-  </div> <!-- center-page -->
+  </div> <!-- center-page_960 -->
 
 </body>
 </html>

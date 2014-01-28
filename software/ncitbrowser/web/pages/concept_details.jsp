@@ -43,11 +43,18 @@
         response.setContentType("text/html;charset=utf-8");
 
 	JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+	
 	String dictionary = info.dictionary;
+
+String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchemeName(dictionary);	
+	
 	if (dictionary != null) {
 		dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
 		dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
-		dictionary = DataUtils.getCodingSchemeName(dictionary);
+		
+		
+		
+		dictionary = DataUtils.getCSName(dictionary);
 	}
 	String deprecatedVersion = info.version_deprecated;
 	String version = info.version;
@@ -75,45 +82,13 @@
         boolean view_graph_link = false;
         String ncbo_id = null;
         String is_virtual = "true";
+        String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
         
-        RESTClient client = new RESTClient();
-        HashMap formalName2VirtualIdMap = (HashMap) request.getSession().getAttribute("formalName2VirtualIdMap");
-        if (formalName2VirtualIdMap == null) {
-            formalName2VirtualIdMap = DataUtils.getFormalName2VirtualIdMap();
-            request.getSession().setAttribute("formalName2VirtualIdMap", formalName2VirtualIdMap);
-        }
-    
-        String virtualId = null;
-        if (formalName2VirtualIdMap != null) {
-		virtualId = (String) formalName2VirtualIdMap.get(dictionary);
-		if (virtualId != null) {
-		    HashMap version2IdMap = client.getVersion2IdMap(virtualId);
-		    if (version2IdMap != null && version2IdMap.containsKey(version)) {
-			String t = (String) version2IdMap.get(version);
-			Vector id_vec = DataUtils.parseData(t);
-			if (id_vec.size() == 1) {
-			    ncbo_id = (String) id_vec.elementAt(0);
-			} else {
-			    ncbo_id = (String) id_vec.elementAt(id_vec.size()-1);
-			}
-			if (ncbo_id != null) {
-			    view_graph_link = true;
-			}
-		    } else {
-		        //System.out.println("WARNING: " + dictionary + " (version: " + version + ") not found in NCBO Bioportal.");
-		    }
-		}
-        }
+        //ncbo_id = DataUtils.getNCBOId(DataUtils.getCSName(dictionary));
+        //System.out.println("concept detail ncbo_id: " + ncbo_id);
         
-        // To be removed (set to true) when api_key is setup on anthill. 
-        boolean to_be_removed = false;
-        if (!to_be_removed) {
-		if (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0) {
-		    ncbo_id = "1032";
-		    view_graph_link = true;
-		}
-        }
-        
+        boolean view_graph = DataUtils.visualizationWidgetSupported(dictionary);
+
 %>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -150,19 +125,19 @@
       
       
       <%@ include file="/pages/templates/header.jsp"%>
-      <div class="center-page">         
+      <div class="center-page_960">         
          <%@ include file="/pages/templates/sub-header.jsp"%>
          <!-- Main box -->
-         <div id="main-area">         
+         <div id="main-area_960">         
             <%
                   String code = null;
+                  String ns = null;
             		String type = null;
             		String singleton = (String) request.getAttribute("singleton");
             		if (singleton != null && singleton.compareTo("true") == 0) {
-            			if (dictionary != null
-            					&& dictionary
-            							.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
-            				dictionary = DataUtils.getCodingSchemeName(dictionary);
+            			if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
+            			        //KLO, 012714
+            				//dictionary = DataUtils.getCodingSchemeName(dictionary);
             			}
             		}
             		
@@ -178,6 +153,7 @@
            		    code_from_cart_action = true;
            		}
            		
+           		ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
             		
             		//KLO 
             		code = HTTPUtils.cleanXSS(code);
@@ -187,8 +163,14 @@
             			if (con != null) {
             				code = con.getEntityCode();
             				request.getSession().setAttribute("code", code);
+            				
+             				ns = con.getEntityCodeNamespace();
+            				request.getSession().setAttribute("ns", ns);
+            				
+            				
             			} else {
             				code = (String) request.getSession().getAttribute("code");
+            				ns = (String) request.getSession().getAttribute("ns");
             			}
             		}
            		
@@ -249,11 +231,8 @@
             		} else if (JSPUtils.isNull(version)) {
             			name = "Error: Invalid version - " + version + ".";
             		} else {
-           			//c = DataUtils.getConceptByCode(dictionary, version, ltag, code);
-           			c = DataUtils.getConceptByCode(dictionary, version, code);
-           			
-           			//c = SearchUtils.getConceptByCode(dictionary, version, ltag, code);
-           			
+           			c = DataUtils.getConceptByCode(dictionary, version, code, ns, true);
+         			
             			if (c != null) {
             				request.getSession().setAttribute("concept", c);
             				request.getSession().setAttribute("code", code);
@@ -291,7 +270,7 @@
                   <h:form style="margin:0px 0px 0px 0px;" acceptcharset="UTF-8"> 
                   
                   
-                  <table border="0" width="720px" style="margin:0px 0px 0px 0px;">
+                  <table border="0" width="920px" style="margin:0px 0px 0px 0px;">
                      <tr class="global-nav"> 
                         <td width="25%"></td>                       
                         <td align="right" width="75%">
@@ -302,7 +281,7 @@
                            	if (tree_access2 && !typeLink_isMapping2) {
                            %>
       
-                           <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ontology_display_name=<%=dictionary%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                           <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ns=<%=ns%>&ontology_display_name=<%=short_name%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
                               View in Hierarchy</a>
                            <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
              <%
@@ -320,28 +299,15 @@
 
 
 <%
-if (ncbo_id != null) {                    
+
+
+if (view_graph) { 
+    String ncbo_widget_page = "ncbo_widget";
 %>
                           <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
-<!--
-	<a href="#" onclick="javascript:window.open('http://bioportal.bioontology.org/flex/BasicFlexoViz?ontology=<%=ncbo_id%>&nodeid=<%=code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
--->
-
-
-<!--
-	<a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/exit_app.jsf?ncbo_id=<%=ncbo_id%>&code=<%=code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
--->
-
-<!--
-	<a href="#" onclick="javascript:popup_window('<%=request.getContextPath()%>/pages/exit_app.jsf?ncbo_id=<%=ncbo_id%>&code=<%=code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12">
--->
-
-
-	<a href="#" onclick="javascript:popup_window('<%=request.getContextPath()%>/pages/BasicFlexoViz.jsf?ncbo_id=<%=ncbo_id%>&code=<%=code%>&virtual=<%=is_virtual%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12"
+	<a href="#" onclick="javascript:popup_window('<%=request.getContextPath()%>/pages/<%=ncbo_widget_page%>.jsf?dictionary=<%=dictionary%>&code=<%=code%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12"
 	 title="This link displays a graph that recapitulates some information in the Relationships tab in a visual format.">
 	View Graph</a>  
-
-
 <%
 }                  
 %>
@@ -439,7 +405,19 @@ if (!DataUtils.isNull(b)) {
                <a name="evs-content" id="evs-content"></a>
                <table border="0" cellpadding="0" cellspacing="0" width="700px">
                   <tr>
+                  <%
+                  if (namespace_list != null && namespace_list.size() > 1) {
+                  %>
+                     <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>; &nbsp;Namespace: <%=ns%>)</td>
+                  <%   
+                  } else {
+                  %>
                      <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>)</td>
+                  <%
+                  }
+                  %>
+                     
+                     
                      <td class="textbodyred">
                   <%
                   	if (namespace_list != null && namespace_list.size() > 1) {
@@ -529,9 +507,9 @@ if (!DataUtils.isNull(b)) {
 
 
             </div> <!--  End pagecontentLittlePadding -->         
-         </div> <!--  End main-area -->
-         <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
-      </div> <!-- End center-page -->
+         </div> <!--  End main-area_960 -->
+         <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+      </div> <!-- End center-page_960 -->
       
    </f:view>
 </body>

@@ -55,10 +55,10 @@
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation -->
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
 <%
 
 String base_Path = request.getContextPath();
@@ -99,7 +99,7 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
 %>
 
  
- <div class="bannerarea">
+ <div class="bannerarea_960">
  
 <% 
    if (info3.dictionary.compareTo("NCI Thesaurus") == 0) {
@@ -163,7 +163,7 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
 %> 
 
          
-	 <div class="search-globalnav"><!-- Search box -->
+	 <div class="search-globalnav_960"><!-- Search box -->
 		 <div class="searchbox-top"><img
 		   src="<%=base_Path%>/images/searchbox-top.gif" width="352" height="2"
 		   alt="SearchBox Top" /></div>
@@ -330,7 +330,7 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 }
 
 %>
-          <table class="datatable">
+          <table class="datatable_960">
 
           <th class="dataTableHeader" width="60px" scope="col" align="left">Source</th>
 
@@ -432,8 +432,8 @@ if (show_rank_column) {
         target_version = mappingData.getTargetCodingSchemeVersion();
        
                 
-source_scheme = DataUtils.getFormalName(source_scheme);        
-target_scheme = DataUtils.getFormalName(target_scheme);        
+source_scheme = DataUtils.getCSName(source_scheme);        
+target_scheme = DataUtils.getCSName(target_scheme);        
 
             %>
 
@@ -497,7 +497,7 @@ if (show_rank_column) {
       </div>
       <!-- end Page content -->
     </div>
-    <div class="mainbox-bottom"><img src="<%=base_Path%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=base_Path%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>

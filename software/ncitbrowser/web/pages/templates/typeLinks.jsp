@@ -5,7 +5,8 @@
     <%
  JSPUtils.JSPHeaderInfo typeLinks_info = new JSPUtils.JSPHeaderInfo(request);
  String scheme = typeLinks_info.dictionary;
- scheme = DataUtils.getFormalName(scheme);
+ //scheme = DataUtils.getFormalName(scheme);
+ scheme = DataUtils.getCSName(scheme);
 
  String tab_version = typeLinks_info.version;
  boolean typeLink_isMapping = DataUtils.isMapping(scheme, null);

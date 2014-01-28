@@ -45,7 +45,7 @@ if (vsdUri != null && vsdUri.compareTo("null") != 0 && vsdUri.indexOf("|") != -1
   
 %>
 
-<div class="bannerarea">
+<div class="bannerarea_960">
     <div class="banner">
     <!--
 	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
@@ -85,7 +85,7 @@ if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
 
     </div>
 	
-    <div class="search-globalnav">
+    <div class="search-globalnav_960">
         <!-- Search box -->
         <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
         <div class="searchbox"><%@ include file="/pages/templates/searchForm-resolvedvalueset.jsp" %></div>

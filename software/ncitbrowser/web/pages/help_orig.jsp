@@ -26,10 +26,10 @@
     String subsetsUrl = request.getContextPath() + "/pages/subset.jsf";
   %>
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
     <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
       <!-- Page content -->
       <div class="pagecontent">
@@ -49,7 +49,7 @@
           <A HREF="#additionalinfo">Additional Information</A>
         </p>
         <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="920px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="introduction">Introduction</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
@@ -88,7 +88,7 @@
         </p>
 
         <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="920px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="sources">Sources</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
@@ -111,7 +111,7 @@
         </p>
 
         <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="920px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="searchhelp">Search</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
@@ -218,7 +218,7 @@
         </p>
 
         <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="920px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="conceptdetails">Concept Details</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
@@ -254,7 +254,7 @@
         </p>
 
         <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="920px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="viewhierarchy">View Hierarchy</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
@@ -274,7 +274,7 @@
         </p>
 
         <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="920px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="otherlinks">Other Links</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
@@ -304,7 +304,7 @@
         </p>
 
         <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="920px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="knownissues">Known Issues</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
@@ -341,7 +341,7 @@
         </p>
 
         <p class="textbody">
-          <table width="720px" cellpadding="0" cellspacing="0" border="0"><tr>
+          <table width="920px" cellpadding="0" cellspacing="0" border="0"><tr>
             <td><h2><A NAME="additionalinfo">Additional Information</A></h2></td>
             <td align="right"><a href="#"><img src="<%= request.getContextPath() %>/images/up_arrow.jpg" width="16" height="16" border="0" alt="top" /></a></td>
           </tr></table>
@@ -355,10 +355,10 @@
         <br>
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div> <!-- end pagecontent -->
-    </div> <!-- end main-area -->
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div> <!-- end main-area_960 -->
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
-  </div> <!-- end center-page -->
+  </div> <!-- end center-page_960 -->
 </f:view>
 </body>
 </html>

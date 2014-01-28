@@ -303,10 +303,10 @@ var tree;
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
      
       <!-- Thesaurus, banner search area -->
 
@@ -316,7 +316,7 @@ var tree;
                          if (isValueSet) {
                        %>         
         
-      <div class="bannerarea">
+      <div class="bannerarea_960">
 
       <div class="banner">
         <a class="vocabularynamebanner" href="/ncitbrowser/pages/value_set_search_results.jsf?vsd_uri=http://ncit:C81222">
@@ -328,7 +328,7 @@ var tree;
 	    </a>
       </div>
 
-        <div class="search-globalnav">        
+        <div class="search-globalnav_960">        
         
           <!-- Search box -->
           <div class="searchbox-top"><img src="/ncitbrowser/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
@@ -408,11 +408,11 @@ var tree;
           <!-- end Global Navigation -->
           
           
-        </div> <!-- search-globalnav -->
+        </div> <!-- search-globalnav_960 -->
         
         
         
-      </div> <!-- bannerarea -->
+      </div> <!-- bannerarea_960 -->
           
           
                       <%
@@ -421,7 +421,7 @@ var tree;
                        
 
 
-<div class="bannerarea">
+<div class="bannerarea_960">
       <div class="banner">
         <a class="vocabularynamebanner" href="/ncitbrowser/pages/value_set_search_results.jsf?vsd_uri=http://ncit:C81222">
 	      <div class="vocabularynamebanner">
@@ -432,7 +432,7 @@ var tree;
 	    </a>
       </div>
   
-  <div class="search-globalnav">
+  <div class="search-globalnav_960">
     <img src="<%=basePath%>/images/shim.gif"
       width="1" height="80" alt="Shim" border="0"/>
     <%@ include file="/pages/templates/menuBar-termbrowserhome.jsp" %>
@@ -539,7 +539,7 @@ var tree;
             </td></tr>
             
             <tr><td>
-		 <table class="datatableValueSet" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+		 <table class="datatable_960ValueSet_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                      <tr><td>
 			      <p class="dataCellText">
 			      <%=vsd_description%>
@@ -559,10 +559,10 @@ var tree;
           <%@ include file="/pages/templates/nciFooter.jsp" %>
         </div>
       </div> <!-- pagecontent -->
-    </div> <!-- main-area -->
+    </div> <!-- main-area_960 -->
     <!-- end Main box -->
-  </div> <!-- center-page -->
-  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+  </div> <!-- center-page_960 -->
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
 </body>
 </html>

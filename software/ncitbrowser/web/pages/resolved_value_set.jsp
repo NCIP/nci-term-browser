@@ -74,10 +74,10 @@
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</a>
       <!-- End Skip Top Navigation -->
       <%@ include file="/pages/templates/header.jsp"%>
-      <div class="center-page">
+      <div class="center-page_960">
          <%@ include file="/pages/templates/sub-header.jsp"%>
          <!-- Main box -->
-         <div id="main-area">
+         <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
             		int numRemaining = 0;
@@ -247,7 +247,7 @@
                         </tr>
                         <tr class="textbody">
                            <td>
-                              <table class="dataTable" summary="Data Table" cellpadding="3" cellspacing="0" border="0" style="width: 694px;">
+                              <table class="dataTable_960" summary="Data Table" cellpadding="3" cellspacing="0" border="0" style="width: 694px;">
                                  <th class="dataTableHeader" scope="col" align="left">Code</th>
                                  <th class="dataTableHeader" scope="col" align="left">Name</th>
                                  <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
@@ -301,7 +301,8 @@
                                     <td class="dataCellText" scope="row">
                                        <%
                                        	if (code.indexOf("@") == -1) {
-                                       %> <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=coding_scheme%>&version=<%=vsn%>&code=<%=code%>"><%=code%></a>
+                                            String coding_scheme_nm = Datatils.getCSName(coding_scheme);
+                                       %> <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=coding_scheme_nm%>&version=<%=vsn%>&code=<%=code%>"><%=code%></a>
                                        <%
                                         	} else {
                                        %> <%=code%> <%
@@ -337,7 +338,7 @@
             </div><!-- end Page content -->
          </div><!-- end Main box -->         
       </div>      
-      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
    </f:view>
 </body>
 </html>

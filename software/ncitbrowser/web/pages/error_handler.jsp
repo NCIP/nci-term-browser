@@ -44,11 +44,11 @@
     <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
   <!-- End Skip Top Navigation --> 
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
-      <div class="bannerarea">
+    <div id="main-area_960">
+      <div class="bannerarea_960">
         <% if (subApp == TB) {%>
 		  <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
 		    <div class="vocabularynamebanner_tb">
@@ -87,7 +87,7 @@ if (display_release_date) {
         <% } else { %>
           <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
         <% } %>
-      </div> <!-- end bannerarea -->
+      </div> <!-- end bannerarea_960 -->
       <!-- end Thesaurus, banner search area -->
       <!-- Quick links bar -->
       <%@ include file="/pages/templates/quickLink.jsp" %>
@@ -103,7 +103,7 @@ if (display_release_date) {
       </div>
       <!-- end Page content -->
     </div>
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
   </div>
 </f:view>

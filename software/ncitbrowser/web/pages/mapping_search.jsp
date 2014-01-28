@@ -142,7 +142,9 @@ if (display_name_vec == null) {
     String sort_category = DataUtils.getMetadataValue(
 	scheme, version, "vocabulary_sort_category");
 
-    OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
+    String short_scheme_name = DataUtils.uri2CodingSchemeName(scheme);
+   //OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
+    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
     display_name_vec.add(info);
 
 	 if (!info.isProduction()) {
@@ -203,25 +205,25 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
   <%@ include file="/pages/templates/header.jsp" %>
   
   
-  <div class="center-page">
+  <div class="center-page_960">
   
 <h:form id="mappingSearch" acceptcharset="UTF-8">
     
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
         <input type="hidden" name="initial_search" value="true" />
 
 
  
  <!-- Thesaurus, banner search area -->
- <div class="bannerarea">
+ <div class="bannerarea_960">
 	 <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
 	   <div class="vocabularynamebanner_tb">
 	     <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
 	   </div>
 	 </a>
-     <div class="search-globalnav">
+     <div class="search-globalnav_960">
          <!-- Search box -->
          <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
         
@@ -250,8 +252,7 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
     onFocus="active = true"
     onBlur="active = false"
     onkeypress="return submitEnter('mappingSearch:mapping_search',event)"
-    tabindex="1"
-  />
+    tabindex="1"/>
   <h:commandButton
     id="mapping_search"
     value="mapping_search"
@@ -267,17 +268,30 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
     <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn" alt="Search Help"
     style="border-width:0;"/>
   </h:outputLink>
+  
+  
   <%
 //String algorithm = (String) request.getSession().getAttribute("algorithm");
 String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
 
     String check_e = "", check_s = "" , check_c ="";
+    /*
     if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
       check_e = "checked";
     else if (algorithm.compareTo("startsWith") == 0)
       check_s= "checked";
     else
       check_c = "checked";
+    */
+
+    if (algorithm == null || algorithm.compareTo("contains") == 0)
+      check_c = "checked";
+    else if (algorithm.compareTo("startsWith") == 0)
+      check_s= "checked";
+    else
+      check_e = "checked";
+      
+    
   %>
   <table border="0" cellspacing="0" cellpadding="0">
     <tr valign="top" align="left">
@@ -386,7 +400,7 @@ or search from there.  It is not yet possible to search more than one mapping da
             </span>
             
             
-            <table class="termstable" border="0">
+            <table class="termstable_960" border="0">
   
                
                 <tr><td class="textbody">Mappings:</td></tr>
@@ -484,7 +498,7 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
     if (mapping_cs_knt > 0) {
 %>  
 
-          <table class="termstable" border="0">
+          <table class="termstable_960" border="0">
                 <tr>
                   <td>
 
@@ -508,15 +522,15 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
           </div> <!-- end tabTableContentContainer -->
           <%@ include file="/pages/templates/nciFooter.jsp"%>
         </div> <!-- end Page content -->
-    </div> <!-- end main-area -->
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div> <!-- end main-area_960 -->
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <input type="hidden" id="single_mapping_search" name="single_mapping_search" value="true">
 
 
 
 </h:form>
 
-  </div> <!-- end center-page -->
+  </div> <!-- end center-page_960 -->
   <br>
 </f:view>
 <%

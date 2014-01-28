@@ -59,6 +59,7 @@ public class Constants {
     public static final String CONFIG_FILE = "NCItBrowserProperties.xml";
     public static final String CODING_SCHEME_NAME = "NCI Thesaurus";
     public static final String NCI_THESAURUS = "NCI Thesaurus";
+    public static final String NCIT_CS_NAME = "NCI_Thesaurus";
     public static final String NCI_METATHESAURUS = "NCI Metathesaurus";
 
     // Application constants
@@ -98,6 +99,9 @@ public class Constants {
     public static final String CONTAIN_SEARCH_ALGORITHM =
         "nonLeadingWildcardLiteralSubString";// "literalSubString";//"subString";
     public static final String LICENSE_STATEMENT = "license_statement";// "literalSubString";//"subString";
+
+    public static final String DEFAULT_SEARCH_ALGORITHM = "contains";
+
 
     public static final int SEARCH_BOTH_DIRECTION = 0;
     public static final int SEARCH_SOURCE = 1;
@@ -156,6 +160,13 @@ public class Constants {
 
     public static final String INVERSE_ASSOCIATION_DESCRIPTION_LABEL = "(True for the other concept's relationship to the current concept.)";
 
+    public static final String NCBO_PURL = "http://purl.bioontology.org/ontology/";
+    public static final String NCIT_NCBO_ID = "1032";
+    public static final String NCIT = "NCIT";
+    public static final String NCIT_NAMESPACE = "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#";
+    public static final String NCBO_WIDGET_QUERY_STRING = "http://bioportal.bioontology.org/widgets/visualization?ontology=";
+
+    public static final String DEFAULT_NCBO_WIDGET_INFO = "NCI_Thesaurus|1032|NCIT;";
 
 /*
 Role Relationships pointing from the current concept to other concepts:

@@ -155,7 +155,7 @@ if (list != null && list.size() > 0) {
            
 %>        
     <p></p>Mapping Source: <%=mapping_cs_name%>
-          <table class="datatable">
+          <table class="datatable_960">
 
           <th class="dataTableHeader" width="60px" scope="col" align="left">Source</th>
 
@@ -207,9 +207,9 @@ if (show_rank_column) {
         if (display_name_hmap.containsKey(source_namespace)) {
             source_namespace = (String) display_name_hmap.get(source_namespace);
         } else {
-            String short_name = DataUtils.getMappingDisplayName(mapping_cs_name, source_namespace);
-            display_name_hmap.put(source_namespace, short_name);
-            source_namespace = short_name;
+            String mappings_short_name = DataUtils.getMappingDisplayName(mapping_cs_name, source_namespace);
+            display_name_hmap.put(source_namespace, mappings_short_name);
+            source_namespace = mappings_short_name;
         }
 
 		rel = mappingData.getRel();
@@ -222,16 +222,18 @@ if (show_rank_column) {
         if (display_name_hmap.containsKey(target_namespace)) {
             target_namespace = (String) display_name_hmap.get(target_namespace);
         } else {
-            String short_name = DataUtils.getMappingDisplayName(mapping_cs_name, target_namespace);
-            display_name_hmap.put(target_namespace, short_name);
-            target_namespace = short_name;
+            String mappings_short_name = DataUtils.getMappingDisplayName(mapping_cs_name, target_namespace);
+            display_name_hmap.put(target_namespace, mappings_short_name);
+            target_namespace = mappings_short_name;
         }    
         
 
 		source_scheme = DataUtils.getFormalName(mappingData.getSourceCodingScheme());
 		source_version = mappingData.getSourceCodingSchemeVersion();
 		target_scheme = DataUtils.getFormalName(mappingData.getTargetCodingScheme());
-		target_version = mappingData.getTargetCodingSchemeVersion();         
+		target_version = mappingData.getTargetCodingSchemeVersion();
+		String source_scheme_nm = DataUtils.getCSName(source_scheme);
+		String target_scheme_nm = DataUtils.getCSName(target_scheme);
           
         %>
         
@@ -241,7 +243,7 @@ if (show_rank_column) {
         <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme_nm%>&version=<%=source_version%>&code=<%=source_code%>'">
       <%=source_code%>
 </a>
 
@@ -266,7 +268,7 @@ if (show_rank_column) {
         <td class="datacoldark">
 
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme_nm%>&version=<%=target_version%>&code=<%=target_code%>'">
       <%=target_code%>
 </a>
 
@@ -315,7 +317,7 @@ if (list != null && list.size() > 0) {
 %>
       
     <p></p>Mapping Source: <%=mapping_cs_name%>
-          <table class="datatable">
+          <table class="datatable_960">
 
           <th class="dataTableHeader" width="60px" scope="col" align="left">Source</th>
 
@@ -365,9 +367,9 @@ if (show_rank_column) {
 		if (display_name_hmap.containsKey(source_namespace)) {
 		    source_namespace = (String) display_name_hmap.get(source_namespace);
 		} else {
-		    String short_name = DataUtils.getMappingDisplayName(mapping_cs_name, source_namespace);
-		    display_name_hmap.put(source_namespace, short_name);
-		    source_namespace = short_name;
+		    String mappings_short_name = DataUtils.getMappingDisplayName(mapping_cs_name, source_namespace);
+		    display_name_hmap.put(source_namespace, mappings_short_name);
+		    source_namespace = mappings_short_name;
 		}
 		rel = mappingData.getRel();
 		score = Integer.valueOf(mappingData.getScore()).toString();
@@ -378,15 +380,17 @@ if (show_rank_column) {
 		if (display_name_hmap.containsKey(target_namespace)) {
 		    target_namespace = (String) display_name_hmap.get(target_namespace);
 		} else {
-		    String short_name = DataUtils.getMappingDisplayName(mapping_cs_name, target_namespace);
-		    display_name_hmap.put(target_namespace, short_name);
-		    target_namespace = short_name;
+		    String mappings_short_name = DataUtils.getMappingDisplayName(mapping_cs_name, target_namespace);
+		    display_name_hmap.put(target_namespace, mappings_short_name);
+		    target_namespace = mappings_short_name;
 		} 
 		
 		source_scheme = DataUtils.getFormalName(mappingData.getSourceCodingScheme());
 		source_version = mappingData.getSourceCodingSchemeVersion();
 		target_scheme = DataUtils.getFormalName(mappingData.getTargetCodingScheme());
 		target_version = mappingData.getTargetCodingSchemeVersion();         
+		String source_scheme_nm = DataUtils.getCSName(source_scheme);
+		String target_scheme_nm = DataUtils.getCSName(target_scheme);
 
 
         %>
@@ -395,7 +399,7 @@ if (show_rank_column) {
         <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme_nm%>&version=<%=source_version%>&code=<%=source_code%>'">
       <%=source_code%>
 </a>
 
@@ -419,7 +423,7 @@ if (show_rank_column) {
         <td class="datacoldark">
 
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme_nm%>&version=<%=target_version%>&code=<%=target_code%>'">
       <%=target_code%>
 </a>
 

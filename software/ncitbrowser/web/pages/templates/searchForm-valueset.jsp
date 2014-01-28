@@ -43,6 +43,7 @@
     
 
     String _check__e = "", _check__b = "", _check__s = "" , _check__c ="";
+/*    
     if (_valueset_search_algorithm == null || _valueset_search_algorithm.compareTo("exactMatch") == 0)
         _check__e = "checked";
     else if (_valueset_search_algorithm.compareTo("startsWith") == 0)
@@ -51,7 +52,17 @@
         _check__b= "checked";
     else
         _check__c = "checked";
-        
+*/
+
+	if (algorithm == null || algorithm.compareTo("contains") == 0)
+		check_c = "checked";
+	else if (algorithm.compareTo("startsWith") == 0)
+		check_s = "checked";
+	else if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0)
+		check_b = "checked";
+	else if (algorithm.compareTo("exactMatch") == 0)
+		check_e = "checked";
+		
 
     String _selectValueSetSearchOption = null;
     _selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));

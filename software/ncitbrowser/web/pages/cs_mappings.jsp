@@ -95,20 +95,20 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
   <%@ include file="/pages/templates/header.jsp" %>
   
   
-  <div class="center-page">
+  <div class="center-page_960">
   
 <h:form id="mappingSearch" styleClass="search-form" acceptcharset="UTF-8">
     
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
     
         <input type="hidden" name="initial_search" value="true" />
 
 
  
  <!-- Thesaurus, banner search area -->
- <div class="bannerarea">
+ <div class="bannerarea_960">
  
 <%
   JSPUtils.JSPHeaderInfoMore info3 = new JSPUtils.JSPHeaderInfoMore(request);
@@ -188,7 +188,7 @@ if (display_release_date) {
 %>
 
 
-     <div class="search-globalnav">
+     <div class="search-globalnav_960">
          <!-- Search box -->
          <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
         
@@ -352,7 +352,7 @@ if (hide_ontology_list == null || hide_ontology_list.compareTo("false") == 0) {
             </span>
             
             
-            <table class="termstable" border="0">
+            <table class="termstable_960" border="0">
   
                
                 <tr><td class="textbody"><%=cs_mappings_dictionary%> mappings:</td></tr>
@@ -436,7 +436,7 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
 
 <p></p>
 
-          <table class="termstable" border="0">
+          <table class="termstable_960" border="0">
                 <tr>
                   <td>
 
@@ -457,8 +457,8 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
           </div> <!-- end tabTableContentContainer -->
           <%@ include file="/pages/templates/nciFooter.jsp"%>
         </div> <!-- end Page content -->
-    </div> <!-- end main-area -->
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div> <!-- end main-area_960 -->
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <input type="hidden" id="single_mapping_search" name="single_mapping_search" value="true">
     <input type="hidden" id="dictionary" name="dictionary" value="<%=cs_dictionary%>">
     <input type="hidden" id="version" name="version" value="<%=cs_version%>">
@@ -466,7 +466,7 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
 
 </h:form>
 
-  </div> <!-- end center-page -->
+  </div> <!-- end center-page_960 -->
   <br>
 </f:view>
 <%

@@ -29,10 +29,10 @@
     String tab2 = tab + tab;
   %>
   <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page">
+  <div class="center-page_960">
     <%@ include file="/pages/templates/sub-header.jsp" %>
     <!-- Main box -->
-    <div id="main-area">
+    <div id="main-area_960">
     <%@ include file="/pages/templates/content-header-no-searchbox.jsp" %>
       <!-- Page content -->
       <div class="pagecontent">
@@ -65,7 +65,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><b><a name="introduction">Introduction</a></b></td>
               <td align="right">
@@ -145,7 +145,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><a name="homePage"><b>NCI Term Browser Home Page</b></a></td>
               <td align="right">
@@ -210,7 +210,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><a name="terminologies"><b>Terminologies Tab</b></a></td>
               <td align="right">
@@ -239,7 +239,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="sources">Sources</a></h2></td>
               <td align="right">
@@ -286,7 +286,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="searchBox">Using the Search Box</a></h2></td>
               <td align="right">
@@ -394,7 +394,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="searchResults">Search Results</a></h2></td>
               <td align="right">
@@ -450,7 +450,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="searchingOther">Searching Other/Multiple Versions of a Terminology</a></h2></td>
               <td align="right">
@@ -495,7 +495,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="advancedSearch">Advanced Search</a></h2></td>
               <td align="right">
@@ -541,7 +541,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="conceptDetails">Concept Details</a></h2></td>
               <td align="right">
@@ -603,7 +603,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="additionalLinks">Additional Links for Individual Terminologies</a></h2></td>
               <td align="right">
@@ -646,7 +646,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="cartAndExport">Cart and Export Functionality</a></h2></td>
               <td align="right">
@@ -719,7 +719,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><a name="valueSetsTab"><b>Value Sets Tab</b></a></td>
               <td align="right">
@@ -840,7 +840,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="valueSetsSearchBox">Using the Search Box</a></h2></td>
               <td align="right">
@@ -897,7 +897,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><a name="mappingsTab"><b>Mappings Tab</b></a></td>
               <td align="right">
@@ -955,7 +955,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><h2><a name="mappingSearchBox">Using the Search Box</a></h2></td>
               <td align="right">
@@ -1057,7 +1057,7 @@
         <%-- -------------------------------------------------------------- --%>        
         <div class="textbody">
           <br/>
-          <table width="720px" cellpadding="0" cellspacing="0" border="0">
+          <table width="920px" cellpadding="0" cellspacing="0" border="0">
             <tr>
               <td><a name="additionalInformation"><b>Additional Information</b></a></td>
               <td align="right">
@@ -1077,10 +1077,10 @@
         </div>
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div> <!-- end pagecontent -->
-    </div> <!-- end main-area -->
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div> <!-- end main-area_960 -->
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
-  </div> <!-- end center-page -->
+  </div> <!-- end center-page_960 -->
 </f:view>
 </body>
 </html>

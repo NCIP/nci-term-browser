@@ -563,6 +563,11 @@
                  <key>NCBO_API_KEY</key>
                  <value>@ncbo_api_key@</value>
         </ConfigurableItem>
+
+        <ConfigurableItem>
+                 <key>NCBO_WIDGET_INFO</key>
+                 <value>@ncbo_widget_info@</value>
+        </ConfigurableItem>
         
         <!-- Standard FTP Report List (End) ================================ -->
 

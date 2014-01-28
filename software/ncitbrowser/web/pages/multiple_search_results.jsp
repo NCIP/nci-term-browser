@@ -77,10 +77,10 @@
       <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
     <!-- End Skip Top Navigation -->  
     <%@ include file="/pages/templates/header.jsp" %>
-    <div class="center-page">
+    <div class="center-page_960">
       <%@ include file="/pages/templates/sub-header.jsp" %>
       <!-- Main box -->
-      <div id="main-area">
+      <div id="main-area_960">
  <%
 boolean reindex_required = false;
 String ontologiesToSearchOnStr = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("ontologiesToSearchOnStr"));
@@ -120,14 +120,14 @@ request.getSession().setAttribute("matchText", match_text);
       check_r = "checked";
 %>
       <!-- Thesaurus, banner search area -->
-      <h:form styleClass="search-form-main-area" id="searchTerm" acceptcharset="UTF-8">
-      <div class="bannerarea">
+      <h:form styleClass="search-form-main-area_960" id="searchTerm" acceptcharset="UTF-8">
+      <div class="bannerarea_960">
 	    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
 	      <div class="vocabularynamebanner_tb">
 	        <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
 	      </div>
 	    </a>
-        <div class="search-globalnav">
+        <div class="search-globalnav_960">
           <!-- Search box -->
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
             <div class="searchbox">
@@ -187,8 +187,8 @@ request.getSession().setAttribute("matchText", match_text);
           <!-- Global Navigation -->
           <%@ include file="/pages/templates/menuBar-termbrowserhome.jsp" %>
           <!-- end Global Navigation -->
-      </div> <!-- end search-globalnav -->
-    </div> <!-- end bannerarea -->
+      </div> <!-- end search-globalnav_960 -->
+    </div> <!-- end bannerarea_960 -->
     </h:form>
     <!-- end Thesaurus, banner search area -->
     <!-- Quick links bar -->
@@ -393,6 +393,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
         String code = rcr.getConceptCode();
         String name = "";
         String version = null;
+        String ns = null;
         
         if (rcr != null) {
             if (rcr.getConceptCode() == null) {
@@ -416,6 +417,8 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
        
         if (rcr != null && code != null) {
 		version = rcr.getCodingSchemeVersion();
+		ns = rcr.getCodeNamespace(); 
+		
 		String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
 		if (vocabulary_name == null) {
 		    vocabulary_name = (String) hmap.get(rcr.getCodingSchemeName());
@@ -425,8 +428,9 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 		if (name_hmap.containsKey(vocabulary_name)) {
 	      		short_vocabulary_name = (String) name_hmap.get(vocabulary_name);
 		} else {
-	      		short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, version, "display_name");
-	      		if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
+	      		//short_vocabulary_name = DataUtils.getMetadataValue(vocabulary_name, version, "display_name");
+	      	        short_vocabulary_name = DataUtils.getCSName(vocabulary_name);
+	      	        if (short_vocabulary_name == null || short_vocabulary_name.compareTo("null") == 0) {
 		  		short_vocabulary_name = DataUtils.getLocalName(vocabulary_name);
 	      		}
 	      		name_hmap.put(vocabulary_name, short_vocabulary_name);
@@ -503,7 +507,10 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
             }
 
             String vocabulary_name_encoded = null;
-            if (vocabulary_name != null) vocabulary_name_encoded = vocabulary_name.replace(" ", "%20");
+            String short_name = (String) name_hmap.get(vocabulary_name);
+            if (short_name != null) {
+                 vocabulary_name_encoded = DataUtils.getCSName(short_name);//short_name.replace(" ", "%20");
+            }
 
             if (i % 2 == 0) {
         %>
@@ -524,7 +531,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>"><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>"><%=name%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
@@ -533,7 +540,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=name%></a>
           <%
           }
           %>
@@ -551,7 +558,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + code;
@@ -560,7 +567,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           <%
           } else {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%
           }
           %>
@@ -616,10 +623,10 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
   
         <%@ include file="/pages/templates/nciFooter.jsp" %>
       </div> <!-- end Page content -->
-    </div> <!-- end main-area -->    
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="745" height="5" alt="Mainbox Bottom" /></div>
+    </div> <!-- end main-area_960 -->    
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
     <!-- end Main box -->
-  </div> <!-- end center-page -->
+  </div> <!-- end center-page_960 -->
 
 <%
 
