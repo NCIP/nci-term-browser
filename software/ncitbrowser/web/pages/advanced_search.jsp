@@ -374,6 +374,7 @@
     }
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";
+    /*
     if (adv_search_algorithm == null || adv_search_algorithm.compareTo("exactMatch") == 0)
         check__e = "checked";
     else if (adv_search_algorithm.compareTo("startsWith") == 0)
@@ -382,6 +383,17 @@
         check__b= "checked";
     else
         check__c = "checked";
+    */
+    
+    if (adv_search_algorithm == null || adv_search_algorithm.compareTo("contains") == 0)
+        check__c = "checked";
+    else if (adv_search_algorithm.compareTo("startsWith") == 0)
+        check__s= "checked";
+    else if (adv_search_algorithm.compareToIgnoreCase("lucene") == 0)
+        check__b= "checked";
+    else
+        check__e = "checked";
+        
 
     String check_n2 = "", check_c2 = "", check_p2 = "" , check_r2 ="";
 

@@ -6257,70 +6257,7 @@ if (lbSvc == null) {
         return list;
     }
 
-/*
-	public static String getNCBOOntologyInfo(String ncbo_widget_info, String ncbo_id) {
-        Vector v = parseData(ncbo_widget_info, ";");
-        for (int i=0; i<v.size(); i++) {
-			String info = (String) v.elementAt(i);
-			if (info.startsWith(ncbo_id + "|")) return info;
-		}
-		return null;
-	}
 
-	public static String getNCBOOntologyName(String ncbo_ontology_info) {
-        Vector v = parseData(ncbo_ontology_info);
-		return (String) v.elementAt(1);
-	}
-
-	public static String getNCBONamespace(String ncbo_ontology_info) {
-        Vector v = parseData(ncbo_ontology_info);
-        if (v.size() == 3) {
-			return (String) v.elementAt(2);
-		} else {
-            String ncbo_id = (String) v.elementAt(0);
-            if (ncbo_id.compareTo(NCIT_NCBO_ID) == 0) {
-				return Constants.NCIT_NAMESPACE;
-			}
-			String abbreviation = (String) v.elementAt(1);
-			return Constants.NCBO_PURL + abbreviation + "/"; //#
-		}
-	}
-
-//ncbo_widget_info=1032|NCIT|http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#;1415|CTCAE|http://purl.bioontology.org/ontolog/CTCAE#;1070|GO|http://purl.bioontology.org/ontolog/GO#;1343|HL7|http://purl.bioontology.org/ontolog/HL7#;1528|HUGO|http://purl.bioontology.org/ontolog/HUGO#;1553|ICD10CM|http://purl.bioontology.org/ontolog/ICD10CM#;1101|ICD9CM|http://purl.bioontology.org/ontolog/ICD9CM#;1350|LOINC|http://purl.bioontology.org/ontolog/LOINC#;1000|MA|http://purl.bioontology.org/ontolog/MA#;1083|NPO|http://purl.bioontology.org/ontolog/NPO#;1352|NDFRT|http://purl.bioontology.org/ontolog/NDFRT#;1349|PDQ|http://purl.bioontology.org/ontolog/PDQ#;1057|RADLEX|http://purl.bioontology.org/ontolog/RADLEX#;1353|SNOMEDCT|http://purl.bioontology.org/ontolog/SNOMEDCT#;
-
-	public static String getNCBOId(String vocabularyName) {
-		String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
-		if (ncbo_widget_info == null) return null;
-
-		//System.out.println(ncbo_widget_info);
-		//System.out.println(vocabularyName);
-
-		String formalName = searchFormalName(vocabularyName);
-		//System.out.println(formalName);
-
-		if (formalName.compareTo("NCI_Thesaurus") == 0 || formalName.compareTo("NCI Thesaurus") == 0) {
-			return Constants.NCIT_NCBO_ID;
-		}
-
-        Vector v = parseData(ncbo_widget_info, ";");
-        for (int i=0; i<v.size(); i++) {
-			String info = (String) v.elementAt(i);
-			Vector u = parseData(info);
-			String abbreviation = (String) u.elementAt(1);
-			//System.out.println(abbreviation);
-			if (_localName2FormalNameHashMap.containsKey(abbreviation)) {
-				String value = (String) _localName2FormalNameHashMap.get(abbreviation);
-				//System.out.println("value: " + value + " formalName: " + formalName);
-				if (formalName.compareTo(value) == 0)
-				{
-					return (String) u.elementAt(0);
-				}
-			}
-		}
-		return null;
-	}
-
-*/
 	public static String getCSName(String vocabularyName) {
         if (_uri2CodingSchemeNameHashMap == null) setCodingSchemeMap();
 		String formalname = getFormalName(vocabularyName);

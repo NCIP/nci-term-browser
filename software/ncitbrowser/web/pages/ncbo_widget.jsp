@@ -26,7 +26,7 @@ if (url == null) {
 <%     
 } else {
 
-System.out.println(url);
+//System.out.println(url);
 
 %>
 <iframe src="<%=url%>" width="550" height="550" frameborder="0">
