@@ -409,9 +409,9 @@ String vsd_name = "null";
     
         <tr valign="top" align="left">
         <td align="left" class="textbody">  
+                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3" onclick="onVSAlgorithmChanged();">Contains
                      <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
                      <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3" onclick="onVSAlgorithmChanged();">Begins With&nbsp;
-                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3" onclick="onVSAlgorithmChanged();">Contains
         </td>
         </tr>
         <%

@@ -203,10 +203,9 @@ vse = t2;
    <table border="0" cellspacing="0" cellpadding="0" width="340px">
       <tr valign="top" align="left">
          <td align="left" class="textbody" colspan="2">
-         
+            <input type="radio" name="algorithm" value="contains"   alt="Contains"    <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');">Contains
             <input type="radio" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4">Exact Match&nbsp;
             <input type="radio" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');">Begins With&nbsp;
-            <input type="radio" name="algorithm" value="contains"   alt="Contains"    <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');">Contains
             
             <!--
             <input type="radio" name="algorithm" id="algorithm1"

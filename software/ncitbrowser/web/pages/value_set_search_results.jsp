@@ -416,9 +416,9 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
   <table border="0" cellspacing="0" cellpadding="0" width="340px">
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
+        <input type="radio" name="algorithm" id="contains" value="contains" alt="Contains" <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="contains">Contains</label>
         <input type="radio" name="algorithm" id="exactMatch" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4"/><label for="exactMatch">Exact Match&nbsp;</label>
         <input type="radio" name="algorithm" id="startsWith" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="startsWith">Begins With&nbsp;</label>
-        <input type="radio" name="algorithm" id="contains" value="contains" alt="Contains" <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="contains">Contains</label>
       </td>
     </tr>
     
@@ -516,9 +516,9 @@ if (vd_uri != null) {
     
         <tr valign="top" align="left">
         <td align="left" class="textbody">  
+                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
                      <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
                      <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3">Begins With&nbsp;
-                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3">Contains
         </td>
         </tr>
         <%

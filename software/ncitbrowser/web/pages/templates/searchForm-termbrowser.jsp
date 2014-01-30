@@ -62,9 +62,9 @@ String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) req
   <table border="0" cellspacing="0" cellpadding="0">
     <tr valign="top" align="left">
       <td align="left" class="textbody">
+        <input type="radio" id="contains" name="algorithm" value="contains" alt="Contains" <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');">Contains&nbsp;
         <input type="radio" id="exactMatch" name="algorithm" value="exactMatch" alt="Exact Match" <%=check_e%> tabindex="4">Exact Match&nbsp;
         <input type="radio" id="startsWith" name="algorithm" value="startsWith" alt="Begins With" <%=check_s%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');">Begins With&nbsp;
-        <input type="radio" id="contains" name="algorithm" value="contains" alt="Contains" <%=check_c%> tabindex="4" onclick="onAlgorithmChanged('searchTerm');">Contains&nbsp;
         <%
           String searchTarget = (String) request.getSession().getAttribute("searchTarget");
           String check_n = "", check_cd = "", check_p = "" , check_r ="";

@@ -437,9 +437,9 @@
                   <tr><td>
                      <table border="0" cellspacing="0" cellpadding="0">
                     <tr valign="top" align="left"><td align="left" class="textbody">
+                      <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3" onclick="refresh_algorithm()"; >Contains
                       <input type="radio" name="adv_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3" onclick="refresh_algorithm()"; >Exact Match&nbsp;
                       <input type="radio" name="adv_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3" onclick="refresh_algorithm()"; >Begins With&nbsp;
-                      <input type="radio" name="adv_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3" onclick="refresh_algorithm()"; >Contains
                       
 <%
 String luceneSearch = "<a href=\"#\" onmouseover=\"Tip('<h4>Match Algorithm</h4><table><tr><td>Wildcard (multiple characters)</b>: heart*</td></tr><tr>       <td><b>Wildcard (single character)</b>: he?rt</td></tr><tr><td><b>Fussy match</b>: heart~</td></tr><tr><td><b>Boolean</b>: heart AND attack</td></tr><td><b>Boosting</b>: heart^5 AND attack</td></tr><tr><td><b>Negation</b>: heart -attack</td></tr><tr><td><b>Code Field</b>: code:118797008 AND heart</td></tr></table>')\" onmouseout=\"UnTip()\" >Lucene Search</a>";

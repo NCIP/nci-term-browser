@@ -2187,9 +2187,9 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("");
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("        <td align=\"left\" class=\"textbody\">");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Contains");
       out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"exactMatch\" alt=\"Exact Match\" " + algorithm_exactMatch + " tabindex=\"3\">Exact Match&nbsp;");
       out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"startsWith\" alt=\"Begins With\" " + algorithm_startsWith + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Begins With&nbsp;");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Contains");
       out.println("        </td>");
       out.println("        </tr>");
       out.println("");
@@ -4062,9 +4062,9 @@ if (DataUtils.isNull(matchText)) {
 
       out.println("        <tr valign=\"top\" align=\"left\">");
       out.println("        <td align=\"left\" class=\"textbody\">");
+      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Contains");
       out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"exactMatch\" alt=\"Exact Match\" " + algorithm_exactMatch + " tabindex=\"3\">Exact Match&nbsp;");
       out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"startsWith\" alt=\"Begins With\" " + algorithm_startsWith + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Begins With&nbsp;");
-      out.println("                     <input type=\"radio\" name=\"valueset_search_algorithm\" value=\"contains\" alt=\"Contains\" "      + algorithm_contains   + " tabindex=\"3\"  onclick=\"onVSAlgorithmChanged();\">Contains");
       out.println("        </td>");
       out.println("        </tr>");
       out.println("");

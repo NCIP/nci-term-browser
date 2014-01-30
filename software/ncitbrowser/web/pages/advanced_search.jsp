@@ -310,7 +310,8 @@
     }
 
     if (DataUtils.isNull(selectSearchOption)) {
-        selectSearchOption = "Property";
+        //selectSearchOption = "Property";
+        selectSearchOption = "Name";
     }
    
     if (direction == null) direction = "source";
@@ -366,7 +367,7 @@
     if (selectProperty == null) selectProperty = "ALL";
     if (adv_search_source == null) adv_search_source = "ALL";
     if (search_string == null) search_string = "";
-    if (adv_search_algorithm == null) adv_search_algorithm = "exactMatch";
+    if (adv_search_algorithm == null) adv_search_algorithm = "contains";
     
     
     if (direction == null) {

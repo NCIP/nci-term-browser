@@ -347,9 +347,9 @@ var tree;
   <table border="0" cellspacing="0" cellpadding="0" width="340px">
     <tr valign="top" align="left">
       <td align="left" class="textbody" colspan="2">
+        <input type="radio" name="algorithm" id="contains" value="contains" alt="Contains"  tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="contains">Contains</label>
         <input type="radio" name="algorithm" id="exactMatch" value="exactMatch" alt="Exact Match" checked tabindex="4"/><label for="exactMatch">Exact Match&nbsp;</label>
         <input type="radio" name="algorithm" id="startsWith" value="startsWith" alt="Begins With"  tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="startsWith">Begins With&nbsp;</label>
-        <input type="radio" name="algorithm" id="contains" value="contains" alt="Contains"  tabindex="4" onclick="onAlgorithmChanged('resolvedValueSetSearchForm');"/><label for="contains">Contains</label>
       </td>
     </tr>
     
