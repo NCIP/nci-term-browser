@@ -617,7 +617,7 @@ a.hideLink
 /* ------------ Quick links ------------ */
 #quicklinksholder
 {
- margin-left: 225px;
+ margin-left: 231px;  /*225px*/
  padding-top: 7px;
 }
 
