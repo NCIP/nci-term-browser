@@ -157,10 +157,10 @@ if (list != null && list.size() > 0) {
     <p></p>Mapping Source: <%=mapping_cs_name%>
           <table class="datatable_960">
 
-          <th class="dataTableHeader" width="60px" scope="col" align="left">Source</th>
+          <th class="dataTableHeader" width="100px" scope="col" align="left">Source</th>
 
 
-          <th class="dataTableHeader" scope="col" align="left">
+          <th class="dataTableHeader" width="100px" scope="col" align="left">
                  Source Code
           </th>
 
@@ -182,9 +182,9 @@ if (show_rank_column) {
 }
 %>
 
-          <th class="dataTableHeader" width="60px" scope="col" align="left">Target</th>
+          <th class="dataTableHeader" width="100px" scope="col" align="left">Target</th>
 
-          <th class="dataTableHeader" scope="col" align="left">
+          <th class="dataTableHeader" width="100px" scope="col" align="left">
                  Target Code
           </th>
 
@@ -319,7 +319,7 @@ if (list != null && list.size() > 0) {
     <p></p>Mapping Source: <%=mapping_cs_name%>
           <table class="datatable_960">
 
-          <th class="dataTableHeader" width="60px" scope="col" align="left">Source</th>
+          <th class="dataTableHeader" width="100px" scope="col" align="left">Source</th>
 
 
           <th class="dataTableHeader" scope="col" align="left">
@@ -344,7 +344,7 @@ if (show_rank_column) {
 }
 %>
 
-          <th class="dataTableHeader" width="60px" scope="col" align="left">Target</th>
+          <th class="dataTableHeader" width="100px" scope="col" align="left">Target</th>
 
           <th class="dataTableHeader" scope="col" align="left">
                  Target Code

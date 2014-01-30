@@ -105,7 +105,7 @@ if (vocabulary_name == null || vocabulary_name.compareTo("NCI Thesaurus") == 0) 
     <%
     } else {
     %>
-        <table width="700px">
+        <table width="900px">
           <tr>
             <table>
               <tr>

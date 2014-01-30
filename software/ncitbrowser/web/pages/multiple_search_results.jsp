@@ -314,7 +314,7 @@ String next_page_num_str = Integer.toString(next_page_num);
       
       
       
-        <table width="700px">
+        <table width="900px">
           <tr>
             <td>
               <table>
@@ -349,11 +349,8 @@ String next_page_num_str = Integer.toString(next_page_num);
 
           <tr>
             <td class="textbody">
-              <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+              <table class="datatable_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 <%
-
-
-
 
 if (size > 0) {
 

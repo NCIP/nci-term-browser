@@ -403,7 +403,7 @@ if (!DataUtils.isNull(b)) {
                   </h:form>  
  
                <a name="evs-content" id="evs-content"></a>
-               <table border="0" cellpadding="0" cellspacing="0" width="700px">
+               <table border="0" cellpadding="0" cellspacing="0" width="100%">
                   <tr>
                   <%
                   if (namespace_list != null && namespace_list.size() > 1) {

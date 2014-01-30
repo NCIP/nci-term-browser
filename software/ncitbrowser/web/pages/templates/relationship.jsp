@@ -65,7 +65,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
     scheme_curr = scheme_curr.replaceAll(" ", "%20");
 
 %>
-  <table border="0" width="708px">
+  <table class="datatable_960" border="0" width="100%">
     <tr>
 
     
@@ -120,7 +120,7 @@ if (type != null && type.compareTo("all") == 0) {
       } else if (concepts != null) {
     %>
         <b><%=label%></b>
-        <table class="dataTable">
+        <table class="datatable_960" border="0" width="100%">
     <%
         for (int i=0; i<concepts.size(); i++) {
           String s = (String) concepts.get(i);
@@ -169,7 +169,7 @@ if (type != null && type.compareTo("all") == 0) {
       } else if (concepts != null) {
     %>
         <b><%=label%></b>
-        <table class="dataTable">
+        <table class="datatable_960" border="0" width="100%">
     <%
         for (int i=0; i<concepts.size(); i++) {
           String s = (String) concepts.get(i);
@@ -205,7 +205,7 @@ if (type != null && type.compareTo("all") == 0) {
 
   <br/>
   <i><%=Constants.ROLE_DESCRIPTION_LABEL%></i>
-  <table class="dataTable">
+  <table class="datatable_960" border="0" width="100%">
 
     <%
       int n1 = 0;
@@ -274,7 +274,7 @@ if (type != null && type.compareTo("all") == 0) {
     <b><%=Constants.ASSOCIATION_LABEL%></b>&nbsp;<%=Constants.ASSOCIATION_LABEL_2%>:
 <br/>
 <i><%=Constants.ASSOCIATION_DESCRIPTION_LABEL%></i>
-<table class="dataTable">
+<table class="datatable_960" border="0" width="100%">
 
 
   <%
@@ -429,7 +429,7 @@ if (!isMapping) {
 
   <br/>
   <i><%=Constants.INVERSE_ROLE_DESCRIPTION_LABEL%></i>
-  <table class="dataTable">
+  <table class="datatable_960" border="0" width="100%">
 
 
     <%
@@ -527,7 +527,7 @@ if (!isMapping) {
     <b><%=Constants.INVERSE_ASSOCIATION_LABEL%></b>&nbsp;<%=Constants.INVERSE_ASSOCIATION_LABEL_2%>:
 <br/>
 <i><%=Constants.INVERSE_ASSOCIATION_DESCRIPTION_LABEL%></i>
-<table class="dataTable">
+<table class="datatable_960" border="0" width="100%">
 
   <%
    if (isMapping) {

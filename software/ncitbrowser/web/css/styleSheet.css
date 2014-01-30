@@ -441,6 +441,7 @@ a.hideLink
  font-family: arial, verdana, trebuchet ms, tahoma, sans-serif;
 }
 
+/*
 .datatable
 {
  table-layout: fixed;
@@ -456,6 +457,24 @@ a.hideLink
  word-wrap: break-word;
  font-size: 11px;
 }
+*/
+
+.datatable
+{
+ table-layout: fixed;
+ width: 916px;
+ word-wrap: break-word;
+ font-size: 11px;
+}
+
+.datatableValueSet
+{
+ table-layout: fixed;
+ width: 887px;
+ word-wrap: break-word;
+ font-size: 11px;
+}
+
 
 .datatableheader
 {
@@ -832,11 +851,18 @@ a.hideLink
  text-align: left;
 }
 
-
+/*
 .termstable_960
 {
  font-size: 11px;
  width: 950px;
+}
+*/
+
+.termstable_960
+{
+ font-size: 11px;
+ width: 100%;
 }
 
 

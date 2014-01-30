@@ -489,7 +489,7 @@ var tree;
       
             <tr class="textbody"><td>
                 <div id="message" class="textbody">
-                   <table border="0" width="700px">
+                   <table border="0" width="100%">
                     <tr>
                       <td>
                          <div class="texttitle-blue">Welcome</div>

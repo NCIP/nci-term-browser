@@ -79,7 +79,7 @@
           String prev_page_num_str = Integer.toString(prev_page_num);
           String next_page_num_str = Integer.toString(next_page_num);
         %>
-        <table width="700px">
+        <table class="datatable_960" border="0" width="100%">
           <tr>
             <table>
               <tr>
@@ -98,7 +98,7 @@
           </tr>
           <tr>
             <td class="textbody">
-              <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+              <table class="datatable_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                 <%
                   for (int i=istart; i<iend; i++) {
                     if (i >= 0 && i<v.size()) {

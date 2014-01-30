@@ -496,7 +496,7 @@ String vsd_name = "null";
             <tr class="textbody"><td>
                 <div id="message" class="textbody">
                 
-                   <table width="700px">
+                   <table width="900px">
                    
 			  <tr><td>
 			    <table>

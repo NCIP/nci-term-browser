@@ -156,7 +156,7 @@
                      </tr>
                   </table>
                   <hr />
-                  <table class="dataTable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+                  <table class="datatable" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                      <tr>
                         <th class="dataTableHeader" scope="col" align="left" width="20px">&nbsp;</th>
                         <th class="dataTableHeader" scope="col" align="left">Concept</th>

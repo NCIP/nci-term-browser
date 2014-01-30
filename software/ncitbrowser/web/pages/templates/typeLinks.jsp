@@ -1,6 +1,6 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 
-<table width="700px" cellspacing="0" cellpadding="0" border="0" class="tabTable">
+<table width="900px" cellspacing="0" cellpadding="0" border="0" class="tabTable">
   <tr>
     <%
  JSPUtils.JSPHeaderInfo typeLinks_info = new JSPUtils.JSPHeaderInfo(request);

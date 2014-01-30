@@ -106,7 +106,7 @@
 			– flat lists of terms from one or more terminologies used for 
 			a particular coding purpose – and mappings between terminologies 
 			to support data translation and cross-reference. 
-			This 2.3 release improves support for those new features, 
+			This 2.4 release improves support for those new features, 
 			especially in the improved presentation and search of  
 			value sets 
 			and the option to export mapping data. 
@@ -329,7 +329,7 @@
                    no results will be returned, for any option covered under Method 1,but with
 				   Method 2 you will match
 				                      <font face="courier"><i>Corneal Melanoma</i></font>.
-					Refinement of these methods is ongoing; for updates and current details, see NCI Term Browser 2.3 Release Notes.
+					Refinement of these methods is ongoing; for updates and current details, see NCI Term Browser 2.4 Release Notes.
                 </li>
 			  </ul>
             </li>
@@ -513,7 +513,7 @@
             key differences:
           </p>
           <ul>
-		    <li><b>Lucene</b>: This option, new to the Term Browser 2.3 release, 
+		    <li><b>Lucene</b>: This option, new to the Term Browser 2.4 release, 
 			allows use of Name search options not available elsewhere, 
 			including wildcards, Boolean operators, negation, and fuzzy search 
 			(click the radio button to see examples).</li>
@@ -1068,8 +1068,8 @@
           </table>
           <p>
             For information on known issues, 
-            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.3+Release+Notes" target="_blank">
-              see NCI Term Browser 2.3 Release Notes</a>.
+            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.4+Release+Notes" target="_blank">
+              see NCI Term Browser 2.4 Release Notes</a>.
             Additional information about EVS can be found on the
             <a href="http://evs.nci.nih.gov/" target="_blank">EVS Web</a> and 
             <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank">EVS Wiki sites</a>.

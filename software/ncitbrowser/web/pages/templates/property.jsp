@@ -780,7 +780,7 @@ if (!hasOtherProperties) {
 
 
   <b>Other Properties:</b>
-  <table class="datatable_960">
+  <table class="datatable_960" width="100%">
     <%
       Vector prop_name_value_vec = new Vector();
       Iterator iterator = hmap.entrySet().iterator();
