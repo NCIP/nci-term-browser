@@ -336,17 +336,19 @@
             <li><b>Match method radio buttons</b> select how your 
                 search string will be matched.
               <ul>
-                <li><b>Exact Match</b> button is the default: Only terms 
-                    or codes that are identical will match.</li>
-                <li><b>Begins With</b> button can be selected to find all 
-                    terms that start with the words or characters 
-                    you enter. Codes cannot be searched this way.</li>
-                <li><b>Contains</b> button will search for what you enter 
+
+                <li><b>Contains</b> button is the default. It will search for what you enter 
                     anywhere within a term or code (e.g., 
                     <font face="courier">carcinoma</font> will match 
                     <i>adenocarcinoma)</i>.
 					For multiple word search, see description in the preceding section.
-				</li>
+				</li>              
+                <li><b>Exact Match</b> Only terms or codes that are identical will match.</li>
+                <li><b>Begins With</b> button can be selected to find all 
+                    terms that start with the words or characters 
+                    you enter. Codes cannot be searched this way.</li>
+                    
+
                 <li>Concept Codes will only match if they exactly match 
                     what you enter, even if you select <b>Begins With</b>
                     or <b>Contains</b> buttons.</li>
