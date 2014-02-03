@@ -351,7 +351,7 @@ String n = HTTPUtils.cleanXSS((String) request.getParameter("n"));
 String m = HTTPUtils.cleanXSS((String) request.getParameter("m"));
 String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
 
-
+/*
         if (!DataUtils.isNull(b) && !DataUtils.isInteger(b)) {
             b = "1";
         }
@@ -363,6 +363,22 @@ String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
         if (!DataUtils.isNull(m) && !DataUtils.isInteger(m)) {
             m = "1";
         }
+*/
+
+// Floating Point Value Denial of Service threats fix:
+        if (!DataUtils.isNull(b) && b.compareTo("0") != 0) {
+            b = "1";
+        }
+        
+        if (!DataUtils.isNull(n) && !DataUtils.isInteger(n)) {
+            n = "1";
+        }
+
+        if (!DataUtils.isNull(m) && m.compareTo("0") != 0) {
+            m = "1";
+        }
+        
+        
 
 String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 
@@ -399,7 +415,6 @@ if (!DataUtils.isNull(b)) {
 
 }
 %>
-
                   </h:form>  
  
                <a name="evs-content" id="evs-content"></a>

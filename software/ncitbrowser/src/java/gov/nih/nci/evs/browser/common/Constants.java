@@ -168,6 +168,8 @@ public class Constants {
 
     public static final String DEFAULT_NCBO_WIDGET_INFO = "NCI_Thesaurus|1032|NCIT;";
 
+    public static final String[] NAV_TYPE_VALUES = {"terminologies", "mappings", "valuesets"};
+
 /*
 Role Relationships pointing from the current concept to other concepts:
 (True for the current concept and its descendants, may be inherited from parent(s).)

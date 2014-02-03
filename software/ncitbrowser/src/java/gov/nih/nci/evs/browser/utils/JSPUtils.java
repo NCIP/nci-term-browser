@@ -275,6 +275,13 @@ if (version != null) {
             if (debug)
                 _logger.debug("nav_type (Default): " + nav_type);
         }
+
+        if (!Arrays.asList(Constants.NAV_TYPE_VALUES).contains(nav_type)) {
+            nav_type = "terminologies";
+            if (debug)
+                _logger.debug("nav_type (Default): " + nav_type);
+        }
+
         request.getSession().setAttribute("nav_type", nav_type);
         return nav_type;
     }

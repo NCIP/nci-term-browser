@@ -76,22 +76,24 @@
 <%
         boolean back_to_search_results_link = false;
         boolean value_set_entity_search = false;
+        String multiple_search_flag = HTTPUtils.cleanXSS((String) request.getParameter("m"));
         String search_key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
         
-        String t = HTTPUtils.cleanXSS((String) request.getParameter("b")); 
+        String t = HTTPUtils.cleanXSS((String) request.getParameter("b"));
+        if (!DataUtils.isNull(t) && t.compareTo("0") != 0) {
+            t = "1";
+        }        
+        
+        
         String t2 = HTTPUtils.cleanXSS((String) request.getParameter("vse")); 
         String vse = null;
         
         if (!DataUtils.isNull(t2)) {
             value_set_entity_search = true;
-            
-vse = t2;            
-           
-            
+            vse = t2;            
         }
         
-        String page_number = HTTPUtils.cleanXSS((String) request.getParameter("n")); 
-        
+        String page_number = HTTPUtils.cleanXSS((String) request.getParameter("n"));
         if (!DataUtils.isNull(page_number) && !DataUtils.isInteger(page_number)) {
             page_number = "1";
         }
@@ -106,10 +108,7 @@ vse = t2;
         }
 
 	Logger logger = Utils.getJspLogger("searchForm.jsp");
-	
-	
-	String multiple_search_flag = HTTPUtils.cleanXSS((String) request.getParameter("m"));
-        if (!DataUtils.isNull(multiple_search_flag) && !DataUtils.isInteger(multiple_search_flag)) {
+        if (!DataUtils.isNull(multiple_search_flag) && multiple_search_flag.compareTo("0") != 0) {
             multiple_search_flag = "1";
         }	
 	
