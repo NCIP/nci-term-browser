@@ -29,7 +29,7 @@ if (url == null) {
 //System.out.println(url);
 
 %>
-<iframe src="<%=url%>" width="550" height="550" frameborder="0">
+<iframe title="NCBO visualization widget" src="<%=url%>" width="550" height="550" frameborder="0">
 </iframe>
 <%
 }

@@ -106,14 +106,6 @@
 			– flat lists of terms from one or more terminologies used for 
 			a particular coding purpose – and mappings between terminologies 
 			to support data translation and cross-reference. 
-			This 2.4 release improves support for those new features, 
-			especially in the improved presentation and search of  
-			value sets 
-			and the option to export mapping data. 
-			The Search box separates Name and Code search, search performance 
-			is better, and single-terminology Advanced Search offers new 
-			Lucene options to search with wildcards, negation, boolean operators, 
-			and fuzzy matching. 
 		 </p>
           
           <p>
@@ -515,8 +507,7 @@
             key differences:
           </p>
           <ul>
-		    <li><b>Lucene</b>: This option, new to the Term Browser 2.4 release, 
-			allows use of Name search options not available elsewhere, 
+		    <li><b>Lucene</b>: This option allows use of Name search options not available elsewhere, 
 			including wildcards, Boolean operators, negation, and fuzzy search 
 			(click the radio button to see examples).</li>
 		    <li><b>Source</b>: Some terminologies include content from 
