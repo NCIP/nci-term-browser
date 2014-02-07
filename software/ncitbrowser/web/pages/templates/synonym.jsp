@@ -67,14 +67,20 @@ if (type != null && type.compareTo("all") == 0) {
         String term_type = (String) synonym_data.elementAt(1);
         String term_source = (String) synonym_data.elementAt(2);
         String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
-        String term_source_nm = DataUtils.getCSName(term_source_formal_name);
-
+        
+//Test case: NCIt, ADCS-ADL MCI - Balance Checkbook (Code C106898)
         if (term_source_formal_name == null)
-      term_source_formal_name = DataUtils.getFormalName(term_source);
+            term_source_formal_name = DataUtils.getFormalName(term_source);
+           
         if (term_source.equalsIgnoreCase("nci"))
-      term_source_formal_name = "NCI Thesaurus";
+            term_source_formal_name = "NCI Thesaurus";
 
-        String term_source_code = (String) synonym_data.elementAt(3);
+        //GF#33194 Empty string source codes break Synonym Details and View All 
+        String term_source_code = null;
+        if (synonym_data.size() > 3) {
+            term_source_code = (String) synonym_data.elementAt(3);
+        } 
+        
         String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
     %>
         <tr class="<%=rowColor%>">
@@ -82,15 +88,18 @@ if (type != null && type.compareTo("all") == 0) {
           <td class="dataCellText"><%=term_source%></td>
           <td class="dataCellText"><%=term_type%></td>
               <%
-                if (term_source_formal_name != null && term_source_code != null) {
+                if (!DataUtils.isNull(term_source_formal_name) && !DataUtils.isNull(term_source_code)) {
+                  String term_source_nm = DataUtils.getCSName(term_source_formal_name);
                   String url_str = request.getContextPath() +
                       "/pages/concept_details.jsf?dictionary=" +
                       term_source_nm + "&code=" + term_source_code;
               %>
                 <td><a href="<%= url_str %>"><%= term_source_code %></a></td>
-              <%} else {%>
+              <%} else if (!DataUtils.isNull(term_source_code)) {%>
             <td class="dataCellText"><%=term_source_code%></td>
-              <%}%>
+              <%} else { %>
+            <td class="dataCellText">&nbsp;</td>  
+              <%} %>
         </tr>
     <%
             }
