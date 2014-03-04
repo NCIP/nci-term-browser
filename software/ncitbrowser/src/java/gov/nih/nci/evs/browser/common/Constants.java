@@ -166,7 +166,8 @@ public class Constants {
     public static final String NCIT_NAMESPACE = "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#";
     public static final String NCBO_WIDGET_QUERY_STRING = "http://bioportal.bioontology.org/widgets/visualization?ontology=";
 
-    public static final String DEFAULT_NCBO_WIDGET_INFO = "NCI_Thesaurus|1032|NCIT;";
+    //public static final String DEFAULT_NCBO_WIDGET_INFO = "NCI_Thesaurus|1032|NCIT;";
+    public static final String DEFAULT_NCBO_WIDGET_INFO = "NCI_Thesaurus|NCI_Thesaurus|NCIT;";
 
     public static final String[] NAV_TYPE_VALUES = {"terminologies", "mappings", "valuesets"};
 

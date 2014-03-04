@@ -1,9 +1,9 @@
 package gov.nih.nci.evs.browser.properties;
 
 import java.util.*;
-
 import org.apache.log4j.*;
 import gov.nih.nci.evs.browser.common.*;
+import gov.nih.nci.evs.browser.utils.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -137,6 +137,11 @@ public class NCItBrowserProperties {
     private static Vector<StandardFtpReportInfo> _standard_ftp_report_info_list =
         new Vector<StandardFtpReportInfo>();
 
+
+	private	static HashMap _bioportalAcronym2NameHashMap = null;//NCBORESTClient.getBioportalAcronym2NameHashMap(getAPIKey());
+
+
+
     /**
      * Private constructor for singleton pattern.
      */
@@ -207,8 +212,11 @@ public class NCItBrowserProperties {
 				_browserProperties
 					.getProperty(_browserProperties.NCBO_WIDGET_INFO);
 
-			if (_ncbo_widget_info == null || _ncbo_widget_info.compareTo("${ncbo_widget_info}") == 0) {
-				_ncbo_widget_info = Constants.DEFAULT_NCBO_WIDGET_INFO;
+            _bioportalAcronym2NameHashMap = RESTClient.getBioportalAcronym2NameHashMap(_ncbo_api_key);
+
+			if (DataUtils.isNullOrBlank(_ncbo_widget_info)) {
+				//_ncbo_widget_info = Constants.DEFAULT_NCBO_WIDGET_INFO;
+				_ncbo_widget_info = null;
 			}
 
 			_license_page_option =
@@ -257,6 +265,10 @@ public class NCItBrowserProperties {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	public static HashMap getBioportalAcronym2NameHashMap() {
+		return _bioportalAcronym2NameHashMap;
 	}
 
 

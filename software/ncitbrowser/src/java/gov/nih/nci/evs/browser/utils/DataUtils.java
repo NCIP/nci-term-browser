@@ -274,6 +274,11 @@ public class DataUtils {
 		updateListOfCodingSchemeVersionsUsedInResolutionHashMap();
 	}
 
+	public static void setAPIKey(String apikey) {
+		_api_key = apikey;
+	}
+
+
 	public static String getAPIKey() {
 		return _api_key;
 	}
@@ -361,13 +366,14 @@ public class DataUtils {
     }
 
 
+/*
     public static HashMap getFormalName2VirtualIdMap() {
 		if (_formalName2VirtualIdMap == null) {
 			_formalName2VirtualIdMap = createFormalName2VirtualIdMap();
 		}
 		return _formalName2VirtualIdMap;
 	}
-
+*/
 
     public static HashMap getDefaultFormalName2VirtualIdMap() {
 		HashMap formalName2VirtualIdMap = new HashMap();
@@ -379,7 +385,7 @@ public class DataUtils {
 	}
 
 
-
+/*
     public static HashMap createFormalName2VirtualIdMap() {
 		HashMap formalName2VirtualIdMap = new HashMap();
 
@@ -419,7 +425,7 @@ public class DataUtils {
 		}
 		return formalName2VirtualIdMap;
 	}
-
+*/
 
 
     public static HashMap get_localName2FormalNameHashMap() {
@@ -6275,12 +6281,57 @@ if (lbSvc == null) {
 
 //==========================================================================================
 
-
+/*
     public static HashMap getNCBOWidgetString() {
 		String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
 		if (ncbo_widget_info == null) return null;
 		return parseNCBOWidgetString(ncbo_widget_info);
 	}
+*/
+
+    public static HashMap getNCBOWidgetString() {
+        String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
+		if (isNull(ncbo_widget_info)) {
+			System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
+			System.out.println("(*) computeNCBOWidgetString ... ");
+			ncbo_widget_info = computeNCBOWidgetString();
+		}
+		//System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
+		return parseNCBOWidgetString(ncbo_widget_info);
+	}
+
+
+	public static String computeNCBOWidgetString() {
+		StringBuffer buf = new StringBuffer();
+		HashMap map = NCItBrowserProperties.getBioportalAcronym2NameHashMap();
+
+		if (map == null) {
+			System.out.println("(*) getBioportalAcronym2NameHashMap returns null??? ");
+			return null;
+		}
+
+        Set entrys = map.entrySet() ;
+        Iterator iter = entrys.iterator() ;
+        while(iter.hasNext()) {
+            Map.Entry me = (Map.Entry)iter.next();
+            String acronym = (String) me.getKey();
+            //String name = (String) me.getValue();
+            if (_localName2FormalNameHashMap.containsKey(acronym)) {
+				System.out.println("(*) _localName2FormalNameHashMap containsKey " + acronym);
+				String formalname = (String) _localName2FormalNameHashMap.get(acronym);
+				String cs_name = (String) _uri2CodingSchemeNameHashMap.get(formalname);
+				buf.append(cs_name + "|" + formalname + "|" + acronym + ";");
+            }
+        }
+        String t = buf.toString();
+        if (t.indexOf("NCI_Thesaurus") == -1) {
+			t = t + Constants.DEFAULT_NCBO_WIDGET_INFO;//"NCI_Thesaurus|NCI_Thesaurus|NCIT;";
+		}
+        return t;
+	}
+
+
+
 
     public static HashMap parseNCBOWidgetString(String s) {
 		HashMap hmap = new HashMap();

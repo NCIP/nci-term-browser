@@ -2335,8 +2335,7 @@ if (DataUtils.isNull(vsd_uri)) {
 		  out.println("Standards categories group the value sets supporting them; all other labels lead to the home pages of actual value sets or source terminologies.");
 		  out.println("Search or browse a value set from its home page, or search all value sets at once from this page (very slow) to find which ones contain a particular code or term.");
 //out.println("Many of these value sets are subsets of NCI Thesaurus that are developed jointly with EVS partners as federal and international coding standards (see the <a href=http://ncit.nci.nih.gov/ncitbrowser/pages/subset.jsf>NCI Thesaurus Subsets</a> page).");
-//out.println("Many of these value sets are subsets of NCI Thesaurus that are developed jointly with EVS partners as federal and international coding standards (see the ");
-
+out.println("Many of these value sets are subsets of NCI Thesaurus that are developed jointly with EVS partners as federal and international coding standards (see the ");
 out.println(" <a href=\"");
 out.print( request.getContextPath() );
 out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
