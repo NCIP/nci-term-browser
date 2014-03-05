@@ -355,7 +355,7 @@ public class DataUtils {
             String value = (String) item.getValue();
             /*
             if (value.indexOf("Metathesaurus") == -1) {
-                buf.append(value + "|");
+                buf.append(value + "|);");
             }
             */
             if (value.indexOf("NCI_Thesaurus") != -1 || value.indexOf("NCI Thesaurus") != -1) {
@@ -844,6 +844,12 @@ public class DataUtils {
             }
         }
         _formalName2NCImSABHashMap = createFormalName2NCImSABHashMap();
+
+        //KLO
+        if (!_localName2FormalNameHashMap.containsKey(Constants.NCIT)) {
+			_localName2FormalNameHashMap.put(Constants.NCIT, Constants.NCIT_CS_NAME);
+		}
+
         dumpHashMap(_formalName2NCImSABHashMap);
 
         setMappingDisplayNameHashMap();
@@ -6292,8 +6298,8 @@ if (lbSvc == null) {
     public static HashMap getNCBOWidgetString() {
         String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
 		if (isNull(ncbo_widget_info)) {
-			System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
-			System.out.println("(*) computeNCBOWidgetString ... ");
+			//System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
+			//System.out.println("(*) computeNCBOWidgetString ... ");
 			ncbo_widget_info = computeNCBOWidgetString();
 		}
 		//System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
@@ -6378,17 +6384,34 @@ if (lbSvc == null) {
 		return (String) v.elementAt(1);
 	}
 
+	public static String getNCBOOntologyNamespace(String dictionary) {
+		boolean bool = visualizationWidgetSupported(dictionary);
+		if (!bool) return null;
+		String csName = getCSName(dictionary);
+		String ncbo_widget_info_str = (String) _visualizationWidgetHashMap.get(csName);
+		if (ncbo_widget_info_str == null) return null;
+		Vector v = parseData(ncbo_widget_info_str);
+		if (v == null) return null;
+		return (String) v.elementAt(0);
+	}
+
+
 	public static String createVisualizationWidgetURL(String abbreviation, String code) {
-		String api_key = NCItBrowserProperties.getNCBO_API_KEY();
-		if (abbreviation.compareTo(Constants.NCIT) == 0) {
-			return NCBO_WIDGET_QUERY_STRING + abbreviation + "&class="
-			       + HTTPUtils.encode(Constants.NCIT_NAMESPACE + code)
-			       + "&apikey=" + getAPIKey();
-		} else {
-			return NCBO_WIDGET_QUERY_STRING + abbreviation + "&class="
-			       + HTTPUtils.encode(Constants.NCBO_PURL + abbreviation + "/" + code)
-			       + "&apikey=" + getAPIKey();
+		String api_key = getAPIKey();
+		//String csName = (String) localname2CSNameMap.get(abbreviation);
+		String csName = getCSName(abbreviation);
+		String purl = getNCBOOntologyNamespace(csName);
+
+		System.out.println("(**********) " + purl);
+		if (purl == null) return null;
+
+		if (purl.contains("obo")) {
+			code = code.replaceAll(":", "_");
 		}
+
+		return NCBO_WIDGET_QUERY_STRING + abbreviation + "&class="
+			       + HTTPUtils.encode(purl + code)
+			       + "&apikey=" + getAPIKey();
 	}
 
     public static String getVisualizationWidgetURL(String dictionary, String code) {
