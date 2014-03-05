@@ -6401,11 +6401,9 @@ if (lbSvc == null) {
 		//String csName = (String) localname2CSNameMap.get(abbreviation);
 		String csName = getCSName(abbreviation);
 		String purl = getNCBOOntologyNamespace(csName);
-
-		System.out.println("(**********) " + purl);
 		if (purl == null) return null;
 
-		if (purl.contains("obo")) {
+		if (purl.indexOf("/obo/") != -1) {
 			code = code.replaceAll(":", "_");
 		}
 

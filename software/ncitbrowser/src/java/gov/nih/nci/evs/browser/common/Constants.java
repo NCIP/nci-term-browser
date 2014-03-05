@@ -69,6 +69,7 @@ public class Constants {
     public static final String EMPTY = "";
 
     public static final String ALL = "ALL";
+    public static final String OBO = "OBO";
 
     // Application error constants
     public static final String INIT_PARAM_ERROR_PAGE = "errorPage";
