@@ -170,7 +170,8 @@
             <b>NCI Term Browser</b> icon above the tabs always leads 
             back to the main Terminologies home page. 
             The Term Browser and LexEVS terminology server versions 
-            are displayed in the browser’s home page banner.
+            are displayed in the browser’s home page banner; for more information on LexEVS, 
+            see the <a href="https://wiki.nci.nih.gov/display/LexEVS/LexEVS" target="_blank">LexEVS Wiki Pages</a>.
           </p>
 
           <p>
