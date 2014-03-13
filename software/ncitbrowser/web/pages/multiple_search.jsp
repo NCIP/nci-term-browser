@@ -27,6 +27,12 @@
   }
 %>
 <%
+
+  //KLO 031314
+  request.getSession().removeAttribute("dictionary");
+  request.getSession().removeAttribute("version");
+  
+
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
   String anthill_build_tag_built = new DataUtils().getNCITAnthillBuildTagBuilt();
@@ -314,9 +320,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-		     if (info.getHasMultipleVersions()) {
-			 //System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
-		     } 
 		     
 		     if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 			 info.setSelected(true);
@@ -422,7 +425,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				}     
 				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
-				if (scheme.compareTo("NCI Thesaurus") == 0) {
+				if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI_Thesaurus") == 0) {
 				    String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + version;
 				  %>
                     <a href="<%=nciturl%>"><%=display_label%></a>

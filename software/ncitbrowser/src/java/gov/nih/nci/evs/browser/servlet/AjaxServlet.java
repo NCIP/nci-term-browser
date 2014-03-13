@@ -352,8 +352,11 @@ if (action.compareTo("xmldefinitions") == 0) {
         } else if (action.equals("search_value_set")) {
             search_value_set(request, response);
         } else if (action.equals("create_src_vs_tree")) {
+			//KLO 0312145
+			request.getSession().setAttribute("nav_type", "valuesets");
             create_src_vs_tree(request, response);
         } else if (action.equals("create_cs_vs_tree")) {
+			request.getSession().setAttribute("nav_type", "valuesets");
             create_cs_vs_tree(request, response);
         } else if (action.equals("search_hierarchy")) {
             search_hierarchy(request, response, node_id, ontology_display_name, ontology_version);
@@ -1249,6 +1252,15 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
     public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String vsd_uri) {
+
+		String nav_type = (String) request.getParameter("nav_type");
+		System.out.println("(*) create_vs_tree: " + nav_type);
+		request.getSession().setAttribute("vs_nav_type", "valuesets");
+
+  request.getSession().removeAttribute("dictionary");
+  request.getSession().removeAttribute("version");
+
+
 		String root_vsd_uri = vsd_uri;
 		String vsd_name = null;
 		boolean isValueSet = false;
@@ -3875,7 +3887,10 @@ if (DataUtils.isNull(algorithm)) {
       out.println("    <td><a href=\"/ncitbrowser/pages/multiple_search.jsf?nav_type=terminologies\">");
       out.println("      <img name=\"tab_terms\" src=\"/ncitbrowser/images/tab_terms_clicked.gif\"");
       out.println("        border=\"0\" alt=\"Terminologies\" title=\"Terminologies\" /></a></td>");
-      out.println("    <td><a href=\"/ncitbrowser/ajax?action=create_src_vs_tree\">");
+
+//KLO 031214
+      //out.println("    <td><a href=\"/ncitbrowser/ajax?action=create_src_vs_tree\">");
+      out.println("    <td><a href=\"/ncitbrowser/ajax?action=create_src_vs_tree&nav_type=valuesets\">");
       out.println("      <img name=\"tab_valuesets\" src=\"/ncitbrowser/images/tab_valuesets.gif\"");
       out.println("        border=\"0\" alt=\"Value Sets\" title=\"ValueSets\" /></a></td>");
       out.println("    <td><a href=\"/ncitbrowser/pages/mapping_search.jsf?nav_type=mappings\">");

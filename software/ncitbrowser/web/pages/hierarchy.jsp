@@ -483,7 +483,7 @@ if (release_date == null || release_date.compareTo("") == 0) {
 	 
 	 
 
-if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
+if (hierarchy_schema.compareTo("NCI Thesaurus") == 0 || hierarchy_schema.compareTo("NCI_Thesaurus") == 0) {
 %>
     <div>
       <img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
@@ -571,9 +571,6 @@ if (DataUtils.isNull(schema)) {
 
 String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 
-//System.out.println("hierarchy.jsp ontology_version: " + ontology_version);
-
-
 String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
 if (ontology_display_name == null) {
     ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
@@ -584,8 +581,6 @@ if (ontology_display_name == null) {
 String ontology_display_name = info.dictionary;
 String ontology_version = info.version;
 
-System.out.println("(**) hierarchy.jsp ontology_display_name: " + ontology_display_name);
-System.out.println("(**) hierarchy.jsp ontology_version: " + ontology_version);
 String schema = ontology_display_name;
 
 //11202013, KLO

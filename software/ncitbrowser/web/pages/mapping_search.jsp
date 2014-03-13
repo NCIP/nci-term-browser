@@ -147,10 +147,6 @@ if (display_name_vec == null) {
     OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
     display_name_vec.add(info);
 
-	 if (!info.isProduction()) {
-	     //System.out.println("Non-production version: " + scheme + " version: " + version);
-	 }
-
   }
 
 
@@ -169,9 +165,6 @@ if (display_name_vec == null) {
 
   for (int k = 0; k < display_name_vec.size(); k++) { 
      OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-     if (info.getHasMultipleVersions()) {
-	 //System.out.println("(*) Multiple versions found in " + info.getCodingScheme() + " version: " + info.getVersion() + " tag: " + info.getTag());
-     } 
 
      if (ontologiesToSearchOn.indexOf(info.getLabel()) != -1) {
 	 info.setSelected(true);
@@ -233,6 +226,10 @@ String warning_msg = (String) request.getSession().getAttribute("warning");
          
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%
+
+  request.getSession().removeAttribute("dictionary");
+  request.getSession().removeAttribute("version");
+
 
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
     .cleanXSS((String) request.getSession().getAttribute("matchText"));

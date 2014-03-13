@@ -86,7 +86,7 @@ if (mapping_version != null) {
     request.getSession().setAttribute("version", mapping_version);
 }
 
-if (mapping_dictionary != null && mapping_dictionary.compareTo("NCI Thesaurus") == 0) {
+if (mapping_dictionary != null && (mapping_dictionary.compareTo("NCI Thesaurus") == 0 || mapping_dictionary.compareTo("NCI_Thesaurus") == 0)) {
 %>
 
       <%@ include file="/pages/templates/content-header.jsp" %>

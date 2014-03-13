@@ -63,9 +63,7 @@
 		  }
           }
           
-//System.out.println("(*) pagination_mapping next_page_num: " +  next_page_num);         
-//System.out.println("(*) pagination_mapping num_pages: " +  num_pages);         
-          
+        
 
         if (num_pages > 1 && next_page_num <= num_pages) {
            

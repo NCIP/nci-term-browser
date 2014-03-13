@@ -236,6 +236,10 @@ public class DataUtils {
 
     private static HashMap _RVSCSFormalName2VersionHashMap = null;
 
+    private static HashMap _RVSCSURI2VersionHashMap = null;
+
+    private static HashMap _VSDName2URIHashMap = null;
+
     private static HashMap _formalName2DisplayNameHashMap = null;
 
     private static HashMap _visualizationWidgetHashMap = null;
@@ -502,6 +506,10 @@ public class DataUtils {
 		return (Vector) _RVSCSFormalName2VersionHashMap.get(RVSCS_formalname);
     }
 
+	public static Vector getRVSCSVersionsByURI(String RVSCS_URI) {
+		if (!_RVSCSURI2VersionHashMap.containsKey(RVSCS_URI)) return null;
+		return (Vector) _RVSCSURI2VersionHashMap.get(RVSCS_URI);
+    }
 
     private static void setCodingSchemeMap() {
 		//LexEVSResolvedValueSetServiceImpl lexEVSResolvedValueSetService = new LexEVSResolvedValueSetServiceImpl();
@@ -535,6 +543,7 @@ public class DataUtils {
         _versionReleaseDateHashMap = new HashMap();
         _listOfCodingSchemeVersionsUsedInResolutionHashMap = new HashMap();
         _RVSCSFormalName2VersionHashMap = new HashMap();
+        _RVSCSURI2VersionHashMap = new HashMap();
         _formalName2DisplayNameHashMap = new HashMap();
 
         Vector nv_vec = new Vector();
@@ -624,9 +633,15 @@ public class DataUtils {
 								w = new Vector();
 							}
 							w.add(cs_version);
-							//System.out.println("(*) " + cs_formalname + " -> " + cs_version);
-
 							_RVSCSFormalName2VersionHashMap.put(cs_formalname, w);
+
+							Vector w2 = (Vector) _RVSCSURI2VersionHashMap.get(cs_uri);
+							if (w2 == null) {
+								w2 = new Vector();
+							}
+							w2.add(cs_version);
+							_RVSCSURI2VersionHashMap.put(cs_uri, w);
+
 
 							HashMap hmap = new HashMap();
 							AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(cs_name);
@@ -862,6 +877,8 @@ public class DataUtils {
     private static void initializeValueSetHierarchy() {
 		//if (hasNoValueSet || valueSetHierarchyInitialized) return;
 		if (valueSetHierarchyInitialized) return;
+
+		_VSDName2URIHashMap = getVSDName2URIHashMap();
 
 		_logger.debug("Initializing Value Set Metadata ...");
 		Vector v = getValueSetDefinitionMetadata();
@@ -5032,6 +5049,26 @@ if (lbSvc == null) {
 		return SortUtils.quickSort(v);
 	}
 
+	public static String getVSDURIByName(String name) {
+		if (_VSDName2URIHashMap.containsKey(name)) {
+			return (String) _VSDName2URIHashMap.get(name);
+		}
+		return null;
+	}
+
+
+	public static HashMap getVSDName2URIHashMap() {
+		HashMap vSDName2URIHashMap = new HashMap();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+        List list = vsd_service.listValueSetDefinitionURIs();
+        for (int i=0; i<list.size(); i++) {
+			String uri = (String) list.get(i);
+			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
+			String name = vsd.getValueSetDefinitionName();
+            vSDName2URIHashMap.put(name, uri);
+		}
+		return vSDName2URIHashMap;
+	}
 
 
 	public static String getValueSetDefinitionURIByName(String vsd_name) {

@@ -69,7 +69,7 @@
               alt="NCI Metathesaurus">NCI Metathesaurus Browser</a></li>
 
             <%
-            if (quicklink_dictionary == null || quicklink_dictionary.compareTo("NCI Thesaurus") != 0) {
+            if (quicklink_dictionary == null || (quicklink_dictionary.compareTo("NCI Thesaurus") != 0 && quicklink_dictionary.compareTo("NCI_Thesaurus") != 0) ) {
             %>
 
             <li><a href="<%= request.getContextPath() %>/index.jsp" tabindex="-1"

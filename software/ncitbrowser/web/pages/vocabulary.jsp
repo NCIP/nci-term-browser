@@ -166,6 +166,8 @@ request.getSession().removeAttribute("m");
         <%@ include file="/pages/templates/sub-header.jsp"%> <!-- Main box -->
         <div id="main-area_960">
         <%
+       
+        
           if (LicenseUtils.isLicensedAndNotAccepted(request, scheme, version)) {
             LicenseUtils.WebPageHelper helper = new LicenseUtils.WebPageHelper(scheme, version);
         %>
@@ -217,11 +219,8 @@ request.getSession().removeAttribute("m");
 <%
 
 
-
-
-
-if ((dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) ||
-    (scheme != null && scheme.compareTo("NCI Thesaurus") == 0)
+if ((dictionary != null && (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0)) ||
+    (scheme != null && (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI_Thesaurus") == 0))
     ) {
 %>
     <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>

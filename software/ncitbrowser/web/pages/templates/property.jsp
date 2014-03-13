@@ -476,7 +476,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 %>
             <p>
               <b><%=propName_label%>:&nbsp;</b><%=value%>
-              <% if (! prop_dictionary.equalsIgnoreCase("NCI Thesaurus")) { %>
+              <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
                    <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
               <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
                   <%= getDisplayLink(label2URL, label2Linktext, "caDSR metadata", value) %>

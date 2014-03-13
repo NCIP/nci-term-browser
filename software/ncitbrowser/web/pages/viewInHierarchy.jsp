@@ -145,7 +145,7 @@
         </table>
 
 <%
-if (hierarchy_schema.compareTo("NCI Thesaurus") == 0) {
+if (hierarchy_schema.compareTo("NCI Thesaurus") == 0 || hierarchy_schema.compareTo("NCI_Thesaurus") == 0) {
 %>
     <div>
       <img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />

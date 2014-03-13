@@ -342,7 +342,7 @@ if (!no_match) {
 
           <td class="dataCellText" scope="row">
           <%
-          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
+          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
           <%
@@ -379,7 +379,7 @@ if (!no_match) {
 
           <td class="dataCellText" scope="row">
           <%
-          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
+          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%

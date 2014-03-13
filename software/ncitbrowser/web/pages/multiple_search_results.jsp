@@ -523,7 +523,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           <td class="dataCellText" scope="row">
           <%
-          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
+          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>"><%=name%></a>
           <%
@@ -550,7 +550,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           <td class="dataCellText" scope="row">
           <%
-          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0) {
+          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=name%></a>&nbsp;(<%=con_status%>)
           <%

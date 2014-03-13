@@ -126,7 +126,7 @@ String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + in
 	      </div>
 	    </a>
     <%
-  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0) {
+  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0 || info3.dictionary.compareTo("NCI_Thesaurus") == 0) {
   %>
 	 <a href="<%=nciturl%>" style="text-decoration: none;">
 	      <div class="vocabularynamebanner_ncit">

@@ -78,11 +78,7 @@
         
   <select name=resultsPerPage size=1 onChange="paginationForm.submit();">
   <%
-  
-	//System.out.println("(*) mapping pagination  selectedResultsPerPage: " + selectedResultsPerPage); 
-  
-  
-  
+ 
     List resultsPerPageValues = UserSessionBean.getResultsPerPageValues();
     for (int i=0; i<resultsPerPageValues.size(); i++) {
         String resultsPerPageValue = (String) resultsPerPageValues.get(i);

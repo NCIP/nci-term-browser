@@ -66,7 +66,7 @@ String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchem
 	
 	request.setAttribute("version", version);
 	// AppScan
-	if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
+	if (dictionary != null && (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0)) {
 %>
 <title>NCI Thesaurus</title>
 <%
@@ -244,8 +244,7 @@ String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchem
             		}
           		
             		
-            		if (dictionary != null && (dictionary.compareTo("NCI Thesaurus") == 0
-            				|| dictionary.compareTo("NCI_Thesaurus") == 0)) {
+            		if (dictionary != null && (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0)) {
                %>
                <%@ include file="/pages/templates/content-header-other.jsp"%>
                <%

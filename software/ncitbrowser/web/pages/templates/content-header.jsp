@@ -7,7 +7,6 @@
   JSPUtils.JSPHeaderInfoMore info3 = new JSPUtils.JSPHeaderInfoMore(request);
   String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + info3.version;
   
-  
   if (JSPUtils.isNull(info3.dictionary)) {
      %>
 	    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
@@ -16,7 +15,7 @@
 	      </div>
 	    </a>
     <%
-  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0) {
+  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0 || info3.dictionary.compareTo("NCI_Thesaurus") == 0) {
   %>
 	 <a href="<%=nciturl%>" style="text-decoration: none;">
 	      <div class="vocabularynamebanner_ncit">

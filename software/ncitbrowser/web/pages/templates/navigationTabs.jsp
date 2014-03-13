@@ -11,6 +11,18 @@
       String mapping_jsp_page_name = "mapping_search.jsf";
       String nav_type = JSPUtils.getNavType(request);
       
+      
+
+
+      String vs_nav_type = (String) request.getSession().getAttribute("vs_nav_type");
+      if (vs_nav_type != null) {
+          nav_type = vs_nav_type;
+          request.getSession().removeAttribute("vs_nav_type");
+      }
+ 
+request.getSession().setAttribute("nav_type", nav_type);
+
+      
       String tab_terms_image = nav_type.equalsIgnoreCase("terminologies")
         ? "tab_terms_clicked.gif" : "tab_terms.gif";
       tab_terms_image = imagesPath + tab_terms_image;
@@ -23,7 +35,9 @@
       
       
       //String tab_valueset_link = pagesPath + valueset_jsp_page_name + "?nav_type=valuesets";
-      String tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree";
+      //String tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree";
+      
+      String tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree&nav_type=valuesets";
       
     
       String tab_mappings_image = nav_type.equalsIgnoreCase("mappings")

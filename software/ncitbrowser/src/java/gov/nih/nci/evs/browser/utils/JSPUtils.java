@@ -99,7 +99,7 @@ public class JSPUtils {
             if (debug)
                 _logger.debug(Utils.SEPARATOR);
             dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-            //KLO, 012714
+
             dictionary = DataUtils.getCSName(dictionary);
             version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 
@@ -131,6 +131,8 @@ if (version != null) {
                     DataUtils.isCodingSchemeLoaded(DEFAULT_DICTIONARY, version)) {
                 dictionary = DEFAULT_DICTIONARY;
                 debugDV("Defaulting to: ", dictionary, version);
+
+
             } else if (! isDictionaryNull && isVersionNull) {
                 version =
                     DataUtils.getVocabularyVersionByTag(dictionary,

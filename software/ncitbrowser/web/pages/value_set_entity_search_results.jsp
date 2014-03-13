@@ -617,8 +617,9 @@ for (int i=0; i<list.size(); i++) {
 		      
 		      <td class="dataCellText">
 		         <%
+		         String entity_cs_nm = DataUtils.getCSName(entity_cs);
 			 if (DataUtils.isNull(entity_cs_version) || entity_cs_version.compareTo("") == 0) {
-			     String entity_cs_nm = DataUtils.getCSName(entity_cs);
+			     //String entity_cs_nm = DataUtils.getCSName(entity_cs);
 			 %>
 			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=entity_name%></a>
                          <%
