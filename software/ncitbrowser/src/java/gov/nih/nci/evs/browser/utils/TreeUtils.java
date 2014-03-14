@@ -646,7 +646,7 @@ public class TreeUtils {
 
     public static HashMap getSubconcepts(String scheme, String version,
         String code) {
-        if (scheme.compareTo("NCI Thesaurus") == 0) {
+        if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI_Thesaurus") == 0) {
             return getAssociatedConcepts(scheme, version, code, "subClassOf",
                 false);
         }

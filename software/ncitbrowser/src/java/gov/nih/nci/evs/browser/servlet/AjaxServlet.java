@@ -1253,8 +1253,7 @@ if (action.compareTo("xmldefinitions") == 0) {
 
     public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String vsd_uri) {
 
-		String nav_type = (String) request.getParameter("nav_type");
-		System.out.println("(*) create_vs_tree: " + nav_type);
+		String nav_type = HTTPUtils.cleanXSS((String) request.getParameter("nav_type"));
 		request.getSession().setAttribute("vs_nav_type", "valuesets");
 
   request.getSession().removeAttribute("dictionary");
