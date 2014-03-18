@@ -527,7 +527,7 @@ String vsd_name = "null";
     <input type="hidden" name="valueset" value="<%=vsd_uri%>">&nbsp;</input>
 
  
-    <table class="datatable_960ValueSet_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+    <table class="datatable_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
        <th class="dataTableHeader" scope="col" align="left">Value Set</th>
         <th class="dataTableHeader" scope="col" align="left">Vocabulary</th>
         <!--
