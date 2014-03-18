@@ -352,7 +352,7 @@ if (action.compareTo("xmldefinitions") == 0) {
         } else if (action.equals("search_value_set")) {
             search_value_set(request, response);
         } else if (action.equals("create_src_vs_tree")) {
-			//KLO 0312145
+			//KLO 031214
 			request.getSession().setAttribute("nav_type", "valuesets");
             create_src_vs_tree(request, response);
         } else if (action.equals("create_cs_vs_tree")) {

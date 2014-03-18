@@ -10,14 +10,17 @@
       String valueset_jsp_page_name = "value_set_source_view.jsf";
       String mapping_jsp_page_name = "mapping_search.jsf";
       String nav_type = JSPUtils.getNavType(request);
-      
-      
 
-
-      String vs_nav_type = (String) request.getSession().getAttribute("vs_nav_type");
-      if (vs_nav_type != null) {
-          nav_type = vs_nav_type;
-          request.getSession().removeAttribute("vs_nav_type");
+      if (nav_type == null) {
+	      String vs_nav_type = (String) request.getSession().getAttribute("vs_nav_type");
+	      if (vs_nav_type != null) {
+		  nav_type = vs_nav_type;
+		  request.getSession().removeAttribute("vs_nav_type");
+	      } 
+      }
+      
+      if (nav_type == null) {
+          nav_type = "terminologies";
       }
  
 request.getSession().setAttribute("nav_type", nav_type);
