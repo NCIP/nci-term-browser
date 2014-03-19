@@ -539,7 +539,7 @@ var tree;
             </td></tr>
             
             <tr><td>
-		 <table class="datatable_960ValueSet_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+		 <table class="datatable_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
                      <tr><td>
 			      <p class="dataCellText">
 			      <%=vsd_description%>
@@ -562,7 +562,7 @@ var tree;
     </div> <!-- main-area_960 -->
     <!-- end Main box -->
   </div> <!-- center-page_960 -->
-  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
 </body>
 </html>

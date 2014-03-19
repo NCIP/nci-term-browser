@@ -1924,7 +1924,7 @@ N_345309882_1211493727.isLeaf = true;
     <!-- EVS Logo -->
 <div>
   <img src="/ncitbrowser/images/evs-logo-swapped.gif" alt="EVS Logo"
-       width="941" height="26" border="0"
+       width="945" height="26" border="0"
        usemap="#external-evs" />
   <map id="external-evs" name="external-evs">
     <area shape="rect" coords="0,0,140,26"
@@ -1952,7 +1952,7 @@ N_345309882_1211493727.isLeaf = true;
   </tr>
 </table>
 
-<div class="mainbox-top"><img src="/ncitbrowser/images/mainbox-top.gif" width="941" height="5" alt=""/></div>
+<div class="mainbox-top"><img src="/ncitbrowser/images/mainbox-top.gif" width="945" height="5" alt=""/></div>
 <!-- end EVS Logo -->
     <!-- Main box -->
     <div id="main-area_960">
@@ -1970,7 +1970,7 @@ N_345309882_1211493727.isLeaf = true;
           <div class="searchbox">
 
 
-<form id="valueSetSearchForm" name="valueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_value_set" class="search-form-main-area_960" enctype="application/x-www-form-urlencoded" charset=UTF-8">
+<form id="valueSetSearchForm" name="valueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_value_set" class="search-form" enctype="application/x-www-form-urlencoded" charset=UTF-8">
 <input type="hidden" name="valueSetSearchForm" value="valueSetSearchForm" />
 <input type="hidden" name="view" value="1" />
 
@@ -2214,7 +2214,7 @@ Search or browse a value set from its home page, or search all value sets at onc
 
       </div> <!-- pagecontent -->
     </div> <!--  main-area_960 -->
-    <div class="mainbox-bottom"><img src="/ncitbrowser/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="/ncitbrowser/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
 
   </div> <!-- center-page_960 -->
 

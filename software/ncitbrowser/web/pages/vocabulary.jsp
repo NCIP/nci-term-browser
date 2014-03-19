@@ -333,7 +333,7 @@ if (display_release_date) {
         <% } %>
         </div><!-- end main-area_960 -->
       </div><!-- end center-page_960 -->
-      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+      <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
     </f:view>
     <br/>
   </body>

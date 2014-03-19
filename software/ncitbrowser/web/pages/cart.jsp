@@ -186,7 +186,7 @@
                   <%@ include file="/pages/templates/nciFooter.jsp"%>
                </div> <!-- End of pagecontent -->
             </div> <!-- End main-area_960 -->
-            <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+            <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
          </div> <!-- End center-page_960 -->
       </h:form>
    </f:view>

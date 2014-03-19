@@ -150,8 +150,13 @@ if (iteratorBean != null) {
 String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
 int pageNum = 0; 
 int pageSize = Integer.parseInt( resultsPerPage );
-int size = iteratorBean.getSize();    
-List list = null;
+int size = 0;
+if (iteratorBean != null) {
+    iteratorBean.getSize(); 
+}
+    
+//List list = null;
+List list = new ArrayList();
 int num_pages = size / pageSize;
 if (num_pages * pageSize < size) num_pages++;
 
@@ -173,26 +178,29 @@ if (page_num == 0) {
     istart = (pageNum-1) * pageSize;
 }
 int iend = istart + pageSize - 1;
-try {
-   list = iteratorBean.getData(istart, iend);
-   int prev_size = size;
-   size = iteratorBean.getSize();
 
-   if (size != prev_size) {
-	if (iend > size) {
-	    iend = size;
+if (iteratorBean != null) {
+	try {
+	   list = iteratorBean.getData(istart, iend);
+	   int prev_size = size;
+	   size = iteratorBean.getSize();
+
+	   if (size != prev_size) {
+		if (iend > size) {
+		    iend = size;
+		}
+	       list = iteratorBean.getData(istart, size);
+
+	   } else {
+
+		if (iend > size) {
+		    iend = size;
+		}
+
+	   }
+	} catch (Exception ex) {
+	   //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 	}
-       list = iteratorBean.getData(istart, size);
-       
-   } else {
-
-	if (iend > size) {
-	    iend = size;
-	}
-
-   }
-} catch (Exception ex) {
-   //System.out.println("ERROR: bean.getData throws exception??? istart: " + istart + " iend: " + iend);
 }
 
 
@@ -205,10 +213,12 @@ int istart_plus_pageSize = istart+pageSize;
 String istart_str = Integer.toString(istart+1);    
 String iend_str = Integer.valueOf(iend).toString();
 
-if (iend >= istart+pageSize-1) {
-    iend = istart+pageSize-1;
-    list = iteratorBean.getData(istart, iend);
-    iend_str = Integer.valueOf(iend+1).toString();
+if (iteratorBean != null) {
+	if (iend >= istart+pageSize-1) {
+	    iend = istart+pageSize-1;
+	    list = iteratorBean.getData(istart, iend);
+	    iend_str = Integer.valueOf(iend+1).toString();
+	}
 }
 
 String match_size = Integer.valueOf(size).toString();
@@ -287,34 +297,6 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 
 String uri_vsd = null;
 String vsd_name = "null";
-%>
-
-<f:view>
-  <!-- Begin Skip Top Navigation -->
-    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
-  <!-- End Skip Top Navigation --> 
-  <%@ include file="/pages/templates/header.jsp" %>
-  <div class="center-page_960">
-    <%@ include file="/pages/templates/sub-header.jsp" %>
-    <!-- Main box -->
-    <div id="main-area_960">
-     <!-- Thesaurus, banner search area -->
-      <div class="bannerarea_960">
-      
-      
-    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
-      <div class="vocabularynamebanner_tb">
-        <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
-      </div>
-    </a>
-
-
-        <div class="search-globalnav_960">
-          <!-- Search box -->
-          <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-          
-
-<%
 
     String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
         .cleanXSS((String) request.getSession().getAttribute("matchText"));
@@ -331,6 +313,8 @@ String vsd_name = "null";
     }
 
 
+    request.setAttribute("globalNavHeight", "37"); 
+        
     String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
 
     String check_e = "", check_s = "" , check_c ="";
@@ -362,91 +346,98 @@ String vsd_name = "null";
 %>
 
 
+<f:view>
+  <!-- Begin Skip Top Navigation -->
+    <a href="#evs-content" class="hideLink" accesskey="1" title="Skip repetitive navigation links">skip navigation links</A>
+  <!-- End Skip Top Navigation --> 
+  <%@ include file="/pages/templates/header.jsp" %>
+  <div class="center-page_960">
+    <%@ include file="/pages/templates/sub-header.jsp" %>
+    <!-- Main box -->
+    <div id="main-area_960">
+     <!-- Thesaurus, banner search area -->
+      <div class="bannerarea_960">
+      
+      
+    <a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
+      <div class="vocabularynamebanner_tb">
+        <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
+      </div>
+    </a>
+
+
+        <div class="search-globalnav_960">
+        
+        
+          <!-- Search box -->
+          <div class="searchbox-top"><img src="/ncitbrowser/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           <div class="searchbox">
-          
-<h:form id="valueSetSearchForm" styleClass="search-form-main-area_960" acceptcharset="UTF-8">      
-              <%-- <div class="textbody"> --%>
+
+
+<h:form id="valueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">      
+
+
+<input type="hidden" name="valueSetSearchForm" value="valueSetSearchForm" />
+<input type="hidden" name="view" value="1" />
+            <input type="hidden" id="checked_vocabularies" name="checked_vocabularies" value="" />
+            <input type="hidden" id="partial_checked_vocabularies" name="partial_checked_vocabularies" value="" />
+            <input type="hidden" id="value_set_home" name="value_set_home" value="true" />
+            <input type="hidden" name="vsd_uri" value="null" />
 <table border="0" cellspacing="0" cellpadding="0" style="margin: 2px" >
   <tr valign="top" align="left">
-    <td align="left" class="textbody">  
-                <% if (selectValueSetSearchOption.compareTo("CodingScheme") == 0) { %>
+    <td align="left" class="textbody">
+
                   <input CLASS="searchbox-input-2"
                     name="matchText"
                     value=""
-                    disabled="disabled" 
-                    onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
-                    tabindex="1"/>
-                <% } else { %>
-                  <input CLASS="searchbox-input-2"
-                    name="matchText"
-                    value="<%=valueset_match_text%>"
                     onFocus="active = true"
                     onBlur="active = false"
                     onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"
                     tabindex="1"/>
-                <% } %>  
-                
-                <h:commandButton id="valueset_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
-                  onclick="javascript:cursor_wait();"
-                  image="#{valueSetSearch_requestContextPath}/images/search.gif"
-                    styleClass="searchbox-btn"
-                  alt="Search value sets containing matched concepts"
-                  tabindex="2">
-                </h:commandButton>
-                
-                <h:outputLink
-                  value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp"
-                  tabindex="3">
-                  <h:graphicImage value="/images/search-help.gif" styleClass="searchbox-btn" alt="Search Help"
-                    style="border-width:0;"/>
-                </h:outputLink> 
+
+
+                <input id="valueSetSearchForm:valueset_search" type="image" src="/ncitbrowser/images/search.gif" name="valueSetSearchForm:valueset_search" alt="Search value sets containing matched concepts" onclick="javascript:getCheckedVocabularies();" tabindex="2" class="searchbox-btn" /><a href="/ncitbrowser/pages/help.jsf#searchhelp" tabindex="3"><img src="/ncitbrowser/images/search-help.gif" alt="Search Help" style="border-width:0;" class="searchbox-btn" /></a>
+
+
     </td>
   </tr>
-  
+
   <tr valign="top" align="left">
     <td>
       <table border="0" cellspacing="0" cellpadding="0" style="margin: 0px">
-    
+
         <tr valign="top" align="left">
-        <td align="left" class="textbody">  
-                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="contains" alt="Contains" <%=check__c%> tabindex="3" onclick="onVSAlgorithmChanged();">Contains
-                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match" <%=check__e%> tabindex="3">Exact Match&nbsp;
-                     <input type="radio" id="valueset_search_algorithm" name="valueset_search_algorithm" value="startsWith" alt="Begins With" <%=check__s%> tabindex="3" onclick="onVSAlgorithmChanged();">Begins With&nbsp;
+        <td align="left" class="textbody">
+                     <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" checked tabindex="3"  onclick="onVSAlgorithmChanged();">Contains
+                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match"  tabindex="3">Exact Match&nbsp;
+                     <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With"  tabindex="3"  onclick="onVSAlgorithmChanged();">Begins With&nbsp;
         </td>
         </tr>
-        <%
-                     request.setAttribute("globalNavHeight", "37"); 
-        %>
+
         <tr align="left">
             <td height="1px" bgcolor="#2F2F5F" align="left"></td>
         </tr>
         <tr valign="top" align="left">
-          <td align="left" class="textbody"> 
-          
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_name%> 
-                  alt="Name" tabindex="1" >Name&nbsp;
-          
-          
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_code%> 
-                  alt="Code" tabindex="1" onclick="javascript:onVSCodeButtonPressed()" >Code
+          <td align="left" class="textbody">
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" checked alt="Name" checked tabindex="4"  >Name&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code"  alt="Code" tabindex="4" onclick="onVSCodeButtonPressed();">Code&nbsp;
           </td>
         </tr>
       </table>
     </td>
   </tr>
-</table>                 
-                <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
+</table>
                 <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
                 <input type="hidden" id="view" name="view" value="source" />
-<input type="hidden" name="checked_vocabularies" id="checked_vocabularies" value="<%=checked_vocabularies%>">
-                
-              <%-- </div> <!-- textbody --> --%>
-</h:form> 
+</h:form>
 
           </div> <!-- searchbox -->
-          
-          <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
+
+          <div class="searchbox-bottom"><img src="/ncitbrowser/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
           <!-- end Search box -->
+         
+          
+          
           <!-- Global Navigation -->
           <%@ include file="/pages/templates/menuBar-termbrowserhome.jsp" %>
           <!-- end Global Navigation -->
@@ -460,20 +451,15 @@ String vsd_name = "null";
 
       <!-- Page content -->
       <div class="pagecontent">
-        <div id="contentArea">
+<div>
           <a name="evs-content" id="evs-content"></a>
-
-          <%-- 0 <%@ include file="/pages/templates/navigationTabs.jsp"%> --%>
-          
+         
             <% if (!DataUtils.isNullOrBlank(message)) {
 		      if (message.compareToIgnoreCase("No match found.") == 0) {
 		      %>
 		      <p class="textbodyred">&nbsp;No match found in &nbsp;
 
 <%=selected_vocabularies_link%>
-<!--
-	<a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected value sets</a>
--->
 
 	              </p>.
 		      <%
@@ -486,10 +472,10 @@ String vsd_name = "null";
               
             <% }  else { %>         
 
-          
-          <table>
-           
 
+
+
+          <table>
 
 
  <h:form id="valueSetSearchResultsForm" styleClass="search-form" acceptcharset="UTF-8">            
@@ -649,7 +635,13 @@ for (int i=0; i<list.size(); i++) {
           
 </h:form>
 
-<% } %>
+
+
+
+
+
+
+            <% } %>
 
           </td></tr>
            
@@ -675,12 +667,12 @@ for (int i=0; i<list.size(); i++) {
         <%}%>
         
           <%@ include file="/pages/templates/nciFooter.jsp" %>
-        </div>
+</div>
       </div> <!-- pagecontent -->
     </div> <!-- main-area_960 -->
     <!-- end Main box -->
   </div> <!-- center-page_960 -->
-  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
 </body>
 </html>

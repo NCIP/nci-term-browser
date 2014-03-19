@@ -458,7 +458,7 @@ if (mapping_scheme_and_version.compareTo("") == 0 && mapping_cs_knt == 1) {
           <%@ include file="/pages/templates/nciFooter.jsp"%>
         </div> <!-- end Page content -->
     </div> <!-- end main-area_960 -->
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
     <input type="hidden" id="single_mapping_search" name="single_mapping_search" value="true">
     <input type="hidden" id="dictionary" name="dictionary" value="<%=cs_dictionary%>">
     <input type="hidden" id="version" name="version" value="<%=cs_version%>">

@@ -2128,7 +2128,7 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("  </tr>");
       out.println("</table>");
       out.println("");
-      out.println("<div class=\"mainbox-top\"><img src=\"/ncitbrowser/images/mainbox-top.gif\" width=\"941\" height=\"5\" alt=\"\"/></div>");
+      out.println("<div class=\"mainbox-top\"><img src=\"/ncitbrowser/images/mainbox-top.gif\" width=\"945\" height=\"5\" alt=\"\"/></div>");
       out.println("<!-- end EVS Logo -->");
       out.println("    <!-- Main box -->");
       out.println("    <div id=\"main-area_960\">");
@@ -2522,7 +2522,7 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
       out.println("      </div> <!-- pagecontent -->");
       out.println("    </div> <!--  main-area -->");
-      out.println("    <div class=\"mainbox-bottom\"><img src=\"/ncitbrowser/images/mainbox-bottom.gif\" width=\"941\" height=\"5\" alt=\"Mainbox Bottom\" /></div>");
+      out.println("    <div class=\"mainbox-bottom\"><img src=\"/ncitbrowser/images/mainbox-bottom.gif\" width=\"945\" height=\"5\" alt=\"Mainbox Bottom\" /></div>");
       out.println("");
       out.println("  </div> <!-- center-page -->");
       out.println("");
@@ -3903,7 +3903,7 @@ if (DataUtils.isNull(algorithm)) {
 
 
       out.println("");
-      out.println("<div class=\"mainbox-top\"><img src=\"/ncitbrowser/images/mainbox-top.gif\" width=\"941\" height=\"5\" alt=\"\"/></div>");
+      out.println("<div class=\"mainbox-top\"><img src=\"/ncitbrowser/images/mainbox-top.gif\" width=\"945\" height=\"5\" alt=\"\"/></div>");
       out.println("<!-- end EVS Logo -->");
       out.println("    <!-- Main box -->");
       out.println("    <div id=\"main-area_960\">");
@@ -4400,7 +4400,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("");
       out.println("      </div> <!-- pagecontent -->");
       out.println("    </div> <!--  main-area -->");
-      out.println("    <div class=\"mainbox-bottom\"><img src=\"/ncitbrowser/images/mainbox-bottom.gif\" width=\"941\" height=\"5\" alt=\"Mainbox Bottom\" /></div>");
+      out.println("    <div class=\"mainbox-bottom\"><img src=\"/ncitbrowser/images/mainbox-bottom.gif\" width=\"945\" height=\"5\" alt=\"Mainbox Bottom\" /></div>");
       out.println("");
       out.println("  </div> <!-- center-page -->");
       out.println("");

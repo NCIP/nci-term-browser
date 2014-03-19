@@ -248,7 +248,7 @@
     </div>
     <!-- end Main box -->
   </div>
-  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
 <br/>
 </body>

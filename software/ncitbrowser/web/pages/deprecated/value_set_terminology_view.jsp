@@ -719,7 +719,7 @@ body {
           <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           <div class="searchbox">
 
-<h:form id="valueSetSearchForm" styleClass="search-form-main-area_960" acceptcharset="UTF-8">  
+<h:form id="valueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">  
 
 
             <input type="hidden" id="checked_vocabularies" name="checked_vocabularies" value="" />
@@ -906,7 +906,7 @@ Search or browse a value set from its home page, or search all value sets at onc
         
       </div> <!-- pagecontent -->
     </div> <!--  main-area_960 -->
-    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+    <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
 
   </div> <!-- center-page_960 -->
 </f:view>

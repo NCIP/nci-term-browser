@@ -471,7 +471,7 @@ if (vd_uri != null) {
           
           <div class="searchbox">
           
-<h:form id="valueSetSearchForm" styleClass="search-form-main-area_960" acceptcharset="UTF-8">      
+<h:form id="valueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">      
               <%-- <div class="textbody"> --%>
 <table border="0" cellspacing="0" cellpadding="0" style="margin: 2px" >
   <tr valign="top" align="left">
@@ -645,7 +645,7 @@ if (vd_uri != null) {
  %>
 
  
-              <table class="datatable_960ValueSet_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+              <table class="datatable_960" summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 
 <%
 if (vsd_vec != null && vsd_vec.size() > 1) {
@@ -842,7 +842,7 @@ if (vsd_uri.indexOf("|") != -1) {
     </div> <!-- main-area_960 -->
     <!-- end Main box -->
   </div> <!-- center-page_960 -->
-  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="941" height="5" alt="Mainbox Bottom" /></div>
+  <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
 </f:view>
 </body>
 </html>
