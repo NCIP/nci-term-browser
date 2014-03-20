@@ -621,6 +621,7 @@ public class DataUtils {
                     try {
 
                         CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
+
                         if (isResolvedValueSetCodingScheme(cs)) {
 							String cs_uri = cs.getCodingSchemeURI();
 							String cs_name = cs.getCodingSchemeName();
@@ -681,6 +682,7 @@ public class DataUtils {
                                 formalname);
                         }
                         _localName2FormalNameHashMap.put(cs.getCodingSchemeURI(), formalname);
+                        _localName2FormalNameHashMap.put(cs.getCodingSchemeName(), formalname);
 
                         NameAndValue[] nvList =
                             MetadataUtils.getMetadataProperties(cs);
@@ -776,17 +778,24 @@ public class DataUtils {
                             _logger.debug("\t" + nvList.length
                                 + " MetadataProperties cached for "
                                 + formalname);
-                            _formalName2MetadataHashMap.put(formalname,
-                                metadataProperties);
+
+                            _formalName2MetadataHashMap.put(formalname, metadataProperties);
+                            _formalName2MetadataHashMap.put(cs.getCodingSchemeName(), metadataProperties);
 
                             _formalNameVersion2MetadataHashMap.put(formalname + "$" + representsVersion,
+                                metadataProperties);
+
+                            _formalNameVersion2MetadataHashMap.put(cs.getCodingSchemeName() + "$" + representsVersion,
                                 metadataProperties);
 
                             String displayName =
                                 getMetadataValue(formalname, "display_name");
                             _logger.debug("\tdisplay_name: " + displayName);
+
                             _displayName2FormalNameHashMap.put(displayName, formalname);
                             _formalName2DisplayNameHashMap.put(formalname, displayName);
+                            _formalName2DisplayNameHashMap.put(cs.getCodingSchemeName(), displayName);
+
                             _displayNameVersion2FormalNameVersionHashMap.put(displayName + "$" + representsVersion,
                                 formalname + "$" + representsVersion);
 
@@ -1015,7 +1024,11 @@ public class DataUtils {
 	}
 
     public static String getMetadataValue(String scheme, String propertyName) {
-        Vector v = getMetadataValues(scheme, propertyName);
+		//032014
+		String formalName = getFormalName(scheme);
+		Vector v = getMetadataValues(formalName, propertyName);
+
+        //Vector v = getMetadataValues(scheme, propertyName);
         if (v == null || v.size() == 0)
             return null;
         return (String) v.elementAt(0);
@@ -1026,10 +1039,11 @@ public class DataUtils {
             setCodingSchemeMap();
         }
 
-        if (!_formalName2MetadataHashMap.containsKey(scheme)) {
+		String formalName = getFormalName(scheme);
+        if (!_formalName2MetadataHashMap.containsKey(formalName)) {
             return null;
         }
-        Vector metadata = (Vector) _formalName2MetadataHashMap.get(scheme);
+        Vector metadata = (Vector) _formalName2MetadataHashMap.get(formalName);
         if (metadata == null || metadata.size() == 0) {
             return null;
         }
@@ -1054,10 +1068,12 @@ public class DataUtils {
             setCodingSchemeMap();
         }
 
-        if (!_formalNameVersion2MetadataHashMap.containsKey(scheme + "$" + version)) {
+        String formalName = getFormalName(scheme);
+
+        if (!_formalNameVersion2MetadataHashMap.containsKey(formalName + "$" + version)) {
             return null;
         }
-        Vector metadata = (Vector) _formalNameVersion2MetadataHashMap.get(scheme + "$" + version);
+        Vector metadata = (Vector) _formalNameVersion2MetadataHashMap.get(formalName + "$" + version);
         if (metadata == null || metadata.size() == 0) {
             return null;
         }
@@ -1070,19 +1086,8 @@ public class DataUtils {
 			setCodingSchemeMap();
 		}
 
-        boolean isLoaded = _formalNameVersion2MetadataHashMap.containsKey(scheme + "$" + version);
-        if (isLoaded) {
-            return isLoaded;
-		}
-
-        String formalName = getFormalName(scheme);
-        if (formalName == null) {
-
-		} else if (formalName.equals(scheme)) {
-            return isLoaded;
-	    }
-
-        isLoaded = _formalNameVersion2MetadataHashMap.containsKey(formalName + "$" + version);
+		String formalName = getFormalName(scheme);
+        boolean isLoaded = _formalNameVersion2MetadataHashMap.containsKey(formalName + "$" + version);
         return isLoaded;
     }
 
