@@ -285,15 +285,15 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
     else if (selectValueSetSearchOption.compareTo("Source") == 0)
         check_src = "checked";
         
-        
+ /*
     String valueset_match_text = (String) request.getSession().getAttribute("matchText_VSD");
     if (DataUtils.isNull(valueset_match_text)) {
         valueset_match_text = (String) request.getSession().getAttribute("matchText");
     }
     if (DataUtils.isNull(valueset_match_text)) {
         valueset_match_text = "";
-    }    
-    
+    } 
+*/
 
 String uri_vsd = null;
 String vsd_name = "null";
@@ -389,7 +389,7 @@ String vsd_name = "null";
 
                   <input CLASS="searchbox-input-2"
                     name="matchText"
-                    value=""
+                    value="<%=matchText%>"
                     onFocus="active = true"
                     onBlur="active = false"
                     onkeypress="return submitEnter('valueSetSearchForm:valueset_search',event)"

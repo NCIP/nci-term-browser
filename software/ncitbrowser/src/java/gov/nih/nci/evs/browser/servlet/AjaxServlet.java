@@ -1672,7 +1672,7 @@ if (DataUtils.isNull(algorithm)) {
 }
 
 if (DataUtils.isNull(algorithm)) {
-	algorithm = Constants.DEFAULT_SEARCH_ALGORITHM;//"exactMatch";
+	algorithm = Constants.DEFAULT_SEARCH_ALGORITHM;//"contains";
 }
 request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
@@ -1694,6 +1694,7 @@ String option_code = "";
 String option_name = "";
 if (DataUtils.isNull(option)) {
 	option_name = "checked";
+
 } else {
 	if (option.compareToIgnoreCase("Code") == 0) {
 		option_code = "checked";
@@ -1708,45 +1709,31 @@ String algorithm_exactMatch = "";
 String algorithm_startsWith = "";
 String algorithm_contains = "";
 
-/*
 if (DataUtils.isNull(algorithm)) {
+	algorithm = "contains";
+}
+
+if (algorithm.compareToIgnoreCase("exactMatch") == 0) {
 	algorithm_exactMatch = "checked";
-} else {
-	if (algorithm.compareToIgnoreCase("exactMatch") == 0) {
-		algorithm_exactMatch = "checked";
-	}
-
-	if (algorithm.compareToIgnoreCase("startsWith") == 0) {
-		algorithm_startsWith = "checked";
-	}
-
-	if (algorithm.compareToIgnoreCase("contains") == 0) {
-		algorithm_contains = "checked";
-	}
 }
-*/
 
-if (DataUtils.isNull(algorithm)) {
+if (algorithm.compareToIgnoreCase("startsWith") == 0) {
+	algorithm_startsWith = "checked";
+	option_name = "checked";
+	option_code = "";
+}
+
+if (algorithm.compareToIgnoreCase("contains") == 0) {
 	algorithm_contains = "checked";
-} else {
-	if (algorithm.compareToIgnoreCase("exactMatch") == 0) {
-		algorithm_exactMatch = "checked";
-	}
-
-	if (algorithm.compareToIgnoreCase("startsWith") == 0) {
-		algorithm_startsWith = "checked";
-	}
-
-	if (algorithm.compareToIgnoreCase("contains") == 0) {
-		algorithm_contains = "checked";
-	}
+	option_name = "checked";
+	option_code = "";
 }
 
-      out.println("");
-      //if (message == null) {
-	  if (message == null && DataUtils.isNull(vsd_uri)) {
-      	  out.println("		 tree.collapseAll();");
-	  }
+out.println("");
+//if (message == null) {
+if (message == null && DataUtils.isNull(vsd_uri)) {
+  out.println("		 tree.collapseAll();");
+}
 
 if (DataUtils.isNull(vsd_uri)) {
       out.println("      initializeNodeCheckState();");
@@ -1933,22 +1920,6 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("    }");
       out.println("");
       out.println("");
-
-
-//KLO
-/*
-      out.println("function initialize_tree() {");
-
-      out.println("    alert(\"onload\");");
-
-      out.println("    tree = new YAHOO.widget.TreeView(\"treecontainer\");");
-      out.println("    tree.expandAll();");
-      out.println("    check_all();");
-      out.println("    tree.draw();");
-      out.println("}");
-*/
-
-
 
       out.println("");
       out.println("    function expandEntireTree() {");
@@ -2535,114 +2506,6 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("");
   }
 
-///////////////////////////
-// search_value_set
-///////////////////////////
-
-/*
-    public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
-        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
-		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
-
-        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
-        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
-
-		// check if any checkbox is checked.
-        String contextPath = request.getContextPath();
-		String view_str = HTTPUtils.cleanXSS((String) request.getParameter("view"));
-		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
-		String root_vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("root_vsd_uri"));
-
-		int view = Constants.STANDARD_VIEW;
-		boolean isInteger = DataUtils.isInteger(view_str);
-		if (isInteger) {
-			view = Integer.parseInt(view_str);
-		}
-
-if (vsd_uri != null && root_vsd_uri == null) {
-	root_vsd_uri = vsd_uri;
-}
-
-		String msg = null;
-		request.getSession().removeAttribute("checked_vocabularies");
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-		request.getSession().removeAttribute("partial_checked_vocabularies");
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
-        if (DataUtils.isNull(matchText)) {
-			matchText = "";
-		} else {
-			matchText = matchText.trim();
-		}
-        request.getSession().setAttribute("matchText", matchText);
-
-		String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("ontology_display_name"));
-		String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("ontology_version"));
-
-		if (matchText.compareTo("") == 0) {
-			msg = "Please enter a search string.";
-			request.getSession().setAttribute("message", msg);
-			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
-				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
-			} else {
-			    create_vs_tree(request, response, view);
-			}
-			return;
-		}
-
-        if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
-			msg = "No value set definition is selected.";
-			request.getSession().setAttribute("message", msg);
-			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
-				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
-			} else {
-                vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
-                if (DataUtils.isNull(vsd_uri)) {
-					create_vs_tree(request, response, view);
-				} else {
-					create_vs_tree(request, response, view, vsd_uri);
-				}
-			}
-		} else {
-			try {
-				String retstr = valueSetSearchAction(request);
-				//KLO, 041312
-				if (retstr.compareTo("message") == 0) {
-					if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
-						create_vs_tree(request, response, view, ontology_display_name, ontology_version);
-					} else {
- 					    create_vs_tree(request, response, view);
-					}
-					return;
-				}
-
-
-Vector matched_vsds = (Vector) request.getSession().getAttribute("matched_vsds");
-
-
-				String destination = contextPath + "/pages/value_set_search_results.jsf";
-
-if (matched_vsds != null && matched_vsds.size() == 1) {
-	String s = (String) matched_vsds.elementAt(0);
-	Vector u = DataUtils.parseData(s);
-	root_vsd_uri = (String) u.elementAt(0);
-
-} else {
-    System.out.println("Search value set: root_vsd_uri " + root_vsd_uri);
-}
-
-				if (!DataUtils.isNull(vsd_uri)) {
-					destination = contextPath + "/pages/value_set_search_results.jsf?value_set_tab=false&root_vsd_uri=" + root_vsd_uri;
-				}
-
-				response.sendRedirect(response.encodeRedirectURL(destination));
-	            request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-	    }
-    }
-*/
-
 
     public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
@@ -2725,16 +2588,6 @@ if (matched_vsds != null && matched_vsds.size() == 1) {
 
 				String destination = contextPath + "/pages/value_set_entity_search_results.jsf";
 
-/*
-if (matched_vsds != null && matched_vsds.size() == 1) {
-	String s = (String) matched_vsds.elementAt(0);
-	Vector u = DataUtils.parseData(s);
-	root_vsd_uri = (String) u.elementAt(0);
-
-} else {
-    System.out.println("Search value set: root_vsd_uri " + root_vsd_uri);
-}
-*/
 
 				if (!DataUtils.isNull(vsd_uri)) {
 					destination = contextPath + "/pages/value_set_entity_search_results.jsf?value_set_tab=false&root_vsd_uri=" + root_vsd_uri;
@@ -2748,224 +2601,6 @@ if (matched_vsds != null && matched_vsds.size() == 1) {
 	    }
     }
 
-
-
-/*
-    public static String valueSetSearchAction(HttpServletRequest request) {
-		java.lang.String valueSetDefinitionRevisionId = null;
-		String msg = null;
-
-        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
-
-        if (DataUtils.isNull(selectValueSetSearchOption)) {
-			selectValueSetSearchOption = "Name";
-		}
-		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
-
-        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
-        if (DataUtils.isNull(algorithm)) {
-			algorithm = "exactMatch";
-		}
-
-        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
-
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-
-		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
-			msg = "No value set definition is selected.";
-			//System.out.println(msg);
-			request.getSession().setAttribute("message", msg);
-			return "message";
-		}
-
-		Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
-        String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
-        request.getSession().setAttribute("view", VSD_view);
-
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
-
-        Vector v = new Vector();
-        LexEVSValueSetDefinitionServices vsd_service = null;
-        vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-
-        if (matchText != null) matchText = matchText.trim();
-		if (selectValueSetSearchOption.compareTo("Code") == 0) {
-            String uri = null;
-
-			try {
-				String versionTag = null;//"PRODUCTION";
-				if (checked_vocabularies != null) {
-					for (int k=0; k<selected_vocabularies.size(); k++) {
-						String vsd_name = (String) selected_vocabularies.elementAt(k);
-						String vsd_uri = DataUtils.getValueSetDefinitionURIByName(vsd_name);
-
-                        try {
-							//ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
-							if (vsd_uri != null) {
-                                ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(vsd_uri), null);
-								AbsoluteCodingSchemeVersionReference acsvr = vsd_service.isEntityInValueSet(matchText,
-									  new URI(vsd_uri),
-									  null,
-									  versionTag);
-								if (acsvr != null) {
-									String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-									if (metadata != null) {
-										v.add(metadata);
-									}
-								}
-							}
-						} catch (Exception ex) {
-                            ex.printStackTrace();
-						}
-
-					}
-			    } else {
-				    AbsoluteCodingSchemeVersionReferenceList csVersionList = null;//ValueSetHierarchy.getAbsoluteCodingSchemeVersionReferenceList();
-					List list = vsd_service.listValueSetsWithEntityCode(matchText, null, csVersionList, versionTag);
-					if (list != null) {
-
-						for (int j=0; j<list.size(); j++) {
-							uri = (String) list.get(j);
-
-							String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
-							if (selected_vocabularies.contains(vsd_name)) {
-								try {
-									ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
-									if (vsd == null) {
-										msg = "Unable to find any value set with URI " + uri + ".";
-										request.getSession().setAttribute("message", msg);
-										return "message";
-									}
-
-									String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-									if (metadata != null) {
-										v.add(metadata);
-									}
-
-								} catch (Exception ex) {
-									ex.printStackTrace();
-									msg = "Unable to find any value set with URI " + uri + ".";
-									request.getSession().setAttribute("message", msg);
-									return "message";
-								}
-
-							}
-
-						}
-					}
-			    }
-
-
-				request.getSession().setAttribute("matched_vsds", v);
-				if (v.size() == 0) {
-					msg = "No match found.";
-					msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
-					request.getSession().setAttribute("message", msg);
-					return "message";
-				} else if (v.size() == 1) {
-					request.getSession().setAttribute("vsd_uri", uri);
-				}
-
-				return "value_set";
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-
-			msg = "Unexpected errors encountered; search by code failed.";
-			request.getSession().setAttribute("message", msg);
-
-			return "message";
-
-		} else if (selectValueSetSearchOption.compareTo("Name") == 0) {
-
-            String uri = null;
-			try {
-
-				Vector uri_vec = DataUtils.getValueSetURIs();
-
-                for (int i=0; i<uri_vec.size(); i++) {
-					uri = (String) uri_vec.elementAt(i);
-
-					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
-
-					if (checked_vocabularies == null || selected_vocabularies.contains(vsd_name)) {
-						AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
-						ResolvedValueSetCodedNodeSet rvs_cns = null;
-						SortOptionList sortOptions = null;
-						LocalNameList propertyNames = null;
-						CodedNodeSet.PropertyType[] propertyTypes = null;
-
-						try {
-							rvs_cns = vsd_service.getValueSetDefinitionEntitiesForTerm(matchText, algorithm, new URI(uri), csVersionList, null);
-
-							if (rvs_cns != null) {
-								CodedNodeSet cns = rvs_cns.getCodedNodeSet();
-								ResolvedConceptReferencesIterator itr = cns.resolve(sortOptions, propertyNames, propertyTypes);
-								if (itr != null && itr.numberRemaining() > 0) {
-
-									AbsoluteCodingSchemeVersionReferenceList ref_list = rvs_cns.getCodingSchemeVersionRefList();
-									if (ref_list.getAbsoluteCodingSchemeVersionReferenceCount() > 0) {
-										try {
-											ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), null);
-											if (vsd == null) {
-												msg = "Unable to find any value set with name " + matchText + ".";
-												request.getSession().setAttribute("message", msg);
-												return "message";
-											}
-
-											String metadata = DataUtils.getValueSetDefinitionMetadata(vsd);
-											if (metadata != null) {
-												v.add(metadata);
-
-											}
-
-										} catch (Exception ex) {
-
-											ex.printStackTrace();
-											msg = "Unable to find any value set with name " + matchText + ".";
-											request.getSession().setAttribute("message", msg);
-											return "message";
-
-										}
-									}
-								}
-							}
-
-
-						} catch (Exception ex) {
-
-							msg = "getValueSetDefinitionEntitiesForTerm throws exception -- search by \"" + matchText + "\" failed. (VSD URI: " + uri + ")";
-							request.getSession().setAttribute("message", msg);
-							ex.printStackTrace();
-							return "message";
-
-						}
-					}
-				}
-
-				request.getSession().setAttribute("matched_vsds", v);
-				if (v.size() == 0) {
-					msg = "No match found.";
-					request.getSession().setAttribute("message", msg);
-					return "message";
-				} else if (v.size() == 1) {
-					request.getSession().setAttribute("vsd_uri", uri);
-				}
-				return "value_set";
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-
-			msg = "Unexpected errors encountered; search by name failed.";
-			request.getSession().setAttribute("message", msg);
-			return "message";
-
-		}
-		return "value_set";
-    }
-*/
 
 
     public static String valueSetSearchAction(HttpServletRequest request) {
@@ -3427,7 +3062,8 @@ _logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
 String option_code = "";
 String option_name = "";
 if (DataUtils.isNull(option)) {
-	option_code = "checked";
+	option_name = "checked";
+
 } else {
 	if (option.compareToIgnoreCase("Code") == 0) {
 		option_code = "checked";
@@ -3441,23 +3077,26 @@ if (DataUtils.isNull(option)) {
 String algorithm_exactMatch = "";
 String algorithm_startsWith = "";
 String algorithm_contains = "";
+
 if (DataUtils.isNull(algorithm)) {
-	//algorithm_exactMatch = "checked";
-	algorithm_contains = "checked";
-} else {
-	if (algorithm.compareToIgnoreCase("exactMatch") == 0) {
-		algorithm_exactMatch = "checked";
-	}
-
-	if (algorithm.compareToIgnoreCase("startsWith") == 0) {
-		algorithm_startsWith = "checked";
-	}
-
-	if (algorithm.compareToIgnoreCase("contains") == 0) {
-		algorithm_contains = "checked";
-	}
+	algorithm = "contains";
 }
 
+if (algorithm.compareToIgnoreCase("exactMatch") == 0) {
+	algorithm_exactMatch = "checked";
+}
+
+if (algorithm.compareToIgnoreCase("startsWith") == 0) {
+	algorithm_startsWith = "checked";
+	option_name = "checked";
+	option_code = "";
+}
+
+if (algorithm.compareToIgnoreCase("contains") == 0) {
+	algorithm_contains = "checked";
+	option_name = "checked";
+	option_code = "";
+}
 
       out.println("");
       if (message == null) {
@@ -3518,32 +3157,6 @@ if (DataUtils.isNull(algorithm)) {
       out.println("");
 
    // 0=unchecked, 1=some children checked, 2=all children checked
-
-
-/*
-    function getCheckedNodes(nodes) {
-        nodes = nodes || tree.getRoot().children;
-        checkedNodes = [];
-        for(var i=0, l=nodes.length; i<l; i=i+1) {
-            var n = nodes[i];
-            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked
-            if (n.checkState == 2) {
-                checkedNodes.push(n.label); // just using label for simplicity
-            }
-
-            if (n.hasChildren()) {
-		        checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
-            }
-        }
-
-       //var checked_vocabularies = document.forms["valueSetSearchForm"].checked_vocabularies;
-       //checked_vocabularies.value = checkedNodes;
-
-
-       return checkedNodes;
-    }
-
-*/
 
 
       out.println("    function getCheckedVocabularies(nodes) {");
@@ -3915,14 +3528,6 @@ if (DataUtils.isNull(algorithm)) {
       out.println("      <div class=\"bannerarea_960\">");
 
 
-/*
-
-      out.println("        <a href=\"/ncitbrowser/start.jsf\" style=\"text-decoration: none;\">");
-      out.println("          <div class=\"vocabularynamebanner_tb\">");
-      out.println("            <span class=\"vocabularynamelong_tb\">" + JSPUtils.getApplicationVersionDisplay() + "</span>");
-      out.println("          </div>");
-      out.println("        </a>");
-*/
 
 JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
 String scheme = info.dictionary;
@@ -3930,14 +3535,7 @@ String term_browser_version = info.term_browser_version;
 String display_name = info.display_name;
  String basePath = request.getContextPath();
 
-/*
-<a href="/ncitbrowser/pages/home.jsf?version=12.02d" style="text-decoration: none;">
-	<div class="vocabularynamebanner_ncit">
-	    <span class="vocabularynamelong_ncit">Version: 12.02d (Release date: 2012-02-27-08:00)</span>
-	</div>
-</a>
 
-*/
 String release_date = DataUtils.getVersionReleaseDate(scheme, version);
 if (dictionary != null && dictionary.compareTo("NCI Thesaurus") == 0) {
 
