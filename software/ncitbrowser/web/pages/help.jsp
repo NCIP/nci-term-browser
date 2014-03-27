@@ -522,7 +522,7 @@
             <li><b>Relationship</b> search offers a drop-down list 
               of all specific relationships associated with the home 
               terminology source, so that they can be selected and 
-              searched individually or altogether.  Radio buttons 
+              searched individually or all together.  Radio buttons 
               specify whether the search expression should match 
               relationship source or target concepts (e.g., in the 
               relationship [<i>Finger</i>] --&gt;
