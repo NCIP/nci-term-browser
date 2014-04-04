@@ -356,7 +356,7 @@
                     search examples in this Help page use the default 
                     name search.</li>
                 <li><b>Code</b> button is for searching concepts by code: Search text 
-                    is matched to a concept code, or source code. The search is case-insensitive.</li>                   
+                    is matched to a concept code, or source code. The search is case-sensitive.</li>                   
                 <li><b>Property</b> button will match to other direct 
                     property attributes of a concept, such as 
                     definitions.</li>
