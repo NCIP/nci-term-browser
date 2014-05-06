@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
@@ -158,7 +158,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
             }
         %>
           <td class="dataCellText" scope="row">
-             <%=name%>
+             <%=DataUtils.encodeTerm(name)%>
           </td>
         </tr>
           <%
@@ -214,11 +214,11 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           if (con_status == null) {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=sel_dictionary_nm%>&version=<%=sel_version%>&code=<%=code%>&ns=<%=ns%>" ><%=name%></a>&nbsp;(Namespace: <%=ns%>)
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=sel_dictionary_nm%>&version=<%=sel_version%>&code=<%=code%>&ns=<%=ns%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(Namespace: <%=ns%>)
           <%
           } else {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=sel_dictionary_nm%>&version=<%=sel_version%>&code=<%=code%>&ns=<%=ns%>" ><%=name%></a>&nbsp;(Namespace: <%=ns%>)&nbsp;(<%=con_status%>)
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=sel_dictionary_nm%>&version=<%=sel_version%>&code=<%=code%>&ns=<%=ns%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(Namespace: <%=ns%>)&nbsp;(<%=con_status%>)
           <%
           }
           %>

@@ -76,7 +76,7 @@ String code_curr = (String) request.getSession().getAttribute("code");
 <%			
 if (type != null && type.compareTo("all") == 0) {
 %>
-    <A name="relationships">Relationships with other <%=rel_display_name%> Concepts</A>
+    <A name="relationships">Relationships with other <%=DataUtils.encodeTerm(rel_display_name)%> Concepts</A>
 <%    
 } else {
 %>
@@ -238,10 +238,10 @@ if (type != null && type.compareTo("all") == 0) {
         }
         n1++;
         %>
-              <td><%=role_name%></td>
+              <td><%=DataUtils.encodeTerm(role_name)%></td>
               <td>
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
-                  <%=target_concept_name%>
+                  <%=DataUtils.encodeTerm(target_concept_name)%>
                 </a>
               </td>
             </tr>
@@ -360,18 +360,18 @@ if (type != null && type.compareTo("all") == 0) {
         }
         n2++;
         %>
-              <td scope="row"><%=role_name%></td>
+              <td scope="row"><%=DataUtils.encodeTerm(role_name)%></td>
               <td>
               <%
               if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
               %>
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
-                  <%=target_concept_name%>
+                  <%=DataUtils.encodeTerm(target_concept_name)%>
                 </a>
               <%
               } else {
               %>
-                <%=target_concept_name%>
+                <%=DataUtils.encodeTerm(target_concept_name)%>
               <%
               }
               %>
@@ -463,12 +463,12 @@ if (!isMapping) {
               if (!DataUtils.isNonConcept2ConceptAssociation(role_name)) {
               %>
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
-                  <%=target_concept_name%>
+                  <%=DataUtils.encodeTerm(target_concept_name)%>
                 </a>
               <%
               } else {
               %>
-                <%=target_concept_name%>
+                <%=DataUtils.encodeTerm(target_concept_name)%>
               <%
               }
               %>
@@ -610,12 +610,12 @@ if (!isMapping) {
               %>
 
                 <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_coding_scheme_name%><%=version_parameter%>&code=<%=target_concept_code%>">
-                  <%=target_concept_name%>
+                  <%=DataUtils.encodeTerm(target_concept_name)%>
                 </a>
               <%
               } else {
               %>
-                <%=target_concept_name%>
+                <%=DataUtils.encodeTerm(target_concept_name)%>
               <%
               }
               %>

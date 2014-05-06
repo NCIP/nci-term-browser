@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h"%>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.io.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="org.LexGrid.concepts.Entity"%>
@@ -228,7 +228,7 @@
                            <td></td>
                         </tr>
                         <tr class="textbody">
-                           <td><b>Name</b>: <%=name%></td>
+                           <td><b>Name</b>: <%=DataUtils.encodeTerm(name)%></td>
                         </tr>
                         <tr class="textbody">
                            <td><b>Description</b>: <%=description%></td>
@@ -309,7 +309,7 @@
                                         	}
                                        %>
                                     </td>
-                                    <td class="dataCellText"><%=conceptname%></td>
+                                    <td class="dataCellText"><%=DataUtils.encodeTerm(conceptname)%></td>
                                     <td class="dataCellText"><%=coding_scheme%></td>
                                     <td class="dataCellText"><%=namespace%></td>
                                  <%

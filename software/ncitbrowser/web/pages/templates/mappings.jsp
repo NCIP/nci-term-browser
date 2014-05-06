@@ -154,7 +154,7 @@ if (list != null && list.size() > 0) {
 
            
 %>        
-    <p></p>Mapping Source: <%=mapping_cs_name%>
+    <p></p>Mapping Source: <%=DataUtils.encodeTerm(mapping_cs_name)%>
           <table class="datatable_960">
 
           <th class="dataTableHeader" width="100px" scope="col" align="left">Source</th>
@@ -249,7 +249,7 @@ if (show_rank_column) {
 
 
         </td>
-        <td class="datacoldark"><%=source_name%></td>
+        <td class="datacoldark"><%=DataUtils.encodeTerm(source_name)%></td>
 
 
         <td class="textbody"><%=rel%></td>
@@ -273,7 +273,7 @@ if (show_rank_column) {
 </a>
 
                     </td>
-        <td class="datacoldark"><%=target_name%></td>
+        <td class="datacoldark"><%=DataUtils.encodeTerm(target_name)%></td>
 
 
         </tr>
@@ -316,7 +316,7 @@ if (list != null && list.size() > 0) {
 
 %>
       
-    <p></p>Mapping Source: <%=mapping_cs_name%>
+    <p></p>Mapping Source: <%=DataUtils.encodeTerm(mapping_cs_name)%>
           <table class="datatable_960">
 
           <th class="dataTableHeader" width="100px" scope="col" align="left">Source</th>
@@ -404,7 +404,7 @@ if (show_rank_column) {
 </a>
 
         </td>
-        <td class="datacoldark"><%=source_name%></td>
+        <td class="datacoldark"><%=DataUtils.encodeTerm(source_name)%></td>
 
 
         <td class="textbody"><%=rel%></td>
@@ -428,7 +428,7 @@ if (show_rank_column) {
 </a>
 
                     </td>
-        <td class="datacoldark"><%=target_name%></td>
+        <td class="datacoldark"><%=DataUtils.encodeTerm(target_name)%></td>
 
           </tr>
         <%

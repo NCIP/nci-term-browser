@@ -378,6 +378,7 @@ public class ValueSetHierarchy {
         return getHierarchyRoots(scheme, version);
 	}
 
+/*
 	public static void geValueSetHierarchy(HashMap hmap, Vector v) {
 
     }
@@ -392,6 +393,7 @@ public class ValueSetHierarchy {
 		}
         geValueSetHierarchy(hmap, v);
 	}
+*/
 
     public static Vector<String> parseData(String line) {
 		if (line == null) return null;
@@ -1566,9 +1568,11 @@ public class ValueSetHierarchy {
 
 				for (int i=0; i<list.size(); i++) {
 					String uri = (String) list.get(i);
-					java.net.URI valueSetDefinitionURI = new URI(uri);
+					//java.net.URI valueSetDefinitionURI = new URI(uri);
 					Vector v = new Vector();
 					try {
+						v = DataUtils.getCodingSchemeURNsInValueSetDefinition(uri);
+						/*
 						//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 						AbsoluteCodingSchemeVersionReferenceList codingSchemes =
 							vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
@@ -1581,6 +1585,10 @@ public class ValueSetHierarchy {
 							v = SortUtils.quickSort(v);
 							hmap.put(uri, v);
 							//return SortUtils.quickSort(v);
+						}
+						*/
+						if (v != null) {
+							hmap.put(uri, v);
 						}
 
 					} catch (Exception ex) {

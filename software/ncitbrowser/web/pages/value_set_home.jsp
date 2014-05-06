@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
@@ -322,7 +322,7 @@ var tree;
         <a class="vocabularynamebanner" href="/ncitbrowser/pages/value_set_search_results.jsf?vsd_uri=http://ncit:C81222">
 	      <div class="vocabularynamebanner">
             <div class="vocabularynameshort" STYLE="font-size: 22px; font-family : Arial">
-              <%=vsd_name%>
+              <%=DataUtils.encodeTerm(vsd_name)%>
             </div>
           </div>
 	    </a>
@@ -426,7 +426,7 @@ var tree;
         <a class="vocabularynamebanner" href="/ncitbrowser/pages/value_set_search_results.jsf?vsd_uri=http://ncit:C81222">
 	      <div class="vocabularynamebanner">
             <div class="vocabularynameshort" STYLE="font-size: 22px; font-family : Arial">
-              <%=vsd_name%>
+              <%=DataUtils.encodeTerm(vsd_name)%>
             </div>
           </div>
 	    </a>

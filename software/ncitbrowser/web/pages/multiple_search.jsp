@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.util.Collections"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashMap"%>
@@ -41,12 +41,12 @@
   String requestContextPath = request.getContextPath();
   requestContextPath = requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
   //boolean display_cabig_approval_indicator_note = false;
+  // 04242014
   Integer curr_sort_category = null;
   
 request.getSession().removeAttribute("n");
 request.getSession().removeAttribute("b");
 request.getSession().removeAttribute("m");
-  
   
   
 %>
@@ -297,9 +297,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                         display_name = DataUtils.getLocalName(scheme);
                     } 
  
-                    String sort_category = DataUtils.getMetadataValue(
-                        scheme, version, "vocabulary_sort_category");
+                    String sort_category = DataUtils.getMetadataValue(scheme, version, "vocabulary_sort_category");
                          //KLO, 11202013
+                     
+                    // KLO, 04242014 
+                    if (sort_category == null) {
+                        sort_category = "0";//String.valueOf(0);
+                    }
 		    
 		    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
                     display_name_vec.add(info);
@@ -346,9 +350,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                      
   int hide_counter = 0; 
   int show_counter = 0;
+  OntologyInfo info_0 = (OntologyInfo) display_name_vec.elementAt(0);
+  curr_sort_category = Integer.valueOf(info_0.getSortCategory());
+  
                       for (int i = 0; i < display_name_vec.size(); i++) {
-                       OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+                        OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
                         int sort_category = info.getSortCategory();
+                        
                         String display_name = info.getDisplayName();
                         String label = info.getLabel();
                         String label2 = "|" + label + "|";
@@ -377,21 +385,19 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				  http_version = version.replaceAll(" ", "%20");
 				%>
 
-        <% if (curr_sort_category != null && sort_category != curr_sort_category.intValue()) { %>
-          <tr>
-            <td width="25px"></td>
-            <td></td>
-          </tr>
-        <% } curr_sort_category = Integer.valueOf(sort_category); %>
+        <% 
+          if (sort_category != curr_sort_category.intValue()) { 
+        %>
+          <tr><td width="25px">&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+        <% 
+        } 
+        curr_sort_category = Integer.valueOf(sort_category);
+        %>
         
 				<tr>
 				  <td width="25px"></td>
-				  
-				  
 				  <td>
 				<%
-				
-				
 				//boolean checked = ontologiesToSearchOn != null
 				//    && ontologiesToSearchOn.indexOf(label2) != -1;
 				    

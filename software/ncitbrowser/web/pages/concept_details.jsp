@@ -34,7 +34,7 @@
 
 <%@ page import="gov.nih.nci.evs.browser.properties.*"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.*"%>
-
+<%@ page contentType="text/html;charset=UTF-8"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
@@ -422,7 +422,7 @@ if (!DataUtils.isNull(b)) {
                   <%
                   if (namespace_list != null && namespace_list.size() > 1) {
                   %>
-                     <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>; &nbsp;Namespace: <%=ns%>)</td>
+                     <td class="texttitle-blue"><%=HTTPUtils.cleanXSS(name)%> (Code <%=HTTPUtils.cleanXSS(code)%>; &nbsp;Namespace <%=ns%>)</td>
                   <%   
                   } else {
                   %>

@@ -68,6 +68,8 @@ import org.lexgrid.resolvedvalueset.impl.LexEVSResolvedValueSetServiceImpl;
 import org.LexGrid.commonTypes.Property;
 import org.LexGrid.commonTypes.Properties;
 
+import org.apache.commons.lang.*;
+
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -318,11 +320,17 @@ public class DataUtils {
 
 
     public static StringBuffer getSourceValueSetTreeStringBuffer() {
+		if (sourceValueSetTreeStringBuffer == null) {
+			initializeValueSetHierarchy();
+		}
 		return sourceValueSetTreeStringBuffer;
 	}
 
 
     public static StringBuffer getCodingSchemeValueSetTreeStringBuffer() {
+		if (terminologyValueSetTreeStringBuffer == null) {
+			initializeValueSetHierarchy();
+		}
 		return terminologyValueSetTreeStringBuffer;
 	}
 
@@ -5185,8 +5193,7 @@ if (lbSvc == null) {
 	}
 
 
-
-
+/*
     public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
 		try {
 			java.net.URI valueSetDefinitionURI = new URI(uri);
@@ -5216,6 +5223,7 @@ if (lbSvc == null) {
 		}
 		return null;
 	}
+*/
 
 //===========================================================================================================================
 // Value Set Hierarchy
@@ -5236,6 +5244,7 @@ if (lbSvc == null) {
         return rcrl;
 	}
 
+/*
 	public static void geValueSetHierarchy(HashMap hmap, Vector v) {
 
     }
@@ -5253,7 +5262,7 @@ if (lbSvc == null) {
 		}
         geValueSetHierarchy(hmap, v);
 	}
-
+*/
 
 
 
@@ -5443,7 +5452,7 @@ if (lbSvc == null) {
 		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str + "|" + supportedSourceStr;
 	}
 
-
+/*
     public static Vector getCodingSchemesInValueSetDefinition(String uri) {
 		HashSet hset = new HashSet();
 		try {
@@ -5472,10 +5481,7 @@ if (lbSvc == null) {
 		}
 		return null;
 	}
-
-
-
-
+*/
 
     public static Vector getCodingSchemeVersionsByURN(String urn) {
         try {
@@ -6459,5 +6465,68 @@ if (lbSvc == null) {
 		if (abbreviation == null) return null;
 		return createVisualizationWidgetURL(abbreviation, code);
 	}
+
+    public static String encodeTerm(String s) {
+		if (s == null) return null;
+		if (StringUtils.isAlphanumeric(s)) return s;
+
+        StringBuilder buf = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+			if (Character.isLetterOrDigit(c)) {
+                buf.append(c);
+            } else {
+                buf.append("&#").append((int) c).append(";");
+            }
+        }
+        return buf.toString();
+    }
+
+
+// Reference: http://www.walterzorn.de/en/tooltip_old/tooltip_e.htm
+// (whilespace after &lt; is intentional)
+    public static String encode_term(String s) {
+		if (s == null) return null;
+		if (StringUtils.isAlphanumeric(s)) return s;
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == 60) {
+				buf.append("&lt; ");
+			} else if (c == 62) {
+				buf.append("&gt;");
+			} else if (c == 38) {
+				buf.append("&amp;");
+			} else if (c == 32) {
+				buf.append("&#32;");
+			} else {
+				buf.append(c);
+			}
+        }
+        String t = buf.toString();
+        return t;
+    }
+
+
+   public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
+	    Vector v = new Vector();
+		try {
+			java.net.URI valueSetDefinitionURI = new URI(uri);
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+	        ValueSetDefinition vsd = vsd_service.getValueSetDefinition(valueSetDefinitionURI, null);
+	        Mappings mappings = vsd.getMappings();
+            SupportedCodingScheme[] supportedCodingSchemes = mappings.getSupportedCodingScheme();
+            for (int i=0; i<supportedCodingSchemes.length; i++) {
+				SupportedCodingScheme supportedCodingScheme = supportedCodingSchemes[i];
+				v.add(supportedCodingScheme.getUri());
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		} finally {
+			//System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
+		}
+		return SortUtils.quickSort(v);
+   }
 }
 

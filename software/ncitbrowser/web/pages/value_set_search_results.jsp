@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
@@ -719,7 +719,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 %>
 		      <td class="dataCellText">
 		      <p>
-			 <b><%=name%></b>
+			 <b><%=DataUtils.encodeTerm(name)%></b>
 		      </p>
 		      
 		      <p class="dataCellText">
@@ -738,7 +738,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 } else {
 %>		      
 		      <td class="dataCellText">
-                         <a href="<%=request.getContextPath() %>/ajax?action=create_src_vs_tree&vsd_uri=<%=uri%>"><%=name%></a>
+                         <a href="<%=request.getContextPath() %>/ajax?action=create_src_vs_tree&vsd_uri=<%=uri%>"><%=DataUtils.encodeTerm(name)%></a>
 		      </td>
 
 		      <td class="dataCellText">

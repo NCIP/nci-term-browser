@@ -170,11 +170,19 @@ public class ViewInHierarchyUtils {
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-
-
-
     }
 
+    public ViewInHierarchyUtils(String codingScheme, String version, String code, String namespace) {
+		has_more_node_knt = 0;
+		try {
+			System.setProperty("file.encoding", "UTF-8");
+			PrintWriter pw  = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"), true);
+			printTree(pw, codingScheme, version, code, namespace);
+		}
+		catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+    }
 
 
     public static String getNamespaceByCode(String codingSchemeName, String vers, String code) {
@@ -251,9 +259,12 @@ public class ViewInHierarchyUtils {
     }
 
 
-
-
     public void printTree(PrintWriter out, String codingScheme, String version, String code) {
+		printTree(out, codingScheme, version, code, null);
+	}
+
+
+    public void printTree(PrintWriter out, String codingScheme, String version, String code, String namespace) {
         try {
 			long ms_0 = System.currentTimeMillis();
 			long ms = System.currentTimeMillis();
@@ -270,16 +281,28 @@ public class ViewInHierarchyUtils {
             if (version != null && version.length() > 0)
                 csvt = Constructors.createCodingSchemeVersionOrTagFromVersion(version);
 
-            String namespace = getNamespaceByCode(codingScheme, version, code);
+            if (namespace == null) {
+                namespace = getNamespaceByCode(codingScheme, version, code);
+			}
+
+			System.out.println("service.getTree code: " + code + " namespace: " + namespace);
             LexEvsTree tree = service.getTree(codingScheme, csvt, code, namespace);
 
             rt_2 = "" + (System.currentTimeMillis() - ms);
             //System.out.println("TreeService.getTree  run time (ms): " + rt_2);
             ms = System.currentTimeMillis();
 
+            LexEvsTreeNode focusNode = tree.getCurrentFocus();
+            focusNode.setNamespace(namespace);
+/*
             List<LexEvsTreeNode> listEvsTreeNode =
                     service.getEvsTreeConverter()
                         .buildEvsTreePathFromRootTree(tree.getCurrentFocus());
+*/
+
+            List<LexEvsTreeNode> listEvsTreeNode =
+                    service.getEvsTreeConverter()
+                        .buildEvsTreePathFromRootTree(focusNode);
 
             rt_3 = "" + (System.currentTimeMillis() - ms);
             //System.out.println("TreeService.buildEvsTreePathFromRootTree  run time (ms): " + rt_3);
@@ -295,6 +318,7 @@ public class ViewInHierarchyUtils {
 
 
         } catch (Exception e) {
+			e.printStackTrace();
             _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
@@ -651,19 +675,8 @@ public class ViewInHierarchyUtils {
 
 
     public static void main(String[] args) throws Exception {
-		//Melanoma (Code C3224)
-        //new ViewInHierarchyUtils("NCI_Thesaurus", "13.08d", "C37927"); // Color
-        String codingscheme = "NCI_Thesaurus";
-        String version = "13.08d";
-        String code = "C3224";
-        if (args.length > 0) {
-			code = args[0];
-		}
-        new ViewInHierarchyUtils("NCI_Thesaurus", "13.08d", code);
+        new ViewInHierarchyUtils("npo", "TestForMultiNamespace", "NPO_1607", "npo");
+        //new ViewInHierarchyUtils("npo", "TestForMultiNamespace", "NPO_1701");
     }
-
 }
-
-// com.healthmarketscience.sqlbuilder.dbspec.basic.DbSchema
-
 

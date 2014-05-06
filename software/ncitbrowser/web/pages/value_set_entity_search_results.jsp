@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="java.util.HashMap"%>
 <%@ page import="java.util.HashSet"%>
@@ -584,7 +584,7 @@ for (int i=0; i<list.size(); i++) {
         %>      
 	      
 		      <td class="dataCellText">
-                        <a href="<%=request.getContextPath() %>/ajax?action=create_src_vs_tree&vsd_uri=<%=uri%>"><%=name%></a>
+                        <a href="<%=request.getContextPath() %>/ajax?action=create_src_vs_tree&vsd_uri=<%=uri%>"><%=DataUtils.encodeTerm(name)%></a>
 		      </td>
 		      
 		      <!--
@@ -607,11 +607,11 @@ for (int i=0; i<list.size(); i++) {
 			 if (DataUtils.isNull(entity_cs_version) || entity_cs_version.compareTo("") == 0) {
 			     //String entity_cs_nm = DataUtils.getCSName(entity_cs);
 			 %>
-			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=entity_name%></a>
+			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=DataUtils.encodeTerm(entity_name)%></a>
                          <%
                          } else {
                          %>
-			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&version=<%=entity_cs_version%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=entity_name%></a>
+			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&version=<%=entity_cs_version%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=DataUtils.encodeTerm(entity_name)%></a>
                          <%
                          }
                          %>

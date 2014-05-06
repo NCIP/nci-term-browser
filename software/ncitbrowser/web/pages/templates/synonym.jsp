@@ -63,7 +63,7 @@ if (type != null && type.compareTo("all") == 0) {
                     n++;
         Vector synonym_data = DataUtils.parseData(s, "|");
         String term_name = (String) synonym_data.elementAt(0);
-        term_name = term_name.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        //term_name = term_name.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         String term_type = (String) synonym_data.elementAt(1);
         String term_source = (String) synonym_data.elementAt(2);
         String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
@@ -84,7 +84,7 @@ if (type != null && type.compareTo("all") == 0) {
         String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
     %>
         <tr class="<%=rowColor%>">
-          <td class="dataCellText" scope="row"><%=term_name%></td>
+          <td class="dataCellText" scope="row"><%=DataUtils.encodeTerm(term_name)%></td>
           <td class="dataCellText"><%=term_source%></td>
           <td class="dataCellText"><%=term_type%></td>
               <%

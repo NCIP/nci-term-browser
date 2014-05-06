@@ -232,6 +232,7 @@ public final class AjaxServlet extends HttpServlet {
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));// DataConstants.ACTION);
 
+//search_hierarchy ns=npo
 
 if (action == null) {
 	action = "create_src_vs_tree";
@@ -255,6 +256,9 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
         String node_id = HTTPUtils.cleanXSS(request.getParameter("ontology_node_id"));// DataConstants.ONTOLOGY_NODE_ID);
+        String ns = HTTPUtils.cleanXSS(request.getParameter("ns"));// DataConstants.ONTOLOGY_NODE_ID);
+        System.out.println("Namespace: " + ns);
+
         String ontology_display_name =
             HTTPUtils.cleanXSS(request.getParameter("ontology_display_name"));// DataConstants.ONTOLOGY_DISPLAY_NAME);
 
@@ -359,7 +363,7 @@ if (action.compareTo("xmldefinitions") == 0) {
 			request.getSession().setAttribute("nav_type", "valuesets");
             create_cs_vs_tree(request, response);
         } else if (action.equals("search_hierarchy")) {
-            search_hierarchy(request, response, node_id, ontology_display_name, ontology_version);
+            search_hierarchy(request, response, node_id, ontology_display_name, ontology_version, ns);
         } else if (action.equals("search_tree")) {
             search_tree(response, node_id, ontology_display_name, ontology_version);
         } else if (action.equals("build_tree")) {
@@ -638,7 +642,7 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
     public static void search_hierarchy(HttpServletRequest request, HttpServletResponse response, String node_id,
-        String ontology_display_name, String ontology_version) {
+        String ontology_display_name, String ontology_version, String namespace) {
 
       Enumeration parameters = request.getParameterNames();
       String param = null;
@@ -1045,8 +1049,14 @@ if (action.compareTo("xmldefinitions") == 0) {
 
       println(out, "      var root = tree.getRoot();");
 
-      //new ViewInHierarchyUtil().printTree(out, ontology_display_name, ontology_version, node_id);
-      new ViewInHierarchyUtils().printTree(out, ontology_display_name, ontology_version, node_id);
+
+System.out.println("AjaxServlet ontology_display_name: " + ontology_display_name);
+System.out.println("AjaxServlet ontology_version: " + ontology_version);
+System.out.println("AjaxServlet node_id: " + node_id);
+System.out.println("AjaxServlet namespace: " + namespace);
+
+
+      new ViewInHierarchyUtils().printTree(out, ontology_display_name, ontology_version, node_id, namespace);
       println(out, "             showPartialHierarchy();");
       println(out, "             tree.draw();");
 

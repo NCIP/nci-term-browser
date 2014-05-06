@@ -5,7 +5,7 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
 <%@ page import="org.LexGrid.concepts.Entity" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%
   String basePath = request.getContextPath();
 %>

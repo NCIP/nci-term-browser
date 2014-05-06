@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.io.*" %>
 <%@ page import="java.util.*"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
@@ -304,7 +304,7 @@ if (!no_match) {
                 }
                 %>
               <td class="dataCellText" scope="row">
-                 <%=name%>
+                 <%=DataUtils.encodeTerm(name)%>
               </td>
               <td class="dataCellText">
                  <%=short_vocabulary_name%>
@@ -344,12 +344,12 @@ if (!no_match) {
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus" + "&version=" + cs_version + "&code=" + code;
           %>
-               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>
+               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=DataUtils.encodeTerm(name)%></a>
           <%
           } else {
               if (code.indexOf("@") != -1) {
@@ -360,7 +360,7 @@ if (!no_match) {
                    
               } else {
            %>
-                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>
+                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>
            <%
               
               }
@@ -381,12 +381,12 @@ if (!no_match) {
           <%
           if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
           %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
           <%
           } else if (vocabulary_name.compareToIgnoreCase("NCI MetaThesaurus") == 0) {
                String meta_url = _ncimUrl + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus" + "&version=" + cs_version + "&code=" + code;
           %>
-               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
           <%
           } else {
                if (code.indexOf("@") != -1) {
@@ -397,7 +397,7 @@ if (!no_match) {
                     
                } else {
             %>
-               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=name%></a>&nbsp;(<%=con_status%>)
+               <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
             <%
                
                }

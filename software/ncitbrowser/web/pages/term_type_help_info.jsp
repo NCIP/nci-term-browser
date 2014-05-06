@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.util.Vector"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.common.*" %>
@@ -60,7 +60,7 @@
             <div>
               <img src="<%=basePath%>/images/other_popup_banner.gif"
                 width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
-              <div class="vocabularynamepopupshort"><%=display_name%></div>
+              <div class="vocabularynamepopupshort"><%=DataUtils.encodeTerm(display_name)%></div>
             </div>
         <%
           }
@@ -112,7 +112,7 @@
                   String rowColor = (n%2 == 1) ? "dataRowDark" : "dataRowLight";
               %>
                   <tr class="<%=rowColor%>">
-                    <td scope="row"><%=name%></td>
+                    <td scope="row"><%=DataUtils.encodeTerm(name)%></td>
                     <td><%=description%></td>
                   </tr>
               <%

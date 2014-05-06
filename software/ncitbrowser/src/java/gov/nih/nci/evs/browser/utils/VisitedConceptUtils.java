@@ -135,7 +135,11 @@ public class VisitedConceptUtils {
             }
             String code = visitedConcept.code;
             String name = visitedConcept.name;
-            name = DataUtils.htmlEntityEncode(name);
+            //name = DataUtils.htmlEntityEncode(name);
+
+            name = DataUtils.encode_term(name);
+
+
             strbuf.append("<li>");
 
             String versionParameter = "", versionParameterDisplay = "";

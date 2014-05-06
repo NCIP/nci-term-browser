@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=windows-1252"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 
 <%@ page import="java.io.*" %>
 <%@ page import="java.util.*"%>
@@ -447,7 +447,7 @@ target_scheme = DataUtils.getCSName(target_scheme);
 
 
         </td>
-        <td class="datacoldark"><%=source_name%></td>
+        <td class="datacoldark"><%=DataUtils.encodeTerm(source_name)%></td>
 
 
         <td class="textbody"><%=rel%></td>
@@ -471,7 +471,7 @@ if (show_rank_column) {
 
 
                     </td>
-        <td class="datacoldark"><%=target_name%></td>
+        <td class="datacoldark"><%=DataUtils.encodeTerm(target_name)%></td>
 
 </tr>
 

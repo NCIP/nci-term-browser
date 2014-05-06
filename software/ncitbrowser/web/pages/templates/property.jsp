@@ -376,7 +376,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
                           if (propName_label.compareTo("NCI Metathesaurus CUI") != 0) {
 			  %>
 			  <p>
-			  <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
+			  <b><%=propName_label%>:&nbsp;</b><%=DataUtils.encodeTerm(value)%>&nbsp;
 			  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
 			  </p>
 			  <%
@@ -401,7 +401,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       			     <i>
 
       			     
-      				  &nbsp;<%=value%>&nbsp;
+      				  &nbsp;<%=DataUtils.encodeTerm(value)%>&nbsp;
       				  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
       				  </i>
                  </td>   
@@ -475,7 +475,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           if (propName_label.indexOf("textualPresentation") == -1) {
 %>
             <p>
-              <b><%=propName_label%>:&nbsp;</b><%=value%>
+              <b><%=propName_label%>:&nbsp;</b><%=DataUtils.encodeTerm(value)%>
               <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
                    <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
               <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
@@ -607,7 +607,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         Vector w = DataUtils.parseData(t, "$");
         String presentaion_name = (String) w.elementAt(0);
         String presentaion_value = (String) w.elementAt(1);
-        presentaion_value = presentaion_value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        //presentaion_value = presentaion_value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         String isPreferred = (String) w.elementAt(2);
 
         displayed_properties.add(presentaion_name);
@@ -632,7 +632,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 <%
 	}
 %>
-		   <td><%=value%></td>
+		   <td><%=DataUtils.encodeTerm(value)%></td>
 	      </tr>
         <%
     }
@@ -711,7 +711,7 @@ if (!hasExternalSourceCodes) {
             %>
               <td><%=propName_label%></td>
               <td>
-                <%=value%>
+                <%=DataUtils.encodeTerm(value)%>
                 <%
                   // KLO
                   if (propName.compareTo("UMLS_CUI") != 0 && prop_url != null && prop_url.compareTo("null") != 0) {
@@ -832,7 +832,7 @@ if (!hasOtherProperties) {
               n++;
               %>
                   <td><%=prop_name%></td>
-                  <td><%=value%></td>
+                  <td><%=DataUtils.encodeTerm(value)%></td>
                 </tr>
               <%
             }
