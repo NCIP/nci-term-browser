@@ -3438,7 +3438,7 @@ if (lbSvc == null) {
         if (_ncimURL != null) {
             return _ncimURL;
         }
-        String default_info = "N/A";
+        String default_info = "http://ncim.nci.nih.gov";
         NCItBrowserProperties properties = null;
         try {
             properties = NCItBrowserProperties.getInstance();
