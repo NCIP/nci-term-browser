@@ -27,6 +27,8 @@
   }
 %>
 <%
+  String nci_meta_url = new DataUtils().getNCImURL();
+  String ncit_url = new DataUtils().getNCItURL();
 
   //KLO 031314
   request.getSession().removeAttribute("dictionary");
@@ -207,7 +209,15 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
           
           <div class="tabTableContentContainer">
 
+
+<!-- modification starts------------------------------------------------------------------------------------------------>
+<table border="0">
+    <tr>
+        <td width="650px" >
+          <!--
           <table class="termstable_960" border="0">
+          -->
+          <table border="0">
                 <tr>
                   <td>
                   <img src="<%= request.getContextPath() %>/images/AllbutNCIm.gif"
@@ -266,8 +276,10 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
             </span>
             
             
-            <table class="termstable_960" border="0">
-
+          <!--
+          <table class="termstable_960" border="0">
+          -->
+          <table border="0">
               <tr>
               <%
                 List ontology_list = DataUtils.getOntologyList();
@@ -609,9 +621,86 @@ if (hide_counter == 1) {
                 </tr>
                 
             </table>
+            
+            
+            
 <%
 }
 %>
+     </td>
+
+     <td valign="top" width="300px" align="right">
+        <table border="0" >
+          <tr valign="top">
+            <td width="10px"></td>
+            <td>
+              <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">
+                <img src="<%= request.getContextPath() %>/images/EVSTile.gif"
+                  width="77" height="38px" alt="EVS" border="0"/>
+              </a>
+            </td>
+            <td width="3px"></td>
+            <td class="textbody" valign="top">
+              <a href="http://evs.nci.nih.gov/" target="_blank" alt="EVS">
+                NCI Enterprise Vocabulary Services</a>:
+              Terminology resources and services for NCI and the biomedical community.
+            </td>
+          </tr>
+          <tr valign="top">
+            <td width="10px"></td>
+            <td>
+              <a href="<%=nci_meta_url%>" target="_blank" alt="NCIm">
+                <img src="<%= request.getContextPath() %>/images/NCImTile.gif"
+                  width="77" height="38px" alt="NCIm" border="0"/>
+              </a>
+            </td>
+            <td width="3px"></td>
+            <td class="textbody" valign="top">
+              <a href="<%=nci_meta_url%>" target="_blank" alt="NCIm">
+                NCI Metathesaurus</a>:
+              Comprehensive database of 4,000,000 terms from 75 terminologies.
+            </td>
+          </tr>
+          <tr valign="top">
+            <td width="10px"></td>
+            <td>
+              <a href="<%=ncit_url%>" target="_blank" alt="NCI Thesaurus">
+                <img src="<%=basePath%>/images/NCItTile.jpg"
+                  width="77" height="38px" alt="NCIt" border="0"/>
+              </a>
+            </td>
+            <td width="3px"></td>
+            <td class="textbody" valign="top">
+              <a href="<%=ncit_url%>" target="_blank" alt="NCI Thesaurus">
+                NCI Thesaurus</a>:
+                Reference terminology for NCI, NCI Metathesaurus and NCI informatics infrastructure.
+            </td>
+          </tr>
+          <tr valign="top">
+            <td width="10px"></td>
+            <td>
+              <a href="http://www.cancer.gov/cancertopics/terminologyresources/"
+                  target="_blank" alt="NCI Terminology Resources">
+                <img src="<%= request.getContextPath() %>/images/Cancer_govTile.gif"
+                  alt="NCI Terminology Resources" border="0"/>
+              </a>
+            </td>
+            <td width="3px"></td>
+            <td class="textbody" valign="top">
+              <a href="http://www.cancer.gov/cancertopics/terminologyresources/"
+                  target="_blank" alt="NCI Terminology Resources">
+                NCI Terminology Resources</a>:
+              More information on NCI dictionaries and resources.
+            </td>
+          </tr>
+          
+        </table>
+      </td>
+
+    <tr>
+</table>
+<!-- modification ends------------------------------------------------------------------------------------------------>
+
           </div> <!-- end tabTableContentContainer -->
           <%@ include file="/pages/templates/nciFooter.jsp"%>
         </div> <!-- end Page content -->

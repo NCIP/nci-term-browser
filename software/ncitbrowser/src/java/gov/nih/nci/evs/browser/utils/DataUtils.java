@@ -248,6 +248,8 @@ public class DataUtils {
 
     private static String _api_key = null;
 
+    public String _ncitURL = null;
+
 
     // ==================================================================================
 
@@ -3412,6 +3414,24 @@ if (lbSvc == null) {
         }
 
         return _ncitAnthillBuildTagBuilt;
+    }
+
+    public String getNCItURL() {
+        if (_ncitURL != null) {
+            return _ncitURL;
+        }
+        String default_info = "N/A";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _ncitURL = properties.getProperty(NCItBrowserProperties.NCIT_URL);
+            if (_ncitURL == null) {
+                _ncitURL = default_info;
+            }
+        } catch (Exception ex) {
+
+        }
+        return _ncitURL;
     }
 
     public String getNCImURL() {
