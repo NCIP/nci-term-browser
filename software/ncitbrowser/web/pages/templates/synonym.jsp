@@ -4,6 +4,10 @@
   String term_type_header = MetadataUtils.getMetadataValue(
       dictionary, null, null, "term_type_header");
 
+
+String formalName = DataUtils.getFormalName(dictionary);
+Vector localname_vec = DataUtils.getLocalNames(formalName);
+
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
   {
     %>
@@ -67,6 +71,7 @@ if (type != null && type.compareTo("all") == 0) {
         String term_type = (String) synonym_data.elementAt(1);
         String term_source = (String) synonym_data.elementAt(2);
         String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
+      
         
 //Test case: NCIt, ADCS-ADL MCI - Balance Checkbook (Code C106898)
         if (term_source_formal_name == null)
@@ -88,7 +93,13 @@ if (type != null && type.compareTo("all") == 0) {
           <td class="dataCellText"><%=term_source%></td>
           <td class="dataCellText"><%=term_type%></td>
               <%
-                if (!DataUtils.isNull(term_source_formal_name) && !DataUtils.isNull(term_source_code)) {
+                //String formalname_term_source = DataUtils.getFormalName(term_source);
+                boolean hyperlink = false;
+                if (term_source != null && !localname_vec.contains(term_source)) {
+                    hyperlink = true;
+                }
+                             
+                if (!DataUtils.isNull(term_source_formal_name) && !DataUtils.isNull(term_source_code) && hyperlink) {
                   String term_source_nm = DataUtils.getCSName(term_source_formal_name);
                   String url_str = request.getContextPath() +
                       "/pages/concept_details.jsf?dictionary=" +

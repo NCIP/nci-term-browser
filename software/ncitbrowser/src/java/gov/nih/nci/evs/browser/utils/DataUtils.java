@@ -184,6 +184,7 @@ public class DataUtils {
     private static HashMap _namespace2CodingScheme = null;
 
     private static HashMap _formalName2LocalNameHashMap = null;
+    private static HashMap _formalName2LocalNamesHashMap = null;
     private static HashMap _localName2FormalNameHashMap = null;
     private static HashMap _formalName2MetadataHashMap = null;
     private static HashMap _displayName2FormalNameHashMap = null;
@@ -532,6 +533,7 @@ public class DataUtils {
         _csnv2codingSchemeNameMap = new HashMap();
         _csnv2VersionMap = new HashMap();
         _formalName2LocalNameHashMap = new HashMap();
+        _formalName2LocalNamesHashMap = new HashMap();
         _localName2FormalNameHashMap = new HashMap();
         _formalName2MetadataHashMap = new HashMap();
         _displayName2FormalNameHashMap = new HashMap();
@@ -740,6 +742,13 @@ public class DataUtils {
 
                             _formalName2LocalNameHashMap.put(formalname,
                                 css_local_name);
+
+                            Vector localname_vec = new Vector();
+                            if (localnames != null) {
+								localname_vec = new Vector(Arrays.asList(localnames));
+							}
+							localname_vec.add(css_local_name);
+                            _formalName2LocalNamesHashMap.put(formalname, localname_vec);
 
                             _formalNameVersion2LocalNameHashMap.put(formalname + "$" + representsVersion,
                                  css_local_name);
@@ -1108,9 +1117,14 @@ public class DataUtils {
         }
 
         String value = (String) _formalName2LocalNameHashMap.get(key);
-//        Utils.debugHashMap("DataUtils.getFormalName: " + key,
-//        	_formalName2LocalNameHashMap, "value: " + value);
         return value;
+    }
+
+    public static Vector getLocalNames(String key) {
+        if (_formalName2LocalNamesHashMap == null) {
+            setCodingSchemeMap();
+        }
+        return (Vector) _formalName2LocalNamesHashMap.get(key);
     }
 
     public static String getFormalName(String key) {
