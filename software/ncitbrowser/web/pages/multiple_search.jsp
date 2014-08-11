@@ -117,11 +117,8 @@ request.getSession().removeAttribute("m");
   </script>
 <%
     request.getSession().removeAttribute("dictionary");
-    
 
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
-
-
 
 //   Modifications:
 
@@ -130,6 +127,8 @@ if (ontologiesToSearchOnStr == null) {
     ontologiesToSearchOnStr = DataUtils.getDefaultOntologiesToSearchOnStr();
     request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
 }
+
+
 
 String action = HTTPUtils.cleanXSS((String) request.getParameter("action"));
 if (action != null) {
@@ -171,14 +170,9 @@ if (action != null) {
     
     }
 }
-		
+	
 request.getSession().setAttribute("display_name_vec", display_name_vec);
-
-
 String warning_msg = (String) request.getSession().getAttribute("warning");
-
-       
-
 
 
 if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
@@ -283,56 +277,11 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
               <tr>
               <%
                 List ontology_list = DataUtils.getOntologyList();
-                if (ontology_list == null) 
-                    _logger.warn("??????????? ontology_list == null");
                 int num_vocabularies = ontology_list.size();
-
+                
 
                 if (display_name_vec == null) {
-                  display_name_vec = new Vector();
-                  
-
-                  for (int i = 0; i < ontology_list.size(); i++) {
-                    SelectItem item = (SelectItem) ontology_list.get(i);
-                    String value = (String) item.getValue();
-                    String label = (String) item.getLabel();
-                    
-                    String scheme = DataUtils.key2CodingSchemeName(value);
-                    String short_scheme_name = DataUtils.uri2CodingSchemeName(scheme);
-                    
-                    String version = DataUtils.key2CodingSchemeVersion(value);
-  
-                    //String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
-                    String display_name = DataUtils.getMetadataValue(short_scheme_name, version, "display_name");
-                    if (DataUtils.isNull(display_name)) {
-                        //if (display_name == null || display_name.compareTo("null") == 0)
-                        display_name = DataUtils.getLocalName(scheme);
-                    } 
- 
-                    String sort_category = DataUtils.getMetadataValue(scheme, version, "vocabulary_sort_category");
-                         //KLO, 11202013
-                     
-                    // KLO, 04242014 
-                    if (sort_category == null) {
-                        sort_category = "0";//String.valueOf(0);
-                    }
-		    
-		    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
-                    display_name_vec.add(info);
-                 }
-                  
- 
-		  for (int i = 0; i < display_name_vec.size(); i++) { 
-		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		     if (!DataUtils.isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
-		     
-		        Vector w = DataUtils.getNonProductionOntologies(display_name_vec, info.getCodingScheme());
-		        if (w.size() > 0) {
-				info.setHasMultipleVersions(true);
-				
-		        }
-		     }
-		  }
+                  display_name_vec = DataUtils.getSortedOntologies();
 
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
@@ -341,14 +290,14 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 			 info.setSelected(true);
 		     }		     
 		  }
- 
+
  		  for (int k = 0; k < display_name_vec.size(); k++) { 
  		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
  		     if (!info.isProduction()) {
  		          info.setSelected(false);
  		     }		     
 		  }
-		  
+	  
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
                 }
 		
@@ -718,6 +667,7 @@ if (hide_counter == 1) {
     request.getSession().removeAttribute("warning");
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().putValue("visited","true");
+    
 %>
 <br/>
 </body>

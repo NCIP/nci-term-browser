@@ -112,6 +112,9 @@ String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSe
 //String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 
 String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
+
+//System.out.println("value_set_entity_search_results.jsp checked_vocabularies: " + checked_vocabularies);
+
 Vector selected_vocabularies = null;
 
 
@@ -120,10 +123,9 @@ String selected_vocabularies_link = "";
 if (checked_vocabularies != null) {
     tooltip_str = checked_vocabularies + "</br>";
     selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
-    
-    selected_vocabularies_link = JSPUtils.getPopUpWindow(selected_vocabularies, "Selected Value Sets");
+    Vector selected_vocabularies_names = DataUtils.uri2CodingSchemeName(selected_vocabularies);
+    selected_vocabularies_link = JSPUtils.getPopUpWindow(selected_vocabularies_names, "Selected Value Sets");
 }
-
 
 //String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
 
@@ -256,14 +258,12 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
     String valueset_search_algorithm = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("valueset_search_algorithm")); ;
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";
-    if (valueset_search_algorithm == null || valueset_search_algorithm.compareTo("exactMatch") == 0)
-        check__e = "checked";
+    if (valueset_search_algorithm == null || valueset_search_algorithm.compareTo("contains") == 0)
+        check__c = "checked";
     else if (valueset_search_algorithm.compareTo("startsWith") == 0)
         check__s= "checked";
-    else if (valueset_search_algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0)
-        check__b= "checked";
-    else
-        check__c = "checked";
+    else 
+        check__e = "checked";
         
     String selectValueSetSearchOption = null;
     selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
@@ -272,31 +272,10 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
         selectValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption");
     }
                
-    if (DataUtils.isNullOrBlank(selectValueSetSearchOption)) {
-        selectValueSetSearchOption = "Name";
-    }
+     
 
-    if (selectValueSetSearchOption.compareTo("CodingScheme") == 0)
-        check_cs = "checked";
-    else if (selectValueSetSearchOption.compareTo("Code") == 0)
-        check_code = "checked";
-    else if (selectValueSetSearchOption.compareTo("Name") == 0)
-        check_name = "checked";        
-    else if (selectValueSetSearchOption.compareTo("Source") == 0)
-        check_src = "checked";
-        
- /*
-    String valueset_match_text = (String) request.getSession().getAttribute("matchText_VSD");
-    if (DataUtils.isNull(valueset_match_text)) {
-        valueset_match_text = (String) request.getSession().getAttribute("matchText");
-    }
-    if (DataUtils.isNull(valueset_match_text)) {
-        valueset_match_text = "";
-    } 
-*/
-
-String uri_vsd = null;
-String vsd_name = "null";
+    String uri_vsd = null;
+    String vsd_name = "null";
 
     String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
         .cleanXSS((String) request.getSession().getAttribute("matchText"));
@@ -314,19 +293,8 @@ String vsd_name = "null";
 
 
     request.setAttribute("globalNavHeight", "37"); 
-        
-    String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
-
-    String check_e = "", check_s = "" , check_c ="";
-    if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
-      check_e = "checked";
-    else if (algorithm.compareTo("startsWith") == 0)
-      check_s= "checked";
-    else
-      check_c = "checked";
       
-      
-        String searchTarget = (String) request.getSession().getAttribute("searchTarget");
+    String searchTarget = selectValueSetSearchOption;
         
         String check_n = "";
         String check_p = "";
@@ -334,13 +302,14 @@ String vsd_name = "null";
         
     if (DataUtils.isNullOrBlank(searchTarget)) {
         check_n = "checked";
-    } else if (searchTarget.compareTo("codes") == 0) {
+    } else if (searchTarget.compareTo("Code") == 0) {
         check_cd = "checked";
-    } else if (searchTarget.compareTo("names") == 0) {
+    } else if (searchTarget.compareTo("Name") == 0) {
         check_n = "checked";
-    } else if (searchTarget.compareTo("properties") == 0) {
+    } 
+    /*else if (searchTarget.compareTo("properties") == 0) {
         check_p = "checked";
-    }        
+    }*/        
 
   
 %>
@@ -373,13 +342,14 @@ String vsd_name = "null";
           <div class="searchbox-top"><img src="/ncitbrowser/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
           <div class="searchbox">
 
-
+<!--
 <h:form id="valueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">      
+-->
 
+<form id="valueSetSearchForm" name="valueSetSearchForm" method="post" action="<%= request.getContextPath() %>/ajax?action=search_value_set" class="search-form-main-area" enctype="application/x-www-form-urlencoded;charset=UTF-8">
 
 <input type="hidden" name="valueSetSearchForm" value="valueSetSearchForm" />
 <input type="hidden" name="view" value="1" />
-            <input type="hidden" id="checked_vocabularies" name="checked_vocabularies" value="" />
             <input type="hidden" id="partial_checked_vocabularies" name="partial_checked_vocabularies" value="" />
             <input type="hidden" id="value_set_home" name="value_set_home" value="true" />
             <input type="hidden" name="vsd_uri" value="null" />
@@ -408,10 +378,10 @@ String vsd_name = "null";
 
         <tr valign="top" align="left">
         <td align="left" class="textbody">
-                     <input type="radio" name="valueset_search_algorithm" value="contains" alt="Contains" checked tabindex="3"  onclick="onVSAlgorithmChanged();">Contains
-                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" alt="Exact Match"  tabindex="3">Exact Match&nbsp;
-                     <input type="radio" name="valueset_search_algorithm" value="startsWith" alt="Begins With"  tabindex="3"  onclick="onVSAlgorithmChanged();">Begins With&nbsp;
-        </td>
+                     <input type="radio" name="valueset_search_algorithm" value="contains"   <%=check__c%> alt="Contains" checked tabindex="3"  onclick="onVSAlgorithmChanged();">Contains
+                     <input type="radio" name="valueset_search_algorithm" value="exactMatch" <%=check__e%> alt="Exact Match"  tabindex="3">Exact Match&nbsp;
+                     <input type="radio" name="valueset_search_algorithm" value="startsWith" <%=check__s%> alt="Begins With"  tabindex="3"  onclick="onVSAlgorithmChanged();">Begins With&nbsp;
+        </td>  
         </tr>
 
         <tr align="left">
@@ -419,8 +389,8 @@ String vsd_name = "null";
         </tr>
         <tr valign="top" align="left">
           <td align="left" class="textbody">
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" checked alt="Name" checked tabindex="4"  >Name&nbsp;
-                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code"  alt="Code" tabindex="4" onclick="onVSCodeButtonPressed();">Code&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Name" <%=check_n%>  alt="Name" checked tabindex="4"  >Name&nbsp;
+                <input type="radio" id="selectValueSetSearchOption" name="selectValueSetSearchOption" value="Code" <%=check_cd%> alt="Code" tabindex="4" onclick="onVSCodeButtonPressed();">Code&nbsp;
           </td>
         </tr>
       </table>
@@ -429,6 +399,11 @@ String vsd_name = "null";
 </table>
                 <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
                 <input type="hidden" id="view" name="view" value="source" />
+
+		<input type="hidden" name="checked_vocabularies" id="checked_vocabularies" value="<%=checked_vocabularies%>">
+		<input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
+ 
+                
 </h:form>
 
           </div> <!-- searchbox -->
@@ -478,7 +453,8 @@ String vsd_name = "null";
           <table>
 
 
- <h:form id="valueSetSearchResultsForm" styleClass="search-form" acceptcharset="UTF-8">            
+ <h:form id="valueSetSearchResultsForm" styleClass="search-form" acceptcharset="UTF-8">  
+ 
             <tr class="textbody"><td>
                 <div id="message" class="textbody">
                 
@@ -502,9 +478,7 @@ String vsd_name = "null";
 			      <b>Results <%=istart_str%>-<%=iend_str%> of&nbsp;<%=match_size%> for: <%=matchText%>&nbsp;from</b>&nbsp;
 
 <%=selected_vocabularies_link%>
-<!--
-<a href="#" onmouseover="Tip('<%=tooltip_str%>')" onmouseout="UnTip()">selected value sets</a>.
--->
+
 			    </td>
 			  </tr>                   
                    </table>  
@@ -568,11 +542,6 @@ for (int i=0; i<list.size(); i++) {
 	   }           
            hmap.put(name + "|" + entity_cs, entity_cs_version);
       }
-      /*
-      if (DataUtils.isNull(entity_cs_version)) {
-           entity_cs_version = "";
-      }
-      */
       
       String cs_name_and_version = vocabulary_name + " (" +  entity_cs_version + ")";
 
@@ -629,8 +598,7 @@ for (int i=0; i<list.size(); i++) {
 
           <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
           <input type="hidden" name="view" id="view" value="<%=VSD_view%>">
-          <input type="hidden" name="view" id="nav_type" value="valuesets">
-          
+          <input type="hidden" name="checked_vocabularies" id="checked_vocabularies" value="<%=checked_vocabularies%>">
           <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
           
 </h:form>

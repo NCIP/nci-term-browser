@@ -188,14 +188,12 @@ public class ViewInHierarchyUtils {
     public static String getNamespaceByCode(String codingSchemeName, String vers, String code) {
         try {
 			if (code == null) {
-				//System.out.println("Input error in DataUtils.getNamespaceByCode -- code is null.");
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
 
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
-                //System.out.println("lbSvc == null???");
                 return null;
             }
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -215,7 +213,6 @@ public class ViewInHierarchyUtils {
 				}
 
                 if (cns == null) {
-					//System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
 					return null;
 				}
 
@@ -228,7 +225,6 @@ public class ViewInHierarchyUtils {
 				}
 
                 if (matches == null) {
-                    //System.out.println("Concept not found.");
                     return null;
                 }
                 int count = matches.getResolvedConceptReferenceCount();
@@ -274,7 +270,6 @@ public class ViewInHierarchyUtils {
                         RemoteServerUtil.createLexBIGService());
 
             rt_1 = "" + (System.currentTimeMillis() - ms);
-			//System.out.println("Setup TreeService run time (ms): " + rt_1);
 			ms = System.currentTimeMillis();
 
             CodingSchemeVersionOrTag csvt = null;
@@ -285,11 +280,9 @@ public class ViewInHierarchyUtils {
                 namespace = getNamespaceByCode(codingScheme, version, code);
 			}
 
-			System.out.println("service.getTree code: " + code + " namespace: " + namespace);
             LexEvsTree tree = service.getTree(codingScheme, csvt, code, namespace);
 
             rt_2 = "" + (System.currentTimeMillis() - ms);
-            //System.out.println("TreeService.getTree  run time (ms): " + rt_2);
             ms = System.currentTimeMillis();
 
             LexEvsTreeNode focusNode = tree.getCurrentFocus();
@@ -305,16 +298,13 @@ public class ViewInHierarchyUtils {
                         .buildEvsTreePathFromRootTree(focusNode);
 
             rt_3 = "" + (System.currentTimeMillis() - ms);
-            //System.out.println("TreeService.buildEvsTreePathFromRootTree  run time (ms): " + rt_3);
             ms = System.currentTimeMillis();
             LexEvsTreeNode root = null;
             printTree(out, "", code, root, "root", listEvsTreeNode);
 
             rt_4 = "" + (System.currentTimeMillis() - ms);
-			//System.out.println("printTree run time (ms): " + rt_4);
 
             rt = "" + (System.currentTimeMillis() - ms_0);
-			//System.out.println("Total run time (ms): " + rt);
 
 
         } catch (Exception e) {

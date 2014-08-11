@@ -47,14 +47,12 @@ if (vsdUri != null && vsdUri.compareTo("null") != 0 && vsdUri.indexOf("|") != -1
 
 <div class="bannerarea_960">
     <div class="banner">
-    <!--
-	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/pages/value_set_search_results.jsf?vsd_uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
-     -->
 	    <a class="vocabularynamebanner" href="<%=request.getContextPath()%>/ajax?action=create_src_vs_tree&vsd_uri=<%=HTTPUtils.cleanXSS(vsdUri)%>">
      
 	<div class="vocabularynamebanner">
 	
 <%
+if (vsd_name == null) vsd_name = "Not specified";
 if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
 %>
 	
@@ -88,7 +86,7 @@ if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
     <div class="search-globalnav_960">
         <!-- Search box -->
         <div class="searchbox-top"><img src="<%=basePath%>/images/searchbox-top.gif" width="352" height="2" alt="SearchBox Top" /></div>
-        <div class="searchbox"><%@ include file="/pages/templates/searchForm-resolvedvalueset.jsp" %></div>
+        <div class="searchbox"><%@ include file="/pages/templates/searchForm-downloadedvalueset.jsp" %></div>
         <div class="searchbox-bottom"><img src="<%=basePath%>/images/searchbox-bottom.gif" width="352" height="2" alt="SearchBox Bottom" /></div>
         <!-- end Search box -->
         <!-- Global Navigation -->

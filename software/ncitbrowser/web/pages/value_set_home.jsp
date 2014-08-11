@@ -500,7 +500,7 @@ var tree;
                        %>  
                       
                       <td class="dataCellText" align="right">
-                        <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
+                        <h:commandButton id="Values" value="Values" action="#{valueSetBean.downloadValueSetAction}"
                           onclick="javascript:cursor_wait();"
                           image="#{valueSetSearch_requestContextPath}/images/values.gif"
                           alt="Values"

@@ -4,6 +4,7 @@ import org.json.*;
 
 import gov.nih.nci.evs.browser.utils.*;
 import gov.nih.nci.evs.browser.common.*;
+import org.LexGrid.valueSets.ValueSetDefinition;
 
 import java.io.*;
 import java.util.*;
@@ -243,6 +244,11 @@ if (action.compareTo("values") == 0) {
 	return;
 }
 
+if (action.compareTo("download") == 0) {
+	downloadValueSetAction(request, response);
+	return;
+}
+
 if (action.compareTo("versions") == 0) {
 	selectCSVersionAction(request, response);
 	return;
@@ -257,7 +263,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 
         String node_id = HTTPUtils.cleanXSS(request.getParameter("ontology_node_id"));// DataConstants.ONTOLOGY_NODE_ID);
         String ns = HTTPUtils.cleanXSS(request.getParameter("ns"));// DataConstants.ONTOLOGY_NODE_ID);
-        System.out.println("Namespace: " + ns);
 
         String ontology_display_name =
             HTTPUtils.cleanXSS(request.getParameter("ontology_display_name"));// DataConstants.ONTOLOGY_DISPLAY_NAME);
@@ -355,6 +360,9 @@ if (action.compareTo("xmldefinitions") == 0) {
             value_set_home(request, response);
         } else if (action.equals("search_value_set")) {
             search_value_set(request, response);
+        } else if (action.equals("search_downloaded_value_set")) {
+            search_downloaded_value_set(request, response);
+
         } else if (action.equals("create_src_vs_tree")) {
 			//KLO 031214
 			request.getSession().setAttribute("nav_type", "valuesets");
@@ -936,36 +944,6 @@ if (action.compareTo("xmldefinitions") == 0) {
       println(out, "    }");
       println(out, "");
 
-/*
-      println(out, "    function loadNodeData(node, fnLoadComplete) {");
-      println(out, "      var id = node.data.id;");
-      println(out, "");
-      println(out, "      var responseSuccess = function(o)");
-      println(out, "      {");
-      println(out, "        var path;");
-      println(out, "        var dirs;");
-      println(out, "        var files;");
-      println(out, "        var respTxt = o.responseText;");
-      println(out, "        var respObj = eval('(' + respTxt + ')');");
-      println(out, "        var fileNum = 0;");
-      println(out, "        var categoryNum = 0;");
-      println(out, "        if ( typeof(respObj.nodes) != \"undefined\") {");
-      println(out, "          for (var i=0; i < respObj.nodes.length; i++) {");
-      println(out, "            var name = respObj.nodes[i].ontology_node_name;");
-      println(out, "            var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.nodes[i].ontology_node_id + \"');\";");
-      println(out, "            var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, href:nodeDetails };");
-      println(out, "            var newNode = new YAHOO.widget.TextNode(newNodeData, node, false);");
-      println(out, "            if (respObj.nodes[i].ontology_node_child_count > 0) {");
-      println(out, "              newNode.setDynamicLoad(loadNodeData);");
-      println(out, "            }");
-      println(out, "          }");
-      println(out, "        }");
-      println(out, "        tree.draw();");
-      println(out, "        fnLoadComplete();");
-      println(out, "      }");
-*/
-
-
       out.println("    function loadNodeData(node, fnLoadComplete) {");
       out.println("      var id = node.data.id;");
       out.println("");
@@ -1026,10 +1004,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 
       println(out, "      var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
       println(out, "      var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-
-      //println(out, "      var ontology_display_name = " + "\"" + ontology_display_name + "\";");
-      //println(out, "      var ontology_version = " + "\"" + ontology_version + "\";");
-
       println(out, "      var cObj = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=expand_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);");
 
       println(out, "    }");
@@ -1048,13 +1022,6 @@ if (action.compareTo("xmldefinitions") == 0) {
       println(out, "");
 
       println(out, "      var root = tree.getRoot();");
-
-
-System.out.println("AjaxServlet ontology_display_name: " + ontology_display_name);
-System.out.println("AjaxServlet ontology_version: " + ontology_version);
-System.out.println("AjaxServlet node_id: " + node_id);
-System.out.println("AjaxServlet namespace: " + namespace);
-
 
       new ViewInHierarchyUtils().printTree(out, ontology_display_name, ontology_version, node_id, namespace);
       println(out, "             showPartialHierarchy();");
@@ -1227,11 +1194,11 @@ System.out.println("AjaxServlet namespace: " + namespace);
     }
 
 
-    public static void create_src_vs_tree(HttpServletRequest request, HttpServletResponse response) {
+    public void create_src_vs_tree(HttpServletRequest request, HttpServletResponse response) {
 		create_vs_tree(request, response, Constants.STANDARD_VIEW);
 	}
 
-    public static void create_cs_vs_tree(HttpServletRequest request, HttpServletResponse response) {
+    public void create_cs_vs_tree(HttpServletRequest request, HttpServletResponse response) {
 		String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 		if (!DataUtils.isNull(dictionary)) {
 			String version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
@@ -1242,7 +1209,7 @@ System.out.println("AjaxServlet namespace: " + namespace);
 	}
 
 
-    public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
+    public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
 		Object obj = request.getParameter("vsd_uri");
 
 		String vsd_uri = null;
@@ -1261,14 +1228,28 @@ System.out.println("AjaxServlet namespace: " + namespace);
 //////////////////////////
 
 
-    public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String vsd_uri) {
+    public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String vsd_uri) {
+        SimpleTreeUtils stu = new SimpleTreeUtils();
+        stu.setUrl(request.getContextPath() + "ajax?action=create_src_vs_tree");
 
 		String nav_type = HTTPUtils.cleanXSS((String) request.getParameter("nav_type"));
 		request.getSession().setAttribute("vs_nav_type", "valuesets");
 
-  request.getSession().removeAttribute("dictionary");
-  request.getSession().removeAttribute("version");
+	    request.getSession().removeAttribute("dictionary");
+	    request.getSession().removeAttribute("version");
 
+
+String checked_valuesets = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
+if (DataUtils.isNullOrBlank(checked_valuesets)) {
+	checked_valuesets = find_checked_value_sets(request);
+}
+Vector selected_valuesets = null;
+if (!DataUtils.isNullOrBlank(checked_valuesets)) {
+	request.getSession().setAttribute("checked_vocabularies", checked_valuesets);
+	selected_valuesets = DataUtils.parseData(checked_valuesets, ",");
+
+	stu.setSelectedNodes(selected_valuesets);
+}
 
 		String root_vsd_uri = vsd_uri;
 		String vsd_name = null;
@@ -1297,14 +1278,16 @@ System.out.println("AjaxServlet namespace: " + namespace);
       response.setContentType("text/html");
       PrintWriter out = null;
 
-	  String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-	  String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
       try {
       	  out = response.getWriter();
       } catch (Exception ex) {
 		  ex.printStackTrace();
 		  return;
 	  }
+
+	  String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+	  String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
+
 	  String message = (String) request.getSession().getAttribute("message");
       out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
       out.println("<html xmlns:c=\"http://java.sun.com/jsp/jstl/core\">");
@@ -1338,32 +1321,14 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css\" />");
       out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css\" />");
       out.println("");
-      out.println("<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js\"></script>");
-      //Before(GF31982): out.println("<script type=\"text/javascript\" src=\"http://yui.yahooapis.com/2.9.0/build/treeview/treeview-min.js\"></script>");
-      out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/yui/treeview-min.js\" ></script>"); //GF31982
-      out.println("");
-      out.println("");
-      out.println("<!-- Dependency -->");
-      out.println("<script src=\"http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js\"></script>");
-      out.println("");
-      out.println("<!-- Source file -->");
-      out.println("<!--");
-      out.println("	If you require only basic HTTP transaction support, use the");
-      out.println("	connection_core.js file.");
-      out.println("-->");
-      out.println("<script src=\"http://yui.yahooapis.com/2.9.0/build/connection/connection_core-min.js\"></script>");
-      out.println("");
-      out.println("<!--");
-      out.println("	Use the full connection.js if you require the following features:");
-      out.println("	- Form serialization.");
-      out.println("	- File Upload using the iframe transport.");
-      out.println("	- Cross-domain(XDR) transactions.");
-      out.println("-->");
-      out.println("<script src=\"http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js\"></script>");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("<!--begin custom header content for this example-->");
+
+
+
+	  out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/event_simulate.js\"></script>");
+	  out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
+
+
+
       out.println("<!--Additional custom style rules for this example:-->");
       out.println("<style type=\"text/css\">");
       out.println("");
@@ -1391,8 +1356,8 @@ if (DataUtils.isNull(vsd_uri)) {
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/search.js\"></script>");
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/dropdown.js\"></script>");
 
-
       out.println("");
+
       out.println("  <script type=\"text/javascript\">");
       out.println("");
       out.println("    function refresh() {");
@@ -1407,258 +1372,19 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("");
       out.println("");
       out.println("      window.location.href=\"/ncitbrowser/pages/value_set_source_view.jsf?refresh=1\""); //Before(GF31982)
-      //GF31982(Not Sure): out.println("      window.location.href=\"/ncitbrowser/ajax?action=create_src_vs_tree?refresh=1\"");
       out.println("          + \"&nav_type=valuesets\" + \"&opt=\"+ selectValueSetSearchOption;");
       out.println("");
       out.println("    }");
       out.println("  </script>");
       out.println("");
-      out.println("  <script language=\"JavaScript\">");
-      out.println("");
-      out.println("    var tree;");
-      out.println("    var nodeIndex;");
-      out.println("    var nodes = [];");
-      out.println("");
-      out.println("    function load(url,target) {");
-      out.println("      if (target != '')");
-      out.println("        target.window.location.href = url;");
-      out.println("      else");
-      out.println("        window.location.href = url;");
-      out.println("    }");
-      out.println("");
-      out.println("    function init() {");
-      out.println("       //initTree();");
-      out.println("    }");
-      out.println("");
-      out.println("	//handler for expanding all nodes");
-      out.println("	YAHOO.util.Event.on(\"expand_all\", \"click\", function(e) {");
-      out.println("	     //expandEntireTree();");
-      out.println("");
-      out.println("	     tree.expandAll();");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("	});");
-      out.println("");
-      out.println("	//handler for collapsing all nodes");
-      out.println("	YAHOO.util.Event.on(\"collapse_all\", \"click\", function(e) {");
-      out.println("		tree.collapseAll();");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("	});");
-      out.println("");
-      out.println("	//handler for checking all nodes");
-      out.println("	YAHOO.util.Event.on(\"check_all\", \"click\", function(e) {");
-      out.println("		check_all();");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("	});");
-      out.println("");
-      out.println("	//handler for unchecking all nodes");
-      out.println("	YAHOO.util.Event.on(\"uncheck_all\", \"click\", function(e) {");
-      out.println("		uncheck_all();");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("	});");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("	YAHOO.util.Event.on(\"getchecked\", \"click\", function(e) {");
-      out.println("               //alert(\"Checked nodes: \" + YAHOO.lang.dump(getCheckedNodes()), \"info\", \"example\");");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("");
-      out.println("	});");
-      out.println("");
-      out.println("");
-      out.println("    function addTreeNode(rootNode, nodeInfo) {");
-      out.println("      var newNodeDetails = \"javascript:onClickTreeNode('\" + nodeInfo.ontology_node_id + \"');\";");
-      out.println("");
-      out.println("      if (nodeInfo.ontology_node_id.indexOf(\"TVS_\") >= 0) {");
-      out.println("          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id };");
-      out.println("      } else {");
-      out.println("          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };");
-      out.println("      }");
-      out.println("");
-      out.println("      var newNode = new YAHOO.widget.TaskNode(newNodeData, rootNode, false);");
-      out.println("      if (nodeInfo.ontology_node_child_count > 0) {");
-      out.println("        newNode.setDynamicLoad(loadNodeData);");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("    function buildTree(ontology_node_id, ontology_display_name) {");
-      out.println("      var handleBuildTreeSuccess = function(o) {");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        if ( typeof(respObj) != \"undefined\") {");
-      out.println("          if ( typeof(respObj.root_nodes) != \"undefined\") {");
-      out.println("            var root = tree.getRoot();");
-      out.println("            if (respObj.root_nodes.length == 0) {");
-      out.println("              //showEmptyRoot();");
-      out.println("            }");
-      out.println("            else {");
-      out.println("              for (var i=0; i < respObj.root_nodes.length; i++) {");
-      out.println("                var nodeInfo = respObj.root_nodes[i];");
-      out.println("                var expand = false;");
-      out.println("                //addTreeNode(root, nodeInfo, expand);");
-      out.println("");
-      out.println("                addTreeNode(root, nodeInfo);");
-      out.println("              }");
-      out.println("            }");
-      out.println("");
-      out.println("            tree.draw();");
-      out.println("          }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      var handleBuildTreeFailure = function(o) {");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var buildTreeCallback =");
-      out.println("      {");
-      out.println("        success:handleBuildTreeSuccess,");
-      out.println("        failure:handleBuildTreeFailure");
-      out.println("      };");
-      out.println("");
-      out.println("      if (ontology_display_name!='') {");
-      out.println("        var ontology_source = null;");
-      out.println("        var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("        var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=build_src_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("    function resetTree(ontology_node_id, ontology_display_name) {");
-      out.println("");
-      out.println("      var handleResetTreeSuccess = function(o) {");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        if ( typeof(respObj) != \"undefined\") {");
-      out.println("          if ( typeof(respObj.root_node) != \"undefined\") {");
-      out.println("            var root = tree.getRoot();");
-      out.println("            var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.root_node.ontology_node_id + \"');\";");
-      out.println("            var rootNodeData = { label:respObj.root_node.ontology_node_name, id:respObj.root_node.ontology_node_id, href:nodeDetails };");
-      out.println("            var expand = false;");
-      out.println("            if (respObj.root_node.ontology_node_child_count > 0) {");
-      out.println("              expand = true;");
-      out.println("            }");
-      out.println("            var ontRoot = new YAHOO.widget.TaskNode(rootNodeData, root, expand);");
-      out.println("");
-      out.println("            if ( typeof(respObj.child_nodes) != \"undefined\") {");
-      out.println("              for (var i=0; i < respObj.child_nodes.length; i++) {");
-      out.println("                var nodeInfo = respObj.child_nodes[i];");
-      out.println("                addTreeNode(ontRoot, nodeInfo);");
-      out.println("              }");
-      out.println("            }");
-      out.println("            tree.draw();");
-      out.println("          }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      var handleResetTreeFailure = function(o) {");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var resetTreeCallback =");
-      out.println("      {");
-      out.println("        success:handleResetTreeSuccess,");
-      out.println("        failure:handleResetTreeFailure");
-      out.println("      };");
-      out.println("      if (ontology_node_id!= '') {");
-      out.println("        var ontology_source = null;");
-      out.println("        var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("        var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=reset_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name + '&version='+ ontology_version +'&ontology_source='+ontology_source,resetTreeCallback);");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("    function onClickTreeNode(ontology_node_id) {");
-      out.println("        //alert(\"onClickTreeNode \" + ontology_node_id);");
-      out.println("        window.location = '/ncitbrowser/pages/value_set_treenode_redirect.jsf?ontology_node_id=' + ontology_node_id;");
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("    function onClickViewEntireOntology(ontology_display_name) {");
-      out.println("      var ontology_display_name = document.pg_form.ontology_display_name.value;");
-      out.println("      tree = new YAHOO.widget.TreeView(\"treecontainer\");");
-
-
-      out.println("      tree.draw();");
-
-
-      out.println("    }");
-      out.println("");
-      out.println("    function initTree() {");
-      out.println("");
-      out.println("        tree = new YAHOO.widget.TreeView(\"treecontainer\");");
-      out.println("	tree.setNodesProperty('propagateHighlightUp',true);");
-      out.println("	tree.setNodesProperty('propagateHighlightDown',true);");
-      out.println("	tree.subscribe('keydown',tree._onKeyDownEvent);");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("		    tree.subscribe(\"expand\", function(node) {");
-      out.println("");
-      out.println("			YAHOO.util.UserAction.keydown(document.body, { keyCode: 39 });");
-      out.println("");
-      out.println("		    });");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("		    tree.subscribe(\"collapse\", function(node) {");
-      out.println("			//alert(\"Collapsing \" + node.label );");
-      out.println("");
-      out.println("			YAHOO.util.UserAction.keydown(document.body, { keyCode: 109 });");
-      out.println("		    });");
-      out.println("");
-      out.println("		    // By default, trees with TextNodes will fire an event for when the label is clicked:");
-      out.println("		    tree.subscribe(\"checkClick\", function(node) {");
-      out.println("			//alert(node.data.myNodeId + \" label was checked\");");
-      out.println("		    });");
-      out.println("");
-      out.println("");
-
-      println(out, "            var root = tree.getRoot();");
 
 
 HashMap value_set_tree_hmap = null;
 Boolean value_set_tab = Boolean.TRUE;
 
-TreeItem root = null;
-
-if (DataUtils.isNull(vsd_uri)) {
-	/*
-	if (view == Constants.STANDARD_VIEW) {
-		value_set_tree_hmap = DataUtils.getSourceValueSetTree();
-	} else if (view == Constants.TERMINOLOGY_VIEW){
-		value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
-	}
-	 if (value_set_tree_hmap != null) {
-		 root = (TreeItem) value_set_tree_hmap.get("<Root>");
-		 new ValueSetUtils().printTree(out, root, view, value_set_tab);
-	 }
-	 */
-
-	if (view == Constants.STANDARD_VIEW) {
-		out.println(DataUtils.getSourceValueSetTreeStringBuffer().toString());
-	} else if (view == Constants.TERMINOLOGY_VIEW){
-		out.println(DataUtils.getCodingSchemeValueSetTreeStringBuffer().toString());
-	}
-
-} else {
-	value_set_tab = Boolean.FALSE;
-	if (view == Constants.STANDARD_VIEW) {
-		value_set_tree_hmap = DataUtils.getSourceValueSetTree(vsd_uri);
-	} else {
-		value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree(vsd_uri);
-	}
-
-	 if (value_set_tree_hmap != null) {
-		 root = (TreeItem) value_set_tree_hmap.get("<Root>");
-		 new ValueSetUtils().printTree(out, root, view, value_set_tab);
-	 }
-
-}
-
-
-
 
  String contextPath = request.getContextPath();
-  String view_str = Integer.valueOf(view).toString();
+ String view_str = Integer.valueOf(view).toString();
 
 //[#31914] Search option and algorithm in value set search box are not preserved in session.
 //String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
@@ -1739,305 +1465,6 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
 	option_code = "";
 }
 
-out.println("");
-//if (message == null) {
-if (message == null && DataUtils.isNull(vsd_uri)) {
-  out.println("		 tree.collapseAll();");
-}
-
-if (DataUtils.isNull(vsd_uri)) {
-      out.println("      initializeNodeCheckState();");
-} else if (DataUtils.isNull(message)) {
-	  out.println("      initializeNodeCheckState();");
-} else if (!message.startsWith("No value set definition")) {
-	  out.println("      initializeNodeCheckState();");
-}
-
-      out.println("      tree.draw();");
-
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("    function onCheckClick(node) {");
-      out.println("        YAHOO.log(node.label + \" check was clicked, new state: \" + node.checkState, \"info\", \"example\");");
-      out.println("    }");
-      out.println("");
-      out.println("    function check_all() {");
-      out.println("        var topNodes = tree.getRoot().children;");
-      out.println("        for(var i=0; i<topNodes.length; ++i) {");
-      out.println("            topNodes[i].check();");
-      out.println("        }");
-      out.println("    }");
-      out.println("");
-      out.println("    function uncheck_all() {");
-      out.println("        var topNodes = tree.getRoot().children;");
-      out.println("        for(var i=0; i<topNodes.length; ++i) {");
-      out.println("            topNodes[i].uncheck();");
-      out.println("        }");
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("    function expand_all() {");
-      out.println("        //alert(\"expand_all\");");
-      out.println("        var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-      out.println("        onClickViewEntireOntology(ontology_display_name);");
-      out.println("    }");
-      out.println("");
-      out.println("");
-
-   // 0=unchecked, 1=some children checked, 2=all children checked
-
-      out.println("    function getCheckedVocabularies(nodes) {");
-      out.println("       getCheckedNodes(nodes);");
-      out.println("       getPartialCheckedNodes(nodes);");
-      out.println("    }");
-
-      writeInitialize(out);
-      initializeNodeCheckState(out, value_set_tab);
-
-      out.println("   // Gets the labels of all of the fully checked nodes");
-      out.println("   // Could be updated to only return checked leaf nodes by evaluating");
-      out.println("   // the children collection first.");
-
-      out.println("    function getCheckedNodes(nodes) {");
-      out.println("        nodes = nodes || tree.getRoot().children;");
-      out.println("        var checkedNodes = [];");
-      out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
-      out.println("            var n = nodes[i];");
-      out.println("            if (n.checkState == 2) {");
-      out.println("                checkedNodes.push(n.label); // just using label for simplicity");
-      out.println("            }");
-      out.println("		       if (n.hasChildren()) {");
-      out.println("			      checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));");
-      out.println("		       }");
-      out.println("        }");
-      //out.println("		   checkedNodes = checkedNodes.concat(\",\");");
-      out.println("        var checked_vocabularies = document.forms[\"valueSetSearchForm\"].checked_vocabularies;");
-      out.println("        checked_vocabularies.value = checkedNodes;");
-      out.println("        return checkedNodes;");
-      out.println("    }");
-
-
-      out.println("    function getPartialCheckedNodes(nodes) {");
-      out.println("        nodes = nodes || tree.getRoot().children;");
-      out.println("        var checkedNodes = [];");
-      out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
-      out.println("            var n = nodes[i];");
-      out.println("            if (n.checkState == 1) {");
-      out.println("                checkedNodes.push(n.label); // just using label for simplicity");
-      out.println("            }");
-      out.println("		       if (n.hasChildren()) {");
-      out.println("			      checkedNodes = checkedNodes.concat(getPartialCheckedNodes(n.children));");
-      out.println("		       }");
-      out.println("        }");
-      //out.println("		   checkedNodes = checkedNodes.concat(\",\");");
-      out.println("        var partial_checked_vocabularies = document.forms[\"valueSetSearchForm\"].partial_checked_vocabularies;");
-      out.println("        partial_checked_vocabularies.value = checkedNodes;");
-      out.println("        return checkedNodes;");
-      out.println("    }");
-
-      out.println("    function loadNodeData(node, fnLoadComplete) {");
-      out.println("      var id = node.data.id;");
-      out.println("");
-      out.println("      var responseSuccess = function(o)");
-      out.println("      {");
-      out.println("        var path;");
-      out.println("        var dirs;");
-      out.println("        var files;");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        var fileNum = 0;");
-      out.println("        var categoryNum = 0;");
-      out.println("        if ( typeof(respObj.nodes) != \"undefined\") {");
-      out.println("          for (var i=0; i < respObj.nodes.length; i++) {");
-      out.println("            var name = respObj.nodes[i].ontology_node_name;");
-      out.println("            var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.nodes[i].ontology_node_id + \"');\";");
-      out.println("            var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, href:nodeDetails };");
-      out.println("            var newNode = new YAHOO.widget.TaskNode(newNodeData, node, false);");
-      out.println("            if (respObj.nodes[i].ontology_node_child_count > 0) {");
-      out.println("              newNode.setDynamicLoad(loadNodeData);");
-      out.println("            }");
-      out.println("          }");
-      out.println("        }");
-      out.println("        tree.draw();");
-      out.println("        fnLoadComplete();");
-      out.println("      }");
-      out.println("");
-      out.println("      var responseFailure = function(o){");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var callback =");
-      out.println("      {");
-      out.println("        success:responseSuccess,");
-      out.println("        failure:responseFailure");
-      out.println("      };");
-      out.println("");
-      out.println("      var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-      out.println("      var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("      var cObj = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=expand_src_vs_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);");
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("    function searchTree(ontology_node_id, ontology_display_name) {");
-      out.println("");
-      out.println("        var handleBuildTreeSuccess = function(o) {");
-      out.println("");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        if ( typeof(respObj) != \"undefined\") {");
-      out.println("");
-      out.println("          if ( typeof(respObj.dummy_root_nodes) != \"undefined\") {");
-      out.println("              showNodeNotFound(ontology_node_id);");
-      out.println("          }");
-      out.println("");
-      out.println("          else if ( typeof(respObj.root_nodes) != \"undefined\") {");
-      out.println("            var root = tree.getRoot();");
-      out.println("            if (respObj.root_nodes.length == 0) {");
-      out.println("              //showEmptyRoot();");
-      out.println("            }");
-      out.println("            else {");
-      out.println("              showPartialHierarchy();");
-      out.println("              showConstructingTreeStatus();");
-      out.println("");
-      out.println("              for (var i=0; i < respObj.root_nodes.length; i++) {");
-      out.println("                var nodeInfo = respObj.root_nodes[i];");
-      out.println("                //var expand = false;");
-      out.println("                addTreeBranch(ontology_node_id, root, nodeInfo);");
-      out.println("              }");
-      out.println("            }");
-      out.println("          }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      var handleBuildTreeFailure = function(o) {");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var buildTreeCallback =");
-      out.println("      {");
-      out.println("        success:handleBuildTreeSuccess,");
-      out.println("        failure:handleBuildTreeFailure");
-      out.println("      };");
-      out.println("");
-      out.println("      if (ontology_display_name!='') {");
-      out.println("        var ontology_source = null;//document.pg_form.ontology_source.value;");
-      out.println("        var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("        var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=search_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);");
-      out.println("");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("");
-
-      out.println("");
-      out.println("    function expandEntireTree() {");
-      out.println("        tree = new YAHOO.widget.TreeView(\"treecontainer\");");
-      out.println("        //tree.draw();");
-      out.println("");
-      out.println("        var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-      out.println("        var ontology_node_id = document.forms[\"pg_form\"].ontology_node_id.value;");
-      out.println("");
-      out.println("        var handleBuildTreeSuccess = function(o) {");
-      out.println("");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        if ( typeof(respObj) != \"undefined\") {");
-      out.println("");
-      out.println("             if ( typeof(respObj.root_nodes) != \"undefined\") {");
-      out.println("");
-      out.println("                    //alert(respObj.root_nodes.length);");
-      out.println("");
-      out.println("                    var root = tree.getRoot();");
-      out.println("		    if (respObj.root_nodes.length == 0) {");
-      out.println("		      //showEmptyRoot();");
-      out.println("		    } else {");
-      out.println("		      for (var i=0; i < respObj.root_nodes.length; i++) {");
-      out.println("			 var nodeInfo = respObj.root_nodes[i];");
-      out.println("	                 //alert(\"calling addTreeBranch \");");
-      out.println("");
-      out.println("			 addTreeBranch(ontology_node_id, root, nodeInfo);");
-      out.println("		      }");
-      out.println("		    }");
-      out.println("              }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      var handleBuildTreeFailure = function(o) {");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var buildTreeCallback =");
-      out.println("      {");
-      out.println("        success:handleBuildTreeSuccess,");
-      out.println("        failure:handleBuildTreeFailure");
-      out.println("      };");
-      out.println("");
-      out.println("      if (ontology_display_name!='') {");
-      out.println("        var ontology_source = null;");
-      out.println("        var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("        var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=expand_entire_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);");
-      out.println("");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("    function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {");
-      out.println("      var newNodeDetails = \"javascript:onClickTreeNode('\" + nodeInfo.ontology_node_id + \"');\";");
-      out.println("");
-      out.println("      var newNodeData;");
-      out.println("      if (ontology_node_id.indexOf(\"TVS_\") >= 0) {");
-      out.println("          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id };");
-      out.println("      } else {");
-      out.println("          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };");
-      out.println("      }");
-      out.println("");
-      out.println("      var expand = false;");
-      out.println("      var childNodes = nodeInfo.children_nodes;");
-      out.println("");
-      out.println("      if (childNodes.length > 0) {");
-      out.println("          expand = true;");
-      out.println("      }");
-      out.println("      var newNode = new YAHOO.widget.TaskNode(newNodeData, rootNode, expand);");
-      out.println("      if (nodeInfo.ontology_node_id == ontology_node_id) {");
-      out.println("          newNode.labelStyle = \"ygtvlabel_highlight\";");
-      out.println("      }");
-      out.println("");
-      out.println("      if (nodeInfo.ontology_node_id == ontology_node_id) {");
-      out.println("         newNode.isLeaf = true;");
-      out.println("         if (nodeInfo.ontology_node_child_count > 0) {");
-      out.println("             newNode.isLeaf = false;");
-      out.println("             newNode.setDynamicLoad(loadNodeData);");
-      out.println("         } else {");
-      out.println("             tree.draw();");
-      out.println("         }");
-      out.println("");
-      out.println("      } else {");
-      out.println("          if (nodeInfo.ontology_node_id != ontology_node_id) {");
-      out.println("          if (nodeInfo.ontology_node_child_count == 0 && nodeInfo.ontology_node_id != ontology_node_id) {");
-      out.println("        newNode.isLeaf = true;");
-      out.println("          } else if (childNodes.length == 0) {");
-      out.println("        newNode.setDynamicLoad(loadNodeData);");
-      out.println("          }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      tree.draw();");
-      out.println("      for (var i=0; i < childNodes.length; i++) {");
-      out.println("         var childnodeInfo = childNodes[i];");
-      out.println("         addTreeBranch(ontology_node_id, newNode, childnodeInfo);");
-      out.println("      }");
-      out.println("    }");
-      out.println("    YAHOO.util.Event.addListener(window, \"load\", init);");
-      out.println("");
-      out.println("    YAHOO.util.Event.onDOMReady(initTree);");
-
-      out.println("");
-      out.println("");
-      out.println("  </script>");
       out.println("");
       out.println("</head>");
       out.println("");
@@ -2047,6 +1474,10 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
+
+	  out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/event_simulate.js\"></script>");
+	  out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
+
 
       out.println("  <!-- Begin Skip Top Navigation -->");
       out.println("  <a href=\"#evs-content\" class=\"hideLink\" accesskey=\"1\" title=\"Skip repetitive navigation links\">skip navigation links</A>");
@@ -2167,7 +1598,7 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("                    tabindex=\"1\"/>");
       out.println("");
       out.println("");
-      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search value sets containing matched concepts\" onclick=\"javascript:getCheckedVocabularies();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
+      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search value sets containing matched concepts\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
       out.println("");
       out.println("");
       out.println("    </td>");
@@ -2206,7 +1637,8 @@ if (DataUtils.isNull(vsd_uri)) {
       //out.println("");
 
       //out.println("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"j_id22:j_id23\" />");
-      out.println("</form>");
+//KLO 071514
+      //out.println("</form>");
 
       //addHiddenForm(out, checked_vocabularies, partial_checked_vocabularies);
 
@@ -2225,34 +1657,39 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("        Sources</a>");
       out.println("");
 
-
-
  String cart_size = (String) request.getSession().getAttribute("cart_size");
  if (!DataUtils.isNull(cart_size)) {
           out.write("|");
           out.write("                        <a href=\"");
           out.print(request.getContextPath());
-          out.write("/pages/cart.jsf\" tabindex=\"16\">Cart</a>\r\n");
+          out.write("/pages/cart.jsf\" tabindex=\"14\">Cart</a>\r\n");
  }
 
+/*
+if (!DataUtils.isNull(vsd_uri)) {
+		  out.write("|");
+		  out.write("&nbsp;");
+		  out.println("<a href=\"/ncitbrowser/ajax?action=download&vsd_uri=" + vsd_uri + "\" tabindex=\"15\" >Report</a>\r\n");
+}
+*/
 
 //KLO, 022612
 	  out.println(" \r\n");
 	  out.println("      ");
 	  out.print( VisitedConceptUtils.getDisplayLink(request, true) );
 	  out.println(" \r\n");
-
-// Visited concepts -- to be implemented.
-//      out.println("      | <A href=\"#\" onmouseover=\"Tip('<ul><li><a href=\'/ncitbrowser/ConceptReport.jsp?dictionary=NCI Thesaurus&version=11.09d&code=C44256\'>Ratio &#40;NCI Thesaurus 11.09d&#41;</a><br></li></ul>',WIDTH, 300, TITLE, 'Visited Concepts', SHADOW, true, FADEIN, 300, FADEOUT, 300, STICKY, 1, CLOSEBTN, true, CLICKCLOSE, true)\" onmouseout=UnTip() >Visited Concepts</A>");
-
       out.println("    </td>");
-      out.println("    <td align=\"right\" valign=\"bottom\">");
 
+
+
+
+      out.println("    <td align=\"right\" valign=\"bottom\">");
 	  out.println("      <a href=\"");
 	  out.print( request.getContextPath() );
 	  out.println("/pages/help.jsf\" tabindex=\"16\">Help</a>\r\n");
 	  out.println("    </td>\r\n");
 	  out.println("    <td width=\"7\"></td>\r\n");
+
 	  out.println("  </tr>\r\n");
 	  out.println("</table>");
 
@@ -2303,14 +1740,7 @@ if (DataUtils.isNull(vsd_uri)) {
       out.println("      <!-- Page content -->");
       out.println("      <div class=\"pagecontent\">");
       out.println("");
-/*
-      if (!DataUtils.isNull(message)) {
-          out.println("<p class=\"textbodyred\">");
-          out.print(message);
-          out.println("</p>");
-          //request.getSession().removeAttribute("message");
-      }
-*/
+
       if (!DataUtils.isNullOrBlank(message)) {
 		  out.println("\r\n");
 		  out.println("      <p class=\"textbodyred\">");
@@ -2354,17 +1784,21 @@ out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
       //out.println("&nbsp;");
       //out.println("                    </td></tr>");
 
-//(***)
+
       if (!DataUtils.isNull(vsd_uri)) {
 
 
 		  if (isValueSet) {
 			  out.println("            <tr class=\"textbody\">");
+
+/*
 			  out.println("                      <td>");
 			  out.println("                         <div class=\"texttitle-blue\">Welcome</div>");
 			  out.println("                      </td>");
-
 			  out.println("                      <td class=\"dataCellText\" align=\"right\">");
+
+//out.println("<a href=\"/ncitbrowser/ajax?action=download&vsd_uri=" + vsd_uri + "\">Report</a>");
+//out.println("&nbsp;&nbsp;&nbsp;&nbsp;");
 
 			  out.println("<a href=\"/ncitbrowser/ajax?action=values&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/values.gif\" alt=\"Values\" border=\"0\" tabindex=\"2\"></a>");
 			  out.println("&nbsp;");
@@ -2373,6 +1807,41 @@ out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
 			  out.println("<a href=\"/ncitbrowser/ajax?action=xmldefinitions&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/xmldefinitions.gif\" alt=\"XML Definition\" border=\"0\" tabindex=\"2\"></a>");
 
               out.println("                      </td>");
+*/
+
+      out.println("                      <td>");
+      out.println("                         <div class=\"texttitle-blue\">Welcome</div>");
+      out.println("                      </td>");
+      out.println("");
+      out.println("                      <td>");
+      out.println("<table>");
+      //out.println("<tr><td>Value Set Released Files (FTP Server)</td></tr>");
+      out.println("<tr><td>");
+
+      out.println("<a href=\"/ncitbrowser/ajax?action=download&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/released_file.gif\" alt=\"Value Set Released Files (FTP Server)\" border=\"0\" tabindex=\"2\"></a>");
+      out.println("</td>");
+      out.println("</tr>");
+      out.println("</table>");
+      out.println("                      </td>");
+      out.println("");
+      out.println("                      <td>");
+      out.println("<table>");
+      //out.println("<tr><td>CTS2 Value Sets (Online Term Server/Browser)</td></tr>");
+      out.println("<tr><td>");
+
+	  out.println("<a href=\"/ncitbrowser/ajax?action=values&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/values.gif\" alt=\"Values\" border=\"0\" tabindex=\"2\"></a>");
+	  out.println("&nbsp;");
+	  out.println("<a href=\"/ncitbrowser/ajax?action=versions&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/versions.gif\" alt=\"Versions\" border=\"0\" tabindex=\"2\"></a>");
+	  out.println("&nbsp;");
+	  out.println("<a href=\"/ncitbrowser/ajax?action=xmldefinitions&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/xmldefinitions.gif\" alt=\"XML Definition\" border=\"0\" tabindex=\"2\"></a>");
+
+      out.println("</td>");
+      out.println("</tr>");
+      out.println("</table>");
+      out.println("                      </td>");
+
+
+
               out.println("            </tr>");
 		  } else {
 			  out.println("            <tr class=\"textbody\">");
@@ -2418,6 +1887,9 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("                &nbsp;|");
       out.println("                Terminology View");
 }
+
+
+
       out.println("              </td>");
       out.println("");
       out.println("              <td align=\"right\">");
@@ -2443,27 +1915,62 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("</style>");
       out.println("");
       out.println("");
-      out.println("<div id=\"expandcontractdiv\">");
-      out.println("	<a id=\"expand_all\" href=\"#\" tabindex=\"101\" >Expand all</a>");
-      out.println("	<a id=\"collapse_all\" href=\"#\" tabindex=\"102\">Collapse all</a>");
-      out.println("	<a id=\"check_all\" href=\"#\" tabindex=\"103\">Check all</a>");
-      out.println("	<a id=\"uncheck_all\" href=\"#\" tabindex=\"104\">Uncheck all</a>");
-      out.println("</div>");
+
+
+      stu.printSelectAllOrNoneLinks(out);
+
+
       out.println("");
       out.println("");
       out.println("");
       out.println("          <!-- Tree content -->");
       out.println("");
-      out.println("          <div id=\"treecontainer\" class=\"ygtv-checkbox\"></div>");
+
+      out.println("<div>");
+
+stu.printFormHeader(out);
+
+TreeItem root = null;
+if (DataUtils.isNull(vsd_uri)) {
+	if (view == Constants.STANDARD_VIEW) {
+		if (DataUtils.isNullOrEmpty(selected_valuesets)) {
+			out.println(DataUtils.getSourceValueSetTreeStringBuffer().toString());
+		} else {
+			value_set_tree_hmap = DataUtils.getSourceValueSetTree();
+
+			stu.printTree(out, value_set_tree_hmap);
+		}
+	} else if (view == Constants.TERMINOLOGY_VIEW){
+		if (DataUtils.isNullOrEmpty(selected_valuesets)) {
+		    out.println(DataUtils.getCodingSchemeValueSetTreeStringBuffer().toString());
+		} else {
+			value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
+
+			stu.printTree(out, value_set_tree_hmap);
+		}
+	}
+
+} else {
+	value_set_tab = Boolean.FALSE;
+	if (view == Constants.STANDARD_VIEW) {
+		value_set_tree_hmap = DataUtils.getSourceValueSetTree(vsd_uri);
+	} else {
+		value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree(vsd_uri);
+	}
+
+	if (value_set_tree_hmap != null) {
+		stu.setFocusNodeId(vsd_uri);
+		stu.setCheckAll(true);
+		stu.printTree(out, value_set_tree_hmap);
+	}
+}
+
+stu.printFormFooter(out);
+out.flush();
+
+
       out.println("");
-      out.println("          <form id=\"pg_form\"  enctype=\"application/x-www-form-urlencoded;charset=UTF-8\">");
-      out.println("            <input type=\"hidden\" id=\"ontology_node_id\" name=\"ontology_node_id\" value=\"null\" />");
-      out.println("            <input type=\"hidden\" id=\"schema\" name=\"schema\" value=\"null\" />");
-      out.println("            <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
-      out.println("          </form>");
-      out.println("");
-      out.println("");
-      out.println("        </div> <!-- popupContentArea -->");
+      out.println("          </div> <!-- popupContentArea -->");
       out.println("");
       out.println("");
       out.println("<div class=\"textbody\">");
@@ -2517,7 +2024,37 @@ if (view == Constants.STANDARD_VIEW) {
   }
 
 
-    public static void search_value_set(HttpServletRequest request, HttpServletResponse response) {
+      private String find_checked_value_sets(HttpServletRequest request) {
+		  HashMap map = DataUtils.getResovedValueSetHashMap();
+		  if (map == null) {
+			  return null;
+		  }
+		  Iterator it = map.keySet().iterator();
+		  int lcv = 0;
+		  int knt = 0;
+		  StringBuffer buf = new StringBuffer();
+		  while (it.hasNext()) {
+			  lcv++;
+			  String rvs_uri = (String) it.next();
+			  String[] results = request.getParameterValues(rvs_uri);
+			  if (results != null && results.length > 0) {
+				  for (int i = 0; i < results.length; i++) {
+					  String result = results[i];
+					  if (result != null && result.compareTo("") != 0) {
+						  knt++;
+						  if (knt > 1) {
+							  buf.append(",");
+						  }
+						  buf.append(rvs_uri);
+					  }
+				  }
+		      }
+		  }
+		  return buf.toString();
+	  }
+
+      public void search_value_set(HttpServletRequest request, HttpServletResponse response) {
+
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
@@ -2541,8 +2078,21 @@ if (view == Constants.STANDARD_VIEW) {
 		}
 
 		String msg = null;
-		request.getSession().removeAttribute("checked_vocabularies");
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+		//request.getSession().removeAttribute("checked_vocabularies");
+String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+
+if (checked_vocabularies != null) {
+	checked_vocabularies = checked_vocabularies.trim();
+}
+if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+    checked_vocabularies = find_checked_value_sets(request);
+}
+
+if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+    checked_vocabularies = vsd_uri;
+}
+
+
 		request.getSession().removeAttribute("partial_checked_vocabularies");
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (DataUtils.isNull(matchText)) {
@@ -2551,7 +2101,6 @@ if (view == Constants.STANDARD_VIEW) {
 			matchText = matchText.trim();
 		}
         request.getSession().setAttribute("matchText", matchText);
-
 		String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("ontology_display_name"));
 		String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("ontology_version"));
 
@@ -2565,8 +2114,8 @@ if (view == Constants.STANDARD_VIEW) {
 			}
 			return;
 		}
+        if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 
-        if (checked_vocabularies == null || (checked_vocabularies.compareTo("") == 0)) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
 			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
@@ -2580,6 +2129,7 @@ if (view == Constants.STANDARD_VIEW) {
 				}
 			}
 		} else {
+			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 			try {
 				String retstr = valueSetSearchAction(request);
 				//KLO, 041312
@@ -2591,18 +2141,10 @@ if (view == Constants.STANDARD_VIEW) {
 					}
 					return;
 				}
-
-//Vector matched_vsds = (Vector) request.getSession().getAttribute("matched_vsds");
-
-				//String destination = contextPath + "/pages/value_set_search_results.jsf";
-
 				String destination = contextPath + "/pages/value_set_entity_search_results.jsf";
-
-
 				if (!DataUtils.isNull(vsd_uri)) {
 					destination = contextPath + "/pages/value_set_entity_search_results.jsf?value_set_tab=false&root_vsd_uri=" + root_vsd_uri;
 				}
-
 				response.sendRedirect(response.encodeRedirectURL(destination));
 	            //request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 			} catch (Exception ex) {
@@ -2613,15 +2155,15 @@ if (view == Constants.STANDARD_VIEW) {
 
 
 
-    public static String valueSetSearchAction(HttpServletRequest request) {
+    public String valueSetSearchAction(HttpServletRequest request) {
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
-
 
 long ms = System.currentTimeMillis();
 
 
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
+String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 
         if (DataUtils.isNull(selectValueSetSearchOption)) {
 			selectValueSetSearchOption = "Name";
@@ -2635,7 +2177,20 @@ long ms = System.currentTimeMillis();
 
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
-		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+
+
+String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+
+if (checked_vocabularies != null) {
+	checked_vocabularies = checked_vocabularies.trim();
+}
+if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+    checked_vocabularies = find_checked_value_sets(request);
+}
+
+if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+    checked_vocabularies = vsd_uri;
+}
 		if (checked_vocabularies != null) {
 			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 		}
@@ -2657,24 +2212,16 @@ long ms = System.currentTimeMillis();
 
         if (matchText != null) matchText = matchText.trim();
 
-        //ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
-        //    matchText, "contains");
+
 
         int searchOption = SimpleSearchUtils.BY_CODE;
         if (selectValueSetSearchOption.compareTo("Name") == 0) {
 			searchOption = SimpleSearchUtils.BY_NAME;
 		}
 
-System.out.println(checked_vocabularies);
-
-System.out.println("AjaxServlet valueSetSearchAction involking ValueSetSearchUtils -- " + matchText + ", " + algorithm);
-_logger.debug("AjaxServlet valueSetSearchAction involking ValueSetSearchUtils -- " + matchText + ", " + algorithm);
 
         ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
             matchText, searchOption, algorithm);
-
-System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
-_logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
 
 
         if (wrapper == null) {
@@ -2720,9 +2267,7 @@ _logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
 			request.getSession().setAttribute("value_set_entity_search_results", iteratorBean);
 			return "value_set";
 		}
-
     }
-
 
     public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String dictionary, String version) {
 
@@ -2734,8 +2279,6 @@ _logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
 
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 		String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
-		//System.out.println("partial_checked_vocabularies: " + partial_checked_vocabularies);
-
 
       try {
       	  out = response.getWriter();
@@ -2842,212 +2385,6 @@ _logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
       out.println("    }");
       out.println("  </script>");
       out.println("");
-      out.println("  <script language=\"JavaScript\">");
-      out.println("");
-      out.println("    var tree;");
-      out.println("    var nodeIndex;");
-      out.println("    var nodes = [];");
-      out.println("");
-      out.println("    function load(url,target) {");
-      out.println("      if (target != '')");
-      out.println("        target.window.location.href = url;");
-      out.println("      else");
-      out.println("        window.location.href = url;");
-      out.println("    }");
-      out.println("");
-      out.println("    function init() {");
-      out.println("       //initTree();");
-      out.println("    }");
-      out.println("");
-      out.println("	//handler for expanding all nodes");
-      out.println("	YAHOO.util.Event.on(\"expand_all\", \"click\", function(e) {");
-      out.println("	     //expandEntireTree();");
-      out.println("");
-      out.println("	     tree.expandAll();");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("	});");
-      out.println("");
-      out.println("	//handler for collapsing all nodes");
-      out.println("	YAHOO.util.Event.on(\"collapse_all\", \"click\", function(e) {");
-      out.println("		tree.collapseAll();");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("	});");
-      out.println("");
-      out.println("	//handler for checking all nodes");
-      out.println("	YAHOO.util.Event.on(\"check_all\", \"click\", function(e) {");
-      out.println("		check_all();");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("	});");
-      out.println("");
-      out.println("	//handler for unchecking all nodes");
-      out.println("	YAHOO.util.Event.on(\"uncheck_all\", \"click\", function(e) {");
-      out.println("		uncheck_all();");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("	});");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("	YAHOO.util.Event.on(\"getchecked\", \"click\", function(e) {");
-      out.println("               //alert(\"Checked nodes: \" + YAHOO.lang.dump(getCheckedNodes()), \"info\", \"example\");");
-      out.println("		//YAHOO.util.Event.preventDefault(e);");
-      out.println("");
-      out.println("	});");
-      out.println("");
-      out.println("");
-      out.println("    function addTreeNode(rootNode, nodeInfo) {");
-      out.println("      var newNodeDetails = \"javascript:onClickTreeNode('\" + nodeInfo.ontology_node_id + \"');\";");
-      out.println("");
-      out.println("      if (nodeInfo.ontology_node_id.indexOf(\"TVS_\") >= 0) {");
-      out.println("          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id };");
-      out.println("      } else {");
-      out.println("          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };");
-      out.println("      }");
-      out.println("");
-      out.println("      var newNode = new YAHOO.widget.TaskNode(newNodeData, rootNode, false);");
-      out.println("      if (nodeInfo.ontology_node_child_count > 0) {");
-      out.println("        newNode.setDynamicLoad(loadNodeData);");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("    function buildTree(ontology_node_id, ontology_display_name) {");
-      out.println("      var handleBuildTreeSuccess = function(o) {");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        if ( typeof(respObj) != \"undefined\") {");
-      out.println("          if ( typeof(respObj.root_nodes) != \"undefined\") {");
-      out.println("            var root = tree.getRoot();");
-      out.println("            if (respObj.root_nodes.length == 0) {");
-      out.println("              //showEmptyRoot();");
-      out.println("            }");
-      out.println("            else {");
-      out.println("              for (var i=0; i < respObj.root_nodes.length; i++) {");
-      out.println("                var nodeInfo = respObj.root_nodes[i];");
-      out.println("                var expand = false;");
-      out.println("                //addTreeNode(root, nodeInfo, expand);");
-      out.println("");
-      out.println("                addTreeNode(root, nodeInfo);");
-      out.println("              }");
-      out.println("            }");
-      out.println("");
-      out.println("            tree.draw();");
-      out.println("          }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      var handleBuildTreeFailure = function(o) {");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var buildTreeCallback =");
-      out.println("      {");
-      out.println("        success:handleBuildTreeSuccess,");
-      out.println("        failure:handleBuildTreeFailure");
-      out.println("      };");
-      out.println("");
-      out.println("      if (ontology_display_name!='') {");
-      out.println("        var ontology_source = null;");
-      out.println("        var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("        var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=build_src_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("    function resetTree(ontology_node_id, ontology_display_name) {");
-      out.println("");
-      out.println("      var handleResetTreeSuccess = function(o) {");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        if ( typeof(respObj) != \"undefined\") {");
-      out.println("          if ( typeof(respObj.root_node) != \"undefined\") {");
-      out.println("            var root = tree.getRoot();");
-      out.println("            var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.root_node.ontology_node_id + \"');\";");
-      out.println("            var rootNodeData = { label:respObj.root_node.ontology_node_name, id:respObj.root_node.ontology_node_id, href:nodeDetails };");
-      out.println("            var expand = false;");
-      out.println("            if (respObj.root_node.ontology_node_child_count > 0) {");
-      out.println("              expand = true;");
-      out.println("            }");
-      out.println("            var ontRoot = new YAHOO.widget.TaskNode(rootNodeData, root, expand);");
-      out.println("");
-      out.println("            if ( typeof(respObj.child_nodes) != \"undefined\") {");
-      out.println("              for (var i=0; i < respObj.child_nodes.length; i++) {");
-      out.println("                var nodeInfo = respObj.child_nodes[i];");
-      out.println("                addTreeNode(ontRoot, nodeInfo);");
-      out.println("              }");
-      out.println("            }");
-      out.println("            tree.draw();");
-      out.println("          }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      var handleResetTreeFailure = function(o) {");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var resetTreeCallback =");
-      out.println("      {");
-      out.println("        success:handleResetTreeSuccess,");
-      out.println("        failure:handleResetTreeFailure");
-      out.println("      };");
-      out.println("      if (ontology_node_id!= '') {");
-      out.println("        var ontology_source = null;");
-      out.println("        var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("        var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=reset_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name + '&version='+ ontology_version +'&ontology_source='+ontology_source,resetTreeCallback);");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("    function onClickTreeNode(ontology_node_id) {");
-      out.println("        //alert(\"onClickTreeNode \" + ontology_node_id);");
-      out.println("        window.location = '/ncitbrowser/pages/value_set_treenode_redirect.jsf?ontology_node_id=' + ontology_node_id;");
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("    function onClickViewEntireOntology(ontology_display_name) {");
-      out.println("      var ontology_display_name = document.pg_form.ontology_display_name.value;");
-      out.println("      tree = new YAHOO.widget.TreeView(\"treecontainer\");");
-
-
-      out.println("      tree.draw();");
-
-
-      out.println("    }");
-      out.println("");
-      out.println("    function initTree() {");
-      out.println("");
-      out.println("        tree = new YAHOO.widget.TreeView(\"treecontainer\");");
-
-      //out.println("         pre_check();");
-
-
-      out.println("	tree.setNodesProperty('propagateHighlightUp',true);");
-      out.println("	tree.setNodesProperty('propagateHighlightDown',true);");
-      out.println("	tree.subscribe('keydown',tree._onKeyDownEvent);");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("		    tree.subscribe(\"expand\", function(node) {");
-      out.println("");
-      out.println("			YAHOO.util.UserAction.keydown(document.body, { keyCode: 39 });");
-
-
-      out.println("");
-      out.println("		    });");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("		    tree.subscribe(\"collapse\", function(node) {");
-      out.println("			//alert(\"Collapsing \" + node.label );");
-      out.println("");
-      out.println("			YAHOO.util.UserAction.keydown(document.body, { keyCode: 109 });");
-      out.println("		    });");
-      out.println("");
-      out.println("		    // By default, trees with TextNodes will fire an event for when the label is clicked:");
-      out.println("		    tree.subscribe(\"checkClick\", function(node) {");
-      out.println("			//alert(node.data.myNodeId + \" label was checked\");");
-      out.println("		    });");
-      out.println("");
-      out.println("");
-
-      println(out, "            var root = tree.getRoot();");
 
 
  HashMap value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
@@ -3059,9 +2396,6 @@ _logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
  String contextPath = request.getContextPath();
  //String view_str = new Integer(view).toString();
  String view_str = Integer.valueOf(view).toString();
-
- //String option = (String) request.getSession().getAttribute("selectValueSetSearchOption");
- //String algorithm = (String) request.getSession().getAttribute("valueset_search_algorithm");
 
 
  String option = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
@@ -3108,346 +2442,19 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
 	option_code = "";
 }
 
-      out.println("");
-      if (message == null) {
-      	  out.println("		 tree.collapseAll();");
-	  }
 
-      out.println("      initializeNodeCheckState();");
-
-      out.println("      tree.draw();");
-
-
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("    function onCheckClick(node) {");
-      out.println("        YAHOO.log(node.label + \" check was clicked, new state: \" + node.checkState, \"info\", \"example\");");
-      out.println("    }");
-      out.println("");
-      out.println("    function check_all() {");
-      out.println("        var topNodes = tree.getRoot().children;");
-      out.println("        for(var i=0; i<topNodes.length; ++i) {");
-      out.println("            topNodes[i].check();");
-      out.println("        }");
-      out.println("    }");
-      out.println("");
-      out.println("    function uncheck_all() {");
-      out.println("        var topNodes = tree.getRoot().children;");
-      out.println("        for(var i=0; i<topNodes.length; ++i) {");
-      out.println("            topNodes[i].uncheck();");
-      out.println("        }");
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("    function expand_all() {");
-      out.println("        //alert(\"expand_all\");");
-      out.println("        var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-      out.println("        onClickViewEntireOntology(ontology_display_name);");
-      out.println("    }");
-      out.println("");
-
-
-      out.println("    function pre_check() {");
-      out.println("        var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-
-
-//out.println(" alert(ontology_display_name);");
-
-      out.println("        var topNodes = tree.getRoot().children;");
-      out.println("        for(var i=0; i<topNodes.length; ++i) {");
-      out.println("            if (topNodes[i].label == ontology_display_name) {");
-      out.println("            	topNodes[i].check();");
-      out.println("            }");
-      out.println("        }");
-      out.println("    }");
-
-
-      out.println("");
-
-   // 0=unchecked, 1=some children checked, 2=all children checked
-
-
-      out.println("    function getCheckedVocabularies(nodes) {");
-      out.println("       getCheckedNodes(nodes);");
-      out.println("       getPartialCheckedNodes(nodes);");
-      out.println("    }");
-
-      writeInitialize(out);
-      initializeNodeCheckState(out);
-
-      out.println("   // Gets the labels of all of the fully checked nodes");
-      out.println("   // Could be updated to only return checked leaf nodes by evaluating");
-      out.println("   // the children collection first.");
-
-      out.println("    function getCheckedNodes(nodes) {");
-      out.println("        nodes = nodes || tree.getRoot().children;");
-      out.println("        var checkedNodes = [];");
-      out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
-      out.println("            var n = nodes[i];");
-      out.println("            if (n.checkState == 2) {");
-      out.println("                checkedNodes.push(n.label); // just using label for simplicity");
-      out.println("            }");
-      out.println("		       if (n.hasChildren()) {");
-      out.println("			      checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));");
-      out.println("		       }");
-      out.println("        }");
-      //out.println("		   checkedNodes = checkedNodes.concat(\",\");");
-      out.println("        var checked_vocabularies = document.forms[\"valueSetSearchForm\"].checked_vocabularies;");
-      out.println("        checked_vocabularies.value = checkedNodes;");
-      out.println("        return checkedNodes;");
-      out.println("    }");
-
-
-      out.println("    function getPartialCheckedNodes(nodes) {");
-      out.println("        nodes = nodes || tree.getRoot().children;");
-      out.println("        var checkedNodes = [];");
-      out.println("        for(var i=0, l=nodes.length; i<l; i=i+1) {");
-      out.println("            var n = nodes[i];");
-      out.println("            if (n.checkState == 1) {");
-      out.println("                checkedNodes.push(n.label); // just using label for simplicity");
-      out.println("            }");
-      out.println("		       if (n.hasChildren()) {");
-      out.println("			      checkedNodes = checkedNodes.concat(getPartialCheckedNodes(n.children));");
-      out.println("		       }");
-      out.println("        }");
-      //out.println("		   checkedNodes = checkedNodes.concat(\",\");");
-      out.println("        var partial_checked_vocabularies = document.forms[\"valueSetSearchForm\"].partial_checked_vocabularies;");
-      out.println("        partial_checked_vocabularies.value = checkedNodes;");
-      out.println("        return checkedNodes;");
-      out.println("    }");
-
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("    function loadNodeData(node, fnLoadComplete) {");
-      out.println("      var id = node.data.id;");
-      out.println("");
-      out.println("      var responseSuccess = function(o)");
-      out.println("      {");
-      out.println("        var path;");
-      out.println("        var dirs;");
-      out.println("        var files;");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        var fileNum = 0;");
-      out.println("        var categoryNum = 0;");
-      out.println("        if ( typeof(respObj.nodes) != \"undefined\") {");
-      out.println("          for (var i=0; i < respObj.nodes.length; i++) {");
-      out.println("            var name = respObj.nodes[i].ontology_node_name;");
-      out.println("            var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.nodes[i].ontology_node_id + \"');\";");
-      out.println("            var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, href:nodeDetails };");
-      out.println("            var newNode = new YAHOO.widget.TaskNode(newNodeData, node, false);");
-      out.println("            if (respObj.nodes[i].ontology_node_child_count > 0) {");
-      out.println("              newNode.setDynamicLoad(loadNodeData);");
-      out.println("            }");
-      out.println("          }");
-      out.println("        }");
-      out.println("        tree.draw();");
-      out.println("        fnLoadComplete();");
-      out.println("      }");
-      out.println("");
-      out.println("      var responseFailure = function(o){");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var callback =");
-      out.println("      {");
-      out.println("        success:responseSuccess,");
-      out.println("        failure:responseFailure");
-      out.println("      };");
-      out.println("");
-      out.println("      var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-      out.println("      var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("      var cObj = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=expand_src_vs_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);");
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("    function searchTree(ontology_node_id, ontology_display_name) {");
-      out.println("");
-      out.println("        var handleBuildTreeSuccess = function(o) {");
-      out.println("");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        if ( typeof(respObj) != \"undefined\") {");
-      out.println("");
-      out.println("          if ( typeof(respObj.dummy_root_nodes) != \"undefined\") {");
-      out.println("              showNodeNotFound(ontology_node_id);");
-      out.println("          }");
-      out.println("");
-      out.println("          else if ( typeof(respObj.root_nodes) != \"undefined\") {");
-      out.println("            var root = tree.getRoot();");
-      out.println("            if (respObj.root_nodes.length == 0) {");
-      out.println("              //showEmptyRoot();");
-      out.println("            }");
-      out.println("            else {");
-      out.println("              showPartialHierarchy();");
-      out.println("              showConstructingTreeStatus();");
-      out.println("");
-      out.println("              for (var i=0; i < respObj.root_nodes.length; i++) {");
-      out.println("                var nodeInfo = respObj.root_nodes[i];");
-      out.println("                //var expand = false;");
-      out.println("                addTreeBranch(ontology_node_id, root, nodeInfo);");
-      out.println("              }");
-      out.println("            }");
-      out.println("          }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      var handleBuildTreeFailure = function(o) {");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var buildTreeCallback =");
-      out.println("      {");
-      out.println("        success:handleBuildTreeSuccess,");
-      out.println("        failure:handleBuildTreeFailure");
-      out.println("      };");
-      out.println("");
-      out.println("      if (ontology_display_name!='') {");
-      out.println("        var ontology_source = null;//document.pg_form.ontology_source.value;");
-      out.println("        var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("        var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=search_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);");
-      out.println("");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("    function expandEntireTree() {");
-      out.println("        tree = new YAHOO.widget.TreeView(\"treecontainer\");");
-      out.println("        //tree.draw();");
-      out.println("");
-      out.println("        var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-      out.println("        var ontology_node_id = document.forms[\"pg_form\"].ontology_node_id.value;");
-      out.println("");
-      out.println("        var handleBuildTreeSuccess = function(o) {");
-      out.println("");
-      out.println("        var respTxt = o.responseText;");
-      out.println("        var respObj = eval('(' + respTxt + ')');");
-      out.println("        if ( typeof(respObj) != \"undefined\") {");
-      out.println("");
-      out.println("             if ( typeof(respObj.root_nodes) != \"undefined\") {");
-      out.println("");
-      out.println("                    //alert(respObj.root_nodes.length);");
-      out.println("");
-      out.println("                    var root = tree.getRoot();");
-      out.println("		    if (respObj.root_nodes.length == 0) {");
-      out.println("		      //showEmptyRoot();");
-      out.println("		    } else {");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("");
-      out.println("		      for (var i=0; i < respObj.root_nodes.length; i++) {");
-      out.println("			 var nodeInfo = respObj.root_nodes[i];");
-      out.println("	                 //alert(\"calling addTreeBranch \");");
-      out.println("");
-      out.println("			 addTreeBranch(ontology_node_id, root, nodeInfo);");
-      out.println("		      }");
-      out.println("		    }");
-      out.println("              }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      var handleBuildTreeFailure = function(o) {");
-      out.println("        alert('responseFailure: ' + o.statusText);");
-      out.println("      }");
-      out.println("");
-      out.println("      var buildTreeCallback =");
-      out.println("      {");
-      out.println("        success:handleBuildTreeSuccess,");
-      out.println("        failure:handleBuildTreeFailure");
-      out.println("      };");
-      out.println("");
-      out.println("      if (ontology_display_name!='') {");
-      out.println("        var ontology_source = null;");
-      out.println("        var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      out.println("        var request = YAHOO.util.Connect.asyncRequest('GET','/ncitbrowser/ajax?action=expand_entire_vs_tree&ontology_node_id=' +ontology_node_id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version+'&ontology_source='+ontology_source,buildTreeCallback);");
-      out.println("");
-      out.println("      }");
-      out.println("    }");
-      out.println("");
-      out.println("");
-
-/*
-      out.println("function initialize_tree() {");
-
-      out.println("    alert(\"onload\");");
-
-      out.println("    tree = new YAHOO.widget.TreeView(\"treecontainer\");");
-      out.println("    tree.expandAll();");
-      out.println("    check_all();");
-      out.println("    tree.draw();");
-      out.println("}");
-*/
-
-      out.println("");
-      out.println("");
-      out.println("    function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {");
-      out.println("      var newNodeDetails = \"javascript:onClickTreeNode('\" + nodeInfo.ontology_node_id + \"');\";");
-      out.println("");
-      out.println("      var newNodeData;");
-      out.println("      if (ontology_node_id.indexOf(\"TVS_\") >= 0) {");
-      out.println("          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id };");
-      out.println("      } else {");
-      out.println("          newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };");
-      out.println("      }");
-      out.println("");
-      out.println("      var expand = false;");
-      out.println("      var childNodes = nodeInfo.children_nodes;");
-      out.println("");
-      out.println("      if (childNodes.length > 0) {");
-      out.println("          expand = true;");
-      out.println("      }");
-      out.println("      var newNode = new YAHOO.widget.TaskNode(newNodeData, rootNode, expand);");
-      out.println("      if (nodeInfo.ontology_node_id == ontology_node_id) {");
-      out.println("          newNode.labelStyle = \"ygtvlabel_highlight\";");
-      out.println("      }");
-      out.println("");
-      out.println("      if (nodeInfo.ontology_node_id == ontology_node_id) {");
-      out.println("         newNode.isLeaf = true;");
-      out.println("         if (nodeInfo.ontology_node_child_count > 0) {");
-      out.println("             newNode.isLeaf = false;");
-      out.println("             newNode.setDynamicLoad(loadNodeData);");
-      out.println("         } else {");
-      out.println("             tree.draw();");
-      out.println("         }");
-      out.println("");
-      out.println("      } else {");
-      out.println("          if (nodeInfo.ontology_node_id != ontology_node_id) {");
-      out.println("          if (nodeInfo.ontology_node_child_count == 0 && nodeInfo.ontology_node_id != ontology_node_id) {");
-      out.println("        newNode.isLeaf = true;");
-      out.println("          } else if (childNodes.length == 0) {");
-      out.println("        newNode.setDynamicLoad(loadNodeData);");
-      out.println("          }");
-      out.println("        }");
-      out.println("      }");
-      out.println("");
-      out.println("      tree.draw();");
-      out.println("      for (var i=0; i < childNodes.length; i++) {");
-      out.println("         var childnodeInfo = childNodes[i];");
-      out.println("         addTreeBranch(ontology_node_id, newNode, childnodeInfo);");
-      out.println("      }");
-      out.println("    }");
-      out.println("    YAHOO.util.Event.addListener(window, \"load\", init);");
-      out.println("");
-      out.println("    YAHOO.util.Event.onDOMReady(initTree);");
-      out.println("");
-      out.println("");
-      out.println("  </script>");
-      out.println("");
       out.println("</head>");
       out.println("");
-      //out.println("<body>");
 
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
 
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
+
+	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/event_simulate.js\"></script>");
+	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
+
 
       out.println("  <!-- Begin Skip Top Navigation -->");
       out.println("  <a href=\"#evs-content\" class=\"hideLink\" accesskey=\"1\" title=\"Skip repetitive navigation links\">skip navigation links</A>");
@@ -3671,7 +2678,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("                    tabindex=\"1\"/>");
       out.println("");
       out.println("");
-      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search value sets containing matched concepts\" onclick=\"javascript:getCheckedVocabularies();\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
+      out.println("                <input id=\"valueSetSearchForm:valueset_search\" type=\"image\" src=\"/ncitbrowser/images/search.gif\" name=\"valueSetSearchForm:valueset_search\" alt=\"Search value sets containing matched concepts\" tabindex=\"2\" class=\"searchbox-btn\" /><a href=\"/ncitbrowser/pages/help.jsf#searchhelp\" tabindex=\"3\"><img src=\"/ncitbrowser/images/search-help.gif\" alt=\"Search Help\" style=\"border-width:0;\" class=\"searchbox-btn\" /></a>");
       out.println("");
       out.println("");
       out.println("    </td>");
@@ -3942,12 +2949,14 @@ if (DataUtils.isNull(matchText)) {
       out.println("</style>");
       out.println("");
       out.println("");
+      /*
       out.println("<div id=\"expandcontractdiv\">");
       out.println("	<a id=\"expand_all\" href=\"#\" tabindex=\"101\" >Expand all</a>");
       out.println("	<a id=\"collapse_all\" href=\"#\" tabindex=\"102\">Collapse all</a>");
       out.println("	<a id=\"check_all\" href=\"#\" tabindex=\"103\">Check all</a>");
       out.println("	<a id=\"uncheck_all\" href=\"#\" tabindex=\"104\">Uncheck all</a>");
       out.println("</div>");
+      */
       out.println("");
       out.println("");
       out.println("");
@@ -4179,10 +3188,13 @@ if (DataUtils.isNull(matchText)) {
 			String nextJSP = "/pages/resolve_value_set.jsf";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 			dispatcher.forward(request,response);
+			return;
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
+
 
     public void resolveValueSetAction(HttpServletRequest request, HttpServletResponse response) {
         String selectedvalueset = null;
@@ -4196,15 +3208,12 @@ if (DataUtils.isNull(matchText)) {
 				Vector u = DataUtils.parseData(selectedvalueset);
 				selectedvalueset = (String) u.elementAt(1);
 			}
-	    }
+		}
         String vsd_uri = selectedvalueset;
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
-
-
-String key = vsd_uri;
-
         request.getSession().setAttribute("vsd_uri", vsd_uri);
         String[] coding_scheme_ref = null;
+        String key = vsd_uri;
 
         Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
         if (w != null) {
@@ -4215,7 +3224,6 @@ String key = vsd_uri;
 
 			}
 		}
-
         if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
 			String msg = "No PRODUCTION version of coding scheme is available.";
 			request.getSession().setAttribute("message", msg);
@@ -4224,6 +3232,9 @@ String key = vsd_uri;
 				String nextJSP = "/pages/resolve_value_set.jsf";
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 				dispatcher.forward(request,response);
+				return;
+
+
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -4232,12 +3243,9 @@ String key = vsd_uri;
 		}
 
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
-
         StringBuffer buf = new StringBuffer();
-
         for (int i=0; i<coding_scheme_ref.length; i++) {
 			String t = coding_scheme_ref[i];
-
 			String delim = "|";
 			if (t.indexOf("|") == -1) {
 				delim = "$";
@@ -4253,7 +3261,6 @@ String key = vsd_uri;
             csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
 		}
 		key = key + buf.toString();
-
         request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 
         //long time = System.currentTimeMillis();
@@ -4297,6 +3304,8 @@ String key = vsd_uri;
 					String nextJSP = "/pages/resolved_value_set.jsf";
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 					dispatcher.forward(request,response);
+					return;
+
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -4309,16 +3318,106 @@ String key = vsd_uri;
 
 		String msg = "Unable to resolve the value set " + vsd_uri;
 		request.getSession().setAttribute("message", msg);
-
         try {
 			String nextJSP = "/pages/resolved_value_set.jsf";
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 			dispatcher.forward(request,response);
+			return;
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
         //return "resolved_value_set";
+	}
+
+
+
+//KLO 071814
+    public void downloadValueSetAction(HttpServletRequest request, HttpServletResponse response) {
+        String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+        String refresh = HTTPUtils.cleanXSS((String) request.getParameter("refresh"));
+        String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
+
+
+        if (DataUtils.isNull(refresh)) {
+
+			ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
+
+			if (vsc == null) {
+				System.out.println("(*) ValueSetDefinitionConfig.getValueSetConfig " + vsd_uri + " returns NULL???");
+			}
+
+
+			String table_content = null;
+			StringBuffer table_content_buf = new StringBuffer();
+
+			String filename = vsc.getReportURI();
+			String excelfile = ValueSetDefinitionConfig.getValueSetDownloadFilename(vsc);
+
+			if (!ValueSetDefinitionConfig.fileExists(excelfile)) {
+				 FTPDownload.download(vsc.getReportURI(), excelfile);
+			}
+
+			Vector u = ValueSetDefinitionConfig.interpretExtractionRule(vsc.getExtractionRule());
+			int col = -1;
+			int sheet = -1;
+			String code = null;
+
+			if (u == null || (u.size() != 2 && u.size() != 3)) {
+				System.out.println("Data not found.");
+			} else {
+				sheet = Integer.parseInt((String) u.elementAt(0)) - 1;
+				if (u.size() == 2) {
+					code = (String) u.elementAt(1);
+
+				} else if (u.size() == 3) {
+					col = Integer.parseInt((String) u.elementAt(1)) - 1;
+					code = (String) u.elementAt(2);
+				}
+
+				int startIndex = ExcelUtil.getHSSFStartRow(excelfile, sheet, col, code);
+				int endIndex = ExcelUtil.getHSSFEndRow(excelfile, sheet, col, code);
+
+				request.getSession().removeAttribute("rvsi");
+
+				if (startIndex != -1 && endIndex != -1) {
+					try {
+						String url = "/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus";
+						ResolvedValueSetIteratorHolder rvsi = new ResolvedValueSetIteratorHolder(excelfile, sheet, startIndex, endIndex, url);
+						request.getSession().setAttribute("rvsi", rvsi);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+
+					try {
+						String nextJSP = "/pages/download_value_set.jsf?vsd_uri=" + vsd_uri;
+						RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+						dispatcher.forward(request,response);
+						return;
+
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+
+			String msg = "Unable to resolve the value set " + vsd_uri;
+			request.getSession().setAttribute("message", msg);
+	    }
+
+        try {
+			String nextJSP = "/pages/download_value_set.jsf?vsd_uri=" + vsd_uri;
+			if (resultsPerPage != null) {
+				nextJSP = nextJSP + "&resultsPerPage=" + resultsPerPage;
+			}
+
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+			dispatcher.forward(request,response);
+			return;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
     public String valueSetDefinition2XMLString(String uri) {
@@ -4422,7 +3521,6 @@ String key = vsd_uri;
 		if (iterator != null) {
 			try {
 				numRemaining = iterator.numberRemaining();
-				//System.out.println("number of records: " + numRemaining);
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -4495,4 +3593,104 @@ String key = vsd_uri;
 		FacesContext.getCurrentInstance().responseComplete();
 		return;
 	}
+
+      public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {
+        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
+		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
+        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
+        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+		// check if any checkbox is checked.
+        String contextPath = request.getContextPath();
+		String view_str = HTTPUtils.cleanXSS((String) request.getParameter("view"));
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+
+		String root_vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("root_vsd_uri"));
+
+		int view = Constants.STANDARD_VIEW;
+		boolean isInteger = DataUtils.isInteger(view_str);
+		if (isInteger) {
+			view = Integer.parseInt(view_str);
+		}
+
+		if (vsd_uri != null && root_vsd_uri == null) {
+			root_vsd_uri = vsd_uri;
+		}
+
+		String msg = null;
+		//request.getSession().removeAttribute("checked_vocabularies");
+String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+
+if (checked_vocabularies != null) {
+	checked_vocabularies = checked_vocabularies.trim();
+}
+if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+    checked_vocabularies = find_checked_value_sets(request);
+}
+
+if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+    checked_vocabularies = vsd_uri;
+}
+
+		request.getSession().removeAttribute("partial_checked_vocabularies");
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        if (DataUtils.isNull(matchText)) {
+			matchText = "";
+		} else {
+			matchText = matchText.trim();
+		}
+        request.getSession().setAttribute("matchText", matchText);
+		String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("ontology_display_name"));
+		String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("ontology_version"));
+
+		if (matchText.compareTo("") == 0) {
+			msg = "Please enter a search string.";
+			request.getSession().setAttribute("message", msg);
+			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+			} else {
+			    create_vs_tree(request, response, view);
+			}
+			return;
+		}
+        if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+
+			msg = "No value set definition is selected.";
+			request.getSession().setAttribute("message", msg);
+			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+				create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+			} else {
+                vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+                if (DataUtils.isNull(vsd_uri)) {
+					create_vs_tree(request, response, view);
+				} else {
+					create_vs_tree(request, response, view, vsd_uri);
+				}
+			}
+		} else {
+			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
+			try {
+				String retstr = valueSetSearchAction(request);
+				//KLO, 041312
+				if (retstr.compareTo("message") == 0) {
+					if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
+						create_vs_tree(request, response, view, ontology_display_name, ontology_version);
+					} else {
+ 					    create_vs_tree(request, response, view);
+					}
+					return;
+				}
+				String destination = contextPath + "/pages/value_set_entity_search_results.jsf";
+				if (!DataUtils.isNull(vsd_uri)) {
+					destination = contextPath + "/pages/value_set_entity_search_results.jsf?value_set_tab=false&root_vsd_uri=" + root_vsd_uri;
+				}
+				response.sendRedirect(response.encodeRedirectURL(destination));
+	            //request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+	    }
+    }
+
+
+
 }

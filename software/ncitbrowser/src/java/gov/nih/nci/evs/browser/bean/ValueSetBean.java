@@ -733,6 +733,28 @@ SortUtils.quickSort(w);
         return "select_value_set";
 	}
 
+
+    public String downloadValueSetAction() {
+
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+
+		try {
+			request.getRequestDispatcher("/ncitbrowser/pages/download_value_set.jsf?vsd_uri=" + vsd_uri).
+							  forward(request,response);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+    }
+
+
     public String resolveValueSetAction() {
 
         HttpServletRequest request =
@@ -991,7 +1013,7 @@ StringBuffer buf = new StringBuffer();
 
 
         String selectedvalueset = null;
-       String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
+        String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
         if (multiplematches != null) {
 			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("valueset"));
 		} else {
@@ -1033,7 +1055,7 @@ StringBuffer buf = new StringBuffer();
 
 	}
 
-
+/*
     public void exportToXMLAction() {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -1114,8 +1136,257 @@ StringBuffer buf = new StringBuffer();
 
         FacesContext.getCurrentInstance().responseComplete();
 	}
+*/
 
 
+    public void exportToXMLAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		String valueSetDefinitionRevisionId = null;
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+        String from_download = HTTPUtils.cleanXSS((String) request.getParameter("from_download"));
+        String uri = null;
+        if (from_download != null && from_download.compareTo("true") == 0) {
+			uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			if (uri == null) {
+				uri = (String) request.getSession().getAttribute("vsd_uri");
+			}
+
+			Vector cs_vec = DataUtils.getCodingSchemeURNsInValueSetDefinition(uri);
+			for (int k=0; k<cs_vec.size(); k++) {
+				String cs_urn = (String) cs_vec.elementAt(k);
+				String version = DataUtils.getVocabularyVersionByTag(cs_urn, "PRODUCTION");
+                csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_urn, version));
+			}
+			//Vector u = DataUtils.getResovedValueSetVersions(uri);
+			//String version = (String) u.elementAt(0);
+			//csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
+		} else {
+			String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
+			uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			if (uri == null) {
+				uri = (String) request.getSession().getAttribute("vsd_uri");
+			}
+
+			if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
+				String msg = "No coding scheme reference is selected.";
+				request.getSession().setAttribute("message", msg);
+				return;// "resolve_value_set";
+			}
+
+			for (int i=0; i<coding_scheme_ref.length; i++) {
+				String t = coding_scheme_ref[i];
+				String delim = "$";
+				if (t.indexOf("$") == -1) delim = "|";
+				Vector u = DataUtils.parseData(t, delim);
+				String url = (String) u.elementAt(0);
+				String version = (String) u.elementAt(1);
+				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
+			}
+	    }
+
+		String csVersionTag = null;
+		boolean failOnAllErrors = false;
+
+        try {
+        	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+			InputStream reader =  vsd_service.exportValueSetResolution(new URI(uri), valueSetDefinitionRevisionId,
+			   csvList, csVersionTag, failOnAllErrors);
+
+			if (reader != null) {
+				StringBuffer sb = new StringBuffer();
+				try {
+					for(int c = reader.read(); c != -1; c = reader.read()) {
+						sb.append((char)c);
+					}
+
+					HttpServletResponse response = (HttpServletResponse) FacesContext
+							.getCurrentInstance().getExternalContext().getResponse();
+					response.setContentType("text/xml");
+
+					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+					vsd_name = vsd_name.replaceAll(" ", "_");
+					vsd_name = "resolved_" + vsd_name + ".xml";
+
+					response.setHeader("Content-Disposition", "attachment; filename="
+							+ vsd_name);
+
+
+					response.setContentLength(sb.length());
+					ServletOutputStream ouputStream = response.getOutputStream();
+					ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
+					ouputStream.flush();
+					ouputStream.close();
+
+				} catch(IOException e) {
+					throw e;
+				} finally {
+					try {
+						reader.close();
+					} catch(Exception e) {
+						// ignored
+					}
+			    }
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+        FacesContext.getCurrentInstance().responseComplete();
+	}
+
+
+	/*
+
+    public void exportToXMLAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+        if (uri == null) {
+            uri = (String) request.getSession().getAttribute("vsd_uri");
+		}
+
+		String valueSetDefinitionRevisionId = null;
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+		Vector u = getResovedValueSetVersions(uri);
+		String version = (String) u.elementAt(0);
+		csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
+
+		String csVersionTag = null;
+		boolean failOnAllErrors = false;
+
+        try {
+        	LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+			InputStream reader =  vsd_service.exportValueSetResolution(new URI(uri), valueSetDefinitionRevisionId,
+			   csvList, csVersionTag, failOnAllErrors);
+
+			if (reader != null) {
+				StringBuffer sb = new StringBuffer();
+				try {
+					for(int c = reader.read(); c != -1; c = reader.read()) {
+						sb.append((char)c);
+					}
+
+					HttpServletResponse response = (HttpServletResponse) FacesContext
+							.getCurrentInstance().getExternalContext().getResponse();
+					response.setContentType("text/xml");
+
+					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+					vsd_name = vsd_name.replaceAll(" ", "_");
+					vsd_name = "resolved_" + vsd_name + ".xml";
+
+					response.setHeader("Content-Disposition", "attachment; filename="
+							+ vsd_name);
+
+
+					response.setContentLength(sb.length());
+					ServletOutputStream ouputStream = response.getOutputStream();
+					ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
+					ouputStream.flush();
+					ouputStream.close();
+
+				} catch(IOException e) {
+					throw e;
+				} finally {
+					try {
+						reader.close();
+					} catch(Exception e) {
+						// ignored
+					}
+			    }
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+        FacesContext.getCurrentInstance().responseComplete();
+	}
+
+
+
+//071514
+    public void exportToXMLAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+        if (uri == null) {
+            uri = (String) request.getSession().getAttribute("vsd_uri");
+		}
+
+        try {
+			Vector rvs_content_vec = (Vector) request.getSession().getAttribute("rvs_content_vec");
+            if (rvs_content_vec != null) {
+				StringBuffer sb = new StringBuffer();
+				sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+				sb.append("<root>");
+				try {
+					System.out.println("rvs_content_vec.size: " + rvs_content_vec.size());
+
+					String heading = (String) rvs_content_vec.elementAt(0);
+					sb.append("<heading>\n");
+					sb.append(heading);
+					sb.append("\n");
+					sb.append("</heading>\n");
+
+					sb.append("<concepts>\n");
+
+					for(int i=1; i<rvs_content_vec.size(); i++) {
+						sb.append("<concept>\n");
+						String t = (String) rvs_content_vec.elementAt(i);
+						//sb.append("<![CDATA[");
+
+						if (t.endsWith("|")) {
+							t = t.substring(0, t.length()-1);
+						}
+						sb.append(t);
+						//sb.append("]]>");
+						sb.append("\n");
+						sb.append("</concept>\n");
+					}
+
+					sb.append("</concepts>");
+					sb.append("</root>");
+
+					HttpServletResponse response = (HttpServletResponse) FacesContext
+							.getCurrentInstance().getExternalContext().getResponse();
+					response.setContentType("text/xml");
+
+					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+					vsd_name = vsd_name.replaceAll(" ", "_");
+					vsd_name = "resolved_" + vsd_name + ".xml";
+
+					response.setHeader("Content-Disposition", "attachment; filename="
+							+ vsd_name);
+
+					response.setContentLength(sb.length());
+					ServletOutputStream ouputStream = response.getOutputStream();
+					ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
+
+					System.out.println(sb.toString());
+
+					ouputStream.flush();
+					ouputStream.close();
+
+				} catch(IOException e) {
+					throw e;
+				}
+			} else {
+				System.out.println("rvs_content_vec is NULL??? ");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+        FacesContext.getCurrentInstance().responseComplete();
+	}
+*/
 
     public String getNCIDefinition(ResolvedConceptReference ref) {
 		if (ref == null) return null;
@@ -1161,7 +1432,201 @@ StringBuffer buf = new StringBuffer();
 	}
 
 
+    public void exportToCSVAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
 
+		String valueSetDefinitionRevisionId = null;
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+
+        String from_download = HTTPUtils.cleanXSS((String) request.getParameter("from_download"));
+        String vsd_uri = null;
+        StringBuffer sb = new StringBuffer();
+        if (from_download != null && from_download.compareTo("true") == 0) {
+			vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			if (vsd_uri == null) {
+				vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+			}
+			ResolvedValueSetIteratorHolder rvsi = (ResolvedValueSetIteratorHolder) request.getSession().getAttribute("rvsi");
+			if (rvsi != null) {
+				Vector w = rvsi.extractRawDataFromTableContent();
+				if (w != null) {
+					try {
+						w = rvsi.tableContent2CSV(w);
+						for (int k=0; k<w.size(); k++) {
+							String t = (String) w.elementAt(k);
+							sb.append(t);
+							sb.append("\n");
+						}
+					} catch (Exception ex) {
+                        ex.printStackTrace();
+					}
+				}
+			}
+		} else {
+			String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
+			vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			if (vsd_uri == null) {
+				vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
+			}
+
+			if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
+				String msg = "No coding scheme reference is selected.";
+				request.getSession().setAttribute("message", msg);
+				return;// "resolve_value_set";
+			}
+
+			for (int i=0; i<coding_scheme_ref.length; i++) {
+				String t = coding_scheme_ref[i];
+				String delim = "$";
+				if (t.indexOf("$") == -1) delim = "|";
+				Vector u = DataUtils.parseData(t, delim);
+				String url = (String) u.elementAt(0);
+				String version = (String) u.elementAt(1);
+				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
+			}
+			String csVersionTag = null;
+			boolean failOnAllErrors = false;
+			try {
+				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+				ResolvedValueSetCodedNodeSet rvs_cns = null;
+
+				rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+																			valueSetDefinitionRevisionId,
+																			csvList,
+																			csVersionTag);
+				CodedNodeSet cns = rvs_cns.getCodedNodeSet();
+
+				SortOptionList sortOptions = null;
+				LocalNameList filterOptions = null;
+				LocalNameList propertyNames = null;//new LocalNameList();
+				CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
+				propertyTypes[0] = CodedNodeSet.PropertyType.DEFINITION;
+				boolean resolveObjects = true;
+				ResolvedConceptReferencesIterator itr = null;
+
+				itr = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
+
+				sb.append("Code,");
+				sb.append("Name,");
+				sb.append("Terminology,");
+				sb.append("Version,");
+				sb.append("Namespace,");
+				sb.append("Definition");
+				sb.append("\r\n");
+
+				while (itr != null && itr.hasNext()) {
+					ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
+					for (ResolvedConceptReference ref : refs) {
+						String entityDescription = "<NOT ASSIGNED>";
+						if (ref.getEntityDescription() != null) {
+							entityDescription = ref.getEntityDescription().getContent();
+						}
+
+						sb.append("\"" + ref.getConceptCode() + "\",");
+						sb.append("\"" + entityDescription + "\",");
+						sb.append("\"" + ref.getCodingSchemeName() + "\",");
+						sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
+						sb.append("\"" + ref.getCodeNamespace() + "\",");
+
+						String definition = getNCIDefinition(ref);
+						if (definition == null) definition = "";
+						sb.append("\"" + definition + "\"");
+						sb.append("\r\n");
+					}
+				}
+			} catch (Exception ex)	{
+				sb.append("WARNING: Export to CVS action failed.");
+				ex.printStackTrace();
+			}
+		}
+
+
+		vsd_uri = DataUtils.valueSetDefiniionURI2Name(vsd_uri);
+		vsd_uri = vsd_uri.replaceAll(" ", "_");
+		vsd_uri = "resolved_" + vsd_uri + ".txt";
+
+		HttpServletResponse response = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		response.setContentType("text/csv");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ vsd_uri);
+
+		response.setContentLength(sb.length());
+
+		try {
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			sb.append("WARNING: Export to CVS action failed.");
+		}
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+
+
+	/*
+    public void exportToCSVAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+        String uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+        if (uri == null) {
+            uri = (String) request.getSession().getAttribute("vsd_uri");
+		}
+
+        try {
+			Vector rvs_content_vec = (Vector) request.getSession().getAttribute("rvs_content_vec");
+            if (rvs_content_vec != null) {
+				StringBuffer sb = new StringBuffer();
+				try {
+					Vector w = new ResolvedValueSetIteratorHolder().tableContent2CSV(rvs_content_vec);
+					for (int k=0; k<w.size(); k++) {
+						String t = (String) w.elementAt(k);
+						sb.append(t);
+						sb.append("\n");
+					}
+
+					HttpServletResponse response = (HttpServletResponse) FacesContext
+							.getCurrentInstance().getExternalContext().getResponse();
+					response.setContentType("text/csv");
+
+					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+					vsd_name = vsd_name.replaceAll(" ", "_");
+					vsd_name = "resolved_" + vsd_name + ".txt";
+
+					response.setHeader("Content-Disposition", "attachment; filename="
+							+ vsd_name);
+
+					response.setContentLength(sb.length());
+					ServletOutputStream ouputStream = response.getOutputStream();
+					ouputStream.write(sb.toString().getBytes("UTF8"), 0, sb.length());
+
+
+					System.out.println(sb.toString());
+
+					ouputStream.flush();
+					ouputStream.close();
+
+				} catch(IOException e) {
+					throw e;
+				}
+			} else {
+				System.out.println("rvs_content_vec is NULL??? ");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+        FacesContext.getCurrentInstance().responseComplete();
+	}
+*/
+
+/*
     public void exportToCSVAction() {
 
         HttpServletRequest request =
@@ -1267,7 +1732,7 @@ StringBuffer buf = new StringBuffer();
 		}
 		FacesContext.getCurrentInstance().responseComplete();
 	}
-
+*/
 
 	public String searchAction() {
 		/*
@@ -1348,9 +1813,12 @@ StringBuffer buf = new StringBuffer();
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
+
+///////////////////////////////////////////////////////////////////////////////////
                 ResolvedConceptReferencesIteratorWrapper wrapper =
                     new ValueSetSearchUtils().searchByCode(
 				        vsd_uri, matchText, maxToReturn);
+
 
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
@@ -1413,77 +1881,6 @@ StringBuffer buf = new StringBuffer();
                 ex.printStackTrace();
             }
             int size = iteratorBean.getSize();
-/*
-            if (size > 1) {
-                request.getSession().setAttribute("search_results", v);
-                String match_size = Integer.toString(size);
-                request.getSession().setAttribute("match_size", match_size);
-                request.getSession().setAttribute("page_string", "1");
-                return "search_results";
-
-            } else if (size == 1) {
-                request.getSession().setAttribute("singleton", "true");
-//                request.getSession().setAttribute("dictionary", scheme);// Constants.CODING_SCHEME_NAME);
-                int pageNumber = 1;
-                List list = iteratorBean.getData(1);
-                ResolvedConceptReference ref =
-                    (ResolvedConceptReference) list.get(0);
-
-                Entity c = null;
-                if (ref == null) {
-                    String msg =
-                        "Error: Null ResolvedConceptReference encountered.";
-                    request.getSession().setAttribute("message", msg);
-
-//                    request.getSession().setAttribute("dictionary", scheme);
-                    return "message";
-
-                } else {
-                    if (ref.getConceptCode() == null) {
-                        String message =
-                            "Code has not been assigned to the concept matches with '"
-                                + matchText + "'";
-                        _logger.warn("WARNING: " + message);
-                        request.getSession().setAttribute("message", message);
-
-                       // request.getSession().setAttribute("dictionary", scheme);
-                        return "message";
-                    } else {
-                        request.getSession().setAttribute("code",
-                            ref.getConceptCode());
-                    }
-
-                    c = ref.getReferencedEntry();
-
-                    if (c == null) {
-
-                           // to be modified
-                           c = DataUtils.getConceptByCode(ref.getCodingSchemeURI(), null, null,
-                               ref.getConceptCode());
-                        if (c == null) {
-                            String message =
-                                "Unable to find the concept with a code '"
-                                    + ref.getConceptCode() + "'";
-                            _logger.warn("WARNING: " + message);
-                            request.getSession().setAttribute("message",
-                                message);
-                           // request.getSession().setAttribute("dictionary",
-                           //     scheme);
-                            return "message";
-                        }
-
-                    } else {
-                        request.getSession().setAttribute("code",
-                            c.getEntityCode());
-                    }
-                }
-
-                request.getSession().setAttribute("concept", c);
-                request.getSession().setAttribute("type", "properties");
-                request.getSession().setAttribute("new_search", Boolean.TRUE);
-                return "concept_details";
-            }
-            */
             if (size > 0) {
                 //request.getSession().setAttribute("search_results", v);
                 String match_size = Integer.toString(size);
@@ -1496,8 +1893,9 @@ StringBuffer buf = new StringBuffer();
         }
 
         String message = "No match found.";
-        int minimumSearchStringLength =
-            NCItBrowserProperties.getMinimumSearchStringLength();
+// [NCITERM-613] Remove the minimum 3-character search string length restriction on all name searches.
+//       int minimumSearchStringLength =
+//           NCItBrowserProperties.getMinimumSearchStringLength();
 
 		if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
 			String t = searchTarget.toLowerCase();
@@ -1508,10 +1906,12 @@ StringBuffer buf = new StringBuffer();
 			}
 		}
 
-        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
-            && matchText.length() < minimumSearchStringLength) {
-            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
-        }
+
+//        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
+//            && matchText.length() < minimumSearchStringLength) {
+//            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
+//        }
+
 
         request.getSession().setAttribute("message", message);
         return "message";
@@ -1523,22 +1923,18 @@ StringBuffer buf = new StringBuffer();
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-/*
-        HttpServletResponse response =
-            (HttpServletResponse) FacesContext.getCurrentInstance()
-                .getExternalContext().getResponse();
-*/
+
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
 
-        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
+        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
 
         if (DataUtils.isNull(selectValueSetSearchOption)) {
 			selectValueSetSearchOption = "Name";
 		}
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
-        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
+        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
         if (DataUtils.isNull(algorithm)) {
 			algorithm = "exactMatch";
 		}
@@ -1622,9 +2018,94 @@ request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 			request.getSession().setAttribute("value_set_entity_search_results", iteratorBean);
 			return "value_set";
 		}
-
     }
 
+/*
+Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
+         Response.AddHeader("Content-Disposition", "attachment; filename=report.xlsx")
+*/
+
+    public void exportToExcelAction() {
+        HttpServletRequest request =
+            (HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
+
+		try {
+			HttpServletResponse response = (HttpServletResponse) FacesContext
+					.getCurrentInstance().getExternalContext().getResponse();
+
+			String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+
+    		response.setContentType("application/vnd.ms-excel");
+			//response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+			String vsd_name = DataUtils.valueSetDefiniionURI2Name(vsd_uri);
+			vsd_name = vsd_name.replaceAll(" ", "_");
+			vsd_name = vsd_name + ".xls";
+
+		    response.setHeader("Content-Disposition", "attachment; filename="
+					+ vsd_name);
+
+            StringBuffer sb = new StringBuffer();
+
+			ResolvedValueSetIteratorHolder rvsi = (ResolvedValueSetIteratorHolder) request.getSession().getAttribute("rvsi");
+			List list = null;
+			if (rvsi != null) {
+				list = rvsi.getResolvedValueSetList();
+				if (list != null) {
+					System.out.println("(*) ResolvedValueSetIteratorHolder list.size() = " + list.size());
+				}
+
+			    sb.append(rvsi.getOpenTableTag("rvs_table"));
+				String first_line = (String) list.get(0);
+			    first_line = first_line.replaceAll("td", "th");
+			    sb.append(first_line);
+
+				for (int k=1; k<list.size(); k++) {
+					String line = (String) list.get(k);
+					line = ResolvedValueSetIteratorHolder.removeHyperlinks(line);
+					sb.append(line);
+				}
+				sb.append(rvsi.getCloseTableTag());
+
+/*
+				Vector w = rvsi.extractRawDataFromTableContent();
+				if (w != null) {
+					try {
+						//Vector w = new ResolvedValueSetIteratorHolder().tableContent2CSV(rvs_content_vec);
+						for (int k=0; k<w.size(); k++) {
+							String t = (String) w.elementAt(k);
+							sb.append(t);
+							sb.append("\n");
+						}
+					} catch (Exception ex) {
+
+					}
+				} else {
+					System.out.println("(*) ResolvedValueSetIteratorHolder extractRawDataFromTableContent returns w == null???");
+				}
+*/
+
+
+			} else {
+				System.out.println("(*) rvsi == null???");
+			}
+
+			String outputstr = sb.toString();
+			response.setContentLength(outputstr.length());
+
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(outputstr.getBytes("UTF8"), 0, outputstr.length());
+			ouputStream.flush();
+			ouputStream.close();
+
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+
+		FacesContext.getCurrentInstance().responseComplete();
+
+	}
 
 }

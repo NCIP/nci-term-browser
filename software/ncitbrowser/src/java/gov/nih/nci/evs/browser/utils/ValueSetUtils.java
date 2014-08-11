@@ -261,10 +261,6 @@ public class ValueSetUtils {
 
 		    if (expanded) {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", true);");
-/*
-		    } else if (isHasMoreNode) {
-			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
-*/
 		    } else {
 			    println(out, "var " + node_label + " = new YAHOO.widget.TaskNode(newNodeData, " + parent_node_id + ", false);");
 		    }

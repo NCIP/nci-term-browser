@@ -167,6 +167,17 @@
                 <file file="${bda.conf.dir}/ehcache.xml"/>
             </resources>
         </copy>
+        
+        
+         <!-- Setup Value Set Report Configuration property file -->
+
+        <copy todir="${bda.dist.dir}/exploded/${project.name}-webapp/deploy" overwrite="true"
+              flatten="true" includeEmptyDirs="no" filtering="false">
+            <resources>
+                <file file="${bda.conf.dir}/value_set_report_config.txt"/>
+            </resources>
+        </copy>       
+        
 
         <!-- Setup application property file with defaults, balance of which is set on deployment -->
 
@@ -259,6 +270,15 @@
             </fileset>
         </copy>
 
+        <copy todir="${exploded.dir}/install" includeEmptyDirs="no"
+           filtering="false" overwrite="true">
+            <fileset dir="${exploded.dir}/deploy">
+                <patternset>
+                    <include name="**/value_set_report_config.txt"/>
+                </patternset>
+            </fileset>
+        </copy>
+        
         <!-- Generate application property file -->
 
         <copy todir="${exploded.dir}/install" overwrite="true"
@@ -428,6 +448,13 @@
             value="${application.data.path}/${web.app.conf.path}/${project.short.name}-log4j.xml"
         />
 
+        <bda:AddTomcatProperty
+            deploydir="${tomcat.server.path}"
+            backup="true"
+            name="gov.nih.nci.evs.browser.ValueSetReportConfig"
+            value="${application.data.path}/${web.app.conf.path}/value_set_report_config.txt"
+        />
+        
         <antcall target="-deploy:configfiles" />
         <antcall target="tomcat:start" />
 
@@ -441,6 +468,7 @@
                 <file file="${exploded.dir}/install/${project.short.name}-log4j.xml"/>
                 <file file="${exploded.dir}/install/log4j.dtd"/>
                 <file file="${exploded.dir}/install/${ehcache.xml.file}"/>
+                <file file="${exploded.dir}/install/value_set_report_config.txt"/>
             </resources>
         </copy>
         <copy

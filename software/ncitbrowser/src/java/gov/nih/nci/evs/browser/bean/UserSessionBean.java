@@ -247,20 +247,23 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
             return "message";
         }
 
-        //if (matchText != null && matchText.length() < 3
-        if (matchText.length() < 3
-              //&& matchAlgorithm.compareTo("contains") == 0) {
-			  && matchAlgorithm.compareTo("exactMatch") != 0) {
-            String message = "Please enter a search string of length no less than 3.";
-            request.getSession().setAttribute("message", message);
-            request.removeAttribute("matchText");
 
-            if (mapping_search) {
-                request.getSession().setAttribute("navigation_type", "mappings");
-                return "return_to_mapping_home";
-			}
-            return "message";
-        }
+//[NCITERM-613] Remove the minimum 3-character search string length restriction on all name searches.
+        //if (matchText != null && matchText.length() < 3
+//        if (matchText.length() < 3
+              //&& matchAlgorithm.compareTo("contains") == 0) {
+//			  && matchAlgorithm.compareTo("exactMatch") != 0) {
+//            String message = "Please enter a search string of length no less than 3.";
+//            request.getSession().setAttribute("message", message);
+//            request.removeAttribute("matchText");
+
+//            if (mapping_search) {
+//                request.getSession().setAttribute("navigation_type", "mappings");
+//                return "return_to_mapping_home";
+//			}
+//            return "message";
+//        }
+
 
         boolean ranking = true;
         String scheme = null;
@@ -679,6 +682,11 @@ mappingIteratorBean.initialize();
             } else {
 				ResolvedConceptReferencesIteratorWrapper wrapper = null;
                 try {
+
+
+ System.out.println("(*) DEBUG: SearchUtils().searchByAssociations: " + matchText + " algorithm: " + matchAlgorithm);
+
+
                     wrapper =
                     new SearchUtils().searchByAssociations(schemes, versions,
                         matchText, source, matchAlgorithm, designationOnly,
@@ -694,6 +702,8 @@ mappingIteratorBean.initialize();
                     if (iterator != null) {
 						try {
 							int numberOfMatches = iterator.numberRemaining();
+
+ System.out.println("(*) DEBUG: numberOfMatches: " + numberOfMatches);
 
 						} catch (Exception ex) {
                             //ex.printStackTrace();
@@ -715,16 +725,20 @@ mappingIteratorBean.initialize();
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
 
-
-
-
 		request.getSession().setAttribute("key", key);
+
+ System.out.println("(*) DEBUG: key: " + 	key);
 
 		_logger.debug("searchAction Iterator key: " + key);
 
         if (iterator != null) {
 
             int size = iteratorBean.getSize();
+
+
+ System.out.println("(*) DEBUG: match_size: " + 	size);
+
+
             List list = null;
             // LexEVS API itersator.numberRemaining is inaccurate, and can cause issues.
             // the following code is a work around.
@@ -736,6 +750,8 @@ mappingIteratorBean.initialize();
 			}
 
             if (size > 1) {
+
+
                 request.getSession().setAttribute("search_results", v);
                 String match_size = Integer.toString(size);
                 request.getSession().setAttribute("match_size", match_size);
@@ -745,6 +761,8 @@ mappingIteratorBean.initialize();
 
                 request.getSession().setAttribute("dictionary", scheme);
 
+ System.out.println("(*) DEBUG: scheme: " + 	scheme);
+
                 _logger
                     .debug("UserSessionBean request.getSession().setAttribute dictionary: "
                         + scheme);
@@ -753,6 +771,9 @@ mappingIteratorBean.initialize();
 				request.getSession().removeAttribute("n");
 				request.getSession().removeAttribute("b");
 				request.getSession().removeAttribute("m");
+
+System.out.println("(*) DEBUG: return to search_results: ");
+
 
                 return "search_results";
             } else if (size == 1) {
@@ -834,8 +855,8 @@ mappingIteratorBean.initialize();
         }
 
         String message = "No match found.";
-        int minimumSearchStringLength =
-            NCItBrowserProperties.getMinimumSearchStringLength();
+        //int minimumSearchStringLength =
+        //    NCItBrowserProperties.getMinimumSearchStringLength();
 
 		if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
 			String t = searchTarget.toLowerCase();
@@ -846,10 +867,10 @@ mappingIteratorBean.initialize();
 			}
 		}
 
-        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
-            && matchText.length() < minimumSearchStringLength) {
-            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
-        }
+        //else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
+        //    && matchText.length() < minimumSearchStringLength) {
+        //    message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
+        //}
 
         request.getSession().setAttribute("message", message);
         request.getSession().setAttribute("dictionary", scheme);
@@ -1768,8 +1789,8 @@ response.setContentType("text/html;charset=utf-8");
 
         }
 
-        int minimumSearchStringLength =
-            NCItBrowserProperties.getMinimumSearchStringLength();
+        // int minimumSearchStringLength =
+        //    NCItBrowserProperties.getMinimumSearchStringLength();
         if (ontologiesToSearchOn.size() == 0) {
             request.getSession().removeAttribute("vocabulary");
         } else if (ontologiesToSearchOn.size() == 1) {
@@ -1789,10 +1810,10 @@ response.setContentType("text/html;charset=utf-8");
 			}
 		}
 
-        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
-            && matchText.length() < minimumSearchStringLength) {
-            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
-        }
+        //else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
+        //    && matchText.length() < minimumSearchStringLength) {
+        //    message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
+        //}
 
         hide_ontology_list = "false";
 

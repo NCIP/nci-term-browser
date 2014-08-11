@@ -73,6 +73,56 @@ import org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService;
 import org.lexgrid.resolvedvalueset.impl.LexEVSResolvedValueSetServiceImpl;
 
 
+/**
+ * <!-- LICENSE_TEXT_START -->
+ * Copyright 2008,2009 NGIT. This software was developed in conjunction
+ * with the National Cancer Institute, and so to the extent government
+ * employees are co-authors, any rights in such works shall be subject
+ * to Title 17 of the United States Code, section 105.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *   1. Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the disclaimer of Article 3,
+ *      below. Redistributions in binary form must reproduce the above
+ *      copyright notice, this list of conditions and the following
+ *      disclaimer in the documentation and/or other materials provided
+ *      with the distribution.
+ *   2. The end-user documentation included with the redistribution,
+ *      if any, must include the following acknowledgment:
+ *      "This product includes software developed by NGIT and the National
+ *      Cancer Institute."   If no such end-user documentation is to be
+ *      included, this acknowledgment shall appear in the software itself,
+ *      wherever such third-party acknowledgments normally appear.
+ *   3. The names "The National Cancer Institute", "NCI" and "NGIT" must
+ *      not be used to endorse or promote products derived from this software.
+ *   4. This license does not authorize the incorporation of this software
+ *      into any third party proprietary programs. This license does not
+ *      authorize the recipient to use any trademarks owned by either NCI
+ *      or NGIT
+ *   5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED
+ *      WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *      OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE
+ *      DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
+ *      NGIT, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *      INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *      CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *      LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *      ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *      POSSIBILITY OF SUCH DAMAGE.
+ * <!-- LICENSE_TEXT_END -->
+ */
+
+/**
+ * @author EVS Team
+ * @version 1.0
+ *
+ *          Modification history Initial implementation kim.ong@ngc.com
+ */
+
+
 public class ValueSetSearchUtils
 {
 	private static Logger _logger = Logger.getLogger(ValueSetSearchUtils.class);
@@ -569,6 +619,7 @@ public class ValueSetSearchUtils
 	}
 */
 
+    // default to Name search
     public ResolvedConceptReferencesIteratorWrapper searchResolvedValueSetCodingSchemes(String checked_vocabularies,
         String matchText, String matchAlgorithm) {
 		return searchResolvedValueSetCodingSchemes(checked_vocabularies, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
@@ -583,63 +634,26 @@ long ms = System.currentTimeMillis();
 
 		if (checked_vocabularies == null) return null;
 		Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+
 		// find versions
 		Vector schemes = new Vector();
 		Vector versions = new Vector();
 		for (int i=0; i<selected_vocabularies.size(); i++) {
 			int k = i+1;
 			String selected_vocabulary = (String) selected_vocabularies.elementAt(i);
-			Vector u = getCodingSchemeVersionsByURN(selected_vocabulary);
+
+			//Vector u = getCodingSchemeVersionsByURN(selected_vocabulary);
+			Vector u = DataUtils.getResovedValueSetVersions(selected_vocabulary);
 			if (u != null) {
-				for (int j=0; j<u.size(); j++) {
-					String version = (String) u.elementAt(j);
-					schemes.add(selected_vocabulary);
-					versions.add(version);
-				}
-		    } else {
-				//System.out.println("\tgetCodingSchemeVersionsByURN returns null ??? " + selected_vocabulary);
-			}
+				String version = (String) u.elementAt(0);
+				schemes.add(selected_vocabulary);
+				versions.add(version);
+		    }
 		}
-
-_logger.debug("\tComponent run time (ms) of searching for all resovled value set coding scheme versions: " + (System.currentTimeMillis() - ms));
-System.out.println("\tComponent run time (ms) of searching for all resovled value set coding scheme versions: " + (System.currentTimeMillis() - ms));
-
-		/*
-		// performs search
-		ResolvedConceptReferencesIteratorWrapper wrapper = null;
-		if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
-			try {
-				wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, searchOption, matchAlgorithm);
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		} else {
-			String source = "ALL";
-			boolean ranking = false;
-			int maxToReturn = -1;
-			if (searchOption == SimpleSearchUtils.BY_NAME) {
-				wrapper = new SearchUtils().searchByNameOrCode(
-						schemes, versions, matchText,
-						source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
-			} else {
-				//071513
-				wrapper = new SearchUtils().searchByNameOrCode(
-						schemes, versions, matchText,
-						source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
-			}
-		}
-		return wrapper;
-		*/
-
 
         if (searchOption == SimpleSearchUtils.BY_NAME) {
 			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 				try {
-
-_logger.debug("searchResolvedValueSetCodingSchemes by name using search extension -- " + matchText + ", " + matchAlgorithm);
-System.out.println("searchResolvedValueSetCodingSchemes by name using search extension -- " + matchText + ", " + matchAlgorithm);
-
 					wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, searchOption, matchAlgorithm);
 
 
@@ -650,9 +664,6 @@ System.out.println("searchResolvedValueSetCodingSchemes by name using search ext
 				String source = "ALL";
 				boolean ranking = false;
 				int maxToReturn = -1;
-
-_logger.debug("searchResolvedValueSetCodingSchemes by name using regular search API -- " + matchText + ", " + matchAlgorithm);
-System.out.println("searchResolvedValueSetCodingSchemes by name using regular search API -- " + matchText + ", " + matchAlgorithm);
 
 					wrapper = new SearchUtils().searchByNameOrCode(
 							schemes, versions, matchText,
@@ -662,10 +673,6 @@ System.out.println("searchResolvedValueSetCodingSchemes by name using regular se
 		} else if (searchOption == SimpleSearchUtils.BY_CODE) {
 			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.CODES)) {
 				try {
-
-_logger.debug("searchResolvedValueSetCodingSchemes by code using search extension -- " + matchText + ", " + matchAlgorithm);
-System.out.println("searchResolvedValueSetCodingSchemes by code using search extension -- " + matchText + ", " + matchAlgorithm);
-
 					wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, searchOption, matchAlgorithm);
 
 				} catch (Exception ex) {
@@ -676,8 +683,6 @@ System.out.println("searchResolvedValueSetCodingSchemes by code using search ext
 				boolean ranking = false;
 				int maxToReturn = -1;
 
-_logger.debug("searchResolvedValueSetCodingSchemes by name using regular search API -- " + matchText + ", " + matchAlgorithm);
-System.out.println("searchResolvedValueSetCodingSchemes by name using regular search API -- " + matchText + ", " + matchAlgorithm);
 
 					wrapper = new SearchUtils().searchByNameOrCode(
 							schemes, versions, matchText,
@@ -685,10 +690,6 @@ System.out.println("searchResolvedValueSetCodingSchemes by name using regular se
 
 			}
 		}
-
-
-_logger.debug("Run time (ms): " + (System.currentTimeMillis() - ms));
-System.out.println("Run time (ms): " + (System.currentTimeMillis() - ms));
 
 
 		return wrapper;

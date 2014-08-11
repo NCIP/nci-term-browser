@@ -144,8 +144,6 @@ public class SimpleSearchUtils {
 	}
 
 	public static boolean isSimpleSearchSupported(String algorithm, String target) {
-		//if (!isSearchExtensionAvaliable) return false;
-
 		if (algorithm == null|| target == null) return false;
 
         if (algorithm.compareToIgnoreCase(EXACT_MATCH) == 0 && target.compareToIgnoreCase(CODES) == 0) {
@@ -207,7 +205,6 @@ public class SimpleSearchUtils {
 
     private void printNumberOfMatches(ResolvedConceptReferencesIterator iterator) {
 		if (iterator == null) {
-			System.out.println("Iterator is null");
 			return;
 		}
 		try {
@@ -221,7 +218,6 @@ public class SimpleSearchUtils {
 
     public ResolvedConceptReferencesIteratorWrapper search(
         Vector<String> schemes, Vector<String> versions, String matchText, int searchOption, String algorithm) throws LBException {
-			System.out.println("search by " + matchText + ", algorithm: " + algorithm);
 
 	    if (schemes == null|| versions == null) return null;
 	    if (schemes.size() != versions.size()) return null;
@@ -249,7 +245,6 @@ public class SimpleSearchUtils {
         for (int i=0; i<schemes.size(); i++) {
 			String scheme = (String) schemes.elementAt(i);
 			String version = (String) versions.elementAt(i);
-			System.out.println("\t" + scheme + " (" + version + ")");
 			CodingSchemeReference ref = new CodingSchemeReference();
 			ref.setCodingScheme(scheme);
 
@@ -314,6 +309,145 @@ public class SimpleSearchUtils {
 		}
 		return null;
 	}
+
+
+    public ResolvedConceptReferencesIteratorWrapper searchAssociation(
+        Vector<String> schemes, Vector<String> versions, String matchText, String source, String algorithm, boolean designationOnly, int searchOption,
+        boolean search_source) throws LBException {
+
+		CodedNodeSet cns = null;
+		for (int i=0; i<schemes.size(); i++) {
+
+			String scheme = (String) schemes.elementAt(i);
+			String version = (String) versions.elementAt(i);
+
+			CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+			if (version != null) {
+				csvt.setVersion(version);
+			}
+
+			ResolvedConceptReferencesIteratorWrapper wrapper
+			   = search(scheme, version, matchText, searchOption, algorithm);
+
+			if (wrapper == null) return null;
+			ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
+
+			if (iterator != null) {
+				try {
+					int numRemaining = iterator.numberRemaining();
+					System.out.println("" + numRemaining + " matches found in " + scheme);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				ConceptReferenceList crl = new ConceptReferenceList();
+
+				try {
+					while (iterator.hasNext()) {
+						try {
+							ResolvedConceptReference[] refs =
+								iterator.next(100).getResolvedConceptReference();
+
+							for (ResolvedConceptReference ref : refs) {
+
+								    String code = ref.getCode();
+
+									ResolvedConceptReferenceList matches = lbSvc.getNodeGraph(scheme, csvt, null).resolveAsList(
+											ConvenienceMethods.createConceptReference(code, scheme), !search_source, search_source, 1, 1, new LocalNameList(), null,
+											null, 1024);
+
+
+									// Analyze the result ...
+									if (matches.getResolvedConceptReferenceCount() > 0) {
+										Enumeration<? extends ResolvedConceptReference> refEnum = matches.enumerateResolvedConceptReference();
+										while (refEnum.hasMoreElements()) {
+											ResolvedConceptReference rcr = refEnum.nextElement();
+
+											if (rcr.getTargetOf() != null) {
+												System.out.println("rcr.getTargetOf() != null");
+											}
+											if (rcr.getSourceOf() != null) {
+												System.out.println("rcr.getSourceOf() != null");
+											}
+
+											AssociationList targetof = null;
+
+											if (search_source) {
+												targetof = rcr.getTargetOf();
+											} else {
+												targetof = rcr.getSourceOf();
+											}
+
+											if (targetof != null) {
+												Association[] associations = targetof.getAssociation();
+
+												if (associations != null) {
+													for (int k = 0; k < associations.length; k++) {
+														Association assoc = associations[k];
+														AssociatedConcept[] acl = assoc.getAssociatedConcepts().getAssociatedConcept();
+
+														for (int j = 0; j < acl.length; j++) {
+															AssociatedConcept ac = acl[j];
+															ConceptReference cr = new ConceptReference();
+															cr.setCodingSchemeName(ac.getCodingSchemeName());
+															cr.setCodeNamespace(ac.getCodeNamespace());
+															cr.setConceptCode(ac.getConceptCode());
+														    crl.addConceptReference(cr);
+														}
+													}
+												} else {
+													System.out.println("associations = null");
+												}
+											}
+										}
+
+									}
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							break;
+						}
+					}
+
+					if (cns == null) {
+
+						if (crl.getConceptReferenceCount() > 0) {
+							cns = DataUtils.getNodeSet(lbSvc, scheme, csvt);
+							cns = cns.restrictToCodes(crl);
+					    }
+
+					} else {
+						CodedNodeSet cns_next = DataUtils.getNodeSet(lbSvc, scheme, csvt);
+						if (crl.getConceptReferenceCount() > 0) {
+							cns_next = cns_next.restrictToCodes(crl);
+							cns = cns.union(cns_next);
+						}
+					}
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+		    }
+
+	    }
+
+		SortOptionList sortOptions = null;
+		LocalNameList filterOptions = null;
+		LocalNameList propertyNames = null;
+		CodedNodeSet.PropertyType[] propertyTypes = null;
+		boolean resolveObjects = false;
+
+		if (cns == null) {
+			System.out.println("CNS is null???");
+			return null;
+		}
+
+        ResolvedConceptReferencesIterator asso_iterator = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
+        return new ResolvedConceptReferencesIteratorWrapper(asso_iterator);
+    }
+
+
 
 	public static void main(String [ ] args) {
 		boolean searchExtensionAvaliable = isSearchExtensionAvaliable();

@@ -100,8 +100,25 @@ public class QuickUnionIterator implements ResolvedConceptReferencesIterator {
                         cns.resolve(sortOptions, filterOptions,
                             restrictToProperties, restrictToPropertyTypes,
                             resolve);
+
                     if (iterator != null) {
-                        _iterators.add(iterator);
+						try {
+							int numberRemaining = iterator.numberRemaining();
+						} catch (Exception ex) {
+							//ex.printStackTrace();
+							System.out.println("ERROR: iterator.numberRemaining() exception??? ");
+						}
+/*
+                        if (!iterator.hasNext()) {
+							System.out.println("(***) QuickUnionIterator constructor BROKEN ITERATOR iterator.hasNext() returns: "
+							    + iterator.hasNext());
+						} else {
+                            _iterators.add(iterator);
+						}
+*/
+                         if (iterator.hasNext()) {
+							 _iterators.add(iterator);
+						 }
                     }
                 } catch (Exception ex) {
                     _logger

@@ -172,6 +172,8 @@ public class Constants {
 
     public static final String[] NAV_TYPE_VALUES = {"terminologies", "mappings", "valuesets"};
 
+    public static final String VALUE_SET_REPORT_CONFIG = "gov.nih.nci.evs.browser.ValueSetReportConfig";
+
 /*
 Role Relationships pointing from the current concept to other concepts:
 (True for the current concept and its descendants, may be inherited from parent(s).)

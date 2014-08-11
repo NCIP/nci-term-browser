@@ -31,6 +31,8 @@ Setup the projects build property file:
 
 3. Updated property values in local.properties as appropriate for your environment.
 
+4. Replace bda-lite-1.1.jar in the extern\lib folder by \software\ncitbrowser\tmp_lib\1.6\bda-lite-1.1.jar
+
 Install JBoss 5.1
 
 1. Run NCI Jboss install

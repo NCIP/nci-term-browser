@@ -2699,15 +2699,15 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 				decorator.setAssociationQualifierNameAndValueList(associationQualifierNameAndValueList);
 			}
 			decorator.setMaxToReturn(maxToReturn);
-/*
+
 
 			try {
 				int numberRemaining = decorator.numberRemaining();
-
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				//ex.printStackTrace();
+				System.out.println("decorator.numberRemaining() throws exception???");
 			}
-*/
+
 			return decorator;
 		} catch (Exception ex) {
 			return null;
@@ -2909,24 +2909,12 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 						ResolvedConceptReferencesIterator quickUnionIterator =
 							new QuickUnionIterator(cns_vec, sortCriteria, null,
 								restrictToProperties, null, resolveConcepts);
-                        /*
+
 						try {
 							int quickIteratorNumberRemaining = quickUnionIterator.numberRemaining();
-
 						} catch (Exception ex) {
 							ex.printStackTrace();
 						}
-						*/
-
-
-/*
-						iterator =
-							new SearchByAssociationIteratorDecorator(
-								quickUnionIterator, resolveForward,
-								resolveBackward, resolveAssociationDepth,
-								maxToReturn);
-*/
-
 
 
 						iterator =
@@ -2942,13 +2930,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
 							new QuickUnionIteratorWrapper(codingSchemeNames, cns_vec, sortCriteria, null,
 								restrictToProperties, null, resolveConcepts);
 
-/*
-						iterator =
-							new SearchByAssociationIteratorDecorator(
-								QuickUnionIteratorWrapper, resolveForward,
-								resolveBackward, resolveAssociationDepth,
-								maxToReturn);
-*/
 
 						iterator =
 							createSearchByAssociationIteratorDecorator(
@@ -2979,6 +2960,27 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         // Pending LexEVS fix:
         // if (iterator != null) iterator.setMessage(message);
         // return iterator;
+
+        if (iterator != null) {
+			int numberRemaining = 0;
+			try {
+				numberRemaining = iterator.numberRemaining();
+				if (numberRemaining > 0 && !iterator.hasNext()) {
+					int searchOption = SimpleSearchUtils.BY_NAME;
+					boolean search_source = true;
+
+					ResolvedConceptReferencesIteratorWrapper wrapper = new SimpleSearchUtils().searchAssociation(
+						 schemes, versions, matchText, source, matchAlgorithm, designationOnly,
+						 searchOption,
+						 search_source);
+					return wrapper;
+				}
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
         return new ResolvedConceptReferencesIteratorWrapper(iterator, message);
     }
 
@@ -4307,6 +4309,8 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         Vector<String> schemes, Vector<String> versions, String matchText,
         String source, String matchAlgorithm, boolean ranking, int maxToReturn, String searchTarget) {
         if (searchTarget == null) searchTarget = SEARCH_BY_NAME_ONLY;
+
+
         try {
             if (matchText == null || matchText.trim().length() == 0)
                 return null;

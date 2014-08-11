@@ -452,6 +452,13 @@
                  <value>@ehcache.xml.file@</value>
         </ConfigurableItem>
 
+<!--        
+        <ConfigurableItem>
+                 <key>VALUE_SET_DOWNLOAD_DIR</key>
+                 <value>@value_set_download_dir@</value>
+        </ConfigurableItem>        
+-->        
+
         <ConfigurableItem>
                  <key>SORT_BY_SCORE</key>
                  <value>@sort.by.score@</value>

@@ -28,6 +28,7 @@
     <property name="project.short.name" value="ncit" />
     <property name="webapp.war.name" value="${project.name}.war" />
     <property name="webapp.prop.file" value="NCItBrowserProperties.xml" />
+    <property name="vsd.config.file" value="value_set_report_config.txt" />
 
     <path id="classpath">
         <fileset dir="../${project.name}/extlib">
@@ -200,6 +201,8 @@
                 <file file="${bda.conf.dir}/application-config-client.xml"/>
             </resources>
         </copy>
+        
+
 
         <!-- Setup log4j file -->
 
@@ -222,6 +225,13 @@
             </resources>
         </copy>
 
+        <copy todir="${bda.dist.dir}/exploded/${project.name}-webapp/deploy" overwrite="true"
+             flatten="true" includeEmptyDirs="no" filtering="false">
+            <resources>
+                <file file="${bda.conf.dir}/value_set_report_config.txt"/>
+            </resources>
+        </copy>
+        
     </target>
 
     <target name="build:config" description="Generates configuration files for a target environment">
@@ -252,6 +262,15 @@
             </fileset>
         </copy>
 
+        <copy todir="${exploded.dir}/install" includeEmptyDirs="no"
+           filtering="false" overwrite="true">
+            <fileset dir="${exploded.dir}/deploy">
+                <patternset>
+                    <include name="**/value_set_report_config.txt"/>
+                </patternset>
+            </fileset>
+        </copy>
+        
         <!-- Generate application property file -->
 
         <copy todir="${exploded.dir}/install" overwrite="true"
@@ -303,6 +322,7 @@
             </resources>
         </copy>
 
+       
     </target>
 
     <target name="deploy:local:upgrade" depends="build:all,build:config" description="Build and upgrade application">
@@ -316,12 +336,22 @@
             value="${application.data.path}/${ncitbrowser.conf.path}/${webapp.prop.file}"
         />
 
+
         <bda:AddJBossProperty
             deploydir="${jboss.server.path}/server/default/deploy"
             backup="true"
             name="gov.nih.nci.evs.browser.NCItlog4jProperties"
             value="${application.data.path}/${ncitbrowser.conf.path}/${project.short.name}-log4j.xml"
         />
+
+
+        <bda:AddJBossProperty
+            deploydir="${jboss.server.path}/server/default/deploy"
+            backup="true"
+            name="gov.nih.nci.evs.browser.ValueSetReportConfig"
+            value="${application.data.path}/${ncitbrowser.conf.path}/${vsd.config.file}"
+        />
+        
 
         <copy todir="${application.data.path}/conf" overwrite="true"
               flatten="true" includeEmptyDirs="no" filtering="false">
@@ -330,6 +360,7 @@
                 <file file="${exploded.dir}/install/${webapp.prop.file}"/>
                 <file file="${exploded.dir}/install/${project.short.name}-log4j.xml"/>
                 <file file="${exploded.dir}/install/log4j.dtd"/>
+                <file file="${exploded.dir}/install/value_set_report_config.txt"/>
             </resources>
         </copy>
 
@@ -340,6 +371,7 @@
             </resources>
         </copy>
 
+       
         <copy
             file="${bda.dist.dir}/exploded/${project.name}-webapp/${webapp.war.name}"
             tofile="${jboss.server.path}/server/default/deploy/${webapp.war.name}"

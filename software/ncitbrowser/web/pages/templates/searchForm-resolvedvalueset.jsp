@@ -1,12 +1,11 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%
-
-          
           
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
     .cleanXSS((String) request.getSession().getAttribute("matchText_RVS"));
 
   if (match_text == null) match_text = "";
+  
 
     String userAgent = request.getHeader("user-agent");
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");
@@ -21,18 +20,9 @@ if (uri_str == null) {
   String searchform_requestContextPath = request.getContextPath();
   searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
-    String algorithm = gov.nih.nci.evs.browser.utils.HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
-
+    //String algorithm = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("algorithm"));
+    String algorithm = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("valueset_search_algorithm"));
     String check_e = "", check_s = "" , check_c ="";
-
-/*    
-    if (algorithm == null || algorithm.compareTo("exactMatch") == 0)
-      check_e = "checked";
-    else if (algorithm.compareTo("startsWith") == 0)
-      check_s= "checked";
-    else
-      check_c = "checked";
-*/
 
     if (algorithm == null || algorithm.compareTo("contains") == 0)
       check_c = "checked";
@@ -63,7 +53,8 @@ if (uri_str == null) {
 <h:form id="resolvedValueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">   
     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=match_text%>" onFocus="active=true"
         onBlur="active=false"  onkeypress="return submitEnter('resolvedValueSetSearchForm:resolvedvalueset_search',event)" tabindex="1"/>
-    <h:commandButton id="resolvedvalueset_search" value="Search" action="#{valueSetBean.resolvedValueSetSearchAction}"
+
+    <h:commandButton id="resolvedvalueset_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{form_requestContextPath}/images/search.gif"
@@ -120,6 +111,8 @@ if (uri_str != null) {
 <%
 }
 %>
+
+
 </h:form>
 
         </tr>
