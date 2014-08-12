@@ -6243,7 +6243,7 @@ if (lbSvc == null) {
 			while (it.hasNext()) {
 				String cs_name = (String) it.next();
 				HashMap hmap = (HashMap) _listOfCodingSchemeVersionsUsedInResolutionHashMap.get(cs_name);
-				if (hmap == null) hmap = new hashMap();
+				if (hmap == null) hmap = new HashMap();
 				Iterator it2 = hmap.entrySet().iterator();
 				while (it2.hasNext()) {
 					Entry entry = (Entry) it2.next();
