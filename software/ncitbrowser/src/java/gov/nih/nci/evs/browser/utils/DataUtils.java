@@ -6238,21 +6238,25 @@ if (lbSvc == null) {
     private static void updateListOfCodingSchemeVersionsUsedInResolutionHashMap() {
 		if (_listOfCodingSchemeVersionsUsedInResolutionHashMap == null) return;
 
-		Iterator it = _listOfCodingSchemeVersionsUsedInResolutionHashMap.keySet().iterator();
-		while (it.hasNext()) {
-			String cs_name = (String) it.next();
-			HashMap hmap = (HashMap) _listOfCodingSchemeVersionsUsedInResolutionHashMap.get(cs_name);
-			//Iterator it2 = hmap.keySet().iterator();
-			Iterator it2 = hmap.entrySet().iterator();
-			while (it2.hasNext()) {
-				//String uri = (String) it2.next();
-				//String version = (String) hmap.get(uri);
-				Entry entry = (Entry) it2.next();
-				String uri = (String) entry.getKey();
-				String version = (String) entry.getValue();
-				String coding_scheme_name = (String) _uri2CodingSchemeNameHashMap.get(uri);
-				hmap.put(coding_scheme_name, version);
+		try {
+			Iterator it = _listOfCodingSchemeVersionsUsedInResolutionHashMap.keySet().iterator();
+			while (it.hasNext()) {
+				String cs_name = (String) it.next();
+				HashMap hmap = (HashMap) _listOfCodingSchemeVersionsUsedInResolutionHashMap.get(cs_name);
+				if (hmap == null) hmap = new hashMap();
+				Iterator it2 = hmap.entrySet().iterator();
+				while (it2.hasNext()) {
+					Entry entry = (Entry) it2.next();
+					String uri = (String) entry.getKey();
+					String version = (String) entry.getValue();
+					String coding_scheme_name = (String) _uri2CodingSchemeNameHashMap.get(uri);
+					hmap.put(coding_scheme_name, version);
+				}
+				//KLO, 081114
+				_listOfCodingSchemeVersionsUsedInResolutionHashMap.put(cs_name, hmap);
 			}
+		} catch (Exception ex) {
+			System.out.println("WARNING: updateListOfCodingSchemeVersionsUsedInResolutionHashMap throws exceptions.");
 		}
 	}
 
