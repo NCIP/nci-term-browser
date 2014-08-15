@@ -270,22 +270,24 @@ if (!DataUtils.isNullOrBlank(vsd_uri)) {
 
     if (DataUtils.isNullOrBlank(searchTarget)) {
         check_n = "checked";
-    } else if (searchTarget.compareTo("codes") == 0) {
+    } else if (searchTarget.compareTo("Code") == 0) {
         check_cd = "checked";
-    } else if (searchTarget.compareTo("names") == 0) {
+    } else if (searchTarget.compareTo("Name") == 0) {
         check_n = "checked";
     } else if (searchTarget.compareTo("properties") == 0) {
           check_p= "checked";
     }
      
 %>
-  
+<!--  
 <form id="resolvedValueSetSearchForm" name="resolvedValueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_value_set" class="search-form" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded">
+-->
+<form id="resolvedValueSetSearchForm" name="resolvedValueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_downloaded_value_set" class="search-form" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded">
 
 <input type="hidden" name="resolvedValueSetSearchForm" value="resolvedValueSetSearchForm" />
 
 
-    <input CLASS="searchbox-input" id="matchText" name="matchText" value="" onFocus="active=true"
+    <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=termbrowser_displayed_match_text%>" onFocus="active=true"
         onBlur="active=false"  onkeypress="return submitEnter('resolvedValueSetSearchForm:resolvedvalueset_search',event)" tabindex="1"/>
 
     <input id="resolvedValueSetSearchForm:resolvedvalueset_search" type="image" src="/ncitbrowser/images/search.gif" name="resolvedValueSetSearchForm:resolvedvalueset_search" accesskey="13" alt="Search concepts in value set" onclick="javascript:cursor_wait();" tabindex="2" class="searchbox-btn" /><a href="/ncitbrowser/pages/help.jsf#searchhelp" tabindex="3"><img src="/ncitbrowser/images/search-help.gif" alt="Search Help" style="border-width:0;" class="searchbox-btn" /></a>
@@ -369,6 +371,10 @@ if (!DataUtils.isNullOrBlank(checked_valuesets)) {
             
             
             <%
+            
+Vector matched_concept_codes = (Vector) request.getSession().getAttribute("matched_concept_codes");
+request.getSession().removeAttribute("matched_concept_codes");            
+            
             		int numRemaining = 0;
             		String valueSetSearch_requestContextPath = request.getContextPath();
 
@@ -440,12 +446,31 @@ if (rvsi != null) {
 			
 */
 
+
+
+boolean filter = false;
+if (matched_concept_codes != null && matched_concept_codes.size() > 0) {
+    filter = true;
+}
+
 			    String first_line = (String) list.get(0);
 			    first_line = first_line.replaceAll("td", "th");
 			    table_content_buf.append(first_line);
+			    
 			    for (int k=1; k<list.size(); k++) {
 				    String line = (String) list.get(k);
-				    table_content_buf.append(line);
+				    boolean include = true;
+				    if (filter) {
+				        include = false;
+				        for (int m=0; m<matched_concept_codes.size(); m++) {
+				            String matched_concept_code = (String) matched_concept_codes.elementAt(m);
+				            if (line.indexOf(matched_concept_code) != -1) {
+				                include = true;
+				                break;
+				            }
+				        }
+				    }
+				    if (include) table_content_buf.append(line);
 			    }
 			
 			
@@ -517,7 +542,28 @@ alt="Download Plugin Microsoft Excel Viewer" /></a>
                            <td>&nbsp;</td>
                         </tr>
                         <tr class="textbody">
+<%                        
+if (matched_concept_codes == null) {                       
+%>                        
                            <td><b>Concepts</b>:</td>
+<%
+} else {
+%>
+<td>
+<table border="0" width="95%">
+<tr class="textbody">
+<td align=left><b>Concepts</b>:</td>
+<td align=right>
+<a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>">
+<img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
+</td>
+</tr>
+</table>
+</td>
+<%
+}     
+%>    
+                           
                         </tr>
                         <tr class="textbody">
                            <td>

@@ -1424,6 +1424,7 @@ request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 			matchText = matchText.trim();
 		}
         request.getSession().setAttribute("matchText", matchText);
+        request.getSession().setAttribute("matchText_RVS", matchText);
 
 
 String option_code = "";
@@ -1634,6 +1635,8 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       //out.println("                <input type=\"hidden\" name=\"referer\" id=\"referer\" value=\"http%3A%2F%2Flocalhost%3A8080%2Fncitbrowser%2Fpages%2Fresolved_value_set_search_results.jsf\">");
       out.println("                <input type=\"hidden\" id=\"nav_type\" name=\"nav_type\" value=\"valuesets\" />");
       out.println("                <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
+      //out.println("                <input type=\"hidden\" id=\"matchText\" name=\"matchText\" value=\"" + matchText + "\" />");
+
       //out.println("");
 
       //out.println("<input type=\"hidden\" name=\"javax.faces.ViewState\" id=\"javax.faces.ViewState\" value=\"j_id22:j_id23\" />");
@@ -2025,7 +2028,7 @@ out.flush();
 
 
       private String find_checked_value_sets(HttpServletRequest request) {
-		  HashMap map = DataUtils.getResovedValueSetHashMap();
+		  HashMap map = DataUtils.getResolvedValueSetHashMap();
 		  if (map == null) {
 			  return null;
 		  }
@@ -3594,7 +3597,189 @@ if (DataUtils.isNull(matchText)) {
 		return;
 	}
 
-      public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {
+
+
+    public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {
+
+System.out.println("(*) search_downloaded_value_set...");
+
+		java.lang.String valueSetDefinitionRevisionId = null;
+		String msg = null;
+
+		long ms = System.currentTimeMillis();
+
+
+        String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+
+        if (DataUtils.isNull(selectValueSetSearchOption)) {
+			selectValueSetSearchOption = "Name";
+		}
+		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
+
+        String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
+        if (DataUtils.isNull(algorithm)) {
+			algorithm = Constants.DEFAULT_SEARCH_ALGORITHM;//"exactMatch";
+		}
+
+
+
+		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+
+		if (checked_vocabularies != null) {
+			checked_vocabularies = checked_vocabularies.trim();
+		}
+		if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+			checked_vocabularies = find_checked_value_sets(request);
+		}
+
+		if (DataUtils.isNullOrBlank(checked_vocabularies)) {
+			checked_vocabularies = vsd_uri;
+		}
+		if (checked_vocabularies != null) {
+			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
+		}
+
+System.out.println("(*) checked_vocabularies..." + checked_vocabularies);
+
+
+		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
+			msg = "No value set definition is selected.";
+			request.getSession().setAttribute("message", msg);
+			//return "message";
+		}
+
+		//Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+        String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
+        request.getSession().setAttribute("view", VSD_view);
+
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+
+
+        //LexEVSValueSetDefinitionServices vsd_service = null;
+        //vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+        if (matchText != null) matchText = matchText.trim();
+
+        int searchOption = SimpleSearchUtils.BY_CODE;
+        if (selectValueSetSearchOption.compareTo("Name") == 0) {
+			searchOption = SimpleSearchUtils.BY_NAME;
+		}
+
+
+System.out.println("\tchecked_vocabularies: " + checked_vocabularies);
+System.out.println("\tmatchText: " + matchText);
+System.out.println("\tsearchOption: " + searchOption);
+System.out.println("\talgorithm: " + algorithm);
+
+
+
+        request.getSession().setAttribute("valueset_search_algorithm", algorithm);
+        request.getSession().setAttribute("searchTarget", selectValueSetSearchOption);
+        request.getSession().setAttribute("matchText_RVS", matchText);
+
+
+
+System.out.println("calling searchResolvedValueSetCodingSchemes... ");
+
+        ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
+            matchText, searchOption, algorithm);
+
+System.out.println("exiting searchResolvedValueSetCodingSchemes... ");
+
+
+        if (wrapper == null) {
+			msg = "No match found.";
+			if (searchOption == SimpleSearchUtils.BY_CODE) {
+   			    msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
+			}
+			request.getSession().setAttribute("message", msg);
+			//return "message";
+		} else {
+			Vector matched_concept_codes = new Vector();
+			ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
+			if (iterator == null) {
+				msg = "No match found.";
+				if (searchOption == SimpleSearchUtils.BY_CODE) {
+					msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
+				}
+				request.getSession().setAttribute("message", msg);
+				//return "message";
+			} else {
+				try {
+					while (iterator.hasNext()) {
+						/*
+						iterator = iterator.scroll(100);
+						ResolvedConceptReferenceList rcrl = iterator.getNext();
+						ResolvedConceptReference[] rcra =
+							rcrl.getResolvedConceptReference();
+						for (int i = 0; i < rcra.length; i++) {
+							ResolvedConceptReference rcr = rcra[i];
+					    */
+					        ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
+							//String name = rcr.getEntityDescription().getContent();
+							String concept_code = rcr.getConceptCode();
+							matched_concept_codes.add(concept_code);
+						//}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				request.getSession().setAttribute("matched_concept_codes", matched_concept_codes);
+			}
+
+			try {
+				int numRemaining = matched_concept_codes.size();
+				if (numRemaining == 0) {
+					msg = "No match found.";
+					if (searchOption == SimpleSearchUtils.BY_CODE) {
+						msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
+					}
+					request.getSession().setAttribute("message", msg);
+					//return "message";
+				} else {
+					System.out.println("Number of matches: " + numRemaining);
+				}
+
+			} catch (Exception ex) {
+				msg = "No match found.";
+				if (searchOption == SimpleSearchUtils.BY_CODE) {
+					msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
+				}
+				request.getSession().setAttribute("message", msg);
+				//return "message";
+			}
+
+			System.out.println("(*) " + msg);
+			/*
+
+			IteratorBean iteratorBean = new IteratorBean(iterator);
+            String key = IteratorBeanManager.createIteratorKey(checked_vocabularies, matchText,
+                selectValueSetSearchOption, algorithm);
+            iteratorBean.setKey(key);
+			request.getSession().setAttribute("downloaded_value_set_search_results", iteratorBean);
+			//return "value_set";
+			*/
+
+		}
+
+        try {
+			request.getSession().setAttribute("display_matched_concepts_only", "true");
+			String nextJSP = "/pages/download_value_set.jsf";
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+			dispatcher.forward(request,response);
+			return;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+
+	}
+
+		/*
+
+
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
         String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
@@ -3690,6 +3875,7 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 			}
 	    }
     }
+    */
 
 
 

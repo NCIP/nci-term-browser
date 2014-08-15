@@ -272,8 +272,8 @@ public class DataUtils {
 		System.out.println("Initialization ...");
 		long ms0 = System.currentTimeMillis();
 		long ms = System.currentTimeMillis();
-		resovedValueSetHashMap = getResovedValueSetHashMap();
-		System.out.println("getResovedValueSetHashMap run time (ms): " + (System.currentTimeMillis() - ms));
+		resovedValueSetHashMap = getResolvedValueSetHashMap();
+		System.out.println("getResolvedValueSetHashMap run time (ms): " + (System.currentTimeMillis() - ms));
 		ms = System.currentTimeMillis();
 
 		setCodingSchemeMap();
@@ -330,7 +330,7 @@ public class DataUtils {
 	}
 
 
-    public static HashMap getResovedValueSetHashMap() {
+    public static HashMap getResolvedValueSetHashMap() {
 		if (resovedValueSetHashMap != null) return resovedValueSetHashMap;
 		HashMap hmap = new HashMap();
 		_VSDURI2NameHashMap = new HashMap();
@@ -577,7 +577,7 @@ public class DataUtils {
 */
 	private static boolean isResolvedValueSetCodingScheme(CodingScheme cs) {
 		if (resovedValueSetHashMap == null) {
-			resovedValueSetHashMap = getResovedValueSetHashMap();
+			resovedValueSetHashMap = getResolvedValueSetHashMap();
 		}
 		return resovedValueSetHashMap.containsKey(cs.getCodingSchemeURI());
 	}
