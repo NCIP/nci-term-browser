@@ -585,7 +585,6 @@ public class DataUtils {
 
 	public static AbsoluteCodingSchemeVersionReferenceList getListOfCodingSchemeVersionsUsedInResolution(String codingScheme) {
         try {
-			//Vector v = new Vector();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             if (lbSvc == null) {
                 _logger
