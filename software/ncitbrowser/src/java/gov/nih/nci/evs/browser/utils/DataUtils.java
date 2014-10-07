@@ -6628,5 +6628,15 @@ if (lbSvc == null) {
 	   }
 	   return display_name_vec;
     }
+
+    public static boolean isNCIT_OR_NCIM(String display_name) {
+		if (display_name == null) return false;
+		for (int i=0; i<Constants.NCIT_OR_NCIM.length; i++) {
+			String name = (String) Constants.NCIT_OR_NCIM[i];
+			if (display_name.compareToIgnoreCase(name) == 0) return true;
+		}
+		return false;
+	}
+
 }
 

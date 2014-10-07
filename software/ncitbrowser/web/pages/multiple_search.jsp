@@ -303,7 +303,8 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		
                 request.getSession().setAttribute("display_name_vec", display_name_vec);
                 display_name_vec = DataUtils.sortOntologyInfo(display_name_vec);
-                
+                boolean blank_line_added = false;
+               
                 %>
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
@@ -327,19 +328,15 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
  
                         boolean isMapping = DataUtils.isMapping(scheme, version);
                         if (!isMapping) {
-
-				//String http_label = null;
+                        
+				String indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+				if (info.isProduction()) {
+				    indent = "";
+				}                         
+                        
 				String http_scheme = null;
 				String http_version = null;
-
-        //String status = DataUtils.getMetadataValue(scheme, version, "cabig_approval_status");
-        //boolean display_status = status != null && status.trim().length() > 0;
-        
-        //String cabig_approval_indicator = getCabigIndicator(display_status, basePath);
-        //display_cabig_approval_indicator_note |= display_status;
-        
-				//if (label != null)
-				//  http_label = label.replaceAll(" ", "%20");
+				
 				if (scheme != null)
 				  http_scheme = scheme.replaceAll(" ", "%20");
 				if (version != null)
@@ -347,11 +344,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				%>
 
         <% 
-          if (sort_category != curr_sort_category.intValue()) { 
+          //if (sort_category != curr_sort_category.intValue()) { 
+          if (indent.length() == 0 && !blank_line_added && !DataUtils.isNCIT_OR_NCIM(display_name)) { 
         %>
           <tr><td width="25px">&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
         <% 
-        } 
+               blank_line_added = true;
+          } 
         curr_sort_category = Integer.valueOf(sort_category);
         %>
         
@@ -359,17 +358,12 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				  <td width="25px"></td>
 				  <td>
 				<%
-				//boolean checked = ontologiesToSearchOn != null
-				//    && ontologiesToSearchOn.indexOf(label2) != -1;
-				    
+			    
 				boolean checked = info.getSelected();
 				
 				String checkedStr = checked ? "checked" : "";
 				
-				String indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
-				if (info.isProduction()) {
-				    indent = "";
-				} 				
+				
 				
 				%>
 
@@ -405,7 +399,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				    </a>
 				  <%
 				} else {
-				
 				
 				
 				

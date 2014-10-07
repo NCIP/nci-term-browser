@@ -759,11 +759,29 @@
             </li>
           </ul>
           <p>
-            Select a value set name, in either view, to go to that 
-            value set's home page.  The home page gives a brief 
-            description, and three buttons for viewing it:
+            Both trees are compliant with Section 508 of the Rehabilitation Act. 
+            Use the Tab and the Shift-Tab keys to navigate tree nodes and use the Space bar to check or uncheck a checkbox.
+            Hit the Enter key, when the navigation is focused on a value set name, to go to that value set's home page.  
+            The home page gives a brief description, and four buttons for viewing it:
           </p>
           <ul>
+            <li>
+              <b>Released File</b> Displays the content of a value set as it appears in the file published at the NCI EVS
+              <a href="ftp://ftp1.nci.nih.gov/pub/cacore/EVS/"> download site</a>.
+              <br/>
+			  There are two options for exporting all of the
+              values from the displayed set:
+			  <br/>
+			  <br/>
+              <ul>
+                <li><b>Export Excel</b> will open or save the value set
+                  in a Excel format.</li>
+                <li><b>Export CSV</b> (Comma Separated Values) will
+                  open or save the value set in a delimited text format.</li>
+              </ul>
+              <br/>
+            </li>          
+          
             <li>
               <b>Values</b> lists all concepts contained in this 
                 value set, using the production version of each 
@@ -1062,8 +1080,8 @@
           </table>
           <p>
             For information on known issues, 
-            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.4+Release+Notes" target="_blank">
-              see NCI Term Browser 2.4 Release Notes</a>.
+            <a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.6+Release+Notes" target="_blank">
+              see NCI Term Browser 2.6 Release Notes</a>.
             Additional information about EVS can be found on the
             <a href="http://evs.nci.nih.gov/" target="_blank">EVS Web</a> and 
             <a href="https://wiki.nci.nih.gov/display/EVS/EVS+Wiki" target="_blank">EVS Wiki sites</a>.

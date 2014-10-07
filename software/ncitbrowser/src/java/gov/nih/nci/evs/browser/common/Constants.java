@@ -173,6 +173,10 @@ public class Constants {
 
     public static final String VALUE_SET_REPORT_CONFIG = "gov.nih.nci.evs.browser.ValueSetReportConfig";
 
+    public static final String VALUE_SET_URI_PREFIX = "http://evs.nci.nih.gov/Valueset/";
+
+    public static final String[] NCIT_OR_NCIM = {"NCI Thesaurus", "NCI_Thesaurus", "NCI Metathesaurus", "NCI_Metathesaurus"};
+
     /**
      * Constructor
      */

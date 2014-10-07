@@ -3333,6 +3333,16 @@ if (DataUtils.isNull(matchText)) {
         //return "resolved_value_set";
 	}
 
+    public String convertValueSetURI(String uri) {
+		if (!uri.startsWith(Constants.VALUE_SET_URI_PREFIX)) {
+			int n = uri.lastIndexOf(":");
+			if (n != -1) {
+				String code = uri.substring(n+1, uri.length());
+				return Constants.VALUE_SET_URI_PREFIX + code;
+			}
+		}
+		return uri;
+	}
 
 
 //KLO 071814
@@ -3341,15 +3351,15 @@ if (DataUtils.isNull(matchText)) {
         String refresh = HTTPUtils.cleanXSS((String) request.getParameter("refresh"));
         String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 
-
         if (DataUtils.isNull(refresh)) {
 
 			ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
-
 			if (vsc == null) {
 				System.out.println("(*) ValueSetDefinitionConfig.getValueSetConfig " + vsd_uri + " returns NULL???");
+				String new_uri = convertValueSetURI(vsd_uri);
+				System.out.println("(*) Try " + vsd_uri + " instead.");
+				vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
 			}
-
 
 			String table_content = null;
 			StringBuffer table_content_buf = new StringBuffer();
