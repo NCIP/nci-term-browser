@@ -177,6 +177,8 @@ public class Constants {
 
     public static final String[] NCIT_OR_NCIM = {"NCI Thesaurus", "NCI_Thesaurus", "NCI Metathesaurus", "NCI_Metathesaurus"};
 
+	public static String[] NCIM_CODE_PROPERTYIES = new String[] {"NCI_META_CUI", "UMLS_CUI"};
+
     /**
      * Constructor
      */

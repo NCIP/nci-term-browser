@@ -72,6 +72,7 @@ import org.apache.commons.lang.*;
 
 import org.lexgrid.resolvedvalueset.impl.LexEVSResolvedValueSetServiceImpl;
 import org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.ActiveOption;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -6637,6 +6638,68 @@ if (lbSvc == null) {
 		}
 		return false;
 	}
+
+
+    public static Vector getNCImCodes(String scheme, String version, String code) {
+        Vector w = new Vector();
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null) {
+			csvt.setVersion(version);
+		}
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			if (lbSvc == null) {
+				_logger
+					.warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+				return null;
+			}
+
+			ConceptReferenceList crefs = ConvenienceMethods.createConceptReferenceList(new String[] { code }, scheme);
+			CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, csvt);
+
+			if (cns == null) {
+				return null;
+			}
+			cns = cns.restrictToStatus(ActiveOption.ALL, null);
+			cns = cns.restrictToCodes(crefs);
+			ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
+			if (matches.getResolvedConceptReferenceCount() > 0) {
+				ResolvedConceptReference ref = (ResolvedConceptReference) matches.enumerateResolvedConceptReference()
+						.nextElement();
+				Entity node = ref.getEntity();
+				return getNCImCodes(node);
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return w;
+    }
+
+
+    public static Vector getNCImCodes(Entity node) {
+		if (node == null) return null;
+        Vector w = new Vector();
+		Property[] props = node.getAllProperties();
+		for (int i = 0; i < props.length; i++) {
+			Property prop = props[i];
+			 PropertyQualifier[] qualifiers = prop.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+			 }
+			 Source[] sources = prop.getSource();
+			 for (int k=0; k<sources.length; k++) {
+				  Source source = sources[k];
+			 }
+			 if (Arrays.asList(Constants.NCIM_CODE_PROPERTYIES).contains(prop.getPropertyName())) {
+				 if (!w.contains(prop.getValue().getContent())) {
+					w.add(prop.getValue().getContent());
+				 }
+			 }
+		}
+		return w;
+    }
+
 
 }
 

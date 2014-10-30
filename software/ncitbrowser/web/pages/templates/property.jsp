@@ -76,19 +76,6 @@
     additionalproperties.add("CONCEPT_NAME");
     additionalproperties.add("primitive");
 
-/*
-    String concept_status = null;
-    try {
-        concept_status = curr_concept.getStatus();
-    } catch (Exception ex) {
-        
-    }
-
-    if (concept_status != null) {
-       concept_status = concept_status.replaceAll("_", " ");
-       if (concept_status.compareToIgnoreCase("active") == 0 || concept_status.compareToIgnoreCase("reviewed") == 0) concept_status = null;
-    }
-*/
     String concept_status = null;
     concept_status = DataUtils.getConceptStatus(dictionary, version, null, curr_concept.getEntityCode());
     if (concept_status != null) {
@@ -138,12 +125,12 @@
         //name$value$isPreferred
         String t = (String) presentation_vec.elementAt(i);
         Vector w = DataUtils.parseData(t, "$");
-        String presentaion_name = (String) w.elementAt(0);
-        String presentaion_value = (String) w.elementAt(1);
+        String presentation_name = (String) w.elementAt(0);
+        String presentation_value = (String) w.elementAt(1);
         String isPreferred = (String) w.elementAt(2);
         if (isPreferred.compareTo("true") == 0) {
-		properties_to_display.add(presentaion_name);
-		properties_to_display_label.add(presentaion_name.replaceAll("_", " "));
+		properties_to_display.add(presentation_name);
+		properties_to_display_label.add(presentation_name.replaceAll("_", " "));
 		properties_to_display_url.add(null);
 		properties_to_display_linktext.add(null);
         }
@@ -315,8 +302,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       Vector value_vec = (Vector) hmap.get(propName);
       int row3=0;
 
-//if (propName_label.compareTo("NCI Metathesaurus CUI") == 0) {
-
       if (value_vec != null && value_vec.size() > 1 && propName_label.compareTo("NCI Metathesaurus CUI") != 0) {
           %>
           <b><%=propName_label%></b>:
@@ -360,7 +345,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 			String url_str = url + value;
 			
 			
-			if (propName_label.compareTo("NCI Metathesaurus CUI") == 0) {
+			if (propName_label.compareTo("NCI Metathesaurus Link") == 0) {
 			    if (!ncim_metathesaurus_cui_hset.contains(value)) {
 			        ncim_metathesaurus_cui_hset.add(value);
 			        ncim_metathesaurus_cui_vec.add(propName_label 
@@ -491,6 +476,8 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 %>
 
 <%
+
+/*
     String vocab = (String) request.getSession().getAttribute("dictionary");
     String NCIm_sab = DataUtils.getNCImSAB(vocab);
     
@@ -536,16 +523,19 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 	    }
 	}
     }
-    
-    
+*/    
+    ncim_metathesaurus_cui_vec = DataUtils.getNCImCodes(curr_concept);
+    String ncimURL = new DataUtils().getNCImURL();
     if (ncim_metathesaurus_cui_vec.size() > 0) {
         if (ncim_metathesaurus_cui_vec.size() == 1) {
             String t = (String) ncim_metathesaurus_cui_vec.elementAt(0);
-            Vector u = DataUtils.parseData(t);
-            String t0 = (String) u.elementAt(0);
-            String t1 = (String) u.elementAt(1);
-            String t2 = (String) u.elementAt(2);
-            String t3 = (String) u.elementAt(3);
+            String t0 = "NCI Metathesaurus Link";
+            String t1 = t;
+            String t2 = ncimURL + "ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
+            if (ncimURL.endsWith("ncimbrowser")) {
+                t2 = new DataUtils().getNCImURL() + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
+            }
+            String t3 = "see NCI Metathesaurus info";
 %>
 	  <p>
 		  <b><%=t0%>:&nbsp;</b><%=t1%>&nbsp;
@@ -573,11 +563,13 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 			}		
 		
 		    String t = (String) ncim_metathesaurus_cui_vec.elementAt(k);
-		    Vector u = DataUtils.parseData(t);
-		    String t0 = (String) u.elementAt(0);
-		    String t1 = (String) u.elementAt(1);
-		    String t2 = (String) u.elementAt(2);
-		    String t3 = (String) u.elementAt(3);
+		    String t0 = "NCI Metathesaurus Link";
+		    String t1 = t;
+		    String t2 = ncimURL + "ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
+		    if (ncimURL.endsWith("ncimbrowser")) {
+			t2 = new DataUtils().getNCImURL() + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
+		    }		    
+                    String t3 = "see NCI Metathesaurus info";
 %>		    
 		    <td><%=t1%>&nbsp;<a href="javascript:redirect_site('<%= t2 %>')">(<%=t3%>)</a></td>
 		    
@@ -593,7 +585,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     
 %>
 
-
 <p>
 <b>Synonyms &amp; Abbreviations:</b>
 <a href="<%=request.getContextPath() %>/pages/concept_details.jsf?dictionary=<%=scheme%>&code=<%=id%>&type=synonym">(see Synonym Details)</a>
@@ -605,15 +596,15 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     for (int i=0; i<presentation_vec.size(); i++) {
         String t = (String) presentation_vec.elementAt(i);
         Vector w = DataUtils.parseData(t, "$");
-        String presentaion_name = (String) w.elementAt(0);
-        String presentaion_value = (String) w.elementAt(1);
-        //presentaion_value = presentaion_value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        String presentation_name = (String) w.elementAt(0);
+        String presentation_value = (String) w.elementAt(1);
+        //presentation_value = presentation_value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         String isPreferred = (String) w.elementAt(2);
 
-        displayed_properties.add(presentaion_name);
-        if (!hset2.contains(presentaion_value)) {
-	    synonym_values.add(presentaion_value);
-	    hset2.add(presentaion_value);
+        displayed_properties.add(presentation_name);
+        if (!hset2.contains(presentation_value)) {
+	    synonym_values.add(presentation_value);
+	    hset2.add(presentation_value);
         }
 
         synonym_values = SortUtils.quickSort(synonym_values);
