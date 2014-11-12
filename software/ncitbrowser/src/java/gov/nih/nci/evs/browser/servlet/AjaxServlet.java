@@ -3357,7 +3357,7 @@ if (DataUtils.isNull(matchText)) {
 			if (vsc == null) {
 				System.out.println("(*) ValueSetDefinitionConfig.getValueSetConfig " + vsd_uri + " returns NULL???");
 				String new_uri = convertValueSetURI(vsd_uri);
-				System.out.println("(*) Try " + vsd_uri + " instead.");
+				System.out.println("(*) Try " + new_uri + " instead.");
 				vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
 			}
 
