@@ -2807,10 +2807,7 @@ if (DataUtils.isNull(matchText)) {
           out.write("/ajax?action=create_cs_vs_tree&dictionary=");
 
           //out.print(HTTPUtils.cleanXSS(scheme));
-          String scheme_name = HTTPUtils.cleanXSS(scheme);
-          if (scheme_name.compareTo("NCI_Thesaurus") == 0) {
-			  scheme_name = "NCI%20Thesaurus";
-		  }
+          String scheme_name = HTTPUtils.cleanXSS(DataUtils.getFormalName(scheme));
 		  out.print(scheme_name);
 
           out.write("&version=");
@@ -3408,6 +3405,15 @@ out.flush();
 				}
 
 				int startIndex = ExcelUtil.getHSSFStartRow(excelfile, sheet, col, code);
+
+//KLO testing
+if (vsc.getExtractionRule() != null && !vsc.getExtractionRule().endsWith(":all")) {
+	String header = ExcelUtil.getHSSFHeader(excelfile, sheet);
+	if (header != null && header.indexOf(Constants.CDISC_SUBMISSION_VALUE) != -1) {
+		startIndex = startIndex - 1;
+	}
+}
+
 				int endIndex = ExcelUtil.getHSSFEndRow(excelfile, sheet, col, code);
 
 				request.getSession().removeAttribute("rvsi");
@@ -3433,7 +3439,8 @@ out.flush();
 				}
 			}
 
-			String msg = "Unable to resolve the value set " + vsd_uri;
+			//String msg = "Unable to resolve the value set " + vsd_uri;
+			String msg = Constants.NO_VALUE_SET_REPORT_AVAILABLE;
 			request.getSession().setAttribute("message", msg);
 	    }
 

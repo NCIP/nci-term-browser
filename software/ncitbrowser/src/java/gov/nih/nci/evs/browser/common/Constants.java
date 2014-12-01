@@ -179,6 +179,11 @@ public class Constants {
 
 	public static String[] NCIM_CODE_PROPERTYIES = new String[] {"NCI_META_CUI", "UMLS_CUI"};
 
+	public static final String NO_VALUE_SET_REPORT_AVAILABLE = "No value set report is available.";
+
+    public static final String CDISC_SUBMISSION_VALUE = "CDISC Submission Value";
+
+
     /**
      * Constructor
      */

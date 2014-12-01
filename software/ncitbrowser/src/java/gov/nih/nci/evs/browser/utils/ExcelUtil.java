@@ -65,6 +65,56 @@ public class ExcelUtil {
 
 	 }
 
+     public static String getHSSFHeader(String file, int sheet) {
+		StringBuffer buf = new StringBuffer();
+		try {
+			FileInputStream fis = new FileInputStream(new File(file));
+			//Get the workbook instance for XLS file
+			HSSFWorkbook workbook = new HSSFWorkbook(fis);
+			try {
+				fis.close();
+			} catch (Exception ex) {
+                ex.printStackTrace();
+			}
+
+			//Get first sheet from the workbook
+			HSSFSheet hSSFSheet = workbook.getSheetAt(sheet);
+			HSSFRow row = hSSFSheet.getRow(0);
+
+			int cells = row.getPhysicalNumberOfCells();
+			System.out.println("\nROW " + row.getRowNum() + " has " + cells
+					+ " cell(s).");
+			for (int c = 0; c < cells; c++) {
+				HSSFCell cell = row.getCell(c);
+				String value = null;
+
+				switch (cell.getCellType()) {
+
+					case HSSFCell.CELL_TYPE_FORMULA:
+						value = cell.getCellFormula();
+						break;
+
+					case HSSFCell.CELL_TYPE_NUMERIC:
+						value = "" + cell.getNumericCellValue();
+						break;
+
+					case HSSFCell.CELL_TYPE_STRING:
+						value = cell.getStringCellValue();
+						break;
+
+					default:
+				}
+				buf.append(value);
+				if (c < cells-1) {
+					buf.append("|");
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return buf.toString();
+	 }
+
 
      public static int getHSSFStartRow(String file, int sheet, int col, String code) {
 		try {
@@ -142,4 +192,12 @@ public class ExcelUtil {
 		}
 		return num;
 	}
+
+	//String getHSSFHeader(String file, int sheet)
+	public static void main(String [] args)
+	{
+		String header = getHSSFHeader("ADaM_Terminology.xls", 1);
+		System.out.println(header);
+	}
+
 }

@@ -39,7 +39,7 @@ public class ValueSetTableGenerator {
 			  excelfile = filename.substring(n+1, filename.length());
 		  }
 
-// To be modified: always download
+          // To be modified: always download
 
 		  if (!fileExists(excelfile)) {
 			  FTPDownload.download(vsc.getReportURI());
@@ -79,7 +79,8 @@ public class ValueSetTableGenerator {
 			  out.println("  overflow-x:scroll;");
 			  out.println("  overflow-y:scroll;");
 			  out.println("  width:900px;");
-			  out.println("  margin-left:100px;");
+			  //out.println("  margin-left:100px;");
+			  out.println("  margin-left:5px;");
 			  out.println("  height:500px;");
 			  out.println("}");
 			  out.println("</style>");
