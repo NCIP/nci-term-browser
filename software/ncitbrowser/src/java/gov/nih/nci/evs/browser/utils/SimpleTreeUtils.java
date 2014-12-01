@@ -392,6 +392,15 @@ public class SimpleTreeUtils {
     public void printTree(PrintWriter pw, HashMap tree_map) {
 		if (tree_map == null) return;
 		TreeItem root = (TreeItem) tree_map.get("<Root>");
+		if (root == null) {
+			System.out.println("ERROR in printTree -- root is null.");
+			return;
+		}
+
+		if (root._assocToChildMap == null) {
+			System.out.println("ERROR in printTree -- root._assocToChildMap is null.");
+			return;
+		}
 
 		int knt = 0;
 		for (String asso_name : root._assocToChildMap.keySet()) {

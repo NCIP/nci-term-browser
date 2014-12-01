@@ -159,7 +159,7 @@ public final class AjaxServlet extends HttpServlet {
     }
 
     private static void debugJSONString(String msg, String jsonString) {
-    	boolean debug = false;  //DYEE_DEBUG (default: false)
+    	boolean debug = false;
     	if (! debug)
     		return;
     	_logger.debug(Utils.SEPARATOR);
@@ -637,7 +637,7 @@ if (action.compareTo("xmldefinitions") == 0) {
         return false;
     }
 
-    private static boolean _debug = false; // DYEE_DEBUG (default: false)
+    private static boolean _debug = false;
     private static StringBuffer _debugBuffer = null;
 
     public static void println(PrintWriter out, String text) {
@@ -1922,7 +1922,6 @@ if (view == Constants.STANDARD_VIEW) {
 
       stu.printSelectAllOrNoneLinks(out);
 
-
       out.println("");
       out.println("");
       out.println("");
@@ -2272,8 +2271,12 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 		}
     }
 
-    public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String dictionary, String version) {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Possible error here?
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    public static void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String dictionary, String version) {
 	  request.getSession().removeAttribute("b");
 	  request.getSession().removeAttribute("m");
 
@@ -2390,12 +2393,6 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
       out.println("");
 
 
- HashMap value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
-
- TreeItem root = (TreeItem) value_set_tree_hmap.get("<Root>");
- new ValueSetUtils().printTree(out, root, Constants.TERMINOLOGY_VIEW, dictionary);
-
-
  String contextPath = request.getContextPath();
  //String view_str = new Integer(view).toString();
  String view_str = Integer.valueOf(view).toString();
@@ -2403,7 +2400,6 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 
  String option = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
  String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
-
 
 
 String option_code = "";
@@ -2809,7 +2805,14 @@ if (DataUtils.isNull(matchText)) {
           out.write("        <a href=\"");
           out.print( request.getContextPath() );
           out.write("/ajax?action=create_cs_vs_tree&dictionary=");
-          out.print(HTTPUtils.cleanXSS(scheme));
+
+          //out.print(HTTPUtils.cleanXSS(scheme));
+          String scheme_name = HTTPUtils.cleanXSS(scheme);
+          if (scheme_name.compareTo("NCI_Thesaurus") == 0) {
+			  scheme_name = "NCI%20Thesaurus";
+		  }
+		  out.print(scheme_name);
+
           out.write("&version=");
           out.print(HTTPUtils.cleanXSS(version));
           out.write("\" tabindex=\"15\">Value Sets</a>\r\n");
@@ -2960,6 +2963,22 @@ if (DataUtils.isNull(matchText)) {
       out.println("	<a id=\"uncheck_all\" href=\"#\" tabindex=\"104\">Uncheck all</a>");
       out.println("</div>");
       */
+
+      SimpleTreeUtils stu = new SimpleTreeUtils();
+      stu.printSelectAllOrNoneLinks(out);
+
+
+stu.printFormHeader(out);
+TreeItem root = null;
+
+//HashMap value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree(scheme, version);
+HashMap value_set_tree_hmap = DataUtils.getCodingSchemeValueSetSubTree(scheme);
+
+stu.printTree(out, value_set_tree_hmap);
+stu.printFormFooter(out);
+out.flush();
+
+
       out.println("");
       out.println("");
       out.println("");

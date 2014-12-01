@@ -6701,5 +6701,27 @@ if (lbSvc == null) {
     }
 
 
+    public static HashMap getCodingSchemeValueSetSubTree(String scheme) {
+		if (terminologyValueSetTree == null) {
+			terminologyValueSetTree = ValueSetHierarchy.getCodingSchemeValueSetTree(null, null);
+		}
+		String formalname = getFormalName(scheme);
+		HashMap tree = new HashMap();
+		TreeItem ti = new TreeItem("<Root>", "Root node");
+		ti._expandable = false;
+		TreeItem root = (TreeItem) terminologyValueSetTree.get("<Root>");
+        for (String association : root._assocToChildMap.keySet()) {
+			List<TreeItem> child_nodes = root._assocToChildMap.get(association);
+			for (TreeItem childItem : child_nodes) {
+				if (childItem._text.compareTo(formalname) == 0) {
+					ti.addChild(association, childItem);
+					ti._expandable = true;
+		            tree.put("<Root>", ti);
+                    return tree;
+				}
+			}
+		}
+		return tree;
+	}
 }
 
