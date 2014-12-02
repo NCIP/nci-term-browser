@@ -155,6 +155,8 @@ public class ValueSetDefinitionConfig {
 					reportURI,
 					extractionRule);
 				hmap.put(uri, vsc);
+				String uri_lower = uri.toLowerCase();
+				hmap.put(uri_lower, vsc);
 			}
 			in.close();
 		} catch (Exception ex) {

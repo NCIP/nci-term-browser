@@ -1822,6 +1822,13 @@ out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
 
 
 ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
+if (vsc == null) {
+	System.out.println("(*) ValueSetDefinitionConfig.getValueSetConfig " + vsd_uri + " returns NULL???");
+	String new_uri = convertValueSetURI(vsd_uri);
+	System.out.println("(*) Try " + new_uri + " instead.");
+	vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
+}
+
 if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
 
       out.println("<table>");
