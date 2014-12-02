@@ -114,11 +114,12 @@ public class ValueSetTableGenerator {
 				  }
 
 				  int startIndex = ExcelUtil.getHSSFStartRow(excelfile, sheet, col, code);
-				  int endIndex = ExcelUtil.getHSSFEndRow(excelfile, sheet, col, code);
+				  //int endIndex = ExcelUtil.getHSSFEndRow(excelfile, sheet, col, code);
 
 				  try {
 					  String url = "http://nciterms.nci.nih.gov/ConceptReport.jsp?dictionary=NCI%20Thesaurus";
-					  HSSF2HTML generator = new HSSF2HTML(excelfile, sheet, startIndex, endIndex, url);
+					  //HSSF2HTML generator = new HSSF2HTML(excelfile, sheet, startIndex, endIndex, url);
+					  HSSFtoHTML generator = new HSSFtoHTML(excelfile, sheet, startIndex, col, code, url);
 					  String table_content = generator.getHTML();
 					  out.print(table_content);
 				  } catch (Exception ex) {
