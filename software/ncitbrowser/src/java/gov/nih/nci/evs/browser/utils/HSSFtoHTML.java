@@ -249,27 +249,30 @@ public class HSSFtoHTML {
         int rows = sheet.getPhysicalNumberOfRows();
         for (int i=startIndex; i<=rows; i++) {
 			HSSFRow row = sheet.getRow(i);
-			HSSFCell cell = row.getCell(col);
+			if (row != null) {
+				HSSFCell cell = row.getCell(col);
+				if (cell != null) {
+					String value = null;
+					switch (cell.getCellType()) {
+						case HSSFCell.CELL_TYPE_FORMULA:
+							value = cell.getCellFormula();
+							break;
 
-			String value = null;
-			switch (cell.getCellType()) {
-				case HSSFCell.CELL_TYPE_FORMULA:
-					value = cell.getCellFormula();
-					break;
+						case HSSFCell.CELL_TYPE_NUMERIC:
+							value = "" + cell.getNumericCellValue();
+							break;
 
-				case HSSFCell.CELL_TYPE_NUMERIC:
-					value = "" + cell.getNumericCellValue();
-					break;
+						case HSSFCell.CELL_TYPE_STRING:
+							value = cell.getStringCellValue();
+							break;
 
-				case HSSFCell.CELL_TYPE_STRING:
-					value = cell.getStringCellValue();
-					break;
-
-				default:
-			}
-			if (value != null && value.compareTo(code) == 0) {
-				tr(row);
-			}
+						default:
+					}
+					if (value != null && value.compareTo(code) == 0) {
+						tr(row);
+					}
+				}
+		    }
         }
         out.append("</table>\n");
     }

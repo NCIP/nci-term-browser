@@ -88,6 +88,47 @@ public class ResolvedValueSetIteratorHolder {
 
    }
 
+
+
+    public ResolvedValueSetIteratorHolder(final String filename, int sheet, int startIndex, int col, String code, String url, boolean cdisc) throws IOException {
+
+		System.out.println("\nResolvedValueSetIteratorHolder: ");
+		System.out.println("\tfilename: " + filename);
+		System.out.println("\tsheet: " + sheet);
+		System.out.println("\tstartIndex: " + startIndex);
+		System.out.println("\tcol: " + col);
+		System.out.println("\tcode: " + code);
+		System.out.println("\turl: " + url);
+		resolvedValueSetList = new ArrayList();
+
+		InputStream in = getInputStream(filename);
+        sdf = new SimpleDateFormat("dd/MM/yyyy");
+        if (in == null) {
+            book = null;
+            palette = null;
+            evaluator = null;
+            return;
+        }
+        this.URL = url;
+        book = new HSSFWorkbook(in);
+        try {
+			in.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+        palette = book.getCustomPalette();
+        evaluator = book.getCreationHelper().createFormulaEvaluator();
+
+
+System.out.println("calling table... ");
+
+        table(book.getSheetAt(sheet), startIndex, col, code, cdisc);
+        //rvs_content_vec = getTableContent(sheet, startIndex, endIndex);
+        rvs_content_vec = extractRawDataFromTableContent();
+   }
+
+
+
     public ResolvedValueSetIteratorHolder(final InputStream in) throws IOException {
 		resolvedValueSetList = new ArrayList();
 		sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -264,13 +305,7 @@ public class ResolvedValueSetIteratorHolder {
             }
         }
 
-        //out.append("<table class=\"datatable_960\" summary=\"Data Table\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">\n");
-
-        //out.append("<table class=\"datatable_960\" summary=\"Data Table\" cellpadding=\"3\" cellspacing=\"0\" border=\"0\" width=\"100%\">\n");
-
         out.append("<table id=\"" + "rvs_table" + "\" width=\"900\" class=\"mt\">\n");
-
-
         tr(sheet.getRow(0));
         StringBuffer buf = new StringBuffer();
         tr(sheet.getRow(0), buf);
@@ -287,6 +322,104 @@ public class ResolvedValueSetIteratorHolder {
         }
         out.append("</table>\n");
 
+        resolvedValueSetIterator = resolvedValueSetList.listIterator();
+    }
+
+
+    private void table(final HSSFSheet sheet, int startIndex, int col, String code, boolean cdisc) {
+
+System.out.println("ResolvedValueSetIteratorHolder: startIndex: " + startIndex);
+System.out.println("ResolvedValueSetIteratorHolder: col: " + col);
+System.out.println("ResolvedValueSetIteratorHolder: code: " + code);
+
+        resolvedValueSetList = new ArrayList();
+
+        if (sheet == null) {
+            return;
+        }
+        if (sheet.getDrawingPatriarch() != null) {
+            final List<HSSFShape> shapes = sheet.getDrawingPatriarch()
+                    .getChildren();
+            for (int i = 0; i < shapes.size(); ++i) {
+                if (shapes.get(i) instanceof HSSFPicture) {
+                    try {
+                        // Gain access to private field anchor.
+                        final HSSFShape pic = shapes.get(i);
+                        final Field f = HSSFShape.class
+                                .getDeclaredField("anchor");
+                        f.setAccessible(true);
+                        final HSSFClientAnchor anchor = (HSSFClientAnchor) f
+                                .get(pic);
+                        // Store picture cell row, column and picture data.
+                        if (!pix.containsKey(anchor.getRow1())) {
+                            pix.put(anchor.getRow1(),
+                                    new HashMap<Short, List<HSSFPictureData>>());
+                        }
+                        if (!pix.get(anchor.getRow1()).containsKey(
+                                anchor.getCol1())) {
+                            pix.get(anchor.getRow1()).put(anchor.getCol1(),
+                                    new ArrayList<HSSFPictureData>());
+                        }
+                        pix.get(anchor.getRow1())
+                                .get(anchor.getCol1())
+                                .add(book.getAllPictures().get(
+                                        ((HSSFPicture) pic).getPictureIndex()));
+                    } catch (final Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+
+        out.append("<table id=\"" + "rvs_table" + "\" width=\"900\" class=\"mt\">\n");
+        tr(sheet.getRow(0));
+        StringBuffer buf = new StringBuffer();
+        tr(sheet.getRow(0), buf);
+        String t = buf.toString();
+        resolvedValueSetList.add(t);
+        int rows = sheet.getPhysicalNumberOfRows();
+
+        for (int i=startIndex; i<=rows; i++) {
+			HSSFRow row = sheet.getRow(i);
+			if (row != null) {
+				if (col != -1) {
+					HSSFCell cell = row.getCell(col);
+					if (cell != null) {
+						String value = null;
+						switch (cell.getCellType()) {
+							case HSSFCell.CELL_TYPE_FORMULA:
+								value = cell.getCellFormula();
+								break;
+
+							case HSSFCell.CELL_TYPE_NUMERIC:
+								value = "" + cell.getNumericCellValue();
+								break;
+
+							case HSSFCell.CELL_TYPE_STRING:
+								value = cell.getStringCellValue();
+								break;
+
+							default:
+						}
+						if ((cdisc && i==startIndex) ||
+						    (value != null && value.compareTo(code) == 0)) {
+							tr(row);
+							buf = new StringBuffer();
+							tr(row, buf);
+							t = buf.toString();
+							resolvedValueSetList.add(t);
+						}
+					}
+			    } else {
+					tr(row);
+					buf = new StringBuffer();
+					tr(row, buf);
+					t = buf.toString();
+					resolvedValueSetList.add(t);
+				}
+		    }
+        }
+        out.append("</table>\n");
         resolvedValueSetIterator = resolvedValueSetList.listIterator();
     }
 
@@ -910,13 +1043,10 @@ public class ResolvedValueSetIteratorHolder {
 			System.out.println("(*) resolvedValueSetList resolvedValueSetList is NULL???");
 			return null;
 		}
-		System.out.println("(*) resolvedValueSetList size: " + resolvedValueSetList.size());
 		Vector w = new Vector();
 
 		for (int i=0; i<resolvedValueSetList.size(); i++) {
             String line = (String) resolvedValueSetList.get(i);
-            //System.out.println(line);
-
 			line = line.replaceAll("</a>", "");
 			line = line.replaceAll("</td>", "|");
 			line = line.replaceAll("</th>", "|");
@@ -935,7 +1065,6 @@ public class ResolvedValueSetIteratorHolder {
 			    }
 			}
 			w.add(buf.toString());
-			//System.out.println(buf.toString());
 		}
 		return w;
 	}
@@ -975,8 +1104,6 @@ public class ResolvedValueSetIteratorHolder {
 		if (colorCode == null) {
 			colorCode = YELLOW;
 		}
-
-		System.out.println("(addRowBackgroundColor) " + tr);
 		int n = tr.indexOf("<tr>");
 		if (n != -1) {
 			tr = tr.replace("<tr>", "<tr " + "bgcolor=" + "\"" + colorCode + "\">");

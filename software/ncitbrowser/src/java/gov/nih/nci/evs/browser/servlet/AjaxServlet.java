@@ -3389,9 +3389,9 @@ out.flush();
 
 			ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
 			if (vsc == null) {
-				System.out.println("(*) ValueSetDefinitionConfig.getValueSetConfig " + vsd_uri + " returns NULL???");
+				//System.out.println("(*) ValueSetDefinitionConfig.getValueSetConfig " + vsd_uri + " returns NULL???");
 				String new_uri = convertValueSetURI(vsd_uri);
-				System.out.println("(*) Try " + new_uri + " instead.");
+				//System.out.println("(*) Try " + new_uri + " instead.");
 				vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
 			}
 
@@ -3424,22 +3424,22 @@ out.flush();
 
 				int startIndex = ExcelUtil.getHSSFStartRow(excelfile, sheet, col, code);
 
-//KLO testing
+boolean cdisc = false;
 if (vsc.getExtractionRule() != null && !vsc.getExtractionRule().endsWith(":all")) {
 	String header = ExcelUtil.getHSSFHeader(excelfile, sheet);
 	if (header != null && header.indexOf(Constants.CDISC_SUBMISSION_VALUE) != -1) {
 		startIndex = startIndex - 1;
+		cdisc = true;
 	}
 }
 
-				int endIndex = ExcelUtil.getHSSFEndRow(excelfile, sheet, col, code);
-
 				request.getSession().removeAttribute("rvsi");
 
-				if (startIndex != -1 && endIndex != -1) {
+				//if (startIndex != -1 && endIndex != -1) {
+				if (startIndex != -1) {
 					try {
 						String url = "/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus";
-						ResolvedValueSetIteratorHolder rvsi = new ResolvedValueSetIteratorHolder(excelfile, sheet, startIndex, endIndex, url);
+						ResolvedValueSetIteratorHolder rvsi = new ResolvedValueSetIteratorHolder(excelfile, sheet, startIndex, col, code, url, cdisc);
 						request.getSession().setAttribute("rvsi", rvsi);
 					} catch (Exception ex) {
 						ex.printStackTrace();
