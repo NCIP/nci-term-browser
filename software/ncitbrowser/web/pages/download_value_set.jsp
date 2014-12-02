@@ -46,7 +46,7 @@
 
 <style type="text/css">
     body, .mt {padding:0px;font-family: Tahoma, sans-serif;font-size: 0.9em;}
-    body {margin:5px;}
+    body {margin:0px;}
     p {margin:30px 0px 30px 0px;}
     table.mt {border-width: 1px;border-spacing:0px ;border-style: solid;border-color: #cfcfcf;border-collapse: collapse;background-color: transparent;}
     table.mt th {border-width: 1px;padding: 1px;border-style: solid;border-color: #cfcfcf;white-space: nowrap; background-color: #afafaf;text-align:left;}
