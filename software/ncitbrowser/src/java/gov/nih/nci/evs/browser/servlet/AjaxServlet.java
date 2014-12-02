@@ -4,6 +4,8 @@ import org.json.*;
 
 import gov.nih.nci.evs.browser.utils.*;
 import gov.nih.nci.evs.browser.common.*;
+import gov.nih.nci.evs.browser.properties.*;
+
 import org.LexGrid.valueSets.ValueSetDefinition;
 
 import java.io.*;
@@ -1817,14 +1819,23 @@ out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
       out.println("                      </td>");
       out.println("");
       out.println("                      <td>");
-      out.println("<table>");
-      //out.println("<tr><td>Value Set Released Files (FTP Server)</td></tr>");
-      out.println("<tr><td>");
 
+
+ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
+if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
+
+      out.println("<table>");
+      out.println("<tr><td>");
       out.println("<a href=\"/ncitbrowser/ajax?action=download&vsd_uri=" + vsd_uri + "\"><img src=\"/ncitbrowser/images/released_file.gif\" alt=\"Value Set Released Files (FTP Server)\" border=\"0\" tabindex=\"2\"></a>");
       out.println("</td>");
       out.println("</tr>");
       out.println("</table>");
+
+
+} else {
+	  out.println("&nbsp;");
+}
+
       out.println("                      </td>");
       out.println("");
       out.println("                      <td>");

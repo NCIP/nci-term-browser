@@ -548,15 +548,32 @@ if (matched_concept_codes == null) {
                            <td><b>Concepts</b>:</td>
 <%
 } else {
+
+
+ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
+
 %>
 <td>
 <table border="0" width="95%">
 <tr class="textbody">
 <td align=left><b>Concepts</b>:</td>
-<td align=right>
-<a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>">
-<img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
-</td>
+
+<%
+if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
+%>
+	<td align=right>
+	<a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>">
+	<img src="/ncitbrowser/images/released_file.gif" alt="Value Set Released Files (FTP Server)" border="0" tabindex="2"></a>
+	</td>
+	
+<%
+} else {
+%>	
+    <td align=right>&nbsp;</td>
+<%
+} 
+%>
+
 </tr>
 </table>
 </td>

@@ -1,7 +1,9 @@
 NCIt Antineoplastic Agent|http://ncit:Antineoplastic_Agent|null|null
 CDISC Terminology|http://evs.nci.nih.gov/Valueset/C61410|null|null
-CDISC ADaM Terminology|http://evs.nci.nih.gov/Valueset/C81222|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:all
+CDISC ADaM Terminology Backup|http://evs.nci.nih.gov/Valueset/C81222|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:all
+CDISC ADaM Terminology|http://ncit:C81222|null|null
 CDISC ADaM Date Imputation Flag Terminology|http://evs.nci.nih.gov/Valueset/C81223|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81223
+CDISC ADaM Date Imputation Flag Terminology Backup|http://ncit:C81223|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81223
 CDISC ADaM Derivation Type Terminology|http://evs.nci.nih.gov/Valueset/C81224|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81224
 CDISC ADaM Parameter Type Terminology|http://evs.nci.nih.gov/Valueset/C81225|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81225
 CDISC ADaM Time Imputation Flag Terminology|http://evs.nci.nih.gov/Valueset/C81226|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81226
