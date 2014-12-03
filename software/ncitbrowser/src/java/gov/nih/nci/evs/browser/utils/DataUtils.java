@@ -576,7 +576,7 @@ public class DataUtils {
 		return false;
 	}
 */
-	private static boolean isResolvedValueSetCodingScheme(CodingScheme cs) {
+	public static boolean isResolvedValueSetCodingScheme(CodingScheme cs) {
 		if (resovedValueSetHashMap == null) {
 			resovedValueSetHashMap = getResolvedValueSetHashMap();
 		}
@@ -6723,5 +6723,49 @@ if (lbSvc == null) {
 		}
 		return tree;
 	}
+
+
+
+	public static ResolvedConceptReferencesIterator resolveCodingScheme(String cs_uri, String version, boolean resolveObjects) {
+	    ResolvedConceptReferencesIterator itr = null;
+ 		try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+				System.out.println("ERROR: unable to instantiate LexBIGService???");
+                return itr;
+            }
+			CodingSchemeVersionOrTag vt = new CodingSchemeVersionOrTag();
+			if (version != null) {
+				vt.setVersion(version);
+			}
+			CodingScheme cs = lbSvc.resolveCodingScheme(cs_uri, vt);
+			String cs_name = cs.getCodingSchemeName();
+			CodedNodeSet cns = null;
+			try {
+				try {
+					cns = getNodeSet(lbSvc, cs_name, vt);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (cns != null) {
+					try {
+						SortOptionList sortOptions = null;
+						LocalNameList filterOptions = null;
+						LocalNameList propertyNames = null;
+						CodedNodeSet.PropertyType[] propertyTypes = null;
+						itr = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return itr;
+	}
+
 }
 

@@ -3305,10 +3305,14 @@ out.flush();
 		ResolvedValueSetDefinition rvsd = null;
 		int lcv = 0;
 		try {
-			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
-			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
-			if(rvsd != null) {
-				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+			//ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+			//rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
+			//if(rvsd != null) {
+				//ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+
+				ResolvedConceptReferencesIterator itr = DataUtils.resolveCodingScheme(vsd_uri, null, false);
+
+
 				IteratorBeanManager iteratorBeanManager = null;
 
 				if (FacesContext.getCurrentInstance() != null &&
@@ -3348,7 +3352,7 @@ out.flush();
 				}
 				//return "resolved_value_set";
 				return;
-		    }
+		    //}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -3931,6 +3935,227 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
     }
     */
 
+/*
 
+
+    public void resolveValueSetAction(HttpServletRequest request, HttpServletResponse response) {
+        String selectedvalueset = null;
+        //String selectedvalueset = (String) request.getParameter("valueset");
+        String multiplematches = HTTPUtils.cleanXSS((String) request.getParameter("multiplematches"));
+        if (multiplematches != null) {
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("valueset"));
+		} else {
+			selectedvalueset = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+			if (selectedvalueset != null && selectedvalueset.indexOf("|") != -1) {
+				Vector u = DataUtils.parseData(selectedvalueset);
+				selectedvalueset = (String) u.elementAt(1);
+			}
+		}
+        String vsd_uri = selectedvalueset;
+		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
+        request.getSession().setAttribute("vsd_uri", vsd_uri);
+
+        ResolvedConceptReferenceList matches = null;
+        ResolvedConceptReferencesIterator itr = null;
+        String key = vsd_uri;
+
+		try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+				System.out.println("ERROR: unable to instantiate LexBIGService???");
+                return;
+            }
+			CodingSchemeVersionOrTag vt = new CodingSchemeVersionOrTag();
+
+			CodingScheme cs = lbSvc.resolveCodingScheme(vsd_uri, vt);
+			System.out.println("(*) Resolved value set coding scheme " + vsd_uri);
+			String cs_uri = cs.getCodingSchemeURI();
+			String cs_name = cs.getCodingSchemeName();
+			System.out.println("(*) cs_uri: " + cs_uri);
+			System.out.println("(*) cs_name: " + cs_name);
+
+			CodedNodeSet cns = null;
+			try {
+				try {
+					cns = DataUtils.getNodeSet(lbSvc, cs_name, vt);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (cns != null) {
+
+					try {
+						SortOptionList sortOptions = null;
+						LocalNameList filterOptions = null;
+						LocalNameList propertyNames = null;
+						CodedNodeSet.PropertyType[] propertyTypes = null;
+						boolean resolveObjects = false;
+						itr = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
+
+						IteratorBeanManager iteratorBeanManager = null;
+
+						if (FacesContext.getCurrentInstance() != null &&
+							FacesContext.getCurrentInstance().getExternalContext() != null &&
+							FacesContext.getCurrentInstance().getExternalContext().getSessionMap() != null) {
+							 iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+							.getSessionMap().get("iteratorBeanManager");
+						}
+
+						if (iteratorBeanManager == null) {
+							iteratorBeanManager = new IteratorBeanManager();
+							request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
+						}
+
+						request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+
+						IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+						if (iteratorBean == null) {
+							iteratorBean = new IteratorBean(itr);
+							iteratorBean.initialize();
+							iteratorBean.setKey(key);
+							iteratorBeanManager.addIteratorBean(iteratorBean);
+						}
+
+						//request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+						//request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+						//request.getSession().setAttribute("resolved_vs_key", key);
+
+						try {
+							String nextJSP = "/pages/resolved_value_set.jsf";
+							RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+							dispatcher.forward(request,response);
+							return;
+
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+        String[] coding_scheme_ref = null;
+        String key = vsd_uri;
+
+        Vector w = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
+        if (w != null) {
+			coding_scheme_ref = new String[w.size()];
+			for (int i=0; i<w.size(); i++) {
+				String s = (String) w.elementAt(i);
+				coding_scheme_ref[i] = s;
+
+			}
+		}
+        if (coding_scheme_ref == null || coding_scheme_ref.length == 0) {
+			String msg = "No PRODUCTION version of coding scheme is available.";
+			request.getSession().setAttribute("message", msg);
+
+			try {
+				String nextJSP = "/pages/resolve_value_set.jsf";
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+				dispatcher.forward(request,response);
+				return;
+
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			return;
+			//return "resolve_value_set";
+		}
+
+		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
+        StringBuffer buf = new StringBuffer();
+        for (int i=0; i<coding_scheme_ref.length; i++) {
+			String t = coding_scheme_ref[i];
+			String delim = "|";
+			if (t.indexOf("|") == -1) {
+				delim = "$";
+			}
+			Vector u = DataUtils.parseData(t, delim);
+			String uri = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+			if (version == null || version.compareTo("null") == 0) {
+				version = DataUtils.getVocabularyVersionByTag(uri, "PRODUCTION");
+			}
+			//key = key + "|" + uri + "$" + version;
+			buf.append("|" + uri + "$" + version);
+            csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(uri, version));
+		}
+		key = key + buf.toString();
+        request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+
+        //long time = System.currentTimeMillis();
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		ResolvedValueSetDefinition rvsd = null;
+		int lcv = 0;
+		try {
+			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
+			if(rvsd != null) {
+				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+				IteratorBeanManager iteratorBeanManager = null;
+
+				if (FacesContext.getCurrentInstance() != null &&
+				    FacesContext.getCurrentInstance().getExternalContext() != null &&
+				    FacesContext.getCurrentInstance().getExternalContext().getSessionMap() != null) {
+					 iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().get("iteratorBeanManager");
+				}
+
+				if (iteratorBeanManager == null) {
+					iteratorBeanManager = new IteratorBeanManager();
+					request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
+				}
+
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+
+				IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+				if (iteratorBean == null) {
+					iteratorBean = new IteratorBean(itr);
+					iteratorBean.initialize();
+					iteratorBean.setKey(key);
+					iteratorBeanManager.addIteratorBean(iteratorBean);
+				}
+
+                request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+				request.getSession().setAttribute("resolved_vs_key", key);
+
+				try {
+					String nextJSP = "/pages/resolved_value_set.jsf";
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+					dispatcher.forward(request,response);
+					return;
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				return;
+		    }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		String msg = "Unable to resolve the value set " + vsd_uri;
+		request.getSession().setAttribute("message", msg);
+        try {
+			String nextJSP = "/pages/resolved_value_set.jsf";
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+			dispatcher.forward(request,response);
+			return;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	*/
 
 }
