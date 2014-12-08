@@ -47,6 +47,14 @@ import org.LexGrid.naming.SupportedProperty;
 import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
 import org.apache.commons.lang.*;
 
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.descriptors.RenderingDetailDescriptor;
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
+
+
 public class ConceptDetails {
     private static Logger _logger = Logger.getLogger(ConceptDetails.class);
     public String _ncimURL = null;
@@ -135,6 +143,53 @@ public class ConceptDetails {
     }
 
     public static ConceptReferenceList createConceptReferenceList(
+        String[] codes, String codingSchemeName, String ns) {
+        if (codes == null) {
+            return null;
+        }
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.length; i++) {
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(codes[i]);
+            if (ns != null) {
+				cr.setCodeNamespace(ns);
+			}
+
+            list.addConceptReference(cr);
+        }
+        return list;
+    }
+
+    public static List<String> getDistinctNamespacesOfCode(
+            String codingScheme,
+            String version,
+            String code) {
+
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            LexBIGServiceConvenienceMethods lbscm =
+                (LexBIGServiceConvenienceMethods) lbSvc
+                    .getGenericExtension("LexBIGServiceConvenienceMethods");
+            lbscm.setLexBIGService(lbSvc);
+
+            CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+            csvt.setVersion(version);
+
+            List<String> list = lbscm.getDistinctNamespacesOfCode(codingScheme, csvt, code);
+            return list;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+        return null;
+	}
+
+    public static boolean isMapping(String scheme, String version) {
+		return DataUtils.isMapping(scheme, version);
+	}
+
+
+    public static ConceptReferenceList createConceptReferenceList(
         String[] codes, String codingSchemeName) {
         if (codes == null) {
             return null;
@@ -165,7 +220,7 @@ public class ConceptDetails {
         return list;
     }
 
-    public CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
+    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
         throws Exception {
 		CodedNodeSet cns = null;
 		try {
@@ -178,6 +233,82 @@ public class ConceptDetails {
 
 		return cns;
 	}
+
+    public static Entity getConceptByCode(String codingSchemeName, String vers, String code, String ns, boolean use_ns) {
+        try {
+			if (code == null) {
+				//System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
+				return null;
+			}
+			if (code.indexOf("@") != -1) return null; // anonymous class
+
+            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            if (lbSvc == null) {
+                //System.out.println("lbSvc == null???");
+                return null;
+            }
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            if (vers != null) versionOrTag.setVersion(vers);
+
+            ConceptReferenceList crefs = null;
+            if (use_ns) {
+                 crefs = createConceptReferenceList(new String[] { code }, codingSchemeName, ns);
+			} else {
+				 crefs = createConceptReferenceList(new String[] { code }, codingSchemeName);
+			}
+
+            CodedNodeSet cns = null;
+            try {
+				try {
+					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+
+                if (cns == null) {
+					return null;
+				}
+
+                cns = cns.restrictToCodes(crefs);
+ 				ResolvedConceptReferenceList matches = null;
+				try {
+					matches = cns.resolveToList(null, null, null, 1);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+                if (matches == null) {
+                    //System.out.println("Concept not found.");
+                    return null;
+                }
+                int count = matches.getResolvedConceptReferenceCount();
+                // Analyze the result ...
+                if (count == 0)
+                    return null;
+                if (count > 0) {
+                    try {
+                        ResolvedConceptReference ref = (ResolvedConceptReference) matches
+                                .enumerateResolvedConceptReference()
+                                .nextElement();
+                        Entity entry = ref.getReferencedEntry();
+                        return entry;
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
+                        return null;
+                    }
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
 
 
     public Entity getConceptByCode(String codingSchemeName, String vers, String code) {
@@ -645,6 +776,12 @@ public class ConceptDetails {
 		return w;
     }
 
+    public static String replaceAll(String s, String t1, String t2) {
+		// AppScan
+		if (s == null) return s;
+        s = s.replaceAll(t1, t2);
+        return s;
+    }
 
     public static String getFormalName(String key) {
         if (key == null) {
@@ -784,5 +921,98 @@ public class ConceptDetails {
         }
         return v;
     }
+
+    public static String getVocabularyVersionByTag(String codingSchemeName,
+        String ltag) {
+
+		if (codingSchemeName == null) {
+			codingSchemeName = "NCI Thesaurus";
+		}
+
+        String version = null;
+        int knt = 0;
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			if (lbSvc == null) {
+				return null;
+			}
+
+            CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
+            CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
+            for (int i = 0; i < csra.length; i++) {
+                CodingSchemeRendering csr = csra[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                if (css.getFormalName().compareTo(codingSchemeName) == 0
+                    || css.getLocalName().compareTo(codingSchemeName) == 0
+                    || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
+					version = css.getRepresentsVersion();
+                    knt++;
+
+                    if (ltag == null)
+                        return version;
+                    RenderingDetail rd = csr.getRenderingDetail();
+                    CodingSchemeTagList cstl = rd.getVersionTags();
+                    java.lang.String[] tags = cstl.getTag();
+                    if (tags == null)
+                        return version;
+					if (tags.length > 0) {
+                        for (int j = 0; j < tags.length; j++) {
+                            String version_tag = (String) tags[j];
+
+                            if (version_tag != null && version_tag.compareToIgnoreCase(ltag) == 0) {
+                                return version;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       if (ltag != null && ltag.compareToIgnoreCase("PRODUCTION") == 0
+            & knt == 1) {
+            return version;
+        }
+        return null;
+    }
+
+    public static HashSet get_vocabulariesWithoutTreeAccessHashSet() {
+		return DataUtils.get_vocabulariesWithoutTreeAccessHashSet();
+	}
+
+    public static boolean visualizationWidgetSupported(String dictionary) {
+		String csName = getCSName(dictionary);
+		if (csName == null) return false;
+		HashMap map = DataUtils.getVisualizationWidgetHashMap();
+		if (map == null) return false;
+		if (map.containsKey(csName)) return true;
+		return false;
+	}
+
+	public static boolean isInteger( String input )
+	{
+	   if (input == null) return false;
+	   try {
+		  Integer.parseInt( input );
+		  return true;
+	   } catch( Exception e) {
+		  return false;
+	   }
+	}
+
+    public static boolean isNull(String value) {
+		if (value == null || value.compareToIgnoreCase("null") == 0) return true;
+		return false;
+	}
+
+    public static boolean isNullOrBlank(String value) {
+		if (value == null || value.compareToIgnoreCase("null") == 0 || value.compareTo("") == 0) return true;
+		return false;
+	}
+
+    public static boolean isNullOrEmpty(Vector v) {
+		if (v == null || v.size() == 0) return true;
+		return false;
+	}
 
 }

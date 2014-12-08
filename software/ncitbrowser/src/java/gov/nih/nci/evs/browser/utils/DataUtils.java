@@ -4617,7 +4617,6 @@ if (lbSvc == null) {
             boolean isMappingCS = mappingExtension.isMappingCodingScheme(scheme, csvt);
             Boolean bool_obj = Boolean.valueOf(isMappingCS);//   new Boolean(isMappingCS);
 
-
 			_isMappingHashMap.put(scheme, bool_obj);
 			return isMappingCS;
 
@@ -6782,6 +6781,12 @@ if (lbSvc == null) {
 	public static HashMap getFormalName2MetadataHashMap() {
         return _formalName2MetadataHashMap;
 	}
+
+	public static HashMap getVisualizationWidgetHashMap() {
+        return _visualizationWidgetHashMap;
+	}
+
+
 
 
     public static void main(String[] args) {

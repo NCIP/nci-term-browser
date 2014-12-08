@@ -10,7 +10,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Set"%>
 <%@ page import="java.util.Iterator"%>
-<%@ page import="gov.nih.nci.evs.browser.utils.DataUtils"%>
+<%@ page import="gov.nih.nci.evs.browser.utils.ConceptDetails"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils"%>
 <%@ page import="gov.nih.nci.evs.browser.properties.PropertyFileParser"%>
 <%@ page import="gov.nih.nci.evs.browser.properties.NCItBrowserProperties"%>
@@ -46,22 +46,19 @@
 	
 	String dictionary = info.dictionary;
 
-String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchemeName(dictionary);	
+String short_name = ConceptDetails.getCSName(dictionary); 	
 	
 	if (dictionary != null) {
-		dictionary = DataUtils.replaceAll(dictionary, "&#40;", "(");
-		dictionary = DataUtils.replaceAll(dictionary, "&#41;", ")");
-		
-		
-		
-		dictionary = DataUtils.getCSName(dictionary);
+		dictionary = ConceptDetails.replaceAll(dictionary, "&#40;", "(");
+		dictionary = ConceptDetails.replaceAll(dictionary, "&#41;", ")");
+		dictionary = ConceptDetails.getCSName(dictionary);
 	}
 	String deprecatedVersion = info.version_deprecated;
 	String version = info.version;
 	
 	//AppScan KLO 051512
 	if (version == null) {
-	    version = DataUtils.getVocabularyVersionByTag(dictionary, "PRODUCTION");
+	    version = ConceptDetails.getVocabularyVersionByTag(dictionary, "PRODUCTION");
 	}
 	
 	request.setAttribute("version", version);
@@ -84,10 +81,8 @@ String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchem
         String is_virtual = "true";
         String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
         
-        //ncbo_id = DataUtils.getNCBOId(DataUtils.getCSName(dictionary));
-        //System.out.println("concept detail ncbo_id: " + ncbo_id);
-        
-        boolean view_graph = DataUtils.visualizationWidgetSupported(dictionary);
+       
+        boolean view_graph = ConceptDetails.visualizationWidgetSupported(dictionary);
 
 %>
 
@@ -134,12 +129,6 @@ String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchem
                   String ns = null;
             		String type = null;
             		String singleton = (String) request.getAttribute("singleton");
-            		if (singleton != null && singleton.compareTo("true") == 0) {
-            			if (dictionary != null && dictionary.compareTo(Constants.CODING_SCHEME_NAME) != 0) {
-            			        //KLO, 012714
-            				//dictionary = DataUtils.getCodingSchemeName(dictionary);
-            			}
-            		}
             		
             		boolean code_from_cart_action = false;
             		
@@ -219,8 +208,8 @@ String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchem
             			}
             		}
                   
-            		String cd_dictionary = DataUtils.getFormalName(dictionary);
-            		String term_suggestion_application_url = DataUtils
+            		String cd_dictionary = ConceptDetails.getFormalName(dictionary);
+            		String term_suggestion_application_url = ConceptDetails
             				.getMetadataValue(cd_dictionary,"term_suggestion_application_url");
             		String name = "";
             		Entity c = null;
@@ -231,7 +220,7 @@ String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchem
             		} else if (JSPUtils.isNull(version)) {
             			name = "Error: Invalid version - " + version + ".";
             		} else {
-           			c = DataUtils.getConceptByCode(dictionary, version, code, ns, true);
+           			c = ConceptDetails.getConceptByCode(dictionary, version, code, ns, true);
          			
             			if (c != null) {
             				request.getSession().setAttribute("concept", c);
@@ -254,10 +243,10 @@ String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchem
                <%@ include file="/pages/templates/content-header-other.jsp"%>
                <%
                	}
-            		List namespace_list = DataUtils.getDistinctNamespacesOfCode(
+            		List namespace_list = ConceptDetails.getDistinctNamespacesOfCode(
             				dictionary, version, code);
             		String tg_dictionary_0 = dictionary;
-            		String tg_dictionary = DataUtils.replaceAll(dictionary, " ", "%20");
+            		String tg_dictionary = ConceptDetails.replaceAll(dictionary, " ", "%20");
             		if (c != null) {
             			request.getSession().setAttribute("type", type);
             			request.getSession().setAttribute("singleton", "false");
@@ -275,8 +264,8 @@ String short_name = DataUtils.getCSName(dictionary); //DataUtils.uri2CodingSchem
                         <td align="right" width="75%">
                            <%
                            	Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE };
-                           	boolean tree_access2 = !DataUtils.get_vocabulariesWithoutTreeAccessHashSet().contains(dictionary);
-                    		boolean typeLink_isMapping2 = DataUtils.isMapping(dictionary, null);
+                           	boolean tree_access2 = !ConceptDetails.get_vocabulariesWithoutTreeAccessHashSet().contains(dictionary);
+                    		boolean typeLink_isMapping2 = ConceptDetails.isMapping(dictionary, null);
                            	if (tree_access2 && !typeLink_isMapping2) {
                            %>
       
@@ -350,30 +339,17 @@ String n = HTTPUtils.cleanXSS((String) request.getParameter("n"));
 String m = HTTPUtils.cleanXSS((String) request.getParameter("m"));
 String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
 
-/*
-        if (!DataUtils.isNull(b) && !DataUtils.isInteger(b)) {
-            b = "1";
-        }
-        
-        if (!DataUtils.isNull(n) && !DataUtils.isInteger(n)) {
-            n = "1";
-        }
-
-        if (!DataUtils.isNull(m) && !DataUtils.isInteger(m)) {
-            m = "1";
-        }
-*/
 
 // Floating Point Value Denial of Service threats fix:
-        if (!DataUtils.isNull(b) && b.compareTo("0") != 0) {
+        if (!ConceptDetails.isNull(b) && b.compareTo("0") != 0) {
             b = "1";
         }
         
-        if (!DataUtils.isNull(n) && !DataUtils.isInteger(n)) {
+        if (!ConceptDetails.isNull(n) && !ConceptDetails.isInteger(n)) {
             n = "1";
         }
 
-        if (!DataUtils.isNull(m) && m.compareTo("0") != 0) {
+        if (!ConceptDetails.isNull(m) && m.compareTo("0") != 0) {
             m = "1";
         }
         
@@ -381,15 +357,15 @@ String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
 
 String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 
-if (!DataUtils.isNull(vse)) {
+if (!ConceptDetails.isNull(vse)) {
 %>
     <input type="hidden" id="vse" name="vse" value="<%=vse%>" />
 <%
 }
 
 
-if (!DataUtils.isNull(b)) {  
-    if (DataUtils.isNull(n)) {
+if (!ConceptDetails.isNull(b)) {  
+    if (ConceptDetails.isNull(n)) {
         n = "1";
     }
     
@@ -404,7 +380,7 @@ if (!DataUtils.isNull(b)) {
              <input type="hidden" id="key" name="key" value="<%=key%>" />
              
 <%  
-    if (!DataUtils.isNull(m)) {
+    if (!ConceptDetails.isNull(m)) {
         request.getSession().setAttribute("m", m);
     %>
         <input type="hidden" id="m" name="m" value="<%=m%>" />
@@ -486,7 +462,7 @@ if (!DataUtils.isNull(b)) {
                <div class="tabTableContentContainer">
                   <%
                   	if (type != null && type.compareTo("all") == 0) {
-              				boolean isMappingCD = DataUtils.isMapping(dictionary,version);
+              				boolean isMappingCD = ConceptDetails.isMapping(dictionary,version);
                   %>
                   <h1 class="textsubtitle-blue">Table of Contents</h1>
                   <ul>
