@@ -3125,7 +3125,8 @@ out.flush();
     public static void addQuickLink(HttpServletRequest request, PrintWriter out) {
 
 		String basePath = request.getContextPath();
-		String ncim_url = new DataUtils().getNCImURL();
+		//String ncim_url = new DataUtils().getNCImURL();
+		String ncim_url = new ConceptDetails().getNCImURL();
 		String quicklink_dictionary = (String) request.getSession().getAttribute("dictionary");
 		quicklink_dictionary = DataUtils.getFormalName(quicklink_dictionary);
 		String term_suggestion_application_url2 = "";

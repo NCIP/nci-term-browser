@@ -801,6 +801,20 @@ if (searchResultsIterator == null) return null;
 	}
 
 
+    public LexBIGServiceConvenienceMethods createLexBIGServiceConvenienceMethods(
+        LexBIGService lbSvc) {
+        LexBIGServiceConvenienceMethods lbscm = null;
+        try {
+            lbscm =
+                (LexBIGServiceConvenienceMethods) lbSvc
+                    .getGenericExtension("LexBIGServiceConvenienceMethods");
+            lbscm.setLexBIGService(lbSvc);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return lbscm;
+    }
+
     public HashMap getMappingRelationshipHashMap(
         String scheme, String version, String code, int direction) {
 
@@ -809,7 +823,7 @@ if (searchResultsIterator == null) return null;
         else if (direction == -1) searchContext = SearchContext.TARGET_CODES;
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         LexBIGServiceConvenienceMethods lbscm =
-            new DataUtils().createLexBIGServiceConvenienceMethods(lbSvc);
+            createLexBIGServiceConvenienceMethods(lbSvc);
 
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         if (version != null)

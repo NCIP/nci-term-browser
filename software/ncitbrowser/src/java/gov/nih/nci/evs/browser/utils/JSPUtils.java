@@ -328,7 +328,8 @@ if (version != null) {
     public static String getApplicationVersionDisplay() {
         if (_applicationVersionDisplay == null)
             _applicationVersionDisplay =
-                HTTPUtils.cleanXSS(new DataUtils().getApplicationVersionDisplay());
+                //HTTPUtils.cleanXSS(new DataUtils().getApplicationVersionDisplay());
+                HTTPUtils.cleanXSS(new ConceptDetails().getApplicationVersionDisplay());
         return _applicationVersionDisplay;
     }
 

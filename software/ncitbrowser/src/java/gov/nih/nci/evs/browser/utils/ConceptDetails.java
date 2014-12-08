@@ -51,11 +51,52 @@ public class ConceptDetails {
     private static Logger _logger = Logger.getLogger(ConceptDetails.class);
     public String _ncimURL = null;
     public String _ncitURL = null;
+    public String _ncitAppVersionDisplay = null;
+    public String _ncitAppVersion = null;
 
 
 	public ConceptDetails() {
 
 	}
+
+    public String getApplicationVersionDisplay() {
+        if (_ncitAppVersionDisplay != null)
+            return _ncitAppVersionDisplay;
+
+        try {
+            NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
+            String value =
+                properties.getProperty(NCItBrowserProperties.NCIT_APP_VERSION_DISPLAY);
+            if (value == null)
+                return _ncitAppVersionDisplay = "";
+            String version = getApplicationVersion();
+            value = value.replace("$application.version", version);
+            return _ncitAppVersionDisplay = value;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return _ncitAppVersionDisplay = "";
+        }
+    }
+
+    public String getApplicationVersion() {
+        if (_ncitAppVersion != null) {
+            return _ncitAppVersion;
+        }
+        String default_info = "1.0";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _ncitAppVersion =
+                properties.getProperty(NCItBrowserProperties.NCIT_APP_VERSION);
+            if (_ncitAppVersion == null) {
+                _ncitAppVersion = default_info;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return _ncitAppVersion;
+    }
+
 
     public String getNCItURL() {
         if (_ncitURL != null) {
@@ -743,56 +784,5 @@ public class ConceptDetails {
         }
         return v;
     }
-/*
-    public String getNCImURL() {
-        if (_ncimURL != null) {
-            return _ncimURL;
-        }
-        String default_info = "http://ncim.nci.nih.gov";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _ncimURL = properties.getProperty(NCItBrowserProperties.NCIM_URL);
-            if (_ncimURL == null) {
-                _ncimURL = default_info;
-            }
-        } catch (Exception ex) {
 
-        }
-        return _ncimURL;
-    }
-
-    public String getEVSServiceURL() {
-        if (_evsServiceURL != null) {
-            return _evsServiceURL;
-        }
-        String default_info = "Local LexEVS";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _evsServiceURL =
-                properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-            if (_evsServiceURL == null) {
-                _evsServiceURL = default_info;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return _evsServiceURL;
-    }
-
-    public String getTermSuggestionURL() {
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _term_suggestion_application_url =
-                properties
-                    .getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
-        } catch (Exception ex) {
-
-        }
-        return _term_suggestion_application_url;
-    }
-*/
 }

@@ -4082,18 +4082,7 @@ if (lbSvc == null) {
         return (String) _displayName2FormalNameHashMap.get(s);
     }
 
-    public static void main(String[] args) {
-        String scheme = "NCI Thesaurus";
-        String version = null;
-        // Breast Carcinoma (Code C4872)
-        String code = "C4872";
 
-        DataUtils test = new DataUtils();
-
-        HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
-        test.dumpRelationshipHashMap(hmap);
-
-    }
 
     // [#25034] Remove hyperlink from instances on the Relationship tab. (KLO,
     // 121709)
@@ -6794,5 +6783,18 @@ if (lbSvc == null) {
         return _formalName2MetadataHashMap;
 	}
 
+
+    public static void main(String[] args) {
+        String scheme = "NCI Thesaurus";
+        String version = null;
+        // Breast Carcinoma (Code C4872)
+        String code = "C4872";
+
+        DataUtils test = new DataUtils();
+
+        HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
+        test.dumpRelationshipHashMap(hmap);
+
+    }
 }
 
