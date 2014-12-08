@@ -77,7 +77,7 @@
     additionalproperties.add("primitive");
 
     String concept_status = null;
-    concept_status = DataUtils.getConceptStatus(dictionary, version, null, curr_concept.getEntityCode());
+    concept_status = ConceptDetails.getConceptStatus(dictionary, version, null, curr_concept.getEntityCode());
     if (concept_status != null) {
        concept_status = concept_status.replaceAll("_", " ");
        if (concept_status.compareToIgnoreCase("active") == 0 || concept_status.compareToIgnoreCase("reviewed") == 0) concept_status = null;
@@ -90,7 +90,7 @@
 
     for (int i=0; i<propertytypes.size(); i++) {
       String propertytype = (String) propertytypes.elementAt(i);
-      Vector propertynames = DataUtils.getPropertyNamesByType(
+      Vector propertynames = ConceptDetails.getPropertyNamesByType(
         curr_concept, propertytype);
 
       for (int j=0; j<propertynames.size(); j++) {
@@ -98,7 +98,7 @@
 
         if (!hset.contains(propertyname)) {
           hset.add(propertyname);
-          propertyvalues = DataUtils.getPropertyValues(
+          propertyvalues = ConceptDetails.getPropertyValues(
             curr_concept, propertytype, propertyname);
 
           if (propertyvalues != null)
@@ -117,14 +117,14 @@
     Vector properties_to_display_url = new Vector();
     Vector properties_to_display_linktext = new Vector();
     
-    Vector presentation_vec = DataUtils.getPresentationProperties(curr_concept);
+    Vector presentation_vec = ConceptDetails.getPresentationProperties(curr_concept);
     presentation_vec = SortUtils.quickSort(presentation_vec);
     
     //Vector preferred_name_vec = new Vector();
     for (int i=0; i<presentation_vec.size(); i++) {
         //name$value$isPreferred
         String t = (String) presentation_vec.elementAt(i);
-        Vector w = DataUtils.parseData(t, "$");
+        Vector w = ConceptDetails.parseData(t, "$");
         String presentation_name = (String) w.elementAt(0);
         String presentation_value = (String) w.elementAt(1);
         String isPreferred = (String) w.elementAt(2);
@@ -210,10 +210,10 @@ if ((bool_obj != null && !bool_obj.equals(Boolean.TRUE)  && concept_status != nu
 	%>            
 		    <%=link%>
 	<%            
-	            String prop_dictionary_nm = DataUtils.getCSName(prop_dictionary); 
+	            String prop_dictionary_nm = ConceptDetails.getCSName(prop_dictionary); 
 		    for (int i=0; i<descendantCodes.size(); i++) {
 		    	   String t = (String) descendantCodes.elementAt(i);
-		    	   Vector w = DataUtils.parseData(t);
+		    	   Vector w = ConceptDetails.parseData(t);
 		    	   String descendantName = (String) w.elementAt(0);
 		    	   String descendantCode = (String) w.elementAt(1);
 	%>
@@ -264,7 +264,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
  
 
     if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
-        String formalName = DataUtils.getFormalName(dictionary);
+        String formalName = ConceptDetails.getFormalName(dictionary);
         if (formalName == null) {
         	formalName = dictionary;
         }
@@ -283,7 +283,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         ncim_cui_prop_url = url;
         ncim_cui_prop_linktext = linktext;
         
-        Vector ncim_cui_code_vec_temp = DataUtils.getPropertyValues(
+        Vector ncim_cui_code_vec_temp = ConceptDetails.getPropertyValues(
             curr_concept, "GENERIC", propName);
         if (ncim_cui_code_vec_temp != null) {
            for (int lcv=0; lcv<ncim_cui_code_vec_temp.size(); lcv++) {
@@ -361,7 +361,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
                           if (propName_label.compareTo("NCI Metathesaurus CUI") != 0) {
 			  %>
 			  <p>
-			  <b><%=propName_label%>:&nbsp;</b><%=DataUtils.encodeTerm(value)%>&nbsp;
+			  <b><%=propName_label%>:&nbsp;</b><%=ConceptDetails.encodeTerm(value)%>&nbsp;
 			  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
 			  </p>
 			  <%
@@ -386,7 +386,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       			     <i>
 
       			     
-      				  &nbsp;<%=DataUtils.encodeTerm(value)%>&nbsp;
+      				  &nbsp;<%=ConceptDetails.encodeTerm(value)%>&nbsp;
       				  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
       				  </i>
                  </td>   
@@ -460,7 +460,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           if (propName_label.indexOf("textualPresentation") == -1) {
 %>
             <p>
-              <b><%=propName_label%>:&nbsp;</b><%=DataUtils.encodeTerm(value)%>
+              <b><%=propName_label%>:&nbsp;</b><%=ConceptDetails.encodeTerm(value)%>
               <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
                    <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
               <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
@@ -479,7 +479,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 /*
     String vocab = (String) request.getSession().getAttribute("dictionary");
-    String NCIm_sab = DataUtils.getNCImSAB(vocab);
+    String NCIm_sab = ConceptDetails.getNCImSAB(vocab);
     
     if (NCIm_sab != null) {
 	ResolvedConceptReferencesIterator iterator = new SearchUtils().findConceptWithSourceCodeMatching("NCI Metathesaurus", null,
@@ -524,8 +524,8 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 	}
     }
 */    
-    ncim_metathesaurus_cui_vec = DataUtils.getNCImCodes(curr_concept);
-    String ncimURL = new DataUtils().getNCImURL();
+    ncim_metathesaurus_cui_vec = ConceptDetails.getNCImCodes(curr_concept);
+    String ncimURL = new ConceptDetails().getNCImURL();
     if (ncim_metathesaurus_cui_vec.size() > 0) {
         if (ncim_metathesaurus_cui_vec.size() == 1) {
             String t = (String) ncim_metathesaurus_cui_vec.elementAt(0);
@@ -533,7 +533,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
             String t1 = t;
             String t2 = ncimURL + "ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
             if (ncimURL.endsWith("ncimbrowser")) {
-                t2 = new DataUtils().getNCImURL() + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
+                t2 = new ConceptDetails().getNCImURL() + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
             }
             String t3 = "see NCI Metathesaurus info";
 %>
@@ -567,7 +567,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 		    String t1 = t;
 		    String t2 = ncimURL + "ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
 		    if (ncimURL.endsWith("ncimbrowser")) {
-			t2 = new DataUtils().getNCImURL() + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
+			t2 = new ConceptDetails().getNCImURL() + "/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&code=" + t;
 		    }		    
                     String t3 = "see NCI Metathesaurus info";
 %>		    
@@ -595,7 +595,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     Vector synonym_values = new Vector();
     for (int i=0; i<presentation_vec.size(); i++) {
         String t = (String) presentation_vec.elementAt(i);
-        Vector w = DataUtils.parseData(t, "$");
+        Vector w = ConceptDetails.parseData(t, "$");
         String presentation_name = (String) w.elementAt(0);
         String presentation_value = (String) w.elementAt(1);
         //presentation_value = presentation_value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
@@ -623,7 +623,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 <%
 	}
 %>
-		   <td><%=DataUtils.encodeTerm(value)%></td>
+		   <td><%=ConceptDetails.encodeTerm(value)%></td>
 	      </tr>
         <%
     }
@@ -639,7 +639,7 @@ int n = 0;
 boolean hasExternalSourceCodes = false;
 boolean display_UMLS_CUI = true;
 String dict_name = (String) request.getSession().getAttribute("dictionary");
-String vocab_format = DataUtils.getMetadataValue(dict_name, "format");
+String vocab_format = ConceptDetails.getMetadataValue(dict_name, "format");
 if (vocab_format != null && vocab_format.compareTo("RRF") == 0) {
  display_UMLS_CUI= false;
 }
@@ -702,7 +702,7 @@ if (!hasExternalSourceCodes) {
             %>
               <td><%=propName_label%></td>
               <td>
-                <%=DataUtils.encodeTerm(value)%>
+                <%=ConceptDetails.encodeTerm(value)%>
                 <%
                   // KLO
                   if (propName.compareTo("UMLS_CUI") != 0 && prop_url != null && prop_url.compareTo("null") != 0) {
@@ -751,7 +751,7 @@ if (!hasExternalSourceCodes) {
 
       for (int k=0; k<prop_name_value_vec0.size(); k++) {
         String prop_name_value = (String) prop_name_value_vec0.elementAt(k);
-        Vector w = DataUtils.parseData( prop_name_value );
+        Vector w = ConceptDetails.parseData( prop_name_value );
         String prop_name = (String) w.elementAt(0);
         if (!displayed_properties.contains(prop_name) && !additionalproperties.contains(prop_name)) {
            if (w.size() > 0) {
@@ -790,7 +790,7 @@ if (!hasOtherProperties) {
 
       for (int k=0; k<prop_name_value_vec.size(); k++) {
         String prop_name_value = (String) prop_name_value_vec.elementAt(k);
-        Vector w = DataUtils.parseData( prop_name_value );
+        Vector w = ConceptDetails.parseData( prop_name_value );
         String prop_name = (String) w.elementAt(0);
         if (!displayed_properties.contains(prop_name) && !additionalproperties.contains(prop_name)) {
           if (w.size() == 1) {
@@ -823,7 +823,7 @@ if (!hasOtherProperties) {
               n++;
               %>
                   <td><%=prop_name%></td>
-                  <td><%=DataUtils.encodeTerm(value)%></td>
+                  <td><%=ConceptDetails.encodeTerm(value)%></td>
                 </tr>
               <%
             }
@@ -850,10 +850,10 @@ if (!hasOtherProperties) {
       String primitive_label = "Defined Fully by Roles:";
       String defined_label = "Defined Fully by Roles:";
       
-      dict = DataUtils.getFormalName(dict);
+      dict = ConceptDetails.getFormalName(dict);
       
       //Vector primitive_value_vec = (Vector) hmap.get(primitive_prop_name);
-      String vocabulary_format = DataUtils.getMetadataValue(dict, "format");
+      String vocabulary_format = ConceptDetails.getMetadataValue(dict, "format");
       Boolean isDefined = null;
       String is_defined = "No";
       if (vocabulary_format != null && vocabulary_format.indexOf("OWL") != -1) {

@@ -215,8 +215,7 @@ public class NCItBrowserProperties {
 
             _bioportalAcronym2NameHashMap = RESTClient.getBioportalAcronym2NameHashMap(_ncbo_api_key);
 
-			if (DataUtils.isNullOrBlank(_ncbo_widget_info)) {
-				//_ncbo_widget_info = Constants.DEFAULT_NCBO_WIDGET_INFO;
+       		if (_ncbo_widget_info == null || _ncbo_widget_info.compareToIgnoreCase("null") == 0 || _ncbo_widget_info.compareTo("") == 0) {
 				_ncbo_widget_info = null;
 			}
 

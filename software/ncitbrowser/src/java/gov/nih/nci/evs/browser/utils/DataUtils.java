@@ -464,6 +464,8 @@ public class DataUtils {
     }
 
 
+
+
 /*
     public static HashMap getFormalName2VirtualIdMap() {
 		if (_formalName2VirtualIdMap == null) {
@@ -990,6 +992,11 @@ public class DataUtils {
             initializeValueSetHierarchy();
 	    }
     }
+
+    public static HashMap getFormalName2DisplayNameHashMap() {
+		return _formalName2DisplayNameHashMap;
+	}
+
 
     private static void initializeValueSetHierarchy() {
 		//if (hasNoValueSet || valueSetHierarchyInitialized) return;
@@ -2227,7 +2234,7 @@ if (lbSvc == null) {
     }
 */
 
-    protected static CodingScheme getCodingScheme(String codingScheme,
+    public static CodingScheme getCodingScheme(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
 
         CodingScheme cs = null;
@@ -3799,16 +3806,16 @@ if (lbSvc == null) {
 
     public void dumpRelationshipHashMap(HashMap hmap) {
         ArrayList superconcepts =
-            (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
-        ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
-        ArrayList roles = (ArrayList) hmap.get(DataUtils.TYPE_ROLE);
+            (ArrayList) hmap.get(TYPE_SUPERCONCEPT);
+        ArrayList subconcepts = (ArrayList) hmap.get(TYPE_SUBCONCEPT);
+        ArrayList roles = (ArrayList) hmap.get(TYPE_ROLE);
         ArrayList associations =
-            (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
+            (ArrayList) hmap.get(TYPE_ASSOCIATION);
 
         ArrayList inverse_roles =
-            (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ROLE);
+            (ArrayList) hmap.get(TYPE_INVERSE_ROLE);
         ArrayList inverse_associations =
-            (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
+            (ArrayList) hmap.get(TYPE_INVERSE_ASSOCIATION);
         ArrayList concepts = null;
 
         concepts = superconcepts;
@@ -3819,7 +3826,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3828,7 +3835,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3843,7 +3850,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3852,7 +3859,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3867,7 +3874,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3876,7 +3883,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3890,7 +3897,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3899,7 +3906,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3914,7 +3921,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3923,7 +3930,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3937,7 +3944,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3946,7 +3953,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -4002,7 +4009,7 @@ if (lbSvc == null) {
             if (status_vec == null || status_vec.size() == 0) {
                 con_status = c.getStatus();
             } else {
-                con_status = DataUtils.convertToCommaSeparatedValue(status_vec);
+                con_status = convertToCommaSeparatedValue(status_vec);
             }
             return con_status;
         }
@@ -4031,7 +4038,7 @@ if (lbSvc == null) {
                         con_status = c.getStatus();
                     } else {
                         con_status =
-                            DataUtils.convertToCommaSeparatedValue(status_vec);
+                            convertToCommaSeparatedValue(status_vec);
                     }
                     w.add(con_status);
                 } else {
@@ -5568,7 +5575,7 @@ if (lbSvc == null) {
     public static Vector getCodingSchemeReferencesInValueSetDefinition(String uri) {
 		HashSet hset = new HashSet();
 	    if (uri.indexOf("|") != -1) {
-			Vector u = DataUtils.parseData(uri);
+			Vector u = parseData(uri);
 			uri = (String) u.elementAt(1);
 		}
 
@@ -5608,7 +5615,7 @@ if (lbSvc == null) {
 		AbsoluteCodingSchemeVersionReferenceList list = new AbsoluteCodingSchemeVersionReferenceList();
 		for (int i=0; i<v.size(); i++) {
 			String s = (String) v.elementAt(i);
-			Vector u = DataUtils.parseData(s);
+			Vector u = parseData(s);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
 			AbsoluteCodingSchemeVersionReference vAbsoluteCodingSchemeVersionReference
@@ -5838,7 +5845,7 @@ if (lbSvc == null) {
 
 			ArrayList alist = (ArrayList) csnv2codesMap.get(key);
 
-			Vector u = DataUtils.parseData(key, "$");
+			Vector u = parseData(key, "$");
 			String scheme = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
 			CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
@@ -5993,7 +6000,7 @@ if (lbSvc == null) {
 		for (int i = 0; i < v.size(); i++) {
 			OntologyInfo info = (OntologyInfo) v.elementAt(i);
 			if (scheme.compareTo(info.getCodingScheme()) == 0) {
-				if (DataUtils.isNull(info.getTag()) || info.getTag().compareToIgnoreCase("PRODUCTION") != 0) {
+				if (isNull(info.getTag()) || info.getTag().compareToIgnoreCase("PRODUCTION") != 0) {
 					u.add(info);
 				}
 			}
@@ -6011,7 +6018,7 @@ if (lbSvc == null) {
         Collections.sort(v, new OntologyInfo.ComparatorImpl());
 		for (int i = 0; i < v.size(); i++) {
 			OntologyInfo info = (OntologyInfo) v.elementAt(i);
-			if (!DataUtils.isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
+			if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
 				u.add(info);
 			    if (info.getExpanded()) {
 					Vector w = getNonProductionOntologies(v, info.getCodingScheme());
@@ -6593,7 +6600,7 @@ if (lbSvc == null) {
 	   if (_sortedOntologies != null) return _sortedOntologies;
 
 	   Vector display_name_vec = new Vector();
-	   List ontology_list = DataUtils.getOntologyList();
+	   List ontology_list = getOntologyList();
 	   int num_vocabularies = ontology_list.size();
 
 	   for (int i = 0; i < ontology_list.size(); i++) {
@@ -6601,15 +6608,15 @@ if (lbSvc == null) {
 			String value = (String) item.getValue();
 			String label = (String) item.getLabel();
 
-			String scheme = DataUtils.key2CodingSchemeName(value);
-			String short_scheme_name = DataUtils.uri2CodingSchemeName(scheme);
+			String scheme = key2CodingSchemeName(value);
+			String short_scheme_name = uri2CodingSchemeName(scheme);
 
-			String version = DataUtils.key2CodingSchemeVersion(value);
-			String display_name = DataUtils.getMetadataValue(short_scheme_name, version, "display_name");
-			if (DataUtils.isNull(display_name)) {
-			   display_name = DataUtils.getLocalName(scheme);
+			String version = key2CodingSchemeVersion(value);
+			String display_name = getMetadataValue(short_scheme_name, version, "display_name");
+			if (isNull(display_name)) {
+			   display_name = getLocalName(scheme);
 			}
-			String sort_category = DataUtils.getMetadataValue(scheme, version, "vocabulary_sort_category");
+			String sort_category = getMetadataValue(scheme, version, "vocabulary_sort_category");
 			if (sort_category == null) {
 				sort_category = "0";
 			}
@@ -6620,8 +6627,8 @@ if (lbSvc == null) {
 
 	   for (int i = 0; i < display_name_vec.size(); i++) {
 		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		    if (!DataUtils.isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
-			    Vector w = DataUtils.getNonProductionOntologies(display_name_vec, info.getCodingScheme());
+		    if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
+			    Vector w = getNonProductionOntologies(display_name_vec, info.getCodingScheme());
 			    if (w.size() > 0) {
 			        info.setHasMultipleVersions(true);
 			    }
@@ -6765,6 +6772,26 @@ if (lbSvc == null) {
 			ex.printStackTrace();
 		}
 		return itr;
+	}
+
+    public static HashSet getVocabulariesWithConceptStatusHashSet() {
+        return _vocabulariesWithConceptStatusHashSet;
+    }
+
+    public static HashMap getUri2CodingSchemeNameHashMap() {
+		return _uri2CodingSchemeNameHashMap;
+	}
+
+	public static HashMap getLocalName2FormalNameHashMap() {
+	    return _localName2FormalNameHashMap;
+	}
+
+	public static HashMap getFormalNameVersion2MetadataHashMap() {
+        return _formalNameVersion2MetadataHashMap;
+	}
+
+	public static HashMap getFormalName2MetadataHashMap() {
+        return _formalName2MetadataHashMap;
 	}
 
 }
