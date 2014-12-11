@@ -458,7 +458,7 @@ FDA SPL Drug Route of Administration Terminology|http://evs.nci.nih.gov/Valueset
 FDA SPL Shape Terminology|http://evs.nci.nih.gov/Valueset/C54454|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54454
 FDA SPL Unit of Measure Terminology|http://evs.nci.nih.gov/Valueset/C92951|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C92951
 FDA SPL Unit of Presentation Terminology|http://evs.nci.nih.gov/Valueset/C87300|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C87300
-FDA Established Names and Unique Ingredient Identifier Codes Terminology|http://evs.nci.nih.gov/Valueset/C63923|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/UNII/FDA-UNII_NCIt_Subsets.xls|1:all
+FDA Established Names and Unique Ingredient Identifier Codes Terminology|http://evs.nci.nih.gov/valueset/C63923|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/UNII/FDA-UNII_NCIt_Subsets.xls|1:all
 FDA Individual Case Safety Report Terminology|http://evs.nci.nih.gov/Valueset/C54447|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:all
 Adverse Event Outcome ICSR Terminology|http://evs.nci.nih.gov/Valueset/C54583|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54583
 Device Usage ICSR Terminology|http://evs.nci.nih.gov/Valueset/C54595|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54595

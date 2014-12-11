@@ -204,14 +204,14 @@ public class ConceptDetails {
         return list;
     }
 
-    public static ConceptReferenceList createConceptReferenceList(Vector codes,
+    public static ConceptReferenceList createConceptReferenceList(Vector code_vec,
         String codingSchemeName) {
-        if (codes == null) {
+        if (code_vec == null) {
             return null;
         }
         ConceptReferenceList list = new ConceptReferenceList();
-        for (int i = 0; i < codes.size(); i++) {
-            String code = (String) codes.elementAt(i);
+        for (int i = 0; i < code_vec.size(); i++) {
+            String code = (String) code_vec.elementAt(i);
             ConceptReference cr = new ConceptReference();
             cr.setCodingSchemeName(codingSchemeName);
             cr.setConceptCode(code);
@@ -220,8 +220,7 @@ public class ConceptDetails {
         return list;
     }
 
-    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag)
-        throws Exception {
+    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag) throws Exception {
 		CodedNodeSet cns = null;
 		try {
 			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
@@ -844,16 +843,16 @@ public class ConceptDetails {
     }
 
     public Vector getConceptStatusByConceptCodes(String scheme,
-        String version, String ltag, Vector codes) {
+        String version, String ltag, Vector code_vec) {
         boolean conceptStatusSupported = false;
         if (DataUtils.getVocabulariesWithConceptStatusHashSet().contains(scheme))
             conceptStatusSupported = true;
 
         Vector w = new Vector();
         long ms = System.currentTimeMillis();
-        for (int i = 0; i < codes.size(); i++) {
+        for (int i = 0; i < code_vec.size(); i++) {
             if (conceptStatusSupported) {
-                String code = (String) codes.elementAt(i);
+                String code = (String) code_vec.elementAt(i);
                 Entity c =
                     getConceptWithProperty(scheme, version, code,
                         "Concept_Status");
@@ -877,7 +876,7 @@ public class ConceptDetails {
         }
         _logger.debug("getConceptStatusByConceptCodes Run time (ms): "
             + (System.currentTimeMillis() - ms) + " number of concepts: "
-            + codes.size());
+            + code_vec.size());
         return w;
     }
 
@@ -895,7 +894,7 @@ public class ConceptDetails {
     }
 
 
-    protected static CodingScheme getCodingScheme(String codingScheme,
+    public static CodingScheme getCodingScheme(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
 
         CodingScheme cs = null;

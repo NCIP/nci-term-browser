@@ -3306,13 +3306,11 @@ out.flush();
 		ResolvedValueSetDefinition rvsd = null;
 		int lcv = 0;
 		try {
-			//ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
-			//rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
-			//if(rvsd != null) {
-				//ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
-
-				ResolvedConceptReferencesIterator itr = DataUtils.resolveCodingScheme(vsd_uri, null, false);
-
+			ValueSetDefinition vsd = DataUtils.findValueSetDefinitionByURI(vsd_uri);
+			rvsd = vsd_service.resolveValueSetDefinition(vsd, csvList, null, null);
+			if(rvsd != null) {
+				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
+				//ResolvedConceptReferencesIterator itr = DataUtils.resolveCodingScheme(vsd_uri, null, false);
 
 				IteratorBeanManager iteratorBeanManager = null;
 
@@ -3353,7 +3351,7 @@ out.flush();
 				}
 				//return "resolved_value_set";
 				return;
-		    //}
+		    }
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
