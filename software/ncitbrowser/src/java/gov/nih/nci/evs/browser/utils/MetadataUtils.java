@@ -385,7 +385,8 @@ public class MetadataUtils {
                 v.add(name + " (version: " + version + ")" + "|" + t);
             }
         }
-        return v;
+        // Sort source help table (NCITERM-626)
+        return SortUtils.quickSort(v);
     }
 
     public static MetadataPropertyList getMetadataPropertyList(
