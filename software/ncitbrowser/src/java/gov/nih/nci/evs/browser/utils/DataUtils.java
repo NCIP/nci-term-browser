@@ -6,7 +6,6 @@ import java.text.*;
 import java.util.*;
 import java.sql.*;
 import javax.faces.model.*;
-
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.Exceptions.*;
@@ -262,6 +261,8 @@ public class DataUtils {
 
     private static Vector _sortedOntologies = null;
 
+    private static String NCIT_PROIDUCTION_VERSION = null;
+
 
     // ==================================================================================
 
@@ -317,6 +318,9 @@ public class DataUtils {
 
 		_sortedOntologies = getSortedOntologies();
 		System.out.println("getSortedOntologies run time (ms): " + (System.currentTimeMillis() - ms));
+
+		NCIT_PROIDUCTION_VERSION = getVocabularyVersionByTag(Constants.NCI_THESAURUS, "PRODUCTION");
+
 		System.out.println("Total DataUtils initialization run time (ms): " + (System.currentTimeMillis() - ms0));
 	}
 
@@ -328,6 +332,10 @@ public class DataUtils {
 	public static String getValueSetName(String rvs_uri) {
 		if (!_VSDURI2NameHashMap.containsKey(rvs_uri)) return null;
 		return (String) _VSDURI2NameHashMap.get(rvs_uri);
+	}
+
+	public static String getNCIT_PROIDUCTION_VERSION() {
+		return NCIT_PROIDUCTION_VERSION;
 	}
 
 

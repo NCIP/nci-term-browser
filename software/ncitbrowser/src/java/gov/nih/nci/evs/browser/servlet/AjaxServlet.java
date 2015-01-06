@@ -3442,6 +3442,10 @@ if (vsc.getExtractionRule() != null && !vsc.getExtractionRule().endsWith(":all")
 				if (startIndex != -1) {
 					try {
 						String url = "/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus";
+						if (DataUtils.getNCIT_PROIDUCTION_VERSION() != null) {
+							url = url + "&version=" + DataUtils.getNCIT_PROIDUCTION_VERSION();
+						}
+
 						ResolvedValueSetIteratorHolder rvsi = new ResolvedValueSetIteratorHolder(excelfile, sheet, startIndex, col, code, url, cdisc);
 						request.getSession().setAttribute("rvsi", rvsi);
 					} catch (Exception ex) {
