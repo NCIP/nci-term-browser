@@ -40,25 +40,27 @@
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
 <%
+ConceptDetails conceptDetails = new ConceptDetails();
+
         response.setContentType("text/html;charset=utf-8");
 
 	JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 	
 	String dictionary = info.dictionary;
 
-String short_name = ConceptDetails.getCSName(dictionary); 	
+String short_name = conceptDetails.getCSName(dictionary); 	
 	
 	if (dictionary != null) {
-		dictionary = ConceptDetails.replaceAll(dictionary, "&#40;", "(");
-		dictionary = ConceptDetails.replaceAll(dictionary, "&#41;", ")");
-		dictionary = ConceptDetails.getCSName(dictionary);
+		dictionary = conceptDetails.replaceAll(dictionary, "&#40;", "(");
+		dictionary = conceptDetails.replaceAll(dictionary, "&#41;", ")");
+		dictionary = conceptDetails.getCSName(dictionary);
 	}
 	String deprecatedVersion = info.version_deprecated;
 	String version = info.version;
 	
 	//AppScan KLO 051512
 	if (version == null) {
-	    version = ConceptDetails.getVocabularyVersionByTag(dictionary, "PRODUCTION");
+	    version = conceptDetails.getVocabularyVersionByTag(dictionary, "PRODUCTION");
 	}
 	
 	request.setAttribute("version", version);
@@ -82,7 +84,7 @@ String short_name = ConceptDetails.getCSName(dictionary);
         String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
         
        
-        boolean view_graph = ConceptDetails.visualizationWidgetSupported(dictionary);
+        boolean view_graph = conceptDetails.visualizationWidgetSupported(dictionary);
 
 %>
 
@@ -208,8 +210,8 @@ String short_name = ConceptDetails.getCSName(dictionary);
             			}
             		}
                   
-            		String cd_dictionary = ConceptDetails.getFormalName(dictionary);
-            		String term_suggestion_application_url = ConceptDetails
+            		String cd_dictionary = conceptDetails.getFormalName(dictionary);
+            		String term_suggestion_application_url = conceptDetails
             				.getMetadataValue(cd_dictionary,"term_suggestion_application_url");
             		String name = "";
             		Entity c = null;
@@ -220,7 +222,7 @@ String short_name = ConceptDetails.getCSName(dictionary);
             		} else if (JSPUtils.isNull(version)) {
             			name = "Error: Invalid version - " + version + ".";
             		} else {
-           			c = ConceptDetails.getConceptByCode(dictionary, version, code, ns, true);
+           			c = conceptDetails.getConceptByCode(dictionary, version, code, ns, true);
          			
             			if (c != null) {
             				request.getSession().setAttribute("concept", c);
@@ -243,10 +245,10 @@ String short_name = ConceptDetails.getCSName(dictionary);
                <%@ include file="/pages/templates/content-header-other.jsp"%>
                <%
                	}
-            		List namespace_list = ConceptDetails.getDistinctNamespacesOfCode(
+            		List namespace_list = conceptDetails.getDistinctNamespacesOfCode(
             				dictionary, version, code);
             		String tg_dictionary_0 = dictionary;
-            		String tg_dictionary = ConceptDetails.replaceAll(dictionary, " ", "%20");
+            		String tg_dictionary = conceptDetails.replaceAll(dictionary, " ", "%20");
             		if (c != null) {
             			request.getSession().setAttribute("type", type);
             			request.getSession().setAttribute("singleton", "false");
@@ -264,8 +266,8 @@ String short_name = ConceptDetails.getCSName(dictionary);
                         <td align="right" width="75%">
                            <%
                            	Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE };
-                           	boolean tree_access2 = !ConceptDetails.get_vocabulariesWithoutTreeAccessHashSet().contains(dictionary);
-                    		boolean typeLink_isMapping2 = ConceptDetails.isMapping(dictionary, null);
+                           	boolean tree_access2 = !conceptDetails.get_vocabulariesWithoutTreeAccessHashSet().contains(dictionary);
+                    		boolean typeLink_isMapping2 = conceptDetails.isMapping(dictionary, null);
                            	if (tree_access2 && !typeLink_isMapping2) {
                            %>
       
@@ -341,15 +343,15 @@ String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
 
 
 // Floating Point Value Denial of Service threats fix:
-        if (!ConceptDetails.isNull(b) && b.compareTo("0") != 0) {
+        if (!conceptDetails.isNull(b) && b.compareTo("0") != 0) {
             b = "1";
         }
         
-        if (!ConceptDetails.isNull(n) && !ConceptDetails.isInteger(n)) {
+        if (!conceptDetails.isNull(n) && !conceptDetails.isInteger(n)) {
             n = "1";
         }
 
-        if (!ConceptDetails.isNull(m) && m.compareTo("0") != 0) {
+        if (!conceptDetails.isNull(m) && m.compareTo("0") != 0) {
             m = "1";
         }
         
@@ -357,15 +359,15 @@ String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
 
 String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 
-if (!ConceptDetails.isNull(vse)) {
+if (!conceptDetails.isNull(vse)) {
 %>
     <input type="hidden" id="vse" name="vse" value="<%=vse%>" />
 <%
 }
 
 
-if (!ConceptDetails.isNull(b)) {  
-    if (ConceptDetails.isNull(n)) {
+if (!conceptDetails.isNull(b)) {  
+    if (conceptDetails.isNull(n)) {
         n = "1";
     }
     
@@ -380,7 +382,7 @@ if (!ConceptDetails.isNull(b)) {
              <input type="hidden" id="key" name="key" value="<%=key%>" />
              
 <%  
-    if (!ConceptDetails.isNull(m)) {
+    if (!conceptDetails.isNull(m)) {
         request.getSession().setAttribute("m", m);
     %>
         <input type="hidden" id="m" name="m" value="<%=m%>" />
@@ -462,7 +464,7 @@ if (!ConceptDetails.isNull(b)) {
                <div class="tabTableContentContainer">
                   <%
                   	if (type != null && type.compareTo("all") == 0) {
-              				boolean isMappingCD = ConceptDetails.isMapping(dictionary,version);
+              				boolean isMappingCD = conceptDetails.isMapping(dictionary,version);
                   %>
                   <h1 class="textsubtitle-blue">Table of Contents</h1>
                   <ul>

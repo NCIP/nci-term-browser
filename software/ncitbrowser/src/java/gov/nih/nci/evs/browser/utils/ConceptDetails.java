@@ -61,10 +61,20 @@ public class ConceptDetails {
     public String _ncitURL = null;
     public String _ncitAppVersionDisplay = null;
     public String _ncitAppVersion = null;
+    private LexBIGService lbSvc = null;
+    private LexBIGServiceConvenienceMethods lbscm = null;
 
 
 	public ConceptDetails() {
-
+        try {
+            lbSvc = RemoteServerUtil.createLexBIGService();
+            lbscm =
+                (LexBIGServiceConvenienceMethods) lbSvc
+                    .getGenericExtension("LexBIGServiceConvenienceMethods");
+            lbscm.setLexBIGService(lbSvc);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
     public String getApplicationVersionDisplay() {
@@ -161,17 +171,19 @@ public class ConceptDetails {
         return list;
     }
 
-    public static List<String> getDistinctNamespacesOfCode(
+    public List<String> getDistinctNamespacesOfCode(
             String codingScheme,
             String version,
             String code) {
 
         try {
+			/*
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             LexBIGServiceConvenienceMethods lbscm =
                 (LexBIGServiceConvenienceMethods) lbSvc
                     .getGenericExtension("LexBIGServiceConvenienceMethods");
             lbscm.setLexBIGService(lbSvc);
+            */
 
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
@@ -220,7 +232,7 @@ public class ConceptDetails {
         return list;
     }
 
-    public static CodedNodeSet getNodeSet(LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag versionOrTag) throws Exception {
+    public CodedNodeSet getNodeSet(String scheme, CodingSchemeVersionOrTag versionOrTag) throws Exception {
 		CodedNodeSet cns = null;
 		try {
 			cns = lbSvc.getCodingSchemeConcepts(scheme, versionOrTag);
@@ -233,19 +245,20 @@ public class ConceptDetails {
 		return cns;
 	}
 
-    public static Entity getConceptByCode(String codingSchemeName, String vers, String code, String ns, boolean use_ns) {
+    public Entity getConceptByCode(String codingSchemeName, String vers, String code, String ns, boolean use_ns) {
         try {
 			if (code == null) {
 				//System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
-
+/*
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
                 //System.out.println("lbSvc == null???");
                 return null;
             }
+*/
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             if (vers != null) versionOrTag.setVersion(vers);
 
@@ -259,7 +272,7 @@ public class ConceptDetails {
             CodedNodeSet cns = null;
             try {
 				try {
-					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
+					cns = getNodeSet(codingSchemeName, versionOrTag);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -317,11 +330,12 @@ public class ConceptDetails {
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
-
+/*
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
                return null;
             }
+*/
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             if (vers != null) versionOrTag.setVersion(vers);
 
@@ -331,8 +345,7 @@ public class ConceptDetails {
             CodedNodeSet cns = null;
             try {
 				try {
-					cns = getNodeSet(lbSvc, codingSchemeName, versionOrTag);
-
+					cns = getNodeSet(codingSchemeName, versionOrTag);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;
@@ -396,7 +409,7 @@ public class ConceptDetails {
         return buf.toString();
     }
 
-    public static Vector getPresentationProperties(Entity concept) {
+    public Vector getPresentationProperties(Entity concept) {
         Vector v = new Vector();
         org.LexGrid.commonTypes.Property[] properties =
             concept.getPresentation();
@@ -419,15 +432,17 @@ public class ConceptDetails {
     }
 
 
-    public static Entity getConceptWithProperty(String scheme, String version,
+    public Entity getConceptWithProperty(String scheme, String version,
         String code, String propertyName) {
         try {
+			/*
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
 
             if (lbSvc == null) {
                 _logger.warn("lbSvc = null");
                 return null;
             }
+            */
 
             CodingSchemeVersionOrTag versionOrTag =
                 new CodingSchemeVersionOrTag();
@@ -501,7 +516,7 @@ public class ConceptDetails {
     }
 
 
-    public static Vector getConceptPropertyValues(Entity c, String propertyName) {
+    public Vector getConceptPropertyValues(Entity c, String propertyName) {
         if (c == null)
             return null;
         Vector v = new Vector();
@@ -517,7 +532,7 @@ public class ConceptDetails {
         return v;
     }
 
-    public static String getConceptStatus(String scheme, String version,
+    public String getConceptStatus(String scheme, String version,
         String ltag, String code) {
         boolean conceptStatusSupported = false;
         if (DataUtils.getVocabulariesWithConceptStatusHashSet().contains(scheme))
@@ -553,7 +568,7 @@ public class ConceptDetails {
         return null;
     }
 
-    public static Vector getPropertyValues(Entity concept,
+    public Vector getPropertyValues(Entity concept,
         String property_type, String property_name) {
 
 		if (concept	== null || property_type == null || property_name == null) return null;
@@ -600,7 +615,7 @@ public class ConceptDetails {
         return v;
     }
 
-    public static String getPropertyQualfierValues(
+    public String getPropertyQualfierValues(
         org.LexGrid.commonTypes.Property p) {
 
         StringBuffer buf = new StringBuffer();
@@ -654,12 +669,14 @@ public class ConceptDetails {
 			csvt.setVersion(version);
 		}
 		try {
+			/*
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			if (lbSvc == null) {
 				_logger
 					.warn("WARNING: Unable to connect to instantiate LexBIGService ???");
 				return null;
 			}
+			*/
 
 			ConceptReferenceList crefs = ConvenienceMethods.createConceptReferenceList(new String[] { code }, scheme);
 			CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, csvt);
@@ -683,7 +700,7 @@ public class ConceptDetails {
 		return w;
     }
 
-    public static String getMetadataValue(String scheme, String propertyName) {
+    public String getMetadataValue(String scheme, String propertyName) {
 		//032014
 		String formalName = getFormalName(scheme);
 		Vector v = getMetadataValues(formalName, propertyName);
@@ -694,7 +711,7 @@ public class ConceptDetails {
         return (String) v.elementAt(0);
     }
 
-    public static Vector getMetadataValues(String scheme, String propertyName) {
+    public Vector getMetadataValues(String scheme, String propertyName) {
         //if (_formalName2MetadataHashMap == null) {
         //    setCodingSchemeMap();
         //}
@@ -713,7 +730,7 @@ public class ConceptDetails {
 
 
 
-    public static String getMetadataValue(String scheme, String version, String propertyName) {
+    public String getMetadataValue(String scheme, String version, String propertyName) {
         Vector v;
         if (version != null && ! version.equalsIgnoreCase("null"))
             v = getMetadataValues(scheme, version, propertyName);
@@ -723,7 +740,7 @@ public class ConceptDetails {
         return (String) v.elementAt(0);
     }
 
-    public static Vector getMetadataValues(String scheme, String version, String propertyName) {
+    public Vector getMetadataValues(String scheme, String version, String propertyName) {
         //if (_formalName2MetadataHashMap == null) {
         //    setCodingSchemeMap();
         //}
@@ -741,7 +758,7 @@ public class ConceptDetails {
         return v;
     }
 
-    public static boolean isCodingSchemeLoaded(String scheme, String version) {
+    public boolean isCodingSchemeLoaded(String scheme, String version) {
 		//if (_formalNameVersion2MetadataHashMap == null) {
 		//	setCodingSchemeMap();
 		//}
@@ -752,7 +769,7 @@ public class ConceptDetails {
     }
 
 
-    public static Vector getNCImCodes(Entity node) {
+    public Vector getNCImCodes(Entity node) {
 		if (node == null) return null;
         Vector w = new Vector();
 		Property[] props = node.getAllProperties();
@@ -782,7 +799,7 @@ public class ConceptDetails {
         return s;
     }
 
-    public static String getFormalName(String key) {
+    public String getFormalName(String key) {
         if (key == null) {
             return null;
         }
@@ -798,7 +815,7 @@ public class ConceptDetails {
         return value;
     }
 
-	public static String getCSName(String vocabularyName) {
+	public String getCSName(String vocabularyName) {
 //        if (_uri2CodingSchemeNameHashMap == null) setCodingSchemeMap();
 		String formalname = getFormalName(vocabularyName);
 		if (DataUtils.getUri2CodingSchemeNameHashMap().get(formalname) == null) return formalname;
@@ -814,7 +831,7 @@ public class ConceptDetails {
 		return t;
 	}
 
-    public static Vector getPropertyNamesByType(Entity concept,
+    public Vector getPropertyNamesByType(Entity concept,
         String property_type) {
         Vector v = new Vector();
         org.LexGrid.commonTypes.Property[] properties = null;
@@ -880,7 +897,7 @@ public class ConceptDetails {
         return w;
     }
 
-    public static Vector<String> getSupportedPropertyNames(CodingScheme cs) {
+    public Vector<String> getSupportedPropertyNames(CodingScheme cs) {
         Vector w = getSupportedProperties(cs);
         if (w == null)
             return null;
@@ -894,12 +911,12 @@ public class ConceptDetails {
     }
 
 
-    public static CodingScheme getCodingScheme(String codingScheme,
+    public CodingScheme getCodingScheme(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
 
         CodingScheme cs = null;
         try {
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -907,7 +924,7 @@ public class ConceptDetails {
         return cs;
     }
 
-    public static Vector<SupportedProperty> getSupportedProperties(
+    public Vector<SupportedProperty> getSupportedProperties(
         CodingScheme cs) {
         if (cs == null)
             return null;
@@ -921,7 +938,7 @@ public class ConceptDetails {
         return v;
     }
 
-    public static String getVocabularyVersionByTag(String codingSchemeName,
+    public String getVocabularyVersionByTag(String codingSchemeName,
         String ltag) {
 
 		if (codingSchemeName == null) {
@@ -931,10 +948,12 @@ public class ConceptDetails {
         String version = null;
         int knt = 0;
         try {
+			/*
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			if (lbSvc == null) {
 				return null;
 			}
+			*/
 
             CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
             CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
@@ -975,11 +994,11 @@ public class ConceptDetails {
         return null;
     }
 
-    public static HashSet get_vocabulariesWithoutTreeAccessHashSet() {
+    public HashSet get_vocabulariesWithoutTreeAccessHashSet() {
 		return DataUtils.get_vocabulariesWithoutTreeAccessHashSet();
 	}
 
-    public static boolean visualizationWidgetSupported(String dictionary) {
+    public boolean visualizationWidgetSupported(String dictionary) {
 		String csName = getCSName(dictionary);
 		if (csName == null) return false;
 		HashMap map = DataUtils.getVisualizationWidgetHashMap();
