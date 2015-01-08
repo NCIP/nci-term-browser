@@ -190,10 +190,6 @@ public class ValueSetDefinitionConfig {
 			return null;
 		} else {
 			Vector v = parseData(extractionRule, ":");
-			for (int i=0; i<v.size(); i++) {
-				String t = (String) v.elementAt(i);
-				System.out.println(t);
-			}
 			return v;
 		}
 	}

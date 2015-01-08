@@ -91,14 +91,6 @@ public class ResolvedValueSetIteratorHolder {
 
 
     public ResolvedValueSetIteratorHolder(final String filename, int sheet, int startIndex, int col, String code, String url, boolean cdisc) throws IOException {
-
-		System.out.println("\nResolvedValueSetIteratorHolder: ");
-		System.out.println("\tfilename: " + filename);
-		System.out.println("\tsheet: " + sheet);
-		System.out.println("\tstartIndex: " + startIndex);
-		System.out.println("\tcol: " + col);
-		System.out.println("\tcode: " + code);
-		System.out.println("\turl: " + url);
 		resolvedValueSetList = new ArrayList();
 
 		InputStream in = getInputStream(filename);
@@ -118,10 +110,6 @@ public class ResolvedValueSetIteratorHolder {
 		}
         palette = book.getCustomPalette();
         evaluator = book.getCreationHelper().createFormulaEvaluator();
-
-
-System.out.println("calling table... ");
-
         table(book.getSheetAt(sheet), startIndex, col, code, cdisc);
         //rvs_content_vec = getTableContent(sheet, startIndex, endIndex);
         rvs_content_vec = extractRawDataFromTableContent();
@@ -153,15 +141,6 @@ System.out.println("calling table... ");
     }
 
     public ResolvedValueSetIteratorHolder(final String filename, int sheet, int startIndex, int endIndex, String url) throws IOException {
-
-		System.out.println("\nResolvedValueSetIteratorHolder: ");
-		System.out.println("\tfilename: " + filename);
-		System.out.println("\tsheet: " + sheet);
-		System.out.println("\tstartIndex: " + startIndex);
-		System.out.println("\tendIndex: " + endIndex);
-		System.out.println("\turl: " + url);
-
-
 		resolvedValueSetList = new ArrayList();
 
 		InputStream in = getInputStream(filename);
@@ -327,11 +306,6 @@ System.out.println("calling table... ");
 
 
     private void table(final HSSFSheet sheet, int startIndex, int col, String code, boolean cdisc) {
-
-System.out.println("ResolvedValueSetIteratorHolder: startIndex: " + startIndex);
-System.out.println("ResolvedValueSetIteratorHolder: col: " + col);
-System.out.println("ResolvedValueSetIteratorHolder: code: " + code);
-
         resolvedValueSetList = new ArrayList();
 
         if (sheet == null) {
@@ -1040,7 +1014,6 @@ System.out.println("ResolvedValueSetIteratorHolder: code: " + code);
 
 	public Vector extractRawDataFromTableContent() {
 		if (resolvedValueSetList == null) {
-			System.out.println("(*) resolvedValueSetList resolvedValueSetList is NULL???");
 			return null;
 		}
 		Vector w = new Vector();

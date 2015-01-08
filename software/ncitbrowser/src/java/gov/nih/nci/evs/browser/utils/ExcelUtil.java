@@ -82,8 +82,6 @@ public class ExcelUtil {
 			HSSFRow row = hSSFSheet.getRow(0);
 
 			int cells = row.getPhysicalNumberOfCells();
-			System.out.println("\nROW " + row.getRowNum() + " has " + cells
-					+ " cell(s).");
 			for (int c = 0; c < cells; c++) {
 				HSSFCell cell = row.getCell(c);
 				String value = null;

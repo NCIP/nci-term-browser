@@ -1823,9 +1823,7 @@ out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
 
 ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
 if (vsc == null) {
-	System.out.println("(*) ValueSetDefinitionConfig.getValueSetConfig " + vsd_uri + " returns NULL???");
 	String new_uri = convertValueSetURI(vsd_uri);
-	System.out.println("(*) Try " + new_uri + " instead.");
 	vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
 }
 
@@ -3392,9 +3390,7 @@ out.flush();
 
 			ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
 			if (vsc == null) {
-				//System.out.println("(*) ValueSetDefinitionConfig.getValueSetConfig " + vsd_uri + " returns NULL???");
 				String new_uri = convertValueSetURI(vsd_uri);
-				//System.out.println("(*) Try " + new_uri + " instead.");
 				vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
 			}
 
@@ -3427,14 +3423,14 @@ out.flush();
 
 				int startIndex = ExcelUtil.getHSSFStartRow(excelfile, sheet, col, code);
 
-boolean cdisc = false;
-if (vsc.getExtractionRule() != null && !vsc.getExtractionRule().endsWith(":all")) {
-	String header = ExcelUtil.getHSSFHeader(excelfile, sheet);
-	if (header != null && header.indexOf(Constants.CDISC_SUBMISSION_VALUE) != -1) {
-		startIndex = startIndex - 1;
-		cdisc = true;
-	}
-}
+				boolean cdisc = false;
+				if (vsc.getExtractionRule() != null && !vsc.getExtractionRule().endsWith(":all")) {
+					String header = ExcelUtil.getHSSFHeader(excelfile, sheet);
+					if (header != null && header.indexOf(Constants.CDISC_SUBMISSION_VALUE) != -1) {
+						startIndex = startIndex - 1;
+						cdisc = true;
+					}
+				}
 
 				request.getSession().removeAttribute("rvsi");
 
@@ -3442,8 +3438,9 @@ if (vsc.getExtractionRule() != null && !vsc.getExtractionRule().endsWith(":all")
 				if (startIndex != -1) {
 					try {
 						String url = "/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus";
-						if (DataUtils.getNCIT_PROIDUCTION_VERSION() != null) {
-							url = url + "&version=" + DataUtils.getNCIT_PROIDUCTION_VERSION();
+						String ncit_production_version = DataUtils.getProductionVersion(Constants.NCI_THESAURUS);
+						if (ncit_production_version != null) {
+							url = url + "&version=" + ncit_production_version;
 						}
 
 						ResolvedValueSetIteratorHolder rvsi = new ResolvedValueSetIteratorHolder(excelfile, sheet, startIndex, col, code, url, cdisc);
@@ -3661,9 +3658,6 @@ if (vsc.getExtractionRule() != null && !vsc.getExtractionRule().endsWith(":all")
 
 
     public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {
-
-System.out.println("(*) search_downloaded_value_set...");
-
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
 
@@ -3701,9 +3695,6 @@ System.out.println("(*) search_downloaded_value_set...");
 			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 		}
 
-System.out.println("(*) checked_vocabularies..." + checked_vocabularies);
-
-
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
@@ -3726,25 +3717,12 @@ System.out.println("(*) checked_vocabularies..." + checked_vocabularies);
         if (selectValueSetSearchOption.compareTo("Name") == 0) {
 			searchOption = SimpleSearchUtils.BY_NAME;
 		}
-
-System.out.println("\tchecked_vocabularies: " + checked_vocabularies);
-System.out.println("\tmatchText: " + matchText);
-System.out.println("\tsearchOption: " + searchOption);
-System.out.println("\talgorithm: " + algorithm);
-
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
         request.getSession().setAttribute("searchTarget", selectValueSetSearchOption);
         request.getSession().setAttribute("matchText_RVS", matchText);
 
-
-
-System.out.println("calling searchResolvedValueSetCodingSchemes... ");
-
         ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
             matchText, searchOption, algorithm);
-
-System.out.println("exiting searchResolvedValueSetCodingSchemes... ");
-
 
         if (wrapper == null) {
 			msg = "No match found.";
@@ -3794,9 +3772,6 @@ System.out.println("exiting searchResolvedValueSetCodingSchemes... ");
 						msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
 					}
 					request.getSession().setAttribute("message", msg);
-					//return "message";
-				} else {
-					System.out.println("Number of matches: " + numRemaining);
 				}
 
 			} catch (Exception ex) {
@@ -3808,7 +3783,6 @@ System.out.println("exiting searchResolvedValueSetCodingSchemes... ");
 				//return "message";
 			}
 
-			System.out.println("(*) " + msg);
 			/*
 
 			IteratorBean iteratorBean = new IteratorBean(iterator);

@@ -374,16 +374,18 @@ public class MetadataUtils {
 			//}
 
             String urn = null;
+            String prodictionVersion = DataUtils.getProductionVersion(scheme);
+            if (prodictionVersion != null && prodictionVersion.compareTo(version) == 0) {
+                Vector w = getMetadataValues(scheme, version, urn, propertyName);
+				if (w == null || w.size() == 0) {
+					//v.add(name + "|" + propertyName + " not available");
+					v.add(scheme + " (version: " + version + ")" + "|WARNING: please check the completeness of metadata " + propertyName);
 
-            Vector w = getMetadataValues(scheme, version, urn, propertyName);
-            if (w == null || w.size() == 0) {
-                //v.add(name + "|" + propertyName + " not available");
-                v.add(scheme + " (version: " + version + ")" + "|WARNING: please check the completeness of metadata " + propertyName);
-
-            } else {
-                String t = (String) w.elementAt(0);
-                v.add(name + " (version: " + version + ")" + "|" + t);
-            }
+				} else {
+					String t = (String) w.elementAt(0);
+					v.add(name + " (version: " + version + ")" + "|" + t);
+				}
+		    }
         }
         // Sort source help table (NCITERM-626)
         return SortUtils.quickSort(v);

@@ -261,7 +261,7 @@ public class DataUtils {
 
     private static Vector _sortedOntologies = null;
 
-    private static String NCIT_PROIDUCTION_VERSION = null;
+    private static HashMap _productionVersionHashMap = null;
 
 
     // ==================================================================================
@@ -319,8 +319,6 @@ public class DataUtils {
 		_sortedOntologies = getSortedOntologies();
 		System.out.println("getSortedOntologies run time (ms): " + (System.currentTimeMillis() - ms));
 
-		NCIT_PROIDUCTION_VERSION = getVocabularyVersionByTag(Constants.NCI_THESAURUS, "PRODUCTION");
-
 		System.out.println("Total DataUtils initialization run time (ms): " + (System.currentTimeMillis() - ms0));
 	}
 
@@ -332,10 +330,6 @@ public class DataUtils {
 	public static String getValueSetName(String rvs_uri) {
 		if (!_VSDURI2NameHashMap.containsKey(rvs_uri)) return null;
 		return (String) _VSDURI2NameHashMap.get(rvs_uri);
-	}
-
-	public static String getNCIT_PROIDUCTION_VERSION() {
-		return NCIT_PROIDUCTION_VERSION;
 	}
 
 
@@ -391,7 +385,7 @@ public class DataUtils {
 
     private static void setTerminologyValueSetDescriptionHashMap() {
 		if (_terminologyValueSetDescriptionHashMap == null) {
-			String prod_version = getVocabularyVersionByTag(Constants.TERMINOLOGY_VALUE_SET_NAME, "PRODUCTION");
+			String prod_version = getVocabularyVersionByTag(Constants.TERMINOLOGY_VALUE_SET_NAME, Constants.PRODUCTION);
 			_terminologyValueSetDescriptionHashMap = getPropertyValues(Constants.TERMINOLOGY_VALUE_SET_NAME, prod_version, "GENERIC", "Description");
 		}
 		/*
@@ -627,6 +621,7 @@ public class DataUtils {
 		//LexEVSResolvedValueSetServiceImpl lexEVSResolvedValueSetService = new LexEVSResolvedValueSetServiceImpl();
 
         _logger.debug("Initializing ...");
+        _productionVersionHashMap = new HashMap();
         _source_code_schemes = new Vector();
         _codingSchemeHashSet = new HashSet();
         _ontologies = new ArrayList();
@@ -708,6 +703,12 @@ public class DataUtils {
                 _logger.debug("(" + j + ") " + formalname + "  version: "
                     + representsVersion);
                 _logger.debug("\tActive? " + isActive);
+
+
+                Boolean bool_obj = versionHasTag(csr, Constants.PRODUCTION);
+                if (bool_obj != null && bool_obj.booleanValue()) {
+					_productionVersionHashMap.put(formalname, representsVersion);
+				}
 
                 if ((includeInactive && isActive == null)
                     || (isActive != null && isActive.equals(Boolean.TRUE))
@@ -1155,6 +1156,16 @@ public class DataUtils {
 		}
 		return terminologyValueSetTree;
 	}
+
+
+    public static String getProductionVersion(String scheme) {
+		if (scheme == null) return null;
+		String formalName = getFormalName(scheme);
+		Object value = _productionVersionHashMap.get(formalName);
+		if (value == null) return null;
+		return (String) value;
+	}
+
 
     public static String getMetadataValue(String scheme, String propertyName) {
 		//032014
@@ -1928,13 +1939,6 @@ public class DataUtils {
 
     public static String getVersion(String scheme) {
         String info = getReleaseDate(scheme);
-        // String version = getVocabularyVersionByTag(scheme, "PRODUCTION");
-/*
-        String full_name = DataUtils.getMetadataValue(scheme, "full_name");
-        if (full_name == null || full_name.compareTo("null") == 0) {
-            full_name = scheme;
-		}
-*/
 
         String version =
             getMetadataValue(scheme, "term_browser_version");
@@ -2051,68 +2055,13 @@ if (lbSvc == null) {
         }
         //_logger.warn("Version corresponding to tag " + ltag + " is not found "
          //   + " in " + codingSchemeName);
-        if (ltag != null && ltag.compareToIgnoreCase("PRODUCTION") == 0
+        if (ltag != null && ltag.compareToIgnoreCase(Constants.PRODUCTION) == 0
             & knt == 1) {
             //_logger.warn("\tUse " + version + " as default.");
             return version;
         }
         return null;
     }
-
-/*
-    public static String getVocabularyVersionByTag(String codingSchemeName,
-        String ltag) {
-        if (codingSchemeName == null)
-            return null;
-        String version = null;
-        int knt = 0;
-        try {
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
-            CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
-            for (int i = 0; i < csra.length; i++) {
-                CodingSchemeRendering csr = csra[i];
-                CodingSchemeSummary css = csr.getCodingSchemeSummary();
-                if (css.getFormalName().compareTo(codingSchemeName) == 0
-                    || css.getLocalName().compareTo(codingSchemeName) == 0
-                    || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
-					version = css.getRepresentsVersion();
-                    knt++;
-
-                    if (ltag == null)
-                        return version;
-                    RenderingDetail rd = csr.getRenderingDetail();
-                    CodingSchemeTagList cstl = rd.getVersionTags();
-                    java.lang.String[] tags = cstl.getTag();
-                    // KLO, 102409
-                    if (tags == null)
-                        return version;
-
-                    if (tags != null && tags.length > 0) {
-                        for (int j = 0; j < tags.length; j++) {
-                            String version_tag = (String) tags[j];
-
-                            if (version_tag != null && version_tag.compareToIgnoreCase(ltag) == 0) {
-                                return version;
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        _logger.warn("Version corresponding to tag " + ltag + " is not found "
-            + " in " + codingSchemeName);
-        if (ltag != null && ltag.compareToIgnoreCase("PRODUCTION") == 0
-            & knt == 1) {
-            _logger.warn("\tUse " + version + " as default.");
-            return version;
-        }
-        return null;
-    }
-*/
-
 
     public static Vector<String> getVersionListData(String codingSchemeName) {
 
@@ -5322,12 +5271,12 @@ if (lbSvc == null) {
 
     public static ResolvedConceptReferenceList getValueSetHierarchyRoots() {
         String scheme = "Terminology Value Set";
-        String version = getVocabularyVersionByTag(scheme, "PRODUCTION");
+        String version = getVocabularyVersionByTag(scheme, Constants.PRODUCTION);
         ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(scheme, version);
 
         if (rcrl == null) {
 			scheme = "Terminology_Value_Set.owl";
-			version = getVocabularyVersionByTag(scheme, "PRODUCTION");
+			version = getVocabularyVersionByTag(scheme, Constants.PRODUCTION);
 			rcrl = TreeUtils.getHierarchyRoots(scheme, version);
 		}
 
@@ -5922,7 +5871,7 @@ if (lbSvc == null) {
                     || css.getLocalName().compareTo(codingSchemeName) == 0
                     || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
 
-					if (version == null) return "PRODUCTION";
+					if (version == null) return Constants.PRODUCTION;
 
 					String representsVersion = css.getRepresentsVersion();
 
@@ -5996,7 +5945,7 @@ if (lbSvc == null) {
 		for (int i = 0; i < v.size(); i++) {
 			OntologyInfo info = (OntologyInfo) v.elementAt(i);
 			if (scheme.compareTo(info.getCodingScheme()) == 0) {
-				if (isNull(info.getTag()) || info.getTag().compareToIgnoreCase("PRODUCTION") != 0) {
+				if (isNull(info.getTag()) || info.getTag().compareToIgnoreCase(Constants.PRODUCTION) != 0) {
 					u.add(info);
 				}
 			}
@@ -6014,7 +5963,7 @@ if (lbSvc == null) {
         Collections.sort(v, new OntologyInfo.ComparatorImpl());
 		for (int i = 0; i < v.size(); i++) {
 			OntologyInfo info = (OntologyInfo) v.elementAt(i);
-			if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
+			if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
 				u.add(info);
 			    if (info.getExpanded()) {
 					Vector w = getNonProductionOntologies(v, info.getCodingScheme());
@@ -6623,7 +6572,7 @@ if (lbSvc == null) {
 
 	   for (int i = 0; i < display_name_vec.size(); i++) {
 		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		    if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
+		    if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
 			    Vector w = getNonProductionOntologies(display_name_vec, info.getCodingScheme());
 			    if (w.size() > 0) {
 			        info.setHasMultipleVersions(true);
@@ -6795,7 +6744,23 @@ if (lbSvc == null) {
 	}
 
 
+    public static Boolean versionHasTag(CodingSchemeRendering csr, String ltag) {
+		if (csr == null || ltag == null) return null;
+		RenderingDetail rd = csr.getRenderingDetail();
+		CodingSchemeTagList cstl = rd.getVersionTags();
+		java.lang.String[] tags = cstl.getTag();
 
+		if (tags == null) return Boolean.FALSE;
+		if (tags.length > 0) {
+			for (int j = 0; j < tags.length; j++) {
+				String version_tag = (String) tags[j];
+				if (version_tag != null && version_tag.compareToIgnoreCase(ltag) == 0) {
+					return Boolean.TRUE;
+				}
+			}
+		}
+		return Boolean.FALSE;
+	}
 
     public static void main(String[] args) {
         String scheme = "NCI Thesaurus";
