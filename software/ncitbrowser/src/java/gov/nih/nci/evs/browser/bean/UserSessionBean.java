@@ -682,11 +682,6 @@ mappingIteratorBean.initialize();
             } else {
 				ResolvedConceptReferencesIteratorWrapper wrapper = null;
                 try {
-
-
- System.out.println("(*) DEBUG: SearchUtils().searchByAssociations: " + matchText + " algorithm: " + matchAlgorithm);
-
-
                     wrapper =
                     new SearchUtils().searchByAssociations(schemes, versions,
                         matchText, source, matchAlgorithm, designationOnly,
@@ -702,9 +697,6 @@ mappingIteratorBean.initialize();
                     if (iterator != null) {
 						try {
 							int numberOfMatches = iterator.numberRemaining();
-
- System.out.println("(*) DEBUG: numberOfMatches: " + numberOfMatches);
-
 						} catch (Exception ex) {
                             //ex.printStackTrace();
 						}
@@ -726,19 +718,10 @@ mappingIteratorBean.initialize();
         request.getSession().removeAttribute("type");
 
 		request.getSession().setAttribute("key", key);
-
- System.out.println("(*) DEBUG: key: " + 	key);
-
 		_logger.debug("searchAction Iterator key: " + key);
 
         if (iterator != null) {
-
             int size = iteratorBean.getSize();
-
-
- System.out.println("(*) DEBUG: match_size: " + 	size);
-
-
             List list = null;
             // LexEVS API itersator.numberRemaining is inaccurate, and can cause issues.
             // the following code is a work around.
@@ -760,9 +743,6 @@ mappingIteratorBean.initialize();
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
 
                 request.getSession().setAttribute("dictionary", scheme);
-
- System.out.println("(*) DEBUG: scheme: " + 	scheme);
-
                 _logger
                     .debug("UserSessionBean request.getSession().setAttribute dictionary: "
                         + scheme);
@@ -771,10 +751,6 @@ mappingIteratorBean.initialize();
 				request.getSession().removeAttribute("n");
 				request.getSession().removeAttribute("b");
 				request.getSession().removeAttribute("m");
-
-System.out.println("(*) DEBUG: return to search_results: ");
-
-
                 return "search_results";
             } else if (size == 1) {
 
@@ -1150,8 +1126,9 @@ System.out.println("(*) DEBUG: return to search_results: ");
         if (acceptedLicensesStr != null) {
             LexEVSUtils.CSchemes acceptedLicenses =
                 LexEVSUtils.CSchemes.toSchemes(acceptedLicensesStr);
-            if (acceptedLicenses != null)
+            if (acceptedLicenses != null) {
                 LicenseUtils.acceptLicenses(request, acceptedLicenses);
+			}
         }
 
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));

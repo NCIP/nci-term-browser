@@ -141,7 +141,7 @@ public class DataUtils {
     private static HashMap _csnv2codingSchemeNameMap = null;
     private static HashMap _csnv2VersionMap = null;
 
-    private static boolean initializeValueSetHierarchy = true; // set to true at check-in
+    private static boolean initializeValueSetHierarchy = false; // set to true at check-in ***********************************************
     private static boolean valueSetHierarchyInitialized = false;
     private static boolean hasNoValueSet = false;
 
@@ -598,8 +598,10 @@ public class DataUtils {
             }
             CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, null);
             LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
-			AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
-			return acsvr;
+            if (service != null) {
+				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
+				return acsvr;
+		    }
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -5089,6 +5091,11 @@ if (lbSvc == null) {
 	public static Vector getValueSetURIs() {
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
+
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
 			String t = (String) list.get(i);
@@ -5108,6 +5115,10 @@ if (lbSvc == null) {
 		String valueSetDefinitionRevisionId = null;
 		try {
 			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			if (vsd_service == null) {
+				System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+				return null;
+			}
 			ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
 			return vsd;
 		} catch (Exception ex) {
@@ -5120,6 +5131,10 @@ if (lbSvc == null) {
 	public static Vector getValueSetNamesAndURIs() {
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
 			String t = (String) list.get(i);
@@ -5145,6 +5160,10 @@ if (lbSvc == null) {
 	public static HashMap getVSDName2URIHashMap() {
 		HashMap vSDName2URIHashMap = new HashMap();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
@@ -5159,6 +5178,10 @@ if (lbSvc == null) {
 	public static String getValueSetDefinitionURIByName(String vsd_name) {
 		//Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
@@ -5290,6 +5313,10 @@ if (lbSvc == null) {
 		}
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         if (list == null) return null;
         for (int i=0; i<list.size(); i++) {
@@ -5316,6 +5343,10 @@ if (lbSvc == null) {
 		Vector availableValueSetDefinitionSources = new Vector();
 		HashSet hset = new HashSet();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         if (list == null) return null;
         for (int i=0; i<list.size(); i++) {
@@ -5352,6 +5383,11 @@ if (lbSvc == null) {
 		if (_valueSetDefinitionMetadata != null) return _valueSetDefinitionMetadata;
 		Vector valueSetDefinitionMetadata = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
+
 		try {
 			List list = vsd_service.listValueSetDefinitionURIs();
 			if (list == null || list.size() == 0) return null;
@@ -6513,6 +6549,11 @@ if (lbSvc == null) {
 		try {
 			java.net.URI valueSetDefinitionURI = new URI(uri);
 			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			if (vsd_service == null) {
+				System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+				return null;
+			}
+
 	        ValueSetDefinition vsd = vsd_service.getValueSetDefinition(valueSetDefinitionURI, null);
 	        Mappings mappings = vsd.getMappings();
             SupportedCodingScheme[] supportedCodingSchemes = mappings.getSupportedCodingScheme();

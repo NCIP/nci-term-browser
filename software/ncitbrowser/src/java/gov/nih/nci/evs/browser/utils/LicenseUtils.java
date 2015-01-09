@@ -99,8 +99,9 @@ public class LicenseUtils {
     public static boolean isLicensedAndNotAccepted(HttpServletRequest request,
         String scheme, String version) {
         boolean isLicensed = LicenseBean.isLicensed(scheme, version);
-        if (! isLicensed)
+        if (! isLicensed) {
             return false;
+		}
 
         LicenseBean licenseBean =
             (LicenseBean) request.getSession().getAttribute("licenseBean");
