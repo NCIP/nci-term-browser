@@ -119,6 +119,7 @@ request.getSession().removeAttribute("m");
     request.getSession().removeAttribute("dictionary");
 
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+String browserType = request.getHeader("User-Agent");
 
 //   Modifications:
 
@@ -127,8 +128,6 @@ if (ontologiesToSearchOnStr == null) {
     ontologiesToSearchOnStr = DataUtils.getDefaultOntologiesToSearchOnStr();
     request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
 }
-
-
 
 String action = HTTPUtils.cleanXSS((String) request.getParameter("action"));
 if (action != null) {
@@ -285,10 +284,11 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-		     
+		     // [NCITERM-641] Tomcat session is mixed up.
+                     info.setSelected(false);
 		     if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 			 info.setSelected(true);
-		     }		     
+		     }
 		  }
 
  		  for (int k = 0; k < display_name_vec.size(); k++) { 
@@ -360,10 +360,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				<%
 			    
 				boolean checked = info.getSelected();
-				
 				String checkedStr = checked ? "checked" : "";
-				
-				
 				
 				%>
 

@@ -1115,6 +1115,7 @@ mappingIteratorBean.initialize();
                 .getExternalContext().getRequest();
 
 		String selected_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("selected_vocabularies"));
+
         String[] ontology_list = request.getParameterValues("ontology_list");
 
         if ( ontology_list  == null ) {
