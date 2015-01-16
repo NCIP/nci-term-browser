@@ -279,7 +279,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                 int num_vocabularies = ontology_list.size();
                 
 
-                if (display_name_vec == null) {
+                //if (display_name_vec == null) {
                   display_name_vec = DataUtils.getSortedOntologies();
 
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
@@ -299,7 +299,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 		  }
 	  
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
-                }
+                //}
 		
                 request.getSession().setAttribute("display_name_vec", display_name_vec);
                 display_name_vec = DataUtils.sortOntologyInfo(display_name_vec);
