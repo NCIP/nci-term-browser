@@ -2483,6 +2483,10 @@ response.setContentType("text/html;charset=utf-8");
 				 info.setVisible(true);
 			 }
 		}
+        // [NCITERM-641] Tomcat session is mixed up.
+		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
+		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
+
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
 		return "multiple_search";
@@ -2543,6 +2547,10 @@ response.setContentType("text/html;charset=utf-8");
 
 
 		}
+		// [NCITERM-641] Tomcat session is mixed up.
+		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
+		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
+
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
 		return "multiple_search";
@@ -2955,4 +2963,19 @@ response.setContentType("text/html;charset=utf-8");
 
     }
 
+    // [NCITERM-641] Tomcat session is mixed up.
+    public String getOntologiesToExpandStr(Vector display_name_vec) {
+		StringBuffer buf = new StringBuffer();
+		String ontologiesToExpandStr = null;
+		buf.append("|");
+		if (display_name_vec != null) {
+			for (int i = 0; i < display_name_vec.size(); i++) {
+				 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+			     if (info.getExpanded()) {
+					 buf.append(info.getLabel() + "|");
+				 }
+			}
+		}
+		return buf.toString();
+	}
 }

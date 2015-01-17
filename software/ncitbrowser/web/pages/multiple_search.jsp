@@ -282,6 +282,11 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                 //if (display_name_vec == null) {
                   display_name_vec = DataUtils.getSortedOntologies();
 
+// [NCITERM-641] Tomcat session is mixed up.
+String ontologiesToExpandStr = (String) request.getSession().getAttribute("ontologiesToExpandStr");
+if (ontologiesToExpandStr == null) {
+    ontologiesToExpandStr = "|";
+}
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
 		     // [NCITERM-641] Tomcat session is mixed up.
@@ -294,8 +299,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
  		  for (int k = 0; k < display_name_vec.size(); k++) { 
  		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
  		     if (!info.isProduction()) {
- 		          info.setSelected(false);
- 		     }		     
+ 		          //info.setSelected(false);
+ 		     }	
+ 		     
+ 		     info.setExpanded(false);
+		     if (ontologiesToExpandStr.indexOf(info.getLabel()) != -1) {
+			 info.setExpanded(true);
+		     } 		     
 		  }
 	  
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
