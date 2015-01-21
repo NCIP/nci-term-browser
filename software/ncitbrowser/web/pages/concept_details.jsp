@@ -222,7 +222,13 @@ String short_name = conceptDetails.getCSName(dictionary);
             		} else if (JSPUtils.isNull(version)) {
             			name = "Error: Invalid version - " + version + ".";
             		} else {
-           			c = conceptDetails.getConceptByCode(dictionary, version, code, ns, true);
+            		        System.out.println("NS: " + ns);
+            		        boolean use_ns = true;
+            		        if (ns == null || ns.compareTo("null") != 0 || ns.compareTo("") == 0) {
+            		            use_ns = false;
+            		        }
+            		        
+           			c = conceptDetails.getConceptByCode(dictionary, version, code, ns, use_ns);
          			
             			if (c != null) {
             				request.getSession().setAttribute("concept", c);
