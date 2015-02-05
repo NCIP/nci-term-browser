@@ -85,7 +85,7 @@ float: left;
         <div class="texttitle-blue">NCI Thesaurus Subsets</div>
         <hr>
         <p>
-          There are over 200 specially defined subsets in NCI Thesaurus. Each has its own NCIt concept,
+          There are over 500 specially defined subsets in NCI Thesaurus. Each has its own NCIt concept,
           defining the nature of the subset, and these are hierarchically organized under the parent concept
           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C54443">
           Terminology Subset (C54443)</a>. These subset concepts are linked to subset-member concepts through
@@ -200,34 +200,23 @@ float: left;
           </tr>
               <td></td><td></td>
           <tr>
-            <td>
+          <tr>
 
- <div>
-     <div class="img1">
+             <td>
               <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/pediatric" target="_blank"
                   alt="National Council for Prescription Drug Programs">
-                <img src="<%=basePath%>/images/NCS_new.jpg" border="0"   height="30" width="110" 
+                <img src="<%=basePath%>/images/NICHD_Logo2.jpg" border="0"   height="30" width="110"
                   alt="National Children's Study (NCS) Pediatric Terminology"/>
-              </a>     
-     </div>
-     <div class="img2">
-              <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/pediatric" target="_blank"
-                  alt="National Council for Prescription Drug Programs">
-                <img src="<%=basePath%>/images/NICHD_new.jpg" border="0" height="25" width="90" 
-                  alt="National Institute of Child Health and Human Development (NICHD) Pediatric Terminology"/>
-              </a>     
-     </div>    
- </div>
-               
-  
+              </a>
+            </td>
             </td>
             <td class="textbody" valign="top">
               <a href="http://www.cancer.gov/cancertopics/cancerlibrary/terminologyresources/pediatric" target="_blank"
                   alt="Federal Medication Terminologies">Pediatric Terminology:
               </a>
-              The National Children's Study (NCS) and the National Institute of Child Health and Human Development (NICHD) are working with EVS to provide standardized coding for pediatric clinical trial and other research activities.
+The National Institute of Child Health and Human Development (NICHD) is working with EVS and numerous contributors from national and international academic, clinical and research institutions to provide standardized coding for pediatric clinical trial and other research activities.
             </td>
-          </tr>         
+          </tr>       
           
           
         </table>
