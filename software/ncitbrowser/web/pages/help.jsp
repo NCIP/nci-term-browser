@@ -308,28 +308,26 @@
 	Method 1: For Exact Match and Begins With methods, and for all Property and Relationship targets, the words must be found together in the order entered with no separation.
 </li>
 <li>	
-	Method 2: Contains search on Name, however, now looks for those words separately. A special index makes these searches faster and more flexible than before, while still ranking best matches first.
+	Method 2: Contains search on Name, however, now looks for those words separately. A special index makes these searches faster and more flexible than before, while still ranking best matches first. Note: The current implementation only finds matches at the start of words, not the middle or end; we plan to address this in a future release.
 </li>
-</ul>				   
-		   For example, if you do
-                   a <b>Contains</b> search on <font face="courier">Melanoma Corneal</font>,
-                   no results will be returned, for any option covered under Method 1,but with
-		   Method 2 you will match
-		   <font face="courier"><i>Corneal Melanoma</i></font>.
-		   Refinement of these methods is ongoing; for updates and current details, see NCI Term Browser 2.4 Release Notes.
+</ul>
+
+                   For example, if you do a <b>Contains</b> search on <font face="courier">Melanoma Cornea</font>, 
+                   no results will be returned, for any option covered under Method 1,but with Method 2 
+                   you will match <font face="courier"><i>Corneal Melanoma</i></font>. Refinement of these methods is ongoing. 
                 </li>
-			  </ul>
+		</ul>
             </li>
             <li><b>Match method radio buttons</b> select how your 
                 search string will be matched.
               <ul>
-
-                <li><b>Contains</b> button is the default. It will search for what you enter 
-                    anywhere within a term or code (e.g., 
-                    <font face="courier">carcinoma</font> will match 
-                    <i>adenocarcinoma)</i>.
-			For multiple word search, see description in the preceding section.
-				</li>              
+                <li><b>Contains</b> button is the default. 
+                 It will search for what you enter at the start of any words in a Name search, or at the beginning or end of any words 
+                 in a Property or Relationship search (e.g., <font face="courier">adeno</font> will match 
+                 <font face="courier"><i>adenocarcinoma</i></font> in all these searches, 
+                 but <font face="courier">carcinoma</font> will only match it in Property or Relationship searches). 
+                 For multiple word search, see description in the preceding section. 
+		</li>              
                 <li><b>Exact Match</b> Only terms or codes that are identical will match.</li>
                 <li><b>Begins With</b> button can be selected to find all 
                     terms that start with the words or characters 
@@ -984,17 +982,11 @@
             </tr>
           </table>
           <p>
-            Searching using the <b>Search Box</b> on either the 
-            <b>Mappings</b> tab or on a particular Mapping Set's home 
-            page works, on the surface, the same way as on the 
-            <b>Terminologies</b> tab: the <b>Text Box</b>, the 
-            <b>Match method radio buttons</b>, and the <b>Match 
-            target radio buttons</b> all function the same way as 
-            with the <b>Terminologies</b> tab. The one exception to 
-            note is that to search only one or two characters, it is 
-            necessary to do an <b>Exact Match</b>; it is not possible 
-            to do a <b>Contains</b> or <b>Begins With</b> with a search 
-            string under 3 characters.
+            Searching using the <b>Search Box</b> on either the <b>Mappings</b> tab or on a particular 
+            Mapping Set's home page works the same way as on the <b>Terminologies</b> tab: the <b>Text Box</b>, 
+            the <b>Match method radio buttons</b>, and the <b>Match target radio buttons</b> all function the same 
+            way as with the <b>Terminologies</b> tab. The one difference to note is that search results 
+            can come from a match to either the source or target concept in each mapping entry. 
           </p>
           <p>
             The results of the search are quite different, however, 
