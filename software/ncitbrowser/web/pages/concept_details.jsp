@@ -223,7 +223,8 @@ String short_name = conceptDetails.getCSName(dictionary);
             			name = "Error: Invalid version - " + version + ".";
             		} else {
             		        boolean use_ns = true;
-            		        if (ns == null || ns.compareTo("null") == 0 || ns.compareTo("") == 0) {
+            		        if (ConceptDetails.isNullOrBlank(ns)) {
+            		        //if (ns == null || ns.compareTo("null") == 0 || ns.compareTo("") == 0) {
             		            use_ns = false;
             		        }
             		        
