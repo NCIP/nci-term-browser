@@ -137,7 +137,7 @@
 <%
 String message = (String) request.getSession().getAttribute("message");
 request.getSession().removeAttribute("message");
-System.out.println(message);   
+//System.out.println(message);   
 
 String name = null;
 String valueset_uri = null;
@@ -245,7 +245,7 @@ if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
 
 
 if (!DataUtils.isNullOrBlank(vsd_uri)) {
-    System.out.println("set checked_valuesets = " + vsd_uri);
+    //System.out.println("set checked_valuesets = " + vsd_uri);
     checked_valuesets = vsd_uri;
 }
 

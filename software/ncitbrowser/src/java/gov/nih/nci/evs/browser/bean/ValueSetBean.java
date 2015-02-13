@@ -2053,10 +2053,6 @@ Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadshee
 			List list = null;
 			if (rvsi != null) {
 				list = rvsi.getResolvedValueSetList();
-				if (list != null) {
-					System.out.println("(*) ResolvedValueSetIteratorHolder list.size() = " + list.size());
-				}
-
 			    sb.append(rvsi.getOpenTableTag("rvs_table"));
 				String first_line = (String) list.get(0);
 			    first_line = first_line.replaceAll("td", "th");
@@ -2086,10 +2082,6 @@ Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadshee
 					System.out.println("(*) ResolvedValueSetIteratorHolder extractRawDataFromTableContent returns w == null???");
 				}
 */
-
-
-			} else {
-				System.out.println("(*) rvsi == null???");
 			}
 
 			String outputstr = sb.toString();
