@@ -220,13 +220,11 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 			searchTarget = "names";
 		}
 
-
-
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
-
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+
         if (matchText != null) {
             matchText = matchText.trim();
             request.getSession().setAttribute("matchText", matchText);
@@ -1114,6 +1112,12 @@ mappingIteratorBean.initialize();
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        request.getSession().removeAttribute("error_msg");
+        boolean retval = HTTPUtils.validateRequestParameters(request);
+        if (!retval) {
+			return "invalid_parameter";
+		}
+
 		String selected_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("selected_vocabularies"));
 
         String[] ontology_list = request.getParameterValues("ontology_list");
@@ -1133,12 +1137,15 @@ mappingIteratorBean.initialize();
         }
 
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+
         if (matchText != null) {
             matchText = matchText.trim();
             request.getSession().setAttribute("matchText", matchText);
         } else {
             matchText = (String) request.getSession().getAttribute("matchText");
         }
+
+
 
         String multiple_search_error =
             (String) request.getSession().getAttribute(
@@ -1840,6 +1847,12 @@ response.setContentType("text/html;charset=utf-8");
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        request.getSession().removeAttribute("error_msg");
+        boolean retval = HTTPUtils.validateRequestParameters(request);
+        if (!retval) {
+			return "invalid_parameter";
+		}
+
         String scheme = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 	    if (scheme == null || DataUtils.getFormalName(scheme) == null) {
 			String message = "Invalid vocabulary name.";
@@ -1930,6 +1943,7 @@ response.setContentType("text/html;charset=utf-8");
 
         String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+
         if (matchText == null || matchText.length() == 0) {
             String message = "Please enter a search string.";
             // request.getSession().setAttribute("message", message);

@@ -11,6 +11,8 @@ import java.util.regex.*;
 
 import org.apache.log4j.*;
 
+import gov.nih.nci.evs.browser.common.*;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -96,6 +98,10 @@ public class HTTPUtils {
 
     }
 */
+
+    public void HTTPUtils() {
+
+	}
 
 
     public static String cleanXSS(String value) {
@@ -236,12 +242,42 @@ public class HTTPUtils {
             int i = 0;
             while (enumeration.hasMoreElements()) {
                 String name = (String) enumeration.nextElement();
-                Object value = cleanXSS((String) request.getParameter(name));
-                _logger.debug("  " + i + ") " + name + ": " + value);
+
+                //Object value = cleanXSS((String) request.getParameter(name));
+                String value = (String) request.getParameter(name);
+                //_logger.debug("  " + i + ") " + name + ": " + value);
+                System.out.println("name: " + name + " value: " + value.toString());
+
                 ++i;
             }
         } catch (Exception e) {
-            _logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+			e.printStackTrace();
+            //_logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
+        }
+    }
+
+    public static void printRequestParameters(HttpServletRequest request) {
+        _logger.debug(" ");
+        _logger.debug(Utils.SEPARATOR);
+        _logger.debug("Request Parameter(s):");
+
+        try {
+            Enumeration<?> enumeration =
+                SortUtils.sort(request.getParameterNames());
+            int i = 0;
+            while (enumeration.hasMoreElements()) {
+                String name = (String) enumeration.nextElement();
+
+                //Object value = cleanXSS((String) request.getParameter(name));
+                String value = (String) request.getParameter(name);
+                //_logger.debug("  " + i + ") " + name + ": " + value);
+                System.out.println("name: " + name + " value: " + value.toString());
+
+                ++i;
+            }
+        } catch (Exception e) {
+			e.printStackTrace();
+            //_logger.error(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
     }
 
@@ -332,5 +368,133 @@ public class HTTPUtils {
 		    ex.printStackTrace();
 		}
 		return retVal;
+	}
+
+
+	public static boolean validateRequestParameters(HttpServletRequest request) {
+		List list = HTTPParameterConstants.HTTP_REQUEST_PARAMETER_NAME_LIST;
+        try {
+            Enumeration<?> enumeration =
+                SortUtils.sort(request.getParameterNames());
+            while (enumeration.hasMoreElements()) {
+                String name = (String) enumeration.nextElement();
+                if (!list.contains(name)) {
+					System.out.println("(*) name: " + name + " not in the list.");
+			        request.getSession().setAttribute("error_msg", "WARNING: Unknown parameter name encountered - '" + name + "'.");
+					return false;
+				}
+				String value = (String) request.getParameter(name);
+				Boolean bool_obj = validateRadioButtonNameAndValue(name, value);
+				if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
+			        request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+					return false;
+				}
+
+				bool_obj = containsPercentSign(name, value);
+				if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
+			        request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+					return false;
+				}
+
+				bool_obj = validateValueSetCheckBox(name, value);
+				if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
+			        request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+					return false;
+				}
+
+				bool_obj = containsHarzardCharacters(value);
+				if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
+			        request.getSession().setAttribute("error_msg", "WARNING: Hazard characters found in parameter value - '" + value + "'.");
+					return false;
+				}
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+	}
+
+
+
+	public static Boolean validateRadioButtonNameAndValue(String name, String value) {
+		if (name == null || value == null) return null;
+		if (name.compareTo("adv_search_algorithm") == 0) {
+			if (HTTPParameterConstants.adv_search_algorithm_value_list.contains(value)) {
+				return Boolean.TRUE;
+			} else {
+				return Boolean.FALSE;
+			}
+		} else if (name.compareTo("algorithm") == 0) {
+			if (HTTPParameterConstants.algorithm_value_list.contains(value)) {
+				return Boolean.TRUE;
+			} else {
+				return Boolean.FALSE;
+			}
+		} else if (name.compareTo("direction") == 0) {
+			if (HTTPParameterConstants.direction_value_list.contains(value)) {
+				return Boolean.TRUE;
+			} else {
+				return Boolean.FALSE;
+			}
+
+		} else if (name.compareTo("searchTarget") == 0) {
+			if (HTTPParameterConstants.searchTarget_value_list.contains(value)) {
+				return Boolean.TRUE;
+			} else {
+				return Boolean.FALSE;
+			}
+		} else if (name.compareTo("selectSearchOption") == 0) {
+			if (HTTPParameterConstants.selectSearchOption_value_list.contains(value)) {
+				return Boolean.TRUE;
+			} else {
+				return Boolean.FALSE;
+			}
+		} else if (name.compareTo("selectValueSetSearchOption") == 0) {
+			if (HTTPParameterConstants.selectValueSetSearchOption_value_list.contains(value)) {
+				return Boolean.TRUE;
+			} else {
+				return Boolean.FALSE;
+			}
+
+		} else if (name.compareTo("valueset_search_algorithm") == 0) {
+			if (HTTPParameterConstants.valueset_search_algorithm_value_list.contains(value)) {
+				return Boolean.TRUE;
+			} else {
+				return Boolean.FALSE;
+			}
+
+		}
+		return null;
+	}
+
+    public static Boolean containsPercentSign(String name, String value) {
+		if (name == null || value == null) return null;
+		if (!name.endsWith(".x")
+		    && !name.endsWith(".y")
+		    && name.compareTo("javax.faces.ViewState") != 0) {
+		    return null;
+		}
+		if (value.indexOf("%") == -1) return Boolean.TRUE;
+		return Boolean.FALSE;
+	}
+
+    public static Boolean validateValueSetCheckBox(String name, String value) {
+		if (name == null || value == null) return null;
+		if (!name.startsWith("TVS_") && !name.startsWith("http:")) {
+		    return null;
+		}
+		if (value.compareTo("on") == 0 || value.compareTo("off") == 0) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+    public static Boolean containsHarzardCharacters(String value) {
+		if (value == null) return null;
+		if (value.indexOf("DECLARE") != -1 && (value.indexOf(";EXEC(") != -1 || value.indexOf("=CAST(") != -1)) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 }

@@ -82,6 +82,7 @@
       <!-- Main box -->
       <div id="main-area_960">
  <%
+request.getSession().removeAttribute("error_msg"); 
 boolean reindex_required = false;
 String ontologiesToSearchOnStr = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("ontologiesToSearchOnStr"));
 

@@ -250,7 +250,10 @@ public class SimpleSearchUtils {
 
 			if (version != null) {
 				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+				System.out.println("scheme: " + scheme + " (version: " + version + ")");
 				versionOrTag.setVersion(version);
+				//[NCITERM-643] Name search failed on diacritics.
+				ref.setVersionOrTag(versionOrTag);
 		    }
 			includes.add(ref);
 		}

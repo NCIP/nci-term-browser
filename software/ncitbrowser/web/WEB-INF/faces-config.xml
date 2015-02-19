@@ -24,6 +24,14 @@
 
   <navigation-rule>
     <from-view-id>/pages/mapping_search.jsp</from-view-id>
+    
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>    
+        
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -592,6 +600,14 @@
     <from-view-id>/pages/multiple_search_results.jsp</from-view-id>
 
     <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>
+    
+    
+    <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.multipleSearchAction}</from-action>
        <from-outcome>search_results</from-outcome>
@@ -839,6 +855,13 @@
   <navigation-rule>
     <from-view-id>/pages/multiple_search.jsp</from-view-id>
 
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>
+    
     <navigation-case>
        <description>show_versions</description>
        <from-action>#{userSessionBean.showOtherVersions}</from-action>
@@ -1126,6 +1149,14 @@
     <from-view-id>/pages/advanced_search.jsp</from-view-id>
 
     <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.advancedSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>
+    
+    
+    <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.advancedSearchAction}</from-action>
        <from-outcome>no_match</from-outcome>
@@ -1235,6 +1266,14 @@
 
   <navigation-rule>
     <from-view-id>/pages/value_set_search.jsp</from-view-id>
+    
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>      
+        
     <navigation-case>
        <description>value_set_search</description>
        <from-action>#{valueSetBean.valueSetSearchAction}</from-action>

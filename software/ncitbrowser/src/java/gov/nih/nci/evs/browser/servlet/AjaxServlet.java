@@ -232,8 +232,28 @@ public final class AjaxServlet extends HttpServlet {
      */
     public void execute(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+
+		//[NCITERM-644] Reduce SQL injection AppScan delays.
+        request.getSession().removeAttribute("error_msg");
+
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));// DataConstants.ACTION);
+
+        //search_value_set
+        if (action.compareTo("search_value_set") != 0) {
+			 boolean retval = HTTPUtils.validateRequestParameters(request);
+			 if (!retval) {
+				 try {
+					 String nextJSP = "/pages/appscan_response.jsf";
+					 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+					 dispatcher.forward(request,response);
+					 return;
+
+				 } catch (Exception ex) {
+					 ex.printStackTrace();
+				 }
+			 }
+	    }
 
 //search_hierarchy ns=npo
 

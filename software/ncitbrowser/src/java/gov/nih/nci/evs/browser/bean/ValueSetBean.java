@@ -1919,10 +1919,15 @@ StringBuffer buf = new StringBuffer();
 
 
     public String valueSetSearchAction() {
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
+
+        request.getSession().removeAttribute("error_msg");
+        boolean retval = HTTPUtils.validateRequestParameters(request);
+        if (!retval) {
+			return "invalid_parameter";
+		}
 
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;

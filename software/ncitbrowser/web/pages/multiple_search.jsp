@@ -169,7 +169,8 @@ if (action != null) {
     
     }
 }
-	
+
+request.getSession().removeAttribute("error_msg"); 
 request.getSession().setAttribute("display_name_vec", display_name_vec);
 String warning_msg = (String) request.getSession().getAttribute("warning");
 
