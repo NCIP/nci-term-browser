@@ -377,36 +377,45 @@ public class HTTPUtils {
             Enumeration<?> enumeration =
                 SortUtils.sort(request.getParameterNames());
             while (enumeration.hasMoreElements()) {
-                String name = (String) enumeration.nextElement();
-                if (!list.contains(name)) {
-					System.out.println("(*) name: " + name + " not in the list.");
-			        request.getSession().setAttribute("error_msg", "WARNING: Unknown parameter name encountered - '" + name + "'.");
-					return false;
-				}
-				String value = (String) request.getParameter(name);
-				Boolean bool_obj = validateRadioButtonNameAndValue(name, value);
-				if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-			        request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
-					return false;
-				}
 
-				bool_obj = containsPercentSign(name, value);
-				if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-			        request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
-					return false;
-				}
+				String name = (String) enumeration.nextElement();
 
-				bool_obj = validateValueSetCheckBox(name, value);
-				if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-			        request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
-					return false;
-				}
+                Boolean isDynamic = isDynamicId(name);
+                Boolean issearchFormParameter = isSearchFormParameter(name);
 
-				bool_obj = containsHarzardCharacters(value);
-				if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
-			        request.getSession().setAttribute("error_msg", "WARNING: Hazard characters found in parameter value - '" + value + "'.");
-					return false;
-				}
+                if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.FALSE)) {
+					if (isDynamic != null && isDynamic.equals(Boolean.FALSE)) {
+						if (!list.contains(name)) {
+							System.out.println("(*) name: " + name + " not in the list.");
+							request.getSession().setAttribute("error_msg", "WARNING: Unknown parameter name encountered - '" + name + "'.");
+							return false;
+						}
+						String value = (String) request.getParameter(name);
+						Boolean bool_obj = validateRadioButtonNameAndValue(name, value);
+						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
+							request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+							return false;
+						}
+
+						bool_obj = containsPercentSign(name, value);
+						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
+							request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+							return false;
+						}
+
+						bool_obj = validateValueSetCheckBox(name, value);
+						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
+							request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+							return false;
+						}
+
+						bool_obj = containsHarzardCharacters(value);
+						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
+							request.getSession().setAttribute("error_msg", "WARNING: Hazard characters found in parameter value - '" + value + "'.");
+							return false;
+						}
+					}
+			    }
             }
             return true;
         } catch (Exception e) {
@@ -497,4 +506,22 @@ public class HTTPUtils {
 		}
 		return Boolean.FALSE;
 	}
+
+	public static Boolean isDynamicId(String id) {
+		if (id == null) return null;
+		if (id.startsWith("j_id_jsp_")) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	public static Boolean isSearchFormParameter(String name) {
+		if (name == null) return null;
+		String nm = name.toLowerCase();
+		if (nm.endsWith("search.x") || nm.endsWith("search.y")) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
 }

@@ -100,7 +100,11 @@ public class HTTPParameterConstants {
        "valueSetSearchForm:valueset_search.x",
        "valueSetSearchForm:valueset_search.y",
        "value_set_home",
-       "valueset_search_algorithm"
+       "valueset_search_algorithm",
+       "searchTerm:multi_search.x",
+       "searchTerm:multi_search.y",
+       "searchTerm:multipleSearch.x",
+       "searchTerm:multipleSearch.y"
     };
 
     public static final List HTTP_REQUEST_PARAMETER_NAME_LIST = Arrays.asList(HTTP_REQUEST_PARAMETER_NAMES);
