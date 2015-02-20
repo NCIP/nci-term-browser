@@ -393,25 +393,33 @@ public class HTTPUtils {
 						String value = (String) request.getParameter(name);
 						Boolean bool_obj = validateRadioButtonNameAndValue(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
+							   " (name: " + name + ").";
+							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 
 						bool_obj = containsPercentSign(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
+							   " (name: " + name + ").";
+							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 
 						bool_obj = validateValueSetCheckBox(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							request.getSession().setAttribute("error_msg", "WARNING: Invalid parameter value encountered - '" + value + "'.");
+							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
+							   " (name: " + name + ").";
+							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 
 						bool_obj = containsHarzardCharacters(value);
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
-							request.getSession().setAttribute("error_msg", "WARNING: Hazard characters found in parameter value - '" + value + "'.");
+							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
+							   " (name: " + name + ").";
+							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 					}
@@ -427,7 +435,7 @@ public class HTTPUtils {
 
 
 	public static Boolean validateRadioButtonNameAndValue(String name, String value) {
-		if (name == null || value == null) return null;
+		if (name == null || value == null || value.length() == 0) return null;
 		if (name.compareTo("adv_search_algorithm") == 0) {
 			if (HTTPParameterConstants.adv_search_algorithm_value_list.contains(value)) {
 				return Boolean.TRUE;
