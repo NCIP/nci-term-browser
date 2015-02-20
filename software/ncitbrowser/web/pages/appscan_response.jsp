@@ -103,7 +103,7 @@
     <div class="bannerarea_960">
   <a href="/ncitbrowser/start.jsf" style="text-decoration: none;">
     <div class="vocabularynamebanner_tb">
-      <span class="vocabularynamelong_tb">Version 2.5 (using LexEVS 6.2)</span>
+      <span class="vocabularynamelong_tb"><%=JSPUtils.getApplicationVersionDisplay()%></span>
     </div>
   </a>
   <div class="search-globalnav_960">
