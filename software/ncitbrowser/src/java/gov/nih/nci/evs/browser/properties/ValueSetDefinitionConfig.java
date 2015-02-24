@@ -179,6 +179,8 @@ public class ValueSetDefinitionConfig {
 
 		if (valueSetConfigHashMap.containsKey(uri)) {
 			return (ValueSetConfig) valueSetConfigHashMap.get(uri);
+		} else if (valueSetConfigHashMap.containsKey(uri.toLowerCase())) {
+			return (ValueSetConfig) valueSetConfigHashMap.get(uri);
 		}
 		return null;
 	}

@@ -306,6 +306,8 @@ public class SimpleSearchUtils {
 				return SearchExtension.MatchAlgorithm.PRESENTATION_CONTAINS;
 			} else if (algorithm.compareTo("lucene") == 0) {
 				return SearchExtension.MatchAlgorithm.LUCENE;
+			} else { // Note: there is no startsWith equivalence in the search extension algorithm.
+				return SearchExtension.MatchAlgorithm.LUCENE;
 			}
 		} else if (algorithm.compareTo("exactMatch") == 0 && searchOption == BY_CODE) {
 			return SearchExtension.MatchAlgorithm.CODE_EXACT;
