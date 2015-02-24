@@ -92,7 +92,7 @@ if (search_results_dictionary == null || search_results_dictionary.compareTo("NC
         <%
 
 key = (String) request.getSession().getAttribute("key");
-
+boolean bool_val;
 
 String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 if (resultsPerPage == null) {
@@ -101,6 +101,21 @@ if (resultsPerPage == null) {
        resultsPerPage = "50";
     }
 } else {
+
+
+
+		    bool_val = JSPUtils.isInteger(resultsPerPage);
+		    if (!bool_val) {
+			 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+			 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+			 request.getSession().setAttribute("error_msg", error_msg);
+			 response.sendRedirect(redirectURL);
+		    } else {
+			 resultsPerPage = "50";
+		    }  
+
+
+
     request.getSession().setAttribute("resultsPerPage", resultsPerPage);
 }
 
@@ -130,10 +145,24 @@ if (num_pages * pageSize < size) num_pages++;
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
 if (!DataUtils.isNull(page_number)) {
-//  if (page_number != null) {
-    pageNum = Integer.parseInt(page_number);
+
+
+		    bool_val = JSPUtils.isInteger(page_number);
+		    if (!bool_val) {
+			 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+			 String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
+			 request.getSession().setAttribute("error_msg", error_msg);
+			 response.sendRedirect(redirectURL);
+		    } else {
+		         pageNum = Integer.parseInt(page_number);
+		    }  
+
+
+    
 } else {
+
     pageNum = 0;
+    
 }
 
 int istart = pageNum * pageSize;
@@ -209,9 +238,22 @@ String match_size = Integer.valueOf(size).toString();
           //String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
 
+          if (page_number != null)
+          {
+          
+		    bool_val = JSPUtils.isInteger(page_number);
+		    if (!bool_val) {
+			 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+			 String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
+			 request.getSession().setAttribute("error_msg", error_msg);
+			 response.sendRedirect(redirectURL);
+		    } 
+
+          }
+          
           if (page_number != null && new_search == Boolean.FALSE)
           {
-              page_string = page_number;
+               page_string = page_number;
           }
           request.getSession().setAttribute("new_search", Boolean.FALSE);
           

@@ -380,6 +380,7 @@ request.getSession().removeAttribute("matched_concept_codes");
 
 String table_content = "";
 StringBuffer table_content_buf = new StringBuffer();
+boolean bool_val;
 
 rvsi = (ResolvedValueSetIteratorHolder) request.getSession().getAttribute("rvsi");
 if (rvsi != null) {
@@ -398,7 +399,17 @@ if (rvsi != null) {
             			}
 
             		} else {
-            			request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+            		
+            		
+			    bool_val = JSPUtils.isInteger(resultsPerPage);
+			    if (!bool_val) {
+				 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+				 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+				 request.getSession().setAttribute("error_msg", error_msg);
+				 response.sendRedirect(redirectURL);
+			    } else {
+				 request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+			    }              		
             		}
 
             		selectedResultsPerPage = resultsPerPage;
@@ -407,7 +418,17 @@ if (rvsi != null) {
             		int pageNum = 0;
 
             		if (page_number != null) {
-            			pageNum = Integer.parseInt(page_number);
+            		
+ 			    bool_val = JSPUtils.isInteger(page_number);
+			    if (!bool_val) {
+				 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+				 String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
+				 request.getSession().setAttribute("error_msg", error_msg);
+				 response.sendRedirect(redirectURL);
+			    } else {
+				 pageNum = Integer.parseInt(page_number);
+			    }  
+            			
             		} else {
             			pageNum = 1;
             		}

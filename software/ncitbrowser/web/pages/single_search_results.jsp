@@ -41,7 +41,7 @@
         <a name="evs-content" id="evs-content"></a>
         <%
           Vector v = (Vector) request.getAttribute("search_results");
-
+    boolean bool_val;
     if (v != null) {
          _logger.debug("single search results: " + v.size());
     } else {
@@ -58,7 +58,16 @@
 
           if (page_number != null && new_search == Boolean.FALSE)
           {
-              page_string = page_number;
+		    bool_val = JSPUtils.isInteger(page_number);
+		    if (!bool_val) {
+			 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+			 String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
+			 request.getSession().setAttribute("error_msg", error_msg);
+			 response.sendRedirect(redirectURL);
+		    } else {
+			 page_string = page_number;
+		    }          
+              
           }
           request.setAttribute("new_search", Boolean.FALSE);
           int page_num = Integer.parseInt(page_string);

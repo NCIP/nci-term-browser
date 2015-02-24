@@ -102,7 +102,8 @@ if (mapping_dictionary != null && (mapping_dictionary.compareTo("NCI Thesaurus")
 	    <a name="evs-content" id="evs-content"></a>
 
 <%
-
+String base_path = request.getContextPath();
+boolean bool_val;
 HashMap scheme2MappingIteratorBeanMap = null;
 Object scheme2MappingIteratorBean = request.getSession().getAttribute("scheme2MappingIteratorBeanMap");
 
@@ -122,18 +123,28 @@ if (resultsPerPage == null) {
     }
     
 }  else {
-    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
-    MappingIteratorBean mapping_bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
-    if (mapping_bean != null) {
-        mapping_bean.setPageSize(Integer.parseInt(resultsPerPage));
-        scheme2MappingIteratorBeanMap.put(mapping_schema, mapping_bean);
+
+    
+    bool_val = JSPUtils.isInteger(resultsPerPage);
+    if (!bool_val) {
+         String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+         String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+         request.getSession().setAttribute("error_msg", error_msg);
+	 response.sendRedirect(redirectURL);
+    } else {
+	    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+	    MappingIteratorBean mapping_bean = (MappingIteratorBean) scheme2MappingIteratorBeanMap.get(mapping_schema);
+	    if (mapping_bean != null) {
+		mapping_bean.setPageSize(Integer.parseInt(resultsPerPage));
+		scheme2MappingIteratorBeanMap.put(mapping_schema, mapping_bean);
+	    }
     }
 }
 
 
 
 
-  String base_path = request.getContextPath();
+
 int numRemaining = 0;
 
 int sortBy = MappingData.COL_SOURCE_CODE;
@@ -143,14 +154,37 @@ int prevSortBy = MappingData.COL_SOURCE_CODE;
 String sortByStr = HTTPUtils.cleanXSS((String) request.getParameter("sortBy"));
 
 
+    
+
 if (sortByStr != null  && sortByStr.compareTo("null") != 0 ) {
-    sortBy = Integer.parseInt(sortByStr);
+
+
+    bool_val = JSPUtils.isInteger(sortByStr);
+    if (!bool_val) {
+         String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+         String error_msg = HTTPUtils.createErrorMsg("sortByStr", sortByStr);
+         request.getSession().setAttribute("error_msg", error_msg);
+	 response.sendRedirect(redirectURL);
+    } else {
+         sortBy = Integer.parseInt(sortByStr);
+    }
 }
 
 
 String prevSortByStr = (String) request.getSession().getAttribute("sortBy");
 if (prevSortByStr != null && prevSortByStr.compareTo("null") != 0) {
-    prevSortBy = Integer.parseInt(prevSortByStr);
+
+    bool_val = JSPUtils.isInteger(prevSortByStr);
+    if (!bool_val) {
+         String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+         String error_msg = HTTPUtils.createErrorMsg("prevSortByStr", prevSortByStr);
+         request.getSession().setAttribute("error_msg", error_msg);
+	 response.sendRedirect(redirectURL);
+    } else {
+         prevSortBy = Integer.parseInt(prevSortByStr);
+    }
+    
+    
 }
 
 if (sortByStr == null) {
@@ -216,7 +250,17 @@ String selectedResultsPerPage = Integer.valueOf(pageSize).toString();
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 int pageNum = 0;
 if (page_number != null && page_number.compareTo("null") != 0) {
-    pageNum = Integer.parseInt(page_number);
+
+
+    bool_val = JSPUtils.isInteger(page_number);
+    if (!bool_val) {
+         String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+         String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
+         request.getSession().setAttribute("error_msg", error_msg);
+	 response.sendRedirect(redirectURL);
+    } else {
+         pageNum = Integer.parseInt(page_number);
+    }
 }
 
 int page_num = pageNum;

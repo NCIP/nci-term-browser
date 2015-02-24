@@ -80,6 +80,7 @@
          <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
+                        boolean bool_val;
             		int numRemaining = 0;
             		String valueSetSearch_requestContextPath = request
             				.getContextPath();
@@ -145,8 +146,17 @@
             			}
 
             		} else {
-            			request.getSession().setAttribute("resultsPerPage",
-            					resultsPerPage);
+            		
+				    bool_val = JSPUtils.isInteger(resultsPerPage);
+				    if (!bool_val) {
+					 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+					 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+					 request.getSession().setAttribute("error_msg", error_msg);
+					 response.sendRedirect(redirectURL);
+				    } else {
+					 request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+				    }              		
+ 
             		}
 
             		String selectedResultsPerPage = resultsPerPage;

@@ -532,4 +532,10 @@ public class HTTPUtils {
 		return Boolean.FALSE;
 	}
 
+	public static String createErrorMsg(String name, String value) {
+		String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
+		   " (name: " + name + ").";
+		return error_msg;
+	}
+
 }

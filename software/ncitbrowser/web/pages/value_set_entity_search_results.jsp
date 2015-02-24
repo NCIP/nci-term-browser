@@ -112,7 +112,7 @@ String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSe
 //String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 
 String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
-
+boolean bool_val;
 //System.out.println("value_set_entity_search_results.jsp checked_vocabularies: " + checked_vocabularies);
 
 Vector selected_vocabularies = null;
@@ -133,8 +133,21 @@ if (checked_vocabularies != null) {
 String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 if (resultsPerPage == null) {
     resultsPerPage = (String) request.getSession().getAttribute("resultsPerPage");
+    
     if (resultsPerPage == null) {
         resultsPerPage = "50";
+    }  else {
+    
+	    bool_val = JSPUtils.isInteger(resultsPerPage);
+	    if (!bool_val) {
+		 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+		 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+		 request.getSession().setAttribute("error_msg", error_msg);
+		 response.sendRedirect(redirectURL);
+	    } else {
+	         resultsPerPage = "50";
+	    }
+    
     }
     
 }  else {
@@ -165,10 +178,19 @@ if (num_pages * pageSize < size) num_pages++;
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
 if (!DataUtils.isNull(page_number)) {
-    pageNum = Integer.parseInt(page_number);
+
+	    bool_val = JSPUtils.isInteger(page_number);
+	    if (!bool_val) {
+		 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+		 String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
+		 request.getSession().setAttribute("error_msg", error_msg);
+		 response.sendRedirect(redirectURL);
+	    } else {
+	         pageNum = Integer.parseInt(page_number);
+	    }
+    
 } else {
     pageNum = 0;
-    
     page_number = "0";
 }
 

@@ -96,6 +96,7 @@ vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
 String checked = "";
+boolean bool_val;
 
 %>
         <div class="pagecontent">
@@ -114,7 +115,17 @@ if (resultsPerPage == null) {
     }
     
 }  else {
-    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+
+    bool_val = JSPUtils.isInteger(resultsPerPage);
+    if (!bool_val) {
+	 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+	 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+	 request.getSession().setAttribute("error_msg", error_msg);
+	 response.sendRedirect(redirectURL);
+    } else {
+	 request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+    }  
+
 }
 
 
