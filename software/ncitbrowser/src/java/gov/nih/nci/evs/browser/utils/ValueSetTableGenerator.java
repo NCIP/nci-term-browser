@@ -206,6 +206,10 @@ public class ValueSetTableGenerator {
 		  uri = "http://ncit:C54577";
 
 	      ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(uri);
+	      if (vsc == null) {
+			  uri = uri.toLowerCase();
+			  vsc = ValueSetDefinitionConfig.getValueSetConfig(uri);
+		  }
 	      new ValueSetTableGenerator().generate(vsc);
 
 	 }

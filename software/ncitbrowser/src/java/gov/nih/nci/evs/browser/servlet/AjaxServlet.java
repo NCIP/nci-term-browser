@@ -1845,6 +1845,10 @@ ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
 if (vsc == null) {
 	String new_uri = convertValueSetURI(vsd_uri);
 	vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
+	if (vsc == null) {
+		new_uri = new_uri.toLowerCase();
+		vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
+	}
 }
 
 if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
@@ -3412,6 +3416,10 @@ out.flush();
 			if (vsc == null) {
 				String new_uri = convertValueSetURI(vsd_uri);
 				vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
+				if (vsc == null) {
+					new_uri = new_uri.toLowerCase();
+					vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
+				}
 			}
 
 			String table_content = null;
