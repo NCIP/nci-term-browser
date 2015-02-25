@@ -1842,10 +1842,6 @@ out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
 
 
 ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
-if (vsc == null) {
-		String vsd_uri_lower = vsd_uri.toLowerCase();
-		vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri_lower);
-}
 
 if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
 
@@ -3409,10 +3405,6 @@ out.flush();
         if (DataUtils.isNull(refresh)) {
 
 			ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
-			if (vsc == null) {
-				String vsd_uri_lower = vsd_uri.toLowerCase();
-				vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri_lower);
-			}
 
 			String table_content = null;
 			StringBuffer table_content_buf = new StringBuffer();

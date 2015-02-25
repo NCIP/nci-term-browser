@@ -572,10 +572,6 @@ if (matched_concept_codes == null) {
 
 
 ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
-if (vsc == null) {
-	String vsd_uri_lower = vsd_uri.toLowerCase();
-        vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri_lower);
-}
 
 %>
 <td>

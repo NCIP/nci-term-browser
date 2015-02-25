@@ -104,7 +104,8 @@ public class HTTPParameterConstants {
        "searchTerm:multi_search.x",
        "searchTerm:multi_search.y",
        "searchTerm:multipleSearch.x",
-       "searchTerm:multipleSearch.y"
+       "searchTerm:multipleSearch.y",
+       "resolvedValueSetSearchForm"
     };
 
     public static final List HTTP_REQUEST_PARAMETER_NAME_LIST = Arrays.asList(HTTP_REQUEST_PARAMETER_NAMES);
