@@ -1843,12 +1843,8 @@ out.print("/pages/subset.jsf\">NCI Thesaurus Subsets</a> page).");
 
 ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
 if (vsc == null) {
-	String new_uri = convertValueSetURI(vsd_uri);
-	vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
-	if (vsc == null) {
-		new_uri = new_uri.toLowerCase();
-		vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
-	}
+		String vsd_uri_lower = vsd_uri.toLowerCase();
+		vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri_lower);
 }
 
 if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
@@ -3414,12 +3410,8 @@ out.flush();
 
 			ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
 			if (vsc == null) {
-				String new_uri = convertValueSetURI(vsd_uri);
-				vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
-				if (vsc == null) {
-					new_uri = new_uri.toLowerCase();
-					vsc = ValueSetDefinitionConfig.getValueSetConfig(new_uri);
-				}
+				String vsd_uri_lower = vsd_uri.toLowerCase();
+				vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri_lower);
 			}
 
 			String table_content = null;

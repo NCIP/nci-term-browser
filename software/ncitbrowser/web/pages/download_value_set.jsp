@@ -572,6 +572,10 @@ if (matched_concept_codes == null) {
 
 
 ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
+if (vsc == null) {
+	String vsd_uri_lower = vsd_uri.toLowerCase();
+        vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri_lower);
+}
 
 %>
 <td>
@@ -581,6 +585,7 @@ ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
 
 <%
 if (vsc != null && !DataUtils.isNullOrBlank(vsc.getReportURI())) {
+
 %>
 	<td align=right>
 	<a href="/ncitbrowser/ajax?action=download&vsd_uri=<%=vsd_uri%>">
