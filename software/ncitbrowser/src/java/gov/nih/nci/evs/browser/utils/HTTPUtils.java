@@ -385,6 +385,8 @@ public class HTTPUtils {
 
                 if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.FALSE)) {
 					if (isDynamic != null && isDynamic.equals(Boolean.FALSE)) {
+						if (name.endsWith("value=")) return true;
+
 						if (!list.contains(name)) {
 							System.out.println("(*) name: " + name + " not in the list.");
 							request.getSession().setAttribute("error_msg", "WARNING: Unknown parameter name encountered - '" + name + "'.");
@@ -436,6 +438,8 @@ public class HTTPUtils {
 
 	public static Boolean validateRadioButtonNameAndValue(String name, String value) {
 		if (name == null || value == null || value.length() == 0) return null;
+
+
 		if (name.compareTo("adv_search_algorithm") == 0) {
 			if (HTTPParameterConstants.adv_search_algorithm_value_list.contains(value)) {
 				return Boolean.TRUE;
