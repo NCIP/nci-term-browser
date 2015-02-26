@@ -4460,7 +4460,6 @@ if (lbSvc == null) {
 */
 
     private static void dumpHashMap(HashMap<String, String> hmap) {
-		_logger.warn("\n\n");
 		if (hmap == null) return;
 
 		Set<Map.Entry<String, String>> set = hmap.entrySet();

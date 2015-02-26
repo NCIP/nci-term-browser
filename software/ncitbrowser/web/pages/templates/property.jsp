@@ -28,6 +28,12 @@
 %>
 
 <%
+  int other_src_alt_def_count = 0;
+  Vector nci_def_label_value = new Vector();
+  Vector non_nci_def_label_value = new Vector();
+  Vector other_label_value = new Vector();
+  boolean is_definition = false;
+
   Vector ncim_metathesaurus_cui_vec = new Vector();
   HashSet ncim_metathesaurus_cui_hset = new HashSet();
 
@@ -95,12 +101,9 @@
 
       for (int j=0; j<propertynames.size(); j++) {
         String propertyname = (String) propertynames.elementAt(j);
-
         if (!hset.contains(propertyname)) {
           hset.add(propertyname);
-          propertyvalues = conceptDetails.getPropertyValues(
-            curr_concept, propertytype, propertyname);
-
+          propertyvalues = conceptDetails.getPropertyValues(curr_concept, propertytype, propertyname);
           if (propertyvalues != null)
             hmap.put(propertyname, propertyvalues);
         }
@@ -259,9 +262,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
   for (int i=0; i<properties_to_display.size(); i++) {
     String propName = (String) properties_to_display.elementAt(i);
-   
     String propName_label = (String) properties_to_display_label.elementAt(i);
- 
 
     if (propName_label.compareTo("NCI Thesaurus Code") == 0  && propName.compareTo("NCI_THESAURUS_CODE") != 0) {
         String formalName = conceptDetails.getFormalName(dictionary);
@@ -316,15 +317,25 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         for (int lcv=0; lcv<value_vec.size(); lcv++) {
          
 		String value = (String) value_vec.elementAt(lcv);
-		
 		String value_wo_qualifier = value;
 
 		int n = value.indexOf("|");
 		if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 
 		         || propName_label.indexOf("definition") != -1)) {
 		         
-			  value_wo_qualifier = value.substring(0, n);
-			  qualifier = value.substring(n+1, value.length());
+		         //System.out.println(propName_label);
+			  //value_wo_qualifier = value.substring(0, n);
+			  //qualifier = value.substring(n+1, value.length());
+			  
+			  Vector def_vec = DataUtils.parseData(value);
+			  value_wo_qualifier = (String) def_vec.elementAt(0);
+			  qualifier = "";
+			  if (qualifier.compareTo("NCI") != 0 && propName.compareTo("ALT_DEFINITION") != 0) {
+				  other_src_alt_def_count++;
+			  }
+			  if (def_vec.size() > 1) {
+			      qualifier = (String) def_vec.elementAt(1);
+			  }
 
 			  if (def_map != null && def_map.containsKey(qualifier)) {
 			      String def_source_display_value = (String) def_map.get(qualifier);
@@ -333,18 +344,21 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 			  } else {
 
 				  if (qualifier.indexOf("PDQ") != -1) {
-					value = FormatUtils.reformatPDQDefinition(value);
+				      value = FormatUtils.reformatPDQDefinition(value);
 				  } else if (qualifier.compareTo("NCI") != 0) {
 				      value = value_wo_qualifier;
 				      propName_label = qualifier + " " + propName_label2;
+				      
+				      propName_label = propName_label.trim();
+				      
+				      
 				  } else
 				      value = value_wo_qualifier;
 			          }
 			  }
-
+			  
 			String url_str = url + value;
-			
-			
+						
 			if (propName_label.compareTo("NCI Metathesaurus Link") == 0) {
 			    if (!ncim_metathesaurus_cui_hset.contains(value)) {
 			        ncim_metathesaurus_cui_hset.add(value);
@@ -406,8 +420,6 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
     } else if (propName_label.indexOf("Synonyms") == -1) {
     
       displayed_properties.add(propName);
-     
-      
       Vector value_vec = (Vector) hmap.get(propName);
 
       if (value_vec != null && value_vec.size() > 0) {
@@ -428,46 +440,57 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
           String value_wo_qualifier = value;
           int n = value.indexOf("|");
 
+          is_definition = false;
           if (n != -1 && (propName_label.indexOf("Definition") != -1 || propName_label.indexOf("DEFINITION") != -1 || propName_label.indexOf("definition") != -1)) {
-
-              value_wo_qualifier = value.substring(0, n);
-              qualifier = value.substring(n+1, value.length());
-  
+              is_definition = true;
+  			  Vector def_vec = DataUtils.parseData(value);
+  			  value_wo_qualifier = (String) def_vec.elementAt(0);
+  			  qualifier = "";
+  			  if (def_vec.size() > 1) {
+  			      qualifier = (String) def_vec.elementAt(1);
+			  }
+			  
               if (def_map != null && def_map.containsKey(qualifier)) {
 	          String def_source_display_value = (String) def_map.get(qualifier);
 	          value = value_wo_qualifier + " (" + qualifier + ")";
                   propName_label = def_source_display_value + " " + propName_label2;
- 
                   
               } else {
 		    if (qualifier.indexOf("PDQ") != -1) {
- 		    
 			value = FormatUtils.reformatPDQDefinition(value);
 			
 		    } else if (qualifier.compareTo("NCI") != 0) {
 	    
 		      value = value_wo_qualifier;
 		      propName_label = qualifier + " " + propName_label2;
-	      
-		      
+
+		    } else if (qualifier.compareTo("NCI") == 0 && propName.compareTo("ALT_DEFINITION") == 0) {
+	                 value = value_wo_qualifier;
+	                 if (other_src_alt_def_count > 0) {
+		         	propName_label = qualifier + " " + propName_label2;
+		         } else {
+		                propName_label = propName_label2;
+		         }
+		         
+		    } else if (qualifier.compareTo("NCI") == 0 && propName.compareTo("ALT_DEFINITION") != 0) {
+	                 value = value_wo_qualifier;
+		         propName_label = propName_label2;
+		         
 		    } else {
-		      value = value_wo_qualifier;
+		         value = value_wo_qualifier;
 		    }
               }
-              
+	      if (qualifier.compareToIgnoreCase("NCI") == 0) {
+		    nci_def_label_value.add(propName_label2 + "|" + value);
+	      } else {
+		    non_nci_def_label_value.add(propName_label + "|" + value);
+	      }              
           }
-          
+         
           if (propName_label.indexOf("textualPresentation") == -1) {
-%>
-            <p>
-              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
-              <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
-                   <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
-              <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
-                  <%= getDisplayLink(label2URL, label2Linktext, "caDSR metadata", value) %>
-              <% } %>
-            </p>
-<%
+              if (!is_definition) {
+                   other_label_value.add(propName_label + "|" + value);             
+              }
           }
       }
     }
@@ -475,55 +498,94 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 }
 %>
 
+
 <%
-
-/*
-    String vocab = (String) request.getSession().getAttribute("dictionary");
-    String NCIm_sab = conceptDetails.getNCImSAB(vocab);
-    
-    if (NCIm_sab != null) {
-	ResolvedConceptReferencesIterator iterator = new SearchUtils().findConceptWithSourceCodeMatching("NCI Metathesaurus", null,
-	    NCIm_sab, curr_concept.getEntityCode(), 100, true);
-	if (iterator != null) {
-	    try {
-	        int nummatches = iterator.numberRemaining();
-
-		while(iterator.hasNext()) {
-			ResolvedConceptReference[] refs = iterator.next(100).getResolvedConceptReference();
-			if (refs != null) {
-			
-				for (int k=0; k<refs.length; k++) {
-				    ResolvedConceptReference ref = refs[k];
-				    String ref_code = ref.getCode();
-				    
-				    if (!ncim_cui_code_vec.contains(ref_code)) {
-  					    String _ncim_cui_prop_url = ncim_cui_prop_url + ref_code;
-
-
-			if (ncim_cui_propName_label.compareTo("NCI Metathesaurus CUI") == 0) {
-			    if (!ncim_metathesaurus_cui_hset.contains(ref_code)) {
-			        ncim_metathesaurus_cui_hset.add(ref_code);
-			        ncim_metathesaurus_cui_vec.add(ncim_cui_propName_label 
-			                                   + "|" + ref_code
-			                                   + "|" + _ncim_cui_prop_url
-			                                   + "|" + ncim_cui_prop_linktext);
-			    }
-			}
-			
-
-
-
-		  
-				    } 
-				}
-			}
-		}
-	    } catch (Exception ex) {
-	        ex.printStackTrace();
-	    }
-	}
+    for (int i_def = 0; i_def<other_label_value.size(); i_def++) {
+        String label_value = (String) other_label_value.elementAt(i_def);
+        Vector u = DataUtils.parseData(label_value);
+        String propName_label = (String) u.elementAt(0);
+        if (propName_label.compareToIgnoreCase("Preferred Name") == 0) {
+            String value = (String) u.elementAt(1);
+%>        
+            <p>
+              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
+              <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
+                   <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
+              <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
+                  <%= getDisplayLink(label2URL, label2Linktext, "caDSR metadata", value) %>
+              <% } %>
+            </p> 
+<%  
+        }
     }
-*/    
+%>
+
+
+
+<%
+    for (int i_def = 0; i_def<nci_def_label_value.size(); i_def++) {
+        String label_value = (String) nci_def_label_value.elementAt(i_def);
+        Vector u = DataUtils.parseData(label_value);
+        String propName_label = (String) u.elementAt(0);
+        String value = (String) u.elementAt(1);
+%>        
+            <p>
+              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
+              <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
+                   <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
+              <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
+                  <%= getDisplayLink(label2URL, label2Linktext, "caDSR metadata", value) %>
+              <% } %>
+            </p> 
+<%            
+    }
+%>
+
+
+
+<%
+    for (int i_def = 0; i_def<non_nci_def_label_value.size(); i_def++) {
+        String label_value = (String) non_nci_def_label_value.elementAt(i_def);
+        Vector u = DataUtils.parseData(label_value);
+        String propName_label = (String) u.elementAt(0);
+        String value = (String) u.elementAt(1);
+%>        
+            <p>
+              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
+              <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
+                   <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
+              <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
+                  <%= getDisplayLink(label2URL, label2Linktext, "caDSR metadata", value) %>
+              <% } %>
+            </p> 
+<%            
+    }
+%>
+
+
+<%
+    for (int i_def = 0; i_def<other_label_value.size(); i_def++) {
+        String label_value = (String) other_label_value.elementAt(i_def);
+        Vector u = DataUtils.parseData(label_value);
+        String propName_label = (String) u.elementAt(0);
+        if (propName_label.compareToIgnoreCase("Preferred Name") != 0) {
+            String value = (String) u.elementAt(1);
+%>        
+            <p>
+              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
+              <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
+                   <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
+              <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
+                  <%= getDisplayLink(label2URL, label2Linktext, "caDSR metadata", value) %>
+              <% } %>
+            </p> 
+<%  
+        }
+    }
+%>
+
+
+<%
     ncim_metathesaurus_cui_vec = conceptDetails.getNCImCodes(curr_concept);
     String ncimURL = new ConceptDetails().getNCImURL();
     if (ncim_metathesaurus_cui_vec.size() > 0) {

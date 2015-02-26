@@ -260,7 +260,9 @@ public class SimpleSearchUtils {
 
 		ResolvedConceptReferencesIterator iterator = null;
 		try {
-			iterator = searchExtension.search(matchText, includes, converToMatchAlgorithm(searchOption, algorithm));
+			//iterator = searchExtension.search(matchText, includes, converToMatchAlgorithm(searchOption, algorithm));
+			iterator = searchExtension.search(matchText, includes, null, converToMatchAlgorithm(searchOption, algorithm), false, true);
+
 			printNumberOfMatches(iterator);
 
 		} catch (Exception ex) {
