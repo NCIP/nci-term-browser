@@ -119,6 +119,10 @@ public class SimpleSearchUtils {
 			return search(schemes, versions, matchText, BY_CODE, "exactMatch");
         } else if (algorithm.compareToIgnoreCase(LUCENE) == 0 && target.compareToIgnoreCase(CODES) == 0) {
 			return search(schemes, versions, matchText, BY_CODE, "exactMatch");
+
+        } else if (algorithm.compareToIgnoreCase(EXACT_MATCH) == 0 && target.compareToIgnoreCase(NAMES) == 0) {
+			return search(schemes, versions, matchText, BY_NAME, "exactMatch");
+
         } else if (algorithm.compareToIgnoreCase(LUCENE) == 0 && target.compareToIgnoreCase(NAMES) == 0) {
 			return search(schemes, versions, matchText, BY_NAME, "lucene");
         } else if (algorithm.compareToIgnoreCase(CONTAINS) == 0 && target.compareToIgnoreCase(NAMES) == 0) {

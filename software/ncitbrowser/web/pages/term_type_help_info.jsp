@@ -112,7 +112,7 @@
                   String rowColor = (n%2 == 1) ? "dataRowDark" : "dataRowLight";
               %>
                   <tr class="<%=rowColor%>">
-                    <td scope="row"><%=DataUtils.encodeTerm(name)%></td>
+                    <td scope="row"><%=name%></td>
                     <td><%=description%></td>
                   </tr>
               <%
