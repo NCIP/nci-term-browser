@@ -82,8 +82,6 @@ String short_name = conceptDetails.getCSName(dictionary);
         String ncbo_id = null;
         String is_virtual = "true";
         String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
-        
-       
         boolean view_graph = conceptDetails.visualizationWidgetSupported(dictionary);
 
 %>
@@ -275,10 +273,30 @@ String short_name = conceptDetails.getCSName(dictionary);
                            	boolean tree_access2 = !conceptDetails.get_vocabulariesWithoutTreeAccessHashSet().contains(dictionary);
                     		boolean typeLink_isMapping2 = conceptDetails.isMapping(dictionary, null);
                            	if (tree_access2 && !typeLink_isMapping2) {
+                           	
+                           	
+                           	
                            %>
       
-                           <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ns=<%=ns%>&ontology_display_name=<%=short_name%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-                              View in Hierarchy</a>
+ <%
+ if (DataUtils.isNullOrBlank(ns)) {
+ %>
+       
+                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ontology_display_name=<%=short_name%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+
+ 
+ <%
+ } else {
+ %>
+       
+                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ns=<%=ns%>&ontology_display_name=<%=short_name%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+
+ 
+ <%
+ }
+ %>
+      
+                               View in Hierarchy</a>
                            <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
              <%
                       }

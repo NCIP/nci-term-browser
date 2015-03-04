@@ -630,7 +630,7 @@ public class ValueSetSearchUtils
         String matchText, int searchOption, String matchAlgorithm) {
 		ResolvedConceptReferencesIteratorWrapper wrapper = null;
 
-long ms = System.currentTimeMillis();
+        long ms = System.currentTimeMillis();
 
 		if (checked_vocabularies == null) return null;
 		Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
@@ -641,7 +641,6 @@ long ms = System.currentTimeMillis();
 		for (int i=0; i<selected_vocabularies.size(); i++) {
 			int k = i+1;
 			String selected_vocabulary = (String) selected_vocabularies.elementAt(i);
-
 			//Vector u = getCodingSchemeVersionsByURN(selected_vocabulary);
 			Vector u = DataUtils.getResovedValueSetVersions(selected_vocabulary);
 			if (u != null) {
