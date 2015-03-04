@@ -788,7 +788,8 @@
             </li>          
           
             <li>
-              <b>Values</b> lists all concepts contained in this 
+            
+              <b><a name="valueBullet">Values</a></b> lists all concepts contained in this 
                 value set, using the production version of each 
                 participating terminology. The listing shows:
               <ul> 
