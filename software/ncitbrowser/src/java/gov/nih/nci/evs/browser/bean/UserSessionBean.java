@@ -1194,6 +1194,7 @@ if (DataUtils.isNull(selected_vocabularies)) {
 	ontologiesToSearchOnStr = buf.toString();
 }
 
+String new_ontologiesToSearchOnStr = "";
 for (int i = 0; i < display_name_vec.size(); i++) {
 	 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
 
@@ -1202,11 +1203,16 @@ for (int i = 0; i < display_name_vec.size(); i++) {
 	 } else if (info.getVisible() && ontologiesToSearchOnStr.indexOf(info.getLabel()) == -1) {
 		 info.setSelected(false);
 	 }
+	 if (info.getSelected()) {
+		 new_ontologiesToSearchOnStr = new_ontologiesToSearchOnStr + "|" + info.getLabel();
+	 }
 }
-
+ontologiesToSearchOnStr = new_ontologiesToSearchOnStr;
+String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
 
 request.getSession().setAttribute("display_name_vec", display_name_vec);
 request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
 
 
         List list = new ArrayList<String>();
@@ -1228,22 +1234,18 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
 
 
 		int selected_knt = 0;
-
 		Vector ontologies_to_search_on = new Vector();
 		StringBuffer buff = new StringBuffer();
 		buff.append("|");
-		//ontologiesToSearchOnStr = "|";
 		for (int i = 0; i < display_name_vec.size(); i++) {
 			 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
 			 if (info.getSelected()) {
 				 selected_knt++;
 				 ontologies_to_search_on.add(info.getLabel());
-				 //ontologiesToSearchOnStr = ontologiesToSearchOnStr + info.getLabel() + "|";
 				 buff.append(info.getLabel() + "|");
 			 }
 		}
 		ontologiesToSearchOnStr = buff.toString();
-
 		ontology_list = new String[ontologies_to_search_on.size()];
 		ontologiesToSearchOn = new ArrayList<String>();
 
@@ -2380,10 +2382,7 @@ response.setContentType("text/html;charset=utf-8");
                 request.getSession().setAttribute("code", ref.getConceptCode());
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
-
                 request.getSession().setAttribute("version", version);
-
-
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
 
 HttpServletResponse response =
@@ -2500,7 +2499,6 @@ response.setContentType("text/html;charset=utf-8");
         // [NCITERM-641] Tomcat session is mixed up.
 		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
 		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
-
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
 		return "multiple_search";
@@ -2648,7 +2646,6 @@ String s = "|";
 
 				 }
 
-        System.out.println("\t" + info.getLabel() + ": " +  info.getSelected());
 
 		     //}
 
@@ -2669,8 +2666,6 @@ ontologiesToSearchOnStr = s;
 		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
-
-		System.out.println("(*************) UserSessionBean: ontologiesToSearchOnStr: " + ontologiesToSearchOnStr);
 
      }
 

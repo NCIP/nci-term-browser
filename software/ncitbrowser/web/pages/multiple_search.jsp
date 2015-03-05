@@ -681,13 +681,6 @@ if (ontologiesToExpandStr == null) {
         </div> <!-- end Page content -->
     </div> <!-- end main-area_960 -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
-
-    <input type="hidden" name="hidden_ontology_list" value="" />
-    <input type="hidden" name="hidden_matchText" value="" />
-    <input type="hidden" name="hidden_algorithm" value="" />
-    <input type="hidden" name="hidden_searchTarget" value="" />
-    <input type="hidden" name="hidden_csn" value="" />
-    
     
     
 </h:form>
