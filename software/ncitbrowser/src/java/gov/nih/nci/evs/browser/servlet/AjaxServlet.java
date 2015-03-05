@@ -220,6 +220,65 @@ public final class AjaxServlet extends HttpServlet {
         return jsonString;
     }
 
+
+     private void show_other_versions(HttpServletRequest request, boolean show) {
+		 //String matchText = HTTPUtils.cleanXSS(request.getParameter("txt"));
+		 String algorithm = HTTPUtils.cleanXSS(request.getParameter("algorithm"));
+		 String searchTarget = HTTPUtils.cleanXSS(request.getParameter("searchTarget"));
+		 String ontologiesToSearchOnStr = HTTPUtils.cleanXSS(request.getParameter("ontology_list"));
+		 String action_cs = HTTPUtils.cleanXSS(request.getParameter("csn"));
+		 request.getSession().setAttribute("algorithm", algorithm);
+		 request.getSession().setAttribute("searchTarget", searchTarget);
+
+
+Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+if (display_name_vec == null) {
+     display_name_vec = DataUtils.getSortedOntologies();
+}
+
+		String new_ontologiesToSearchOnStr = "";
+		for (int i = 0; i < display_name_vec.size(); i++) {
+			 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) { // visible and checked by the user
+				 info.setSelected(true);
+			 } else if (info.getVisible() && ontologiesToSearchOnStr.indexOf(info.getLabel()) == -1) {
+				 info.setSelected(false);
+			 }
+			 if (info.getSelected()) {
+				 new_ontologiesToSearchOnStr = new_ontologiesToSearchOnStr + "|" + info.getLabel();
+			 }
+
+			 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+				 info.setExpanded(show);
+			 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+				 info.setVisible(show);
+			 }
+
+		}
+
+		ontologiesToSearchOnStr = new_ontologiesToSearchOnStr;
+		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
+		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
+        request.getSession().setAttribute("display_name_vec", display_name_vec);
+        request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+
+     }
+
+    public String getOntologiesToExpandStr(Vector display_name_vec) {
+		StringBuffer buf = new StringBuffer();
+		String ontologiesToExpandStr = null;
+		buf.append("|");
+		if (display_name_vec != null) {
+			for (int i = 0; i < display_name_vec.size(); i++) {
+				 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+			     if (info.getExpanded()) {
+					 buf.append(info.getLabel() + "|");
+				 }
+			}
+		}
+		return buf.toString();
+	}
+
     /**
      * Process the specified HTTP request, and create the corresponding HTTP
      * response (or forward to another web component that will create it).
@@ -237,10 +296,36 @@ public final class AjaxServlet extends HttpServlet {
         request.getSession().removeAttribute("error_msg");
 
         // Determine request by attributes
-        String action = HTTPUtils.cleanXSS(request.getParameter("action"));// DataConstants.ACTION);
+        String action = HTTPUtils.cleanXSS(request.getParameter("action"));//
+
+        if (action.compareTo("show") == 0) {
+            show_other_versions(request, true);
+
+				 try {
+					 String nextJSP = "/pages/multiple_search.jsf";
+					 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+					 dispatcher.forward(request,response);
+					 return;
+
+				 } catch (Exception ex) {
+					 ex.printStackTrace();
+				 }
+
+		} else if (action.compareTo("hide") == 0) {
+            show_other_versions(request, false);
+
+				 try {
+					 String nextJSP = "/pages/multiple_search.jsf";
+					 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+					 dispatcher.forward(request,response);
+					 return;
+
+				 } catch (Exception ex) {
+					 ex.printStackTrace();
+				 }
 
         //search_value_set
-        if (action.compareTo("search_value_set") != 0) {
+        } else if (action.compareTo("search_value_set") != 0) {
 			 boolean retval = HTTPUtils.validateRequestParameters(request);
 			 if (!retval) {
 				 try {

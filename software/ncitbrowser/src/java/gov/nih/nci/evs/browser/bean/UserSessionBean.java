@@ -2600,11 +2600,79 @@ response.setContentType("text/html;charset=utf-8");
 
         //KLO, 102611
      	request.getSession().removeAttribute("ontology_list");
-
-
-        //LicenseUtils.clearAllLicenses(request); //DYEE
 		return "multiple_search";
 	}
+
+
+     private void show_other_versions(HttpServletRequest request, String action_cs, boolean show) {
+
+		System.out.println("action_cs: " + action_cs + "; show or hide: " + show);
+
+
+	    String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
+	    if (ontologiesToSearchOnStr == null) {
+
+			String[] ontology_list = request.getParameterValues("ontology_list"); // checkboxes, value = info.getLabel();
+			if ( ontology_list  == null ) {
+				 ontology_list = (String[]) request.getSession().getAttribute("ontology_list");
+			}
+
+			StringBuffer buf = new StringBuffer();
+			buf.append("|");
+			if (ontology_list != null) {
+				System.out.println("(*) UserSessionBean ontology_list.length: " + ontology_list.length);
+				for (int i = 0; i < ontology_list.length; ++i) {
+
+					System.out.println("(" + i + ") " + ontology_list[i]);
+
+					buf.append(ontology_list[i] + "|");
+				}
+			}
+			ontologiesToSearchOnStr = buf.toString();
+		}
+
+
+        System.out.println("(************* *) UserSessionBean: ontologiesToSearchOnStr: " + ontologiesToSearchOnStr);
+
+
+String s = "|";
+	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+		for (int i = 0; i < display_name_vec.size(); i++) {
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+
+			 //if (info.getVisible()) {
+				 info.setSelected(false);
+				 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+					 info.setSelected(true);
+					 s = s + info.getLabel() + "|";
+
+				 }
+
+        System.out.println("\t" + info.getLabel() + ": " +  info.getSelected());
+
+		     //}
+
+			 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+			     info.setExpanded(show);
+			 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+				 info.setVisible(show);
+			 }
+		}
+
+
+ontologiesToSearchOnStr = s;
+
+        // [NCITERM-641] Tomcat session is mixed up.
+		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
+		System.out.println("(*************) UserSessionBean: ontologiesToExpandStr: " + ontologiesToExpandStr);
+
+		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
+        request.getSession().setAttribute("display_name_vec", display_name_vec);
+        request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+
+		System.out.println("(*************) UserSessionBean: ontologiesToSearchOnStr: " + ontologiesToSearchOnStr);
+
+     }
 
 
     public void showListener(ActionEvent evt) {
@@ -2625,10 +2693,15 @@ response.setContentType("text/html;charset=utf-8");
 				 show_counter++;
 				 if (show_counter == k) {
 					 action_coding_scheme = info.getCodingScheme();
+					 show_other_versions(request, action_coding_scheme, true);
 					 break;
 				 }
 			 }
 		}
+
+		String t0 = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
+
+		System.out.println("EXIT show_other_versions: " + t0);
 
     }
 
@@ -2648,10 +2721,12 @@ response.setContentType("text/html;charset=utf-8");
 				 hide_counter++;
 				 if (hide_counter == k) {
 					 action_coding_scheme = info.getCodingScheme();
+					 show_other_versions(request, action_coding_scheme, false);
 					 break;
 				 }
 			 }
 		}
+		System.out.println("EXIT show_other_versions");
 
     }
 

@@ -77,6 +77,84 @@ request.getSession().removeAttribute("m");
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
   <script language="JavaScript">
+  
+  	    function show_others(csn) {
+  	      var checkedStr = "";
+  	      var target = "";
+  	      var alg = "";
+  	      var checkedObj = document.forms["searchTerm"].ontology_list;
+  	      for (var i=0; i<checkedObj.length; i++) {
+  		if (checkedObj[i].checked) {
+  		    checkedStr = checkedStr + checkedObj[i].value + "|";
+  		}
+  	      }
+  
+  	          var searchTargetObj = document.forms["searchTerm"].searchTarget;
+  		  for (var j=0; j<searchTargetObj.length; j++) {
+  		      if (searchTargetObj[j].checked == true) {
+  			  target = searchTargetObj[j].value;
+  			  break;
+  		      }
+  		  }
+  
+  	          var algorithmObj = document.forms["searchTerm"].algorithm;
+  		  for (var j=0; j<algorithmObj.length; j++) {
+  		      if (algorithmObj[j].checked == true) {
+  		          alg = algorithmObj[j].value;
+  			  break;
+  		      }
+  		  }
+  
+  	      //document.forms["searchTerm"].hidden_matchText.value = input_text;
+  	      //document.forms["searchTerm"].hidden_algorithm.value = alg;
+  	      //document.forms["searchTerm"].hidden_searchTarget.value = target;
+  	      //document.forms["searchTerm"].hidden_ontology_list.value = checkedStr;
+  	      //document.forms["searchTerm"].hidden_csn.value = csn;
+    
+window.location.href = "/ncitbrowser/ajax?action=show&csn="+ csn +"&algorithm=" + alg + "&searchTarget=" + target + "&ontology_list=" + checkedStr + "";
+    
+  	    }
+  
+  
+  	    function hide_others(csn) {
+  	      var checkedStr = "";
+  	      var target = "";
+  	      var alg = "";
+  	      var checkedObj = document.forms["searchTerm"].ontology_list;
+  	      for (var i=0; i<checkedObj.length; i++) {
+  		if (checkedObj[i].checked) {
+  		    checkedStr = checkedStr + checkedObj[i].value + "|";
+  		}
+  	      }
+  
+  	          var searchTargetObj = document.forms["searchTerm"].searchTarget;
+  		  for (var j=0; j<searchTargetObj.length; j++) {
+  		      if (searchTargetObj[j].checked == true) {
+  			  target = searchTargetObj[j].value;
+  			  break;
+  		      }
+  		  }
+  
+  	          var algorithmObj = document.forms["searchTerm"].algorithm;
+  		  for (var j=0; j<algorithmObj.length; j++) {
+  		      if (algorithmObj[j].checked == true) {
+  		          alg = algorithmObj[j].value;
+  			  break;
+  		      }
+  		  }
+  
+  	      //document.forms["searchTerm"].hidden_matchText.value = input_text;
+  	      //document.forms["searchTerm"].hidden_algorithm.value = alg;
+  	      //document.forms["searchTerm"].hidden_searchTarget.value = target;
+  	      //document.forms["searchTerm"].hidden_ontology_list.value = checkedStr;
+  	      //document.forms["searchTerm"].hidden_csn.value = csn;
+    
+window.location.href = "/ncitbrowser/ajax?action=hide&csn="+ csn +"&algorithm=" + alg + "&searchTarget=" + target + "&ontology_list=" + checkedStr + "";
+    
+  	    }
+  	    
+  
+    
      function checkVisited() {
        var test = '<%= request.getSession().getAttribute("visited") %>';
        if (test == "" || test == "null")
@@ -116,9 +194,15 @@ request.getSession().removeAttribute("m");
      
   </script>
 <%
+
     request.getSession().removeAttribute("dictionary");
 
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+if (display_name_vec == null) {
+     display_name_vec = DataUtils.getSortedOntologies();
+}
+                  
+
 String browserType = request.getHeader("User-Agent");
 
 //   Modifications:
@@ -141,7 +225,6 @@ if (action != null) {
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 				 info.setSelected(true);
 			 }
-
 	         }
 
 		 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
@@ -288,6 +371,8 @@ String ontologiesToExpandStr = (String) request.getSession().getAttribute("ontol
 if (ontologiesToExpandStr == null) {
     ontologiesToExpandStr = "|";
 }
+
+
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
 		     // [NCITERM-641] Tomcat session is mixed up.
@@ -370,7 +455,13 @@ if (ontologiesToExpandStr == null) {
 				  <td>
 				<%
 			    
-				boolean checked = info.getSelected();
+				 //boolean checked = info.getSelected();
+				 boolean checked = false;
+				 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+				     checked = true;  
+				 }
+				
+			
 				String checkedStr = checked ? "checked" : "";
 				
 				%>
@@ -422,48 +513,12 @@ if (ontologiesToExpandStr == null) {
 				   <%
 				   String cs_nm = info.getCodingScheme();
 				   if (info.isProduction() && info.getHasMultipleVersions() && !info.getExpanded()) {
-				   
-				       show_counter++;
-				   
 				   %>    
 
                   &nbsp&nbsp; 
-                  <font color="red">
-
-
-
-
-<h:commandLink styleClass="textbodyred" id="show" value="[show other versions]"
-    action="#{userSessionBean.showOtherVersions}" actionListener="#{userSessionBean.showListener}"  immediate="true"> 
-    
-<%
-if (show_counter == 1) {
-%>    
-    <f:param name="action_cs_index" value="1" />
-<%
-} else if (show_counter == 2) {
-%> 
-    <f:param name="action_cs_index" value="2" />
-<%
-} else if (show_counter == 3) {
-%> 
-    <f:param name="action_cs_index" value="3" />
-<%
-} else if (show_counter == 4) {
-%> 
-    <f:param name="action_cs_index" value="4" />
-<%
-} else if (show_counter == 5) {
-%> 
-    <f:param name="action_cs_index" value="5" />
-<%
-}
-%>
-
-    
-</h:commandLink></td>
-
-                 
+                  <a href="#" onclick="javascript:show_others('<%=cs_nm%>')";><i><font color="red">[show other versions]</font></i></a>
+                  
+                  </td>
                   
                   </td>
                   
@@ -472,48 +527,18 @@ if (show_counter == 1) {
 				       
 				   <%    
 				   } else if (info.isProduction() && info.getHasMultipleVersions() && info.getExpanded()) {
-				       
-				       hide_counter++;
+
 				   %>  
 				   
                   &nbsp&nbsp; 
-                  <font color="red">
-
-
-<h:commandLink styleClass="textbodyred" id="hide" value="[hide other versions]"
-action="#{userSessionBean.hideOtherVersions}" actionListener="#{userSessionBean.hideListener}"  immediate="true"> 
-
-<%
-if (hide_counter == 1) {
-%>    
-    <f:param name="action_cs_index" value="1" />
-<%
-} else if (hide_counter == 2) {
-%> 
-    <f:param name="action_cs_index" value="2" />
-<%
-} else if (hide_counter == 3) {
-%> 
-    <f:param name="action_cs_index" value="3" />
-<%
-} else if (hide_counter == 4) {
-%> 
-    <f:param name="action_cs_index" value="4" />
-<%
-} else if (hide_counter == 5) {
-%> 
-    <f:param name="action_cs_index" value="5" />
-<%
-}
-%>
-
-</h:commandLink></td>
+                  <a href="#" onclick="javascript:hide_others('<%=cs_nm%>')";><i><font color="red">[hide other versions]</font></i></a>
+                  
+                  </td>
 
                   
                   </td>
                   </font>
-
-				       
+	       
 				   <%    
 				   }
 				   %>					
@@ -657,6 +682,14 @@ if (hide_counter == 1) {
     </div> <!-- end main-area_960 -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
 
+    <input type="hidden" name="hidden_ontology_list" value="" />
+    <input type="hidden" name="hidden_matchText" value="" />
+    <input type="hidden" name="hidden_algorithm" value="" />
+    <input type="hidden" name="hidden_searchTarget" value="" />
+    <input type="hidden" name="hidden_csn" value="" />
+    
+    
+    
 </h:form>
 
   </div> <!-- end center-page_960 -->

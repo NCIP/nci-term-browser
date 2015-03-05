@@ -21,6 +21,7 @@ public class HTTPParameterConstants {
        "code",
        "content_page",
        "content_title",
+       "csn",
        "data_type",
        "dictionary",
        "dir",
