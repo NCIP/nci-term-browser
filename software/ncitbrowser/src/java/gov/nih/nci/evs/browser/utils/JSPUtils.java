@@ -334,21 +334,17 @@ if (version != null) {
     }
 
     public static String getPopUpWindow(Vector<String> schemes, String label) {
+		if (schemes.size() > 200) {
+			return getPopUpWindowAlt(schemes, label);
+		}
         StringBuffer strbuf = new StringBuffer();
         String line = "<A href=\"#\" onmouseover=\"Tip('";
         strbuf.append(line);
         strbuf.append("<ul>");
         for (int i = 0; i < schemes.size(); i++) {
-            //int j = schemes.size() - i - 1;
             String scheme = schemes.elementAt(i);
             strbuf.append("<li>");
             line = scheme;
-            /*
-                "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
-                    + formalName + versionParameter + "&code=" + code + "\\'>"
-                    + name + " &#40;" + display_name + " "
-                    + versionParameterDisplay + "&#41;" + "</a><br>";
-            */
             strbuf.append(line);
             strbuf.append("</li>");
         }
@@ -370,6 +366,28 @@ if (version != null) {
         return strbuf.toString();
     }
 
+    public static String getPopUpWindowAlt(Vector<String> schemes, String label) {
+        StringBuffer strbuf = new StringBuffer();
+        String line = "<a href=\"#\" class=\"tooltip\">";
+        strbuf.append(line);
+        strbuf.append(label);
+        strbuf.append("<span>");
+        strbuf.append("<center><strong>");
+        strbuf.append(label);
+        strbuf.append("</strong></center>");
+        strbuf.append("<ul>");
+        for (int i = 0; i < schemes.size(); i++) {
+            String scheme = schemes.elementAt(i);
+            strbuf.append("<li>");
+            line = scheme;
+            strbuf.append(line);
+            strbuf.append("</li>");
+        }
+        strbuf.append("</ul>");
+        strbuf.append("</span>");
+        strbuf.append("</a>");
+        return strbuf.toString();
+	}
 
     public static String getBookmarkUrl(HttpServletRequest request,
     	String dictionary, String version, String concept_id, String ns) {
