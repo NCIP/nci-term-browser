@@ -1,12 +1,47 @@
 package gov.nih.nci.evs.browser.utils;
 
 import java.io.*;
+import java.util.*;
 import java.net.*;
 import org.apache.commons.io.FilenameUtils;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 public class FTPDownload {
+
+   public static Vector get(String uri) {
+      URL u = null;
+      InputStream is = null;
+      DataInputStream dis;
+      String s;
+      Vector v = new Vector();
+      try {
+         u = new URL(uri);
+         is = u.openStream();
+         dis = new DataInputStream(new BufferedInputStream(is));
+         while ((s = dis.readLine()) != null) {
+            v.add(s);
+         }
+
+      } catch (MalformedURLException mue) {
+		 System.out.println("(*) MalformedURLException: " + uri);
+		 return v;
+         //mue.printStackTrace();
+
+      } catch (IOException ioe) {
+		 System.out.println(uri);
+         ioe.printStackTrace();
+
+      } finally {
+         try {
+            is.close();
+         } catch (IOException ioe) {
+            ioe.printStackTrace();
+         }
+      }
+      return v;
+   }
+
 
    public static void downloadText(String uri) {
       URL u;
@@ -32,11 +67,9 @@ public class FTPDownload {
 
       } catch (MalformedURLException mue) {
          mue.printStackTrace();
-         System.exit(1);
 
       } catch (IOException ioe) {
          ioe.printStackTrace();
-         System.exit(1);
 
       } finally {
          try {
@@ -104,11 +137,9 @@ public class FTPDownload {
 
       } catch (MalformedURLException mue) {
          mue.printStackTrace();
-         System.exit(1);
 
       } catch (IOException ioe) {
          ioe.printStackTrace();
-         System.exit(1);
 
       } finally {
          try {
