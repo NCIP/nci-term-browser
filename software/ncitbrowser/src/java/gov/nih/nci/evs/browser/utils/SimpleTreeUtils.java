@@ -370,7 +370,7 @@ public class SimpleTreeUtils {
 	}
 
 
-
+/*
 	private String getHyperLink(TreeItem ti) {
 		if (ti._code.startsWith("TVS_")) {
 			return ti._text;
@@ -378,6 +378,27 @@ public class SimpleTreeUtils {
 
 		//if (ti._code.indexOf("Valueset") == -1) {
 		if (!ti._code.startsWith("http:")) {
+			return ti._text;
+		}
+
+		if (focusNodeId != null && ti._code.compareTo(focusNodeId) == 0) {
+			return ti._text;
+		}
+
+	    return "<a href=\"#\" onclick=\"onValueSetNodeClicked('" + ti._code + "');return false;\" " + getTabIndex() + ">" + ti._text + "</a>";
+    }
+*/
+    // Make root node clickable:
+	private String getHyperLink(TreeItem ti) {
+		//if (ti._code.startsWith("TVS_")) {
+		//	return ti._text;
+		//}
+
+		//if (!ti._code.startsWith("http:")) {
+		//	return ti._text;
+		//}
+
+		if (DataUtils.getFormalName(ti._code) != null || DataUtils.getFormalName(ti._text) != null) {
 			return ti._text;
 		}
 
