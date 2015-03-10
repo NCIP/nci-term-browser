@@ -81,6 +81,9 @@ request.getSession().removeAttribute("m");
   	      var checkedStr = "";
   	      var target = "";
   	      var alg = "";
+  	      
+  	      var matchText = document.searchTerm.matchText.value;
+
   	      var checkedObj = document.forms["searchTerm"].ontology_list;
   	      for (var i=0; i<checkedObj.length; i++) {
   		if (checkedObj[i].checked) {
@@ -104,18 +107,15 @@ request.getSession().removeAttribute("m");
   		      }
   		  }
   
-  	      //document.forms["searchTerm"].hidden_matchText.value = input_text;
-  	      //document.forms["searchTerm"].hidden_algorithm.value = alg;
-  	      //document.forms["searchTerm"].hidden_searchTarget.value = target;
-  	      //document.forms["searchTerm"].hidden_ontology_list.value = checkedStr;
-  	      //document.forms["searchTerm"].hidden_csn.value = csn;
-    
-window.location.href = "/ncitbrowser/ajax?action=show&csn="+ csn +"&algorithm=" + alg + "&searchTarget=" + target + "&ontology_list=" + checkedStr + "";
+
+window.location.href = "/ncitbrowser/ajax?action=show&csn="+ csn +"&matchText=" + matchText +"&algorithm=" + alg + "&searchTarget=" + target + "&ontology_list=" + checkedStr + "";
     
   	    }
   
   
   	    function hide_others(csn) {
+  	      var matchText = document.searchTerm.matchText.value;
+
   	      var checkedStr = "";
   	      var target = "";
   	      var alg = "";
@@ -141,14 +141,8 @@ window.location.href = "/ncitbrowser/ajax?action=show&csn="+ csn +"&algorithm=" 
   			  break;
   		      }
   		  }
-  
-  	      //document.forms["searchTerm"].hidden_matchText.value = input_text;
-  	      //document.forms["searchTerm"].hidden_algorithm.value = alg;
-  	      //document.forms["searchTerm"].hidden_searchTarget.value = target;
-  	      //document.forms["searchTerm"].hidden_ontology_list.value = checkedStr;
-  	      //document.forms["searchTerm"].hidden_csn.value = csn;
     
-window.location.href = "/ncitbrowser/ajax?action=hide&csn="+ csn +"&algorithm=" + alg + "&searchTarget=" + target + "&ontology_list=" + checkedStr + "";
+window.location.href = "/ncitbrowser/ajax?action=hide&csn="+ csn +"&matchText=" + matchText +"&algorithm=" + alg + "&searchTarget=" + target + "&ontology_list=" + checkedStr + "";
     
   	    }
   	    

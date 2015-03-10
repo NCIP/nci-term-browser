@@ -222,11 +222,12 @@ public final class AjaxServlet extends HttpServlet {
 
 
      private void show_other_versions(HttpServletRequest request, boolean show) {
-		 //String matchText = HTTPUtils.cleanXSS(request.getParameter("txt"));
+		 String matchText = HTTPUtils.cleanXSS(request.getParameter("matchText"));
 		 String algorithm = HTTPUtils.cleanXSS(request.getParameter("algorithm"));
 		 String searchTarget = HTTPUtils.cleanXSS(request.getParameter("searchTarget"));
 		 String ontologiesToSearchOnStr = HTTPUtils.cleanXSS(request.getParameter("ontology_list"));
 		 String action_cs = HTTPUtils.cleanXSS(request.getParameter("csn"));
+		 request.getSession().setAttribute("matchText", matchText);
 		 request.getSession().setAttribute("algorithm", algorithm);
 		 request.getSession().setAttribute("searchTarget", searchTarget);
 
