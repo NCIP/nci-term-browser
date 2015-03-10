@@ -1123,7 +1123,7 @@ mappingIteratorBean.initialize();
         String[] ontology_list = request.getParameterValues("ontology_list");
 
         if ( ontology_list  == null ) {
-			 ontology_list = (String[]) request.getSession().getAttribute("ontology_list");
+			 //ontology_list = (String[]) request.getSession().getAttribute("ontology_list");
 		}
 
         // Called from license.jsp
@@ -1178,6 +1178,49 @@ mappingIteratorBean.initialize();
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 
 StringBuffer buf = new StringBuffer();
+String ontologiesToSearchOnStr = null;
+HashSet hset = new HashSet();
+if (selected_vocabularies != null) { // hidden variable (subsequent search from search results page)
+	ontologiesToSearchOnStr = selected_vocabularies;
+} else {
+
+
+
+	if (ontology_list != null) {
+		List list = Arrays.asList(ontology_list);//.contains("any");
+	    for (int i=0; i<display_name_vec.size(); i++) {
+		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		    if (info.getVisible() && !list.contains(info.getLabel())) {
+				info.setSelected(false);
+			} else if (info.getVisible() && list.contains(info.getLabel())) {
+				info.setSelected(true);
+			}
+		}
+		for (int i = 0; i < ontology_list.length; ++i) {
+			if (!hset.contains(ontology_list[i])) {
+				hset.add(ontology_list[i]);
+			    buf.append(ontology_list[i] + "|");
+			}
+		}
+	}
+
+	buf.append("|");
+	for (int i=0; i<display_name_vec.size(); i++) {
+		 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		 if (info.getSelected()) {
+			 if (!hset.contains(info.getLabel())) {
+				 buf.append(info.getLabel() + "|");
+				 hset.add(info.getLabel());
+			 }
+		 }
+	}
+
+
+	ontologiesToSearchOnStr = buf.toString();
+}
+
+
+/*
 String ontologiesToSearchOnStr = selected_vocabularies;
 if (DataUtils.isNull(selected_vocabularies)) {
 	// check if selection status has been changed.
@@ -1193,14 +1236,18 @@ if (DataUtils.isNull(selected_vocabularies)) {
 	}
 	ontologiesToSearchOnStr = buf.toString();
 }
+*/
 
+
+/*
 String new_ontologiesToSearchOnStr = "";
 for (int i = 0; i < display_name_vec.size(); i++) {
 	 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
 
 	 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) { // visible and checked by the user
 		 info.setSelected(true);
-	 } else if (info.getVisible() && ontologiesToSearchOnStr.indexOf(info.getLabel()) == -1) {
+		 //KLO
+	 } else {//if (info.getVisible() && ontologiesToSearchOnStr.indexOf(info.getLabel()) == -1) {
 		 info.setSelected(false);
 	 }
 	 if (info.getSelected()) {
@@ -1208,6 +1255,7 @@ for (int i = 0; i < display_name_vec.size(); i++) {
 	 }
 }
 ontologiesToSearchOnStr = new_ontologiesToSearchOnStr;
+*/
 String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
 
 request.getSession().setAttribute("display_name_vec", display_name_vec);

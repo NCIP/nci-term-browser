@@ -30,7 +30,6 @@
   String nci_meta_url = new DataUtils().getNCImURL();
   String ncit_url = new DataUtils().getNCItURL();
 
-  //KLO 031314
   request.getSession().removeAttribute("dictionary");
   request.getSession().removeAttribute("version");
   
@@ -219,7 +218,7 @@ if (action != null) {
     if (action.compareTo("show") == 0) {
 	for (int i = 0; i < display_name_vec.size(); i++) {
 	     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-
+//KLO 030915
 		 if (info.getVisible()) {
 			 info.setSelected(false);
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
@@ -241,8 +240,7 @@ if (action != null) {
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 				 info.setSelected(true);
 			 }
-
-	     }
+	         }
 		 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 		     info.setExpanded(false);
 		 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
