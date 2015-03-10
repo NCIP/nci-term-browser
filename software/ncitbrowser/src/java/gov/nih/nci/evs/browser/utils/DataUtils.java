@@ -424,57 +424,42 @@ public class DataUtils {
     public static HashMap getRVSCSURI2VersionHashMap() {
 		return _RVSCSURI2VersionHashMap;
 	}
-/*
-    public static String getDefaultOntologiesToSearchOnStr() {
-        if (_ontologies == null)
-            setCodingSchemeMap();
-
-        _defaultOntologiesToSearchOnStr = "|";
-        for (int i = 0; i < _ontologies.size(); i++) {
-            SelectItem item = (SelectItem) _ontologies.get(i);
-            String value = (String) item.getValue();
-            if (value.indexOf("Metathesaurus") == -1) {
-                _defaultOntologiesToSearchOnStr =
-                    _defaultOntologiesToSearchOnStr + value + "|";
-            }
-        }
-        return _defaultOntologiesToSearchOnStr;
-    }
-*/
-
 
     public static String getDefaultOntologiesToSearchOnStr() {
 		if (_defaultOntologiesToSearchOnStr != null) return _defaultOntologiesToSearchOnStr;
         if (_ontologies == null) setCodingSchemeMap();
+        Vector display_name_vec = getSortedOntologies();
+        StringBuffer buf = new StringBuffer();
+        buf.append("|");
+        for (int i = 0; i < display_name_vec.size(); i++) {
+		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		    if (info.getLabel().indexOf("NCI_Thesaurus") != -1 || info.getLabel().indexOf("NCI Thesaurus") != -1) {
+		        if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
+                    buf.append(info.getLabel() + "|");
+			    }
+		    }
+	    }
+	    _defaultOntologiesToSearchOnStr = buf.toString();
+	    return _defaultOntologiesToSearchOnStr;
+    }
 
-        //_defaultOntologiesToSearchOnStr = "|";
+/*
+    public static String getDefaultOntologiesToSearchOnStr() {
+		if (_defaultOntologiesToSearchOnStr != null) return _defaultOntologiesToSearchOnStr;
+        if (_ontologies == null) setCodingSchemeMap();
+
         StringBuffer buf = new StringBuffer();
         buf.append("|");
         for (int i = 0; i < _ontologies.size(); i++) {
             SelectItem item = (SelectItem) _ontologies.get(i);
             String value = (String) item.getValue();
-            /*
-            if (value.indexOf("Metathesaurus") == -1) {
-                buf.append(value + "|);");
-            }
-            */
+
             if (value.indexOf("NCI_Thesaurus") != -1 || value.indexOf("NCI Thesaurus") != -1) {
                 buf.append(value + "|");
             }
         }
         return buf.toString();//_defaultOntologiesToSearchOnStr;
     }
-
-
-
-
-/*
-    public static HashMap getFormalName2VirtualIdMap() {
-		if (_formalName2VirtualIdMap == null) {
-			_formalName2VirtualIdMap = createFormalName2VirtualIdMap();
-		}
-		return _formalName2VirtualIdMap;
-	}
 */
 
     public static HashMap getDefaultFormalName2VirtualIdMap() {
