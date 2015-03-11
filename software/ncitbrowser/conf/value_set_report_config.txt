@@ -3,7 +3,7 @@ CDISC ADaM Date Imputation Flag Terminology|http://evs.nci.nih.gov/valueset/C812
 CDISC ADaM Derivation Type Terminology|http://evs.nci.nih.gov/valueset/C81224|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81224
 CDISC ADaM Parameter Type Terminology|http://evs.nci.nih.gov/valueset/C81225|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81225
 CDISC ADaM Time Imputation Flag Terminology|http://evs.nci.nih.gov/valueset/C81226|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81226
-CDISC ADaM Terminology|http://evs.nci.nih.gov/valueset/C81222|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81222
+CDISC ADaM Terminology|http://evs.nci.nih.gov/valueset/C81222|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:all
 CDISC CDASH Concomitant Medication Dose Form Terminology|http://evs.nci.nih.gov/valueset/C78418|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78418
 CDISC CDASH Concomitant Medication Dose Units Terminology|http://evs.nci.nih.gov/valueset/C78417|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78417
 CDISC CDASH Concomitant Medication Dosing Frequency per Interval Terminology|http://evs.nci.nih.gov/valueset/C78419|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78419
@@ -19,7 +19,7 @@ CDISC CDASH Unit of Measure for Flow Rate Terminology|http://evs.nci.nih.gov/val
 CDISC CDASH Units for Exposure Terminology|http://evs.nci.nih.gov/valueset/C78423|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78423
 CDISC CDASH Units for Planned Exposure Terminology|http://evs.nci.nih.gov/valueset/C78430|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78430
 CDISC CDASH Vital Signs Position of Subject Terminology|http://evs.nci.nih.gov/valueset/C78431|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78431
-CDISC CDASH Terminology|http://evs.nci.nih.gov/valueset/C77527|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C77527
+CDISC CDASH Terminology|http://evs.nci.nih.gov/valueset/C77527|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:all
 CDISC Functional Test 6MWT Test Code Terminology|http://evs.nci.nih.gov/valueset/C115388|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115388
 CDISC Functional Test 6MWT Test Name Terminology|http://evs.nci.nih.gov/valueset/C115387|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115387
 CDISC Functional Test Category Terminology|http://evs.nci.nih.gov/valueset/C115304|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115304
@@ -33,7 +33,7 @@ CDISC Functional Test SDMT Test Code Terminology|http://evs.nci.nih.gov/valueset
 CDISC Functional Test SDMT Test Name Terminology|http://evs.nci.nih.gov/valueset/C115395|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115395
 CDISC Functional Test T25FW Test Code Terminology|http://evs.nci.nih.gov/valueset/C115398|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115398
 CDISC Functional Test T25FW Test Name Terminology|http://evs.nci.nih.gov/valueset/C115397|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115397
-CDISC Functional Test Terminology|http://evs.nci.nih.gov/valueset/C115302|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115302
+CDISC Functional Test Terminology|http://evs.nci.nih.gov/valueset/C115302|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:all
 CDISC Functional Test TUG Test Code Terminology|http://evs.nci.nih.gov/valueset/C115400|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115400
 CDISC Functional Test TUG Test Name Terminology|http://evs.nci.nih.gov/valueset/C115399|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C115399
 CDISC Genetic Sample Type Terminology|http://evs.nci.nih.gov/valueset/C111114|null|null
@@ -185,7 +185,7 @@ CDISC Questionnaire UPDRS Test Code Terminology|http://evs.nci.nih.gov/valueset/
 CDISC Questionnaire UPDRS Test Name Terminology|http://evs.nci.nih.gov/valueset/C100147|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C100147
 CDISC Questionnaire UPS Test Code Terminology|http://evs.nci.nih.gov/valueset/C103489|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C103489
 CDISC Questionnaire UPS Test Name Terminology|http://evs.nci.nih.gov/valueset/C103488|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C103488
-CDISC Questionnaire Terminology|http://evs.nci.nih.gov/valueset/C100110|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C100110
+CDISC Questionnaire Terminology|http://evs.nci.nih.gov/valueset/C100110|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:all
 CDISC Questionnaire YMRS Test Code Terminology|http://evs.nci.nih.gov/valueset/C101830|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C101830
 CDISC Questionnaire YMRS Test Name Terminology|http://evs.nci.nih.gov/valueset/C101831|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C101831
 CDISC SDTM Action Taken with Study Treatment Terminology|http://evs.nci.nih.gov/valueset/C66767|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C66767
@@ -301,7 +301,7 @@ CDISC SDTM Tumor Response Result Terminology|http://evs.nci.nih.gov/valueset/C96
 CDISC SDTM Vaccination Evidence Source Terminology|http://evs.nci.nih.gov/valueset/C102590|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C102590
 CDISC SDTM Viral Resistance Findings Test Code Terminology|http://evs.nci.nih.gov/valueset/C116110|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C116110
 CDISC SDTM Viral Resistance Findings Test Name Terminology|http://evs.nci.nih.gov/valueset/C116109|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C116109
-CDISC SDTM Terminology|http://evs.nci.nih.gov/valueset/C66830|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C66830
+CDISC SDTM Terminology|http://evs.nci.nih.gov/valueset/C66830|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:all
 CDISC SEND Biospecimens Terminology|http://evs.nci.nih.gov/valueset/C77529|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C77529
 CDISC SEND Body System Terminology|http://evs.nci.nih.gov/valueset/C88026|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C88026
 CDISC SEND Body Weight Gain Test Code Terminology|http://evs.nci.nih.gov/valueset/C89960|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C89960
@@ -335,7 +335,7 @@ CDISC SEND Tumor Findings Histopathology Result Category Terminology|http://evs.
 CDISC SEND Tumor Findings Test Code Terminology|http://evs.nci.nih.gov/valueset/C90006|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C90006
 CDISC SEND Tumor Findings Test Name Terminology|http://evs.nci.nih.gov/valueset/C90005|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C90005
 CDISC SEND Version Terminology|http://evs.nci.nih.gov/valueset/C89982|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C89982
-CDISC SEND Terminology|http://evs.nci.nih.gov/valueset/C77526|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C77526
+CDISC SEND Terminology|http://evs.nci.nih.gov/valueset/C77526|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:all
 CDISC Skin Classification Terminology|http://evs.nci.nih.gov/valueset/C76351|null|null
 CDISC Variable Terminology|http://evs.nci.nih.gov/valueset/C83187|null|null
 CDISC Terminology|http://evs.nci.nih.gov/valueset/C61410|null|null
@@ -361,7 +361,7 @@ FDA SPL Package Type Terminology|http://evs.nci.nih.gov/valueset/C54457|ftp://ft
 FDA SPL Potency Terminology|http://evs.nci.nih.gov/valueset/C54458|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54458
 FDA SPL Drug Route of Administration Terminology|http://evs.nci.nih.gov/valueset/C54455|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54455
 FDA SPL Shape Terminology|http://evs.nci.nih.gov/valueset/C54454|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54454
-FDA SPL Terminology|http://evs.nci.nih.gov/valueset/C54452|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54452
+FDA SPL Terminology|http://evs.nci.nih.gov/valueset/C54452|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:all
 FDA Established Names and Unique Ingredient Identifier Codes Terminology|http://evs.nci.nih.gov/valueset/C63923|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/UNII/FDA-UNII_NCIt_Subsets.xls|1:all
 Adverse Event Outcome ICSR Terminology|http://evs.nci.nih.gov/valueset/C54583|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54583
 Device Usage ICSR Terminology|http://evs.nci.nih.gov/valueset/C54595|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54595
@@ -488,10 +488,10 @@ CDISC SDTM Multiple Sclerosis Findings About Test Name Terminology|http://evs.nc
 CDISC SDTM Ophthalmic Exam Test Code Terminology|http://evs.nci.nih.gov/valueset/C117743|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C117743
 CDISC SDTM Ophthalmic Exam Test Name Terminology|http://evs.nci.nih.gov/valueset/C117742|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C117742
 CDISC SDTM West Haven Hepatic Encephalopathy Grade Terminology|http://evs.nci.nih.gov/valueset/C117746|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C117746
-CDISC Clinical Classification Category Terminology|http://evs.nci.nih.gov/valueset/C118971|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:2:C118971
+CDISC Clinical Classification Category Terminology|http://evs.nci.nih.gov/valueset/C118971|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/COA/COA%20Terminology.xls|2:all
 US Counties Terminology|http://evs.nci.nih.gov/valueset/C111076|null|null
-FDA CDRH Event Problem Codes Terminology|http://evs.nci.nih.gov/valueset/C62596|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/FDA-CDRH_NCIt_Subsets.xls|1:2:C62596
-FDA CDRH GUDID Terminology|http://evs.nci.nih.gov/valueset/C106039|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/FDA-CDRH_NCIt_Subsets.xls|1:2:C106039
+FDA CDRH Event Problem Codes Terminology|http://evs.nci.nih.gov/valueset/C62596|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/FDA-CDRH_NCIt_Subsets.xls|1:all
+FDA CDRH GUDID Terminology|http://evs.nci.nih.gov/valueset/C106039|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/FDA-CDRH_NCIt_Subsets.xls|1:all
 FDA eCTD Terminology|http://evs.nci.nih.gov/valueset/C97181|null|null
 CDISC SEND Microscopic Findings Test Code Terminology|http://evs.nci.nih.gov/valueset/C89974|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C89974
 CDISC SEND Microscopic Findings Test Name Terminology|http://evs.nci.nih.gov/valueset/C89973|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C89973
