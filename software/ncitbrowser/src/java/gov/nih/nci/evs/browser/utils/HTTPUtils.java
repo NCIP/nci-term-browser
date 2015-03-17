@@ -418,8 +418,17 @@ public class HTTPUtils {
 						}
 
 						bool_obj = containsHarzardCharacters(value);
+						/*
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
 							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
+							   " (name: " + name + ").";
+							request.getSession().setAttribute("error_msg", error_msg);
+							return false;
+						}
+						*/
+						// Cross-Site Scripting:
+						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
+							String error_msg = "WARNING: Invalid parameter value encountered - '" +
 							   " (name: " + name + ").";
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
@@ -510,11 +519,22 @@ public class HTTPUtils {
 		}
 		return Boolean.FALSE;
 	}
-
+/*
     public static Boolean containsHarzardCharacters(String value) {
 		if (value == null) return null;
 		if (value.indexOf("DECLARE") != -1 && (value.indexOf(";EXEC(") != -1 || value.indexOf("=CAST(") != -1)) {
 			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+*/
+    public static Boolean containsHarzardCharacters(String value) {
+		if (value == null) return Boolean.FALSE;
+		String s = value.toUpperCase();
+		s = s.trim();
+		for (int i=0; i<Constants.HARZARD_CHARS.length; i++) {
+			String t = Constants.HARZARD_CHARS[i];
+			if (s.indexOf(t) != -1) return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
 	}
