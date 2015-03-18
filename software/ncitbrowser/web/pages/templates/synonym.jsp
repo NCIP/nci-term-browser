@@ -37,7 +37,7 @@ if (type != null && type.compareTo("all") == 0) {
             <% if (source_header != null && source_header.length() > 0) { %>
               <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/source_help_info.jsf?dictionary=<%=dictionary%>',
                   '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-                <img src="<%= request.getContextPath() %>/images/help.gif" alt="Term Type Definitions" border="0">
+                <img src="<%= request.getContextPath() %>/images/help.gif" alt="Source Definitions" border="0">
               </a>
             <% } %>
           </th>
