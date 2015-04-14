@@ -396,7 +396,7 @@ if (scheme != null) {
 				    }
 
 					if (iterator == null) {
-						wrapper = new MappingSearchUtils().searchByName(
+						wrapper = new MappingSearchUtils().searchByCode(
 							scheme, version, matchText,
 							matchAlgorithm, maxToReturn);
 						if (wrapper != null) {
@@ -406,8 +406,7 @@ if (scheme != null) {
 						}
 					}
 
-
-				} else if (searchTarget.compareTo("codes") == 0) {
+				} else if (searchTarget.compareTo("properties") == 0) {
 
 					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByProperties(
 						scheme, version, matchText,
