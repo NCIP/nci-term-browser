@@ -344,7 +344,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 			  } else {
 
 				  if (qualifier.indexOf("PDQ") != -1) {
-				      value = FormatUtils.reformatPDQDefinition(value);
+				      //value = FormatUtils.reformatPDQDefinition(value);
 				  } else if (qualifier.compareTo("NCI") != 0) {
 				      value = value_wo_qualifier;
 				      propName_label = qualifier + " " + propName_label2;
@@ -375,7 +375,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
                           if (propName_label.compareTo("NCI Metathesaurus CUI") != 0) {
 			  %>
 			  <p>
-			  <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>&nbsp;
+			  <b><%=propName_label%>:&nbsp;</b><%=value%>&nbsp;
 			  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
 			  </p>
 			  <%
@@ -400,7 +400,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
       			     <i>
 
       			     
-      				  &nbsp;<%=conceptDetails.encodeTerm(value)%>&nbsp;
+      				  &nbsp;<%=value%>&nbsp;
       				  <a href="javascript:redirect_site('<%= url_str %>')">(<%=linktext%>)</a>
       				  </i>
                  </td>   
@@ -457,7 +457,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
                   
               } else {
 		    if (qualifier.indexOf("PDQ") != -1) {
-			value = FormatUtils.reformatPDQDefinition(value);
+			//value = FormatUtils.reformatPDQDefinition(value);
 			
 		    } else if (qualifier.compareTo("NCI") != 0) {
 	    
@@ -508,7 +508,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
             String value = (String) u.elementAt(1);
 %>        
             <p>
-              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
+              <b><%=propName_label%>:&nbsp;</b><%=value%>
               <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
                    <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
               <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
@@ -530,7 +530,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         String value = (String) u.elementAt(1);
 %>        
             <p>
-              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
+              <b><%=propName_label%>:&nbsp;</b><%=value%>
               <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
                    <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
               <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
@@ -551,7 +551,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         String value = (String) u.elementAt(1);
 %>        
             <p>
-              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
+              <b><%=propName_label%>:&nbsp;</b><%=value%>
               <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
                    <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
               <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
@@ -572,7 +572,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
             String value = (String) u.elementAt(1);
 %>        
             <p>
-              <b><%=propName_label%>:&nbsp;</b><%=conceptDetails.encodeTerm(value)%>
+              <b><%=propName_label%>:&nbsp;</b><%=value%>
               <% if (!prop_dictionary.equalsIgnoreCase("NCI Thesaurus") && !prop_dictionary.equalsIgnoreCase("NCI_Thesaurus")) { %>
                    <%= getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
               <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
