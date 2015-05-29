@@ -542,7 +542,7 @@ Operator of Medical Device ICSR Terminology|http://evs.nci.nih.gov/valueset/C545
 Patient Problem Codes FDA CDRH|http://evs.nci.nih.gov/valueset/C54450|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/FDA-CDRH_NCIt_Subsets.xls|1:2:C54450
 Pediatric Adverse Events Terminology|http://evs.nci.nih.gov/valueset/C118464|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Adverse%20Events%20Terminology/NICHD-Pediatric_Adverse_Events_Terminology_NCIt_Subsets.xls|2:11:C118464
 Pediatric Immunization Terminology|http://evs.nci.nih.gov/valueset/C96388|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Terminology/NICHD-Pediatric-Terminology_NCIt_Subsets.xls|2:11:C96388
-Pediatric Rheumatology Terminology|http://evs.nci.nih.gov/valueset/C118468|ftp://evs.nci.nih.gov/ftp1/NICHD/Pediatric%20Rheumatology%20Terminology/NICHD-Pediatric_Rheumatology_Terminology_NCIt_Subsets.xls|2:11:C118468
+Pediatric Rheumatology Terminology|http://evs.nci.nih.gov/valueset/C118468|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Rheumatology%20Terminology/NICHD-Pediatric_Rheumatology_Terminology_NCIt_Subsets.xls|2:11:C118468
 Pediatric Terminology|http://evs.nci.nih.gov/valueset/C90259|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Terminology/NICHD-Pediatric-Terminology_NCIt_Subsets.xls|2:11:C90259
 Perinatal Terminology|http://evs.nci.nih.gov/valueset/C118466|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Perinatal%20Terminology/NICHD-Perinatal_Terminology_NCIt_Subsets.xls|2:11:C118466
 Reason for Non-Evaluation ICSR Terminology|http://evs.nci.nih.gov/valueset/C54593|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54593
