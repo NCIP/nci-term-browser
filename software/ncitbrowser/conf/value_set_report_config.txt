@@ -7,7 +7,7 @@ CDISC ADaM Analysis Reason Terminology|http://evs.nci.nih.gov/valueset/C117744|f
 CDISC ADaM Date Imputation Flag Terminology|http://evs.nci.nih.gov/valueset/C81223|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81223
 CDISC ADaM Derivation Type Terminology|http://evs.nci.nih.gov/valueset/C81224|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81224
 CDISC ADaM Parameter Type Terminology|http://evs.nci.nih.gov/valueset/C81225|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81225
-CDISC ADaM Terminology|http://evs.nci.nih.gov/valueset/C81222|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:all
+CDISC ADaM Terminology|http://evs.nci.nih.gov/valueset/C81222|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81222
 CDISC ADaM Time Imputation Flag Terminology|http://evs.nci.nih.gov/valueset/C81226|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/ADaM/ADaM%20Terminology.xls|2:2:C81226
 CDISC CDASH Concomitant Medication Dose Form Terminology|http://evs.nci.nih.gov/valueset/C78418|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78418
 CDISC CDASH Concomitant Medication Dose Units Terminology|http://evs.nci.nih.gov/valueset/C78417|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78417
@@ -18,7 +18,7 @@ CDISC CDASH Exposure Dose Form Terminology|http://evs.nci.nih.gov/valueset/C7842
 CDISC CDASH Exposure Dosing Frequency per Interval Terminology|http://evs.nci.nih.gov/valueset/C78745|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78745
 CDISC CDASH Exposure Route of Administration Terminology|http://evs.nci.nih.gov/valueset/C78425|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78425
 CDISC CDASH Substance Use Never/Current/Former Classification Terminology|http://evs.nci.nih.gov/valueset/C83004|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C83004
-CDISC CDASH Terminology|http://evs.nci.nih.gov/valueset/C77527|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:all
+CDISC CDASH Terminology|http://evs.nci.nih.gov/valueset/C77527|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C77527
 CDISC CDASH Total Volume Administration Unit Terminology|http://evs.nci.nih.gov/valueset/C78428|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78428
 CDISC CDASH Unit for Duration of Treatment Interruption Terminology|http://evs.nci.nih.gov/valueset/C78427|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78427
 CDISC CDASH Unit of Drug Dispensed or Returned Terminology|http://evs.nci.nih.gov/valueset/C78421|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/CDASH%20Terminology.xls|2:2:C78421
@@ -436,7 +436,7 @@ CDISC SDTM Subject Characteristic Test Name Terminology|http://evs.nci.nih.gov/v
 CDISC SDTM Submission Domain Abbreviation Terminology|http://evs.nci.nih.gov/valueset/C66734|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C66734
 CDISC SDTM Sudden Death Syndrome Type Terminology|http://evs.nci.nih.gov/valueset/C101852|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C101852
 CDISC SDTM Supporting Evidence for Re-Treatment Terminology|http://evs.nci.nih.gov/valueset/C102579|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C102579
-CDISC SDTM Terminology|http://evs.nci.nih.gov/valueset/C66830|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:all
+CDISC SDTM Terminology|http://evs.nci.nih.gov/valueset/C66830|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C66830
 CDISC SDTM Thrombolysis in Myocardial Infarction Flow Responses Terminology|http://evs.nci.nih.gov/valueset/C101841|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C101841
 CDISC SDTM Treatment Episode Terminology|http://evs.nci.nih.gov/valueset/C102589|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C102589
 CDISC SDTM Treatment Failure Reason Terminology|http://evs.nci.nih.gov/valueset/C102585|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SDTM/SDTM%20Terminology.xls|2:2:C102585
@@ -499,7 +499,7 @@ CDISC SEND Study Design Terminology|http://evs.nci.nih.gov/valueset/C89967|ftp:/
 CDISC SEND Study Type Terminology|http://evs.nci.nih.gov/valueset/C90003|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C90003
 CDISC SEND Subject Characteristic Test Code Terminology|http://evs.nci.nih.gov/valueset/C89981|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C89981
 CDISC SEND Subject Characteristic Test Name Terminology|http://evs.nci.nih.gov/valueset/C89980|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C89980
-CDISC SEND Terminology|http://evs.nci.nih.gov/valueset/C77526|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:all
+CDISC SEND Terminology|http://evs.nci.nih.gov/valueset/C77526|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C77526
 CDISC SEND Trial Summary Parameter Long Name Terminology|http://evs.nci.nih.gov/valueset/C90007|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C90007
 CDISC SEND Trial Summary Parameter Short Name Terminology|http://evs.nci.nih.gov/valueset/C90009|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C90009
 CDISC SEND Tumor Findings Histopathology Result Category Terminology|http://evs.nci.nih.gov/valueset/C90004|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/CDISC/SEND/SEND%20Terminology.xls|2:2:C90004
@@ -532,19 +532,19 @@ NCPDP Measurement Unit Code Terminology|http://evs.nci.nih.gov/valueset/C91101|f
 NCPDP Quantity Unit of Measure Terminology|http://evs.nci.nih.gov/valueset/C89510|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NCPDP/NCPDP.xls|1:1:C89510
 NCPDP Strength Form Terminology|http://evs.nci.nih.gov/valueset/C89508|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NCPDP/NCPDP.xls|1:1:C89508
 NCPDP Strength Unit of Measure Terminology|http://evs.nci.nih.gov/valueset/C89509|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NCPDP/NCPDP.xls|1:1:C89509
-NCPDP Terminology|http://evs.nci.nih.gov/valueset/C89415|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NCPDP/NCPDP.xls|1:all
-Neonatal Research Network Terminology|http://evs.nci.nih.gov/valueset/C99147|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Neonatal%20Research%20Network%20Terminology/NICHD-NRNT_NCIt_Subsets.xls|2:11:C99147
-Neurological Development Terminology|http://evs.nci.nih.gov/valueset/C97150|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Terminology/NICHD-Pediatric-Terminology_NCIt_Subsets.xls|2:11:C97150
-Newborn Screening Terminology|http://evs.nci.nih.gov/valueset/C89506|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Terminology/NICHD-Pediatric-Terminology_NCIt_Subsets.xls|2:11:C89506
+NCPDP Terminology|http://evs.nci.nih.gov/valueset/C89415|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NCPDP/NCPDP.xls|1:1:C89415
+Neonatal Research Network Terminology|http://evs.nci.nih.gov/valueset/C99147|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Neonatal%20Research%20Network%20Terminology%20Subset/Neonatal_Research_Network_Terminology_Subset.xls|2:all
+Neurological Development Terminology|http://evs.nci.nih.gov/valueset/C97150|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Neurological%20Development%20Terminology%20Subset/Neurological_Development_Terminology_Subset.xls|2:all
+Newborn Screening Terminology|http://evs.nci.nih.gov/valueset/C89506|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Newborn%20Screening%20Terminology%20Subset/Newborn_Screening_Terminology_Subset.xls|2:all
 Observation ICSR Terminology|http://evs.nci.nih.gov/valueset/C88088|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C88088
 Occupation ICSR Terminology|http://evs.nci.nih.gov/valueset/C54585|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54585
 Operator of Medical Device ICSR Terminology|http://evs.nci.nih.gov/valueset/C54584|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54584
 Patient Problem Codes FDA CDRH|http://evs.nci.nih.gov/valueset/C54450|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/FDA-CDRH_NCIt_Subsets.xls|1:2:C54450
-Pediatric Adverse Events Terminology|http://evs.nci.nih.gov/valueset/C118464|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Adverse%20Events%20Terminology/NICHD-Pediatric_Adverse_Events_Terminology_NCIt_Subsets.xls|2:11:C118464
-Pediatric Immunization Terminology|http://evs.nci.nih.gov/valueset/C96388|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Terminology/NICHD-Pediatric-Terminology_NCIt_Subsets.xls|2:11:C96388
-Pediatric Rheumatology Terminology|http://evs.nci.nih.gov/valueset/C118468|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Rheumatology%20Terminology/NICHD-Pediatric_Rheumatology_Terminology_NCIt_Subsets.xls|2:11:C118468
-Pediatric Terminology|http://evs.nci.nih.gov/valueset/C90259|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Terminology/NICHD-Pediatric-Terminology_NCIt_Subsets.xls|2:all
-Perinatal Terminology|http://evs.nci.nih.gov/valueset/C118466|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Perinatal%20Terminology/NICHD-Perinatal_Terminology_NCIt_Subsets.xls|2:11:C118466
+Pediatric Adverse Events Terminology|http://evs.nci.nih.gov/valueset/C118464|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Adverse%20Events%20Terminology%20Subset/Pediatric_Adverse_Events_Subset_Terminology.xls|2:all
+Pediatric Immunization Terminology|http://evs.nci.nih.gov/valueset/C96388|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Immunization%20Terminology%20Subset/Pediatric_Immunization_Terminology_Subset.xls|2:all
+Pediatric Rheumatology Terminology|http://evs.nci.nih.gov/valueset/C118468|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Rheumatology%20Terminology%20Subset/Pediatric_Rheumatology_Terminology_Subset.xls|2:all
+Pediatric Terminology|http://evs.nci.nih.gov/valueset/C90259|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Terminology/Pediatric_Terminology.xls|2:all
+Perinatal Terminology|http://evs.nci.nih.gov/valueset/C118466|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Perinatal%20Terminology%20Subset/Perinatal_Terminology_Subset.xls|2:all
 Reason for Non-Evaluation ICSR Terminology|http://evs.nci.nih.gov/valueset/C54593|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54593
 Report Source ICSR Terminology|http://evs.nci.nih.gov/valueset/C54587|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C54587
 Structured Product Labeling Business Operation Terminology|http://evs.nci.nih.gov/valueset/C73600|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C73600
@@ -561,7 +561,7 @@ Structured Product Labeling Pharmaceutical Dosage Form Terminology|http://evs.nc
 Structured Product Labeling Pharmacokinetic Effect Consequences Terminology|http://evs.nci.nih.gov/valueset/C54600|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54600
 Structured Product Labeling Potency Terminology|http://evs.nci.nih.gov/valueset/C54458|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54458
 Structured Product Labeling Shape Terminology|http://evs.nci.nih.gov/valueset/C54454|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54454
-Structured Product Labeling Terminology|http://evs.nci.nih.gov/valueset/C54452|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:all
+Structured Product Labeling Terminology|http://evs.nci.nih.gov/valueset/C54452|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54452
 Structured Product Labeling Type of Drug Interaction Consequence Terminology|http://evs.nci.nih.gov/valueset/C54618|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C54618
 Structured Product Labeling Unit of Measure Terminology|http://evs.nci.nih.gov/valueset/C92951|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C92951
 Structured Product Labeling Unit of Presentation Terminology|http://evs.nci.nih.gov/valueset/C87300|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/SPL/FDA-SPL_NCIt_Subsets.xls|1:2:C87300
