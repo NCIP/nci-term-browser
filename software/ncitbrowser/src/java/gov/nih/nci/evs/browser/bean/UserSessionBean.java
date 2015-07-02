@@ -2218,6 +2218,40 @@ response.setContentType("text/html;charset=utf-8");
                     }
                 }
 
+
+System.out.println("===================================================");
+System.out.println("\tscheme: " + scheme);
+System.out.println("\tversion: " + version);
+System.out.println("\tmatchText: " + matchText);
+if (associationsToNavigate != null) {
+	for (int i=0; i<associationsToNavigate.length; i++) {
+		String t = (String) associationsToNavigate[i];
+		System.out.println("\t\tassociationsToNavigate: " + t);
+	}
+}
+if (association_qualifier_names != null) {
+	for (int i=0; i<association_qualifier_names.length; i++) {
+		String t = (String) association_qualifier_names[i];
+		System.out.println("\t\tassociation_qualifier_names: " + t);
+	}
+}
+if (association_qualifier_values != null) {
+	for (int i=0; i<association_qualifier_values.length; i++) {
+		String t = (String) association_qualifier_values[i];
+		System.out.println("\t\tassociation_qualifier_values: " + t);
+	}
+}
+
+System.out.println("\tsearch_direction: " + search_direction);
+System.out.println("\tsource: " + source);
+System.out.println("\tscheme: " + scheme);
+System.out.println("\tmatchAlgorithm: " + matchAlgorithm);
+System.out.println("\texcludeDesignation: " + excludeDesignation);
+System.out.println("\tranking: " + ranking);
+System.out.println("\tmaxToReturn: " + maxToReturn);
+System.out.println("===================================================");
+
+
                 wrapper =
                     new SearchUtils().searchByAssociations(scheme, version,
                         matchText, associationsToNavigate,
