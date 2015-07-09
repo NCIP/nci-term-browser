@@ -178,7 +178,7 @@ var tree;
     
     if (vsd != null) {
             vsd_name = vsd.getValueSetDefinitionName();  
-	    TreeItem ti = ValueSetHierarchy.getSourceValueSetTreeBranch(vsd);
+	    TreeItem ti = DataUtils.getValueSetHierarchy().getSourceValueSetTreeBranch(vsd);
 	    HashMap hmap = new HashMap();
 	    hmap.put("<Root>", ti);
     } else {
@@ -291,7 +291,7 @@ var tree;
         check_p = "checked";
     }         
     
-    String vsd_description = ValueSetHierarchy.getValueSetDecription(vsd_uri);
+    String vsd_description = DataUtils.getValueSetHierarchy().getValueSetDecription(vsd_uri);
     if (vsd_description == null) {
         vsd_description = "DESCRIPTION NOT AVAILABLE";
     }    

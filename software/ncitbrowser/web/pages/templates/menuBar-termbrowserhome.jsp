@@ -18,7 +18,7 @@
   String _menubar_tb_dictionary = DataUtils.getCodingSchemeName( _dictionaryName0 );
   String _menubar_tb_version = DataUtils.getCodingSchemeVersion( _dictionaryName0 );
 
-//  boolean hasValueSet = ValueSetHierarchy.hasValueSet(_menubar_tb_dictionary);
+//  boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(_menubar_tb_dictionary);
 //  boolean hasMapping = DataUtils.hasMapping(_menubar_tb_dictionary);
   
   int globalNavHeight = JSPUtils.parseInt(

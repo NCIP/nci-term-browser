@@ -165,7 +165,7 @@ int size = 0;
             		String metadata = DataUtils
             				.getValueSetDefinitionMetadata(DataUtils
             						.findValueSetDefinitionByURI(vsd_uri));
-            		Vector u = DataUtils.parseData(metadata);
+            		Vector u = StringUtils.parseData(metadata);
             		name = (String) u.elementAt(0);
             		valueset_uri = (String) u.elementAt(1);
             		description = (String) u.elementAt(2);
@@ -517,10 +517,9 @@ if (matched_concept_codes != null && matched_concept_codes.size() > 0) {
                      <table border="0">
                         <tr>
                            <td>
-                              <table border="0" width="95%">
+                              <table border="0" width="900" >
                                  <tr>
                                     <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
-                                    <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                     <td align="right">
                                     
                                        <h:commandLink

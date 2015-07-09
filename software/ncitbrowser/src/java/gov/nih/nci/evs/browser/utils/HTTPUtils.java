@@ -114,7 +114,9 @@ public class HTTPUtils {
         value = replaceAll(value, ".*<\\s*iframe.*>", "");
         value = value.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         //value = value.replaceAll("\\(", "&#40;").replaceAll("\\)", "&#41;");
-        value = value.replaceAll("'", "&#39;");
+
+        //[NCITERM-679] Terms with apostrophes return no results.
+        //value = value.replaceAll("'", "&#39;");
         value = value.replaceAll("eval\\((.*)\\)", "");
         value =
             replaceAll(value, "[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']",
@@ -519,15 +521,7 @@ public class HTTPUtils {
 		}
 		return Boolean.FALSE;
 	}
-/*
-    public static Boolean containsHarzardCharacters(String value) {
-		if (value == null) return null;
-		if (value.indexOf("DECLARE") != -1 && (value.indexOf(";EXEC(") != -1 || value.indexOf("=CAST(") != -1)) {
-			return Boolean.TRUE;
-		}
-		return Boolean.FALSE;
-	}
-*/
+
     public static Boolean containsHarzardCharacters(String value) {
 		if (value == null) return Boolean.FALSE;
 		String s = value.toUpperCase();

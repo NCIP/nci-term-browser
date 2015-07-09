@@ -15,7 +15,7 @@
 	      </div>
 	    </a>
     <%
-  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0 || info3.dictionary.compareTo("NCI_Thesaurus") == 0) {
+  } else if (DataUtils.isNCIT(info3.dictionary)) {
   %>
 	 <a href="<%=nciturl%>" style="text-decoration: none;">
 	      <div class="vocabularynamebanner_ncit">

@@ -7,6 +7,7 @@
 <%@ page import="java.util.HashMap"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="org.apache.log4j.*" %>
 <%!
@@ -477,7 +478,7 @@ if (ontologiesToExpandStr == null) {
 				}     
 				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
-				if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI_Thesaurus") == 0) {
+				if (DataUtils.isNCIT(scheme)) {
 				    String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + version;
 				  %>
                     <a href="<%=nciturl%>"><%=display_label%></a>

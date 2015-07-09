@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.browser.bean;
 
+import gov.nih.nci.evs.searchlog.*;
+
 import java.util.*;
 import java.net.URI;
 
@@ -13,6 +15,7 @@ import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.Utility.Iterators.*;
 
 import gov.nih.nci.evs.browser.utils.*;
+import gov.nih.nci.evs.browser.bean.*;
 import gov.nih.nci.evs.browser.properties.*;
 import gov.nih.nci.evs.browser.common.*;
 import gov.nih.nci.evs.searchlog.*;
@@ -22,12 +25,14 @@ import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.commonTypes.Source;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext;
 import nl.captcha.Captcha;
 //import nl.captcha.audio.*;
 
 import nl.captcha.audio.AudioCaptcha;
+import javax.servlet.ServletOutputStream;
 
 
 /**
@@ -332,7 +337,7 @@ if (scheme != null) {
 
         _logger.debug("UserSessionBean scheme: " + scheme);
         _logger.debug("searchAction version: " + version);
-
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		if (isMapping) {
 				if (searchTarget.compareTo("names") == 0) {
 					/*
@@ -341,14 +346,18 @@ if (scheme != null) {
 						matchAlgorithm, maxToReturn);
 					*/
 
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByNameOrCode(
+					//ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByNameOrCode(
+					//	scheme, version, matchText,
+					//	matchAlgorithm, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
+
+					iterator = new MappingSearchUtils(lbSvc).searchByNameOrCode(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
 
 
-					if (wrapper != null) {
-						iterator = wrapper.getIterator();
-					}
+					//if (wrapper != null) {
+					//	iterator = wrapper.getIterator();
+					//}
 
                     if (iterator != null) {
 						try {
@@ -362,6 +371,7 @@ if (scheme != null) {
 						}
 				    }
 
+                    /*
 					if (iterator == null) {
 						wrapper = new MappingSearchUtils().searchByName(
 							scheme, version, matchText,
@@ -372,17 +382,24 @@ if (scheme != null) {
 							iterator = null;
 						}
 					}
+					*/
 
+					if (iterator == null) {
+
+						iterator = new MappingSearchUtils(lbSvc).searchByName(
+							scheme, version, matchText,
+							matchAlgorithm, maxToReturn);
+					}
 				} else if (searchTarget.compareTo("codes") == 0) {
 					//ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByCode(
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByNameOrCode(
+					iterator = new MappingSearchUtils(lbSvc).searchByNameOrCode(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
-
+/*
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
 					}
-
+*/
                     if (iterator != null) {
 						try {
 							int numberRemaining = iterator.numberRemaining();
@@ -396,38 +413,45 @@ if (scheme != null) {
 				    }
 
 					if (iterator == null) {
-						wrapper = new MappingSearchUtils().searchByCode(
+						iterator = new MappingSearchUtils(lbSvc).searchByCode(
 							scheme, version, matchText,
 							matchAlgorithm, maxToReturn);
+							/*
 						if (wrapper != null) {
 							iterator = wrapper.getIterator();
 						} else {
 							iterator = null;
 						}
+						*/
 					}
+
 
 				} else if (searchTarget.compareTo("properties") == 0) {
 
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByProperties(
+					iterator = new MappingSearchUtils(lbSvc).searchByProperties(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn);
+						/*
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
 					} else {
 						iterator = null;
 					}
+					*/
 
 
 				} else if (searchTarget.compareTo("relationships") == 0) {
 
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByRelationships(
+					iterator = new MappingSearchUtils(lbSvc).searchByRelationships(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn);
+						/*
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
 					} else {
 						iterator = null;
 					}
+					*/
 
 				}
 
@@ -510,7 +534,7 @@ if (scheme != null) {
 				0,    // pageNumber,
 				1);   // numberPages
 */
-mappingIteratorBean.initialize();
+				mappingIteratorBean.initialize();
 				request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
 				request.getSession().setAttribute("dictionary", scheme);
 				//request.getSession().setAttribute("scheme", scheme);
@@ -588,11 +612,21 @@ mappingIteratorBean.initialize();
                 iterator = iteratorBean.getIterator();
             } else {
                 ResolvedConceptReferencesIteratorWrapper wrapper = null;
+
+
+System.out.println("(***) searchAction matchText: " + matchText);
+
+
+
                 try {
 					if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
-						wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+						iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+						wrapper = null;
+						if (iterator != null) {
+							wrapper = new ResolvedConceptReferencesIteratorWrapper(iterator);
+						}
 				    } else {
-						wrapper = new SearchUtils()
+						wrapper = new SearchUtils(lbSvc)
 							.searchByNameOrCode(schemes, versions, matchText, source,
 								matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
 					}
@@ -602,13 +636,14 @@ mappingIteratorBean.initialize();
 
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
-
                     if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
                     }
-                }
+                } else {
+					System.out.println("(*) search by names returns wrapper = NULL???");
+				}
             }
 
         } else if (searchTarget.compareTo("codes") == 0) {
@@ -625,7 +660,7 @@ mappingIteratorBean.initialize();
                             matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
                     */
 
-					wrapper = new CodeSearchUtils().searchByCode(
+					wrapper = new CodeSearchUtils(lbSvc).searchByCode(
 						schemes, versions, matchText,
 						source, matchAlgorithm, ranking, maxToReturn, false);
 
@@ -652,14 +687,12 @@ mappingIteratorBean.initialize();
                 ResolvedConceptReferencesIteratorWrapper wrapper = null;
                 try {
                     wrapper =
-                    new SearchUtils().searchByProperties(schemes, versions,
+                    new SearchUtils(lbSvc).searchByProperties(schemes, versions,
                         matchText, source, matchAlgorithm, excludeDesignation,
                         ranking, maxToReturn);
 				} catch (Exception ex) {
                     //ex.printStackTrace();
 				}
-
-
 
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
@@ -680,7 +713,7 @@ mappingIteratorBean.initialize();
 				ResolvedConceptReferencesIteratorWrapper wrapper = null;
                 try {
                     wrapper =
-                    new SearchUtils().searchByAssociations(schemes, versions,
+                    new SearchUtils(lbSvc).searchByAssociations(schemes, versions,
                         matchText, source, matchAlgorithm, designationOnly,
                         ranking, maxToReturn);
 
@@ -1524,12 +1557,8 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 
 
 
-
-
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         if (searchTarget.compareTo("names") == 0) {
-
-
-
             long ms = System.currentTimeMillis();
             long delay = 0;
             _logger.debug("Calling SearchUtils().searchByNameAndCode " + matchText);
@@ -1546,27 +1575,22 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 
             //062013 KLO
             if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
-
-
 				try {
-					wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+					iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			} else {
-				wrapper = new SearchUtils().searchByNameOrCode(
+				wrapper = new SearchUtils(lbSvc).searchByNameOrCode(
 						schemes, versions, matchText,
 						source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
+
+				if (wrapper != null) {
+					iterator = wrapper.getIterator();
+				}
+
 			}
 
-
-            if (wrapper != null) {
-                iterator = wrapper.getIterator();
-
-
-
-
-            }
             delay = System.currentTimeMillis() - ms;
             _logger.debug("searchByNameAndCode delay (millisec.): " + delay);
 
@@ -1581,7 +1605,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
                 new SearchUtils().searchByName(schemes, versions, matchText,
                     source, matchAlgorithm, ranking, maxToReturn);
             */
-                new CodeSearchUtils().searchByCode(schemes, versions, matchText,
+                new CodeSearchUtils(lbSvc).searchByCode(schemes, versions, matchText,
                     source, matchAlgorithm, ranking, maxToReturn);
 
             if (wrapper != null) {
@@ -1592,7 +1616,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 
         } else if (searchTarget.compareTo("properties") == 0) {
             ResolvedConceptReferencesIteratorWrapper wrapper =
-                new SearchUtils().searchByProperties(schemes, versions,
+                new SearchUtils(lbSvc).searchByProperties(schemes, versions,
                     matchText, source, matchAlgorithm, excludeDesignation,
                     ranking, maxToReturn);
             if (wrapper != null) {
@@ -1601,7 +1625,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
         } else if (searchTarget.compareTo("relationships") == 0) {
             designationOnly = true;
             ResolvedConceptReferencesIteratorWrapper wrapper =
-                new SearchUtils().searchByAssociations(schemes, versions,
+                new SearchUtils(lbSvc).searchByAssociations(schemes, versions,
                     matchText, source, matchAlgorithm, designationOnly,
                     ranking, maxToReturn);
             if (wrapper != null) {
@@ -1742,7 +1766,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 						c = ref.getReferencedEntry();
 						if (c == null) {
 							//c = DataUtils.getConceptByCode(coding_scheme, ref_version,
-							c = SearchUtils.getConceptByCode(coding_scheme, ref_version,
+							c = new SearchUtils(lbSvc).getConceptByCode(coding_scheme, ref_version,
 									null, ref.getConceptCode());
 						}
 					}
@@ -1890,7 +1914,7 @@ response.setContentType("text/html;charset=utf-8");
     }
 
     public String advancedSearchAction() {
-
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         ResolvedConceptReferencesIteratorWrapper wrapper = null;
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
@@ -2097,7 +2121,7 @@ response.setContentType("text/html;charset=utf-8");
                     property_names = new String[] { property_name };
                 excludeDesignation = false;
                 wrapper =
-                    new SearchUtils().searchByProperties(scheme, version,
+                    new SearchUtils(lbSvc).searchByProperties(scheme, version,
                         matchText, property_types, property_names, source,
                         matchAlgorithm, excludeDesignation, ranking,
                         maxToReturn);
@@ -2180,85 +2204,56 @@ response.setContentType("text/html;charset=utf-8");
                 String[] association_qualifier_names = null;
                 String[] association_qualifier_values = null;
 
-                if (rel_search_association != null) {
-					/*
-                    associationsToNavigate =
-                        new String[] { rel_search_association };
-                    */
 
-                    //KLO, 042211
-					//String assocName = OntologyBean.convertAssociationName(scheme, null, rel_search_association);
+		if (rel_search_association != null) {
+			String assocName = rel_search_association;
+			//_logger.debug("Converting " + rel_search_association + " to " + assocName);
+			associationsToNavigate =
+				new String[] { assocName };
 
-					String assocName = rel_search_association;
-					//_logger.debug("Converting " + rel_search_association + " to " + assocName);
-                    associationsToNavigate =
-                        new String[] { assocName };
+		} else {
+			System.out.println("(*) associationsToNavigate == null");
+		}
 
-                } else {
-                    _logger.debug("(*) associationsToNavigate == null");
-                }
+		if (rel_search_rela != null) {
+			association_qualifier_names = new String[] { "rela" };
+			association_qualifier_values =
+				new String[] { rel_search_rela };
 
-                if (rel_search_rela != null) {
-                    association_qualifier_names = new String[] { "rela" };
-                    association_qualifier_values =
-                        new String[] { rel_search_rela };
+			if (associationsToNavigate == null) {
+				Vector w = new CodingSchemeDataUtils(lbSvc).getSupportedAssociationNames(scheme, null);
+				if (w == null || w.size() == 0) {
+					//_logger
+					//	.warn("OntologyBean.getAssociationNames() returns null, or nothing???");
+				} else {
+					associationsToNavigate = new String[w.size()];
+					for (int i = 0; i < w.size(); i++) {
+						String nm = (String) w.elementAt(i);
+						associationsToNavigate[i] = nm;
+					}
+				}
+			}
+		}
 
-                    if (associationsToNavigate == null) {
-                        Vector w = OntologyBean.getAssociationNames(scheme);
-                        if (w == null || w.size() == 0) {
-                            _logger
-                                .warn("OntologyBean.getAssociationNames() returns null, or nothing???");
-                        } else {
-                            associationsToNavigate = new String[w.size()];
-                            for (int i = 0; i < w.size(); i++) {
-                                String nm = (String) w.elementAt(i);
-                                associationsToNavigate[i] = nm;
-                            }
-                        }
-                    }
-                }
+/*
+System.out.println("(*) advancedSearchAction SearchUtils(lbSvc).searchByAssociations ...");
 
-
-System.out.println("===================================================");
-System.out.println("\tscheme: " + scheme);
-System.out.println("\tversion: " + version);
-System.out.println("\tmatchText: " + matchText);
-if (associationsToNavigate != null) {
-	for (int i=0; i<associationsToNavigate.length; i++) {
-		String t = (String) associationsToNavigate[i];
-		System.out.println("\t\tassociationsToNavigate: " + t);
-	}
-}
-if (association_qualifier_names != null) {
-	for (int i=0; i<association_qualifier_names.length; i++) {
-		String t = (String) association_qualifier_names[i];
-		System.out.println("\t\tassociation_qualifier_names: " + t);
-	}
-}
-if (association_qualifier_values != null) {
-	for (int i=0; i<association_qualifier_values.length; i++) {
-		String t = (String) association_qualifier_values[i];
-		System.out.println("\t\tassociation_qualifier_values: " + t);
-	}
-}
-
-System.out.println("\tsearch_direction: " + search_direction);
-System.out.println("\tsource: " + source);
-System.out.println("\tscheme: " + scheme);
-System.out.println("\tmatchAlgorithm: " + matchAlgorithm);
-System.out.println("\texcludeDesignation: " + excludeDesignation);
-System.out.println("\tranking: " + ranking);
-System.out.println("\tmaxToReturn: " + maxToReturn);
-System.out.println("===================================================");
-
-
+		    wrapper =
+			new SearchUtils(lbSvc).searchByAssociations(scheme, version,
+				matchText, associationsToNavigate,
+				association_qualifier_names,
+				association_qualifier_values, search_direction, source,
+				matchAlgorithm, excludeDesignation, ranking,
+				maxToReturn);
+*/
                 wrapper =
-                    new SearchUtils().searchByAssociations(scheme, version,
+                    new SearchUtils(lbSvc).searchByAssociations(scheme, version,
                         matchText, associationsToNavigate,
                         association_qualifier_names,
                         association_qualifier_values, search_direction, source,
                         matchAlgorithm, excludeDesignation, ranking,
                         maxToReturn);
+
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
                 }
@@ -2306,16 +2301,17 @@ System.out.println("===================================================");
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-
-				if (SimpleSearchUtils.searchAllSources(source) && SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
+                //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				if (new SimpleSearchUtils(lbSvc).searchAllSources(source) && SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 					try {
-						wrapper = new SimpleSearchUtils().search(scheme, version, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+						iterator = new SimpleSearchUtils(lbSvc).search(scheme, version, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+						wrapper = new ResolvedConceptReferencesIteratorWrapper(iterator);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				} else {
 					wrapper =
-						new SearchUtils().searchByName(scheme, version, matchText,
+						new SearchUtils(lbSvc).searchByName(scheme, version, matchText,
 							source, matchAlgorithm, ranking, maxToReturn,
 							SearchUtils.NameSearchType.Name);
 				}
@@ -2352,7 +2348,7 @@ System.out.println("===================================================");
 			    schemes.add(scheme);
 			    versions.add(version);
 
-                wrapper = new CodeSearchUtils().searchByCode(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn, false);
+                wrapper = new CodeSearchUtils(lbSvc).searchByCode(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn, false);
 
                 /*
                 wrapper =
@@ -2710,10 +2706,6 @@ response.setContentType("text/html;charset=utf-8");
 			ontologiesToSearchOnStr = buf.toString();
 		}
 
-
-        System.out.println("(************* *) UserSessionBean: ontologiesToSearchOnStr: " + ontologiesToSearchOnStr);
-
-
 String s = "|";
 	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 		for (int i = 0; i < display_name_vec.size(); i++) {
@@ -3004,7 +2996,6 @@ ontologiesToSearchOnStr = s;
 			return "retry";
 		}
 
-
         try {
     		String retstr = null;
     		if (captcha_option.compareTo("audio") == 0) {
@@ -3013,8 +3004,13 @@ ontologiesToSearchOnStr = s;
 				retstr = validateCaptcha(request, "incomplete");
 			}
 
-            String recipients[] = MailUtils.getRecipients();
-            MailUtils.postMail(from, recipients, subject, message);
+            //String recipients[] = MailUtils.getRecipients();
+            //MailUtils.postMail(from, recipients, subject, message);
+
+            String recipientStr = NCItBrowserProperties.getNCICB_CONTACT_URL();
+            String mail_smtp_server = NCItBrowserProperties.getMAIL_SMTP_SERVER();
+            MailUtils.postMail(from, recipientStr, subject, message, mail_smtp_server);
+
 			request.getSession().setAttribute("message", msg);
 
         } catch (NoReloadException e) {
@@ -3143,4 +3139,89 @@ ontologiesToSearchOnStr = s;
 		}
 		return buf.toString();
 	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void export_mapping_search_results(HttpServletRequest request, HttpServletResponse response) {
+        String mapping_schema = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+        String mapping_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
+
+        //to be modified
+        ResolvedConceptReferencesIterator iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version);
+		int numRemaining = 0;
+		if (iterator != null) {
+			try {
+				numRemaining = iterator.numberRemaining();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+        StringBuffer sb = new StringBuffer();
+        try {
+			sb.append("Source Code,");
+			sb.append("Source Name,");
+			sb.append("Source Coding Scheme,");
+			sb.append("Source Coding Scheme Version,");
+			sb.append("Source Coding Scheme Namespace,");
+
+			sb.append("Association Name,");
+			sb.append("REL,");
+			sb.append("Map Rank,");
+
+			sb.append("Target Code,");
+			sb.append("Target Name,");
+			sb.append("Target Coding Scheme,");
+			sb.append("Target Coding Scheme Version,");
+			sb.append("Target Coding Scheme Namespace");
+			sb.append("\r\n");
+
+			MappingIteratorBean bean = new MappingIteratorBean(iterator);
+            List list = bean.getData(0, numRemaining-1);
+            for (int k=0; k<list.size(); k++) {
+				MappingData mappingData = (MappingData) list.get(k);
+				sb.append("\"" + mappingData.getSourceCode() + "\",");
+				sb.append("\"" + mappingData.getSourceName() + "\",");
+				sb.append("\"" + mappingData.getSourceCodingScheme() + "\",");
+				sb.append("\"" + mappingData.getSourceCodingSchemeVersion() + "\",");
+				sb.append("\"" + mappingData.getSourceCodeNamespace() + "\",");
+
+				sb.append("\"" + mappingData.getAssociationName() + "\",");
+				sb.append("\"" + mappingData.getRel() + "\",");
+				sb.append("\"" + mappingData.getScore() + "\",");
+
+				sb.append("\"" + mappingData.getTargetCode() + "\",");
+				sb.append("\"" + mappingData.getTargetName() + "\",");
+				sb.append("\"" + mappingData.getTargetCodingScheme() + "\",");
+				sb.append("\"" + mappingData.getTargetCodingSchemeVersion() + "\",");
+				sb.append("\"" + mappingData.getTargetCodeNamespace() + "\"");
+				sb.append("\r\n");
+			}
+		} catch (Exception ex)	{
+			sb.append("WARNING: Export to CVS action failed.");
+			ex.printStackTrace();
+		}
+
+		String filename = mapping_schema + "_" + mapping_version;
+		filename = filename.replaceAll(" ", "_");
+		filename = filename + ".csv";
+
+		response.setContentType("text/csv");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ filename);
+
+		response.setContentLength(sb.length());
+
+		try {
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes("UTF-8"), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			sb.append("WARNING: Export to CVS action failed.");
+		}
+		FacesContext.getCurrentInstance().responseComplete();
+		return;
+	}
+
 }

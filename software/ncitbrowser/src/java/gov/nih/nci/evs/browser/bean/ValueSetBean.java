@@ -167,7 +167,7 @@ public class ValueSetBean {
 	    }
 */
 
-        HashSet hset = ValueSetHierarchy.get_valueSetParticipationHashSet();
+        HashSet hset = DataUtils.getValueSetHierarchy().get_valueSetParticipationHashSet();
         if (hset == null) return null;
         Iterator it = hset.iterator();
         while (it.hasNext()) {
@@ -1815,19 +1815,22 @@ StringBuffer buf = new StringBuffer();
             } else {
 
 ///////////////////////////////////////////////////////////////////////////////////
-                ResolvedConceptReferencesIteratorWrapper wrapper =
+                //ResolvedConceptReferencesIteratorWrapper wrapper =
+                //    new ValueSetSearchUtils().searchByCode(
+				//        vsd_uri, matchText, maxToReturn);
+                iterator =
                     new ValueSetSearchUtils().searchByCode(
 				        vsd_uri, matchText, maxToReturn);
 
 
-                if (wrapper != null) {
-                    iterator = wrapper.getIterator();
+                //if (wrapper != null) {
+                //    iterator = wrapper.getIterator();
                     if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
                     }
-                }
+                //}
             }
 
         } else if (searchTarget.compareTo("names") == 0) {
@@ -1835,17 +1838,22 @@ StringBuffer buf = new StringBuffer();
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-                ResolvedConceptReferencesIteratorWrapper wrapper =
+                //ResolvedConceptReferencesIteratorWrapper wrapper =
+                //    new ValueSetSearchUtils().searchByName(
+				//        vsd_uri, matchText, matchAlgorithm, maxToReturn);
+
+                iterator =
                     new ValueSetSearchUtils().searchByName(
 				        vsd_uri, matchText, matchAlgorithm, maxToReturn);
 
-                if (wrapper != null) {
-                    iterator = wrapper.getIterator();
-                    if (iterator != null) {
+
+                if (iterator != null) {
+                    //iterator = wrapper.getIterator();
+                    //if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
-                    }
+                    //}
                 }
             }
 
@@ -1855,17 +1863,22 @@ StringBuffer buf = new StringBuffer();
                 iterator = iteratorBean.getIterator();
             } else {
 				boolean excludeDesignation = true;
+				/*
                 ResolvedConceptReferencesIteratorWrapper wrapper =
                     new ValueSetSearchUtils().searchByProperties(
 				        vsd_uri, matchText, excludeDesignation, matchAlgorithm, maxToReturn);
+                */
+                iterator =
+                    new ValueSetSearchUtils().searchByProperties(
+				        vsd_uri, matchText, excludeDesignation, matchAlgorithm, maxToReturn);
 
-                if (wrapper != null) {
-                    iterator = wrapper.getIterator();
-                    if (iterator != null) {
+                if (iterator != null) {
+                    //iterator = wrapper.getIterator();
+                    //if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
-                    }
+                    //}
                 }
             }
 
@@ -1973,12 +1986,15 @@ StringBuffer buf = new StringBuffer();
 			searchOption = SimpleSearchUtils.BY_NAME;
 		}
 
-request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
+		request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 
-        ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
+        //ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
+        //    matchText, searchOption, algorithm);
+
+        ResolvedConceptReferencesIterator iterator = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
             matchText, searchOption, algorithm);
 
-        if (wrapper == null) {
+        if (iterator == null) {
 			msg = "No match found.";
 			if (searchOption == SimpleSearchUtils.BY_CODE) {
    			    msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
@@ -1986,6 +2002,7 @@ request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 			request.getSession().setAttribute("message", msg);
 			return "message";
 		} else {
+			/*
 			ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
 			if (iterator == null) {
 				msg = "No match found.";
@@ -1995,6 +2012,7 @@ request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 				request.getSession().setAttribute("message", msg);
 				return "message";
 			}
+			*/
 			try {
 				int numRemaining = iterator.numberRemaining();
 				if (numRemaining == 0) {

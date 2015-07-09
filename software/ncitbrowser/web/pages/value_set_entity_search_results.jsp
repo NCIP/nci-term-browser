@@ -109,26 +109,20 @@
 String VSD_view = (String) request.getSession().getAttribute("view");
 String valueSetSearch_requestContextPath = request.getContextPath();
 String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
-//String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-
 String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
 boolean bool_val;
-//System.out.println("value_set_entity_search_results.jsp checked_vocabularies: " + checked_vocabularies);
-
 Vector selected_vocabularies = null;
-
 
 String tooltip_str = "No value set is selected." + "</br>";
 String selected_vocabularies_link = "";
 if (checked_vocabularies != null) {
     tooltip_str = checked_vocabularies + "</br>";
-    selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
+    selected_vocabularies = StringUtils.parseData(checked_vocabularies, ",");
     Vector selected_vocabularies_names = DataUtils.uri2CodingSchemeName(selected_vocabularies);
     selected_vocabularies_link = JSPUtils.getPopUpWindow(selected_vocabularies_names, "Selected Value Sets");
 }
 
 //String partial_checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("partial_checked_vocabularies"));
-
 
 String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 if (resultsPerPage == null) {
@@ -306,13 +300,10 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 
     String userAgent = request.getHeader("user-agent");
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");
-
-    //String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
     
     if (vsd_uri == null) {
         vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
     }
-
 
     request.setAttribute("globalNavHeight", "37"); 
       
@@ -532,7 +523,7 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
       String entity_cs_version = null;
 
 
-    String vsd_description = ValueSetHierarchy.getValueSetDecription(vsd_uri);
+    String vsd_description = DataUtils.getValueSetHierarchy().getValueSetDecription(vsd_uri);
     if (vsd_description == null) {
 	vsd_description = "DESCRIPTION NOT AVAILABLE";
     }

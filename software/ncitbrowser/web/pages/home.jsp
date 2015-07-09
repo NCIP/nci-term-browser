@@ -36,6 +36,15 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
 <%
+
+Boolean ncit_available = DataUtils.isNCITAvailable();
+if (ncit_available == null || !ncit_available.equals(Boolean.TRUE)) {
+    String error_msg = "WARNING: NCI Thesaurus " + Constants.CODING_SCHEME_NOT_AVAILABLE;
+    request.getSession().setAttribute("error_msg", error_msg);
+    String redirectURL = request.getContextPath() + "/pages/coding_scheme_unavailable.jsf";
+    response.sendRedirect(redirectURL);
+}
+
 request.getSession().setAttribute("dictionary", "NCI Thesaurus");
 String vocabulary_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 if (vocabulary_version != null) {

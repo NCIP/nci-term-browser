@@ -18,8 +18,11 @@
   String _menubar_tb_dictionary = DataUtils.getCodingSchemeName( _dictionaryName0 );
   String _menubar_tb_version = DataUtils.getCodingSchemeVersion( _dictionaryName0 );
 
-  boolean hasValueSet = ValueSetHierarchy.hasValueSet(_menubar_tb_dictionary);
+  boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(_menubar_tb_dictionary);
   boolean hasMapping = DataUtils.hasMapping(_menubar_tb_dictionary);
+  
+  boolean isMapping = DataUtils.isMapping(_menubar_tb_dictionary, _menubar_tb_version);
+
   
   int globalNavHeight = JSPUtils.parseInt(
       (String) request.getAttribute("globalNavHeight"), 33);
@@ -28,11 +31,18 @@
 <table class="global-nav" border="0" width="100%" height="<%=globalNavHeight%>px" cellpadding="0" cellspacing="0">
   <tr>
     <td align="left" valign="bottom">
+    
+    <% if (isMapping) { %>
+      <a href="/ncitbrowser/pages/mapping.jsf?dictionary=<%=HTTPUtils.cleanXSS(_dictionaryName)%>&version=<%=HTTPUtils.cleanXSS(_menubar_tb_version)%>">
+	Mapping
+      </a>    
+    
+   <% } else { %> 
       <a href="#" onclick="javascript:window.open('<%=request.getContextPath() %>/pages/source_help_info-termbrowser.jsf',
         '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="13">
         Sources</a> 
    
-   
+   <% } %> 
 
       <% if (hasValueSet) { %>
         |

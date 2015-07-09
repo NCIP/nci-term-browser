@@ -86,7 +86,7 @@ if (mapping_version != null) {
     request.getSession().setAttribute("version", mapping_version);
 }
 
-if (mapping_dictionary != null && (mapping_dictionary.compareTo("NCI Thesaurus") == 0 || mapping_dictionary.compareTo("NCI_Thesaurus") == 0)) {
+if (DataUtils.isNCIT(mapping_dictionary)) {
 %>
 
       <%@ include file="/pages/templates/content-header.jsp" %>
@@ -331,7 +331,7 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
                                     <td align="left">&nbsp;&nbsp;</td>
                                     <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
       <td align="right">                               
-      <a href="<%=request.getContextPath() %>/ajax?action=export_mapping&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>">
+      <a href="<%=request.getContextPath() %>/ajax?action=export_mapping&dictionary=<%=HTTPUtils.cleanXSS(mapping_schema)%>&version=<%=mapping_version%>" title="Export mapping to CSV">
       Export CSV
       </a>  
       </td>

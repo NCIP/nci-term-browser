@@ -11,6 +11,9 @@
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.apache.log4j.*" %>
 
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService" %>
+
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -444,7 +447,8 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
                       if (rcr.getEntityDescription() != null) {
                           name = rcr.getEntityDescription().getContent();
                       } else {
-			      Entity entity = SearchUtils.getConceptByCode(rcr.getCodeNamespace(), null, null, rcr.getConceptCode());
+                              LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			      Entity entity = new SearchUtils(lbSvc).getConceptByCode(rcr.getCodeNamespace(), null, null, rcr.getConceptCode());
 			      if (entity != null && entity.getEntityDescription() != null) {
 			      	  name = entity.getEntityDescription().getContent();
 			      } 
@@ -518,16 +522,22 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           <td class="dataCellText" scope="row">
           <%
-
-          if (con_status == null) {
-          %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>
-          <%
+          
+          if (PropertyData.isConceptEntity(rcr)) {
+		  if (con_status == null) {
+		  %>
+		     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>
+		  <%
+		  } else {
+		  %>
+		     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
+		  <%
+		  }
           } else {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
-          <%
-          }
+	          <%=DataUtils.encodeTerm(name)%>
+	  <%        
+          }   
           %>
           </td>
 

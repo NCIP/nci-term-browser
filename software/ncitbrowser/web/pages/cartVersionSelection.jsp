@@ -101,7 +101,7 @@ int lcv = i+1;
 		    
 		    String coding_scheme_name_version = coding_scheme_ref_str;
 		    
-		    Vector u = DataUtils.parseData(coding_scheme_ref_str);
+		    Vector u = StringUtils.parseData(coding_scheme_ref_str);
 		    String cs_name = (String) u.elementAt(0);
 		    String displayed_cs_name = DataUtils.uri2CodingSchemeName(cs_name);
 		    

@@ -126,21 +126,22 @@ subject to the conditions specified at
               
               Vector abbr_vec = (Vector) request.getSession().getAttribute("source_descriptions");
               if (abbr_vec == null) {
-                  abbr_vec = new MetadataUtils().getSupportedVocabularyMetadataValues(propertyName);
+                  LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+                  abbr_vec = new MetadataUtils(lbSvc).getSupportedVocabularyMetadataValues(propertyName);
                   request.getSession().setAttribute("source_descriptions", abbr_vec);
               } 
               
               int lcv = 0;
               for (int n=0; n<abbr_vec.size(); n++) {
                  String t = (String) abbr_vec.elementAt(n);
-                 Vector w = DataUtils.parseData(t, "|");
+                 Vector w = StringUtils.parseData(t, "|");
                  String abbr = (String) w.elementAt(0);
                  
                  if (!abbr.startsWith("Terminology Value Set")) {
                          lcv++;
 			 String def = (String) w.elementAt(1);
-			 def = DataUtils.replaceContextPath(def, basePath);
-			 def = DataUtils.replaceInnerEvalExpressions(def, from_vec, to_vec);
+			 def = JSPUtils.replaceContextPath(def, basePath);
+			 def = JSPUtils.replaceInnerEvalExpressions(def, from_vec, to_vec);
 			 
 			 String rowColor = (lcv%2 == 0) ? "dataRowDark" : "dataRowLight";
 		    %>

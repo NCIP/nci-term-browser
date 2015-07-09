@@ -15,7 +15,7 @@ ValueSetDefinition selected_vsd = (ValueSetDefinition) request.getSession().getA
 
 if (vsdUri != null && vsdUri.compareTo("null") != 0 && vsdUri.indexOf("|") != -1) {
 
-    Vector w = DataUtils.parseData(vsdUri);
+    Vector w = StringUtils.parseData(vsdUri);
     
     for (int k=0; k<w.size(); k++) {
        String t = (String) w.elementAt(k);
@@ -35,7 +35,7 @@ if (vsdUri != null && vsdUri.compareTo("null") != 0 && vsdUri.indexOf("|") != -1
 } else if (vsdUri != null) {
     String metadata = DataUtils.getValueSetDefinitionMetadata(vsdUri);
     
-    Vector metadata_vec = DataUtils.parseData(metadata);
+    Vector metadata_vec = StringUtils.parseData(metadata);
 
     vsd_name = (String) metadata_vec.elementAt(0);
     request.getSession().setAttribute("vsd_uri", vsdUri); 

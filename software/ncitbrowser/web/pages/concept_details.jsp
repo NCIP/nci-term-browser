@@ -31,32 +31,64 @@
 <%@ page import="gov.nih.nci.evs.browser.common.Constants"%>
 <%@ page import="org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods"%>
 <%@ page import="org.LexGrid.LexBIG.Extensions.Generic.MappingExtension"%>
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService"%>
+
 
 <%@ page import="gov.nih.nci.evs.browser.properties.*"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.*"%>
+<%@ page import="gov.nih.nci.evs.browser.common.*"%>
+
 <%@ page contentType="text/html;charset=UTF-8"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
 <%
-ConceptDetails conceptDetails = new ConceptDetails();
+JSPUtils.JSPHeaderInfo prop_info = new JSPUtils.JSPHeaderInfo(request);
+String prop_dictionary = prop_info.dictionary;
+
+if (prop_dictionary != null) {
+	prop_dictionary = StringUtils.replaceAll(prop_dictionary, "&#40;", "(");
+	prop_dictionary = StringUtils.replaceAll(prop_dictionary, "&#41;", ")");
+}
+
+
+String prop_version = prop_info.version;
+
+LexBIGService lbs = RemoteServerUtil.createLexBIGService();
+DataUtils dataUtils = new DataUtils();
+String cs_name = dataUtils.getCSName(prop_dictionary);
+PropertyData propertyData = new PropertyData(lbs, cs_name, prop_version); 
+ConceptDetails conceptDetails = propertyData.getConceptDetails();
+HistoryUtils historyUtils = propertyData.getHistoryUtils();
+
+
+List namespace_list = null;
 
         response.setContentType("text/html;charset=utf-8");
 
-	JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
+	//JSPUtils.JSPHeaderInfo info = new JSPUtils.JSPHeaderInfo(request);
 	
-	String dictionary = info.dictionary;
+	String dictionary = prop_dictionary;
 
-String short_name = conceptDetails.getCSName(dictionary); 	
+String short_name = cs_name; 	
 	
 	if (dictionary != null) {
-		dictionary = conceptDetails.replaceAll(dictionary, "&#40;", "(");
-		dictionary = conceptDetails.replaceAll(dictionary, "&#41;", ")");
-		dictionary = conceptDetails.getCSName(dictionary);
+		//dictionary = StringUtils.replaceAll(dictionary, "&#40;", "(");
+		//dictionary = StringUtils.replaceAll(dictionary, "&#41;", ")");
+		dictionary = dataUtils.getCSName(dictionary);
+		
+		Boolean cs_available = DataUtils.isCodingSchemeAvailable(dictionary);
+		if (cs_available == null || !cs_available.equals(Boolean.TRUE)) {
+		    String error_msg = "WARNING: " + dictionary + Constants.CODING_SCHEME_NOT_AVAILABLE;
+		    request.getSession().setAttribute("error_msg", error_msg);
+		    String redirectURL = request.getContextPath() + "/pages/coding_scheme_unavailable.jsf";
+		    response.sendRedirect(redirectURL);
+
+		}  		
 	}
-	String deprecatedVersion = info.version_deprecated;
-	String version = info.version;
+	String deprecatedVersion = prop_info.version_deprecated;
+	String version = prop_info.version;
 	
 	//AppScan KLO 051512
 	if (version == null) {
@@ -65,7 +97,7 @@ String short_name = conceptDetails.getCSName(dictionary);
 	
 	request.setAttribute("version", version);
 	// AppScan
-	if (dictionary != null && (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0)) {
+	if (DataUtils.isNCIT(dictionary)) {
 %>
 <title>NCI Thesaurus</title>
 <%
@@ -82,7 +114,7 @@ String short_name = conceptDetails.getCSName(dictionary);
         String ncbo_id = null;
         String is_virtual = "true";
         String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
-        boolean view_graph = conceptDetails.visualizationWidgetSupported(dictionary);
+        boolean view_graph = dataUtils.visualizationWidgetSupported(dictionary);
 
 %>
 
@@ -125,121 +157,134 @@ String short_name = conceptDetails.getCSName(dictionary);
          <!-- Main box -->
          <div id="main-area_960">         
             <%
-                  String code = null;
-                  String ns = null;
-            		String type = null;
-            		String singleton = (String) request.getAttribute("singleton");
-            		
-            		boolean code_from_cart_action = false;
-            		
-            		code = (String) request.getAttribute("code_from_cart_action");
-            		 
-            		 
-            		if (code == null) {
-           		    code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
-           		} else {
-           		    request.removeAttribute("code_from_cart_action");
-           		    code_from_cart_action = true;
-           		}
-           		
-           		ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
-            		
-            		//KLO 
-            		code = HTTPUtils.cleanXSS(code);
-            		
-            		if (code == null) {
-            			Entity con = (Entity) request.getSession().getAttribute("concept");
-            			if (con != null) {
-            				code = con.getEntityCode();
-            				request.getSession().setAttribute("code", code);
-            				
-             				ns = con.getEntityCodeNamespace();
-            				request.getSession().setAttribute("ns", ns);
-            				
-            				
-            			} else {
-            				code = (String) request.getSession().getAttribute("code");
-            				ns = (String) request.getSession().getAttribute("ns");
-            			}
-            		}
-           		
-            		
-            		String active_code = (String) request.getSession().getAttribute("active_code");
-            		
-            		
-            		if (active_code == null) {
-            			request.getSession().setAttribute("active_code", code);
-            		} else {
-            			if (active_code.compareTo(code) != 0) {
-            				request.getSession().removeAttribute(
-            						"RelationshipHashMap");
-            				request.getSession().setAttribute("active_code", code);
-            			}
-            		}
-            		
-            		Boolean new_search = null;
-            		Object new_search_obj = request.getSession().getAttribute("new_search");
-                  
-            		if (new_search_obj != null) {
-            			new_search = (Boolean) new_search_obj;
-            			if (new_search.equals(Boolean.TRUE)) {
-            			    type = "properties";
-            			    request.getSession().setAttribute("new_search",Boolean.FALSE);
-            			    String codeFromParameter = code;
-            			    code = (String) request.getSession().getAttribute("code");
-                                    if (code == null) {
-                                        code = codeFromParameter;
-                                    }
-            		        }
-            		}
-            		
-           		
-            		if (type == null) {
-            			type = HTTPUtils.cleanXSS((String) request.getParameter("type"));
-                                if (type == null) type = (String) request.getAttribute("type");
-            			if (type == null) {
-            				type = "properties";
-            			} else if (type.compareTo("properties") != 0
-            					&& type.compareTo("relationship") != 0
-            					&& type.compareTo("synonym") != 0
-            					&& type.compareTo("mapping") != 0
-            					&& type.compareTo("all") != 0) {
-            				type = "properties";
-            			}
-            		}
-                  
-            		String cd_dictionary = conceptDetails.getFormalName(dictionary);
-            		String term_suggestion_application_url = conceptDetails
-            				.getMetadataValue(cd_dictionary,"term_suggestion_application_url");
-            		String name = "";
-            		Entity c = null;
-            		String ltag = null;
+                String code = null;
+                String ns = null;
+		String type = null;
+		Entity c = null;
 
-            		if (JSPUtils.isNull(dictionary)) {
-            			name = "Error: Invalid dictionary - " + dictionary + ".";
-            		} else if (JSPUtils.isNull(version)) {
-            			name = "Error: Invalid version - " + version + ".";
-            		} else {
-            		        boolean use_ns = true;
-            		        if (ConceptDetails.isNullOrBlank(ns)) {
-            		        //if (ns == null || ns.compareTo("null") == 0 || ns.compareTo("") == 0) {
-            		            use_ns = false;
-            		        }
-            		        
-           			c = conceptDetails.getConceptByCode(dictionary, version, code, ns, use_ns);
-         			
-            			if (c != null) {
-            				request.getSession().setAttribute("concept", c);
-            				request.getSession().setAttribute("code", code);
-            				name = c.getEntityDescription().getContent();
-            			} else {
-            				//name = "The server encountered an internal error that prevented it from fulfilling this request.";
-            				name = "ERROR: Invalid code - " + code + ".";
-            			}
-            		}
-          		
+		String singleton = (String) request.getAttribute("singleton");
+
+		boolean code_from_cart_action = false;
+
+		code = (String) request.getAttribute("code_from_cart_action");
+
+		if (code == null) {
+		    code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
+
+		} else {
+		    request.removeAttribute("code_from_cart_action");
+		    code_from_cart_action = true;
+		}
+		ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
+		
+
+		if (StringUtils.isNullOrBlank(code)) {
+
+		} else {
+
+			 Vector u2 = StringUtils.parseData(code, ",");
+			 if (u2.size() == 2) {
+			     code = (String)u2.elementAt(0);
+			     ns = (String)u2.elementAt(1);
+			 }
+		}
+		//KLO 
+		code = HTTPUtils.cleanXSS(code);
+
+		if (code == null) {
+			Entity con = (Entity) request.getSession().getAttribute("concept");
+			if (con != null) {
+				code = con.getEntityCode();
+				ns = con.getEntityCodeNamespace();
+
+
+			} else {
+				code = (String) request.getSession().getAttribute("code");
+				ns = (String) request.getSession().getAttribute("ns");
+			}
+		}
+
+		request.getSession().setAttribute("code", code);	
+		request.getSession().setAttribute("ns", ns);
+
+
+		String active_code = (String) request.getSession().getAttribute("active_code");
+
+
+		if (active_code == null) {
+			request.getSession().setAttribute("active_code", code);
+		} else {
+			if (active_code.compareTo(code) != 0) {
+				request.getSession().removeAttribute(
+						"RelationshipHashMap");
+				request.getSession().setAttribute("active_code", code);
+			}
+		}
+
+		Boolean new_search = null;
+		Object new_search_obj = request.getSession().getAttribute("new_search");
+
+		if (new_search_obj != null) {
+			new_search = (Boolean) new_search_obj;
+			if (new_search.equals(Boolean.TRUE)) {
+			    type = "properties";
+			    request.getSession().setAttribute("new_search",Boolean.FALSE);
+			    String codeFromParameter = code;
+			    code = (String) request.getSession().getAttribute("code");
+			    if (code == null) {
+				code = codeFromParameter;
+			    }
+			}
+		}
+
+
+		if (type == null) {
+			type = HTTPUtils.cleanXSS((String) request.getParameter("type"));
+			if (type == null) type = (String) request.getAttribute("type");
+			if (type == null) {
+				type = "properties";
+			} else if (type.compareTo("properties") != 0
+					&& type.compareTo("relationship") != 0
+					&& type.compareTo("synonym") != 0
+					&& type.compareTo("mapping") != 0
+					&& type.compareTo("all") != 0) {
+				type = "properties";
+			}
+		}
+
+		String cd_dictionary = dataUtils.getFormalName(dictionary);
+		String term_suggestion_application_url = dataUtils
+				.getMetadataValue(cd_dictionary,"term_suggestion_application_url");
+		String name = "";
+		String ltag = null;
+
+		if (JSPUtils.isNull(dictionary)) {
+			name = "Error: Invalid dictionary - " + dictionary + ".";
+		} else if (JSPUtils.isNull(version)) {
+			name = "Error: Invalid version - " + version + ".";
+		} else {
+            		namespace_list = conceptDetails.getDistinctNamespacesOfCode(
+            				dictionary, version, code);		
+		
+			if (StringUtils.isNullOrBlank(ns) || namespace_list.size() == 1) {
+			    c = conceptDetails.getConceptByCode(dictionary, version, code);
+			} else {
+			    c = conceptDetails.getConceptByCode(dictionary, version, code, ns, true);
+			}
+
+			if (c != null) {
+				request.getSession().setAttribute("concept", c);
+				request.getSession().setAttribute("code", code);
+				request.getSession().setAttribute("ns", ns);
+				name = c.getEntityDescription().getContent();
+			} else {
+				//name = "The server encountered an internal error that prevented it from fulfilling this request.";
+				name = "ERROR: Invalid code - " + code + ".";
+			}
+		}
+
             		
-            		if (dictionary != null && (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0)) {
+               if (DataUtils.isNCIT(dictionary)) {
                %>
                <%@ include file="/pages/templates/content-header-other.jsp"%>
                <%
@@ -249,10 +294,10 @@ String short_name = conceptDetails.getCSName(dictionary);
                <%@ include file="/pages/templates/content-header-other.jsp"%>
                <%
                	}
-            		List namespace_list = conceptDetails.getDistinctNamespacesOfCode(
-            				dictionary, version, code);
+
+            				
             		String tg_dictionary_0 = dictionary;
-            		String tg_dictionary = conceptDetails.replaceAll(dictionary, " ", "%20");
+            		String tg_dictionary = StringUtils.replaceAll(dictionary, " ", "%20");
             		if (c != null) {
             			request.getSession().setAttribute("type", type);
             			request.getSession().setAttribute("singleton", "false");
@@ -270,8 +315,8 @@ String short_name = conceptDetails.getCSName(dictionary);
                         <td align="right" width="75%">
                            <%
                            	Boolean[] isPipeDisplayed = new Boolean[] { Boolean.FALSE };
-                           	boolean tree_access2 = !conceptDetails.get_vocabulariesWithoutTreeAccessHashSet().contains(dictionary);
-                    		boolean typeLink_isMapping2 = conceptDetails.isMapping(dictionary, null);
+                           	boolean tree_access2 = !dataUtils.get_vocabulariesWithoutTreeAccessHashSet().contains(dictionary);
+                    		boolean typeLink_isMapping2 = dataUtils.isMapping(dictionary, null);
                            	if (tree_access2 && !typeLink_isMapping2) {
                            	
                            	
@@ -289,7 +334,7 @@ String short_name = conceptDetails.getCSName(dictionary);
  } else {
  %>
        
-                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ns=<%=ns%>&ontology_display_name=<%=short_name%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
+                            <a href="#" onClick="javascript:window.open('<%=request.getContextPath()%>/ajax?action=search_hierarchy&ontology_node_id=<%=code%>&ontology_node_ns=<%=ns%>&ontology_display_name=<%=short_name%>&version=<%=version%>', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
 
  
  <%
@@ -302,7 +347,7 @@ String short_name = conceptDetails.getCSName(dictionary);
                       }
                       
                       
-                      boolean historyAccess = HistoryUtils.isHistoryServiceAvailable(dictionary);
+                      boolean historyAccess = historyUtils.isHistoryServiceAvailable(dictionary);
                       if (historyAccess) {
              %>
                           <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
@@ -367,15 +412,15 @@ String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
 
 
 // Floating Point Value Denial of Service threats fix:
-        if (!conceptDetails.isNull(b) && b.compareTo("0") != 0) {
+        if (!StringUtils.isNull(b) && b.compareTo("0") != 0) {
             b = "1";
         }
         
-        if (!conceptDetails.isNull(n) && !conceptDetails.isInteger(n)) {
+        if (!StringUtils.isNull(n) && !StringUtils.isInteger(n)) {
             n = "1";
         }
 
-        if (!conceptDetails.isNull(m) && m.compareTo("0") != 0) {
+        if (!StringUtils.isNull(m) && m.compareTo("0") != 0) {
             m = "1";
         }
         
@@ -383,15 +428,15 @@ String vse = HTTPUtils.cleanXSS((String) request.getParameter("vse"));
 
 String key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 
-if (!conceptDetails.isNull(vse)) {
+if (!StringUtils.isNull(vse)) {
 %>
     <input type="hidden" id="vse" name="vse" value="<%=vse%>" />
 <%
 }
 
 
-if (!conceptDetails.isNull(b)) {  
-    if (conceptDetails.isNull(n)) {
+if (!StringUtils.isNull(b)) {  
+    if (StringUtils.isNull(n)) {
         n = "1";
     }
     
@@ -406,7 +451,7 @@ if (!conceptDetails.isNull(b)) {
              <input type="hidden" id="key" name="key" value="<%=key%>" />
              
 <%  
-    if (!conceptDetails.isNull(m)) {
+    if (!StringUtils.isNull(m)) {
         request.getSession().setAttribute("m", m);
     %>
         <input type="hidden" id="m" name="m" value="<%=m%>" />
@@ -481,14 +526,15 @@ if (!conceptDetails.isNull(b)) {
                <hr>
                <%
                	request.getSession().setAttribute("concept", c);
-               			request.getSession().setAttribute("code", code);
-               			request.setAttribute("version", version);
+		request.getSession().setAttribute("code", code);
+		request.getSession().setAttribute("ns", ns);
+		request.setAttribute("version", version);
                %>
                <%@ include file="/pages/templates/typeLinks.jsp"%>
                <div class="tabTableContentContainer">
                   <%
                   	if (type != null && type.compareTo("all") == 0) {
-              				boolean isMappingCD = conceptDetails.isMapping(dictionary,version);
+              				boolean isMappingCD = dataUtils.isMapping(dictionary,version);
                   %>
                   <h1 class="textsubtitle-blue">Table of Contents</h1>
                   <ul>

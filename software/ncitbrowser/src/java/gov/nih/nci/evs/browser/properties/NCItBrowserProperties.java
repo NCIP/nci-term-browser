@@ -493,6 +493,14 @@ public class NCItBrowserProperties {
         return _ncbo_widget_info;
     }
 
+    public static String getMAIL_SMTP_SERVER() {
+        return _mail_smtp_server;
+    }
+
+    public static String getNCICB_CONTACT_URL() {
+        return _ncicb_contact_url;
+    }
+
     public static int getPaginationTimeOut() {
         return _pagination_time_out;
     }

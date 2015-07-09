@@ -66,6 +66,8 @@ public class ValueSetDefinitionConfig {
     public  static HashMap valueSetConfigHashMap = null;
     private static String vsd_config_file_dir = null;
     private static String vsd_config_file = null;
+    private static HashSet uriHset = null;
+    private static HashMap code2URIHashMap = null;
     private static Logger _logger =
         Logger.getLogger(ValueSetDefinitionConfig.class);
 
@@ -132,9 +134,20 @@ public class ValueSetDefinitionConfig {
         return data_vec;
     }
 
+    public static boolean isValueSetHeaderConcept(String code) {
+		if (code == null) return false;
+		return uriHset.contains(code);
+	}
+
+    public static String getValueSetURI(String code) {
+		if (code == null) return null;
+		return (String) code2URIHashMap.get(code);
+	}
 
     public static HashMap readValueSetDefinitionConfigFile(String file) {
 		HashMap hmap = new HashMap();
+		uriHset = new HashSet();
+		code2URIHashMap = new HashMap();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			while (in.ready()) {
@@ -144,6 +157,17 @@ public class ValueSetDefinitionConfig {
 			    String uri = (String) v.elementAt(1);
 			    String reportURI = (String) v.elementAt(2);
 			    String extractionRule = (String) v.elementAt(3);
+
+				if (uri.indexOf("valueset") != -1) {
+					int n = uri.lastIndexOf("/");
+					if (n != -1) {
+						String code = uri.substring(n+1, uri.length());
+						if (!uriHset.contains(code)) {
+							uriHset.add(code);
+							code2URIHashMap.put(code, uri);
+						}
+					}
+				}
 
 			    if (reportURI != null) {
 					reportURI = reportURI.replaceAll("%20", " ");
@@ -166,30 +190,29 @@ public class ValueSetDefinitionConfig {
 	}
 
 	public static ValueSetConfig getValueSetConfig(String uri) {
-		long ms = System.currentTimeMillis();
-		vsd_config_file = System.getProperty(Constants.VALUE_SET_REPORT_CONFIG);
-
-		if (vsd_config_file == null) {
-			System.out.println("ERROR: Unable to find system property " + Constants.VALUE_SET_REPORT_CONFIG);
-		} else {
-			vsd_config_file_dir = new File(vsd_config_file).getParent();
-			valueSetConfigHashMap = readValueSetDefinitionConfigFile(vsd_config_file);
-			System.out.println("ValueSetDefinitionConfig initialization run time (ms): " + (System.currentTimeMillis() - ms));
-		}
+		if (valueSetConfigHashMap == null) {
+			long ms = System.currentTimeMillis();
+			vsd_config_file = System.getProperty(Constants.VALUE_SET_REPORT_CONFIG);
+			if (vsd_config_file == null) {
+				System.out.println("ERROR: Unable to find system property " + Constants.VALUE_SET_REPORT_CONFIG);
+			} else {
+				vsd_config_file_dir = new File(vsd_config_file).getParent();
+				valueSetConfigHashMap = readValueSetDefinitionConfigFile(vsd_config_file);
+				System.out.println("ValueSetDefinitionConfig initialization run time (ms): " + (System.currentTimeMillis() - ms));
+			}
+	    }
 
 		if (valueSetConfigHashMap.containsKey(uri)) {
 			return (ValueSetConfig) valueSetConfigHashMap.get(uri);
 		} else if (valueSetConfigHashMap.containsKey(uri.toLowerCase())) {
 			return (ValueSetConfig) valueSetConfigHashMap.get(uri.toLowerCase());
 		} else { // backward compatibility
-
 			int n = uri.indexOf(Constants.VALUE_SET_URI_PREFIX_OLD);
 			if (n != -1) {
 				n = uri.lastIndexOf(":");
 				uri = Constants.VALUE_SET_URI_PREFIX + uri.substring(n+1, uri.length());
 				return (ValueSetConfig) valueSetConfigHashMap.get(uri);
 			}
-
 		}
 		return null;
 	}

@@ -12,6 +12,7 @@
 <%@ page import="gov.nih.nci.evs.browser.bean.IteratorBean" %>
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference" %>
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService" %>
 <%@ page import="org.apache.log4j.*" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
@@ -395,8 +396,8 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
                 reindex_required = true;
             }
             if (rcr.getEntityDescription() == null) {
-            
-	         Entity entity = SearchUtils.getConceptByCode(rcr.getCodeNamespace(),
+                 LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+	         Entity entity = new SearchUtils(lbSvc).getConceptByCode(rcr.getCodeNamespace(),
 		   null, null, rcr.getConceptCode());
 		 if (entity != null && entity.getEntityDescription() != null) { 
 	         	name = entity.getEntityDescription().getContent(); 
@@ -524,7 +525,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           <td class="dataCellText" scope="row">
           <%
-          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
+          if (DataUtils.isNCIT(vocabulary_name)) {
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>"><%=name%></a>
           <%
@@ -534,9 +535,18 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=DataUtils.encodeTerm(name)%></a>
           <%
           } else {
+               if (PropertyData.isConceptEntity(rcr)) {
+          
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>
           <%
+               } else {
+               
+          %>
+	          <%=DataUtils.encodeTerm(name)%>
+	  <%               
+               
+               }
           }
           %>
           </td>
@@ -551,7 +561,7 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           <td class="dataCellText" scope="row">
           <%
-          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
+          if (DataUtils.isNCIT(vocabulary_name)) {
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
           <%
@@ -561,9 +571,16 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
                <a href="javascript:openQuickLinkSite('<%=meta_url%>')"><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
           <%
           } else {
+               if (PropertyData.isConceptEntity(rcr)) {
+
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_name_encoded%><%=version_parameter%>&code=<%=code%>&ns=<%=ns%>&key=<%=itr_key%>&m=1&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
           <%
+               } else {
+          %>
+	          <%=DataUtils.encodeTerm(name)%>
+	  <%
+	       }          
           }
           %>
           </td>

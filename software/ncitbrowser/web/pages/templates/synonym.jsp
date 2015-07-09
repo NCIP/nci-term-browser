@@ -1,7 +1,7 @@
 <%
-  String source_header = MetadataUtils.getMetadataValue(
+  String source_header = DataUtils.getMetadataValue(
       dictionary, null, null, "source_header");
-  String term_type_header = MetadataUtils.getMetadataValue(
+  String term_type_header = DataUtils.getMetadataValue(
       dictionary, null, null, "term_type_header");
 
 
@@ -65,7 +65,7 @@ if (type != null && type.compareTo("all") == 0) {
             if (!hset.contains(s)) {
                     hset.add(s);
                     n++;
-        Vector synonym_data = DataUtils.parseData(s, "|");
+        Vector synonym_data = StringUtils.parseData(s, "|");
         String term_name = (String) synonym_data.elementAt(0);
         //term_name = term_name.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         String term_type = (String) synonym_data.elementAt(1);

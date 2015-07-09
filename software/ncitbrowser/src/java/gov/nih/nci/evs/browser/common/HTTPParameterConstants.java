@@ -46,6 +46,7 @@ public class HTTPParameterConstants {
        "ontology_display_name",
        "ontology_list_str",
        "ontology_node_id",
+       "ontology_node_ns",
        "ontology_version",
        "opt",
        "page_number",

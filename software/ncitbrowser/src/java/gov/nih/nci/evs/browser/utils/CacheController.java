@@ -9,11 +9,20 @@ import org.LexGrid.commonTypes.*;
 import org.LexGrid.concepts.*;
 
 import org.json.*;
+
+/*
 import org.lexevs.tree.model.*;
 import org.lexevs.tree.service.*;
+*/
+import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverter;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverterFactory;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.model.*;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.service.*;
+
 
 import gov.nih.nci.evs.browser.properties.*;
 import gov.nih.nci.evs.browser.common.*;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.apache.log4j.*;
 
 
@@ -84,6 +93,8 @@ public class CacheController {
     public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
     public static final String CHILDREN_NODES = "children_nodes";
 
+    public static final String ONTOLOGY_NODE_NS = "ontology_node_ns";
+
     private static CacheController _instance = null;
     private static CacheManager _cacheManager = null;
     private static Cache _cache = null;
@@ -99,7 +110,7 @@ public class CacheController {
         _cache = _cacheManager.getCache(cacheName);
     }
 
-/*
+
     public CacheController(String cacheName) {
         if (!_cacheManager.cacheExists(cacheName)) {
             _cacheManager.addCache(cacheName);
@@ -109,6 +120,7 @@ public class CacheController {
         _cache = _cacheManager.getCache(cacheName);
     }
 
+
     public static CacheController getInstance() {
         synchronized (CacheController.class) {
             if (_instance == null) {
@@ -117,11 +129,11 @@ public class CacheController {
         }
         return _instance;
     }
-*/
+/*
     public static CacheController getInstance() {
 		return new CacheController();
 	}
-
+*/
 
 
     private static CacheManager getCacheManager() {
@@ -168,15 +180,15 @@ public class CacheController {
     }
 
     public JSONArray getSubconcepts(String scheme, String version, String code) {
-        return getSubconcepts(scheme, version, code, true);
+        return getSubconcepts(scheme, version, code, null, true);
+    }
+
+    public JSONArray getSubconcepts(String scheme, String version, String code, String ns) {
+        return getSubconcepts(scheme, version, code, ns, true);
     }
 
 
-
-
-    public JSONArray getSubconcepts(String scheme, String version, String code,
-        boolean fromCache) {
-
+    public JSONArray getSubconcepts(String scheme, String version, String code, String ns, boolean fromCache) {
         if (scheme == null) {
             scheme = Constants.CODING_SCHEME_NAME;
 			String retval = DataUtils.getCodingSchemeName(scheme);
@@ -186,33 +198,26 @@ public class CacheController {
 			}
 		}
 
+        String parent_code = null;
+		String focus_code = null;
         HashMap map = null;
         JSONArray nodeArray = null;
-        ViewInHierarchyUtils util = new ViewInHierarchyUtils();
-
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        ViewInHierarchyUtils util = new ViewInHierarchyUtils(lbSvc);
         // getRemainingSubconcepts
 		if (code.indexOf("_dot_") != -1) {
-
-			code = util.getFocusCode(code);
+			parent_code = util.getParentCode(code);
+			focus_code = util.getFocusCode(code);
 			boolean from_root = false;
 			if (code.indexOf("root_") != -1) {
 				from_root = true;
 			}
-
-			map = util.getRemainingSubconcepts(scheme, version, code, from_root);
-/*
-			if (map == null) {
-				return null;
-			}
-*/
+			map = util.getRemainingSubconcepts(scheme, version, parent_code, ns, from_root, focus_code);
 			nodeArray = hashMap2JSONArray(map);
 			return nodeArray;
 		}
 
-
-
-        String key = scheme + "$" + version + "$" + code;
-
+        String key = scheme + "$" + version + "$" + code + "$" + ns;
         if (fromCache) {
             Element element = _cache.get(key);
             if (element != null) {
@@ -221,10 +226,8 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubconcepts " + scheme + " (code: " + code + ")");
-
-            map = new TreeUtils().getSubconcepts(scheme, version, code);
-
-            //map = util.getSubconcepts(scheme, version, code);
+            //map = new TreeUtils(lbSvc).getSubconcepts(scheme, version, code, ns);
+            map = util.getSubconcepts(scheme, version, code, ns);
 
             nodeArray = hashMap2JSONArray(map);
 
@@ -233,7 +236,7 @@ public class CacheController {
                     Element element = new Element(key, nodeArray);
                     _cache.put(element);
                 } catch (Exception ex) {
-
+                    ex.printStackTrace();
                 }
             }
         } else {
@@ -269,7 +272,7 @@ public class CacheController {
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
 
-            map = ValueSetHierarchy.getSubValueSets(scheme, code);
+            map = DataUtils.getValueSetHierarchy().getSubValueSets(scheme, code);
             nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -299,7 +302,7 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            map = ValueSetHierarchy.getSubValueSets(code);
+            map = DataUtils.getValueSetHierarchy().getSubValueSets(code);
             nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -330,7 +333,7 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            map = ValueSetHierarchy.getSubValueSets(null, code);
+            map = DataUtils.getValueSetHierarchy().getSubValueSets(null, code);
             nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -376,7 +379,7 @@ public class CacheController {
         if (nodesArray == null) {
             _logger.debug("Not in cache -- calling ValueSetHierarchy.getRootValueSets " + scheme);
             try {
-                HashMap hmap = ValueSetHierarchy.getRootValueSets(scheme);
+                HashMap hmap = DataUtils.getValueSetHierarchy().getRootValueSets(scheme);
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
 
@@ -443,7 +446,7 @@ public class CacheController {
 
         if (nodesArray == null) {
             try {
-                HashMap hmap = ValueSetHierarchy.getRootValueSets();
+                HashMap hmap = DataUtils.getValueSetHierarchy().getRootValueSets();
 
                 //ValueSetHierarchy.moveNCItToTop(hmap);
 
@@ -512,7 +515,7 @@ public class CacheController {
 
         if (nodesArray == null) {
             try {
-                HashMap hmap = ValueSetHierarchy.build_src_vs_tree();
+                HashMap hmap = DataUtils.getValueSetHierarchy().build_src_vs_tree();
 
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
@@ -592,7 +595,8 @@ public class CacheController {
             try {
                 // list = new DataUtils().getHierarchyRoots(scheme, version,
                 // null);
-                list = new TreeUtils().getHierarchyRoots(scheme, version, null);
+                LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+                list = new TreeUtils(lbSvc).getHierarchyRoots(scheme, version, null);
                 nodeArray = list2JSONArray(scheme, list);
 
                 if (fromCache) {
@@ -660,9 +664,10 @@ public class CacheController {
 
                     int childCount = 1;
 
+                    LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
                     ArrayList sub_list =
-                        TreeUtils
-                            .getSubconceptNamesAndCodes(scheme, null, code);
+                        new TreeUtils(lbSvc).getSubconceptNamesAndCodes(scheme, null, code);
                     if (sub_list.size() == 0)
                         childCount = 0;
 
@@ -735,7 +740,8 @@ public class CacheController {
             _logger.debug("Not in cache -- calling expand_src_vs_tree_exclude_src_nodes " + node_id);
             try {
 
-				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
+				//HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
+				HashMap hmap = DataUtils.getValueSetHierarchy().expand_src_vs_tree_exclude_src_nodes(node_id);
 
 				nodesArray = hashMap2JSONArray(hmap);
                 element = new Element(key, nodesArray);
@@ -752,7 +758,6 @@ public class CacheController {
 
 
     public JSONArray hashMap2JSONArray(HashMap hmap) {
-
         //JSONObject json = new JSONObject();
         JSONArray nodesArray = null;
         try {
@@ -770,6 +775,7 @@ public class CacheController {
                     // printTree(childItem, focusCode, depth + 1);
                     JSONObject nodeObject = new JSONObject();
                     nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                    nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
                     nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                     int knt = 0;
                     if (childItem._expandable) {
@@ -830,7 +836,8 @@ public class CacheController {
         if (maxLevel == -1) {
             rootsArray = getRootConcepts(ontology_display_name, version, false);
             try {
-                TreeUtils util = new TreeUtils();
+                LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+                TreeUtils util = new TreeUtils(lbSvc);
                 HashMap hmap =
                     util.getTreePathData(ontology_display_name, null, null,
                         node_id);
@@ -853,7 +860,8 @@ public class CacheController {
             return rootsArray;
         } else {
             try {
-                TreeUtils util = new TreeUtils();
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+                TreeUtils util = new TreeUtils(lbSvc);
 
                 HashMap hmap =
                     util.getTreePathData(ontology_display_name, null, null,
@@ -970,6 +978,7 @@ public class CacheController {
                     JSONObject nodeObject = new JSONObject();
                     try {
                         nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                        nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
                         nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                         nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                         nodeObject.put(CHILDREN_NODES, getNodesArray(node_id,
@@ -994,6 +1003,7 @@ public class CacheController {
                         JSONObject nodeObject = new JSONObject();
                         try {
                             nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                            nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
                             nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                             nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                             nodeObject.put(CHILDREN_NODES, getNodesArray(
@@ -1026,6 +1036,7 @@ public class CacheController {
                         nodeObject = new JSONObject();
                         try {
                             nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                            nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
                             nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                             nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                             nodeObject.put(CHILDREN_NODES, getNodesArray(
@@ -1070,6 +1081,7 @@ public class CacheController {
 				JSONObject nodeObject = new JSONObject();
 				try {
 					nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+					nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
 					nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
 					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
 					nodeObject.put(CHILDREN_NODES, toJSONArray(childItem));
@@ -1202,20 +1214,11 @@ public class CacheController {
     }
 
 
-
-
-
     private static String getTreeKey(String codingScheme, String version, String code) {
         return String.valueOf("Tree".hashCode() + codingScheme.hashCode()
             + version.hashCode()
             + code.hashCode());
     }
-
-
-
-
-
-
 
 
     private JSONArray getNodesArray(TreeItem ti) {
@@ -1233,6 +1236,7 @@ public class CacheController {
 				JSONObject nodeObject = new JSONObject();
 				try {
 					nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+					nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
 					nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
 					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
 					nodeObject.put(CHILDREN_NODES, getNodesArray(childItem));
@@ -1273,7 +1277,8 @@ public class CacheController {
 		_logger.debug("Not in cache -- calling getSubValueSets ");
 
 		//map = ValueSetHierarchy.getSourceValueSetTree(scheme, version);
-		map = ValueSetHierarchy.getSourceValueSetTree();
+		//map = ValueSetHierarchy.getSourceValueSetTree();
+		map = DataUtils.getValueSetHierarchy().getSourceValueSetTree();
 
 		TreeItem root = (TreeItem) map.get("<Root>");
 		nodeArray = toJSONArray(root);
@@ -1314,7 +1319,9 @@ public class CacheController {
         HashMap map = null;
 		_logger.debug("Not in cache -- calling getCodingSchemeValueSetTree ");
 
-		map = ValueSetHierarchy.getCodingSchemeValueSetTree(scheme, version);
+		//map = ValueSetHierarchy.getCodingSchemeValueSetTree(scheme, version);
+		map = DataUtils.getValueSetHierarchy().getCodingSchemeValueSetTree(scheme, version);
+
 		TreeItem root = (TreeItem) map.get("<Root>");
 		nodeArray = toJSONArray(root);
 

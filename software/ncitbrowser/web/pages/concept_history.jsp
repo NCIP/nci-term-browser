@@ -1,9 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page import="java.util.Vector" %>
+<%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.DataUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HTTPUtils" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.HistoryUtils" %>
+
+<%@ page import="gov.nih.nci.evs.browser.utils.RemoteServerUtil" %>
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService"%>
+
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%
@@ -20,6 +25,9 @@
   </head>
   <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
   <%
+    LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+    HistoryUtils historyUtils = new HistoryUtils(lbSvc);
+    
     String code = HTTPUtils.cleanXSS((String) request.getParameter("code"));
     String dictionary = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
     String vers = null;
@@ -49,9 +57,9 @@
       </div>
   <%
     } else {
-      Vector rows = HistoryUtils.getEditActions(dictionary, vers, ltag, code);
+      Vector rows = historyUtils.getEditActions(dictionary, vers, ltag, code);
       String concept_name = concept.getEntityDescription().getContent();
-      Vector headers = HistoryUtils.getTableHeader();
+      Vector headers = historyUtils.getTableHeader();
   %>
     <div id="popupContainer">
       <!-- nci popup banner -->
@@ -106,7 +114,7 @@
                 <tr class="<%=rowColor%>">
             <%
                 String row = (String) rows.elementAt(i);
-                Vector cols = DataUtils.parseData(row, "|");
+                Vector cols = StringUtils.parseData(row, "|");
                 for (int j=0; j<cols.size(); ++j) {
                   Object cell = cols.elementAt(j);
                   String iFormat = "", iFormatEnd = "";

@@ -197,6 +197,20 @@ _logger.debug("mapping_search_results.jsp version: " + mapping_version);
 	    <a name="evs-content" id="evs-content"></a>
 
 
+                              <table class="textbody" border="0" width="100%">
+                                 <tr >
+                                    <td align="left">&nbsp;&nbsp;</td>
+                                    <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td align="right">                               
+      <a href="/ncitbrowser/ajax?action=export_mapping_search&dictionary=<%=mapping_dictionary%>&version=<%=mapping_version%>"  title="Export mapping search results to CSV">
+      Export CSV
+      </a>  
+      </td>
+                                 </tr>
+                              </table>
+
+
+
 <%
 String mapping_results_msg = (String) request.getSession().getAttribute("message");
 boolean bool_val;

@@ -2,7 +2,7 @@ package gov.nih.nci.evs.browser.bean;
 
 import gov.nih.nci.evs.browser.utils.RemoteServerUtil;
 import gov.nih.nci.evs.browser.utils.DataUtils;
-import gov.nih.nci.evs.browser.utils.SearchCart;
+//import gov.nih.nci.evs.browser.utils.SearchCart;
 import gov.nih.nci.evs.browser.utils.SortUtils;
 
 import java.io.InputStream;
@@ -48,6 +48,27 @@ import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
 import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import org.lexgrid.valuesets.impl.LexEVSValueSetDefinitionServicesImpl;
 
+import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeRenderingList;
+import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
+import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
+import org.LexGrid.LexBIG.Exceptions.LBException;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.Utility.ConvenienceMethods;
+import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
+import org.LexGrid.codingSchemes.CodingScheme;
+import org.LexGrid.commonTypes.Property;
+import org.LexGrid.concepts.Entity;
+import org.LexGrid.naming.SupportedHierarchy;
 import gov.nih.nci.evs.browser.utils.*;
 
 
@@ -124,6 +145,22 @@ public class CartActionBean {
     static public final String NOTHING_SELECTED = "No concepts selected.";
     static public final String EXPORT_COMPLETE = "Export completed.";
     static private final String PROD_VERSION = "[Production]";
+
+    private static LexBIGService lbSvc = null;
+    //private static LexBIGServiceConvenienceMethods lbscm = null;
+
+    // Local constants
+    private static final int RESOLVEASSOCIATIONDEPTH = 1;
+    private static final int MAXTORETURN = 1000;
+    private static final String LB_EXTENSION = "LexBIGServiceConvenienceMethods";
+    private static enum Direction {
+    	FORWARD, REVERSE;
+    	public boolean test() {
+    		if (ordinal() == FORWARD.ordinal()) return true;
+    		return false;
+    	}
+    }
+
 
     // Getters & Setters
 
@@ -230,9 +267,10 @@ public class CartActionBean {
 	}
 
 	private void _initDisplayItems() throws Exception {
-		SearchCart search = new SearchCart();
+		//SearchCart search = new SearchCart();
 		HashMap<String, SchemeVersion> versionList
-			= getSchemeVersionList(search);
+			//= getSchemeVersionList(search);
+			= getSchemeVersionList();
 
 		// Init scheme version scheme list
 		initSelectVersionItems(versionList);
@@ -465,7 +503,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        SearchCart search = new SearchCart();
+        //SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         HashMap<String, SchemeVersion> versionList = null;
 
@@ -488,7 +526,8 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
         if (_cart != null && _cart.size() > 0) {
 
         	// Generate unique list of scheme / versions for the cart
-        	versionList = getSchemeVersionList(search);
+        	//versionList = getSchemeVersionList(search);
+        	versionList = getSchemeVersionList();
 
         	// Setup lexbig service
     		vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -552,7 +591,9 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 			long ruleOrder = 2;
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept) i.next();
-                ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+                //ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+                ref = getConceptByCode(item.codingScheme, item.version, item.code);
+
 
                 if (item.getSelected() && ref != null) {
 					_logger.debug("Exporting: " + ref.getCode() + "("
@@ -676,7 +717,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 
         _messageflag = false;
 
-        SearchCart search = new SearchCart();
+        //SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         StringBuffer sb = new StringBuffer();
 
@@ -706,7 +747,9 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
             // Add concepts
             for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
                 Concept item = (Concept)i.next();
-                ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+                //ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+                ref = getConceptByCode(item.codingScheme, item.version, item.code);
+
                 if (ref != null) {
                     _logger.debug("Exporting: " + ref.getCode());
                     sb.append("\"" + clean(item.name) + "\",");
@@ -957,16 +1000,16 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 	 * @return
 	 * @throws Exception
 	 */
-	private HashMap<String, SchemeVersion> getSchemeVersionList(
-			SearchCart search) throws Exception {
+	private HashMap<String, SchemeVersion> getSchemeVersionList() throws Exception {
+			//SearchCart search) throws Exception {
 		HashMap<String, SchemeVersion> map = new HashMap<String, SchemeVersion>();
 		ResolvedConceptReference ref = null;
 
 		for (Iterator<Concept> i = getConcepts().iterator(); i.hasNext();) {
 			Concept item = (Concept) i.next();
-			ref = search.getConceptByCode(item.codingScheme, item.version,
-					item.code);
-			ArrayList<String> list = search.getSchemeVersions(ref.getCodingSchemeURI());
+			//ref = search.getConceptByCode(item.codingScheme, item.version, item.code);
+			ref = getConceptByCode(item.codingScheme, item.version, item.code);
+			ArrayList<String> list = getSchemeVersions(ref.getCodingSchemeURI());
 			for(int x=0;x<list.size();x++) {
 				SchemeVersion vs = new SchemeVersion();
 				vs.uri = ref.getCodingSchemeURI();
@@ -1220,7 +1263,6 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
 
         _messageflag = false;
 
-        //SearchCart search = new SearchCart();
         ResolvedConceptReference ref = null;
         StringBuffer sb = new StringBuffer();
 
@@ -1280,7 +1322,7 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
                     new CodingSchemeVersionOrTag();
                 versionOrTag.setVersion(version);
 
-                CodedNodeSet cns = SearchUtils.getNodeSet(lbSvc, scheme, versionOrTag);
+                CodedNodeSet cns = new SearchUtils(lbSvc).getNodeSet(scheme, versionOrTag);
 
                 Vector v = (Vector) cs2codes_map.get(scheme);
                 scheme = DataUtils.uri2CodingSchemeName(scheme);
@@ -1326,6 +1368,408 @@ if (!DataUtils.isNull(b) && !DataUtils.isNull(n)) {
         FacesContext ctx = FacesContext.getCurrentInstance();
         String format = (String) ctx.getExternalContext().getRequestParameterMap().get("format");
         //System.out.println("formatListener format: " + format);
+    }
+
+
+
+    /**
+     * Get concept Entity by code
+     * @param codingScheme
+     * @param code
+     * @return
+     */
+    public ResolvedConceptReference getConceptByCode(String codingScheme, String version,
+    		String code) {
+        CodedNodeSet cns = null;
+        ResolvedConceptReferencesIterator iterator = null;
+
+        try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+            if (version != null) csvt.setVersion(version);
+
+            cns = lbSvc.getCodingSchemeConcepts(codingScheme, csvt);
+            ConceptReferenceList crefs =
+                createConceptReferenceList(new String[] { code }, codingScheme);
+            cns.restrictToCodes(crefs);
+            iterator = cns.resolve(null, null, null);
+            if (iterator.numberRemaining() > 0) {
+                ResolvedConceptReference ref = (ResolvedConceptReference) iterator.next();
+                return ref;
+            }
+        } catch (LBException e) {
+            _logger.info("Error: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Return list of Presentations
+     * @param ref
+     * @return
+     */
+    public Property[] getPresentationValues(ResolvedConceptReference ref) {
+        return returnProperties(ref.getReferencedEntry().getPresentation());
+    }
+
+    /**
+     * Return list of Definitions
+     * @param ref
+     * @return
+     */
+    public Property[] getDefinitionValues(ResolvedConceptReference ref) {
+        return returnProperties(ref.getReferencedEntry().getDefinition());
+    }
+
+    /**
+     * Return list of Properties
+     * @param ref
+     * @return
+     */
+    public Property[] getPropertyValues(ResolvedConceptReference ref) {
+        return returnProperties(ref.getReferencedEntry().getProperty());
+    }
+
+    /**
+     * Returns list of Parent Concepts
+     * @param ref
+     * @return
+     * @throws LBException
+     */
+    public Vector<Entity> getParentConcepts(ResolvedConceptReference ref) throws Exception {
+        String scheme = ref.getCodingSchemeName();
+        String version = ref.getCodingSchemeVersion();
+        String code = ref.getCode();
+        Direction dir = getCodingSchemeDirection(ref);
+        Vector<String> assoNames = getAssociationNames(scheme, version);
+        Vector<Entity> superconcepts = getAssociatedConcepts(scheme, version,
+                code, assoNames, dir.test());
+        return superconcepts;
+    }
+
+    /**
+     * Returns list of Child Concepts
+     * @param ref
+     * @return
+     */
+    public Vector<Entity> getChildConcepts(ResolvedConceptReference ref) throws Exception {
+        String scheme = ref.getCodingSchemeName();
+        String version = ref.getCodingSchemeVersion();
+        String code = ref.getCode();
+        Direction dir = getCodingSchemeDirection(ref);
+        Vector<String> assoNames = getAssociationNames(scheme, version);
+        Vector<Entity> supconcepts = getAssociatedConcepts(scheme, version,
+                code, assoNames, !dir.test());
+        return supconcepts;
+    }
+
+    /**
+     * Returns Associated Concepts
+     *
+     * @param scheme
+     * @param version
+     * @param code
+     * @param assocName
+     * @param forward
+     * @return
+     */
+    public Vector<Entity> getAssociatedConcepts(String scheme, String version,
+            String code, Vector<String> assocNames, boolean forward) {
+
+            CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+            if (version != null) csvt.setVersion(version);
+            boolean resolveForward = true;
+            boolean resolveBackward = false;
+
+            // Set backward direction
+            if (!forward) {
+                resolveForward = false;
+                resolveBackward = true;
+            }
+
+            Vector<Entity> v = new Vector<Entity>();
+
+            try {
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+                CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
+
+                // Restrict coded node graph to the given association
+                NameAndValueList nameAndValueList = createNameAndValueList(
+                        assocNames, null);
+                cng = cng.restrictToAssociations(nameAndValueList, null);
+
+                ConceptReference graphFocus =
+                    ConvenienceMethods.createConceptReference(code, scheme);
+
+                ResolvedConceptReferencesIterator iterator =
+                    codedNodeGraph2CodedNodeSetIterator(cng, graphFocus,
+                        resolveForward, resolveBackward, RESOLVEASSOCIATIONDEPTH,
+                        MAXTORETURN);
+                v = resolveIterator(iterator, MAXTORETURN, code);
+
+            } catch (Exception ex) {
+                _logger.warn(ex.getMessage());
+            }
+            return v;
+        }
+
+    /**
+     * Resolve the Iterator
+     *
+     * @param iterator
+     * @param maxToReturn
+     * @param code
+     * @return
+     */
+    public Vector<Entity> resolveIterator(
+            ResolvedConceptReferencesIterator iterator, int maxToReturn,
+            String code) {
+
+        Vector<Entity> v = new Vector<Entity>();
+
+        if (iterator == null) {
+            _logger.warn("No match.");
+            return v;
+        }
+        try {
+            int iteration = 0;
+            while (iterator.hasNext()) {
+                iteration++;
+                iterator = iterator.scroll(maxToReturn);
+                ResolvedConceptReferenceList rcrl = iterator.getNext();
+                ResolvedConceptReference[] rcra = rcrl
+                        .getResolvedConceptReference();
+                for (int i = 0; i < rcra.length; i++) {
+                    ResolvedConceptReference rcr = rcra[i];
+                    Entity ce = rcr.getReferencedEntry();
+                    if (code == null) {
+                        v.add(ce);
+                    } else {
+                        if (ce.getEntityCode().compareTo(code) != 0)
+                            v.add(ce);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            _logger.warn(e.getMessage());
+        }
+        return v;
+    }
+
+    /**
+     * Return Iterator for codedNodeGraph
+     *
+     * @param cng
+     * @param graphFocus
+     * @param resolveForward
+     * @param resolveBackward
+     * @param resolveAssociationDepth
+     * @param maxToReturn
+     * @return
+     */
+    public ResolvedConceptReferencesIterator codedNodeGraph2CodedNodeSetIterator(
+            CodedNodeGraph cng, ConceptReference graphFocus,
+            boolean resolveForward, boolean resolveBackward,
+            int resolveAssociationDepth, int maxToReturn) {
+        CodedNodeSet cns = null;
+
+        try {
+            cns = cng.toNodeList(graphFocus, resolveForward, resolveBackward,
+                    resolveAssociationDepth, maxToReturn);
+            if (cns == null) return null;
+            return cns.resolve(null, null, null);
+        } catch (Exception ex) {
+            _logger.warn(ex.getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Return a list of Association names
+     *
+     * @param scheme
+     * @param version
+     * @return
+     */
+    public Vector<String> getAssociationNames(String scheme, String version) {
+        Vector<String> association_vec = new Vector<String>();
+        try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+            versionOrTag.setVersion(version);
+            CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);
+
+            SupportedHierarchy[] hierarchies = cs.getMappings().getSupportedHierarchy();
+            String[] ids = hierarchies[0].getAssociationNames();
+            for (int i = 0; i < ids.length; i++) {
+                if (!association_vec.contains(ids[i])) {
+                    association_vec.add(ids[i]);
+                    _logger.debug("AssociationName: " + ids[i]);
+                }
+            }
+        } catch (Exception ex) {
+            _logger.warn(ex.getMessage());
+        }
+        return association_vec;
+    }
+
+    /**
+     * Return list of Comments
+     * @param ref
+     * @return
+     */
+    public Property[] getCommentValues(ResolvedConceptReference ref) {
+        return returnProperties(ref.getReferencedEntry().getComment());
+    }
+
+    /**
+     * Determine direction of Coding Scheme
+     *
+     * @param ref
+     * @return
+     * @throws LBException
+     */
+    public Direction getCodingSchemeDirection(ResolvedConceptReference ref)
+        throws Exception {
+
+    	Direction direction = Direction.FORWARD;
+
+    	// Create a version object
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        versionOrTag.setVersion(ref.getCodingSchemeVersion());
+
+        // Get Coding Scheme
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+    	CodingScheme cs = lbSvc.resolveCodingScheme(ref.getCodingSchemeName(), versionOrTag);
+    	if (cs == null) {
+    		throw new Exception("getTreeDirection(): CodingScheme is null!");
+    	}
+
+    	// Get hierarchy
+        SupportedHierarchy[] hierarchies = cs.getMappings().getSupportedHierarchy();
+        if (hierarchies == null || hierarchies.length < 1) {
+        	throw new Exception("getTreeDirection(): hierarchies is null!");
+        }
+
+        if (hierarchies[0].isIsForwardNavigable())
+        	direction = Direction.REVERSE;
+        else
+        	direction = Direction.FORWARD;
+
+        _logger.debug("getTreeDirection() = " + direction);
+
+        return direction;
+    }
+
+    /**
+     * Returns the coding scheme's URI
+     * @param scheme
+     * @param version
+     * @return
+     * @throws Exception
+     */
+    public String getSchemeURI(String scheme, String version) throws Exception {
+        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+        versionOrTag.setVersion(version);
+        CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);
+    	return cs.getCodingSchemeURI();
+    }
+
+    /**
+     * Returns the coding scheme production version
+     * @param scheme
+     * @param version
+     * @return
+     * @throws Exception
+     */
+    public String getDefaultSchemeVersion(String scheme) throws Exception {
+        CodingScheme cs = lbSvc.resolveCodingScheme(scheme,null);
+    	return cs.getRepresentsVersion();
+    }
+
+    /**
+     * Returns list of all versions associated with a scheme
+     * @param uri
+     * @return
+     * @throws Exception
+     */
+    public ArrayList<String> getSchemeVersions(String uri) throws Exception {
+    	ArrayList<String> list = new ArrayList<String>();
+
+    	LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+        CodingSchemeRenderingList csrl = lbSvc.getSupportedCodingSchemes();
+        CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+
+        for (int i = 0; i < csrs.length; i++) {
+            CodingSchemeRendering csr = csrs[i];
+            String status = csr.getRenderingDetail().getVersionStatus().value();
+            CodingSchemeSummary css = csr.getCodingSchemeSummary();
+            if (status.equals("active")) {
+	            if (css.getCodingSchemeURI().equals(uri))
+	            	list.add(css.getRepresentsVersion());
+            }
+        }
+
+    	return list;
+    }
+
+    // -----------------------------------------------------
+    // Internal utility methods
+    // -----------------------------------------------------
+
+    /**
+     * Return a NameAndValueList from two vectors
+     * @param names
+     * @param values
+     * @return
+     */
+    private static NameAndValueList createNameAndValueList(Vector<String> names,
+            Vector<String> values) {
+        NameAndValueList nvList = new NameAndValueList();
+
+        for (int i = 0; i < names.size(); i++) {
+            NameAndValue nv = new NameAndValue();
+            nv.setName(names.elementAt(i));
+            if (values != null) {
+                nv.setContent(values.elementAt(i));
+            }
+            nvList.addNameAndValue(nv);
+        }
+        return nvList;
+    }
+
+    /**
+     * @param properties
+     * @return
+     */
+    private Property[] returnProperties(Property[] properties) {
+        if (properties == null)
+            return new Property[0]; // return empty list
+        return properties;
+    }
+
+    /**
+     * @param codes
+     * @param codingSchemeName
+     * @return
+     */
+    private ConceptReferenceList createConceptReferenceList(String[] codes,
+            String codingSchemeName) {
+        if (codes == null)
+            return null;
+        ConceptReferenceList list = new ConceptReferenceList();
+        for (int i = 0; i < codes.length; i++) {
+            ConceptReference cr = new ConceptReference();
+            cr.setCodingSchemeName(codingSchemeName);
+            cr.setConceptCode(codes[i]);
+            list.addConceptReference(cr);
+        }
+        return list;
     }
 
 } // End of CartActionBean

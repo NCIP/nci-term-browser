@@ -1,22 +1,26 @@
 
 <%
 
+  LexBIGService lbsvc = RemoteServerUtil.createLexBIGService();
+  MappingSearchUtils mappingSearchutils = new MappingSearchUtils(lbsvc);
+
+
   if (type.compareTo("mapping") == 0 || type.compareTo("all") == 0) {
   HashMap display_name_hmap = new HashMap();
 
 
-  Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
+  //Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
   JSPUtils.JSPHeaderInfo mapping_info = new JSPUtils.JSPHeaderInfo(request);
-  String scheme_curr = mapping_info.dictionary;
-  String version_curr = mapping_info.version;
-  String code_curr = (String) request.getSession().getAttribute("code");
+  String mappings_scheme_curr = mapping_info.dictionary;
+  String mappings_version_curr = mapping_info.version;
+  String mappings_code_curr = (String) request.getSession().getAttribute("code");
   
-  boolean isMappingCS = DataUtils.isMapping(scheme_curr, version_curr);
+  boolean isMappingCS = DataUtils.isMapping(mappings_scheme_curr, mappings_version_curr);
     
   
   if(!isMappingCS) {
   
-  Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
+  Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(mappings_code_curr, null);
 
 
                 String source_scheme = null;//"NCI_Thesaurus";
@@ -41,7 +45,7 @@
  <%
  
          Entity con = (Entity) request.getSession().getAttribute("concept");
- 	 Vector meta_cui_vec = DataUtils.getMatchedMetathesaurusCUIs(con);//scheme_curr, version_curr, null, code_curr);
+ 	 Vector meta_cui_vec = DataUtils.getMatchedMetathesaurusCUIs(con);//mappings_scheme_curr, mappings_version_curr, null, mappings_code_curr);
 
 
 %>  
@@ -134,7 +138,7 @@ if (type != null && type.compareTo("all") == 0) {
     
         
            String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
-           Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
+           Vector ret_vec = StringUtils.parseData(mapping_uri_version, "|");
            String mapping_cs_uri = (String) ret_vec.elementAt(0);
            String mapping_cs_version = (String) ret_vec.elementAt(1);
            String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
@@ -146,8 +150,8 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 }   
 
 
-           List list = new MappingSearchUtils().getMappingRelationship(
-                       mapping_cs_uri, mapping_cs_version, code_curr, 1);
+           List list = mappingSearchutils.getMappingRelationship(
+                       mapping_cs_uri, mapping_cs_version, mappings_code_curr, 1);
 
 
 if (list != null && list.size() > 0) {
@@ -296,7 +300,7 @@ if (show_rank_column) {
 <%      
       for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
            String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
-           Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
+           Vector ret_vec = StringUtils.parseData(mapping_uri_version, "|");
            String mapping_cs_uri = (String) ret_vec.elementAt(0);
            String mapping_cs_version = (String) ret_vec.elementAt(1);
            String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
@@ -308,8 +312,8 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 }   
 
 
-           List list = new MappingSearchUtils().getMappingRelationship(
-                       mapping_cs_uri, mapping_cs_version, code_curr, -1);
+           List list = mappingSearchutils.getMappingRelationship(
+                       mapping_cs_uri, mapping_cs_version, mappings_code_curr, -1);
 
 
 if (list != null && list.size() > 0) {

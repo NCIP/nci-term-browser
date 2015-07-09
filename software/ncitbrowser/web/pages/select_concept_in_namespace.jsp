@@ -80,7 +80,7 @@ if (coding_scheme_version != null) {
     request.setAttribute("version", coding_scheme_version);
 }
 
-if (vocabulary_name == null || vocabulary_name.compareTo("NCI Thesaurus") == 0 || || vocabulary_name.compareTo("NCI_Thesaurus") == 0) {
+if (DataUtils.isNCIT(vocabulary_name)) {
 %>
 
       <%@ include file="/pages/templates/content-header.jsp" %>

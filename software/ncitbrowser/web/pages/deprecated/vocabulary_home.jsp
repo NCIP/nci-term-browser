@@ -75,7 +75,7 @@
     }
 
 
-  boolean hasValueSet = ValueSetHierarchy.hasValueSet(menubar_dictionary);
+  boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(menubar_dictionary);
   boolean hasMapping = DataUtils.hasMapping(menubar_dictionary);
 
     

@@ -72,7 +72,7 @@
               <td width="1">
                 <% if (hierarchy_schema == null) { %>
                   <img src="<%=basePath%>/images/termbrowser_popup_banner-left.gif" alt="NCI Term Browser Banner" title="" border="0" />
-                <% } else if (hierarchy_schema.compareTo("NCI Thesaurus") == 0 || hierarchy_schema.compareTo("NCI_Thesaurus") == 0) { %>
+                <% } else if (DataUtils.isNCIT(hierarchy_schema)) { %>
                   <img src="<%=basePath%>/images/thesaurus_popup_banner-left.gif" alt="NCI Thesaurus Banner" title="" border="0" />
                 <% } else { %>
                   <img src="<%=basePath%>/images/other_popup_banner-left.gif" alt="Other Banner" title="" border="0" />
