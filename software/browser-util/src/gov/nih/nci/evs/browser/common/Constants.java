@@ -127,6 +127,9 @@ public class Constants {
     public static final String  TERMINOLOGY_VALUE_SET_NAME = "Terminology_Value_Set.owl";
     public static final String  TERMINOLOGY_VALUE_SET_ALT_NAME = "Terminology Value Set.owl";
 
+    public static final String[] TERMINOLOGY_VALUE_SET_NAMES = {"Terminology Value Set", "Terminology_Value_Set.owl", "Terminology Value Set.owl", "Terminology_Value_Set"};
+
+
     public static final long MILLISECONDS_PER_MINUTE = 60L * 1000;
 
     public static final String PLEASE_COMPLETE_DATA_ENTRIES = "Please complete data entries.";
