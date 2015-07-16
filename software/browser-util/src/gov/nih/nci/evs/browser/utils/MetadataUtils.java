@@ -1,7 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.common.*;
 import java.util.*;
-
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.LexBIGService.*;
@@ -567,5 +567,27 @@ if (codingSchemeName.compareTo("MedDRA") == 0) {
         return null;
     }
 
+    public boolean tree_access_allowed(String scheme, String version) {
+		try {
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null) {
+				versionOrTag.setVersion(version);
+			}
+
+			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, versionOrTag);
+			NameAndValue[] nvList = getMetadataProperties(cs);
+			for (int k = 0; k < nvList.length; k++) {
+				NameAndValue nv = (NameAndValue) nvList[k];
+				if (nv.getName().compareTo(gov.nih.nci.evs.browser.common.Constants.TREE_ACCESS_ALLOWED) == 0) {
+				    if (nv.getContent().compareTo("false") == 0) {
+						return false;
+					}
+				}
+			}
+		} catch (Exception ex) {
+            ex.printStackTrace();
+		}
+        return true;
+	}
 }
 

@@ -276,7 +276,10 @@ String short_name = cs_name;
 				request.getSession().setAttribute("concept", c);
 				request.getSession().setAttribute("code", code);
 				request.getSession().setAttribute("ns", ns);
-				name = c.getEntityDescription().getContent();
+				name = "";
+				if (c.getEntityDescription() != null) {
+				    name = c.getEntityDescription().getContent();
+				}
 			} else {
 				//name = "The server encountered an internal error that prevented it from fulfilling this request.";
 				name = "ERROR: Invalid code - " + code + ".";
