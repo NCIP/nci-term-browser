@@ -613,11 +613,6 @@ if (scheme != null) {
             } else {
                 ResolvedConceptReferencesIteratorWrapper wrapper = null;
 
-
-System.out.println("(***) searchAction matchText: " + matchText);
-
-
-
                 try {
 					if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 						iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);

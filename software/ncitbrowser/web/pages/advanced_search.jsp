@@ -611,10 +611,11 @@ if (adv_search_algorithm.compareToIgnoreCase("lucene") != 0) {
                             if (association_vec != null) {
 				    for (int i=0; i<association_vec.size(); i++) {
 				      t = (String) association_vec.elementAt(i);
-
-				      Vector name_and_id_vec = StringUtils.parseData(t);
-				      String association_name = (String) name_and_id_vec.elementAt(0);
-				      String association_id = (String) name_and_id_vec.elementAt(1);
+				      //Vector name_and_id_vec = StringUtils.parseData(t);
+				      //String association_name = (String) name_and_id_vec.elementAt(0);
+				      //String association_id = (String) name_and_id_vec.elementAt(1);
+				      String association_name = t;
+				      String association_id = t;
 
 				      if (association_id.compareTo(rel_search_association) == 0) {
 				  %>
