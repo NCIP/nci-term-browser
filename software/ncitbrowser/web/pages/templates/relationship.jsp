@@ -260,7 +260,7 @@ if (type != null && type.compareTo("all") == 0) {
      }
      
      
-System.out.println("(*) display_inverse_relationships: " + display_inverse_relationships);
+//System.out.println("(*) display_inverse_relationships: " + display_inverse_relationships);
 
 
 if (!isMapping) {

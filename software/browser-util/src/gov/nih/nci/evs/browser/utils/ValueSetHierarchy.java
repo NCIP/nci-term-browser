@@ -105,6 +105,8 @@ public class ValueSetHierarchy {
 
     private CodingSchemeDataUtils codingSchemeDataUtils = null;
 
+    private TreeUtils treeUtils = null;
+
 
 
     public ValueSetHierarchy(LexBIGService lbSvc,
@@ -113,6 +115,7 @@ public class ValueSetHierarchy {
                              HashMap codingSchemeName2URIHashMap) {
 		this.lbSvc = lbSvc;
 		codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
+		treeUtils = new TreeUtils(lbSvc);
 		this.vsd_service = vsd_service;
 		this.localName2FormalNameHashMap = localName2FormalNameHashMap;
 		this.vocabularyNameSet = localName2FormalNameHashMap.keySet();;
@@ -412,7 +415,7 @@ public class ValueSetHierarchy {
 
 
     public HashMap getSubconcepts(String scheme, String version, String code) {
-        return new TreeUtils().getSubconcepts(scheme, version, code);
+        return treeUtils.getSubconcepts(scheme, version, code);
     }
 
 
@@ -504,7 +507,7 @@ public class ValueSetHierarchy {
 
 
     public List getSubconceptList(String scheme, String version, String code) {
-		return new TreeUtils(lbSvc).getSubconceptNamesAndCodes(scheme, version, code);
+		return treeUtils.getSubconceptNamesAndCodes(scheme, version, code);
 	}
 
 	public void populateChildrenNodes(String scheme, String version, TreeItem ti, HashSet visited_nodes) {
@@ -1360,7 +1363,7 @@ public class ValueSetHierarchy {
         Vector codes = getCodesInNodeSet(cns);
         for (int i=0; i<codes.size(); i++) {
 			String code = (String) codes.elementAt(i);
-			HashMap code_hmap = new TreeUtils().getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
+			HashMap code_hmap = treeUtils.getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
 			if (code_hmap != null) {
 				subValueSet_hmap.put(code, code_hmap);
 		    }
@@ -1737,7 +1740,7 @@ public class ValueSetHierarchy {
         ResolvedConceptReferenceList rcrl = null;//TreeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
         int count = 0;
         try {
-			rcrl = new TreeUtils(lbSvc).getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
+			rcrl = treeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
 
 
 		if (rcrl == null) {
@@ -1777,7 +1780,7 @@ public class ValueSetHierarchy {
 
 
 	public HashMap build_src_vs_tree_exclude_src_nodes() {
-        ResolvedConceptReferenceList rcrl = new TreeUtils(lbSvc).getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
+        ResolvedConceptReferenceList rcrl = treeUtils.getHierarchyRoots(SOURCE_SCHEME, SOURCE_VERSION);
         if (rcrl == null) {
 			return null;
 		}

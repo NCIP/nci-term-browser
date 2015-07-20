@@ -58,7 +58,10 @@
   <%
     } else {
       Vector rows = historyUtils.getEditActions(dictionary, vers, ltag, code);
-      String concept_name = concept.getEntityDescription().getContent();
+      String concept_name = "";
+      if (concept.getEntityDescription() != null) {
+          concept_name = concept.getEntityDescription().getContent();
+      }
       Vector headers = historyUtils.getTableHeader();
   %>
     <div id="popupContainer">

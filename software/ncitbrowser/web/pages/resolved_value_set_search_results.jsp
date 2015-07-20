@@ -282,9 +282,20 @@ if (!no_match) {
 
     for (int i=0; i<list.size(); i++) {
         ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
-              if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
-        String code = rcr.getConceptCode();
-        String name = rcr.getEntityDescription().getContent();
+        String code = null;
+        String name = "";
+        if (rcr != null) {
+            code = rcr.getConceptCode();
+        }
+
+       
+        if (rcr != null && rcr.getEntityDescription() != null) {
+            name = rcr.getEntityDescription().getContent();
+        }
+        
+        if (rcr != null) {
+        
+        
         String cs_version = rcr.getCodingSchemeVersion();
 
         String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());

@@ -113,7 +113,10 @@
                     if (i >= 0 && i<v.size()) {
                       Entity c = (Entity) v.elementAt(i);
                       String code = c.getEntityCode();
-                      String name = c.getEntityDescription().getContent();
+		      String name = "";
+		      if (c.getEntityDescription() != null) {
+			  name = c.getEntityDescription().getContent();
+		      }                     
 
                       if (i % 2 == 0) {
                         %>

@@ -538,7 +538,10 @@ for (int i=0; i<list.size(); i++) {
       name = (String) rcr.getCodingSchemeName();
       
       uri = (String) rcr.getCodingSchemeURI();
-      entity_name = (String) rcr.getEntityDescription().getContent();
+      entity_name = "";
+      if (rcr.getEntityDescription() != null) {
+          entity_name = rcr.getEntityDescription().getContent();
+      }
       entity_code = (String) rcr.getCode();
       entity_cs = (String) rcr.getCodeNamespace();
       

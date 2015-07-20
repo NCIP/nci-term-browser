@@ -159,8 +159,14 @@ public class ValueSetSearchUtils
 	}
 
 	protected static void displayRef(int count, ResolvedConceptReference ref){
-		System.out.println("(" + count + ") " + ref.getConceptCode() + " (" + ref.getEntityDescription().getContent()
+		if (ref.getEntityDescription() != null) {
+		    System.out.println("(" + count + ") " + ref.getConceptCode() + " (" + ref.getEntityDescription().getContent()
 		    + ") namespace: " + ref.getCodeNamespace() + ", coding scheme: " + ref.getCodingSchemeName() + ", version: " + ref.getCodingSchemeVersion());
+		} else {
+		    System.out.println("(" + count + ") " + ref.getConceptCode() + " (" + ""
+		    + ") namespace: " + ref.getCodeNamespace() + ", coding scheme: " + ref.getCodingSchemeName() + ", version: " + ref.getCodingSchemeVersion());
+
+		}
 	}
 
 
@@ -795,7 +801,11 @@ public class ValueSetSearchUtils
 					int numberRemaining = iterator.numberRemaining();
 					while (iterator.hasNext()) {
 						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
-						System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						if (rcr.getEntityDescription() != null) {
+							System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						} else {
+							System.out.println("(" + rcr.getConceptCode() + ")");
+						}
 					}
 
 				} catch (Exception ex) {
@@ -816,7 +826,11 @@ public class ValueSetSearchUtils
 
 					while (iterator.hasNext()) {
 						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
-						System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						if (rcr.getEntityDescription() != null) {
+							System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						} else {
+							System.out.println("(" + rcr.getConceptCode() + ")");
+						}
 					}
 
 
@@ -838,7 +852,11 @@ public class ValueSetSearchUtils
 
 					while (iterator.hasNext()) {
 						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
-						System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						if (rcr.getEntityDescription() != null) {
+							System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						} else {
+							System.out.println("(" + rcr.getConceptCode() + ")");
+						}
 					}
 
 

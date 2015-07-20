@@ -635,8 +635,11 @@ if (!hasOtherProperties) {
 </p>
 <p>
     <%
-      String concept_name = curr_concept.getEntityDescription().getContent();
-      concept_name = concept_name.replaceAll(" ", "_");
+      String concept_name = "";
+      if (curr_concept.getEntityDescription() != null) {
+          concept_name = curr_concept.getEntityDescription().getContent();
+          concept_name = concept_name.replaceAll(" ", "_");
+      }
 
       String concept_name_label = "Concept Name:";
       String dict = (String) request.getSession().getAttribute("dictionary");

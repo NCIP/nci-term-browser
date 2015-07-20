@@ -166,7 +166,10 @@ public class HistoryUtils {
                         rCode);
                 // KLO
                 if (c != null) {
-                    String name = c.getEntityDescription().getContent();
+                    String name = "";
+                    if (c.getEntityDescription() != null) {
+						name = c.getEntityDescription().getContent();
+					}
                     desc = name + " (Code " + rCode + ")";
                 } else {
                     desc = rCode;
@@ -263,7 +266,10 @@ public class HistoryUtils {
                             ltag, rCode);
 
                     if (c != null) {
-                        name = c.getEntityDescription().getContent();
+                        name = "";
+                        if (c.getEntityDescription() != null) {
+							name = c.getEntityDescription().getContent();
+						}
                     }
                 }
                 String info = name + "|" + rCode;

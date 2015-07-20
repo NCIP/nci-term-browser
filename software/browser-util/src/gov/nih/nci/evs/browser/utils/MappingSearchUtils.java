@@ -653,7 +653,6 @@ public class MappingSearchUtils {
 					ResolvedConceptReference[] refs = searchResultsIterator.next(100).getResolvedConceptReference();
 					for(ResolvedConceptReference ref : refs){
 						lcv++;
-						//System.out.println("(" + lcv + ") " + ref.getEntityDescription().getContent() + "(" + ref.getCode() + ")");
 						codeList.addConceptReference((ConceptReference) ref);
 					}
 				}

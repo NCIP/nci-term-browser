@@ -225,8 +225,6 @@ public class MetathesaurusUtils { //extends ServiceTestCase {
 				while (iterator.hasNext()) {
 					lcv++;
 					ResolvedConceptReference rcr = iterator.next();
-					//System.out.println("(" + lcv + ") " + rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
-
 					Entity entity = conceptDetails.getConceptByCode(codingSchemeURN, codingSchemeVersion, rcr.getConceptCode());
 					properties = entity.getPresentation();
 					String syn_1 = null;
@@ -271,8 +269,11 @@ public class MetathesaurusUtils { //extends ServiceTestCase {
 							}
 						}
 					}
-
-					System.out.println(lcv + "|" + rcr.getEntityDescription().getContent() + "|" + rcr.getConceptCode() + "|" + code_1 + "|" + code_2);
+                    if (rcr.getEntityDescription() != null) {
+						System.out.println(lcv + "|" + rcr.getEntityDescription().getContent() + "|" + rcr.getConceptCode() + "|" + code_1 + "|" + code_2);
+					} else {
+						System.out.println(lcv + "|" + "No description" + "|" + rcr.getConceptCode() + "|" + code_1 + "|" + code_2);
+					}
 
 				}
 			} catch (Exception ex) {

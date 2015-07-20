@@ -185,7 +185,10 @@ var tree;
             isValueSet = false;
             Entity entity = DataUtils.getConceptByCode(Constants.TERMINOLOGY_VALUE_SET_NAME, null, vsd_uri); 
             if (entity != null) {
-            	vsd_name = entity.getEntityDescription().getContent();
+            	vsd_name = "";
+            	if (entity.getEntityDescription() != null) {
+            	    vsd_name = entity.getEntityDescription().getContent();
+            	}
             }
     }
 

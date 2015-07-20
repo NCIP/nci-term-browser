@@ -19,26 +19,6 @@ import org.LexGrid.concepts.*;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.*;
 import org.apache.log4j.*;
 
-//import gov.nih.nci.test.util.*;
-
-/**
- * Copyright: (c) 2004-2009 Mayo Foundation for Medical Education and
- * Research (MFMER). All rights reserved. MAYO, MAYO CLINIC, and the
- * triple-shield Mayo logo are trademarks and service marks of MFMER.
- *
- * Except as contained in the copyright notice above, or as used to identify
- * MFMER as the author of this software, the trade names, trademarks, service
- * marks, or product names of the copyright holder shall not be used in
- * advertising, promotion or otherwise in connection with this software without
- * prior written authorization of the copyright holder.
- *
- * Licensed under the Eclipse Public License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.eclipse.org/legal/epl-v10.html
- *
- */
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -114,11 +94,11 @@ import org.apache.log4j.*;
  */
 public class TreeUtils {
     private static Logger _logger = Logger.getLogger(TreeUtils.class);
-    //static LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
     private static LocalNameList _noopList = new LocalNameList();
 
     private LexBIGService lbSvc = null;
     private LexBIGServiceConvenienceMethods lbscm = null;
+    private ConceptDetails conceptDetails = null;
 
     public TreeUtils() {
 
@@ -127,6 +107,7 @@ public class TreeUtils {
     public TreeUtils(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
 		try {
+			this.conceptDetails = new ConceptDetails(lbSvc);
 			this.lbscm = (LexBIGServiceConvenienceMethods) lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
 			this.lbscm.setLexBIGService(lbSvc);
 		} catch (Exception ex) {
@@ -152,33 +133,26 @@ public class TreeUtils {
     public HashMap getTreePathData(String scheme, String version,
         String hierarchyID, String code, int maxLevel) throws LBException {
 
-        //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        LexBIGServiceConvenienceMethods lbscm =
-            (LexBIGServiceConvenienceMethods) lbSvc
-                .getGenericExtension("LexBIGServiceConvenienceMethods");
-        lbscm.setLexBIGService(lbSvc);
         if (hierarchyID == null)
             hierarchyID = "is_a";
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         if (version != null)
             csvt.setVersion(version);
         SupportedHierarchy hierarchyDefn =
-            getSupportedHierarchy(lbSvc, scheme, csvt, hierarchyID);
-        return getTreePathData(lbSvc, lbscm, scheme, csvt, hierarchyDefn, code,
+            getSupportedHierarchy(scheme, csvt, hierarchyID);
+        return getTreePathData(scheme, csvt, hierarchyDefn, code,
             maxLevel);
     }
 
-    public HashMap getTreePathData(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme,
+    public HashMap getTreePathData(String scheme,
         CodingSchemeVersionOrTag csvt, SupportedHierarchy hierarchyDefn,
         String focusCode) throws LBException {
 
-        return getTreePathData(lbSvc, lbscm, scheme, csvt, hierarchyDefn,
+        return getTreePathData(scheme, csvt, hierarchyDefn,
             focusCode, -1);
     }
 
-    public HashMap getTreePathData(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme,
+    public HashMap getTreePathData(String scheme,
         CodingSchemeVersionOrTag csvt, SupportedHierarchy hierarchyDefn,
         String focusCode, int maxLevel) throws LBException {
 
@@ -204,7 +178,7 @@ public class TreeUtils {
             Map<String, EntityDescription> codesToDescriptions =
                 new HashMap<String, EntityDescription>();
             AssociationList pathsFromRoot =
-                getPathsFromRoot(lbSvc, lbscm, scheme, csvt, hierarchyID,
+                getPathsFromRoot(scheme, csvt, hierarchyID,
                     focusCode, codesToDescriptions, maxLevel);
 
             // Typically there will be one path, but handle multiple just in
@@ -216,7 +190,7 @@ public class TreeUtils {
 
             for (Iterator<? extends Association> paths =
                 pathsFromRoot.iterateAssociation(); paths.hasNext();) {
-                addPathFromRoot(ti, lbSvc, lbscm, scheme, csvt, paths.next(),
+                addPathFromRoot(ti, scheme, csvt, paths.next(),
                     associationsToNavigate, associationsNavigatedFwd,
                     codesToDescriptions);
                 pathsResolved++;
@@ -256,8 +230,7 @@ public class TreeUtils {
         printTree(ti, code, 0);
     }
 
-    protected void addPathFromRoot(TreeItem ti, LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme,
+    protected void addPathFromRoot(TreeItem ti, String scheme,
         CodingSchemeVersionOrTag csvt, Association path,
         String[] associationsToNavigate, boolean associationsNavigatedFwd,
         Map<String, EntityDescription> codesToDescriptions) throws LBException {
@@ -269,7 +242,7 @@ public class TreeUtils {
         String branchCodeNamespace = branchRoot.getCodeNamespace();
         String branchCodeDescription =
             codesToDescriptions.containsKey(branchCode) ? codesToDescriptions
-                .get(branchCode).getContent() : getCodeDescription(lbSvc,
+                .get(branchCode).getContent() : getCodeDescription(
                 scheme, csvt, branchCode);
         TreeItem branchPoint = new TreeItem(branchCode, branchCodeDescription, branchCodeNamespace, null);
         String branchNavText =
@@ -296,13 +269,13 @@ public class TreeUtils {
                     // indication of sub-nodes (+). Codes already
                     // processed as part of the path are ignored since
                     // they are handled through recursion.
-                    addChildren(branchItem, lbSvc, lbscm, scheme, csvt, code,
+                    addChildren(branchItem, scheme, csvt, code,
                         codesToDescriptions.keySet(), associationsToNavigate,
                         associationsNavigatedFwd);
 
                     // More levels left to process ...
                     for (int j = 0; j < nextLevel.getAssociationCount(); j++)
-                        addPathFromRoot(branchPoint, lbSvc, lbscm, scheme,
+                        addPathFromRoot(branchPoint, scheme,
                             csvt, nextLevel.getAssociation(j),
                             associationsToNavigate, associationsNavigatedFwd,
                             codesToDescriptions);
@@ -312,7 +285,7 @@ public class TreeUtils {
                     // in this case with no exclusions since we are moving
                     // beyond the path to root and allowed to duplicate
                     // nodes that may have occurred in the path to root.
-                    addChildren(branchItem, lbSvc, lbscm, scheme, csvt, code,
+                    addChildren(branchItem, scheme, csvt, code,
                         Collections.EMPTY_SET, associationsToNavigate,
                         associationsNavigatedFwd);
                 }
@@ -321,7 +294,7 @@ public class TreeUtils {
                 // indication of sub-nodes (+). Codes already
                 // processed as part of the path are ignored since
                 // they are handled through recursion.
-                addChildren(branchItem, lbSvc, lbscm, scheme, csvt, code,
+                addChildren(branchItem, scheme, csvt, code,
                     codesToDescriptions.keySet(), associationsToNavigate,
                     associationsNavigatedFwd);
             }
@@ -329,7 +302,7 @@ public class TreeUtils {
 
         // Add immediate children of the node being processed,
         // and indication of sub-nodes.
-        addChildren(branchPoint, lbSvc, lbscm, scheme, csvt, branchCode,
+        addChildren(branchPoint, scheme, csvt, branchCode,
             codesToDescriptions.keySet(), associationsToNavigate,
             associationsNavigatedFwd);
 
@@ -343,17 +316,15 @@ public class TreeUtils {
      */
 
 
-    protected void addChildren(TreeItem ti, LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme,
+    protected void addChildren(TreeItem ti, String scheme,
         CodingSchemeVersionOrTag csvt, String branchRootCode,
         Set<String> codesToExclude, String[] associationsToNavigate,
         boolean associationsNavigatedFwd) throws LBException {
-		addChildren(ti, lbSvc, lbscm, scheme, csvt, branchRootCode, null, codesToExclude, associationsToNavigate, associationsNavigatedFwd);
+		addChildren(ti, scheme, csvt, branchRootCode, null, codesToExclude, associationsToNavigate, associationsNavigatedFwd);
 	}
 
 
-    protected void addChildren(TreeItem ti, LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme,
+    protected void addChildren(TreeItem ti, String scheme,
         CodingSchemeVersionOrTag csvt, String branchRootCode, String namespace,
         Set<String> codesToExclude, String[] associationsToNavigate,
         boolean associationsNavigatedFwd) throws LBException {
@@ -494,14 +465,14 @@ public class TreeUtils {
     /**
      * Returns the entity description for the given code.
      */
-    protected  String getCodeDescription(LexBIGService lbSvc,
+    protected  String getCodeDescription(
         String scheme, CodingSchemeVersionOrTag csvt, String code)
             throws LBException {
-		return 	getCodeDescription(lbSvc, scheme, csvt, code, null);
+		return 	getCodeDescription(scheme, csvt, code, null);
 
 	}
 
-    protected  String getCodeDescription(LexBIGService lbSvc,
+    protected  String getCodeDescription(
         String scheme, CodingSchemeVersionOrTag csvt, String code, String namespace)
             throws LBException {
 
@@ -570,17 +541,15 @@ public class TreeUtils {
      * Resolves one or more paths from the hierarchy root to the given code
      * through a list of connected associations defined by the hierarchy.
      */
-    protected AssociationList getPathsFromRoot(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme,
+    protected AssociationList getPathsFromRoot(String scheme,
         CodingSchemeVersionOrTag csvt, String hierarchyID, String focusCode,
         Map<String, EntityDescription> codesToDescriptions) throws LBException {
-        return getPathsFromRoot(lbSvc, lbscm, scheme, csvt, hierarchyID,
+        return getPathsFromRoot(scheme, csvt, hierarchyID,
             focusCode, codesToDescriptions, -1);
 
     }
 
-    protected AssociationList getPathsFromRoot(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme,
+    protected AssociationList getPathsFromRoot(String scheme,
         CodingSchemeVersionOrTag csvt, String hierarchyID, String focusCode,
         Map<String, EntityDescription> codesToDescriptions, int maxLevel)
             throws LBException {
@@ -598,7 +567,7 @@ public class TreeUtils {
         // recursively to reverse the order for processing ...
         AssociationList pathFromRoot = new AssociationList();
         for (int i = pathToRoot.getAssociationCount() - 1; i >= 0; i--)
-            reverseAssoc(lbSvc, lbscm, scheme, csvt, pathToRoot
+            reverseAssoc(scheme, csvt, pathToRoot
                 .getAssociation(i), pathFromRoot, codesToDescriptions,
                 maxLevel, 0);
 
@@ -610,7 +579,7 @@ public class TreeUtils {
      * and matching the specified ID.
      */
     protected  SupportedHierarchy getSupportedHierarchy(
-        LexBIGService lbSvc, String scheme, CodingSchemeVersionOrTag csvt,
+        String scheme, CodingSchemeVersionOrTag csvt,
         String hierarchyID) throws LBException {
 
         CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
@@ -728,29 +697,39 @@ public class TreeUtils {
         }
         */
 
+
+        if (namespace == null) {
+			List<String> namespaces = conceptDetails.getDistinctNamespacesOfCode(
+				scheme, version, code);
+			if (namespaces != null && namespaces.size() == 1) {
+				namespace = namespaces.get(0);
+			}
+		}
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         if (version != null) {
             csvt.setVersion(version);
 		}
 
-
         try {
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
+            CodingScheme cs = null;
+            try {
+				cs = lbSvc.resolveCodingScheme(scheme, csvt);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
-            CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
-            if (cs == null)
-                return null;
+            if (cs == null) {
+				return null;
+			}
+
             Mappings mappings = cs.getMappings();
             SupportedHierarchy[] hierarchies = mappings.getSupportedHierarchy();
-            if (hierarchies == null || hierarchies.length == 0)
+            if (hierarchies == null || hierarchies.length == 0) {
                 return null;
+			}
 
             SupportedHierarchy hierarchyDefn = hierarchies[0];
-            //String hier_id = hierarchyDefn.getLocalId();
-
+            String hier_id = hierarchyDefn.getLocalId();
             String[] associationsToNavigate =
                 hierarchyDefn.getAssociationNames();
 
@@ -765,7 +744,7 @@ public class TreeUtils {
                 }
             }
 
-            return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, namespace,
+            return getAssociatedConcepts(scheme, version, code, namespace,
                 associationsToNavigate, associationsNavigatedFwd);
         } catch (Exception ex) {
             return null;
@@ -784,11 +763,6 @@ public class TreeUtils {
             csvt.setVersion(version);
 
         try {
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
-
             CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
             if (cs == null)
                 return null;
@@ -821,24 +795,14 @@ public class TreeUtils {
             return null;
         }
     }
-
-    public HashMap getSuperconcepts(LexBIGService lbSvc, String scheme, String version, String code) {
-		return getSuperconcepts(lbSvc, scheme, version, code, null);
-	}
-
-
-    public HashMap getSuperconcepts(LexBIGService lbSvc, String scheme, String version, String code, String namespace) {
+/*
+    public HashMap getSuperconcepts(String scheme, String version, String code, String namespace) {
 
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         if (version != null)
             csvt.setVersion(version);
 
         try {
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
-
             CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
             if (cs == null)
                 return null;
@@ -866,7 +830,7 @@ public class TreeUtils {
                 }
             }
 
-            return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, namespace,
+            return getAssociatedConcepts(scheme, version, code, namespace,
                 associationsToNavigate, !associationsNavigatedFwd);
 
 
@@ -875,6 +839,7 @@ public class TreeUtils {
             return null;
         }
     }
+*/
 
     /*
      * public HashMap getSuperconcepts(String scheme, String version,
@@ -1058,54 +1023,32 @@ public class TreeUtils {
 
     public HashMap getAssociatedConcepts(String scheme, String version,
         String code, String namespace, String assocName, boolean direction) {
-
-        try {
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
-            return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, namespace,
-                assocName, direction);
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public HashMap getAssociatedConcepts(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme, String version,
-        String code, String assocName, boolean direction) {
-
-		return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, null, assocName, direction);
-	}
-
-
-    public HashMap getAssociatedConcepts(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme, String version,
-        String code, String namespace, String assocName, boolean direction) {
-
-
         HashMap hmap = new HashMap();
         TreeItem ti = null;
         long ms = System.currentTimeMillis();
 
         Set<String> codesToExclude = Collections.EMPTY_SET;
-
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         if (version != null)
             csvt.setVersion(version);
         ResolvedConceptReferenceList matches = null;
         //Vector v = new Vector();
         try {
-			Entity concept = getConceptByCode(scheme, version, null, code, namespace);
-
+			Entity concept = null;
+			if (namespace == null) {
+				concept = conceptDetails.getConceptByCode(scheme, version, code);
+		    } else {
+				concept = conceptDetails.getConceptByCode(scheme, version, code, namespace, true);
+			}
 			if (concept == null) return null;
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
-
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 			focus.setCodingSchemeName(scheme);
 			focus.setCodeNamespace(entityCodeNamespace);
-            String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
-
+            String name = "";
+            if (concept.getEntityDescription() != null) {
+                name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
+			}
             //String name = getCodeDescription(lbSvc, scheme, csvt, code);
             ti = new TreeItem(code, name, entityCodeNamespace, null);
             ti._expandable = false;
@@ -1119,6 +1062,8 @@ public class TreeUtils {
             cng =
                 cng.restrictToAssociations(Constructors
                     .createNameAndValueList(assocName), null);
+
+
             boolean associationsNavigatedFwd = direction;
 
             // To remove anonymous classes (KLO, 091009), the
@@ -1131,12 +1076,11 @@ public class TreeUtils {
                 branch =
                     cng.resolveAsList(focus,
                         associationsNavigatedFwd,
-                        // !associationsNavigatedFwd, 1, 2, noopList_, null,
-                        // null, null, -1, false);
-                        !associationsNavigatedFwd, -1, 2, _noopList, null,
+                        !associationsNavigatedFwd, -1, 2, new LocalNameList(), null,
                         null, null, -1, false);
 
             } catch (Exception e) {
+				e.printStackTrace();
                 _logger
                     .error("TreeUtils getAssociatedConcepts throws exceptions.");
                 return null;
@@ -1252,30 +1196,6 @@ public class TreeUtils {
     public HashMap getAssociatedConcepts(String scheme, String version,
         String code, String namespace, String[] assocNames, boolean direction) {
 
-        try {
-            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
-            return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, namespace,
-                assocNames, direction);
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-
-    public HashMap getAssociatedConcepts(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme, String version,
-        String code, String[] assocNames, boolean direction) {
-        return getAssociatedConcepts(lbSvc, lbscm, scheme, version, code, null, assocNames, direction);
-    }
-
-    public HashMap getAssociatedConcepts(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme, String version,
-        String code, String namespace, String[] assocNames, boolean direction) {
-
         HashMap hmap = new HashMap();
         TreeItem ti = null;
         long ms = System.currentTimeMillis();
@@ -1289,14 +1209,22 @@ public class TreeUtils {
         ResolvedConceptReferenceList matches = null;
         //Vector v = new Vector();
         try {
-			Entity concept = getConceptByCode(scheme, version, null, code, namespace);
+			Entity concept = null;
+			if (namespace == null) {
+				concept = conceptDetails.getConceptByCode(scheme, version, code);
+		    } else {
+				concept = conceptDetails.getConceptByCode(scheme, version, code, namespace, true);
+			}
 
 			if (concept == null) return null;
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 			focus.setCodingSchemeName(scheme);
 			focus.setCodeNamespace(namespace);
-            String name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
+            String name = "";
+            if (concept.getEntityDescription() != null) {
+				name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
+			}
             ti = new TreeItem(code, name, namespace, null);
             ti._expandable = false;
 
@@ -1537,66 +1465,6 @@ public class TreeUtils {
     }
 
 
-    public Entity getConceptByCode(LexBIGService lbSvc, String codingSchemeName,
-        String vers, String ltag, String code) {
-		String namespace = null;
-		return getConceptByCode(lbSvc, codingSchemeName, vers, ltag, code, namespace);
-	}
-
-
-    public Entity getConceptByCode(LexBIGService lbSvc, String codingSchemeName,
-        String vers, String ltag, String code, String namespace) {
-        try {
-           if (lbSvc == null) {
-                _logger.warn("lbSvc == null???");
-                return null;
-            }
-
-            CodingSchemeVersionOrTag versionOrTag =
-                new CodingSchemeVersionOrTag();
-            versionOrTag.setVersion(vers);
-
-            ConceptReferenceList crefs =
-                Constructors.createConceptReferenceList(new String[] { code }, namespace, codingSchemeName);
-
-            CodedNodeSet cns = null;
-
-            try {
-                cns =
-                    lbSvc.getCodingSchemeConcepts(codingSchemeName,
-                        versionOrTag);
-                if (cns == null) return null;
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                return null;
-            }
-
-            cns = cns.restrictToCodes(crefs);
-            ResolvedConceptReferenceList matches =
-                cns.resolveToList(null, null, null, 1);
-
-            if (matches == null) {
-                _logger.warn("Concept not found.");
-                return null;
-            }
-
-            // Analyze the result ...
-            if (matches.getResolvedConceptReferenceCount() > 0) {
-                ResolvedConceptReference ref =
-                    (ResolvedConceptReference) matches
-                        .enumerateResolvedConceptReference().nextElement();
-
-                Entity entry = ref.getReferencedEntry();
-                return entry;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        return null;
-    }
-
-
     public static NameAndValueList createNameAndValueList(String[] names,
         String[] values) {
         NameAndValueList nvList = new NameAndValueList();
@@ -1611,8 +1479,7 @@ public class TreeUtils {
         return nvList;
     }
 
-    protected AssociationList reverseAssoc(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String scheme,
+    protected AssociationList reverseAssoc(String scheme,
         CodingSchemeVersionOrTag csvt, Association assoc,
         AssociationList addTo,
         Map<String, EntityDescription> codeToEntityDescriptionMap,
@@ -1637,7 +1504,7 @@ public class TreeUtils {
         // Otherwise retrieve on demand ...
         else
             acFromRef.setEntityDescription(Constructors
-                .createEntityDescription(getCodeDescription(lbSvc, scheme,
+                .createEntityDescription(getCodeDescription(scheme,
                     csvt, acRef.getConceptCode())));
 
         AssociatedConceptList acl = assoc.getAssociatedConcepts();
@@ -1675,7 +1542,7 @@ public class TreeUtils {
             if (sourceOf != null)
                 for (Association sourceAssoc : sourceOf.getAssociation()) {
                     AssociationList pos =
-                        reverseAssoc(lbSvc, lbscm, scheme, csvt, sourceAssoc,
+                        reverseAssoc(scheme, csvt, sourceAssoc,
                             addTo, codeToEntityDescriptionMap, maxLevel,
                             currLevel + 1);
                     pos.addAssociation(rAssoc);
@@ -1791,13 +1658,17 @@ public class TreeUtils {
                                 ResolvedConceptReference node =
                                     (ResolvedConceptReference) list.get(i);
                                 nd_code = node.getConceptCode();
-                                nd_name =
-                                    node.getEntityDescription().getContent();
+                                nd_name = "";
+                                if (node.getEntityDescription() != null) {
+                                    nd_name = node.getEntityDescription().getContent();
+								}
                             } else if (obj instanceof Entity) {
                                 Entity node = (Entity) list.get(i);
                                 nd_code = node.getEntityCode();
-                                nd_name =
-                                    node.getEntityDescription().getContent();
+                                nd_name = "";
+                                if (node.getEntityDescription() != null) {
+                                    nd_name = node.getEntityDescription().getContent();
+								}
                             }
                             _logger.debug("TOP NODE: " + nd_name + " ("
                                 + nd_code + ")");
@@ -1815,7 +1686,7 @@ public class TreeUtils {
 
     // ====================================================================================================================
 
-    public String[] getHierarchyIDs(LexBIGService lbSvc,
+    public String[] getHierarchyIDs(
 		String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
 
@@ -1823,7 +1694,7 @@ public class TreeUtils {
         Set<String> ids = new HashSet<String>();
         SupportedHierarchy[] sh = null;
         try {
-            sh = getSupportedHierarchies(lbSvc, codingScheme, versionOrTag);
+            sh = getSupportedHierarchies(codingScheme, versionOrTag);
             if (sh != null) {
                 for (int i = 0; i < sh.length; i++) {
                     ids.add(sh[i].getLocalId());
@@ -1838,14 +1709,14 @@ public class TreeUtils {
 
         return hier;
     }
-
-    protected SupportedHierarchy[] getSupportedHierarchies(LexBIGService lbSvc,
+/*
+    protected SupportedHierarchy[] getSupportedHierarchies(
         String codingScheme, CodingSchemeVersionOrTag versionOrTag)
             throws LBException {
 
         CodingScheme cs = null;
         try {
-            cs = getCodingScheme(lbSvc, codingScheme, versionOrTag);
+            cs = getCodingScheme(codingScheme, versionOrTag);
         } catch (Exception ex) {
 
         }
@@ -1856,12 +1727,11 @@ public class TreeUtils {
         Mappings mappings = cs.getMappings();
         return mappings.getSupportedHierarchy();
     }
-
-    protected CodingScheme getCodingScheme(LexBIGService lbSvc, String codingScheme,
+*/
+    protected CodingScheme getCodingScheme(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
         CodingScheme cs = null;
         try {
-            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1870,7 +1740,7 @@ public class TreeUtils {
     }
 
 
-
+/*
     public String[] getHierarchyIDs(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
 
@@ -1893,6 +1763,7 @@ public class TreeUtils {
 
         return hier;
     }
+*/
 
     protected  SupportedHierarchy[] getSupportedHierarchies(
         String codingScheme, CodingSchemeVersionOrTag versionOrTag)
@@ -1912,17 +1783,6 @@ public class TreeUtils {
         return mappings.getSupportedHierarchy();
     }
 
-    protected CodingScheme getCodingScheme(String codingScheme,
-        CodingSchemeVersionOrTag versionOrTag) throws LBException {
-        CodingScheme cs = null;
-        try {
-            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return cs;
-    }
 
     public String getHierarchyID(String codingScheme, String version) {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -1938,59 +1798,12 @@ public class TreeUtils {
         return null;
     }
 
-
-    public String getHierarchyID(LexBIGService lbSvc, String codingScheme, String version) {
-        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-        if (version != null)
-            versionOrTag.setVersion(version);
-        try {
-            String[] ids = getHierarchyIDs(lbSvc, codingScheme, versionOrTag);
-            if (ids.length > 0)
-                return ids[0];
-        } catch (Exception e) {
-
-        }
-        return null;
-    }
-
-    public ResolvedConceptReferenceList getHierarchyRoots(LexBIGService lbSvc,
-        String codingScheme, String version) {
-        CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-        if (version != null)
-            versionOrTag.setVersion(version);
-        try {
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-
-            lbscm.setLexBIGService(lbSvc);
-            String hierarchyID = getHierarchyID(lbSvc, codingScheme, version);
-
-            ResolvedConceptReferenceList rcrl = lbscm.getHierarchyRoots(codingScheme, versionOrTag,
-                hierarchyID);
-
-            return rcrl;
-
-        } catch (Exception ex) {
-			ex.printStackTrace();
-            return null;
-        }
-    }
-
-
     public ResolvedConceptReferenceList getHierarchyRoots(
         String codingScheme, String version) {
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
         if (version != null)
             versionOrTag.setVersion(version);
         try {
-            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-
-            lbscm.setLexBIGService(lbSvc);
             String hierarchyID = getHierarchyID(codingScheme, version);
 
             ResolvedConceptReferenceList rcrl = lbscm.getHierarchyRoots(codingScheme, versionOrTag,
@@ -2006,8 +1819,7 @@ public class TreeUtils {
 
     // ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void traverseUp(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, java.lang.String codingScheme,
+    public void traverseUp(java.lang.String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, java.lang.String hierarchyID,
         java.lang.String conceptCode, String namespace, TreeItem root, TreeItem ti,
         Set<String> codesToExclude, String[] associationsToNavigate,
@@ -2061,7 +1873,7 @@ public class TreeUtils {
 
                             try {
                                 codesToExclude.add(conceptCode);
-                                addChildren(branchItem, lbSvc, lbscm,
+                                addChildren(branchItem,
                                     codingScheme, versionOrTag, parentCode,
                                     codesToExclude, associationsToNavigate,
                                     associationsNavigatedFwd);
@@ -2075,7 +1887,7 @@ public class TreeUtils {
                             // ti.addChild("PAR", branchItem);
                             branchItem._expandable = true;
 
-                            traverseUp(lbSvc, lbscm, codingScheme,
+                            traverseUp(codingScheme,
                                 versionOrTag, hierarchyID, parentCode, namespace, root,
                                 branchItem, codesToExclude,
                                 associationsToNavigate,
@@ -2120,12 +1932,6 @@ public class TreeUtils {
         ResolvedConceptReferenceList matches = null;
         //Vector v = new Vector();
         try {
-            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
-
             CodingSchemeVersionOrTag versionOrTag =
                 new CodingSchemeVersionOrTag();
             if (version != null)
@@ -2145,14 +1951,14 @@ public class TreeUtils {
             boolean associationsNavigatedFwd =
                 hierarchyDefn.getIsForwardNavigable();
 
-            String name = getCodeDescription(lbSvc, scheme, csvt, code);
+            String name = getCodeDescription(scheme, csvt, code);
             TreeItem ti = new TreeItem(code, name, namespace, null);
             // ti.expandable = false;
             ti._expandable = hasSubconcepts(scheme, version, code, namespace);
 
             _logger.debug(name + "(" + code + ")");
 
-            traverseUp(lbSvc, lbscm, scheme, csvt, hierarchyID, code, namespace, root, ti,
+            traverseUp(scheme, csvt, hierarchyID, code, namespace, root, ti,
                 codesToExclude, associationsToNavigate,
                 associationsNavigatedFwd, visited_links, visited_nodes,
                 maxLevel, 0);
@@ -2190,12 +1996,6 @@ public class TreeUtils {
          * getTreeRoots(scheme, csvt, hierarchyID); }
          */
         int maxDepth = 1;
-        //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        LexBIGServiceConvenienceMethods lbscm =
-            (LexBIGServiceConvenienceMethods) lbSvc
-                .getGenericExtension("LexBIGServiceConvenienceMethods");
-        lbscm.setLexBIGService(lbSvc);
-
         ResolvedConceptReferenceList roots =
             lbscm.getHierarchyRoots(scheme, csvt, hierarchyID);
 
@@ -2216,7 +2016,7 @@ public class TreeUtils {
                 _logger
                     .debug("getHierarchyRoots rcr.getEntityDescription() == null.");
                 String name =
-                        getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+                        getCodeDescription(scheme, csvt, rcr.getConceptCode());
                 if (name == null)
                     name = rcr.getConceptCode();// HL7
                 EntityDescription e = new EntityDescription();
@@ -2226,7 +2026,7 @@ public class TreeUtils {
                 _logger
                     .debug("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
                 String name =
-                    getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+                    getCodeDescription(scheme, csvt, rcr.getConceptCode());
                 if (name == null)
                     name = rcr.getConceptCode();// HL7
                 EntityDescription e = new EntityDescription();
@@ -2241,11 +2041,8 @@ public class TreeUtils {
     }
 
     // /////////////////////////////////////////////////////////////////////////////////////////////////////
-    public List search(LexBIGService lbSvc,
-        LexBIGServiceConvenienceMethods lbscm, String codingSchemeName,
+    public List search(String codingSchemeName,
         String t, String algorithm) throws Exception {
-
-        //LexBIGService lbs = RemoteServerUtil.createLexBIGService();
         CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(codingSchemeName, null);
         cns =
             cns.restrictToMatchingDesignations(t, SearchDesignationOption.ALL,
@@ -2253,7 +2050,7 @@ public class TreeUtils {
         ResolvedConceptReferenceList list = null;
         int knt = 0;
         try {
-            list = cns.resolveToList(null, null, null, 500);// .getResolvedConceptReference();
+            list = cns.resolveToList(null, null, null, -1);
             if (list == null)
                 return null;
             return resolvedConceptReferenceList2List(list);
@@ -2271,12 +2068,6 @@ public class TreeUtils {
         String hierarchyID) throws LBException {
 
         int maxDepth = 1;
-        //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        LexBIGServiceConvenienceMethods lbscm =
-            (LexBIGServiceConvenienceMethods) lbSvc
-                .getGenericExtension("LexBIGServiceConvenienceMethods");
-        lbscm.setLexBIGService(lbSvc);
-
         ResolvedConceptReferenceList roots =
             lbscm.getHierarchyRoots(scheme, csvt, hierarchyID);
         ResolvedConceptReferenceList modified_roots =
@@ -2299,7 +2090,7 @@ public class TreeUtils {
 
             if (rcr.getEntityDescription() == null) {
                 String name =
-                    getCodeDescription(lbSvc, scheme, csvt, rcr
+                    getCodeDescription(scheme, csvt, rcr
                         .getConceptCode());
 
                 if (name == null) {
@@ -2314,7 +2105,7 @@ public class TreeUtils {
                 _logger
                     .debug("getHierarchyRoots rcr.getEntityDescription().getContent() == null.");
                 String name =
-                    getCodeDescription(lbSvc, scheme, csvt, rcr.getConceptCode());
+                    getCodeDescription(scheme, csvt, rcr.getConceptCode());
                 if (name == null) {
                     name =
                         "<Not Assigned> (code: " + rcr.getConceptCode() + ")";// HL7
@@ -2326,7 +2117,7 @@ public class TreeUtils {
             List list = new ArrayList();
             try {
                 list =
-                    search(lbSvc, lbscm, scheme, rcr.getEntityDescription()
+                    search(scheme, rcr.getEntityDescription()
                         .getContent(), "exactMatch");
 
             } catch (Exception ex) {
@@ -2368,12 +2159,6 @@ public class TreeUtils {
             csvt.setVersion(version);
 
         try {
-            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
-
             CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
             if (cs == null)
                 return null;
@@ -2394,17 +2179,8 @@ public class TreeUtils {
         return null;
     }
 
-    public ArrayList getSubconceptNamesAndCodes(LexBIGService lbSvc, String scheme, String version, String code) {
-		return getSubconceptNamesAndCodes(lbSvc, scheme, version, code, null);
-    }
-
-
-    public ArrayList getSubconceptNamesAndCodes(String scheme, String version, String code) {
-		return getSubconceptNamesAndCodes(scheme, version, code, null);
-    }
-
+/*
     public ArrayList getSubconceptNamesAndCodes(String scheme, String version, String code, String namespace) {
-        // returned bar delimited name|code
         ArrayList list = new ArrayList();
 
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
@@ -2412,12 +2188,6 @@ public class TreeUtils {
             csvt.setVersion(version);
         long ms = System.currentTimeMillis();
         try {
-            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
-
             CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
             if (cs == null)
                 return null;
@@ -2448,7 +2218,14 @@ public class TreeUtils {
                 cng =
                     cng.restrictToAssociations(nameAndValueList,
                         nameAndValueList_qualifier);
-				Entity concept = getConceptByCode(scheme, version, null, code, namespace);
+
+				Entity concept = null;
+				if (namespace == null) {
+					concept = conceptDetails.getConceptByCode(scheme, version, code);
+				} else {
+					concept = conceptDetails.getConceptByCode(scheme, version, code, namespace, true);
+				}
+
 				if (concept != null) {
 					String entityCodeNamespace = concept.getEntityCodeNamespace();
 
@@ -2523,9 +2300,13 @@ public class TreeUtils {
         SortUtils.quickSort(list);
         return list;
     }
+*/
+    public ArrayList getSubconceptNamesAndCodes(String scheme, String version, String code) {
+		return getSubconceptNamesAndCodes(scheme, version, code, null);
+	}
 
 
-    public ArrayList getSubconceptNamesAndCodes(LexBIGService lbSvc, String scheme, String version, String code, String namespace) {
+    public ArrayList getSubconceptNamesAndCodes(String scheme, String version, String code, String namespace) {
         // returned bar delimited name|code
         ArrayList list = new ArrayList();
 
@@ -2534,12 +2315,6 @@ public class TreeUtils {
             csvt.setVersion(version);
         long ms = System.currentTimeMillis();
         try {
-            //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            LexBIGServiceConvenienceMethods lbscm =
-                (LexBIGServiceConvenienceMethods) lbSvc
-                    .getGenericExtension("LexBIGServiceConvenienceMethods");
-            lbscm.setLexBIGService(lbSvc);
-
             CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
             if (cs == null)
                 return null;
@@ -2570,7 +2345,14 @@ public class TreeUtils {
                 cng =
                     cng.restrictToAssociations(nameAndValueList,
                         nameAndValueList_qualifier);
-				Entity concept = getConceptByCode(lbSvc, scheme, version, null, code, namespace);
+
+				Entity concept = null;
+				if (namespace == null) {
+					concept = conceptDetails.getConceptByCode(scheme, version, code);
+				} else {
+					concept = conceptDetails.getConceptByCode(scheme, version, code, namespace, true);
+				}
+
 				if (concept != null) {
 					String entityCodeNamespace = concept.getEntityCodeNamespace();
 
@@ -2725,8 +2507,6 @@ public class TreeUtils {
         long ms = System.currentTimeMillis();
         Vector v = new Vector();
         try {
-
-            lbscm.setLexBIGService(lbSvc);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
             // Iterate through all hierarchies and levels ...
@@ -2756,32 +2536,5 @@ public class TreeUtils {
         }
         return v;
     }
-
-    public static void main(String[] args) {
-		/*
-        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-        TreeUtils treeUtils = new TreeUtils(lbSvc);
-
-        HashMap hmap = null;
-
-        String scheme = "HL7";
-        String version = "V3 R2.36";
-        String code = "19870:UnitsOfMeasure";
-        String namespace = null;
-
-        System.out.println("scheme: " + scheme);
-        System.out.println("version: " + version);
-        System.out.println("code: " + code);
-        System.out.println("namespace: " + namespace);
-
-        hmap = treeUtils.getSubconcepts(scheme, version, code);//, namespace);
-        if (hmap != null) {
-        	treeUtils.printTree(hmap);
-		} else {
-			System.out.println("WARNING: treeUtils.getSubconcepts returns null");
-		}
-		*/
-    }
 }
-
 

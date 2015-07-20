@@ -985,7 +985,11 @@ public class CodingSchemeDataUtils {
             for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 				ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 				Entity entity = rcr.getReferencedEntry();
-				conceptDomainName_vec.add(entity.getEntityDescription().getContent());
+				if (entity.getEntityDescription() != null) {
+					conceptDomainName_vec.add(entity.getEntityDescription().getContent());
+				} else {
+					conceptDomainName_vec.add("");
+				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -196,19 +196,6 @@ public class SearchUtils {
             lbscm.setLexBIGService(lbSvc);
             CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
             csvt.setVersion(version);
-            /*
-            String desc = null;
-            try {
-                desc =
-                    lbscm
-                        .createCodeNodeSet(new String[] { code }, scheme, csvt)
-                        .resolveToList(null, null, null, 1)
-                        .getResolvedConceptReference(0).getEntityDescription()
-                        .getContent();
-            } catch (Exception e) {
-                desc = "<not found>";
-            }
-            */
 
             // Iterate through all hierarchies and levels ...
             String[] hierarchyIDs = lbscm.getHierarchyIDs(scheme, csvt);
@@ -612,10 +599,6 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ ref.getCon
                 entry.setEntityCode(ref.getConceptCode());
                 entry.setEntityCodeNamespace(ref.getCodeNamespace());
                 entry.setEntityDescription(ref.getEntityDescription());
-
-
-_logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + ref.getEntityDescription());
-
 
                 // Concept entry = ref.getReferencedEntry();
                 return entry;
@@ -1564,7 +1547,10 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 ResolvedConceptReference ref =
                     refs.getResolvedConceptReference(i);
                 String code = ref.getConceptCode();
-                String name = ref.getEntityDescription().getContent();
+                String name = "";
+                if (ref.getEntityDescription() != null) {
+					name = ref.getEntityDescription().getContent();
+				}
                 float score = score(name, compareWords, true, i);
                 scoredResult.put(code, new ScoredTerm(ref, score));
             }
@@ -1760,7 +1746,10 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
                 ResolvedConceptReference ref =
                     refs.getResolvedConceptReference(i);
                 String code = ref.getConceptCode();
-                String name = ref.getEntityDescription().getContent();
+                String name = "";
+                if (ref.getEntityDescription() != null) {
+					name = ref.getEntityDescription().getContent();
+				}
                 float score = (float) 0.0;// score(name, compareWords, true, i);
                 /*
                  * if (algorithm.compareTo("DoubleMetaphoneLuceneQuery") == 0) {
@@ -2253,8 +2242,11 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
     // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     protected void displayRef(ResolvedConceptReference ref) {
-        _logger.debug(ref.getConceptCode() + ":"
-            + ref.getEntityDescription().getContent());
+		if (ref.getEntityDescription() != null) {
+        	_logger.debug(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+		} else {
+			_logger.debug(ref.getConceptCode() + ":");
+		}
     }
 
     public void dumpIterator(ResolvedConceptReferencesIterator itr) {
@@ -3667,7 +3659,7 @@ _logger.debug("************ SearchUtils.getConceptByCode ************ FOUND-" + 
         boolean ranking, int maxToReturn) {
 
 
-
+/*
 System.out.println("===================================================");
 System.out.println("\tscheme: " + scheme);
 System.out.println("\tversion: " + version);
@@ -3699,6 +3691,7 @@ System.out.println("\tdesignationOnly: " + designationOnly);
 System.out.println("\tranking: " + ranking);
 System.out.println("\tmaxToReturn: " + maxToReturn);
 System.out.println("===================================================");
+*/
 
         /*
          * _logger.debug("searchByAssociations scheme: " + scheme);
@@ -4045,7 +4038,10 @@ System.out.println("===================================================");
 			ResolvedConceptReferenceList list =	cns.resolveToList(null, null, null, null, false, -1);
 			for (int i=0; i<list.getResolvedConceptReferenceCount(); i++) {
 				ResolvedConceptReference rcr = list.getResolvedConceptReference(i);
-				String name = rcr.getEntityDescription().getContent();
+				String name = "";
+				if (rcr.getEntityDescription() != null) {
+					name = rcr.getEntityDescription().getContent();
+				}
 				String code = rcr.getConceptCode();
 				if (name.compareTo(code) == 0) {
 					return false;
@@ -4085,8 +4081,6 @@ System.out.println("===================================================");
                 // matchAlgorithm = Constants.CONTAIN_SEARCH_ALGORITHM;
                 matchAlgorithm = findBestContainsAlgorithm(matchText);
             }
-
-System.out.println(matchAlgorithm);
 
             //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             Vector<CodedNodeSet> cns_vec = new Vector<CodedNodeSet>();

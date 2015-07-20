@@ -293,7 +293,11 @@ public class SimpleSearchUtils {
 
 
     protected static void displayRef(ResolvedConceptReference ref) {
-        System.out.println(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+		if (ref.getEntityDescription() != null) {
+	        System.out.println(ref.getConceptCode() + ":" + ref.getEntityDescription().getContent());
+		} else {
+			System.out.println(ref.getConceptCode() + ":");
+		}
     }
 
 
@@ -542,7 +546,11 @@ public class SimpleSearchUtils {
 
 					while (iterator.hasNext()) {
 						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
-						System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						if (rcr.getEntityDescription() != null) {
+							System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						} else {
+							System.out.println("(" + rcr.getConceptCode() + ")");
+						}
 					}
 
 
@@ -566,7 +574,11 @@ public class SimpleSearchUtils {
 
 					while (iterator.hasNext()) {
 						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
-						System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						if (rcr.getEntityDescription() != null) {
+							System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+						} else {
+							System.out.println("(" + rcr.getConceptCode() + ")");
+						}
 					}
 
 				} catch (Exception ex) {

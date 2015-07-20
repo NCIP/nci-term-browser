@@ -839,7 +839,7 @@ public class CacheController {
                 LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
                 TreeUtils util = new TreeUtils(lbSvc);
                 HashMap hmap =
-                    util.getTreePathData(ontology_display_name, null, null,
+                    util.getTreePathData(ontology_display_name, version, null,
                         node_id);
                 // _logger.debug("Calling util.getTreePathData2...");
                 // HashMap hmap = util.getTreePathData2(ontology_display_name,
@@ -864,7 +864,7 @@ public class CacheController {
                 TreeUtils util = new TreeUtils(lbSvc);
 
                 HashMap hmap =
-                    util.getTreePathData(ontology_display_name, null, null,
+                    util.getTreePathData(ontology_display_name, version, null,
                         node_id, maxLevel);
                 // HashMap hmap = util.getTreePathData2(ontology_display_name,
                 // null, node_id, maxLevel);

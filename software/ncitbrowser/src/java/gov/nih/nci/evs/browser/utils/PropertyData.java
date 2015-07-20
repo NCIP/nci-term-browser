@@ -775,8 +775,8 @@ public class PropertyData
         if (isEmpty) return description;
 		String firstColumnHeading = null;
 		String secondColumnHeading = null;
-		int	firstPercentColumnWidth = 20;
-		int	secondPercentColumnWidth = 80;
+		int	firstPercentColumnWidth = 60;
+		int	secondPercentColumnWidth = 40;
 
 		int qualifierColumn = 1;
 		if (rel_type.startsWith("type_inverse")) {

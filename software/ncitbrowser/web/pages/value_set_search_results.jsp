@@ -230,7 +230,10 @@ if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
 		    //isValueSet = false;
 		    Entity entity = DataUtils.getConceptByCode(Constants.TERMINOLOGY_VALUE_SET_NAME, null, root_vsd_uri); 
 		    if (entity != null) {
-			vsd_name = entity.getEntityDescription().getContent();
+		        vsd_name = "";
+		        if (entity.getEntityDescription() != null) {
+			    vsd_name = entity.getEntityDescription().getContent();
+			}
 		    }
 	    }	      
 	      
