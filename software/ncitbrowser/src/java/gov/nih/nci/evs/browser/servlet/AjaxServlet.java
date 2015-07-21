@@ -3655,9 +3655,10 @@ out.flush();
 			String filename = vsc.getReportURI();
 			String excelfile = ValueSetDefinitionConfig.getValueSetDownloadFilename(vsc);
 
-			if (!ValueSetDefinitionConfig.fileExists(excelfile)) {
+            //[NCITERM-680] Released File views get out of sync with ftp publications
+			//if (!ValueSetDefinitionConfig.fileExists(excelfile)) {
 				 FTPDownload.download(vsc.getReportURI(), excelfile);
-			}
+			//}
 
 			Vector u = ValueSetDefinitionConfig.interpretExtractionRule(vsc.getExtractionRule());
 			int col = -1;
