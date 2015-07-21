@@ -8,6 +8,7 @@
 String formalName = DataUtils.getFormalName(dictionary);
 Vector localname_vec = DataUtils.getLocalNames(formalName);
 boolean has_subsource = false;
+boolean display_subsource = false; // temporarily turned off
 
 
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
@@ -82,7 +83,7 @@ if (type != null && type.compareTo("all") == 0) {
           <th class="dataTableHeader" scope="col" align="left">Code</th>
           
           <%
-          if (has_subsource) {
+          if (display_subsource && has_subsource) {
           %>
           <th class="dataTableHeader" scope="col" align="left">Subsource Name</th>
           <%
@@ -154,7 +155,7 @@ if (type != null && type.compareTo("all") == 0) {
               <%} %>
               
             <%  
-            if (has_subsource) {
+            if (display_subsource && has_subsource) {
 		    if (!StringUtils.isNullOrBlank(term_subsource_name)) {%>
 			<td class="dataCellText"><%=term_subsource_name%></td>
 		    <%
