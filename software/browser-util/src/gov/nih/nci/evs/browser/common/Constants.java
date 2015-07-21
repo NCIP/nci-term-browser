@@ -192,12 +192,13 @@ public class Constants {
 
     public static final String CDISC_SUBMISSION_VALUE = "CDISC Submission Value";
 
-    public static final String[] HARZARD_CHARS = {"/SCRIPT", "=CAST(", "EXEC(", "IMG SRC=", "IMG SRC=", "BODY onload",
-                                 "iframe src", "INPUT TYPE", "IMG DYNSRC", "IMG LOWSRC",
-                                 "javascript:alert", "BGSOUND SRC", "BR SIZE", "LINK REL",
-                                 "META HTTP-EQUIV", "STYLE=", "xss:expression", "XSS STYLE",
+    public static final String[] HARZARD_CHARS = {"/SCRIPT", "CAST(", "EXEC(", "IMG SRC=", "IMG SRC=", "BODY ONLOAD",
+                                 "IFRAME SRC", "INPUT TYPE", "IMG DYNSRC", "IMG LOWSRC",
+                                 "JAVASCRIPT:ALERT", "BGSOUND SRC", "BR SIZE", "LINK REL",
+                                 "META HTTP-EQUIV", "STYLE=", "XSS:EXPRESSION", "XSS STYLE",
                                  "DIV STYLE", "BASE HREF", "OBJECT TYPE", "XML ID",
-                                 "SPAN DATASRC", "A HREF="};
+                                 "SPAN DATASRC", "A HREF=", "$WHERE", "SLEEP(", "$QUERY", ";DECLARE", "VARCHAR(", "E-"};
+
 
     public static final String NO_VALUE_SET_LOADED_MSG = "No value set has been loaded.";
     public static final String ONTOLOGY_NODE_ID = "ontology_node_id";

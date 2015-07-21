@@ -12,6 +12,7 @@ import java.util.regex.*;
 import org.apache.log4j.*;
 
 import gov.nih.nci.evs.browser.common.*;
+import gov.nih.nci.evs.browser.properties.*;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -373,13 +374,19 @@ public class HTTPUtils {
 	}
 
 
+	public static boolean isValueSetURI(String key) {
+		if (key == null) return false;
+		if (ValueSetDefinitionConfig.getValueSetConfig(key) != null) return true;
+		return false;
+	}
+
 	public static boolean validateRequestParameters(HttpServletRequest request) {
 		List list = HTTPParameterConstants.HTTP_REQUEST_PARAMETER_NAME_LIST;
+		String value = null;
         try {
             Enumeration<?> enumeration =
                 SortUtils.sort(request.getParameterNames());
             while (enumeration.hasMoreElements()) {
-
 				String name = (String) enumeration.nextElement();
 
                 Boolean isDynamic = isDynamicId(name);
@@ -388,13 +395,14 @@ public class HTTPUtils {
                 if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.FALSE)) {
 					if (isDynamic != null && isDynamic.equals(Boolean.FALSE)) {
 						if (name.endsWith("value=")) return true;
-
-						if (!list.contains(name)) {
+                        // 072115
+                        if (!name.startsWith("TVS_") && !name.startsWith("http:") && !list.contains(name)) {
+						//if (!list.contains(name)) {
 							System.out.println("(*) name: " + name + " not in the list.");
 							request.getSession().setAttribute("error_msg", "WARNING: Unknown parameter name encountered - '" + name + "'.");
 							return false;
 						}
-						String value = (String) request.getParameter(name);
+						value = (String) request.getParameter(name);
 						Boolean bool_obj = validateRadioButtonNameAndValue(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
 							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
@@ -420,14 +428,6 @@ public class HTTPUtils {
 						}
 
 						bool_obj = containsHarzardCharacters(value);
-						/*
-						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
-							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
-							   " (name: " + name + ").";
-							request.getSession().setAttribute("error_msg", error_msg);
-							return false;
-						}
-						*/
 						// Cross-Site Scripting:
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
 							String error_msg = "WARNING: Invalid parameter value encountered - '" +
@@ -516,6 +516,13 @@ public class HTTPUtils {
 		if (!name.startsWith("TVS_") && !name.startsWith("http:")) {
 		    return null;
 		}
+
+		if (isValueSetURI(name)) {
+			if (value.compareTo("on") != 0 && value.compareTo("off") != 0) {
+				return Boolean.FALSE;
+			}
+		}
+
 		if (value.compareTo("on") == 0 || value.compareTo("off") == 0) {
 			return Boolean.TRUE;
 		}
@@ -528,7 +535,9 @@ public class HTTPUtils {
 		s = s.trim();
 		for (int i=0; i<Constants.HARZARD_CHARS.length; i++) {
 			String t = Constants.HARZARD_CHARS[i];
-			if (s.indexOf(t) != -1) return Boolean.TRUE;
+			if (s.indexOf(t) != -1) {
+				return Boolean.TRUE;
+			}
 		}
 		return Boolean.FALSE;
 	}

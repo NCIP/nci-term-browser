@@ -329,7 +329,7 @@ if (display_name_vec == null) {
 				 }
 
         //search_value_set
-        } else if (action.compareTo("search_value_set") != 0) {
+        } else { //if (action.compareTo("search_value_set") != 0) {
 			 boolean retval = HTTPUtils.validateRequestParameters(request);
 			 if (!retval) {
 				 try {

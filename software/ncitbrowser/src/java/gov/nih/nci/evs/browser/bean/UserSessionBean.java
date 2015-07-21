@@ -614,6 +614,11 @@ if (scheme != null) {
                 ResolvedConceptReferencesIteratorWrapper wrapper = null;
 
                 try {
+					// temporary fix for: [NCITERM-682] Contains search failed on search strings containing a colon character.
+					if (matchAlgorithm.compareTo("contains") == 0) {
+						matchText = matchText.replaceAll(":", " ");
+					}
+
 					if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 						iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
 						wrapper = null;
@@ -2287,6 +2292,13 @@ System.out.println("(*) advancedSearchAction SearchUtils(lbSvc).searchByAssociat
             }
 
         } else if (searchType != null && searchType.compareTo("Name") == 0) {
+
+
+			// temporary fix for: [NCITERM-682] Contains search failed on search strings containing a colon character.
+			if (matchAlgorithm.compareTo("contains") == 0) {
+				matchText = matchText.replaceAll(":", " ");
+			}
+
 
             searchFields =
                 SearchFields.setName(schemes, matchText, searchTarget, source,
