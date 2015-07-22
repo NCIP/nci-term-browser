@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.bean.*;
 import gov.nih.nci.evs.browser.common.*;
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
 

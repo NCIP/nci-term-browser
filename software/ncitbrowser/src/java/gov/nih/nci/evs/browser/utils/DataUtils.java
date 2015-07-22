@@ -1,4 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
+
+import gov.nih.nci.evs.browser.bean.*;
+
 import java.io.*;
 import java.net.URI;
 
@@ -282,12 +285,21 @@ public class DataUtils {
             _namespace2CodingScheme = getNamespaceId2CodingSchemeFormalNameMapping();
 		}
 		System.out.println("getNamespaceId2CodingSchemeFormalNameMapping run time (ms): " + (System.currentTimeMillis() - ms));
+
 		ms = System.currentTimeMillis();
 		if (_defaultOntologiesToSearchOnStr == null) {
             _defaultOntologiesToSearchOnStr = getDefaultOntologiesToSearchOnStr();
 		}
 
 		System.out.println("getDefaultOntologiesToSearchOnStr run time (ms): " + (System.currentTimeMillis() - ms));
+
+		updateListOfCodingSchemeVersionsUsedInResolutionHashMap();
+		System.out.println("updateListOfCodingSchemeVersionsUsedInResolutionHashMap run time (ms): " + (System.currentTimeMillis() - ms));
+		ms = System.currentTimeMillis();
+
+		_sortedOntologies = getSortedOntologies();
+		System.out.println("getSortedOntologies run time (ms): " + (System.currentTimeMillis() - ms));
+
 		ms = System.currentTimeMillis();
 
 		if (_visualizationWidgetHashMap == null) {
@@ -298,16 +310,7 @@ public class DataUtils {
 		ms = System.currentTimeMillis();
 
 		_api_key = NCItBrowserProperties.getNCBO_API_KEY();
-
-		updateListOfCodingSchemeVersionsUsedInResolutionHashMap();
-		System.out.println("updateListOfCodingSchemeVersionsUsedInResolutionHashMap run time (ms): " + (System.currentTimeMillis() - ms));
-		ms = System.currentTimeMillis();
-
-		_sortedOntologies = getSortedOntologies();
-		System.out.println("getSortedOntologies run time (ms): " + (System.currentTimeMillis() - ms));
-
 		System.out.println("Total DataUtils initialization run time (ms): " + (System.currentTimeMillis() - ms0));
-
 
 	}
 
@@ -417,24 +420,6 @@ public class DataUtils {
 		return _RVSCSURI2VersionHashMap;
 	}
 
-    public static String getDefaultOntologiesToSearchOnStr() {
-		if (_defaultOntologiesToSearchOnStr != null) return _defaultOntologiesToSearchOnStr;
-        if (_ontologies == null) setCodingSchemeMap();
-        Vector display_name_vec = getSortedOntologies();
-        StringBuffer buf = new StringBuffer();
-        buf.append("|");
-        for (int i = 0; i < display_name_vec.size(); i++) {
-		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		    if (info.getLabel().indexOf(Constants.NCIT_CS_NAME) != -1 || info.getLabel().indexOf(Constants.NCI_THESAURUS) != -1) {
-			//if (isNCIT(info.getLabel())) {
-		        if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
-                    buf.append(info.getLabel() + "|");
-			    }
-		    }
-	    }
-	    _defaultOntologiesToSearchOnStr = buf.toString();
-	    return _defaultOntologiesToSearchOnStr;
-    }
 
     public static HashMap getDefaultFormalName2VirtualIdMap() {
 		HashMap formalName2VirtualIdMap = new HashMap();
@@ -1183,7 +1168,7 @@ public class DataUtils {
     }
 
     public static String int2String(Integer int_obj) {
-		return StringUtils.int2String(int_obj);
+		return gov.nih.nci.evs.browser.utils.StringUtils.int2String(int_obj);
     }
 
     // ==================================================================================================================================
@@ -1986,11 +1971,11 @@ public class DataUtils {
 
 
     public static Vector<String> parseData(String line) {
-		return StringUtils.parseData(line, "|");
+		return gov.nih.nci.evs.browser.utils.StringUtils.parseData(line, "|");
     }
 
     public static Vector<String> parseData(String line, String tab) {
-		return StringUtils.parseData(line, tab);
+		return gov.nih.nci.evs.browser.utils.StringUtils.parseData(line, tab);
     }
 
 
@@ -2060,181 +2045,8 @@ public class DataUtils {
         return v;
     }
 
-    public String getNCICBContactURL() {
-        if (_ncicbContactURL != null) {
-            return _ncicbContactURL;
-        }
-        String default_url = "ncicb@pop.nci.nih.gov";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _ncicbContactURL =
-                properties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
-            if (_ncicbContactURL == null) {
-                _ncicbContactURL = default_url;
-            }
-        } catch (Exception ex) {
 
-        }
-        return _ncicbContactURL;
-    }
 
-    public String getTerminologySubsetDownloadURL() {
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _terminologySubsetDownloadURL =
-                properties
-                    .getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
-        } catch (Exception ex) {
-
-        }
-        return _terminologySubsetDownloadURL;
-    }
-
-    public String getNCITBuildInfo() {
-        if (_ncitBuildInfo != null) {
-            return _ncitBuildInfo;
-        }
-        String default_info = "N/A";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _ncitBuildInfo =
-                properties.getProperty(NCItBrowserProperties.NCIT_BUILD_INFO);
-            if (_ncitBuildInfo == null) {
-                _ncitBuildInfo = default_info;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return _ncitBuildInfo;
-    }
-
-    public String getApplicationVersion() {
-        if (_ncitAppVersion != null) {
-            return _ncitAppVersion;
-        }
-        String default_info = "1.0";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _ncitAppVersion =
-                properties.getProperty(NCItBrowserProperties.NCIT_APP_VERSION);
-            if (_ncitAppVersion == null) {
-                _ncitAppVersion = default_info;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return _ncitAppVersion;
-    }
-
-    public String getApplicationVersionDisplay() {
-        if (_ncitAppVersionDisplay != null)
-            return _ncitAppVersionDisplay;
-        try {
-            NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
-            String value =
-                properties.getProperty(NCItBrowserProperties.NCIT_APP_VERSION_DISPLAY);
-            if (value == null)
-                return _ncitAppVersionDisplay = "";
-            String version = getApplicationVersion();
-            value = value.replace("$application.version", version);
-            return _ncitAppVersionDisplay = value;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return _ncitAppVersionDisplay = "";
-        }
-    }
-
-    public String getNCITAnthillBuildTagBuilt() {
-        if (_ncitAnthillBuildTagBuilt != null) {
-            return _ncitAnthillBuildTagBuilt;
-        }
-        String default_info = "N/A";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _ncitAnthillBuildTagBuilt =
-                properties
-                    .getProperty(NCItBrowserProperties.ANTHILL_BUILD_TAG_BUILT);
-            if (_ncitAnthillBuildTagBuilt == null) {
-                _ncitAnthillBuildTagBuilt = default_info;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return _ncitAnthillBuildTagBuilt;
-    }
-
-    public String getNCItURL() {
-        if (_ncitURL != null) {
-            return _ncitURL;
-        }
-        String default_info = "N/A";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _ncitURL = properties.getProperty(NCItBrowserProperties.NCIT_URL);
-            if (_ncitURL == null) {
-                _ncitURL = default_info;
-            }
-        } catch (Exception ex) {
-
-        }
-        return _ncitURL;
-    }
-
-    public String getNCImURL() {
-        if (_ncimURL != null) {
-            return _ncimURL;
-        }
-        String default_info = "http://ncim.nci.nih.gov";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _ncimURL = properties.getProperty(NCItBrowserProperties.NCIM_URL);
-            if (_ncimURL == null) {
-                _ncimURL = default_info;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return _ncimURL;
-    }
-
-    public String getEVSServiceURL() {
-        if (_evsServiceURL != null) {
-            return _evsServiceURL;
-        }
-        String default_info = "Local LexEVS";
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _evsServiceURL =
-                properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
-            if (_evsServiceURL == null) {
-                _evsServiceURL = default_info;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return _evsServiceURL;
-    }
-
-    public String getTermSuggestionURL() {
-        NCItBrowserProperties properties = null;
-        try {
-            properties = NCItBrowserProperties.getInstance();
-            _term_suggestion_application_url =
-                properties
-                    .getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return _term_suggestion_application_url;
-    }
     // /////////////////////////////////////////////////////////////////////////////
 
     public static CodingScheme resolveCodingScheme(LexBIGService lbSvc,
@@ -2433,7 +2245,7 @@ public class DataUtils {
             if (status_vec == null || status_vec.size() == 0) {
                 con_status = c.getStatus();
             } else {
-                con_status = StringUtils.convertToCommaSeparatedValue(status_vec);
+                con_status = gov.nih.nci.evs.browser.utils.StringUtils.convertToCommaSeparatedValue(status_vec);
             }
             return con_status;
         }
@@ -2462,7 +2274,7 @@ public class DataUtils {
                         con_status = c.getStatus();
                     } else {
                         con_status =
-                            StringUtils.convertToCommaSeparatedValue(status_vec);
+                            gov.nih.nci.evs.browser.utils.StringUtils.convertToCommaSeparatedValue(status_vec);
                     }
                     w.add(con_status);
                 } else {
@@ -3350,51 +3162,18 @@ public class DataUtils {
 
 
     public static boolean isNull(String value) {
-		return StringUtils.isNull(value);
+		return gov.nih.nci.evs.browser.utils.StringUtils.isNull(value);
 	}
 
     public static boolean isNullOrBlank(String value) {
-		return StringUtils.isNullOrBlank(value);
+		return gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(value);
 	}
 
     public static boolean isNullOrEmpty(Vector v) {
-		return StringUtils.isNullOrEmpty(v);
+		return gov.nih.nci.evs.browser.utils.StringUtils.isNullOrEmpty(v);
 	}
 
-	public static Vector getNonProductionOntologies(Vector v, String scheme) {
-		Vector u = new Vector();
-		for (int i = 0; i < v.size(); i++) {
-			OntologyInfo info = (OntologyInfo) v.elementAt(i);
-			if (scheme.compareTo(info.getCodingScheme()) == 0) {
-				if (isNull(info.getTag()) || info.getTag().compareToIgnoreCase(Constants.PRODUCTION) != 0) {
-					u.add(info);
-				}
-			}
-		}
-		if (u.size() > 0) {
-			Collections.sort(u, new OntologyInfo.ComparatorImpl());
-		}
-		return u;
-	}
 
-	public static Vector sortOntologyInfo(Vector v) {
-		Vector u = new Vector();
-        Collections.sort(v, new OntologyInfo.ComparatorImpl());
-		for (int i = 0; i < v.size(); i++) {
-			OntologyInfo info = (OntologyInfo) v.elementAt(i);
-			if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
-				u.add(info);
-			    if (info.getExpanded()) {
-					Vector w = getNonProductionOntologies(v, info.getCodingScheme());
-					for (int j=0; j<w.size(); j++) {
-						OntologyInfo ontologyInfo = (OntologyInfo) w.elementAt(j);
-						u.add(ontologyInfo);
-					}
-				}
-			}
-		}
-		return u;
-	}
 
 	public static String getNavigationTabType(String dictionary, String version,
 	        String vsd_uri, String nav_type) {
@@ -3460,7 +3239,7 @@ public class DataUtils {
 	}
 
 	public static boolean isInteger( String input )	{
-		return StringUtils.isInteger(input);
+		return gov.nih.nci.evs.browser.utils.StringUtils.isInteger(input);
 	}
 
     public static boolean isCaptchaOptionValid(String value) {
@@ -3567,46 +3346,7 @@ public class DataUtils {
 	}
 
 //==========================================================================================
-    public static HashMap getNCBOWidgetString() {
-        String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
-		if (isNull(ncbo_widget_info)) {
-			//System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
-			//System.out.println("(*) computeNCBOWidgetString ... ");
-			ncbo_widget_info = computeNCBOWidgetString();
-		}
-		//System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
-		return parseNCBOWidgetString(ncbo_widget_info);
-	}
 
-
-	public static String computeNCBOWidgetString() {
-		StringBuffer buf = new StringBuffer();
-		HashMap map = NCItBrowserProperties.getBioportalAcronym2NameHashMap();
-
-		if (map == null) {
-			System.out.println("(*) getBioportalAcronym2NameHashMap returns null??? ");
-			return null;
-		}
-
-        Set entrys = map.entrySet() ;
-        Iterator iter = entrys.iterator() ;
-        while(iter.hasNext()) {
-            Map.Entry me = (Map.Entry)iter.next();
-            String acronym = (String) me.getKey();
-            //String name = (String) me.getValue();
-            if (_localName2FormalNameHashMap.containsKey(acronym)) {
-				System.out.println("(*) _localName2FormalNameHashMap containsKey " + acronym);
-				String formalname = (String) _localName2FormalNameHashMap.get(acronym);
-				String cs_name = (String) _uri2CodingSchemeNameHashMap.get(formalname);
-				buf.append(cs_name + "|" + formalname + "|" + acronym + ";");
-            }
-        }
-        String t = buf.toString();
-        if (t.indexOf(Constants.NCI_THESAURUS) == -1) {
-			t = t + Constants.DEFAULT_NCBO_WIDGET_INFO;//"NCI_Thesaurus|NCI_Thesaurus|NCIT;";
-		}
-        return t;
-	}
 
     public static HashMap parseNCBOWidgetString(String s) {
 		HashMap hmap = new HashMap();
@@ -3663,33 +3403,13 @@ public class DataUtils {
 	}
 
 
-	public static String createVisualizationWidgetURL(String abbreviation, String code) {
-		String api_key = getAPIKey();
-		//String csName = (String) localname2CSNameMap.get(abbreviation);
-		String csName = getCSName(abbreviation);
-		String purl = getNCBOOntologyNamespace(csName);
-		if (purl == null) return null;
-
-		if (purl.indexOf("/obo/") != -1) {
-			code = code.replaceAll(":", "_");
-		}
-		return NCBO_WIDGET_QUERY_STRING + abbreviation + "&class="
-			       + HTTPUtils.encode(purl + code)
-			       + "&apikey=" + getAPIKey();
-	}
-
-    public static String getVisualizationWidgetURL(String dictionary, String code) {
-		String abbreviation = getNCBOOntologyAbbreviation(dictionary);
-		if (abbreviation == null) return null;
-		return createVisualizationWidgetURL(abbreviation, code);
-	}
 
     public static String encodeTerm(String s) {
-		return StringUtils.encodeTerm(s);
+		return gov.nih.nci.evs.browser.utils.StringUtils.encodeTerm(s);
     }
 
     public static String encode_term(String s) {
-		return StringUtils.encode_term(s);
+		return gov.nih.nci.evs.browser.utils.StringUtils.encode_term(s);
     }
 
     public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
@@ -3708,46 +3428,6 @@ public class DataUtils {
     }
 
 
-    public static Vector getSortedOntologies() {
-	   if (_sortedOntologies != null) return _sortedOntologies;
-
-	   Vector display_name_vec = new Vector();
-	   List ontology_list = getOntologyList();
-	   int num_vocabularies = ontology_list.size();
-
-	   for (int i = 0; i < ontology_list.size(); i++) {
-			SelectItem item = (SelectItem) ontology_list.get(i);
-			String value = (String) item.getValue();
-			String label = (String) item.getLabel();
-
-			String scheme = key2CodingSchemeName(value);
-			String short_scheme_name = uri2CodingSchemeName(scheme);
-
-			String version = key2CodingSchemeVersion(value);
-			String display_name = getMetadataValue(short_scheme_name, version, "display_name");
-			if (isNull(display_name)) {
-			   display_name = getLocalName(scheme);
-			}
-			String sort_category = getMetadataValue(scheme, version, "vocabulary_sort_category");
-			if (sort_category == null) {
-				sort_category = "0";
-			}
-
-	        OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
-			display_name_vec.add(info);
-	   }
-
-	   for (int i = 0; i < display_name_vec.size(); i++) {
-		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		    if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
-			    Vector w = getNonProductionOntologies(display_name_vec, info.getCodingScheme());
-			    if (w.size() > 0) {
-			        info.setHasMultipleVersions(true);
-			    }
-		    }
-	   }
-	   return display_name_vec;
-    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static boolean isNCIT_OR_NCIM(String display_name) {
@@ -3916,6 +3596,358 @@ public class DataUtils {
 		return NCI_THESAURUS_AVAILABLE;
 	}
 
+
+
+
+
+    public static String getDefaultOntologiesToSearchOnStr() {
+		if (_defaultOntologiesToSearchOnStr != null) return _defaultOntologiesToSearchOnStr;
+        if (_ontologies == null) setCodingSchemeMap();
+        Vector display_name_vec = getSortedOntologies();
+        StringBuffer buf = new StringBuffer();
+        buf.append("|");
+        for (int i = 0; i < display_name_vec.size(); i++) {
+		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		    if (info.getLabel().indexOf(Constants.NCIT_CS_NAME) != -1 || info.getLabel().indexOf(Constants.NCI_THESAURUS) != -1) {
+			//if (isNCIT(info.getLabel())) {
+		        if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
+                    buf.append(info.getLabel() + "|");
+			    }
+		    }
+	    }
+	    _defaultOntologiesToSearchOnStr = buf.toString();
+	    return _defaultOntologiesToSearchOnStr;
+    }
+
+    public static Vector getSortedOntologies() {
+	   if (_sortedOntologies != null) return _sortedOntologies;
+
+	   Vector display_name_vec = new Vector();
+	   List ontology_list = getOntologyList();
+	   int num_vocabularies = ontology_list.size();
+
+	   for (int i = 0; i < ontology_list.size(); i++) {
+			SelectItem item = (SelectItem) ontology_list.get(i);
+			String value = (String) item.getValue();
+			String label = (String) item.getLabel();
+
+			String scheme = key2CodingSchemeName(value);
+			String short_scheme_name = uri2CodingSchemeName(scheme);
+
+			String version = key2CodingSchemeVersion(value);
+			String display_name = getMetadataValue(short_scheme_name, version, "display_name");
+			if (isNull(display_name)) {
+			   display_name = getLocalName(scheme);
+			}
+			String sort_category = getMetadataValue(scheme, version, "vocabulary_sort_category");
+			if (sort_category == null) {
+				sort_category = "0";
+			}
+			String tag = getVocabularyVersionTag(short_scheme_name, version);
+
+	        //OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
+	        OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, tag, label, sort_category);
+			display_name_vec.add(info);
+	   }
+
+	   for (int i = 0; i < display_name_vec.size(); i++) {
+		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		    if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
+			    Vector w = getNonProductionOntologies(display_name_vec, info.getCodingScheme());
+			    if (w.size() > 0) {
+			        info.setHasMultipleVersions(true);
+			    }
+		    }
+	   }
+	   return display_name_vec;
+    }
+
+
+	public static Vector getNonProductionOntologies(Vector v, String scheme) {
+		Vector u = new Vector();
+		for (int i = 0; i < v.size(); i++) {
+			OntologyInfo info = (OntologyInfo) v.elementAt(i);
+			if (scheme.compareTo(info.getCodingScheme()) == 0) {
+				if (isNull(info.getTag()) || info.getTag().compareToIgnoreCase(Constants.PRODUCTION) != 0) {
+					u.add(info);
+				}
+			}
+		}
+		if (u.size() > 0) {
+			Collections.sort(u, new OntologyInfo.ComparatorImpl());
+		}
+		return u;
+	}
+
+	public static Vector sortOntologyInfo(Vector v) {
+		Vector u = new Vector();
+        Collections.sort(v, new OntologyInfo.ComparatorImpl());
+		for (int i = 0; i < v.size(); i++) {
+			OntologyInfo info = (OntologyInfo) v.elementAt(i);
+			if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
+				u.add(info);
+			    if (info.getExpanded()) {
+					Vector w = getNonProductionOntologies(v, info.getCodingScheme());
+					for (int j=0; j<w.size(); j++) {
+						OntologyInfo ontologyInfo = (OntologyInfo) w.elementAt(j);
+						u.add(ontologyInfo);
+					}
+				}
+			}
+		}
+		return u;
+	}
+
+
+
+//==============================================
+//           NCItBrowserProperties
+//==============================================
+
+
+    public static HashMap getNCBOWidgetString() {
+        String ncbo_widget_info = NCItBrowserProperties.getNCBO_WIDGET_INFO();
+		if (isNull(ncbo_widget_info)) {
+			//System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
+			//System.out.println("(*) computeNCBOWidgetString ... ");
+			ncbo_widget_info = computeNCBOWidgetString();
+		}
+		//System.out.println("(*) ncbo_widget_info: " + ncbo_widget_info);
+		return parseNCBOWidgetString(ncbo_widget_info);
+	}
+
+
+	public static String computeNCBOWidgetString() {
+		StringBuffer buf = new StringBuffer();
+
+
+//      _bioportalAcronym2NameHashMap = RESTClient.getBioportalAcronym2NameHashMap(_ncbo_api_key);
+
+		HashMap map = NCItBrowserProperties.getBioportalAcronym2NameHashMap();
+
+		if (map == null) {
+			System.out.println("(*) getBioportalAcronym2NameHashMap returns null??? ");
+			return null;
+		}
+
+        Set entrys = map.entrySet() ;
+        Iterator iter = entrys.iterator() ;
+        while(iter.hasNext()) {
+            Map.Entry me = (Map.Entry)iter.next();
+            String acronym = (String) me.getKey();
+            //String name = (String) me.getValue();
+            if (_localName2FormalNameHashMap.containsKey(acronym)) {
+				System.out.println("(*) _localName2FormalNameHashMap containsKey " + acronym);
+				String formalname = (String) _localName2FormalNameHashMap.get(acronym);
+				String cs_name = (String) _uri2CodingSchemeNameHashMap.get(formalname);
+				buf.append(cs_name + "|" + formalname + "|" + acronym + ";");
+            }
+        }
+        String t = buf.toString();
+        if (t.indexOf(Constants.NCI_THESAURUS) == -1) {
+			t = t + Constants.DEFAULT_NCBO_WIDGET_INFO;//"NCI_Thesaurus|NCI_Thesaurus|NCIT;";
+		}
+        return t;
+	}
+
+	public static String createVisualizationWidgetURL(String abbreviation, String code) {
+		String api_key = getAPIKey();
+		String csName = getCSName(abbreviation);
+		String purl = getNCBOOntologyNamespace(csName);
+		if (purl == null) return null;
+
+		if (purl.indexOf("/obo/") != -1) {
+			code = code.replaceAll(":", "_");
+		}
+		return Constants.NCBO_WIDGET_QUERY_STRING + abbreviation + "&class="
+			       + HTTPUtils.encode(purl + code)
+			       + "&apikey=" + getAPIKey();
+	}
+
+
+    public static String getVisualizationWidgetURL(String dictionary, String code) {
+		String abbreviation = getNCBOOntologyAbbreviation(dictionary);
+		if (abbreviation == null) return null;
+		return createVisualizationWidgetURL(abbreviation, code);
+	}
+
+
+    public String getNCICBContactURL() {
+        if (_ncicbContactURL != null) {
+            return _ncicbContactURL;
+        }
+        String default_url = "ncicb@pop.nci.nih.gov";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _ncicbContactURL =
+                properties.getProperty(NCItBrowserProperties.NCICB_CONTACT_URL);
+            if (_ncicbContactURL == null) {
+                _ncicbContactURL = default_url;
+            }
+        } catch (Exception ex) {
+
+        }
+        return _ncicbContactURL;
+    }
+
+    public String getTerminologySubsetDownloadURL() {
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _terminologySubsetDownloadURL =
+                properties
+                    .getProperty(NCItBrowserProperties.TERMINOLOGY_SUBSET_DOWNLOAD_URL);
+        } catch (Exception ex) {
+
+        }
+        return _terminologySubsetDownloadURL;
+    }
+
+    public String getNCITBuildInfo() {
+        if (_ncitBuildInfo != null) {
+            return _ncitBuildInfo;
+        }
+        String default_info = "N/A";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _ncitBuildInfo =
+                properties.getProperty(NCItBrowserProperties.NCIT_BUILD_INFO);
+            if (_ncitBuildInfo == null) {
+                _ncitBuildInfo = default_info;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return _ncitBuildInfo;
+    }
+
+    public String getApplicationVersion() {
+        if (_ncitAppVersion != null) {
+            return _ncitAppVersion;
+        }
+        String default_info = "1.0";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _ncitAppVersion =
+                properties.getProperty(NCItBrowserProperties.NCIT_APP_VERSION);
+            if (_ncitAppVersion == null) {
+                _ncitAppVersion = default_info;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return _ncitAppVersion;
+    }
+
+    public String getApplicationVersionDisplay() {
+        if (_ncitAppVersionDisplay != null)
+            return _ncitAppVersionDisplay;
+        try {
+            NCItBrowserProperties properties = NCItBrowserProperties.getInstance();
+            String value =
+                properties.getProperty(NCItBrowserProperties.NCIT_APP_VERSION_DISPLAY);
+            if (value == null)
+                return _ncitAppVersionDisplay = "";
+            String version = getApplicationVersion();
+            value = value.replace("$application.version", version);
+            return _ncitAppVersionDisplay = value;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return _ncitAppVersionDisplay = "";
+        }
+    }
+
+    public String getNCITAnthillBuildTagBuilt() {
+        if (_ncitAnthillBuildTagBuilt != null) {
+            return _ncitAnthillBuildTagBuilt;
+        }
+        String default_info = "N/A";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _ncitAnthillBuildTagBuilt =
+                properties
+                    .getProperty(NCItBrowserProperties.ANTHILL_BUILD_TAG_BUILT);
+            if (_ncitAnthillBuildTagBuilt == null) {
+                _ncitAnthillBuildTagBuilt = default_info;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return _ncitAnthillBuildTagBuilt;
+    }
+
+    public String getNCItURL() {
+        if (_ncitURL != null) {
+            return _ncitURL;
+        }
+        String default_info = "N/A";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _ncitURL = properties.getProperty(NCItBrowserProperties.NCIT_URL);
+            if (_ncitURL == null) {
+                _ncitURL = default_info;
+            }
+        } catch (Exception ex) {
+
+        }
+        return _ncitURL;
+    }
+
+    public String getNCImURL() {
+        if (_ncimURL != null) {
+            return _ncimURL;
+        }
+        String default_info = "http://ncim.nci.nih.gov";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _ncimURL = properties.getProperty(NCItBrowserProperties.NCIM_URL);
+            if (_ncimURL == null) {
+                _ncimURL = default_info;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return _ncimURL;
+    }
+
+    public String getEVSServiceURL() {
+        if (_evsServiceURL != null) {
+            return _evsServiceURL;
+        }
+        String default_info = "Local LexEVS";
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _evsServiceURL =
+                properties.getProperty(NCItBrowserProperties.EVS_SERVICE_URL);
+            if (_evsServiceURL == null) {
+                _evsServiceURL = default_info;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return _evsServiceURL;
+    }
+
+    public String getTermSuggestionURL() {
+        NCItBrowserProperties properties = null;
+        try {
+            properties = NCItBrowserProperties.getInstance();
+            _term_suggestion_application_url =
+                properties
+                    .getProperty(NCItBrowserProperties.TERM_SUGGESTION_APPLICATION_URL);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return _term_suggestion_application_url;
+    }
+
     public static void main(String[] args) {
         String scheme = "NCI Thesaurus";
         String version = null;
@@ -3923,8 +3955,10 @@ public class DataUtils {
         String code = "C4872";
 
         DataUtils test = new DataUtils();
-        HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
+
+        //HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
         //test.dumpRelationshipHashMap(hmap);
     }
+
 }
 

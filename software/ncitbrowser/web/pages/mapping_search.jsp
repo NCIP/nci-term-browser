@@ -144,8 +144,11 @@ if (display_name_vec == null) {
 	scheme, version, "vocabulary_sort_category");
 
     String short_scheme_name = DataUtils.uri2CodingSchemeName(scheme);
-   //OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
-    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
+
+    String tag = DataUtils.getVocabularyVersionTag(short_scheme_name, version);
+    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, tag, label, sort_category);
+    
+    //OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
     display_name_vec.add(info);
 
   }
