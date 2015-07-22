@@ -167,7 +167,7 @@ public class RESTClient{
 
 	public static void main(String[] args)
 	{
-		 String API_KEY = "dd69337f-8111-485f-a424-ae24129713a8";
+		 String API_KEY = "";
          Vector v = retrieve_REST_content(API_KEY);
          HashMap map = getBioportalAcronym2NameHashMap(v);
          dumpHashMap(map);
