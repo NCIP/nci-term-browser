@@ -193,6 +193,16 @@ public class JSPUtils {
             	request.getSession().setAttribute("version", version);
             }
         }
+
+
+        public String toString() {
+			StringBuffer buf = new StringBuffer();
+			buf.append("dictionary: ").append(dictionary).append("\n");
+			buf.append("\tversion: ").append(version).append("\n");
+			buf.append("\tdisplay_name: ").append(display_name).append("\n");
+			buf.append("\tterm_browser_version: ").append(term_browser_version);
+			return buf.toString();
+		}
     }
 
     public static String getSelectedVocabularyTooltip(HttpServletRequest request) {

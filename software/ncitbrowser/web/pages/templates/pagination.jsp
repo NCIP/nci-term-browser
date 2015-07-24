@@ -50,7 +50,7 @@ if (!page_timeout) {
         %>
         &nbsp;
         <i>
-          <a href="<%=request.getContextPath() %>/pages/search_results.jsf?page_number=<%=prev_page_num_str%>">Prev</a>
+          <a href="<%=request.getContextPath() %>/pages/search_results.jsf?page_number=<%=prev_page_num_str%>&dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>">Prev</a>
         </i>&nbsp;
         <%
           }
@@ -73,7 +73,7 @@ if (!page_timeout) {
 		    String idx_str = Integer.toString(idx);
 		    if (page_num != idx) {
 		      %>
-			<a href="<%=request.getContextPath() %>/pages/search_results.jsf?page_number=<%=idx_str%>"><%=idx_str%></a>
+			<a href="<%=request.getContextPath() %>/pages/search_results.jsf?page_number=<%=idx_str%>&dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>"><%=idx_str%></a>
 			&nbsp;
 		      <%
 		    } else {
@@ -88,7 +88,7 @@ if (!page_timeout) {
         %>
           &nbsp;
           <i>
-            <a href="<%=request.getContextPath() %>/pages/search_results.jsf?page_number=<%=next_page_num_str%>">Next</a>
+            <a href="<%=request.getContextPath() %>/pages/search_results.jsf?page_number=<%=next_page_num_str%>&dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>">Next</a>
           </i>
         <%
           }

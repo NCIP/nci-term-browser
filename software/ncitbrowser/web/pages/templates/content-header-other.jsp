@@ -8,6 +8,9 @@
   String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + info3.version;
   
   
+System.out.println(info3.toString());
+  
+  
   if (JSPUtils.isNull(info3.dictionary)) {
      %>
 		<a href="<%=basePath%>/start.jsf" style="text-decoration: none;">
