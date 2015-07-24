@@ -3719,10 +3719,6 @@ public class DataUtils {
 
 	public static String computeNCBOWidgetString() {
 		StringBuffer buf = new StringBuffer();
-
-
-//      _bioportalAcronym2NameHashMap = RESTClient.getBioportalAcronym2NameHashMap(_ncbo_api_key);
-
 		HashMap map = NCItBrowserProperties.getBioportalAcronym2NameHashMap();
 
 		if (map == null) {

@@ -14,7 +14,7 @@
 %>
 <!--
    Build info: <%=ncit_build_info%>
- Version info: <%=application_version%>
+   Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
    LexEVS URL: <%=evs_service_url%>
   -->

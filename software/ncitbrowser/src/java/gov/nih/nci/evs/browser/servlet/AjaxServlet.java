@@ -725,9 +725,14 @@ if (action.compareTo("xmldefinitions") == 0) {
                 _logger.debug("Run time (milliseconds): "
                     + (System.currentTimeMillis() - ms));
             }
-        }
+        } else if (action.equals("view_graph")) {
+            String scheme =  HTTPUtils.cleanXSS(request.getParameter("dictionary"));
+            String version =  HTTPUtils.cleanXSS(request.getParameter("version"));
+            ns =  HTTPUtils.cleanXSS(request.getParameter("ns"));
+            String code =  HTTPUtils.cleanXSS(request.getParameter("code"));
 
-
+            view_graph(request, response, scheme, version, ns, code);
+		}
     }
 
     private boolean isRoot(JSONArray rootsArray, String code) {
@@ -3986,6 +3991,73 @@ out.flush();
 		return;
 	}
 
+
+    public static void view_graph(HttpServletRequest request, HttpServletResponse response,
+        String scheme, String version, String namespace, String code) {
+
+      response.setContentType("text/html");
+      PrintWriter out = null;
+
+      try {
+      	  out = response.getWriter();
+      } catch (Exception ex) {
+		  ex.printStackTrace();
+		  return;
+	  }
+
+      out.println("<!doctype html>");
+      out.println("<html>");
+      out.println("<head>");
+      out.println("   <title>View Graph</title>");
+      out.println("   <style type=\"text/css\">");
+      out.println("       #viewgraph {");
+      out.println("           width:  1200px;");
+      out.println("           height: 1200px;");
+      out.println("           border: 1px solid lightgray;");
+      out.println("       }");
+      out.println("   </style>");
+      out.println("");
+      out.println("   <script type=\"text/javascript\" src=\"/ncitbrowser/css/vis/vis.js\"></script>");
+      out.println("   <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/vis/vis.css\" />");
+      out.println("");
+      out.println("   <script type=\"text/javascript\">");
+      out.println("       function draw() {");
+
+  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
+  if (hmap == null) {
+      RelationshipUtils relationshipUtils = new RelationshipUtils(lb_svc);
+      hmap = relationshipUtils.getRelationshipHashMap(scheme, version, code, namespace, true);
+      request.getSession().setAttribute("RelationshipHashMap", hmap);
+  }
+  // compute nodes and edges using hmap
+  VisUtils visUtils = new VisUtils(lb_svc);
+  String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, null, VisUtils.NODES_AND_EDGES, hmap);
+  out.println(nodes_and_edges);
+
+      out.println("           var container = document.getElementById('viewgraph');");
+      out.println("           var data = {");
+      out.println("               nodes: nodes,");
+      out.println("               edges: edges");
+      out.println("           };");
+      out.println("");
+      out.println("           var options = {");
+      out.println("           nodes : {");
+      out.println("               shape: 'ellipse',");
+
+      //out.println("               size: 5");
+      out.println("           }");
+      out.println("       };");
+      out.println("       var network = new vis.Network(container, data, options);");
+      out.println("       }");
+      out.println("   </script>");
+      out.println("   <script src=\"../../googleAnalytics.js\"></script>");
+      out.println("</head>");
+      out.println("<body onload=\"draw()\">");
+      out.println("<div id=\"viewgraph\"></div>");
+      out.println("</body>");
+      out.println("</html>");
+    }
 
 
     public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {
