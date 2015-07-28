@@ -4134,7 +4134,7 @@ out.flush();
       out.println("");
       out.println("&nbsp;&nbsp;");
       //out.println("<input type=\"submit\" onclick=\"javascript:refresh()\"></input>");
-      out.println("<input type=\"submit\"></input>");
+      out.println("<input type=\"submit\" value=\"Refresh\"></input>");
       out.println("</form>");
       out.println("");
       out.println("<div style=\"width: 800px; font-size:14px; text-align: justify;\">");
