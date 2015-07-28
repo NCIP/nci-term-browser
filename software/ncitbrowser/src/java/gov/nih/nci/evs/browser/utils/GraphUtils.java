@@ -35,6 +35,11 @@ public class GraphUtils {
 			String node_label = (String) it.next();
 			node_label_vec.add(node_label);
 		}
+
+		if (node_label_vec.size() == 0) {
+			return "No data avaialble.";
+		}
+
 		node_label_vec = SortUtils.quickSort(node_label_vec);
 		int knt = 0;
 		HashMap label2IdMap = new HashMap();
@@ -120,6 +125,8 @@ public class GraphUtils {
 			v.add(relationship);
 			edge_map.put(key, v);
 		}
+
+
 		return generateGraphScript(nodes, edge_map, option);
     }
 

@@ -726,12 +726,18 @@ if (action.compareTo("xmldefinitions") == 0) {
                     + (System.currentTimeMillis() - ms));
             }
         } else if (action.equals("view_graph")) {
-            String scheme =  HTTPUtils.cleanXSS(request.getParameter("dictionary"));
+            String scheme =  HTTPUtils.cleanXSS(request.getParameter("scheme"));
             String version =  HTTPUtils.cleanXSS(request.getParameter("version"));
             ns =  HTTPUtils.cleanXSS(request.getParameter("ns"));
             String code =  HTTPUtils.cleanXSS(request.getParameter("code"));
+            String type =  HTTPUtils.cleanXSS(request.getParameter("type"));
 
-            view_graph(request, response, scheme, version, ns, code);
+if (type == null) {
+	type = "ALL";
+}
+
+
+            view_graph(request, response, scheme, version, ns, code, type);
 		}
     }
 
@@ -3993,7 +3999,7 @@ out.flush();
 
 
     public static void view_graph(HttpServletRequest request, HttpServletResponse response,
-        String scheme, String version, String namespace, String code) {
+        String scheme, String version, String namespace, String code, String type) {
 
       response.setContentType("text/html");
       PrintWriter out = null;
@@ -4016,7 +4022,7 @@ out.flush();
       out.println("    }");
       out.println("    #mynetwork {");
       out.println("      width: 1200px;");
-      out.println("      height: 700px;");
+      out.println("      height: 600px;");
       out.println("      border: 1px solid lightgray;");
       out.println("    }");
       out.println("    table.legend_table {");
@@ -4049,6 +4055,7 @@ out.flush();
       out.println("      }");
       out.println("    }");
       out.println("");
+
       out.println("    function draw() {");
 
   LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
@@ -4060,10 +4067,13 @@ out.flush();
   }
   // compute nodes and edges using hmap
   VisUtils visUtils = new VisUtils(lb_svc);
-
-  String[] types = new String[2];
-  types[0] = "type_superconcept";
-  types[1] = "type_subconcept";
+  String[] types = null;
+  if (type == null || type.compareTo("ALL") == 0) {
+	  types = VisUtils.ALL_RELATIONSHIP_TYPES;
+  } else {
+	  types = new String[1];
+	  types[0] = type;
+  }
 
   String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
   out.println(nodes_and_edges);
@@ -4093,18 +4103,37 @@ out.flush();
       out.println("<body onload=\"draw();\">");
       out.println("<h2>View Graph</h2>");
       out.println("");
-      out.println("<form action=\"\">");
+
+      out.println("<form id=\"data\" method=\"post\" action=\"/ncitbrowser/ajax?action=view_graph\">");
       out.println("Relationships");
-      out.println("<select id=\"layout\">");
-      out.println("  <option value=\"ALL\">ALL</option>");
-      out.println("  <option value=\"superconcept\">superconcept</option>");
-      out.println("  <option value=\"subconcept\">subconcept</option>");
-      out.println("  <option value=\"role\">role</option>");
-      out.println("  <option value=\"inverse_role\">inverse role</option>");
-      out.println("  <option value=\"association\">association</option>");
-      out.println("  <option value=\"inverse_association\">inverse association</option>");
+      out.println("<select name=\"type\" >");
+      if (type == null || type.compareTo("ALL") == 0) {
+     	  out.println("  <option value=\"ALL\" selected>ALL</option>");
+      } else {
+		  out.println("  <option value=\"ALL\">ALL</option>");
+	  }
+	  for (int k=0; k<VisUtils.ALL_RELATIONSHIP_TYPES.length; k++) {
+          String rel_type = (String) VisUtils.ALL_RELATIONSHIP_TYPES[k];
+
+          List list = (List) hmap.get(rel_type);
+          if (list != null && list.size() > 0) {
+			  String option_label = rel_type.substring(5, rel_type.length());
+			  if (type.compareTo(rel_type) == 0) {
+				  out.println("  <option value=\"" + rel_type + "\" selected>" + option_label + "</option>");
+			  } else {
+				  out.println("  <option value=\"" + rel_type + "\">" + option_label + "</option>");
+			  }
+	      }
+	  }
+
       out.println("</select>");
+      out.println("<input type=\"hidden\" id=\"scheme\" name=\"scheme\" value=\"" + scheme + "\" />");
+      out.println("<input type=\"hidden\" id=\"version\" name=\"version\" value=\"" + version + "\" />");
+      out.println("<input type=\"hidden\" id=\"ns\" name=\"ns\" value=\"" + namespace + "\" />");
+      out.println("<input type=\"hidden\" id=\"code\" name=\"code\" value=\"" + code + "\" />");
+      out.println("");
       out.println("&nbsp;&nbsp;");
+      //out.println("<input type=\"submit\" onclick=\"javascript:refresh()\"></input>");
       out.println("<input type=\"submit\"></input>");
       out.println("</form>");
       out.println("");
@@ -4252,17 +4281,6 @@ out.flush();
 				request.getSession().setAttribute("message", msg);
 				//return "message";
 			}
-
-			/*
-
-			IteratorBean iteratorBean = new IteratorBean(iterator);
-            String key = IteratorBeanManager.createIteratorKey(checked_vocabularies, matchText,
-                selectValueSetSearchOption, algorithm);
-            iteratorBean.setKey(key);
-			request.getSession().setAttribute("downloaded_value_set_search_results", iteratorBean);
-			//return "value_set";
-			*/
-
 		}
 
         try {
