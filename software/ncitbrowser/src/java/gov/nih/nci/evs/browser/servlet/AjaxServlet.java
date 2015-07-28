@@ -4008,20 +4008,48 @@ out.flush();
       out.println("<!doctype html>");
       out.println("<html>");
       out.println("<head>");
-      out.println("   <title>View Graph</title>");
-      out.println("   <style type=\"text/css\">");
-      out.println("       #viewgraph {");
-      out.println("           width:  1200px;");
-      out.println("           height: 1200px;");
-      out.println("           border: 1px solid lightgray;");
-      out.println("       }");
-      out.println("   </style>");
+      out.println("  <title>View Graph</title>");
       out.println("");
-      out.println("   <script type=\"text/javascript\" src=\"/ncitbrowser/css/vis/vis.js\"></script>");
-      out.println("   <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/vis/vis.css\" />");
+      out.println("  <style type=\"text/css\">");
+      out.println("    body {");
+      out.println("      font: 10pt sans;");
+      out.println("    }");
+      out.println("    #mynetwork {");
+      out.println("      width: 1200px;");
+      out.println("      height: 700px;");
+      out.println("      border: 1px solid lightgray;");
+      out.println("    }");
+      out.println("    table.legend_table {");
+      out.println("      border-collapse: collapse;");
+      out.println("    }");
+      out.println("    table.legend_table td,");
+      out.println("    table.legend_table th {");
+      out.println("      border: 1px solid #d3d3d3;");
+      out.println("      padding: 10px;");
+      out.println("    }");
       out.println("");
-      out.println("   <script type=\"text/javascript\">");
-      out.println("       function draw() {");
+      out.println("    table.legend_table td {");
+      out.println("      text-align: center;");
+      out.println("      width:110px;");
+      out.println("    }");
+      out.println("  </style>");
+      out.println("");
+      out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/css/vis/vis.js\"></script>");
+      out.println("  <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/vis/vis.css\" />");
+      out.println("");
+      out.println("  <script type=\"text/javascript\">");
+      out.println("    var nodes = null;");
+      out.println("    var edges = null;");
+      out.println("    var network = null;");
+      out.println("");
+      out.println("    function destroy() {");
+      out.println("      if (network !== null) {");
+      out.println("        network.destroy();");
+      out.println("        network = null;");
+      out.println("      }");
+      out.println("    }");
+      out.println("");
+      out.println("    function draw() {");
 
   LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
   HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
@@ -4032,32 +4060,66 @@ out.flush();
   }
   // compute nodes and edges using hmap
   VisUtils visUtils = new VisUtils(lb_svc);
-  String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, null, VisUtils.NODES_AND_EDGES, hmap);
+
+  String[] types = new String[2];
+  types[0] = "type_superconcept";
+  types[1] = "type_subconcept";
+
+  String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
   out.println(nodes_and_edges);
 
-      out.println("           var container = document.getElementById('viewgraph');");
-      out.println("           var data = {");
-      out.println("               nodes: nodes,");
-      out.println("               edges: edges");
-      out.println("           };");
+      out.println("      // create a network");
+      out.println("      var container = document.getElementById('mynetwork');");
+      out.println("      var data = {");
+      out.println("        nodes: nodes,");
+      out.println("        edges: edges");
+      out.println("      };");
+      out.println("      var options = {");
+      out.println("        interaction: {");
+      out.println("          navigationButtons: true,");
+      out.println("          keyboard: true");
+      out.println("        }");
+      out.println("      };");
+      out.println("      network = new vis.Network(container, data, options);");
       out.println("");
-      out.println("           var options = {");
-      out.println("           nodes : {");
-      out.println("               shape: 'ellipse',");
-
-      //out.println("               size: 5");
-      out.println("           }");
-      out.println("       };");
-      out.println("       var network = new vis.Network(container, data, options);");
-      out.println("       }");
-      out.println("   </script>");
-      out.println("   <script src=\"../../googleAnalytics.js\"></script>");
+      out.println("      // add event listeners");
+      out.println("      network.on('select', function(params) {");
+      out.println("        document.getElementById('selection').innerHTML = 'Selection: ' + params.nodes;");
+      out.println("      });");
+      out.println("    }");
+      out.println("  </script>");
       out.println("</head>");
-      out.println("<body onload=\"draw()\">");
-      out.println("<div id=\"viewgraph\"></div>");
+      out.println("");
+      out.println("<body onload=\"draw();\">");
+      out.println("<h2>View Graph</h2>");
+      out.println("");
+      out.println("<form action=\"\">");
+      out.println("Relationships");
+      out.println("<select id=\"layout\">");
+      out.println("  <option value=\"ALL\">ALL</option>");
+      out.println("  <option value=\"superconcept\">superconcept</option>");
+      out.println("  <option value=\"subconcept\">subconcept</option>");
+      out.println("  <option value=\"role\">role</option>");
+      out.println("  <option value=\"inverse_role\">inverse role</option>");
+      out.println("  <option value=\"association\">association</option>");
+      out.println("  <option value=\"inverse_association\">inverse association</option>");
+      out.println("</select>");
+      out.println("&nbsp;&nbsp;");
+      out.println("<input type=\"submit\"></input>");
+      out.println("</form>");
+      out.println("");
+      out.println("<div style=\"width: 800px; font-size:14px; text-align: justify;\">");
+      out.println("</div>");
+      out.println("");
+      out.println("<div id=\"mynetwork\"></div>");
+      out.println("");
+      out.println("<p id=\"selection\"></p>");
       out.println("</body>");
       out.println("</html>");
-    }
+   }
+
+
+
 
 
     public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {

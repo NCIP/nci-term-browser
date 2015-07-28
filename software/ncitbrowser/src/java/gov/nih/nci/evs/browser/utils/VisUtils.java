@@ -1,7 +1,5 @@
 package gov.nih.nci.evs.browser.utils;
 
-import gov.nih.nci.evs.browser.utils.*;
-
 import java.util.*;
 import java.io.*;
 import java.util.Map.Entry;
@@ -213,42 +211,6 @@ public class VisUtils {
         return buf.toString();
 	}
 
-
-/*
-<script type="text/javascript">
-  var nodes = [
-    {id: 1, label: 'Node 1', font: {strokeWidth: 3, strokeColor: 'white'}},
-    {id: 2, label: 'Node 2'},
-    {id: 3, label: 'Node 3'},
-    {id: 4, label: 'Node 4'},
-    {id: 5, label: 'Node 5'}
-  ];
-
-  // create an array with edges
-  var edges = [
-    {from: 1, to: 2, label: 'edgeLabel', font: {strokeWidth: 2, strokeColor : '#00ff00'}},
-    {from: 1, to: 3, label: 'edgeLabel'},
-    {from: 2, to: 4},
-    {from: 2, to: 5}
-  ];
-
-  // create a network
-  var container = document.getElementById('mynetwork');
-  var data = {
-    nodes: nodes,
-    edges: edges
-  };
-  var options = {
-    nodes : {
-      shape: 'dot',
-      size: 10
-    }
-  };
-  var network = new vis.Network(container, data, options);
-</script>
-*/
-
-
     public String generateGraphScript(String scheme, String version, String namespace, String code) {
 		return generateGraphScript(scheme, version, namespace, code, null);
 	}
@@ -260,6 +222,7 @@ public class VisUtils {
 
 
     public String generateGraphScript(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
+		/*
 		List typeList = null;
 		if (types != null) {
 			typeList = Arrays.asList(types);
@@ -267,12 +230,6 @@ public class VisUtils {
 			typeList = new ArrayList();
 			typeList.add("type_superconcept");
 			typeList.add("type_subconcept");
-			/*
-			typeList.add("type_role");
-			typeList.add("type_inverse_role");
-			typeList.add("type_association");
-			typeList.add("type_inverse_association");
-			*/
 		}
 
 
@@ -549,69 +506,271 @@ if (!gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
 		buf.append("];");
 	    }
         return buf.toString();
+        */
+        if (types == null) {
+			types = getAllRelationshipTypes();
+		}
+        Vector graphData = generateGraphData(scheme, version, namespace, code, types, option, hmap);
+        return GraphUtils.generateGraphScript(graphData, option);
 	}
 
 
 
+
+    public String[] getAllRelationshipTypes() {
+		String[] types = new String[6];
+		types[0] = "type_superconcept";
+		types[1] = "type_subconcept";
+		types[2] = "type_role";
+		types[3] = "type_inverse_role";
+		types[4] = "type_association";
+		types[5] = "type_inverse_association";
+    	return types;
+	}
+
+
+    public Vector generateGraphData(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
+		Vector graphData = new Vector();
+		List typeList = null;
+		if (types != null) {
+			typeList = Arrays.asList(types);
+		} else {
+			typeList = new ArrayList();
+			typeList.add("type_superconcept");
+			typeList.add("type_subconcept");
+    	}
+
+		boolean useNamespace = true;
+		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
+			useNamespace = false;
+		}
+
+
+		Entity concept = new ConceptDetails(lbSvc).getConceptByCode(scheme, version, code, namespace, useNamespace);
+		String name = "<NO DESCRIPTION>";
+		if (concept.getEntityDescription() != null) {
+			name = concept.getEntityDescription().getContent();
+		}
+		name = encode(name);
+		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
+			namespace = concept.getEntityCodeNamespace();
+		}
+		if (!gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
+			useNamespace = true;
+		}
+        String focused_node_label = getLabel(name, code);
+
+        HashMap relMap = null;
+        if (relMap == null) {
+			RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
+			relMap = relUtils.getRelationshipHashMap(scheme, version, code, namespace, useNamespace);
+	    } else {
+			relMap = hmap;
+		}
+
+        HashSet nodes = new HashSet();
+        nodes.add(focused_node_label);
+
+        ArrayList list = null;
+
+		String key = null;
+
+		key = "type_superconcept";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(t);
+					if (!nodes.contains(rel_node_label)) {
+						nodes.add(rel_node_label);
+					}
+				}
+			}
+	    }
+
+		key = "type_subconcept";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(t);
+					if (!nodes.contains(rel_node_label)) {
+						nodes.add(rel_node_label);
+					}
+				}
+			}
+	    }
+
+		key = "type_role";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+					if (!nodes.contains(rel_node_label)) {
+						nodes.add(rel_node_label);
+					}
+				}
+			}
+	    }
+
+		key = "type_inverse_role";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+					if (!nodes.contains(rel_node_label)) {
+						nodes.add(rel_node_label);
+					}
+				}
+			}
+	    }
+
+		key = "type_association";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+					if (!nodes.contains(rel_node_label)) {
+						nodes.add(rel_node_label);
+					}
+				}
+			}
+	    }
+
+		key = "type_inverse_association";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+					if (!nodes.contains(rel_node_label)) {
+						nodes.add(rel_node_label);
+					}
+				}
+			}
+	    }
+
+		Vector node_label_vec = new Vector();
+		Iterator it = nodes.iterator();
+		while (it.hasNext()) {
+			String node_label = (String) it.next();
+			node_label_vec.add(node_label);
+		}
+
+		key = "type_superconcept";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(t);
+					String rel_label = "is_a";
+					graphData.add(focused_node_label + "|" + rel_node_label + "|" + rel_label + "|1");
+				}
+			}
+	    }
+
+		key = "type_subconcept";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(t);
+					String rel_label = "is_a";
+					graphData.add(rel_node_label + "|" + focused_node_label + "|" + rel_label + "|2");
+				}
+			}
+	    }
+
+		key = "type_role";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+					String rel_label = getFieldValue(t, 0);
+					graphData.add(focused_node_label + "|" + rel_node_label + "|" + rel_label + "|3");
+				}
+			}
+	    }
+
+		key = "type_inverse_role";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+					String rel_label = getFieldValue(t, 0);
+					graphData.add(rel_node_label + "|" + focused_node_label + "|" +rel_label + "|4");
+				}
+			}
+		}
+
+		key = "type_association";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+					String rel_label = getFieldValue(t, 0);
+					graphData.add(focused_node_label + "|" + rel_node_label + "|" + rel_label + "|5");
+				}
+			}
+	    }
+
+		key = "type_inverse_association";
+		if (typeList.contains(key)) {
+			list = (ArrayList) relMap.get(key);
+			if (list != null) {
+				for (int i=0; i<list.size(); i++) {
+					String t = (String) list.get(i);
+					String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+					String rel_label = getFieldValue(t, 0);
+					graphData.add(rel_node_label + "|" + focused_node_label + "|" +rel_label + "|6");
+				}
+			}
+		}
+        return graphData;
+	}
+
+    public String generateGraphScript(String scheme, String version, String namespace, String code, int option) {
+        Vector graphData = generateGraphData(scheme, version, namespace, code, getAllRelationshipTypes(), option, null);
+        return GraphUtils.generateGraphScript(graphData, option);
+	}
+
     public static void main(String [] args) {
-
-		//LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-
 		VisUtils visUtils = new VisUtils(lbSvc);
-/*
-		String codingSchemeURN = "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl";
-		codingSchemeURN = "owl2lexevs.owl";
-		String codingSchemeVersion = "0.1.2";
-		String code = "HappyPatientWalkingAround";
-		String namespace = null;
-		boolean useNamespace = false;
-*/
 
 		String codingSchemeURN = "NCI_Thesaurus";
 		String codingSchemeVersion = "15.06e";
 		String code = "C9118";//"Sarcoma (Code C9118)";
 		String namespace = null;
 		boolean useNamespace = false;
-/*
-        RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
-        HashMap relMap = relUtils.getRelationshipHashMap(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace);
-        Iterator it = relMap.keySet().iterator();
-        while (it.hasNext()) {
-			String key = (String) it.next();
-			ArrayList list = (ArrayList) relMap.get(key);
-			System.out.println("\n" + key);
-			if (list != null) {
-				for (int i=0; i<list.size(); i++) {
-					String t = (String) list.get(i);
-					System.out.println("\t" + t);
-				}
-			}
-		}
-*/
-		//String digraph = visUtils.generateDiGraph(codingSchemeURN, codingSchemeVersion, namespace, code);
-		//System.out.println(digraph);
 
-		String digraph = visUtils.generateGraphScript(codingSchemeURN, codingSchemeVersion, namespace, code);
-		System.out.println(digraph);
+		System.out.println("scheme: " + codingSchemeURN);
+		System.out.println("version: " + codingSchemeVersion);
+		System.out.println("code: " + code);
+		System.out.println("namespace: " + namespace);
+		System.out.println("useNamespace: " + useNamespace);
+		System.out.println("\n");
+		String graph = visUtils.generateGraphScript(codingSchemeURN, codingSchemeVersion, namespace, code, NODES_AND_EDGES);
+		System.out.println(graph);
+
 
 	}
 }
 
-/*
-digraph {
-  node [shape=circle fontsize=16]
-  edge [length=100, color=gray, fontcolor=black]
-
-  A -> A[label=0.5];
-  B -> B[label=1.2] -> C[label=0.7] -- A;
-  B -> D;
-  D -> {B; C}
-  D -> E[label=0.2];
-  F -> F;
-  A [
-    fontcolor=white,
-    color=red,
-  ]
-}
-*/
