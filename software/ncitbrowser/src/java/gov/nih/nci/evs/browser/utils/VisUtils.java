@@ -108,7 +108,7 @@ public class VisUtils {
 
 	public String encode(String t) {
 		if (t == null) return null;
-		t = t.replaceAll("'", " ");
+		t = t.replaceAll("'", "\'");
 		return t;
 	}
 
