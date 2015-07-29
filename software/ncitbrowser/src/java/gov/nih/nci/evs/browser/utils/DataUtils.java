@@ -3362,11 +3362,15 @@ public class DataUtils {
 	}
 
     public static boolean visualizationWidgetSupported(String dictionary) {
+		// to be determined:
+		/*
 		String csName = getCSName(dictionary);
 		if (csName == null) return false;
 		if (_visualizationWidgetHashMap == null) return false;
 		if (_visualizationWidgetHashMap.containsKey(csName)) return true;
 		return false;
+		*/
+		return true;
 	}
 
 	public static String getNCBOOntologyId(String dictionary) {

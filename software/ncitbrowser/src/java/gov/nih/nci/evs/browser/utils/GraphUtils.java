@@ -13,6 +13,8 @@ public class GraphUtils {
     public static final int MIN_EDGE_LENGTH = 200;
     public static final int EDGE_LENGTH = 400;
 
+    public static final String NO_DATA_AVAILABLE = "No data available.";
+
 	public static Vector readFile(String filename)
 	{
 		Vector v = new Vector();
@@ -41,7 +43,7 @@ public class GraphUtils {
 		}
 
 		if (node_label_vec.size() == 0) {
-			return "No data avaialble.";
+			return NO_DATA_AVAILABLE;
 		}
 
 		node_label_vec = SortUtils.quickSort(node_label_vec);

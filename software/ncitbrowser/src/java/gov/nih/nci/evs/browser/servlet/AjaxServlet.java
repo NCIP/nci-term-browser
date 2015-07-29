@@ -4036,8 +4036,13 @@ out.flush();
 		  types = new String[1];
 		  types[0] = type;
 	  }
-
 	  int edge_count = countEdges(hmap, types);
+	  String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
+	  boolean graph_available = true;
+	  if (nodes_and_edges.compareTo(GraphUtils.NO_DATA_AVAILABLE) == 0) {
+		  graph_available = false;
+	  }
+
 
       response.setContentType("text/html");
       PrintWriter out = null;
@@ -4084,6 +4089,8 @@ out.flush();
       out.println("");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/css/vis/vis.js\"></script>");
       out.println("  <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/vis/vis.css\" />");
+      out.println("  <link rel=\"stylesheet\" type=\"text/css\" href=\"/ncitbrowser/css/styleSheet.css\" />");
+
       out.println("");
       out.println("  <script type=\"text/javascript\">");
       out.println("    var nodes = null;");
@@ -4100,8 +4107,9 @@ out.flush();
 
       out.println("    function draw() {");
 
-  String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
-  out.println(nodes_and_edges);
+	  if (graph_available) {
+		  out.println(nodes_and_edges);
+	  }
 
       out.println("      // create a network");
       out.println("      var container = document.getElementById('conceptnetwork');");
@@ -4127,10 +4135,44 @@ out.flush();
       out.println("</head>");
       out.println("");
       out.println("<body onload=\"draw();\">");
-      out.println("<h2>View Graph</h2>");
-      out.println("");
+
+
+
+      out.println("<div class=\"ncibanner\">");
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">     ");
+      out.println("    <img src=\"/ncitbrowser/images/logotype.gif\"");
+      out.println("      width=\"556\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"National Cancer Institute\"/>");
+      out.println("  </a>");
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">     ");
+      out.println("    <img src=\"/ncitbrowser/images/spacer.gif\"");
+      out.println("      width=\"60\" height=\"39\" border=\"0\" ");
+      out.println("      alt=\"National Cancer Institute\" class=\"print-header\"/>");
+      out.println("  </a>");
+      out.println("  <a href=\"http://www.nih.gov\" target=\"_blank\" >      ");
+      out.println("    <img src=\"/ncitbrowser/images/tagline_nologo.gif\"");
+      out.println("      width=\"219\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"U.S. National Institutes of Health\"/>");
+      out.println("  </a>");
+      out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">      ");
+      out.println("    <img src=\"/ncitbrowser/images/cancer-gov.gif\"");
+      out.println("      width=\"125\" height=\"39\" border=\"0\"");
+      out.println("      alt=\"www.cancer.gov\"/>");
+      out.println("  </a>");
+      out.println("</div>");
+
+
+
+      //out.println("<h2>View Graph</h2>");
+      out.println("<p></p>");
+      //out.println("<p></p>");
+
+	  if (!graph_available) {
+		  out.println("<p class=\"textbodyred\">&nbsp;No graph data is available.</p>");
+	  }
 
       out.println("<form id=\"data\" method=\"post\" action=\"/ncitbrowser/ajax?action=view_graph\">");
+
       out.println("Relationships");
       out.println("<select name=\"type\" >");
       if (type == null || type.compareTo("ALL") == 0) {
@@ -4168,6 +4210,9 @@ out.flush();
       out.println("<div id=\"conceptnetwork\"></div>");
       out.println("");
       out.println("<p id=\"selection\"></p>");
+
+
+
       out.println("</body>");
       out.println("</html>");
    }
