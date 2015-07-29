@@ -3998,8 +3998,46 @@ out.flush();
 	}
 
 
+	public static int countEdges(HashMap relMap, String[] types) {
+		if (relMap == null || types == null) return 0;
+		int knt = 0;
+		List typeList = Arrays.asList(types);
+		for (int k=0; k<VisUtils.ALL_RELATIONSHIP_TYPES.length; k++) {
+			String rel_type = (String) VisUtils.ALL_RELATIONSHIP_TYPES[k];
+			if (typeList.contains(rel_type)) {
+				List list = (ArrayList) relMap.get(rel_type);
+				if (list != null) {
+					knt = knt + list.size();
+				}
+			}
+		}
+        return knt;
+	}
+
+
+
+
     public static void view_graph(HttpServletRequest request, HttpServletResponse response,
         String scheme, String version, String namespace, String code, String type) {
+
+	  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+	  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
+	  if (hmap == null) {
+		  RelationshipUtils relationshipUtils = new RelationshipUtils(lb_svc);
+		  hmap = relationshipUtils.getRelationshipHashMap(scheme, version, code, namespace, true);
+		  request.getSession().setAttribute("RelationshipHashMap", hmap);
+	  }
+	  // compute nodes and edges using hmap
+	  VisUtils visUtils = new VisUtils(lb_svc);
+	  String[] types = null;
+	  if (type == null || type.compareTo("ALL") == 0) {
+		  types = VisUtils.ALL_RELATIONSHIP_TYPES;
+	  } else {
+		  types = new String[1];
+		  types[0] = type;
+	  }
+
+	  int edge_count = countEdges(hmap, types);
 
       response.setContentType("text/html");
       PrintWriter out = null;
@@ -4020,9 +4058,13 @@ out.flush();
       out.println("    body {");
       out.println("      font: 10pt sans;");
       out.println("    }");
-      out.println("    #mynetwork {");
+      out.println("    #conceptnetwork {");
       out.println("      width: 1200px;");
-      out.println("      height: 600px;");
+      if (edge_count > 50) {
+      	  out.println("      height: 800px;");
+	  } else {
+		  out.println("      height: 600px;");
+	  }
       out.println("      border: 1px solid lightgray;");
       out.println("    }");
       out.println("    table.legend_table {");
@@ -4058,33 +4100,17 @@ out.flush();
 
       out.println("    function draw() {");
 
-  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
-  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
-  if (hmap == null) {
-      RelationshipUtils relationshipUtils = new RelationshipUtils(lb_svc);
-      hmap = relationshipUtils.getRelationshipHashMap(scheme, version, code, namespace, true);
-      request.getSession().setAttribute("RelationshipHashMap", hmap);
-  }
-  // compute nodes and edges using hmap
-  VisUtils visUtils = new VisUtils(lb_svc);
-  String[] types = null;
-  if (type == null || type.compareTo("ALL") == 0) {
-	  types = VisUtils.ALL_RELATIONSHIP_TYPES;
-  } else {
-	  types = new String[1];
-	  types[0] = type;
-  }
-
   String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
   out.println(nodes_and_edges);
 
       out.println("      // create a network");
-      out.println("      var container = document.getElementById('mynetwork');");
+      out.println("      var container = document.getElementById('conceptnetwork');");
       out.println("      var data = {");
       out.println("        nodes: nodes,");
       out.println("        edges: edges");
       out.println("      };");
       out.println("      var options = {");
+
       out.println("        interaction: {");
       out.println("          navigationButtons: true,");
       out.println("          keyboard: true");
@@ -4133,14 +4159,13 @@ out.flush();
       out.println("<input type=\"hidden\" id=\"code\" name=\"code\" value=\"" + code + "\" />");
       out.println("");
       out.println("&nbsp;&nbsp;");
-      //out.println("<input type=\"submit\" onclick=\"javascript:refresh()\"></input>");
       out.println("<input type=\"submit\" value=\"Refresh\"></input>");
       out.println("</form>");
       out.println("");
       out.println("<div style=\"width: 800px; font-size:14px; text-align: justify;\">");
       out.println("</div>");
       out.println("");
-      out.println("<div id=\"mynetwork\"></div>");
+      out.println("<div id=\"conceptnetwork\"></div>");
       out.println("");
       out.println("<p id=\"selection\"></p>");
       out.println("</body>");

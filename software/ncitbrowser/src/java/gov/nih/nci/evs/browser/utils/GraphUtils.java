@@ -5,9 +5,13 @@ import java.io.*;
 import java.util.Map.Entry;
 
 public class GraphUtils {
-    public static int NODES_ONLY = 1;
-    public static int EDGES_ONLY = 2;
-    public static int NODES_AND_EDGES = 3;
+    public static final int NODES_ONLY = 1;
+    public static final int EDGES_ONLY = 2;
+    public static final int NODES_AND_EDGES = 3;
+
+    public static final int NODE_COUNT_THRESHOLD = 30;
+    public static final int MIN_EDGE_LENGTH = 200;
+    public static final int EDGE_LENGTH = 400;
 
 	public static Vector readFile(String filename)
 	{
@@ -56,11 +60,20 @@ public class GraphUtils {
 			for (int k=0; k<node_label_vec.size()-1; k++) {
 				String node_label = (String) node_label_vec.elementAt(k);
 				String id = (String) label2IdMap.get(node_label);
-				buf.append("{id: " + id + ", label: '" + node_label + "'},").append("\n");
+				if (node_label_vec.size() <= NODE_COUNT_THRESHOLD) {
+					buf.append("{id: " + id + ", label: '" + node_label + "'},").append("\n");
+				} else {
+					buf.append("{id: " + id + ", label: '" + node_label + "', shape: 'dot', size: 5},").append("\n");
+				}
 			}
 			String node_label = (String) node_label_vec.elementAt(node_label_vec.size()-1);
 			String id = (String) label2IdMap.get(node_label);
-			buf.append("{id: " + id + ", label: '" + node_label + "'}").append("\n");
+			if (node_label_vec.size() <= NODE_COUNT_THRESHOLD) {
+				buf.append("{id: " + id + ", label: '" + node_label + "'}").append("\n");
+			} else {
+				buf.append("{id: " + id + ", label: '" + node_label + "', shape: 'dot', size: 5},").append("\n");
+			}
+
 			buf.append("];").append("\n");
 	    }
 
@@ -88,10 +101,18 @@ public class GraphUtils {
 				for (int k=0; k<w.size(); k++) {
 					String edge = (String) w.elementAt(k);
 					m++;
-					if (m < count) {
-						buf.append("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "'}, ").append("\n");
+					if (node_label_vec.size() <= NODE_COUNT_THRESHOLD) {
+					    if (m < count) {
+						    buf.append("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "', length: " + MIN_EDGE_LENGTH + "}, ").append("\n");
+					    } else {
+						    buf.append("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "', length: " + MIN_EDGE_LENGTH + "} ").append("\n");
+					    }
 					} else {
-						buf.append("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "'}").append("\n");
+					    if (m < count) {
+						    buf.append("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "', length: " + EDGE_LENGTH + "}, ").append("\n");
+					    } else {
+						    buf.append("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "', length: " + EDGE_LENGTH + "} ").append("\n");
+					    }
 					}
 				}
 			}
@@ -125,8 +146,6 @@ public class GraphUtils {
 			v.add(relationship);
 			edge_map.put(key, v);
 		}
-
-
 		return generateGraphScript(nodes, edge_map, option);
     }
 

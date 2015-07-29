@@ -367,7 +367,7 @@ if (view_graph) {
 
 %>
          <%=JSPUtils.getPipeSeparator(isPipeDisplayed)%>
-	<a href="#" onclick="javascript:popup_window('<%=request.getContextPath()%>/ajax?action=view_graph&scheme=<%=dictionary%>&version=<%=version%>&ns=<%=ns%>&code=<%=code%>&type=type_superconcept', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12"
+	<a href="#" onclick="javascript:popup_window('<%=request.getContextPath()%>/ajax?action=view_graph&scheme=<%=dictionary%>&version=<%=version%>&ns=<%=ns%>&code=<%=code%>&type=ALL', '_blank','top=100, left=100, height=740, width=680, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');" tabindex="12"
 	 title="This link displays a graph that recapitulates some information in the Relationships tab in a visual format.">
 	View Graph</a>  
 <%

@@ -112,7 +112,6 @@ public class VisUtils {
 		return t;
 	}
 
-
     public String generateDiGraph(String scheme, String version, String namespace, String code) {
 		boolean useNamespace = false;
 		if (namespace != null) useNamespace = true;
@@ -230,21 +229,10 @@ public class VisUtils {
 
     public String generateGraphScript(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
         if (types == null) {
-			types = getAllRelationshipTypes();
+			types = ALL_RELATIONSHIP_TYPES;
 		}
         Vector graphData = generateGraphData(scheme, version, namespace, code, types, option, hmap);
         return GraphUtils.generateGraphScript(graphData, option);
-	}
-
-    public String[] getAllRelationshipTypes() {
-		String[] types = new String[6];
-		types[0] = "type_superconcept";
-		types[1] = "type_subconcept";
-		types[2] = "type_role";
-		types[3] = "type_inverse_role";
-		types[4] = "type_association";
-		types[5] = "type_inverse_association";
-    	return types;
 	}
 
 
@@ -466,7 +454,7 @@ public class VisUtils {
 	}
 
     public String generateGraphScript(String scheme, String version, String namespace, String code, int option) {
-        Vector graphData = generateGraphData(scheme, version, namespace, code, getAllRelationshipTypes(), option, null);
+        Vector graphData = generateGraphData(scheme, version, namespace, code, ALL_RELATIONSHIP_TYPES, option, null);
         return GraphUtils.generateGraphScript(graphData, option);
 	}
 
