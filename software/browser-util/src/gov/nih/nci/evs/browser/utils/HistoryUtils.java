@@ -184,6 +184,8 @@ public class HistoryUtils {
             v.add(info);
             hset.add(info);
         }
+        //[NCITERM-612] NCI Thesaurus history not sorted correctly (https://tracker.nci.nih.gov/browse/NCITERM-612)
+        v = sortHistoryRecordsByDate(v);
         return v;
     }
 
@@ -404,7 +406,7 @@ public class HistoryUtils {
         return event;
     }
 
-    public static Vector sortHistoryRecordsByDate(Vector v) {
+    public Vector sortHistoryRecordsByDate(Vector v) {
 		if (v == null || v.size() <= 1) return v;
 		Vector w = new Vector();
 		Vector u = null;
