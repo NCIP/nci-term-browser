@@ -404,4 +404,27 @@ public class HistoryUtils {
         return event;
     }
 
+    public static Vector sortHistoryRecordsByDate(Vector v) {
+		if (v == null || v.size() <= 1) return v;
+		Vector w = new Vector();
+		Vector u = null;
+		HashMap map = new HashMap();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			u = StringUtils.parseData(t);
+			String col_1 = (String) u.elementAt(0);
+			String col_2 = (String) u.elementAt(1);
+			String col_3 = (String) u.elementAt(2);
+			String s = col_2 + col_1 + col_3;
+			map.put(s, t);
+			w.add(s);
+		}
+		w = SortUtils.quickSort(w);
+		u = new Vector();
+		for (int i=0; i<w.size(); i++) {
+			String t = (String) w.elementAt(i);
+			u.add((String) map.get(t));
+		}
+		return u;
+	}
 }
