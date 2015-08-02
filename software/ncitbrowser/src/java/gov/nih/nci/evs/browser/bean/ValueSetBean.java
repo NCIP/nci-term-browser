@@ -135,7 +135,7 @@ public class ValueSetBean {
 
 
 	private String selectedOntology = null;
-	private List ontologyList = null;
+	private static List ontologyList = null;
 	private Vector<String> ontologyListData = null;
 
 
@@ -167,7 +167,9 @@ public class ValueSetBean {
 	    }
 */
 
-        HashSet hset = DataUtils.getValueSetHierarchy().get_valueSetParticipationHashSet();
+        //HashSet hset = DataUtils.getValueSetHierarchy().get_valueSetParticipationHashSet();
+        HashSet hset = new DataUtils().get_valueSetParticipationHashSet();
+
         if (hset == null) return null;
         Iterator it = hset.iterator();
         while (it.hasNext()) {
