@@ -6738,7 +6738,9 @@ if (lbSvc == null) {
 		if (terminologyValueSetTree == null) {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-			ValueSetHierarchy valueSetHierarchy = new ValueSetHierarchy(lbSvc,
+
+			//ValueSetHierarchy valueSetHierarchy = new ValueSetHierarchy(lbSvc,
+			valueSetHierarchy = new ValueSetHierarchy(lbSvc,
 									   vsd_service,
 									   _localName2FormalNameHashMap,
 									   _codingSchemeName2URIHashMap);
