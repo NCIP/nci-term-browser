@@ -1020,9 +1020,9 @@ public class TreeUtils {
 
     }
 
-
     public HashMap getAssociatedConcepts(String scheme, String version,
         String code, String namespace, String assocName, boolean direction) {
+
         HashMap hmap = new HashMap();
         TreeItem ti = null;
         long ms = System.currentTimeMillis();
@@ -1034,6 +1034,7 @@ public class TreeUtils {
         ResolvedConceptReferenceList matches = null;
         //Vector v = new Vector();
         try {
+
 			Entity concept = null;
 			if (namespace == null) {
 				concept = conceptDetails.getConceptByCode(scheme, version, code);
@@ -1042,9 +1043,19 @@ public class TreeUtils {
 			}
 			if (concept == null) return null;
 			String entityCodeNamespace = concept.getEntityCodeNamespace();
+
 			ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 			focus.setCodingSchemeName(scheme);
-			focus.setCodeNamespace(entityCodeNamespace);
+			if (namespace == null) {
+                List<String> list = lbscm.getDistinctNamespacesOfCode(scheme, csvt, code);
+                if (list.size() == 1) {
+					// do nothing???
+				}
+			} else {
+				focus.setCodeNamespace(namespace);
+			}
+
+			//focus.setCodeNamespace(entityCodeNamespace);
             String name = "";
             if (concept.getEntityDescription() != null) {
                 name = concept.getEntityDescription().getContent();//getCodeDescription(lbSvc, scheme, csvt, code);
@@ -1080,9 +1091,8 @@ public class TreeUtils {
                         null, null, -1, false);
 
             } catch (Exception e) {
-				e.printStackTrace();
-                _logger
-                    .error("TreeUtils getAssociatedConcepts throws exceptions.");
+				//e.printStackTrace();
+                System.out.println("(*) TreeUtils getAssociatedConcepts throws exceptions.");
                 return null;
             }
 
@@ -1119,7 +1129,6 @@ public class TreeUtils {
                         // Each association may have multiple children ...
                         AssociatedConceptList branchItemList =
                             child.getAssociatedConcepts();
-
                         /*
                          * for (Iterator<AssociatedConcept> branchNodes =
                          * branchItemList.iterateAssociatedConcept();
@@ -1133,6 +1142,7 @@ public class TreeUtils {
                             .hasNext();) {
                             AssociatedConcept branchItemNode =
                                 branchNodes.next();
+
                             child_list.add(branchItemNode);
                         }
 
@@ -1174,14 +1184,14 @@ public class TreeUtils {
                         }
                     }
                 } else {
-                    //_logger.warn("WARNING: childAssociationList == null.");
+                   System.out.println("WARNING: childAssociationList == null.\n");
                 }
             }
             hmap.put(code, ti);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        _logger.debug("Run time (milliseconds) getSubconcepts: "
+        System.out.println("Run time (milliseconds) getSubconcepts: "
             + (System.currentTimeMillis() - ms) + " to resolve ");
         return hmap;
     }
@@ -1253,9 +1263,10 @@ public class TreeUtils {
                         null, null, -1, false);
 
             } catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
                 _logger
-                    .error("TreeUtils getAssociatedConcepts throws exceptions.");
+                    .error("#2 TreeUtils getAssociatedConcepts throws exceptions.");
+
                 return null;
             }
 
