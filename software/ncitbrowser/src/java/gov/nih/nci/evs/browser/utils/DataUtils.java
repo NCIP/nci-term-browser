@@ -6651,6 +6651,11 @@ if (lbSvc == null) {
 
     //public OntologyInfo(String codingScheme, String displayName, String version, String tag, String label, String sortCategory) {
 		    String tag = null;
+		    String productionVersion = getProductionVersion(short_scheme_name);
+		    if (version.compareTo(productionVersion) == 0) {
+				tag = "PRODUCTION";
+			}
+
 	        OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, tag, label, sort_category);
 			display_name_vec.add(info);
 	   }
@@ -6851,6 +6856,18 @@ if (lbSvc == null) {
 		}
 		return Boolean.FALSE;
 	}
+
+
+    public static String getMetadataValue(String codingSchemeName, String version, String urn, String propertyName) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		return new MetadataUtils(lbSvc).getMetadataValue(codingSchemeName, version, urn, propertyName);
+    }
+
+    public static Vector getMetadataNameValuePairs(String codingSchemeName, String version, String urn) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		return new MetadataUtils(lbSvc).getMetadataNameValuePairs(codingSchemeName, version, urn);
+	}
+
 
 
     public static boolean isNCIT(String scheme) {

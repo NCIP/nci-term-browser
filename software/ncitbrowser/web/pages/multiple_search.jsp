@@ -194,8 +194,8 @@ window.location.href = "/ncitbrowser/ajax?action=hide&csn="+ csn +"&matchText=" 
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 if (display_name_vec == null) {
      display_name_vec = DataUtils.getSortedOntologies();
+     
 }
-                  
 
 String browserType = request.getHeader("User-Agent");
 
@@ -353,11 +353,11 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
               <tr>
               <%
                 List ontology_list = DataUtils.getOntologyList();
-                int num_vocabularies = ontology_list.size();
-                
-
+               int num_vocabularies = ontology_list.size();
                 //if (display_name_vec == null) {
+               
                   display_name_vec = DataUtils.getSortedOntologies();
+                 
 
 // [NCITERM-641] Tomcat session is mixed up.
 String ontologiesToExpandStr = (String) request.getSession().getAttribute("ontologiesToExpandStr");
@@ -391,7 +391,9 @@ if (ontologiesToExpandStr == null) {
                 //}
 		
                 request.getSession().setAttribute("display_name_vec", display_name_vec);
+                
                 display_name_vec = DataUtils.sortOntologyInfo(display_name_vec);
+                
                 boolean blank_line_added = false;
                
                 %>
@@ -401,8 +403,15 @@ if (ontologiesToExpandStr == null) {
                      
   int hide_counter = 0; 
   int show_counter = 0;
+  
   OntologyInfo info_0 = (OntologyInfo) display_name_vec.elementAt(0);
-  curr_sort_category = Integer.valueOf(info_0.getSortCategory());
+  if (info_0 == null) {
+      curr_sort_category = 0;
+  } else {
+      curr_sort_category = Integer.valueOf(info_0.getSortCategory());
+  }
+    
+  //curr_sort_category = Integer.valueOf(info_0.getSortCategory());
   
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
