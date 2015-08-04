@@ -529,7 +529,7 @@ if (matched_concept_codes != null && matched_concept_codes.size() > 0) {
                                           title="Export VSD in MS Excel format" />
 
 <a title="Download Plugin Microsoft Excel Viewer" href="http://www.microsoft.com/downloads/details.aspx?FamilyID=1cd6acf9-ce06-4e1c-8dcf-f33f669dbc3a&amp;DisplayLang=en" target="_blank"><img
-     src="http://evs.nci.nih.gov/link_xls.gif" width="16"
+     src="/ncitbrowser/images/link_xls.gif" width="16"
      height="16" border="0"
 alt="Download Plugin Microsoft Excel Viewer" /></a>
     
