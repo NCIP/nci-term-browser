@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.common.*;
+
 import java.util.*;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -1052,7 +1054,9 @@ public class TreeUtils {
 					// do nothing???
 				}
 			} else {
-				focus.setCodeNamespace(namespace);
+				if (!Arrays.asList(gov.nih.nci.evs.browser.common.Constants.TERMINOLOGY_VALUE_SET_NAMES).contains(scheme)) {
+					focus.setCodeNamespace(namespace);
+				}
 			}
 
 			//focus.setCodeNamespace(entityCodeNamespace);
@@ -1091,8 +1095,8 @@ public class TreeUtils {
                         null, null, -1, false);
 
             } catch (Exception e) {
-				//e.printStackTrace();
-                System.out.println("(*) TreeUtils getAssociatedConcepts throws exceptions.");
+				e.printStackTrace();
+                //System.out.println("(*) TreeUtils getAssociatedConcepts throws exceptions. " + scheme);
                 return null;
             }
 
@@ -1184,15 +1188,14 @@ public class TreeUtils {
                         }
                     }
                 } else {
-                   System.out.println("WARNING: childAssociationList == null.\n");
+                   //System.out.println("WARNING: childAssociationList == null.\n");
                 }
             }
             hmap.put(code, ti);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        System.out.println("Run time (milliseconds) getSubconcepts: "
-            + (System.currentTimeMillis() - ms) + " to resolve ");
+        //System.out.println("Run time (milliseconds) getSubconcepts: " + (System.currentTimeMillis() - ms) + " to resolve ");
         return hmap;
     }
 
@@ -2364,18 +2367,31 @@ public class TreeUtils {
 					concept = conceptDetails.getConceptByCode(scheme, version, code, namespace, true);
 				}
 
-				if (concept != null) {
-					String entityCodeNamespace = concept.getEntityCodeNamespace();
+
+				//if (concept != null) {
+					//String entityCodeNamespace = concept.getEntityCodeNamespace();
 
 					ConceptReference focus = ConvenienceMethods.createConceptReference(code, scheme);
 					focus.setCodingSchemeName(scheme);
-					focus.setCodeNamespace(entityCodeNamespace);
+
+			if (namespace == null) {
+                List<String> ns_list = lbscm.getDistinctNamespacesOfCode(scheme, csvt, code);
+                if (ns_list.size() == 1) {
+					// do nothing???
+				}
+			} else {
+				if (!Arrays.asList(gov.nih.nci.evs.browser.common.Constants.TERMINOLOGY_VALUE_SET_NAMES).contains(scheme)) {
+					focus.setCodeNamespace(namespace);
+				}
+			}
+
+					//focus.setCodeNamespace(entityCodeNamespace);
 
 					matches =
 						cng.resolveAsList(focus, associationsNavigatedFwd,
 							!associationsNavigatedFwd, 1, 1, new LocalNameList(),
 							null, null, -1);
-				}
+				//}
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

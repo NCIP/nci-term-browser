@@ -288,10 +288,22 @@ public class DataUtils {
 
 
 		VALUE_SET_TAB_AVAILABLE = isCodingSchemeAvailable(Constants.TERMINOLOGY_VALUE_SET_NAME);
+
+
+		System.out.println("VALUE_SET_TAB_AVAILABLE ..." + VALUE_SET_TAB_AVAILABLE);
+
+
 		NCI_THESAURUS_AVAILABLE = isCodingSchemeAvailable(Constants.NCIT_CS_NAME);
 
+		System.out.println("NCI_THESAURUS_AVAILABLE ..." + NCI_THESAURUS_AVAILABLE);
+
         if (VALUE_SET_TAB_AVAILABLE != null && VALUE_SET_TAB_AVAILABLE.equals(Boolean.TRUE)) {
-			resovedValueSetHashMap = getResolvedValueSetHashMap();
+
+			System.out.println("calling getResolvedValueSetHashMap ...");
+
+			//resovedValueSetHashMap = getResolvedValueSetHashMap();
+
+
 			System.out.println("getResolvedValueSetHashMap run time (ms): " + (System.currentTimeMillis() - ms));
 			ms = System.currentTimeMillis();
 		} else {
@@ -301,11 +313,12 @@ public class DataUtils {
 		//resovedValueSetHashMap = getResolvedValueSetHashMap();
 		System.out.println("getResolvedValueSetHashMap run time (ms): " + (System.currentTimeMillis() - ms));
 		ms = System.currentTimeMillis();
-
+        System.out.println("setCodingSchemeMap... ");
 		setCodingSchemeMap();
 		System.out.println("setCodingSchemeMap run time (ms): " + (System.currentTimeMillis() - ms));
 		ms = System.currentTimeMillis();
 
+        System.out.println("getValueSetDefinitionMetadata... ");
 		if (_valueSetDefinitionMetadata == null) {
 			_valueSetDefinitionMetadata = getValueSetDefinitionMetadata();
         }
@@ -336,6 +349,7 @@ public class DataUtils {
 
 		_api_key = NCItBrowserProperties.getNCBO_API_KEY();
 
+        System.out.println("updateListOfCodingSchemeVersionsUsedInResolutionHashMap ");
 		updateListOfCodingSchemeVersionsUsedInResolutionHashMap();
 		System.out.println("updateListOfCodingSchemeVersionsUsedInResolutionHashMap run time (ms): " + (System.currentTimeMillis() - ms));
 		ms = System.currentTimeMillis();
@@ -600,6 +614,22 @@ public class DataUtils {
 		return resovedValueSetHashMap.containsKey(cs.getCodingSchemeURI());
 	}
 
+	public static AbsoluteCodingSchemeVersionReferenceList getListOfCodingSchemeVersionsUsedInResolution(LexEVSResolvedValueSetService service,
+	                CodingScheme cs) {
+        try {
+            if (service != null) {
+				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(cs);
+				return acsvr;
+		    } else {
+				System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution service == NULL???");
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
 
 	public static AbsoluteCodingSchemeVersionReferenceList getListOfCodingSchemeVersionsUsedInResolution(String codingScheme) {
         try {
@@ -610,6 +640,36 @@ public class DataUtils {
                 return null;
             }
             CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, null);
+
+            //System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution " + scheme.getFormalName());
+
+            LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
+            if (service != null) {
+				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
+				return acsvr;
+		    } else {
+				System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution service == NULL???");
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			//System.out.println("getListOfCodingSchemeVersionsUsedInResolution throws exception " + codingScheme);
+		}
+		return null;
+	}
+
+	public static AbsoluteCodingSchemeVersionReferenceList getListOfCodingSchemeVersionsUsedInResolution(String codingScheme, CodingSchemeVersionOrTag vt) {
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+                _logger
+                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
+            }
+            CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, vt);
+
+            //System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution " + scheme.getFormalName());
+
             LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             if (service != null) {
 				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
@@ -618,9 +678,11 @@ public class DataUtils {
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			//System.out.println("getListOfCodingSchemeVersionsUsedInResolution throws exception " + codingScheme);
 		}
 		return null;
 	}
+
 
 	public static Vector getRVSCSVersionsByFormalName(String RVSCS_formalname) {
 		if (!_RVSCSFormalName2VersionHashMap.containsKey(RVSCS_formalname)) return null;
@@ -674,6 +736,7 @@ public class DataUtils {
 
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
@@ -774,7 +837,16 @@ public class DataUtils {
 
 
 							HashMap hmap = new HashMap();
-							AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(cs_name);
+							//AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(cs_name);
+
+							CodingSchemeVersionOrTag codingSchemeVersionOrTag = new CodingSchemeVersionOrTag();
+							if (cs_version != null) {
+								codingSchemeVersionOrTag.setVersion(cs_version);
+							}
+
+							//AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(cs_name, codingSchemeVersionOrTag);
+							AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(service, cs);
+
 							if (acsvr != null) {
 								for(AbsoluteCodingSchemeVersionReference abrefs :acsvr.getAbsoluteCodingSchemeVersionReference()){
 									hmap.put(abrefs.getCodingSchemeURN(),  abrefs.getCodingSchemeVersion());
@@ -992,6 +1064,8 @@ public class DataUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        _logger.debug("Populate ontologies... " );
         if (nv_vec.size() > 0) {
             nv_vec = SortUtils.quickSort(nv_vec);
             for (int k = 0; k < nv_vec.size(); k++) {
@@ -1001,6 +1075,8 @@ public class DataUtils {
 				}
             }
         }
+
+        _logger.debug("createFormalName2NCImSABHashMap... " );
         _formalName2NCImSABHashMap = createFormalName2NCImSABHashMap();
 
         //KLO
@@ -1014,7 +1090,9 @@ public class DataUtils {
          _vocabularyNameSet = _localName2FormalNameHashMap.keySet();
 
         if (initializeValueSetHierarchy) {
+			 _logger.debug("initializeValueSetHierarchy... " );
             initializeValueSetHierarchy();
+            _logger.debug("Done initializeValueSetHierarchy... " );
 	    }
     }
 
@@ -1028,9 +1106,11 @@ public class DataUtils {
 
     private static void initializeValueSetHierarchy() {
 		//if (hasNoValueSet || valueSetHierarchyInitialized) return;
-		long ms = System.currentTimeMillis();
+
 
 		if (valueSetHierarchyInitialized) return;
+		long ms_0 = System.currentTimeMillis();
+		long ms = System.currentTimeMillis();
 
 		_VSDName2URIHashMap = getVSDName2URIHashMap();
 
@@ -1057,12 +1137,20 @@ public class DataUtils {
 
 
 		valueSetHierarchy.preprocessSourceHierarchyData();
+		System.out.println("valueSetHierarchy.getValueSetParticipationHashSet() ...");
 		_valueSetParticipationHashSet = valueSetHierarchy.getValueSetParticipationHashSet();
-		valueSetHierarchy.createVSDSource2VSDsMap();
-		valueSetHierarchy.initializeCS2vsdURIs_map();
-		_logger.debug("\tDone initializing ValueSetHierarchy ...");
+		System.out.println("Done valueSetHierarchy.getValueSetParticipationHashSet() ...");
+		//valueSetHierarchy.createVSDSource2VSDsMap();
+        //System.out.println("Done valueSetHierarchy.initializeCS2vsdURIs_map() ...");
 
-		valueSetHierarchyInitialized = true;
+        System.out.println("valueSetHierarchy.initializeCS2vsdURIs_map() ...");
+		valueSetHierarchy.initializeCS2vsdURIs_map();
+		_logger.debug("Done initializing initializeCS2vsdURIs_map ...");
+
+		//valueSetHierarchyInitialized = true;
+
+        System.out.println("Constructing sourceValueSetTree ...");
+        ms = System.currentTimeMillis();
 		sourceValueSetTree = valueSetHierarchy.getSourceValueSetTree(null, null);
 		if (sourceValueSetTree == null) {
 			_logger.debug("\t(*) sourceValueSetTree == null??? ...");
@@ -1073,10 +1161,18 @@ public class DataUtils {
 			//new ValueSetCacheUtils().printTree(sourceValueSetTreeStringBuffer, root, Constants.STANDARD_VIEW, Boolean.TRUE);
 			SimpleTreeUtils stu = new SimpleTreeUtils(_vocabularyNameSet);
             sourceValueSetTreeStringBuffer = stu.getValueSetTreeStringBuffer(sourceValueSetTree);
+            System.out.println(sourceValueSetTreeStringBuffer);
             //sourceValueSetCheckboxid2NodeIdMap = stu.getCheckboxid2NodeIdMap();
-
 	    }
 
+		//terminologyValueSetCheckboxid2NodeIdMap = stu_2.getCheckboxid2NodeIdMap();
+
+		createSourceValueSetTreeKey2TreeItemMap();
+		System.out.println("sourceValueSetTree run time (ms): " + (System.currentTimeMillis() - ms));
+
+
+        System.out.println("Constructing terminologyValueSetTree ...");
+        ms = System.currentTimeMillis();
 		terminologyValueSetTree = valueSetHierarchy.getCodingSchemeValueSetTree(null, null);
 		/*
 		if (terminologyValueSetTree == null) {
@@ -1092,14 +1188,14 @@ public class DataUtils {
 
 		// new ValueSetCacheUtils().printTree(terminologyValueSetTreeStringBuffer, root, Constants.TERMINOLOGY_VIEW, Boolean.TRUE);
         SimpleTreeUtils stu_2 = new SimpleTreeUtils(_vocabularyNameSet);
-
 		terminologyValueSetTreeStringBuffer = stu_2.getValueSetTreeStringBuffer(terminologyValueSetTree);
-		//terminologyValueSetCheckboxid2NodeIdMap = stu_2.getCheckboxid2NodeIdMap();
+		System.out.println(terminologyValueSetTreeStringBuffer);
+		System.out.println("terminologyValueSetTree run time (ms): " + (System.currentTimeMillis() - ms));
 
-		createSourceValueSetTreeKey2TreeItemMap();
 		setTerminologyValueSetDescriptionHashMap();
+		valueSetHierarchyInitialized = true;
 
-		System.out.println("initializeValueSetHierarchy run time (ms): " + (System.currentTimeMillis() - ms));
+		System.out.println("initializeValueSetHierarchy run time (ms): " + (System.currentTimeMillis() - ms_0));
 
 	}
 
@@ -6923,8 +7019,8 @@ if (lbSvc == null) {
 
         DataUtils test = new DataUtils();
 
-        HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
-        test.dumpRelationshipHashMap(hmap);
+        //HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
+        //test.dumpRelationshipHashMap(hmap);
 
     }
 }

@@ -133,8 +133,15 @@ public class ValueSetHierarchy {
 		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(SOURCE_SCHEME, SOURCE_VERSION);
         _valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
 	    _availableValueSetDefinitionSources = findAvailableValueSetDefinitionSources();
+
+	    System.out.println("getValueSetSourceHierarchy..." + SOURCE_SCHEME);
+	    System.out.println("getValueSetSourceHierarchy..." + SOURCE_VERSION);
+
 		_source_hierarchy = getValueSetSourceHierarchy(SOURCE_SCHEME, SOURCE_VERSION);
+
 	    _vsd_source_to_vsds_map = createVSDSource2VSDsMap();
+
+
 		_subValueSet_hmap = getSubValueSetsFromSourceCodingScheme();
 		_rootValueSets = getRootValueSets();
 	}
@@ -1133,7 +1140,6 @@ public class ValueSetHierarchy {
 
 
     public AbsoluteCodingSchemeVersionReferenceList getAbsoluteCodingSchemeVersionReferenceList() {
-
         if (_valueSetParticipationHashSet == null) {
 			_valueSetParticipationHashSet = getValueSetParticipationHashSet();
 		}
@@ -1226,7 +1232,7 @@ public class ValueSetHierarchy {
 
         List <TreeItem> children = new ArrayList();
 
-        SortUtils.quickSort(root_cs_vec);
+        root_cs_vec = SortUtils.quickSort(root_cs_vec);
         Vector sorted_root_cs_vec = new Vector();
         for (int i=0; i<root_cs_vec.size(); i++) {
 			String cs = (String) root_cs_vec.elementAt(i);
@@ -1265,6 +1271,7 @@ public class ValueSetHierarchy {
 
 	public HashSet getValueSetParticipationHashSet() {
 		if (_valueSetParticipationHashSet != null) return _valueSetParticipationHashSet;
+		System.out.println("getValueSetParticipationHashSet ...");
         HashSet valueSetParticipationHashSet = new HashSet();
 		//if (_valueSetParticipationHashSet != null) return _valueSetParticipationHashSet;
 		//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -1278,9 +1285,12 @@ public class ValueSetHierarchy {
 				return null;
 			}
 
-
+            int k = 0;
+            System.out.println("vsd_service.listValueSetDefinitionURIs: " + list.size());
 			for (int i=0; i<list.size(); i++) {
 				String uri = (String) list.get(i);
+				k = i+1;
+				System.out.println("(" + k + ") " + uri);
 				Vector cs_vec = getCodingSchemeURNsInValueSetDefinition(uri);
 				for (int j=0; j<cs_vec.size(); j++) {
 					String cs = (String) cs_vec.elementAt(j);
@@ -1353,7 +1363,6 @@ public class ValueSetHierarchy {
 	}
 
 
-
     private HashMap getSubValueSetsFromSourceCodingScheme() {
 		HashMap subValueSet_hmap = new HashMap();
 
@@ -1363,10 +1372,14 @@ public class ValueSetHierarchy {
         Vector codes = getCodesInNodeSet(cns);
         for (int i=0; i<codes.size(); i++) {
 			String code = (String) codes.elementAt(i);
-			HashMap code_hmap = treeUtils.getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
-			if (code_hmap != null) {
-				subValueSet_hmap.put(code, code_hmap);
-		    }
+			try {
+				HashMap code_hmap = treeUtils.getSubconcepts(SOURCE_SCHEME, SOURCE_VERSION, code);
+				if (code_hmap != null) {
+					subValueSet_hmap.put(code, code_hmap);
+				}
+			} catch (Exception e) {
+                System.out.println("ERROR -- getSubValueSetsFromSourceCodingScheme throws exception.");
+			}
 		}
 		return subValueSet_hmap;
     }
@@ -1681,8 +1694,6 @@ public class ValueSetHierarchy {
 	}
 
     public boolean isValueSetSourceNodeExpandable(String node_id) {
-	   //HashMap = new TreeUtils().getSubconcepts(ValueSetHierarchy.SOURCE_SCHEME, ValueSetHierarchy.SOURCE_VERSION, node_id);
-
 	   return false;
 	}
 
@@ -1759,6 +1770,7 @@ public class ValueSetHierarchy {
         for (int i=0; i<count; i++) {
 			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 			String src = rcr.getConceptCode();
+			int j = i+1;
 
 			String text = rcr.getEntityDescription().getContent();
 			//TreeItem ti = new TreeItem(src, src + " (" + text + ")");
@@ -1766,6 +1778,10 @@ public class ValueSetHierarchy {
 			//TreeItem ti = new TreeItem(src, src);
 			//KLO 091411
 			TreeItem ti = new TreeItem(src, text);
+
+
+			//System.out.println("(" + j + ") " + text + " (" + src + ")");
+
 
 			ti._expandable = containsValueSets(src);
 			children.add(ti);
@@ -1879,8 +1895,6 @@ public class ValueSetHierarchy {
         if (_valueSetParticipationHashSet == null) {
             _valueSetParticipationHashSet = getValueSetParticipationHashSet();
 	    }
-
-
 	}
 
 
@@ -1919,18 +1933,29 @@ public class ValueSetHierarchy {
 		//createVSDSource2VSDsMap();
 		//if (_source_subconcept_map == null) preprocessSourceHierarchyData();
 		Vector vsd_vec = (Vector) _vsd_source_to_vsds_map.get(src_str);
+
 		if (vsd_vec != null && vsd_vec.size() > 0) {
 			return vsd_vec;
+
 		} else {
 			//get sub_sources
 			Vector vsd_in_sub_src_vec = new Vector();
-			if (!_source_subconcept_map.containsKey(src_str)) return null;
+			if (!_source_subconcept_map.containsKey(src_str)) {
+				return null;
+			}
 			Vector sub_vec = (Vector) _source_subconcept_map.get(src_str);
-			if (sub_vec == null) return null;
-			if (sub_vec.size() == 0) return new Vector();
+			if (sub_vec == null) {
+				return null;
+			}
+
+			if (sub_vec.size() == 0) {
+				return new Vector();
+			}
+
 			for (int i=0; i<sub_vec.size(); i++) {
 				String sub = (String) sub_vec.elementAt(i);
-				Vector vec_sub = getVSDRootsBySource(sub);
+
+  			    Vector vec_sub = getVSDRootsBySource(sub);
 				if (vec_sub != null && vec_sub.size() > 0) {
 					for (int j=0; j<vec_sub.size(); j++) {
 						ValueSetDefinition vsd = (ValueSetDefinition) vec_sub.elementAt(j);
@@ -2102,6 +2127,7 @@ public class ValueSetHierarchy {
 				 String code = childItem._code;
 				 String name = childItem._text;
 				 TreeItem top_node = new TreeItem(childItem._code, childItem._text);
+
 				 top_node._expandable = false;
 				 List <TreeItem> top_branch = new ArrayList();
 
@@ -2138,6 +2164,7 @@ public class ValueSetHierarchy {
 
 
     public TreeItem getCodingSchemeValueSetTreeBranch(String scheme, String code, String name) {
+		System.out.println("\tBranch: " + scheme + " " + name + " (" + code + ")");
 		TreeItem ti = new TreeItem(code, name);
 		ti._expandable = false;
 		List <TreeItem> children = new ArrayList();
@@ -2187,6 +2214,7 @@ public class ValueSetHierarchy {
 
 
     public HashMap getCodingSchemeValueSetTree(String scheme, String version) {
+		System.out.println("\tSetup root node...");
 		List <TreeItem> branch = new ArrayList();
 		TreeItem super_root = new TreeItem("<Root>", "Root node");
 
