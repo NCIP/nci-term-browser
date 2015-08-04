@@ -71,6 +71,8 @@ import java.util.Map.Entry;
 
 import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.LexGrid.LexBIG.caCore.interfaces.LexEVSApplicationService;
+import org.lexgrid.valuesets.impl.LexEVSValueSetDefinitionServicesImpl;
+
 import org.json.*;
 
 public class ValueSetHierarchy {
@@ -107,6 +109,24 @@ public class ValueSetHierarchy {
 
     private TreeUtils treeUtils = null;
 
+    private List valueSetDefinitionURIList = null;
+
+    public ValueSetHierarchy(LexBIGService lbSvc,
+                             LexEVSValueSetDefinitionServices vsd_service) {
+		this.lbSvc = lbSvc;
+		this.vsd_service = vsd_service;
+
+		codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
+		treeUtils = new TreeUtils(lbSvc);
+
+		try {
+			valueSetDefinitionURIList = this.vsd_service.listValueSetDefinitionURIs();
+		} catch (Exception ex) {
+            System.out.println("ERROR: vsd_service.listValueSetDefinitionURIs() failed.");
+		}
+
+        initialize();
+    }
 
 
     public ValueSetHierarchy(LexBIGService lbSvc,
@@ -114,11 +134,21 @@ public class ValueSetHierarchy {
                              HashMap localName2FormalNameHashMap,
                              HashMap codingSchemeName2URIHashMap) {
 		this.lbSvc = lbSvc;
+		this.vsd_service = vsd_service;
+
 		codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
 		treeUtils = new TreeUtils(lbSvc);
-		this.vsd_service = vsd_service;
+
+		try {
+			valueSetDefinitionURIList = vsd_service.listValueSetDefinitionURIs();
+		} catch (Exception ex) {
+            System.out.println("ERROR: vsd_service.listValueSetDefinitionURIs() failed.");
+		}
+
 		this.localName2FormalNameHashMap = localName2FormalNameHashMap;
-		this.vocabularyNameSet = localName2FormalNameHashMap.keySet();;
+		if (localName2FormalNameHashMap != null) {
+			this.vocabularyNameSet = localName2FormalNameHashMap.keySet();
+		}
         this.codingSchemeName2URIHashMap = codingSchemeName2URIHashMap;
         initialize();
     }
@@ -129,6 +159,9 @@ public class ValueSetHierarchy {
 	}
 
     private void initialize() {
+		if (localName2FormalNameHashMap == null || codingSchemeName2URIHashMap == null) {
+			initializeHashMaps();
+		}
 		//vsdURI2CodingSchemeURNs = getVsdURI2CodingSchemeURNs();
 		_valueSetDefinitionSourceCode2Name_map = getCodeHashMap(SOURCE_SCHEME, SOURCE_VERSION);
         _valueSetDefinitionURI2VSD_map = getValueSetDefinitionURI2VSD_map();
@@ -140,7 +173,6 @@ public class ValueSetHierarchy {
 		_source_hierarchy = getValueSetSourceHierarchy(SOURCE_SCHEME, SOURCE_VERSION);
 
 	    _vsd_source_to_vsds_map = createVSDSource2VSDsMap();
-
 
 		_subValueSet_hmap = getSubValueSetsFromSourceCodingScheme();
 		_rootValueSets = getRootValueSets();
@@ -242,16 +274,7 @@ public class ValueSetHierarchy {
 		_valueSetDefinitionURI2VSD_map = new HashMap();
 		try {
 			String valueSetDefinitionRevisionId = null;
-			List list = null;//vsd_service.listValueSetDefinitionURIs();
-
-			try {
-				list = vsd_service.listValueSetDefinitionURIs();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				return null;
-			}
-
-
+			List list = valueSetDefinitionURIList;
 			for (int i=0; i<list.size(); i++) {
 				String uri = (String) list.get(i);
 			    ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
@@ -301,16 +324,7 @@ public class ValueSetHierarchy {
 		}
 
 		Vector v = new Vector();
-        List list = null;//vsd_service.listValueSetDefinitionURIs();
-
-		try {
-			list = vsd_service.listValueSetDefinitionURIs();
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-			return v;
-		}
-
-
+        List list = valueSetDefinitionURIList;
         if (list == null) return null;
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
@@ -333,14 +347,7 @@ public class ValueSetHierarchy {
     public Vector findAvailableValueSetDefinitionSources() {
 		Vector v = new Vector();
 		HashSet hset = new HashSet();
-        List list = null;//vsd_service.listValueSetDefinitionURIs();
-		try {
-			list = vsd_service.listValueSetDefinitionURIs();
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-			return new Vector();
-		}
-
+		List list = valueSetDefinitionURIList;
         if (list == null) return null;
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
@@ -808,15 +815,8 @@ public class ValueSetHierarchy {
     public HashMap createVSDSource2VSDsMap() {
 
 		HashMap vsd_source_to_vsds_map = new HashMap();
-
 		//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-		List list = null;
-		try {
-			list = vsd_service.listValueSetDefinitionURIs();
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-			return vsd_source_to_vsds_map;
-		}
+		List list = valueSetDefinitionURIList;
 
 		for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
@@ -871,23 +871,10 @@ public class ValueSetHierarchy {
 	public HashMap getRootValueSets(String scheme) {
 		String formalName = getFormalName(scheme);
 		String codingSchemeURN = getCodingSchemeURN(formalName);
-
-		//HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_in_cs_vsd_vec = new Vector();
         HashMap source2VSD_map = new HashMap();
         HashMap uri2VSD_map = new HashMap();
-
-		//Vector v = new Vector();
-		//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-        List list = null;//vsd_service.listValueSetDefinitionURIs();
-
-		try {
-			list = vsd_service.listValueSetDefinitionURIs();
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
-
+        List list = valueSetDefinitionURIList;
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
 			//
@@ -917,15 +904,13 @@ public class ValueSetHierarchy {
 						source2VSD_map.put(src_str, vsd_v);
 					}
 				}
-
-				//v.add(uri);
 			}
 		}
 
 		TreeItem root = new TreeItem("<Root>", "Root node");
+		HashSet hset = new HashSet();
 
         List <TreeItem> children = new ArrayList();
-        //Vector root_source_vec = new Vector();
 		for (int k=0; k<source_in_cs_vsd_vec.size(); k++) {
 			String src = (String) source_in_cs_vsd_vec.elementAt(k);
 			// check has children
@@ -939,9 +924,7 @@ public class ValueSetHierarchy {
 						break;
 					}
 				}
-
 			}
-
 
 			boolean has_parent = false;
 			if (_source_superconcept_map.containsKey(src)) {
@@ -969,9 +952,13 @@ public class ValueSetHierarchy {
 						name = "<NOT ASSIGNED>";
 					}
 
-					TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), name);
-					ti._expandable = false;
-					children.add(ti);
+					String key = vsd.getValueSetDefinitionURI() + "$" + name;
+					if (!hset.contains(key)) {
+						hset.add(key);
+						TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), name);
+						ti._expandable = false;
+						children.add(ti);
+					}
 				}
 
 			} else if (has_children && !has_parent) {
@@ -985,20 +972,26 @@ public class ValueSetHierarchy {
 					if (name == null || name.compareTo("") == 0) {
 						name = "<NOT ASSIGNED>";
 					}
+					String key = vsd.getValueSetDefinitionURI() + "$" + name;
 
-					TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), name);
-
-					ti._expandable = true;
-					children.add(ti);
+                    if (!hset.contains(key)) {
+						hset.add(key);
+						TreeItem ti = new TreeItem(vsd.getValueSetDefinitionURI(), name);
+						ti._expandable = true;
+						children.add(ti);
+				    }
 				}
 			}
-
 		}
 
 		root._expandable = false;
 		SortUtils.quickSort(children);
-		root.addAll("[inverse_is_a]", children);
 
+		try {
+			root.addAll("[inverse_is_a]", children);
+		} catch (Exception ex) {
+			System.out.println("ERROR: root.addAll failed -- possible duplicated child nodes.");
+		}
 		HashMap hmap = new HashMap();
 		hmap.put("<Root>", root);
         return hmap;
@@ -1017,13 +1010,7 @@ public class ValueSetHierarchy {
 
 		//Vector v = new Vector();
 		//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-        List list = null;//vsd_service.listValueSetDefinitionURIs();
-		try {
-			list = vsd_service.listValueSetDefinitionURIs();
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
+        List list = valueSetDefinitionURIList;
 
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
@@ -1054,7 +1041,6 @@ public class ValueSetHierarchy {
 
 
 		TreeItem root = new TreeItem("<Root>", "Root node");
-
         List <TreeItem> children = new ArrayList();
         //Vector root_source_vec = new Vector();
 		for (int k=0; k<source_vec.size(); k++) {
@@ -1195,7 +1181,6 @@ public class ValueSetHierarchy {
 
                         String cs_uri = cs.getCodingSchemeURI();
                         if (_valueSetParticipationHashSet.contains(cs_uri)) {
-
 							AbsoluteCodingSchemeVersionReference csv_ref = new AbsoluteCodingSchemeVersionReference();
 							csv_ref.setCodingSchemeURN(cs.getCodingSchemeURI());
 							csv_ref.setCodingSchemeVersion(representsVersion);
@@ -1226,6 +1211,9 @@ public class ValueSetHierarchy {
 			String cs = (String) it.next();
 			String formalName = getFormalName(cs);
 			root_cs_vec.add(formalName);
+
+
+			System.out.println("getRootValueSets " + formalName);
 		}
 		root_cs_vec = SortUtils.quickSort(root_cs_vec);
 		TreeItem root = new TreeItem("<Root>", "Root node");
@@ -1276,15 +1264,7 @@ public class ValueSetHierarchy {
 		//if (_valueSetParticipationHashSet != null) return _valueSetParticipationHashSet;
 		//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 		try {
-			List list = null;//vsd_service.listValueSetDefinitionURIs();
-
-			try {
-				list = vsd_service.listValueSetDefinitionURIs();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				return null;
-			}
-
+			List list = valueSetDefinitionURIList;
             int k = 0;
             System.out.println("vsd_service.listValueSetDefinitionURIs: " + list.size());
 			for (int i=0; i<list.size(); i++) {
@@ -1430,15 +1410,7 @@ public class ValueSetHierarchy {
 		// find participating VSDs based on scheme uri2VSD_map & source2VSD_map
 
 		//LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-        List list = null;//vsd_service.listValueSetDefinitionURIs();
-
-		try {
-			list = vsd_service.listValueSetDefinitionURIs();
-	    } catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
-
+        List list = valueSetDefinitionURIList;
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
 			//
@@ -2218,7 +2190,9 @@ public class ValueSetHierarchy {
 		List <TreeItem> branch = new ArrayList();
 		TreeItem super_root = new TreeItem("<Root>", "Root node");
 
+System.out.println("getRootValueSets");
 		HashMap hmap = getRootValueSets();
+System.out.println("Done getRootValueSets");
 		TreeItem root = (TreeItem) hmap.get("<Root>");
 
 		for (String association : root._assocToChildMap.keySet()) {
@@ -2226,7 +2200,6 @@ public class ValueSetHierarchy {
 			 for (TreeItem childItem : children) {
 				 String code = childItem._code;
 				 String name = childItem._text;
-
 				 TreeItem cs_vs_root = new TreeItem(code, name);
    				 cs_vs_root._expandable = false;
 				 List <TreeItem> cs_vs_root_children = new ArrayList();
@@ -2282,13 +2255,109 @@ public class ValueSetHierarchy {
 		return getCodingSchemeValueSetTree(null, null);
 	}
 
+
+
+
+    private void initializeHashMaps() {
+		long ms = System.currentTimeMillis();
+
+        localName2FormalNameHashMap = new HashMap();
+        codingSchemeName2URIHashMap = new HashMap();
+
+        Vector nv_vec = new Vector();
+        boolean includeInactive = false;
+
+        try {
+            CodingSchemeRenderingList csrl = null;
+            try {
+                csrl = lbSvc.getSupportedCodingSchemes();
+            } catch (LBInvocationException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            CodingSchemeRendering[] csrs = csrl.getCodingSchemeRendering();
+            for (int i = 0; i < csrs.length; i++) {
+                int j = i + 1;
+                CodingSchemeRendering csr = csrs[i];
+                CodingSchemeSummary css = csr.getCodingSchemeSummary();
+                String formalname = css.getFormalName();
+                Boolean isActive = null;
+                if (csr.getRenderingDetail() == null) {
+                    _logger.warn("\tcsr.getRenderingDetail() == null");
+                } else if (csr.getRenderingDetail().getVersionStatus() == null) {
+                    _logger
+                        .warn("\tcsr.getRenderingDetail().getVersionStatus() == null");
+                } else {
+                    isActive =
+                        csr.getRenderingDetail().getVersionStatus().equals(
+                            CodingSchemeVersionStatus.ACTIVE);
+                }
+
+                String representsVersion = css.getRepresentsVersion();
+                _logger.debug("(" + j + ") " + formalname + "  version: "
+                    + representsVersion);
+                _logger.debug("\tActive? " + isActive);
+
+                if ((includeInactive && isActive == null)
+                    || (isActive != null && isActive.equals(Boolean.TRUE))
+                    || (includeInactive && (isActive != null && isActive
+                        .equals(Boolean.FALSE)))) {
+
+                    CodingSchemeVersionOrTag vt =
+                        new CodingSchemeVersionOrTag();
+                    vt.setVersion(representsVersion);
+
+                    try {
+                        CodingScheme cs = lbSvc.resolveCodingScheme(formalname, vt);
+                        codingSchemeName2URIHashMap.put(cs.getCodingSchemeName(), cs.getCodingSchemeURI());
+                        codingSchemeName2URIHashMap.put(formalname, cs.getCodingSchemeURI());
+
+                        String[] localnames = cs.getLocalName();
+                        for (int m = 0; m < localnames.length; m++) {
+                            String localname = localnames[m];
+                            _logger.debug("\tlocal name: " + localname);
+                            localName2FormalNameHashMap.put(localname,
+                                formalname);
+                        }
+                        localName2FormalNameHashMap.put(cs.getCodingSchemeURI(), formalname);
+                        localName2FormalNameHashMap.put(cs.getCodingSchemeName(), formalname);
+                        localName2FormalNameHashMap.put(formalname, formalname);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		System.out.println("initializeHashMaps run time (ms): " + (System.currentTimeMillis() - ms));
+    }
+
 /*
-	public void main(String[] args) throws Exception {
-		//ValueSetHierarchy test = new ValueSetHierarchy();
+	public static void main(String[] args) throws Exception {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		String url = "http://lexevsapi6.nci.nih.gov/lexevsapi63";
+		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices(url);
+        ValueSetHierarchy vsu = new ValueSetHierarchy(lbSvc, vsd_service);
+
         String cs_url = "http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#";
-	    HashMap root_hmap = ValueSetHierarchy.getRootValueSets(cs_url);
+	    HashMap root_hmap = vsu.getRootValueSets(cs_url);
+	    System.out.println("\nTree:");
 	    if (root_hmap != null) {
-			printTree(root_hmap);
+			System.out.println("vsu.getRootValueSets returns != null " + cs_url);
+			vsu.printTree(root_hmap);
+		} else {
+			System.out.println("vsu.getRootValueSets returns null??? " + cs_url);
+		}
+
+        cs_url = "National Drug File - Reference Terminology";
+	    root_hmap = vsu.getRootValueSets(cs_url);
+	    System.out.println("\nTree:");
+	    if (root_hmap != null) {
+			System.out.println("vsu.getRootValueSets returns != null " + cs_url);
+			vsu.printTree(root_hmap);
+		} else {
+			System.out.println("vsu.getRootValueSets returns null??? " + cs_url);
 		}
 	}
 */
