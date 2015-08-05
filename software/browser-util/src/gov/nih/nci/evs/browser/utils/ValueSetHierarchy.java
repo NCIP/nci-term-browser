@@ -2138,10 +2138,7 @@ public class ValueSetHierarchy {
 		System.out.println("\tSetup root node...");
 		List <TreeItem> branch = new ArrayList();
 		TreeItem super_root = new TreeItem("<Root>", "Root node");
-
-System.out.println("getRootValueSets");
 		HashMap hmap = getRootValueSets();  // same as getRootValuSetes(by_source = true)
-System.out.println("Done getRootValueSets");
 		TreeItem root = (TreeItem) hmap.get("<Root>");
 
 		for (String association : root._assocToChildMap.keySet()) {
@@ -2201,7 +2198,6 @@ System.out.println("Done getRootValueSets");
 
 
     public TreeItem getCodingSchemeValueSetTreeBranch(String scheme, String code, String name) {
-		System.out.println("\tBranch: " + scheme + " " + name + " (" + code + ")");
 		TreeItem ti = new TreeItem(code, name);
 		ti._expandable = false;
 		List <TreeItem> children = new ArrayList();

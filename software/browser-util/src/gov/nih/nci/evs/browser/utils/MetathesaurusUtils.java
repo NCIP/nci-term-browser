@@ -72,9 +72,11 @@ import org.LexGrid.commonTypes.PropertyQualifier;
 
 public class MetathesaurusUtils { //extends ServiceTestCase {
 	LexBIGService lbSvc = null;
+	ConceptDetails conceptDetails = null;
 
 	public MetathesaurusUtils(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
+		conceptDetails = new ConceptDetails(lbSvc);
 	}
 
     // Restrictions: property name and value pair, list of sources of presentation properties
@@ -189,6 +191,49 @@ public class MetathesaurusUtils { //extends ServiceTestCase {
 		return cns;
 	}
 
+
+    public Vector getMatchedMetathesaurusCUIs(String scheme, String version,
+        String ltag, String code) {
+        Entity c = conceptDetails.getConceptByCode(scheme, version, code);
+        if (c != null) {
+            Vector v = conceptDetails.getConceptPropertyValues(c, "NCI_META_CUI");
+            if (v == null || v.size() == 0) {
+				return conceptDetails.getConceptPropertyValues(c, "UMLS_CUI");
+			}        }
+        return null;
+    }
+
+
+    public Vector getMatchedMetathesaurusCUIs(Entity c) {
+        if (c != null) {
+            Vector v = conceptDetails.getConceptPropertyValues(c, "NCI_META_CUI");
+            if (v == null || v.size() == 0) {
+				return conceptDetails.getConceptPropertyValues(c, "UMLS_CUI");
+			}
+        }
+        return null;
+    }
+
+/*
+    // Bodily Pain (Code C114901)
+	public static void main(String [] args) {
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			MetathesaurusUtils test = new MetathesaurusUtils(lbSvc);
+
+            Vector cui_vec = test.getMatchedMetathesaurusCUIs("NCI_Thesaurus", "15.07d", null, "C114901");
+            for (int i=0; i<cui_vec.size(); i++) {
+				String cui = (String) cui_vec.elementAt(i);
+				System.out.println("CUI: " + cui);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
 	public static void main(String [] args) {
 		try {
 			String serviceUrl = "http://lexevsapi62.nci.nih.gov/lexevsapi62";
@@ -283,5 +328,5 @@ public class MetathesaurusUtils { //extends ServiceTestCase {
             ex.printStackTrace();
 		}
 	}
-
+*/
 }
