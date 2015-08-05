@@ -286,32 +286,18 @@ public class DataUtils {
 		long ms0 = System.currentTimeMillis();
 		long ms = System.currentTimeMillis();
 
-
 		VALUE_SET_TAB_AVAILABLE = isCodingSchemeAvailable(Constants.TERMINOLOGY_VALUE_SET_NAME);
-
-
-		System.out.println("VALUE_SET_TAB_AVAILABLE ..." + VALUE_SET_TAB_AVAILABLE);
-
-
 		NCI_THESAURUS_AVAILABLE = isCodingSchemeAvailable(Constants.NCIT_CS_NAME);
 
-		System.out.println("NCI_THESAURUS_AVAILABLE ..." + NCI_THESAURUS_AVAILABLE);
-
         if (VALUE_SET_TAB_AVAILABLE != null && VALUE_SET_TAB_AVAILABLE.equals(Boolean.TRUE)) {
-
-			System.out.println("calling getResolvedValueSetHashMap ...");
-
-			//resovedValueSetHashMap = getResolvedValueSetHashMap();
-
-
+			System.out.println("getResolvedValueSetHashMap ...");
+			resovedValueSetHashMap = getResolvedValueSetHashMap();
 			System.out.println("getResolvedValueSetHashMap run time (ms): " + (System.currentTimeMillis() - ms));
 			ms = System.currentTimeMillis();
 		} else {
 			hasNoValueSet = true;
 		}
-
 		//resovedValueSetHashMap = getResolvedValueSetHashMap();
-		System.out.println("getResolvedValueSetHashMap run time (ms): " + (System.currentTimeMillis() - ms));
 		ms = System.currentTimeMillis();
         System.out.println("setCodingSchemeMap... ");
 		setCodingSchemeMap();
@@ -1157,11 +1143,10 @@ public class DataUtils {
 		} else {
 			TreeItem root = (TreeItem) sourceValueSetTree.get("<Root>");
 			sourceValueSetTreeStringBuffer = new StringBuffer();
-//KLO 070914
 			//new ValueSetCacheUtils().printTree(sourceValueSetTreeStringBuffer, root, Constants.STANDARD_VIEW, Boolean.TRUE);
 			SimpleTreeUtils stu = new SimpleTreeUtils(_vocabularyNameSet);
             sourceValueSetTreeStringBuffer = stu.getValueSetTreeStringBuffer(sourceValueSetTree);
-            System.out.println(sourceValueSetTreeStringBuffer);
+            //System.out.println(sourceValueSetTreeStringBuffer);
             //sourceValueSetCheckboxid2NodeIdMap = stu.getCheckboxid2NodeIdMap();
 	    }
 
@@ -1169,7 +1154,6 @@ public class DataUtils {
 
 		createSourceValueSetTreeKey2TreeItemMap();
 		System.out.println("sourceValueSetTree run time (ms): " + (System.currentTimeMillis() - ms));
-
 
         System.out.println("Constructing terminologyValueSetTree ...");
         ms = System.currentTimeMillis();
@@ -1189,12 +1173,11 @@ public class DataUtils {
 		// new ValueSetCacheUtils().printTree(terminologyValueSetTreeStringBuffer, root, Constants.TERMINOLOGY_VIEW, Boolean.TRUE);
         SimpleTreeUtils stu_2 = new SimpleTreeUtils(_vocabularyNameSet);
 		terminologyValueSetTreeStringBuffer = stu_2.getValueSetTreeStringBuffer(terminologyValueSetTree);
-		System.out.println(terminologyValueSetTreeStringBuffer);
+		//System.out.println(terminologyValueSetTreeStringBuffer);
 		System.out.println("terminologyValueSetTree run time (ms): " + (System.currentTimeMillis() - ms));
 
 		setTerminologyValueSetDescriptionHashMap();
 		valueSetHierarchyInitialized = true;
-
 		System.out.println("initializeValueSetHierarchy run time (ms): " + (System.currentTimeMillis() - ms_0));
 
 	}
