@@ -45,7 +45,7 @@ import java.util.*;
  * <!-- LICENSE_TEXT_END -->
  */
 
-public class OntologyInfo {
+public class OntologyInfo implements java.io.Serializable {
     private String _codingScheme = "";
     private String _displayName = "";
     private String _version = "";
