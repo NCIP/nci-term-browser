@@ -526,11 +526,11 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
           if (PropertyData.isConceptEntity(rcr)) {
 		  if (con_status == null) {
 		  %>
-		     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>
+		     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&ns=<%=ns%>&code=<%=code%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>
 		  <%
 		  } else {
 		  %>
-		     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
+		     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&ns=<%=ns%>&code=<%=code%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
 		  <%
 		  }
           } else {

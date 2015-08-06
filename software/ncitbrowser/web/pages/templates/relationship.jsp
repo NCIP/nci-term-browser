@@ -132,7 +132,7 @@ if (type != null && type.compareTo("all") == 0) {
           
     %>
           <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&code=<%=cCode%>&ns=<%=cNamespace%>">
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
             <%=cName%>
           </a>
     <%
@@ -157,7 +157,7 @@ if (type != null && type.compareTo("all") == 0) {
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&code=<%=cCode%>&ns=<%=cNamespace%>">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>
@@ -191,7 +191,7 @@ if (type != null && type.compareTo("all") == 0) {
               cNamespace = (String) ret_vec.elementAt(2);
           }    %>
           <b><%=label%></b>
-          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&code=<%=cCode%>&ns=<%=cNamespace%>">
+          <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
             <%=cName%>
           </a>
     <%
@@ -212,7 +212,7 @@ if (type != null && type.compareTo("all") == 0) {
     %>
           <tr class="<%=rowColor%>">
             <td class="dataCellText">
-              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&code=<%=cCode%>&ns=<%=cNamespace%>">
+              <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
                 <%=cName%>
               </a>
             </td>

@@ -2135,7 +2135,6 @@ public class ValueSetHierarchy {
 
 
     public HashMap getCodingSchemeValueSetTree(String scheme, String version) {
-		System.out.println("\tSetup root node...");
 		List <TreeItem> branch = new ArrayList();
 		TreeItem super_root = new TreeItem("<Root>", "Root node");
 		HashMap hmap = getRootValueSets();  // same as getRootValuSetes(by_source = true)
@@ -2147,9 +2146,6 @@ public class ValueSetHierarchy {
 				 String code = childItem._code;
 				 String name = childItem._text;
 				 TreeItem cs_vs_root = new TreeItem(code, name);
-
-				 printTreeItem(cs_vs_root);
-
    				 cs_vs_root._expandable = false;
 				 List <TreeItem> cs_vs_root_children = new ArrayList();
 				 String node_id = code;
@@ -2342,9 +2338,7 @@ public class ValueSetHierarchy {
 
 			while (sourceEnum.hasMoreElements()) {
 				Source src = (Source) sourceEnum.nextElement();
-
 				String src_str = src.getContent();
-
 				if (_source_subconcept_map.containsKey(src_str)) {
 					Vector sub_vec = (Vector) _source_subconcept_map.get(src_str);
 					for (int k=0; k<sub_vec.size(); k++) {
@@ -2358,11 +2352,7 @@ public class ValueSetHierarchy {
 								if (participating_vsd_vec.contains(sub_vsd_uri)) {
 
 									ValueSetDefinition sub_vsd = (ValueSetDefinition) uri2VSD_map.get(sub_vsd_uri);
-
-									System.out.println("\tsub_vsd: " + sub_vsd.getValueSetDefinitionName());
-
 									String vsd_text = sub_vsd.getValueSetDefinitionName();
-
 
 											java.util.Enumeration<? extends Source> sub_vsd_sourceEnum = sub_vsd.enumerateSource();
 											while (sub_vsd_sourceEnum.hasMoreElements()) {

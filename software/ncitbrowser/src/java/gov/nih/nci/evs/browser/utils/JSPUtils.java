@@ -424,12 +424,14 @@ public class JSPUtils {
           String url = requestURL;
           url += "ConceptReport.jsp";
           url += "?dictionary=" + encoded_dictionary;
-          if (version != null && version.length() > 0)
+          if (version != null && version.length() > 0) {
               url += "&version=" + version;
-          url +="&code=" + encoded_concept_id;
+		  }
+
           if (ns != null) {
 			  url +="&ns=" + ns;
 		  }
+          url +="&code=" + encoded_concept_id;
           return url;
     }
 

@@ -103,7 +103,7 @@ if (type != null && type.compareTo("all") == 0) {
  			%>
  			       <tr>
  				 <td class="textbody">
-  					    <a href="<%= ncim_url %>/ConceptReport.jsp?dictionary=<%=ncim_cs_name%>&code=<%=meta_cui%>&type=synonym" target="_blank">
+  					    <a href="<%= ncim_url %>/ConceptReport.jsp?dictionary=<%=ncim_cs_name%>&type=synonym&code=<%=meta_cui%>" target="_blank">
  					      <i class="textbody"><%=meta_cui%></i>
  					      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=ncim_cs_name%>" />
  					    </a>
