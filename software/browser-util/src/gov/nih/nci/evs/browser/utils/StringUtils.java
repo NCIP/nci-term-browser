@@ -211,4 +211,18 @@ public class StringUtils {
 	   }
 	   return buf.toString();
    }
+
+   public static String getFieldValue(String line, int index) {
+		if (line == null) return null;
+        Vector u = parseData(line);
+        if (u.size() <= index) return null;
+        return (String) u.elementAt(index);
+   }
+
+   public static String getFieldValue(String line, String delim, int index) {
+		if (line == null) return null;
+        Vector u = parseData(line, delim);
+        if (u.size() <= index) return null;
+        return (String) u.elementAt(index);
+   }
 }

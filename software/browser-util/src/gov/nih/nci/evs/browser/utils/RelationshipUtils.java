@@ -78,6 +78,45 @@ public class RelationshipUtils {
     private LexBIGServiceConvenienceMethods lbscm = null;
     private TreeUtils treeUtils = null;
 
+    private static int SUPERCONCEPT_OPTION = 0;
+    private static int SUBCONCEPT_OPTION = 1;
+    private static int ROLE_OPTION = 2;
+    private static int INVERSE_ROLE_OPTION = 3;
+    private static int ASSOCIATION_OPTION = 4;
+    private static int INVERSE_ASSOCIATION_OPTION = 5;
+
+
+    public List createOptionList(boolean superconcept,
+                                 boolean subconcept,
+                                 boolean role,
+                                 boolean inverse_role,
+                                 boolean association,
+                                 boolean inverse_association) {
+		ArrayList list = new ArrayList();
+		list.add(new Boolean(superconcept));
+		list.add(new Boolean(subconcept));
+		list.add(new Boolean(role));
+		list.add(new Boolean(inverse_role));
+		list.add(new Boolean(association));
+		list.add(new Boolean(inverse_association));
+		return list;
+    }
+
+    public List getDefaultOptionList() {
+		ArrayList list = new ArrayList();
+		for (int i=0; i<6; i++) {
+			list.add(new Boolean(true));
+		}
+		return list;
+	}
+
+	public boolean checkOption(List options, int index) {
+		Boolean bool = (Boolean) options.get(index);
+		if (bool.equals(Boolean.TRUE)) return true;
+		return false;
+	}
+
+
 	public RelationshipUtils(LexBIGService lbSvc) {
         this.lbSvc = lbSvc;
         try {
@@ -125,8 +164,7 @@ public class RelationshipUtils {
 
 
 
-    public List getSupportedRoleNames(LexBIGService lbSvc, String scheme,
-        String version) {
+    public List getSupportedRoleNames(String scheme, String version) {
         CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
         if (version != null)
             csvt.setVersion(version);
@@ -183,6 +221,14 @@ public class RelationshipUtils {
 
 
     public HashMap getRelationshipHashMap(String scheme, String version, String code, String ns, boolean useNamespace) {
+		return getRelationshipHashMap(scheme, version, code, ns, useNamespace, getDefaultOptionList());
+	}
+
+
+    public HashMap getRelationshipHashMap(String scheme, String version, String code, String ns, boolean useNamespace, List options) {
+		if (options == null) {
+			options = getDefaultOptionList();
+		}
         boolean isMapping = isMapping(scheme, version);
         NameAndValueList navl = null;
         if (isMapping) navl = getMappingAssociationNames(scheme, version);
@@ -214,7 +260,7 @@ public class RelationshipUtils {
 
         // Perform the query ...
         ResolvedConceptReferenceList matches = null;
-        List list = getSupportedRoleNames(lbSvc, scheme, version);
+        List list = getSupportedRoleNames(scheme, version);
 
         ArrayList roleList = new ArrayList();
         ArrayList associationList = new ArrayList();
@@ -227,7 +273,6 @@ public class RelationshipUtils {
 
         HashMap map = new HashMap();
 
-        // Exclude hierarchical relationships:
         String[] associationsToNavigate =
             treeUtils.getAssociationsToNavigate(scheme, version);
         Vector w = new Vector();
@@ -238,25 +283,26 @@ public class RelationshipUtils {
         }
 
          // superconcepts:
-		if (!isMapping) {
-				HashMap hmap_super = treeUtils.getSuperconcepts(scheme, version, code, ns);
-				if (hmap_super != null) {
-					TreeItem ti = (TreeItem) hmap_super.get(code);
-					if (ti != null) {
-						for (String association : ti._assocToChildMap.keySet()) {
-							List<TreeItem> children =
-								ti._assocToChildMap.get(association);
-							for (TreeItem childItem : children) {
-								superconceptList.add(childItem._text + "|"
-									+ childItem._code);
+        if (checkOption(options, SUPERCONCEPT_OPTION)) {
+			if (!isMapping) {
+					HashMap hmap_super = treeUtils.getSuperconcepts(scheme, version, code, ns);
+					if (hmap_super != null) {
+						TreeItem ti = (TreeItem) hmap_super.get(code);
+						if (ti != null) {
+							for (String association : ti._assocToChildMap.keySet()) {
+								List<TreeItem> children =
+									ti._assocToChildMap.get(association);
+								for (TreeItem childItem : children) {
+									superconceptList.add(childItem._text + "|"
+										+ childItem._code);
+								}
 							}
 						}
 					}
-				}
-				//Collections.sort(superconceptList);
-				SortUtils.quickSort(superconceptList);
-
-		}
+					//Collections.sort(superconceptList);
+					SortUtils.quickSort(superconceptList);
+			}
+	    }
         map.put(Constants.TYPE_SUPERCONCEPT, superconceptList);
 
         /*
@@ -270,376 +316,396 @@ public class RelationshipUtils {
          */
 
         // subconcepts:
-		if (!isMapping) {
-				subconceptList = treeUtils.getSubconceptNamesAndCodes(scheme, version, code, ns);
-				SortUtils.quickSort(subconceptList);
-		}
+        if (checkOption(options, SUBCONCEPT_OPTION)) {
+			if (!isMapping) {
+					subconceptList = treeUtils.getSubconceptNamesAndCodes(scheme, version, code, ns);
+					SortUtils.quickSort(subconceptList);
+			}
+	    }
         map.put(Constants.TYPE_SUBCONCEPT, subconceptList);
 
         // associations:
-        try {
-            CodedNodeGraph cng = lbSvc.getNodeGraph(scheme, csvt, null);
-           	cng = restrictToEntityType(cng, "concept");
-           	if (cng == null) return null;
+        CodedNodeGraph cng = null;
+        if (checkOption(options, ROLE_OPTION) || checkOption(options, ASSOCIATION_OPTION) ) {
 
-            if (isMapping) {
-                 if (navl != null) {
-					 cng = cng.restrictToAssociations(navl, null);
- 				 }
+			try {
+				cng = lbSvc.getNodeGraph(scheme, csvt, null);
+				cng = restrictToEntityType(cng, "concept");
+				if (cng == null) return null;
+
+				if (isMapping) {
+					 if (navl != null) {
+						 cng = cng.restrictToAssociations(navl, null);
+					 }
+				}
+
+				matches = null;
+				try {
+					matches = cng.resolveAsList(cr, true, false, 0, 1, null, null, null, null, -1, false);
+
+				} catch (Exception e) {
+					//_logger
+					 //   .error("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions."
+					  //      + code);
+				}
+
+				if (matches != null
+					&& matches.getResolvedConceptReferenceCount() > 0) {
+					Enumeration<? extends ResolvedConceptReference> refEnum =
+						matches.enumerateResolvedConceptReference();
+
+					while (refEnum.hasMoreElements()) {
+						ResolvedConceptReference ref = (ResolvedConceptReference) refEnum.nextElement();
+						AssociationList sourceof = ref.getSourceOf();
+						if (sourceof != null) {
+							Association[] associations = sourceof.getAssociation();
+							if (associations != null) {
+								for (int i = 0; i < associations.length; i++) {
+									Association assoc = associations[i];
+									String associationName = null;
+
+									try {
+										associationName =
+											lbscm
+												.getAssociationNameFromAssociationCode(
+													scheme, csvt, assoc
+														.getAssociationName());
+									} catch (Exception ex) {
+										associationName = assoc.getAssociationName();
+									}
+
+									//associationName = assoc.getDirectionalName();
+
+									boolean isRole = false;
+									if (list.contains(associationName)) {
+										isRole = true;
+									}
+
+									AssociatedConcept[] acl =
+										assoc.getAssociatedConcepts()
+											.getAssociatedConcept();
+
+									for (int j = 0; j < acl.length; j++) {
+										AssociatedConcept ac = acl[j];
+
+										String ac_csn = ac.getCodingSchemeName();
+
+										// [#26283] Remove self-referential
+										// relationships.
+										boolean include = true;
+										if (ac.getConceptCode().compareTo(code) == 0)
+											include = false;
+
+										if (include) {
+
+											EntityDescription ed =
+												ac.getEntityDescription();
+
+											String name = "No Description";
+											if (ed != null)
+												name = ed.getContent();
+											String pt = name;
+
+											if (associationName
+												.compareToIgnoreCase("equivalentClass") != 0
+												&& ac.getConceptCode().indexOf("@") == -1) {
+												if (!w.contains(associationName)) {
+													// String s = associationName +
+													// "|" + pt + "|" +
+													// ac.getConceptCode();
+													String relaValue =
+														replaceAssociationNameByRela(
+															ac, associationName);
+
+													String s =
+														relaValue + "|" + pt + "|"
+															+ ac.getConceptCode() + "|"
+															+ ac.getCodingSchemeName() + "|"
+															+ ac.getCodeNamespace();
+
+													StringBuffer sb = new StringBuffer();
+													//if (isMapping) {
+														if (ac.getAssociationQualifiers() != null) {
+															//String qualifiers = "";
+															StringBuffer buf = new StringBuffer();
+															for (NameAndValue qual : ac
+																	.getAssociationQualifiers()
+																	.getNameAndValue()) {
+																String qualifier_name = qual.getName();
+																String qualifier_value = qual.getContent();
+																//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+																if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(qualifier_name) &&
+																	gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(qualifier_value)) {
+																} else {
+																	buf.append((qualifier_name + ":" + qualifier_value) + "$");
+																}
+
+															}
+															String qualifiers = buf.toString();
+															if (qualifiers.endsWith("$")) {
+																qualifiers = qualifiers.substring(0, qualifiers.length()-1);
+															}
+
+															//s = s + "|" + qualifiers;
+															sb.append("|" + qualifiers);
+														}
+														//s = s + "|" + ac.getCodeNamespace();
+														//sb.append("|" + ac.getCodeNamespace());
+													//}
+													s = s + sb.toString();
+
+
+													if (isRole) {
+														// if
+														// (associationName.compareToIgnoreCase("hasSubtype")
+														// != 0) {
+														// //_logger.debug("Adding role: "
+														// +
+														// s);
+														roleList.add(s);
+														// }
+													} else {
+														// //_logger.debug("Adding association: "
+														// + s);
+														associationList.add(s);
+
+													}
+
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			} catch (Exception ex) {
+
 			}
+		}
 
-            matches = null;
+        if (checkOption(options, INVERSE_ROLE_OPTION) || checkOption(options, INVERSE_ASSOCIATION_OPTION)) {
             try {
-                matches = cng.resolveAsList(cr, true, false, 0, 1, null, null, null, null, -1, false);
+				cng = lbSvc.getNodeGraph(scheme, csvt, null);
+				cng = restrictToEntityType(cng, "concept");
+				if (cng == null) return null;
 
-            } catch (Exception e) {
-                //_logger
-                 //   .error("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions."
-                  //      + code);
-            }
+				if (isMapping) {
+					 if (navl != null) {
+						 cng = cng.restrictToAssociations(navl, null);
+					 }
+				}
 
-            if (matches != null
-                && matches.getResolvedConceptReferenceCount() > 0) {
-                Enumeration<? extends ResolvedConceptReference> refEnum =
-                    matches.enumerateResolvedConceptReference();
+				matches = null;
+				try {
+					/*
+					 * CodedNodeSet.PropertyType[] propertyTypes = new
+					 * CodedNodeSet.PropertyType[1]; propertyTypes[0] =
+					 * PropertyType.PRESENTATION; int resolveCodedEntryDepth = 0;
+					 */
+					matches =
+						cng.resolveAsList(cr,
+								// false, true, 0, 1, new LocalNameList(), null,
+								// null, 10000);
+								// false, true, 0, 1, null, new LocalNameList(),
+								// null, null, -1, false);
+								false, true, 0, 1, null, null, null, null, -1,
+								false);
+					/*
+					 * matches = cng.resolveAsList(ConvenienceMethods
+					 * .createConceptReference(code, scheme), //true, true, 1, 1,
+					 * noopList_, null, null, null, -1, false); //true, true, 1, 1,
+					 * noopList_, propertyTypes, null, null, -1, false); true, true,
+					 * 0, 1, null, propertyTypes, null, null, -1, false);
+					 */
 
-                while (refEnum.hasMoreElements()) {
-                    ResolvedConceptReference ref = (ResolvedConceptReference) refEnum.nextElement();
-                    AssociationList sourceof = ref.getSourceOf();
-                    if (sourceof != null) {
-                        Association[] associations = sourceof.getAssociation();
-                        if (associations != null) {
-                            for (int i = 0; i < associations.length; i++) {
-                                Association assoc = associations[i];
-                                String associationName = null;
+				} catch (Exception e) {
+					//_logger
+						//error("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions."
+						 //   + code);
+				}
 
-                                try {
-									associationName =
-										lbscm
+				if (matches != null
+					&& matches.getResolvedConceptReferenceCount() > 0) {
+					Enumeration<? extends ResolvedConceptReference> refEnum =
+						matches.enumerateResolvedConceptReference();
+
+					while (refEnum.hasMoreElements()) {
+						ResolvedConceptReference ref = refEnum.nextElement();
+
+						// inverse roles and associations
+						AssociationList targetof = ref.getTargetOf();
+						if (targetof != null) {
+							Association[] inv_associations =
+								targetof.getAssociation();
+							if (inv_associations != null) {
+								for (int i = 0; i < inv_associations.length; i++) {
+									Association assoc = inv_associations[i];
+									// String associationName =
+									// assoc.getAssociationName();
+
+									String associationName = null;
+									try {
+										associationName = lbscm
 											.getAssociationNameFromAssociationCode(
 												scheme, csvt, assoc
 													.getAssociationName());
-								} catch (Exception ex) {
-									associationName = assoc.getAssociationName();
-								}
+									} catch (Exception ex) {
+										associationName = assoc.getAssociationName();
+									}
 
-								//associationName = assoc.getDirectionalName();
+									//associationName = assoc.getDirectionalName();
 
-                                boolean isRole = false;
-                                if (list.contains(associationName)) {
-                                    isRole = true;
-                                }
+									boolean isRole = false;
+									if (list.contains(associationName)) {
+										isRole = true;
+									}
+									AssociatedConcept[] acl =
+										assoc.getAssociatedConcepts()
+											.getAssociatedConcept();
+									for (int j = 0; j < acl.length; j++) {
+										AssociatedConcept ac = acl[j];
 
-                                AssociatedConcept[] acl =
-                                    assoc.getAssociatedConcepts()
-                                        .getAssociatedConcept();
+										// [#26283] Remove self-referential
+										// relationships.
+										boolean include = true;
+										if (ac.getConceptCode().compareTo(code) == 0)
+											include = false;
 
-                                for (int j = 0; j < acl.length; j++) {
-                                    AssociatedConcept ac = acl[j];
+										if (include) {
 
-                                    String ac_csn = ac.getCodingSchemeName();
+											EntityDescription ed =
+												ac.getEntityDescription();
 
-                                    // [#26283] Remove self-referential
-                                    // relationships.
-                                    boolean include = true;
-                                    if (ac.getConceptCode().compareTo(code) == 0)
-                                        include = false;
+											String name = "No Description";
+											if (ed != null)
+												name = ed.getContent();
 
-                                    if (include) {
+											String pt = name;
 
-                                        EntityDescription ed =
-                                            ac.getEntityDescription();
+											// [#24749] inverse association names
+											// are empty for domain and range
+											if (associationName.compareTo("domain") == 0
+												|| associationName
+													.compareTo("range") == 0) {
 
-                                        String name = "No Description";
-                                        if (ed != null)
-                                            name = ed.getContent();
-                                        String pt = name;
-
-                                        if (associationName
-                                            .compareToIgnoreCase("equivalentClass") != 0
-                                            && ac.getConceptCode().indexOf("@") == -1) {
-                                            if (!w.contains(associationName)) {
-                                                // String s = associationName +
-                                                // "|" + pt + "|" +
-                                                // ac.getConceptCode();
-                                                String relaValue =
-                                                    replaceAssociationNameByRela(
-                                                        ac, associationName);
-
-                                                String s =
-                                                    relaValue + "|" + pt + "|"
-                                                        + ac.getConceptCode() + "|"
-                                                        + ac.getCodingSchemeName() + "|"
-                                                        + ac.getCodeNamespace();
-
-                                                StringBuffer sb = new StringBuffer();
-                                                //if (isMapping) {
-													if (ac.getAssociationQualifiers() != null) {
-														//String qualifiers = "";
-														StringBuffer buf = new StringBuffer();
-														for (NameAndValue qual : ac
-																.getAssociationQualifiers()
-																.getNameAndValue()) {
-															String qualifier_name = qual.getName();
-															String qualifier_value = qual.getContent();
-															//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
-															if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(qualifier_name) &&
-															    gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(qualifier_value)) {
-															} else {
-															    buf.append((qualifier_name + ":" + qualifier_value) + "$");
-															}
-
-														}
-														String qualifiers = buf.toString();
-														if (qualifiers.endsWith("$")) {
-															qualifiers = qualifiers.substring(0, qualifiers.length()-1);
-														}
-
-														//s = s + "|" + qualifiers;
-														sb.append("|" + qualifiers);
-													}
-													//s = s + "|" + ac.getCodeNamespace();
-													//sb.append("|" + ac.getCodeNamespace());
-												//}
-												s = s + sb.toString();
-
-
-                                                if (isRole) {
-                                                    // if
-                                                    // (associationName.compareToIgnoreCase("hasSubtype")
-                                                    // != 0) {
-                                                    // //_logger.debug("Adding role: "
-                                                    // +
-                                                    // s);
-                                                    roleList.add(s);
-                                                    // }
-                                                } else {
-                                                    // //_logger.debug("Adding association: "
-                                                    // + s);
-                                                    associationList.add(s);
-
-                                                }
-
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            cng = lbSvc.getNodeGraph(scheme, csvt, null);
-            cng = restrictToEntityType(cng, "concept");
-            if (cng == null) return null;
-
-            if (isMapping) {
-                 if (navl != null) {
-					 cng = cng.restrictToAssociations(navl, null);
- 				 }
-			}
-
-            matches = null;
-            try {
-                /*
-                 * CodedNodeSet.PropertyType[] propertyTypes = new
-                 * CodedNodeSet.PropertyType[1]; propertyTypes[0] =
-                 * PropertyType.PRESENTATION; int resolveCodedEntryDepth = 0;
-                 */
-                matches =
-                    cng.resolveAsList(cr,
-                            // false, true, 0, 1, new LocalNameList(), null,
-                            // null, 10000);
-                            // false, true, 0, 1, null, new LocalNameList(),
-                            // null, null, -1, false);
-                            false, true, 0, 1, null, null, null, null, -1,
-                            false);
-                /*
-                 * matches = cng.resolveAsList(ConvenienceMethods
-                 * .createConceptReference(code, scheme), //true, true, 1, 1,
-                 * noopList_, null, null, null, -1, false); //true, true, 1, 1,
-                 * noopList_, propertyTypes, null, null, -1, false); true, true,
-                 * 0, 1, null, propertyTypes, null, null, -1, false);
-                 */
-
-            } catch (Exception e) {
-                //_logger
-                    //error("ERROR: DataUtils getRelationshipHashMap cng.resolveAsList throws exceptions."
-                     //   + code);
-            }
-
-            if (matches != null
-                && matches.getResolvedConceptReferenceCount() > 0) {
-                Enumeration<? extends ResolvedConceptReference> refEnum =
-                    matches.enumerateResolvedConceptReference();
-
-                while (refEnum.hasMoreElements()) {
-                    ResolvedConceptReference ref = refEnum.nextElement();
-
-                    // inverse roles and associations
-                    AssociationList targetof = ref.getTargetOf();
-                    if (targetof != null) {
-                        Association[] inv_associations =
-                            targetof.getAssociation();
-                        if (inv_associations != null) {
-                            for (int i = 0; i < inv_associations.length; i++) {
-                                Association assoc = inv_associations[i];
-                                // String associationName =
-                                // assoc.getAssociationName();
-
-
-                                String associationName = null;
-                                try {
-                                    associationName = lbscm
-                                        .getAssociationNameFromAssociationCode(
-                                            scheme, csvt, assoc
-                                                .getAssociationName());
-							    } catch (Exception ex) {
-									associationName = assoc.getAssociationName();
-								}
-
-								//associationName = assoc.getDirectionalName();
-
-                                boolean isRole = false;
-                                if (list.contains(associationName)) {
-                                    isRole = true;
-                                }
-                                AssociatedConcept[] acl =
-                                    assoc.getAssociatedConcepts()
-                                        .getAssociatedConcept();
-                                for (int j = 0; j < acl.length; j++) {
-                                    AssociatedConcept ac = acl[j];
-
-                                    // [#26283] Remove self-referential
-                                    // relationships.
-                                    boolean include = true;
-                                    if (ac.getConceptCode().compareTo(code) == 0)
-                                        include = false;
-
-                                    if (include) {
-
-                                        EntityDescription ed =
-                                            ac.getEntityDescription();
-
-                                        String name = "No Description";
-                                        if (ed != null)
-                                            name = ed.getContent();
-
-                                        String pt = name;
-
-                                        // [#24749] inverse association names
-                                        // are empty for domain and range
-                                        if (associationName.compareTo("domain") == 0
-                                            || associationName
-                                                .compareTo("range") == 0) {
-
-											try {
-												pt =
-													lbscm
-														.getAssociationNameFromAssociationCode(
-															scheme, csvt, ac
-																.getConceptCode());
-											} catch (Exception ex) {
-												pt = ac.getConceptCode();
+												try {
+													pt =
+														lbscm
+															.getAssociationNameFromAssociationCode(
+																scheme, csvt, ac
+																	.getConceptCode());
+												} catch (Exception ex) {
+													pt = ac.getConceptCode();
+												}
 											}
-                                        }
 
-                                        // if
-                                        // (associationName.compareToIgnoreCase("equivalentClass")
-                                        // != 0) {
-                                        if (associationName
-                                            .compareToIgnoreCase("equivalentClass") != 0
-                                            && ac.getConceptCode().indexOf("@") == -1) {
+											// if
+											// (associationName.compareToIgnoreCase("equivalentClass")
+											// != 0) {
+											if (associationName
+												.compareToIgnoreCase("equivalentClass") != 0
+												&& ac.getConceptCode().indexOf("@") == -1) {
 
-                                            if (!w.contains(associationName)) {
-                                                // String s = associationName +
-                                                // "|" + pt + "|" +
-                                                // ac.getConceptCode();
-                                                String relaValue =
-                                                    replaceAssociationNameByRela(
-                                                        ac, associationName);
+												if (!w.contains(associationName)) {
+													// String s = associationName +
+													// "|" + pt + "|" +
+													// ac.getConceptCode();
+													String relaValue =
+														replaceAssociationNameByRela(
+															ac, associationName);
 
-                                                String s =
-                                                    relaValue + "|" + pt + "|"
-                                                         + ac.getConceptCode() + "|"
-                                                         + ac.getCodingSchemeName() + "|"
-                                                         + ac.getCodeNamespace();
+													String s =
+														relaValue + "|" + pt + "|"
+															 + ac.getConceptCode() + "|"
+															 + ac.getCodingSchemeName() + "|"
+															 + ac.getCodeNamespace();
 
-                                                StringBuffer sb = new StringBuffer();
+													StringBuffer sb = new StringBuffer();
 
 
-                                                //if (isMapping) {
-													if (ac.getAssociationQualifiers() != null) {
-														//String qualifiers = "";
-														StringBuffer buf = new StringBuffer();
-														for (NameAndValue qual : ac
-																.getAssociationQualifiers()
-																.getNameAndValue()) {
-															String qualifier_name = qual.getName();
-															String qualifier_value = qual.getContent();
-															//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
-															buf.append((qualifier_name + ":" + qualifier_value) + "$");
+													//if (isMapping) {
+														if (ac.getAssociationQualifiers() != null) {
+															//String qualifiers = "";
+															StringBuffer buf = new StringBuffer();
+															for (NameAndValue qual : ac
+																	.getAssociationQualifiers()
+																	.getNameAndValue()) {
+																String qualifier_name = qual.getName();
+																String qualifier_value = qual.getContent();
+																//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
+																buf.append((qualifier_name + ":" + qualifier_value) + "$");
+															}
+															String qualifiers = buf.toString();
+															if (qualifiers.endsWith("$")) {
+																qualifiers = qualifiers.substring(0, qualifiers.length()-1);
+															}
+															//s = s + "|" + qualifiers;
+															sb.append("|" + qualifiers);
 														}
-														String qualifiers = buf.toString();
-														if (qualifiers.endsWith("$")) {
-															qualifiers = qualifiers.substring(0, qualifiers.length()-1);
-														}
-														//s = s + "|" + qualifiers;
-														sb.append("|" + qualifiers);
+														//s = s + "|" + ac.getCodeNamespace();
+														//sb.append("|" + ac.getCodeNamespace());
+														s = s + sb.toString();
+													//}
+
+													if (isRole) {
+														inverse_roleList.add(s);
+													} else {
+														inverse_associationList
+															.add(s);
 													}
-													//s = s + "|" + ac.getCodeNamespace();
-													//sb.append("|" + ac.getCodeNamespace());
-													s = s + sb.toString();
-												//}
+												}
 
-                                                if (isRole) {
-                                                    inverse_roleList.add(s);
-                                                } else {
-                                                    inverse_associationList
-                                                        .add(s);
-                                                }
-                                            }
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+		    } catch (Exception ex) {
 
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+			}
+		}
 
-            if (roleList.size() > 0) {
-                //Collections.sort(roleList);
-                SortUtils.quickSort(roleList);
+		if (!checkOption(options, ROLE_OPTION)) {
+			roleList = new ArrayList();
+		}
+		if (!checkOption(options, INVERSE_ROLE_OPTION)) {
+			inverse_roleList = new ArrayList();
+		}
+		if (!checkOption(options, ASSOCIATION_OPTION)) {
+			associationList = new ArrayList();
+		}
+		if (!checkOption(options, INVERSE_ASSOCIATION_OPTION)) {
+			inverse_associationList = new ArrayList();
+		}
 
-            }
+		if (roleList.size() > 0) {
+			SortUtils.quickSort(roleList);
+		}
 
-            if (associationList.size() > 0) {
-                //Collections.sort(associationList);
-                SortUtils.quickSort(associationList);
-            }
+		if (associationList.size() > 0) {
+			SortUtils.quickSort(associationList);
+		}
 
-            map.put(Constants.TYPE_ROLE, roleList);
-            map.put(Constants.TYPE_ASSOCIATION, associationList);
+		map.put(Constants.TYPE_ROLE, roleList);
+		map.put(Constants.TYPE_ASSOCIATION, associationList);
 
-            if (inverse_roleList.size() > 0) {
-                //Collections.sort(inverse_roleList);
-                SortUtils.quickSort(inverse_roleList);
-            }
+		if (inverse_roleList.size() > 0) {
+			SortUtils.quickSort(inverse_roleList);
+		}
 
-            if (inverse_associationList.size() > 0) {
-                //Collections.sort(inverse_associationList);
-                SortUtils.quickSort(inverse_associationList);
-            }
+		if (inverse_associationList.size() > 0) {
+			SortUtils.quickSort(inverse_associationList);
+		}
 
-            map.put(Constants.TYPE_INVERSE_ROLE, inverse_roleList);
-            map.put(Constants.TYPE_INVERSE_ASSOCIATION, inverse_associationList);
+		map.put(Constants.TYPE_INVERSE_ROLE, inverse_roleList);
+		map.put(Constants.TYPE_INVERSE_ASSOCIATION, inverse_associationList);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+
         return map;
     }
 
@@ -692,4 +758,23 @@ public class RelationshipUtils {
 		}
 		return cng;
 	}
+
+
+	public List getRelationshipData(HashMap relMap, String key, List relationship_list) {
+		if (relMap == null) return null;
+		List list = (ArrayList) relMap.get(key);
+		if (list == null) return null;
+		List a = new ArrayList();
+		for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			String rel_label = gov.nih.nci.evs.browser.utils.StringUtils.getFieldValue(t, 0);
+			String name = gov.nih.nci.evs.browser.utils.StringUtils.getFieldValue(t, 1);
+			String code = gov.nih.nci.evs.browser.utils.StringUtils.getFieldValue(t, 2);
+			if (relationship_list.contains(rel_label)) {
+				a.add(rel_label + "|" + name + "|" + code);
+			}
+		}
+		return a;
+	}
+
 }

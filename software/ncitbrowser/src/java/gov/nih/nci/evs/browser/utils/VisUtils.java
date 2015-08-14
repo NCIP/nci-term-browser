@@ -67,7 +67,8 @@ public class VisUtils {
                                                            "type_role",
                                                            "type_inverse_role",
                                                            "type_association",
-                                                           "type_inverse_association"};
+                                                           "type_inverse_association"
+                                                           };
 
 	public VisUtils() {
 
@@ -208,7 +209,6 @@ public class VisUtils {
 			}
 		}
 
-
         buf.append(focused_node_label + " [").append("\n");
         buf.append("fontcolor=white,").append("\n");
         buf.append("color=red,").append("\n");
@@ -216,6 +216,7 @@ public class VisUtils {
         buf.append("}").append("\n");
         return buf.toString();
 	}
+
 
     public String generateGraphScript(String scheme, String version, String namespace, String code) {
 		return generateGraphScript(scheme, version, namespace, code, null);
@@ -227,6 +228,8 @@ public class VisUtils {
 	}
 
 
+//	  String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
+
     public String generateGraphScript(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
         if (types == null) {
 			types = ALL_RELATIONSHIP_TYPES;
@@ -235,23 +238,12 @@ public class VisUtils {
         return GraphUtils.generateGraphScript(graphData, option);
 	}
 
-
-    public Vector generateGraphData(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
+    public Vector generatePartonomyGraphData(String scheme, String version, String namespace, String code, int option, HashMap hmap) {
 		Vector graphData = new Vector();
-		List typeList = null;
-		if (types != null) {
-			typeList = Arrays.asList(types);
-		} else {
-			typeList = new ArrayList();
-			typeList.add("type_superconcept");
-			typeList.add("type_subconcept");
-    	}
-
 		boolean useNamespace = true;
 		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
 			useNamespace = false;
 		}
-
 
 		Entity concept = new ConceptDetails(lbSvc).getConceptByCode(scheme, version, code, namespace, useNamespace);
 		String name = "<NO DESCRIPTION>";
@@ -268,7 +260,77 @@ public class VisUtils {
         String focused_node_label = getLabel(name, code);
 
         HashMap relMap = null;
-        if (relMap == null) {
+        if (hmap == null) {
+			RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
+			relMap = relUtils.getRelationshipHashMap(scheme, version, code, namespace, useNamespace);
+	    } else {
+			relMap = hmap;
+		}
+
+        HashSet nodes = new HashSet();
+        nodes.add(focused_node_label);
+
+        ArrayList list = null;
+        PartonomyUtils partUtils = new PartonomyUtils(lbSvc);
+		List part_of_list = partUtils.getPartOfData(relMap);
+		for (int i=0; i<part_of_list.size(); i++) {
+			String t = (String) part_of_list.get(i);
+			String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+			String rel_label = getFieldValue(t, 0);
+			graphData.add(focused_node_label + "|" + rel_node_label + "|" + rel_label + "|7");
+		}
+
+		List has_part_list = partUtils.getHasPartData(relMap);
+		for (int i=0; i<has_part_list.size(); i++) {
+			String t = (String) has_part_list.get(i);
+			String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+			String rel_label = getFieldValue(t, 0);
+			graphData.add(rel_node_label + "|" + focused_node_label + "|" + rel_label + "|7");
+		}
+		return graphData;
+	}
+
+
+    public Vector generateGraphData(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
+		if (types != null && types.length == 1) {
+			String type = types[0];
+
+			if (type.compareTo("type_part_of") == 0) {
+				return generatePartonomyGraphData(scheme, version, namespace, code, option, hmap);
+			}
+		}
+
+		Vector graphData = new Vector();
+		List typeList = null;
+		if (types != null) {
+			typeList = Arrays.asList(types);
+		} else {
+			typeList = new ArrayList();
+			typeList.add("type_superconcept");
+			typeList.add("type_subconcept");
+    	}
+
+		boolean useNamespace = true;
+		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
+			useNamespace = false;
+		}
+
+		Entity concept = new ConceptDetails(lbSvc).getConceptByCode(scheme, version, code, namespace, useNamespace);
+		String name = "<NO DESCRIPTION>";
+		if (concept.getEntityDescription() != null) {
+			name = concept.getEntityDescription().getContent();
+		}
+		name = encode(name);
+		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
+			namespace = concept.getEntityCodeNamespace();
+		}
+		if (!gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
+			useNamespace = true;
+		}
+        String focused_node_label = getLabel(name, code);
+
+        HashMap relMap = null;
+        if (hmap == null) {
 			RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
 			relMap = relUtils.getRelationshipHashMap(scheme, version, code, namespace, useNamespace);
 	    } else {

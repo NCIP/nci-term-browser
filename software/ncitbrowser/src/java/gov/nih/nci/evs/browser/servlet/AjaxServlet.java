@@ -4043,7 +4043,6 @@ out.flush();
 		  graph_available = false;
 	  }
 
-
       response.setContentType("text/html");
       PrintWriter out = null;
 
@@ -4180,18 +4179,32 @@ out.flush();
       } else {
 		  out.println("  <option value=\"ALL\">ALL</option>");
 	  }
-	  for (int k=0; k<VisUtils.ALL_RELATIONSHIP_TYPES.length; k++) {
-          String rel_type = (String) VisUtils.ALL_RELATIONSHIP_TYPES[k];
+	  String rel_type = null;
+	  String option_label = null;
 
+	  for (int k=0; k<VisUtils.ALL_RELATIONSHIP_TYPES.length; k++) {
+          rel_type = (String) VisUtils.ALL_RELATIONSHIP_TYPES[k];
           List list = (List) hmap.get(rel_type);
           if (list != null && list.size() > 0) {
-			  String option_label = rel_type.substring(5, rel_type.length());
+			  option_label = rel_type.substring(5, rel_type.length());
 			  if (type.compareTo(rel_type) == 0) {
 				  out.println("  <option value=\"" + rel_type + "\" selected>" + option_label + "</option>");
 			  } else {
 				  out.println("  <option value=\"" + rel_type + "\">" + option_label + "</option>");
 			  }
 	      }
+	  }
+
+	  boolean hasPartOf = new PartonomyUtils(lb_svc).hasPartOfRelationships(hmap);
+	  if (hasPartOf) {
+		  rel_type = "type_part_of";
+		  option_label = rel_type.substring(5, rel_type.length());
+
+		  if (type.compareTo(rel_type) == 0) {
+			  out.println("  <option value=\"" + rel_type + "\" selected>" + option_label + "</option>");
+		  } else {
+			  out.println("  <option value=\"" + rel_type + "\">" + option_label + "</option>");
+		  }
 	  }
 
       out.println("</select>");
@@ -4210,9 +4223,6 @@ out.flush();
       out.println("<div id=\"conceptnetwork\"></div>");
       out.println("");
       out.println("<p id=\"selection\"></p>");
-
-
-
       out.println("</body>");
       out.println("</html>");
    }
