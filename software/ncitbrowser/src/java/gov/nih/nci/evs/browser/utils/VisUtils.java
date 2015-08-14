@@ -228,8 +228,6 @@ public class VisUtils {
 	}
 
 
-//	  String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
-
     public String generateGraphScript(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
         if (types == null) {
 			types = ALL_RELATIONSHIP_TYPES;
@@ -238,7 +236,29 @@ public class VisUtils {
         return GraphUtils.generateGraphScript(graphData, option);
 	}
 
-    public Vector generatePartonomyGraphData(String scheme, String version, String namespace, String code, int option, HashMap hmap) {
+
+	public Vector treeItem2GraphData(TreeItem root) {
+	    Vector graphData = treeItem2GraphData(root, new Vector());
+	    return graphData;
+    }
+
+	public Vector treeItem2GraphData(TreeItem ti, Vector v) {
+		String focused_node_label = getLabel(ti._text, ti._code);
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			for (TreeItem childItem : children) {
+				String code = childItem._code;
+				String text = childItem._text;
+				String rel_node_label = getLabel(text, code);
+				v.add(focused_node_label + "|" + rel_node_label + "|" + association + "|7");
+				v = treeItem2GraphData(childItem, v);
+			}
+		}
+	    return v;
+    }
+
+
+    public Vector generatePartonomyGraphData(String scheme, String version, String namespace, String code, String type, int option, HashMap hmap) {
 		Vector graphData = new Vector();
 		boolean useNamespace = true;
 		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
@@ -270,22 +290,31 @@ public class VisUtils {
         HashSet nodes = new HashSet();
         nodes.add(focused_node_label);
 
-        ArrayList list = null;
         PartonomyUtils partUtils = new PartonomyUtils(lbSvc);
-		List part_of_list = partUtils.getPartOfData(relMap);
-		for (int i=0; i<part_of_list.size(); i++) {
-			String t = (String) part_of_list.get(i);
-			String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
-			String rel_label = getFieldValue(t, 0);
-			graphData.add(focused_node_label + "|" + rel_node_label + "|" + rel_label + "|7");
-		}
 
-		List has_part_list = partUtils.getHasPartData(relMap);
-		for (int i=0; i<has_part_list.size(); i++) {
-			String t = (String) has_part_list.get(i);
-			String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
-			String rel_label = getFieldValue(t, 0);
-			graphData.add(rel_node_label + "|" + focused_node_label + "|" + rel_label + "|7");
+        if (type.compareTo("type_part_of") == 0) {
+			ArrayList list = null;
+
+			List part_of_list = partUtils.getPartOfData(relMap);
+			for (int i=0; i<part_of_list.size(); i++) {
+				String t = (String) part_of_list.get(i);
+				String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+				String rel_label = getFieldValue(t, 0);
+				graphData.add(focused_node_label + "|" + rel_node_label + "|" + rel_label + "|7");
+			}
+
+			List has_part_list = partUtils.getHasPartData(relMap);
+			for (int i=0; i<has_part_list.size(); i++) {
+				String t = (String) has_part_list.get(i);
+				String rel_node_label = getLabel(getFieldValue(t, 1), getFieldValue(t, 2));
+				String rel_label = getFieldValue(t, 0);
+				graphData.add(rel_node_label + "|" + focused_node_label + "|" + rel_label + "|7");
+			}
+		} else if (type.compareTo("type_part_of_path") == 0) {
+            HashMap map = partUtils.getPathsToRoots(scheme, version, code, namespace, "part_of");
+            if (map == null) return null;
+            TreeItem root = (TreeItem) map.get("<ROOT>");
+            graphData = treeItem2GraphData(root);
 		}
 		return graphData;
 	}
@@ -295,8 +324,8 @@ public class VisUtils {
 		if (types != null && types.length == 1) {
 			String type = types[0];
 
-			if (type.compareTo("type_part_of") == 0) {
-				return generatePartonomyGraphData(scheme, version, namespace, code, option, hmap);
+			if (type.compareTo("type_part_of") == 0 || type.compareTo("type_part_of_path") == 0) {
+				return generatePartonomyGraphData(scheme, version, namespace, code, type, option, hmap);
 			}
 		}
 

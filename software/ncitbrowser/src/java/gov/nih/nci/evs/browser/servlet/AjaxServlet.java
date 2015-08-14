@@ -4199,7 +4199,14 @@ out.flush();
 	  if (hasPartOf) {
 		  rel_type = "type_part_of";
 		  option_label = rel_type.substring(5, rel_type.length());
+		  if (type.compareTo(rel_type) == 0) {
+			  out.println("  <option value=\"" + rel_type + "\" selected>" + option_label + "</option>");
+		  } else {
+			  out.println("  <option value=\"" + rel_type + "\">" + option_label + "</option>");
+		  }
 
+		  rel_type = "type_part_of_path";
+		  option_label = rel_type.substring(5, rel_type.length());
 		  if (type.compareTo(rel_type) == 0) {
 			  out.println("  <option value=\"" + rel_type + "\" selected>" + option_label + "</option>");
 		  } else {

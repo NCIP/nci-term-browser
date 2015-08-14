@@ -167,78 +167,54 @@ public class PartonomyUtils {
 		return false;
 	}
 
+	public String encode(String t) {
+		if (t == null) return null;
+		t = t.replaceAll("'", "\'");
+		return t;
+	}
 
-	public static void main(String [] args) {
-		try {
-			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-//Hand (Code C32712)
-			String codingSchemeURN = "NCI_Thesaurus";
-			String codingSchemeVersion = "15.07d";
-			String code = "C32712";
-			String namespace = null;
-			boolean useNamespace = false;
-
-			RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
-			HashMap relMap = relUtils.getRelationshipHashMap(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace);
-			Iterator it = relMap.keySet().iterator();
-			while (it.hasNext()) {
-				String key = (String) it.next();
-				ArrayList list = (ArrayList) relMap.get(key);
-				System.out.println("\n" + key);
-				if (list != null) {
-					for (int i=0; i<list.size(); i++) {
-						String t = (String) list.get(i);
-						System.out.println("\t" + t);
-					}
-				}
-			}
-/*
-			System.out.println("\n=========================part_of_list========================================");
-	        List part_of_list = relUtils.getPartonomyData(relMap, PartonomyUtils.HAS_PART_LIST);
-	        for (int i=0; i<part_of_list.size(); i++) {
-				String t = (String) part_of_list.get(i);
-				System.out.println(t);
-			}
-*/
-
-            PartonomyUtils partUtils = new PartonomyUtils(lbSvc);
-			System.out.println("\n==========================part_of_list========================================");
-	        List part_of_list = partUtils.getPartOfData(relMap);
-	        for (int i=0; i<part_of_list.size(); i++) {
-				String t = (String) part_of_list.get(i);
-				System.out.println(t);
-			}
-
-			System.out.println("\n==========================has_part_list========================================");
-	        List has_part_list = partUtils.getHasPartData(relMap);
-	        for (int i=0; i<has_part_list.size(); i++) {
-				String t = (String) has_part_list.get(i);
-				System.out.println(t);
-			}
-
-
-/*
-            List options = relUtils.createOptionList(true, true, true, false, false, false);
-			relMap = relUtils.getRelationshipHashMap(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace, options);
-			it = relMap.keySet().iterator();
-			while (it.hasNext()) {
-				String key = (String) it.next();
-				ArrayList list = (ArrayList) relMap.get(key);
-				System.out.println("\n" + key);
-				if (list != null) {
-					for (int i=0; i<list.size(); i++) {
-						String t = (String) list.get(i);
-						System.out.println("\t" + t);
-					}
-				}
-			}
-*/
-
-
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
+	public TreeItem getChildNode(String codingSchemeURN, String codingSchemeVersion, String code, String namespace, String rel) {
+		HashMap hmap = new HashMap();
+		boolean useNamespace = true;
+		if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(namespace)) {
+			useNamespace = false;
 		}
+
+		Entity concept = new ConceptDetails(lbSvc).getConceptByCode(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace);
+		String name = "<NO DESCRIPTION>";
+		if (concept.getEntityDescription() != null) {
+			name = concept.getEntityDescription().getContent();
+		}
+		name = encode(name);
+		TreeItem root = new TreeItem(code, name);
+		RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
+		HashMap relMap = relUtils.getRelationshipHashMap(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace);
+
+        List part_of_list = null;
+        if (rel.compareTo("part_of") == 0) {
+		    part_of_list = getPartOfData(relMap);
+	    } else {
+			part_of_list = getHasPartData(relMap);
+		}
+
+		for (int i=0; i<part_of_list.size(); i++) {
+			String t = (String) part_of_list.get(i);
+			String child_name = gov.nih.nci.evs.browser.utils.StringUtils.getFieldValue(t, 1);
+			String child_code = gov.nih.nci.evs.browser.utils.StringUtils.getFieldValue(t, 2);
+			String rel_label = gov.nih.nci.evs.browser.utils.StringUtils.getFieldValue(t, 0);
+			TreeItem child_node = getChildNode(codingSchemeURN, codingSchemeVersion, child_code, namespace, rel);
+			root.addChild(rel_label, child_node);
+		}
+		return root;
+	}
+
+
+
+	public HashMap getPathsToRoots(String codingSchemeURN, String codingSchemeVersion, String code, String namespace, String rel) {
+		HashMap hmap = new HashMap();
+		TreeItem root = getChildNode(codingSchemeURN, codingSchemeVersion, code, namespace, rel);
+        hmap.put("<ROOT>", root);
+        return hmap;
 	}
 
 }
