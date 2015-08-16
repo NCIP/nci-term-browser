@@ -62,13 +62,34 @@ public class VisUtils {
     public static int EDGES_ONLY = 2;
     public static int NODES_AND_EDGES = 3;
 
+    public static String ROOT = "<ROOT>";
+    public static String PART_OF = "part_of";
+
     public static final String[] ALL_RELATIONSHIP_TYPES = {"type_superconcept",
                                                            "type_subconcept",
                                                            "type_role",
                                                            "type_inverse_role",
                                                            "type_association",
-                                                           "type_inverse_association"
-                                                           };
+                                                           "type_inverse_association"};
+    public static HashMap RELATIONSHIP_LABEL_MAP;
+
+    static {
+		RELATIONSHIP_LABEL_MAP = new HashMap();
+		RELATIONSHIP_LABEL_MAP.put("ALL", "ALL");
+		RELATIONSHIP_LABEL_MAP.put("type_superconcept", "Superconcept");
+		RELATIONSHIP_LABEL_MAP.put("type_subconcept", "Subconcept");
+		RELATIONSHIP_LABEL_MAP.put("type_role", "Role");
+		RELATIONSHIP_LABEL_MAP.put("type_inverse_role", "Inverse Role");
+		RELATIONSHIP_LABEL_MAP.put("type_association", "Association");
+		RELATIONSHIP_LABEL_MAP.put("type_inverse_association", "Inverse Association");
+		RELATIONSHIP_LABEL_MAP.put("type_part_of", "Part Of");
+		RELATIONSHIP_LABEL_MAP.put("type_part_of_path", "Part Of (Path to Roots)");
+	};
+
+	public static String getRelatinshipLabel(String option_label) {
+	    if (!RELATIONSHIP_LABEL_MAP.containsKey(option_label)) return option_label;
+	    return (String) RELATIONSHIP_LABEL_MAP.get(option_label);
+	}
 
 	public VisUtils() {
 
@@ -311,9 +332,9 @@ public class VisUtils {
 				graphData.add(rel_node_label + "|" + focused_node_label + "|" + rel_label + "|7");
 			}
 		} else if (type.compareTo("type_part_of_path") == 0) {
-            HashMap map = partUtils.getPathsToRoots(scheme, version, code, namespace, "part_of");
+            HashMap map = partUtils.getPathsToRoots(scheme, version, code, namespace, PART_OF);
             if (map == null) return null;
-            TreeItem root = (TreeItem) map.get("<ROOT>");
+            TreeItem root = (TreeItem) map.get(ROOT);
             graphData = treeItem2GraphData(root);
 		}
 		return graphData;

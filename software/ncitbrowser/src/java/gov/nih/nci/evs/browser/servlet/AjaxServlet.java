@@ -732,10 +732,9 @@ if (action.compareTo("xmldefinitions") == 0) {
             String code =  HTTPUtils.cleanXSS(request.getParameter("code"));
             String type =  HTTPUtils.cleanXSS(request.getParameter("type"));
 
-if (type == null) {
-	type = "ALL";
-}
-
+			if (type == null) {
+				type = "ALL";
+			}
 
             view_graph(request, response, scheme, version, ns, code, type);
 		}
@@ -4116,13 +4115,29 @@ out.flush();
       out.println("        nodes: nodes,");
       out.println("        edges: edges");
       out.println("      };");
-      out.println("      var options = {");
 
-      out.println("        interaction: {");
-      out.println("          navigationButtons: true,");
-      out.println("          keyboard: true");
-      out.println("        }");
-      out.println("      };");
+      if (type.endsWith("path")) {
+		  out.println("            var directionInput = document.getElementById(\"direction\").value;");
+		  out.println("            var options = {");
+		  out.println("                layout: {");
+		  out.println("                    hierarchical: {");
+		  out.println("                        direction: directionInput");
+		  out.println("                    }");
+		  out.println("                }");
+		  out.println("            };");
+
+
+	  } else {
+
+		  out.println("      var options = {");
+		  out.println("        interaction: {");
+		  out.println("          navigationButtons: true,");
+		  out.println("          keyboard: true");
+		  out.println("        }");
+		  out.println("      };");
+
+      }
+
       out.println("      network = new vis.Network(container, data, options);");
       out.println("");
       out.println("      // add event listeners");
@@ -4134,8 +4149,6 @@ out.flush();
       out.println("</head>");
       out.println("");
       out.println("<body onload=\"draw();\">");
-
-
 
       out.println("<div class=\"ncibanner\">");
       out.println("  <a href=\"http://www.cancer.gov\" target=\"_blank\">     ");
@@ -4159,12 +4172,7 @@ out.flush();
       out.println("      alt=\"www.cancer.gov\"/>");
       out.println("  </a>");
       out.println("</div>");
-
-
-
-      //out.println("<h2>View Graph</h2>");
       out.println("<p></p>");
-      //out.println("<p></p>");
 
 	  if (!graph_available) {
 		  out.println("<p class=\"textbodyred\">&nbsp;No graph data is available.</p>");
@@ -4186,7 +4194,7 @@ out.flush();
           rel_type = (String) VisUtils.ALL_RELATIONSHIP_TYPES[k];
           List list = (List) hmap.get(rel_type);
           if (list != null && list.size() > 0) {
-			  option_label = rel_type.substring(5, rel_type.length());
+			  option_label = VisUtils.getRelatinshipLabel(rel_type);
 			  if (type.compareTo(rel_type) == 0) {
 				  out.println("  <option value=\"" + rel_type + "\" selected>" + option_label + "</option>");
 			  } else {
@@ -4198,7 +4206,7 @@ out.flush();
 	  boolean hasPartOf = new PartonomyUtils(lb_svc).hasPartOfRelationships(hmap);
 	  if (hasPartOf) {
 		  rel_type = "type_part_of";
-		  option_label = rel_type.substring(5, rel_type.length());
+		  option_label = VisUtils.getRelatinshipLabel(rel_type);
 		  if (type.compareTo(rel_type) == 0) {
 			  out.println("  <option value=\"" + rel_type + "\" selected>" + option_label + "</option>");
 		  } else {
@@ -4206,7 +4214,7 @@ out.flush();
 		  }
 
 		  rel_type = "type_part_of_path";
-		  option_label = rel_type.substring(5, rel_type.length());
+		  option_label = VisUtils.getRelatinshipLabel(rel_type);
 		  if (type.compareTo(rel_type) == 0) {
 			  out.println("  <option value=\"" + rel_type + "\" selected>" + option_label + "</option>");
 		  } else {
@@ -4224,6 +4232,42 @@ out.flush();
       out.println("<input type=\"submit\" value=\"Refresh\"></input>");
       out.println("</form>");
       out.println("");
+
+      if (type.endsWith("path")) {
+
+      out.println("<p>");
+      out.println("    <input type=\"button\" id=\"btn-UD\" value=\"Up-Down\">");
+      out.println("    <input type=\"button\" id=\"btn-DU\" value=\"Down-Up\">");
+      out.println("    <input type=\"button\" id=\"btn-LR\" value=\"Left-Right\">");
+      out.println("    <input type=\"button\" id=\"btn-RL\" value=\"Right-Left\">");
+      out.println("    <input type=\"hidden\" id='direction' value=\"UD\">");
+      out.println("</p>");
+      out.println("<script language=\"javascript\">");
+      out.println("    var directionInput = document.getElementById(\"direction\");");
+      out.println("    var btnUD = document.getElementById(\"btn-UD\");");
+      out.println("    btnUD.onclick = function () {");
+      out.println("        directionInput.value = \"UD\";");
+      out.println("        draw();");
+      out.println("    }");
+      out.println("    var btnDU = document.getElementById(\"btn-DU\");");
+      out.println("    btnDU.onclick = function () {");
+      out.println("        directionInput.value = \"DU\";");
+      out.println("        draw();");
+      out.println("    };");
+      out.println("    var btnLR = document.getElementById(\"btn-LR\");");
+      out.println("    btnLR.onclick = function () {");
+      out.println("        directionInput.value = \"LR\";");
+      out.println("        draw();");
+      out.println("    };");
+      out.println("    var btnRL = document.getElementById(\"btn-RL\");");
+      out.println("    btnRL.onclick = function () {");
+      out.println("        directionInput.value = \"RL\";");
+      out.println("        draw();");
+      out.println("    };");
+      out.println("</script>");
+
+      }
+
       out.println("<div style=\"width: 800px; font-size:14px; text-align: justify;\">");
       out.println("</div>");
       out.println("");
