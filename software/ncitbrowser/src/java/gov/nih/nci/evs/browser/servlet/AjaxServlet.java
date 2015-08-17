@@ -737,8 +737,30 @@ if (action.compareTo("xmldefinitions") == 0) {
 			}
 
             view_graph(request, response, scheme, version, ns, code, type);
+        } else if (action.equals("reset_graph")) {
+            String id =  HTTPUtils.cleanXSS(request.getParameter("id"));
+            String scheme = (String) request.getSession().getAttribute("scheme");
+            String version = (String) request.getSession().getAttribute("version");
+            ns = (String) request.getSession().getAttribute("ns");
+            String nodes_and_edges = (String) request.getSession().getAttribute("nodes_and_edges");
+            String code = findCodeInGraph(nodes_and_edges, id);
+            view_graph(request, response, scheme, version, ns, code, "ALL");
 		}
-    }
+	}
+
+    public String findCodeInGraph(String nodes_and_edges, String id) {
+		String target = "{id: " + id + ", label:";
+		int n = nodes_and_edges.indexOf(target);
+		if (n == -1) return null;
+		String t = nodes_and_edges.substring(n+target.length(), nodes_and_edges.length());
+		target = ")'}";
+		n = t.indexOf(target);
+		t = t.substring(0, n);
+		n = t.lastIndexOf("(");
+		t = t.substring(n+1, t.length());
+		return t;
+	}
+
 
     private boolean isRoot(JSONArray rootsArray, String code) {
         for (int i = 0; i < rootsArray.length(); i++) {
@@ -4014,8 +4036,6 @@ out.flush();
 	}
 
 
-
-
     public static void view_graph(HttpServletRequest request, HttpServletResponse response,
         String scheme, String version, String namespace, String code, String type) {
 
@@ -4095,6 +4115,12 @@ out.flush();
       out.println("    var edges = null;");
       out.println("    var network = null;");
       out.println("");
+
+      out.println("    function reset_graph(id) {");
+      out.println("        window.location.href=\"http://localhost:8080/ncitbrowser/ajax?action=reset_graph&id=\" + id;");
+      out.println("    }");
+
+
       out.println("    function destroy() {");
       out.println("      if (network !== null) {");
       out.println("        network.destroy();");
@@ -4144,6 +4170,13 @@ out.flush();
       out.println("      network.on('select', function(params) {");
       out.println("        document.getElementById('selection').innerHTML = 'Selection: ' + params.nodes;");
       out.println("      });");
+
+      out.println("			network.on(\"doubleClick\", function (params) {");
+      out.println("				params.event = \"[original event]\";");
+      out.println("				var json = JSON.stringify(params, null, 4);");
+      out.println("				reset_graph(params.nodes);");
+      out.println("		    });");
+
       out.println("    }");
       out.println("  </script>");
       out.println("</head>");
@@ -4227,6 +4260,15 @@ out.flush();
       out.println("<input type=\"hidden\" id=\"version\" name=\"version\" value=\"" + version + "\" />");
       out.println("<input type=\"hidden\" id=\"ns\" name=\"ns\" value=\"" + namespace + "\" />");
       out.println("<input type=\"hidden\" id=\"code\" name=\"code\" value=\"" + code + "\" />");
+
+
+      request.getSession().setAttribute("scheme", scheme);
+      request.getSession().setAttribute("version", version);
+      request.getSession().setAttribute("ns", namespace);
+      request.getSession().setAttribute("code", code);
+      request.getSession().setAttribute("nodes_and_edges", nodes_and_edges);
+
+
       out.println("");
       out.println("&nbsp;&nbsp;");
       out.println("<input type=\"submit\" value=\"Refresh\"></input>");
@@ -4277,10 +4319,6 @@ out.flush();
       out.println("</body>");
       out.println("</html>");
    }
-
-
-
-
 
     public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {
 		java.lang.String valueSetDefinitionRevisionId = null;

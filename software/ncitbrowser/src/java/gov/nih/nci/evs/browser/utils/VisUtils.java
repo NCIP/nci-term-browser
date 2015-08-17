@@ -366,6 +366,14 @@ public class VisUtils {
 		}
 
 		Entity concept = new ConceptDetails(lbSvc).getConceptByCode(scheme, version, code, namespace, useNamespace);
+		if (concept == null && useNamespace) {
+			System.out.println("concept is NULL -- try without namespace " + namespace);
+			concept = new ConceptDetails(lbSvc).getConceptByCode(scheme, version, code, namespace, false);
+			if (concept == null) {
+				System.out.println("Unable to find concept with code: " + code);
+			}
+		}
+
 		String name = "<NO DESCRIPTION>";
 		if (concept.getEntityDescription() != null) {
 			name = concept.getEntityDescription().getContent();
@@ -493,7 +501,9 @@ public class VisUtils {
 					String t = (String) list.get(i);
 					String rel_node_label = getLabel(t);
 					String rel_label = "is_a";
-					graphData.add(focused_node_label + "|" + rel_node_label + "|" + rel_label + "|1");
+					if (focused_node_label.compareTo(rel_node_label) != 0) {
+						graphData.add(focused_node_label + "|" + rel_node_label + "|" + rel_label + "|1");
+				    }
 				}
 			}
 	    }
@@ -506,7 +516,9 @@ public class VisUtils {
 					String t = (String) list.get(i);
 					String rel_node_label = getLabel(t);
 					String rel_label = "is_a";
-					graphData.add(rel_node_label + "|" + focused_node_label + "|" + rel_label + "|2");
+					if (focused_node_label.compareTo(rel_node_label) != 0) {
+						graphData.add(rel_node_label + "|" + focused_node_label + "|" + rel_label + "|2");
+				    }
 				}
 			}
 	    }
@@ -568,6 +580,19 @@ public class VisUtils {
     public String generateGraphScript(String scheme, String version, String namespace, String code, int option) {
         Vector graphData = generateGraphData(scheme, version, namespace, code, ALL_RELATIONSHIP_TYPES, option, null);
         return GraphUtils.generateGraphScript(graphData, option);
+	}
+
+    public String findCodeInGraph(String nodes_and_edges, String id) {
+		String target = "{id: " + id + ", label:";
+		int n = nodes_and_edges.indexOf(target);
+		if (n == -1) return null;
+		String t = nodes_and_edges.substring(n+target.length(), nodes_and_edges.length());
+		target = ")'}";
+		n = t.indexOf(target);
+		t = t.substring(0, n);
+		n = t.lastIndexOf("(");
+		t = t.substring(n+1, t.length());
+		return t;
 	}
 
     public static void main(String [] args) {

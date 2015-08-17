@@ -99,6 +99,7 @@ public class GraphUtils {
 
 				String from_id = (String) label2IdMap.get(source);
 				String to_id = (String) label2IdMap.get(target);
+
 				Vector w = (Vector) edge_map.get(key);
 				for (int k=0; k<w.size(); k++) {
 					String edge = (String) w.elementAt(k);
