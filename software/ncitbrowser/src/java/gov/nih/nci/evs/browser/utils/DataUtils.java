@@ -6475,6 +6475,11 @@ if (lbSvc == null) {
 
 	public static String getCSName(String vocabularyName) {
         if (_uri2CodingSchemeNameHashMap == null) setCodingSchemeMap();
+        //KLO, 08182015
+        if (vocabularyName == null) return null;
+        if (vocabularyName.indexOf("%20") != -1) {
+			vocabularyName = vocabularyName.replaceAll("%20", " ");
+		}
 		String formalname = getFormalName(vocabularyName);
 		if (_uri2CodingSchemeNameHashMap.get(formalname) == null) return formalname;
 		String t = (String) _uri2CodingSchemeNameHashMap.get(formalname);
