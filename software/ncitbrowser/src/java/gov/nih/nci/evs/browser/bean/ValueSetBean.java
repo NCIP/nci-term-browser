@@ -1758,6 +1758,7 @@ StringBuffer buf = new StringBuffer();
 			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
 
+        request.getSession().setAttribute("nav_type", "valuesets");
         request.getSession().setAttribute("vsd_uri", vsd_uri);
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         request.getSession().setAttribute("matchText_RVS", matchText);
@@ -1941,7 +1942,8 @@ StringBuffer buf = new StringBuffer();
         request.getSession().removeAttribute("error_msg");
         boolean retval = HTTPUtils.validateRequestParameters(request);
         if (!retval) {
-			return "invalid_parameter";
+			//return "invalid_parameter";
+			return "message";
 		}
 
 		java.lang.String valueSetDefinitionRevisionId = null;

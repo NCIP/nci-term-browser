@@ -1266,13 +1266,22 @@
 
   <navigation-rule>
     <from-view-id>/pages/value_set_search.jsp</from-view-id>
-    
+    <!--
     <navigation-case>
        <description>Appscan</description>
        <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
        <from-outcome>invalid_parameter</from-outcome>
        <to-view-id>/pages/appscan_response.jsp</to-view-id>
-    </navigation-case>      
+    </navigation-case> 
+    -->
+
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/value_set_search.jsp</to-view-id>
+    </navigation-case>     
+        
         
     <navigation-case>
        <description>value_set_search</description>
@@ -1281,12 +1290,22 @@
        <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
     </navigation-case>
     
+    <!--
     <navigation-case>
        <description>message</description>
        <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/value_set_search.jsp</to-view-id>
     </navigation-case>
+    -->
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>
+    
     
     <navigation-case>
        <description>message</description>

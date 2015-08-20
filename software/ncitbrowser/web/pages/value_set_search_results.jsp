@@ -144,6 +144,11 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 
     String message = (String) request.getSession().getAttribute("message");
     request.getSession().removeAttribute("message");
+    
+    if (message == null) {
+	    String message = (String) request.getSession().getAttribute("error_msg");
+	    request.getSession().removeAttribute("error_msg");
+    }
 
    
     String t = null;

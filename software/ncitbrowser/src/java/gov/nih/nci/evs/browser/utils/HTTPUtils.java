@@ -380,6 +380,19 @@ public class HTTPUtils {
 		return false;
 	}
 
+	// type: name=1; value=2
+	public static String createErrorMessage(int type, String name) {
+		if (type == 1) {
+			return "WARNING: Unknown parameter name encountered - '" + cleanXSS(name) + "'.";
+		} else {
+			return "WARNING: Invalid parameter value encountered - " + " (name: " + cleanXSS(name) + ").";
+		}
+	}
+
+	public static String createErrorMessage(String name, String value) {
+		return "WARNING: Invalid parameter value encountered - " + cleanXSS(value) + " (name: " + cleanXSS(name) + ").";
+	}
+
 	public static boolean validateRequestParameters(HttpServletRequest request) {
 		List list = HTTPParameterConstants.HTTP_REQUEST_PARAMETER_NAME_LIST;
 		String value = null;
@@ -395,34 +408,30 @@ public class HTTPUtils {
                 if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.FALSE)) {
 					if (isDynamic != null && isDynamic.equals(Boolean.FALSE)) {
 						if (name.endsWith("value=")) return true;
-                        // 072115
                         if (!name.startsWith("TVS_") && !name.startsWith("http:") && !list.contains(name)) {
-						//if (!list.contains(name)) {
-							System.out.println("(*) name: " + name + " not in the list.");
-							request.getSession().setAttribute("error_msg", "WARNING: Unknown parameter name encountered - '" + name + "'.");
+							System.out.println("WARNING: parameter name: " + name + " is not in the list.");
+							String error_msg = createErrorMessage(1, name);
+							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 						value = (String) request.getParameter(name);
 						Boolean bool_obj = validateRadioButtonNameAndValue(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
-							   " (name: " + name + ").";
+							String error_msg = createErrorMessage(name, value);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 
 						bool_obj = containsPercentSign(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
-							   " (name: " + name + ").";
+							String error_msg = createErrorMessage(name, value);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 
 						bool_obj = validateValueSetCheckBox(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
-							   " (name: " + name + ").";
+							String error_msg = createErrorMessage(name, value);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
@@ -430,8 +439,7 @@ public class HTTPUtils {
 						bool_obj = containsHarzardCharacters(value);
 						// Cross-Site Scripting:
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
-							String error_msg = "WARNING: Invalid parameter value encountered - '" +
-							   " (name: " + name + ").";
+							String error_msg = createErrorMessage(2, name);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
@@ -560,7 +568,7 @@ public class HTTPUtils {
 	}
 
 	public static String createErrorMsg(String name, String value) {
-		String error_msg = "WARNING: Invalid parameter value encountered - '" + value +
+		String error_msg = "WARNING: Invalid parameter value encountered - " + value +
 		   " (name: " + name + ").";
 		return error_msg;
 	}
