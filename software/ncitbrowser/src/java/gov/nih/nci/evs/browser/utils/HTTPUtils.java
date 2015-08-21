@@ -104,6 +104,62 @@ public class HTTPUtils {
 
 	}
 
+    public static boolean isPositiveEven(int num) {
+		return ((num % 2) == 0 && num > 0);
+	}
+
+	public static int getCount(String s, char c) {
+		int num = 0;
+		if (s == null) return num;
+		for (int i=0; i<s.length(); i++) {
+			char ch = s.charAt(i);
+			if (ch == c) num++;
+		}
+		return num;
+	}
+
+	public static boolean checkPotentialMaliciousContent(String s) {
+		if (s == null) return false;
+		char c1 = '<';
+		char c2 = '>';
+		char c3 = '/';
+		int k1 = getCount(s, c1);
+		int k2 = getCount(s, c2);
+		int k3 = getCount(s, c3);
+		if (isPositiveEven(k1) && isPositiveEven(k2) && k3 > 0) {
+            return maybeMalicious(s, c3, c2);
+		}
+		return false;
+	}
+
+
+	public static boolean maybeMalicious(String s, char c1, char c2) {
+		//</script>
+		if (s == null) return false;
+		String s1 = Character.toString(c1);
+		String s2 = Character.toString(c2);
+
+		int n1 = s.lastIndexOf(s1);
+		int n2 = s.lastIndexOf(s2);
+
+		if (n1 == -1 || n2 == -1) return false;
+		if (n1 > n2) return false;
+		return true;
+	}
+
+    public static String cleanMatchTextXSS(String value) {
+		if (value == null) return null;
+		if (value.compareTo(">") == 0) return "GT";
+		if (value.compareTo("<") == 0) return "LT";
+
+		boolean retval = checkPotentialMaliciousContent(value);
+		if (retval) {
+			value = cleanXSS(value);
+		}
+		System.out.println("matchText: " + value);
+		return value;
+	}
+
 
     public static String cleanXSS(String value) {
 

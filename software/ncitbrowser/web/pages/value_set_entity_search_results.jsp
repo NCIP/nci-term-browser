@@ -256,8 +256,10 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
     request.getSession().setAttribute("navigation_type", "valuesets");
 
     String message = (String) request.getSession().getAttribute("message");
+    if (message == null) {
+        message = (String) request.getSession().getAttribute("error_msg");
+    }
     request.getSession().removeAttribute("message");
-
    
     String t = null;
     

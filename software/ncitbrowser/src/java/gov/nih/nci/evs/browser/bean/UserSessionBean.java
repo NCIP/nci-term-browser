@@ -228,7 +228,7 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
 
         if (matchText != null) {
             matchText = matchText.trim();
@@ -1168,7 +1168,7 @@ if (scheme != null) {
 			}
         }
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
 
         if (matchText != null) {
             matchText = matchText.trim();
@@ -2015,7 +2015,7 @@ response.setContentType("text/html;charset=utf-8");
         request.getSession().setAttribute("searchStatusBean", bean);
 
         String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
 
         if (matchText == null || matchText.length() == 0) {
             String message = "Please enter a search string.";
@@ -2534,7 +2534,7 @@ response.setContentType("text/html;charset=utf-8");
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 
@@ -2593,7 +2593,7 @@ response.setContentType("text/html;charset=utf-8");
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 
@@ -2658,7 +2658,7 @@ response.setContentType("text/html;charset=utf-8");
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 

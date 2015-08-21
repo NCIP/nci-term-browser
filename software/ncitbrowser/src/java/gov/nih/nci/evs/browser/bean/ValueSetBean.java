@@ -1760,7 +1760,7 @@ StringBuffer buf = new StringBuffer();
 
         request.getSession().setAttribute("nav_type", "valuesets");
         request.getSession().setAttribute("vsd_uri", vsd_uri);
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         request.getSession().setAttribute("matchText_RVS", matchText);
 
         if (matchText != null)
@@ -1942,8 +1942,8 @@ StringBuffer buf = new StringBuffer();
         request.getSession().removeAttribute("error_msg");
         boolean retval = HTTPUtils.validateRequestParameters(request);
         if (!retval) {
-			//return "invalid_parameter";
-			return "message";
+			return "invalid_parameter";
+			//return "message";
 		}
 
 		java.lang.String valueSetDefinitionRevisionId = null;
@@ -1975,7 +1975,7 @@ StringBuffer buf = new StringBuffer();
         String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
         request.getSession().setAttribute("view", VSD_view);
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
 
         //LexEVSValueSetDefinitionServices vsd_service = null;
         //vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();

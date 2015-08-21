@@ -225,7 +225,7 @@ public final class AjaxServlet extends HttpServlet {
 
 
      private void show_other_versions(HttpServletRequest request, boolean show) {
-		 String matchText = HTTPUtils.cleanXSS(request.getParameter("matchText"));
+		 String matchText = HTTPUtils.cleanMatchTextXSS(request.getParameter("matchText"));
 		 String algorithm = HTTPUtils.cleanXSS(request.getParameter("algorithm"));
 		 String searchTarget = HTTPUtils.cleanXSS(request.getParameter("searchTarget"));
 		 String ontologiesToSearchOnStr = HTTPUtils.cleanXSS(request.getParameter("ontology_list"));
@@ -334,6 +334,10 @@ if (display_name_vec == null) {
 			 if (!retval) {
 				 try {
 					 String nextJSP = "/pages/appscan_response.jsf";
+					 nextJSP = "/pages/value_set_entity_search_results.jsf";
+					 //value_set_entity_search_results.jsf
+					 //String message = (String) request.getSession().getAttribute("message");
+
 					 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 					 dispatcher.forward(request,response);
 					 return;
@@ -1414,12 +1418,13 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
     public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
-		Object obj = request.getParameter("vsd_uri");
 
-		String vsd_uri = null;
-		if (obj != null) {
-			vsd_uri = HTTPUtils.cleanXSS((String) obj);
-		}
+		//Object obj = request.getParameter("vsd_uri");
+		//String vsd_uri = null;
+		//if (obj != null) {
+		//	vsd_uri = HTTPUtils.cleanXSS((String) obj);
+		//}
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 		create_vs_tree(request, response, view, vsd_uri);
 	}
 
@@ -1618,7 +1623,7 @@ if (DataUtils.isNull(algorithm)) {
 request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (DataUtils.isNull(matchText)) {
 			matchText = (String) request.getSession().getAttribute("matchText");
 		}
@@ -2274,7 +2279,7 @@ out.flush();
 String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption"));
 String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("checked_vocabularies"));
 IteratorBean iteratorBean = (IteratorBean) request.getSession().getAttribute("value_set_entity_search_results");
-String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("matchText"));
+String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getSession().getAttribute("matchText"));
 */
       public String construct_checked_vocabularies_string() {
 		  StringBuffer buf = new StringBuffer();
@@ -2298,7 +2303,7 @@ String matchText = HTTPUtils.cleanXSS((String) request.getSession().getAttribute
 	  }
 
       public void search_all_value_sets(HttpServletRequest request, HttpServletResponse response) {
-          String matchText = HTTPUtils.cleanXSS((String) request.getParameter("code"));
+          String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("code"));
           String searchOption = "codes";
           String algorithm = "exactMatch";
           String msg = null;
@@ -2397,7 +2402,7 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 
 
 		request.getSession().removeAttribute("partial_checked_vocabularies");
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (DataUtils.isNull(matchText)) {
 			matchText = "";
 		} else {
@@ -2509,7 +2514,7 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
         String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
         request.getSession().setAttribute("view", VSD_view);
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
 
         //LexEVSValueSetDefinitionServices vsd_service = null;
         //vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -4368,7 +4373,7 @@ out.flush();
         String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
         request.getSession().setAttribute("view", VSD_view);
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
 
 
         //LexEVSValueSetDefinitionServices vsd_service = null;
