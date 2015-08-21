@@ -149,6 +149,7 @@ public class HTTPUtils {
 
     public static String cleanMatchTextXSS(String value) {
 		if (value == null) return null;
+		value = value.trim();
 		if (value.compareTo(">") == 0) return "GT";
 		if (value.compareTo("<") == 0) return "LT";
 
@@ -162,9 +163,9 @@ public class HTTPUtils {
 
 
     public static String cleanXSS(String value) {
-
-        if (value == null || value.length() < 1)
-            return value;
+        if (value == null) return null;
+        value = value.trim();
+        if (value.length() == 0) return value;
 
         // Remove XSS attacks
         value = replaceAll(value, "<\\s*script\\s*>.*</\\s*script\\s*>", "");
