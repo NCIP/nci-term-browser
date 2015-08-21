@@ -150,8 +150,8 @@ public class HTTPUtils {
     public static String cleanMatchTextXSS(String value) {
 		if (value == null) return null;
 		value = value.trim();
-		if (value.compareTo(">") == 0) return "GT";
-		if (value.compareTo("<") == 0) return "LT";
+		if (value.compareTo(">") == 0) return cleanXSS(value);
+		if (value.compareTo("<") == 0) return cleanXSS(value);
 
 		boolean retval = checkPotentialMaliciousContent(value);
 		if (retval) {
