@@ -447,7 +447,8 @@ public class HTTPUtils {
 	}
 
 	public static String createErrorMessage(String name, String value) {
-		return "WARNING: Invalid parameter value encountered - " + cleanXSS(value) + " (name: " + cleanXSS(name) + ").";
+		//return "WARNING: Invalid parameter value encountered - " + cleanXSS(value) + " (name: " + cleanXSS(name) + ").";
+		return "WARNING: Invalid parameter name and/or value encountered -- please check your URL and try again. ";
 	}
 
 	public static boolean validateRequestParameters(HttpServletRequest request) {
