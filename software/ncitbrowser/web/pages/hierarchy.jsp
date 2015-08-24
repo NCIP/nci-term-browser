@@ -302,6 +302,11 @@
         var dirs;
         var files;
         var respTxt = o.responseText;
+        
+        
+        alert(respTxt);
+        
+        
         var respObj = eval('(' + respTxt + ')');
         var fileNum = 0;
         var categoryNum = 0;

@@ -430,6 +430,15 @@ public class HTTPUtils {
 		return retVal;
 	}
 
+    public static String decode(String t) {
+		String retVal = "";
+		try {
+        	retVal = URLDecoder.decode(t, "UTF-8");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return retVal;
+	}
 
 	public static boolean isValueSetURI(String key) {
 		if (key == null) return false;
@@ -598,8 +607,9 @@ public class HTTPUtils {
 
     public static Boolean containsHarzardCharacters(String value) {
 		if (value == null) return Boolean.FALSE;
-		String s = value.toUpperCase();
+		String s = decode(value).toUpperCase();
 		s = s.trim();
+		System.out.println(s);
 		for (int i=0; i<Constants.HARZARD_CHARS.length; i++) {
 			String t = Constants.HARZARD_CHARS[i];
 			if (s.indexOf(t) != -1) {

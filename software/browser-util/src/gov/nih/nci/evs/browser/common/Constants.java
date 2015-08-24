@@ -192,8 +192,8 @@ public class Constants {
 
     public static final String CDISC_SUBMISSION_VALUE = "CDISC Submission Value";
 
-    public static final String[] HARZARD_CHARS = {"/SCRIPT", "CAST(", "EXEC(", "IMG SRC=", "IMG SRC=", "BODY ONLOAD",
-                                 "IFRAME SRC", "INPUT TYPE", "IMG DYNSRC", "IMG LOWSRC",
+    public static final String[] HARZARD_CHARS = {"/SCRIPT", "CAST(", "EXEC(", "IMG SRC=", "BODY ONLOAD",
+                                 "/IFRAME ", "IFRAME ", "INPUT TYPE", "IMG DYNSRC", "IMG LOWSRC", "ALERT(",
                                  "JAVASCRIPT:ALERT", "BGSOUND SRC", "BR SIZE", "LINK REL",
                                  "META HTTP-EQUIV", "STYLE=", "XSS:EXPRESSION", "XSS STYLE",
                                  "DIV STYLE", "BASE HREF", "OBJECT TYPE", "XML ID",

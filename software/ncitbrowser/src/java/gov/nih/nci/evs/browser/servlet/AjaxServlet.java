@@ -390,12 +390,22 @@ if (action.compareTo("xmldefinitions") == 0) {
         long ms = System.currentTimeMillis();
 
         if (action.equals("expand_tree")) {
+
+//System.out.println("(*) expand_tree	******************************************");
+
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
                 try {
+
+
+//System.out.println("(*) expand_tree	ontology_display_name: " + ontology_display_name);
+//System.out.println("(*) expand_tree	ontology_version: " + ontology_version);
+//System.out.println("(*) expand_tree	node_id: " + node_id);
+//System.out.println("(*) expand_tree	ns: " + ns);
+
                     nodesArray =
                         CacheController.getInstance().getSubconcepts(
                             ontology_display_name, ontology_version, node_id, ns);
@@ -407,6 +417,10 @@ if (action.compareTo("xmldefinitions") == 0) {
                 } catch (Exception e) {
 					e.printStackTrace();
                 }
+
+
+//System.out.println("(*) json: " + json.toString());
+
 
                 response.getWriter().write(json.toString());
             }
@@ -1017,7 +1031,8 @@ if (action.compareTo("xmldefinitions") == 0) {
       println(out, "    }");
 */
       println(out, "    function onClickTreeNode(ontology_node_id, ontology_node_ns) {");
-      out.println("       if (ontology_node_id.indexOf(\"_dot_\") != -1) return;");
+// KLO, 082415
+      println(out, "      if (ontology_node_id.indexOf(\"_dot_\") != -1) return;");
       println(out, "      var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
       println(out, "      var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
       println(out, "      load('/ncitbrowser/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version + '&code=' + ontology_node_id + '&ns=' + ontology_node_ns, currOpener);");
@@ -1126,6 +1141,11 @@ if (action.compareTo("xmldefinitions") == 0) {
       out.println("        var dirs;");
       out.println("        var files;");
       out.println("        var respTxt = o.responseText;");
+
+
+      //out.println("alert(respTxt);");
+
+
       out.println("        var respObj = eval('(' + respTxt + ')');");
       out.println("        var fileNum = 0;");
       out.println("        var categoryNum = 0;");
