@@ -440,7 +440,8 @@ public class HTTPUtils {
 	// type: name=1; value=2
 	public static String createErrorMessage(int type, String name) {
 		if (type == 1) {
-			return "WARNING: Unknown parameter name encountered - '" + cleanXSS(name) + "'.";
+			//return "WARNING: Unknown parameter name encountered - '" + cleanXSS(name) + "'.";
+			return "WARNING: Invalid parameter name encountered -- please check your URL and try again. ";
 		} else {
 			return "WARNING: Invalid parameter value encountered - " + " (name: " + cleanXSS(name) + ").";
 		}
