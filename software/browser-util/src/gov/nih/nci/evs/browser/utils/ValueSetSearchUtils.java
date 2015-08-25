@@ -822,7 +822,7 @@ public class ValueSetSearchUtils
             if (iterator != null) {
 				try {
 					int numberRemaining = iterator.numberRemaining();
-					System.out.println("Number of matches: " + numberRemaining);
+					//System.out.println("Number of matches: " + numberRemaining);
 
 					while (iterator.hasNext()) {
 						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();

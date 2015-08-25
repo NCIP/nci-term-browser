@@ -531,7 +531,7 @@ public class SimpleSearchUtils {
 			String version = null;
 			for (int i=0; i<versions.size(); i++) {
 				version = (String) versions.elementAt(i);
-				System.out.println("Version: " + version);
+				//System.out.println("Version: " + version);
 			}
 
 			String checked_vocabularies = vsd_uri;
@@ -542,7 +542,7 @@ public class SimpleSearchUtils {
             if (iterator != null) {
 				try {
 					int numberRemaining = iterator.numberRemaining();
-					System.out.println("Number of matches: " + numberRemaining);
+					//System.out.println("Number of matches: " + numberRemaining);
 
 					while (iterator.hasNext()) {
 						ResolvedConceptReference rcr = (ResolvedConceptReference) iterator.next();
