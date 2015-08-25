@@ -609,7 +609,6 @@ public class HTTPUtils {
 		if (value == null) return Boolean.FALSE;
 		String s = decode(value).toUpperCase();
 		s = s.trim();
-		System.out.println(s);
 		for (int i=0; i<Constants.HARZARD_CHARS.length; i++) {
 			String t = Constants.HARZARD_CHARS[i];
 			if (s.indexOf(t) != -1) {

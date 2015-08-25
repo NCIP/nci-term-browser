@@ -374,8 +374,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 	return;
 }
 
-
-
         String node_id = HTTPUtils.cleanXSS(request.getParameter("ontology_node_id"));// DataConstants.ONTOLOGY_NODE_ID);
         String ns = HTTPUtils.cleanXSS(request.getParameter("ontology_node_ns"));// DataConstants.ONTOLOGY_NODE_ID);
 
@@ -390,22 +388,13 @@ if (action.compareTo("xmldefinitions") == 0) {
         long ms = System.currentTimeMillis();
 
         if (action.equals("expand_tree")) {
-
-//System.out.println("(*) expand_tree	******************************************");
-
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
                 try {
-
-
-//System.out.println("(*) expand_tree	ontology_display_name: " + ontology_display_name);
-//System.out.println("(*) expand_tree	ontology_version: " + ontology_version);
-//System.out.println("(*) expand_tree	node_id: " + node_id);
-//System.out.println("(*) expand_tree	ns: " + ns);
-
+System.out.println("(*) expand_tree " + ontology_display_name + " " + ontology_version + " " + ns + " " + node_id);
                     nodesArray =
                         CacheController.getInstance().getSubconcepts(
                             ontology_display_name, ontology_version, node_id, ns);
@@ -417,11 +406,6 @@ if (action.compareTo("xmldefinitions") == 0) {
                 } catch (Exception e) {
 					e.printStackTrace();
                 }
-
-
-//System.out.println("(*) json: " + json.toString());
-
-
                 response.getWriter().write(json.toString());
             }
         }
