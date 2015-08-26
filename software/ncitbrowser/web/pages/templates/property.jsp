@@ -683,7 +683,7 @@ if (!hasOtherProperties) {
     %>	  
 </p>
 <%
-  String url = JSPUtils.getBookmarkUrl(request, dictionary, null, concept_id, namespace);
+  String url = JSPUtils.getBookmarkUrl(request, dictionary, version, concept_id, namespace);
   String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>
