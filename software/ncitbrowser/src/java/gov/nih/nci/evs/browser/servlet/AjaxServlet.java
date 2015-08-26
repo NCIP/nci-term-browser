@@ -176,15 +176,11 @@ public final class AjaxServlet extends HttpServlet {
     }
 
 
-
-
-
-
     public static void search_tree(HttpServletResponse response, String node_id,
-        String ontology_display_name, String ontology_version) {
+        String ontology_display_name, String ontology_version, String namespace) {
         try {
             String jsonString = search_tree(node_id,
-                ontology_display_name, ontology_version);
+                ontology_display_name, ontology_version, namespace);
             if (jsonString == null)
                 return;
 
@@ -202,7 +198,7 @@ public final class AjaxServlet extends HttpServlet {
     }
 
     public static String search_tree(String node_id,
-        String ontology_display_name, String ontology_version) throws Exception {
+        String ontology_display_name, String ontology_version, String namespace) throws Exception {
         if (node_id == null || ontology_display_name == null)
             return null;
 
@@ -216,7 +212,7 @@ public final class AjaxServlet extends HttpServlet {
 
         String jsonString =
             CacheController.getTree(
-                ontology_display_name, versionOrTag, node_id);
+                ontology_display_name, versionOrTag, node_id, namespace);
         debugJSONString("Section: search_tree", jsonString);
 
         _logger.debug("search_tree: " + stopWatch.getResult());
@@ -482,7 +478,7 @@ System.out.println("(*) expand_tree " + ontology_display_name + " " + ontology_v
         } else if (action.equals("search_hierarchy")) {
             search_hierarchy(request, response, node_id, ontology_display_name, ontology_version, ns);
         } else if (action.equals("search_tree")) {
-            search_tree(response, node_id, ontology_display_name, ontology_version);
+            search_tree(response, node_id, ontology_display_name, ontology_version, ns);
         } else if (action.equals("build_tree")) {
             if (ontology_display_name == null)
                 ontology_display_name = CODING_SCHEME_NAME;

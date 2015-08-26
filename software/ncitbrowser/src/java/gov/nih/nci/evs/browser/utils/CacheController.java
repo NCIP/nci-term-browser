@@ -1127,7 +1127,34 @@ public class CacheController {
             .getObjectValue();
     }
 
+    public static String getTree(String codingScheme,
+        CodingSchemeVersionOrTag versionOrTag, String code, String namespace) {
+        if (!CacheController.getInstance()
+            .containsKey(getTreeKey(codingScheme, code))) {
+            _logger.debug("Tree Not Found In Cache.");
+            TreeService treeService =
+                TreeServiceFactory.getInstance().getTreeService(
+                    RemoteServerUtil.createLexBIGService());
 
+            LexEvsTree tree = null;
+            if (StringUtils.isNullOrBlank(namespace)) {
+				tree = treeService.getTree(codingScheme, versionOrTag, code);
+			} else {
+				tree = treeService.getTree(codingScheme, versionOrTag, code, namespace);
+			}
+
+            String json =
+                treeService.getJsonConverter().buildJsonPathFromRootTree(
+                    tree.getCurrentFocus());
+
+            _cache.put(new Element(getTreeKey(tree, versionOrTag.getVersion()), json));
+            return json;
+        }
+        return (String) _cache.get(getTreeKey(codingScheme, versionOrTag.getVersion(), code))
+            .getObjectValue();
+    }
+
+/*
     public static String getTree(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
         if (!CacheController.getInstance()
@@ -1150,7 +1177,11 @@ public class CacheController {
         return (String) _cache.get(getTreeKey(codingScheme, versionOrTag.getVersion(), code))
             .getObjectValue();
     }
-
+*/
+    public static String getTree(String codingScheme,
+        CodingSchemeVersionOrTag versionOrTag, String code) {
+		return getTree(codingScheme, versionOrTag, code, null);
+	}
 
     public void activeCacheTree(ResolvedConceptReference ref) {
         _logger.debug("Actively caching tree.");

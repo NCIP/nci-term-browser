@@ -725,6 +725,25 @@ public class ViewInHierarchyUtils {
         return list;
     }
 
+    public String getTree(String codingScheme,
+        CodingSchemeVersionOrTag versionOrTag, String code, String namespace) {
+		TreeService treeService =
+			TreeServiceFactory.getInstance().getTreeService(lbSvc);
+
+		LexEvsTree tree = null;
+		if (StringUtils.isNullOrBlank(namespace)) {
+			tree = treeService.getTree(codingScheme, versionOrTag, code);
+		} else {
+			tree = treeService.getTree(codingScheme, versionOrTag, code, namespace);
+		}
+
+		String json =
+			treeService.getJsonConverter().buildJsonPathFromRootTree(
+				tree.getCurrentFocus());
+
+		return json;
+    }
+
 
     public static void main(String[] args) throws Exception {
 		LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
