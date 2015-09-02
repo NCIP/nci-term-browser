@@ -401,9 +401,8 @@ if (action.compareTo("xmldefinitions") == 0) {
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
 
-//To be fixed:
                 try {
-System.out.println("(*) expand_tree " + ontology_display_name + " " + ontology_version + " " + ns + " " + node_id);
+//System.out.println("(*) expand_tree " + ontology_display_name + " " + ontology_version + " " + ns + " " + node_id);
                     nodesArray =
                         CacheController.getInstance().getSubconcepts(
                             ontology_display_name, ontology_version, node_id, ns);

@@ -97,7 +97,7 @@ import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
 // Note: Version with the has more (...) nodes feature.
 
 public class ViewInHierarchyUtils {
-	private int MAX_CHILDREN = 5;
+	public static int MAX_CHILDREN = 5;
 	private static Logger _logger = Logger.getLogger(ViewInHierarchyUtils.class);
 	private static Random rand = new Random();
 

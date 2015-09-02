@@ -190,6 +190,78 @@ public class CacheController {
     }
 
 
+    public String getRemainingSubconceptJSONString(String codingScheme, String version, String parent_code, String parent_ns, String focus_code) {
+		long ms = System.currentTimeMillis();
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+        boolean useNamespace = false;
+        if (parent_ns == null) {
+			parent_ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, parent_code);
+			//System.out.println("NS: " + ns);
+			if (parent_ns != null) {
+				useNamespace = true;
+			}
+		}
+
+		TreeService treeService =
+			TreeServiceFactory.getInstance().getTreeService(lbSvc);
+
+
+		TreeItem root = new TreeItem("Root", "<Root>");
+		if (parent_code.compareTo("<Root>") == 0) {
+			return null;
+		}
+
+        boolean from_root = false;
+        List<LexEvsTreeNode> list = new ViewInHierarchyUtils(lbSvc).getChildren(codingScheme, version, parent_code, parent_ns, from_root);
+        try {
+			if (list.size() > ViewInHierarchyUtils.MAX_CHILDREN) {
+				for (int i=ViewInHierarchyUtils.MAX_CHILDREN; i<list.size(); i++) {
+					LexEvsTreeNode child = (LexEvsTreeNode) list.get(i);
+					if (child != null) {
+                        boolean include = true;
+                        if (focus_code != null) {
+							if (focus_code.compareTo(child.getCode()) == 0) {
+								include = false;
+							}
+						}
+
+						if (include) {
+
+							String name = "<UNSPECIFIED>";
+							if (child.getEntityDescription() != null) {
+								name = child.getEntityDescription();
+							}
+
+							TreeItem childItem =
+								new TreeItem(child.getCode(),
+									name,
+									child.getNamespace(),
+									null
+									);
+
+							childItem._expandable = false;
+							LexEvsTreeNode.ExpandableStatus child_node_status = child.getExpandableStatus();
+							if (child_node_status != null && child_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+								childItem._expandable = true;
+							}
+							root.addChild("has_child", childItem);
+							root._expandable = true;
+						}
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		ms = System.currentTimeMillis();
+		String json = JSON2TreeItem.treeItem2Json(root);
+		//json = "{\"nodes\":" + json + "}";
+		return json;
+	}
+
+
     public JSONArray getSubconcepts(String scheme, String version, String code, String ns, boolean fromCache) {
         if (scheme == null) {
             scheme = Constants.CODING_SCHEME_NAME;
@@ -214,8 +286,19 @@ public class CacheController {
 			if (code.indexOf("root_") != -1) {
 				from_root = true;
 			}
+
+			String json = getRemainingSubconceptJSONString(scheme, version, parent_code, ns, focus_code);
+			try {
+				nodeArray = new JSONArray(json);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+            /* 090215
 			map = util.getRemainingSubconcepts(scheme, version, parent_code, ns, from_root, focus_code);
 			nodeArray = hashMap2JSONArray(map);
+			*/
+
 			return nodeArray;
 		}
 
