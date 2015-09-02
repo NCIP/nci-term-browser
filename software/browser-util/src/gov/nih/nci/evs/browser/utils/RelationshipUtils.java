@@ -78,13 +78,12 @@ public class RelationshipUtils {
     private LexBIGServiceConvenienceMethods lbscm = null;
     private TreeUtils treeUtils = null;
 
-    private static int SUPERCONCEPT_OPTION = 0;
-    private static int SUBCONCEPT_OPTION = 1;
-    private static int ROLE_OPTION = 2;
-    private static int INVERSE_ROLE_OPTION = 3;
-    private static int ASSOCIATION_OPTION = 4;
-    private static int INVERSE_ASSOCIATION_OPTION = 5;
-
+    public static int SUPERCONCEPT_OPTION = 0;
+    public static int SUBCONCEPT_OPTION = 1;
+    public static int ROLE_OPTION = 2;
+    public static int INVERSE_ROLE_OPTION = 3;
+    public static int ASSOCIATION_OPTION = 4;
+    public static int INVERSE_ASSOCIATION_OPTION = 5;
 
     public List createOptionList(boolean superconcept,
                                  boolean subconcept,
@@ -225,6 +224,38 @@ public class RelationshipUtils {
 	}
 
 
+	public List sortList(List list) {
+		if (list == null) return list;
+        Vector v = new Vector();
+		for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			v.add(t);
+		}
+		v = SortUtils.quickSort(v);
+		list = new ArrayList();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			list.add(t);
+		}
+        return list;
+	}
+
+	public ArrayList sortList(ArrayList list) {
+		if (list == null) return list;
+        Vector v = new Vector();
+		for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			v.add(t);
+		}
+		v = SortUtils.quickSort(v);
+		ArrayList new_list = new ArrayList();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			new_list.add(t);
+		}
+        return new_list;
+	}
+
     public HashMap getRelationshipHashMap(String scheme, String version, String code, String ns, boolean useNamespace, List options) {
 		if (options == null) {
 			options = getDefaultOptionList();
@@ -319,7 +350,8 @@ public class RelationshipUtils {
         if (checkOption(options, SUBCONCEPT_OPTION)) {
 			if (!isMapping) {
 					subconceptList = treeUtils.getSubconceptNamesAndCodes(scheme, version, code, ns);
-					SortUtils.quickSort(subconceptList);
+					//SortUtils.quickSort(subconceptList);
+					subconceptList = sortList(subconceptList);
 			}
 	    }
         map.put(Constants.TYPE_SUBCONCEPT, subconceptList);

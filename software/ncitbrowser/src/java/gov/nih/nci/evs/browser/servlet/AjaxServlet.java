@@ -63,6 +63,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService;
 import org.lexgrid.resolvedvalueset.impl.LexEVSResolvedValueSetServiceImpl;
 
+import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverter;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverterFactory;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.model.*;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.service.*;
+
+
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
 
 
 /**
@@ -162,6 +170,9 @@ public final class AjaxServlet extends HttpServlet {
             throws IOException, ServletException {
         execute(request, response);
     }
+
+
+
 
     private static void debugJSONString(String msg, String jsonString) {
     	boolean debug = false;
@@ -389,6 +400,8 @@ if (action.compareTo("xmldefinitions") == 0) {
                 response.setHeader("Cache-Control", "no-cache");
                 JSONObject json = new JSONObject();
                 JSONArray nodesArray = null;
+
+//To be fixed:
                 try {
 System.out.println("(*) expand_tree " + ontology_display_name + " " + ontology_version + " " + ns + " " + node_id);
                     nodesArray =
@@ -485,25 +498,22 @@ System.out.println("(*) expand_tree " + ontology_display_name + " " + ontology_v
 
             response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
-            JSONObject json = new JSONObject();
-            JSONArray nodesArray = null;// new JSONArray();
-            try {
-                nodesArray =
-                    CacheController.getInstance().getRootConcepts(
-                        ontology_display_name, ontology_version);
-                if (nodesArray != null) {
-                    json.put("root_nodes", nodesArray);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-            debugJSONString("Section: build_tree", json.toString());
-            response.getWriter().write(json.toString());
-            // response.getWriter().flush();
+long ms1 = System.currentTimeMillis();
+//090215
+				JSONObject json = new JSONObject();
+				JSONArray nodesArray = null;// new JSONArray();
+				try {
+					nodesArray = new JSONArray(CacheController.getInstance().getRootJSONString(ontology_display_name, ontology_version));
+					if (nodesArray != null) {
+						json.put("root_nodes", nodesArray);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				response.getWriter().write(json.toString());
 
-            _logger.debug("Run time (milliseconds): "
-                + (System.currentTimeMillis() - ms));
+System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms1));
             return;
 
         } else if (action.equals("build_vs_tree")) {
@@ -541,9 +551,12 @@ System.out.println("(*) expand_tree " + ontology_display_name + " " + ontology_v
                 JSONArray nodesArray = null;
 
                 try {
+
                     nodesArray =
                         CacheController.getInstance().getSubValueSets(
                             ontology_display_name, ontology_version, node_id);
+
+
                     if (nodesArray != null) {
                        json.put("nodes", nodesArray);
                     }

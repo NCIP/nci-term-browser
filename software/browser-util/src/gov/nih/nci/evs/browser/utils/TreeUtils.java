@@ -21,6 +21,13 @@ import org.LexGrid.concepts.*;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.*;
 import org.apache.log4j.*;
 
+import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverter;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverterFactory;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.service.TreeService;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.service.TreeServiceFactory;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.dao.iterator.ChildTreeNodeIterator;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTreeNode;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTree;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -102,16 +109,22 @@ public class TreeUtils {
     private LexBIGServiceConvenienceMethods lbscm = null;
     private ConceptDetails conceptDetails = null;
 
+    private TreeService treeService = null;
+
+
+
     public TreeUtils() {
 
     }
 
     public TreeUtils(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
+
 		try {
 			this.conceptDetails = new ConceptDetails(lbSvc);
 			this.lbscm = (LexBIGServiceConvenienceMethods) lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
 			this.lbscm.setLexBIGService(lbSvc);
+			this.treeService = TreeServiceFactory.getInstance().getTreeService(lbSvc);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -601,15 +614,32 @@ public class TreeUtils {
 		return hasSubconcepts(scheme, version, code, null);
 	}
 
+	public boolean isExpandable(String scheme, String version, String code, String namespace) {
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+		LexEvsTreeNode node = null;
+		if (namespace == null) {
+		    node = treeService.getSubConcepts(scheme, versionOrTag, code);
+	    } else {
+			node = treeService.getSubConcepts(scheme, versionOrTag, code, namespace);
+		}
+
+        if (node != null && node.getExpandableStatus().toString().compareTo("IS_EXPANDABLE") == 0) return true;
+        return false;
+	}
 
     public boolean hasSubconcepts(String scheme, String version, String code, String namespace) {
-
+        /*
         HashMap hmap = getSubconcepts(scheme, version, code, namespace);
         if (hmap == null)
             return false;
         TreeItem item = (TreeItem) hmap.get(code);
         return item._expandable;
+        */
 
+        return isExpandable(scheme, version, code, namespace);
     }
 
     /*

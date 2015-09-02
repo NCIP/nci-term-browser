@@ -599,6 +599,7 @@ public class ViewInHierarchyUtils {
         List<LexEvsTreeNode> list = getChildren(codingScheme, version, focus_code, focus_ns, false);
 
         if (list.size() > 0) {
+			Vector w = new Vector();
 			for (int i=0; i<list.size(); i++) {
 				LexEvsTreeNode child = (LexEvsTreeNode) list.get(i);
 				TreeItem childItem =
@@ -606,20 +607,25 @@ public class ViewInHierarchyUtils {
 						child.getEntityDescription(), child.getNamespace(), null);
 				if (StringUtils.isNullOrBlank(focus_ns)) {
 				    childItem = new TreeItem(child.getCode(), child.getEntityDescription());
+
 				}
-
-				//TreeItem(String code, String text, String ns, String auiText) {
-
 				childItem._expandable = false;
 				LexEvsTreeNode.ExpandableStatus child_node_status = child.getExpandableStatus();
 				if (child_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
 					childItem._expandable = true;
 				}
-
+				w.add(childItem);
+				//ti.addChild(childNavText, childItem);
+				//ti._expandable = true;
+			}
+			w = SortUtils.quickSort(w);
+			for (int i=0; i<w.size(); i++) {
+				TreeItem childItem = (TreeItem) w.elementAt(i);
 				ti.addChild(childNavText, childItem);
 				ti._expandable = true;
 			}
 		}
+
         hmap.put(focus_code, ti);
         return hmap;
     }

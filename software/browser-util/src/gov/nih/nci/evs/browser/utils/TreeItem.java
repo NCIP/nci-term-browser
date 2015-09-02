@@ -83,9 +83,15 @@ public class TreeItem implements Serializable, Comparable<TreeItem> {
         new TreeMap<String, List<TreeItem>>();
 
     public boolean equals(Object o) {
-        return o instanceof TreeItem
-            && _code.compareTo(((TreeItem) o)._code) == 0
-            && _ns.compareTo(((TreeItem) o)._ns) == 0;
+		if (o == null) return false;
+		if (!(o instanceof TreeItem)) return false;
+		TreeItem item = (TreeItem) o;
+		if (_ns == null) {
+			return _text.compareTo(item._text) == 0 && _code.compareTo(item._code) == 0;
+		} else {
+			if (item._ns == null) return false;
+			return _text.compareTo(item._text) == 0 && _code.compareTo(item._code) == 0 && _ns.compareTo(item._ns) == 0;
+		}
     }
 
     public int compareTo(TreeItem ti) {
