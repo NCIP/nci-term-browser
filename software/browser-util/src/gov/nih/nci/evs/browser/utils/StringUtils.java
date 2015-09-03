@@ -159,6 +159,19 @@ public class StringUtils {
         return t;
     }
 
+
+
+    public static String decode_term(String t) {
+	    t = t.replaceAll("&amp;", "&");
+	    t = t.replaceAll("&lt;", "<");
+	    t = t.replaceAll("&gt;", ">");
+	    t = t.replaceAll("&quot;", "\"");
+	    t = t.replaceAll("&apos;", "'");
+	    return t;
+    }
+
+
+
     /*
      * To convert a string to the URL-encoded form suitable for transmission as
      * a query string (or, generally speaking, as part of a URL), use the escape
