@@ -429,4 +429,55 @@ public class HistoryUtils {
 		}
 		return u;
 	}
+
+
+    public String getReferencedCUI(String scheme, String version, String code) {
+		if (code == null) return null;
+        code = code.trim();
+        /*
+        if (code.length() != 8) {
+            return null;
+        }
+        */
+
+        try {
+            Vector<String> v = getEditActions(scheme, version, null, code);
+            if (v != null) {
+                if (v.size() == 0)
+                    _logger
+                        .debug("(*) HistoryUtils.getEditActions returns nothing");
+                for (int i = 0; i < v.size(); i++) {
+                    String s = (String) v.elementAt(i);
+                    // _logger.debug("s: " + s);
+                    // 11:55:42,983 INFO [STDOUT] s:
+                    // retire|2008-08-01|unclassified Enteroviruses (Code
+                    // C1040101)
+                    Vector w = StringUtils.parseData(s, "|");
+                    String action = (String) w.elementAt(0);
+                    if (action.compareTo("merge") == 0
+                        || action.compareTo("retire") == 0) {
+                        String date = (String) w.elementAt(1);
+                        String nameAndCode = (String) w.elementAt(2);
+                        _logger.debug("(*) nameAndCode: " + nameAndCode);
+                        // //merge|2006-01-01|LAS17 protein, S cerevisiae (Code
+                        // C1433544)
+                        int idx = nameAndCode.indexOf("(Code");
+                        if (idx != -1) {
+                            String t =
+                                nameAndCode.substring(idx + 6, nameAndCode
+                                    .length() - 1);
+                            _logger.debug("(*) new CUI: " + t);
+                            return t;
+                        }
+                    }
+                }
+            } else {
+                _logger.warn("(*) HistoryUtils.getEditActions returns null");
+            }
+        } catch (Exception ex) {
+
+        }
+        return null;
+    }
+
 }
