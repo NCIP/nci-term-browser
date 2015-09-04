@@ -543,16 +543,7 @@ public class SearchUtils {
 
     public Entity getConceptByCode(String codingSchemeName,
         String vers, String ltag, String code) {
-
-
-_logger.debug("************ SearchUtils.getConceptByCode ************ coding_scheme " + codingSchemeName);
-_logger.debug("************ SearchUtils.getConceptByCode ************ ref_version " + vers);
-_logger.debug("************ SearchUtils.getConceptByCode ************ ref.getConceptCode() " + code);
-
-
-
         try {
-            //LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
                 _logger.warn("lbSvc == null???");
                 return null;
