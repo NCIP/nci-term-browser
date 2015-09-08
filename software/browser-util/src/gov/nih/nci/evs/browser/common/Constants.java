@@ -197,6 +197,7 @@ public class Constants {
                                  "JAVASCRIPT:ALERT", "BGSOUND SRC", "BR SIZE", "LINK REL",
                                  "META HTTP-EQUIV", "STYLE=", "XSS:EXPRESSION", "XSS STYLE",
                                  "DIV STYLE", "BASE HREF", "OBJECT TYPE", "XML ID",
+                                 "%2BALERT", "+ALERT", "%22ONMOUSEOVER", "\"ONMOUSEOVER",
                                  "SPAN DATASRC", "A HREF=", "$WHERE", "SLEEP(", "$QUERY", ";DECLARE", "VARCHAR(", "E-"};
 
 

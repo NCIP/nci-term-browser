@@ -306,6 +306,25 @@ if (display_name_vec == null) {
 		//[NCITERM-644] Reduce SQL injection AppScan delays.
         request.getSession().removeAttribute("error_msg");
 
+        //Appscan:
+        String vocabulary_name = HTTPUtils.cleanXSS(request.getParameter("dictionary"));
+        if (vocabulary_name != null) {
+			String formal_name = DataUtils.getFormalName(vocabulary_name);
+			if (formal_name == null) {
+				 try {
+					 String nextJSP = "/pages/appscan_response.jsf";
+					 String errormsg = "WARNING: Unidentifiable vocabulary name.";
+					 request.getSession().setAttribute("error_msg", errormsg);
+					 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+					 dispatcher.forward(request,response);
+					 return;
+
+				 } catch (Exception ex) {
+					 ex.printStackTrace();
+				 }
+			}
+		}
+
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));//
 
@@ -336,15 +355,12 @@ if (display_name_vec == null) {
 				 }
 
         //search_value_set
-        } else { //if (action.compareTo("search_value_set") != 0) {
+        } else {
 			 boolean retval = HTTPUtils.validateRequestParameters(request);
 			 if (!retval) {
 				 try {
 					 String nextJSP = "/pages/appscan_response.jsf";
-					 nextJSP = "/pages/value_set_entity_search_results.jsf";
-					 //value_set_entity_search_results.jsf
-					 //String message = (String) request.getSession().getAttribute("message");
-
+					 //nextJSP = "/pages/value_set_entity_search_results.jsf";
 					 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 					 dispatcher.forward(request,response);
 					 return;
