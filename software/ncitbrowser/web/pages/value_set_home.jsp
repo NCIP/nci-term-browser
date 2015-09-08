@@ -374,10 +374,8 @@ var tree;
     <tr><td height="5px;"></td></tr>
    </table>
 
-
-    <input type="hidden" name="referer" id="referer" value="http%3A%2F%2Flocalhost%3A19280%2Fncitbrowser%2Fajax%3Faction%3Dcreate_src_vs_tree" />
+    <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
     <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>" />
-
 
 </div>
 

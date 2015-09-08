@@ -1854,7 +1854,6 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("  </tr>");
       out.println("</table>");
 
-      //out.println("                <input type=\"hidden\" name=\"referer\" id=\"referer\" value=\"http%3A%2F%2Flocalhost%3A8080%2Fncitbrowser%2Fpages%2Fresolved_value_set_search_results.jsf\">");
       out.println("                <input type=\"hidden\" id=\"nav_type\" name=\"nav_type\" value=\"valuesets\" />");
       out.println("                <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
       //out.println("                <input type=\"hidden\" id=\"matchText\" name=\"matchText\" value=\"" + matchText + "\" />");
@@ -3031,7 +3030,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("    </td>");
       out.println("  </tr>");
       out.println("</table>");
-      out.println("                <input type=\"hidden\" name=\"referer\" id=\"referer\" value=\"http%3A%2F%2Flocalhost%3A8080%2Fncitbrowser%2Fpages%2Fresolved_value_set_search_results.jsf\">");
+      out.println("                <input type=\"hidden\" name=\"referer\" id=\"referer\" value=\"<%=HTTPUtils.getRefererParmEncode(request)%>\">");
       out.println("                <input type=\"hidden\" id=\"nav_type\" name=\"nav_type\" value=\"valuesets\" />");
       out.println("                <input type=\"hidden\" id=\"view\" name=\"view\" value=\"source\" />");
 
@@ -4134,7 +4133,7 @@ out.flush();
       out.println("");
 
       out.println("    function reset_graph(id) {");
-      out.println("        window.location.href=\"http://localhost:8080/ncitbrowser/ajax?action=reset_graph&id=\" + id;");
+      out.println("        window.location.href=\"/ncitbrowser/ajax?action=reset_graph&id=\" + id;");
       out.println("    }");
 
 
