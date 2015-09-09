@@ -210,7 +210,8 @@ public class Constants {
     public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
     public static final String CHILDREN_NODES = "children_nodes";
 
-    public static final String CODING_SCHEME_NOT_AVAILABLE = " is either not loaded or inactive. Please consult your system administrator.";
+    public static final String CODING_SCHEME_NOT_AVAILABLE = "Coding scheme is either not loaded or inactive. Please consult your system administrator.";
+    public static final String NCIT_NOT_AVAILABLE = "NCI Thesaurus is either not loaded or inactive. Please consult your system administrator.";
 
     public static final String[] NON_CONCEPT_TO_CONCEPT_ASSOCIATION = new String[] {"domain", "range", "instance"};
 

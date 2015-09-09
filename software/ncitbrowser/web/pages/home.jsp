@@ -39,7 +39,7 @@
 
 Boolean ncit_available = DataUtils.isNCITAvailable();
 if (ncit_available == null || !ncit_available.equals(Boolean.TRUE)) {
-    String error_msg = "WARNING: NCI Thesaurus " + Constants.CODING_SCHEME_NOT_AVAILABLE;
+    String error_msg = "WARNING: " + Constants.NCIT_NOT_AVAILABLE;
     request.getSession().setAttribute("error_msg", error_msg);
     String redirectURL = request.getContextPath() + "/pages/coding_scheme_unavailable.jsf";
     response.sendRedirect(redirectURL);

@@ -88,6 +88,7 @@ public class HTTPParameterConstants {
        "valueset_search_algorithm",
        "version",
        "view",
+       "vocabulary",
        "vsd_uri",
        "vse",
        "javax.faces.ViewState",

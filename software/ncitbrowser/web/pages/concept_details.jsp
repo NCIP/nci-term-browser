@@ -55,6 +55,21 @@ if (prop_dictionary != null) {
 
 String prop_version = prop_info.version;
 
+                         // appscan fix: 09082015
+			 boolean retval = HTTPUtils.validateRequestParameters(request);
+			 if (!retval) {
+				 try {
+					 String error_msg = "WARNING: Invalid parameter(s) encountered.";
+					 request.getSession().setAttribute("error_msg", error_msg);
+					 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+					 response.sendRedirect(redirectURL);				 
+
+				 } catch (Exception ex) {
+					 ex.printStackTrace();
+				 }
+			 }
+			 
+
 LexBIGService lbs = RemoteServerUtil.createLexBIGService();
 DataUtils dataUtils = new DataUtils();
 String cs_name = dataUtils.getCSName(prop_dictionary);
@@ -80,11 +95,10 @@ String short_name = cs_name;
 		
 		Boolean cs_available = DataUtils.isCodingSchemeAvailable(dictionary);
 		if (cs_available == null || !cs_available.equals(Boolean.TRUE)) {
-		    String error_msg = "WARNING: " + dictionary + Constants.CODING_SCHEME_NOT_AVAILABLE;
+		    String error_msg = "WARNING: " + Constants.CODING_SCHEME_NOT_AVAILABLE;
 		    request.getSession().setAttribute("error_msg", error_msg);
 		    String redirectURL = request.getContextPath() + "/pages/coding_scheme_unavailable.jsf";
 		    response.sendRedirect(redirectURL);
-
 		}  		
 	}
 	String deprecatedVersion = prop_info.version_deprecated;
