@@ -106,8 +106,8 @@
 			a particular coding purpose) and mappings between terminologies 
 			to support data translation and cross-reference. 
 			For information on new features and known issues, 
-           		<a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.6+Release+Notes" target="_blank">
-              		see NCI Term Browser 2.6 Release Notes</a>.
+           		<a href="https://wiki.nci.nih.gov/display/EVS/NCI+Term+Browser+2.7+Release+Notes" target="_blank">
+              		see NCI Term Browser 2.7 Release Notes</a>.
 		 </p>
           
           <p>
