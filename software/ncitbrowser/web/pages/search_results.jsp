@@ -113,9 +113,7 @@ if (resultsPerPage == null) {
 			 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
 			 request.getSession().setAttribute("error_msg", error_msg);
 			 response.sendRedirect(redirectURL);
-		    } else {
-			 resultsPerPage = "50";
-		    }  
+		    } 
 
 
 
