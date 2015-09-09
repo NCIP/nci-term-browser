@@ -6819,8 +6819,10 @@ if (lbSvc == null) {
 
 
     public static Boolean isCodingSchemeAvailable(String cs_name) {
+
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		return new CodingSchemeDataUtils(lbSvc).isCodingSchemeAvailable(cs_name);
+
     }
 
     public static HashMap getCodingSchemeValueSetSubTree(String scheme) {
@@ -6960,7 +6962,10 @@ if (lbSvc == null) {
     }
 
     public static Boolean isNCITAvailable() {
-		return NCI_THESAURUS_AVAILABLE;
+		String ncit = getFormalName(Constants.NCIT_CS_NAME);
+		if (ncit != null) return Boolean.TRUE;
+		//return NCI_THESAURUS_AVAILABLE;
+		return Boolean.FALSE;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////

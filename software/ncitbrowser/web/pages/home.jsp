@@ -38,10 +38,14 @@
 <%
 
 Boolean ncit_available = DataUtils.isNCITAvailable();
+
+System.out.println("ncit_available: " + ncit_available);
+
 if (ncit_available == null || !ncit_available.equals(Boolean.TRUE)) {
     String error_msg = "WARNING: " + Constants.NCIT_NOT_AVAILABLE;
     request.getSession().setAttribute("error_msg", error_msg);
     String redirectURL = request.getContextPath() + "/pages/coding_scheme_unavailable.jsf";
+    redirectURL = request.getContextPath() + "/start.jsf";
     response.sendRedirect(redirectURL);
 }
 

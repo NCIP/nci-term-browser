@@ -173,9 +173,7 @@ public class ValueSetHierarchy {
 	    _availableValueSetDefinitionSources = findAvailableValueSetDefinitionSources();
 	    constructVsUri2ParticipationCS_map();
 		_source_hierarchy = getValueSetSourceHierarchy(SOURCE_SCHEME, SOURCE_VERSION);
-
 	    _vsd_source_to_vsds_map = createVSDSource2VSDsMap();
-
 		_subValueSet_hmap = getSubValueSetsFromSourceCodingScheme();
 		_rootValueSets = getRootValueSets();
 		System.out.println("Total ValueSetHierarchy initalization run time (ms): " + (System.currentTimeMillis() - ms));
@@ -895,7 +893,6 @@ public class ValueSetHierarchy {
 
 	public HashMap getRootValueSets(boolean bySource) {
 		if (!bySource) return getRootValueSets();
-
 		//HashMap source_hier = getValueSetSourceHierarchy();
         Vector source_vec = new Vector();
         HashSet source_set = new HashSet();
@@ -933,7 +930,6 @@ public class ValueSetHierarchy {
 				}
 			}
 		}
-
 
 		TreeItem root = new TreeItem("<Root>", "Root node");
         List <TreeItem> children = new ArrayList();
@@ -1008,7 +1004,6 @@ public class ValueSetHierarchy {
 				}
 			}
 		}
-
 		root._expandable = false;
 		SortUtils.quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
@@ -1099,7 +1094,6 @@ public class ValueSetHierarchy {
         if (_valueSetParticipationHashSet == null) {
             _valueSetParticipationHashSet = getValueSetParticipationHashSet();
 		}
-
         Vector root_cs_vec = new Vector();
         Iterator it = _valueSetParticipationHashSet.iterator();
         while (it.hasNext()) {
@@ -1111,16 +1105,19 @@ public class ValueSetHierarchy {
 		TreeItem root = new TreeItem("<Root>", "Root node");
 
         List <TreeItem> children = new ArrayList();
+if (root_cs_vec != null) {
 
         root_cs_vec = SortUtils.quickSort(root_cs_vec);
         Vector sorted_root_cs_vec = new Vector();
         for (int i=0; i<root_cs_vec.size(); i++) {
 			String cs = (String) root_cs_vec.elementAt(i);
-			if (cs.compareTo("NCI Thesaurus") == 0) {
+
+			if (cs != null && cs.compareTo("NCI Thesaurus") == 0) {
 				sorted_root_cs_vec.add(cs);
 				break;
 			}
 		}
+
         for (int i=0; i<root_cs_vec.size(); i++) {
 			String cs = (String) root_cs_vec.elementAt(i);
 			if (cs != null && cs.compareTo("NCI Thesaurus") != 0) {
@@ -1137,7 +1134,6 @@ public class ValueSetHierarchy {
 			ti._expandable = true;
 			children.add(ti);
 		}
-
         //SortUtils.quickSort(children);
 		root.addAll(INVERSE_IS_A, children);
 
@@ -1145,6 +1141,9 @@ public class ValueSetHierarchy {
 		hmap.put("<Root>", root);
 
         return hmap;
+}
+
+        return null;
 	}
 
 
