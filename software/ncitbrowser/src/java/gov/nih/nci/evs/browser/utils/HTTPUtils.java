@@ -156,8 +156,10 @@ public class HTTPUtils {
 		boolean retval = checkPotentialMaliciousContent(value);
 		if (retval) {
 			value = cleanXSS(value);
+			//value = value.replaceAll(":", " ");
+
 		}
-		System.out.println("matchText: " + value);
+		//System.out.println("matchText: " + value);
 		return value;
 	}
 

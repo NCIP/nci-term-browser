@@ -615,9 +615,9 @@ if (scheme != null) {
 
                 try {
 					// temporary fix for: [NCITERM-682] Contains search failed on search strings containing a colon character.
-					if (matchAlgorithm.compareTo("contains") == 0) {
+					//if (matchAlgorithm.compareTo("contains") == 0) {
 						matchText = matchText.replaceAll(":", " ");
-					}
+					//}
 
 					if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 						iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
@@ -1168,15 +1168,23 @@ if (scheme != null) {
 			}
         }
 
+
         String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
 
+        if (matchText != null) {
+            matchText = matchText.trim();
+            request.getSession().setAttribute("matchText", matchText);
+		}
+
+		/*
+        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (matchText != null) {
             matchText = matchText.trim();
             request.getSession().setAttribute("matchText", matchText);
         } else {
             matchText = (String) request.getSession().getAttribute("matchText");
         }
-
+        */
 
 
         String multiple_search_error =
@@ -1185,7 +1193,6 @@ if (scheme != null) {
         request.getSession().removeAttribute("multiple_search_no_match_error");
 
         String matchAlgorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
-
 
 
         //KLO 051512 AppScan
@@ -1345,8 +1352,14 @@ request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr
                 request.getSession().setAttribute("message", message);
                 request.getSession().removeAttribute("ontologiesToSearchOn");
                 request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
-                request.getSession().setAttribute("matchText",
-                    HTTPUtils.convertJSPString(matchText));
+
+//System.out.println("1. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
+                //request.getSession().setAttribute("matchText",
+                //    HTTPUtils.convertJSPString(matchText));
 
 
 
@@ -1402,8 +1415,14 @@ request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr
                 String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
                 request.getSession().setAttribute("warning", msg);
                 request.getSession().setAttribute("message", msg);
-                request.getSession().setAttribute("matchText",
-                    HTTPUtils.convertJSPString(matchText));
+
+
+                //request.getSession().setAttribute("matchText", HTTPUtils.convertJSPString(matchText));
+//System.out.println("2. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
                 return "multiple_search";
             }
         }
@@ -1451,8 +1470,14 @@ request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr
                 // ontologiesToSearchOnStr;
                 request.getSession().setAttribute(
                     "defaultOntologiesToSearchOnStr", "|");
-                request.getSession().setAttribute("matchText",
-                    HTTPUtils.convertJSPString(matchText));
+
+//System.out.println("3. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
+                //request.getSession().setAttribute("matchText",
+                //    HTTPUtils.convertJSPString(matchText));
 
                 return "multiple_search";
             }
@@ -1489,8 +1514,10 @@ request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr
             request.getSession().setAttribute("message", message);
             request.getSession().removeAttribute("ontologiesToSearchOn");
 
-            request.getSession().setAttribute("matchText",
-                HTTPUtils.convertJSPString(matchText));
+//System.out.println("4. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
 
             return "multiple_search";
         }
@@ -1507,7 +1534,7 @@ request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr
         LexEVSUtils.CSchemes unacceptedLicensesCS =
             LicenseUtils.getUnacceptedLicenses(request, ontologiesToSearchOn);
         if (unacceptedLicensesCS.size() > 0) {
-            request.getSession().setAttribute("matchText", matchText);
+            //request.getSession().setAttribute("matchText", matchText);
             request.setAttribute("searchTarget", searchTarget);
             request.setAttribute("algorithm", matchAlgorithm);
             request.setAttribute("ontology_list_str", ontology_list_str);
@@ -1559,6 +1586,7 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         if (searchTarget.compareTo("names") == 0) {
+			//matchText = matchText.replaceAll(":", " ");
             long ms = System.currentTimeMillis();
             long delay = 0;
             _logger.debug("Calling SearchUtils().searchByNameAndCode " + matchText);
@@ -1576,13 +1604,16 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             //062013 KLO
             if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 				try {
-					iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+					String matchTextStr = matchText.replaceAll(":", " ");
+					iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchTextStr, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			} else {
+				String matchTextStr = matchText.replaceAll(":", " ");
 				wrapper = new SearchUtils(lbSvc).searchByNameOrCode(
-						schemes, versions, matchText,
+						schemes, versions, matchTextStr,
 						source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
 
 				if (wrapper != null) {
@@ -1615,15 +1646,17 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             _logger.debug("searchByCode delay (millisec.): " + delay);
 
         } else if (searchTarget.compareTo("properties") == 0) {
+			String matchTextStr = matchText.replaceAll(":", " ");
             ResolvedConceptReferencesIteratorWrapper wrapper =
                 new SearchUtils(lbSvc).searchByProperties(schemes, versions,
-                    matchText, source, matchAlgorithm, excludeDesignation,
+                    matchTextStr, source, matchAlgorithm, excludeDesignation,
                     ranking, maxToReturn);
             if (wrapper != null) {
                 iterator = wrapper.getIterator();
             }
         } else if (searchTarget.compareTo("relationships") == 0) {
             designationOnly = true;
+
             ResolvedConceptReferencesIteratorWrapper wrapper =
                 new SearchUtils(lbSvc).searchByAssociations(schemes, versions,
                     matchText, source, matchAlgorithm, designationOnly,
@@ -1690,8 +1723,10 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 						String msg =
 							"No match found.";
 						request.getSession().setAttribute("message", msg);
-						request.getSession().setAttribute("matchText",
-							HTTPUtils.convertJSPString(matchText));
+
+
+						//request.getSession().setAttribute("matchText",
+						//	HTTPUtils.convertJSPString(matchText));
 
 
 						hide_ontology_list = "false";
@@ -1705,8 +1740,15 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 						request.getSession().setAttribute("multiple_search_no_match_error",
 							"true");
 
-						request.getSession().setAttribute("matchText",
-							HTTPUtils.convertJSPString(matchText));
+						//request.getSession().setAttribute("matchText",
+						//	HTTPUtils.convertJSPString(matchText));
+
+
+//System.out.println("6. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
 
 						return "multiple_search";
 
@@ -1758,8 +1800,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 						String msg =
 							"Error: Null ResolvedConceptReference encountered.";
 						request.getSession().setAttribute("message", msg);
-						request.getSession().setAttribute("matchText",
-							HTTPUtils.convertJSPString(matchText));
+
+//System.out.println("7. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
+						//request.getSession().setAttribute("matchText",
+						//	HTTPUtils.convertJSPString(matchText));
 						return "message";
 
 					} else {
@@ -1782,8 +1830,14 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 							.get(coding_scheme);
 
 					String convertJSPString = HTTPUtils.convertJSPString(matchText);
-					request.getSession()
-						.setAttribute("matchText", convertJSPString);
+
+//System.out.println("8. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
+					//request.getSession()
+					//	.setAttribute("matchText", convertJSPString);
 
 					request.setAttribute("dictionary", coding_scheme);
 					request.setAttribute("version", ref_version);
@@ -1809,9 +1863,15 @@ response.setContentType("text/html;charset=utf-8");
 					request.getSession().setAttribute("match_size", match_size);
 					request.getSession().setAttribute("page_string", "1");
 					request.getSession().setAttribute("new_search", Boolean.TRUE);
+
+//System.out.println("9. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
 					// route to multiple_search_results.jsp
-					request.getSession().setAttribute("matchText",
-						HTTPUtils.convertJSPString(matchText));
+					//request.getSession().setAttribute("matchText",
+					//	HTTPUtils.convertJSPString(matchText));
 
 					_logger.debug("Start to render search_results ... ");
 
@@ -1831,8 +1891,13 @@ response.setContentType("text/html;charset=utf-8");
 				request.getSession().setAttribute("page_string", "1");
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
 				// route to multiple_search_results.jsp
-				request.getSession().setAttribute("matchText",
-					HTTPUtils.convertJSPString(matchText));
+//System.out.println("10. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
+				//request.getSession().setAttribute("matchText",
+				//	HTTPUtils.convertJSPString(matchText));
 
 				_logger.debug("Start to render search_results ... ");
 
@@ -1884,8 +1949,13 @@ response.setContentType("text/html;charset=utf-8");
         request.getSession().setAttribute("multiple_search_no_match_error",
             "true");
 
-        request.getSession().setAttribute("matchText",
-            HTTPUtils.convertJSPString(matchText));
+//System.out.println("11. matchText: " + matchText);
+String matchTextStr = HTTPUtils.convertJSPString(matchText);
+//System.out.println("matchTextStr: " + matchTextStr);
+            request.getSession().setAttribute("matchText", matchTextStr);
+
+       // request.getSession().setAttribute("matchText",
+       // HTTPUtils.convertJSPString(matchText));
 
 
         return "multiple_search";
@@ -2295,9 +2365,9 @@ System.out.println("(*) advancedSearchAction SearchUtils(lbSvc).searchByAssociat
 
 
 			// temporary fix for: [NCITERM-682] Contains search failed on search strings containing a colon character.
-			if (matchAlgorithm.compareTo("contains") == 0) {
+			//if (matchAlgorithm.compareTo("contains") == 0) {
 				matchText = matchText.replaceAll(":", " ");
-			}
+			//}
 
 
             searchFields =
