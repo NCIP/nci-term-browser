@@ -159,7 +159,6 @@ public class HTTPUtils {
 			//value = value.replaceAll(":", " ");
 
 		}
-		//System.out.println("matchText: " + value);
 		return value;
 	}
 
@@ -334,7 +333,6 @@ public class HTTPUtils {
                 String value = (String) request.getParameter(name);
                 //_logger.debug("  " + i + ") " + name + ": " + value);
                 System.out.println("name: " + name + " value: " + value.toString());
-
                 ++i;
             }
         } catch (Exception e) {
@@ -471,9 +469,6 @@ public class HTTPUtils {
                 SortUtils.sort(request.getParameterNames());
             while (enumeration.hasMoreElements()) {
 				String name = (String) enumeration.nextElement();
-
-				System.out.println("validateRequestParameters: " + name);
-
                 Boolean isDynamic = isDynamicId(name);
                 Boolean issearchFormParameter = isSearchFormParameter(name);
 
@@ -591,8 +586,6 @@ public class HTTPUtils {
 
     public static Boolean validateValueSetCheckBox(String name, String value) {
 		if (name == null || value == null) return null;
-
-		System.out.println(name);
 		if (DataUtils.getFormalName(name) != null) {
 			if (value.compareTo("on") != 0 && value.compareTo("off") != 0) {
 				return Boolean.FALSE;
