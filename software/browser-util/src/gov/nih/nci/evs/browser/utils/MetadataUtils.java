@@ -11,7 +11,7 @@ import org.LexGrid.codingSchemes.*;
 import org.LexGrid.LexBIG.Extensions.Generic.*;
 import org.LexGrid.LexBIG.Exceptions.LBException;
 
-//import javax.faces.model.*;
+import javax.faces.model.*;
 import org.apache.log4j.*;
 
 /**

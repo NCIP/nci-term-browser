@@ -472,13 +472,16 @@ public class HTTPUtils {
             while (enumeration.hasMoreElements()) {
 				String name = (String) enumeration.nextElement();
 
+				System.out.println("validateRequestParameters: " + name);
+
                 Boolean isDynamic = isDynamicId(name);
                 Boolean issearchFormParameter = isSearchFormParameter(name);
 
                 if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.FALSE)) {
 					if (isDynamic != null && isDynamic.equals(Boolean.FALSE)) {
 						if (name.endsWith("value=")) return true;
-                        if (!name.startsWith("TVS_") && !name.startsWith("http:") && !list.contains(name)) {
+						String formal_name = DataUtils.getFormalName(name);
+                        if (formal_name == null && !name.startsWith("TVS_") && !name.startsWith("http:") && !list.contains(name)) {
 							System.out.println("WARNING: parameter name: " + name + " is not in the list.");
 							String error_msg = createErrorMessage(1, name);
 							request.getSession().setAttribute("error_msg", error_msg);
@@ -491,21 +494,18 @@ public class HTTPUtils {
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
-
 						bool_obj = containsPercentSign(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
 							String error_msg = createErrorMessage(name, value);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
-
 						bool_obj = validateValueSetCheckBox(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
 							String error_msg = createErrorMessage(name, value);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
-
 						bool_obj = containsHarzardCharacters(value);
 						// Cross-Site Scripting:
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
@@ -591,6 +591,15 @@ public class HTTPUtils {
 
     public static Boolean validateValueSetCheckBox(String name, String value) {
 		if (name == null || value == null) return null;
+
+		System.out.println(name);
+		if (DataUtils.getFormalName(name) != null) {
+			if (value.compareTo("on") != 0 && value.compareTo("off") != 0) {
+				return Boolean.FALSE;
+			}
+			return Boolean.TRUE;
+		}
+
 		if (!name.startsWith("TVS_") && !name.startsWith("http:")) {
 		    return null;
 		}

@@ -7004,6 +7004,45 @@ if (lbSvc == null) {
 */
 
 
+    public static Vector getSupportedVocabularyMetadataValues(String propertyName) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		MetadataUtils metadataUtils = new MetadataUtils(lbSvc);
+        Vector v = new Vector();
+        List ontology_list = getOntologyList();
+        for (int i = 0; i < ontology_list.size(); i++) {
+            SelectItem item = (SelectItem) ontology_list.get(i);
+            String value = (String) item.getValue();
+
+            String label = (String) item.getLabel();
+            String scheme = DataUtils.getCodingSchemeName(value);
+            String version = DataUtils.getCodingSchemeVersion(value);
+            //String name = DataUtils.getMetadataValue(scheme, "display_name");
+            String name = metadataUtils.getMetadataValue(scheme, null, null, "display_name");
+
+            //if (name == null || name.compareTo("") == 0) {
+				//System.out.println("(*) WARNING: getSupportedVocabularyMetadataValues -- " + scheme + " does not have a display_name property.");
+			//}
+
+            String urn = null;
+            String prodictionVersion = DataUtils.getProductionVersion(scheme);
+            if (prodictionVersion != null && prodictionVersion.compareTo(version) == 0) {
+                Vector w = metadataUtils.getMetadataValues(scheme, version, urn, propertyName, true);
+				if (w == null || w.size() == 0) {
+					//v.add(name + "|" + propertyName + " not available");
+					v.add(scheme + " (version: " + version + ")" + "|WARNING: please check the completeness of metadata " + propertyName);
+
+				} else {
+					String t = (String) w.elementAt(0);
+					v.add(name + " (version: " + version + ")" + "|" + t);
+				}
+		    }
+        }
+        // Sort source help table (NCITERM-626)
+        return SortUtils.quickSort(v);
+    }
+
+
+
     public static void main(String[] args) {
         String scheme = "NCI Thesaurus";
         String version = null;

@@ -46,6 +46,17 @@
     </servlet-mapping>
 
 
+    <servlet>
+        <servlet-name>websvc</servlet-name>
+        <servlet-class>gov.nih.nci.evs.browser.servlet.DataServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+         <servlet-name>websvc</servlet-name>
+         <url-pattern>/websvc</url-pattern>
+    </servlet-mapping>
+    
     <!-- Faces Servlet -->
 
     <!-- servlet>

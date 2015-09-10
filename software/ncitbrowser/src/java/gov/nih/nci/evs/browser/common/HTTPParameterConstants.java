@@ -79,6 +79,7 @@ public class HTTPParameterConstants {
        "sortBy",
        "source",
        "subject",
+       "target",
        "text",
        "type",
        "uri",

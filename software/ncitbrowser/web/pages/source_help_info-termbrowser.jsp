@@ -2,9 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="java.util.Vector"%>
+<%@ page import="java.util.List"%>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%@ page import="gov.nih.nci.evs.browser.common.*" %>
-
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService"%>
 <%
   String basePath = request.getContextPath();
 %>
@@ -126,10 +127,11 @@ subject to the conditions specified at
               
               Vector abbr_vec = (Vector) request.getSession().getAttribute("source_descriptions");
               if (abbr_vec == null) {
-                  LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-                  abbr_vec = new MetadataUtils(lbSvc).getSupportedVocabularyMetadataValues(propertyName);
+                  //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+                  //ist ontology_list = DataUtils.getOntologyList();
+                  abbr_vec = DataUtils.getSupportedVocabularyMetadataValues(propertyName);
                   request.getSession().setAttribute("source_descriptions", abbr_vec);
-              } 
+              }  
               
               int lcv = 0;
               for (int n=0; n<abbr_vec.size(); n++) {
