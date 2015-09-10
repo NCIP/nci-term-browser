@@ -93,7 +93,7 @@ public final class DataServlet extends HttpServlet {
 	public static final String SOURCE_CONCEPT_NAME = "source_concept_name";
 	public static final String TARGET = "target";
 	public static final String TARGET_CODE = "target_code";
-	public static final String TARGET_CONCEPT_NAME = "target__concept_name";
+	public static final String TARGET_CONCEPT_NAME = "target_concept_name";
 	public static final String DEFINITION = "definition";
 
 
