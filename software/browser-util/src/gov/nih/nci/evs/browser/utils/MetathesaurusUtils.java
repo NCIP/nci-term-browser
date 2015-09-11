@@ -43,7 +43,7 @@ import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
 import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
 
-import gov.nih.nci.evs.browser.utils.*;
+import gov.nih.nci.evs.browser.common.*;
 
 import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
 import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
@@ -53,8 +53,15 @@ import org.LexGrid.LexBIG.Utility.Iterators.ResolvedConceptReferencesIterator;
 import org.LexGrid.concepts.Entity;
 import org.LexGrid.commonTypes.Property;
 import org.LexGrid.concepts.Presentation;
+import org.LexGrid.concepts.Definition;
 import org.LexGrid.commonTypes.Source;
 import org.LexGrid.commonTypes.PropertyQualifier;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.json.simple.JSONValue;
 
 /**
  * @author EVS Team
@@ -73,6 +80,14 @@ import org.LexGrid.commonTypes.PropertyQualifier;
 public class MetathesaurusUtils { //extends ServiceTestCase {
 	LexBIGService lbSvc = null;
 	ConceptDetails conceptDetails = null;
+
+	public static final String SOURCE = "source";
+	public static final String SOURCE_CODE = "source_code";
+	public static final String SOURCE_CONCEPT_NAME = "source_concept_name";
+	public static final String TARGET = "target";
+	public static final String TARGET_CODE = "target_code";
+	public static final String TARGET_CONCEPT_NAME = "target_concept_name";
+	public static final String DEFINITION = "definition";
 
 	public MetathesaurusUtils(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
@@ -214,87 +229,64 @@ public class MetathesaurusUtils { //extends ServiceTestCase {
         return null;
     }
 
-/*
-    // Bodily Pain (Code C114901)
-	public static void main(String [] args) {
+
+    public JSONObject nciDefinition2JSONObject(String src_abbrev, String src_code, String nci_code, String nci_concept_name, String def) {
+		JSONObject obj = null;
 		try {
-			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-			MetathesaurusUtils test = new MetathesaurusUtils(lbSvc);
-
-            Vector cui_vec = test.getMatchedMetathesaurusCUIs("NCI_Thesaurus", "15.07d", null, "C114901");
-            for (int i=0; i<cui_vec.size(); i++) {
-				String cui = (String) cui_vec.elementAt(i);
-				System.out.println("CUI: " + cui);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			obj=new JSONObject();
+			obj.put(SOURCE, src_abbrev);
+			obj.put(TARGET, "NCI");
+			obj.put(SOURCE_CODE, src_code);
+			obj.put(TARGET_CODE, nci_code);
+			obj.put(TARGET_CONCEPT_NAME, nci_concept_name);
+			obj.put(DEFINITION, def);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
 		}
+		return obj;
 	}
 
+	public String getNCIDefinitionInJSON(String src_abbrev, String src_code) {
+	    String nci_code = null;
+	    String nci_def = null;
+	    String target_concept_name = "No match";
 
+	    Vector nci_code_vec = new Vector();
+	    JSONArray array = new JSONArray();
 
-	public static void main(String [] args) {
 		try {
-			String serviceUrl = "http://lexevsapi62.nci.nih.gov/lexevsapi62";
-			SimpleRemoteServerUtil SimpleRemoteServerUtil = new SimpleRemoteServerUtil(serviceUrl);
-			LexBIGService lbSvc = SimpleRemoteServerUtil.getLexBIGService();
-			MetathesaurusUtils test = new MetathesaurusUtils(lbSvc);
+			//LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            Vector cui_vec = getMatchedMetathesaurusCUIs(src_abbrev, null, null, src_code);
+            String cui = null;
+            for (int i=0; i<cui_vec.size(); i++) {
+				cui = (String) cui_vec.elementAt(i);
+			}
+			if (cui == null) return null;
 
 			ConceptDetails conceptDetails = new ConceptDetails(lbSvc);
-			String codingSchemeURN = "NCI Metathesaurus";
-			String codingSchemeVersion = null;
-			String type = "concept";
-			String propertyName = "GO_NAMESPACE";
-			String propertyValue = "biological_process";
-			String[] sourceList = new String[2];
-			sourceList[0] = "NCI";
-			sourceList[1] = "GO";
-			String algorithm = "exactMatch";
+			Entity ncim_entity = conceptDetails.getConceptByCode(Constants.NCI_METATHESAURUS, null, cui, null, false);
+			String syn_1 = null;
+			String syn_2 = null;
 
-	        CodedNodeSet cns = test.getEntitiesWithProperty(codingSchemeURN, codingSchemeVersion, type,
-	                                            propertyName, propertyValue, sourceList, algorithm);
+			String code_1 = null;
+			String code_2 = null;
 
-            SortOptionList sortOptions = null;
-            LocalNameList filterOptions = null;
-            LocalNameList propertyNames = null;
-            CodedNodeSet.PropertyType[] propertyTypes = null;
-            boolean resolveObjects = false;
-            org.LexGrid.commonTypes.Property[] properties = null;
+			if (ncim_entity != null) {
+				org.LexGrid.commonTypes.Property[] properties = ncim_entity.getPresentation();
+				for (int i = 0; i < properties.length; i++) {
+					Property p = (Property) properties[i];
+					String t = p.getValue().getContent();
+					Source[] sources = p.getSource();
+					if (sources != null && sources.length > 0) {
 
-            ResolvedConceptReferencesIterator iterator = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
-            try {
-				int numberRemaining = iterator.numberRemaining();
-				System.out.println("Count: " + numberRemaining);
-				int lcv = 0;
-				while (iterator.hasNext()) {
-					lcv++;
-					ResolvedConceptReference rcr = iterator.next();
-					Entity entity = conceptDetails.getConceptByCode(codingSchemeURN, codingSchemeVersion, rcr.getConceptCode());
-					properties = entity.getPresentation();
-					String syn_1 = null;
-					String syn_2 = null;
-					String src_abbr = null;
-
-					String code_1 = null;
-					String code_2 = null;
-
-					for (int i = 0; i < properties.length; i++) {
-						Property p = (Property) properties[i];
-						String t = p.getValue().getContent();
-						Source[] sources = p.getSource();
-						if (sources != null && sources.length > 0) {
-							Source src = sources[0];
-							src_abbr = src.getContent();
-							if (src_abbr.compareTo(sourceList[0]) == 0) {
-								//System.out.println(p.getPropertyName() + " " + p.getValue().getContent() + " " + src);
-								syn_1 = p.getValue().getContent();
-							} else if (src_abbr.compareTo(sourceList[1]) == 0) {
-								//System.out.println(p.getPropertyName() + " " + p.getValue().getContent() + " " + src);
-								syn_2 = p.getValue().getContent();
-							}
+						Source src = sources[0];
+						String src_abbr = src.getContent();
+						if (src_abbr.compareTo(src_abbrev) == 0) {
+							syn_1 = p.getValue().getContent();
+						} else if (src_abbr.compareTo("NCI") == 0) {
+							syn_2 = p.getValue().getContent();
 						}
-
 
 						PropertyQualifier[] qualifiers = p.getPropertyQualifier();
 						if (qualifiers != null && qualifiers.length > 0) {
@@ -303,30 +295,58 @@ public class MetathesaurusUtils { //extends ServiceTestCase {
 								String qualifier_name = q.getPropertyQualifierName();
 								String qualifier_value = q.getValue().getContent();
 								if (qualifier_name.compareTo("source-code") == 0) {
-									if (src_abbr.compareTo(sourceList[0]) == 0) {
-									     //System.out.println(sourceList[0] + " " + qualifier_name + ": " + qualifier_value);
-									     code_1 = qualifier_value;
-									} else if (src_abbr.compareTo(sourceList[1]) == 0) {
-										 //System.out.println(sourceList[1] + " " + qualifier_name + ": " + qualifier_value);
+									if (src_abbr.compareTo(src_abbrev) == 0) {
+										 code_1 = qualifier_value;
+									} else if (src_abbr.compareTo("NCI") == 0) {
 										 code_2 = qualifier_value;
+										 if (!nci_code_vec.contains(code_2)) {
+											 nci_code_vec.add(code_2);
+										 }
 									}
 								}
 							}
 						}
 					}
-                    if (rcr.getEntityDescription() != null) {
-						System.out.println(lcv + "|" + rcr.getEntityDescription().getContent() + "|" + rcr.getConceptCode() + "|" + code_1 + "|" + code_2);
-					} else {
-						System.out.println(lcv + "|" + "No description" + "|" + rcr.getConceptCode() + "|" + code_1 + "|" + code_2);
-					}
-
 				}
+			}
+			if (nci_code_vec.size() == 0) return null;
+			for (int lcv=0; lcv<nci_code_vec.size(); lcv++) {
+				nci_code = (String) nci_code_vec.elementAt(lcv);
+				Entity ncit_entity = conceptDetails.getConceptByCode(Constants.NCIT_CS_NAME, null, nci_code, null, false);
+				if (ncit_entity != null) {
+					target_concept_name = ncit_entity.getEntityDescription().getContent();
+					org.LexGrid.concepts.Definition[] properties = ncit_entity.getDefinition();
+					for (int i = 0; i < properties.length; i++) {
+						Definition p = (Definition) properties[i];
+						String t = p.getValue().getContent();
+						Source[] sources = p.getSource();
+						if (sources != null && sources.length > 0) {
+							Source src = sources[0];
+							String src_abbr = src.getContent();
+							if (src_abbr.compareTo("NCI") == 0) {
+								nci_def = p.getValue().getContent();
+								JSONObject obj = nciDefinition2JSONObject(src_abbrev, src_code, nci_code, target_concept_name, nci_def);
+								array.add(obj);
+							}
+						}
+					}
+				}
+			}
+			if (array.size() == 0) return null;
+			StringWriter out = new StringWriter();
+			try {
+				array.writeJSONString(out);
+				String jsonText = out.toString();
+				return jsonText;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		} catch (Exception ex) {
-            ex.printStackTrace();
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return null;
 	}
-*/
+
+
 }

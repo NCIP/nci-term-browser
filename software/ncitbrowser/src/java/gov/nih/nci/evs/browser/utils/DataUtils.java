@@ -270,7 +270,7 @@ public class DataUtils {
     private static HashSet _valueSetParticipationHashSet = null;
 
     public static Boolean VALUE_SET_TAB_AVAILABLE = null;
-    public static Boolean NCI_THESAURUS_AVAILABLE = null;
+    //public static Boolean NCI_THESAURUS_AVAILABLE = null;
 
     public static ValueSetHierarchy valueSetHierarchy = null;
 
@@ -287,7 +287,6 @@ public class DataUtils {
 		long ms = System.currentTimeMillis();
 
 		VALUE_SET_TAB_AVAILABLE = isCodingSchemeAvailable(Constants.TERMINOLOGY_VALUE_SET_NAME);
-		NCI_THESAURUS_AVAILABLE = isCodingSchemeAvailable(Constants.NCIT_CS_NAME);
 
         if (VALUE_SET_TAB_AVAILABLE != null && VALUE_SET_TAB_AVAILABLE.equals(Boolean.TRUE)) {
 			System.out.println("getResolvedValueSetHashMap ...");
@@ -6964,7 +6963,6 @@ if (lbSvc == null) {
     public static Boolean isNCITAvailable() {
 		String ncit = getFormalName(Constants.NCIT_CS_NAME);
 		if (ncit != null) return Boolean.TRUE;
-		//return NCI_THESAURUS_AVAILABLE;
 		return Boolean.FALSE;
 	}
 

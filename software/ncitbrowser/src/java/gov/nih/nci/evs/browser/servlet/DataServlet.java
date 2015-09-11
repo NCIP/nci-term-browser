@@ -45,8 +45,6 @@ import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeSummary;
 import org.LexGrid.LexBIG.DataModel.Collections.CodingSchemeTagList;
 import org.LexGrid.LexBIG.DataModel.InterfaceElements.RenderingDetail;
 
-import gov.nih.nci.evs.browser.utils.*;
-
 import org.LexGrid.LexBIG.DataModel.Collections.LocalNameList;
 import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
 import org.LexGrid.LexBIG.DataModel.Collections.SortOptionList;
@@ -64,8 +62,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import org.json.simple.JSONValue;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.http.HttpServletRequest;
@@ -149,17 +147,9 @@ public final class DataServlet extends HttpServlet {
 			try {
 				String source = HTTPUtils.cleanXSS(request.getParameter("source"));
 				String code = HTTPUtils.cleanXSS(request.getParameter("code"));
-                JSONObject obj = getJSONObjectForNCIDefinition(source, code);
-
-				StringWriter out = new StringWriter();
-				String jsonText = "No NCI definition available.";
-				if (obj == null) {
-	                response.getWriter().write(jsonText);
-				} else {
-					obj.writeJSONString(out);
-				    jsonText = out.toString();
-				    response.getWriter().write(jsonText);
-				}
+                String json = getNCIDefinitionInJSON(source, code);
+                if (json == null) json = "No NCI definition available.";
+                response.getWriter().write(json);
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -179,8 +169,6 @@ public final class DataServlet extends HttpServlet {
         return null;
     }
 
-
-
     public JSONObject nciDefinition2JSONObject(String src_abbrev, String src_code, String nci_code, String nci_concept_name, String def) {
 		JSONObject obj = null;
 		try {
@@ -198,10 +186,14 @@ public final class DataServlet extends HttpServlet {
 		return obj;
 	}
 
-	public JSONObject getJSONObjectForNCIDefinition(String src_abbrev, String src_code) { //"10009851"
+	public String getNCIDefinitionInJSON(String src_abbrev, String src_code) {
 	    String nci_code = null;
 	    String nci_def = null;
 	    String target_concept_name = "No match";
+
+	    Vector nci_code_vec = new Vector();
+	    JSONArray array = new JSONArray();
+
 		try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             Vector cui_vec = getMatchedMetathesaurusCUIs(lbSvc, src_abbrev, null, null, src_code);
@@ -246,6 +238,9 @@ public final class DataServlet extends HttpServlet {
 										 code_1 = qualifier_value;
 									} else if (src_abbr.compareTo("NCI") == 0) {
 										 code_2 = qualifier_value;
+										 if (!nci_code_vec.contains(code_2)) {
+											 nci_code_vec.add(code_2);
+										 }
 									}
 								}
 							}
@@ -253,13 +248,12 @@ public final class DataServlet extends HttpServlet {
 					}
 				}
 			}
-			if (syn_1 != null && syn_2 != null) {
-				nci_code = code_2;
-
-				Entity ncit_entity = conceptDetails.getConceptByCode(Constants.NCIT_CS_NAME, null, code_2, null, false);
+			if (nci_code_vec.size() == 0) return null;
+			for (int lcv=0; lcv<nci_code_vec.size(); lcv++) {
+				nci_code = (String) nci_code_vec.elementAt(lcv);
+				Entity ncit_entity = conceptDetails.getConceptByCode(Constants.NCIT_CS_NAME, null, nci_code, null, false);
 				if (ncit_entity != null) {
 					target_concept_name = ncit_entity.getEntityDescription().getContent();
-					//System.out.println(ncit_entity.getEntityDescription().getContent() + " (" + ncit_entity.getEntityCode() + ")");
 					org.LexGrid.concepts.Definition[] properties = ncit_entity.getDefinition();
 					for (int i = 0; i < properties.length; i++) {
 						Definition p = (Definition) properties[i];
@@ -269,25 +263,28 @@ public final class DataServlet extends HttpServlet {
 							Source src = sources[0];
 							String src_abbr = src.getContent();
 							if (src_abbr.compareTo("NCI") == 0) {
-								//System.out.println(p.getPropertyName() + " " + p.getValue().getContent() + " " + src_abbr);
 								nci_def = p.getValue().getContent();
+								JSONObject obj = nciDefinition2JSONObject(src_abbrev, src_code, nci_code, target_concept_name, nci_def);
+								array.add(obj);
 							}
 						}
 					}
 				}
-				if (nci_def == null) {
-					nci_def = "Not available.";
-				}
 			}
-
+			if (array.size() == 0) return null;
+			StringWriter out = new StringWriter();
+			try {
+				array.writeJSONString(out);
+				String jsonText = out.toString();
+				return jsonText;
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (nci_code != null) {
-			return nciDefinition2JSONObject(src_abbrev, src_code, nci_code, target_concept_name, nci_def);
-		} else {
-			return nciDefinition2JSONObject(src_abbrev, src_code, "No match", target_concept_name, nci_def);
-		}
+		return null;
 	}
+
 }
