@@ -3838,7 +3838,7 @@ out.flush();
 		try {
 			response.setContentType("text/xml");
 
-			String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+			String vsd_name = DataUtils.valueSetDefinitionURI2Name(uri);
 			vsd_name = vsd_name.replaceAll(" ", "_");
 			vsd_name = vsd_name + ".xml";
 

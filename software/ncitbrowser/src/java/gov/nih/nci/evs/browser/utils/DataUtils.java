@@ -5312,7 +5312,8 @@ if (lbSvc == null) {
 	}
 
 
-    public static String valueSetDefiniionURI2Name(String vsd_uri) {
+    //public static String valueSetDefiniionURI2Name(String vsd_uri) {
+	public static String valueSetDefinitionURI2Name(String vsd_uri) {
 		String metadata = getValueSetDefinitionMetadata(vsd_uri);
 		Vector v = parseData(metadata);
 		return (String) v.elementAt(0);
@@ -5526,6 +5527,7 @@ if (lbSvc == null) {
 
 
 	public static String getValueSetDefinitionMetadata(String vsd_uri) {
+		if (vsd_uri == null) return null;
 		ValueSetDefinition vsd = findValueSetDefinitionByURI(vsd_uri);
 		if (vsd == null) return null;
 		return getValueSetDefinitionMetadata(vsd);

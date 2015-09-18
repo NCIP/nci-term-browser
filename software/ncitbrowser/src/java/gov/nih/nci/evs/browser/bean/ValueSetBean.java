@@ -584,7 +584,7 @@ public class ValueSetBean {
 					.getCurrentInstance().getExternalContext().getResponse();
 			response.setContentType("text/xml");
 
-			String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+			String vsd_name = DataUtils.valueSetDefinitionURI2Name(uri);
 			vsd_name = vsd_name.replaceAll(" ", "_");
 			vsd_name = vsd_name + ".xml";
 
@@ -675,7 +675,7 @@ public class ValueSetBean {
 							.getCurrentInstance().getExternalContext().getResponse();
 					response.setContentType("text/xml");
 
-					String vsd_name = DataUtils.valueSetDefiniionURI2Name(uri);
+					String vsd_name = DataUtils.valueSetDefinitionURI2Name(uri);
 					vsd_name = vsd_name.replaceAll(" ", "_");
 					vsd_name = "resolved_" + vsd_name + ".xml";
 
@@ -863,7 +863,7 @@ public class ValueSetBean {
 		}
 
 
-		vsd_uri = DataUtils.valueSetDefiniionURI2Name(vsd_uri);
+		vsd_uri = DataUtils.valueSetDefinitionURI2Name(vsd_uri);
 		vsd_uri = vsd_uri.replaceAll(" ", "_");
 		vsd_uri = "resolved_" + vsd_uri + ".txt";
 
@@ -1213,7 +1213,7 @@ public class ValueSetBean {
     		response.setContentType("application/vnd.ms-excel");
 			//response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
-			String vsd_name = DataUtils.valueSetDefiniionURI2Name(vsd_uri);
+			String vsd_name = DataUtils.valueSetDefinitionURI2Name(vsd_uri);
 			vsd_name = vsd_name.replaceAll(" ", "_");
 			vsd_name = vsd_name + ".xls";
 

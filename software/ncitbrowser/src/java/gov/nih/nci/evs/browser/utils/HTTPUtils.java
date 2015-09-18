@@ -69,7 +69,8 @@ public class HTTPUtils {
     private static final int MIN_FONT_SIZE = 22;
     private static final int MAX_STR_LEN = 18;
 
-    public  static final int ABS_MAX_STR_LEN = 40;
+    //public static final int ABS_MAX_STR_LEN = 40;
+    public static final int ABS_MAX_STR_LEN = 100;
 
     /**
      * Remove potentially bad XSS syntax
@@ -308,7 +309,6 @@ public class HTTPUtils {
                 String value = (String) request.getParameter(name);
                 //_logger.debug("  " + i + ") " + name + ": " + value);
                 System.out.println("name: " + name + " value: " + value.toString());
-
                 ++i;
             }
         } catch (Exception e) {
@@ -467,10 +467,49 @@ public class HTTPUtils {
         try {
             Enumeration<?> enumeration =
                 SortUtils.sort(request.getParameterNames());
+
             while (enumeration.hasMoreElements()) {
 				String name = (String) enumeration.nextElement();
+			    if (name.compareTo("view") == 0) {
+					value = (String) request.getParameter(name);
+					if (value != null) {
+						boolean isInteger = gov.nih.nci.evs.browser.utils.StringUtils.isInteger(value);
+						if (!isInteger) {
+							System.out.println("Integer value violation???");
+							String error_msg = createErrorMessage(name, value);
+							request.getSession().setAttribute("error_msg", error_msg);
+							return false;
+						}
+					}
+				}
+			    if (name.compareTo("vsd_uri") == 0) {
+					value = (String) request.getParameter(name);
+					if (!DataUtils.isNull(value)) {
+						String vsd_md = DataUtils.getValueSetDefinitionMetadata(value);
+						if (vsd_md == null) {
+							String error_msg = createErrorMessage(name, value);
+							request.getSession().setAttribute("error_msg", error_msg);
+							return false;
+						}
+					}
+				}
+
                 Boolean isDynamic = isDynamicId(name);
                 Boolean issearchFormParameter = isSearchFormParameter(name);
+
+                // 09182015
+                if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.TRUE)) {
+					value = (String) request.getParameter(name);
+					if (value != null) {
+						boolean isInteger = gov.nih.nci.evs.browser.utils.StringUtils.isInteger(value);
+						if (!isInteger) {
+							System.out.println("Integer value violation???" + value);
+							String error_msg = createErrorMessage(name, value);
+							request.getSession().setAttribute("error_msg", error_msg);
+							return false;
+						}
+				    }
+				}
 
                 if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.FALSE)) {
 					if (isDynamic != null && isDynamic.equals(Boolean.FALSE)) {
@@ -508,6 +547,14 @@ public class HTTPUtils {
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
+						//09182015
+						bool_obj = checkLimitedLengthCondition(name, value);
+						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
+							String error_msg = createErrorMessage(name, value);
+							request.getSession().setAttribute("error_msg", error_msg);
+							return false;
+						}
+
 					}
 			    }
             }
@@ -639,10 +686,34 @@ public class HTTPUtils {
 		return Boolean.FALSE;
 	}
 
+
+	public static Boolean isCheckedVocabulariesParameter(String name) {
+		if (name == null) return null;
+		String nm = name.toLowerCase();
+		if (nm.endsWith("checked_vocabularies")) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+
 	public static String createErrorMsg(String name, String value) {
 		String error_msg = "WARNING: Invalid parameter value encountered - " + value +
 		   " (name: " + name + ").";
 		return error_msg;
+	}
+
+	public static Boolean checkLimitedLengthCondition(String name, String value) {
+		if (name == null) return null;
+		if (value == null) return Boolean.TRUE;
+		Boolean bool_val = isCheckedVocabulariesParameter(name);
+		// exceptions:
+		if ((bool_val != null && bool_val.equals(Boolean.FALSE)) && name.compareTo("matchText") != 0 && name.compareTo("message") != 0) {
+			if (value.length() > ABS_MAX_STR_LEN) {
+				return Boolean.FALSE;
+			}
+		}
+        return Boolean.TRUE;
 	}
 
 }
