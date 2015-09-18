@@ -197,6 +197,8 @@ public final class DataServlet extends HttpServlet {
 		try {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             Vector cui_vec = getMatchedMetathesaurusCUIs(lbSvc, src_abbrev, null, null, src_code);
+            if (cui_vec == null) return null;
+
             String cui = null;
             for (int i=0; i<cui_vec.size(); i++) {
 				cui = (String) cui_vec.elementAt(i);
