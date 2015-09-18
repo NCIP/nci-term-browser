@@ -578,9 +578,10 @@
 		  concept history data.</li> 
 		<li><b>View Graph</b>: Click the link to see an interactive 
 		  graphic presentation of some information available in the 
-		  <b>Relationships</b> tab.  
-		  This uses a widget from the National Center for Biomedical Ontology (NCBO), 
-		  and is not available for all terminologies.</li> 
+		  <b>Relationships</b> tab. 
+                  The default displays all available relationships at once.  
+                  A drop-down pick list allows choosing specific relationships for viewing.
+                </li> 
             	<li><b>Add to Cart</b>: For information about placing concepts into the 
               	  <b>Cart</b> (using the <b>Add to Cart</b> link found 
                	  on the Concept Details pages) in order to <b>Export</b>
@@ -767,6 +768,7 @@
             Both trees are compliant with Section 508 of the Rehabilitation Act. 
             Use the Tab and the Shift-Tab keys to navigate tree nodes and use the Space bar to check or uncheck a checkbox.
             Hit the Enter key, when the navigation is focused on a value set name, to go to that value set's home page.  
+          </p><p>  
             The home page gives a brief description, and four buttons for viewing it:
           </p>
           <ul>
