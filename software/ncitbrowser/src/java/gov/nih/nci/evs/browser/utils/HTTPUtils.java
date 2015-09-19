@@ -457,7 +457,6 @@ public class HTTPUtils {
 	}
 
 	public static String createErrorMessage(String name, String value) {
-		//return "WARNING: Invalid parameter value encountered - " + cleanXSS(value) + " (name: " + cleanXSS(name) + ").";
 		return "WARNING: Invalid parameter name and/or value encountered -- please check your URL and try again. ";
 	}
 
@@ -470,6 +469,19 @@ public class HTTPUtils {
 
             while (enumeration.hasMoreElements()) {
 				String name = (String) enumeration.nextElement();
+				System.out.println(name);
+
+				if (name.compareTo("nav_type") == 0) {
+					value = (String) request.getParameter(name);
+					String[] types = Constants.NAV_TYPE_VALUES;
+					if (!Arrays.asList(types).contains(value)) {
+						String error_msg = createErrorMessage(2, name);
+						request.getSession().setAttribute("error_msg", error_msg);
+						System.out.println("WARNING: Unknown nav_type: " + value);
+						return false;
+					}
+				}
+
 			    if (name.compareTo("view") == 0) {
 					value = (String) request.getParameter(name);
 					if (value != null) {
