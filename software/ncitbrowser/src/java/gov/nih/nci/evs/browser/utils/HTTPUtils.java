@@ -482,6 +482,7 @@ public class HTTPUtils {
 						}
 					}
 				}
+
 			    if (name.compareTo("vsd_uri") == 0) {
 					value = (String) request.getParameter(name);
 					if (!DataUtils.isNull(value)) {
@@ -494,9 +495,7 @@ public class HTTPUtils {
 					}
 				}
 
-                Boolean isDynamic = isDynamicId(name);
                 Boolean issearchFormParameter = isSearchFormParameter(name);
-
                 // 09182015
                 if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.TRUE)) {
 					value = (String) request.getParameter(name);
@@ -512,6 +511,10 @@ public class HTTPUtils {
 				}
 
                 if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.FALSE)) {
+					Boolean isDynamic = isDynamicId(name);
+
+
+
 					if (isDynamic != null && isDynamic.equals(Boolean.FALSE)) {
 						if (name.endsWith("value=")) return true;
 						String formal_name = DataUtils.getFormalName(name);
@@ -522,7 +525,15 @@ public class HTTPUtils {
 							return false;
 						}
 						value = (String) request.getParameter(name);
-						Boolean bool_obj = validateRadioButtonNameAndValue(name, value);
+						Boolean bool_obj = containsHarzardCharacters(value);
+						// Cross-Site Scripting:
+						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
+							String error_msg = createErrorMessage(2, name);
+							request.getSession().setAttribute("error_msg", error_msg);
+							System.out.println("WARNING: Harzardous -- " + name + ": " + value);
+							return false;
+						}
+						bool_obj = validateRadioButtonNameAndValue(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
 							String error_msg = createErrorMessage(name, value);
 							request.getSession().setAttribute("error_msg", error_msg);
@@ -540,13 +551,7 @@ public class HTTPUtils {
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
-						bool_obj = containsHarzardCharacters(value);
-						// Cross-Site Scripting:
-						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
-							String error_msg = createErrorMessage(2, name);
-							request.getSession().setAttribute("error_msg", error_msg);
-							return false;
-						}
+
 						//09182015
 						bool_obj = checkLimitedLengthCondition(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
@@ -554,7 +559,6 @@ public class HTTPUtils {
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
-
 					}
 			    }
             }

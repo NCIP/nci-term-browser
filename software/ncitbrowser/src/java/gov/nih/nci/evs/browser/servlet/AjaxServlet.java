@@ -307,6 +307,19 @@ if (display_name_vec == null) {
 		//[NCITERM-644] Reduce SQL injection AppScan delays.
         request.getSession().removeAttribute("error_msg");
 
+		boolean retval = HTTPUtils.validateRequestParameters(request);
+		if (!retval) {
+			 try {
+				 String nextJSP = "/pages/appscan_response.jsf";
+				 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+				 dispatcher.forward(request,response);
+				 return;
+
+			 } catch (Exception ex) {
+				 ex.printStackTrace();
+			 }
+		}
+
         //Appscan:
         String vocabulary_name = HTTPUtils.cleanXSS(request.getParameter("dictionary"));
         if (vocabulary_name != null) {
@@ -356,21 +369,7 @@ if (display_name_vec == null) {
 				 }
 
         //search_value_set
-        } else {
-			 boolean retval = HTTPUtils.validateRequestParameters(request);
-			 if (!retval) {
-				 try {
-					 String nextJSP = "/pages/appscan_response.jsf";
-					 //nextJSP = "/pages/value_set_entity_search_results.jsf";
-					 RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-					 dispatcher.forward(request,response);
-					 return;
-
-				 } catch (Exception ex) {
-					 ex.printStackTrace();
-				 }
-			 }
-	    }
+        }
 
 //search_hierarchy ns=npo
 
