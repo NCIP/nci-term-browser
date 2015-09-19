@@ -186,6 +186,8 @@ public class Constants {
     public static final String[] NCIT_OR_NCIM = {"NCI Thesaurus", "NCI_Thesaurus", "NCI Metathesaurus", "NCI_Metathesaurus"};
     public static final String[] NCIT_NAMES = {"NCI Thesaurus", "NCI_Thesaurus", "NCIT"};
 
+    public static final String[] TRUE_OR_FALSE = {"true", "false"};
+
 	public static String[] NCIM_CODE_PROPERTYIES = new String[] {"NCI_META_CUI", "UMLS_CUI"};
 
 	public static final String NO_VALUE_SET_REPORT_AVAILABLE = "No value set report is available.";

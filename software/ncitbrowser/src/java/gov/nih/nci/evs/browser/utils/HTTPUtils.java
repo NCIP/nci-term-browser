@@ -469,11 +469,39 @@ public class HTTPUtils {
 
             while (enumeration.hasMoreElements()) {
 				String name = (String) enumeration.nextElement();
-				System.out.println(name);
+
+				Boolean checkedVocabularies = isCheckedVocabulariesParameter(name);
+				if (checkedVocabularies != null && checkedVocabularies.equals(Boolean.TRUE)) {
+                    value = (String) request.getParameter(name);
+                    if (!DataUtils.isNullOrBlank(value)) {
+						Vector selected_vocabularies_vec = gov.nih.nci.evs.browser.utils.StringUtils.parseData(name, ",");
+						for (int k=0; k<selected_vocabularies_vec.size(); k++) {
+							String vocabularyNm = (String) selected_vocabularies_vec.elementAt(k);
+                            String formal_name = DataUtils.getFormalName(vocabularyNm);
+                            if (formal_name == null) {
+								String error_msg = createErrorMessage(2, name);
+								request.getSession().setAttribute("error_msg", error_msg);
+								System.out.println("WARNING: Unknown nav_type: " + value);
+								return false;
+							}
+						}
+					}
+				}
 
 				if (name.compareTo("nav_type") == 0) {
 					value = (String) request.getParameter(name);
 					String[] types = Constants.NAV_TYPE_VALUES;
+					if (!Arrays.asList(types).contains(value)) {
+						String error_msg = createErrorMessage(2, name);
+						request.getSession().setAttribute("error_msg", error_msg);
+						System.out.println("WARNING: Unknown nav_type: " + value);
+						return false;
+					}
+				}
+
+				if (name.compareTo("value_set_home") == 0) {
+					value = (String) request.getParameter(name);
+					String[] types = Constants.TRUE_OR_FALSE;
 					if (!Arrays.asList(types).contains(value)) {
 						String error_msg = createErrorMessage(2, name);
 						request.getSession().setAttribute("error_msg", error_msg);
@@ -524,8 +552,6 @@ public class HTTPUtils {
 
                 if (issearchFormParameter != null && issearchFormParameter.equals(Boolean.FALSE)) {
 					Boolean isDynamic = isDynamicId(name);
-
-
 
 					if (isDynamic != null && isDynamic.equals(Boolean.FALSE)) {
 						if (name.endsWith("value=")) return true;
