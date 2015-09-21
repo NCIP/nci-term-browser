@@ -481,7 +481,7 @@ public class HTTPUtils {
                             if (formal_name == null) {
 								String error_msg = createErrorMessage(2, name);
 								request.getSession().setAttribute("error_msg", error_msg);
-								System.out.println("WARNING: Unknown nav_type: " + value);
+								System.out.println("WARNING: Unknown vocabulary: " + value);
 								return false;
 							}
 						}
@@ -750,7 +750,8 @@ public class HTTPUtils {
 		if (value == null) return Boolean.TRUE;
 		Boolean bool_val = isCheckedVocabulariesParameter(name);
 		// exceptions:
-		if ((bool_val != null && bool_val.equals(Boolean.FALSE)) && name.compareTo("matchText") != 0 && name.compareTo("message") != 0) {
+		if ((bool_val != null && bool_val.equals(Boolean.FALSE)) && name.compareTo("matchText") != 0 && name.compareTo("message") != 0
+		    && name.compareTo("referer") != 0) {
 			if (value.length() > ABS_MAX_STR_LEN) {
 				return Boolean.FALSE;
 			}
