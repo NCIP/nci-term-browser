@@ -593,14 +593,12 @@ public class HTTPUtils {
 						}
 
 						//09182015
-						/*
 						bool_obj = checkLimitedLengthCondition(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
 							String error_msg = createErrorMessage(name, value);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
-						*/
 					}
 			    }
             }
