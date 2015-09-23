@@ -3709,11 +3709,14 @@ out.flush();
         String refresh = HTTPUtils.cleanXSS((String) request.getParameter("refresh"));
         String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 
-        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
-        if (matchText != null) {
-            matchText = matchText.trim();
-            request.getSession().setAttribute("matchText", matchText);
+        String valueset_search_algorithm = (String) request.getParameter("valueset_search_algorithm");
+        if (valueset_search_algorithm != null) {
+            request.getSession().setAttribute("valueset_search_algorithm", valueset_search_algorithm);
+		}
 
+        String selectValueSetSearchOption = (String) request.getParameter("selectValueSetSearchOption");
+        if (selectValueSetSearchOption != null) {
+            request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 		}
 
         if (DataUtils.isNull(refresh)) {
