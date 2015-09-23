@@ -3709,6 +3709,13 @@ out.flush();
         String refresh = HTTPUtils.cleanXSS((String) request.getParameter("refresh"));
         String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
+        if (matchText != null) {
+            matchText = matchText.trim();
+            request.getSession().setAttribute("matchText", matchText);
+
+		}
+
         if (DataUtils.isNull(refresh)) {
 
 			ValueSetConfig vsc = ValueSetDefinitionConfig.getValueSetConfig(vsd_uri);
