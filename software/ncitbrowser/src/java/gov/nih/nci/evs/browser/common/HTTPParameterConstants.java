@@ -36,6 +36,7 @@ public class HTTPParameterConstants {
        "initial_search",
        "key",
        "m",
+       "mappingSearch";
        "matchText",
        "message",
        "multiplematches",

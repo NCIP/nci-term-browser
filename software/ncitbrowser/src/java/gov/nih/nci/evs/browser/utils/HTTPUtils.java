@@ -449,14 +449,16 @@ public class HTTPUtils {
 	// type: name=1; value=2
 	public static String createErrorMessage(int type, String name) {
 		if (type == 1) {
-			//return "WARNING: Unknown parameter name encountered - '" + cleanXSS(name) + "'.";
+			System.out.println("WARNING: Unknown parameter name encountered - '" + cleanXSS(name) + "'.");
 			return "WARNING: Invalid parameter name encountered -- please check your URL and try again. ";
 		} else {
+			System.out.println("WARNING: Invalid parameter value encountered - " + " (name: " + cleanXSS(name) + ").");
 			return "WARNING: Invalid parameter value encountered - " + " (name: " + cleanXSS(name) + ").";
 		}
 	}
 
 	public static String createErrorMessage(String name, String value) {
+		System.out.println("WARNING: Invalid parameter value encountered - " + " (name: " + cleanXSS(name) + " value: " + value + ").");
 		return "WARNING: Invalid parameter name and/or value encountered -- please check your URL and try again. ";
 	}
 
@@ -591,12 +593,14 @@ public class HTTPUtils {
 						}
 
 						//09182015
+						/*
 						bool_obj = checkLimitedLengthCondition(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
 							String error_msg = createErrorMessage(name, value);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
+						*/
 					}
 			    }
             }
@@ -742,16 +746,22 @@ public class HTTPUtils {
 	public static String createErrorMsg(String name, String value) {
 		String error_msg = "WARNING: Invalid parameter value encountered - " + value +
 		   " (name: " + name + ").";
+		System.out.println(error_msg);
 		return error_msg;
 	}
+
 
 	public static Boolean checkLimitedLengthCondition(String name, String value) {
 		if (name == null) return null;
 		if (value == null) return Boolean.TRUE;
 		Boolean bool_val = isCheckedVocabulariesParameter(name);
 		// exceptions:
-		if ((bool_val != null && bool_val.equals(Boolean.FALSE)) && name.compareTo("matchText") != 0 && name.compareTo("message") != 0
-		    && name.compareTo("referer") != 0) {
+		if ((bool_val != null && bool_val.equals(Boolean.FALSE))
+		    && name.compareTo("matchText") != 0
+		    && name.compareTo("message") != 0
+		    && name.compareTo("referer") != 0
+		    && name.compareTo("acceptedLicenses") != 0
+		    && name.compareTo("ontology_list_str") != 0) {
 			if (value.length() > ABS_MAX_STR_LEN) {
 				return Boolean.FALSE;
 			}

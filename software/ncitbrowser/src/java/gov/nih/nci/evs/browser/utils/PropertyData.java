@@ -929,10 +929,10 @@ public class PropertyData
 		if (rcr == null) return false;
         String[] entityTypes = rcr.getEntityType();
         if (entityTypes == null) return false;
+        if (entityTypes.length == 0) return true;
         if (Arrays.asList(entityTypes).contains("concept")) return true;
         return false;
 	}
-
 
 
     public String getHyperlink(String scheme, String version, ResolvedConceptReference rcr,

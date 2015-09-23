@@ -2833,7 +2833,7 @@ public class SearchUtils {
 					return wrapper;
 */
 
-					ResolvedConceptReferencesIterator itr = new SimpleSearchUtils().searchAssociation(
+					ResolvedConceptReferencesIterator itr = new SimpleSearchUtils(lbSvc).searchAssociation(
 						 schemes, versions, matchText, source, matchAlgorithm, designationOnly,
 						 searchOption,
 						 search_source);

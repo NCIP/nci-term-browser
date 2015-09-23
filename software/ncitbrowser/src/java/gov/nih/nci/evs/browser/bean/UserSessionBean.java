@@ -336,6 +336,18 @@ if (scheme != null) {
 
         _logger.debug("UserSessionBean scheme: " + scheme);
         _logger.debug("searchAction version: " + version);
+
+
+
+
+boolean retval = HTTPUtils.validateRequestParameters(request);
+if (!retval) {
+	System.out.println("searchAction returns invalid_parameter");
+	return "invalid_parameter";
+}
+
+
+
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		if (isMapping) {
 				if (searchTarget.compareTo("names") == 0) {
@@ -1146,11 +1158,14 @@ if (scheme != null) {
                 .getExternalContext().getRequest();
 
         request.getSession().removeAttribute("error_msg");
-        boolean retval = HTTPUtils.validateRequestParameters(request);
-        if (!retval) {
-			return "invalid_parameter";
-		}
 
+/*
+boolean retval = HTTPUtils.validateRequestParameters(request);
+if (!retval) {
+	System.out.println("multipleSearchAction returns invalid_parameter");
+	return "invalid_parameter";
+}
+*/
 		String selected_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("selected_vocabularies"));
 
         String[] ontology_list = request.getParameterValues("ontology_list");
@@ -1544,6 +1559,13 @@ request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr
 		}
 
 
+boolean retval = HTTPUtils.validateRequestParameters(request);
+if (!retval) {
+	System.out.println("multipleSearchAction returns invalid_parameter");
+	return "invalid_parameter";
+}
+
+
         LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         if (searchTarget.compareTo("names") == 0) {
 			// temporary fix for: [NCITERM-682] Contains search failed on search strings containing a colon character.
@@ -1587,6 +1609,7 @@ request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr
             long ms = System.currentTimeMillis();
             long delay = 0;
             _logger.debug("Calling CodeSearchUtils().searchByCode " + matchText);
+
             ResolvedConceptReferencesIteratorWrapper wrapper =
                 new CodeSearchUtils(lbSvc).searchByCode(schemes, versions, matchText,
                     source, matchAlgorithm, ranking, maxToReturn);
@@ -1888,11 +1911,13 @@ response.setContentType("text/html;charset=utf-8");
                 .getExternalContext().getRequest();
 
         request.getSession().removeAttribute("error_msg");
+/*
         boolean retval = HTTPUtils.validateRequestParameters(request);
         if (!retval) {
+			System.out.println("advancedSearchAction returns invalid_parameter");
 			return "invalid_parameter";
 		}
-
+*/
         String scheme = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 	    if (scheme == null || DataUtils.getFormalName(scheme) == null) {
 			String message = "Invalid vocabulary name.";
@@ -2045,6 +2070,16 @@ response.setContentType("text/html;charset=utf-8");
         searchTarget = searchType;
 
         _logger.debug("SearchUtils.java searchType: " + searchType);
+
+
+
+boolean retval = HTTPUtils.validateRequestParameters(request);
+if (!retval) {
+	System.out.println("advancedSearchAction returns invalid_parameter");
+	return "invalid_parameter";
+}
+
+
 
         if (searchType != null && searchType.compareTo("Property") == 0) {
             /*
@@ -2653,7 +2688,7 @@ response.setContentType("text/html;charset=utf-8");
 
      private void show_other_versions(HttpServletRequest request, String action_cs, boolean show) {
 
-		System.out.println("action_cs: " + action_cs + "; show or hide: " + show);
+		//System.out.println("action_cs: " + action_cs + "; show or hide: " + show);
 
 
 	    String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
@@ -2667,10 +2702,10 @@ response.setContentType("text/html;charset=utf-8");
 			StringBuffer buf = new StringBuffer();
 			buf.append("|");
 			if (ontology_list != null) {
-				System.out.println("(*) UserSessionBean ontology_list.length: " + ontology_list.length);
+				//System.out.println("(*) UserSessionBean ontology_list.length: " + ontology_list.length);
 				for (int i = 0; i < ontology_list.length; ++i) {
 
-					System.out.println("(" + i + ") " + ontology_list[i]);
+					//System.out.println("(" + i + ") " + ontology_list[i]);
 
 					buf.append(ontology_list[i] + "|");
 				}
@@ -2706,8 +2741,6 @@ ontologiesToSearchOnStr = s;
 
         // [NCITERM-641] Tomcat session is mixed up.
 		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
-		System.out.println("(*************) UserSessionBean: ontologiesToExpandStr: " + ontologiesToExpandStr);
-
 		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
@@ -2741,7 +2774,7 @@ ontologiesToSearchOnStr = s;
 
 		String t0 = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
 
-		System.out.println("EXIT show_other_versions: " + t0);
+		//System.out.println("EXIT show_other_versions: " + t0);
 
     }
 
@@ -2766,7 +2799,7 @@ ontologiesToSearchOnStr = s;
 				 }
 			 }
 		}
-		System.out.println("EXIT show_other_versions");
+		//System.out.println("EXIT show_other_versions");
 
     }
 

@@ -568,9 +568,12 @@ import org.apache.commons.codec.language.*;
 						version, matchText, source, searchInactive);
 				}
 
+if (hasSourceCodeQualifier(scheme)) {
 				CodedNodeSet cns_2 = getCodedNodeSetContainingSourceCode(
 					scheme, version, source, code, maxToReturn, searchInactive);
                 cns = union(cns, cns_2);
+}
+
 				if (cns != null) {
 					cns_vec.add(cns);
 				}
@@ -589,4 +592,32 @@ import org.apache.commons.codec.language.*;
 		return null;
 	}
 
+    public Vector getSupportedPropertyQualifier(CodingScheme cs)
+    {
+		Vector v = new Vector();
+		if (cs != null) {
+			SupportedPropertyQualifier[] qualifiers = cs.getMappings().getSupportedPropertyQualifier();
+			for (int i=0; i<qualifiers.length; i++)
+			{
+				v.add(qualifiers[i].getLocalId());
+			}
+			return v;
+	    }
+	    return null;
+	}
+
+    public boolean hasSourceCodeQualifier(String scheme) {
+		try {
+			CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+			CodingScheme cs = lbSvc.resolveCodingScheme(scheme, csvt);
+			Vector prop_quals = getSupportedPropertyQualifier(cs);
+			if (prop_quals.contains("source-code")) {
+				return true;
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return false;
+    }
 }
