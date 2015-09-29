@@ -198,7 +198,7 @@ public class Constants {
                                  "/IFRAME ", "IFRAME ", "INPUT TYPE", "IMG DYNSRC", "IMG LOWSRC", "ALERT(",
                                  "JAVASCRIPT:ALERT", "BGSOUND SRC", "BR SIZE", "LINK REL",
                                  "META HTTP-EQUIV", "STYLE=", "XSS:EXPRESSION", "XSS STYLE",
-                                 "DIV STYLE", "BASE HREF", "OBJECT TYPE", "XML ID", "SION(EVAL",
+                                 "DIV STYLE", "BASE HREF", "OBJECT TYPE", "XML ID", "SION(EVAL","(EVAL",
                                  "%2BALERT", "+ALERT", "%22ONMOUSEOVER", "\"ONMOUSEOVER",
                                  "SPAN DATASRC", "A HREF=", "$WHERE", "SLEEP(", "$QUERY", ";DECLARE", "VARCHAR(", "E-"};
 
