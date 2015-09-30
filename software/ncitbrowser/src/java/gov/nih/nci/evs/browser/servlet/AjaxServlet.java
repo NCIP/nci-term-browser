@@ -483,11 +483,6 @@ if (action.compareTo("xmldefinitions") == 0) {
             export_mapping(request, response);
         } else if (action.equals("export_mapping_search")) {
             export_mapping_search(request, response);
-
-/*
-        } else if (action.equals("value_set_home")) {
-            value_set_home(request, response);
-*/
         } else if (action.equals("search_all_value_sets")) {
             search_all_value_sets(request, response);
 
