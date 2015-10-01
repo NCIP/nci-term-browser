@@ -565,12 +565,12 @@ public class HTTPUtils {
 							return false;
 						}
 						value = (String) request.getParameter(name);
-						Boolean bool_obj = containsHarzardCharacters(value);
+						Boolean bool_obj = containsHazardCharacters(value);
 						// Cross-Site Scripting:
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
 							String error_msg = createErrorMessage(2, name);
 							request.getSession().setAttribute("error_msg", error_msg);
-							System.out.println("WARNING: Harzardous -- " + name + ": " + value);
+							System.out.println("WARNING: HAZARDous -- " + name + ": " + value);
 							return false;
 						}
 						bool_obj = validateRadioButtonNameAndValue(name, value);
@@ -700,12 +700,12 @@ public class HTTPUtils {
 		return Boolean.FALSE;
 	}
 
-    public static Boolean containsHarzardCharacters(String value) {
+    public static Boolean containsHazardCharacters(String value) {
 		if (value == null) return Boolean.FALSE;
 		String s = decode(value).toUpperCase();
 		s = s.trim();
-		for (int i=0; i<Constants.HARZARD_CHARS.length; i++) {
-			String t = Constants.HARZARD_CHARS[i];
+		for (int i=0; i<Constants.HAZARD_CHARS.length; i++) {
+			String t = Constants.HAZARD_CHARS[i];
 			if (s.indexOf(t) != -1) {
 				return Boolean.TRUE;
 			}
