@@ -232,7 +232,6 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
         if (matchText != null) {
             matchText = matchText.trim();
             request.getSession().setAttribute("matchText", matchText);
-
 		}
 
         // [#19965] Error message is not displayed when Search Criteria is not

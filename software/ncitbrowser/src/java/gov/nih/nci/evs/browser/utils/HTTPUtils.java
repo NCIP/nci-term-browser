@@ -570,7 +570,7 @@ public class HTTPUtils {
 						if (bool_obj != null && bool_obj.equals(Boolean.TRUE)) {
 							String error_msg = createErrorMessage(2, name);
 							request.getSession().setAttribute("error_msg", error_msg);
-							System.out.println("WARNING: HAZARDous -- " + name + ": " + value);
+							System.out.println("WARNING: Hazardous -- " + name + ": " + value);
 							return false;
 						}
 						bool_obj = validateRadioButtonNameAndValue(name, value);
@@ -704,6 +704,12 @@ public class HTTPUtils {
 		if (value == null) return Boolean.FALSE;
 		String s = decode(value).toUpperCase();
 		s = s.trim();
+
+		//SELECT FROM WHERE
+		if (s.indexOf("SELECT") != -1 && s.indexOf("FROM") != -1 && s.indexOf("WHERE") != -1) {
+			return Boolean.TRUE;
+		}
+
 		for (int i=0; i<Constants.HAZARD_CHARS.length; i++) {
 			String t = Constants.HAZARD_CHARS[i];
 			if (s.indexOf(t) != -1) {

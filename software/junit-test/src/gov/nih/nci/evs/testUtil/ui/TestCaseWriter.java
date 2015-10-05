@@ -599,7 +599,10 @@ public class TestCaseWriter
         if (searchType == TestCase.VIEW_HIERARCHY) {
 		    out.println("		try {");
 		    out.println("		    popUpWindow(\"Hierarchy\");");
-		    out.println("		    bodyText = driver.findElement(By.tagName(\"body\")).getText();");
+
+		    //out.println("		    bodyText = driver.findElement(By.tagName(\"body\")).getText();");
+		    out.println("		    bodyText = getPopupWindowBodyText(driver);");
+
 		    out.println("		    assertTrue(!bodyText.contains(matchedString));");
 		    out.println("		} catch (Exception ex) {");
 		    out.println("			System.out.println(\"Hierarchy not available.\");");
@@ -610,7 +613,10 @@ public class TestCaseWriter
 			  out.println("		try {");
 			  out.println("			driver.findElement(By.linkText(\"View in Hierarchy\")).click();");
 			  wait(long_delay * 4);
-			  out.println("			assertTrue(containsText(matchText) || containsText(matchedString));");
+			  //out.println("			assertTrue(containsText(matchText) || containsText(matchedString));");
+			  out.println("		    bodyText = getPopupWindowBodyText(driver);");
+			  out.println("			assertTrue(bodyText.contains(matchText) || bodyText.contains(matchedString));");
+
 			  out.println("			String windowTitle= getCurrentWindowTitle();");
 			  wait(short_delay);
 			  out.println("			String mainWindow = getMainWindowHandle(driver);");
