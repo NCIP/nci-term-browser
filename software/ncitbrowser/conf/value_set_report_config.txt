@@ -516,6 +516,7 @@ DICOM Terminology|http://evs.nci.nih.gov/valueset/C69186|null|null
 Dose Denominator Qualifier ICSR Terminology|http://evs.nci.nih.gov/valueset/C94849|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/ICSR/FDA-ICSR_NCIt_Subsets.xls|1:2:C94849
 FDA CDRH GUDID Terminology|http://evs.nci.nih.gov/valueset/C106039|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/GUDID/FDA-CDRH-GUDID_NCIt_Subsets.xls|1:all
 FDA Center For Devices and Radiological Health Terminology|http://evs.nci.nih.gov/valueset/C62596|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/FDA-CDRH_NCIt_Subsets.xls|1:all
+FDA Quality Metrics Terminology|http://evs.nci.nih.gov/valueset/C123273|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/QualityMetrics/FDA-Quality_Metrics_Terminology.xls|1:all
 FDA eCTD Terminology|http://evs.nci.nih.gov/valueset/C97181|null|null
 FDA Established Names and Unique Ingredient Identifier Codes Terminology|http://evs.nci.nih.gov/valueset/C63923|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/UNII/FDA-UNII_NCIt_Subsets.xls|1:all
 Identification of Medicinal Products Terminology|http://evs.nci.nih.gov/valueset/C103197|null|null
@@ -542,6 +543,7 @@ Operator of Medical Device ICSR Terminology|http://evs.nci.nih.gov/valueset/C545
 Patient Problem Codes FDA CDRH|http://evs.nci.nih.gov/valueset/C54450|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/FDA/CDRH/FDA-CDRH_NCIt_Subsets.xls|1:2:C54450
 Pediatric Adverse Events Terminology|http://evs.nci.nih.gov/valueset/C118464|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Adverse%20Events%20Terminology%20Subset/Pediatric_Adverse_Events_Terminology_Subset.xls|2:all
 Pediatric Immunization Terminology|http://evs.nci.nih.gov/valueset/C96388|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Immunization%20Terminology%20Subset/Pediatric_Immunization_Terminology_Subset.xls|2:all
+Pediatric Nephrology Terminology|http://evs.nci.nih.gov/valueset/C123272|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Nephrology%20Terminology%20Subset/Pediatric_Nephrology_Terminology_Subset.xls|2:all
 Pediatric Rheumatology Terminology|http://evs.nci.nih.gov/valueset/C118468|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Rheumatology%20Terminology%20Subset/Pediatric_Rheumatology_Terminology_Subset.xls|2:all
 Pediatric Terminology|http://evs.nci.nih.gov/valueset/C90259|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Pediatric%20Terminology/Pediatric_Terminology.xls|2:all
 Perinatal Terminology|http://evs.nci.nih.gov/valueset/C118466|ftp://ftp1.nci.nih.gov/pub/cacore/EVS/NICHD/Perinatal%20Terminology%20Subset/Perinatal_Terminology_Subset.xls|2:all
