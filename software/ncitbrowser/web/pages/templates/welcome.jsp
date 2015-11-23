@@ -48,8 +48,8 @@ String contextPath = request.getContextPath();
 if (html_compatable_description_value == null) {
     html_compatable_description_value = "WARNING: html_compatable_description metadata element not found.";
 } else {
-    html_compatable_description_value = DataUtils.replaceContextPath(html_compatable_description_value, contextPath);
-    html_compatable_description_value = DataUtils.replaceInnerEvalExpressions(html_compatable_description_value, from_vec, to_vec);
+    html_compatable_description_value = JSPUtils.replaceContextPath(html_compatable_description_value, contextPath);
+    html_compatable_description_value = JSPUtils.replaceInnerEvalExpressions(html_compatable_description_value, from_vec, to_vec);
 }
 
 String _version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
@@ -117,7 +117,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         if (cabig_vkc_index_url_value != null) {
         %>
             <p>
-            caBIG VKC Link:
+            More Information:
               <a href="<%=cabig_vkc_index_url_value%>" target="_blank"><%=HTTPUtils.cleanXSS(cabig_vkc_index_url_value)%></a>
             </p>
         <%

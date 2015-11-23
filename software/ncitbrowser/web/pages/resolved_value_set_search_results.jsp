@@ -96,6 +96,7 @@ vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 
 Vector coding_scheme_ref_vec = DataUtils.getCodingSchemesInValueSetDefinition(vsd_uri);
 String checked = "";
+boolean bool_val;
 
 %>
         <div class="pagecontent">
@@ -114,7 +115,17 @@ if (resultsPerPage == null) {
     }
     
 }  else {
-    request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+
+    bool_val = JSPUtils.isInteger(resultsPerPage);
+    if (!bool_val) {
+	 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+	 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+	 request.getSession().setAttribute("error_msg", error_msg);
+	 response.sendRedirect(redirectURL);
+    } else {
+	 request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+    }  
+
 }
 
 
@@ -271,9 +282,20 @@ if (!no_match) {
 
     for (int i=0; i<list.size(); i++) {
         ResolvedConceptReference rcr = (ResolvedConceptReference) list.get(i);
-              if (rcr != null && rcr.getConceptCode() != null && rcr.getEntityDescription() != null) {
-        String code = rcr.getConceptCode();
-        String name = rcr.getEntityDescription().getContent();
+        String code = null;
+        String name = "";
+        if (rcr != null) {
+            code = rcr.getConceptCode();
+        }
+
+       
+        if (rcr != null && rcr.getEntityDescription() != null) {
+            name = rcr.getEntityDescription().getContent();
+        }
+        
+        if (rcr != null) {
+        
+        
         String cs_version = rcr.getCodingSchemeVersion();
 
         String vocabulary_name = (String) DataUtils.getFormalName(rcr.getCodingSchemeName());
@@ -342,7 +364,7 @@ if (!no_match) {
 
           <td class="dataCellText" scope="row">
           <%
-          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
+          if (DataUtils.isNCIT(vocabulary_name)) {
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>
           <%
@@ -379,7 +401,7 @@ if (!no_match) {
 
           <td class="dataCellText" scope="row">
           <%
-          if (vocabulary_name.compareToIgnoreCase("NCI Thesaurus") == 0 || vocabulary_name.compareToIgnoreCase("NCI_Thesaurus") == 0) {
+          if (DataUtils.isNCIT(vocabulary_name)) {
           %>
                <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=vocabulary_nm%>&version=<%=cs_version%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
           <%

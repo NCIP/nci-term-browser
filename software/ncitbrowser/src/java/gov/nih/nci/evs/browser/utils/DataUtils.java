@@ -1,4 +1,7 @@
 package gov.nih.nci.evs.browser.utils;
+
+import gov.nih.nci.evs.browser.bean.*;
+
 import java.io.*;
 import java.net.URI;
 
@@ -6,7 +9,6 @@ import java.text.*;
 import java.util.*;
 import java.sql.*;
 import javax.faces.model.*;
-
 import org.LexGrid.LexBIG.DataModel.Collections.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.Exceptions.*;
@@ -70,6 +72,9 @@ import org.LexGrid.commonTypes.Properties;
 
 import org.apache.commons.lang.*;
 
+import org.lexgrid.resolvedvalueset.impl.LexEVSResolvedValueSetServiceImpl;
+import org.lexgrid.resolvedvalueset.LexEVSResolvedValueSetService;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet.ActiveOption;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -122,7 +127,8 @@ import org.apache.commons.lang.*;
  */
 public class DataUtils {
     private static Logger _logger = Logger.getLogger(DataUtils.class);
-    //private static LocalNameList _noopList = Constructors.createLocalNameList("_noop_");
+    private static Set _vocabularyNameSet = null;
+
     private static LocalNameList _noopList = new LocalNameList();
     private int _maxReturn = 5000;
     private Connection _con;
@@ -184,6 +190,7 @@ public class DataUtils {
     private static HashMap _namespace2CodingScheme = null;
 
     private static HashMap _formalName2LocalNameHashMap = null;
+    private static HashMap _formalName2LocalNamesHashMap = null;
     private static HashMap _localName2FormalNameHashMap = null;
     private static HashMap _formalName2MetadataHashMap = null;
     private static HashMap _displayName2FormalNameHashMap = null;
@@ -226,7 +233,10 @@ public class DataUtils {
     private static HashMap terminologyValueSetTree = null;
 
     private static StringBuffer sourceValueSetTreeStringBuffer = null;
+    private static HashMap sourceValueSetCheckboxid2NodeIdMap = null;
+
     private static StringBuffer terminologyValueSetTreeStringBuffer = null;
+    private static HashMap terminologyValueSetCheckboxid2NodeIdMap = null;
 
     private static HashMap _formalName2VirtualIdMap = null;
 
@@ -241,6 +251,7 @@ public class DataUtils {
     private static HashMap _RVSCSURI2VersionHashMap = null;
 
     private static HashMap _VSDName2URIHashMap = null;
+    private static HashMap _VSDURI2NameHashMap = null;
 
     private static HashMap _formalName2DisplayNameHashMap = null;
 
@@ -250,37 +261,137 @@ public class DataUtils {
 
     public String _ncitURL = null;
 
+    private static HashMap resovedValueSetHashMap = null;
+
+    private static Vector _sortedOntologies = null;
+
+    private static HashMap _productionVersionHashMap = null;
+
+    private static HashSet _valueSetParticipationHashSet = null;
+
+    public static Boolean VALUE_SET_TAB_AVAILABLE = null;
+    //public static Boolean NCI_THESAURUS_AVAILABLE = null;
+
+    public static ValueSetHierarchy valueSetHierarchy = null;
+
 
     // ==================================================================================
 
     public DataUtils() {
-        // setCodingSchemeMap();
+
     }
 
     static {
-		setCodingSchemeMap();
+		System.out.println("Initialization ...");
+		long ms0 = System.currentTimeMillis();
+		long ms = System.currentTimeMillis();
 
+		VALUE_SET_TAB_AVAILABLE = isCodingSchemeAvailable(Constants.TERMINOLOGY_VALUE_SET_NAME);
+
+        if (VALUE_SET_TAB_AVAILABLE != null && VALUE_SET_TAB_AVAILABLE.equals(Boolean.TRUE)) {
+			System.out.println("getResolvedValueSetHashMap ...");
+			resovedValueSetHashMap = getResolvedValueSetHashMap();
+			System.out.println("getResolvedValueSetHashMap run time (ms): " + (System.currentTimeMillis() - ms));
+			ms = System.currentTimeMillis();
+		} else {
+			hasNoValueSet = true;
+		}
+		//resovedValueSetHashMap = getResolvedValueSetHashMap();
+		ms = System.currentTimeMillis();
+        System.out.println("setCodingSchemeMap... ");
+		setCodingSchemeMap();
+		System.out.println("setCodingSchemeMap run time (ms): " + (System.currentTimeMillis() - ms));
+		ms = System.currentTimeMillis();
+
+        System.out.println("getValueSetDefinitionMetadata... ");
 		if (_valueSetDefinitionMetadata == null) {
 			_valueSetDefinitionMetadata = getValueSetDefinitionMetadata();
         }
+
+		System.out.println("getValueSetDefinitionMetadata run time (ms): " + (System.currentTimeMillis() - ms));
+		ms = System.currentTimeMillis();
 
         if (_namespace2CodingScheme == null) {
             _namespace2CodingScheme = getNamespaceId2CodingSchemeFormalNameMapping();
 		}
 
+		System.out.println("getNamespaceId2CodingSchemeFormalNameMapping run time (ms): " + (System.currentTimeMillis() - ms));
+		ms = System.currentTimeMillis();
+
 		if (_defaultOntologiesToSearchOnStr == null) {
             _defaultOntologiesToSearchOnStr = getDefaultOntologiesToSearchOnStr();
 		}
+
+		System.out.println("getDefaultOntologiesToSearchOnStr run time (ms): " + (System.currentTimeMillis() - ms));
+		ms = System.currentTimeMillis();
 
 		if (_visualizationWidgetHashMap == null) {
             _visualizationWidgetHashMap = getNCBOWidgetString();
 		}
 
+		System.out.println("getNCBOWidgetString run time (ms): " + (System.currentTimeMillis() - ms));
+		ms = System.currentTimeMillis();
+
 		_api_key = NCItBrowserProperties.getNCBO_API_KEY();
 
-
+        System.out.println("updateListOfCodingSchemeVersionsUsedInResolutionHashMap ");
 		updateListOfCodingSchemeVersionsUsedInResolutionHashMap();
+		System.out.println("updateListOfCodingSchemeVersionsUsedInResolutionHashMap run time (ms): " + (System.currentTimeMillis() - ms));
+		ms = System.currentTimeMillis();
+
+		_sortedOntologies = getSortedOntologies();
+		System.out.println("getSortedOntologies run time (ms): " + (System.currentTimeMillis() - ms));
+
+		System.out.println("Total DataUtils initialization run time (ms): " + (System.currentTimeMillis() - ms0));
 	}
+
+	public static Set getVocabularyNameSet() {
+		return _vocabularyNameSet;
+	}
+
+    public static Vector getResovedValueSetVersions(String rvs_uri) {
+		return (Vector) resovedValueSetHashMap.get(rvs_uri);
+	}
+
+	public static String getValueSetName(String rvs_uri) {
+		if (!_VSDURI2NameHashMap.containsKey(rvs_uri)) return null;
+		return (String) _VSDURI2NameHashMap.get(rvs_uri);
+	}
+
+
+    public static HashMap getResolvedValueSetHashMap() {
+		if (resovedValueSetHashMap != null) return resovedValueSetHashMap;
+		HashMap hmap = new HashMap();
+		_VSDURI2NameHashMap = new HashMap();
+		try {
+			long ms = System.currentTimeMillis();
+			LexBIGService lbs = RemoteServerUtil.createLexBIGService();
+			List<CodingScheme> choices = new ArrayList<CodingScheme>();
+			LexEVSResolvedValueSetService lrvs = new LexEVSResolvedValueSetServiceImpl(lbs);
+			List<CodingScheme> schemes = lrvs.listAllResolvedValueSets();
+			for (int i = 0; i < schemes.size(); i++) {
+				CodingScheme cs = schemes.get(i);
+				int j = i+1;
+				String key = cs.getCodingSchemeURI();
+				String name = cs.getCodingSchemeName();
+				_VSDURI2NameHashMap.put(key, name);
+
+				String value = cs.getRepresentsVersion();
+				Vector v = new Vector();
+				if (hmap.containsKey(key)) {
+					v = (Vector) hmap.get(key);
+				}
+				v.add(value);
+				hmap.put(key, v);
+			}
+			System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return hmap;
+    }
+
 
 	public static void setAPIKey(String apikey) {
 		_api_key = apikey;
@@ -300,7 +411,7 @@ public class DataUtils {
 
     private static void setTerminologyValueSetDescriptionHashMap() {
 		if (_terminologyValueSetDescriptionHashMap == null) {
-			String prod_version = getVocabularyVersionByTag(Constants.TERMINOLOGY_VALUE_SET_NAME, "PRODUCTION");
+			String prod_version = getVocabularyVersionByTag(Constants.TERMINOLOGY_VALUE_SET_NAME, Constants.PRODUCTION);
 			_terminologyValueSetDescriptionHashMap = getPropertyValues(Constants.TERMINOLOGY_VALUE_SET_NAME, prod_version, "GENERIC", "Description");
 		}
 		/*
@@ -336,57 +447,45 @@ public class DataUtils {
 		return terminologyValueSetTreeStringBuffer;
 	}
 
-
-
-/*
-    public static String getDefaultOntologiesToSearchOnStr() {
-        if (_ontologies == null)
-            setCodingSchemeMap();
-
-        _defaultOntologiesToSearchOnStr = "|";
-        for (int i = 0; i < _ontologies.size(); i++) {
-            SelectItem item = (SelectItem) _ontologies.get(i);
-            String value = (String) item.getValue();
-            if (value.indexOf("Metathesaurus") == -1) {
-                _defaultOntologiesToSearchOnStr =
-                    _defaultOntologiesToSearchOnStr + value + "|";
-            }
-        }
-        return _defaultOntologiesToSearchOnStr;
-    }
-*/
-
+    public static HashMap getRVSCSURI2VersionHashMap() {
+		return _RVSCSURI2VersionHashMap;
+	}
 
     public static String getDefaultOntologiesToSearchOnStr() {
 		if (_defaultOntologiesToSearchOnStr != null) return _defaultOntologiesToSearchOnStr;
         if (_ontologies == null) setCodingSchemeMap();
+        Vector display_name_vec = getSortedOntologies();
+        StringBuffer buf = new StringBuffer();
+        buf.append("|");
+        for (int i = 0; i < display_name_vec.size(); i++) {
+		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		    if (info.getLabel().indexOf("NCI_Thesaurus") != -1 || info.getLabel().indexOf("NCI Thesaurus") != -1) {
+		        if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
+                    buf.append(info.getLabel() + "|");
+			    }
+		    }
+	    }
+	    _defaultOntologiesToSearchOnStr = buf.toString();
+	    return _defaultOntologiesToSearchOnStr;
+    }
 
-        //_defaultOntologiesToSearchOnStr = "|";
+/*
+    public static String getDefaultOntologiesToSearchOnStr() {
+		if (_defaultOntologiesToSearchOnStr != null) return _defaultOntologiesToSearchOnStr;
+        if (_ontologies == null) setCodingSchemeMap();
+
         StringBuffer buf = new StringBuffer();
         buf.append("|");
         for (int i = 0; i < _ontologies.size(); i++) {
             SelectItem item = (SelectItem) _ontologies.get(i);
             String value = (String) item.getValue();
-            /*
-            if (value.indexOf("Metathesaurus") == -1) {
-                buf.append(value + "|);");
-            }
-            */
+
             if (value.indexOf("NCI_Thesaurus") != -1 || value.indexOf("NCI Thesaurus") != -1) {
                 buf.append(value + "|");
             }
         }
         return buf.toString();//_defaultOntologiesToSearchOnStr;
     }
-
-
-/*
-    public static HashMap getFormalName2VirtualIdMap() {
-		if (_formalName2VirtualIdMap == null) {
-			_formalName2VirtualIdMap = createFormalName2VirtualIdMap();
-		}
-		return _formalName2VirtualIdMap;
-	}
 */
 
     public static HashMap getDefaultFormalName2VirtualIdMap() {
@@ -471,7 +570,8 @@ public class DataUtils {
  			String value = (String) it.next();
  			String cs = (String) _csnv2codingSchemeNameMap.get(value);
  			String version = (String) _csnv2VersionMap.get(value);
- 			HashMap hmap = MetadataUtils.getMappingDisplayHashMap(cs, version);
+ 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+ 			HashMap hmap = new MetadataUtils(lbSvc).getMappingDisplayHashMap(cs, version);
  			if (hmap != null) {
  				_mappingDisplayNameHashMap.put(cs, hmap);
  			}
@@ -482,6 +582,7 @@ public class DataUtils {
 		setCodingSchemeMap();
 	}
 
+/*
 	private static boolean isResolvedValueSetCodingScheme(CodingScheme cs) {
 		for (Property prop: cs.getProperties().getProperty()) {
 			if (prop.getPropertyName().equalsIgnoreCase(LexEVSValueSetDefinitionServices.RESOLVED_AGAINST_CODING_SCHEME_VERSION)) {
@@ -490,10 +591,33 @@ public class DataUtils {
 		}
 		return false;
 	}
+*/
+	public static boolean isResolvedValueSetCodingScheme(CodingScheme cs) {
+		if (resovedValueSetHashMap == null) {
+			resovedValueSetHashMap = getResolvedValueSetHashMap();
+		}
+		return resovedValueSetHashMap.containsKey(cs.getCodingSchemeURI());
+	}
+
+	public static AbsoluteCodingSchemeVersionReferenceList getListOfCodingSchemeVersionsUsedInResolution(LexEVSResolvedValueSetService service,
+	                CodingScheme cs) {
+        try {
+            if (service != null) {
+				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(cs);
+				return acsvr;
+		    } else {
+				System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution service == NULL???");
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
 
 	public static AbsoluteCodingSchemeVersionReferenceList getListOfCodingSchemeVersionsUsedInResolution(String codingScheme) {
         try {
-			//Vector v = new Vector();
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             if (lbSvc == null) {
                 _logger
@@ -501,15 +625,49 @@ public class DataUtils {
                 return null;
             }
             CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, null);
+
+            //System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution " + scheme.getFormalName());
+
             LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
-			AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
-			return acsvr;
+            if (service != null) {
+				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
+				return acsvr;
+		    } else {
+				System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution service == NULL???");
+			}
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			//System.out.println("getListOfCodingSchemeVersionsUsedInResolution throws exception " + codingScheme);
 		}
 		return null;
 	}
+
+	public static AbsoluteCodingSchemeVersionReferenceList getListOfCodingSchemeVersionsUsedInResolution(String codingScheme, CodingSchemeVersionOrTag vt) {
+        try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+                _logger
+                    .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+                return null;
+            }
+            CodingScheme scheme = lbSvc.resolveCodingScheme(codingScheme, vt);
+
+            //System.out.println("(*) getListOfCodingSchemeVersionsUsedInResolution " + scheme.getFormalName());
+
+            LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
+            if (service != null) {
+				AbsoluteCodingSchemeVersionReferenceList acsvr = service.getListOfCodingSchemeVersionsUsedInResolution(scheme);
+				return acsvr;
+		    }
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			//System.out.println("getListOfCodingSchemeVersionsUsedInResolution throws exception " + codingScheme);
+		}
+		return null;
+	}
+
 
 	public static Vector getRVSCSVersionsByFormalName(String RVSCS_formalname) {
 		if (!_RVSCSFormalName2VersionHashMap.containsKey(RVSCS_formalname)) return null;
@@ -525,6 +683,7 @@ public class DataUtils {
 		//LexEVSResolvedValueSetServiceImpl lexEVSResolvedValueSetService = new LexEVSResolvedValueSetServiceImpl();
 
         _logger.debug("Initializing ...");
+        _productionVersionHashMap = new HashMap();
         _source_code_schemes = new Vector();
         _codingSchemeHashSet = new HashSet();
         _ontologies = new ArrayList();
@@ -532,6 +691,7 @@ public class DataUtils {
         _csnv2codingSchemeNameMap = new HashMap();
         _csnv2VersionMap = new HashMap();
         _formalName2LocalNameHashMap = new HashMap();
+        _formalName2LocalNamesHashMap = new HashMap();
         _localName2FormalNameHashMap = new HashMap();
         _formalName2MetadataHashMap = new HashMap();
         _displayName2FormalNameHashMap = new HashMap();
@@ -561,6 +721,7 @@ public class DataUtils {
 
         try {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            LexEVSResolvedValueSetService service = new LexEVSResolvedValueSetServiceImpl(lbSvc);
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
@@ -605,6 +766,12 @@ public class DataUtils {
                 _logger.debug("(" + j + ") " + formalname + "  version: "
                     + representsVersion);
                 _logger.debug("\tActive? " + isActive);
+
+
+                Boolean bool_obj = versionHasTag(csr, Constants.PRODUCTION);
+                if (bool_obj != null && bool_obj.booleanValue()) {
+					_productionVersionHashMap.put(formalname, representsVersion);
+				}
 
                 if ((includeInactive && isActive == null)
                     || (isActive != null && isActive.equals(Boolean.TRUE))
@@ -655,11 +822,18 @@ public class DataUtils {
 
 
 							HashMap hmap = new HashMap();
-							AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(cs_name);
+							//AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(cs_name);
+
+							CodingSchemeVersionOrTag codingSchemeVersionOrTag = new CodingSchemeVersionOrTag();
+							if (cs_version != null) {
+								codingSchemeVersionOrTag.setVersion(cs_version);
+							}
+
+							//AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(cs_name, codingSchemeVersionOrTag);
+							AbsoluteCodingSchemeVersionReferenceList acsvr = getListOfCodingSchemeVersionsUsedInResolution(service, cs);
+
 							if (acsvr != null) {
 								for(AbsoluteCodingSchemeVersionReference abrefs :acsvr.getAbsoluteCodingSchemeVersionReference()){
-									//System.out.println("Coding Scheme Id: " + abrefs.getCodingSchemeURN());
-									//System.out.println("Coding Scheme Version: " + abrefs.getCodingSchemeVersion());
 									hmap.put(abrefs.getCodingSchemeURN(),  abrefs.getCodingSchemeVersion());
 								}
 								_listOfCodingSchemeVersionsUsedInResolutionHashMap.put(cs_name, hmap);
@@ -693,9 +867,9 @@ public class DataUtils {
                         }
                         _localName2FormalNameHashMap.put(cs.getCodingSchemeURI(), formalname);
                         _localName2FormalNameHashMap.put(cs.getCodingSchemeName(), formalname);
-
+                        //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
                         NameAndValue[] nvList =
-                            MetadataUtils.getMetadataProperties(cs);
+                            new MetadataUtils(lbSvc).getMetadataProperties(cs);
                         if (nvList == null || nvList.length <= 0) {
                             //_logger.warn("\t*******************************************************************");
                             _logger.warn("\t*** Warning: Metadata properties are possibly not loaded.       ***");
@@ -740,6 +914,13 @@ public class DataUtils {
 
                             _formalName2LocalNameHashMap.put(formalname,
                                 css_local_name);
+
+                            Vector localname_vec = new Vector();
+                            if (localnames != null) {
+								localname_vec = new Vector(Arrays.asList(localnames));
+							}
+							localname_vec.add(css_local_name);
+                            _formalName2LocalNamesHashMap.put(formalname, localname_vec);
 
                             _formalNameVersion2LocalNameHashMap.put(formalname + "$" + representsVersion,
                                  css_local_name);
@@ -868,6 +1049,8 @@ public class DataUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        _logger.debug("Populate ontologies... " );
         if (nv_vec.size() > 0) {
             nv_vec = SortUtils.quickSort(nv_vec);
             for (int k = 0; k < nv_vec.size(); k++) {
@@ -877,6 +1060,8 @@ public class DataUtils {
 				}
             }
         }
+
+        _logger.debug("createFormalName2NCImSABHashMap... " );
         _formalName2NCImSABHashMap = createFormalName2NCImSABHashMap();
 
         //KLO
@@ -887,15 +1072,30 @@ public class DataUtils {
         dumpHashMap(_formalName2NCImSABHashMap);
 
         setMappingDisplayNameHashMap();
+         _vocabularyNameSet = _localName2FormalNameHashMap.keySet();
 
         if (initializeValueSetHierarchy) {
+			 _logger.debug("initializeValueSetHierarchy... " );
             initializeValueSetHierarchy();
+            _logger.debug("Done initializeValueSetHierarchy... " );
 	    }
     }
 
+    public static HashMap getFormalName2DisplayNameHashMap() {
+		return _formalName2DisplayNameHashMap;
+	}
+
+    public static ValueSetHierarchy getValueSetHierarchy() {
+		return valueSetHierarchy;
+	}
+
     private static void initializeValueSetHierarchy() {
 		//if (hasNoValueSet || valueSetHierarchyInitialized) return;
+
+
 		if (valueSetHierarchyInitialized) return;
+		long ms_0 = System.currentTimeMillis();
+		long ms = System.currentTimeMillis();
 
 		_VSDName2URIHashMap = getVSDName2URIHashMap();
 
@@ -909,27 +1109,54 @@ public class DataUtils {
 		_logger.debug("Done Initializing Value Set Metadata ...");
 		_logger.debug("\tInitializing ValueSetHierarchy ...");
 
-		//System.out.println("\tpreprocessSourceHierarchyData ...");
-		ValueSetHierarchy.preprocessSourceHierarchyData();
-		//System.out.println("\tgetValueSetParticipationHashSet ...");
-		ValueSetHierarchy.getValueSetParticipationHashSet();
-		//System.out.println("\tcreateVSDSource2VSDsMap ...");
-		ValueSetHierarchy.createVSDSource2VSDsMap();
-		//System.out.println("\tinitializeCS2vsdURIsMap ...");
-		ValueSetHierarchy.initializeCS2vsdURIs_map();
-		_logger.debug("\tDone initializing ValueSetHierarchy ...");
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
-		valueSetHierarchyInitialized = true;
-		sourceValueSetTree = ValueSetHierarchy.getSourceValueSetTree(null, null);
+
+        //ValueSetHierarchy valueSetHierarchy = new ValueSetHierarchy(lbSvc,
+        valueSetHierarchy = new ValueSetHierarchy(lbSvc,
+                                   vsd_service,
+                                   _localName2FormalNameHashMap,
+                                   _codingSchemeName2URIHashMap);
+
+
+
+		valueSetHierarchy.preprocessSourceHierarchyData();
+		System.out.println("valueSetHierarchy.getValueSetParticipationHashSet() ...");
+		_valueSetParticipationHashSet = valueSetHierarchy.getValueSetParticipationHashSet();
+		System.out.println("Done valueSetHierarchy.getValueSetParticipationHashSet() ...");
+		//valueSetHierarchy.createVSDSource2VSDsMap();
+        //System.out.println("Done valueSetHierarchy.initializeCS2vsdURIs_map() ...");
+
+        System.out.println("valueSetHierarchy.initializeCS2vsdURIs_map() ...");
+		valueSetHierarchy.initializeCS2vsdURIs_map();
+		_logger.debug("Done initializing initializeCS2vsdURIs_map ...");
+
+		//valueSetHierarchyInitialized = true;
+
+        System.out.println("Constructing sourceValueSetTree ...");
+        ms = System.currentTimeMillis();
+		sourceValueSetTree = valueSetHierarchy.getSourceValueSetTree(null, null);
 		if (sourceValueSetTree == null) {
 			_logger.debug("\t(*) sourceValueSetTree == null??? ...");
 		} else {
 			TreeItem root = (TreeItem) sourceValueSetTree.get("<Root>");
 			sourceValueSetTreeStringBuffer = new StringBuffer();
-			new ValueSetCacheUtils().printTree(sourceValueSetTreeStringBuffer, root, Constants.STANDARD_VIEW, Boolean.TRUE);
+			//new ValueSetCacheUtils().printTree(sourceValueSetTreeStringBuffer, root, Constants.STANDARD_VIEW, Boolean.TRUE);
+			SimpleTreeUtils stu = new SimpleTreeUtils(_vocabularyNameSet);
+            sourceValueSetTreeStringBuffer = stu.getValueSetTreeStringBuffer(sourceValueSetTree);
+            //System.out.println(sourceValueSetTreeStringBuffer);
+            //sourceValueSetCheckboxid2NodeIdMap = stu.getCheckboxid2NodeIdMap();
 	    }
 
-		terminologyValueSetTree = ValueSetHierarchy.getCodingSchemeValueSetTree(null, null);
+		//terminologyValueSetCheckboxid2NodeIdMap = stu_2.getCheckboxid2NodeIdMap();
+
+		createSourceValueSetTreeKey2TreeItemMap();
+		System.out.println("sourceValueSetTree run time (ms): " + (System.currentTimeMillis() - ms));
+
+        System.out.println("Constructing terminologyValueSetTree ...");
+        ms = System.currentTimeMillis();
+		terminologyValueSetTree = valueSetHierarchy.getCodingSchemeValueSetTree(null, null);
 		/*
 		if (terminologyValueSetTree == null) {
 			_logger.debug("\t(*) terminologyValueSetTree == null??? ...");
@@ -941,14 +1168,25 @@ public class DataUtils {
 	    */
 		TreeItem root = (TreeItem) terminologyValueSetTree.get("<Root>");
 		terminologyValueSetTreeStringBuffer = new StringBuffer();
-		new ValueSetCacheUtils().printTree(terminologyValueSetTreeStringBuffer, root, Constants.TERMINOLOGY_VIEW, Boolean.TRUE);
 
-		createSourceValueSetTreeKey2TreeItemMap();
+		// new ValueSetCacheUtils().printTree(terminologyValueSetTreeStringBuffer, root, Constants.TERMINOLOGY_VIEW, Boolean.TRUE);
+        SimpleTreeUtils stu_2 = new SimpleTreeUtils(_vocabularyNameSet);
+		terminologyValueSetTreeStringBuffer = stu_2.getValueSetTreeStringBuffer(terminologyValueSetTree);
+		//System.out.println(terminologyValueSetTreeStringBuffer);
+		System.out.println("terminologyValueSetTree run time (ms): " + (System.currentTimeMillis() - ms));
+
 		setTerminologyValueSetDescriptionHashMap();
+		valueSetHierarchyInitialized = true;
+		System.out.println("initializeValueSetHierarchy run time (ms): " + (System.currentTimeMillis() - ms_0));
+
 	}
 
 //////////////////////////////////////////////////////////
 // to be modified
+    public static HashSet get_valueSetParticipationHashSet() {
+		return _valueSetParticipationHashSet;
+	}
+
 
     public static TreeItem getSourceValueSetTreeItem(String node_id) {
 		String vsd_name = null;
@@ -1033,6 +1271,16 @@ public class DataUtils {
 		return terminologyValueSetTree;
 	}
 
+
+    public static String getProductionVersion(String scheme) {
+		if (scheme == null) return null;
+		String formalName = getFormalName(scheme);
+		Object value = _productionVersionHashMap.get(formalName);
+		if (value == null) return null;
+		return (String) value;
+	}
+
+
     public static String getMetadataValue(String scheme, String propertyName) {
 		//032014
 		String formalName = getFormalName(scheme);
@@ -1057,7 +1305,8 @@ public class DataUtils {
         if (metadata == null || metadata.size() == 0) {
             return null;
         }
-        Vector v = MetadataUtils.getMetadataValues(metadata, propertyName);
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        Vector v = new MetadataUtils(lbSvc).getMetadataValues(metadata, propertyName);
         return v;
     }
 
@@ -1087,7 +1336,8 @@ public class DataUtils {
         if (metadata == null || metadata.size() == 0) {
             return null;
         }
-        Vector v = MetadataUtils.getMetadataValues(metadata, propertyName);
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        Vector v = new MetadataUtils(lbSvc).getMetadataValues(metadata, propertyName);
         return v;
     }
 
@@ -1108,9 +1358,14 @@ public class DataUtils {
         }
 
         String value = (String) _formalName2LocalNameHashMap.get(key);
-//        Utils.debugHashMap("DataUtils.getFormalName: " + key,
-//        	_formalName2LocalNameHashMap, "value: " + value);
         return value;
+    }
+
+    public static Vector getLocalNames(String key) {
+        if (_formalName2LocalNamesHashMap == null) {
+            setCodingSchemeMap();
+        }
+        return (Vector) _formalName2LocalNamesHashMap.get(key);
     }
 
     public static String getFormalName(String key) {
@@ -1357,15 +1612,13 @@ public class DataUtils {
     public static Entity getConceptByCode(String codingSchemeName, String vers, String code) {
         try {
 			if (code == null) {
-				//System.out.println("Input error in DataUtils.getConceptByCode -- code is null.");
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
 
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
-                //System.out.println("lbSvc == null???");
-                return null;
+               return null;
             }
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             if (vers != null) versionOrTag.setVersion(vers);
@@ -1384,7 +1637,6 @@ public class DataUtils {
 				}
 
                 if (cns == null) {
-					//System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
 					return null;
 				}
 
@@ -1397,8 +1649,7 @@ public class DataUtils {
 				}
 
                 if (matches == null) {
-                    //System.out.println("Concept not found.");
-                    return null;
+                   return null;
                 }
                 int count = matches.getResolvedConceptReferenceCount();
                 // Analyze the result ...
@@ -1435,15 +1686,13 @@ public class DataUtils {
     public static String getNamespaceByCode(String codingSchemeName, String vers, String code) {
         try {
 			if (code == null) {
-				//System.out.println("Input error in DataUtils.getNamespaceByCode -- code is null.");
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
 
             LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
-                //System.out.println("lbSvc == null???");
-                return null;
+               return null;
             }
             CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
             if (vers != null) versionOrTag.setVersion(vers);
@@ -1462,7 +1711,6 @@ public class DataUtils {
 				}
 
                 if (cns == null) {
-					//System.out.println("getConceptByCode getCodingSchemeConcepts returns null??? " + codingSchemeName);
 					return null;
 				}
 
@@ -1475,7 +1723,6 @@ public class DataUtils {
 				}
 
                 if (matches == null) {
-                    //System.out.println("Concept not found.");
                     return null;
                 }
                 int count = matches.getResolvedConceptReferenceCount();
@@ -1509,7 +1756,8 @@ public class DataUtils {
 
     public static Entity getConceptByCode(String codingSchemeName,
         String vers, String ltag, String code) {
-        return SearchUtils.matchConceptByCode(codingSchemeName, vers, code,
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        return new SearchUtils(lbSvc).matchConceptByCode(codingSchemeName, vers, code,
             null, "LuceneQuery");
             //null, "exactMatch");
     }
@@ -1808,13 +2056,6 @@ public class DataUtils {
 
     public static String getVersion(String scheme) {
         String info = getReleaseDate(scheme);
-        // String version = getVocabularyVersionByTag(scheme, "PRODUCTION");
-/*
-        String full_name = DataUtils.getMetadataValue(scheme, "full_name");
-        if (full_name == null || full_name.compareTo("null") == 0) {
-            full_name = scheme;
-		}
-*/
 
         String version =
             getMetadataValue(scheme, "term_browser_version");
@@ -1890,7 +2131,6 @@ if (codingSchemeName == null) {
             LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
 if (lbSvc == null) {
-	//System.out.println("lbSvc == null ??? " + ltag);
 	return null;
 }
 
@@ -1932,68 +2172,13 @@ if (lbSvc == null) {
         }
         //_logger.warn("Version corresponding to tag " + ltag + " is not found "
          //   + " in " + codingSchemeName);
-        if (ltag != null && ltag.compareToIgnoreCase("PRODUCTION") == 0
+        if (ltag != null && ltag.compareToIgnoreCase(Constants.PRODUCTION) == 0
             & knt == 1) {
             //_logger.warn("\tUse " + version + " as default.");
             return version;
         }
         return null;
     }
-
-/*
-    public static String getVocabularyVersionByTag(String codingSchemeName,
-        String ltag) {
-        if (codingSchemeName == null)
-            return null;
-        String version = null;
-        int knt = 0;
-        try {
-            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-            CodingSchemeRenderingList lcsrl = lbSvc.getSupportedCodingSchemes();
-            CodingSchemeRendering[] csra = lcsrl.getCodingSchemeRendering();
-            for (int i = 0; i < csra.length; i++) {
-                CodingSchemeRendering csr = csra[i];
-                CodingSchemeSummary css = csr.getCodingSchemeSummary();
-                if (css.getFormalName().compareTo(codingSchemeName) == 0
-                    || css.getLocalName().compareTo(codingSchemeName) == 0
-                    || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
-					version = css.getRepresentsVersion();
-                    knt++;
-
-                    if (ltag == null)
-                        return version;
-                    RenderingDetail rd = csr.getRenderingDetail();
-                    CodingSchemeTagList cstl = rd.getVersionTags();
-                    java.lang.String[] tags = cstl.getTag();
-                    // KLO, 102409
-                    if (tags == null)
-                        return version;
-
-                    if (tags != null && tags.length > 0) {
-                        for (int j = 0; j < tags.length; j++) {
-                            String version_tag = (String) tags[j];
-
-                            if (version_tag != null && version_tag.compareToIgnoreCase(ltag) == 0) {
-                                return version;
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        _logger.warn("Version corresponding to tag " + ltag + " is not found "
-            + " in " + codingSchemeName);
-        if (ltag != null && ltag.compareToIgnoreCase("PRODUCTION") == 0
-            & knt == 1) {
-            _logger.warn("\tUse " + version + " as default.");
-            return version;
-        }
-        return null;
-    }
-*/
-
 
     public static Vector<String> getVersionListData(String codingSchemeName) {
 
@@ -2123,7 +2308,7 @@ if (lbSvc == null) {
     }
 */
 
-    protected static CodingScheme getCodingScheme(String codingScheme,
+    public static CodingScheme getCodingScheme(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag) throws LBException {
 
         CodingScheme cs = null;
@@ -2472,7 +2657,6 @@ if (lbSvc == null) {
 		Entity concept = getConceptByCode(scheme, version, null, code);
 		if (concept == null) {
 			if (!isMapping) {
-				//System.out.println("*** WARNING: concept not found in: " + scheme + " version: " + version + " code: " + code);
 				return null;
 		    }
 		} else {
@@ -2501,8 +2685,10 @@ if (lbSvc == null) {
         HashMap map = new HashMap();
 
         // Exclude hierarchical relationships:
+		TreeUtils treeUtils = new TreeUtils(lbSvc);
+
         String[] associationsToNavigate =
-            TreeUtils.getAssociationsToNavigate(scheme, version);
+            treeUtils.getAssociationsToNavigate(scheme, version);
         Vector w = new Vector();
         if (associationsToNavigate != null) {
             for (int k = 0; k < associationsToNavigate.length; k++) {
@@ -2512,7 +2698,7 @@ if (lbSvc == null) {
 
          // superconcepts:
 		if (!isMapping) {
-				HashMap hmap_super = TreeUtils.getSuperconcepts(scheme, version, code);
+				HashMap hmap_super = treeUtils.getSuperconcepts(scheme, version, code);
 				if (hmap_super != null) {
 					TreeItem ti = (TreeItem) hmap_super.get(code);
 					if (ti != null) {
@@ -2545,7 +2731,7 @@ if (lbSvc == null) {
         // subconcepts:
 		if (!isMapping) {
 				subconceptList =
-					TreeUtils.getSubconceptNamesAndCodes(scheme, version, code);
+					new TreeUtils(lbSvc).getSubconceptNamesAndCodes(scheme, version, code);
 				//KLO
 				//Collections.sort(subconceptList);
 				SortUtils.quickSort(subconceptList);
@@ -3696,16 +3882,16 @@ if (lbSvc == null) {
 
     public void dumpRelationshipHashMap(HashMap hmap) {
         ArrayList superconcepts =
-            (ArrayList) hmap.get(DataUtils.TYPE_SUPERCONCEPT);
-        ArrayList subconcepts = (ArrayList) hmap.get(DataUtils.TYPE_SUBCONCEPT);
-        ArrayList roles = (ArrayList) hmap.get(DataUtils.TYPE_ROLE);
+            (ArrayList) hmap.get(TYPE_SUPERCONCEPT);
+        ArrayList subconcepts = (ArrayList) hmap.get(TYPE_SUBCONCEPT);
+        ArrayList roles = (ArrayList) hmap.get(TYPE_ROLE);
         ArrayList associations =
-            (ArrayList) hmap.get(DataUtils.TYPE_ASSOCIATION);
+            (ArrayList) hmap.get(TYPE_ASSOCIATION);
 
         ArrayList inverse_roles =
-            (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ROLE);
+            (ArrayList) hmap.get(TYPE_INVERSE_ROLE);
         ArrayList inverse_associations =
-            (ArrayList) hmap.get(DataUtils.TYPE_INVERSE_ASSOCIATION);
+            (ArrayList) hmap.get(TYPE_INVERSE_ASSOCIATION);
         ArrayList concepts = null;
 
         concepts = superconcepts;
@@ -3716,7 +3902,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3725,7 +3911,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3740,7 +3926,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3749,7 +3935,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3764,7 +3950,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3773,7 +3959,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3787,7 +3973,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3796,7 +3982,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3811,7 +3997,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3820,7 +4006,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3834,7 +4020,7 @@ if (lbSvc == null) {
         //} else if (concepts != null && concepts.size() == 1) {
 		} else if (concepts.size() == 1) {
             String s = (String) concepts.get(0);
-            Vector ret_vec = DataUtils.parseData(s, "|");
+            Vector ret_vec = parseData(s, "|");
             String cName = (String) ret_vec.elementAt(0);
             String cCode = (String) ret_vec.elementAt(1);
 
@@ -3843,7 +4029,7 @@ if (lbSvc == null) {
             _logger.debug(label);
             for (int i = 0; i < concepts.size(); i++) {
                 String s = (String) concepts.get(i);
-                Vector ret_vec = DataUtils.parseData(s, "|");
+                Vector ret_vec = parseData(s, "|");
                 String cName = (String) ret_vec.elementAt(0);
                 String cCode = (String) ret_vec.elementAt(1);
                 _logger.debug("\t" + " " + cName + "(" + cCode + ")");
@@ -3899,7 +4085,7 @@ if (lbSvc == null) {
             if (status_vec == null || status_vec.size() == 0) {
                 con_status = c.getStatus();
             } else {
-                con_status = DataUtils.convertToCommaSeparatedValue(status_vec);
+                con_status = convertToCommaSeparatedValue(status_vec);
             }
             return con_status;
         }
@@ -3928,7 +4114,7 @@ if (lbSvc == null) {
                         con_status = c.getStatus();
                     } else {
                         con_status =
-                            DataUtils.convertToCommaSeparatedValue(status_vec);
+                            convertToCommaSeparatedValue(status_vec);
                     }
                     w.add(con_status);
                 } else {
@@ -3972,18 +4158,7 @@ if (lbSvc == null) {
         return (String) _displayName2FormalNameHashMap.get(s);
     }
 
-    public static void main(String[] args) {
-        String scheme = "NCI Thesaurus";
-        String version = null;
-        // Breast Carcinoma (Code C4872)
-        String code = "C4872";
 
-        DataUtils test = new DataUtils();
-
-        HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
-        test.dumpRelationshipHashMap(hmap);
-
-    }
 
     // [#25034] Remove hyperlink from instances on the Relationship tab. (KLO,
     // 121709)
@@ -4402,7 +4577,6 @@ if (lbSvc == null) {
 */
 
     private static void dumpHashMap(HashMap<String, String> hmap) {
-		_logger.warn("\n\n");
 		if (hmap == null) return;
 
 		Set<Map.Entry<String, String>> set = hmap.entrySet();
@@ -4517,7 +4691,6 @@ if (lbSvc == null) {
 
             boolean isMappingCS = mappingExtension.isMappingCodingScheme(scheme, csvt);
             Boolean bool_obj = Boolean.valueOf(isMappingCS);//   new Boolean(isMappingCS);
-
 
 			_isMappingHashMap.put(scheme, bool_obj);
 			return isMappingCS;
@@ -4883,7 +5056,6 @@ if (lbSvc == null) {
 				}
 			}
 			if (relationsContainerName == null) {
-				//System.out.println("WARNING: Mapping container not found in " + scheme);
 				return null;
 			}
 
@@ -4919,7 +5091,6 @@ if (lbSvc == null) {
 			Relations[] relations = cs.getRelations();
 			for (int i = 0; i < relations.length; i++) {
 				Relations relation = relations[i];
-				//System.out.println(relation.getContainerName());
                 Boolean isMapping = relation.isIsMapping();
                 if (isMapping != null && isMapping.equals(Boolean.TRUE)) {
 					AssociationPredicate[] associationPredicates = relation.getAssociationPredicate();
@@ -5005,7 +5176,6 @@ if (lbSvc == null) {
 			int maxToReturn = 1000;
             ResolvedConceptReferenceList rcrl = cns.resolveToList(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects, maxToReturn);
 
-            //System.out.println("Number of concept domains: " + rcrl.getResolvedConceptReferenceCount());
             for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
 				ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
 				Entity entity = rcr.getReferencedEntry();
@@ -5037,6 +5207,11 @@ if (lbSvc == null) {
 	public static Vector getValueSetURIs() {
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
+
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
 			String t = (String) list.get(i);
@@ -5056,6 +5231,10 @@ if (lbSvc == null) {
 		String valueSetDefinitionRevisionId = null;
 		try {
 			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			if (vsd_service == null) {
+				System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+				return null;
+			}
 			ValueSetDefinition vsd = vsd_service.getValueSetDefinition(new URI(uri), valueSetDefinitionRevisionId);
 			return vsd;
 		} catch (Exception ex) {
@@ -5068,6 +5247,10 @@ if (lbSvc == null) {
 	public static Vector getValueSetNamesAndURIs() {
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
 			String t = (String) list.get(i);
@@ -5093,6 +5276,10 @@ if (lbSvc == null) {
 	public static HashMap getVSDName2URIHashMap() {
 		HashMap vSDName2URIHashMap = new HashMap();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
@@ -5106,7 +5293,12 @@ if (lbSvc == null) {
 
 	public static String getValueSetDefinitionURIByName(String vsd_name) {
 		//Vector v = new Vector();
+
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         for (int i=0; i<list.size(); i++) {
 			String uri = (String) list.get(i);
@@ -5120,7 +5312,8 @@ if (lbSvc == null) {
 	}
 
 
-    public static String valueSetDefiniionURI2Name(String vsd_uri) {
+    //public static String valueSetDefiniionURI2Name(String vsd_uri) {
+	public static String valueSetDefinitionURI2Name(String vsd_uri) {
 		String metadata = getValueSetDefinitionMetadata(vsd_uri);
 		Vector v = parseData(metadata);
 		return (String) v.elementAt(0);
@@ -5213,78 +5406,26 @@ if (lbSvc == null) {
 	}
 
 
-/*
-    public static Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
-		try {
-			java.net.URI valueSetDefinitionURI = new URI(uri);
-			Vector v = new Vector();
-			try {
-				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-				AbsoluteCodingSchemeVersionReferenceList codingSchemes =
-					vsd_service.getCodingSchemesInValueSetDefinition(valueSetDefinitionURI);
-
-                if (codingSchemes != null) {
-					//output is all of the mapping ontologies that this code participates in.
-					for(AbsoluteCodingSchemeVersionReference ref : codingSchemes.getAbsoluteCodingSchemeVersionReference()){
-						v.add(ref.getCodingSchemeURN());
-					}
-					return SortUtils.quickSort(v);
-			    } else {
-					//System.out.println("WARNING: DataUtils.getCodingSchemeURNsInValueSetDefinition returns null (URI: "
-					//   + uri + ").");
-				}
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			return v;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
-*/
-
 //===========================================================================================================================
 // Value Set Hierarchy
 //===========================================================================================================================
 
     public static ResolvedConceptReferenceList getValueSetHierarchyRoots() {
         String scheme = "Terminology Value Set";
-        String version = getVocabularyVersionByTag(scheme, "PRODUCTION");
-        ResolvedConceptReferenceList rcrl = TreeUtils.getHierarchyRoots(scheme, version);
+        String version = getVocabularyVersionByTag(scheme, Constants.PRODUCTION);
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        TreeUtils treeUtils = new TreeUtils(lbSvc);
+        ResolvedConceptReferenceList rcrl = treeUtils.getHierarchyRoots(scheme, version);
 
         if (rcrl == null) {
 			scheme = "Terminology_Value_Set.owl";
-			version = getVocabularyVersionByTag(scheme, "PRODUCTION");
-			rcrl = TreeUtils.getHierarchyRoots(scheme, version);
+			version = getVocabularyVersionByTag(scheme, Constants.PRODUCTION);
+			rcrl = treeUtils.getHierarchyRoots(scheme, version);
 		}
 
 
         return rcrl;
 	}
-
-/*
-	public static void geValueSetHierarchy(HashMap hmap, Vector v) {
-
-    }
-
-	public static void geValueSetHierarchy() {
-        HashMap hmap = new HashMap();
-        ResolvedConceptReferenceList roots = getValueSetHierarchyRoots();
-
-        if (roots == null) return;
-
-        Vector v = new Vector();
-        for (int i=0; i<roots.getResolvedConceptReferenceCount(); i++) {
-			ResolvedConceptReference rcr = roots.getResolvedConceptReference(i);
-			v.add(rcr);
-		}
-        geValueSetHierarchy(hmap, v);
-	}
-*/
-
-
 
     public static Vector getValueSetDefinitionsBySource(String source) {
 		if (_availableValueSetDefinitionSources != null) {
@@ -5292,6 +5433,10 @@ if (lbSvc == null) {
 		}
 		Vector v = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         if (list == null) return null;
         for (int i=0; i<list.size(); i++) {
@@ -5312,39 +5457,16 @@ if (lbSvc == null) {
 	}
 
 
-/*
-    public static Vector getAvailableValueSetDefinitionSources() {
-		if (_availableValueSetDefinitionSources != null) return _availableValueSetDefinitionSources;
-
-		_availableValueSetDefinitionSources = new Vector();
-		HashSet hset = new HashSet();
-		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-        List list = vsd_service.listValueSetDefinitionURIs();
-        if (list == null) return null;
-        for (int i=0; i<list.size(); i++) {
-			String uri = (String) list.get(i);
-			ValueSetDefinition vsd = findValueSetDefinitionByURI(uri);
-			java.util.Enumeration<? extends Source> sourceEnum = vsd.enumerateSource();
-
-			while (sourceEnum.hasMoreElements()) {
-				Source src = (Source) sourceEnum.nextElement();
-				String src_str = src.getContent();
-				if (!hset.contains(src_str)) {
-					hset.add(src_str);
-					_availableValueSetDefinitionSources.add(src_str);
-				}
-			}
-		}
-		return SortUtils.quickSort(_availableValueSetDefinitionSources);
-	}
-*/
-
     public static Vector getAvailableValueSetDefinitionSources() {
 		if (_availableValueSetDefinitionSources != null) return _availableValueSetDefinitionSources;
 
 		Vector availableValueSetDefinitionSources = new Vector();
 		HashSet hset = new HashSet();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
         List list = vsd_service.listValueSetDefinitionURIs();
         if (list == null) return null;
         for (int i=0; i<list.size(); i++) {
@@ -5381,6 +5503,11 @@ if (lbSvc == null) {
 		if (_valueSetDefinitionMetadata != null) return _valueSetDefinitionMetadata;
 		Vector valueSetDefinitionMetadata = new Vector();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+		if (vsd_service == null) {
+			System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+			return null;
+		}
+
 		try {
 			List list = vsd_service.listValueSetDefinitionURIs();
 			if (list == null || list.size() == 0) return null;
@@ -5400,6 +5527,7 @@ if (lbSvc == null) {
 
 
 	public static String getValueSetDefinitionMetadata(String vsd_uri) {
+		if (vsd_uri == null) return null;
 		ValueSetDefinition vsd = findValueSetDefinitionByURI(vsd_uri);
 		if (vsd == null) return null;
 		return getValueSetDefinitionMetadata(vsd);
@@ -5549,7 +5677,7 @@ if (lbSvc == null) {
     public static Vector getCodingSchemeReferencesInValueSetDefinition(String uri) {
 		HashSet hset = new HashSet();
 	    if (uri.indexOf("|") != -1) {
-			Vector u = DataUtils.parseData(uri);
+			Vector u = parseData(uri);
 			uri = (String) u.elementAt(1);
 		}
 
@@ -5589,7 +5717,7 @@ if (lbSvc == null) {
 		AbsoluteCodingSchemeVersionReferenceList list = new AbsoluteCodingSchemeVersionReferenceList();
 		for (int i=0; i<v.size(); i++) {
 			String s = (String) v.elementAt(i);
-			Vector u = DataUtils.parseData(s);
+			Vector u = parseData(s);
 			String uri = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
 			AbsoluteCodingSchemeVersionReference vAbsoluteCodingSchemeVersionReference
@@ -5819,7 +5947,7 @@ if (lbSvc == null) {
 
 			ArrayList alist = (ArrayList) csnv2codesMap.get(key);
 
-			Vector u = DataUtils.parseData(key, "$");
+			Vector u = parseData(key, "$");
 			String scheme = (String) u.elementAt(0);
 			String version = (String) u.elementAt(1);
 			CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
@@ -5900,7 +6028,7 @@ if (lbSvc == null) {
                     || css.getLocalName().compareTo(codingSchemeName) == 0
                     || css.getCodingSchemeURI().compareTo(codingSchemeName) == 0) {
 
-					if (version == null) return "PRODUCTION";
+					if (version == null) return Constants.PRODUCTION;
 
 					String representsVersion = css.getRepresentsVersion();
 
@@ -5964,12 +6092,17 @@ if (lbSvc == null) {
 		return false;
 	}
 
+    public static boolean isNullOrEmpty(Vector v) {
+		if (v == null || v.size() == 0) return true;
+		return false;
+	}
+
 	public static Vector getNonProductionOntologies(Vector v, String scheme) {
 		Vector u = new Vector();
 		for (int i = 0; i < v.size(); i++) {
 			OntologyInfo info = (OntologyInfo) v.elementAt(i);
 			if (scheme.compareTo(info.getCodingScheme()) == 0) {
-				if (DataUtils.isNull(info.getTag()) || info.getTag().compareToIgnoreCase("PRODUCTION") != 0) {
+				if (isNull(info.getTag()) || info.getTag().compareToIgnoreCase(Constants.PRODUCTION) != 0) {
 					u.add(info);
 				}
 			}
@@ -5987,7 +6120,7 @@ if (lbSvc == null) {
         Collections.sort(v, new OntologyInfo.ComparatorImpl());
 		for (int i = 0; i < v.size(); i++) {
 			OntologyInfo info = (OntologyInfo) v.elementAt(i);
-			if (!DataUtils.isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
+			if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
 				u.add(info);
 			    if (info.getExpanded()) {
 					Vector w = getNonProductionOntologies(v, info.getCodingScheme());
@@ -6214,21 +6347,25 @@ if (lbSvc == null) {
     private static void updateListOfCodingSchemeVersionsUsedInResolutionHashMap() {
 		if (_listOfCodingSchemeVersionsUsedInResolutionHashMap == null) return;
 
-		Iterator it = _listOfCodingSchemeVersionsUsedInResolutionHashMap.keySet().iterator();
-		while (it.hasNext()) {
-			String cs_name = (String) it.next();
-			HashMap hmap = (HashMap) _listOfCodingSchemeVersionsUsedInResolutionHashMap.get(cs_name);
-			//Iterator it2 = hmap.keySet().iterator();
-			Iterator it2 = hmap.entrySet().iterator();
-			while (it2.hasNext()) {
-				//String uri = (String) it2.next();
-				//String version = (String) hmap.get(uri);
-				Entry entry = (Entry) it2.next();
-				String uri = (String) entry.getKey();
-				String version = (String) entry.getValue();
-				String coding_scheme_name = (String) _uri2CodingSchemeNameHashMap.get(uri);
-				hmap.put(coding_scheme_name, version);
+		try {
+			Iterator it = _listOfCodingSchemeVersionsUsedInResolutionHashMap.keySet().iterator();
+			while (it.hasNext()) {
+				String cs_name = (String) it.next();
+				HashMap hmap = (HashMap) _listOfCodingSchemeVersionsUsedInResolutionHashMap.get(cs_name);
+				if (hmap == null) hmap = new HashMap();
+				Iterator it2 = hmap.entrySet().iterator();
+				while (it2.hasNext()) {
+					Entry entry = (Entry) it2.next();
+					String uri = (String) entry.getKey();
+					String version = (String) entry.getValue();
+					String coding_scheme_name = (String) _uri2CodingSchemeNameHashMap.get(uri);
+					hmap.put(coding_scheme_name, version);
+				}
+				//KLO, 081114
+				_listOfCodingSchemeVersionsUsedInResolutionHashMap.put(cs_name, hmap);
 			}
+		} catch (Exception ex) {
+			System.out.println("WARNING: updateListOfCodingSchemeVersionsUsedInResolutionHashMap throws exceptions.");
 		}
 	}
 
@@ -6339,6 +6476,11 @@ if (lbSvc == null) {
 
 	public static String getCSName(String vocabularyName) {
         if (_uri2CodingSchemeNameHashMap == null) setCodingSchemeMap();
+        //KLO, 08182015
+        if (vocabularyName == null) return null;
+        if (vocabularyName.indexOf("%20") != -1) {
+			vocabularyName = vocabularyName.replaceAll("%20", " ");
+		}
 		String formalname = getFormalName(vocabularyName);
 		if (_uri2CodingSchemeNameHashMap.get(formalname) == null) return formalname;
 		String t = (String) _uri2CodingSchemeNameHashMap.get(formalname);
@@ -6488,7 +6630,7 @@ if (lbSvc == null) {
 
     public static String encodeTerm(String s) {
 		if (s == null) return null;
-		if (StringUtils.isAlphanumeric(s)) return s;
+		if (gov.nih.nci.evs.browser.utils.StringUtils.isAlphanumeric(s)) return s;
 
         StringBuilder buf = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {
@@ -6507,7 +6649,7 @@ if (lbSvc == null) {
 // (whilespace after &lt; is intentional)
     public static String encode_term(String s) {
 		if (s == null) return null;
-		if (StringUtils.isAlphanumeric(s)) return s;
+		if (gov.nih.nci.evs.browser.utils.StringUtils.isAlphanumeric(s)) return s;
         StringBuilder buf = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -6533,6 +6675,11 @@ if (lbSvc == null) {
 		try {
 			java.net.URI valueSetDefinitionURI = new URI(uri);
 			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+			if (vsd_service == null) {
+				System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+				return null;
+			}
+
 	        ValueSetDefinition vsd = vsd_service.getValueSetDefinition(valueSetDefinitionURI, null);
 	        Mappings mappings = vsd.getMappings();
             SupportedCodingScheme[] supportedCodingSchemes = mappings.getSupportedCodingScheme();
@@ -6548,5 +6695,381 @@ if (lbSvc == null) {
 		}
 		return SortUtils.quickSort(v);
    }
+
+   public static Vector uri2CodingSchemeName(Vector uri_vec) {
+	    if (uri_vec == null) return null;
+	    Vector u = new Vector();
+	    for (int i=0; i<uri_vec.size(); i++) {
+			String uri = (String) uri_vec.elementAt(i);
+			String name = (String) _VSDURI2NameHashMap.get(uri);
+			u.add(name);
+		}
+		return u;
+   }
+
+
+   public static Vector getSortedOntologies() {
+	   if (_sortedOntologies != null) return _sortedOntologies;
+
+	   Vector display_name_vec = new Vector();
+	   List ontology_list = getOntologyList();
+	   int num_vocabularies = ontology_list.size();
+
+	   for (int i = 0; i < ontology_list.size(); i++) {
+			SelectItem item = (SelectItem) ontology_list.get(i);
+			String value = (String) item.getValue();
+			String label = (String) item.getLabel();
+
+			String scheme = key2CodingSchemeName(value);
+			String short_scheme_name = uri2CodingSchemeName(scheme);
+
+			String version = key2CodingSchemeVersion(value);
+			String display_name = getMetadataValue(short_scheme_name, version, "display_name");
+			if (isNull(display_name)) {
+			   display_name = getLocalName(scheme);
+			}
+			String sort_category = getMetadataValue(scheme, version, "vocabulary_sort_category");
+			if (sort_category == null) {
+				sort_category = "0";
+			}
+
+
+    //public OntologyInfo(String codingScheme, String displayName, String version, String tag, String label, String sortCategory) {
+		    String tag = null;
+		    String productionVersion = getProductionVersion(short_scheme_name);
+		    if (version.compareTo(productionVersion) == 0) {
+				tag = "PRODUCTION";
+			}
+
+	        OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, tag, label, sort_category);
+			display_name_vec.add(info);
+	   }
+
+	   for (int i = 0; i < display_name_vec.size(); i++) {
+		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		    if (!isNull(info.getTag()) && info.getTag().compareToIgnoreCase(Constants.PRODUCTION) == 0) {
+			    Vector w = getNonProductionOntologies(display_name_vec, info.getCodingScheme());
+			    if (w.size() > 0) {
+			        info.setHasMultipleVersions(true);
+			    }
+		    }
+	   }
+	   return display_name_vec;
+    }
+
+
+    public static Vector getNCImCodes(String scheme, String version, String code) {
+        Vector w = new Vector();
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null) {
+			csvt.setVersion(version);
+		}
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			if (lbSvc == null) {
+				_logger
+					.warn("WARNING: Unable to connect to instantiate LexBIGService ???");
+				return null;
+			}
+
+			ConceptReferenceList crefs = ConvenienceMethods.createConceptReferenceList(new String[] { code }, scheme);
+			CodedNodeSet cns = lbSvc.getCodingSchemeConcepts(scheme, csvt);
+
+			if (cns == null) {
+				return null;
+			}
+			cns = cns.restrictToStatus(ActiveOption.ALL, null);
+			cns = cns.restrictToCodes(crefs);
+			ResolvedConceptReferenceList matches = cns.resolveToList(null, null, null, 1);
+			if (matches.getResolvedConceptReferenceCount() > 0) {
+				ResolvedConceptReference ref = (ResolvedConceptReference) matches.enumerateResolvedConceptReference()
+						.nextElement();
+				Entity node = ref.getEntity();
+				return getNCImCodes(node);
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return w;
+    }
+
+
+    public static Vector getNCImCodes(Entity node) {
+		if (node == null) return null;
+        Vector w = new Vector();
+		Property[] props = node.getAllProperties();
+		for (int i = 0; i < props.length; i++) {
+			Property prop = props[i];
+			 PropertyQualifier[] qualifiers = prop.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+			 }
+			 Source[] sources = prop.getSource();
+			 for (int k=0; k<sources.length; k++) {
+				  Source source = sources[k];
+			 }
+			 if (Arrays.asList(Constants.NCIM_CODE_PROPERTYIES).contains(prop.getPropertyName())) {
+				 if (!w.contains(prop.getValue().getContent())) {
+					w.add(prop.getValue().getContent());
+				 }
+			 }
+		}
+		return w;
+    }
+
+
+    public static Boolean isCodingSchemeAvailable(String cs_name) {
+
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		return new CodingSchemeDataUtils(lbSvc).isCodingSchemeAvailable(cs_name);
+
+    }
+
+    public static HashMap getCodingSchemeValueSetSubTree(String scheme) {
+		if (terminologyValueSetTree == null) {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
+
+			//ValueSetHierarchy valueSetHierarchy = new ValueSetHierarchy(lbSvc,
+			valueSetHierarchy = new ValueSetHierarchy(lbSvc,
+									   vsd_service,
+									   _localName2FormalNameHashMap,
+									   _codingSchemeName2URIHashMap);
+
+			terminologyValueSetTree = valueSetHierarchy.getCodingSchemeValueSetTree(null, null);
+		}
+		String formalname = getFormalName(scheme);
+		HashMap tree = new HashMap();
+		TreeItem ti = new TreeItem("<Root>", "Root node");
+		ti._expandable = false;
+		TreeItem root = (TreeItem) terminologyValueSetTree.get("<Root>");
+        for (String association : root._assocToChildMap.keySet()) {
+			List<TreeItem> child_nodes = root._assocToChildMap.get(association);
+			for (TreeItem childItem : child_nodes) {
+				if (childItem._text.compareTo(formalname) == 0) {
+					ti.addChild(association, childItem);
+					ti._expandable = true;
+		            tree.put("<Root>", ti);
+                    return tree;
+				}
+			}
+		}
+		return tree;
+	}
+
+
+
+	public static ResolvedConceptReferencesIterator resolveCodingScheme(String cs_uri, String version, boolean resolveObjects) {
+	    ResolvedConceptReferencesIterator itr = null;
+ 		try {
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            if (lbSvc == null) {
+				System.out.println("ERROR: unable to instantiate LexBIGService???");
+                return itr;
+            }
+			CodingSchemeVersionOrTag vt = new CodingSchemeVersionOrTag();
+			if (version != null) {
+				vt.setVersion(version);
+			}
+			CodingScheme cs = lbSvc.resolveCodingScheme(cs_uri, vt);
+			String cs_name = cs.getCodingSchemeName();
+			CodedNodeSet cns = null;
+			try {
+				try {
+					cns = getNodeSet(lbSvc, cs_name, vt);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (cns != null) {
+					try {
+						SortOptionList sortOptions = null;
+						LocalNameList filterOptions = null;
+						LocalNameList propertyNames = null;
+						CodedNodeSet.PropertyType[] propertyTypes = null;
+						itr = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return itr;
+	}
+
+    public static HashSet getVocabulariesWithConceptStatusHashSet() {
+        return _vocabulariesWithConceptStatusHashSet;
+    }
+
+    public static HashMap getUri2CodingSchemeNameHashMap() {
+		return _uri2CodingSchemeNameHashMap;
+	}
+
+	public static HashMap getLocalName2FormalNameHashMap() {
+	    return _localName2FormalNameHashMap;
+	}
+
+	public static HashMap getFormalNameVersion2MetadataHashMap() {
+        return _formalNameVersion2MetadataHashMap;
+	}
+
+	public static HashMap getFormalName2MetadataHashMap() {
+        return _formalName2MetadataHashMap;
+	}
+
+	public static HashMap getVisualizationWidgetHashMap() {
+        return _visualizationWidgetHashMap;
+	}
+
+
+    public static Boolean versionHasTag(CodingSchemeRendering csr, String ltag) {
+		if (csr == null || ltag == null) return null;
+		RenderingDetail rd = csr.getRenderingDetail();
+		CodingSchemeTagList cstl = rd.getVersionTags();
+		java.lang.String[] tags = cstl.getTag();
+
+		if (tags == null) return Boolean.FALSE;
+		if (tags.length > 0) {
+			for (int j = 0; j < tags.length; j++) {
+				String version_tag = (String) tags[j];
+				if (version_tag != null && version_tag.compareToIgnoreCase(ltag) == 0) {
+					return Boolean.TRUE;
+				}
+			}
+		}
+		return Boolean.FALSE;
+	}
+
+
+    public static String getMetadataValue(String codingSchemeName, String version, String urn, String propertyName) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		return new MetadataUtils(lbSvc).getMetadataValue(codingSchemeName, version, urn, propertyName);
+    }
+
+    public static Vector getMetadataNameValuePairs(String codingSchemeName, String version, String urn) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		return new MetadataUtils(lbSvc).getMetadataNameValuePairs(codingSchemeName, version, urn);
+	}
+
+
+
+    public static boolean isNCIT(String scheme) {
+        if (scheme == null) return true;
+        return Arrays.asList(Constants.NCIT_NAMES).contains(scheme);
+    }
+
+    public static Boolean isNCITAvailable() {
+		String ncit = getFormalName(Constants.NCIT_CS_NAME);
+		if (ncit != null) return Boolean.TRUE;
+		return Boolean.FALSE;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static boolean isNCIT_OR_NCIM(String display_name) {
+		if (display_name == null) return false;
+		for (int i=0; i<Constants.NCIT_OR_NCIM.length; i++) {
+			String name = (String) Constants.NCIT_OR_NCIM[i];
+			if (display_name.compareToIgnoreCase(name) == 0) return true;
+		}
+		return false;
+	}
+
+/*
+    public static HashMap getCodingSchemeValueSetSubTree(String scheme) {
+		//if (terminologyValueSetTree == null) {
+		//	terminologyValueSetTree = ValueSetHierarchy.getCodingSchemeValueSetTree(null, null);
+		//}
+		String formalname = getFormalName(scheme);
+		HashMap tree = new HashMap();
+		TreeItem ti = new TreeItem("<Root>", "Root node");
+		ti._expandable = false;
+		TreeItem root = (TreeItem) terminologyValueSetTree.get("<Root>");
+        for (String association : root._assocToChildMap.keySet()) {
+			List<TreeItem> child_nodes = root._assocToChildMap.get(association);
+			for (TreeItem childItem : child_nodes) {
+				if (childItem._text.compareTo(formalname) == 0) {
+					ti.addChild(association, childItem);
+					ti._expandable = true;
+		            tree.put("<Root>", ti);
+                    return tree;
+				}
+			}
+		}
+		return tree;
+	}
+*/
+
+
+    public static Vector getSupportedVocabularyMetadataValues(String propertyName) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		MetadataUtils metadataUtils = new MetadataUtils(lbSvc);
+        Vector v = new Vector();
+        List ontology_list = getOntologyList();
+        for (int i = 0; i < ontology_list.size(); i++) {
+            SelectItem item = (SelectItem) ontology_list.get(i);
+            String value = (String) item.getValue();
+
+            String label = (String) item.getLabel();
+            String scheme = DataUtils.getCodingSchemeName(value);
+            String version = DataUtils.getCodingSchemeVersion(value);
+            //String name = DataUtils.getMetadataValue(scheme, "display_name");
+            String name = metadataUtils.getMetadataValue(scheme, null, null, "display_name");
+
+            //if (name == null || name.compareTo("") == 0) {
+				//System.out.println("(*) WARNING: getSupportedVocabularyMetadataValues -- " + scheme + " does not have a display_name property.");
+			//}
+
+            String urn = null;
+            String prodictionVersion = DataUtils.getProductionVersion(scheme);
+            if (prodictionVersion != null && prodictionVersion.compareTo(version) == 0) {
+                Vector w = metadataUtils.getMetadataValues(scheme, version, urn, propertyName, true);
+				if (w == null || w.size() == 0) {
+					//v.add(name + "|" + propertyName + " not available");
+					v.add(scheme + " (version: " + version + ")" + "|WARNING: please check the completeness of metadata " + propertyName);
+
+				} else {
+					String t = (String) w.elementAt(0);
+					v.add(name + " (version: " + version + ")" + "|" + t);
+				}
+		    }
+        }
+        // Sort source help table (NCITERM-626)
+        return SortUtils.quickSort(v);
+    }
+
+
+
+    public static void main(String[] args) {
+        String scheme = "NCI Thesaurus";
+        String version = null;
+        // Breast Carcinoma (Code C4872)
+        String code = "C4872";
+
+        DataUtils test = new DataUtils();
+
+        //HashMap hmap = test.getRelationshipHashMap(scheme, version, code);
+        //test.dumpRelationshipHashMap(hmap);
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

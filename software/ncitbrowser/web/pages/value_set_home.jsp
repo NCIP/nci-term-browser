@@ -178,14 +178,17 @@ var tree;
     
     if (vsd != null) {
             vsd_name = vsd.getValueSetDefinitionName();  
-	    TreeItem ti = ValueSetHierarchy.getSourceValueSetTreeBranch(vsd);
+	    TreeItem ti = DataUtils.getValueSetHierarchy().getSourceValueSetTreeBranch(vsd);
 	    HashMap hmap = new HashMap();
 	    hmap.put("<Root>", ti);
     } else {
             isValueSet = false;
             Entity entity = DataUtils.getConceptByCode(Constants.TERMINOLOGY_VALUE_SET_NAME, null, vsd_uri); 
             if (entity != null) {
-            	vsd_name = entity.getEntityDescription().getContent();
+            	vsd_name = "";
+            	if (entity.getEntityDescription() != null) {
+            	    vsd_name = entity.getEntityDescription().getContent();
+            	}
             }
     }
 
@@ -291,7 +294,7 @@ var tree;
         check_p = "checked";
     }         
     
-    String vsd_description = ValueSetHierarchy.getValueSetDecription(vsd_uri);
+    String vsd_description = DataUtils.getValueSetHierarchy().getValueSetDecription(vsd_uri);
     if (vsd_description == null) {
         vsd_description = "DESCRIPTION NOT AVAILABLE";
     }    
@@ -371,10 +374,8 @@ var tree;
     <tr><td height="5px;"></td></tr>
    </table>
 
-
-    <input type="hidden" name="referer" id="referer" value="http%3A%2F%2Flocalhost%3A19280%2Fncitbrowser%2Fajax%3Faction%3Dcreate_src_vs_tree" />
+    <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
     <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>" />
-
 
 </div>
 
@@ -500,7 +501,7 @@ var tree;
                        %>  
                       
                       <td class="dataCellText" align="right">
-                        <h:commandButton id="Values" value="Values" action="#{valueSetBean.resolveValueSetAction}"
+                        <h:commandButton id="Values" value="Values" action="#{valueSetBean.downloadValueSetAction}"
                           onclick="javascript:cursor_wait();"
                           image="#{valueSetSearch_requestContextPath}/images/values.gif"
                           alt="Values"

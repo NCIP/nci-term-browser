@@ -31,7 +31,7 @@
     display_name = info.display_name;
     version = info.term_browser_version;
     if (display_name == null) subApp = TB;
-    else if (dictionary == "NCI Thesaurus" || dictionary == "NCI_Thesaurus")
+    else if (DataUtils.isNCIT(dictionary))
       subApp = NCIT;
     else
       subApp = NCIO;

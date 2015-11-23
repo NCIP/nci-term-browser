@@ -4,7 +4,7 @@
 <div class="bannerarea_960">
 <%
   JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
-  if (info.dictionary == null || info.dictionary.compareTo("NCI Thesaurus") == 0 || info.dictionary.compareTo("NCI_Thesaurus") == 0) {
+  if (DataUtils.isNCIT(info.dictionary)) {
   %>
     <div class="banner">
       <a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383"

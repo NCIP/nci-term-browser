@@ -7,6 +7,7 @@
 <%@ page import="java.util.HashMap"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="org.apache.log4j.*" %>
 <%!
@@ -61,7 +62,7 @@
 <body onLoad="document.forms.searchTerm.matchText.focus();">
 <!--
    Build info: <%=ncit_build_info%>
- Version info: <%=application_version%>
+   Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
    LexEVS URL: <%=evs_service_url%>
   -->
@@ -143,8 +144,11 @@ if (display_name_vec == null) {
 	scheme, version, "vocabulary_sort_category");
 
     String short_scheme_name = DataUtils.uri2CodingSchemeName(scheme);
-   //OntologyInfo info = new OntologyInfo(scheme, display_name, version, label, sort_category);
-    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
+
+    String tag = DataUtils.getVocabularyVersionTag(short_scheme_name, version);
+    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, tag, label, sort_category);
+    
+    //OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
     display_name_vec.add(info);
 
   }

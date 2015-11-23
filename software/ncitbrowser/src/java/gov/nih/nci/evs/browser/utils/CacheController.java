@@ -9,12 +9,23 @@ import org.LexGrid.commonTypes.*;
 import org.LexGrid.concepts.*;
 
 import org.json.*;
+
+/*
 import org.lexevs.tree.model.*;
 import org.lexevs.tree.service.*;
+*/
+import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverter;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverterFactory;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.model.*;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.service.*;
 
 import gov.nih.nci.evs.browser.properties.*;
 import gov.nih.nci.evs.browser.common.*;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 import org.apache.log4j.*;
+
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
 
 
 /**
@@ -84,6 +95,8 @@ public class CacheController {
     public static final String ONTOLOGY_NODE_DEFINITION = "ontology_node_definition";
     public static final String CHILDREN_NODES = "children_nodes";
 
+    public static final String ONTOLOGY_NODE_NS = "ontology_node_ns";
+
     private static CacheController _instance = null;
     private static CacheManager _cacheManager = null;
     private static Cache _cache = null;
@@ -99,7 +112,7 @@ public class CacheController {
         _cache = _cacheManager.getCache(cacheName);
     }
 
-/*
+
     public CacheController(String cacheName) {
         if (!_cacheManager.cacheExists(cacheName)) {
             _cacheManager.addCache(cacheName);
@@ -109,6 +122,7 @@ public class CacheController {
         _cache = _cacheManager.getCache(cacheName);
     }
 
+
     public static CacheController getInstance() {
         synchronized (CacheController.class) {
             if (_instance == null) {
@@ -117,11 +131,11 @@ public class CacheController {
         }
         return _instance;
     }
-*/
+/*
     public static CacheController getInstance() {
 		return new CacheController();
 	}
-
+*/
 
 
     private static CacheManager getCacheManager() {
@@ -168,15 +182,87 @@ public class CacheController {
     }
 
     public JSONArray getSubconcepts(String scheme, String version, String code) {
-        return getSubconcepts(scheme, version, code, true);
+        return getSubconcepts(scheme, version, code, null, true);
+    }
+
+    public JSONArray getSubconcepts(String scheme, String version, String code, String ns) {
+        return getSubconcepts(scheme, version, code, ns, true);
     }
 
 
+    public String getRemainingSubconceptJSONString(String codingScheme, String version, String parent_code, String parent_ns, String focus_code) {
+		long ms = System.currentTimeMillis();
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+        boolean useNamespace = false;
+        if (parent_ns == null) {
+			parent_ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, parent_code);
+			//System.out.println("NS: " + ns);
+			if (parent_ns != null) {
+				useNamespace = true;
+			}
+		}
+
+		TreeService treeService =
+			TreeServiceFactory.getInstance().getTreeService(lbSvc);
 
 
-    public JSONArray getSubconcepts(String scheme, String version, String code,
-        boolean fromCache) {
+		TreeItem root = new TreeItem("Root", "<Root>");
+		if (parent_code.compareTo("<Root>") == 0) {
+			return null;
+		}
 
+        boolean from_root = false;
+        List<LexEvsTreeNode> list = new ViewInHierarchyUtils(lbSvc).getChildren(codingScheme, version, parent_code, parent_ns, from_root);
+        try {
+			if (list.size() > ViewInHierarchyUtils.MAX_CHILDREN) {
+				for (int i=ViewInHierarchyUtils.MAX_CHILDREN; i<list.size(); i++) {
+					LexEvsTreeNode child = (LexEvsTreeNode) list.get(i);
+					if (child != null) {
+                        boolean include = true;
+                        if (focus_code != null) {
+							if (focus_code.compareTo(child.getCode()) == 0) {
+								include = false;
+							}
+						}
+
+						if (include) {
+
+							String name = "<UNSPECIFIED>";
+							if (child.getEntityDescription() != null) {
+								name = child.getEntityDescription();
+							}
+
+							TreeItem childItem =
+								new TreeItem(child.getCode(),
+									name,
+									child.getNamespace(),
+									null
+									);
+
+							childItem._expandable = false;
+							LexEvsTreeNode.ExpandableStatus child_node_status = child.getExpandableStatus();
+							if (child_node_status != null && child_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+								childItem._expandable = true;
+							}
+							root.addChild("has_child", childItem);
+							root._expandable = true;
+						}
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		ms = System.currentTimeMillis();
+		String json = JSON2TreeItem.treeItem2Json(root);
+		//json = "{\"nodes\":" + json + "}";
+		return json;
+	}
+
+
+    public JSONArray getSubconcepts(String scheme, String version, String code, String ns, boolean fromCache) {
         if (scheme == null) {
             scheme = Constants.CODING_SCHEME_NAME;
 			String retval = DataUtils.getCodingSchemeName(scheme);
@@ -186,56 +272,65 @@ public class CacheController {
 			}
 		}
 
+        String parent_code = null;
+		String focus_code = null;
         HashMap map = null;
         JSONArray nodeArray = null;
-        ViewInHierarchyUtils util = new ViewInHierarchyUtils();
-
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        ViewInHierarchyUtils util = new ViewInHierarchyUtils(lbSvc);
         // getRemainingSubconcepts
 		if (code.indexOf("_dot_") != -1) {
-
-			code = util.getFocusCode(code);
+			parent_code = util.getParentCode(code);
+			focus_code = util.getFocusCode(code);
 			boolean from_root = false;
 			if (code.indexOf("root_") != -1) {
 				from_root = true;
 			}
 
-			map = util.getRemainingSubconcepts(scheme, version, code, from_root);
-/*
-			if (map == null) {
-				return null;
+			String json = getRemainingSubconceptJSONString(scheme, version, parent_code, ns, focus_code);
+			try {
+				nodeArray = new JSONArray(json);
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-*/
+
+            /* 090215
+			map = util.getRemainingSubconcepts(scheme, version, parent_code, ns, from_root, focus_code);
 			nodeArray = hashMap2JSONArray(map);
+			*/
+
 			return nodeArray;
 		}
 
-
-
-        String key = scheme + "$" + version + "$" + code;
-
+        String key = scheme + "$" + version + "$" + code + "$" + ns;
         if (fromCache) {
             Element element = _cache.get(key);
             if (element != null) {
                 nodeArray = (JSONArray) element.getValue();
             }
         }
+        //KLO, 090215
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubconcepts " + scheme + " (code: " + code + ")");
-
-            map = new TreeUtils().getSubconcepts(scheme, version, code);
-
-            //map = util.getSubconcepts(scheme, version, code);
-
+            //map = new TreeUtils(lbSvc).getSubconcepts(scheme, version, code, ns);
+            /*
+            map = util.getSubconcepts(scheme, version, code, ns);
             nodeArray = hashMap2JSONArray(map);
+            */
+            try {
+				nodeArray = new JSONArray(getSubconceptJSONString(scheme, version, code, ns));
 
-            if (fromCache) {
-                try {
-                    Element element = new Element(key, nodeArray);
-                    _cache.put(element);
-                } catch (Exception ex) {
-
-                }
-            }
+				if (fromCache) {
+					try {
+						Element element = new Element(key, nodeArray);
+						_cache.put(element);
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+		    } catch (Exception ex) {
+				ex.printStackTrace();
+			}
         } else {
             _logger.debug("Retrieved from cache.");
         }
@@ -269,7 +364,7 @@ public class CacheController {
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
 
-            map = ValueSetHierarchy.getSubValueSets(scheme, code);
+            map = DataUtils.getValueSetHierarchy().getSubValueSets(scheme, code);
             nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -299,7 +394,7 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            map = ValueSetHierarchy.getSubValueSets(code);
+            map = DataUtils.getValueSetHierarchy().getSubValueSets(code);
             nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -330,7 +425,7 @@ public class CacheController {
         }
         if (nodeArray == null) {
             _logger.debug("Not in cache -- calling getSubValueSets ");
-            map = ValueSetHierarchy.getSubValueSets(null, code);
+            map = DataUtils.getValueSetHierarchy().getSubValueSets(null, code);
             nodeArray = hashMap2JSONArray(map);
 
             if (nodeArray != null && fromCache) {
@@ -376,7 +471,7 @@ public class CacheController {
         if (nodesArray == null) {
             _logger.debug("Not in cache -- calling ValueSetHierarchy.getRootValueSets " + scheme);
             try {
-                HashMap hmap = ValueSetHierarchy.getRootValueSets(scheme);
+                HashMap hmap = DataUtils.getValueSetHierarchy().getRootValueSets(scheme);
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
 
@@ -443,7 +538,7 @@ public class CacheController {
 
         if (nodesArray == null) {
             try {
-                HashMap hmap = ValueSetHierarchy.getRootValueSets();
+                HashMap hmap = DataUtils.getValueSetHierarchy().getRootValueSets();
 
                 //ValueSetHierarchy.moveNCItToTop(hmap);
 
@@ -512,7 +607,7 @@ public class CacheController {
 
         if (nodesArray == null) {
             try {
-                HashMap hmap = ValueSetHierarchy.build_src_vs_tree();
+                HashMap hmap = DataUtils.getValueSetHierarchy().build_src_vs_tree();
 
                 TreeItem root = (TreeItem) hmap.get("<Root>");
                 nodesArray = new JSONArray();
@@ -592,7 +687,8 @@ public class CacheController {
             try {
                 // list = new DataUtils().getHierarchyRoots(scheme, version,
                 // null);
-                list = new TreeUtils().getHierarchyRoots(scheme, version, null);
+                LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+                list = new TreeUtils(lbSvc).getHierarchyRoots(scheme, version, null);
                 nodeArray = list2JSONArray(scheme, list);
 
                 if (fromCache) {
@@ -607,6 +703,8 @@ public class CacheController {
         }
         return nodeArray;
     }
+
+
 
     private JSONArray list2JSONArray(String scheme, List list) {
         List newlist = new ArrayList();
@@ -650,21 +748,43 @@ public class CacheController {
                     }
                 }
                 SortUtils.quickSort(newlist);
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		        TreeService treeService =
+			        TreeServiceFactory.getInstance().getTreeService(lbSvc);
 
                 for (int i = 0; i < newlist.size(); i++) {
                     Object obj = newlist.get(i);
                     ResolvedConceptReference node =
                         (ResolvedConceptReference) obj;
-                    String code = node.getConceptCode();
-                    String name = node.getEntityDescription().getContent();
 
-                    int childCount = 1;
+					String cs_name = node.getCodingSchemeName();
+					String cs_version = node.getCodingSchemeVersion();
+					String cs_ns = node.getCodeNamespace();
+					String code = node.getConceptCode();
+					String name = node.getEntityDescription().getContent();
+
+/*
+ 			        boolean isExpandible = isExpandable(lbSvc, node.getCodingSchemeName(),
+			                                         node.getCodingSchemeVersion(),
+			                                         node.getConceptCode(),
+			                                         node.getCodeNamespace());
+*/
+			        boolean isExpandible = isExpandable(treeService, cs_name, cs_version, code, cs_ns);
+			        int childCount = 0;
+                    if (isExpandible) {
+						childCount = 1;
+					}
+/*
+
+
+                    LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
                     ArrayList sub_list =
-                        TreeUtils
-                            .getSubconceptNamesAndCodes(scheme, null, code);
+                        new TreeUtils(lbSvc).getSubconceptNamesAndCodes(scheme, null, code);
                     if (sub_list.size() == 0)
                         childCount = 0;
+
+*/
 
                     try {
                         JSONObject nodeObject = new JSONObject();
@@ -685,6 +805,8 @@ public class CacheController {
         }
         return nodesArray;
     }
+
+
 
     /*
      * //HL7 fix private JSONArray list2JSONArray(List list) { JSONArray
@@ -735,7 +857,8 @@ public class CacheController {
             _logger.debug("Not in cache -- calling expand_src_vs_tree_exclude_src_nodes " + node_id);
             try {
 
-				HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
+				//HashMap hmap = ValueSetHierarchy.expand_src_vs_tree_exclude_src_nodes(node_id);
+				HashMap hmap = DataUtils.getValueSetHierarchy().expand_src_vs_tree_exclude_src_nodes(node_id);
 
 				nodesArray = hashMap2JSONArray(hmap);
                 element = new Element(key, nodesArray);
@@ -752,7 +875,6 @@ public class CacheController {
 
 
     public JSONArray hashMap2JSONArray(HashMap hmap) {
-
         //JSONObject json = new JSONObject();
         JSONArray nodesArray = null;
         try {
@@ -770,6 +892,7 @@ public class CacheController {
                     // printTree(childItem, focusCode, depth + 1);
                     JSONObject nodeObject = new JSONObject();
                     nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                    nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
                     nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                     int knt = 0;
                     if (childItem._expandable) {
@@ -830,9 +953,10 @@ public class CacheController {
         if (maxLevel == -1) {
             rootsArray = getRootConcepts(ontology_display_name, version, false);
             try {
-                TreeUtils util = new TreeUtils();
+                LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+                TreeUtils util = new TreeUtils(lbSvc);
                 HashMap hmap =
-                    util.getTreePathData(ontology_display_name, null, null,
+                    util.getTreePathData(ontology_display_name, version, null,
                         node_id);
                 // _logger.debug("Calling util.getTreePathData2...");
                 // HashMap hmap = util.getTreePathData2(ontology_display_name,
@@ -853,10 +977,11 @@ public class CacheController {
             return rootsArray;
         } else {
             try {
-                TreeUtils util = new TreeUtils();
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+                TreeUtils util = new TreeUtils(lbSvc);
 
                 HashMap hmap =
-                    util.getTreePathData(ontology_display_name, null, null,
+                    util.getTreePathData(ontology_display_name, version, null,
                         node_id, maxLevel);
                 // HashMap hmap = util.getTreePathData2(ontology_display_name,
                 // null, node_id, maxLevel);
@@ -970,6 +1095,7 @@ public class CacheController {
                     JSONObject nodeObject = new JSONObject();
                     try {
                         nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                        nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
                         nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                         nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                         nodeObject.put(CHILDREN_NODES, getNodesArray(node_id,
@@ -994,6 +1120,7 @@ public class CacheController {
                         JSONObject nodeObject = new JSONObject();
                         try {
                             nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                            nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
                             nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                             nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                             nodeObject.put(CHILDREN_NODES, getNodesArray(
@@ -1026,6 +1153,7 @@ public class CacheController {
                         nodeObject = new JSONObject();
                         try {
                             nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+                            nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
                             nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
                             nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
                             nodeObject.put(CHILDREN_NODES, getNodesArray(
@@ -1070,6 +1198,7 @@ public class CacheController {
 				JSONObject nodeObject = new JSONObject();
 				try {
 					nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+					nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
 					nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
 					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
 					nodeObject.put(CHILDREN_NODES, toJSONArray(childItem));
@@ -1115,7 +1244,34 @@ public class CacheController {
             .getObjectValue();
     }
 
+    public static String getTree(String codingScheme,
+        CodingSchemeVersionOrTag versionOrTag, String code, String namespace) {
+        if (!CacheController.getInstance()
+            .containsKey(getTreeKey(codingScheme, code))) {
+            _logger.debug("Tree Not Found In Cache.");
+            TreeService treeService =
+                TreeServiceFactory.getInstance().getTreeService(
+                    RemoteServerUtil.createLexBIGService());
 
+            LexEvsTree tree = null;
+            if (StringUtils.isNullOrBlank(namespace)) {
+				tree = treeService.getTree(codingScheme, versionOrTag, code);
+			} else {
+				tree = treeService.getTree(codingScheme, versionOrTag, code, namespace);
+			}
+
+            String json =
+                treeService.getJsonConverter().buildJsonPathFromRootTree(
+                    tree.getCurrentFocus());
+
+            _cache.put(new Element(getTreeKey(tree, versionOrTag.getVersion()), json));
+            return json;
+        }
+        return (String) _cache.get(getTreeKey(codingScheme, versionOrTag.getVersion(), code))
+            .getObjectValue();
+    }
+
+/*
     public static String getTree(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
         if (!CacheController.getInstance()
@@ -1138,7 +1294,11 @@ public class CacheController {
         return (String) _cache.get(getTreeKey(codingScheme, versionOrTag.getVersion(), code))
             .getObjectValue();
     }
-
+*/
+    public static String getTree(String codingScheme,
+        CodingSchemeVersionOrTag versionOrTag, String code) {
+		return getTree(codingScheme, versionOrTag, code, null);
+	}
 
     public void activeCacheTree(ResolvedConceptReference ref) {
         _logger.debug("Actively caching tree.");
@@ -1202,20 +1362,11 @@ public class CacheController {
     }
 
 
-
-
-
     private static String getTreeKey(String codingScheme, String version, String code) {
         return String.valueOf("Tree".hashCode() + codingScheme.hashCode()
             + version.hashCode()
             + code.hashCode());
     }
-
-
-
-
-
-
 
 
     private JSONArray getNodesArray(TreeItem ti) {
@@ -1233,6 +1384,7 @@ public class CacheController {
 				JSONObject nodeObject = new JSONObject();
 				try {
 					nodeObject.put(ONTOLOGY_NODE_ID, childItem._code);
+					nodeObject.put(ONTOLOGY_NODE_NS, childItem._ns);
 					nodeObject.put(ONTOLOGY_NODE_NAME, childItem._text);
 					nodeObject.put(ONTOLOGY_NODE_CHILD_COUNT, knt);
 					nodeObject.put(CHILDREN_NODES, getNodesArray(childItem));
@@ -1273,7 +1425,8 @@ public class CacheController {
 		_logger.debug("Not in cache -- calling getSubValueSets ");
 
 		//map = ValueSetHierarchy.getSourceValueSetTree(scheme, version);
-		map = ValueSetHierarchy.getSourceValueSetTree();
+		//map = ValueSetHierarchy.getSourceValueSetTree();
+		map = DataUtils.getValueSetHierarchy().getSourceValueSetTree();
 
 		TreeItem root = (TreeItem) map.get("<Root>");
 		nodeArray = toJSONArray(root);
@@ -1314,7 +1467,9 @@ public class CacheController {
         HashMap map = null;
 		_logger.debug("Not in cache -- calling getCodingSchemeValueSetTree ");
 
-		map = ValueSetHierarchy.getCodingSchemeValueSetTree(scheme, version);
+		//map = ValueSetHierarchy.getCodingSchemeValueSetTree(scheme, version);
+		map = DataUtils.getValueSetHierarchy().getCodingSchemeValueSetTree(scheme, version);
+
 		TreeItem root = (TreeItem) map.get("<Root>");
 		nodeArray = toJSONArray(root);
 
@@ -1330,5 +1485,167 @@ public class CacheController {
         return nodeArray;
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
+    public ResolvedConceptReferenceList getHierarchyRoots(
+        String codingScheme, String version) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		return new TreeUtils(lbSvc).getHierarchyRoots(codingScheme, version);
+	}
+
+
+	public boolean isExpandable(TreeService treeService, String scheme, String version, String code, String namespace) {
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		LexEvsTreeNode node = treeService.getSubConcepts(scheme, versionOrTag, code, namespace);
+        if (node != null && node.getExpandableStatus().toString().compareTo("IS_EXPANDABLE") == 0) return true;
+        return false;
+	}
+
+    public String getRootJSONString(String codingScheme, String version) {
+		String key = codingScheme + "$" + version + "$root";
+		Element element = _cache.get(key);
+		if (element != null) {
+			return (String) element.getValue();
+		}
+
+		long ms = System.currentTimeMillis();
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		ResolvedConceptReferenceList rcrl = getHierarchyRoots(codingScheme, version);
+
+            System.out.println("getHierarchyRoots run time (milliseconds): "
+                + (System.currentTimeMillis() - ms));
+
+		TreeService treeService =
+			TreeServiceFactory.getInstance().getTreeService(lbSvc);
+
+		ms = System.currentTimeMillis();
+		TreeItem root = new TreeItem("Root", "<Root>");
+
+        Vector w = new Vector();
+        for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
+			ResolvedConceptReference rcr = rcrl.getResolvedConceptReference(i);
+			w.add(rcr);
+		}
+
+		w = SortUtils.quickSort(w);
+        for (int i=0; i<w.size(); i++) {
+			ResolvedConceptReference rcr = (ResolvedConceptReference) w.elementAt(i);
+			String cs_name = rcr.getCodingSchemeName();
+			String cs_version = rcr.getCodingSchemeVersion();
+			String cs_ns = rcr.getCodeNamespace();
+			String code = rcr.getConceptCode();
+			String name = rcr.getEntityDescription().getContent();
+			boolean is_expandable = isExpandable(treeService, cs_name, cs_version, code, cs_ns);
+
+//System.out.println(name + " (" + code + ") expandable? " + is_expandable);
+
+			TreeItem child = new TreeItem(code, name, cs_ns, null);
+			child._expandable = is_expandable;
+			root.addChild("has_child", child);
+		}
+
+            System.out.println("TreeItem run time (milliseconds): "
+                + (System.currentTimeMillis() - ms));
+
+		ms = System.currentTimeMillis();
+		String json = JSON2TreeItem.treeItem2Json(root);
+
+            System.out.println("treeItem2Json run time (milliseconds): "
+                + (System.currentTimeMillis() - ms));
+
+		//json = "{\"root_nodes\":" + json + "}";
+
+		try {
+			element = new Element(key, json);
+			_cache.put(element);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return json;
+	}
+
+
+    public String getSubconceptJSONString(String codingScheme, String version, String code, String ns) {
+
+        String key = codingScheme + "$" + version + "$" + code + "$" + ns;
+		Element element = _cache.get(key);
+		if (element != null) {
+			String json = (String) element.getValue();
+			return json;
+		}
+
+		long ms = System.currentTimeMillis();
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
+        boolean useNamespace = false;
+        if (ns == null) {
+			ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, code);
+			System.out.println("NS: " + ns);
+			if (ns != null) {
+				useNamespace = true;
+			}
+		}
+
+		TreeService treeService =
+			TreeServiceFactory.getInstance().getTreeService(lbSvc);
+
+
+		TreeItem root = new TreeItem("Root", "<Root>");
+		if (code.compareTo("<Root>") == 0) {
+			return null;
+		}
+        RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
+
+        List options = relUtils.createOptionList(false, true, false, false, false, false);
+        //options.add(RelationshipUtils.SUBCONCEPT_OPTION);
+
+        HashMap relMap = relUtils.getRelationshipHashMap(codingScheme, version, code, ns, useNamespace, options);
+        List list = (ArrayList) relMap.get("type_subconcept");
+
+             //System.out.println("getSubconcepts run time (milliseconds): "
+             //   + (System.currentTimeMillis() - ms));
+
+        Vector w = new Vector();
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			w.add(t);
+		}
+		w = SortUtils.quickSort(w);
+        for (int i=0; i<w.size(); i++) {
+		    String t = (String) w.elementAt(i);
+			Vector u = StringUtils.parseData(t);
+			String child_name = (String) u.elementAt(0);
+			String child_code = (String) u.elementAt(1);
+			String child_ns = (String) u.elementAt(2);
+            boolean is_expandable = isExpandable(treeService, codingScheme, version, child_code, child_ns);
+			TreeItem child = new TreeItem(child_code, child_name, child_ns, null);
+			child._expandable = is_expandable;
+			root.addChild("has_child", child);
+		}
+
+            //System.out.println("TreeItem run time (milliseconds): "
+            //    + (System.currentTimeMillis() - ms));
+
+		ms = System.currentTimeMillis();
+		String json = JSON2TreeItem.treeItem2Json(root);
+
+            //System.out.println("treeItem2Json run time (milliseconds): "
+            //    + (System.currentTimeMillis() - ms));
+
+		try {
+			element = new Element(key, json);
+			_cache.put(element);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		//json = "{\"nodes\":" + json + "}";
+		return json;
+	}
 
 }

@@ -17,6 +17,8 @@ String _search_key = HTTPUtils.cleanXSS((String) request.getParameter("key"));
 
 
 String _page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
+String _ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
+
 
 if (DataUtils.isNull(_page_number)) {
     _page_number = "0";
@@ -52,7 +54,7 @@ if (DataUtils.isNull(_page_number)) {
           <%
         } else if (data_type.compareTo("properties") != 0) {
           %>
-            <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=properties&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
+            <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&ns=<%=_ns%>&type=properties&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
               <img name="tpTab"
                 src="<%=request.getContextPath() %>/images/tab_tp.gif"
                 width="134" height="21" border="0" alt="Terms &amp; Properties"
@@ -68,7 +70,7 @@ if (DataUtils.isNull(_page_number)) {
             if (data_type == null ||
               (data_type != null && data_type.compareTo("synonym") != 0)) {
           %>
-          <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=synonym&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
+          <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&ns=<%=_ns%>&type=synonym&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
             <img name="sdTab"
               src="<%=request.getContextPath() %>/images/tab_sd.gif"
               width="119" height="21" border="0" alt="Synonym Details"
@@ -93,7 +95,7 @@ if (DataUtils.isNull(_page_number)) {
           if (data_type == null ||
             (data_type != null && data_type.compareTo("relationship") != 0)) {
         %>
-        <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=relationship&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
+        <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&ns=<%=_ns%>&type=relationship&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
           <img name="relTab"
             src="<%=request.getContextPath() %>/images/tab_rel.gif"
             width="102" height="21" border="0" alt="Relationships"
@@ -122,7 +124,7 @@ if (!typeLink_isMapping) {
           if (data_type == null ||
             (data_type != null && data_type.compareTo("mapping") != 0)) {
         %>
-        <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=mapping&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
+        <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&ns=<%=_ns%>&type=mapping&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
           <img name="mapTab"
             src="<%=request.getContextPath() %>/images/tab_map.gif"
             width="90" height="21" border="0" alt="Mapping"
@@ -149,7 +151,7 @@ if (!typeLink_isMapping) {
             if (data_type == null ||
               (data_type != null && data_type.compareTo("all") != 0)) {
           %>
-            <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&type=all&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
+            <a href="<%=request.getContextPath() %>/pages/<%=jsp_page_name%>?dictionary=<%=scheme%>&version=<%=tab_version%>&code=<%=id%>&ns=<%=_ns%>&type=all&key=<%=_search_key%>&b=1&n=<%=_page_number%>&vse=<%=_vse%>"">
               <img name="vaTab"
                 src="<%=request.getContextPath() %>/images/tab_va.gif"
                 width="71" height="21" border="0" alt="View All"

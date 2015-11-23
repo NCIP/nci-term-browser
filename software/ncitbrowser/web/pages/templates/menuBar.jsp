@@ -34,7 +34,7 @@
   boolean menubar_isMapping = DataUtils.isMapping(menubar_dictionary, null);
   //Vector mapping_scheme_vec = DataUtils.getMappingCodingSchemes(menubar_dictionary);
   
-  boolean hasValueSet = ValueSetHierarchy.hasValueSet(menubar_dictionary);
+  boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(menubar_dictionary);
   boolean hasMapping = DataUtils.hasMapping(menubar_dictionary);
 
   if (menubar_version == null) menubar_version = menuBar_info.version; // HTTPUtils.cleanXSS already performed in JSPUtils.JSPHeaderInfo
@@ -74,7 +74,7 @@
       <% } else if (tree_access_allowed) { %>
         <% if (showMenuItems) { 
 		  if (DataUtils.isNull(hdr_dictionary0)) {
-		       hdr_dictionary0 = "NCI_Thesaurus";
+		       hdr_dictionary0 = Constants.NCIT_CS_NAME;
 		  }        
         %>
           <%= JSPUtils.getPipeSeparator(isPipeDisplayed) %>

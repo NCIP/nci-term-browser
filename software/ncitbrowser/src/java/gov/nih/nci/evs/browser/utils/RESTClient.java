@@ -151,16 +151,23 @@ public class RESTClient{
 	public static void dumpHashMap(HashMap map) {
 		if (map == null) return;
         Set entrys = map.entrySet() ;
-        Iterator iter = entrys.iterator() ;
+        Vector v = new Vector();
+        Iterator iter = entrys.iterator();
         while(iter.hasNext()) {
             Map.Entry me = (Map.Entry)iter.next();
-            System.out.println(me.getKey() + "|" + me.getValue());
+            v.add(me.getKey() + "|" + me.getValue());
         }
+        v = SortUtils.quickSort(v);
+        for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			int j = i+1;
+			System.out.println("(" + j + ") " + t);
+		}
 	}
 
 	public static void main(String[] args)
 	{
-		 String API_KEY = "dd69337f-8111-485f-a424-ae24129713a8";
+		 String API_KEY = "";
          Vector v = retrieve_REST_content(API_KEY);
          HashMap map = getBioportalAcronym2NameHashMap(v);
          dumpHashMap(map);

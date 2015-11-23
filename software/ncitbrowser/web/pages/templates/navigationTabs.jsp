@@ -54,13 +54,24 @@ request.getSession().setAttribute("nav_type", nav_type);
         * (For Firefox): </a> is on a separate line,
         * (For Internet Explorer): </td> is on a separate line
     --%>
+    
     <td width="5"></td>
     <td><a href="<%=HTTPUtils.cleanXSS(tab_terms_link)%>">
       <img name="tab_terms" src="<%=tab_terms_image%>"
         border="0" alt="Terminologies" title="Terminologies" /></a></td>
+        
+    <% 
+    Boolean value_set_tab_available = DataUtils.VALUE_SET_TAB_AVAILABLE;
+    if (value_set_tab_available != null && value_set_tab_available.equals(Boolean.TRUE)) {
+    %>
+    
     <td><a href="<%=HTTPUtils.cleanXSS(tab_valueset_link)%>">
       <img name="tab_valuesets" src="<%=tab_valuesets_image%>"
         border="0" alt="Value Sets" title="ValueSets" /></a></td>
+    <%    
+    }
+    %>
+        
     <td><a href="<%=HTTPUtils.cleanXSS(tab_mappings_link)%>">
       <img name="tab_map" src="<%=tab_mappings_image%>"
         border="0" alt="Mappings" title="Mappings" /></a></td>

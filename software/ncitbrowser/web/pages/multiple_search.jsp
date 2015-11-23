@@ -7,6 +7,7 @@
 <%@ page import="java.util.HashMap"%>
 <%@ page import="org.LexGrid.concepts.Entity" %>
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
+<%@ page import="gov.nih.nci.evs.browser.bean.*" %>
 <%@ page import="gov.nih.nci.evs.browser.common.Constants" %>
 <%@ page import="org.apache.log4j.*" %>
 <%!
@@ -30,7 +31,6 @@
   String nci_meta_url = new DataUtils().getNCImURL();
   String ncit_url = new DataUtils().getNCItURL();
 
-  //KLO 031314
   request.getSession().removeAttribute("dictionary");
   request.getSession().removeAttribute("version");
   
@@ -69,7 +69,7 @@ request.getSession().removeAttribute("m");
 <body onLoad="document.forms.searchTerm.matchText.focus();">
 <!--
    Build info: <%=ncit_build_info%>
- Version info: <%=application_version%>
+   Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
    LexEVS URL: <%=evs_service_url%>
   -->
@@ -77,6 +77,78 @@ request.getSession().removeAttribute("m");
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_centerwindow.js"></script>
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
   <script language="JavaScript">
+  
+  	    function show_others(csn) {
+  	      var checkedStr = "";
+  	      var target = "";
+  	      var alg = "";
+  	      
+  	      var matchText = document.searchTerm.matchText.value;
+
+  	      var checkedObj = document.forms["searchTerm"].ontology_list;
+  	      for (var i=0; i<checkedObj.length; i++) {
+  		if (checkedObj[i].checked) {
+  		    checkedStr = checkedStr + checkedObj[i].value + "|";
+  		}
+  	      }
+  
+  	          var searchTargetObj = document.forms["searchTerm"].searchTarget;
+  		  for (var j=0; j<searchTargetObj.length; j++) {
+  		      if (searchTargetObj[j].checked == true) {
+  			  target = searchTargetObj[j].value;
+  			  break;
+  		      }
+  		  }
+  
+  	          var algorithmObj = document.forms["searchTerm"].algorithm;
+  		  for (var j=0; j<algorithmObj.length; j++) {
+  		      if (algorithmObj[j].checked == true) {
+  		          alg = algorithmObj[j].value;
+  			  break;
+  		      }
+  		  }
+  
+
+window.location.href = "/ncitbrowser/ajax?action=show&csn="+ csn +"&matchText=" + matchText +"&algorithm=" + alg + "&searchTarget=" + target + "&ontology_list=" + checkedStr + "";
+    
+  	    }
+  
+  
+  	    function hide_others(csn) {
+  	      var matchText = document.searchTerm.matchText.value;
+
+  	      var checkedStr = "";
+  	      var target = "";
+  	      var alg = "";
+  	      var checkedObj = document.forms["searchTerm"].ontology_list;
+  	      for (var i=0; i<checkedObj.length; i++) {
+  		if (checkedObj[i].checked) {
+  		    checkedStr = checkedStr + checkedObj[i].value + "|";
+  		}
+  	      }
+  
+  	          var searchTargetObj = document.forms["searchTerm"].searchTarget;
+  		  for (var j=0; j<searchTargetObj.length; j++) {
+  		      if (searchTargetObj[j].checked == true) {
+  			  target = searchTargetObj[j].value;
+  			  break;
+  		      }
+  		  }
+  
+  	          var algorithmObj = document.forms["searchTerm"].algorithm;
+  		  for (var j=0; j<algorithmObj.length; j++) {
+  		      if (algorithmObj[j].checked == true) {
+  		          alg = algorithmObj[j].value;
+  			  break;
+  		      }
+  		  }
+    
+window.location.href = "/ncitbrowser/ajax?action=hide&csn="+ csn +"&matchText=" + matchText +"&algorithm=" + alg + "&searchTarget=" + target + "&ontology_list=" + checkedStr + "";
+    
+  	    }
+  	    
+  
+    
      function checkVisited() {
        var test = '<%= request.getSession().getAttribute("visited") %>';
        if (test == "" || test == "null")
@@ -116,12 +188,16 @@ request.getSession().removeAttribute("m");
      
   </script>
 <%
+
     request.getSession().removeAttribute("dictionary");
-    
 
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+if (display_name_vec == null) {
+     display_name_vec = DataUtils.getSortedOntologies();
+     
+}
 
-
+String browserType = request.getHeader("User-Agent");
 
 //   Modifications:
 
@@ -137,13 +213,12 @@ if (action != null) {
     if (action.compareTo("show") == 0) {
 	for (int i = 0; i < display_name_vec.size(); i++) {
 	     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-
+//KLO 030915
 		 if (info.getVisible()) {
 			 info.setSelected(false);
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 				 info.setSelected(true);
 			 }
-
 	         }
 
 		 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
@@ -160,8 +235,7 @@ if (action != null) {
 			 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 				 info.setSelected(true);
 			 }
-
-	     }
+	         }
 		 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
 		     info.setExpanded(false);
 		 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
@@ -171,14 +245,10 @@ if (action != null) {
     
     }
 }
-		
+
+request.getSession().removeAttribute("error_msg"); 
 request.getSession().setAttribute("display_name_vec", display_name_vec);
-
-
 String warning_msg = (String) request.getSession().getAttribute("warning");
-
-       
-
 
 
 if (warning_msg != null && warning_msg.compareTo(Constants.ERROR_NO_VOCABULARY_SELECTED) == 0) {
@@ -283,78 +353,49 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
               <tr>
               <%
                 List ontology_list = DataUtils.getOntologyList();
-                if (ontology_list == null) 
-                    _logger.warn("??????????? ontology_list == null");
-                int num_vocabularies = ontology_list.size();
+               int num_vocabularies = ontology_list.size();
+                //if (display_name_vec == null) {
+               
+                  display_name_vec = DataUtils.getSortedOntologies();
+                 
 
+// [NCITERM-641] Tomcat session is mixed up.
+String ontologiesToExpandStr = (String) request.getSession().getAttribute("ontologiesToExpandStr");
+if (ontologiesToExpandStr == null) {
+    ontologiesToExpandStr = "|";
+}
 
-                if (display_name_vec == null) {
-                  display_name_vec = new Vector();
-                  
-
-                  for (int i = 0; i < ontology_list.size(); i++) {
-                    SelectItem item = (SelectItem) ontology_list.get(i);
-                    String value = (String) item.getValue();
-                    String label = (String) item.getLabel();
-                    
-                    String scheme = DataUtils.key2CodingSchemeName(value);
-                    String short_scheme_name = DataUtils.uri2CodingSchemeName(scheme);
-                    
-                    String version = DataUtils.key2CodingSchemeVersion(value);
-  
-                    //String display_name = DataUtils.getMetadataValue(scheme, version, "display_name");
-                    String display_name = DataUtils.getMetadataValue(short_scheme_name, version, "display_name");
-                    if (DataUtils.isNull(display_name)) {
-                        //if (display_name == null || display_name.compareTo("null") == 0)
-                        display_name = DataUtils.getLocalName(scheme);
-                    } 
- 
-                    String sort_category = DataUtils.getMetadataValue(scheme, version, "vocabulary_sort_category");
-                         //KLO, 11202013
-                     
-                    // KLO, 04242014 
-                    if (sort_category == null) {
-                        sort_category = "0";//String.valueOf(0);
-                    }
-		    
-		    OntologyInfo info = new OntologyInfo(short_scheme_name, display_name, version, label, sort_category);
-                    display_name_vec.add(info);
-                 }
-                  
- 
-		  for (int i = 0; i < display_name_vec.size(); i++) { 
-		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
-		     if (!DataUtils.isNull(info.getTag()) && info.getTag().compareToIgnoreCase("PRODUCTION") == 0) {
-		     
-		        Vector w = DataUtils.getNonProductionOntologies(display_name_vec, info.getCodingScheme());
-		        if (w.size() > 0) {
-				info.setHasMultipleVersions(true);
-				
-		        }
-		     }
-		  }
 
 		  for (int k = 0; k < display_name_vec.size(); k++) { 
 		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
-		     
+		     // [NCITERM-641] Tomcat session is mixed up.
+                     info.setSelected(false);
 		     if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
 			 info.setSelected(true);
-		     }		     
+		     }
 		  }
- 
+
  		  for (int k = 0; k < display_name_vec.size(); k++) { 
  		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(k);
  		     if (!info.isProduction()) {
- 		          info.setSelected(false);
- 		     }		     
+ 		          //info.setSelected(false);
+ 		     }	
+ 		     
+ 		     info.setExpanded(false);
+		     if (ontologiesToExpandStr.indexOf(info.getLabel()) != -1) {
+			 info.setExpanded(true);
+		     } 		     
 		  }
-		  
+	  
                   Collections.sort(display_name_vec, new OntologyInfo.ComparatorImpl());
-                }
+                //}
 		
                 request.getSession().setAttribute("display_name_vec", display_name_vec);
+                
                 display_name_vec = DataUtils.sortOntologyInfo(display_name_vec);
                 
+                boolean blank_line_added = false;
+               
                 %>
                   <td class="textbody">
                     <table border="0" cellpadding="0" cellspacing="0">
@@ -362,8 +403,15 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
                      
   int hide_counter = 0; 
   int show_counter = 0;
+  
   OntologyInfo info_0 = (OntologyInfo) display_name_vec.elementAt(0);
-  curr_sort_category = Integer.valueOf(info_0.getSortCategory());
+  if (info_0 == null) {
+      curr_sort_category = 0;
+  } else {
+      curr_sort_category = Integer.valueOf(info_0.getSortCategory());
+  }
+    
+  //curr_sort_category = Integer.valueOf(info_0.getSortCategory());
   
                       for (int i = 0; i < display_name_vec.size(); i++) {
                         OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
@@ -378,19 +426,15 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
  
                         boolean isMapping = DataUtils.isMapping(scheme, version);
                         if (!isMapping) {
-
-				//String http_label = null;
+                        
+				String indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+				if (info.isProduction()) {
+				    indent = "";
+				}                         
+                        
 				String http_scheme = null;
 				String http_version = null;
-
-        //String status = DataUtils.getMetadataValue(scheme, version, "cabig_approval_status");
-        //boolean display_status = status != null && status.trim().length() > 0;
-        
-        //String cabig_approval_indicator = getCabigIndicator(display_status, basePath);
-        //display_cabig_approval_indicator_note |= display_status;
-        
-				//if (label != null)
-				//  http_label = label.replaceAll(" ", "%20");
+				
 				if (scheme != null)
 				  http_scheme = scheme.replaceAll(" ", "%20");
 				if (version != null)
@@ -398,11 +442,13 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				%>
 
         <% 
-          if (sort_category != curr_sort_category.intValue()) { 
+          //if (sort_category != curr_sort_category.intValue()) { 
+          if (indent.length() == 0 && !blank_line_added && !DataUtils.isNCIT_OR_NCIM(display_name)) { 
         %>
           <tr><td width="25px">&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
         <% 
-        } 
+               blank_line_added = true;
+          } 
         curr_sort_category = Integer.valueOf(sort_category);
         %>
         
@@ -410,17 +456,15 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				  <td width="25px"></td>
 				  <td>
 				<%
-				//boolean checked = ontologiesToSearchOn != null
-				//    && ontologiesToSearchOn.indexOf(label2) != -1;
-				    
-				boolean checked = info.getSelected();
+			    
+				 //boolean checked = info.getSelected();
+				 boolean checked = false;
+				 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+				     checked = true;  
+				 }
 				
+			
 				String checkedStr = checked ? "checked" : "";
-				
-				String indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
-				if (info.isProduction()) {
-				    indent = "";
-				} 				
 				
 				%>
 
@@ -443,7 +487,7 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				}     
 				String display_label = display_name + ":&nbsp;" + full_name + "&nbsp;(" + term_browser_version + ")";
 
-				if (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI_Thesaurus") == 0) {
+				if (DataUtils.isNCIT(scheme)) {
 				    String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + version;
 				  %>
                     <a href="<%=nciturl%>"><%=display_label%></a>
@@ -459,7 +503,6 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				
 				
 				
-				
 				  %>
 				    <a href="<%= request.getContextPath() %>/pages/vocabulary.jsf?dictionary=<%=http_scheme%>&version=<%=http_version%>">
 				      <%=display_label%>
@@ -472,48 +515,12 @@ String unsupported_vocabulary_message = (String) request.getSession().getAttribu
 				   <%
 				   String cs_nm = info.getCodingScheme();
 				   if (info.isProduction() && info.getHasMultipleVersions() && !info.getExpanded()) {
-				   
-				       show_counter++;
-				   
 				   %>    
 
                   &nbsp&nbsp; 
-                  <font color="red">
-
-
-
-
-<h:commandLink styleClass="textbodyred" id="show" value="[show other versions]"
-    action="#{userSessionBean.showOtherVersions}" actionListener="#{userSessionBean.showListener}"  immediate="true"> 
-    
-<%
-if (show_counter == 1) {
-%>    
-    <f:param name="action_cs_index" value="1" />
-<%
-} else if (show_counter == 2) {
-%> 
-    <f:param name="action_cs_index" value="2" />
-<%
-} else if (show_counter == 3) {
-%> 
-    <f:param name="action_cs_index" value="3" />
-<%
-} else if (show_counter == 4) {
-%> 
-    <f:param name="action_cs_index" value="4" />
-<%
-} else if (show_counter == 5) {
-%> 
-    <f:param name="action_cs_index" value="5" />
-<%
-}
-%>
-
-    
-</h:commandLink></td>
-
-                 
+                  <a href="#" onclick="javascript:show_others('<%=cs_nm%>')";><i><font color="red">[show other versions]</font></i></a>
+                  
+                  </td>
                   
                   </td>
                   
@@ -522,48 +529,18 @@ if (show_counter == 1) {
 				       
 				   <%    
 				   } else if (info.isProduction() && info.getHasMultipleVersions() && info.getExpanded()) {
-				       
-				       hide_counter++;
+
 				   %>  
 				   
                   &nbsp&nbsp; 
-                  <font color="red">
-
-
-<h:commandLink styleClass="textbodyred" id="hide" value="[hide other versions]"
-action="#{userSessionBean.hideOtherVersions}" actionListener="#{userSessionBean.hideListener}"  immediate="true"> 
-
-<%
-if (hide_counter == 1) {
-%>    
-    <f:param name="action_cs_index" value="1" />
-<%
-} else if (hide_counter == 2) {
-%> 
-    <f:param name="action_cs_index" value="2" />
-<%
-} else if (hide_counter == 3) {
-%> 
-    <f:param name="action_cs_index" value="3" />
-<%
-} else if (hide_counter == 4) {
-%> 
-    <f:param name="action_cs_index" value="4" />
-<%
-} else if (hide_counter == 5) {
-%> 
-    <f:param name="action_cs_index" value="5" />
-<%
-}
-%>
-
-</h:commandLink></td>
+                  <a href="#" onclick="javascript:hide_others('<%=cs_nm%>')";><i><font color="red">[hide other versions]</font></i></a>
+                  
+                  </td>
 
                   
                   </td>
                   </font>
-
-				       
+	       
 				   <%    
 				   }
 				   %>					
@@ -706,7 +683,8 @@ if (hide_counter == 1) {
         </div> <!-- end Page content -->
     </div> <!-- end main-area_960 -->
     <div class="mainbox-bottom"><img src="<%=basePath%>/images/mainbox-bottom.gif" width="945" height="5" alt="Mainbox Bottom" /></div>
-
+    
+    
 </h:form>
 
   </div> <!-- end center-page_960 -->
@@ -718,6 +696,7 @@ if (hide_counter == 1) {
     request.getSession().removeAttribute("warning");
     request.getSession().removeAttribute("ontologiesToSearchOn");
     request.getSession().putValue("visited","true");
+    
 %>
 <br/>
 </body>

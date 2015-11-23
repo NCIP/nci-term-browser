@@ -1,5 +1,7 @@
 package gov.nih.nci.evs.browser.bean;
 
+import gov.nih.nci.evs.searchlog.*;
+
 import java.util.*;
 import java.net.URI;
 
@@ -13,6 +15,7 @@ import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.Utility.Iterators.*;
 
 import gov.nih.nci.evs.browser.utils.*;
+import gov.nih.nci.evs.browser.bean.*;
 import gov.nih.nci.evs.browser.properties.*;
 import gov.nih.nci.evs.browser.common.*;
 import gov.nih.nci.evs.searchlog.*;
@@ -22,12 +25,14 @@ import org.LexGrid.LexBIG.caCore.interfaces.LexEVSDistributed;
 import org.lexgrid.valuesets.LexEVSValueSetDefinitionServices;
 import org.LexGrid.valueSets.ValueSetDefinition;
 import org.LexGrid.commonTypes.Source;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
 
 import org.LexGrid.LexBIG.Extensions.Generic.MappingExtension.Mapping.SearchContext;
 import nl.captcha.Captcha;
 //import nl.captcha.audio.*;
 
 import nl.captcha.audio.AudioCaptcha;
+import javax.servlet.ServletOutputStream;
 
 
 /**
@@ -220,17 +225,13 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
 			searchTarget = "names";
 		}
 
-
-
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
-
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (matchText != null) {
             matchText = matchText.trim();
             request.getSession().setAttribute("matchText", matchText);
-
 		}
 
         // [#19965] Error message is not displayed when Search Criteria is not
@@ -247,20 +248,23 @@ if (single_mapping_search != null && single_mapping_search.compareTo("true") == 
             return "message";
         }
 
-        //if (matchText != null && matchText.length() < 3
-        if (matchText.length() < 3
-              //&& matchAlgorithm.compareTo("contains") == 0) {
-			  && matchAlgorithm.compareTo("exactMatch") != 0) {
-            String message = "Please enter a search string of length no less than 3.";
-            request.getSession().setAttribute("message", message);
-            request.removeAttribute("matchText");
 
-            if (mapping_search) {
-                request.getSession().setAttribute("navigation_type", "mappings");
-                return "return_to_mapping_home";
-			}
-            return "message";
-        }
+//[NCITERM-613] Remove the minimum 3-character search string length restriction on all name searches.
+        //if (matchText != null && matchText.length() < 3
+//        if (matchText.length() < 3
+              //&& matchAlgorithm.compareTo("contains") == 0) {
+//			  && matchAlgorithm.compareTo("exactMatch") != 0) {
+//            String message = "Please enter a search string of length no less than 3.";
+//            request.getSession().setAttribute("message", message);
+//            request.removeAttribute("matchText");
+
+//            if (mapping_search) {
+//                request.getSession().setAttribute("navigation_type", "mappings");
+//                return "return_to_mapping_home";
+//			}
+//            return "message";
+//        }
+
 
         boolean ranking = true;
         String scheme = null;
@@ -332,6 +336,18 @@ if (scheme != null) {
         _logger.debug("UserSessionBean scheme: " + scheme);
         _logger.debug("searchAction version: " + version);
 
+
+
+
+boolean retval = HTTPUtils.validateRequestParameters(request);
+if (!retval) {
+	System.out.println("searchAction returns invalid_parameter");
+	return "invalid_parameter";
+}
+
+
+
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		if (isMapping) {
 				if (searchTarget.compareTo("names") == 0) {
 					/*
@@ -340,14 +356,18 @@ if (scheme != null) {
 						matchAlgorithm, maxToReturn);
 					*/
 
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByNameOrCode(
+					//ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByNameOrCode(
+					//	scheme, version, matchText,
+					//	matchAlgorithm, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
+
+					iterator = new MappingSearchUtils(lbSvc).searchByNameOrCode(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
 
 
-					if (wrapper != null) {
-						iterator = wrapper.getIterator();
-					}
+					//if (wrapper != null) {
+					//	iterator = wrapper.getIterator();
+					//}
 
                     if (iterator != null) {
 						try {
@@ -361,6 +381,7 @@ if (scheme != null) {
 						}
 				    }
 
+                    /*
 					if (iterator == null) {
 						wrapper = new MappingSearchUtils().searchByName(
 							scheme, version, matchText,
@@ -371,17 +392,24 @@ if (scheme != null) {
 							iterator = null;
 						}
 					}
+					*/
 
+					if (iterator == null) {
+
+						iterator = new MappingSearchUtils(lbSvc).searchByName(
+							scheme, version, matchText,
+							matchAlgorithm, maxToReturn);
+					}
 				} else if (searchTarget.compareTo("codes") == 0) {
 					//ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByCode(
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByNameOrCode(
+					iterator = new MappingSearchUtils(lbSvc).searchByNameOrCode(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
-
+/*
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
 					}
-
+*/
                     if (iterator != null) {
 						try {
 							int numberRemaining = iterator.numberRemaining();
@@ -395,39 +423,45 @@ if (scheme != null) {
 				    }
 
 					if (iterator == null) {
-						wrapper = new MappingSearchUtils().searchByName(
+						iterator = new MappingSearchUtils(lbSvc).searchByCode(
 							scheme, version, matchText,
 							matchAlgorithm, maxToReturn);
+							/*
 						if (wrapper != null) {
 							iterator = wrapper.getIterator();
 						} else {
 							iterator = null;
 						}
+						*/
 					}
 
 
-				} else if (searchTarget.compareTo("codes") == 0) {
+				} else if (searchTarget.compareTo("properties") == 0) {
 
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByProperties(
+					iterator = new MappingSearchUtils(lbSvc).searchByProperties(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn);
+						/*
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
 					} else {
 						iterator = null;
 					}
+					*/
 
 
 				} else if (searchTarget.compareTo("relationships") == 0) {
 
-					ResolvedConceptReferencesIteratorWrapper wrapper = new MappingSearchUtils().searchByRelationships(
+					iterator = new MappingSearchUtils(lbSvc).searchByRelationships(
 						scheme, version, matchText,
 						matchAlgorithm, maxToReturn);
+						/*
 					if (wrapper != null) {
 						iterator = wrapper.getIterator();
 					} else {
 						iterator = null;
 					}
+					*/
 
 				}
 
@@ -510,7 +544,7 @@ if (scheme != null) {
 				0,    // pageNumber,
 				1);   // numberPages
 */
-mappingIteratorBean.initialize();
+				mappingIteratorBean.initialize();
 				request.getSession().setAttribute("mapping_search_results", mappingIteratorBean);
 				request.getSession().setAttribute("dictionary", scheme);
 				//request.getSession().setAttribute("scheme", scheme);
@@ -588,12 +622,24 @@ mappingIteratorBean.initialize();
                 iterator = iteratorBean.getIterator();
             } else {
                 ResolvedConceptReferencesIteratorWrapper wrapper = null;
+
                 try {
+					// temporary fix for: [NCITERM-682] Contains search failed on search strings containing a colon character.
+					String matchTextStr = matchText;
+					if (matchAlgorithm.compareTo("contains") == 0) {
+						matchTextStr = matchTextStr.replaceAll(":", " ");
+					}
 					if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
-						wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+						iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchTextStr, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+
+						wrapper = null;
+						if (iterator != null) {
+							wrapper = new ResolvedConceptReferencesIteratorWrapper(iterator);
+						}
 				    } else {
-						wrapper = new SearchUtils()
-							.searchByNameOrCode(schemes, versions, matchText, source,
+
+						wrapper = new SearchUtils(lbSvc)
+							.searchByNameOrCode(schemes, versions, matchTextStr, source,
 								matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
 					}
 				} catch (Exception ex) {
@@ -602,13 +648,14 @@ mappingIteratorBean.initialize();
 
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
-
                     if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
                     }
-                }
+                } else {
+					System.out.println("(*) search by names returns wrapper = NULL???");
+				}
             }
 
         } else if (searchTarget.compareTo("codes") == 0) {
@@ -625,7 +672,7 @@ mappingIteratorBean.initialize();
                             matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_CODE_ONLY);
                     */
 
-					wrapper = new CodeSearchUtils().searchByCode(
+					wrapper = new CodeSearchUtils(lbSvc).searchByCode(
 						schemes, versions, matchText,
 						source, matchAlgorithm, ranking, maxToReturn, false);
 
@@ -652,14 +699,12 @@ mappingIteratorBean.initialize();
                 ResolvedConceptReferencesIteratorWrapper wrapper = null;
                 try {
                     wrapper =
-                    new SearchUtils().searchByProperties(schemes, versions,
+                    new SearchUtils(lbSvc).searchByProperties(schemes, versions,
                         matchText, source, matchAlgorithm, excludeDesignation,
                         ranking, maxToReturn);
 				} catch (Exception ex) {
                     //ex.printStackTrace();
 				}
-
-
 
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
@@ -680,7 +725,7 @@ mappingIteratorBean.initialize();
 				ResolvedConceptReferencesIteratorWrapper wrapper = null;
                 try {
                     wrapper =
-                    new SearchUtils().searchByAssociations(schemes, versions,
+                    new SearchUtils(lbSvc).searchByAssociations(schemes, versions,
                         matchText, source, matchAlgorithm, designationOnly,
                         ranking, maxToReturn);
 
@@ -694,7 +739,6 @@ mappingIteratorBean.initialize();
                     if (iterator != null) {
 						try {
 							int numberOfMatches = iterator.numberRemaining();
-
 						} catch (Exception ex) {
                             //ex.printStackTrace();
 						}
@@ -715,15 +759,10 @@ mappingIteratorBean.initialize();
         request.getSession().removeAttribute("AssociationTargetHashMap");
         request.getSession().removeAttribute("type");
 
-
-
-
 		request.getSession().setAttribute("key", key);
-
 		_logger.debug("searchAction Iterator key: " + key);
 
         if (iterator != null) {
-
             int size = iteratorBean.getSize();
             List list = null;
             // LexEVS API itersator.numberRemaining is inaccurate, and can cause issues.
@@ -736,6 +775,8 @@ mappingIteratorBean.initialize();
 			}
 
             if (size > 1) {
+
+
                 request.getSession().setAttribute("search_results", v);
                 String match_size = Integer.toString(size);
                 request.getSession().setAttribute("match_size", match_size);
@@ -744,7 +785,6 @@ mappingIteratorBean.initialize();
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
 
                 request.getSession().setAttribute("dictionary", scheme);
-
                 _logger
                     .debug("UserSessionBean request.getSession().setAttribute dictionary: "
                         + scheme);
@@ -753,7 +793,6 @@ mappingIteratorBean.initialize();
 				request.getSession().removeAttribute("n");
 				request.getSession().removeAttribute("b");
 				request.getSession().removeAttribute("m");
-
                 return "search_results";
             } else if (size == 1) {
 
@@ -834,8 +873,8 @@ mappingIteratorBean.initialize();
         }
 
         String message = "No match found.";
-        int minimumSearchStringLength =
-            NCItBrowserProperties.getMinimumSearchStringLength();
+        //int minimumSearchStringLength =
+        //    NCItBrowserProperties.getMinimumSearchStringLength();
 
 		if (matchAlgorithm.compareTo(Constants.EXACT_SEARCH_ALGORITHM) == 0) {
 			String t = searchTarget.toLowerCase();
@@ -846,10 +885,10 @@ mappingIteratorBean.initialize();
 			}
 		}
 
-        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
-            && matchText.length() < minimumSearchStringLength) {
-            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
-        }
+        //else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
+        //    && matchText.length() < minimumSearchStringLength) {
+        //    message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
+        //}
 
         request.getSession().setAttribute("message", message);
         request.getSession().setAttribute("dictionary", scheme);
@@ -1117,11 +1156,21 @@ mappingIteratorBean.initialize();
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        request.getSession().removeAttribute("error_msg");
+
+/*
+boolean retval = HTTPUtils.validateRequestParameters(request);
+if (!retval) {
+	System.out.println("multipleSearchAction returns invalid_parameter");
+	return "invalid_parameter";
+}
+*/
 		String selected_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("selected_vocabularies"));
+
         String[] ontology_list = request.getParameterValues("ontology_list");
 
         if ( ontology_list  == null ) {
-			 ontology_list = (String[]) request.getSession().getAttribute("ontology_list");
+			 //ontology_list = (String[]) request.getSession().getAttribute("ontology_list");
 		}
 
         // Called from license.jsp
@@ -1129,10 +1178,18 @@ mappingIteratorBean.initialize();
         if (acceptedLicensesStr != null) {
             LexEVSUtils.CSchemes acceptedLicenses =
                 LexEVSUtils.CSchemes.toSchemes(acceptedLicensesStr);
-            if (acceptedLicenses != null)
+            if (acceptedLicenses != null) {
                 LicenseUtils.acceptLicenses(request, acceptedLicenses);
+			}
         }
 
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
+        if (matchText != null) {
+            matchText = matchText.trim();
+           request.getSession().setAttribute("matchText", matchText);
+		}
+
+		/*
         String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
         if (matchText != null) {
             matchText = matchText.trim();
@@ -1140,6 +1197,8 @@ mappingIteratorBean.initialize();
         } else {
             matchText = (String) request.getSession().getAttribute("matchText");
         }
+        */
+
 
         String multiple_search_error =
             (String) request.getSession().getAttribute(
@@ -1149,12 +1208,10 @@ mappingIteratorBean.initialize();
         String matchAlgorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
 
 
-
         //KLO 051512 AppScan
         if (matchAlgorithm == null || matchAlgorithm.length() == 0) {
 			matchAlgorithm = "exactMatch";
 		}
-
         request.getSession().setAttribute("algorithm", matchAlgorithm);
 
         String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
@@ -1172,6 +1229,49 @@ mappingIteratorBean.initialize();
 Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
 
 StringBuffer buf = new StringBuffer();
+String ontologiesToSearchOnStr = null;
+HashSet hset = new HashSet();
+if (selected_vocabularies != null) { // hidden variable (subsequent search from search results page)
+	ontologiesToSearchOnStr = selected_vocabularies;
+} else {
+
+
+
+	if (ontology_list != null) {
+		List list = Arrays.asList(ontology_list);//.contains("any");
+	    for (int i=0; i<display_name_vec.size(); i++) {
+		    OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		    if (info.getVisible() && !list.contains(info.getLabel())) {
+				info.setSelected(false);
+			} else if (info.getVisible() && list.contains(info.getLabel())) {
+				info.setSelected(true);
+			}
+		}
+		for (int i = 0; i < ontology_list.length; ++i) {
+			if (!hset.contains(ontology_list[i])) {
+				hset.add(ontology_list[i]);
+			    buf.append(ontology_list[i] + "|");
+			}
+		}
+	}
+
+	buf.append("|");
+	for (int i=0; i<display_name_vec.size(); i++) {
+		 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+		 if (info.getSelected()) {
+			 if (!hset.contains(info.getLabel())) {
+				 buf.append(info.getLabel() + "|");
+				 hset.add(info.getLabel());
+			 }
+		 }
+	}
+
+
+	ontologiesToSearchOnStr = buf.toString();
+}
+
+
+/*
 String ontologiesToSearchOnStr = selected_vocabularies;
 if (DataUtils.isNull(selected_vocabularies)) {
 	// check if selection status has been changed.
@@ -1187,20 +1287,31 @@ if (DataUtils.isNull(selected_vocabularies)) {
 	}
 	ontologiesToSearchOnStr = buf.toString();
 }
+*/
 
+
+/*
+String new_ontologiesToSearchOnStr = "";
 for (int i = 0; i < display_name_vec.size(); i++) {
 	 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
 
 	 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) { // visible and checked by the user
 		 info.setSelected(true);
-	 } else if (info.getVisible() && ontologiesToSearchOnStr.indexOf(info.getLabel()) == -1) {
+		 //KLO
+	 } else {//if (info.getVisible() && ontologiesToSearchOnStr.indexOf(info.getLabel()) == -1) {
 		 info.setSelected(false);
 	 }
+	 if (info.getSelected()) {
+		 new_ontologiesToSearchOnStr = new_ontologiesToSearchOnStr + "|" + info.getLabel();
+	 }
 }
-
+ontologiesToSearchOnStr = new_ontologiesToSearchOnStr;
+*/
+String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
 
 request.getSession().setAttribute("display_name_vec", display_name_vec);
 request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
 
 
         List list = new ArrayList<String>();
@@ -1222,22 +1333,18 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
 
 
 		int selected_knt = 0;
-
 		Vector ontologies_to_search_on = new Vector();
 		StringBuffer buff = new StringBuffer();
 		buff.append("|");
-		//ontologiesToSearchOnStr = "|";
 		for (int i = 0; i < display_name_vec.size(); i++) {
 			 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
 			 if (info.getSelected()) {
 				 selected_knt++;
 				 ontologies_to_search_on.add(info.getLabel());
-				 //ontologiesToSearchOnStr = ontologiesToSearchOnStr + info.getLabel() + "|";
 				 buff.append(info.getLabel() + "|");
 			 }
 		}
 		ontologiesToSearchOnStr = buff.toString();
-
 		ontology_list = new String[ontologies_to_search_on.size()];
 		ontologiesToSearchOn = new ArrayList<String>();
 
@@ -1257,11 +1364,6 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
                 request.getSession().setAttribute("message", message);
                 request.getSession().removeAttribute("ontologiesToSearchOn");
                 request.getSession().setAttribute("defaultOntologiesToSearchOnStr", "|");
-                request.getSession().setAttribute("matchText",
-                    HTTPUtils.convertJSPString(matchText));
-
-
-
                 return "multiple_search";
             } else {
 
@@ -1314,8 +1416,6 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
                 String msg = Constants.ERROR_REQUIRE_MORE_SPECIFIC_QUERY_STRING;
                 request.getSession().setAttribute("warning", msg);
                 request.getSession().setAttribute("message", msg);
-                request.getSession().setAttribute("matchText",
-                    HTTPUtils.convertJSPString(matchText));
                 return "multiple_search";
             }
         }
@@ -1363,9 +1463,6 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
                 // ontologiesToSearchOnStr;
                 request.getSession().setAttribute(
                     "defaultOntologiesToSearchOnStr", "|");
-                request.getSession().setAttribute("matchText",
-                    HTTPUtils.convertJSPString(matchText));
-
                 return "multiple_search";
             }
         }
@@ -1400,10 +1497,6 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
             request.getSession().setAttribute("warning", message);
             request.getSession().setAttribute("message", message);
             request.getSession().removeAttribute("ontologiesToSearchOn");
-
-            request.getSession().setAttribute("matchText",
-                HTTPUtils.convertJSPString(matchText));
-
             return "multiple_search";
         }
 
@@ -1419,7 +1512,7 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
         LexEVSUtils.CSchemes unacceptedLicensesCS =
             LicenseUtils.getUnacceptedLicenses(request, ontologiesToSearchOn);
         if (unacceptedLicensesCS.size() > 0) {
-            request.getSession().setAttribute("matchText", matchText);
+            //request.getSession().setAttribute("matchText", matchText);
             request.setAttribute("searchTarget", searchTarget);
             request.setAttribute("algorithm", matchAlgorithm);
             request.setAttribute("ontology_list_str", ontology_list_str);
@@ -1454,64 +1547,58 @@ request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchO
         ResolvedConceptReferencesIterator iterator = null;
 
 
- // validate vocvabulary names:
+		for (int lcv=0; lcv<schemes.size(); lcv++) {
+			String check_formal_name = (String) schemes.elementAt(lcv);
+			check_formal_name = DataUtils.getFormalName(check_formal_name);
+			if (check_formal_name == null) {
+				String message = "Unable to identify vocabulary: " + check_formal_name;
+				request.getSession().setAttribute("message", message);
+				return "multiple_search";
+			}
+		}
 
 
-for (int lcv=0; lcv<schemes.size(); lcv++) {
-	String check_formal_name = (String) schemes.elementAt(lcv);
-	check_formal_name = DataUtils.getFormalName(check_formal_name);
-	if (check_formal_name == null) {
-		String message = "Unable to identify vocabulary: " + check_formal_name;
-		request.getSession().setAttribute("message", message);
-	    return "multiple_search";
-	}
+boolean retval = HTTPUtils.validateRequestParameters(request);
+if (!retval) {
+	System.out.println("multipleSearchAction returns invalid_parameter");
+	return "invalid_parameter";
 }
 
 
-
-
-
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         if (searchTarget.compareTo("names") == 0) {
-
-
-
+			// temporary fix for: [NCITERM-682] Contains search failed on search strings containing a colon character.
             long ms = System.currentTimeMillis();
             long delay = 0;
             _logger.debug("Calling SearchUtils().searchByNameAndCode " + matchText);
             ResolvedConceptReferencesIteratorWrapper wrapper = null;
-            /*
-                new SearchUtils().searchByName(schemes, versions, matchText,
-                    source, matchAlgorithm, ranking, maxToReturn);
-            */
-
-            /*
-                new SearchUtils().searchByNameAndCode(schemes, versions, matchText,
-                    source, matchAlgorithm, ranking, maxToReturn);
-            */
-
             //062013 KLO
             if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
-
-
 				try {
-					wrapper = new SimpleSearchUtils().search(schemes, versions, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+					String matchTextStr = matchText;
+					if (matchAlgorithm.compareTo("contains") == 0) {
+						matchTextStr = matchText.replaceAll(":", " ");
+					}
+					iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchTextStr, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			} else {
-				wrapper = new SearchUtils().searchByNameOrCode(
-						schemes, versions, matchText,
+				String matchTextStr = matchText;
+				if (matchAlgorithm.compareTo("contains") == 0) {
+					matchTextStr = matchText.replaceAll(":", " ");
+				}
+				wrapper = new SearchUtils(lbSvc).searchByNameOrCode(
+						schemes, versions, matchTextStr,
 						source, matchAlgorithm, ranking, maxToReturn, SearchUtils.SEARCH_BY_NAME_ONLY);
+
+				if (wrapper != null) {
+					iterator = wrapper.getIterator();
+				}
+
 			}
 
-
-            if (wrapper != null) {
-                iterator = wrapper.getIterator();
-
-
-
-
-            }
             delay = System.currentTimeMillis() - ms;
             _logger.debug("searchByNameAndCode delay (millisec.): " + delay);
 
@@ -1521,12 +1608,9 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             long ms = System.currentTimeMillis();
             long delay = 0;
             _logger.debug("Calling CodeSearchUtils().searchByCode " + matchText);
+
             ResolvedConceptReferencesIteratorWrapper wrapper =
-            /*
-                new SearchUtils().searchByName(schemes, versions, matchText,
-                    source, matchAlgorithm, ranking, maxToReturn);
-            */
-                new CodeSearchUtils().searchByCode(schemes, versions, matchText,
+                new CodeSearchUtils(lbSvc).searchByCode(schemes, versions, matchText,
                     source, matchAlgorithm, ranking, maxToReturn);
 
             if (wrapper != null) {
@@ -1536,17 +1620,19 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
             _logger.debug("searchByCode delay (millisec.): " + delay);
 
         } else if (searchTarget.compareTo("properties") == 0) {
+			String matchTextStr = matchText.replaceAll(":", " ");
             ResolvedConceptReferencesIteratorWrapper wrapper =
-                new SearchUtils().searchByProperties(schemes, versions,
-                    matchText, source, matchAlgorithm, excludeDesignation,
+                new SearchUtils(lbSvc).searchByProperties(schemes, versions,
+                    matchTextStr, source, matchAlgorithm, excludeDesignation,
                     ranking, maxToReturn);
             if (wrapper != null) {
                 iterator = wrapper.getIterator();
             }
         } else if (searchTarget.compareTo("relationships") == 0) {
             designationOnly = true;
+
             ResolvedConceptReferencesIteratorWrapper wrapper =
-                new SearchUtils().searchByAssociations(schemes, versions,
+                new SearchUtils(lbSvc).searchByAssociations(schemes, versions,
                     matchText, source, matchAlgorithm, designationOnly,
                     ranking, maxToReturn);
             if (wrapper != null) {
@@ -1611,8 +1697,10 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 						String msg =
 							"No match found.";
 						request.getSession().setAttribute("message", msg);
-						request.getSession().setAttribute("matchText",
-							HTTPUtils.convertJSPString(matchText));
+
+
+						//request.getSession().setAttribute("matchText",
+						//	HTTPUtils.convertJSPString(matchText));
 
 
 						hide_ontology_list = "false";
@@ -1625,9 +1713,6 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 							ontologiesToSearchOnStr);
 						request.getSession().setAttribute("multiple_search_no_match_error",
 							"true");
-
-						request.getSession().setAttribute("matchText",
-							HTTPUtils.convertJSPString(matchText));
 
 						return "multiple_search";
 
@@ -1679,15 +1764,13 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 						String msg =
 							"Error: Null ResolvedConceptReference encountered.";
 						request.getSession().setAttribute("message", msg);
-						request.getSession().setAttribute("matchText",
-							HTTPUtils.convertJSPString(matchText));
 						return "message";
 
 					} else {
 						c = ref.getReferencedEntry();
 						if (c == null) {
 							//c = DataUtils.getConceptByCode(coding_scheme, ref_version,
-							c = SearchUtils.getConceptByCode(coding_scheme, ref_version,
+							c = new SearchUtils(lbSvc).getConceptByCode(coding_scheme, ref_version,
 									null, ref.getConceptCode());
 						}
 					}
@@ -1703,9 +1786,6 @@ for (int lcv=0; lcv<schemes.size(); lcv++) {
 							.get(coding_scheme);
 
 					String convertJSPString = HTTPUtils.convertJSPString(matchText);
-					request.getSession()
-						.setAttribute("matchText", convertJSPString);
-
 					request.setAttribute("dictionary", coding_scheme);
 					request.setAttribute("version", ref_version);
 
@@ -1730,10 +1810,6 @@ response.setContentType("text/html;charset=utf-8");
 					request.getSession().setAttribute("match_size", match_size);
 					request.getSession().setAttribute("page_string", "1");
 					request.getSession().setAttribute("new_search", Boolean.TRUE);
-					// route to multiple_search_results.jsp
-					request.getSession().setAttribute("matchText",
-						HTTPUtils.convertJSPString(matchText));
-
 					_logger.debug("Start to render search_results ... ");
 
 
@@ -1752,9 +1828,6 @@ response.setContentType("text/html;charset=utf-8");
 				request.getSession().setAttribute("page_string", "1");
 				request.getSession().setAttribute("new_search", Boolean.TRUE);
 				// route to multiple_search_results.jsp
-				request.getSession().setAttribute("matchText",
-					HTTPUtils.convertJSPString(matchText));
-
 				_logger.debug("Start to render search_results ... ");
 
 
@@ -1768,8 +1841,8 @@ response.setContentType("text/html;charset=utf-8");
 
         }
 
-        int minimumSearchStringLength =
-            NCItBrowserProperties.getMinimumSearchStringLength();
+        // int minimumSearchStringLength =
+        //    NCItBrowserProperties.getMinimumSearchStringLength();
         if (ontologiesToSearchOn.size() == 0) {
             request.getSession().removeAttribute("vocabulary");
         } else if (ontologiesToSearchOn.size() == 1) {
@@ -1789,10 +1862,10 @@ response.setContentType("text/html;charset=utf-8");
 			}
 		}
 
-        else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
-            && matchText.length() < minimumSearchStringLength) {
-            message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
-        }
+        //else if (matchAlgorithm.compareTo(Constants.STARTWITH_SEARCH_ALGORITHM) == 0
+        //    && matchText.length() < minimumSearchStringLength) {
+        //    message = Constants.ERROR_ENCOUNTERED_TRY_NARROW_QUERY;
+        //}
 
         hide_ontology_list = "false";
 
@@ -1804,11 +1877,6 @@ response.setContentType("text/html;charset=utf-8");
             ontologiesToSearchOnStr);
         request.getSession().setAttribute("multiple_search_no_match_error",
             "true");
-
-        request.getSession().setAttribute("matchText",
-            HTTPUtils.convertJSPString(matchText));
-
-
         return "multiple_search";
     }
 
@@ -1835,12 +1903,20 @@ response.setContentType("text/html;charset=utf-8");
     }
 
     public String advancedSearchAction() {
-
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         ResolvedConceptReferencesIteratorWrapper wrapper = null;
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        request.getSession().removeAttribute("error_msg");
+/*
+        boolean retval = HTTPUtils.validateRequestParameters(request);
+        if (!retval) {
+			System.out.println("advancedSearchAction returns invalid_parameter");
+			return "invalid_parameter";
+		}
+*/
         String scheme = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
 	    if (scheme == null || DataUtils.getFormalName(scheme) == null) {
 			String message = "Invalid vocabulary name.";
@@ -1930,7 +2006,8 @@ response.setContentType("text/html;charset=utf-8");
         request.getSession().setAttribute("searchStatusBean", bean);
 
         String searchTarget = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
+
         if (matchText == null || matchText.length() == 0) {
             String message = "Please enter a search string.";
             // request.getSession().setAttribute("message", message);
@@ -1993,6 +2070,16 @@ response.setContentType("text/html;charset=utf-8");
 
         _logger.debug("SearchUtils.java searchType: " + searchType);
 
+
+
+boolean retval = HTTPUtils.validateRequestParameters(request);
+if (!retval) {
+	System.out.println("advancedSearchAction returns invalid_parameter");
+	return "invalid_parameter";
+}
+
+
+
         if (searchType != null && searchType.compareTo("Property") == 0) {
             /*
              * _logger.debug("Advanced Search: "); _logger.debug("searchType: "
@@ -2035,7 +2122,7 @@ response.setContentType("text/html;charset=utf-8");
                     property_names = new String[] { property_name };
                 excludeDesignation = false;
                 wrapper =
-                    new SearchUtils().searchByProperties(scheme, version,
+                    new SearchUtils(lbSvc).searchByProperties(scheme, version,
                         matchText, property_types, property_names, source,
                         matchAlgorithm, excludeDesignation, ranking,
                         maxToReturn);
@@ -2118,51 +2205,56 @@ response.setContentType("text/html;charset=utf-8");
                 String[] association_qualifier_names = null;
                 String[] association_qualifier_values = null;
 
-                if (rel_search_association != null) {
-					/*
-                    associationsToNavigate =
-                        new String[] { rel_search_association };
-                    */
 
-                    //KLO, 042211
-					//String assocName = OntologyBean.convertAssociationName(scheme, null, rel_search_association);
+		if (rel_search_association != null) {
+			String assocName = rel_search_association;
+			//_logger.debug("Converting " + rel_search_association + " to " + assocName);
+			associationsToNavigate =
+				new String[] { assocName };
 
-					String assocName = rel_search_association;
-					//_logger.debug("Converting " + rel_search_association + " to " + assocName);
-                    associationsToNavigate =
-                        new String[] { assocName };
+		} else {
+			System.out.println("(*) associationsToNavigate == null");
+		}
 
-                } else {
-                    _logger.debug("(*) associationsToNavigate == null");
-                }
+		if (rel_search_rela != null) {
+			association_qualifier_names = new String[] { "rela" };
+			association_qualifier_values =
+				new String[] { rel_search_rela };
 
-                if (rel_search_rela != null) {
-                    association_qualifier_names = new String[] { "rela" };
-                    association_qualifier_values =
-                        new String[] { rel_search_rela };
+			if (associationsToNavigate == null) {
+				Vector w = new CodingSchemeDataUtils(lbSvc).getSupportedAssociationNames(scheme, null);
+				if (w == null || w.size() == 0) {
+					//_logger
+					//	.warn("OntologyBean.getAssociationNames() returns null, or nothing???");
+				} else {
+					associationsToNavigate = new String[w.size()];
+					for (int i = 0; i < w.size(); i++) {
+						String nm = (String) w.elementAt(i);
+						associationsToNavigate[i] = nm;
+					}
+				}
+			}
+		}
 
-                    if (associationsToNavigate == null) {
-                        Vector w = OntologyBean.getAssociationNames(scheme);
-                        if (w == null || w.size() == 0) {
-                            _logger
-                                .warn("OntologyBean.getAssociationNames() returns null, or nothing???");
-                        } else {
-                            associationsToNavigate = new String[w.size()];
-                            for (int i = 0; i < w.size(); i++) {
-                                String nm = (String) w.elementAt(i);
-                                associationsToNavigate[i] = nm;
-                            }
-                        }
-                    }
-                }
+/*
+System.out.println("(*) advancedSearchAction SearchUtils(lbSvc).searchByAssociations ...");
 
+		    wrapper =
+			new SearchUtils(lbSvc).searchByAssociations(scheme, version,
+				matchText, associationsToNavigate,
+				association_qualifier_names,
+				association_qualifier_values, search_direction, source,
+				matchAlgorithm, excludeDesignation, ranking,
+				maxToReturn);
+*/
                 wrapper =
-                    new SearchUtils().searchByAssociations(scheme, version,
+                    new SearchUtils(lbSvc).searchByAssociations(scheme, version,
                         matchText, associationsToNavigate,
                         association_qualifier_names,
                         association_qualifier_values, search_direction, source,
                         matchAlgorithm, excludeDesignation, ranking,
                         maxToReturn);
+
                 if (wrapper != null) {
                     iterator = wrapper.getIterator();
                 }
@@ -2201,25 +2293,31 @@ response.setContentType("text/html;charset=utf-8");
             }
 
         } else if (searchType != null && searchType.compareTo("Name") == 0) {
+			// temporary fix for: [NCITERM-682] Contains search failed on search strings containing a colon character.
+			String matchTextStr = matchText;
+			if (matchAlgorithm.compareTo("contains") == 0) {
+				matchTextStr = matchTextStr.replaceAll(":", " ");
+			}
 
             searchFields =
-                SearchFields.setName(schemes, matchText, searchTarget, source,
+                SearchFields.setName(schemes, matchTextStr, searchTarget, source,
                     matchAlgorithm, maxToReturn);
             key = searchFields.getKey();
             if (iteratorBeanManager.containsIteratorBean(key)) {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-
-				if (SimpleSearchUtils.searchAllSources(source) && SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
+                //LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				if (new SimpleSearchUtils(lbSvc).searchAllSources(source) && SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 					try {
-						wrapper = new SimpleSearchUtils().search(scheme, version, matchText, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+						iterator = new SimpleSearchUtils(lbSvc).search(scheme, version, matchTextStr, SimpleSearchUtils.BY_NAME, matchAlgorithm);
+						wrapper = new ResolvedConceptReferencesIteratorWrapper(iterator);
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				} else {
 					wrapper =
-						new SearchUtils().searchByName(scheme, version, matchText,
+						new SearchUtils(lbSvc).searchByName(scheme, version, matchTextStr,
 							source, matchAlgorithm, ranking, maxToReturn,
 							SearchUtils.NameSearchType.Name);
 				}
@@ -2256,7 +2354,7 @@ response.setContentType("text/html;charset=utf-8");
 			    schemes.add(scheme);
 			    versions.add(version);
 
-                wrapper = new CodeSearchUtils().searchByCode(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn, false);
+                wrapper = new CodeSearchUtils(lbSvc).searchByCode(schemes, versions, matchText, source, matchAlgorithm, ranking, maxToReturn, false);
 
                 /*
                 wrapper =
@@ -2367,10 +2465,7 @@ response.setContentType("text/html;charset=utf-8");
                 request.getSession().setAttribute("code", ref.getConceptCode());
                 request.getSession().setAttribute("concept", c);
                 request.getSession().setAttribute("type", "properties");
-
                 request.getSession().setAttribute("version", version);
-
-
                 request.getSession().setAttribute("new_search", Boolean.TRUE);
 
 HttpServletResponse response =
@@ -2438,7 +2533,7 @@ response.setContentType("text/html;charset=utf-8");
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 
@@ -2484,6 +2579,9 @@ response.setContentType("text/html;charset=utf-8");
 				 info.setVisible(true);
 			 }
 		}
+        // [NCITERM-641] Tomcat session is mixed up.
+		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
+		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
 		return "multiple_search";
@@ -2494,7 +2592,7 @@ response.setContentType("text/html;charset=utf-8");
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 
@@ -2544,6 +2642,10 @@ response.setContentType("text/html;charset=utf-8");
 
 
 		}
+		// [NCITERM-641] Tomcat session is mixed up.
+		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
+		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
+
         request.getSession().setAttribute("display_name_vec", display_name_vec);
         request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
 		return "multiple_search";
@@ -2555,7 +2657,7 @@ response.setContentType("text/html;charset=utf-8");
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
-        String matchText = HTTPUtils.cleanXSS((String) request.getParameter("matchText"));
+        String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
         if (matchText != null)
             matchText = matchText.trim();
 
@@ -2579,11 +2681,70 @@ response.setContentType("text/html;charset=utf-8");
 
         //KLO, 102611
      	request.getSession().removeAttribute("ontology_list");
-
-
-        //LicenseUtils.clearAllLicenses(request); //DYEE
 		return "multiple_search";
 	}
+
+
+     private void show_other_versions(HttpServletRequest request, String action_cs, boolean show) {
+
+		//System.out.println("action_cs: " + action_cs + "; show or hide: " + show);
+
+
+	    String ontologiesToSearchOnStr = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
+	    if (ontologiesToSearchOnStr == null) {
+
+			String[] ontology_list = request.getParameterValues("ontology_list"); // checkboxes, value = info.getLabel();
+			if ( ontology_list  == null ) {
+				 ontology_list = (String[]) request.getSession().getAttribute("ontology_list");
+			}
+
+			StringBuffer buf = new StringBuffer();
+			buf.append("|");
+			if (ontology_list != null) {
+				//System.out.println("(*) UserSessionBean ontology_list.length: " + ontology_list.length);
+				for (int i = 0; i < ontology_list.length; ++i) {
+
+					//System.out.println("(" + i + ") " + ontology_list[i]);
+
+					buf.append(ontology_list[i] + "|");
+				}
+			}
+			ontologiesToSearchOnStr = buf.toString();
+		}
+
+String s = "|";
+	    Vector display_name_vec = (Vector) request.getSession().getAttribute("display_name_vec");
+		for (int i = 0; i < display_name_vec.size(); i++) {
+		     OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+
+			 //if (info.getVisible()) {
+				 info.setSelected(false);
+				 if (ontologiesToSearchOnStr.indexOf(info.getLabel()) != -1) {
+					 info.setSelected(true);
+					 s = s + info.getLabel() + "|";
+
+				 }
+
+
+		     //}
+
+			 if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && info.getHasMultipleVersions()) {
+			     info.setExpanded(show);
+			 } else if (action_cs != null && action_cs.compareTo(info.getCodingScheme()) == 0 && !info.isProduction()) {
+				 info.setVisible(show);
+			 }
+		}
+
+
+ontologiesToSearchOnStr = s;
+
+        // [NCITERM-641] Tomcat session is mixed up.
+		String ontologiesToExpandStr = getOntologiesToExpandStr(display_name_vec);
+		request.getSession().setAttribute("ontologiesToExpandStr", ontologiesToExpandStr);
+        request.getSession().setAttribute("display_name_vec", display_name_vec);
+        request.getSession().setAttribute("ontologiesToSearchOnStr", ontologiesToSearchOnStr);
+
+     }
 
 
     public void showListener(ActionEvent evt) {
@@ -2604,10 +2765,15 @@ response.setContentType("text/html;charset=utf-8");
 				 show_counter++;
 				 if (show_counter == k) {
 					 action_coding_scheme = info.getCodingScheme();
+					 show_other_versions(request, action_coding_scheme, true);
 					 break;
 				 }
 			 }
 		}
+
+		String t0 = (String) request.getSession().getAttribute("ontologiesToSearchOnStr");
+
+		//System.out.println("EXIT show_other_versions: " + t0);
 
     }
 
@@ -2627,10 +2793,12 @@ response.setContentType("text/html;charset=utf-8");
 				 hide_counter++;
 				 if (hide_counter == k) {
 					 action_coding_scheme = info.getCodingScheme();
+					 show_other_versions(request, action_coding_scheme, false);
 					 break;
 				 }
 			 }
 		}
+		//System.out.println("EXIT show_other_versions");
 
     }
 
@@ -2832,7 +3000,6 @@ response.setContentType("text/html;charset=utf-8");
 			return "retry";
 		}
 
-
         try {
     		String retstr = null;
     		if (captcha_option.compareTo("audio") == 0) {
@@ -2841,8 +3008,13 @@ response.setContentType("text/html;charset=utf-8");
 				retstr = validateCaptcha(request, "incomplete");
 			}
 
-            String recipients[] = MailUtils.getRecipients();
-            MailUtils.postMail(from, recipients, subject, message);
+            //String recipients[] = MailUtils.getRecipients();
+            //MailUtils.postMail(from, recipients, subject, message);
+
+            String recipientStr = NCItBrowserProperties.getNCICB_CONTACT_URL();
+            String mail_smtp_server = NCItBrowserProperties.getMAIL_SMTP_SERVER();
+            MailUtils.postMail(from, recipientStr, subject, message, mail_smtp_server);
+
 			request.getSession().setAttribute("message", msg);
 
         } catch (NoReloadException e) {
@@ -2955,5 +3127,105 @@ response.setContentType("text/html;charset=utf-8");
         return "retry";
 
     }
+
+    // [NCITERM-641] Tomcat session is mixed up.
+    public String getOntologiesToExpandStr(Vector display_name_vec) {
+		StringBuffer buf = new StringBuffer();
+		String ontologiesToExpandStr = null;
+		buf.append("|");
+		if (display_name_vec != null) {
+			for (int i = 0; i < display_name_vec.size(); i++) {
+				 OntologyInfo info = (OntologyInfo) display_name_vec.elementAt(i);
+			     if (info.getExpanded()) {
+					 buf.append(info.getLabel() + "|");
+				 }
+			}
+		}
+		return buf.toString();
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void export_mapping_search_results(HttpServletRequest request, HttpServletResponse response) {
+        String mapping_schema = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
+        String mapping_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
+
+        //to be modified
+        ResolvedConceptReferencesIterator iterator = DataUtils.getMappingDataIterator(mapping_schema, mapping_version);
+		int numRemaining = 0;
+		if (iterator != null) {
+			try {
+				numRemaining = iterator.numberRemaining();
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+        StringBuffer sb = new StringBuffer();
+        try {
+			sb.append("Source Code,");
+			sb.append("Source Name,");
+			sb.append("Source Coding Scheme,");
+			sb.append("Source Coding Scheme Version,");
+			sb.append("Source Coding Scheme Namespace,");
+
+			sb.append("Association Name,");
+			sb.append("REL,");
+			sb.append("Map Rank,");
+
+			sb.append("Target Code,");
+			sb.append("Target Name,");
+			sb.append("Target Coding Scheme,");
+			sb.append("Target Coding Scheme Version,");
+			sb.append("Target Coding Scheme Namespace");
+			sb.append("\r\n");
+
+			MappingIteratorBean bean = new MappingIteratorBean(iterator);
+            List list = bean.getData(0, numRemaining-1);
+            for (int k=0; k<list.size(); k++) {
+				MappingData mappingData = (MappingData) list.get(k);
+				sb.append("\"" + mappingData.getSourceCode() + "\",");
+				sb.append("\"" + mappingData.getSourceName() + "\",");
+				sb.append("\"" + mappingData.getSourceCodingScheme() + "\",");
+				sb.append("\"" + mappingData.getSourceCodingSchemeVersion() + "\",");
+				sb.append("\"" + mappingData.getSourceCodeNamespace() + "\",");
+
+				sb.append("\"" + mappingData.getAssociationName() + "\",");
+				sb.append("\"" + mappingData.getRel() + "\",");
+				sb.append("\"" + mappingData.getScore() + "\",");
+
+				sb.append("\"" + mappingData.getTargetCode() + "\",");
+				sb.append("\"" + mappingData.getTargetName() + "\",");
+				sb.append("\"" + mappingData.getTargetCodingScheme() + "\",");
+				sb.append("\"" + mappingData.getTargetCodingSchemeVersion() + "\",");
+				sb.append("\"" + mappingData.getTargetCodeNamespace() + "\"");
+				sb.append("\r\n");
+			}
+		} catch (Exception ex)	{
+			sb.append("WARNING: Export to CVS action failed.");
+			ex.printStackTrace();
+		}
+
+		String filename = mapping_schema + "_" + mapping_version;
+		filename = filename.replaceAll(" ", "_");
+		filename = filename + ".csv";
+
+		response.setContentType("text/csv");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ filename);
+
+		response.setContentLength(sb.length());
+
+		try {
+			ServletOutputStream ouputStream = response.getOutputStream();
+			ouputStream.write(sb.toString().getBytes("UTF-8"), 0, sb.length());
+			ouputStream.flush();
+			ouputStream.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			sb.append("WARNING: Export to CVS action failed.");
+		}
+		FacesContext.getCurrentInstance().responseComplete();
+		return;
+	}
 
 }

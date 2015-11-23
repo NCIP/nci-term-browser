@@ -87,7 +87,7 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         %>
 
         <%
-        if (source_url_value != null) {
+        if (source_url_value != null && !isMapping) {
         %>
             <p>
             Source Home Page:
@@ -105,10 +105,10 @@ if (license_display_value != null && (license_display_value.compareTo("show") ==
         <%
         }
         
-        if (cabig_vkc_index_url_value != null) {
+        if (cabig_vkc_index_url_value != null && !isMapping) {
         %>
             <p>
-            caBIG VKC Link:
+            More Information:
               <a href="<%=cabig_vkc_index_url_value%>" target="_blank"><%=cabig_vkc_index_url_value%></a>
             </p>
         <%

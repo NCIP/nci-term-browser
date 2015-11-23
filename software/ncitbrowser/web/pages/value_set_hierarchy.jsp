@@ -481,7 +481,7 @@ if (search_results_version != null) {
     <!-- Main box -->
     <div id="main-area_960">
 
-    <% if (search_results_dictionary == null || search_results_dictionary.compareTo("NCI Thesaurus") == 0 || || search_results_dictionary.compareTo("NCI_Thesaurus") == 0) { %>
+    <% if (DataUtils.isNCIT(search_results_dictionary)) { %>
       <%@ include file="/pages/templates/content-header.jsp" %>
     <% } else { %>
       <%@ include file="/pages/templates/content-header-other.jsp" %>

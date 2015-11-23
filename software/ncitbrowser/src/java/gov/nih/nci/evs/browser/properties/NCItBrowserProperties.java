@@ -74,6 +74,7 @@ public class NCItBrowserProperties {
     public static final String PING_LEXEVS_INTERVAL = "PING_LEXEVS_INTERVAL";
     public static final String MAXIMUM_RETURN = "MAXIMUM_RETURN";
     public static final String EHCACHE_XML_PATHNAME = "EHCACHE_XML_PATHNAME";
+    public static final String CONFIGURATION_DIR = "CONFIGURATION_DIR";
     public static final String SORT_BY_SCORE = "SORT_BY_SCORE";
     public static final String MAIL_SMTP_SERVER = "MAIL_SMTP_SERVER";
     public static final String NCICB_CONTACT_URL = "NCICB_CONTACT_URL";
@@ -214,8 +215,7 @@ public class NCItBrowserProperties {
 
             _bioportalAcronym2NameHashMap = RESTClient.getBioportalAcronym2NameHashMap(_ncbo_api_key);
 
-			if (DataUtils.isNullOrBlank(_ncbo_widget_info)) {
-				//_ncbo_widget_info = Constants.DEFAULT_NCBO_WIDGET_INFO;
+       		if (_ncbo_widget_info == null || _ncbo_widget_info.compareToIgnoreCase("null") == 0 || _ncbo_widget_info.compareTo("") == 0) {
 				_ncbo_widget_info = null;
 			}
 
@@ -491,6 +491,14 @@ public class NCItBrowserProperties {
 
     public static String getNCBO_WIDGET_INFO() {
         return _ncbo_widget_info;
+    }
+
+    public static String getMAIL_SMTP_SERVER() {
+        return _mail_smtp_server;
+    }
+
+    public static String getNCICB_CONTACT_URL() {
+        return _ncicb_contact_url;
     }
 
     public static int getPaginationTimeOut() {

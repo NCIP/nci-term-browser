@@ -5,21 +5,21 @@
 --------------------------------------
 Pre-installation requirements
 --------------------------------------
-1. JDK 1.6
-2. Apache ANT 1.7 or newer
-3. LexEVS 6.0 (lexevs60.war) deployed and running
+1. JDK 1.7
+2. Apache ANT 1.8 or newer
+3. LexEVS 6.1 (lexevsapi61.war) deployed and running
 
 -------------------------------------------------------------------
 Build the application (Linux Example, Adjust as needed for windows)
 -------------------------------------------------------------------
 
-Checkout source files from SVN:
+Checkout source files from NCIEVS GitHub repository:
 
 1. Create the application directory
    EG; mkdir /home/user/NCI-Projects/ncitbrowser
 
 2. Checkout NCIt code from trunk
-   EG; svn checkout https://ncisvn.nci.nih.gov/svn/ncit/trunk /home/user/NCI-Projects/ncitbrowser
+   EG; git clone https://github.com/NCIEVS/nci-term-browser.git /home/user/NCI-Projects/ncitbrowser
 
 Setup the projects build property file:
 
@@ -31,34 +31,27 @@ Setup the projects build property file:
 
 3. Updated property values in local.properties as appropriate for your environment.
 
-Install JBoss 5.1
+Install Tomcat Server
 
-1. Run NCI Jboss install
+1. Run NCI Tomcat install
    ant deploy:local:install
 
 
-Deploy NCIt we application
+Deploy NCI Term Browser web application
 
 1. ant deploy:local:upgrade
 
-The URL for accessing NCIt is : http:// your_app_server.com:19280/ncitbrowser/
+The URL for accessing NCIt is : http:// your_app_server.com:8080/ncitbrowser/
 
 
 ************************
 * Miscellaneous  notes *
 ************************
 
---------------------------------------
-Deploy to DEV remotely from desktop
---------------------------------------
-1. Rename local.properties so that it does not overwrite the remote properties file.
-2. ant -Dproperties.file=C:\SVN-Projects\ncit-properties\properties\dev-upgrade.properties deploy:remote:upgrade
-
-
 -----------------------
 Other build commands
 -----------------------
-cd C:\SVN-Projects\ncit\software\build>
+cd /home/user/NCI-Projects/ncitbrowser/software/build>
 
 Usage:      ant
 Clean:      ant clean
@@ -70,7 +63,7 @@ Redeploy:   ant deploy:hot
 --------------------------------------
 Location of files
 --------------------------------------
-URL:        http://localhost:19280/ncitbrowser
+URL:        http://localhost:8080/ncitbrowser
 
 --------------------------------------
 Load balancing
@@ -83,29 +76,10 @@ Enable persistence checking on the F5 Bigip box so a user is always returned to 
 Trouble shooting
 --------------------------------------
 
-Clear JBoss cache
------------------
-Solution:
-Delete C:\Apps\jboss-4.0.5.GA\server\default\work\jboss.web\localhost
-
-JBoss rmiPort=1098 "Address already in use" error
--------------------------------------------------
-Solution:
-cd <JBOSS_HOME>\server\default\conf directory, and changed the rmi port in
-the jboss-services.xml from 1098 to 1122 (or a port that hasn't been taken).
-Restarted JBOSS.
-
-log4j:ERROR "org.jboss.logging.util.OnlyOnceErrorHandler"
----------------------------------------------------------
-Exceptions occurs if an application deployed on JBoss packages log4j and commons-logging related jars
-in its package. JBoss has its own versions of these jars in its lib folder which results in these conflicts.
-Solution:
-Removing the log4j and commons-logging jars from your application's package will solve this issue.
-
 Error: Could not acquire lock on lock file
 ------------------------------------------
 Solution:
-The JBoss user needs read/writer privileges on the lock file in /local/content/evs/lexbig51/resources/config.
+The tomcat user needs read/writer privileges on the lock file in /local/content/evs/lexbig51/resources/config.
 
 Error: Copying from a remote server to a remote server is not supported
 -----------------------------------------------------------------------
@@ -116,7 +90,3 @@ the ‘Remote to Remote’ error.
 Solution:
 Don’t use special character in paths.
 
-Lexevs60 hibernate exception fix
---------------------------------
-Update run.conf as follows:
--XX:ThreadStackSize=256

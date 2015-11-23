@@ -337,7 +337,7 @@ public class OntologyBean {
             versionOrTag.setVersion(version);
         CodingScheme cs = null;
         try {
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             try {
                 cs = lbSvc.resolveCodingScheme(codingScheme, versionOrTag);
             } catch (Exception ex2) {
@@ -527,7 +527,7 @@ public class OntologyBean {
         Vector w = new Vector();
 
         try {
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             lbscm =
                 (LexBIGServiceConvenienceMethodsImpl) lbSvc
                     .getGenericExtension("LexBIGServiceConvenienceMethods");
@@ -563,7 +563,7 @@ public class OntologyBean {
         //Vector w = new Vector();
 
         try {
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             lbscm =
                 (LexBIGServiceConvenienceMethodsImpl) lbSvc
                     .getGenericExtension("LexBIGServiceConvenienceMethods");
@@ -592,7 +592,7 @@ public class OntologyBean {
 
         LexBIGServiceConvenienceMethodsImpl lbscm = null;
         try {
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             lbscm =
                 (LexBIGServiceConvenienceMethodsImpl) lbSvc
                     .getGenericExtension("LexBIGServiceConvenienceMethods");
@@ -633,7 +633,7 @@ public class OntologyBean {
 
         LexBIGServiceConvenienceMethodsImpl lbscm = null;
         try {
-            LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+            LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             lbscm =
                 (LexBIGServiceConvenienceMethodsImpl) lbSvc
                     .getGenericExtension("LexBIGServiceConvenienceMethods");
@@ -651,8 +651,6 @@ public class OntologyBean {
 				String id = sa.getLocalId();
 				String name = sa.getContent();
 				String t = name + "|" + id;
-
-				//_association_name_vec.add(name);
 				if (name != null && name.compareTo("") != 0 && id != null && id.compareTo("") != 0) {
 					_association_name_vec.add(name + "|" + id);
 				}
@@ -680,7 +678,7 @@ public class OntologyBean {
     }
 
 
-
+/*
     public static Vector getSupportedMappingAssociationNamesAndIDs(String codingSchemeName, String version) {
 		if (codingSchemeName == null) return null;
         Vector association_name_vec = new Vector();
@@ -691,7 +689,7 @@ public class OntologyBean {
 
 		//List list = new ArrayList();
 		try {
-			LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 			CodingScheme cs = lbSvc.resolveCodingScheme(codingSchemeName, csvt);
 			Relations[] relations = cs.getRelations();
 			if (relations.length == 0) {
@@ -709,6 +707,55 @@ public class OntologyBean {
 						association_name_vec.add(asso.getAssociationName() + "|" + asso.getAssociationName());
 					}
 
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+        }
+        return association_name_vec;
+	}
+*/
+
+    public static Vector getSupportedMappingAssociationNamesAndIDs(String codingSchemeName, String version) {
+		if (codingSchemeName == null) return null;
+        Vector association_name_vec = new Vector();
+
+
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null) {
+            csvt.setVersion(version);
+		}
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			CodingScheme cs = lbSvc.resolveCodingScheme(codingSchemeName, csvt);
+
+			if (cs == null) {
+				System.out.println("Coding scheme " + codingSchemeName + " not found.");
+				return null;
+			}
+			Relations[] relations = cs.getRelations();
+			if (relations.length == 0) {
+				return association_name_vec;
+			}
+			for (int i = 0; i < relations.length; i++) {
+				Relations relation = relations[i];
+				/*
+				Boolean bool_obj = relation.isIsMapping();
+				System.out.println("is mapping: " + bool_obj);
+				if (bool_obj == null || bool_obj.equals(Boolean.FALSE)) {
+					return association_name_vec;
+				} else {
+                    AssociationPredicate[] asso_array = relation.getAssociationPredicate();
+                    for (int j=0; j<asso_array.length; j++) {
+						AssociationPredicate asso = asso_array[j];
+						association_name_vec.add(asso.getAssociationName() + "|" + asso.getAssociationName());
+					}
+				}
+				*/
+				AssociationPredicate[] asso_array = relation.getAssociationPredicate();
+				for (int j=0; j<asso_array.length; j++) {
+					AssociationPredicate asso = asso_array[j];
+				    association_name_vec.add(asso.getAssociationName() + "|" + asso.getAssociationName());
 				}
 			}
 		} catch (Exception ex) {

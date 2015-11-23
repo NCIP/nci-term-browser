@@ -108,10 +108,12 @@
            break;
         }
       }      
-     
- 
-      var adv_search_source = document.forms["advancedSearchForm"].adv_search_source.value;
-
+      
+      var adv_search_source = "";
+      var sourceObj = document.forms["advancedSearchForm"].adv_search_source;
+      if (!(sourceObj === undefined || sourceObj === null)) {
+           adv_search_source = sourceObj.value;
+      }
 
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
@@ -149,8 +151,12 @@
  
       var selectSearchOption = "Code";
       var algorithm = "exactMatch";
-      var adv_search_source = document.forms["advancedSearchForm"].adv_search_source.value;
 
+      var adv_search_source = "";
+      var sourceObj = document.forms["advancedSearchForm"].adv_search_source;
+      if (!(sourceObj === undefined || sourceObj === null)) {
+           adv_search_source = sourceObj.value;
+      }
 
       var rel_search_association = document.forms["advancedSearchForm"].rel_search_association.value;
       var selectProperty = document.forms["advancedSearchForm"].selectProperty.value;
@@ -279,7 +285,7 @@
     
         // Note: Called when the user selects "Search By" fields.
         selectSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
-        search_string = HTTPUtils.cleanXSS((String) request.getParameter("text"));
+        search_string = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("text"));
         adv_search_algorithm = HTTPUtils.cleanXSS((String) request.getParameter("algorithm"));
         
         adv_search_source = HTTPUtils.cleanXSS((String) request.getParameter("sab"));
@@ -305,6 +311,10 @@
 
     } else {
         selectSearchOption = (String) request.getSession().getAttribute("selectSearchOption");
+        adv_search_source = (String) request.getSession().getAttribute("selectedSource");
+        if (adv_search_source == null) {
+            adv_search_source = "ALL";
+        }
         search_string = (String) request.getSession().getAttribute("matchText");
         direction = (String) request.getSession().getAttribute("direction");
     }
@@ -351,13 +361,13 @@
             
             selectSearchOption = bean.getSelectedSearchOption();
             
-
             _logger.debug("advanced_search.jsp adv_search_algorithm: " + adv_search_algorithm);
             _logger.debug("advanced_search.jsp adv_search_source: " + adv_search_source);
             _logger.debug("advanced_search.jsp selectProperty: " + selectProperty);
             _logger.debug("advanced_search.jsp search_string: " + search_string);
             _logger.debug("advanced_search.jsp rel_search_association: " + rel_search_association);
             _logger.debug("advanced_search.jsp rel_search_rela: " + rel_search_rela);
+            
             FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("searchStatusBean", bean);
         }
     }
@@ -375,16 +385,6 @@
     }
 
     String check__e = "", check__b = "", check__s = "" , check__c ="";
-    /*
-    if (adv_search_algorithm == null || adv_search_algorithm.compareTo("exactMatch") == 0)
-        check__e = "checked";
-    else if (adv_search_algorithm.compareTo("startsWith") == 0)
-        check__s= "checked";
-    else if (adv_search_algorithm.compareToIgnoreCase("lucene") == 0)
-        check__b= "checked";
-    else
-        check__c = "checked";
-    */
     
     if (adv_search_algorithm == null || adv_search_algorithm.compareTo("contains") == 0)
         check__c = "checked";
@@ -506,9 +506,6 @@ if (adv_search_algorithm.compareToIgnoreCase("lucene") != 0) {
                   &nbsp;&nbsp;
                 </td></tr>
                 
-                
-                
-                
 <%
 } else {
 %>
@@ -605,15 +602,17 @@ if (adv_search_algorithm.compareToIgnoreCase("lucene") != 0) {
                           <%} %>
 
                           <%
-                            
-                            Vector association_vec = OntologyBean.getSupportedAssociationNamesAndIDs(adv_search_vocabulary, adv_search_version);
+                            //[NCITERM-681] The relationship combo box in some coding schemes is not populated correctly.
+                            //Vector association_vec = OntologyBean.getSupportedAssociationNamesAndIDs(adv_search_vocabulary, adv_search_version);
+                            Vector association_vec = DataUtils.getSupportedAssociationNames(adv_search_vocabulary, adv_search_version);
                             if (association_vec != null) {
 				    for (int i=0; i<association_vec.size(); i++) {
 				      t = (String) association_vec.elementAt(i);
-
-				      Vector name_and_id_vec = DataUtils.parseData(t);
-				      String association_name = (String) name_and_id_vec.elementAt(0);
-				      String association_id = (String) name_and_id_vec.elementAt(1);
+				      //Vector name_and_id_vec = StringUtils.parseData(t);
+				      //String association_name = (String) name_and_id_vec.elementAt(0);
+				      //String association_id = (String) name_and_id_vec.elementAt(1);
+				      String association_name = t;
+				      String association_id = t;
 
 				      if (association_id.compareTo(rel_search_association) == 0) {
 				  %>
@@ -732,17 +731,9 @@ if (adv_search_algorithm.compareToIgnoreCase("lucene") == 0 && selectSearchOptio
 <i>Negation: heart -attack</i>
        </td>
    </tr>
-<!--
-   <tr>
-       <td class="textbody">
-<i>Code Field: code:118797008 AND heart</i>
-       </td>
-   </tr>
--->
 </table>
 </p>
 </td></tr>
-
 <%
 }
 %>

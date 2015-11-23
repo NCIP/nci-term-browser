@@ -133,7 +133,7 @@ String selectedvalueset = null;
 vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
 if (vsd_vec != null && vsd_vec.size() == 1) {
 	vsd_uri = (String) vsd_vec.elementAt(0);
-	Vector temp_vec = DataUtils.parseData(vsd_uri);
+	Vector temp_vec = StringUtils.parseData(vsd_uri);
 	selectedvalueset = (String) temp_vec.elementAt(1);
 	root_vsd_uri = (String) temp_vec.elementAt(0);
 }
@@ -144,6 +144,11 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 
     String message = (String) request.getSession().getAttribute("message");
     request.getSession().removeAttribute("message");
+    
+    if (message == null) {
+	    String message = (String) request.getSession().getAttribute("error_msg");
+	    request.getSession().removeAttribute("error_msg");
+    }
 
    
     String t = null;
@@ -230,7 +235,10 @@ if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
 		    //isValueSet = false;
 		    Entity entity = DataUtils.getConceptByCode(Constants.TERMINOLOGY_VALUE_SET_NAME, null, root_vsd_uri); 
 		    if (entity != null) {
-			vsd_name = entity.getEntityDescription().getContent();
+		        vsd_name = "";
+		        if (entity.getEntityDescription() != null) {
+			    vsd_name = entity.getEntityDescription().getContent();
+			}
 		    }
 	    }	      
 	      
@@ -275,7 +283,7 @@ if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
     if (vsd_uri.indexOf("|") == -1) {
         uri_vsd = vsd_uri;
     } else {
-       Vector temp_vec = DataUtils.parseData(vsd_uri);
+       Vector temp_vec = StringUtils.parseData(vsd_uri);
         vsd_name = (String) temp_vec.elementAt(0);
         uri_vsd = (String) temp_vec.elementAt(1);
     } 
@@ -632,7 +640,7 @@ if (vd_uri != null) {
  if (vsd_uri != null) {
   
       if (vsd_uri.indexOf("|") != -1) {
-  	Vector w = (Vector) DataUtils.parseData(vsd_uri);
+  	Vector w = (Vector) StringUtils.parseData(vsd_uri);
   	vsd_uri = (String) w.elementAt(1);
       }
 
@@ -669,7 +677,7 @@ if (vsd_vec != null && vsd_vec.size() > 1) {
     for (int i=0; i<vsd_vec.size(); i++) {
       String vsd_str = (String) vsd_vec.elementAt(i);
             
-      Vector u = DataUtils.parseData(vsd_str);
+      Vector u = StringUtils.parseData(vsd_str);
       String name = (String) u.elementAt(0);
       String uri = (String) u.elementAt(1);
       String label = (String) u.elementAt(2);
@@ -704,11 +712,11 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
   
     
     
-    Vector w = DataUtils.parseData(vsd_metadata_str);
+    Vector w = StringUtils.parseData(vsd_metadata_str);
     vsd_uri = (String) w.elementAt(1);
 
     
-    String vsd_description = ValueSetHierarchy.getValueSetDecription(vsd_uri);
+    String vsd_description = DataUtils.getValueSetHierarchy().getValueSetDecription(vsd_uri);
     if (vsd_description == null) {
         vsd_description = "DESCRIPTION NOT AVAILABLE";
     }
@@ -801,7 +809,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
 if (vsd_vec != null && vsd_vec.size() == 1) {
 
 if (vsd_uri.indexOf("|") != -1) {
-	Vector w = (Vector) DataUtils.parseData(vsd_uri);
+	Vector w = (Vector) StringUtils.parseData(vsd_uri);
 	vsd_uri = (String) w.elementAt(1);
 }
 

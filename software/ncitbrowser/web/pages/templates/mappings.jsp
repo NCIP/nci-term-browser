@@ -1,22 +1,27 @@
 
 <%
 
+  LexBIGService lbsvc = RemoteServerUtil.createLexBIGService();
+  MappingSearchUtils mappingSearchutils = new MappingSearchUtils(lbsvc);
+  MetathesaurusUtils metathesaurusUtils = new MetathesaurusUtils(lbsvc);
+
+
   if (type.compareTo("mapping") == 0 || type.compareTo("all") == 0) {
   HashMap display_name_hmap = new HashMap();
 
 
-  Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
+  //Entity concept_curr = (Entity) request.getSession().getAttribute("concept");
   JSPUtils.JSPHeaderInfo mapping_info = new JSPUtils.JSPHeaderInfo(request);
-  String scheme_curr = mapping_info.dictionary;
-  String version_curr = mapping_info.version;
-  String code_curr = (String) request.getSession().getAttribute("code");
+  String mappings_scheme_curr = mapping_info.dictionary;
+  String mappings_version_curr = mapping_info.version;
+  String mappings_code_curr = (String) request.getSession().getAttribute("code");
   
-  boolean isMappingCS = DataUtils.isMapping(scheme_curr, version_curr);
+  boolean isMappingCS = DataUtils.isMapping(mappings_scheme_curr, mappings_version_curr);
     
   
   if(!isMappingCS) {
   
-  Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(code_curr, null);
+  Vector mapping_uri_version_vec = DataUtils.getMappingCodingSchemesEntityParticipatesIn(mappings_code_curr, null);
 
 
                 String source_scheme = null;//"NCI_Thesaurus";
@@ -39,10 +44,13 @@
   <table border="0" width="708px">
 
  <%
- 
+         Vector meta_cui_vec = null;
          Entity con = (Entity) request.getSession().getAttribute("concept");
- 	 Vector meta_cui_vec = DataUtils.getMatchedMetathesaurusCUIs(con);//scheme_curr, version_curr, null, code_curr);
-
+         if (con == null) {
+             meta_cui_vec = metathesaurusUtils.getMatchedMetathesaurusCUIs(mappings_scheme_curr, mappings_version_curr, null, mappings_code_curr);        
+         } else {
+             meta_cui_vec = metathesaurusUtils.getMatchedMetathesaurusCUIs(con); 
+         }
 
 %>  
   
@@ -53,6 +61,7 @@
 if (type != null && type.compareTo("all") == 0) {
 %>
     <A name="mappings">Mapping Details</A>
+    
 <%    
 } else {
 %>
@@ -64,23 +73,16 @@ if (type != null && type.compareTo("all") == 0) {
       
       </td>
     </tr>
-    
-    
-    
-    
-    
-    
-    
+   
   </table>
+  <p></p>
 <%
-        if (mapping_uri_version_vec == null || mapping_uri_version_vec.size() == 0) {
+        if ((mapping_uri_version_vec == null || mapping_uri_version_vec.size() == 0) && (meta_cui_vec == null || meta_cui_vec.size() == 0)) {
 %>
             <b>Mapping Relationships:</b> <i>(none)</i>
 <%
         } else {
               DataUtils util = new DataUtils();
-              
-
 
 
          if (meta_cui_vec != null && meta_cui_vec.size() > 0)
@@ -101,7 +103,7 @@ if (type != null && type.compareTo("all") == 0) {
  			%>
  			       <tr>
  				 <td class="textbody">
-  					    <a href="<%= ncim_url %>/ConceptReport.jsp?dictionary=<%=ncim_cs_name%>&code=<%=meta_cui%>&type=synonym" target="_blank">
+  					    <a href="<%= ncim_url %>/ConceptReport.jsp?dictionary=<%=ncim_cs_name%>&type=synonym&code=<%=meta_cui%>" target="_blank">
  					      <i class="textbody"><%=meta_cui%></i>
  					      <img src="<%= request.getContextPath() %>/images/window-icon.gif" width="10" height="11" border="0" alt="<%=ncim_cs_name%>" />
  					    </a>
@@ -134,7 +136,7 @@ if (type != null && type.compareTo("all") == 0) {
     
         
            String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
-           Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
+           Vector ret_vec = StringUtils.parseData(mapping_uri_version, "|");
            String mapping_cs_uri = (String) ret_vec.elementAt(0);
            String mapping_cs_version = (String) ret_vec.elementAt(1);
            String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
@@ -146,8 +148,8 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 }   
 
 
-           List list = new MappingSearchUtils().getMappingRelationship(
-                       mapping_cs_uri, mapping_cs_version, code_curr, 1);
+           List list = mappingSearchutils.getMappingRelationship(
+                       mapping_cs_uri, mapping_cs_version, mappings_code_curr, 1);
 
 
 if (list != null && list.size() > 0) {
@@ -296,7 +298,7 @@ if (show_rank_column) {
 <%      
       for(int lcv=0; lcv<mapping_uri_version_vec.size(); lcv++) {
            String mapping_uri_version = (String) mapping_uri_version_vec.elementAt(lcv);
-           Vector ret_vec = DataUtils.parseData(mapping_uri_version, "|");
+           Vector ret_vec = StringUtils.parseData(mapping_uri_version, "|");
            String mapping_cs_uri = (String) ret_vec.elementAt(0);
            String mapping_cs_version = (String) ret_vec.elementAt(1);
            String mapping_cs_name = DataUtils.uri2CodingSchemeName(mapping_cs_uri);
@@ -308,8 +310,8 @@ if (map_rank_applicable != null && map_rank_applicable.compareTo("false") == 0) 
 }   
 
 
-           List list = new MappingSearchUtils().getMappingRelationship(
-                       mapping_cs_uri, mapping_cs_version, code_curr, -1);
+           List list = mappingSearchutils.getMappingRelationship(
+                       mapping_cs_uri, mapping_cs_version, mappings_code_curr, -1);
 
 
 if (list != null && list.size() > 0) {

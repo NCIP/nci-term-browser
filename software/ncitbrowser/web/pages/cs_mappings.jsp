@@ -65,7 +65,7 @@
 <body onLoad="document.forms.searchTerm.matchText.focus();">
 <!--
    Build info: <%=ncit_build_info%>
- Version info: <%=application_version%>
+   Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
    LexEVS URL: <%=evs_service_url%>
   -->
@@ -126,7 +126,7 @@ String nciturl = request.getContextPath() + "/pages/home.jsf" + "?version=" + in
 	      </div>
 	    </a>
     <%
-  } else if (info3.dictionary.compareTo("NCI Thesaurus") == 0 || info3.dictionary.compareTo("NCI_Thesaurus") == 0) {
+  } else if (DataUtils.isNCIT(info3.dictionary)) {
   %>
 	 <a href="<%=nciturl%>" style="text-decoration: none;">
 	      <div class="vocabularynamebanner_ncit">

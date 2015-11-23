@@ -7,6 +7,9 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*"%>
 <%@ page import="gov.nih.nci.evs.browser.properties.*"%>
 <%@ page import="gov.nih.nci.evs.browser.bean.*"%>
+
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService"%>
+
 <%
   String ncit_build_info = new DataUtils().getNCITBuildInfo();
   String application_version = new DataUtils().getApplicationVersion();
@@ -15,7 +18,7 @@
 %>
 <!--
    Build info: <%=ncit_build_info%>
- Version info: <%=application_version%>
+   Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
    LexEVS URL: <%=evs_service_url%>
   -->
@@ -47,6 +50,8 @@
       <%
 JSPUtils.JSPHeaderInfoMore info = new JSPUtils.JSPHeaderInfoMore(request);
 String vocabulary_version = info.version;
+LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+MetadataUtils metadataUtils = new MetadataUtils(lbSvc);
 
         String menubar_scheme = null;
         String menubar_scheme0 = null;
@@ -59,6 +64,9 @@ String vocabulary_version = info.version;
         /* ------------------------ */
 
         String scheme = info.dictionary;
+        
+        
+        
         String vocabulary_home_str = HTTPUtils.cleanXSS((String) request.getParameter("home"));
         String shortName = null;
 //KLO, testing
@@ -75,8 +83,7 @@ if (scheme != null) {
         }
 
 
-
-  boolean hasValueSet = ValueSetHierarchy.hasValueSet(scheme);
+  boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(scheme);
   boolean hasMapping = DataUtils.hasMapping(scheme);
 
 
@@ -95,7 +102,8 @@ request.getSession().removeAttribute("m");
         String term_browser_version = info.term_browser_version;
         String display_name = info.display_name;
 
-        if (scheme != null && scheme == null) {
+        //if (scheme != null && scheme == null) {
+        if (scheme != null) {
           if (version != null) {
             dictionary = scheme + " (version" + version + ")";
             version = version.replaceAll("%20", " ");
@@ -116,8 +124,8 @@ request.getSession().removeAttribute("m");
 
         /* ------------------------ */
 
-        v = MetadataUtils.getMetadataNameValuePairs(scheme, version, null);
-        Vector u1 = MetadataUtils.getMetadataValues(v, 
+        v = DataUtils.getMetadataNameValuePairs(scheme, version, null);
+        Vector u1 = metadataUtils.getMetadataValues(v, 
             "html_compatable_description");
         voc_description = scheme;
         if (u1 != null && u1.size() > 0) {
@@ -128,7 +136,7 @@ request.getSession().removeAttribute("m");
             voc_description = "";
           }
         } else {
-          u1 = MetadataUtils.getMetadataValues(v, "description");
+          u1 = metadataUtils.getMetadataValues(v, "description");
           if (u1 != null && u1.size() > 0) {
             voc_description = (String) u1.elementAt(0);
             if (voc_description == null
@@ -138,7 +146,7 @@ request.getSession().removeAttribute("m");
             }
           }
         }
-        Vector u2 = MetadataUtils.getMetadataValues(v, "version");
+        Vector u2 = metadataUtils.getMetadataValues(v, "version");
         voc_version = "";
         if (u2 != null && u2.size() > 0) {
           voc_version = (String) u2.elementAt(0);
@@ -146,7 +154,7 @@ request.getSession().removeAttribute("m");
         if (voc_version.compareTo("") == 0)
           voc_version = version;
 
-        Vector u3 = MetadataUtils.getMetadataValues(v,
+        Vector u3 = metadataUtils.getMetadataValues(v,
             "download_url");
         if (u3 != null && u3.size() > 0) {
           download_site = (String) u3.elementAt(0);
@@ -217,11 +225,7 @@ request.getSession().removeAttribute("m");
 
               <div class="bannerarea_960">
 <%
-
-
-if ((dictionary != null && (dictionary.compareTo("NCI Thesaurus") == 0 || dictionary.compareTo("NCI_Thesaurus") == 0)) ||
-    (scheme != null && (scheme.compareTo("NCI Thesaurus") == 0 || scheme.compareTo("NCI_Thesaurus") == 0))
-    ) {
+if (DataUtils.isNCIT(dictionary) || DataUtils.isNCIT(scheme)) {    
 %>
     <div class="banner"><a href="<%=basePath%>"><img src="<%=basePath%>/images/thesaurus_browser_logo.jpg" width="383" height="117" alt="Thesaurus Browser Logo" border="0"/></a></div>
 <%

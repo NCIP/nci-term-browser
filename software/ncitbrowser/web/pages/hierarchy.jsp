@@ -68,8 +68,15 @@
     }
 
     function addTreeNode(rootNode, nodeInfo) {
-      var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
-      var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+
+      var newNodeDetails = "javascript:onClickTreeNode('" 
+                         + nodeInfo.ontology_node_id 
+                         + "','"
+                         + nodeInfo.ontology_node_ns 
+                         + "');";
+      
+      var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, ns:nodeInfo.ontology_node_ns, href:newNodeDetails };
+      
       var newNode = new YAHOO.widget.TextNode(newNodeData, rootNode, false);
       if (nodeInfo.ontology_node_child_count > 0) {
         newNode.setDynamicLoad(loadNodeData);
@@ -130,8 +137,18 @@
         if ( typeof(respObj) != "undefined") {
           if ( typeof(respObj.root_node) != "undefined") {
             var root = tree.getRoot();
-            var nodeDetails = "javascript:onClickTreeNode('" + respObj.root_node.ontology_node_id + "');";
-            var rootNodeData = { label:respObj.root_node.ontology_node_name, id:respObj.root_node.ontology_node_id, href:nodeDetails };
+
+            var nodeDetails = "javascript:onClickTreeNode('" 
+                  + respObj.root_node.ontology_node_id
+                  + "','"
+                  + respObj.root_node.ontology_node_ns
+                  + "');";
+            var rootNodeData = { label:respObj.root_node.ontology_node_name, 
+                                 id:respObj.root_node.ontology_node_id, 
+                                 ns:respObj.root_node.ontology_node_ns, href:nodeDetails };
+
+            
+            
             var expand = false;
             if (respObj.root_node.ontology_node_child_count > 0) {
               expand = true;
@@ -169,12 +186,21 @@
       }
     }
 
-    function onClickTreeNode(ontology_node_id) {
+    //function onClickTreeNode(ontology_node_id) {
+    //  var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
+    //  var ontology_version = document.forms["pg_form"].ontology_version.value;
+    //  load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id, currOpener);
+    //}
+
+    function onClickTreeNode(ontology_node_id, ontology_node_ns) {
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
       var ontology_version = document.forms["pg_form"].ontology_version.value;
-      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id, currOpener);
+      load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name 
+           + '&version='+ ontology_version  
+           + '&code=' + ontology_node_id 
+           + '&ns=' + ontology_node_ns, currOpener);
     }
-
+    
     function onClickViewEntireOntology(ontology_display_name) {
       var ontology_display_name = document.pg_form.ontology_display_name.value;
       tree = new YAHOO.widget.TreeView("treecontainer");
@@ -268,6 +294,7 @@
 
     function loadNodeData(node, fnLoadComplete) {
       var id = node.data.id;
+      var ns = node.data.ns;
 
       var responseSuccess = function(o)
       {
@@ -275,14 +302,19 @@
         var dirs;
         var files;
         var respTxt = o.responseText;
+       
         var respObj = eval('(' + respTxt + ')');
         var fileNum = 0;
         var categoryNum = 0;
         if ( typeof(respObj.nodes) != "undefined") {
           for (var i=0; i < respObj.nodes.length; i++) {
             var name = respObj.nodes[i].ontology_node_name;
-            var nodeDetails = "javascript:onClickTreeNode('" + respObj.nodes[i].ontology_node_id + "');";
-            var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, href:nodeDetails };
+            var nodeDetails = "javascript:onClickTreeNode('" 
+                  + respObj.nodes[i].ontology_node_id
+                  + "','"
+                  + respObj.nodes[i].ontology_node_ns
+                  + "');";
+            var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, ns:respObj.nodes[i].ontology_node_ns, href:nodeDetails };
             var newNode = new YAHOO.widget.TextNode(newNodeData, node, false);
             if (respObj.nodes[i].ontology_node_child_count > 0) {
               newNode.setDynamicLoad(loadNodeData);
@@ -305,7 +337,7 @@
 
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
       var ontology_version = document.forms["pg_form"].ontology_version.value;
-      var cObj = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_tree&ontology_node_id=' +id+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);
+      var cObj = YAHOO.util.Connect.asyncRequest('GET','<%= request.getContextPath() %>/ajax?action=expand_tree&ontology_node_id=' +id + '&ontology_node_ns=' +ns+'&ontology_display_name='+ontology_display_name+'&version='+ontology_version,callback);
     }
 
     function setRootDesc(rootNodeName, ontology_display_name) {
@@ -384,8 +416,24 @@
 
 
     function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {
-      var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
-      var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+      //var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
+      //var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
+
+      //var newNodeDetails = "javascript:onClickTreeNode('" 
+      //                   + nodeInfo.ontology_node_id 
+      //                   + ","
+      //                    + nodeInfo.ontology_node_ns 
+      //                   + "');";
+
+
+      var newNodeDetails = "javascript:onClickTreeNode('" 
+                         + nodeInfo.ontology_node_id 
+                         + "','"
+                         + nodeInfo.ontology_node_ns 
+                         + "');";
+                        
+                         
+      var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, ns:nodeInfo.ontology_node_ns, href:newNodeDetails };
 
       var expand = false;
       var childNodes = nodeInfo.children_nodes;
@@ -409,12 +457,12 @@
 
       } else {
           if (nodeInfo.ontology_node_id != ontology_node_id) {
-          if (nodeInfo.ontology_node_child_count == 0 && nodeInfo.ontology_node_id != ontology_node_id) {
-        newNode.isLeaf = true;
-          } else if (childNodes.length == 0) {
-        newNode.setDynamicLoad(loadNodeData);
+              if (nodeInfo.ontology_node_child_count == 0 && nodeInfo.ontology_node_id != ontology_node_id) {
+                  newNode.isLeaf = true;
+              } else if (childNodes.length == 0) {
+                  newNode.setDynamicLoad(loadNodeData);
+              }
           }
-        }
       }
 
       tree.draw();
@@ -483,7 +531,7 @@ if (release_date == null || release_date.compareTo("") == 0) {
 	 
 	 
 
-if (hierarchy_schema.compareTo("NCI Thesaurus") == 0 || hierarchy_schema.compareTo("NCI_Thesaurus") == 0) {
+if (DataUtils.isNCIT(hierarchy_schema)) {
 %>
     <div>
       <img src="<%=basePath%>/images/thesaurus_popup_banner.gif" width="612" height="56" alt="NCI Thesaurus" title="" border="0" />
@@ -562,11 +610,12 @@ if (hierarchy_schema.compareTo("NCI Thesaurus") == 0 || hierarchy_schema.compare
           <form id="pg_form" enctype="application/x-www-form-urlencoded;charset=UTF-8">
             <%
               String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
+              String ontology_node_ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
 /*
 String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
 //11202013, KLO
 if (DataUtils.isNull(schema)) {
-    schema = "NCI_Thesaurus";
+    schema = Constants.NCIT_CS_NAME;
 }
 
 String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
@@ -587,13 +636,14 @@ String schema = ontology_display_name;
 //ontology_display_name = DataUtils.uri2CodingSchemeName(ontology_display_name);
 ontology_display_name = DataUtils.getCSName(ontology_display_name);
 if (DataUtils.isNull(ontology_display_name)) {
-    ontology_display_name = "NCI_Thesaurus";
+    ontology_display_name = Constants.NCIT_CS_NAME;
 }
 
 String ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
 
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
+            <input type="hidden" id="ontology_node_ns" name="ontology_node_ns" value="<%=HTTPUtils.cleanXSS(ontology_node_ns)%>" />
             <input type="hidden" id="ontology_display_name" name="ontology_display_name" value="<%=HTTPUtils.cleanXSS(ontology_display_name)%>" />
             <input type="hidden" id="schema" name="schema" value="<%=HTTPUtils.cleanXSS(schema)%>" />
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />

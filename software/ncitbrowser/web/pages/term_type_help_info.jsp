@@ -52,7 +52,7 @@
             display_name = DataUtils.getLocalName(schema); 
           }
           
-          if (schema.compareTo("NCI Thesaurus") == 0 || schema.compareTo("NCI_Thesaurus") == 0) {
+          if (DataUtils.isNCIT(schema)) {
         %>
             <div><img src="<%=basePath%>/images/thesaurus_popup_banner.gif"
               width="612" height="56" alt="NCI Thesaurus" title="" border="0" /></div>
@@ -112,7 +112,7 @@
                   String rowColor = (n%2 == 1) ? "dataRowDark" : "dataRowLight";
               %>
                   <tr class="<%=rowColor%>">
-                    <td scope="row"><%=DataUtils.encodeTerm(name)%></td>
+                    <td scope="row"><%=name%></td>
                     <td><%=description%></td>
                   </tr>
               <%

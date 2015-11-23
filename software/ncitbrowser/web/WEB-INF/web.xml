@@ -12,11 +12,16 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
     </context-param>
-
+    
     <context-param>
         <param-name>javax.faces.CONFIG_FILES</param-name>
         <param-value>/WEB-INF/faces-config.xml</param-value>
     </context-param>
+
+<context-param>  
+    <param-name>com.sun.faces.enableRestoreView11Compatibility</param-name>
+    <param-value>true</param-value>  
+</context-param>
 
     <listener>
         <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
@@ -46,6 +51,17 @@
     </servlet-mapping>
 
 
+    <servlet>
+        <servlet-name>websvc</servlet-name>
+        <servlet-class>gov.nih.nci.evs.browser.servlet.DataServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+         <servlet-name>websvc</servlet-name>
+         <url-pattern>/websvc</url-pattern>
+    </servlet-mapping>
+    
     <!-- Faces Servlet -->
 
     <!-- servlet>

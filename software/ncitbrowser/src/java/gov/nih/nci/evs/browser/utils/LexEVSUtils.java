@@ -54,10 +54,12 @@ public class LexEVSUtils {
     public static class CScheme {
         private String _codingScheme;
         private String _version;
+        private String _displayName;
 
         public CScheme(String codingScheme, String version) {
             _codingScheme = codingScheme;
             _version = version;
+            _displayName = null;
         }
 
         public String getCodingScheme() {
@@ -69,7 +71,10 @@ public class LexEVSUtils {
         }
 
         public String getDisplayName() {
-            return DataUtils.getMetadataValue(_codingScheme, "display_name");
+			if (_displayName == null) {
+            	_displayName = DataUtils.getMetadataValue(_codingScheme, "display_name");
+			}
+			return _displayName;
         }
 
         public String toString() {

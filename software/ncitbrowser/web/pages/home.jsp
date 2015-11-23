@@ -27,7 +27,7 @@
 <body onLoad="document.forms.searchTerm.matchText.focus();">
 <!--
    Build info: <%=ncit_build_info%>
- Version info: <%=application_version%>
+   Version info: <%=application_version%>
           Tag: <%=anthill_build_tag_built%>
    LexEVS URL: <%=evs_service_url%>          
   -->
@@ -36,6 +36,17 @@
   <script type="text/javascript" src="<%= request.getContextPath() %>/js/tip_followscroll.js"></script>
 
 <%
+
+Boolean ncit_available = DataUtils.isNCITAvailable();
+
+if (ncit_available == null || !ncit_available.equals(Boolean.TRUE)) {
+    String error_msg = "WARNING: " + Constants.NCIT_NOT_AVAILABLE;
+    request.getSession().setAttribute("error_msg", error_msg);
+    String redirectURL = request.getContextPath() + "/pages/coding_scheme_unavailable.jsf";
+    redirectURL = request.getContextPath() + "/start.jsf";
+    response.sendRedirect(redirectURL);
+}
+
 request.getSession().setAttribute("dictionary", "NCI Thesaurus");
 String vocabulary_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
 if (vocabulary_version != null) {

@@ -11,6 +11,9 @@
 <%@ page import="javax.faces.context.FacesContext" %>
 <%@ page import="org.apache.log4j.*" %>
 
+<%@ page import="org.LexGrid.LexBIG.LexBIGService.LexBIGService" %>
+
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
@@ -92,7 +95,7 @@ if (search_results_dictionary == null || search_results_dictionary.compareTo("NC
         <%
 
 key = (String) request.getSession().getAttribute("key");
-
+boolean bool_val;
 
 String resultsPerPage = HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
 if (resultsPerPage == null) {
@@ -101,6 +104,19 @@ if (resultsPerPage == null) {
        resultsPerPage = "50";
     }
 } else {
+
+
+
+		    bool_val = JSPUtils.isInteger(resultsPerPage);
+		    if (!bool_val) {
+			 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+			 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+			 request.getSession().setAttribute("error_msg", error_msg);
+			 response.sendRedirect(redirectURL);
+		    } 
+
+
+
     request.getSession().setAttribute("resultsPerPage", resultsPerPage);
 }
 
@@ -130,10 +146,24 @@ if (num_pages * pageSize < size) num_pages++;
 String page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
 
 if (!DataUtils.isNull(page_number)) {
-//  if (page_number != null) {
-    pageNum = Integer.parseInt(page_number);
+
+
+		    bool_val = JSPUtils.isInteger(page_number);
+		    if (!bool_val) {
+			 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+			 String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
+			 request.getSession().setAttribute("error_msg", error_msg);
+			 response.sendRedirect(redirectURL);
+		    } else {
+		         pageNum = Integer.parseInt(page_number);
+		    }  
+
+
+    
 } else {
+
     pageNum = 0;
+    
 }
 
 int istart = pageNum * pageSize;
@@ -209,9 +239,22 @@ String match_size = Integer.valueOf(size).toString();
           //String selectedResultsPerPage = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectedResultsPerPage"));
           String contains_warning_msg = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("contains_warning_msg"));
 
+          if (page_number != null)
+          {
+          
+		    bool_val = JSPUtils.isInteger(page_number);
+		    if (!bool_val) {
+			 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+			 String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
+			 request.getSession().setAttribute("error_msg", error_msg);
+			 response.sendRedirect(redirectURL);
+		    } 
+
+          }
+          
           if (page_number != null && new_search == Boolean.FALSE)
           {
-              page_string = page_number;
+               page_string = page_number;
           }
           request.getSession().setAttribute("new_search", Boolean.FALSE);
           
@@ -402,7 +445,8 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
                       if (rcr.getEntityDescription() != null) {
                           name = rcr.getEntityDescription().getContent();
                       } else {
-			      Entity entity = SearchUtils.getConceptByCode(rcr.getCodeNamespace(), null, null, rcr.getConceptCode());
+                              LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+			      Entity entity = new SearchUtils(lbSvc).getConceptByCode(rcr.getCodeNamespace(), null, null, rcr.getConceptCode());
 			      if (entity != null && entity.getEntityDescription() != null) {
 			      	  name = entity.getEntityDescription().getContent();
 			      } 
@@ -476,16 +520,22 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           <td class="dataCellText" scope="row">
           <%
-
-          if (con_status == null) {
-          %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>
-          <%
+          
+          if (PropertyData.isConceptEntity(rcr)) {
+		  if (con_status == null) {
+		  %>
+		     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&ns=<%=ns%>&code=<%=code%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>
+		  <%
+		  } else {
+		  %>
+		     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&ns=<%=ns%>&code=<%=code%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
+		  <%
+		  }
           } else {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=search_results_dictionary%>&version=<%=search_results_version%>&code=<%=code%>&ns=<%=ns%>&key=<%=key%>&b=1&n=<%=page_number%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(<%=con_status%>)
-          <%
-          }
+	          <%=DataUtils.encodeTerm(name)%>
+	  <%        
+          }   
           %>
           </td>
 

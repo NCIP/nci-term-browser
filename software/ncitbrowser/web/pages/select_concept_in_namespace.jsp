@@ -80,7 +80,7 @@ if (coding_scheme_version != null) {
     request.setAttribute("version", coding_scheme_version);
 }
 
-if (vocabulary_name == null || vocabulary_name.compareTo("NCI Thesaurus") == 0 || || vocabulary_name.compareTo("NCI_Thesaurus") == 0) {
+if (DataUtils.isNCIT(vocabulary_name)) {
 %>
 
       <%@ include file="/pages/templates/content-header.jsp" %>
@@ -214,11 +214,11 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 
           if (con_status == null) {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=sel_dictionary_nm%>&version=<%=sel_version%>&code=<%=code%>&ns=<%=ns%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(Namespace: <%=ns%>)
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=sel_dictionary_nm%>&version=<%=sel_version%>&ns=<%=ns%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(Namespace: <%=ns%>)
           <%
           } else {
           %>
-             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=sel_dictionary_nm%>&version=<%=sel_version%>&code=<%=code%>&ns=<%=ns%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(Namespace: <%=ns%>)&nbsp;(<%=con_status%>)
+             <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=sel_dictionary_nm%>&version=<%=sel_version%>&ns=<%=ns%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>&nbsp;(Namespace: <%=ns%>)&nbsp;(<%=con_status%>)
           <%
           }
           %>

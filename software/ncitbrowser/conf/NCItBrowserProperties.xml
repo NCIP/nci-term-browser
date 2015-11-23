@@ -140,18 +140,19 @@
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
 
+<!--
         <DisplayItem>
             <propertyName>NCI_META_CUI</propertyName>
-            <itemLabel>NCI Metathesaurus CUI</itemLabel>
+            <itemLabel>NCI Metathesaurus Link</itemLabel>
             <url>@ncim.url@ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>false</isExternalCode>
        </DisplayItem>
 
-<!--
+
       <DisplayItem>
             <propertyName>UMLS_CUI</propertyName>
-            <itemLabel>NCI Metathesaurus CUI</itemLabel>
+            <itemLabel>NCI Metathesaurus Link</itemLabel>
             <url>@ncim.url@ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
             <isExternalCode>false</isExternalCode>
@@ -304,14 +305,6 @@
        
 
        <DisplayItem>
-            <propertyName>NCI_META_CUI</propertyName>
-            <itemLabel>NCI META CUI</itemLabel>
-            <url>@ncim.url@ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
-            <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
-            <isExternalCode>true</isExternalCode>
-       </DisplayItem>
-
-       <DisplayItem>
             <propertyName>NSC_Code</propertyName>
             <itemLabel>NSC Code</itemLabel>
             <url>http://dtp.nci.nih.gov/dtpstandard/servlet/dwindex?searchtype=NSC&amp;searchlist=</url>
@@ -322,8 +315,8 @@
        <DisplayItem>
             <propertyName>PDQ_Closed_Trial_Search_ID</propertyName>
             <itemLabel>PDQ Closed Trial Search ID</itemLabel>
-            <url>http://www.cancer.gov/Search/ClinicalTrialsLink.aspx?idtype=1&amp;closed=1&amp;id=</url>
-            <hyperlinkText>check for NCI PDQ closed clinical trial info</hyperlinkText>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
@@ -351,11 +344,37 @@
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
+<!--
+       <DisplayItem>
+            <propertyName>NCI_META_CUI</propertyName>
+            <itemLabel>NCI META CUI</itemLabel>
+            <url>@ncim.url@ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
+            <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem>
+
+
        <DisplayItem>
             <propertyName>UMLS_CUI</propertyName>
             <itemLabel>UMLS CUI</itemLabel>
             <url>@ncim.url@ncimbrowser/ConceptReport.jsp?dictionary=NCI%20MetaThesaurus&amp;code=</url>
             <hyperlinkText>see NCI Metathesaurus info</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem>
+-->
+       <DisplayItem>
+            <propertyName>NCI_META_CUI</propertyName>
+            <itemLabel>NCI META CUI</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
+            <isExternalCode>true</isExternalCode>
+       </DisplayItem>
+
+       <DisplayItem>
+            <propertyName>UMLS_CUI</propertyName>
+            <itemLabel>UMLS CUI</itemLabel>
+            <url>null</url>
+            <hyperlinkText>null</hyperlinkText>
             <isExternalCode>true</isExternalCode>
        </DisplayItem>
 
@@ -451,6 +470,13 @@
                  <key>EHCACHE_XML_PATHNAME</key>
                  <value>@ehcache.xml.file@</value>
         </ConfigurableItem>
+
+<!--        
+        <ConfigurableItem>
+                 <key>VALUE_SET_DOWNLOAD_DIR</key>
+                 <value>@value_set_download_dir@</value>
+        </ConfigurableItem>        
+-->        
 
         <ConfigurableItem>
                  <key>SORT_BY_SCORE</key>

@@ -24,6 +24,14 @@
 
   <navigation-rule>
     <from-view-id>/pages/mapping_search.jsp</from-view-id>
+    
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>    
+        
     <navigation-case>
        <description>mapping_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -227,9 +235,67 @@
        <to-view-id>/pages/concept_details.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
-
+    
   <navigation-rule>
     <from-view-id>/pages/vocabulary.jsp</from-view-id>
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>      
+        
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>mapping_search_results</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>mapping_search_results</from-outcome>
+       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
+    </navigation-case>
+        
+    <navigation-case>
+       <description>Search</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/search_results.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details</from-outcome>
+       <to-view-id>/pages/concept_details.jsp</to-view-id>
+    </navigation-case>
+    
+
+    <navigation-case>
+       <description>concept_details</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>concept_details_other_term</from-outcome>
+       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_message</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/message.jsp</to-view-id>
+    </navigation-case>
+
+    <navigation-case>
+       <description>contact_us_error</description>
+       <from-action>#{userSessionBean.contactUs}</from-action>
+       <from-outcome>error</from-outcome>
+       <to-view-id>/pages/contact_us.jsp</to-view-id>
+    </navigation-case>
+  
+    
     <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.acceptLicenseAgreement}</from-action>
@@ -251,13 +317,7 @@
        <to-view-id>/pages/search_results.jsp</to-view-id>
     </navigation-case>
 
-    <navigation-case>
-       <description>mapping_search_results</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>mapping_search_results</from-outcome>
-       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
-    </navigation-case>
-    
+   
     <navigation-case>
        <description>single_search_results</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -266,30 +326,23 @@
     </navigation-case>
 
     <navigation-case>
-       <description>concept_details</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>concept_details</from-outcome>
-       <to-view-id>/pages/concept_details.jsp</to-view-id>
-    </navigation-case>
-
-    <navigation-case>
        <description>error_message</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/message.jsp</to-view-id>
     </navigation-case>
-
-    <navigation-case>
-       <description>contact_us_message</description>
-       <from-action>#{userSessionBean.contactUs}</from-action>
-       <from-outcome>message</from-outcome>
-       <to-view-id>/pages/message.jsp</to-view-id>
-    </navigation-case>
-
-   </navigation-rule>
+ </navigation-rule>
 
   <navigation-rule>
     <from-view-id>/pages/home.jsp</from-view-id>
+        
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>     
+    
     <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -342,6 +395,15 @@
 
   <navigation-rule>
     <from-view-id>/pages/vocabulary_home.jsp</from-view-id>
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.searchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>   
+  
+  
+    
     <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.searchAction}</from-action>
@@ -409,64 +471,7 @@
 
 
 
-  <navigation-rule>
-    <from-view-id>/pages/vocabulary.jsp</from-view-id>
-    <navigation-case>
-       <description>message</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>message</from-outcome>
-       <to-view-id>/pages/message.jsp</to-view-id>
-    </navigation-case>
 
-    <navigation-case>
-       <description>mapping_search_results</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>mapping_search_results</from-outcome>
-       <to-view-id>/pages/mapping_search_results.jsp</to-view-id>
-    </navigation-case>
-        
-    <navigation-case>
-       <description>Search</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>search_results</from-outcome>
-       <to-view-id>/pages/search_results.jsp</to-view-id>
-    </navigation-case>
-
-    <navigation-case>
-       <description>Search</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>single_search_results</from-outcome>
-       <to-view-id>/pages/single_search_results.jsp</to-view-id>
-    </navigation-case>
-
-    <navigation-case>
-       <description>concept_details</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>concept_details</from-outcome>
-       <to-view-id>/pages/concept_details.jsp</to-view-id>
-    </navigation-case>
-
-    <navigation-case>
-       <description>concept_details</description>
-       <from-action>#{userSessionBean.searchAction}</from-action>
-       <from-outcome>concept_details_other_term</from-outcome>
-       <to-view-id>/pages/concept_details_other_term.jsp</to-view-id>
-    </navigation-case>
-
-    <navigation-case>
-       <description>contact_us_message</description>
-       <from-action>#{userSessionBean.contactUs}</from-action>
-       <from-outcome>message</from-outcome>
-       <to-view-id>/pages/message.jsp</to-view-id>
-    </navigation-case>
-
-    <navigation-case>
-       <description>contact_us_error</description>
-       <from-action>#{userSessionBean.contactUs}</from-action>
-       <from-outcome>error</from-outcome>
-       <to-view-id>/pages/contact_us.jsp</to-view-id>
-    </navigation-case>
-  </navigation-rule>
 
   <navigation-rule>
     <from-view-id>/pages/contact_us.jsp</from-view-id>
@@ -592,6 +597,14 @@
     <from-view-id>/pages/multiple_search_results.jsp</from-view-id>
 
     <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>
+    
+    
+    <navigation-case>
        <description>Search</description>
        <from-action>#{userSessionBean.multipleSearchAction}</from-action>
        <from-outcome>search_results</from-outcome>
@@ -711,7 +724,7 @@
        <description>term_type_help_info</description>
        <to-view-id>/pages/term_type_help_info.jsp</to-view-id>
     </navigation-case>
-  </navigation-rule>
+    </navigation-rule>
 
     <navigation-case>
        <description>mapping_search_results</description>
@@ -839,6 +852,13 @@
   <navigation-rule>
     <from-view-id>/pages/multiple_search.jsp</from-view-id>
 
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.multipleSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>
+    
     <navigation-case>
        <description>show_versions</description>
        <from-action>#{userSessionBean.showOtherVersions}</from-action>
@@ -987,6 +1007,14 @@
 
    <navigation-rule>
      <from-view-id>/pages/vocabulary-home.jsp</from-view-id>
+     
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.advancedSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>    
+     
      <navigation-case>
         <description>message</description>
         <from-action>#{userSessionBean.searchAction}</from-action>
@@ -1126,6 +1154,14 @@
     <from-view-id>/pages/advanced_search.jsp</from-view-id>
 
     <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{userSessionBean.advancedSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case>
+    
+    
+    <navigation-case>
        <description>message</description>
        <from-action>#{userSessionBean.advancedSearchAction}</from-action>
        <from-outcome>no_match</from-outcome>
@@ -1235,6 +1271,23 @@
 
   <navigation-rule>
     <from-view-id>/pages/value_set_search.jsp</from-view-id>
+    <!--
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/appscan_response.jsp</to-view-id>
+    </navigation-case> 
+    -->
+
+    <navigation-case>
+       <description>Appscan</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>invalid_parameter</from-outcome>
+       <to-view-id>/pages/value_set_search.jsp</to-view-id>
+    </navigation-case>     
+        
+        
     <navigation-case>
        <description>value_set_search</description>
        <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
@@ -1242,12 +1295,22 @@
        <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
     </navigation-case>
     
+    <!--
     <navigation-case>
        <description>message</description>
        <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
        <from-outcome>message</from-outcome>
        <to-view-id>/pages/value_set_search.jsp</to-view-id>
     </navigation-case>
+    -->
+
+    <navigation-case>
+       <description>message</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+    </navigation-case>
+    
     
     <navigation-case>
        <description>message</description>

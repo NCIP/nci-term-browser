@@ -80,6 +80,7 @@
          <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
+                        boolean bool_val;
             		int numRemaining = 0;
             		String valueSetSearch_requestContextPath = request
             				.getContextPath();
@@ -90,7 +91,7 @@
             		String metadata = DataUtils
             				.getValueSetDefinitionMetadata(DataUtils
             						.findValueSetDefinitionByURI(vsd_uri));
-            		Vector u = DataUtils.parseData(metadata);
+            		Vector u = StringUtils.parseData(metadata);
             		String name = (String) u.elementAt(0);
             		String valueset_uri = (String) u.elementAt(1);
             		String description = (String) u.elementAt(2);
@@ -145,8 +146,17 @@
             			}
 
             		} else {
-            			request.getSession().setAttribute("resultsPerPage",
-            					resultsPerPage);
+            		
+				    bool_val = JSPUtils.isInteger(resultsPerPage);
+				    if (!bool_val) {
+					 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
+					 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
+					 request.getSession().setAttribute("error_msg", error_msg);
+					 response.sendRedirect(redirectURL);
+				    } else {
+					 request.getSession().setAttribute("resultsPerPage", resultsPerPage);
+				    }              		
+ 
             		}
 
             		String selectedResultsPerPage = resultsPerPage;
@@ -200,14 +210,9 @@
                      <table border="0">
                         <tr>
                            <td>
-                           
-                             
-                              <table border="0" width="95%">
-                             
-                              
+                              <table border="0" width="900" >
                                  <tr>
                                     <td align="left" class="texttitle-blue">Value Set:&nbsp;<%=vsd_uri%></td>
-                                    <td align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                                     <td align="right">
                                        <h:commandLink
                                           value="Export XML"
@@ -280,7 +285,7 @@
                                  				for (int i = 0; i < concept_vec.size(); i++) {
                                  					String concept_str = (String) concept_vec
                                  							.elementAt(i);
-                                 					u = DataUtils.parseData(concept_str);
+                                 					u = StringUtils.parseData(concept_str);
                                  					String code = (String) u.elementAt(0);
                                  					String conceptname = (String) u.elementAt(1);
                                  					String coding_scheme = (String) u.elementAt(2);

@@ -1,8 +1,15 @@
 <%
-  String source_header = MetadataUtils.getMetadataValue(
+  String source_header = DataUtils.getMetadataValue(
       dictionary, null, null, "source_header");
-  String term_type_header = MetadataUtils.getMetadataValue(
+  String term_type_header = DataUtils.getMetadataValue(
       dictionary, null, null, "term_type_header");
+
+
+String formalName = DataUtils.getFormalName(dictionary);
+Vector localname_vec = DataUtils.getLocalNames(formalName);
+boolean has_subsource = false;
+boolean display_subsource = false; // temporarily turned off
+
 
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
   {
@@ -17,10 +24,38 @@ if (type != null && type.compareTo("all") == 0) {
     <A name="synonyms">Synonym Details</A>
 <%    
 } else {
+
 %>
     Synonym Details
 <%    
 }
+
+
+          Entity concept_syn = (Entity) request.getSession().getAttribute("concept");
+          //Vector synonyms = new DataUtils().getSynonyms(dictionary, concept_syn);
+          //Vector synonyms = new DataUtils().getSynonyms(concept_syn);
+          LexBIGService lexBIGService = RemoteServerUtil.createLexBIGService();
+          Vector synonyms = new ConceptDetails(lexBIGService).getSynonyms(dictionary, concept_syn);
+          
+          // check if subsource exists
+          
+          for (int lcv=0; lcv<synonyms.size(); lcv++)
+          {
+            String s = (String) synonyms.elementAt(lcv);   
+            Vector synonym_data = StringUtils.parseData(s, "|");
+            if (synonym_data.size() > 4) {
+                String subsource_nm = (String) synonym_data.elementAt(4);
+                if (StringUtils.isNullOrBlank(subsource_nm)) {
+			has_subsource = true;
+			System.out.println("(*) subsource_nm: " + subsource_nm);
+			break;
+		}
+            }
+          }
+
+
+
+
 %>         
       </td>
     </tr>
@@ -33,7 +68,7 @@ if (type != null && type.compareTo("all") == 0) {
             <% if (source_header != null && source_header.length() > 0) { %>
               <a href="#" onclick="javascript:window.open('<%=request.getContextPath()%>/pages/source_help_info.jsf?dictionary=<%=dictionary%>',
                   '_blank','top=100, left=100, height=740, width=780, status=no, menubar=no, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no');">
-                <img src="<%= request.getContextPath() %>/images/help.gif" alt="Term Type Definitions" border="0">
+                <img src="<%= request.getContextPath() %>/images/help.gif" alt="Source Definitions" border="0">
               </a>
             <% } %>
           </th>
@@ -46,13 +81,19 @@ if (type != null && type.compareTo("all") == 0) {
             <% } %>
           </th>
           <th class="dataTableHeader" scope="col" align="left">Code</th>
+          
+          <%
+          if (display_subsource && has_subsource) {
+          %>
+          <th class="dataTableHeader" scope="col" align="left">Subsource Name</th>
+          <%
+          }
+          %>
         </tr>
 
         <%
 
-          Entity concept_syn = (Entity) request.getSession().getAttribute("concept");
-          //Vector synonyms = new DataUtils().getSynonyms(dictionary, concept_syn);
-          Vector synonyms = new DataUtils().getSynonyms(concept_syn);
+                 
           HashSet hset = new HashSet();
           int n = -1;
           for (int lcv=0; lcv<synonyms.size(); lcv++)
@@ -61,12 +102,13 @@ if (type != null && type.compareTo("all") == 0) {
             if (!hset.contains(s)) {
                     hset.add(s);
                     n++;
-        Vector synonym_data = DataUtils.parseData(s, "|");
+        Vector synonym_data = StringUtils.parseData(s, "|");
         String term_name = (String) synonym_data.elementAt(0);
         //term_name = term_name.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         String term_type = (String) synonym_data.elementAt(1);
         String term_source = (String) synonym_data.elementAt(2);
         String term_source_formal_name = DataUtils.getFormalNameByDisplayName(term_source);
+      
         
 //Test case: NCIt, ADCS-ADL MCI - Balance Checkbook (Code C106898)
         if (term_source_formal_name == null)
@@ -80,6 +122,11 @@ if (type != null && type.compareTo("all") == 0) {
         if (synonym_data.size() > 3) {
             term_source_code = (String) synonym_data.elementAt(3);
         } 
+
+        String term_subsource_name = null;
+        if (synonym_data.size() > 4) {
+            term_subsource_name = (String) synonym_data.elementAt(4);
+        } 
         
         String rowColor = (n%2 == 0) ? "dataRowDark" : "dataRowLight";
     %>
@@ -88,18 +135,38 @@ if (type != null && type.compareTo("all") == 0) {
           <td class="dataCellText"><%=term_source%></td>
           <td class="dataCellText"><%=term_type%></td>
               <%
-                if (!DataUtils.isNull(term_source_formal_name) && !DataUtils.isNull(term_source_code)) {
+                //String formalname_term_source = DataUtils.getFormalName(term_source);
+                boolean hyperlink = false;
+                if (term_source != null && !localname_vec.contains(term_source)) {
+                    hyperlink = true;
+                }
+                             
+                if (!DataUtils.isNull(term_source_formal_name) && !DataUtils.isNull(term_source_code) && hyperlink) {
                   String term_source_nm = DataUtils.getCSName(term_source_formal_name);
                   String url_str = request.getContextPath() +
                       "/pages/concept_details.jsf?dictionary=" +
                       term_source_nm + "&code=" + term_source_code;
               %>
                 <td><a href="<%= url_str %>"><%= term_source_code %></a></td>
-              <%} else if (!DataUtils.isNull(term_source_code)) {%>
+              <%} else if (!StringUtils.isNullOrBlank(term_source_code)) {%>
             <td class="dataCellText"><%=term_source_code%></td>
               <%} else { %>
             <td class="dataCellText">&nbsp;</td>  
               <%} %>
+              
+            <%  
+            if (display_subsource && has_subsource) {
+		    if (!StringUtils.isNullOrBlank(term_subsource_name)) {%>
+			<td class="dataCellText"><%=term_subsource_name%></td>
+		    <%
+		    } else {
+		    %>
+		        <td class="dataCellText">&nbsp;</td> 
+		    <%
+		    }
+            }
+            %>
+              
         </tr>
     <%
             }
