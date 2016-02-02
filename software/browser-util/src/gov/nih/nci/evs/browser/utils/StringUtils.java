@@ -23,7 +23,7 @@ public class StringUtils {
         while (st.hasMoreTokens()) {
             String value = st.nextToken();
             if (value.compareTo("null") == 0)
-                value = " ";
+                value = "";
             data_vec.add(value);
         }
         return data_vec;

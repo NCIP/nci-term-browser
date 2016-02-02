@@ -458,6 +458,16 @@ public class HTTPUtils {
 	}
 
 	public static String createErrorMessage(String name, String value) {
+		return createErrorMessage(name, value, 0);
+
+		//System.out.println("WARNING: Invalid parameter value encountered - " + " (name: " + cleanXSS(name) + " value: " + value + ").");
+		//return "WARNING: Invalid parameter name and/or value encountered -- please check your URL and try again. ";
+	}
+
+	public static String createErrorMessage(String name, String value, int source) {
+		if (source != 0) {
+			System.out.println("(*) createErrorMessage source: " + source);
+		}
 		System.out.println("WARNING: Invalid parameter value encountered - " + " (name: " + cleanXSS(name) + " value: " + value + ").");
 		return "WARNING: Invalid parameter name and/or value encountered -- please check your URL and try again. ";
 	}
@@ -472,21 +482,31 @@ public class HTTPUtils {
             while (enumeration.hasMoreElements()) {
 				String name = (String) enumeration.nextElement();
 
+/*
+WARNING: Invalid parameter value encountered -  (name: selected_vocabularies).
+WARNING: Unknown vocabulary: pizza.owl (version: version 1.2)|pizza.owl (version
+: version 1.1)|pizza.owl (version: version diacritics)||
+multipleSearchAction returns invalid_parameter
+*/
+
 				Boolean checkedVocabularies = isCheckedVocabulariesParameter(name);
 				if (checkedVocabularies != null && checkedVocabularies.equals(Boolean.TRUE)) {
                     value = (String) request.getParameter(name);
                     if (!DataUtils.isNullOrBlank(value)) {
 						Vector selected_vocabularies_vec = gov.nih.nci.evs.browser.utils.StringUtils.parseData(name, ",");
-						for (int k=0; k<selected_vocabularies_vec.size(); k++) {
-							String vocabularyNm = (String) selected_vocabularies_vec.elementAt(k);
-                            String formal_name = DataUtils.getFormalName(vocabularyNm);
-                            if (formal_name == null) {
-								String error_msg = createErrorMessage(2, name);
-								request.getSession().setAttribute("error_msg", error_msg);
-								System.out.println("WARNING: Unknown vocabulary: " + value);
-								return false;
+						String nm = name.toLowerCase();
+						if (nm.compareTo("selected_vocabularies") != 0) {
+							for (int k=0; k<selected_vocabularies_vec.size(); k++) {
+								String vocabularyNm = (String) selected_vocabularies_vec.elementAt(k);
+								String formal_name = DataUtils.getFormalName(vocabularyNm);
+								if (formal_name == null) {
+									String error_msg = createErrorMessage(2, name);
+									request.getSession().setAttribute("error_msg", error_msg);
+									System.out.println("WARNING: Unknown vocabulary: " + value);
+									return false;
+								}
 							}
-						}
+					    }
 					}
 				}
 
@@ -518,7 +538,7 @@ public class HTTPUtils {
 						boolean isInteger = gov.nih.nci.evs.browser.utils.StringUtils.isInteger(value);
 						if (!isInteger) {
 							System.out.println("Integer value violation???");
-							String error_msg = createErrorMessage(name, value);
+							String error_msg = createErrorMessage(name, value, 1);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
@@ -530,7 +550,7 @@ public class HTTPUtils {
 					if (!DataUtils.isNull(value)) {
 						String vsd_md = DataUtils.getValueSetDefinitionMetadata(value);
 						if (vsd_md == null) {
-							String error_msg = createErrorMessage(name, value);
+							String error_msg = createErrorMessage(name, value, 2);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
@@ -545,7 +565,7 @@ public class HTTPUtils {
 						boolean isInteger = gov.nih.nci.evs.browser.utils.StringUtils.isInteger(value);
 						if (!isInteger) {
 							System.out.println("Integer value violation???" + value);
-							String error_msg = createErrorMessage(name, value);
+							String error_msg = createErrorMessage(name, value, 3);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
@@ -575,19 +595,19 @@ public class HTTPUtils {
 						}
 						bool_obj = validateRadioButtonNameAndValue(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							String error_msg = createErrorMessage(name, value);
+							String error_msg = createErrorMessage(name, value, 4);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 						bool_obj = containsPercentSign(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							String error_msg = createErrorMessage(name, value);
+							String error_msg = createErrorMessage(name, value, 5);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
 						bool_obj = validateValueSetCheckBox(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							String error_msg = createErrorMessage(name, value);
+							String error_msg = createErrorMessage(name, value, 6);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
@@ -595,7 +615,7 @@ public class HTTPUtils {
 						//09182015
 						bool_obj = checkLimitedLengthCondition(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
-							String error_msg = createErrorMessage(name, value);
+							String error_msg = createErrorMessage(name, value, 7);
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
@@ -740,6 +760,10 @@ public class HTTPUtils {
 	public static Boolean isCheckedVocabulariesParameter(String name) {
 		if (name == null) return null;
 		String nm = name.toLowerCase();
+		if (nm.compareTo("selected_vocabularies") == 0) {
+			return Boolean.TRUE;
+		}
+
 		if (nm.endsWith("checked_vocabularies")) {
 			return Boolean.TRUE;
 		}

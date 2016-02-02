@@ -2,47 +2,37 @@ package gov.nih.nci.evs.browser.utils;
 
 import java.io.*;
 import java.util.*;
-
+import org.LexGrid.LexBIG.DataModel.Collections.*;
+import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
+import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.LexGrid.LexBIG.DataModel.Core.CodingSchemeVersionOrTag;
-import org.LexGrid.LexBIG.Utility.Constructors;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-/*
-import org.lexevs.tree.json.JsonConverter;
-import org.lexevs.tree.json.JsonConverterFactory;
-import org.lexevs.tree.model.LexEvsTree;
-import org.lexevs.tree.model.LexEvsTreeNode;
-import org.lexevs.tree.model.LexEvsTreeNode.ExpandableStatus;
-import org.lexevs.tree.service.TreeService;
-import org.lexevs.tree.service.TreeServiceFactory;
-import org.lexevs.tree.dao.iterator.ChildTreeNodeIterator;
-*/
-
+import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
+import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
+import org.LexGrid.LexBIG.Exceptions.*;
+import org.LexGrid.LexBIG.Extensions.Generic.*;
+import org.LexGrid.LexBIG.Extensions.Generic.LexBIGServiceConvenienceMethods.*;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.dao.iterator.ChildTreeNodeIterator;
 import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverter;
 import org.LexGrid.LexBIG.Impl.Extensions.tree.json.JsonConverterFactory;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTree;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTreeNode;
 import org.LexGrid.LexBIG.Impl.Extensions.tree.service.TreeService;
 import org.LexGrid.LexBIG.Impl.Extensions.tree.service.TreeServiceFactory;
-import org.LexGrid.LexBIG.Impl.Extensions.tree.dao.iterator.ChildTreeNodeIterator;
-import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTreeNode;
-import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTree;
-
-
-
-
-import org.apache.log4j.*;
-
-import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
-import org.LexGrid.LexBIG.caCore.interfaces.LexEVSApplicationService;
-
-import org.LexGrid.LexBIG.DataModel.Core.ResolvedConceptReference;
-import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
-import org.LexGrid.LexBIG.DataModel.Collections.ResolvedConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Collections.ConceptReferenceList;
-import org.LexGrid.LexBIG.DataModel.Core.ConceptReference;
 import org.LexGrid.LexBIG.Impl.LexBIGServiceImpl;
-
-
+import org.LexGrid.LexBIG.LexBIGService.*;
+import org.LexGrid.LexBIG.LexBIGService.CodedNodeSet;
+import org.LexGrid.LexBIG.LexBIGService.LexBIGService;
+import org.LexGrid.LexBIG.Utility.*;
+import org.LexGrid.LexBIG.Utility.Constructors;
+import org.LexGrid.LexBIG.caCore.interfaces.LexEVSApplicationService;
+import org.LexGrid.codingSchemes.*;
+import org.LexGrid.commonTypes.*;
+import org.LexGrid.concepts.*;
+import org.LexGrid.naming.*;
+import org.apache.log4j.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * <!-- LICENSE_TEXT_START -->
@@ -111,6 +101,7 @@ public class ViewInHierarchyUtils {
 	public String rt = null;
 
     private LexBIGService lbSvc = null;
+    private LexBIGServiceConvenienceMethods lbscm = null;
 
 	private String generateRandomString() {
 		int i = rand.nextInt();
@@ -143,8 +134,13 @@ public class ViewInHierarchyUtils {
 	}
 
     public ViewInHierarchyUtils(LexBIGService lbSvc) {
-		this.lbSvc = lbSvc;
-		has_more_node_knt = 0;
+		try {
+			this.lbSvc = lbSvc;
+			this.lbscm = (LexBIGServiceConvenienceMethods) lbSvc.getGenericExtension("LexBIGServiceConvenienceMethods");
+			has_more_node_knt = 0;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
     private static void println(PrintWriter out, String text) {
@@ -253,6 +249,63 @@ public class ViewInHierarchyUtils {
 	}
 
 
+	public LexEvsTreeNode treeItem2LexEvsTreeNode(String codingScheme, String version, TreeItem ti) {
+		if (ti == null) return null;
+		LexEvsTreeNode node = new LexEvsTreeNode();
+		node.setCode(ti._code);
+		node.setEntityDescription(ti._text);
+		String namespace = ti._ns;
+
+		if (StringUtils.isNullOrBlank(namespace)) {
+			namespace = getNamespaceByCode(codingScheme, version, ti._code);
+		}
+
+		node.setNamespace(namespace);
+	    node.setExpandableStatus(LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE);
+	    return node;
+	}
+
+	boolean isNodeInList(List<LexEvsTreeNode> listEvsTreeNode, String code) {
+		if (listEvsTreeNode == null) return false;
+		for (int k=0; k<listEvsTreeNode.size(); k++) {
+			LexEvsTreeNode node = listEvsTreeNode.get(k);
+			if (node.getCode().compareTo(code) == 0) return true;
+		}
+		return false;
+	}
+
+
+	List<LexEvsTreeNode> removeDotNode(List<LexEvsTreeNode> listEvsTreeNode) {
+		List<LexEvsTreeNode> list = new ArrayList();
+		for (int i=0; i<listEvsTreeNode.size(); i++) {
+			LexEvsTreeNode node = listEvsTreeNode.get(i);
+			if (node.getCode().compareTo("...") != 0 && node.getEntityDescription().compareTo("...") != 0) {
+				list.add(node);
+			}
+		}
+		return list;
+	}
+
+
+
+	List<LexEvsTreeNode> getRemainingLexEvsTreeNodes(String codingScheme, String version, List<LexEvsTreeNode> listEvsTreeNode) {
+		List<LexEvsTreeNode> list = new ArrayList();
+		HashMap hmap = getRoots(codingScheme, version);
+        TreeItem ti = (TreeItem) hmap.get("<Root>");
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			for (int i=0; i<children.size(); i++) {
+				TreeItem childItem = (TreeItem) children.get(i);
+				if (!isNodeInList(listEvsTreeNode, childItem._code)) {
+					LexEvsTreeNode node = treeItem2LexEvsTreeNode(codingScheme, version, childItem);
+					list.add(node);
+				}
+			}
+		}
+		return list;
+	}
+
+//to be modified:
     public void printTree(PrintWriter out, String codingScheme, String version, String code, String namespace) {
         try {
 			long ms_0 = System.currentTimeMillis();
@@ -293,9 +346,33 @@ public class ViewInHierarchyUtils {
                     service.getEvsTreeConverter()
                         .buildEvsTreePathFromRootTree(focusNode);
 
+// 01252016:
+            listEvsTreeNode = removeDotNode(listEvsTreeNode);
+
+	        List<LexEvsTreeNode> remainingRootNodes = getRemainingLexEvsTreeNodes(codingScheme, version, listEvsTreeNode);
+	        for (int k=0; k<remainingRootNodes.size(); k++) {
+				LexEvsTreeNode node = remainingRootNodes.get(k);
+    			listEvsTreeNode.add(node);
+			}
+
             rt_3 = "" + (System.currentTimeMillis() - ms);
             ms = System.currentTimeMillis();
             LexEvsTreeNode root = null;
+
+//sort:
+            Vector w = new Vector();
+	        for (int k=0; k<listEvsTreeNode.size(); k++) {
+				LexEvsTreeNode node = (LexEvsTreeNode) listEvsTreeNode.get(k);
+    			w.add(node);
+			}
+
+            w = SortUtils.quickSort(w);
+            listEvsTreeNode = new ArrayList<LexEvsTreeNode>();
+	        for (int k=0; k<w.size(); k++) {
+				LexEvsTreeNode node = (LexEvsTreeNode) w.get(k);
+    			listEvsTreeNode.add(node);
+			}
+
             printTree(out, "", code, root, "root", listEvsTreeNode);
 
             rt_4 = "" + (System.currentTimeMillis() - ms);
@@ -447,7 +524,6 @@ public class ViewInHierarchyUtils {
 
 
     public List<LexEvsTreeNode> getChildren(String codingScheme, String version, String parent_code, String parent_ns, boolean from_root) {
-        // root: input parent_code = "@" or "@@";
         List<LexEvsTreeNode> list = new ArrayList();
         try {
 			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
@@ -457,10 +533,25 @@ public class ViewInHierarchyUtils {
 				TreeServiceFactory.getInstance().getTreeService(lbSvc);//RemoteServerUtil.createLexBIGService());
 
 			LexEvsTree lexEvsTree = null;
-			if (StringUtils.isNullOrBlank(parent_ns)) {
+
+			if (!StringUtils.isNullOrBlank(parent_ns)) {
 				lexEvsTree = treeService.getTree(codingScheme, versionOrTag, parent_code);
 			} else {
-				lexEvsTree = treeService.getTree(codingScheme, versionOrTag, parent_code, parent_ns);
+				try {
+					lexEvsTree = treeService.getTree(codingScheme, versionOrTag, "@");
+					if (lexEvsTree == null) {
+						lexEvsTree = treeService.getTree(codingScheme, versionOrTag, "@@");
+					}
+				} catch (Exception ex) {
+					System.out.println(	"treeService.getTree failed.");
+					return null;
+				}
+			}
+
+			if (lexEvsTree == null) {
+				System.out.println(	"lexEvsTree == null???");
+				return null;
+
 			}
 
 			LexEvsTreeNode parent_node = null;
@@ -475,43 +566,42 @@ public class ViewInHierarchyUtils {
 			if (parent_node == null) {
 				return null;
 			}
-
 			LexEvsTreeNode.ExpandableStatus parent_node_status = parent_node.getExpandableStatus();
 			if (parent_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
 				ChildTreeNodeIterator itr = parent_node.getChildIterator();
+					try {
+						HashSet hset = new HashSet();
 
-				try {
-					HashSet hset = new HashSet();
-					int lcv = 0;
+						int lcv = 0;
 
-					while(itr.hasNext()){
-						LexEvsTreeNode child = itr.next();
-						lcv++;
-						if (child != null) {
-							String child_code = child.getCode();
-							String child_ns = child.getNamespace();
-
-							if (StringUtils.isNullOrBlank(parent_ns)) {
-								if (!hset.contains(child_code)) {
-									hset.add(child_code);
-									list.add(child);
-								}
-							} else {
-								if (!StringUtils.isNullOrBlank(child_ns)
-								&& parent_ns.compareTo(child_ns) == 0) {
+						while(itr.hasNext()){
+							LexEvsTreeNode child = itr.next();
+							lcv++;
+							if (child != null) {
+								String child_code = child.getCode();
+								String child_ns = child.getNamespace();
+								if (StringUtils.isNullOrBlank(parent_ns)) {
 									if (!hset.contains(child_code)) {
 										hset.add(child_code);
 										list.add(child);
+									}
+								} else {
+									if (!StringUtils.isNullOrBlank(child_ns)
+									&& parent_ns.compareTo(child_ns) == 0) {
+										if (!hset.contains(child_code)) {
+											hset.add(child_code);
+											list.add(child);
+										}
 									}
 								}
 							}
 						}
 
+
+					} catch (Exception ex) {
+						//ex.printStackTrace();
+						_logger.debug("WARNING: ChildTreeNodeIterator exception...");
 					}
-				} catch (Exception ex) {
-					//ex.printStackTrace();
-					_logger.debug("WARNING: ChildTreeNodeIterator exception...");
-				}
 			}
 
 		} catch (Exception ex) {
@@ -526,10 +616,11 @@ public class ViewInHierarchyUtils {
 
     public HashMap getRemainingSubconcepts(String codingScheme, String version, String parent_code, boolean from_root, String focus_code) {
 		return getRemainingSubconcepts(codingScheme, version, parent_code, null, from_root, focus_code);
+
 	}
 
-
     public HashMap getRemainingSubconcepts(String codingScheme, String version, String parent_code, String parent_ns, boolean from_root, String focus_code) {
+
         HashMap hmap = new HashMap();
         String childNavText = "inverse_is_a";
 
@@ -539,8 +630,9 @@ public class ViewInHierarchyUtils {
         List<LexEvsTreeNode> list = getChildren(codingScheme, version, parent_code, parent_ns, from_root);
         try {
 			if (list.size() > MAX_CHILDREN) {
-				for (int i=MAX_CHILDREN; i<list.size(); i++) {
+				for (int i=MAX_CHILDREN-1; i<list.size(); i++) {
 					LexEvsTreeNode child = (LexEvsTreeNode) list.get(i);
+
 					if (child != null) {
                         boolean include = true;
                         if (focus_code != null) {
@@ -550,7 +642,6 @@ public class ViewInHierarchyUtils {
 						}
 
 						if (include) {
-
 							TreeItem childItem =
 								new TreeItem(child.getCode(),
 									child.getEntityDescription(),
@@ -579,15 +670,14 @@ public class ViewInHierarchyUtils {
     }
 
 
-
     public HashMap getSubconcepts(String codingScheme, String version, String focus_code) {
 		return getSubconcepts(codingScheme, version, focus_code, null);
 	}
 
 
     public HashMap getSubconcepts(String codingScheme, String version, String focus_code, String focus_ns) {
-
         HashMap hmap = new HashMap();
+        List<LexEvsTreeNode> list = null;
         String childNavText = "inverse_is_a";
 
 		TreeItem ti = new TreeItem(focus_code, "", focus_ns, null);
@@ -596,9 +686,9 @@ public class ViewInHierarchyUtils {
 		}
 
 		ti._expandable = false;
-        List<LexEvsTreeNode> list = getChildren(codingScheme, version, focus_code, focus_ns, false);
+        list = getChildren(codingScheme, version, focus_code, focus_ns, false);
 
-        if (list.size() > 0) {
+        if (list != null && list.size() > 0) {
 			Vector w = new Vector();
 			for (int i=0; i<list.size(); i++) {
 				LexEvsTreeNode child = (LexEvsTreeNode) list.get(i);
@@ -615,8 +705,6 @@ public class ViewInHierarchyUtils {
 					childItem._expandable = true;
 				}
 				w.add(childItem);
-				//ti.addChild(childNavText, childItem);
-				//ti._expandable = true;
 			}
 			w = SortUtils.quickSort(w);
 			for (int i=0; i<w.size(); i++) {
@@ -644,15 +732,6 @@ public class ViewInHierarchyUtils {
 		}
 		return restoreNodeID((String) v.elementAt(2));
 	}
-
-
-/*
-	if (parent == null) {
-		code = "root" + "_" + focus_code + "_dot_" + Integer.valueOf(has_more_node_knt).toString();
-	} else {
-		code = parent.getCode() + "_dot_" + focus_code + "_" + Integer.valueOf(has_more_node_knt).toString();
-	}
-*/
 
     public String getParentCode(String ontology_node_id) {
 		if (ontology_node_id == null) return null;
@@ -731,8 +810,7 @@ public class ViewInHierarchyUtils {
         return list;
     }
 
-    public String getTree(String codingScheme,
-        CodingSchemeVersionOrTag versionOrTag, String code, String namespace) {
+    public String getTree(String codingScheme, CodingSchemeVersionOrTag versionOrTag, String code, String namespace) {
 		TreeService treeService =
 			TreeServiceFactory.getInstance().getTreeService(lbSvc);
 
@@ -751,10 +829,357 @@ public class ViewInHierarchyUtils {
     }
 
 
-    public static void main(String[] args) throws Exception {
-		LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
-        ViewInHierarchyUtils vihu = new ViewInHierarchyUtils(lbSvc);
-        vihu.printTree("npo", "TestForMultiNamespace", "NPO_1607", "npo");
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public HashMap getSubConcepts(String codingScheme, String version, String code, String namespace) {
+		if (code.compareTo("@") == 0 || code.compareTo("@@") == 0) {
+			return getRoots(codingScheme, version);
+		}
+		HashMap hmap = new HashMap();
+        String childNavText = "inverse_is_a";
+
+		TreeItem ti = new TreeItem(code, "", namespace, null);
+		ti._expandable = false;
+		Vector w = new Vector();
+
+        List<LexEvsTreeNode> list = new ArrayList();
+        try {
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null)
+				versionOrTag.setVersion(version);
+			TreeService treeService =
+				TreeServiceFactory.getInstance().getTreeService(lbSvc);//RemoteServerUtil.createLexBIGService());
+
+			LexEvsTree lexEvsTree = treeService.getTree(codingScheme, versionOrTag, code, namespace);
+			LexEvsTreeNode parent_node = lexEvsTree.findNodeInTree(code);
+			ChildTreeNodeIterator itr = parent_node.getChildIterator();
+			try {
+				HashSet hset = new HashSet();
+				int lcv = 0;
+
+				while(itr.hasNext()){
+					LexEvsTreeNode child = itr.next();
+					TreeItem childItem =
+						new TreeItem(child.getCode(),
+							child.getEntityDescription(), child.getNamespace(), null);
+
+					if (StringUtils.isNullOrBlank(namespace)) {
+						childItem = new TreeItem(child.getCode(), child.getEntityDescription());
+					}
+					childItem._expandable = false;
+					LexEvsTreeNode.ExpandableStatus child_node_status = child.getExpandableStatus();
+					if (child_node_status == LexEvsTreeNode.ExpandableStatus.IS_EXPANDABLE) {
+						childItem._expandable = true;
+					}
+					w.add(childItem);
+				}
+				w = SortUtils.quickSort(w);
+				for (int i=0; i<w.size(); i++) {
+					TreeItem childItem = (TreeItem) w.elementAt(i);
+					ti.addChild(childNavText, childItem);
+					ti._expandable = true;
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		hmap.put(code, ti);
+		return hmap;
+	}
+
+	public HashMap getRoots(String scheme, String version) {
+        TreeUtils treeUtils = new TreeUtils(lbSvc);
+        String childNavText = "inverse_is_a";
+		ResolvedConceptReferenceList rcrl = treeUtils.getHierarchyRoots(scheme, version);
+        HashMap hmap = new HashMap();
+		TreeItem ti = new TreeItem("<Root>", "", "", null);
+		ti._expandable = false;
+		Vector w = new Vector();
+
+		for (int i=0; i<rcrl.getResolvedConceptReferenceCount(); i++) {
+			ResolvedConceptReference rcr = (ResolvedConceptReference) rcrl.getResolvedConceptReference(i);
+			TreeItem childItem =
+				new TreeItem(rcr.getCode(),
+					rcr.getEntityDescription().getContent(), rcr.getCodeNamespace(), null);
+			childItem = new TreeItem(rcr.getCode(), rcr.getEntityDescription().getContent());
+			childItem._expandable = true;
+			w.add(childItem);
+		}
+		w = SortUtils.quickSort(w);
+		for (int i=0; i<w.size(); i++) {
+			TreeItem childItem = (TreeItem) w.elementAt(i);
+			ti.addChild(childNavText, childItem);
+			ti._expandable = true;
+		}
+		hmap.put("<Root>", ti);
+		return hmap;
+	}
+
+    public String getTree(String codingScheme, String version, String code) {
+		return getTree(codingScheme, version, code, null);
+	}
+/*
+    public String getTree(String codingScheme, String version, String code, String namespace) {
+        try {
+			CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+			if (version != null) {
+				versionOrTag.setVersion(version);
+			}
+			return getTree(codingScheme, versionOrTag, code, namespace);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+*/
+	public TreeItem searchTree(String scheme, String version, String ns, String code, TreeItem ti) {
+		if (code.compareTo("@") == 0 || code.compareTo("@@") == 0) {
+			HashMap hmap = getRoots(scheme, version);
+			return (TreeItem) hmap.get("<Root>");
+		}
+		if (ti._code.compareTo(code) == 0) return ti;
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			for (int i=0; i<children.size(); i++) {
+				TreeItem childItem = (TreeItem) children.get(i);
+				if (childItem._ns != null && ns != null) {
+					if (childItem._code.compareTo(code) == 0 && childItem._ns.compareTo(ns) == 0) {
+						return childItem;
+					}
+				} else if (childItem._code.compareTo(code) == 0) {
+					return childItem;
+				}
+				return searchTree(scheme, version, ns, code, childItem);
+			}
+		}
+		return null;
+	}
+
+	public HashSet getChildItemCodes(TreeItem ti) {
+		if (ti == null) return null;
+		HashSet hset = new HashSet();
+		for (String association : ti._assocToChildMap.keySet()) {
+			List<TreeItem> children = ti._assocToChildMap.get(association);
+			for (int i=0; i<children.size(); i++) {
+				TreeItem childItem = (TreeItem) children.get(i);
+				if (childItem._code.compareTo(ti._code) != 0 && !hset.contains(childItem._code)) {
+					hset.add(childItem._code);
+				}
+			}
+		}
+		return hset;
+	}
+
+	public static void dumpHashSet(HashSet hset) {
+		if (hset == null) return;
+		Iterator it = hset.iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			System.out.println(key);
+		}
+	}
+
+    public TreeItem removeChildNodes(TreeItem ti, HashSet childCodes) {
+		TreeItem root = new TreeItem("<Root>", "Root node");
+		root._expandable = false;
+        for (String association : ti._assocToChildMap.keySet()) {
+            List<TreeItem> children = ti._assocToChildMap.get(association);
+            System.out.println("association: " + association);
+            System.out.println("children.size(): " + children.size());
+            for (int i=0; i<children.size(); i++) {
+				TreeItem childItem = (TreeItem) children.get(i);
+
+				System.out.println("\tchildItem._code: " + childItem._code);
+
+                if (!childCodes.contains(childItem._code)) {
+
+					System.out.println("\taddChild: " + childItem._code);
+					root.addChild(association, childItem);
+					root._expandable = true;
+				}
+			}
+        }
+        System.out.println("\treturn root: " + root._code);
+        return root;
+	}
+
+    public HashMap getRemainingNodes(String scheme, String version, String focus_code, String namespace, String dot_node_code) {
+		TreeItem ti = null;
+		TreeItem tree_item = null;
+		HashMap tree_hmap = null;
+		HashMap hmap = null;
+
+		if (StringUtils.isNullOrBlank(namespace)) {
+			namespace = getNamespaceByCode(scheme, version, focus_code);
+		}
+
+        if (dot_node_code.compareTo("@") == 0 || dot_node_code.compareTo("@@") == 0) {
+			String json = getTree(scheme, version, focus_code, namespace);
+			System.out.println("\n\n(1) VIH JSON:" + "\n" + json);
+			ti = JSON2TreeItem.json2TreeItem(json);
+			TreeItem.printTree(ti, 0);
+			tree_item = ti;
+		} else {
+			String json = getTree(scheme, version, focus_code, namespace);
+			System.out.println("\n\n(2) VIH JSON:" + "\n" + json);
+			ti = JSON2TreeItem.json2TreeItem(json);
+			tree_item = searchTree(scheme, version, namespace, dot_node_code, ti);
+			TreeItem.printTree(tree_item, 0);
+		}
+
+		HashSet hset = getChildItemCodes(tree_item);
+		dumpHashSet(hset);
+
+		if (dot_node_code.compareTo("@") == 0 || dot_node_code.compareTo("@@") == 0) {
+			hmap = getRoots(scheme, version);
+            ti = (TreeItem) hmap.get("<Root>");
+	    } else {
+            hmap = new TreeUtils(lbSvc).getSubconcepts(scheme, version, dot_node_code, namespace);
+            ti = (TreeItem) hmap.get(dot_node_code);
+		}
+
+        if (hmap == null) {
+			System.out.println("new TreeUtils(lbSvc).getSubconcepts ???");
+			return null;
+		}
+
+        if (ti == null) {
+			System.out.println("ti == null");
+			return null;
+		}
+
+		TreeItem.printTree(ti, 0);
+        TreeItem new_ti = removeChildNodes(ti, hset);
+        TreeItem.printTree(new_ti, 0);
+
+        hmap = new HashMap();
+        hmap.put("<Root>", new_ti);
+        return hmap;
+	}
+
+
+    //public String construct_view_in_hierarchy_tree(String codingScheme, String version, String code, String namespace) {
+    public String getTree(String codingScheme, String version, String code, String namespace) {
+
+		CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+		if (version != null) {
+			versionOrTag.setVersion(version);
+		}
+
+		TreeService treeService =
+			TreeServiceFactory.getInstance().getTreeService(lbSvc);
+
+		LexEvsTree tree = null;
+		if (StringUtils.isNullOrBlank(namespace)) {
+			tree = treeService.getTree(codingScheme, versionOrTag, code);
+		} else {
+			tree = treeService.getTree(codingScheme, versionOrTag, code, namespace);
+		}
+
+		String json =
+			treeService.getJsonConverter().buildJsonPathFromRootTree(
+				tree.getCurrentFocus());
+
+        //System.out.println(json);
+		TreeItem vih_tree = JSON2TreeItem.json2TreeItem(json);
+		ViewInHierarchyUtils util = new ViewInHierarchyUtils(lbSvc);
+
+		HashMap hmap = getRoots(codingScheme, version);
+		TreeItem vh_tree = (TreeItem) hmap.get("<Root>");
+
+        HashMap vh_hmap = new HashMap();
+		TreeItem vh_root = new TreeItem("<Root>", "", "", null);
+		vh_root._expandable = false;
+		String childNavText = "inverse_is_a";
+
+		for (String association : vh_tree._assocToChildMap.keySet()) {
+			List<TreeItem> children = vh_tree._assocToChildMap.get(association);
+			for (int i=0; i<children.size(); i++) {
+				TreeItem childItem = (TreeItem) children.get(i);
+				if (childItem._code.compareTo("@@") != 0 && childItem._code.compareTo("@") != 0) {
+					TreeItem node = searchTree(codingScheme, version, childItem._ns, childItem._code, vih_tree);
+					if (node == null) {
+						vh_root.addChild(childNavText, childItem);
+						vh_root._expandable = true;
+					} else {
+						vh_root.addChild(childNavText, node);
+						vh_root._expandable = true;
+					}
+			    }
+			}
+		}
+
+		json = JSON2TreeItem.treeItem2Json(vh_root);
+		System.out.println("\nNew Tree========================================");
+		TreeItem.printTree(vh_root, 0);
+		return json;
     }
+
+/*
+    public static void main(String[] args) throws Exception {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        ViewInHierarchyUtils vihu = new ViewInHierarchyUtils(lbSvc);
+        String scheme = "NCI_Thesaurus";
+        String version = "15.12d";
+        String namespace = "NCI_Thesaurus";
+        String code = "C2693"; //Erlotinib Hydrochloride (Code C2693)
+        //code = "C38628";
+	    HashMap hmap = vihu.getRoots(scheme, version);
+	    TreeItem ti = (TreeItem) hmap.get("<Root>");
+	    TreeItem.printTree(ti, 0);
+        try {
+			hmap = vihu.getSubConcepts(scheme, version, code, namespace);
+			if (hmap != null) {
+				ti = (TreeItem) hmap.get(code);
+				TreeItem.printTree(ti, 0);
+
+				String json = JSON2TreeItem.treeItem2Json(ti);
+				System.out.println(json);
+		    } else {
+				System.out.println("hmap == null???");
+			}
+		} catch (Exception ex) {
+			System.out.println("Exception thrown???");
+		}
+
+		String json = vihu.getTree(scheme, version, code, namespace);
+		System.out.println("\n\nVIH JSON:" + "\n" + json);
+
+		TreeItem ti = JSON2TreeItem.json2TreeItem(json);
+		TreeItem.printTree(ti, 0);
+
+		TreeItem tree_item = vihu.searchTree(scheme, version, namespace, "C1404", ti);
+		TreeItem.printTree(tree_item, 0);
+
+		HashSet hset = vihu.getChildItemCodes(tree_item);
+
+        code = "C1404";
+        HashMap hmap = new TreeUtils(lbSvc).getSubconcepts(scheme, version, code, namespace);
+		ti = (TreeItem) hmap.get(code);
+		TreeItem.printTree(ti, 0);
+
+        TreeItem new_ti = vihu.removeChildNodes(ti, hset);
+        TreeItem.printTree(new_ti, 0);
+
+        String focus_code = "C20181";//Conceptual Entity (Code C20181)
+        String dot_node_code = "@";
+        HashMap hmap = vihu.getRemainingNodes(scheme, version, focus_code, namespace, dot_node_code);
+		TreeItem ti = (TreeItem) hmap.get("<Root>");
+		TreeItem.printTree(ti, 0);
+
+		//Cell Aging (Code C16394)
+		//Cellular Process (Code C20480)
+
+        String focus_code = "C16394";//Conceptual Entity (Code C20181)
+        String dot_node_code = "C20480";
+        HashMap hmap = vihu.getRemainingNodes(scheme, version, focus_code, namespace, dot_node_code);
+		TreeItem ti = (TreeItem) hmap.get("<Root>");
+		TreeItem.printTree(ti, 0);
+        code = "C16394";
+        String vih_json = vihu.getTree(scheme, version, code, namespace);
+    }
+*/
 }
 

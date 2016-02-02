@@ -1,11 +1,9 @@
 package gov.nih.nci.evs.browser.utils;
 
 import gov.nih.nci.evs.browser.bean.*;
-
 import java.util.*;
 import java.io.*;
 import java.util.Map.Entry;
-import gov.nih.nci.evs.browser.bean.*;
 
 import org.LexGrid.concepts.*;
 import org.LexGrid.LexBIG.Utility.Iterators.*;
@@ -298,7 +296,6 @@ public class UIUtils {
 			if (w.size() > 3) {
 				namespace = (String) w.elementAt(3);
 			}
-
             Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
             qualifiers = SortUtils.quickSort(qualifiers);
 
@@ -308,7 +305,17 @@ public class UIUtils {
 				  buf.append("	<tr class=\"dataRowLight\">").append("\n");
 			}
 
-            if (qualifierColumn == 1) {
+			if (qualifierColumn == 0) {
+				  buf.append("<td class=\"dataCellText\">").append("\n");
+				  buf.append("				 " + name).append("\n");
+				  buf.append("</td>").append("\n");
+
+				  if (code != null) {
+				      value = getHyperlink(codingScheme, version, value, code, namespace);
+				  }
+				  buf.append("<td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+
+			} else if (qualifierColumn == 1) {
                 if (hasQualifiers(qualifiers)) {
 					buf.append("	  <td class=\"dataCellText\" scope=\"row\">").append("\n");
 					buf.append("		  <table>").append("\n");
@@ -521,34 +528,37 @@ public class UIUtils {
 		return generateHTMLTable(spec);
 	}
 
-    public static void main(String [] args) {
-
-		LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
-		UIUtils uiUtils = new UIUtils(lbSvc);
-
 /*
+    public static void main(String [] args) {
+        boolean testLocal = true;
+        LexBIGService lbSvc = null;
+        if (testLocal) {
+			lbSvc = LexBIGServiceImpl.defaultInstance();
+		} else {
+			lbSvc = RemoteServerUtil.createLexBIGService();
+		}
+
+		UIUtils uiUtils = new UIUtils(lbSvc);
 		ConceptDetails conceptDetails = new ConceptDetails(lbSvc);
-		String codingSchemeName = "NCI_Thesaurus";
-
-		String vers = "12.05d";
+		String codingSchemeURN = "NCI_Thesaurus";
+		String codingSchemeVersion = "15.10d";
 		String code = "C16612";
-		String ns = "NCI_Thesaurus";
-		boolean use_ns = true;
+		String namespace = "NCI_Thesaurus";
+		boolean useNamespace = true;
 
+        if (testLocal) {
+			codingSchemeURN = "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl";
+			//= "owl2lexevs.owl";
+			codingSchemeVersion = "0.1.2";
+			code = "HappyPatientWalkingAround";
+			namespace = null;
+			useNamespace = false;
+	    }
 
-
-		Entity concept = conceptDetails.getConceptByCode(codingSchemeName, vers, code, ns, use_ns);
+		Entity concept = conceptDetails.getConceptByCode(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace);
 		String property_type = "PRESENTATION";
 		String t = uiUtils.generatePropertyTable(concept, property_type);
 		System.out.println(t);
-*/
-
-		String codingSchemeURN = "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl";
-		codingSchemeURN = "owl2lexevs.owl";
-		String codingSchemeVersion = "0.1.2";
-		String code = "HappyPatientWalkingAround";
-		String namespace = null;
-		boolean useNamespace = false;
 
         RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
         HashMap relMap = relUtils.getRelationshipHashMap(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace);
@@ -559,12 +569,11 @@ public class UIUtils {
 			System.out.println("\n" + key);
 			if (list != null) {
 				for (int i=0; i<list.size(); i++) {
-					String t = (String) list.get(i);
+					t = (String) list.get(i);
 					System.out.println("\t" + t);
 				}
 			}
 		}
-
 
 		String description = "Association";
 		String firstColumnHeading = "Name";
@@ -572,8 +581,8 @@ public class UIUtils {
 		int firstPercentColumnWidth = 20;
 		int secondPercentColumnWidth = 80;
 		int qualifierColumn = 2;
+		//qualifierColumn = 0;
 		ArrayList list = (ArrayList) relMap.get("type_association");
-
 
 	    HTMLTableSpec spec = uiUtils.relationshipList2HTMLTableSpec(
 		    description,
@@ -584,9 +593,11 @@ public class UIUtils {
 		    qualifierColumn,
 		    list);
 
-		String html_str = uiUtils.generateHTMLTable(spec, "NCI_Thesaurus", "12.05d");
+		//String html_str = uiUtils.generateHTMLTable(spec, "NCI_Thesaurus", "12.05d");
+		String html_str = uiUtils.generateHTMLTable(spec, codingSchemeURN, codingSchemeVersion);
 		System.out.println(html_str);
 
 	}
+*/
 }
 

@@ -38,6 +38,16 @@
          <url-pattern>/ajax</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ajax2</servlet-name>
+        <servlet-class>gov.nih.nci.evs.browser.servlet.AjaxServletV25</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+         <servlet-name>ajax2</servlet-name>
+         <url-pattern>/ajax2</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>vsServlet</servlet-name>

@@ -193,8 +193,8 @@ public final class AjaxServlet extends HttpServlet {
         try {
             String jsonString = search_tree(node_id,
                 ontology_display_name, ontology_version, namespace);
-            if (jsonString == null)
-                return;
+
+            if (jsonString == null) return;
 
             JSONObject json = new JSONObject();
             JSONArray rootsArray = new JSONArray(jsonString);
@@ -211,6 +211,7 @@ public final class AjaxServlet extends HttpServlet {
 
     public static String search_tree(String node_id,
         String ontology_display_name, String ontology_version, String namespace) throws Exception {
+
         if (node_id == null || ontology_display_name == null)
             return null;
 
@@ -220,11 +221,18 @@ public final class AjaxServlet extends HttpServlet {
 //                NCItBrowserProperties.MAXIMUM_TREE_LEVEL);
 //        int maxLevel = Integer.parseInt(max_tree_level_str);
         CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-        if (ontology_version != null) versionOrTag.setVersion(ontology_version);
+        if (ontology_version != null) {
+			versionOrTag.setVersion(ontology_version);
+		}
 
+/*
         String jsonString =
             CacheController.getTree(
                 ontology_display_name, versionOrTag, node_id, namespace);
+*/
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        String jsonString = new ViewInHierarchyUtils(lbSvc).getTree(ontology_display_name, ontology_version, node_id, namespace);
+
         debugJSONString("Section: search_tree", jsonString);
 
         _logger.debug("search_tree: " + stopWatch.getResult());
@@ -339,9 +347,9 @@ if (display_name_vec == null) {
 			}
 		}
 
+
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));//
-
         if (action.compareTo("show") == 0) {
             show_other_versions(request, true);
 
@@ -377,6 +385,16 @@ if (action == null) {
 	action = "create_src_vs_tree";
 }
 
+if (action.compareTo("create_alt_src_vs_tree") == 0) {
+    request.getSession().setAttribute("vs_tree_type", "v2.7");
+	action = "create_src_vs_tree";
+}
+
+if (action.compareTo("create_alt_cs_vs_tree") == 0) {
+    request.getSession().setAttribute("vs_tree_type", "v2.7");
+	action = "create_cs_vs_tree";
+}
+
 if (action.compareTo("values") == 0) {
 	resolveValueSetAction(request, response);
 	return;
@@ -409,8 +427,8 @@ if (action.compareTo("xmldefinitions") == 0) {
 		}
 
         long ms = System.currentTimeMillis();
-
         if (action.equals("expand_tree")) {
+
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
@@ -418,7 +436,6 @@ if (action.compareTo("xmldefinitions") == 0) {
                 JSONArray nodesArray = null;
 
                 try {
-//System.out.println("(*) expand_tree " + ontology_display_name + " " + ontology_version + " " + ns + " " + node_id);
                     nodesArray =
                         CacheController.getInstance().getSubconcepts(
                             ontology_display_name, ontology_version, node_id, ns);
@@ -498,11 +515,17 @@ if (action.compareTo("xmldefinitions") == 0) {
         } else if (action.equals("create_cs_vs_tree")) {
 			request.getSession().setAttribute("nav_type", "valuesets");
             create_cs_vs_tree(request, response);
+
         } else if (action.equals("search_hierarchy")) {
+
             search_hierarchy(request, response, node_id, ontology_display_name, ontology_version, ns);
+
+
         } else if (action.equals("search_tree")) {
+
             search_tree(response, node_id, ontology_display_name, ontology_version, ns);
         } else if (action.equals("build_tree")) {
+
             if (ontology_display_name == null)
                 ontology_display_name = CODING_SCHEME_NAME;
 
@@ -974,11 +997,6 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
       println(out, "          if ( typeof(respObj.root_node) != \"undefined\") {");
       println(out, "            var root = tree.getRoot();");
 
-      /*
-      println(out, "            var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.root_node.ontology_node_id + \"');\";");
-      println(out, "            var rootNodeData = { label:respObj.root_node.ontology_node_name, id:respObj.root_node.ontology_node_id, href:nodeDetails };");
-      */
-
       out.println("      var nodeDetails = \"javascript:onClickTreeNode('\" ");
       out.println("                         + respObj.root_node.ontology_node_id ");
       out.println("                         + \"','\"");
@@ -1024,15 +1042,6 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
       println(out, "    }");
       println(out, "");
 
-/*
-      println(out, "    function onClickTreeNode(ontology_node_id) {");
-      out.println("       if (ontology_node_id.indexOf(\"_dot_\") != -1) return;");
-      println(out, "      var ontology_display_name = document.forms[\"pg_form\"].ontology_display_name.value;");
-      println(out, "      var ontology_version = document.forms[\"pg_form\"].ontology_version.value;");
-      println(out, "      load('/ncitbrowser/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version
-                               + '&code=' + ontology_node_id, currOpener);");
-      println(out, "    }");
-*/
       println(out, "    function onClickTreeNode(ontology_node_id, ontology_node_ns) {");
 // KLO, 082415
       println(out, "      if (ontology_node_id.indexOf(\"_dot_\") != -1) return;");
@@ -1146,9 +1155,6 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
       out.println("        var respTxt = o.responseText;");
 
 
-      //out.println("alert(respTxt);");
-
-
       out.println("        var respObj = eval('(' + respTxt + ')');");
       out.println("        var fileNum = 0;");
       out.println("        var categoryNum = 0;");
@@ -1158,9 +1164,6 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
       out.println("	      for (var i=0; i < respObj.nodes.length; i++) {");
       out.println("		var name = respObj.nodes[i].ontology_node_name;");
 
-
-      //out.println("		var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.nodes[i].ontology_node_id + \"');\";");
-      //out.println("		var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, href:nodeDetails };");
 
       out.println("      var nodeDetails = \"javascript:onClickTreeNode('\" ");
       out.println("                         + respObj.nodes[i].ontology_node_id ");
@@ -1183,16 +1186,12 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
       out.println("		  var name = respObj.nodes[i].ontology_node_name;");
 
 
-      //out.println("		  var nodeDetails = \"javascript:onClickTreeNode('\" + respObj.nodes[i].ontology_node_id + \"');\";");
-      //out.println("		  var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, href:nodeDetails };");
-
       out.println("      var nodeDetails = \"javascript:onClickTreeNode('\" ");
       out.println("                         + respObj.nodes[i].ontology_node_id ");
       out.println("                         + \",\"");
       out.println("                         + respObj.nodes[i].ontology_node_ns ");
       out.println("                         + \"');\";");
       out.println("      var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, ns:respObj.nodes[i].ontology_node_ns, href:nodeDetails };");
-
 
 
       out.println("");
@@ -1206,8 +1205,6 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
       out.println("        }");
       out.println("        fnLoadComplete();");
       out.println("      }");
-
-
 
       println(out, "");
       println(out, "      var responseFailure = function(o){");
@@ -1242,18 +1239,18 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
 
       println(out, "      var root = tree.getRoot();");
 
+
       LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+      //new ViewInHierarchyUtils(lbSvc).printTree(out, ontology_display_name, ontology_version, node_id, namespace);
       new ViewInHierarchyUtils(lbSvc).printTree(out, ontology_display_name, ontology_version, node_id, namespace);
-      println(out, "             showPartialHierarchy();");
+
+      //println(out, "             showPartialHierarchy();");
       println(out, "             tree.draw();");
 
       println(out, "    }");
       println(out, "");
       println(out, "");
       println(out, "    function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {");
-
-      //println(out, "      var newNodeDetails = \"javascript:onClickTreeNode('\" + nodeInfo.ontology_node_id + \"');\";");
-      //println(out, "      var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };");
 
       out.println("      var newNodeDetails = \"javascript:onClickTreeNode('\" ");
       out.println("                         + nodeInfo.ontology_node_id ");
@@ -1296,10 +1293,10 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
       println(out, "      }");
       println(out, "");
       println(out, "      tree.draw();");
-      println(out, "      for (var i=0; i < childNodes.length; i++) {");
-      println(out, "         var childnodeInfo = childNodes[i];");
-      println(out, "         addTreeBranch(ontology_node_id, newNode, childnodeInfo);");
-      println(out, "      }");
+      //println(out, "      for (var i=0; i < childNodes.length; i++) {");
+      //println(out, "         var childnodeInfo = childNodes[i];");
+      //println(out, "         addTreeBranch(ontology_node_id, newNode, childnodeInfo);");
+      //println(out, "      }");
       println(out, "    }");
       println(out, "    YAHOO.util.Event.addListener(window, \"load\", init);");
       println(out, "");
@@ -2133,7 +2130,18 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("                Terminology View");
 }
 
-
+/*
+//v2.8 modification:
+if (view == Constants.STANDARD_VIEW) {
+out.println("&nbsp;&nbsp;(");
+out.println("<a href=\"" + contextPath + "/ajax2?action=create_alt_src_vs_tree\" tabindex=\"100\"><font color=\"red\">Alt Standards View</font></a>");
+out.println(")");
+} else {
+out.println("&nbsp;&nbsp;(");
+out.println("<a href=\"" + contextPath + "/ajax2?action=create_alt_cs_vs_tree\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
+out.println(")");
+}
+*/
 
       out.println("              </td>");
       out.println("");
@@ -4083,6 +4091,7 @@ out.flush();
 		  hmap = relationshipUtils.getRelationshipHashMap(scheme, version, code, namespace, true);
 		  request.getSession().setAttribute("RelationshipHashMap", hmap);
 	  }
+
 	  // compute nodes and edges using hmap
 	  VisUtils visUtils = new VisUtils(lb_svc);
 	  String[] types = null;
@@ -4093,7 +4102,44 @@ out.flush();
 		  types[0] = type;
 	  }
 	  int edge_count = countEdges(hmap, types);
-	  String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
+	  //String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
+      //boolean graph_reduced = false;
+	  Vector v = visUtils.generateGraphScriptVector(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
+
+      String nodes_and_edges = null;
+////////////////////////////////////////////////////////
+/*
+      Vector w = visUtils.reduceGraph(v);
+      String nodes_and_edges = null;
+      if (v.size() == w.size()) {
+	      nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
+	  } else {
+		  nodes_and_edges =  visUtils.generateGraphScript(v);
+	  }
+*/
+////////////////////////////////////////////////////////
+
+
+      String group_node_data = "";
+      GraphReductionUtils graphReductionUtils = new GraphReductionUtils();
+      String group_node_id = graphReductionUtils.getGroupNodeId(v);
+      Vector w = graphReductionUtils.reduce_graph(v, true);
+      boolean graph_reduced = graphReductionUtils.graph_reduced(v, w);
+      if (graph_reduced) {
+		  group_node_data = graphReductionUtils.get_removed_node_str(v, true);
+	  } else {
+		  w = graphReductionUtils.reduce_graph(v, false);
+		  graph_reduced = graphReductionUtils.graph_reduced(v, w);
+		  if (graph_reduced) {
+			  group_node_data = graphReductionUtils.get_removed_node_str(v, false);
+		  }
+	  }
+      if (graph_reduced) {
+		  nodes_and_edges =  visUtils.generateGraphScript(w);
+	  } else {
+		  nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
+	  }
+
 	  boolean graph_available = true;
 	  if (nodes_and_edges.compareTo(GraphUtils.NO_DATA_AVAILABLE) == 0) {
 		  graph_available = false;
@@ -4204,14 +4250,28 @@ out.flush();
       out.println("      network = new vis.Network(container, data, options);");
       out.println("");
       out.println("      // add event listeners");
+
+
       out.println("      network.on('select', function(params) {");
-      out.println("        document.getElementById('selection').innerHTML = 'Selection: ' + params.nodes;");
+      //out.println("        document.getElementById('selection').innerHTML = 'Selection: ' + params.nodes;");
+      //out.println("      });");
+
+      out.println("      if (params.nodes == '" + group_node_id + "') {");
+	  out.println("         document.getElementById('selection').innerHTML = '" + group_node_data + "';");
+	  out.println("      }");
       out.println("      });");
 
+
       out.println("			network.on(\"doubleClick\", function (params) {");
+
+      out.println("      if (params.nodes != '" + group_node_id + "') {");
+
       out.println("				params.event = \"[original event]\";");
       out.println("				var json = JSON.stringify(params, null, 4);");
       out.println("				reset_graph(params.nodes);");
+      out.println("      }");
+
+
       out.println("		    });");
 
       out.println("    }");

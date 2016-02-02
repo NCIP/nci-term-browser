@@ -757,6 +757,11 @@ public class PropertyData
 */
 
     public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type) {
+		return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, false);
+	}
+
+    public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type,
+        boolean display_qualifiers) {
 		HashMap hmap = null;
 		if (relationshipHashMap != null) {
 			hmap = relationshipHashMap;
@@ -777,13 +782,19 @@ public class PropertyData
 		String secondColumnHeading = null;
 		int	firstPercentColumnWidth = 60;
 		int	secondPercentColumnWidth = 40;
-
-		int qualifierColumn = 1;
 		if (rel_type.startsWith("type_inverse")) {
-			qualifierColumn = 2;
 		    firstPercentColumnWidth = 40;
 		    secondPercentColumnWidth = 60;
 		}
+
+        int qualifierColumn = 0;
+        if (display_qualifiers) {
+		    qualifierColumn = 1;
+		    if (rel_type.startsWith("type_inverse")) {
+				qualifierColumn = 2;
+			}
+		}
+
 		HTMLTableSpec spec = null;
 		try {
 			spec = uiUtils.relationshipList2HTMLTableSpec(
@@ -962,6 +973,18 @@ public class PropertyData
 		buf.append(name);
 		buf.append("%></a>");
 		return buf.toString();
+	}
+
+	public static void main(String[] args) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		String scheme = "NCI_Thesaurus";
+		String version = "15.12d";
+		PropertyData pd = new PropertyData(lbSvc, scheme, version);
+		String code = "C17359"; // TP53 Gene (Code C17359)
+		String namespace = scheme;
+		String rel_type = Constants.TYPE_ROLE;
+		String t = pd.generateRelationshipTable(scheme, version, code, namespace, rel_type);
+        System.out.println(t);
 	}
 
 }

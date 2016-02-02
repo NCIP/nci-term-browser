@@ -248,6 +248,9 @@ public class VisUtils {
 		return generateGraphScript(scheme, version, namespace, code, types, NODES_AND_EDGES, null);
 	}
 
+    public static String generateGraphScript(Vector v) {
+		return GraphUtils.generateGraphScript(v);
+	}
 
     public String generateGraphScript(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
         if (types == null) {
@@ -256,6 +259,21 @@ public class VisUtils {
         Vector graphData = generateGraphData(scheme, version, namespace, code, types, option, hmap);
         return GraphUtils.generateGraphScript(graphData, option);
 	}
+
+
+    public Vector generateGraphScriptVector(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
+        if (types == null) {
+			types = ALL_RELATIONSHIP_TYPES;
+		}
+        Vector graphData = generateGraphData(scheme, version, namespace, code, types, option, hmap);
+        return GraphUtils.generateGraphScriptVector(graphData, option);
+	}
+
+
+	public static Vector reduceGraph(Vector v) {
+		return GraphUtils.reduceGraph(v);
+	}
+
 
 
 	public Vector treeItem2GraphData(TreeItem root) {
@@ -367,7 +385,6 @@ public class VisUtils {
 
 		Entity concept = new ConceptDetails(lbSvc).getConceptByCode(scheme, version, code, namespace, useNamespace);
 		if (concept == null && useNamespace) {
-			System.out.println("concept is NULL -- try without namespace " + namespace);
 			concept = new ConceptDetails(lbSvc).getConceptByCode(scheme, version, code, namespace, false);
 			if (concept == null) {
 				System.out.println("Unable to find concept with code: " + code);
@@ -375,7 +392,7 @@ public class VisUtils {
 		}
 
 		String name = "<NO DESCRIPTION>";
-		if (concept.getEntityDescription() != null) {
+		if (concept != null && concept.getEntityDescription() != null) {
 			name = concept.getEntityDescription().getContent();
 		}
 		name = encode(name);
@@ -613,8 +630,7 @@ public class VisUtils {
 		System.out.println("\n");
 		String graph = visUtils.generateGraphScript(codingSchemeURN, codingSchemeVersion, namespace, code, NODES_AND_EDGES);
 		System.out.println(graph);
-
-
 	}
 }
+
 

@@ -299,7 +299,7 @@ public class ConceptDetails {
 
     public String encodeTerm(String s) {
 		if (s == null) return null;
-		if (StringUtils.isAlphanumeric(s)) return s;
+		if (gov.nih.nci.evs.browser.utils.StringUtils.isAlphanumeric(s)) return s;
 
         StringBuilder buf = new StringBuilder(s.length());
         for (int i = 0; i < s.length(); i++) {
@@ -444,7 +444,7 @@ public class ConceptDetails {
             if (status_vec == null || status_vec.size() == 0) {
                 con_status = c.getStatus();
             } else {
-                con_status = StringUtils.convertToCommaSeparatedValue(status_vec);
+                con_status = gov.nih.nci.evs.browser.utils.StringUtils.convertToCommaSeparatedValue(status_vec);
             }
             return con_status;
         }
@@ -621,7 +621,7 @@ public class ConceptDetails {
                         con_status = c.getStatus();
                     } else {
                         con_status =
-                            StringUtils.convertToCommaSeparatedValue(status_vec);
+                            gov.nih.nci.evs.browser.utils.StringUtils.convertToCommaSeparatedValue(status_vec);
                     }
                     w.add(con_status);
                 } else {

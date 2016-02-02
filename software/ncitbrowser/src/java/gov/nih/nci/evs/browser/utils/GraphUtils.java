@@ -34,6 +34,18 @@ public class GraphUtils {
 		return v;
 	}
 
+    public static String generateGraphScript(Vector v) {
+		StringBuffer buf = new StringBuffer();
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			buf.append(t);
+			if (i < v.size()-1) {
+				buf.append("\n");
+			}
+		}
+		return buf.toString();
+	}
+
 	public static String generateGraphScript(HashSet nodes, HashMap edge_map, int option) {
 		Vector node_label_vec = new Vector();
 		Iterator it = nodes.iterator();
@@ -125,8 +137,101 @@ public class GraphUtils {
 	}
 
 
+	public static Vector generateGraphScriptVector(HashSet nodes, HashMap edge_map, int option) {
+		Vector v = new Vector();
+		Vector node_label_vec = new Vector();
+		Iterator it = nodes.iterator();
+		while (it.hasNext()) {
+			String node_label = (String) it.next();
+			node_label_vec.add(node_label);
+		}
+
+		if (node_label_vec.size() == 0) {
+			//return NO_DATA_AVAILABLE;
+			return v;
+		}
+
+		node_label_vec = SortUtils.quickSort(node_label_vec);
+		int knt = 0;
+		HashMap label2IdMap = new HashMap();
+		for (int k=0; k<node_label_vec.size(); k++) {
+			String node_label = (String) node_label_vec.elementAt(k);
+			int j = k+1;
+			String id = "" + j;
+			label2IdMap.put(node_label, id);
+		}
+
+		StringBuffer buf = new StringBuffer();
+        if (option == NODES_ONLY || option == NODES_AND_EDGES) {
+			v.add("var nodes = [");
+			for (int k=0; k<node_label_vec.size()-1; k++) {
+				String node_label = (String) node_label_vec.elementAt(k);
+				String id = (String) label2IdMap.get(node_label);
+				if (node_label_vec.size() <= NODE_COUNT_THRESHOLD) {
+					v.add("{id: " + id + ", label: '" + node_label + "'},");
+				} else {
+					v.add("{id: " + id + ", label: '" + node_label + "', shape: 'dot', size: 5},");
+				}
+			}
+			String node_label = (String) node_label_vec.elementAt(node_label_vec.size()-1);
+			String id = (String) label2IdMap.get(node_label);
+			if (node_label_vec.size() <= NODE_COUNT_THRESHOLD) {
+				v.add("{id: " + id + ", label: '" + node_label + "'}");
+			} else {
+				v.add("{id: " + id + ", label: '" + node_label + "', shape: 'dot', size: 5},");
+			}
+			v.add("];");
+	    }
+
+        if (option == EDGES_ONLY || option == NODES_AND_EDGES) {
+			v.add("var edges = [");
+			int count = 0;
+			Iterator it2 = edge_map.keySet().iterator();
+			while (it2.hasNext()) {
+				String key = (String) it2.next();
+				Vector w = (Vector) edge_map.get(key);
+				count = count + w.size();
+			}
+
+			int m = 0;
+			it2 = edge_map.keySet().iterator();
+			while (it2.hasNext()) {
+				String key = (String) it2.next();
+				Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(key, "$");
+				String source = (String) u.elementAt(0);
+				String target = (String) u.elementAt(1);
+
+				String from_id = (String) label2IdMap.get(source);
+				String to_id = (String) label2IdMap.get(target);
+
+				Vector w = (Vector) edge_map.get(key);
+				for (int k=0; k<w.size(); k++) {
+					String edge = (String) w.elementAt(k);
+					m++;
+					if (node_label_vec.size() <= NODE_COUNT_THRESHOLD) {
+					    if (m < count) {
+						    v.add("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "', length: " + MIN_EDGE_LENGTH + "}, ");
+					    } else {
+						    v.add("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "', length: " + MIN_EDGE_LENGTH + "} ");
+					    }
+					} else {
+					    if (m < count) {
+						    v.add("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "', length: " + EDGE_LENGTH + "}, ");
+					    } else {
+						    v.add("{from: " + from_id + ", to: " + to_id + ", arrows:'to', label: '" + edge + "', length: " + EDGE_LENGTH + "} ");
+					    }
+					}
+				}
+			}
+			v.add("];");
+		}
+		return v;
+	}
+
+
     public static String generateGraphScript(Vector graphData, int option) {
 		if (graphData == null) return null;
+
 		HashSet nodes = new HashSet();
 		HashMap edge_map = new HashMap();
         for (int i=0; i<graphData.size(); i++) {
@@ -152,6 +257,57 @@ public class GraphUtils {
 		return generateGraphScript(nodes, edge_map, option);
     }
 
+    public static Vector generateGraphScriptVector(Vector graphData, int option) {
+		if (graphData == null) return null;
+		HashSet nodes = new HashSet();
+		HashMap edge_map = new HashMap();
+        for (int i=0; i<graphData.size(); i++) {
+			String t = (String) graphData.elementAt(i);
+			Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(t);
+			String source = (String) w.elementAt(0);
+			String target = (String) w.elementAt(1);
+			String relationship = (String) w.elementAt(2);
+			if (!nodes.contains(source)) {
+				nodes.add(source);
+			}
+			if (!nodes.contains(target)) {
+				nodes.add(target);
+			}
+			String key = source + "$" + target;
+			Vector v = (Vector) edge_map.get(key);
+			if (v == null) {
+				v = new Vector();
+			}
+			v.add(relationship);
+			edge_map.put(key, v);
+		}
+		return generateGraphScriptVector(nodes, edge_map, option);
+    }
+
+
+    //Vector v = generateGraphScriptVector(graphData, option);
+    public static Vector reduceGraph(Vector v) {
+		//Vector v = generateGraphScriptVector(graphData, option);
+		GraphReductionUtils util = new GraphReductionUtils(v);
+		int n1 = util.getNodeCount(v);
+		HashMap hmap = util.getSourceEdge2TargetsMap();
+		Vector w = util.reduceGraph(v, hmap, true);
+		int n2 = util.getNodeCount(w);
+		boolean graph_reduced = false;
+		if (n1 > n2 * 2) {
+			return w;
+		} else {
+			hmap = util.getTargetEdge2SourcesMap();
+			w = util.reduceGraph(v, hmap, false);
+			n2 = util.getNodeCount(w);
+			if (n1 > n2 * 2) {
+				return w;
+			}
+		}
+		return v;
+	}
+
+/*
     public static void main(String [] args) {
 		Vector graphData = readFile("graph.txt");
         String t = generateGraphScript(graphData, NODES_ONLY);
@@ -164,5 +320,6 @@ public class GraphUtils {
         System.out.println("\n" + t);
 
 	}
+*/
 }
 
