@@ -532,8 +532,8 @@ if (action.compareTo("xmldefinitions") == 0) {
             response.setContentType("text/html");
             response.setHeader("Cache-Control", "no-cache");
 
-long ms1 = System.currentTimeMillis();
-//090215
+			long ms1 = System.currentTimeMillis();
+			//090215
 				JSONObject json = new JSONObject();
 				JSONArray nodesArray = null;// new JSONArray();
 				try {
@@ -546,7 +546,7 @@ long ms1 = System.currentTimeMillis();
 				}
 				response.getWriter().write(json.toString());
 
-System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms1));
+				System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms1));
             return;
 
         } else if (action.equals("build_vs_tree")) {
@@ -559,7 +559,6 @@ System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - m
             JSONObject json = new JSONObject();
             JSONArray nodesArray = null;// new JSONArray();
             try {
-				//HashMap getRootValueSets(String codingSchemeURN)
 				String codingSchemeVersion = null;
                 nodesArray =
                     CacheController.getInstance().getRootValueSets(
@@ -2130,7 +2129,7 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("                Terminology View");
 }
 
-/*
+
 //v2.8 modification:
 if (view == Constants.STANDARD_VIEW) {
 out.println("&nbsp;&nbsp;(");
@@ -2141,7 +2140,7 @@ out.println("&nbsp;&nbsp;(");
 out.println("<a href=\"" + contextPath + "/ajax2?action=create_alt_cs_vs_tree\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
 out.println(")");
 }
-*/
+
 
       out.println("              </td>");
       out.println("");
@@ -4083,7 +4082,6 @@ out.flush();
 
     public static void view_graph(HttpServletRequest request, HttpServletResponse response,
         String scheme, String version, String namespace, String code, String type) {
-
 	  LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
 	  HashMap hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
 	  if (hmap == null) {
@@ -4091,7 +4089,6 @@ out.flush();
 		  hmap = relationshipUtils.getRelationshipHashMap(scheme, version, code, namespace, true);
 		  request.getSession().setAttribute("RelationshipHashMap", hmap);
 	  }
-
 	  // compute nodes and edges using hmap
 	  VisUtils visUtils = new VisUtils(lb_svc);
 	  String[] types = null;
@@ -4119,27 +4116,66 @@ out.flush();
 */
 ////////////////////////////////////////////////////////
 
-
       String group_node_data = "";
+      String group_node_id = null;
+      String group_node_data_2 = "";
+      String group_node_id_2 = null;
+      boolean direction = true;
+      HashMap group_node_id2dataMap = new HashMap();
+
+
       GraphReductionUtils graphReductionUtils = new GraphReductionUtils();
-      String group_node_id = graphReductionUtils.getGroupNodeId(v);
-      Vector w = graphReductionUtils.reduce_graph(v, true);
-      boolean graph_reduced = graphReductionUtils.graph_reduced(v, w);
-      if (graph_reduced) {
-		  group_node_data = graphReductionUtils.get_removed_node_str(v, true);
-	  } else {
-		  w = graphReductionUtils.reduce_graph(v, false);
+      int graph_size = graphReductionUtils.getNodeCount(v);
+      System.out.println("Initial graph size: " + graph_size);
+
+      if (graph_size > graphReductionUtils.MINIMUM_REDUCED_GRAPH_SIZE) {
+
+		  group_node_id = graphReductionUtils.getGroupNodeId(v);
+		  int group_node_id_int = Integer.parseInt(group_node_id);
+		  group_node_id_2 = new Integer(group_node_id_int+1).toString();
+		  Vector w = graphReductionUtils.reduce_graph(v, direction);
+
+		  boolean graph_reduced = graphReductionUtils.graph_reduced(v, w);
+		  if (graph_reduced) {
+			  group_node_data = graphReductionUtils.get_removed_node_str(v, direction);
+			  Vector group_node_ids = graphReductionUtils.get_group_node_ids(w);
+			  for (int k=0; k<group_node_ids.size(); k++) {
+				  String node_id = (String) group_node_ids.elementAt(k);
+				  if (!group_node_id2dataMap.containsKey(node_id)) {
+					  group_node_id2dataMap.put(node_id, group_node_data);
+					  break;
+				  }
+			  }
+
+			  nodes_and_edges =  visUtils.generateGraphScript(w);
+			  v = (Vector) w.clone();
+		  }
+
+
+		  direction = false;
+		  w = graphReductionUtils.reduce_graph(v, direction);
 		  graph_reduced = graphReductionUtils.graph_reduced(v, w);
 		  if (graph_reduced) {
-			  group_node_data = graphReductionUtils.get_removed_node_str(v, false);
+			  group_node_data_2 = graphReductionUtils.get_removed_node_str(v, direction);
+			  Vector group_node_ids = graphReductionUtils.get_group_node_ids(w);
+			  for (int k=0; k<group_node_ids.size(); k++) {
+				  String node_id = (String) group_node_ids.elementAt(k);
+				  if (!group_node_id2dataMap.containsKey(node_id)) {
+					  group_node_id2dataMap.put(node_id, group_node_data_2);
+					  break;
+				  }
+			  }
+
+			  nodes_and_edges =  visUtils.generateGraphScript(w);
+			  v = (Vector) w.clone();
 		  }
-	  }
-      if (graph_reduced) {
-		  nodes_and_edges =  visUtils.generateGraphScript(w);
-	  } else {
+      }
+
+      if (group_node_id2dataMap.keySet().size() == 0) {
 		  nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
 	  }
 
+	  Vector group_node_ids = graphReductionUtils.get_group_node_ids(v);
 	  boolean graph_available = true;
 	  if (nodes_and_edges.compareTo(GraphUtils.NO_DATA_AVAILABLE) == 0) {
 		  graph_available = false;
@@ -4253,24 +4289,56 @@ out.flush();
 
 
       out.println("      network.on('select', function(params) {");
-      //out.println("        document.getElementById('selection').innerHTML = 'Selection: ' + params.nodes;");
-      //out.println("      });");
 
-      out.println("      if (params.nodes == '" + group_node_id + "') {");
-	  out.println("         document.getElementById('selection').innerHTML = '" + group_node_data + "';");
-	  out.println("      }");
+      Iterator it = group_node_id2dataMap.keySet().iterator();
+      while (it.hasNext()) {
+		  String node_id = (String) it.next();
+		  String node_data = (String) group_node_id2dataMap.get(node_id);
+		  out.println("      if (params.nodes == '" + node_id + "') {");
+		  out.println("         document.getElementById('selection').innerHTML = '" + node_data + "';");
+		  out.println("      }");
+	  }
+
       out.println("      });");
-
-
       out.println("			network.on(\"doubleClick\", function (params) {");
 
-      out.println("      if (params.nodes != '" + group_node_id + "') {");
+      String node_id_1 = null;
+      String node_id_2 = null;
+      it = group_node_id2dataMap.keySet().iterator();
+      int lcv = 0;
+      while (it.hasNext()) {
+		  String node_id = (String) it.next();
+		  if (lcv == 0) {
+			  node_id_1 = node_id;
+		  } else if (lcv == 1) {
+			  node_id_2 = node_id;
+		  }
+		  lcv++;
+  	  }
 
-      out.println("				params.event = \"[original event]\";");
-      out.println("				var json = JSON.stringify(params, null, 4);");
-      out.println("				reset_graph(params.nodes);");
-      out.println("      }");
-
+  	  if (node_id_1 != null && node_id_2 != null) {
+		  out.println("      if (params.nodes != '" + node_id_1 + "' && params.nodes != '" + node_id_2 + "') {");
+		  out.println("				params.event = \"[original event]\";");
+		  out.println("				var json = JSON.stringify(params, null, 4);");
+		  out.println("				reset_graph(params.nodes);");
+		  out.println("      }");
+  	  } else if (node_id_1 != null && node_id_2 == null) {
+		  out.println("      if (params.nodes != '" + node_id_1 + "') {");
+		  out.println("				params.event = \"[original event]\";");
+		  out.println("				var json = JSON.stringify(params, null, 4);");
+		  out.println("				reset_graph(params.nodes);");
+		  out.println("      }");
+  	  } else if (node_id_2 != null && node_id_1 == null) {
+		  out.println("      if (params.nodes != '" + node_id_2 + "') {");
+		  out.println("				params.event = \"[original event]\";");
+		  out.println("				var json = JSON.stringify(params, null, 4);");
+		  out.println("				reset_graph(params.nodes);");
+		  out.println("      }");
+  	  } else if (node_id_2 == null && node_id_1 == null) {
+		  out.println("				params.event = \"[original event]\";");
+		  out.println("				var json = JSON.stringify(params, null, 4);");
+		  out.println("				reset_graph(params.nodes);");
+	  }
 
       out.println("		    });");
 
@@ -4545,7 +4613,6 @@ out.flush();
 					msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
 				}
 				request.getSession().setAttribute("message", msg);
-				//return "message";
 			}
 		}
 
@@ -4560,5 +4627,12 @@ out.flush();
 			ex.printStackTrace();
 		}
 
+	}
+
+	public static void dumpVector(Vector v) {
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			System.out.println(t);
+		}
 	}
 }

@@ -269,11 +269,11 @@ public class VisUtils {
         return GraphUtils.generateGraphScriptVector(graphData, option);
 	}
 
-
+/*
 	public static Vector reduceGraph(Vector v) {
 		return GraphUtils.reduceGraph(v);
 	}
-
+*/
 
 
 	public Vector treeItem2GraphData(TreeItem root) {

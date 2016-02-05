@@ -8,6 +8,7 @@ public class GraphReductionUtils {
     Vector data_vec = null;
     HashMap sourceEdge2TargetsMap = null;
     HashMap targetEdge2SourcesMap = null;
+    public int MINIMUM_REDUCED_GRAPH_SIZE = 25;
 
     int group_node_id = 0;
 
@@ -59,8 +60,6 @@ public class GraphReductionUtils {
 		return this.targetEdge2SourcesMap;
 	}
 
-//        {id: 3, font: {size:12, color:'red', face:'sans', background:'white'}, label: 'Source Node 3', shape: 'dot', title: 'Click to view all source concepts.', color: {background:'cyan', border:'blue',highlight:{background:'red',border:'blue'},hover:{background:'white',border:'red'}}},
-
     public Vector insert_group_node(Vector v, String nodeId, String nodeLabel) {
         Vector w = new Vector();
         String new_node =
@@ -77,7 +76,6 @@ public class GraphReductionUtils {
 		return w;
 	}
 
-//{from: 3, to: 2, arrows:'to', width: 1, label:'concept_in_subset'},
     public Vector insert_edge_to_group_node(Vector v, String sourceNodeId, String groupNodeId, String edgeLabel) {
 		return insert_edge_to_group_node(v, sourceNodeId, groupNodeId, edgeLabel, true);
 	}
@@ -737,6 +735,7 @@ public class GraphReductionUtils {
 	}
 
 	public Vector reduce_graph(Vector v, boolean direction) {
+		int n = getNodeCount(v);
 		HashMap hmap = createSourceEdge2TargetsMap(v);
 		if (!direction) {
 			hmap = getInverseHashMap(hmap);
@@ -747,12 +746,14 @@ public class GraphReductionUtils {
 	public boolean graph_reduced(Vector v, Vector w) {
 		int n1 = getNodeCount(v);
 		int n2 = getNodeCount(w);
-		if (n1 > n2 * 2) {
+		//if (n1 > n2 * 2) {
+		if (n1 > n2) {
 			return true;
 		}
 		return false;
 	}
 
+/*
 	public Vector reduce_graph(Vector v) {
 		Vector w = reduce_graph(v, true);
 		if (graph_reduced(v, w)) {
@@ -764,7 +765,7 @@ public class GraphReductionUtils {
 		}
 		return v;
 	}
-
+*/
 
 	public String get_removed_node_str(Vector v, boolean direction) {
 		HashMap hmap = createSourceEdge2TargetsMap(v);
@@ -772,6 +773,33 @@ public class GraphReductionUtils {
 			hmap = getInverseHashMap(hmap);
 		}
 		return get_removed_node_str(v, hmap);
+	}
+
+	public Vector get_group_node_ids(Vector v) {
+		Vector w = new Vector();
+		if (v == null) return w;
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			t = t.trim();
+			if (t.startsWith("{id:")) {
+				int n = t.indexOf("label:");
+				String s = t.substring(n, t.length());
+				n = s.indexOf(",");
+				if (n != -1) {
+					s = s.substring(0, n-1);
+					n = s.indexOf("'");
+					if (n != -1) {
+						s = s.substring(n+1, s.length());
+						if (s.startsWith("Node")) {
+							n = s.lastIndexOf(" ");
+							s = s.substring(n+1, s.length());
+							w.add(s);
+						}
+				    }
+			    }
+			}
+		}
+		return w;
 	}
 
 /*

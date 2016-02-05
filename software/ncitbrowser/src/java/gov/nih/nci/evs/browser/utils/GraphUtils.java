@@ -9,7 +9,7 @@ public class GraphUtils {
     public static final int EDGES_ONLY = 2;
     public static final int NODES_AND_EDGES = 3;
 
-    public static final int NODE_COUNT_THRESHOLD = 30;
+    public static final int NODE_COUNT_THRESHOLD = 25;
     public static final int MIN_EDGE_LENGTH = 200;
     public static final int EDGE_LENGTH = 400;
 
@@ -167,19 +167,26 @@ public class GraphUtils {
 			for (int k=0; k<node_label_vec.size()-1; k++) {
 				String node_label = (String) node_label_vec.elementAt(k);
 				String id = (String) label2IdMap.get(node_label);
+				/* testing
 				if (node_label_vec.size() <= NODE_COUNT_THRESHOLD) {
 					v.add("{id: " + id + ", label: '" + node_label + "'},");
 				} else {
 					v.add("{id: " + id + ", label: '" + node_label + "', shape: 'dot', size: 5},");
 				}
+				*/
+				v.add("{id: " + id + ", label: '" + node_label + "'},");
+
 			}
 			String node_label = (String) node_label_vec.elementAt(node_label_vec.size()-1);
 			String id = (String) label2IdMap.get(node_label);
+			/*
 			if (node_label_vec.size() <= NODE_COUNT_THRESHOLD) {
 				v.add("{id: " + id + ", label: '" + node_label + "'}");
 			} else {
 				v.add("{id: " + id + ", label: '" + node_label + "', shape: 'dot', size: 5},");
 			}
+			*/
+			v.add("{id: " + id + ", label: '" + node_label + "'}");
 			v.add("];");
 	    }
 
@@ -284,7 +291,7 @@ public class GraphUtils {
 		return generateGraphScriptVector(nodes, edge_map, option);
     }
 
-
+/*
     //Vector v = generateGraphScriptVector(graphData, option);
     public static Vector reduceGraph(Vector v) {
 		//Vector v = generateGraphScriptVector(graphData, option);
@@ -306,6 +313,7 @@ public class GraphUtils {
 		}
 		return v;
 	}
+*/
 
 /*
     public static void main(String [] args) {
