@@ -545,7 +545,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 					e.printStackTrace();
 				}
 				response.getWriter().write(json.toString());
-
 				System.out.println("Run time (milliseconds): " + (System.currentTimeMillis() - ms1));
             return;
 
@@ -780,6 +779,7 @@ if (action.compareTo("xmldefinitions") == 0) {
 			}
 
             view_graph(request, response, scheme, version, ns, code, type);
+
         } else if (action.equals("reset_graph")) {
             String id =  HTTPUtils.cleanXSS(request.getParameter("id"));
             String scheme = (String) request.getSession().getAttribute("scheme");
@@ -4089,6 +4089,7 @@ out.flush();
 		  hmap = relationshipUtils.getRelationshipHashMap(scheme, version, code, namespace, true);
 		  request.getSession().setAttribute("RelationshipHashMap", hmap);
 	  }
+
 	  // compute nodes and edges using hmap
 	  VisUtils visUtils = new VisUtils(lb_svc);
 	  String[] types = null;
@@ -4102,7 +4103,6 @@ out.flush();
 	  //String nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
       //boolean graph_reduced = false;
 	  Vector v = visUtils.generateGraphScriptVector(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
-
       String nodes_and_edges = null;
 ////////////////////////////////////////////////////////
 /*
@@ -4126,8 +4126,6 @@ out.flush();
 
       GraphReductionUtils graphReductionUtils = new GraphReductionUtils();
       int graph_size = graphReductionUtils.getNodeCount(v);
-      System.out.println("Initial graph size: " + graph_size);
-
       if (graph_size > graphReductionUtils.MINIMUM_REDUCED_GRAPH_SIZE) {
 
 		  group_node_id = graphReductionUtils.getGroupNodeId(v);
@@ -4147,7 +4145,7 @@ out.flush();
 				  }
 			  }
 
-			  nodes_and_edges =  visUtils.generateGraphScript(w);
+			  nodes_and_edges =  GraphUtils.generateGraphScript(w);
 			  v = (Vector) w.clone();
 		  }
 
@@ -4165,8 +4163,7 @@ out.flush();
 					  break;
 				  }
 			  }
-
-			  nodes_and_edges =  visUtils.generateGraphScript(w);
+			  nodes_and_edges =  GraphUtils.generateGraphScript(w);
 			  v = (Vector) w.clone();
 		  }
       }
@@ -4180,7 +4177,6 @@ out.flush();
 	  if (nodes_and_edges.compareTo(GraphUtils.NO_DATA_AVAILABLE) == 0) {
 		  graph_available = false;
 	  }
-
       response.setContentType("text/html");
       PrintWriter out = null;
 
@@ -4472,7 +4468,6 @@ out.flush();
       out.println("        draw();");
       out.println("    };");
       out.println("</script>");
-
       }
 
       out.println("<div style=\"width: 800px; font-size:14px; text-align: justify;\">");
@@ -4483,6 +4478,16 @@ out.flush();
       out.println("<p id=\"selection\"></p>");
       out.println("</body>");
       out.println("</html>");
+
+      out.flush();
+
+		try {
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
    }
 
     public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {

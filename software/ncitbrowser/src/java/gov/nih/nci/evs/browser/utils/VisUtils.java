@@ -248,9 +248,7 @@ public class VisUtils {
 		return generateGraphScript(scheme, version, namespace, code, types, NODES_AND_EDGES, null);
 	}
 
-    public static String generateGraphScript(Vector v) {
-		return GraphUtils.generateGraphScript(v);
-	}
+
 
     public String generateGraphScript(String scheme, String version, String namespace, String code, String[] types, int option, HashMap hmap) {
         if (types == null) {
@@ -268,13 +266,6 @@ public class VisUtils {
         Vector graphData = generateGraphData(scheme, version, namespace, code, types, option, hmap);
         return GraphUtils.generateGraphScriptVector(graphData, option);
 	}
-
-/*
-	public static Vector reduceGraph(Vector v) {
-		return GraphUtils.reduceGraph(v);
-	}
-*/
-
 
 	public Vector treeItem2GraphData(TreeItem root) {
 	    Vector graphData = treeItem2GraphData(root, new Vector());

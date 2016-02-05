@@ -38,6 +38,7 @@ public class GraphUtils {
 		StringBuffer buf = new StringBuffer();
 		for (int i=0; i<v.size(); i++) {
 			String t = (String) v.elementAt(i);
+			//t = encodeNodeLabel(t);
 			buf.append(t);
 			if (i < v.size()-1) {
 				buf.append("\n");
@@ -136,6 +137,11 @@ public class GraphUtils {
 		return buf.toString();
 	}
 
+	public static String encodeNodeLabel(String node_label) {
+        String s = node_label.replace("'", "\\'");
+        return s;
+	}
+
 
 	public static Vector generateGraphScriptVector(HashSet nodes, HashMap edge_map, int option) {
 		Vector v = new Vector();
@@ -143,6 +149,7 @@ public class GraphUtils {
 		Iterator it = nodes.iterator();
 		while (it.hasNext()) {
 			String node_label = (String) it.next();
+			//node_label = encodeNodeLabel(node_label);
 			node_label_vec.add(node_label);
 		}
 
@@ -246,6 +253,10 @@ public class GraphUtils {
 			Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(t);
 			String source = (String) w.elementAt(0);
 			String target = (String) w.elementAt(1);
+
+			source = encodeNodeLabel(source);
+			target = encodeNodeLabel(target);
+
 			String relationship = (String) w.elementAt(2);
 			if (!nodes.contains(source)) {
 				nodes.add(source);
@@ -291,29 +302,6 @@ public class GraphUtils {
 		return generateGraphScriptVector(nodes, edge_map, option);
     }
 
-/*
-    //Vector v = generateGraphScriptVector(graphData, option);
-    public static Vector reduceGraph(Vector v) {
-		//Vector v = generateGraphScriptVector(graphData, option);
-		GraphReductionUtils util = new GraphReductionUtils(v);
-		int n1 = util.getNodeCount(v);
-		HashMap hmap = util.getSourceEdge2TargetsMap();
-		Vector w = util.reduceGraph(v, hmap, true);
-		int n2 = util.getNodeCount(w);
-		boolean graph_reduced = false;
-		if (n1 > n2 * 2) {
-			return w;
-		} else {
-			hmap = util.getTargetEdge2SourcesMap();
-			w = util.reduceGraph(v, hmap, false);
-			n2 = util.getNodeCount(w);
-			if (n1 > n2 * 2) {
-				return w;
-			}
-		}
-		return v;
-	}
-*/
 
 /*
     public static void main(String [] args) {

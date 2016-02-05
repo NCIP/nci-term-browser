@@ -539,6 +539,7 @@ public class GraphReductionUtils {
 		return buf.toString();
 	}
 
+/*
     //PrintWriter out = response.getWriter();
 	public void generateResponse(PrintWriter out, Vector v, String group_node_id, String group_node_data) {
       out.println("<!doctype html>");
@@ -670,7 +671,7 @@ public class GraphReductionUtils {
       out.println("</body>");
       out.println("</html>");
    }
-
+*/
     public Vector get_nodes_to_remove(Vector v, HashMap hmap) {
 		int source_max = getHighestFreqSourceEdgeCount(hmap);
 		String max_source_edge_str = getHighestFreqSourceEdge(hmap);
