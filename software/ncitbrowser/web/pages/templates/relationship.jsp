@@ -39,6 +39,11 @@ String ns_curr = (String) request.getSession().getAttribute("ns");
         ns_curr = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
     }
     
+// Relationship tab failed to render correctly.    
+if (ns_curr == null || ns_curr.compareTo("null") == 0 || ns_curr.compareTo("undefined") == 0) {
+    ns_curr = new ConceptDetails(lb_svc).getNamespaceByCode(scheme_curr, version_curr, code_curr); 
+}
+    
     String key = scheme_curr + "$" + version_curr + "$" + code_curr;
     if (!DataUtils.isNullOrBlank(ns_curr)) {
         key = key + "$" + ns_curr;
