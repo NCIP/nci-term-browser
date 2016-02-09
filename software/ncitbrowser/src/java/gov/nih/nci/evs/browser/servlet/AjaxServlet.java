@@ -1165,9 +1165,10 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
       out.println("      var nodeDetails = \"javascript:onClickTreeNode('\" ");
-      out.println("                         + respObj.nodes[i].ontology_node_id ");
-      out.println("                         + \",\"");
-      out.println("                         + respObj.nodes[i].ontology_node_ns ");
+      out.println("                         + respObj.nodes[i].ontology_node_id");
+      //out.println("                         + \",\"");
+      out.println("                         + \"','\"");
+      out.println("                         + respObj.nodes[i].ontology_node_ns");
       out.println("                         + \"');\";");
       out.println("      var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, ns:respObj.nodes[i].ontology_node_ns, href:nodeDetails };");
 
@@ -1186,9 +1187,10 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
       out.println("      var nodeDetails = \"javascript:onClickTreeNode('\" ");
-      out.println("                         + respObj.nodes[i].ontology_node_id ");
-      out.println("                         + \",\"");
-      out.println("                         + respObj.nodes[i].ontology_node_ns ");
+      out.println("                         + respObj.nodes[i].ontology_node_id");
+      //out.println("                         + \",\"");
+      out.println("                         + \"','\"");
+      out.println("                         + respObj.nodes[i].ontology_node_ns");
       out.println("                         + \"');\";");
       out.println("      var newNodeData = { label:name, id:respObj.nodes[i].ontology_node_id, ns:respObj.nodes[i].ontology_node_ns, href:nodeDetails };");
 
@@ -1253,7 +1255,9 @@ if (action.compareTo("xmldefinitions") == 0) {
 
       out.println("      var newNodeDetails = \"javascript:onClickTreeNode('\" ");
       out.println("                         + nodeInfo.ontology_node_id ");
-      out.println("                         + \",\"");
+      //out.println("                               out.println("                         + \"','\"");
+      out.println("                         + \"','\"");
+
       out.println("                         + nodeInfo.ontology_node_ns ");
       out.println("                         + \"');\";");
       out.println("      ");
