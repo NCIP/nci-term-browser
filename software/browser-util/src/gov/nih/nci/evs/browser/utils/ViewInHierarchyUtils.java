@@ -939,26 +939,26 @@ public class ViewInHierarchyUtils {
 			HashMap hmap = getRoots(scheme, version);
 			return (TreeItem) hmap.get("<Root>");
 		}
-		if (ti._code.compareTo(code) == 0) return ti;
+
+		if (ti._code.compareTo(code) == 0) {
+			return ti;
+		}
 		for (String association : ti._assocToChildMap.keySet()) {
 			List<TreeItem> children = ti._assocToChildMap.get(association);
 			for (int i=0; i<children.size(); i++) {
 				TreeItem childItem = (TreeItem) children.get(i);
-				if (childItem._ns != null && ns != null) {
-					if (childItem._code.compareTo(code) == 0 && childItem._ns.compareTo(ns) == 0) {
-						return childItem;
-					}
-				} else if (childItem._code.compareTo(code) == 0) {
-					return childItem;
-				}
-				return searchTree(scheme, version, ns, code, childItem);
+				TreeItem ti_child = searchTree(scheme, version, ns, code, childItem);
+				if (ti_child != null) return ti_child;
 			}
 		}
 		return null;
 	}
 
 	public HashSet getChildItemCodes(TreeItem ti) {
-		if (ti == null) return null;
+		if (ti == null) {
+			System.out.println("getChildItemCodes ti == null ???");
+			return null;
+		}
 		HashSet hset = new HashSet();
 		for (String association : ti._assocToChildMap.keySet()) {
 			List<TreeItem> children = ti._assocToChildMap.get(association);
@@ -986,22 +986,14 @@ public class ViewInHierarchyUtils {
 		root._expandable = false;
         for (String association : ti._assocToChildMap.keySet()) {
             List<TreeItem> children = ti._assocToChildMap.get(association);
-            System.out.println("association: " + association);
-            System.out.println("children.size(): " + children.size());
             for (int i=0; i<children.size(); i++) {
 				TreeItem childItem = (TreeItem) children.get(i);
-
-				System.out.println("\tchildItem._code: " + childItem._code);
-
                 if (!childCodes.contains(childItem._code)) {
-
-					System.out.println("\taddChild: " + childItem._code);
 					root.addChild(association, childItem);
 					root._expandable = true;
 				}
 			}
         }
-        System.out.println("\treturn root: " + root._code);
         return root;
 	}
 
@@ -1011,26 +1003,29 @@ public class ViewInHierarchyUtils {
 		HashMap tree_hmap = null;
 		HashMap hmap = null;
 
-		if (StringUtils.isNullOrBlank(namespace)) {
+		//if (StringUtils.isNullOrBlank(namespace)) {
+		if (namespace == null || namespace.compareTo("null") == 0 || namespace.compareTo("undefined") == 0) {
 			namespace = getNamespaceByCode(scheme, version, focus_code);
 		}
 
         if (dot_node_code.compareTo("@") == 0 || dot_node_code.compareTo("@@") == 0) {
 			String json = getTree(scheme, version, focus_code, namespace);
-			System.out.println("\n\n(1) VIH JSON:" + "\n" + json);
-			ti = JSON2TreeItem.json2TreeItem(json);
+    		ti = JSON2TreeItem.json2TreeItem(json);
 			TreeItem.printTree(ti, 0);
 			tree_item = ti;
 		} else {
 			String json = getTree(scheme, version, focus_code, namespace);
-			System.out.println("\n\n(2) VIH JSON:" + "\n" + json);
 			ti = JSON2TreeItem.json2TreeItem(json);
 			tree_item = searchTree(scheme, version, namespace, dot_node_code, ti);
-			TreeItem.printTree(tree_item, 0);
+			//TreeItem.printTree(tree_item, 0);
 		}
 
 		HashSet hset = getChildItemCodes(tree_item);
-		dumpHashSet(hset);
+		if (tree_item == null || hset == null) {
+			System.out.println("\n\tWARNING: getChildItemCodes error.");
+		}
+
+		//dumpHashSet(hset);
 
 		if (dot_node_code.compareTo("@") == 0 || dot_node_code.compareTo("@@") == 0) {
 			hmap = getRoots(scheme, version);
@@ -1050,9 +1045,16 @@ public class ViewInHierarchyUtils {
 			return null;
 		}
 
-		TreeItem.printTree(ti, 0);
+		//TreeItem.printTree(ti, 0);
+		if (hset == null) {
+			System.out.println("\n\thset == null...");
+			hset = new HashSet();
+		}
+
+		//dumpHashSet(hset);
+
         TreeItem new_ti = removeChildNodes(ti, hset);
-        TreeItem.printTree(new_ti, 0);
+        //TreeItem.printTree(new_ti, 0);
 
         hmap = new HashMap();
         hmap.put("<Root>", new_ti);
@@ -1112,8 +1114,7 @@ public class ViewInHierarchyUtils {
 		}
 
 		json = JSON2TreeItem.treeItem2Json(vh_root);
-		System.out.println("\nNew Tree========================================");
-		TreeItem.printTree(vh_root, 0);
+		//TreeItem.printTree(vh_root, 0);
 		return json;
     }
 

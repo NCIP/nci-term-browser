@@ -190,15 +190,10 @@ public class CacheController {
     }
 
     public String getRemainingSubconceptJSONString(String codingScheme, String version, String parent_code, String parent_ns, String focus_code, boolean from_root) {
-
-System.out.println("\tgetRemainingSubconceptJSONString: ");
-System.out.println("\tscheme: " + codingScheme);
-System.out.println("\tversion: " + version);
-System.out.println("\tparent_code: " + parent_code);
-System.out.println("\tparent_ns: " + parent_ns);
-System.out.println("\tfocus_code: " + focus_code);
-System.out.println("\tfrom_root: " + from_root);
-
+	 if (parent_ns == null || parent_ns.compareTo("null") == 0 || parent_ns.compareTo("undefined") == 0) {
+		 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+		 parent_ns = new ConceptDetails(lb_svc).getNamespaceByCode(codingScheme, version, parent_code);
+	 }
 		long ms = System.currentTimeMillis();
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
         boolean useNamespace = false;
@@ -209,7 +204,6 @@ System.out.println("\tfrom_root: " + from_root);
 			}
 		}
 		ms = System.currentTimeMillis();
-		System.out.println("\tnew ViewInHierarchyUtils(lbSvc).getRemainingNodes: ");
 		HashMap hmap = null;
 		if (from_root) {
 			hmap = new ViewInHierarchyUtils(lbSvc).getRemainingNodes(codingScheme, version, focus_code, parent_ns, "@");
@@ -218,10 +212,10 @@ System.out.println("\tfrom_root: " + from_root);
 		}
 
 		TreeItem root = (TreeItem) hmap.get("<Root>");
-		TreeItem.printTree(root, 0);
+		//TreeItem.printTree(root, 0);
 		String json = JSON2TreeItem.treeItem2Json(root);
-        System.out.println("getRemainingSubconceptJSONString run time (milliseconds): "
-                + (System.currentTimeMillis() - ms));
+        //System.out.println("getRemainingSubconceptJSONString run time (milliseconds): "
+        //        + (System.currentTimeMillis() - ms));
 		return json;
 	}
 
@@ -1531,13 +1525,6 @@ System.out.println("\tfrom_root: " + from_root);
 	}
 
     public String getRootJSONString(String codingScheme, String version) {
-
-
-System.out.println("********* CacheController getRootJSONString: codingScheme " + codingScheme);
-System.out.println("********* CacheController getRootJSONString: version " + version);
-
-
-
 		String key = codingScheme + "$" + version + "$root";
 		Element element = _cache.get(key);
 		if (element != null) {
@@ -1547,7 +1534,6 @@ System.out.println("********* CacheController getRootJSONString: version " + ver
 		long ms = System.currentTimeMillis();
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		ResolvedConceptReferenceList rcrl = getHierarchyRoots(codingScheme, version);
-
             System.out.println("getHierarchyRoots run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
 
@@ -1572,9 +1558,6 @@ System.out.println("********* CacheController getRootJSONString: version " + ver
 			String code = rcr.getConceptCode();
 			String name = rcr.getEntityDescription().getContent();
 			boolean is_expandable = isExpandable(treeService, cs_name, cs_version, code, cs_ns);
-
-//System.out.println(name + " (" + code + ") expandable? " + is_expandable);
-
 			TreeItem child = new TreeItem(code, name, cs_ns, null);
 			child._expandable = is_expandable;
 			root.addChild("has_child", child);
@@ -1597,9 +1580,6 @@ System.out.println("********* CacheController getRootJSONString: version " + ver
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
-System.out.println("CacheController json: " + json);
-
 		return json;
 	}
 
@@ -1619,7 +1599,6 @@ System.out.println("CacheController json: " + json);
         boolean useNamespace = false;
         if (ns == null) {
 			ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, code);
-			System.out.println("NS: " + ns);
 			if (ns != null) {
 				useNamespace = true;
 			}

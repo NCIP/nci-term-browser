@@ -602,7 +602,7 @@ public class VisUtils {
 		t = t.substring(n+1, t.length());
 		return t;
 	}
-
+/*
     public static void main(String [] args) {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		VisUtils visUtils = new VisUtils(lbSvc);
@@ -622,6 +622,7 @@ public class VisUtils {
 		String graph = visUtils.generateGraphScript(codingSchemeURN, codingSchemeVersion, namespace, code, NODES_AND_EDGES);
 		System.out.println(graph);
 	}
+*/
 }
 
 

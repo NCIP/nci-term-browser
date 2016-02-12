@@ -87,7 +87,6 @@ public class JSON2TreeItem {
 
 			} else if (key.compareTo(ONTOLOGY_NODE_NS) == 0) {
 				ti._ns = value;
-
 			} else if (key.compareTo(ONTOLOGY_NODE_NAME) == 0) {
 				ti._text = value;
 

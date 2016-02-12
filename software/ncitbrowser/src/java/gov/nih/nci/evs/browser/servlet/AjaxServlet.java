@@ -427,7 +427,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 		}
 
         long ms = System.currentTimeMillis();
-
         if (action.equals("expand_tree")) {
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
@@ -436,10 +435,19 @@ if (action.compareTo("xmldefinitions") == 0) {
                 JSONArray nodesArray = null;
 
                 try {
- if (ns == null || ns.compareTo("null") == 0 || ns.compareTo("undefined") == 0) {
+
+ if (node_id.indexOf("_dot_") == -1) {
+	 if (ns == null || ns.compareTo("null") == 0 || ns.compareTo("undefined") == 0) {
+		 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+		 ns = new ConceptDetails(lb_svc).getNamespaceByCode(ontology_display_name, null, node_id);
+	 }
+ } else {
+	 int idx = node_id.indexOf("_dot_");
+	 String parent_code = node_id.substring(0, idx);
 	 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
-	 ns = new ConceptDetails(lb_svc).getNamespaceByCode(ontology_display_name, null, node_id);
+	 ns = new ConceptDetails(lb_svc).getNamespaceByCode(ontology_display_name, null, parent_code);
  }
+
                     nodesArray =
                         CacheController.getInstance().getSubconcepts(
                             ontology_display_name, ontology_version, node_id, ns);
@@ -2196,7 +2204,6 @@ if (DataUtils.isNull(vsd_uri)) {
 			out.println(DataUtils.getSourceValueSetTreeStringBuffer().toString());
 		} else {
 			value_set_tree_hmap = DataUtils.getSourceValueSetTree();
-
 			stu.printTree(out, value_set_tree_hmap);
 		}
 	} else if (view == Constants.TERMINOLOGY_VIEW){
@@ -2204,7 +2211,6 @@ if (DataUtils.isNull(vsd_uri)) {
 		    out.println(DataUtils.getCodingSchemeValueSetTreeStringBuffer().toString());
 		} else {
 			value_set_tree_hmap = DataUtils.getCodingSchemeValueSetTree();
-
 			stu.printTree(out, value_set_tree_hmap);
 		}
 	}
