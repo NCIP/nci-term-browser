@@ -9,6 +9,7 @@ public class GraphReductionUtils {
     HashMap sourceEdge2TargetsMap = null;
     HashMap targetEdge2SourcesMap = null;
     public int MINIMUM_REDUCED_GRAPH_SIZE = 25;
+    private int MINIMUM_GRAPH_NODE_ID = 1000;
 
     int group_node_id = 0;
 
@@ -16,6 +17,15 @@ public class GraphReductionUtils {
 
     public GraphReductionUtils() {
 
+	}
+
+	public void initialize_group_node_id(int n) {
+		MINIMUM_GRAPH_NODE_ID = n;
+	}
+
+	private int getGroupNodeID() {
+		MINIMUM_GRAPH_NODE_ID++;
+		return MINIMUM_GRAPH_NODE_ID;
 	}
 
     public GraphReductionUtils(Vector data_vec) {
@@ -702,8 +712,11 @@ public class GraphReductionUtils {
 	}
 
 	public Vector reduceGraph(Vector v, HashMap hmap, boolean forward) {
-		int n1 = getNodeCount(v);
-		String groupNodeId = new Integer(n1+1).toString();
+
+		//int n1 = getNodeCount(v);
+		//String groupNodeId = new Integer(n1+1).toString();
+		int n1 = getGroupNodeID();
+		String groupNodeId = new Integer(n1).toString();
 		String groupNodeLabel = "Node " + groupNodeId;
 		Vector w = null;
 		try {

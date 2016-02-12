@@ -4134,6 +4134,9 @@ out.flush();
 
       GraphReductionUtils graphReductionUtils = new GraphReductionUtils();
       int graph_size = graphReductionUtils.getNodeCount(v);
+
+      //KLO, 02122016
+      graphReductionUtils.initialize_group_node_id(graph_size);
       if (graph_size > graphReductionUtils.MINIMUM_REDUCED_GRAPH_SIZE) {
 
 		  group_node_id = graphReductionUtils.getGroupNodeId(v);
