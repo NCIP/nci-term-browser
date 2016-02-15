@@ -4118,18 +4118,6 @@ out.flush();
       //boolean graph_reduced = false;
 	  Vector v = visUtils.generateGraphScriptVector(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
       String nodes_and_edges = null;
-////////////////////////////////////////////////////////
-/*
-      Vector w = visUtils.reduceGraph(v);
-      String nodes_and_edges = null;
-      if (v.size() == w.size()) {
-	      nodes_and_edges =  visUtils.generateGraphScript(scheme, version, namespace, code, types, VisUtils.NODES_AND_EDGES, hmap);
-	  } else {
-		  nodes_and_edges =  visUtils.generateGraphScript(v);
-	  }
-*/
-////////////////////////////////////////////////////////
-
       String group_node_data = "";
       String group_node_id = null;
       String group_node_data_2 = "";

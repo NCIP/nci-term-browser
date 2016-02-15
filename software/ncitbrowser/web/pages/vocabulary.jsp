@@ -82,8 +82,10 @@ if (scheme != null) {
             scheme = (String) request.getSession().getAttribute("scheme");
         }
 
-
-  boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(scheme);
+  boolean hasValueSet = false;
+  if (DataUtils.getValueSetHierarchy() != null) {
+  	hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(scheme);
+  }
   boolean hasMapping = DataUtils.hasMapping(scheme);
 
 

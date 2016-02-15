@@ -18,7 +18,13 @@
   String _menubar_tb_dictionary = DataUtils.getCodingSchemeName( _dictionaryName0 );
   String _menubar_tb_version = DataUtils.getCodingSchemeVersion( _dictionaryName0 );
 
-  boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(_menubar_tb_dictionary);
+  //boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(_menubar_tb_dictionary);
+
+  boolean hasValueSet = false;
+  if (DataUtils.getValueSetHierarchy() != null) {
+  	hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(_menubar_tb_dictionary);
+  }    
+  
   boolean hasMapping = DataUtils.hasMapping(_menubar_tb_dictionary);
   
   boolean isMapping = DataUtils.isMapping(_menubar_tb_dictionary, _menubar_tb_version);

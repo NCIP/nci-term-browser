@@ -34,7 +34,14 @@
   boolean menubar_isMapping = DataUtils.isMapping(menubar_dictionary, null);
   //Vector mapping_scheme_vec = DataUtils.getMappingCodingSchemes(menubar_dictionary);
   
-  boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(menubar_dictionary);
+  //boolean hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(menubar_dictionary);
+  
+  boolean hasValueSet = false;
+  if (DataUtils.getValueSetHierarchy() != null) {
+  	hasValueSet = DataUtils.getValueSetHierarchy().hasValueSet(menubar_dictionary);
+  }  
+  
+  
   boolean hasMapping = DataUtils.hasMapping(menubar_dictionary);
 
   if (menubar_version == null) menubar_version = menuBar_info.version; // HTTPUtils.cleanXSS already performed in JSPUtils.JSPHeaderInfo
