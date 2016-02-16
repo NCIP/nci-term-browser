@@ -428,6 +428,14 @@ if (action.compareTo("xmldefinitions") == 0) {
 
         long ms = System.currentTimeMillis();
         if (action.equals("expand_tree")) {
+
+
+System.out.println(	"(*) " + action + " ontology_display_name " + ontology_display_name);
+System.out.println(	"(*) " + action + " vocabulary_name " + vocabulary_name);
+System.out.println(	"(*) " + action + " node_id " + node_id);
+System.out.println(	"(*) " + action + " ns " + ns);
+
+
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
@@ -436,17 +444,18 @@ if (action.compareTo("xmldefinitions") == 0) {
 
                 try {
 
- if (node_id.indexOf("_dot_") == -1) {
-	 if (ns == null || ns.compareTo("null") == 0 || ns.compareTo("undefined") == 0) {
-		 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
-		 ns = new ConceptDetails(lb_svc).getNamespaceByCode(ontology_display_name, null, node_id);
-	 }
- } else {
-	 int idx = node_id.indexOf("_dot_");
-	 String parent_code = node_id.substring(0, idx);
-	 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
-	 ns = new ConceptDetails(lb_svc).getNamespaceByCode(ontology_display_name, null, parent_code);
- }
+					 if (node_id.indexOf("_dot_") == -1) {
+						 if (ns == null || ns.compareTo("null") == 0 || ns.compareTo("undefined") == 0) {
+							 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+							 ns = new ConceptDetails(lb_svc).getNamespaceByCode(ontology_display_name, null, node_id);
+						 }
+					 } else {
+						 int idx = node_id.indexOf("_dot_");
+						 String parent_code = node_id.substring(0, idx);
+						 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+						 ns = new ConceptDetails(lb_svc).getNamespaceByCode(ontology_display_name, null, parent_code);
+					 }
+
 
                     nodesArray =
                         CacheController.getInstance().getSubconcepts(
@@ -459,6 +468,11 @@ if (action.compareTo("xmldefinitions") == 0) {
                 } catch (Exception e) {
 					e.printStackTrace();
                 }
+
+
+System.out.println(	"(*) " + action + " json.toString() " + json.toString());
+
+
                 response.getWriter().write(json.toString());
             }
         }

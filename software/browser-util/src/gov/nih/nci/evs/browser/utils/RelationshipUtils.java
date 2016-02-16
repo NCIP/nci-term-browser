@@ -215,7 +215,8 @@ public class RelationshipUtils {
     }
 
     public HashMap getRelationshipHashMap(String scheme, String version, String code) {
-		return getRelationshipHashMap(scheme, version, code, null, false);
+		String namespace = new ConceptDetails(lbSvc).getNamespaceByCode(scheme, version, code);
+		return getRelationshipHashMap(scheme, version, code, namespace, false);
 	}
 
 
@@ -324,8 +325,7 @@ public class RelationshipUtils {
 								List<TreeItem> children =
 									ti._assocToChildMap.get(association);
 								for (TreeItem childItem : children) {
-									superconceptList.add(childItem._text + "|"
-										+ childItem._code);
+									superconceptList.add(childItem._text + "|" + childItem._code + "|" + childItem._ns);
 								}
 							}
 						}

@@ -126,11 +126,11 @@ if (type != null && type.compareTo("all") == 0) {
     <%
       } else if (concepts != null && concepts.size() == 1) {
           String s = (String) concepts.get(0);
-          
           Vector ret_vec = StringUtils.parseData(s, "|");
           String cName = (String) ret_vec.elementAt(0);
           String cCode = (String) ret_vec.elementAt(1);
           cNamespace = null;
+          
           if (ret_vec.size() > 2) {
               cNamespace = (String) ret_vec.elementAt(2);
           }
@@ -148,7 +148,6 @@ if (type != null && type.compareTo("all") == 0) {
     <%
         for (int i=0; i<concepts.size(); i++) {
           String s = (String) concepts.get(i);
-          
           Vector ret_vec = StringUtils.parseData(s, "|");
           String cName = (String) ret_vec.elementAt(0);
           String cCode = (String) ret_vec.elementAt(1);
@@ -263,10 +262,6 @@ if (type != null && type.compareTo("all") == 0) {
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;
      }
-     
-     
-//System.out.println("(*) display_inverse_relationships: " + display_inverse_relationships);
-
 
 if (!isMapping) {
 

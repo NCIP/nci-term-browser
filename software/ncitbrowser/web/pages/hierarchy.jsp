@@ -599,7 +599,6 @@ if (DataUtils.isNCIT(hierarchy_schema)) {
 
 String ontology_display_name = info.dictionary;
 String ontology_version = info.version;
-
 String schema = ontology_display_name;
 
 //11202013, KLO
@@ -609,7 +608,12 @@ if (DataUtils.isNull(ontology_display_name)) {
     ontology_display_name = Constants.NCIT_CS_NAME;
 }
 
-String ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
+
+System.out.println("(*) hierarchy.jsp ontology_display_name: " + ontology_display_name);
+System.out.println("(*) hierarchy.jsp ontology_version: " + ontology_version);
+System.out.println("(*) hierarchy.jsp ontology_node_id: " + ontology_node_id);
+System.out.println("(*) hierarchy.jsp ontology_node_ns: " + ontology_node_ns);
+
 
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
@@ -619,9 +623,9 @@ String ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
 
 <%
-   if (ns != null && ns.compareTo("na") != 0) {
+   if (ontology_node_ns != null && ontology_node_ns.compareTo("na") != 0) {
 %>
-            <input type="hidden" id="ontology_node_ns" name="ontology_node_ns" value="<%=HTTPUtils.cleanXSS(ns)%>" />
+            <input type="hidden" id="ontology_node_ns" name="ontology_node_ns" value="<%=ontology_node_ns%>" />
 <%
    }
 %>
