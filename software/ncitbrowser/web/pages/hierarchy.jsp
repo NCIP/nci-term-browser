@@ -596,7 +596,6 @@ if (DataUtils.isNCIT(hierarchy_schema)) {
               String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
               String ontology_node_ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
 
-
 String ontology_display_name = info.dictionary;
 String ontology_version = info.version;
 String schema = ontology_display_name;
@@ -607,12 +606,6 @@ ontology_display_name = DataUtils.getCSName(ontology_display_name);
 if (DataUtils.isNull(ontology_display_name)) {
     ontology_display_name = Constants.NCIT_CS_NAME;
 }
-
-
-System.out.println("(*) hierarchy.jsp ontology_display_name: " + ontology_display_name);
-System.out.println("(*) hierarchy.jsp ontology_version: " + ontology_version);
-System.out.println("(*) hierarchy.jsp ontology_node_id: " + ontology_node_id);
-System.out.println("(*) hierarchy.jsp ontology_node_ns: " + ontology_node_ns);
 
 
             %>

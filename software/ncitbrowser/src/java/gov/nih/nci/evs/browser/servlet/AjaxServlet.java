@@ -428,14 +428,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 
         long ms = System.currentTimeMillis();
         if (action.equals("expand_tree")) {
-
-
-System.out.println(	"(*) " + action + " ontology_display_name " + ontology_display_name);
-System.out.println(	"(*) " + action + " vocabulary_name " + vocabulary_name);
-System.out.println(	"(*) " + action + " node_id " + node_id);
-System.out.println(	"(*) " + action + " ns " + ns);
-
-
             if (node_id != null && ontology_display_name != null) {
                 response.setContentType("text/html");
                 response.setHeader("Cache-Control", "no-cache");
@@ -468,11 +460,6 @@ System.out.println(	"(*) " + action + " ns " + ns);
                 } catch (Exception e) {
 					e.printStackTrace();
                 }
-
-
-System.out.println(	"(*) " + action + " json.toString() " + json.toString());
-
-
                 response.getWriter().write(json.toString());
             }
         }
