@@ -781,18 +781,18 @@ public class PropertyData
         if (isEmpty) return description;
 		String firstColumnHeading = null;
 		String secondColumnHeading = null;
-		int	firstPercentColumnWidth = 60;
-		int	secondPercentColumnWidth = 40;
+		int	firstPercentColumnWidth = 40;
+		int	secondPercentColumnWidth = 60;
 		if (rel_type.startsWith("type_inverse")) {
-		    firstPercentColumnWidth = 40;
-		    secondPercentColumnWidth = 60;
+		    firstPercentColumnWidth = 60;
+		    secondPercentColumnWidth = 40;
 		}
 
         int qualifierColumn = 0;
         if (display_qualifiers) {
-		    qualifierColumn = 1;
+		    qualifierColumn = 2;
 		    if (rel_type.startsWith("type_inverse")) {
-				qualifierColumn = 2;
+				qualifierColumn = 1;
 			}
 		}
 

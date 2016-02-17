@@ -57,6 +57,7 @@ public class UIUtils {
     private static Logger _logger = Logger.getLogger(UIUtils.class);
     private LexBIGService lbSvc = null;
     private LexBIGServiceConvenienceMethods lbscm = null;
+    private String indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	public UIUtils() {
 
 	}
@@ -306,22 +307,26 @@ public class UIUtils {
 			}
 
 			if (qualifierColumn == 0) {
-				  buf.append("<td class=\"dataCellText\">").append("\n");
+				  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
 				  buf.append("				 " + name).append("\n");
 				  buf.append("</td>").append("\n");
 
 				  if (code != null) {
 				      value = getHyperlink(codingScheme, version, value, code, namespace);
 				  }
-				  buf.append("<td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+				  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
 
 			} else if (qualifierColumn == 1) {
                 if (hasQualifiers(qualifiers)) {
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">").append("\n");
+
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">").append("\n");
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\">").append("\n");
-					buf.append("				 " + name).append("\n");
+					buf.append("				 " + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 					for (int j = 0; j < qualifiers.size(); j++) {
 						String q = (String) qualifiers.elementAt(j);
@@ -340,47 +345,42 @@ public class UIUtils {
 						String t = qualifier_name + ":" + qualifier_value;
 						if (t.length() > 1) {
 							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + t + "</td>").append("\n");
+							buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
 							buf.append("			 </tr>").append("\n");
 					    }
 					}
 
 					buf.append("		  </table>").append("\n");
 					buf.append("	  </td>").append("\n");
-					if (code != null) {
-						value = getHyperlink(codingScheme, version, value, code, namespace);
-					}
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 			    } else {
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + name + "</td>").append("\n");
 					if (code != null) {
 						value = getHyperlink(codingScheme, version, value, code, namespace);
 					}
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 				}
 
 			} else if (qualifierColumn == 2) {
 
-				if (hasQualifiers(qualifiers)) {
+                if (hasQualifiers(qualifiers)) {
 					if (code != null) {
 						value = getHyperlink(codingScheme, version, value, code, namespace);
 					}
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 
-					buf.append("	  <td class=\"dataCellText\">").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">").append("\n");
 					buf.append("		  <table>").append("\n");
-					buf.append("			 <tr><td class=\"dataCellText\">").append("\n");
-
-					buf.append("				 " + name).append("\n");
+					buf.append("			 <tr>");
+					buf.append("<td class=\"dataCellText\">").append("\n");
+					buf.append("				 " + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
-
 					for (int j = 0; j < qualifiers.size(); j++) {
 						String q = (String) qualifiers.elementAt(j);
+						Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(q);
 
 						String qualifier_name = "";
 						String qualifier_value = "";
-
-						Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(q);
 
 						if (u.size() > 0) {
 							qualifier_name = (String) u.elementAt(0);
@@ -388,22 +388,22 @@ public class UIUtils {
 						if (u.size() > 1) {
 							qualifier_value = (String) u.elementAt(1);
 						}
-
 						String t = qualifier_name + ":" + qualifier_value;
 						if (t.length() > 1) {
 							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + t + "</td>").append("\n");
+							buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
 							buf.append("			 </tr>").append("\n");
-					    }					}
-
+					    }
+					}
 					buf.append("		  </table>").append("\n");
 					buf.append("	  </td>").append("\n");
+
 			    } else {
 					if (code != null) {
 						value = getHyperlink(codingScheme, version, value, code, namespace);
 					}
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + name + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
 				}
 			}
 			buf.append("	</tr>").append("\n");
@@ -614,7 +614,7 @@ public class UIUtils {
 					buf.append("	  <td class=\"dataCellText\" scope=\"row\">").append("\n");
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
-					buf.append("<td class=\"dataCellText\">").append("\n");
+					buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
 					buf.append("				 " + name).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 
@@ -635,7 +635,7 @@ public class UIUtils {
 						String t = qualifier_name + ":" + qualifier_value;
 						if (t.length() > 1) {
 							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + t + "</td>").append("\n");
+							buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
 							buf.append("			 </tr>").append("\n");
 					    }
 					}
@@ -657,7 +657,7 @@ public class UIUtils {
 
             if (qualifierColumn == 2) {
                 if (hasQualifiers(qualifiers)) {
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + name + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 					if (code != null) {
 						value = getHyperlink(codingScheme, version, value, code, namespace);
 					}
@@ -686,7 +686,7 @@ public class UIUtils {
 						String t = qualifier_name + ":" + qualifier_value;
 						if (t.length() > 1) {
 							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + t + "</td>").append("\n");
+							buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
 							buf.append("			 </tr>").append("\n");
 					    }
 					}
