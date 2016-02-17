@@ -737,7 +737,8 @@ public class PropertyData
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     public String generatePropertyTable(Entity concept, Vector property_names, String description) {
-		return new UIUtils().generatePropertyTable(concept, property_names, description);
+		//return new UIUtils().generatePropertyTable(concept, property_names, description);
+		return new UIUtils().generatePropertyTable(concept, property_names, description, 2);
 	}
 
 

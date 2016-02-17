@@ -479,6 +479,12 @@ public class UIUtils {
 
 
     public String generatePropertyTable(Entity concept, Vector property_names, String description) {
+		int qualifierColumn = 1;
+        return generatePropertyTable(concept, property_names, description, qualifierColumn);
+	}
+
+
+    public String generatePropertyTable(Entity concept, Vector property_names, String description, int qualifierColumn) {
 		if (property_names == null) return null;
 
 		org.LexGrid.commonTypes.Property[] properties = null;
@@ -488,7 +494,7 @@ public class UIUtils {
 		String secondColumnHeading = "Value";
 		int firstPercentColumnWidth = 20;
 		int secondPercentColumnWidth = 80;
-		int qualifierColumn = 1;
+		//int qualifierColumn = 1;
 
 		Vector keyVec = new Vector();
 		HashMap qualifierHashMap = new HashMap();
@@ -527,6 +533,7 @@ public class UIUtils {
 
 		return generateHTMLTable(spec);
 	}
+
 
 /*
     public static void main(String [] args) {
