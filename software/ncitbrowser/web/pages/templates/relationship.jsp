@@ -246,7 +246,7 @@ if (type != null && type.compareTo("all") == 0) {
 
     <%
     propertyData.setRelationshipHashMap(hmap);
-    String assoc_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_ASSOCIATION);
+    String assoc_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_ASSOCIATION, true);
     %>
     
     <p>
@@ -284,7 +284,7 @@ if (!isMapping) {
 
     <%
     propertyData.setRelationshipHashMap(hmap);
-    String inv_asso_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_INVERSE_ASSOCIATION);
+    String inv_asso_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_INVERSE_ASSOCIATION, true);
     
     
     %>
