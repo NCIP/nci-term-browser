@@ -236,7 +236,7 @@ if (type != null && type.compareTo("all") == 0) {
 
     <%
     propertyData.setRelationshipHashMap(hmap);
-    String role_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_ROLE);
+    String role_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_ROLE, true);
     %>
     
     <p>
@@ -268,7 +268,7 @@ if (!isMapping) {
     if (display_inverse_relationships) {
 
     propertyData.setRelationshipHashMap(hmap);
-    String inv_role_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_INVERSE_ROLE);
+    String inv_role_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_INVERSE_ROLE, true);
     %>
     
     <p>

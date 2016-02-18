@@ -1,5 +1,8 @@
 package gov.nih.nci.evs.browser.common;
 
+import java.util.List;
+import java.util.Arrays;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -225,6 +228,12 @@ public class Constants {
     public static final String[] NON_CONCEPT_TO_CONCEPT_ASSOCIATION = new String[] {"domain", "range", "instance"};
 
     public static final String NO_ROOT_NODES_AVAILABLE = "No root nodes available";
+
+    public static final String[] OWL_ROLE_QUALIFIERS = new String[] {"owl:allValuesFrom", "owl:someValuesFrom", "ObjectSomeValuesFrom"};
+
+    public static final List OWL_ROLE_QUALIFIER_LIST = Arrays.asList(OWL_ROLE_QUALIFIERS);
+
+
 
     /**
      * Constructor

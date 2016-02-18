@@ -1,5 +1,6 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.common.*;
 import gov.nih.nci.evs.browser.bean.*;
 import java.util.*;
 import java.io.*;
@@ -355,12 +356,14 @@ public class UIUtils {
 							qualifier_value = (String) u.elementAt(1);
 						}
 
-						String t = qualifier_name + ":" + qualifier_value;
-						if (t.length() > 1) {
-							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
-							buf.append("			 </tr>").append("\n");
-					    }
+						if (displayQualifier(qualifier_name)) {
+							String t = qualifier_name + ":" + qualifier_value;
+							if (t.length() > 1) {
+								buf.append("			 <tr>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+								buf.append("			 </tr>").append("\n");
+							}
+						}
 					}
 
 					buf.append("		  </table>").append("\n");
@@ -401,12 +404,15 @@ public class UIUtils {
 						if (u.size() > 1) {
 							qualifier_value = (String) u.elementAt(1);
 						}
-						String t = qualifier_name + ":" + qualifier_value;
-						if (t.length() > 1) {
-							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
-							buf.append("			 </tr>").append("\n");
-					    }
+
+						if (displayQualifier(qualifier_name)) {
+							String t = qualifier_name + ":" + qualifier_value;
+							if (t.length() > 1) {
+								buf.append("			 <tr>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+								buf.append("			 </tr>").append("\n");
+							}
+						}
 					}
 					buf.append("		  </table>").append("\n");
 					buf.append("	  </td>").append("\n");
@@ -723,7 +729,12 @@ public class UIUtils {
         return buf.toString();
 	}
 
-
+    public boolean displayQualifier(String qualifierName) {
+		if (Constants.OWL_ROLE_QUALIFIER_LIST.contains(qualifierName)) {
+			return false;
+		}
+		return true;
+	}
 
 /*
     public static void main(String [] args) {
