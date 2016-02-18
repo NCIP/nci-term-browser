@@ -781,19 +781,18 @@ public class PropertyData
         if (isEmpty) return description;
 		String firstColumnHeading = null;
 		String secondColumnHeading = null;
+
 		int	firstPercentColumnWidth = 40;
 		int	secondPercentColumnWidth = 60;
+		int qualifierColumn = 2;
 		if (rel_type.startsWith("type_inverse")) {
 		    firstPercentColumnWidth = 60;
 		    secondPercentColumnWidth = 40;
+		    qualifierColumn = 1;
 		}
 
-        int qualifierColumn = 0;
-        if (display_qualifiers) {
-		    qualifierColumn = 2;
-		    if (rel_type.startsWith("type_inverse")) {
-				qualifierColumn = 1;
-			}
+		if (!display_qualifiers) {
+			qualifierColumn = 0;
 		}
 
 		HTMLTableSpec spec = null;
@@ -807,7 +806,7 @@ public class PropertyData
 				qualifierColumn,
 				list);
 
-			return uiUtils.generateHTMLTable(spec, codingScheme, version);
+			return uiUtils.generateHTMLTable(spec, codingScheme, version, rel_type);
 		} catch (Exception ex) {
 			//ex.printStackTrace();
 			System.out.println("Exception: UIUtils.relationshipList2HTMLTableSpec");

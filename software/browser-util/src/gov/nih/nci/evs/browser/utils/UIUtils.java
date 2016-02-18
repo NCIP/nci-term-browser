@@ -231,8 +231,12 @@ public class UIUtils {
 		return false;
 	}
 
-
     public String generateHTMLTable(HTMLTableSpec spec, String codingScheme, String version) {
+		return generateHTMLTable(spec, codingScheme, version, null);
+	}
+
+
+    public String generateHTMLTable(HTMLTableSpec spec, String codingScheme, String version, String rel_type) {
 		StringBuffer buf = new StringBuffer();
 		HashMap qualifierHashMap = spec.getQualifierHashMap();
 		Vector nv_vec = spec.getKeyVec();
@@ -307,14 +311,23 @@ public class UIUtils {
 			}
 
 			if (qualifierColumn == 0) {
-				  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
-				  buf.append("				 " + name).append("\n");
-				  buf.append("</td>").append("\n");
-
-				  if (code != null) {
-				      value = getHyperlink(codingScheme, version, value, code, namespace);
+                  if (rel_type == null || !rel_type.startsWith("type_inverse")) {
+					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
+					  buf.append("				 " + name).append("\n");
+					  buf.append("</td>").append("\n");
+					  if (code != null) {
+						  value = getHyperlink(codingScheme, version, value, code, namespace);
+					  }
+					  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
+				  } else {
+					  if (code != null) {
+						  value = getHyperlink(codingScheme, version, value, code, namespace);
+					  }
+					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
+					  buf.append("				 " + value).append("\n");
+					  buf.append("</td>").append("\n");
+					  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 				  }
-				  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
 
 			} else if (qualifierColumn == 1) {
                 if (hasQualifiers(qualifiers)) {
