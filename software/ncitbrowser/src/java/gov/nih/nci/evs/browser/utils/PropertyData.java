@@ -779,6 +779,7 @@ public class PropertyData
 		}
         String description = uiUtils.getRelationshipTableLabel(defaultLabel, rel_type, isEmpty);
         if (isEmpty) return description;
+        /*
 		String firstColumnHeading = null;
 		String secondColumnHeading = null;
 
@@ -790,10 +791,42 @@ public class PropertyData
 		    secondPercentColumnWidth = 40;
 		    qualifierColumn = 1;
 		}
+		*/
+
+		String firstColumnHeading = null;
+		String secondColumnHeading = null;
+
+		int	firstPercentColumnWidth = 40;
+		int	secondPercentColumnWidth = 60;
+		int qualifierColumn = 2;
+
+		firstColumnHeading = "Relationship";
+		secondColumnHeading = "<div>Value</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(qualifiers)</div>";
+
+		if (rel_type.startsWith("type_inverse")) {
+		    firstPercentColumnWidth = 60;
+		    secondPercentColumnWidth = 40;
+		    qualifierColumn = 1;
+
+			secondColumnHeading = "Relationship";
+			firstColumnHeading = "<div>Value</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(qualifiers)</div>";
+		}
+
 
 		if (!display_qualifiers) {
 			qualifierColumn = 0;
+			if (rel_type.startsWith("type_inverse")) {
+				firstColumnHeading = "Value";
+				secondColumnHeading = "Relationship";
+			} else {
+				secondColumnHeading = "Value";
+				firstColumnHeading = "Relationship";
+			}
 		}
+
+
+
+
 
 		HTMLTableSpec spec = null;
 		try {
