@@ -505,7 +505,7 @@ public class UIUtils {
 
 		String firstColumnHeading = "Name";
 		String secondColumnHeading = "Value";
-		secondColumnHeading = "<div>Value</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(qualifiers)</div>";
+		secondColumnHeading = "Value (qualifiers indented underneath)";
 
 		int firstPercentColumnWidth = 20;
 		int secondPercentColumnWidth = 80;

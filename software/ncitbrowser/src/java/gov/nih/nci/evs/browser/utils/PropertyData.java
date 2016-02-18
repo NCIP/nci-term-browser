@@ -801,7 +801,7 @@ public class PropertyData
 		int qualifierColumn = 2;
 
 		firstColumnHeading = "Relationship";
-		secondColumnHeading = "<div>Value</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(qualifiers)</div>";
+		secondColumnHeading = "Value (qualifiers indented underneath)";
 
 		if (rel_type.startsWith("type_inverse")) {
 		    firstPercentColumnWidth = 60;
@@ -809,7 +809,7 @@ public class PropertyData
 		    qualifierColumn = 1;
 
 			secondColumnHeading = "Relationship";
-			firstColumnHeading = "<div>Value</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(qualifiers)</div>";
+			firstColumnHeading = "Value (qualifiers indented underneath)";
 		}
 
 
