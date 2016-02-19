@@ -107,6 +107,7 @@ public class NCItBrowserProperties {
 
     public static final String NCBO_API_KEY = "NCBO_API_KEY";
     public static final String NCBO_WIDGET_INFO = "NCBO_WIDGET_INFO";
+    public static final String OWL_ROLE_QUANTIFIERS = "OWL_ROLE_QUANTIFIERS";
 
     private static NCItBrowserProperties _browserProperties = null;
     private static Properties _properties = new Properties();
@@ -140,6 +141,8 @@ public class NCItBrowserProperties {
 
 
 	private	static HashMap _bioportalAcronym2NameHashMap = null;//NCBORESTClient.getBioportalAcronym2NameHashMap(getAPIKey());
+
+    private static String _owl_role_quantifiers = null;
 
 
 
@@ -228,6 +231,10 @@ public class NCItBrowserProperties {
 			_ncit_url =
 				_browserProperties
 					.getProperty(_browserProperties.NCIT_URL);
+
+			_owl_role_quantifiers =
+				_browserProperties
+					.getProperty(_browserProperties.OWL_ROLE_QUANTIFIERS);
 
 			String pagination_time_out_str =
 				_browserProperties
@@ -524,4 +531,10 @@ public class NCItBrowserProperties {
     public static boolean isAudioCaptchaBackgroundNoiseOn() {
         return _audio_captcha_background_noise_on;
     }
+
+    public static String get_owl_role_quantifiers() {
+		return _owl_role_quantifiers;
+	}
+
+
 }

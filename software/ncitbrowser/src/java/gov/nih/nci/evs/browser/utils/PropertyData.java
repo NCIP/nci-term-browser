@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.Map.Entry;
 import gov.nih.nci.evs.browser.bean.*;
 import gov.nih.nci.evs.browser.common.*;
+import gov.nih.nci.evs.browser.properties.*;
 
 import org.LexGrid.concepts.*;
 import org.LexGrid.LexBIG.Utility.Iterators.*;
@@ -738,7 +739,9 @@ public class PropertyData
 
     public String generatePropertyTable(Entity concept, Vector property_names, String description) {
 		//return new UIUtils().generatePropertyTable(concept, property_names, description);
-		return new UIUtils().generatePropertyTable(concept, property_names, description, 2);
+		UIUtils uiUtils = new UIUtils();
+		uiUtils.set_owl_role_quantifiers(NCItBrowserProperties.get_owl_role_quantifiers());
+		return uiUtils.generatePropertyTable(concept, property_names, description, 2);
 	}
 
 
@@ -770,7 +773,7 @@ public class PropertyData
 			hmap = new RelationshipUtils(lbSvc).getRelationshipHashMap(codingScheme, version, code, namespace, true);
 		}
 		UIUtils uiUtils = new UIUtils();
-
+		uiUtils.set_owl_role_quantifiers(NCItBrowserProperties.get_owl_role_quantifiers());
         ArrayList list = (ArrayList) hmap.get(rel_type);
         String defaultLabel = null;
         boolean isEmpty = false;

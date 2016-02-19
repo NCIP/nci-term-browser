@@ -229,13 +229,6 @@ public class Constants {
 
     public static final String NO_ROOT_NODES_AVAILABLE = "No root nodes available";
 
-    //https://www.w3.org/TR/2012/REC-owl2-syntax-20121211/
-    public static final String[] OWL_ROLE_QUALIFIERS = new String[] {"owl:allValuesFrom", "owl:someValuesFrom", "ObjectSomeValuesFrom", "ObjectAllValuesFrom"};
-
-    public static final List OWL_ROLE_QUALIFIER_LIST = Arrays.asList(OWL_ROLE_QUALIFIERS);
-
-
-
     /**
      * Constructor
      */

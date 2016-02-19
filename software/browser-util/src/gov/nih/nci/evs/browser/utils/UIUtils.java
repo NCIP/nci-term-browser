@@ -59,8 +59,22 @@ public class UIUtils {
     private LexBIGService lbSvc = null;
     private LexBIGServiceConvenienceMethods lbscm = null;
     private String indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    private List OWL_ROLE_QUALIFIER_LIST = null;
+
 	public UIUtils() {
 
+	}
+
+	public void set_owl_role_quantifiers(String owl_role_quantifiers) {
+        OWL_ROLE_QUALIFIER_LIST = new ArrayList();
+		if (owl_role_quantifiers == null) {
+			return;
+		}
+		Vector v = gov.nih.nci.evs.browser.utils.StringUtils.parseData(owl_role_quantifiers);
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			OWL_ROLE_QUALIFIER_LIST.add(t);
+		}
 	}
 
 	public UIUtils(LexBIGService lbSvc) {
@@ -733,7 +747,8 @@ public class UIUtils {
         if (qualifierName == null) return false;
         if (qualifierName.length() == 0) return false;
 
-		if (Constants.OWL_ROLE_QUALIFIER_LIST.contains(qualifierName)) {
+		//if (Constants.OWL_ROLE_QUALIFIER_LIST.contains(qualifierName)) {
+		if (OWL_ROLE_QUALIFIER_LIST.contains(qualifierName)) {
 			//System.out.println(	"qualifierName: " + qualifierName + " display=false");
 			return false;
 		}
