@@ -195,7 +195,7 @@ public class UIUtils {
 					Vector w2 = new Vector();
 					for (int k=0; k<w.size(); k++) {
 						String t = (String) w.elementAt(k);
-						t = t.replaceAll(":", "|");
+						t = t.replaceAll("=", "|");
 						w2.add(t);
 					}
 					qualifierHashMap.put(key, w2);
@@ -730,9 +730,14 @@ public class UIUtils {
 	}
 
     public boolean displayQualifier(String qualifierName) {
+        if (qualifierName == null) return false;
+        if (qualifierName.length() == 0) return false;
+
 		if (Constants.OWL_ROLE_QUALIFIER_LIST.contains(qualifierName)) {
+			//System.out.println(	"qualifierName: " + qualifierName + " display=false");
 			return false;
 		}
+		//System.out.println(	"qualifierName: " + qualifierName + " display=true");
 		return true;
 	}
 

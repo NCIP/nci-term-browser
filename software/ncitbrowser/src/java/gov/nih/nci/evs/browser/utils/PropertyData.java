@@ -824,10 +824,6 @@ public class PropertyData
 			}
 		}
 
-
-
-
-
 		HTMLTableSpec spec = null;
 		try {
 			spec = uiUtils.relationshipList2HTMLTableSpec(

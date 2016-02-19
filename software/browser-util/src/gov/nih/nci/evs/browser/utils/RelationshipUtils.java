@@ -465,11 +465,10 @@ public class RelationshipUtils {
 																	.getNameAndValue()) {
 																String qualifier_name = qual.getName();
 																String qualifier_value = qual.getContent();
-																//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
 																if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(qualifier_name) &&
 																	gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(qualifier_value)) {
 																} else {
-																	buf.append((qualifier_name + ":" + qualifier_value) + "$");
+																	buf.append((qualifier_name + "=" + qualifier_value) + "$");
 																}
 
 															}
@@ -666,8 +665,7 @@ public class RelationshipUtils {
 																	.getNameAndValue()) {
 																String qualifier_name = qual.getName();
 																String qualifier_value = qual.getContent();
-																//qualifiers = qualifiers + (qualifier_name + ":" + qualifier_value) + "$";
-																buf.append((qualifier_name + ":" + qualifier_value) + "$");
+																buf.append((qualifier_name + "=" + qualifier_value) + "$");
 															}
 															String qualifiers = buf.toString();
 															if (qualifiers.endsWith("$")) {
