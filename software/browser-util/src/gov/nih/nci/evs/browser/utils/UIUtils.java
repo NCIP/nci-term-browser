@@ -667,11 +667,13 @@ public class UIUtils {
 							qualifier_value = (String) u.elementAt(1);
 						}
 
-						String t = qualifier_name + ":" + qualifier_value;
-						if (t.length() > 1) {
-							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
-							buf.append("			 </tr>").append("\n");
+						if (displayQualifier(qualifier_name)) {
+							String t = qualifier_name + ":" + qualifier_value;
+							if (t.length() > 1) {
+								buf.append("			 <tr>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+								buf.append("			 </tr>").append("\n");
+							}
 					    }
 					}
 
@@ -752,7 +754,6 @@ public class UIUtils {
 			//System.out.println(	"qualifierName: " + qualifierName + " display=false");
 			return false;
 		}
-		//System.out.println(	"qualifierName: " + qualifierName + " display=true");
 		return true;
 	}
 
