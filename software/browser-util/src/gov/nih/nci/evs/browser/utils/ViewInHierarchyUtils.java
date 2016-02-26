@@ -816,7 +816,8 @@ public class ViewInHierarchyUtils {
 
 		LexEvsTree tree = null;
 		if (StringUtils.isNullOrBlank(namespace)) {
-			tree = treeService.getTree(codingScheme, versionOrTag, code);
+			String ns = getNamespaceByCode(codingScheme, versionOrTag.getVersion(), code);
+			tree = treeService.getTree(codingScheme, versionOrTag, code, ns);
 		} else {
 			tree = treeService.getTree(codingScheme, versionOrTag, code, namespace);
 		}
@@ -918,7 +919,8 @@ public class ViewInHierarchyUtils {
 	}
 
     public String getTree(String codingScheme, String version, String code) {
-		return getTree(codingScheme, version, code, null);
+		String ns = getNamespaceByCode(codingScheme, version, code);
+		return getTree(codingScheme, version, code, ns);
 	}
 /*
     public String getTree(String codingScheme, String version, String code, String namespace) {
@@ -1075,7 +1077,8 @@ public class ViewInHierarchyUtils {
 
 		LexEvsTree tree = null;
 		if (StringUtils.isNullOrBlank(namespace)) {
-			tree = treeService.getTree(codingScheme, versionOrTag, code);
+            String ns = getNamespaceByCode(codingScheme, version, code);
+			tree = treeService.getTree(codingScheme, versionOrTag, code, ns);
 		} else {
 			tree = treeService.getTree(codingScheme, versionOrTag, code, namespace);
 		}
