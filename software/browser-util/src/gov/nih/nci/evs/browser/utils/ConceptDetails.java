@@ -1144,6 +1144,78 @@ public class ConceptDetails {
 		return hmap;
 	}
 
+    public HashMap getPropertyQualifierHashMap(Entity node) {
+		HashMap hmap = new HashMap();
+		Presentation[] presentations = node.getPresentation();
+		for (int i = 0; i < presentations.length; i++) {
+			 Presentation presentation = presentations[i];
+			 String key = presentation.getPropertyName() + "$" + presentation.getValue().getContent();
+			 PropertyQualifier[] qualifiers = presentation.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+				  String value = qualifier.getPropertyQualifierName() + "=" + qualifier.getValue().getContent();
+				  Vector v = new Vector();
+				  if (hmap.containsKey(key)) {
+					   v = (Vector) hmap.get(key);
+				  }
+				  v.add(value);
+				  hmap.put(key, v);
+			 }
+     	}
+
+		Definition[] definitions = node.getDefinition();
+		for (int i = 0; i < definitions.length; i++) {
+			 Definition definition = definitions[i];
+			 String key = definition.getPropertyName() + "$" + definition.getValue().getContent();
+			 PropertyQualifier[] qualifiers = definition.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+				  String value = qualifier.getPropertyQualifierName() + "=" + qualifier.getValue().getContent();
+				  Vector v = new Vector();
+				  if (hmap.containsKey(key)) {
+					   v = (Vector) hmap.get(key);
+				  }
+				  v.add(value);
+				  hmap.put(key, v);
+			 }
+		}
+
+		Comment[] comments = node.getComment();
+		for (int i = 0; i < comments.length; i++) {
+			 Comment comment = comments[i];
+			 String key = comment.getPropertyName() + "$" + comment.getValue().getContent();
+			 PropertyQualifier[] qualifiers = comment.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+				  String value = qualifier.getPropertyQualifierName() + "=" + qualifier.getValue().getContent();
+				  Vector v = new Vector();
+				  if (hmap.containsKey(key)) {
+					   v = (Vector) hmap.get(key);
+				  }
+				  v.add(value);
+				  hmap.put(key, v);
+			 }
+		}
+
+		Property[] properties = node.getProperty();
+		for (int i = 0; i < properties.length; i++) {
+			 Property property = properties[i];
+			 String key = property.getPropertyName() + "$" + property.getValue().getContent();
+			 PropertyQualifier[] qualifiers = property.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+				  String value = qualifier.getPropertyQualifierName() + "=" + qualifier.getValue().getContent();
+				  Vector v = new Vector();
+				  if (hmap.containsKey(key)) {
+					   v = (Vector) hmap.get(key);
+				  }
+				  v.add(value);
+				  hmap.put(key, v);
+			 }
+		}
+        return hmap;
+    }
+
     public Vector getRelationshipSource(String scheme, String version, String code) {
 		return getRelationshipTarget(scheme, version, code, true);
 	}
