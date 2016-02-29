@@ -64,6 +64,7 @@ import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
 
 public class PropertyData
 {
+	private static boolean owl2_layout = false;
     private static Logger _logger = Logger.getLogger(PropertyData.class);
     private LexBIGService lbSvc = null;
     private ConceptDetails conceptDetails = null;
@@ -88,6 +89,9 @@ public class PropertyData
 	private Vector external_source_codes_linktext;
 	private Vector descendantCodes;
 	private HashMap propertyName2ValueHashMap;
+	private HashMap propertyQualifierHashMap;
+	private HashMap displayLabel2PropertyNameHashMap;
+
 
 	private List displayItemList = null;
 
@@ -183,7 +187,25 @@ public class PropertyData
 		return this.additionalproperties;
 	}
 
+	public HashMap getPropertyQualifierHashMap() {
+		return this.propertyQualifierHashMap;
+	}
+
+	public HashMap addToHashMap(HashMap hmap, String key, String value) {
+		if (hmap == null) {
+			hmap = new HashMap();
+		}
+		Vector v = new Vector();
+		if (hmap.containsKey(key)) {
+			v = (Vector) hmap.get(key);
+		}
+		v.add(value);
+		hmap.put(key, v);
+		return hmap;
+	}
+
 	public void setCurr_concept(Entity curr_concept) {
+
 		this.curr_concept = curr_concept;
 		this.code = curr_concept.getEntityCode();
 		this.namespace = curr_concept.getEntityCodeNamespace();
@@ -192,11 +214,14 @@ public class PropertyData
 		this.additionalproperties.add("CONCEPT_NAME");
 		this.additionalproperties.add("primitive");
 		this.concept_status = conceptDetails.getConceptStatus(codingScheme, version, null, curr_concept.getEntityCode());
+		this.displayLabel2PropertyNameHashMap = new HashMap();
+
 		if (concept_status != null) {
 		   concept_status = concept_status.replaceAll("_", " ");
 		   if (concept_status.compareToIgnoreCase("active") == 0 || concept_status.compareToIgnoreCase("reviewed") == 0) concept_status = null;
 		}
 		this.propertyName2ValueHashMap = conceptDetails.getPropertyName2ValueHashMap(curr_concept);
+		this.propertyQualifierHashMap = conceptDetails.getPropertyQualifierHashMap(curr_concept);
 		Vector propertyvalues = new Vector();
 		concept_id = curr_concept.getEntityCode();
 		propertyvalues.add(concept_id);
@@ -215,25 +240,28 @@ public class PropertyData
 			Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(t, "$");
 			String presentation_name = (String) w.elementAt(0);
 			String presentation_value = (String) w.elementAt(1);
+
 			String isPreferred = (String) w.elementAt(2);
 			if (isPreferred.compareTo("true") == 0) {
 				properties_to_display.add(presentation_name);
-				properties_to_display_label.add(presentation_name.replaceAll("_", " "));
+				String display_label = presentation_name.replaceAll("_", " ");
+				properties_to_display_label.add(display_label);
+displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap, display_label, presentation_name);
 				properties_to_display_url.add(null);
 				properties_to_display_linktext.add(null);
 		    }
 		}
-
 		for (int i=0; i<displayItemList.size(); i++) {
 			DisplayItem displayItem = (DisplayItem) displayItemList.get(i);
 			if (!displayItem.getIsExternalCode() && !properties_to_display.contains( displayItem.getPropertyName() )) {
 				properties_to_display.add(displayItem.getPropertyName());
 				properties_to_display_label.add(displayItem.getItemLabel());
+				//displayLabel2PropertyNameHashMap.put(displayItem.getItemLabel(), displayItem.getPropertyName());
 				properties_to_display_url.add(displayItem.getUrl());
 				properties_to_display_linktext.add(displayItem.getHyperlinkText());
 		    }
+displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap, displayItem.getItemLabel(), displayItem.getPropertyName());
 		}
-
 		this.external_source_codes = new Vector();
 		this.external_source_codes_label = new Vector();
 		this.external_source_codes_url = new Vector();
@@ -256,6 +284,10 @@ public class PropertyData
 		getTermsAndPropertiesData(curr_concept);
 	}
 
+	public HashMap getDisplayLabel2PropertyNameHashMap() {
+		return this.displayLabel2PropertyNameHashMap;
+	}
+
 
 	public void dumpVector(String label, Vector v) {
 		System.out.println(label);
@@ -293,7 +325,6 @@ public class PropertyData
 
 		dumpVector("additionalproperties: ", additionalproperties);
 		dumpHashMap("propertyName2ValueHashMap", propertyName2ValueHashMap);
-
         dumpVector("properties_to_display: ", properties_to_display);
         dumpVector("properties_to_display_label: ", properties_to_display_label);
         dumpVector("properties_to_display_url: ", properties_to_display_url);
@@ -764,17 +795,27 @@ public class PropertyData
 		return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, false);
 	}
 
+
     public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type,
         boolean display_qualifiers) {
-		HashMap hmap = null;
-		if (relationshipHashMap != null) {
-			hmap = relationshipHashMap;
-		} else {
-			hmap = new RelationshipUtils(lbSvc).getRelationshipHashMap(codingScheme, version, code, namespace, true);
-		}
+        return generateRelationshipTable(codingScheme, version, code, namespace, rel_type, display_qualifiers, null);
+	}
+
+    public String generateRelationshipTable(String codingScheme, String version, String code, String namespace, String rel_type,
+        boolean display_qualifiers, ArrayList list) {
+        if (list == null) {
+			HashMap hmap = null;
+			if (relationshipHashMap != null) {
+				hmap = relationshipHashMap;
+			} else {
+				hmap = new RelationshipUtils(lbSvc).getRelationshipHashMap(codingScheme, version, code, namespace, true);
+			}
+			list = (ArrayList) hmap.get(rel_type);
+	    }
+
 		UIUtils uiUtils = new UIUtils();
 		uiUtils.set_owl_role_quantifiers(NCItBrowserProperties.get_owl_role_quantifiers());
-        ArrayList list = (ArrayList) hmap.get(rel_type);
+
         String defaultLabel = null;
         boolean isEmpty = false;
         if (list == null || list.size() == 0) {
@@ -782,19 +823,6 @@ public class PropertyData
 		}
         String description = uiUtils.getRelationshipTableLabel(defaultLabel, rel_type, isEmpty);
         if (isEmpty) return description;
-        /*
-		String firstColumnHeading = null;
-		String secondColumnHeading = null;
-
-		int	firstPercentColumnWidth = 40;
-		int	secondPercentColumnWidth = 60;
-		int qualifierColumn = 2;
-		if (rel_type.startsWith("type_inverse")) {
-		    firstPercentColumnWidth = 60;
-		    secondPercentColumnWidth = 40;
-		    qualifierColumn = 1;
-		}
-		*/
 
 		String firstColumnHeading = null;
 		String secondColumnHeading = null;
@@ -806,7 +834,7 @@ public class PropertyData
 		firstColumnHeading = "Relationship";
 		secondColumnHeading = "Value (qualifiers indented underneath)";
 
-		if (rel_type.startsWith("type_inverse")) {
+		if (rel_type.startsWith("type_inverse") || rel_type.compareTo("type_subconcept") == 0) {
 		    firstPercentColumnWidth = 60;
 		    secondPercentColumnWidth = 40;
 		    qualifierColumn = 1;
@@ -818,7 +846,7 @@ public class PropertyData
 
 		if (!display_qualifiers) {
 			qualifierColumn = 0;
-			if (rel_type.startsWith("type_inverse")) {
+			if (rel_type.startsWith("type_inverse") || rel_type.compareTo("type_subconcept") == 0) {
 				firstColumnHeading = "Value";
 				secondColumnHeading = "Relationship";
 			} else {
@@ -1006,6 +1034,42 @@ public class PropertyData
 		buf.append("%></a>");
 		return buf.toString();
 	}
+
+	public Vector getPropertyQualifiers(String displayLabel, String propertyValue) {
+		Vector propertyName_vec = null;
+		if (displayLabel2PropertyNameHashMap.containsKey(displayLabel)) {
+			propertyName_vec = (Vector) displayLabel2PropertyNameHashMap.get(displayLabel);
+		} else {
+			return null;
+		}
+        for (int i=0; i<propertyName_vec.size(); i++) {
+			String propertyName = (String) propertyName_vec.elementAt(i);
+			String key = propertyName + "$" + propertyValue;
+			if (propertyQualifierHashMap.containsKey(key)) {
+				Vector v = (Vector) propertyQualifierHashMap.get(key);
+				return v;
+			}
+	    }
+	    return null;
+	}
+
+	public String getPropertyQualifierString(String displayLabel, String propertyValue) {
+		if (!owl2_layout) return null;
+		Vector v = getPropertyQualifiers(displayLabel, propertyValue);
+		if (v == null || v.size() == 0) return null;
+		StringBuffer buf = new StringBuffer();
+		String indent = "&nbsp;&nbsp;&nbsp;";
+		for (int i=0; i<v.size(); i++) {
+			String nv = (String) v.elementAt(i);
+			Vector u = StringUtils.parseData(nv, "=");
+			String name = (String) u.elementAt(0);
+			String value = (String) u.elementAt(1);
+			buf.append("<br>" + indent + name + ": " + value + "</br>");
+		}
+		return buf.toString();
+	}
+
+
 
 	public static void main(String[] args) {
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();

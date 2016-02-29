@@ -807,4 +807,123 @@ public class RelationshipUtils {
 		return a;
 	}
 
+    public ArrayList getRelationshipData(String scheme, String version, String namespace, String code,
+                                         String associationName, boolean direction) {
+
+        ArrayList list = new ArrayList();
+        CodingSchemeVersionOrTag csvt = new CodingSchemeVersionOrTag();
+        if (version != null) {
+			csvt.setVersion(version);
+		}
+
+        // Perform the query ...
+        String relationContainerName = null;
+        ResolvedConceptReferenceList matches = null;
+        ConceptReference cref = ConvenienceMethods.createConceptReference(code, scheme);
+        if (namespace == null) {
+			namespace = new ConceptDetails(lbSvc).getNamespaceByCode(scheme, version, code);
+		}
+        cref.setCodeNamespace(namespace);
+        try {
+			matches = lbSvc.getNodeGraph(scheme, csvt, relationContainerName).resolveAsList(
+					cref, direction, !direction, 1, 1, new LocalNameList(), null,
+					null, -1);
+		} catch (Exception ex) {
+			return null;
+		}
+        boolean associationExists = false;
+        if (matches.getResolvedConceptReferenceCount() > 0) {
+            Enumeration<? extends ResolvedConceptReference> refEnum = matches.enumerateResolvedConceptReference();
+
+            while (refEnum.hasMoreElements()) {
+                ResolvedConceptReference ref = refEnum.nextElement();
+                AssociationList sourceof = ref.getSourceOf();
+                if (!direction) {
+					sourceof = ref.getTargetOf();
+				}
+                if (sourceof != null) {
+					Association[] associations = sourceof.getAssociation();
+					for (int i = 0; i < associations.length; i++) {
+						Association assoc = associations[i];
+						if (assoc.getAssociationName().compareTo(associationName) == 0) {
+							associationExists = true;
+							AssociatedConcept[] acl = assoc.getAssociatedConcepts().getAssociatedConcept();
+							for (int j = 0; j < acl.length; j++) {
+								AssociatedConcept ac = acl[j];
+
+								EntityDescription ed =
+									ac.getEntityDescription();
+
+								String name = "No Description";
+								if (ed != null) {
+									name = ed.getContent();
+								}
+								String pt = name;
+								String rela = replaceAssociationNameByRela(ac, assoc.getAssociationName());
+								if (direction) {
+									String s =
+										rela + "|" + pt + "|"
+											+ ac.getConceptCode() + "|"
+											+ ac.getCodingSchemeName() + "|"
+											+ ac.getCodeNamespace();
+
+									StringBuffer sb = new StringBuffer();
+									if (ac.getAssociationQualifiers() != null) {
+										StringBuffer buf = new StringBuffer();
+										for (NameAndValue qual : ac
+												.getAssociationQualifiers()
+												.getNameAndValue()) {
+											String qualifier_name = qual.getName();
+											String qualifier_value = qual.getContent();
+											if (gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(qualifier_name) &&
+												gov.nih.nci.evs.browser.utils.StringUtils.isNullOrBlank(qualifier_value)) {
+											} else {
+												buf.append((qualifier_name + "=" + qualifier_value) + "$");
+											}
+
+										}
+										String qualifiers = buf.toString();
+										if (qualifiers.endsWith("$")) {
+											qualifiers = qualifiers.substring(0, qualifiers.length()-1);
+										}
+										sb.append("|" + qualifiers);
+									}
+									s = s + sb.toString();
+									list.add(s);
+
+								} else {
+									String s =
+										rela + "|" + pt + "|"
+											+ ac.getConceptCode() + "|"
+											+ ac.getCodingSchemeName() + "|"
+											+ ac.getCodeNamespace();
+									StringBuffer sb = new StringBuffer();
+									if (ac.getAssociationQualifiers() != null) {
+										StringBuffer buf = new StringBuffer();
+										for (NameAndValue qual : ac
+												.getAssociationQualifiers()
+												.getNameAndValue()) {
+											String qualifier_name = qual.getName();
+											String qualifier_value = qual.getContent();
+											buf.append((qualifier_name + "=" + qualifier_value) + "$");
+										}
+										String qualifiers = buf.toString();
+										if (qualifiers.endsWith("$")) {
+											qualifiers = qualifiers.substring(0, qualifiers.length()-1);
+										}
+										sb.append("|" + qualifiers);
+									}
+									s = s + sb.toString();
+									list.add(s);
+								}
+							}
+							break;
+						}
+					}
+			    }
+            }
+        }
+        if (!associationExists) return null;
+        return list;
+    }
 }
