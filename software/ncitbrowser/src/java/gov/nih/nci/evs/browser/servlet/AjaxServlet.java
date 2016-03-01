@@ -2147,6 +2147,7 @@ if (view == Constants.STANDARD_VIEW) {
 }
 
 
+/*
 //v2.8 modification:
 if (view == Constants.STANDARD_VIEW) {
 out.println("&nbsp;&nbsp;(");
@@ -2157,7 +2158,7 @@ out.println("&nbsp;&nbsp;(");
 out.println("<a href=\"" + contextPath + "/ajax2?action=create_alt_cs_vs_tree\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
 out.println(")");
 }
-
+*/
 
       out.println("              </td>");
       out.println("");

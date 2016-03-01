@@ -117,8 +117,9 @@ if (type != null && type.compareTo("all") == 0) {
  if (!isMapping) {
 
     propertyData.setRelationshipHashMap(hmap);
-    
-    //arrayList = relationshipUtils.getRelationshipData(scheme_curr, version_curr, ns_curr, code_curr, associationName, direction);
+    if (owl2_display) {
+    arrayList = relationshipUtils.getRelationshipData(scheme_curr, version_curr, ns_curr, code_curr, associationName, direction);
+    }
     if (owl2_display && arrayList != null) {    
          parent_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code_curr, ns_curr, Constants.TYPE_SUPERCONCEPT, true, arrayList);
 	    %>
@@ -193,7 +194,9 @@ if (type != null && type.compareTo("all") == 0) {
    <%
     propertyData.setRelationshipHashMap(hmap);
     direction = false;
-    //arrayList = relationshipUtils.getRelationshipData(scheme_curr, version_curr, ns_curr, code_curr, associationName, direction);
+    if (owl2_display) {
+    arrayList = relationshipUtils.getRelationshipData(scheme_curr, version_curr, ns_curr, code_curr, associationName, direction);
+    }
     if (owl2_display && arrayList != null) {    
          child_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code_curr, ns_curr, Constants.TYPE_SUBCONCEPT, true, arrayList);
 	    %>

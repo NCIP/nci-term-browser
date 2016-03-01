@@ -305,7 +305,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 
         String node_id = HTTPUtils.cleanXSS(request.getParameter("ontology_node_id"));// DataConstants.ONTOLOGY_NODE_ID);
         String ns = HTTPUtils.cleanXSS(request.getParameter("ns"));// DataConstants.ONTOLOGY_NODE_ID);
-        System.out.println("Namespace: " + ns);
 
         String ontology_display_name =
             HTTPUtils.cleanXSS(request.getParameter("ontology_display_name"));// DataConstants.ONTOLOGY_DISPLAY_NAME);

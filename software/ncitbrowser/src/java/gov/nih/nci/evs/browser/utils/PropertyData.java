@@ -1059,16 +1059,21 @@ displayLabel2PropertyNameHashMap = addToHashMap(displayLabel2PropertyNameHashMap
 		if (v == null || v.size() == 0) return null;
 		StringBuffer buf = new StringBuffer();
 		String indent = "&nbsp;&nbsp;&nbsp;";
+		buf.append("<table class=\"datatable_960\" border=\"0\" width=\"100%\">").append("\n");
 		for (int i=0; i<v.size(); i++) {
 			String nv = (String) v.elementAt(i);
 			Vector u = StringUtils.parseData(nv, "=");
 			String name = (String) u.elementAt(0);
 			String value = (String) u.elementAt(1);
-			buf.append("<br>" + indent + name + ": " + value + "</br>");
+			buf.append("<tr>").append("\n");
+			buf.append("	  <td class=\"dataCellText\" scope=\"row\">").append("\n");
+			buf.append(indent + name + ": " + value).append("\n");
+			buf.append("	  </td>").append("\n");
+			buf.append("</tr>").append("\n");
 		}
+		buf.append("</table>");
 		return buf.toString();
 	}
-
 
 
 	public static void main(String[] args) {
