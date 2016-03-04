@@ -133,6 +133,65 @@ public class Utils {
         }
     }
 
+
+    public static void dumpHashMap(String label, HashMap hmap) {
+		System.out.println("\n" + label + ":");
+		Iterator it = hmap.keySet().iterator();
+		while (it.hasNext()) {
+			String nv = (String) it.next();
+			System.out.println("\n");
+
+			Vector v = (Vector) hmap.get(nv);
+			for (int i=0; i<v.size(); i++) {
+				String q = (String) v.elementAt(i);
+				System.out.println(nv + " --> " + q);
+			}
+		}
+		System.out.println("\n");
+	}
+
+    public static void dumpVector(String label, Vector v) {
+		System.out.println("\n" + label + ":");
+		if (v.size() == 0) {
+			System.out.println("\tNone");
+			return;
+		}
+        for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			int j = i+1;
+			System.out.println("\t(" + j + ") " + t);
+		}
+		System.out.println("\n");
+	}
+
+    public static void dumpArrayList(String label, ArrayList list) {
+		System.out.println("\n" + label + ":");
+		if (list.size() == 0) {
+			System.out.println("\tNone");
+			return;
+		}
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			int j = i+1;
+			System.out.println("\t(" + j + ") " + t);
+		}
+		System.out.println("\n");
+	}
+
+    public static void dumpList(String label, List list) {
+		System.out.println("\n" + label + ":");
+		if (list.size() == 0) {
+			System.out.println("\tNone");
+			return;
+		}
+        for (int i=0; i<list.size(); i++) {
+			String t = (String) list.get(i);
+			int j = i+1;
+			System.out.println("\t(" + j + ") " + t);
+		}
+		System.out.println("\n");
+	}
+
     public static void debugHashMap(String preNote, HashMap<String, String> hashMap,
     		String postNote) {
         if (preNote != null && preNote.length() > 0)

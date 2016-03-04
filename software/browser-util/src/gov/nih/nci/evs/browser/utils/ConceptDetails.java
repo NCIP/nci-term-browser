@@ -1331,5 +1331,187 @@ public class ConceptDetails {
 		return v;
     }
 
+    public Vector getPropertyTable(Entity node) {
+		Vector w = new Vector();
+		StringBuffer buf = new StringBuffer();
 
+		Presentation[] presentations = node.getPresentation();
+		for (int i = 0; i < presentations.length; i++) {
+			 buf = new StringBuffer();
+			 Presentation presentation = presentations[i];
+			 buf.append(presentation.getPropertyName() + "|" + presentation.getValue().getContent());
+			 StringBuffer qualifier_buf = new StringBuffer();
+			 PropertyQualifier[] qualifiers = presentation.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+				  String value = qualifier.getPropertyQualifierName() + "=" + qualifier.getValue().getContent();
+				  qualifier_buf.append(value).append("$");
+			 }
+			 String qualifier_str = qualifier_buf.toString();
+			 if (qualifier_str.endsWith("$")) {
+				 qualifier_str = qualifier_str.substring(0, qualifier_str.length()-1);
+			 }
+			 if (qualifier_buf.length() > 0) {
+				 buf.append("|").append(qualifier_str);
+			 }
+			 w.add(buf.toString());
+     	}
+
+		Definition[] definitions = node.getDefinition();
+		for (int i = 0; i < definitions.length; i++) {
+			 buf = new StringBuffer();
+			 Definition definition = definitions[i];
+			 buf.append(definition.getPropertyName() + "|" + definition.getValue().getContent());
+			 StringBuffer qualifier_buf = new StringBuffer();
+			 PropertyQualifier[] qualifiers = definition.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+				  String value = qualifier.getPropertyQualifierName() + "=" + qualifier.getValue().getContent();
+				  qualifier_buf.append(value).append("$");
+			 }
+			 String qualifier_str = qualifier_buf.toString();
+			 if (qualifier_str.endsWith("$")) {
+				 qualifier_str = qualifier_str.substring(0, qualifier_str.length()-1);
+			 }
+			 if (qualifier_buf.length() > 0) {
+				 buf.append("|").append(qualifier_str);
+			 }
+			 w.add(buf.toString());
+		}
+
+		Comment[] comments = node.getComment();
+		for (int i = 0; i < comments.length; i++) {
+			 buf = new StringBuffer();
+			 Comment comment = comments[i];
+			 buf.append(comment.getPropertyName() + "|" + comment.getValue().getContent());
+			 StringBuffer qualifier_buf = new StringBuffer();
+			 PropertyQualifier[] qualifiers = comment.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+				  String value = qualifier.getPropertyQualifierName() + "=" + qualifier.getValue().getContent();
+				  qualifier_buf.append(value).append("$");
+			 }
+			 String qualifier_str = qualifier_buf.toString();
+			 if (qualifier_str.endsWith("$")) {
+				 qualifier_str = qualifier_str.substring(0, qualifier_str.length()-1);
+			 }
+			 if (qualifier_buf.length() > 0) {
+				 buf.append("|").append(qualifier_str);
+			 }
+			 w.add(buf.toString());
+		}
+
+		Property[] properties = node.getProperty();
+		for (int i = 0; i < properties.length; i++) {
+			 buf = new StringBuffer();
+			 Property property = properties[i];
+			 buf.append(property.getPropertyName() + "|" + property.getValue().getContent());
+			 StringBuffer qualifier_buf = new StringBuffer();
+			 PropertyQualifier[] qualifiers = property.getPropertyQualifier();
+			 for (int k=0; k<qualifiers.length; k++) {
+				  PropertyQualifier qualifier = qualifiers[k];
+				  String value = qualifier.getPropertyQualifierName() + "=" + qualifier.getValue().getContent();
+				  qualifier_buf.append(value).append("$");
+			 }
+			 String qualifier_str = qualifier_buf.toString();
+			 if (qualifier_str.endsWith("$")) {
+				 qualifier_str = qualifier_str.substring(0, qualifier_str.length()-1);
+			 }
+			 if (qualifier_buf.length() > 0) {
+				 buf.append("|").append(qualifier_str);
+			 }
+			 w.add(buf.toString());
+		}
+
+		w = SortUtils.quickSort(w);
+        return w;
+    }
+
+	public String sortPropertyQualifiers(String qualifiers) {
+		if (qualifiers == null) return null;
+		Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(qualifiers, "$");
+		u = SortUtils.quickSort(u);
+		StringBuffer buf = new StringBuffer();
+		for (int i=0; i<u.size(); i++) {
+			String t = (String) u.elementAt(i);
+			buf.append(t).append("$");
+		}
+		String s = buf.toString();
+		if (s.endsWith("$")) {
+			s = s.substring(0, s.length()-1);
+		}
+		return s;
+	}
+
+
+    public HashMap getPropertyNameValue2QualifierHashMap(Vector property_table) {
+		if (property_table == null) return null;
+		HashMap hmap = new HashMap();
+		String qualifiers = null;
+		for (int i=0; i<property_table.size(); i++) {
+			String t = (String) property_table.elementAt(i);
+			Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(t);
+			String proprety_name = (String) u.elementAt(0);
+			String proprety_value = (String) u.elementAt(1);
+			qualifiers = null;
+			if (u.size() > 2) {
+				qualifiers = (String) u.elementAt(2);
+				qualifiers = sortPropertyQualifiers(qualifiers);
+			}
+			Vector w = new Vector();
+			if (qualifiers != null) {
+				String nv = proprety_name + "|" + proprety_value;
+				if (hmap.containsKey(nv)) {
+					w = (Vector) hmap.get(nv);
+				}
+				if (!w.contains(qualifiers)) {
+					w.add(qualifiers);
+				}
+				hmap.put(nv, w);
+			}
+		}
+        return hmap;
+	}
+
+    public Vector searchPropertyWithQualifierNameAndValue(HashMap propertyQualifierHashMap,
+        String qualifierName, String qualifierValue) {
+		if (propertyQualifierHashMap == null) return null;
+		String target = qualifierName + "=" + qualifierValue;
+		Vector w = new Vector();
+		Iterator it = propertyQualifierHashMap.keySet().iterator();
+		while (it.hasNext()) {
+			String nv = (String) it.next();
+			Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(nv, "$");
+			if (u != null) {
+				String propertyName = (String) u.elementAt(0);
+				String propertyValue = (String) u.elementAt(1);
+				Vector v = (Vector) propertyQualifierHashMap.get(nv);
+				if (v != null) {
+					if (v.contains(target) && !w.contains(propertyName)) {
+						w.add(propertyName);
+					}
+				}
+		    }
+		}
+		w = SortUtils.quickSort(w);
+		return w;
+	}
+
+
+    public Vector getPropertyNames(HashMap propertyQualifierHashMap) {
+		Vector w = new Vector();
+		Iterator it = propertyQualifierHashMap.keySet().iterator();
+		while (it.hasNext()) {
+			String nv = (String) it.next();
+			Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(nv, "$");
+			if (u != null) {
+				String propertyName = (String) u.elementAt(0);
+				if (!w.contains(propertyName)) {
+					w.add(propertyName);
+				}
+		    }
+		}
+		w = SortUtils.quickSort(w);
+		return w;
+	}
 }

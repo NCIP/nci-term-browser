@@ -113,6 +113,8 @@
 </form>
 <%
 
+System.out.println("(*) value_set_search_results.jsp ");
+
 String vd_uri = null;
 String valueSetSearch_requestContextPath = request.getContextPath();
 String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
@@ -133,6 +135,10 @@ String selectedvalueset = null;
 vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
 if (vsd_vec != null && vsd_vec.size() == 1) {
 	vsd_uri = (String) vsd_vec.elementAt(0);
+	
+	System.out.println("(*) value_set_search_results.jsp vsd_uri: " + vsd_uri);
+
+
 	Vector temp_vec = StringUtils.parseData(vsd_uri);
 	selectedvalueset = (String) temp_vec.elementAt(1);
 	root_vsd_uri = (String) temp_vec.elementAt(0);
@@ -356,6 +362,10 @@ if ((vsd_vec != null && vsd_vec.size() > 1) || (vsd_vec == null)) {
 
 <%
 if (vsd_vec != null && vsd_vec.size() == 1) {
+
+
+System.out.println("(*) value_set_search_results.jsp " + vsd_vec.size());
+
 
     String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
         .cleanXSS((String) request.getSession().getAttribute("matchText"));

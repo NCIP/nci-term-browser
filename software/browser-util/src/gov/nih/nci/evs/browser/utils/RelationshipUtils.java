@@ -258,6 +258,11 @@ public class RelationshipUtils {
 	}
 
     public HashMap getRelationshipHashMap(String scheme, String version, String code, String ns, boolean useNamespace, List options) {
+        return getRelationshipHashMap(scheme, version, code, ns, useNamespace, options, true);
+	}
+
+    public HashMap getRelationshipHashMap(String scheme, String version, String code, String ns, boolean useNamespace, List options,
+        boolean restrictToConcept) {
 		if (options == null) {
 			options = getDefaultOptionList();
 		}
@@ -362,7 +367,9 @@ public class RelationshipUtils {
 
 			try {
 				cng = lbSvc.getNodeGraph(scheme, csvt, null);
-				cng = restrictToEntityType(cng, "concept");
+				if (restrictToConcept) {
+					cng = restrictToEntityType(cng, "concept");
+			    }
 				if (cng == null) return null;
 
 				if (isMapping) {
@@ -519,7 +526,9 @@ public class RelationshipUtils {
         if (checkOption(options, INVERSE_ROLE_OPTION) || checkOption(options, INVERSE_ASSOCIATION_OPTION)) {
             try {
 				cng = lbSvc.getNodeGraph(scheme, csvt, null);
-				cng = restrictToEntityType(cng, "concept");
+				if (restrictToConcept) {
+					cng = restrictToEntityType(cng, "concept");
+				}
 				if (cng == null) return null;
 
 				if (isMapping) {

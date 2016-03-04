@@ -80,6 +80,7 @@
          <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
+          
                         boolean bool_val;
             		int numRemaining = 0;
             		String valueSetSearch_requestContextPath = request
@@ -115,10 +116,15 @@
             		IteratorBean iteratorBean = iteratorBeanManager
             				.getIteratorBean(resolved_vs_key);
             		if (iteratorBean == null) {
+           		
             			ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request
             					.getSession().getAttribute(
             							"ResolvedConceptReferencesIterator");
             			iteratorBean = new IteratorBean(itr);
+            			
+            			
+            			
+            			
             			iteratorBean.initialize();
             			iteratorBean.setKey(resolved_vs_key);
             			request.getSession().setAttribute("resolved_vs_key",
@@ -133,6 +139,7 @@
 
             		} else {
            			int itr_size = iteratorBean.getSize();
+           			
             			Integer obj = Integer.valueOf(itr_size);
             			String itr_size_str = obj.toString();
             		}

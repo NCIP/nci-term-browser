@@ -538,7 +538,6 @@ public class ValueSetBean {
 
 
     public String valueSetDefinition2XMLString(String uri) {
-
         LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
         String s = null;
         String valueSetDefinitionRevisionId = null;
@@ -899,6 +898,8 @@ public class ValueSetBean {
 
 
     public String resolvedValueSetSearchAction() {
+        LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -932,11 +933,6 @@ public class ValueSetBean {
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
-
-        //Vector<org.LexGrid.concepts.Entity> v = null;
-
-        // check if this search has been performance previously through
-        // IteratorBeanManager
         IteratorBeanManager iteratorBeanManager =
             (IteratorBeanManager) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap()
@@ -967,23 +963,15 @@ public class ValueSetBean {
                 iterator = iteratorBean.getIterator();
             } else {
 
-///////////////////////////////////////////////////////////////////////////////////
-                //ResolvedConceptReferencesIteratorWrapper wrapper =
-                //    new ValueSetSearchUtils().searchByCode(
-				//        vsd_uri, matchText, maxToReturn);
                 iterator =
-                    new ValueSetSearchUtils().searchByCode(
+                    new ValueSetSearchUtils(lbSvc).searchByCode(
 				        vsd_uri, matchText, maxToReturn);
 
-
-                //if (wrapper != null) {
-                //    iterator = wrapper.getIterator();
                     if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
                         iteratorBean.setKey(key);
                         iteratorBeanManager.addIteratorBean(iteratorBean);
                     }
-                //}
             }
 
         } else if (searchTarget.compareTo("names") == 0) {
@@ -996,7 +984,7 @@ public class ValueSetBean {
 				//        vsd_uri, matchText, matchAlgorithm, maxToReturn);
 
                 iterator =
-                    new ValueSetSearchUtils().searchByName(
+                    new ValueSetSearchUtils(lbSvc).searchByName(
 				        vsd_uri, matchText, matchAlgorithm, maxToReturn);
 
 
@@ -1022,7 +1010,7 @@ public class ValueSetBean {
 				        vsd_uri, matchText, excludeDesignation, matchAlgorithm, maxToReturn);
                 */
                 iterator =
-                    new ValueSetSearchUtils().searchByProperties(
+                    new ValueSetSearchUtils(lbSvc).searchByProperties(
 				        vsd_uri, matchText, excludeDesignation, matchAlgorithm, maxToReturn);
 
                 if (iterator != null) {
@@ -1053,7 +1041,6 @@ public class ValueSetBean {
                 request.getSession().setAttribute("match_size", match_size);
                 request.getSession().setAttribute("page_string", "1");
                 request.getSession().setAttribute("vsd_uri", vsd_uri);
-
                 return "search_results";
 			}
         }
@@ -1085,6 +1072,7 @@ public class ValueSetBean {
 
 
     public String valueSetSearchAction() {
+
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -1093,8 +1081,9 @@ public class ValueSetBean {
         boolean retval = HTTPUtils.validateRequestParameters(request);
         if (!retval) {
 			return "invalid_parameter";
-			//return "message";
 		}
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+
 
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
@@ -1127,9 +1116,6 @@ public class ValueSetBean {
 
         String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
 
-        //LexEVSValueSetDefinitionServices vsd_service = null;
-        //vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
-
         if (matchText != null) {
 			matchText = matchText.trim();
 			request.getSession().setAttribute("matchText", matchText);
@@ -1142,10 +1128,7 @@ public class ValueSetBean {
 
 		request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 
-        //ResolvedConceptReferencesIteratorWrapper wrapper = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
-        //    matchText, searchOption, algorithm);
-
-        ResolvedConceptReferencesIterator iterator = new ValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
+        ResolvedConceptReferencesIterator iterator = new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(checked_vocabularies,
             matchText, searchOption, algorithm);
 
         if (iterator == null) {
@@ -1156,17 +1139,6 @@ public class ValueSetBean {
 			request.getSession().setAttribute("message", msg);
 			return "message";
 		} else {
-			/*
-			ResolvedConceptReferencesIterator iterator = wrapper.getIterator();
-			if (iterator == null) {
-				msg = "No match found.";
-				if (searchOption == SimpleSearchUtils.BY_CODE) {
-					msg = Constants.ERROR_NO_MATCH_FOUND_CODE_IS_CASESENSITIVE;
-				}
-				request.getSession().setAttribute("message", msg);
-				return "message";
-			}
-			*/
 			try {
 				int numRemaining = iterator.numberRemaining();
 				if (numRemaining == 0) {

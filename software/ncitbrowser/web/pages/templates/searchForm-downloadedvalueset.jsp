@@ -1,10 +1,6 @@
 <%@ page import="gov.nih.nci.evs.browser.utils.*" %>
 <%
-
-
   String checked_valuesets = (String) request.getSession().getAttribute("checked_vocabularies");
-  
-          
   String match_text = gov.nih.nci.evs.browser.utils.HTTPUtils
     .cleanXSS((String) request.getSession().getAttribute("matchText_RVS"));
 
@@ -14,11 +10,10 @@
     String userAgent = request.getHeader("user-agent");
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");
 
-
-String uri_str = (String) request.getSession().getAttribute("vsd_uri");
-if (uri_str == null) {
-    uri_str = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
-}
+	String uri_str = (String) request.getSession().getAttribute("vsd_uri");
+	if (uri_str == null) {
+	    uri_str = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+	}
 
   String termbrowser_displayed_match_text = HTTPUtils.convertJSPString(match_text);
   String searchform_requestContextPath = request.getContextPath();
@@ -46,28 +41,24 @@ if (uri_str == null) {
     } else if (searchTarget.compareTo("names") == 0) {
         check_n = "checked";
     } else if (searchTarget.compareTo("properties") == 0) {
-          check_p= "checked";
+        check_p= "checked";
     }
   
       
 %>
   
-  
-<h:form id="resolvedValueSetSearchForm" styleClass="search-form" acceptcharset="UTF-8">   
-    <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=match_text%>" onFocus="active=true"
+
+<form id="resolvedValueSetSearchForm" name="resolvedValueSetSearchForm" method="post" action="/ncitbrowser/ajax?action=search_downloaded_value_set" class="search-form" accept-charset="UTF-8" enctype="application/x-www-form-urlencoded">
+
+<input type="hidden" name="resolvedValueSetSearchForm" value="resolvedValueSetSearchForm" />
+
+
+    <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=termbrowser_displayed_match_text%>" onFocus="active=true"
         onBlur="active=false"  onkeypress="return submitEnter('resolvedValueSetSearchForm:resolvedvalueset_search',event)" tabindex="1"/>
 
-    <h:commandButton id="resolvedvalueset_search" value="Search" action="/ncitbrowser/ajax?action=search_value_set" 
-      accesskey="13"
-      onclick="javascript:cursor_wait();"
-      image="#{form_requestContextPath}/images/search.gif"
-      alt="Search concepts in value set"
-      styleClass="searchbox-btn"
-      tabindex="2">
-    </h:commandButton>
-    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/pages/help.jsf#searchhelp" tabindex="3">
-      <h:graphicImage value="/images/search-help.gif" style="border-width:0;" styleClass="searchbox-btn" alt="Search Help" />
-    </h:outputLink>
+    <input id="resolvedValueSetSearchForm:resolvedvalueset_search" type="image" src="/ncitbrowser/images/search.gif" name="resolvedValueSetSearchForm:resolvedvalueset_search" accesskey="13" alt="Search concepts in value set" onclick="javascript:cursor_wait();" tabindex="2" class="searchbox-btn" /><a href="/ncitbrowser/pages/help.jsf#searchhelp" tabindex="3"><img src="/ncitbrowser/images/search-help.gif" alt="Search Help" style="border-width:0;" class="searchbox-btn" /></a>
+
+
 
   <table border="0" cellspacing="0" cellpadding="0" width="340px">
 
@@ -95,7 +86,7 @@ if (uri_str == null) {
         <input type="radio" name="selectValueSetSearchOption" id="selectValueSetSearchOption" value="Code" alt="Code" <%=check_cd%> tabindex="5" onclick="onCodeButtonPressed('resolvedValueSetSearchForm');" /><label for="codes">Code&nbsp;</label>
       </td>
     </tr>
-    
+  
     
     <tr><td height="5px;"></td></tr>
     <tr><td colspan="2">
@@ -103,10 +94,15 @@ if (uri_str == null) {
         <tr valign="top">
 
     <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>" />
+    
 <%
-if (uri_str != null) {
+    String valuesetdef_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
+    if (DataUtils.isNullOrBlank(valuesetdef_uri)) {
+	valuesetdef_uri = (String) request.getSession().getAttribute("valuesetdef_uri");
+    }  
+if (valuesetdef_uri != null) {
 %>
-<input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=uri_str%>" />
+<input type="hidden" id="vsd_uri" name="vsd_uri" value="<%=valuesetdef_uri%>" />  
 <%
 }
 %>
@@ -120,9 +116,9 @@ if (!DataUtils.isNullOrBlank(checked_valuesets)) {
 
       <input type="hidden" id="nav_type" name="nav_type" value="valuesets" />
       <input type="hidden" id="view" name="view\ value="source" />
+      <input type="hidden" id="vsd_uri" name="vsd_uri" value="<%=valuesetdef_uri%>" />  
 
-
-</h:form>
+</form>
 
         </tr>
       </table>

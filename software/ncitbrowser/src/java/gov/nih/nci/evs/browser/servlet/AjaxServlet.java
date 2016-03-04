@@ -350,6 +350,7 @@ if (display_name_vec == null) {
 
         // Determine request by attributes
         String action = HTTPUtils.cleanXSS(request.getParameter("action"));//
+
         if (action.compareTo("show") == 0) {
             show_other_versions(request, true);
 
@@ -2407,11 +2408,13 @@ String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getSession().get
 	  }
 
       public void search_value_set(HttpServletRequest request, HttpServletResponse response) {
-
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
         String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
+
+
+
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		// check if any checkbox is checked.
@@ -3586,6 +3589,12 @@ out.flush();
 				selectedvalueset = (String) u.elementAt(1);
 			}
 		}
+
+		String valueset_search_algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
+		String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
+		request.getSession().setAttribute("valueset_search_algorithm", valueset_search_algorithm);
+		request.getSession().setAttribute("searchTarget", selectValueSetSearchOption);
+
         String vsd_uri = selectedvalueset;
 		request.getSession().setAttribute("selectedvalueset", selectedvalueset);
         request.getSession().setAttribute("vsd_uri", vsd_uri);
@@ -3698,7 +3707,8 @@ out.flush();
 		String msg = "Unable to resolve the value set " + vsd_uri;
 		request.getSession().setAttribute("message", msg);
         try {
-			String nextJSP = "/pages/resolved_value_set.jsf";
+			//String nextJSP = "/pages/resolved_value_set.jsf";
+			String nextJSP = "/pages/resolved_value_set.jsf?vsd_uri="+vsd_uri;
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 			dispatcher.forward(request,response);
 			return;
@@ -4500,9 +4510,7 @@ out.flush();
     public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
-
 		long ms = System.currentTimeMillis();
-
 
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("selectValueSetSearchOption"));
 		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
@@ -4516,8 +4524,6 @@ out.flush();
         if (DataUtils.isNull(algorithm)) {
 			algorithm = Constants.DEFAULT_SEARCH_ALGORITHM;//"exactMatch";
 		}
-
-
 
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 

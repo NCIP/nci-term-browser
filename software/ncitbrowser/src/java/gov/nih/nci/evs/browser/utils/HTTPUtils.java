@@ -482,13 +482,6 @@ public class HTTPUtils {
             while (enumeration.hasMoreElements()) {
 				String name = (String) enumeration.nextElement();
 
-/*
-WARNING: Invalid parameter value encountered -  (name: selected_vocabularies).
-WARNING: Unknown vocabulary: pizza.owl (version: version 1.2)|pizza.owl (version
-: version 1.1)|pizza.owl (version: version diacritics)||
-multipleSearchAction returns invalid_parameter
-*/
-
 				Boolean checkedVocabularies = isCheckedVocabulariesParameter(name);
 				if (checkedVocabularies != null && checkedVocabularies.equals(Boolean.TRUE)) {
                     value = (String) request.getParameter(name);
@@ -499,7 +492,8 @@ multipleSearchAction returns invalid_parameter
 							for (int k=0; k<selected_vocabularies_vec.size(); k++) {
 								String vocabularyNm = (String) selected_vocabularies_vec.elementAt(k);
 								String formal_name = DataUtils.getFormalName(vocabularyNm);
-								if (formal_name == null) {
+
+								if (formal_name == null && vocabularyNm.indexOf("evs.nci.nih.gov/valueset") == 0) {
 									String error_msg = createErrorMessage(2, name);
 									request.getSession().setAttribute("error_msg", error_msg);
 									System.out.println("WARNING: Unknown vocabulary: " + value);
@@ -548,12 +542,16 @@ multipleSearchAction returns invalid_parameter
 			    if (name.compareTo("vsd_uri") == 0) {
 					value = (String) request.getParameter(name);
 					if (!DataUtils.isNull(value)) {
-						String vsd_md = DataUtils.getValueSetDefinitionMetadata(value);
-						if (vsd_md == null) {
-							String error_msg = createErrorMessage(name, value, 2);
-							request.getSession().setAttribute("error_msg", error_msg);
-							return false;
-						}
+						//https://tracker.nci.nih.gov/browse/NCITERM-715
+						//WARNING: Invalid parameter value encountered -  (name: vsd_uri value: TVS_CDISC)
+						if (!value.startsWith("TVS_")) {
+							String vsd_md = DataUtils.getValueSetDefinitionMetadata(value);
+							if (vsd_md == null) {
+								String error_msg = createErrorMessage(name, value, 2);
+								request.getSession().setAttribute("error_msg", error_msg);
+								return false;
+							}
+					    }
 					}
 				}
 

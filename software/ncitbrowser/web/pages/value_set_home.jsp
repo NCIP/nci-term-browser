@@ -170,6 +170,9 @@ var tree;
     String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
     String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 
+System.out.println("(*) value_set_home.jsp vsd_uri: " + vsd_uri);
+
+
     String uri_vsd = null;
     String vsd_name = null;  
     
