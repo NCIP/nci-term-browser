@@ -609,7 +609,6 @@ public class HTTPUtils {
 							request.getSession().setAttribute("error_msg", error_msg);
 							return false;
 						}
-
 						//09182015
 						bool_obj = checkLimitedLengthCondition(name, value);
 						if (bool_obj != null && bool_obj.equals(Boolean.FALSE)) {
@@ -763,6 +762,11 @@ public class HTTPUtils {
 		}
 
 		if (nm.endsWith("checked_vocabularies")) {
+			return Boolean.TRUE;
+		}
+
+        //KLO, 03092016, [NCITERM-721]
+		if (nm.endsWith("ontology_list")) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
