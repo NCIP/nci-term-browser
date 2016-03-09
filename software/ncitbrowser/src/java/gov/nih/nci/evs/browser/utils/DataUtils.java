@@ -5600,7 +5600,7 @@ if (lbSvc == null) {
 		return name + "|" + uri + "|" + description + "|" + domain + "|" + src_str + "|" + supportedSourceStr;
 	}
 
-/*
+
     public static Vector getCodingSchemesInValueSetDefinition(String uri) {
 		HashSet hset = new HashSet();
 		try {
@@ -5629,7 +5629,7 @@ if (lbSvc == null) {
 		}
 		return null;
 	}
-*/
+
 
     public static Vector getCodingSchemeVersionsByURN(String urn) {
         try {

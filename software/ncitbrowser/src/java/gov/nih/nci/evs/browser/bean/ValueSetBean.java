@@ -318,7 +318,6 @@ public class ValueSetBean {
 
 
     public String resolveValueSetAction() {
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -933,6 +932,8 @@ public class ValueSetBean {
 
         request.getSession().setAttribute("searchTarget", searchTarget);
         request.getSession().setAttribute("algorithm", matchAlgorithm);
+        request.getSession().setAttribute("valueset_search_algorithm", matchAlgorithm);
+
         IteratorBeanManager iteratorBeanManager =
             (IteratorBeanManager) FacesContext.getCurrentInstance()
                 .getExternalContext().getSessionMap()
@@ -1072,7 +1073,6 @@ public class ValueSetBean {
 
 
     public String valueSetSearchAction() {
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -1084,12 +1084,10 @@ public class ValueSetBean {
 		}
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 
-
 		java.lang.String valueSetDefinitionRevisionId = null;
 		String msg = null;
 
         String selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("searchTarget"));
-
         if (DataUtils.isNull(selectValueSetSearchOption)) {
 			selectValueSetSearchOption = "Name";
 		}
@@ -1099,11 +1097,9 @@ public class ValueSetBean {
         if (DataUtils.isNull(algorithm)) {
 			algorithm = "exactMatch";
 		}
-
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
-
 		String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
-
+		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
@@ -1113,21 +1109,21 @@ public class ValueSetBean {
 		//Vector selected_vocabularies = DataUtils.parseData(checked_vocabularies, ",");
         String VSD_view = HTTPUtils.cleanXSS((String) request.getParameter("view"));
         request.getSession().setAttribute("view", VSD_view);
-
         String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
-
         if (matchText != null) {
 			matchText = matchText.trim();
 			request.getSession().setAttribute("matchText", matchText);
 		}
 
         int searchOption = SimpleSearchUtils.BY_CODE;
-        if (selectValueSetSearchOption.compareTo("Name") == 0) {
+        if (selectValueSetSearchOption.compareTo("Name") == 0 || selectValueSetSearchOption.compareTo("names") == 0) {
 			searchOption = SimpleSearchUtils.BY_NAME;
 		}
-
 		request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 
+		if (checked_vocabularies == null) {
+			checked_vocabularies = vsd_uri;
+		}
         ResolvedConceptReferencesIterator iterator = new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(checked_vocabularies,
             matchText, searchOption, algorithm);
 
@@ -1163,7 +1159,6 @@ public class ValueSetBean {
             String key = IteratorBeanManager.createIteratorKey(checked_vocabularies, matchText,
                 selectValueSetSearchOption, algorithm);
             iteratorBean.setKey(key);
-
 			request.getSession().setAttribute("value_set_entity_search_results", iteratorBean);
 			return "value_set";
 		}

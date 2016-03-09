@@ -38,9 +38,9 @@ if (uri_str == null) {
 
     if (DataUtils.isNullOrBlank(searchTarget)) {
         check_n = "checked";
-    } else if (searchTarget.compareTo("codes") == 0) {
+    } else if (searchTarget.compareTo("codes") == 0 || searchTarget.compareTo("code") == 0 || searchTarget.compareTo("Code") == 0) {
         check_cd = "checked";
-    } else if (searchTarget.compareTo("names") == 0) {
+    } else if (searchTarget.compareTo("names") == 0 || searchTarget.compareTo("Name") == 0) {
         check_n = "checked";
     } else if (searchTarget.compareTo("properties") == 0) {
           check_p= "checked";
@@ -54,7 +54,7 @@ if (uri_str == null) {
     <input CLASS="searchbox-input" id="matchText" name="matchText" value="<%=match_text%>" onFocus="active=true"
         onBlur="active=false"  onkeypress="return submitEnter('resolvedValueSetSearchForm:resolvedvalueset_search',event)" tabindex="1"/>
 
-    <h:commandButton id="resolvedvalueset_search" value="Search" action="#{valueSetBean.valueSetSearchAction}"
+    <h:commandButton id="resolvedvalueset_search" value="Search" action="#{valueSetBean.resolvedValueSetSearchAction}"
       accesskey="13"
       onclick="javascript:cursor_wait();"
       image="#{form_requestContextPath}/images/search.gif"
@@ -90,10 +90,6 @@ if (uri_str == null) {
       <td align="left" class="textbody" colspan="2">
         <input type="radio" name="searchTarget" id="names" value="names" alt="Names" <%=check_n%> tabindex="5"/><label for="names">Name&nbsp;</label>
         <input type="radio" name="searchTarget" id="codes" value="codes" alt="Code" <%=check_cd%> tabindex="5" onclick="onCodeButtonPressed('resolvedValueSetSearchForm');" /><label for="codes">Code&nbsp;</label>
-        <!--
-        <input type="radio" name="searchTarget" id="properties" value="properties" alt="Properties" <%=check_p%> tabindex="5"/><label for="properties">Property</label>
-        -->
-        
       </td>
     </tr>
     

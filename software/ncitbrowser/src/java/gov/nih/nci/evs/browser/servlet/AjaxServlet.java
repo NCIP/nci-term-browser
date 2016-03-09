@@ -1680,10 +1680,10 @@ if (DataUtils.isNull(option)) {
 	option_name = "checked";
 
 } else {
-	if (option.compareToIgnoreCase("Code") == 0) {
+	if (option.compareToIgnoreCase("Code") == 0 || option.compareToIgnoreCase("codes") == 0 || option.compareToIgnoreCase("code") == 0) {
 		option_code = "checked";
 	}
-	if (option.compareToIgnoreCase("Name") == 0) {
+	if (option.compareToIgnoreCase("Name") == 0 || option.compareToIgnoreCase("names") == 0) {
 		option_name = "checked";
 	}
 }
@@ -4509,6 +4509,7 @@ out.flush();
 
     public void search_downloaded_value_set(HttpServletRequest request, HttpServletResponse response) {
 		java.lang.String valueSetDefinitionRevisionId = null;
+
 		String msg = null;
 		long ms = System.currentTimeMillis();
 
@@ -4540,7 +4541,6 @@ out.flush();
 		if (checked_vocabularies != null) {
 			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 		}
-
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
@@ -4552,7 +4552,6 @@ out.flush();
         request.getSession().setAttribute("view", VSD_view);
 
         String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
-
 
         //LexEVSValueSetDefinitionServices vsd_service = null;
         //vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
@@ -4607,6 +4606,7 @@ out.flush();
 							//String name = rcr.getEntityDescription().getContent();
 							String concept_code = rcr.getConceptCode();
 							matched_concept_codes.add(concept_code);
+
 						//}
 					}
 				} catch (Exception ex) {
@@ -4617,6 +4617,7 @@ out.flush();
 
 			try {
 				int numRemaining = matched_concept_codes.size();
+
 				if (numRemaining == 0) {
 					msg = "No match found.";
 					if (searchOption == SimpleSearchUtils.BY_CODE) {

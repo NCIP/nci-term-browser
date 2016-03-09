@@ -667,14 +667,11 @@ public class ValueSetSearchUtils
 			*/
 			schemes.add(selected_vocabulary);
 			versions.add((String) hmap.get(selected_vocabulary));
-
 		}
-
         if (searchOption == SimpleSearchUtils.BY_NAME) {
 			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 				try {
 					iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchText, searchOption, matchAlgorithm);
-
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
