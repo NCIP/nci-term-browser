@@ -1120,5 +1120,4 @@ public class CodingSchemeDataUtils {
 		      + relation.getTargetCodingScheme() + "|"
 		      + relation.getTargetCodingSchemeVersion();
 	}
-
 }
