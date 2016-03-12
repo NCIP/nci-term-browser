@@ -3649,6 +3649,17 @@ out.flush();
 		key = key + buf.toString();
         request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 
+		try {
+			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+            CodingSchemeDataUtils codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
+			ResolvedConceptReferencesIterator itr = codingSchemeDataUtils.resolveCodingScheme(vsd_uri, null, false);
+			/*
+			try {
+				int numberRemaining = itr.numberRemaining();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
         //long time = System.currentTimeMillis();
 		LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 		ResolvedValueSetDefinition rvsd = null;
@@ -3659,47 +3670,47 @@ out.flush();
 			if(rvsd != null) {
 				ResolvedConceptReferencesIterator itr = rvsd.getResolvedConceptReferenceIterator();
 				//ResolvedConceptReferencesIterator itr = DataUtils.resolveCodingScheme(vsd_uri, null, false);
+*/
+			IteratorBeanManager iteratorBeanManager = null;
 
-				IteratorBeanManager iteratorBeanManager = null;
+			if (FacesContext.getCurrentInstance() != null &&
+				FacesContext.getCurrentInstance().getExternalContext() != null &&
+				FacesContext.getCurrentInstance().getExternalContext().getSessionMap() != null) {
+				 iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("iteratorBeanManager");
+			}
 
-				if (FacesContext.getCurrentInstance() != null &&
-				    FacesContext.getCurrentInstance().getExternalContext() != null &&
-				    FacesContext.getCurrentInstance().getExternalContext().getSessionMap() != null) {
-					 iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
-					.getSessionMap().get("iteratorBeanManager");
-				}
+			if (iteratorBeanManager == null) {
+				iteratorBeanManager = new IteratorBeanManager();
+				request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
+			}
 
-				if (iteratorBeanManager == null) {
-					iteratorBeanManager = new IteratorBeanManager();
-					request.getSession().setAttribute("iteratorBeanManager", iteratorBeanManager);
-				}
+			request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
 
-				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+			IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
+			if (iteratorBean == null) {
+				iteratorBean = new IteratorBean(itr);
+				iteratorBean.initialize();
+				iteratorBean.setKey(key);
+				iteratorBeanManager.addIteratorBean(iteratorBean);
+			}
 
-				IteratorBean iteratorBean = iteratorBeanManager.getIteratorBean(key);
-				if (iteratorBean == null) {
-					iteratorBean = new IteratorBean(itr);
-					iteratorBean.initialize();
-					iteratorBean.setKey(key);
-					iteratorBeanManager.addIteratorBean(iteratorBean);
-				}
+			request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
+			request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
+			request.getSession().setAttribute("resolved_vs_key", key);
 
-                request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
-				request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
-				request.getSession().setAttribute("resolved_vs_key", key);
-
-				try {
-					String nextJSP = "/pages/resolved_value_set.jsf";
-					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-					dispatcher.forward(request,response);
-					return;
-
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-				//return "resolved_value_set";
+			try {
+				String nextJSP = "/pages/resolved_value_set.jsf";
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+				dispatcher.forward(request,response);
 				return;
-		    }
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			//return "resolved_value_set";
+			return;
+		    //}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -4003,8 +4014,6 @@ out.flush();
 		return;
 
 	}
-
-
 
     public void export_mapping(HttpServletRequest request, HttpServletResponse response) {
         String mapping_schema = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));

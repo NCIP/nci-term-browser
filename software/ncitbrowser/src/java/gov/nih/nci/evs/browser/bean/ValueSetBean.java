@@ -490,6 +490,12 @@ public class ValueSetBean {
 			LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             CodingSchemeDataUtils codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
 			ResolvedConceptReferencesIterator itr = codingSchemeDataUtils.resolveCodingScheme(vsd_uri, null, false);
+			try {
+				int numberRemaining = itr.numberRemaining();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
 			IteratorBeanManager iteratorBeanManager = (IteratorBeanManager) FacesContext.getCurrentInstance().getExternalContext()
 			.getSessionMap().get("iteratorBeanManager");
 
@@ -510,6 +516,12 @@ public class ValueSetBean {
 			request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 			request.getSession().setAttribute("ResolvedConceptReferencesIterator", itr);
 			request.getSession().setAttribute("resolved_vs_key", key);
+
+			try {
+				int numberRemaining = itr.numberRemaining();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 			return "resolved_value_set";
 
 		} catch (Exception ex) {
@@ -554,9 +566,7 @@ public class ValueSetBean {
 
         for (int i=0; i<cs_name_vec.size(); i++) {
 			String cs_name = (String) cs_name_vec.elementAt(i);
-
 			String version = HTTPUtils.cleanXSS((String) request.getParameter(cs_name));
-
 			if (version != null) {
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(cs_name, version));
 				ref_vec.add(cs_name + "$" + version);
@@ -876,6 +886,7 @@ public class ValueSetBean {
 				}
 			}
 		} else {
+			String scheme_version = null;
 			String[] coding_scheme_ref = (String[]) request.getSession().getAttribute("coding_scheme_ref");
 			vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 			if (vsd_uri == null) {
@@ -895,21 +906,32 @@ public class ValueSetBean {
 				Vector u = DataUtils.parseData(t, delim);
 				String url = (String) u.elementAt(0);
 				String version = (String) u.elementAt(1);
+				scheme_version = version;
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
 			}
 			String csVersionTag = null;
 			boolean failOnAllErrors = false;
+
+			/*
 			try {
+
 				LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
 				ResolvedValueSetCodedNodeSet rvs_cns = null;
-
 				rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
 																			valueSetDefinitionRevisionId,
 																			csvList,
 																			csVersionTag);
 				CodedNodeSet cns = rvs_cns.getCodedNodeSet();
+            */
 
+   		    try {
+				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+				CodingSchemeDataUtils codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
+				//Partial implementation -- only export production version.
+				//Note: LexEVSValueSetDefinitionService needs to be fixed to allow exclusion of anonymous classes.
+				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+				CodedNodeSet cns = codingSchemeDataUtils.getNodeSet(vsd_uri, versionOrTag);
 				SortOptionList sortOptions = null;
 				LocalNameList filterOptions = null;
 				LocalNameList propertyNames = null;//new LocalNameList();
@@ -917,9 +939,7 @@ public class ValueSetBean {
 				propertyTypes[0] = CodedNodeSet.PropertyType.DEFINITION;
 				boolean resolveObjects = true;
 				ResolvedConceptReferencesIterator itr = null;
-
 				itr = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
-
 				sb.append("Code,");
 				sb.append("Name,");
 				sb.append("Terminology,");
@@ -948,6 +968,7 @@ public class ValueSetBean {
 						sb.append("\r\n");
 					}
 				}
+
 			} catch (Exception ex)	{
 				sb.append("WARNING: Export to CVS action failed.");
 				ex.printStackTrace();

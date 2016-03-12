@@ -113,17 +113,22 @@
 
             		String resolved_vs_key = (String) request.getSession()
             				.getAttribute("resolved_vs_key");
+           
+           
+ System.out.println( "(*) resolved_vs_key: " + resolved_vs_key);
+ 
+            				
+            				
             		IteratorBean iteratorBean = iteratorBeanManager
             				.getIteratorBean(resolved_vs_key);
+            				
+           		
             		if (iteratorBean == null) {
            		
             			ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request
             					.getSession().getAttribute(
             							"ResolvedConceptReferencesIterator");
             			iteratorBean = new IteratorBean(itr);
-            			
-            			
-            			
             			
             			iteratorBean.initialize();
             			iteratorBean.setKey(resolved_vs_key);
@@ -132,6 +137,9 @@
             			iteratorBeanManager.addIteratorBean(iteratorBean);
 
             			int itr_size = iteratorBean.getSize();
+            			
+  System.out.println( "(*) itr_size: " + itr_size);
+           			
            			Integer obj = Integer.valueOf(itr_size);
             			String itr_size_str = obj.toString();
            			request.getSession().setAttribute("itr_size_str",
@@ -139,6 +147,9 @@
 
             		} else {
            			int itr_size = iteratorBean.getSize();
+           			
+  System.out.println( "(*) itr_size: " + itr_size);
+          			
            			
             			Integer obj = Integer.valueOf(itr_size);
             			String itr_size_str = obj.toString();
