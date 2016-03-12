@@ -80,7 +80,9 @@
          <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
-          
+                        String version_selection = (String) request.getSession().getAttribute("version_selection");
+                        request.getSession().removeAttribute("version_selection");
+                        
                         boolean bool_val;
             		int numRemaining = 0;
             		String valueSetSearch_requestContextPath = request
@@ -113,12 +115,6 @@
 
             		String resolved_vs_key = (String) request.getSession()
             				.getAttribute("resolved_vs_key");
-           
-           
- System.out.println( "(*) resolved_vs_key: " + resolved_vs_key);
- 
-            				
-            				
             		IteratorBean iteratorBean = iteratorBeanManager
             				.getIteratorBean(resolved_vs_key);
             				
@@ -135,11 +131,8 @@
             			request.getSession().setAttribute("resolved_vs_key",
             					resolved_vs_key);
             			iteratorBeanManager.addIteratorBean(iteratorBean);
-
             			int itr_size = iteratorBean.getSize();
-            			
-  System.out.println( "(*) itr_size: " + itr_size);
-           			
+         			
            			Integer obj = Integer.valueOf(itr_size);
             			String itr_size_str = obj.toString();
            			request.getSession().setAttribute("itr_size_str",
@@ -147,10 +140,6 @@
 
             		} else {
            			int itr_size = iteratorBean.getSize();
-           			
-  System.out.println( "(*) itr_size: " + itr_size);
-          			
-           			
             			Integer obj = Integer.valueOf(itr_size);
             			String itr_size_str = obj.toString();
             		}
@@ -348,6 +337,16 @@
                      %>
                      <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
                      <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
+<%                     
+if (version_selection != null)
+{
+%>
+<input type="hidden" name="version_selection" id="version_selection" value="true">
+<%
+}
+%>
+                 
+                     
                      </h:form>
                </div> <!-- end tabTableContentContainer -->      
                <%

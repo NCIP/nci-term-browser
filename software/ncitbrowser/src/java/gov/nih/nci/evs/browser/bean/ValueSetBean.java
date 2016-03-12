@@ -540,6 +540,7 @@ public class ValueSetBean {
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
 
+        String version_selection = HTTPUtils.cleanXSS((String) request.getParameter("version_selection"));
         String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
         if (vsd_uri == null) {
 			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
@@ -615,6 +616,8 @@ public class ValueSetBean {
             request.getSession().setAttribute("coding_scheme_ref", coding_scheme_ref);
 
             request.getSession().setAttribute("resolved_vs_key", key);
+            request.getSession().setAttribute("version_selection", "true");
+
 			return "resolved_value_set";
 
 
@@ -857,7 +860,7 @@ public class ValueSetBean {
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
-
+		String version_selection = (String) HTTPUtils.cleanXSS((String) request.getParameter("version_selection"));
 		String valueSetDefinitionRevisionId = null;
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
 
@@ -907,6 +910,10 @@ public class ValueSetBean {
 				String url = (String) u.elementAt(0);
 				String version = (String) u.elementAt(1);
 				scheme_version = version;
+
+				//System.out.println("\turl: " + url);
+				//System.out.println("\tscheme_version: " + scheme_version);
+
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
 			}
 			String csVersionTag = null;
@@ -925,56 +932,110 @@ public class ValueSetBean {
 				CodedNodeSet cns = rvs_cns.getCodedNodeSet();
             */
 
-   		    try {
-				LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
-				CodingSchemeDataUtils codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
-				//Partial implementation -- only export production version.
-				//Note: LexEVSValueSetDefinitionService needs to be fixed to allow exclusion of anonymous classes.
-				CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
-				CodedNodeSet cns = codingSchemeDataUtils.getNodeSet(vsd_uri, versionOrTag);
-				SortOptionList sortOptions = null;
-				LocalNameList filterOptions = null;
-				LocalNameList propertyNames = null;//new LocalNameList();
-				CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
-				propertyTypes[0] = CodedNodeSet.PropertyType.DEFINITION;
-				boolean resolveObjects = true;
-				ResolvedConceptReferencesIterator itr = null;
-				itr = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
-				sb.append("Code,");
-				sb.append("Name,");
-				sb.append("Terminology,");
-				sb.append("Version,");
-				sb.append("Namespace,");
-				sb.append("Definition");
-				sb.append("\r\n");
+            if (version_selection == null) {
+				System.out.println("(*) Use resovled value set coding scheme to resolve value set.");
+				try {
+					LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+					CodingSchemeDataUtils codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
+					//Partial implementation -- only export production version.
+					//Note: LexEVSValueSetDefinitionService needs to be fixed to allow exclusion of anonymous classes.
+					CodingSchemeVersionOrTag versionOrTag = new CodingSchemeVersionOrTag();
+					CodedNodeSet cns = codingSchemeDataUtils.getNodeSet(vsd_uri, versionOrTag);
+					SortOptionList sortOptions = null;
+					LocalNameList filterOptions = null;
+					LocalNameList propertyNames = null;//new LocalNameList();
+					CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
+					propertyTypes[0] = CodedNodeSet.PropertyType.DEFINITION;
+					boolean resolveObjects = true;
+					ResolvedConceptReferencesIterator itr = null;
+					itr = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
+					sb.append("Code,");
+					sb.append("Name,");
+					sb.append("Terminology,");
+					sb.append("Version,");
+					sb.append("Namespace,");
+					sb.append("Definition");
+					sb.append("\r\n");
 
-				while (itr != null && itr.hasNext()) {
-					ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
-					for (ResolvedConceptReference ref : refs) {
-						String entityDescription = "<NOT ASSIGNED>";
-						if (ref.getEntityDescription() != null) {
-							entityDescription = ref.getEntityDescription().getContent();
+					while (itr != null && itr.hasNext()) {
+						ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
+						for (ResolvedConceptReference ref : refs) {
+							String entityDescription = "<NOT ASSIGNED>";
+							if (ref.getEntityDescription() != null) {
+								entityDescription = ref.getEntityDescription().getContent();
+							}
+
+							sb.append("\"" + ref.getConceptCode() + "\",");
+							sb.append("\"" + entityDescription + "\",");
+							sb.append("\"" + ref.getCodingSchemeName() + "\",");
+							sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
+							sb.append("\"" + ref.getCodeNamespace() + "\",");
+
+							String definition = getNCIDefinition(ref);
+							if (definition == null) definition = "";
+							sb.append("\"" + definition + "\"");
+							sb.append("\r\n");
 						}
-
-						sb.append("\"" + ref.getConceptCode() + "\",");
-						sb.append("\"" + entityDescription + "\",");
-						sb.append("\"" + ref.getCodingSchemeName() + "\",");
-						sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
-						sb.append("\"" + ref.getCodeNamespace() + "\",");
-
-						String definition = getNCIDefinition(ref);
-						if (definition == null) definition = "";
-						sb.append("\"" + definition + "\"");
-						sb.append("\r\n");
 					}
+
+				} catch (Exception ex)	{
+					sb.append("WARNING: Export to CVS action failed.");
+					ex.printStackTrace();
 				}
+            } else {
+				System.out.println("(*) Dynamicnally resolve value set.");
+				try {
+					LexEVSValueSetDefinitionServices vsd_service = RemoteServerUtil.getLexEVSValueSetDefinitionServices();
 
-			} catch (Exception ex)	{
-				sb.append("WARNING: Export to CVS action failed.");
-				ex.printStackTrace();
-			}
+					ResolvedValueSetCodedNodeSet rvs_cns = null;
+					rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+																				valueSetDefinitionRevisionId,
+																				csvList,
+																				csVersionTag);
+					CodedNodeSet cns = rvs_cns.getCodedNodeSet();
+					SortOptionList sortOptions = null;
+					LocalNameList filterOptions = null;
+					LocalNameList propertyNames = null;//new LocalNameList();
+					CodedNodeSet.PropertyType[] propertyTypes = new CodedNodeSet.PropertyType[1];
+					propertyTypes[0] = CodedNodeSet.PropertyType.DEFINITION;
+					boolean resolveObjects = true;
+					ResolvedConceptReferencesIterator itr = null;
+					itr = cns.resolve(sortOptions, filterOptions, propertyNames, propertyTypes, resolveObjects);
+					sb.append("Code,");
+					sb.append("Name,");
+					sb.append("Terminology,");
+					sb.append("Version,");
+					sb.append("Namespace,");
+					sb.append("Definition");
+					sb.append("\r\n");
+
+					while (itr != null && itr.hasNext()) {
+						ResolvedConceptReference[] refs = itr.next(100).getResolvedConceptReference();
+						for (ResolvedConceptReference ref : refs) {
+							String entityDescription = "<NOT ASSIGNED>";
+							if (ref.getEntityDescription() != null) {
+								entityDescription = ref.getEntityDescription().getContent();
+							}
+
+							sb.append("\"" + ref.getConceptCode() + "\",");
+							sb.append("\"" + entityDescription + "\",");
+							sb.append("\"" + ref.getCodingSchemeName() + "\",");
+							sb.append("\"" + ref.getCodingSchemeVersion() + "\",");
+							sb.append("\"" + ref.getCodeNamespace() + "\",");
+
+							String definition = getNCIDefinition(ref);
+							if (definition == null) definition = "";
+							sb.append("\"" + definition + "\"");
+							sb.append("\r\n");
+						}
+					}
+
+				} catch (Exception ex)	{
+					sb.append("WARNING: Export to CVS action failed.");
+					ex.printStackTrace();
+				}
+		    }
 		}
-
 
 		vsd_uri = DataUtils.valueSetDefinitionURI2Name(vsd_uri);
 		vsd_uri = vsd_uri.replaceAll(" ", "_");
@@ -1002,15 +1063,8 @@ public class ValueSetBean {
 
 
 	public String searchAction() {
-		/*
-        HttpServletRequest request =
-            (HttpServletRequest) FacesContext.getCurrentInstance()
-                .getExternalContext().getRequest();
-        */
-
-		return "search_results";
+    	return "search_results";
 	}
-
 
 
     public String resolvedValueSetSearchAction() {
