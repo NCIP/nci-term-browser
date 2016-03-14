@@ -210,7 +210,7 @@ public class RemoteServerUtil {
     }
 
     public static String getServiceURL() {
-        return _serviceURL;
+		return NCItBrowserProperties.getServiceURL();
     }
 
     public static LexBIGService createLexBIGService(

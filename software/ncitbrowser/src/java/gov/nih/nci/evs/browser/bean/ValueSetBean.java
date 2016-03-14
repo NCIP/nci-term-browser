@@ -96,16 +96,22 @@ public class ValueSetBean {
     private static Vector _coding_scheme_vec = null;
     private static Vector _concept_domain_vec = null;
 
+	private String selectedConceptDomain = null;
+	private List conceptDomainList = null;
+	private Vector<String> conceptDomainListData = null;
 
 
     public void ValueSetBean() {
 
 	}
 
-
-	private String selectedConceptDomain = null;
-	private List conceptDomainList = null;
-	private Vector<String> conceptDomainListData = null;
+	public ValueSetSearchUtils createValueSetSearchUtils() {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        ValueSetSearchUtils valueSetSearchUtils = new ValueSetSearchUtils(lbSvc);
+        String serviceURL = RemoteServerUtil.getServiceURL();
+        valueSetSearchUtils.setServiceUrl(serviceURL);
+        return valueSetSearchUtils;
+	}
 
 
 	public String getSelectedConceptDomain() {
@@ -297,7 +303,6 @@ public class ValueSetBean {
 
 
     public String downloadValueSetAction() {
-
         HttpServletRequest request =
             (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -306,7 +311,6 @@ public class ValueSetBean {
 				.getCurrentInstance().getExternalContext().getResponse();
 
 		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
-
 		try {
 			request.getRequestDispatcher("/ncitbrowser/pages/download_value_set.jsf?vsd_uri=" + vsd_uri).
 							  forward(request,response);
@@ -931,10 +935,6 @@ public class ValueSetBean {
 				String url = (String) u.elementAt(0);
 				String version = (String) u.elementAt(1);
 				scheme_version = version;
-
-				//System.out.println("\turl: " + url);
-				//System.out.println("\tscheme_version: " + scheme_version);
-
 				csvList.addAbsoluteCodingSchemeVersionReference(Constructors.createAbsoluteCodingSchemeVersionReference(url, version));
 			}
 			String csVersionTag = null;
@@ -954,7 +954,6 @@ public class ValueSetBean {
             */
 
             if (version_selection == null) {
-				System.out.println("(*) Use resovled value set coding scheme to resolve value set.");
 				try {
 					LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 					CodingSchemeDataUtils codingSchemeDataUtils = new CodingSchemeDataUtils(lbSvc);
@@ -1100,7 +1099,6 @@ public class ValueSetBean {
         if (vsd_uri == null) {
 			vsd_uri = (String) request.getSession().getAttribute("vsd_uri");
 		}
-
         request.getSession().setAttribute("nav_type", "valuesets");
         request.getSession().setAttribute("vsd_uri", vsd_uri);
         String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
@@ -1150,7 +1148,6 @@ public class ValueSetBean {
         String key =
             iteratorBeanManager.createIteratorKey(schemes, matchText,
                 searchTarget, matchAlgorithm, maxToReturn);
-
         if (searchTarget.compareTo("codes") == 0) {
             if (iteratorBeanManager.containsIteratorBean(key)) {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
@@ -1158,7 +1155,8 @@ public class ValueSetBean {
             } else {
 
                 iterator =
-                    new ValueSetSearchUtils(lbSvc).searchByCode(
+                    //new ValueSetSearchUtils(lbSvc).searchByCode(
+					createValueSetSearchUtils().searchByCode(
 				        vsd_uri, matchText, maxToReturn);
 
                     if (iterator != null) {
@@ -1178,7 +1176,8 @@ public class ValueSetBean {
 				//        vsd_uri, matchText, matchAlgorithm, maxToReturn);
 
                 iterator =
-                    new ValueSetSearchUtils(lbSvc).searchByName(
+                    //new ValueSetSearchUtils(lbSvc).searchByName(
+					createValueSetSearchUtils().searchByName(
 				        vsd_uri, matchText, matchAlgorithm, maxToReturn);
 
 
@@ -1204,7 +1203,8 @@ public class ValueSetBean {
 				        vsd_uri, matchText, excludeDesignation, matchAlgorithm, maxToReturn);
                 */
                 iterator =
-                    new ValueSetSearchUtils(lbSvc).searchByProperties(
+                    //new ValueSetSearchUtils(lbSvc).searchByProperties(
+					createValueSetSearchUtils().searchByProperties(
 				        vsd_uri, matchText, excludeDesignation, matchAlgorithm, maxToReturn);
 
                 if (iterator != null) {
@@ -1317,7 +1317,9 @@ public class ValueSetBean {
 		if (checked_vocabularies == null) {
 			checked_vocabularies = vsd_uri;
 		}
-        ResolvedConceptReferencesIterator iterator = new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(checked_vocabularies,
+        ResolvedConceptReferencesIterator iterator
+            //= new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(checked_vocabularies,
+            = createValueSetSearchUtils().searchResolvedValueSetCodingSchemes(checked_vocabularies,
             matchText, searchOption, algorithm);
 
         if (iterator == null) {

@@ -3625,7 +3625,6 @@ out.flush();
 				ex.printStackTrace();
 			}
 			return;
-			//return "resolve_value_set";
 		}
 
 		AbsoluteCodingSchemeVersionReferenceList csvList = new AbsoluteCodingSchemeVersionReferenceList();
