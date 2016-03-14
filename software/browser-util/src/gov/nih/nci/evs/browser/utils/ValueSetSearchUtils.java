@@ -314,8 +314,13 @@ public class ValueSetSearchUtils
 
             String csVersionTag = null;
 
-            ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
-                  valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+            ResolvedValueSetCodedNodeSet rvs_cns = null;
+            try {
+				rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+					  valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+		    } catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
             if (rvs_cns == null) {
                 return null;
@@ -399,8 +404,13 @@ public class ValueSetSearchUtils
 
             String csVersionTag = null;
 
-            ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+            ResolvedValueSetCodedNodeSet rvs_cns = null;
+            try {
+				rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
             if (rvs_cns == null) {
                 return null;
@@ -495,8 +505,16 @@ public class ValueSetSearchUtils
             */
             String csVersionTag = null;
 
-            ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+            ResolvedValueSetCodedNodeSet rvs_cns = null;
+            try {
+				rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+            //ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+            //      valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
             if (rvs_cns == null) {
                 return null;
