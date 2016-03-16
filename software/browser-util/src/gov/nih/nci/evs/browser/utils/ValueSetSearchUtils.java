@@ -659,7 +659,7 @@ public class ValueSetSearchUtils
 
 		if (checked_vocabularies == null) return null;
 		Vector selected_vocabularies = StringUtils.parseData(checked_vocabularies, ",");
-		HashMap hmap = getRVSCSName2VersionHashMap();
+		//HashMap hmap = getRVSCSName2VersionHashMap();
 
 		// find versions
 		Vector schemes = new Vector();
@@ -668,23 +668,9 @@ public class ValueSetSearchUtils
 		for (int i=0; i<selected_vocabularies.size(); i++) {
 			int k = i+1;
 			String selected_vocabulary = (String) selected_vocabularies.elementAt(i);
-			//Vector u = getCodingSchemeVersionsByURN(selected_vocabulary);
-			/*
-			Vector u = getResovedValueSetVersions(selected_vocabulary);
-
-			if (u != null && u.size() > 0) {
-				String version = (String) u.elementAt(0);
-
-				schemes.add(selected_vocabulary);
-				versions.add(version);
-		    } else {
-
-				schemes.add(selected_vocabulary);
-				versions.add(null);
-			}
-			*/
 			schemes.add(selected_vocabulary);
-			versions.add((String) hmap.get(selected_vocabulary));
+			//versions.add((String) hmap.get(selected_vocabulary));
+			versions.add(null);
 		}
         if (searchOption == SimpleSearchUtils.BY_NAME) {
 			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
