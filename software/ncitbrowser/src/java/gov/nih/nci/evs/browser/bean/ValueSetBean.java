@@ -1153,11 +1153,15 @@ public class ValueSetBean {
                 iteratorBean = iteratorBeanManager.getIteratorBean(key);
                 iterator = iteratorBean.getIterator();
             } else {
-
+/*
                 iterator =
                     //new ValueSetSearchUtils(lbSvc).searchByCode(
 					createValueSetSearchUtils().searchByCode(
 				        vsd_uri, matchText, maxToReturn);
+*/
+			    iterator = new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(vsd_uri,
+				    matchText, 1, matchAlgorithm);
+
 
                     if (iterator != null) {
                         iteratorBean = new IteratorBean(iterator);
@@ -1174,12 +1178,15 @@ public class ValueSetBean {
                 //ResolvedConceptReferencesIteratorWrapper wrapper =
                 //    new ValueSetSearchUtils().searchByName(
 				//        vsd_uri, matchText, matchAlgorithm, maxToReturn);
-
+/*
                 iterator =
                     //new ValueSetSearchUtils(lbSvc).searchByName(
 					createValueSetSearchUtils().searchByName(
 				        vsd_uri, matchText, matchAlgorithm, maxToReturn);
 
+*/
+			    iterator = new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(vsd_uri,
+				    matchText, 2, matchAlgorithm);
 
                 if (iterator != null) {
                     //iterator = wrapper.getIterator();

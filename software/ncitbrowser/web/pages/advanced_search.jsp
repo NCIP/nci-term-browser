@@ -664,9 +664,7 @@ if (adv_search_algorithm.compareToIgnoreCase("lucene") != 0) {
 
                   <% }%>
 
-
-
-                
+               
 
                   </table>
                 </td></tr>
