@@ -1184,6 +1184,8 @@ public class ValueSetBean {
 					createValueSetSearchUtils().searchByName(
 				        vsd_uri, matchText, matchAlgorithm, maxToReturn);
 /*
+//This approach failed.
+//The coding scheme for ResolvedConceptReference returned by the iterator is not populated.
 			    iterator = new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(vsd_uri,
 				    matchText, 2, matchAlgorithm);
 */
