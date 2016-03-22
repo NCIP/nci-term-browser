@@ -1144,6 +1144,9 @@ public class ValueSetBean {
         schemes.add(vsd_uri);
 
         int maxToReturn = -1;
+        ValueSetSearchUtils vssu = createValueSetSearchUtils();
+		AbsoluteCodingSchemeVersionReferenceList csVersinList
+		   = vssu.getDefaultAbsoluteCodingSchemeVersionReferenceList(vsd_uri);
 
         String key =
             iteratorBeanManager.createIteratorKey(schemes, matchText,
@@ -1154,10 +1157,12 @@ public class ValueSetBean {
                 iterator = iteratorBean.getIterator();
             } else {
 
+
+
                 iterator =
                     //new ValueSetSearchUtils(lbSvc).searchByCode(
-					createValueSetSearchUtils().searchByCode(
-				        vsd_uri, matchText, maxToReturn);
+					vssu.searchByCode(
+				        vsd_uri, csVersinList, matchText, maxToReturn);
 /*
 			    iterator = new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(vsd_uri,
 				    matchText, 1, matchAlgorithm);
@@ -1181,14 +1186,9 @@ public class ValueSetBean {
 
                 iterator =
                     //new ValueSetSearchUtils(lbSvc).searchByName(
-					createValueSetSearchUtils().searchByName(
-				        vsd_uri, matchText, matchAlgorithm, maxToReturn);
-/*
-//This approach failed.
-//The coding scheme for ResolvedConceptReference returned by the iterator is not populated.
-			    iterator = new ValueSetSearchUtils(lbSvc).searchResolvedValueSetCodingSchemes(vsd_uri,
-				    matchText, 2, matchAlgorithm);
-*/
+					vssu.searchByName(
+				        vsd_uri, csVersinList, matchText, matchAlgorithm, maxToReturn);
+
                 if (iterator != null) {
                     //iterator = wrapper.getIterator();
                     //if (iterator != null) {
