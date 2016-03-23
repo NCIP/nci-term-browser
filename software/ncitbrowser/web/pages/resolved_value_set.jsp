@@ -322,7 +322,7 @@
                                        	if (code.indexOf("@") == -1) {
                                             namespace = DataUtils.getCSName(namespace);
                                        %> 
-                                           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=namespace%>&version=<%=vsn%>&code=<%=code%>"><%=code%></a>
+                                           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=namespace%>&version=<%=vsn%>&ns=<%=namespace%>&code=<%=code%>"><%=code%></a>
                                        <%
                                         	} else {
                                        %> <%=code%> <%
