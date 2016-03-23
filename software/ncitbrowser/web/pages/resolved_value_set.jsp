@@ -282,12 +282,14 @@
                                  								.getContent();
                                  					}
 
-                                 					concept_vec.add(ref.getConceptCode() + "|"
+                                 					String t = ref.getConceptCode() + "|"
                                  							+ entityDescription + "|"
                                  							+ ref.getCodingSchemeName() + "|"
                                  							+ ref.getCodeNamespace() + "|"
-                                 							+ ref.getCodingSchemeVersion());
-
+                                 							+ ref.getCodingSchemeVersion();
+                            							
+                                 					concept_vec.add(t);                                 							
+ 
                                  				}
                                  				for (int i = 0; i < concept_vec.size(); i++) {
                                  					String concept_str = (String) concept_vec
@@ -297,7 +299,12 @@
                                  					String conceptname = (String) u.elementAt(1);
                                  					String coding_scheme = (String) u.elementAt(2);
                                  					String namespace = (String) u.elementAt(3);
+                                 					
                                  					String vsn = (String) u.elementAt(4);
+                                 					String coding_scheme_nm = namespace;
+                                 					vsn = DataUtils.getProductionVersion(namespace);
+
+
 
                                  					if (i % 2 == 0) {
                                  %>
@@ -313,8 +320,9 @@
                                     <td class="dataCellText" scope="row">
                                        <%
                                        	if (code.indexOf("@") == -1) {
-                                            String coding_scheme_nm = DataUtils.getCSName(coding_scheme);
-                                       %> <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=coding_scheme_nm%>&version=<%=vsn%>&code=<%=code%>"><%=code%></a>
+                                            namespace = DataUtils.getCSName(namespace);
+                                       %> 
+                                           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=namespace%>&version=<%=vsn%>&code=<%=code%>"><%=code%></a>
                                        <%
                                         	} else {
                                        %> <%=code%> <%

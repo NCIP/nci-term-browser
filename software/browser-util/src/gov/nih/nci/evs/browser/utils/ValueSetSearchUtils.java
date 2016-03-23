@@ -854,6 +854,17 @@ public class ValueSetSearchUtils
 		return list;
 	}
 
+    public static void dumpResolvedConceptReference(ResolvedConceptReference rcr) {
+		if (rcr.getEntityDescription() != null) {
+			System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+		} else {
+			System.out.println("(" + rcr.getConceptCode() + ")");
+		}
+		System.out.println("\tURI: " + rcr.getCodingSchemeURI());
+		System.out.println("\tCoding Scheme: " + rcr.getCodingSchemeName());
+		System.out.println("\tCoding Scheme Version: " + rcr.getCodingSchemeVersion());
+		System.out.println("\tnamespace: " + rcr.getCodeNamespace());
+	}
 
     public static void main(String [] args) {
 		try {

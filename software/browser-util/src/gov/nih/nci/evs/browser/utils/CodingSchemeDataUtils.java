@@ -1120,4 +1120,23 @@ public class CodingSchemeDataUtils {
 		      + relation.getTargetCodingScheme() + "|"
 		      + relation.getTargetCodingSchemeVersion();
 	}
+
+
+	public HashMap updateCodeNamespace2VersionMap(HashMap hmap, String codeNamespace) {
+		if (hmap == null) {
+			hmap = new HashMap();
+		}
+		if (codeNamespace == null) {
+		    return hmap;
+		}
+
+		if (hmap.containsKey(codeNamespace)) {
+			return hmap;
+		}
+
+		String version = getVocabularyVersionByTag(codeNamespace, "PRODUCTION");
+		hmap.put(codeNamespace, version);
+		return hmap;
+	}
+
 }
