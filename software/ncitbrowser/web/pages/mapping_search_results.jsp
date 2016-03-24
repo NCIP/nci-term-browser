@@ -467,7 +467,7 @@ target_scheme = DataUtils.getCSName(target_scheme);
                     <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=source_code%>&b=0&m=0'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&ns=<%=source_scheme%>&code=<%=source_code%>&b=0&m=0'">
       <%=source_code%>
 </a>
 
@@ -491,7 +491,7 @@ if (show_rank_column) {
         <td class="datacoldark">
 
 <a href="#"
-      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=target_code%>&b=0&m=0'">
+      onclick="javascript:window.location='<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&ns=<%=target_scheme%>&code=<%=target_code%>&b=0&m=0'">
       <%=target_code%>
 </a>
 

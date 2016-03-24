@@ -60,14 +60,16 @@ public class VisitedConceptUtils {
     private static class VisitedConcept {
         public String scheme = "";
         public String version = "";
+        public String namespace = "";
         public String code = "";
         public String name = "";
         public String value = "";
 
-        public VisitedConcept(String scheme, String version, String code,
+        public VisitedConcept(String scheme, String version, String namespace, String code,
             String name) {
             this.scheme = scheme;
             this.version = version;
+            this.namespace = namespace;
             this.code = code;
             this.name = name;
             this.value = name + " (" + scheme + " " + version + ")";
@@ -93,7 +95,7 @@ public class VisitedConceptUtils {
     }
 
     public static void add(HttpServletRequest request, String dictionary,
-        String version, String code, String name) {
+        String version, String namespace, String code, String name) {
         @SuppressWarnings("unchecked")
         Vector<VisitedConcept> visitedConcepts =
             (Vector<VisitedConcept>) request.getSession().getAttribute(
@@ -103,7 +105,7 @@ public class VisitedConceptUtils {
 
         String localCodingSchemeName = DataUtils.getLocalName(dictionary);
         VisitedConcept visitedConcept =
-            new VisitedConcept(localCodingSchemeName, version, code, name);
+            new VisitedConcept(localCodingSchemeName, version, namespace, code, name);
 
         if (visitedConcept.exists(visitedConcepts))
             return;
@@ -135,6 +137,7 @@ public class VisitedConceptUtils {
             }
             String code = visitedConcept.code;
             String name = visitedConcept.name;
+            String ns = visitedConcept.namespace;
             name = DataUtils.encode_term(name);
 
             strbuf.append("<li>");
@@ -156,7 +159,7 @@ public class VisitedConceptUtils {
 
             line =
                 "<a href=\\'/ncitbrowser/ConceptReport.jsp?dictionary="
-                    + formalName + versionParameter + "&code=" + code + "\\'>"
+                    + formalName + versionParameter + "&ns=" + ns + "&code=" + code + "\\'>"
                     + name + " &#40;" + display_name + " "
                     + versionParameterDisplay + "&#41;" + "</a><br>";
             strbuf.append(line);

@@ -147,7 +147,7 @@ if ((isActive != null && !isActive.equals(Boolean.TRUE)  && concept_status != nu
 		    	   String descendantName = (String) w.elementAt(0);
 		    	   String descendantCode = (String) w.elementAt(1);
 	%>
-		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary_nm%>&code=<%=descendantCode%>">
+		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary_nm%>&ns=<%=prop_dictionary_nm%>&code=<%=descendantCode%>">
 			      <%=descendantName%>
 		      </a>
 	<%              

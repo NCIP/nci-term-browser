@@ -866,6 +866,27 @@ public class ValueSetSearchUtils
 		System.out.println("\tnamespace: " + rcr.getCodeNamespace());
 	}
 
+
+	public AbsoluteCodingSchemeVersionReferenceList getAbsoluteCodingSchemeVersionReferenceList(String vsd_uri) {
+		String prod_version = csdu.getVocabularyVersionByTag(vsd_uri, "PRODUCTION");
+		System.out.println("resolved value set coding scheme URI: " + vsd_uri);
+		System.out.println("resolved value set coding scheme version: " + prod_version);
+        CodingSchemeDataUtils csdu = new CodingSchemeDataUtils(lbSvc);
+        CodingScheme cs = csdu.resolveCodingScheme(vsd_uri, prod_version);
+        LexEVSResolvedValueSetServiceImpl rvssi = new LexEVSResolvedValueSetServiceImpl(lbSvc);
+        AbsoluteCodingSchemeVersionReferenceList scsvrl = rvssi.getListOfCodingSchemeVersionsUsedInResolution(cs);
+        for (int i=0; i<scsvrl.getAbsoluteCodingSchemeVersionReferenceCount(); i++) {
+			AbsoluteCodingSchemeVersionReference acsvr = scsvrl.getAbsoluteCodingSchemeVersionReference(i);
+			String cs_urn = acsvr.getCodingSchemeURN();
+			String cs_version = acsvr.getCodingSchemeVersion();
+            System.out.println("\tcs_urn: " + cs_urn);
+            System.out.println("\tcs_version: " + cs_version);
+            String cs_prod_version = csdu.getVocabularyVersionByTag(cs_urn, "PRODUCTION");
+            System.out.println("\tcs_prod_version: " + cs_prod_version);
+		}
+		return scsvrl;
+	}
+
     public static void main(String [] args) {
 		try {
 

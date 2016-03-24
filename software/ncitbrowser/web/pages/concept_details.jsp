@@ -511,7 +511,7 @@ if (!StringUtils.isNull(b)) {
                      </td>
                   </tr>
                   <%
-                  VisitedConceptUtils.add(request, tg_dictionary_0, version, code, name);
+                  VisitedConceptUtils.add(request, tg_dictionary_0, version, ns, code, name);
                   	if (deprecatedVersion != null) {
                   %>
                   <tr>

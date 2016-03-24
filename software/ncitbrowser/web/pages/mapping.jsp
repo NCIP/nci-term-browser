@@ -547,7 +547,7 @@ if (show_rank_column) {
 <tr>
                     <td class="datacoldark" scope="row"><%=source_namespace%></td>
         <td class="datacoldark">
-<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&code=<%=URLEncoder.encode(source_code,"UTF-8")%>">
+<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=source_scheme%>&version=<%=source_version%>&ns=<%=source_scheme%>&code=<%=URLEncoder.encode(source_code,"UTF-8")%>">
       <%=source_code%>
 </a>
 
@@ -572,7 +572,7 @@ if (show_rank_column) {
         <td class="datacoldark"><%=target_namespace%></td>
         <td class="datacoldark">
 
-<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&code=<%=URLEncoder.encode(target_code,"UTF-8")%>">
+<a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=target_scheme%>&version=<%=target_version%>&ns=<%=target_scheme%>&code=<%=URLEncoder.encode(target_code,"UTF-8")%>">
       <%=target_code%>
 </a>
 
