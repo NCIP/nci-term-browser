@@ -721,8 +721,10 @@ if (!hasOtherProperties) {
     %>	  
 </p>
 <%
-  String url = JSPUtils.getBookmarkUrl(request, dictionary, version, concept_id, namespace);
-  String bookmark_title = prop_dictionary + "%20" + concept_id;
+  //String url = JSPUtils.getBookmarkUrl(request, dictionary, version, concept_id, namespace);
+    String url = JSPUtils.getBookmarkUrl(lbSvc, request, dictionary, version, namespace, concept_id);
+ 
+    String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>
    <table class="datatable_960" border="0" cellpadding="0" cellspacing="0" width="700px">

@@ -617,7 +617,7 @@ public class MappingSearchUtils {
 		}
 		String relationsContainerName = null;
 
-        LexBIGService distributed = lbSvc;//RemoteServerUtil.createLexBIGService();
+        LexBIGService distributed = lbSvc;
         try {
 			CodingScheme cs = distributed.resolveCodingScheme(scheme, versionOrTag);
 			if (cs == null) return null;

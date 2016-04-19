@@ -180,8 +180,6 @@ public class ViewInHierarchyUtils {
 				return null;
 			}
 			if (code.indexOf("@") != -1) return null; // anonymous class
-
-            //LexBIGService lbSvc = new RemoteServerUtil().createLexBIGService();
             if (lbSvc == null) {
                 return null;
             }
@@ -313,7 +311,6 @@ public class ViewInHierarchyUtils {
 
             TreeService service =
                     TreeServiceFactory.getInstance().getTreeService(lbSvc);
-                        //RemoteServerUtil.createLexBIGService());
 
             rt_1 = "" + (System.currentTimeMillis() - ms);
 			ms = System.currentTimeMillis();

@@ -194,7 +194,6 @@ public class ValueSetSearchUtils
         boolean includeInactive = false;
         AbsoluteCodingSchemeVersionReferenceList list = new AbsoluteCodingSchemeVersionReferenceList();
         try {
-            // LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");

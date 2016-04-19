@@ -1320,6 +1320,7 @@ if (action.compareTo("xmldefinitions") == 0) {
       println(out, "  </script>");
       println(out, "</head>");
       println(out, "<body>");
+
       println(out, "  ");
       println(out, "    <!-- Begin Skip Top Navigation -->");
       println(out, "      <a href=\"#evs-content\" class=\"hideLink\" accesskey=\"1\" title=\"Skip repetitive navigation links\">skip navigation links</A>");
@@ -2658,20 +2659,12 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 
 	  out.println("  <title>" + dictionary + " value set</title>");
 
-      //out.println("  <title>NCI Thesaurus</title>");
       out.println("  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
       out.println("");
-      out.println("<style type=\"text/css\">");
-      out.println("/*margin and padding on body element");
-      out.println("  can introduce errors in determining");
-      out.println("  element position and are not recommended;");
-      out.println("  we turn them off as a foundation for YUI");
-      out.println("  CSS treatments. */");
-      out.println("body {");
-      out.println("	margin:0;");
-      out.println("	padding:0;");
-      out.println("}");
-      out.println("</style>");
+
+      out.println("<body>");
+      //out.println("<body onload=\"collapse_all()\">");
+
       out.println("");
       out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css\" />");
       out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css\" />");
