@@ -322,16 +322,16 @@ document.addEventListener('keyup', doc_keyUp, false);
  			} 	
  
  			function expand_node(prefix) {
-  			        var div = "DIV_";
+  			    var div = "DIV_";
   				var child_cnt = 1;
   				child_id = prefix.concat(child_cnt.toString());
-  				while (document.getElementById(child_id) != null) {
+  				while (document.getElementById(div.concat(child_id)) != null) {
   				    show(div.concat(child_id));
   				    expand_node(child_id.concat("_"));
   				    child_cnt++;
   				    child_id = prefix.concat(child_cnt.toString());
   				}
- 			} 			
+ 			}			
   
  			function collapse_all() {
 				var divTags = document.getElementsByTagName('div');
