@@ -376,9 +376,21 @@ public class UITestGenerator extends BaseUITestGenerator {
 			System.out.println("generateTerminologyLinks browserHomeDisplayLabels == null -- return.");
 			return null;
 	   }
+	   /*
 	   int max = browserHomeDisplayLabels.size()-1;
 	   if (number >= browserHomeDisplayLabels.size()) {
-		   number = browserHomeDisplayLabels.size();
+		   //02262016, KLO
+		   //number = browserHomeDisplayLabels.size();
+		   number = browserHomeDisplayLabels.size()-1;
+	   }
+	   */
+	   int max = browserHomeDisplayLabels.size();
+	   if (number >= max) {
+		    ArrayList<Integer> arrayList = new ArrayList<Integer>();
+			for (int i=0; i<max; i++) {
+				arrayList.add(new Integer(i));
+			}
+			return arrayList;
 	   }
 	   List list = rvGenerator.selectWithNoReplacement(number, max);
 	   return list;

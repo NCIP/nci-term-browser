@@ -179,11 +179,6 @@ int size = 0;
     
     request.getSession().setAttribute("vsd_uri", vsd_uri); 
     String vsd_name = DataUtils.getValueSetName(vsd_uri);
-
-
-
-
-
 %>
 
 <div class="bannerarea_960">
@@ -238,14 +233,11 @@ if (vsd_name.length() < HTTPUtils.ABS_MAX_STR_LEN) {
     .cleanXSS((String) request.getSession().getAttribute("matchText_RVS"));
 
   if (match_text == null) match_text = "";
-  
-
     String userAgent = request.getHeader("user-agent");
     boolean isIE = userAgent != null && userAgent.toLowerCase().contains("msie");
 
 
 if (!DataUtils.isNullOrBlank(vsd_uri)) {
-    //System.out.println("set checked_valuesets = " + vsd_uri);
     checked_valuesets = vsd_uri;
 }
 
@@ -373,6 +365,7 @@ if (!DataUtils.isNullOrBlank(checked_valuesets)) {
             <%
             
 Vector matched_concept_codes = (Vector) request.getSession().getAttribute("matched_concept_codes");
+
 request.getSession().removeAttribute("matched_concept_codes");            
             
             		int numRemaining = 0;
@@ -388,92 +381,11 @@ if (rvsi != null) {
 			table_content_buf.append(rvsi.getOpenTableTag("rvs_table"));
 			List list = rvsi.getResolvedValueSetList();
 
-/*
-
-            		resultsPerPage =  HTTPUtils.cleanXSS((String) request.getParameter("resultsPerPage"));
-            		if (resultsPerPage == null) {
-            			resultsPerPage = (String) request.getSession()
-            					.getAttribute("resultsPerPage");
-            			if (resultsPerPage == null) {
-            				resultsPerPage = "50";
-            			}
-
-            		} else {
-            		
-            		
-			    bool_val = JSPUtils.isInteger(resultsPerPage);
-			    if (!bool_val) {
-				 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
-				 String error_msg = HTTPUtils.createErrorMsg("resultsPerPage", resultsPerPage);
-				 request.getSession().setAttribute("error_msg", error_msg);
-				 response.sendRedirect(redirectURL);
-			    } else {
-				 request.getSession().setAttribute("resultsPerPage", resultsPerPage);
-			    }              		
-            		}
-
-            		selectedResultsPerPage = resultsPerPage;
-
-            		page_number = HTTPUtils.cleanXSS((String) request.getParameter("page_number"));
-            		int pageNum = 0;
-
-            		if (page_number != null) {
-            		
- 			    bool_val = JSPUtils.isInteger(page_number);
-			    if (!bool_val) {
-				 String redirectURL = request.getContextPath() + "/pages/appscan_response.jsf";
-				 String error_msg = HTTPUtils.createErrorMsg("page_number", page_number);
-				 request.getSession().setAttribute("error_msg", error_msg);
-				 response.sendRedirect(redirectURL);
-			    } else {
-				 pageNum = Integer.parseInt(page_number);
-			    }  
-            			
-            		} else {
-            			pageNum = 1;
-            		}
-
-            		page_num = pageNum;
-
-            		pageSize = Integer.parseInt(resultsPerPage);
-            		
-           		size = list.size() - 1;
-            		numRemaining = size;
-
-            		num_pages = size / pageSize;
-            		if (num_pages * pageSize < size)
-            			num_pages++;
-
-
-            		istart = (page_num - 1) * pageSize;
-            		if (istart < 0)
-            			istart = 0;
-
-            		iend = istart + pageSize - 1;
-            		if (iend > size) {
-            			iend = size;
-            		}
-            		
-            		if (istart > 0) {
-			    String first_line = (String) list.get(0);
-			    first_line = first_line.replaceAll("td", "th");
-			    table_content_buf.append(first_line);
-            		}
-            		
-			for (int k=istart; k<iend+1; k++) {
-			    String line = (String) list.get(k);
-			    table_content_buf.append(line);
-			}
-			
-*/
-
-
 
 boolean filter = false;
 if (matched_concept_codes != null && matched_concept_codes.size() > 0) {
     filter = true;
 }
-
 			    String first_line = (String) list.get(0);
 			    first_line = first_line.replaceAll("td", "th");
 			    table_content_buf.append(first_line);

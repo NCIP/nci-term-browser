@@ -595,6 +595,14 @@
                  <value>@ncbo_widget_info@</value>
         </ConfigurableItem>
         
+        <ConfigurableItem>
+                 <key>OWL_ROLE_QUANTIFIERS</key>
+                 <value>@owl_role_quantifiers@</value>
+        </ConfigurableItem>
+        
+        //OWL_ROLE_QUALIFIER_LIST
+        
+        
         <!-- Standard FTP Report List (End) ================================ -->
 
     </ConfigurableItems>

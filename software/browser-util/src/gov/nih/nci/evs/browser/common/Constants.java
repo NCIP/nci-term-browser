@@ -1,5 +1,8 @@
 package gov.nih.nci.evs.browser.common;
 
+import java.util.List;
+import java.util.Arrays;
+
 /**
  * <!-- LICENSE_TEXT_START -->
  * Copyright 2008,2009 NGIT. This software was developed in conjunction
@@ -200,7 +203,9 @@ public class Constants {
 		"/IFRAME ", "/SCRIPT", ";DECLARE", "</SPAN>", "</XML>",
 		"<SCRIPT>", "<STYLE>", "=(", "=FUNCTION", "\"ALERT",
 		"ALERT(", "A HREF=", "BASE HREF", "BGSOUND SRC", "BODY ONLOAD",
-		"BR SIZE", "CAST(", "DATA=", "DIV STYLE", "E-",
+		//[NCITERM-733] Search using a string containing a '-' character may result in a misleading error page.
+		//"BR SIZE", "CAST(", "DATA=", "DIV STYLE", "E-",
+		"BR SIZE", "CAST(", "DATA=", "DIV STYLE",
 		"ECHO(", "EXEC(", "EXPRESSION(", "FONT-FAMILY", "HREF=",
 		"IFRAME ", "IFRAME SRC", "IMG DYNSRC", "IMG LOWSRC", "IMG SRC=",
 		"IMG STYLE", "INPUT TYPE", "JAVASCRIPT:ALERT", "LINK REL", "META HTTP-EQUIV",

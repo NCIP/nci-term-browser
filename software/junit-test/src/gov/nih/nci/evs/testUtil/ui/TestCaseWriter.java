@@ -159,6 +159,10 @@ public class TestCaseWriter
 		return this.browserHomePage;
 	}
 
+    public void wait(String indent, int second) {
+		int milliseconds = second * 1000;
+		out.println(indent + "Thread.sleep(" + milliseconds + ");");
+	}
 
     public void wait(int second) {
 		int milliseconds = second * 1000;
@@ -408,7 +412,7 @@ public class TestCaseWriter
         wait(short_delay);
         out.println("		bodyText = driver.findElement(By.tagName(\"body\")).getText();");
         out.println("		if (bodyText.contains(\"copyright/license statement\")) {");
-        out.println("				driver.findElement(By.xpath(\"//input[@src='/ncitbrowser/images/accept.gif']\")).click();");
+        out.println("			driver.findElement(By.xpath(\"//input[@src='/ncitbrowser/images/accept.gif']\")).click();");
         out.println("		}");
     }
 
@@ -419,7 +423,7 @@ public class TestCaseWriter
 
         out.println("		bodyText = driver.findElement(By.tagName(\"body\")).getText();");
         out.println("		if (bodyText.contains(\"copyright/license statement\")) {");
-        out.println("				driver.findElement(By.xpath(\"//input[@src='/ncitbrowser/images/accept.gif']\")).click();");
+        out.println("			driver.findElement(By.xpath(\"//input[@src='/ncitbrowser/images/accept.gif']\")).click();");
         out.println("		}");
         wait(short_delay);
 
@@ -539,7 +543,7 @@ public class TestCaseWriter
 
         out.println("		bodyText = driver.findElement(By.tagName(\"body\")).getText();");
         out.println("		if (bodyText.contains(\"copyright/license statement\")) {");
-        out.println("				driver.findElement(By.xpath(\"//input[@src='/ncitbrowser/images/accept.gif']\")).click();");
+        out.println("			driver.findElement(By.xpath(\"//input[@src='/ncitbrowser/images/accept.gif']\")).click();");
         out.println("		}");
         wait(short_delay);
 
@@ -580,7 +584,7 @@ public class TestCaseWriter
 
         out.println("		bodyText = driver.findElement(By.tagName(\"body\")).getText();");
         out.println("		if (bodyText.contains(\"copyright/license statement\")) {");
-        out.println("				driver.findElement(By.xpath(\"//input[@src='/ncitbrowser/images/accept.gif']\")).click();");
+        out.println("			driver.findElement(By.xpath(\"//input[@src='/ncitbrowser/images/accept.gif']\")).click();");
         out.println("		}");
         wait(short_delay);
 
@@ -612,15 +616,15 @@ public class TestCaseWriter
 
 			  out.println("		try {");
 			  out.println("			driver.findElement(By.linkText(\"View in Hierarchy\")).click();");
-			  wait(long_delay * 4);
-			  //out.println("			assertTrue(containsText(matchText) || containsText(matchedString));");
+			  wait("\t\t\t", long_delay * 4);
 			  out.println("		    bodyText = getPopupWindowBodyText(driver);");
+			  out.println("			System.out.println(bodyText);");
 			  out.println("			assertTrue(bodyText.contains(matchText) || bodyText.contains(matchedString));");
 
 			  out.println("			String windowTitle= getCurrentWindowTitle();");
-			  wait(short_delay);
+			  wait("\t\t\t", short_delay);
 			  out.println("			String mainWindow = getMainWindowHandle(driver);");
-			  wait(short_delay);
+			  wait("\t\t\t", short_delay);
 			  out.println("			closeAllOtherWindows(mainWindow);");
 			  out.println("		} catch (Exception ex) {");
 			  out.println("			System.out.println(\"Hierarchy not available.\");");

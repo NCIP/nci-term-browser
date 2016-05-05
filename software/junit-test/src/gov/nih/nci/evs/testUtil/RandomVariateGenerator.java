@@ -115,7 +115,6 @@ public class RandomVariateGenerator {
     public List selectWithNoReplacement(int n, int max) {
 		ArrayList<Integer> arrayList = new ArrayList<Integer>();
 		for (int i=0; i<max; i++) {
-			//arrayList.add(i+1);
 			arrayList.add(new Integer(i));
 		}
 		Collections.shuffle(arrayList);

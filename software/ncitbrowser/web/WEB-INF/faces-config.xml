@@ -1271,15 +1271,6 @@
 
   <navigation-rule>
     <from-view-id>/pages/value_set_search.jsp</from-view-id>
-    <!--
-    <navigation-case>
-       <description>Appscan</description>
-       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
-       <from-outcome>invalid_parameter</from-outcome>
-       <to-view-id>/pages/appscan_response.jsp</to-view-id>
-    </navigation-case> 
-    -->
-
     <navigation-case>
        <description>Appscan</description>
        <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
@@ -1482,6 +1473,23 @@
        <from-action>#{valueSetBean.exportValueSetAction}</from-action>
        <from-outcome>exported_value_set</from-outcome>
        <to-view-id>/pages/exported_value_set.jsp</to-view-id>
+       
+       <description>search_resolved_value_set</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>search_results</from-outcome>
+       <to-view-id>/pages/resolved_value_set_search_results.jsp</to-view-id>       
+
+       <description>search_resolved_value_set</description>
+       <from-action>#{valueSetBean.resolvedValueSetSearchAction}</from-action>
+       <from-outcome>message</from-outcome>
+       <to-view-id>/pages/resolved_value_set.jsp</to-view-id> 
+       
+       <description>value_set_search</description>
+       <from-action>#{valueSetBean.valueSetSearchAction}</from-action>
+       <from-outcome>value_set</from-outcome>
+       <to-view-id>/pages/value_set_search_results.jsp</to-view-id>
+       
+       
     </navigation-case>
     
     <navigation-case>

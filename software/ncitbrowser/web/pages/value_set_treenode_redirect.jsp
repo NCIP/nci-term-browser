@@ -13,7 +13,7 @@
 <%
 String context_path = request.getContextPath();
 String redirect_url = null;
-String source_scheme = ValueSetHierarchy.SOURCE_SCHEME;
+String source_scheme = Constants.TERMINOLOGY_VALUE_SET_NAME;
 String source_version = DataUtils.getValueSetHierarchy().getSourceSchemeVersion();
 
 HashMap hmap = DataUtils.getValueSetHierarchy().getValueSetSourceHierarchy();

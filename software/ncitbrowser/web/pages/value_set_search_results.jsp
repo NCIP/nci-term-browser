@@ -112,11 +112,9 @@
      <input type="hidden" id="view" name="view" value="<%=VSD_view%>" />
 </form>
 <%
-
 String vd_uri = null;
 String valueSetSearch_requestContextPath = request.getContextPath();
 String selected_ValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("selectValueSetSearchOption")); 
-
 Vector vsd_vec = null;
 String value_set_tab = HTTPUtils.cleanXSS((String) request.getParameter("value_set_tab"));
 
@@ -131,12 +129,14 @@ if (value_set_tab != null && value_set_tab.compareToIgnoreCase("true") == 0) {
 
 String selectedvalueset = null;
 vsd_vec = (Vector) request.getSession().getAttribute("matched_vsds");
+
 if (vsd_vec != null && vsd_vec.size() == 1) {
 	vsd_uri = (String) vsd_vec.elementAt(0);
 	Vector temp_vec = StringUtils.parseData(vsd_uri);
 	selectedvalueset = (String) temp_vec.elementAt(1);
 	root_vsd_uri = (String) temp_vec.elementAt(0);
 }
+
     String searchform_requestContextPath = request.getContextPath();
     searchform_requestContextPath = searchform_requestContextPath.replace("//ncitbrowser//ncitbrowser", "//ncitbrowser");
 
@@ -146,7 +146,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     request.getSession().removeAttribute("message");
     
     if (message == null) {
-	    String message = (String) request.getSession().getAttribute("error_msg");
+	    message = (String) request.getSession().getAttribute("error_msg");
 	    request.getSession().removeAttribute("error_msg");
     }
 
@@ -164,7 +164,6 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     
     // to be modified
     String valueset_search_algorithm = HTTPUtils.cleanXSS((String) request.getSession().getAttribute("valueset_search_algorithm")); ;
-
     String check__e = "", check__b = "", check__s = "" , check__c ="";
     if (valueset_search_algorithm == null || valueset_search_algorithm.compareTo("exactMatch") == 0)
         check__e = "checked";
@@ -177,20 +176,20 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
         
     String selectValueSetSearchOption = null;
     selectValueSetSearchOption = HTTPUtils.cleanXSS((String) request.getParameter("opt"));
-    
+   
     if (selectValueSetSearchOption == null) {
         selectValueSetSearchOption = (String) request.getSession().getAttribute("selectValueSetSearchOption");
     }
-               
+              
     if (DataUtils.isNullOrBlank(selectValueSetSearchOption)) {
         selectValueSetSearchOption = "Name";
     }
 
     if (selectValueSetSearchOption.compareTo("CodingScheme") == 0)
         check_cs = "checked";
-    else if (selectValueSetSearchOption.compareTo("Code") == 0)
+    else if (selectValueSetSearchOption.compareTo("Code") == 0 || selectValueSetSearchOption.compareTo("code") == 0)
         check_code = "checked";
-    else if (selectValueSetSearchOption.compareTo("Name") == 0)
+    else if (selectValueSetSearchOption.compareTo("Name") == 0 || selectValueSetSearchOption.compareTo("names") == 0)
         check_name = "checked";        
     else if (selectValueSetSearchOption.compareTo("Source") == 0)
         check_src = "checked";
@@ -203,7 +202,7 @@ if (vsd_vec != null && vsd_vec.size() == 1) {
     if (DataUtils.isNull(valueset_match_text)) {
         valueset_match_text = "";
     }    
-    
+   
     
 %>
 

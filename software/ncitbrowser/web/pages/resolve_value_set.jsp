@@ -178,10 +178,7 @@ int lcv = i+1;
 <%
 }
              %>                 
-
-
               </table>
-
                   <tr><td>
                     <h:commandButton id="continue_resolve" value="continue_resolve" action="#{valueSetBean.continueResolveValueSetAction}"
                       onclick="javascript:cursor_wait();"
@@ -191,7 +188,8 @@ int lcv = i+1;
                     </h:commandButton>
                   </td></tr>
                   
-              <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">    
+              <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
+              <input type="hidden" name="version_selection" id="version_selection" value="true"> 
               <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
 </h:form>
             

@@ -133,6 +133,7 @@ public class ValueSetSearchUtils
 
     private LexBIGService lbSvc = null;
     LexEVSResolvedValueSetService lrvs = null;
+    CodingSchemeDataUtils csdu = new CodingSchemeDataUtils(lbSvc);
 
     private String serviceUrl = null;
 
@@ -147,6 +148,7 @@ public class ValueSetSearchUtils
     public ValueSetSearchUtils(LexBIGService lbSvc) {
 		this.lbSvc = lbSvc;
         this.lrvs = new LexEVSResolvedValueSetServiceImpl(lbSvc);
+        this.csdu = new CodingSchemeDataUtils(lbSvc);
 	}
 
     public void setServiceUrl(String serviceUrl) {
@@ -192,7 +194,6 @@ public class ValueSetSearchUtils
         boolean includeInactive = false;
         AbsoluteCodingSchemeVersionReferenceList list = new AbsoluteCodingSchemeVersionReferenceList();
         try {
-            // LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
             if (lbSvc == null) {
                 _logger
                     .warn("WARNING: Unable to connect to instantiate LexBIGService ???");
@@ -282,6 +283,13 @@ public class ValueSetSearchUtils
 
     public ResolvedConceptReferencesIterator searchByCode(
         String vsd_uri, String matchText, int maxToReturn) {
+		AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+    	return searchByCode(vsd_uri, csVersionList, matchText, maxToReturn);
+	}
+
+
+    public ResolvedConceptReferencesIterator searchByCode(
+        String vsd_uri, AbsoluteCodingSchemeVersionReferenceList csVersionList, String matchText, int maxToReturn) {
 
 		if (matchText == null) return null;
         //String matchText0 = matchText;
@@ -310,12 +318,17 @@ public class ValueSetSearchUtils
                 return null;
             }
             java.lang.String valueSetDefinitionRevisionId = null;
-            AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+            //AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
 
             String csVersionTag = null;
 
-            ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
-                  valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+            ResolvedValueSetCodedNodeSet rvs_cns = null;
+            try {
+				rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+					  valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+		    } catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
             if (rvs_cns == null) {
                 return null;
@@ -353,10 +366,15 @@ public class ValueSetSearchUtils
     }
 
 
+    public ResolvedConceptReferencesIterator searchByName(
+        String vsd_uri, String matchText, String matchAlgorithm, int maxToReturn) {
+    	return searchByName(vsd_uri, null, matchText, matchAlgorithm, maxToReturn);
+	}
+
 
 
     public ResolvedConceptReferencesIterator searchByName(
-        String vsd_uri, String matchText, String matchAlgorithm, int maxToReturn) {
+        String vsd_uri, AbsoluteCodingSchemeVersionReferenceList csVersionList, String matchText, String matchAlgorithm, int maxToReturn) {
 
 		if (matchText == null) return null;
 
@@ -391,7 +409,7 @@ public class ValueSetSearchUtils
                 return null;
             }
             java.lang.String valueSetDefinitionRevisionId = null;
-            AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
+            //AbsoluteCodingSchemeVersionReferenceList csVersionList = null;
             /*
             Vector cs_ref_vec = DataUtils.getCodingSchemeReferencesInValueSetDefinition(vsd_uri, "PRODUCTION");
             if (cs_ref_vec != null) csVersionList = DataUtils.vector2CodingSchemeVersionReferenceList(cs_ref_vec);
@@ -399,8 +417,13 @@ public class ValueSetSearchUtils
 
             String csVersionTag = null;
 
-            ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+            ResolvedValueSetCodedNodeSet rvs_cns = null;
+            try {
+				rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
             if (rvs_cns == null) {
                 return null;
@@ -495,8 +518,16 @@ public class ValueSetSearchUtils
             */
             String csVersionTag = null;
 
-            ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+            ResolvedValueSetCodedNodeSet rvs_cns = null;
+            try {
+				rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
                   valueSetDefinitionRevisionId, csVersionList, csVersionTag);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+            //ResolvedValueSetCodedNodeSet rvs_cns = vsd_service.getCodedNodeSetForValueSetDefinition(new URI(vsd_uri),
+            //      valueSetDefinitionRevisionId, csVersionList, csVersionTag);
 
             if (rvs_cns == null) {
                 return null;
@@ -641,7 +672,7 @@ public class ValueSetSearchUtils
 
 		if (checked_vocabularies == null) return null;
 		Vector selected_vocabularies = StringUtils.parseData(checked_vocabularies, ",");
-		HashMap hmap = getRVSCSName2VersionHashMap();
+		//HashMap hmap = getRVSCSName2VersionHashMap();
 
 		// find versions
 		Vector schemes = new Vector();
@@ -650,31 +681,14 @@ public class ValueSetSearchUtils
 		for (int i=0; i<selected_vocabularies.size(); i++) {
 			int k = i+1;
 			String selected_vocabulary = (String) selected_vocabularies.elementAt(i);
-			//Vector u = getCodingSchemeVersionsByURN(selected_vocabulary);
-			/*
-			Vector u = getResovedValueSetVersions(selected_vocabulary);
-
-			if (u != null && u.size() > 0) {
-				String version = (String) u.elementAt(0);
-
-				schemes.add(selected_vocabulary);
-				versions.add(version);
-		    } else {
-
-				schemes.add(selected_vocabulary);
-				versions.add(null);
-			}
-			*/
 			schemes.add(selected_vocabulary);
-			versions.add((String) hmap.get(selected_vocabulary));
-
+			//versions.add((String) hmap.get(selected_vocabulary));
+			versions.add(null);
 		}
-
         if (searchOption == SimpleSearchUtils.BY_NAME) {
 			if (SimpleSearchUtils.isSimpleSearchSupported(matchAlgorithm, SimpleSearchUtils.NAMES)) {
 				try {
 					iterator = new SimpleSearchUtils(lbSvc).search(schemes, versions, matchText, searchOption, matchAlgorithm);
-
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
@@ -740,7 +754,7 @@ public class ValueSetSearchUtils
         return null;
 	}
 
-
+/*
    public Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
 	    Vector v = new Vector();
 		try {
@@ -765,6 +779,7 @@ public class ValueSetSearchUtils
 		}
 		return SortUtils.quickSort(v);
    }
+*/
 
    public java.util.List<java.lang.String> listValueSetDefinitionURIs() {
 		try {
@@ -780,6 +795,96 @@ public class ValueSetSearchUtils
 		}
 		return null;
     }
+
+
+    public Vector getCodingSchemeURNsInValueSetDefinition(String uri) {
+	    Vector v = new Vector();
+		try {
+			java.net.URI valueSetDefinitionURI = new URI(uri);
+			LexEVSValueSetDefinitionServices vsd_service = getLexEVSValueSetDefinitionServices();
+			if (vsd_service == null) {
+				System.out.println("Unable to instantiate LexEVSValueSetDefinitionServices???");
+				return null;
+			}
+
+	        ValueSetDefinition vsd = vsd_service.getValueSetDefinition(valueSetDefinitionURI, null);
+	        Mappings mappings = vsd.getMappings();
+            SupportedCodingScheme[] supportedCodingSchemes = mappings.getSupportedCodingScheme();
+            for (int i=0; i<supportedCodingSchemes.length; i++) {
+				SupportedCodingScheme supportedCodingScheme = supportedCodingSchemes[i];
+				v.add(supportedCodingScheme.getUri());
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		} finally {
+			//System.out.println("Total run time (ms): " + (System.currentTimeMillis() - ms));
+		}
+		return SortUtils.quickSort(v);
+    }
+
+    public AbsoluteCodingSchemeVersionReferenceList getDefaultAbsoluteCodingSchemeVersionReferenceList(String vsd_uri) {
+		Vector v = getCodingSchemeURNsInValueSetDefinition(vsd_uri);
+		if (v == null || v.size() == 0) return null;
+		Vector w = new Vector();
+		for (int i=0; i<v.size(); i++) {
+			String cs = (String) v.elementAt(i);
+            String version = csdu.getVocabularyVersionByTag(cs, "PRODUCTION");
+            w.add(cs + "|" + version);
+		}
+		return vector2CodingSchemeVersionReferenceList(w);
+	}
+
+
+    public AbsoluteCodingSchemeVersionReferenceList vector2CodingSchemeVersionReferenceList(Vector v) {
+		if (v == null) return null;
+		AbsoluteCodingSchemeVersionReferenceList list = new AbsoluteCodingSchemeVersionReferenceList();
+		for (int i=0; i<v.size(); i++) {
+			String s = (String) v.elementAt(i);
+			Vector u = StringUtils.parseData(s);
+			String uri = (String) u.elementAt(0);
+			String version = (String) u.elementAt(1);
+			AbsoluteCodingSchemeVersionReference vAbsoluteCodingSchemeVersionReference
+			    = new AbsoluteCodingSchemeVersionReference();
+			vAbsoluteCodingSchemeVersionReference.setCodingSchemeURN(uri);
+			vAbsoluteCodingSchemeVersionReference.setCodingSchemeVersion(version);
+			list.addAbsoluteCodingSchemeVersionReference(vAbsoluteCodingSchemeVersionReference);
+		}
+		return list;
+	}
+
+    public static void dumpResolvedConceptReference(ResolvedConceptReference rcr) {
+		if (rcr.getEntityDescription() != null) {
+			System.out.println(rcr.getEntityDescription().getContent() + "(" + rcr.getConceptCode() + ")");
+		} else {
+			System.out.println("(" + rcr.getConceptCode() + ")");
+		}
+		System.out.println("\tURI: " + rcr.getCodingSchemeURI());
+		System.out.println("\tCoding Scheme: " + rcr.getCodingSchemeName());
+		System.out.println("\tCoding Scheme Version: " + rcr.getCodingSchemeVersion());
+		System.out.println("\tnamespace: " + rcr.getCodeNamespace());
+	}
+
+
+	public AbsoluteCodingSchemeVersionReferenceList getAbsoluteCodingSchemeVersionReferenceList(String vsd_uri) {
+		String prod_version = csdu.getVocabularyVersionByTag(vsd_uri, "PRODUCTION");
+		System.out.println("resolved value set coding scheme URI: " + vsd_uri);
+		System.out.println("resolved value set coding scheme version: " + prod_version);
+        CodingSchemeDataUtils csdu = new CodingSchemeDataUtils(lbSvc);
+        CodingScheme cs = csdu.resolveCodingScheme(vsd_uri, prod_version);
+        LexEVSResolvedValueSetServiceImpl rvssi = new LexEVSResolvedValueSetServiceImpl(lbSvc);
+        AbsoluteCodingSchemeVersionReferenceList scsvrl = rvssi.getListOfCodingSchemeVersionsUsedInResolution(cs);
+        for (int i=0; i<scsvrl.getAbsoluteCodingSchemeVersionReferenceCount(); i++) {
+			AbsoluteCodingSchemeVersionReference acsvr = scsvrl.getAbsoluteCodingSchemeVersionReference(i);
+			String cs_urn = acsvr.getCodingSchemeURN();
+			String cs_version = acsvr.getCodingSchemeVersion();
+            System.out.println("\tcs_urn: " + cs_urn);
+            System.out.println("\tcs_version: " + cs_version);
+            String cs_prod_version = csdu.getVocabularyVersionByTag(cs_urn, "PRODUCTION");
+            System.out.println("\tcs_prod_version: " + cs_prod_version);
+		}
+		return scsvrl;
+	}
 
     public static void main(String [] args) {
 		try {

@@ -18,6 +18,8 @@ String version_curr = relationship_info.version;
 String version_parameter = "";
 String cNamespace = null;
 
+boolean owl2_display = false;
+
 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
 MappingSearchUtils mappingSearchUtils = new MappingSearchUtils(lb_svc);
 RelationshipUtils relationshipUtils = new RelationshipUtils(lb_svc);
@@ -38,6 +40,11 @@ String ns_curr = (String) request.getSession().getAttribute("ns");
         code_curr = HTTPUtils.cleanXSS((String) request.getParameter("code"));
         ns_curr = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
     }
+    
+// Relationship tab failed to render correctly.    
+if (ns_curr == null || ns_curr.compareTo("null") == 0 || ns_curr.compareTo("undefined") == 0) {
+    ns_curr = new ConceptDetails(lb_svc).getNamespaceByCode(scheme_curr, version_curr, code_curr); 
+}
     
     String key = scheme_curr + "$" + version_curr + "$" + code_curr;
     if (!DataUtils.isNullOrBlank(ns_curr)) {
@@ -61,7 +68,7 @@ String ns_curr = (String) request.getSession().getAttribute("ns");
         hmap = (HashMap) request.getSession().getAttribute("RelationshipHashMap");
     }
 
-    if (hmap != null) {
+    //if (hmap != null) {
 
     request.getSession().setAttribute("RelationshipHashMap", hmap);
         
@@ -77,13 +84,18 @@ String ns_curr = (String) request.getSession().getAttribute("ns");
     String rel = "";
     String score = "";
     String scheme_curr_0 = scheme_curr;
-    scheme_curr = scheme_curr.replaceAll(" ", "%20");
+    String scheme_curr_nm = DataUtils.getCSName(scheme_curr);
+    //scheme_curr = scheme_curr.replaceAll(" ", "%20");
 
+    String associationName = "subClassOf";
+    boolean direction = true;
+    ArrayList arrayList = null;
+    String parent_table_str = null;
+    String child_table_str = null;
+        
 %>
   <table class="datatable_960" border="0" width="100%">
     <tr>
-   
-    
       <td class="textsubtitle-blue" align="left">
       
       
@@ -98,21 +110,30 @@ if (type != null && type.compareTo("all") == 0) {
 <%    
 }
 %>     
-      
-
       </td>
     </tr>
   </table>
 <%
  if (!isMapping) {
-%>
 
-  <p>
+    propertyData.setRelationshipHashMap(hmap);
+    if (owl2_display) {
+    arrayList = relationshipUtils.getRelationshipData(scheme_curr, version_curr, ns_curr, code_curr, associationName, direction);
+    }
+    if (owl2_display && arrayList != null) {    
+         parent_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code_curr, ns_curr, Constants.TYPE_SUPERCONCEPT, true, arrayList);
+	    %>
+	    <p>
+	    <%=parent_table_str%>
+	    </p> 
+    <%	    
+    } else {
+    %>
+   <p>
     <%
-
       label = "Parent Concepts:";
       concepts = superconcepts;
-      String scheme_curr_nm = DataUtils.getCSName(scheme_curr);
+      
       
       if (concepts == null || concepts.size() <= 0)
       {
@@ -121,11 +142,11 @@ if (type != null && type.compareTo("all") == 0) {
     <%
       } else if (concepts != null && concepts.size() == 1) {
           String s = (String) concepts.get(0);
-          
           Vector ret_vec = StringUtils.parseData(s, "|");
           String cName = (String) ret_vec.elementAt(0);
           String cCode = (String) ret_vec.elementAt(1);
           cNamespace = null;
+          
           if (ret_vec.size() > 2) {
               cNamespace = (String) ret_vec.elementAt(2);
           }
@@ -143,7 +164,6 @@ if (type != null && type.compareTo("all") == 0) {
     <%
         for (int i=0; i<concepts.size(); i++) {
           String s = (String) concepts.get(i);
-          
           Vector ret_vec = StringUtils.parseData(s, "|");
           String cName = (String) ret_vec.elementAt(0);
           String cCode = (String) ret_vec.elementAt(1);
@@ -168,9 +188,24 @@ if (type != null && type.compareTo("all") == 0) {
         </table>
     <%
       }
+   }
     %>
   </p>
-
+   <%
+    propertyData.setRelationshipHashMap(hmap);
+    direction = false;
+    if (owl2_display) {
+    arrayList = relationshipUtils.getRelationshipData(scheme_curr, version_curr, ns_curr, code_curr, associationName, direction);
+    }
+    if (owl2_display && arrayList != null) {    
+         child_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code_curr, ns_curr, Constants.TYPE_SUBCONCEPT, true, arrayList);
+	    %>
+	    <p>
+	    <%=child_table_str%>
+	    </p> 
+    <%	    
+    } else {
+    %>
   <p>
     <%
       label = "Child Concepts:";
@@ -182,14 +217,13 @@ if (type != null && type.compareTo("all") == 0) {
     <%
       } else if (concepts != null && concepts.size() == 1) {
           String s = (String) concepts.get(0);
-          
-          
           Vector ret_vec = StringUtils.parseData(s, "|");
           String cName = (String) ret_vec.elementAt(0);
           String cCode = (String) ret_vec.elementAt(1);
           if (ret_vec.size() > 2) {
               cNamespace = (String) ret_vec.elementAt(2);
-          }    %>
+          }    
+          %>
           <b><%=label%></b>
           <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=scheme_curr_nm%><%=version_parameter%>&ns=<%=cNamespace%>&code=<%=cCode%>">
             <%=cName%>
@@ -223,93 +257,59 @@ if (type != null && type.compareTo("all") == 0) {
         </table>
     <%
       }
-      
-      }
+    }
     %>
-  </p>
-
-
-
+    </p>
     <%
     propertyData.setRelationshipHashMap(hmap);
-    String role_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_ROLE);
+    String role_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_ROLE, true);
     %>
-    
     <p>
     <%=role_table_str%>
     </p>
 
-
     <%
     propertyData.setRelationshipHashMap(hmap);
-    String assoc_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_ASSOCIATION);
+    String assoc_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_ASSOCIATION, true);
     %>
-    
     <p>
     <%=assoc_table_str%>
     </p>
-
     <p>
     <%
   
      String display_inverse_relationships_metadata_value = DataUtils.getMetadataValue(scheme_curr_0, version_curr, "display_inverse_relationships");
      boolean display_inverse_relationships = true;
-
      if (display_inverse_relationships_metadata_value != null && display_inverse_relationships_metadata_value.compareToIgnoreCase("false") == 0) {
          display_inverse_relationships = false;
      }
-     
-     
-//System.out.println("(*) display_inverse_relationships: " + display_inverse_relationships);
 
-
-if (!isMapping) {
-
-    if (display_inverse_relationships) {
-
-    propertyData.setRelationshipHashMap(hmap);
-    String inv_role_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_INVERSE_ROLE);
-    %>
-    
-    <p>
-    <%=inv_role_table_str%>
-    </p>
-    
-
-
-<%
+     if (!isMapping) {
+	    if (display_inverse_relationships) {
+		    propertyData.setRelationshipHashMap(hmap);
+		    String inv_role_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_INVERSE_ROLE, true);
+		    %>
+		    <p>
+		    <%=inv_role_table_str%>
+		    </p>
+     <%
+	    }
      }
- }
-%>
-
-    <%
     propertyData.setRelationshipHashMap(hmap);
-    String inv_asso_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_INVERSE_ASSOCIATION);
-    
-    
+    String inv_asso_table_str = propertyData.generateRelationshipTable(scheme_curr, version_curr, code, cNamespace, Constants.TYPE_INVERSE_ASSOCIATION, true);
     %>
-    
     <p>
     <%=inv_asso_table_str%>
     </p>
-
-
 <%
 }
-
-%>
-
-
-<%
-      if (!isMapping) {
+    if (!isMapping) {
 
 %>
 		<p>
 		    <b>Mapping relationships:</b>
 		<br/>
 		<table class="dataTable">
-		
-		
 			       <tr>
 				 <td>
 		
@@ -319,11 +319,9 @@ if (!isMapping) {
 			       </tr>
 			       
 		</table>
-
 <%
 
      } //ismapping
-
 }
 %>
 

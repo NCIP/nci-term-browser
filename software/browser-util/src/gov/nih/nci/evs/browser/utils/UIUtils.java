@@ -1,11 +1,10 @@
 package gov.nih.nci.evs.browser.utils;
 
+import gov.nih.nci.evs.browser.common.*;
 import gov.nih.nci.evs.browser.bean.*;
-
 import java.util.*;
 import java.io.*;
 import java.util.Map.Entry;
-import gov.nih.nci.evs.browser.bean.*;
 
 import org.LexGrid.concepts.*;
 import org.LexGrid.LexBIG.Utility.Iterators.*;
@@ -59,8 +58,23 @@ public class UIUtils {
     private static Logger _logger = Logger.getLogger(UIUtils.class);
     private LexBIGService lbSvc = null;
     private LexBIGServiceConvenienceMethods lbscm = null;
+    private String indent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    private List OWL_ROLE_QUALIFIER_LIST = null;
+
 	public UIUtils() {
 
+	}
+
+	public void set_owl_role_quantifiers(String owl_role_quantifiers) {
+        OWL_ROLE_QUALIFIER_LIST = new ArrayList();
+		if (owl_role_quantifiers == null) {
+			return;
+		}
+		Vector v = gov.nih.nci.evs.browser.utils.StringUtils.parseData(owl_role_quantifiers);
+		for (int i=0; i<v.size(); i++) {
+			String t = (String) v.elementAt(i);
+			OWL_ROLE_QUALIFIER_LIST.add(t);
+		}
 	}
 
 	public UIUtils(LexBIGService lbSvc) {
@@ -195,7 +209,7 @@ public class UIUtils {
 					Vector w2 = new Vector();
 					for (int k=0; k<w.size(); k++) {
 						String t = (String) w.elementAt(k);
-						t = t.replaceAll(":", "|");
+						t = t.replaceAll("=", "|");
 						w2.add(t);
 					}
 					qualifierHashMap.put(key, w2);
@@ -232,8 +246,12 @@ public class UIUtils {
 		return false;
 	}
 
-
     public String generateHTMLTable(HTMLTableSpec spec, String codingScheme, String version) {
+		return generateHTMLTable(spec, codingScheme, version, null);
+	}
+
+
+    public String generateHTMLTable(HTMLTableSpec spec, String codingScheme, String version, String rel_type) {
 		StringBuffer buf = new StringBuffer();
 		HashMap qualifierHashMap = spec.getQualifierHashMap();
 		Vector nv_vec = spec.getKeyVec();
@@ -298,7 +316,6 @@ public class UIUtils {
 			if (w.size() > 3) {
 				namespace = (String) w.elementAt(3);
 			}
-
             Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
             qualifiers = SortUtils.quickSort(qualifiers);
 
@@ -308,13 +325,36 @@ public class UIUtils {
 				  buf.append("	<tr class=\"dataRowLight\">").append("\n");
 			}
 
-            if (qualifierColumn == 1) {
+			if (qualifierColumn == 0) {
+                  if (rel_type == null || !rel_type.startsWith("type_inverse")) {
+					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
+					  buf.append("				 " + name).append("\n");
+					  buf.append("</td>").append("\n");
+					  if (code != null) {
+						  value = getHyperlink(codingScheme, version, value, code, namespace);
+					  }
+					  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
+				  } else {
+					  if (code != null) {
+						  value = getHyperlink(codingScheme, version, value, code, namespace);
+					  }
+					  buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
+					  buf.append("				 " + value).append("\n");
+					  buf.append("</td>").append("\n");
+					  buf.append("<td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
+				  }
+
+			} else if (qualifierColumn == 1) {
                 if (hasQualifiers(qualifiers)) {
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">").append("\n");
+
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">").append("\n");
 					buf.append("		  <table>").append("\n");
 					buf.append("			 <tr>");
 					buf.append("<td class=\"dataCellText\">").append("\n");
-					buf.append("				 " + name).append("\n");
+					buf.append("				 " + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
 					for (int j = 0; j < qualifiers.size(); j++) {
 						String q = (String) qualifiers.elementAt(j);
@@ -330,50 +370,47 @@ public class UIUtils {
 							qualifier_value = (String) u.elementAt(1);
 						}
 
-						String t = qualifier_name + ":" + qualifier_value;
-						if (t.length() > 1) {
-							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + t + "</td>").append("\n");
-							buf.append("			 </tr>").append("\n");
-					    }
+						if (displayQualifier(qualifier_name)) {
+							String t = qualifier_name + ":" + qualifier_value;
+							if (t.length() > 1) {
+								buf.append("			 <tr>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+								buf.append("			 </tr>").append("\n");
+							}
+						}
 					}
 
 					buf.append("		  </table>").append("\n");
 					buf.append("	  </td>").append("\n");
-					if (code != null) {
-						value = getHyperlink(codingScheme, version, value, code, namespace);
-					}
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 			    } else {
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + name + "</td>").append("\n");
 					if (code != null) {
 						value = getHyperlink(codingScheme, version, value, code, namespace);
 					}
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 				}
 
 			} else if (qualifierColumn == 2) {
 
-				if (hasQualifiers(qualifiers)) {
+                if (hasQualifiers(qualifiers)) {
 					if (code != null) {
 						value = getHyperlink(codingScheme, version, value, code, namespace);
 					}
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
 
-					buf.append("	  <td class=\"dataCellText\">").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">").append("\n");
 					buf.append("		  <table>").append("\n");
-					buf.append("			 <tr><td class=\"dataCellText\">").append("\n");
-
-					buf.append("				 " + name).append("\n");
+					buf.append("			 <tr>");
+					buf.append("<td class=\"dataCellText\">").append("\n");
+					buf.append("				 " + value).append("\n");
 					buf.append("			 </td></tr>").append("\n");
-
 					for (int j = 0; j < qualifiers.size(); j++) {
 						String q = (String) qualifiers.elementAt(j);
+						Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(q);
 
 						String qualifier_name = "";
 						String qualifier_value = "";
-
-						Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(q);
 
 						if (u.size() > 0) {
 							qualifier_name = (String) u.elementAt(0);
@@ -382,21 +419,24 @@ public class UIUtils {
 							qualifier_value = (String) u.elementAt(1);
 						}
 
-						String t = qualifier_name + ":" + qualifier_value;
-						if (t.length() > 1) {
-							buf.append("			 <tr>").append("\n");
-							buf.append("			 <td class=\"dataCellText\" >" + t + "</td>").append("\n");
-							buf.append("			 </tr>").append("\n");
-					    }					}
-
+						if (displayQualifier(qualifier_name)) {
+							String t = qualifier_name + ":" + qualifier_value;
+							if (t.length() > 1) {
+								buf.append("			 <tr>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+								buf.append("			 </tr>").append("\n");
+							}
+						}
+					}
 					buf.append("		  </table>").append("\n");
 					buf.append("	  </td>").append("\n");
+
 			    } else {
 					if (code != null) {
 						value = getHyperlink(codingScheme, version, value, code, namespace);
 					}
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
-					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + name + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + value + "</td>").append("\n");
 				}
 			}
 			buf.append("	</tr>").append("\n");
@@ -472,6 +512,12 @@ public class UIUtils {
 
 
     public String generatePropertyTable(Entity concept, Vector property_names, String description) {
+		int qualifierColumn = 1;
+        return generatePropertyTable(concept, property_names, description, qualifierColumn);
+	}
+
+
+    public String generatePropertyTable(Entity concept, Vector property_names, String description, int qualifierColumn) {
 		if (property_names == null) return null;
 
 		org.LexGrid.commonTypes.Property[] properties = null;
@@ -479,9 +525,10 @@ public class UIUtils {
 
 		String firstColumnHeading = "Name";
 		String secondColumnHeading = "Value";
+		secondColumnHeading = "Value (qualifiers indented underneath)";
+
 		int firstPercentColumnWidth = 20;
 		int secondPercentColumnWidth = 80;
-		int qualifierColumn = 1;
 
 		Vector keyVec = new Vector();
 		HashMap qualifierHashMap = new HashMap();
@@ -518,37 +565,229 @@ public class UIUtils {
 			 keyVec,
 			 qualifierHashMap);
 
-		return generateHTMLTable(spec);
+		//return generateHTMLTable(spec);
+		return generatePropertyTable(spec, null, null);
 	}
 
-    public static void main(String [] args) {
 
-		LexBIGService lbSvc = LexBIGServiceImpl.defaultInstance();
-		UIUtils uiUtils = new UIUtils(lbSvc);
+    public String generatePropertyTable(HTMLTableSpec spec, String codingScheme, String version) {
+		StringBuffer buf = new StringBuffer();
+		HashMap qualifierHashMap = spec.getQualifierHashMap();
+		Vector nv_vec = spec.getKeyVec();
+		if (nv_vec == null) {
+			Iterator entries = qualifierHashMap.entrySet().iterator();
+			while (entries.hasNext()) {
+				Entry thisEntry = (Entry) entries.next();
+				String nv = (String) thisEntry.getKey();
+				nv_vec.add(nv);
+			}
+			nv_vec = SortUtils.quickSort(nv_vec);
+		}
+		String description = spec.getDescription();
+		if (description != null) {
+			buf.append(description).append("\n");
+		}
+		buf.append("<table class=\"datatable_960\" border=\"0\" width=\"100%\">").append("\n");
+
+	    String firstColumnHeading = spec.getFirstColumnHeading();
+	    String secondColumnHeading = spec.getSecondColumnHeading();
+        if (firstColumnHeading != null && secondColumnHeading != null) {
+			buf.append("<tr>").append("\n");
+			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + firstColumnHeading  + "</th>").append("\n");
+			buf.append("   <th class=\"dataCellText\" scope=\"col\" align=\"left\">" + secondColumnHeading + "</th>").append("\n");
+			buf.append("</tr>").append("\n");
+	    }
+        int firstPercentColumnWidth = spec.getFirstPercentColumnWidth();
+        int secondPercentColumnWidth = spec.getSecondPercentColumnWidth();
+
+        if (firstPercentColumnWidth <= 0 || firstPercentColumnWidth <= 0) {
+			buf.append("   <col width=\"50%\">").append("\n");
+			buf.append("   <col width=\"50%\">").append("\n");
+		} else {
+			String w1 = Integer.toString(firstPercentColumnWidth);
+			String w2 = Integer.toString(secondPercentColumnWidth);
+			buf.append("   <col width=\"" + w1 + "%\">").append("\n");
+			buf.append("   <col width=\"" + w2 + "%\">").append("\n");
+	    }
+
+	    int qualifierColumn = spec.getQualifierColumn();
+		int n = 0;
+        for (int i = 0; i < nv_vec.size(); i++) {
+            String n_v = (String) nv_vec.elementAt(i);
+            Vector w = gov.nih.nci.evs.browser.utils.StringUtils.parseData(n_v);
+            String name = "";
+            String value = "";
+
+            if (w.size() > 0) {
+            	name = (String) w.elementAt(0);
+			}
+
+			if (w.size() > 1) {
+            	value = (String) w.elementAt(1);
+			}
+
+            String code = null;
+            String namespace = null;
+
+            if (w.size() > 2) {
+				code = (String) w.elementAt(2);
+			}
+			if (w.size() > 3) {
+				namespace = (String) w.elementAt(3);
+			}
+            Vector qualifiers = (Vector) qualifierHashMap.get(n_v);
+            qualifiers = SortUtils.quickSort(qualifiers);
+
+			if ((n++) % 2 == 0) {
+				  buf.append("	<tr class=\"dataRowDark\">").append("\n");
+			} else {
+				  buf.append("	<tr class=\"dataRowLight\">").append("\n");
+			}
+
+            if (qualifierColumn == 1) {
+                if (hasQualifiers(qualifiers)) {
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\">").append("\n");
+					buf.append("		  <table>").append("\n");
+					buf.append("			 <tr>");
+					buf.append("<td class=\"dataCellText\" valign=\"top\">").append("\n");
+					buf.append("				 " + name).append("\n");
+					buf.append("			 </td></tr>").append("\n");
+
+					for (int j = 0; j < qualifiers.size(); j++) {
+						String q = (String) qualifiers.elementAt(j);
+						Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(q);
+
+						String qualifier_name = "";
+						String qualifier_value = "";
+
+						if (u.size() > 0) {
+							qualifier_name = (String) u.elementAt(0);
+						}
+						if (u.size() > 1) {
+							qualifier_value = (String) u.elementAt(1);
+						}
+
+						if (displayQualifier(qualifier_name)) {
+							String t = qualifier_name + ":" + qualifier_value;
+							if (t.length() > 1) {
+								buf.append("			 <tr>").append("\n");
+								buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+								buf.append("			 </tr>").append("\n");
+							}
+					    }
+					}
+
+					buf.append("		  </table>").append("\n");
+					buf.append("	  </td>").append("\n");
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+			    } else {
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + name + "</td>").append("\n");
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+				}
+			}
+
+            if (qualifierColumn == 2) {
+                if (hasQualifiers(qualifiers)) {
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\" valign=\"top\">" + name + "</td>").append("\n");
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\">").append("\n");
+					buf.append("		  <table>").append("\n");
+					buf.append("			 <tr>");
+					buf.append("<td class=\"dataCellText\">").append("\n");
+					buf.append("				 " + value).append("\n");
+					buf.append("			 </td></tr>").append("\n");
+
+					for (int j = 0; j < qualifiers.size(); j++) {
+						String q = (String) qualifiers.elementAt(j);
+						Vector u = gov.nih.nci.evs.browser.utils.StringUtils.parseData(q);
+
+						String qualifier_name = "";
+						String qualifier_value = "";
+
+						if (u.size() > 0) {
+							qualifier_name = (String) u.elementAt(0);
+						}
+						if (u.size() > 1) {
+							qualifier_value = (String) u.elementAt(1);
+						}
+
+						String t = qualifier_name + ":" + qualifier_value;
+						if (t.length() > 1) {
+							buf.append("			 <tr>").append("\n");
+							buf.append("			 <td class=\"dataCellText\" >" + indent + t + "</td>").append("\n");
+							buf.append("			 </tr>").append("\n");
+					    }
+					}
+
+					buf.append("		  </table>").append("\n");
+					buf.append("	  </td>").append("\n");
+
+			    } else {
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + name + "</td>").append("\n");
+					if (code != null) {
+						value = getHyperlink(codingScheme, version, value, code, namespace);
+					}
+					buf.append("	  <td class=\"dataCellText\" scope=\"row\">" + value + "</td>").append("\n");
+				}
+			}
+			buf.append("	</tr>").append("\n");
+		}
+		buf.append("</table>").append("\n");
+        return buf.toString();
+	}
+
+    public boolean displayQualifier(String qualifierName) {
+        if (qualifierName == null) return false;
+        if (qualifierName.length() == 0) return false;
+
+		//if (Constants.OWL_ROLE_QUALIFIER_LIST.contains(qualifierName)) {
+		if (OWL_ROLE_QUALIFIER_LIST.contains(qualifierName)) {
+			//System.out.println(	"qualifierName: " + qualifierName + " display=false");
+			return false;
+		}
+		return true;
+	}
 
 /*
+    public static void main(String [] args) {
+        boolean testLocal = true;
+        LexBIGService lbSvc = null;
+        if (testLocal) {
+			lbSvc = LexBIGServiceImpl.defaultInstance();
+		} else {
+			lbSvc = RemoteServerUtil.createLexBIGService();
+		}
+
+		UIUtils uiUtils = new UIUtils(lbSvc);
 		ConceptDetails conceptDetails = new ConceptDetails(lbSvc);
-		String codingSchemeName = "NCI_Thesaurus";
-
-		String vers = "12.05d";
+		String codingSchemeURN = "NCI_Thesaurus";
+		String codingSchemeVersion = "15.10d";
 		String code = "C16612";
-		String ns = "NCI_Thesaurus";
-		boolean use_ns = true;
+		String namespace = "NCI_Thesaurus";
+		boolean useNamespace = true;
 
+        if (testLocal) {
+			codingSchemeURN = "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl";
+			//= "owl2lexevs.owl";
+			codingSchemeVersion = "0.1.2";
+			code = "HappyPatientWalkingAround";
+			namespace = null;
+			useNamespace = false;
+	    }
 
-
-		Entity concept = conceptDetails.getConceptByCode(codingSchemeName, vers, code, ns, use_ns);
+		Entity concept = conceptDetails.getConceptByCode(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace);
 		String property_type = "PRESENTATION";
 		String t = uiUtils.generatePropertyTable(concept, property_type);
 		System.out.println(t);
-*/
-
-		String codingSchemeURN = "http://ncicb.nci.nih.gov/xml/owl/EVS/owl2lexevs.owl";
-		codingSchemeURN = "owl2lexevs.owl";
-		String codingSchemeVersion = "0.1.2";
-		String code = "HappyPatientWalkingAround";
-		String namespace = null;
-		boolean useNamespace = false;
 
         RelationshipUtils relUtils = new RelationshipUtils(lbSvc);
         HashMap relMap = relUtils.getRelationshipHashMap(codingSchemeURN, codingSchemeVersion, code, namespace, useNamespace);
@@ -559,12 +798,11 @@ public class UIUtils {
 			System.out.println("\n" + key);
 			if (list != null) {
 				for (int i=0; i<list.size(); i++) {
-					String t = (String) list.get(i);
+					t = (String) list.get(i);
 					System.out.println("\t" + t);
 				}
 			}
 		}
-
 
 		String description = "Association";
 		String firstColumnHeading = "Name";
@@ -572,8 +810,8 @@ public class UIUtils {
 		int firstPercentColumnWidth = 20;
 		int secondPercentColumnWidth = 80;
 		int qualifierColumn = 2;
+		//qualifierColumn = 0;
 		ArrayList list = (ArrayList) relMap.get("type_association");
-
 
 	    HTMLTableSpec spec = uiUtils.relationshipList2HTMLTableSpec(
 		    description,
@@ -584,9 +822,11 @@ public class UIUtils {
 		    qualifierColumn,
 		    list);
 
-		String html_str = uiUtils.generateHTMLTable(spec, "NCI_Thesaurus", "12.05d");
+		//String html_str = uiUtils.generateHTMLTable(spec, "NCI_Thesaurus", "12.05d");
+		String html_str = uiUtils.generateHTMLTable(spec, codingSchemeURN, codingSchemeVersion);
 		System.out.println(html_str);
 
 	}
+*/
 }
 

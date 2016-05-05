@@ -594,11 +594,11 @@ for (int i=0; i<list.size(); i++) {
 			 if (DataUtils.isNull(entity_cs_version) || entity_cs_version.compareTo("") == 0) {
 			     //String entity_cs_nm = DataUtils.getCSName(entity_cs);
 			 %>
-			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=DataUtils.encodeTerm(entity_name)%></a>
+			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&ns=<%=entity_cs_nm%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=DataUtils.encodeTerm(entity_name)%></a>
                          <%
                          } else {
                          %>
-			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&version=<%=entity_cs_version%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=DataUtils.encodeTerm(entity_name)%></a>
+			     <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=entity_cs_nm%>&version=<%=entity_cs_version%>&ns=<%=entity_cs_nm%>&code=<%=entity_code%>&key=<%=itr_key%>&b=1&n=<%=page_number%>&vse=1" ><%=DataUtils.encodeTerm(entity_name)%></a>
                          <%
                          }
                          %>

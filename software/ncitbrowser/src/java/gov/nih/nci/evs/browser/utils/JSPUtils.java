@@ -3,6 +3,7 @@ package gov.nih.nci.evs.browser.utils;
 import gov.nih.nci.evs.browser.bean.*;
 import gov.nih.nci.evs.browser.common.*;
 import gov.nih.nci.evs.browser.properties.NCItBrowserProperties;
+import org.LexGrid.LexBIG.LexBIGService.*;
 
 import java.util.*;
 
@@ -406,34 +407,54 @@ public class JSPUtils {
         return strbuf.toString();
 	}
 
+/*
     public static String getBookmarkUrl(HttpServletRequest request,
     	String dictionary, String version, String concept_id, String ns) {
     	  String requestURL = request.getRequestURL().toString();
     	  return getBookmarkUrl(requestURL, dictionary, version, concept_id, ns);
     }
 
+	//https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&version=16.03d&ns=NCI_Thesaurus&code=C16394
+	//baseURL: https://nciterms.nci.nih.gov/ncitbrowser
 
-    public static String getBookmarkUrl(String requestURL, String dictionary, String version, String concept_id, String ns) {
-          int idx = requestURL.indexOf("pages");
-          requestURL = requestURL.substring(0, idx);
-          String encoded_dictionary = dictionary.replace(" ", "%20");
+	//public static String getBookmarkURL(String baseURL, String codingScheme, String version, String namespace, String code) {
+*/
 
-          String encoded_concept_id = concept_id;
-          encoded_concept_id = encoded_concept_id.replaceAll(":", "%3A");
+    public static String getBookmarkUrl(LexBIGService lbSvc, HttpServletRequest request,
+    	String codingScheme, String version, String namespace, String code) {
 
-          String url = requestURL;
-          url += "ConceptReport.jsp";
-          url += "?dictionary=" + encoded_dictionary;
-          if (version != null && version.length() > 0) {
-              url += "&version=" + version;
-		  }
+		if (code == null) return null;
 
-          if (ns != null) {
-			  url +="&ns=" + ns;
-		  }
-          url +="&code=" + encoded_concept_id;
-          return url;
-    }
+		String requestURL = request.getRequestURL().toString();
+        int idx = requestURL.indexOf("pages");
+        if (idx == -1) return null;
+        requestURL = requestURL.substring(0, idx);
+
+		if (codingScheme == null) {
+			codingScheme = "NCI Thesaurus";
+		}
+        String encoded_dictionary = codingScheme.replace(" ", "%20");
+        String encoded_concept_id = code;
+        encoded_concept_id = encoded_concept_id.replaceAll(":", "%3A");
+
+        String url = requestURL;
+        url += "ConceptReport.jsp?";
+
+        StringBuffer buf = new StringBuffer();
+        buf.append(url).append("dictionary=").append(encoded_dictionary);
+
+		ConceptDetails cd = new ConceptDetails(lbSvc);
+
+		String prod_version = cd.getVocabularyVersionByTag(codingScheme, "PRODUCTION");
+		if (version != null && version.compareTo(prod_version) != 0) {
+			buf.append("&version=").append(version);
+		}
+		if (namespace != null && namespace.compareTo(codingScheme) != 0) {
+			buf.append("&ns=").append(namespace);
+		}
+		buf.append("&code=").append(code);
+		return buf.toString();
+	}
 
 	public static boolean isInteger(String s) {
 		try {

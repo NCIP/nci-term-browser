@@ -136,12 +136,10 @@ HashMap concept_status_hmap = DataUtils.getPropertyValuesInBatch(list, "Concept_
 			      ns = rcr.getCodeNamespace(); 
                      	      coding_scheme_version = rcr.getCodingSchemeVersion();
 
-			      name = "";
+			      name = "No description available.";
 			      if (rcr.getEntityDescription() != null) {
 				  name = rcr.getEntityDescription().getContent();
-			      } else {
-			          name = DataUtils.getSourceEntityDescription(rcr.getCodeNamespace(), sel_version, rcr.getConceptCode(), null);
-			      }
+			      } 
 		      }
                      
                       if (code == null) {

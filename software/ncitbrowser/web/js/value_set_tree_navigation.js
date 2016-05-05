@@ -316,20 +316,23 @@ document.addEventListener('keyup', doc_keyUp, false);
  				return checkedNodes;
  			}
 
-
- 			function expand_all() {
- 			    var id = "DIV_N";
-			    var prefix = id.concat("_");
-			    var child_cnt = 1;
-			    var child_id = prefix.concat(child_cnt.toString());
-			    while (document.getElementById(child_id) != null) {
-				show(child_id);
-				child_cnt++;
-				child_id = prefix.concat(child_cnt.toString());
-			    }
-			}
-			
-
+   			function expand_all() {
+   			        var prefix = "N_";
+  			        expand_node(prefix);
+ 			} 	
+ 
+ 			function expand_node(prefix) {
+  			    var div = "DIV_";
+  				var child_cnt = 1;
+  				child_id = prefix.concat(child_cnt.toString());
+  				while (document.getElementById(div.concat(child_id)) != null) {
+  				    show(div.concat(child_id));
+  				    expand_node(child_id.concat("_"));
+  				    child_cnt++;
+  				    child_id = prefix.concat(child_cnt.toString());
+  				}
+ 			}			
+  
  			function collapse_all() {
 				var divTags = document.getElementsByTagName('div');
 				for (var i=0;i<divTags.length;i++) {

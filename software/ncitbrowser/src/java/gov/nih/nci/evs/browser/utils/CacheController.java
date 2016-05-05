@@ -189,7 +189,38 @@ public class CacheController {
         return getSubconcepts(scheme, version, code, ns, true);
     }
 
+    public String getRemainingSubconceptJSONString(String codingScheme, String version, String parent_code, String parent_ns, String focus_code, boolean from_root) {
+	 if (parent_ns == null || parent_ns.compareTo("null") == 0 || parent_ns.compareTo("undefined") == 0) {
+		 LexBIGService lb_svc = RemoteServerUtil.createLexBIGService();
+		 parent_ns = new ConceptDetails(lb_svc).getNamespaceByCode(codingScheme, version, parent_code);
+	 }
+		long ms = System.currentTimeMillis();
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+        boolean useNamespace = false;
+        if (parent_ns == null || parent_ns.compareTo("null") == 0) {
+			parent_ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, parent_code);
+			if (parent_ns != null) {
+				useNamespace = true;
+			}
+		}
+		ms = System.currentTimeMillis();
+		HashMap hmap = null;
+		if (from_root) {
+			hmap = new ViewInHierarchyUtils(lbSvc).getRemainingNodes(codingScheme, version, focus_code, parent_ns, "@");
+		} else {
+			hmap = new ViewInHierarchyUtils(lbSvc).getRemainingNodes(codingScheme, version, focus_code, parent_ns, parent_code);
+		}
 
+		TreeItem root = (TreeItem) hmap.get("<Root>");
+		//TreeItem.printTree(root, 0);
+		String json = JSON2TreeItem.treeItem2Json(root);
+        //System.out.println("getRemainingSubconceptJSONString run time (milliseconds): "
+        //        + (System.currentTimeMillis() - ms));
+		return json;
+	}
+
+
+/*
     public String getRemainingSubconceptJSONString(String codingScheme, String version, String parent_code, String parent_ns, String focus_code) {
 		long ms = System.currentTimeMillis();
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
@@ -260,7 +291,7 @@ public class CacheController {
 		//json = "{\"nodes\":" + json + "}";
 		return json;
 	}
-
+*/
 
     public JSONArray getSubconcepts(String scheme, String version, String code, String ns, boolean fromCache) {
         if (scheme == null) {
@@ -287,7 +318,7 @@ public class CacheController {
 				from_root = true;
 			}
 
-			String json = getRemainingSubconceptJSONString(scheme, version, parent_code, ns, focus_code);
+			String json = getRemainingSubconceptJSONString(scheme, version, parent_code, ns, focus_code, from_root);
 			try {
 				nodeArray = new JSONArray(json);
 			} catch (Exception ex) {
@@ -1244,11 +1275,21 @@ public class CacheController {
             .getObjectValue();
     }
 
+/*
+    public static String getTree(String codingScheme,
+        CodingSchemeVersionOrTag versionOrTag, String code, String namespace) {
+		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+		String json = new ViewInHierarchyUtils(lbSvc).getTree(codingScheme, versionOrTag.getVersion(), code, namespace);
+		return json;
+    }
+*/
+
     public static String getTree(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code, String namespace) {
         if (!CacheController.getInstance()
             .containsKey(getTreeKey(codingScheme, code))) {
             _logger.debug("Tree Not Found In Cache.");
+
             TreeService treeService =
                 TreeServiceFactory.getInstance().getTreeService(
                     RemoteServerUtil.createLexBIGService());
@@ -1271,30 +1312,8 @@ public class CacheController {
             .getObjectValue();
     }
 
-/*
-    public static String getTree(String codingScheme,
-        CodingSchemeVersionOrTag versionOrTag, String code) {
-        if (!CacheController.getInstance()
-            .containsKey(getTreeKey(codingScheme, code))) {
-            _logger.debug("Tree Not Found In Cache.");
-            TreeService treeService =
-                TreeServiceFactory.getInstance().getTreeService(
-                    RemoteServerUtil.createLexBIGService());
 
-            LexEvsTree tree =
-                treeService.getTree(codingScheme, versionOrTag, code);
 
-            String json =
-                treeService.getJsonConverter().buildJsonPathFromRootTree(
-                    tree.getCurrentFocus());
-
-            _cache.put(new Element(getTreeKey(tree, versionOrTag.getVersion()), json));
-            return json;
-        }
-        return (String) _cache.get(getTreeKey(codingScheme, versionOrTag.getVersion(), code))
-            .getObjectValue();
-    }
-*/
     public static String getTree(String codingScheme,
         CodingSchemeVersionOrTag versionOrTag, String code) {
 		return getTree(codingScheme, versionOrTag, code, null);
@@ -1515,7 +1534,6 @@ public class CacheController {
 		long ms = System.currentTimeMillis();
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		ResolvedConceptReferenceList rcrl = getHierarchyRoots(codingScheme, version);
-
             System.out.println("getHierarchyRoots run time (milliseconds): "
                 + (System.currentTimeMillis() - ms));
 
@@ -1540,9 +1558,6 @@ public class CacheController {
 			String code = rcr.getConceptCode();
 			String name = rcr.getEntityDescription().getContent();
 			boolean is_expandable = isExpandable(treeService, cs_name, cs_version, code, cs_ns);
-
-//System.out.println(name + " (" + code + ") expandable? " + is_expandable);
-
 			TreeItem child = new TreeItem(code, name, cs_ns, null);
 			child._expandable = is_expandable;
 			root.addChild("has_child", child);
@@ -1565,7 +1580,6 @@ public class CacheController {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		return json;
 	}
 
@@ -1585,7 +1599,6 @@ public class CacheController {
         boolean useNamespace = false;
         if (ns == null) {
 			ns = new ConceptDetails(lbSvc).getNamespaceByCode(codingScheme, version, code);
-			System.out.println("NS: " + ns);
 			if (ns != null) {
 				useNamespace = true;
 			}

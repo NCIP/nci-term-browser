@@ -129,7 +129,7 @@
                       }
                       %>
                           <td class="dataCellText">
-                            <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>
+                            <a href="<%=request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=Constants.CODING_SCHEME_NAME%>&ns=NCI_Thesaurus&code=<%=code%>" ><%=DataUtils.encodeTerm(name)%></a>
                           </td>
                         </tr>
                       <%

@@ -80,6 +80,9 @@
          <div id="main-area_960">
             <%@ include file="/pages/templates/content-header-resolvedvalueset.jsp"%>
             <%
+                        String version_selection = (String) request.getSession().getAttribute("version_selection");
+                        request.getSession().removeAttribute("version_selection");
+                        
                         boolean bool_val;
             		int numRemaining = 0;
             		String valueSetSearch_requestContextPath = request
@@ -114,18 +117,22 @@
             				.getAttribute("resolved_vs_key");
             		IteratorBean iteratorBean = iteratorBeanManager
             				.getIteratorBean(resolved_vs_key);
+            				
+           		
             		if (iteratorBean == null) {
+           		
             			ResolvedConceptReferencesIterator itr = (ResolvedConceptReferencesIterator) request
             					.getSession().getAttribute(
             							"ResolvedConceptReferencesIterator");
             			iteratorBean = new IteratorBean(itr);
+            			
             			iteratorBean.initialize();
             			iteratorBean.setKey(resolved_vs_key);
             			request.getSession().setAttribute("resolved_vs_key",
             					resolved_vs_key);
             			iteratorBeanManager.addIteratorBean(iteratorBean);
-
             			int itr_size = iteratorBean.getSize();
+         			
            			Integer obj = Integer.valueOf(itr_size);
             			String itr_size_str = obj.toString();
            			request.getSession().setAttribute("itr_size_str",
@@ -275,12 +282,14 @@
                                  								.getContent();
                                  					}
 
-                                 					concept_vec.add(ref.getConceptCode() + "|"
+                                 					String t = ref.getConceptCode() + "|"
                                  							+ entityDescription + "|"
                                  							+ ref.getCodingSchemeName() + "|"
                                  							+ ref.getCodeNamespace() + "|"
-                                 							+ ref.getCodingSchemeVersion());
-
+                                 							+ ref.getCodingSchemeVersion();
+                            							
+                                 					concept_vec.add(t);                                 							
+ 
                                  				}
                                  				for (int i = 0; i < concept_vec.size(); i++) {
                                  					String concept_str = (String) concept_vec
@@ -290,7 +299,12 @@
                                  					String conceptname = (String) u.elementAt(1);
                                  					String coding_scheme = (String) u.elementAt(2);
                                  					String namespace = (String) u.elementAt(3);
+                                 					
                                  					String vsn = (String) u.elementAt(4);
+                                 					String coding_scheme_nm = namespace;
+                                 					vsn = DataUtils.getProductionVersion(namespace);
+
+
 
                                  					if (i % 2 == 0) {
                                  %>
@@ -306,8 +320,9 @@
                                     <td class="dataCellText" scope="row">
                                        <%
                                        	if (code.indexOf("@") == -1) {
-                                            String coding_scheme_nm = DataUtils.getCSName(coding_scheme);
-                                       %> <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=coding_scheme_nm%>&version=<%=vsn%>&code=<%=code%>"><%=code%></a>
+                                            namespace = DataUtils.getCSName(namespace);
+                                       %> 
+                                           <a href="<%=request.getContextPath()%>/ConceptReport.jsp?dictionary=<%=namespace%>&version=<%=vsn%>&ns=<%=namespace%>&code=<%=code%>"><%=code%></a>
                                        <%
                                         	} else {
                                        %> <%=code%> <%
@@ -330,6 +345,16 @@
                      %>
                      <input type="hidden" name="vsd_uri" id="vsd_uri" value="<%=vsd_uri%>">
                      <input type="hidden" name="referer" id="referer" value="<%=HTTPUtils.getRefererParmEncode(request)%>">
+<%                     
+if (version_selection != null)
+{
+%>
+<input type="hidden" name="version_selection" id="version_selection" value="true">
+<%
+}
+%>
+                 
+                     
                      </h:form>
                </div> <!-- end tabTableContentContainer -->      
                <%

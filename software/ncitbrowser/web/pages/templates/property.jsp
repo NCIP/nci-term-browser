@@ -48,10 +48,15 @@
 	Vector external_source_codes_linktext = null;
 	Vector descendantCodes = null;
 	HashMap propertyName2ValueHashMap = null;
+	HashMap propertyQualifierHashMap = null;
+	HashMap displayLabel2PropertyNameHashMap = null;
 
 	Vector displayed_properties = new Vector();
 	Vector presentation_vec = new Vector();
 	String concept_id = null;
+	
+	LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
+	ConceptDetails cd = new ConceptDetails(lbSvc);
 
 	try {
 		def_map = NCItBrowserProperties.getDefSourceMappingHashMap();
@@ -63,6 +68,7 @@
 		curr_concept = (Entity) request.getSession().getAttribute("concept");
 		if (curr_concept != null) {
 			propertyData.setCurr_concept(curr_concept);
+			
 			request.getSession().setAttribute("code", curr_concept.getEntityCode());
 			//curr_concept = propertyData.getCurr_concept();
 			codingScheme = propertyData.getCodingScheme();
@@ -71,7 +77,7 @@
 			namespace = propertyData.getNamespace();
 			isActive = propertyData.getIsActive();
 			concept_status = propertyData.getConcept_status();
-			properties_to_display = propertyData.getProperties_to_display();
+			
 			properties_to_display_label = propertyData.getProperties_to_display_label();
 			properties_to_display_url = propertyData.getProperties_to_display_url();
 			properties_to_display_linktext = propertyData.getProperties_to_display_linktext();
@@ -82,8 +88,13 @@
 			external_source_codes_linktext = propertyData.getExternal_source_codes_linktext();
 			descendantCodes = propertyData.getDescendantCodes();
 			propertyName2ValueHashMap = propertyData.getPropertyName2ValueHashMap();
+			propertyQualifierHashMap = propertyData.getPropertyQualifierHashMap();
+			displayLabel2PropertyNameHashMap = propertyData.getDisplayLabel2PropertyNameHashMap();
+
 			concept_id = propertyData.get_concept_id();
 			presentation_vec = propertyData.get_presentation_vec();
+			properties_to_display = propertyData.getProperties_to_display();
+			
 		}
 
 	} catch (Exception ex) {
@@ -136,7 +147,7 @@ if ((isActive != null && !isActive.equals(Boolean.TRUE)  && concept_status != nu
 		    	   String descendantName = (String) w.elementAt(0);
 		    	   String descendantCode = (String) w.elementAt(1);
 	%>
-		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary_nm%>&code=<%=descendantCode%>">
+		      <a href="<%= request.getContextPath() %>/ConceptReport.jsp?dictionary=<%=prop_dictionary_nm%>&ns=<%=prop_dictionary_nm%>&code=<%=descendantCode%>">
 			      <%=descendantName%>
 		      </a>
 	<%              
@@ -194,7 +205,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         ncim_cui_prop_url = url;
         ncim_cui_prop_linktext = linktext;
         
-        Vector ncim_cui_code_vec_temp = conceptDetails.getPropertyValues(
+        Vector ncim_cui_code_vec_temp = cd.getPropertyValues(
             curr_concept, "GENERIC", propName);
         if (ncim_cui_code_vec_temp != null) {
            for (int lcv=0; lcv<ncim_cui_code_vec_temp.size(); lcv++) {
@@ -307,7 +318,15 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
               <b><%=propName_label%>:&nbsp;</b><%=value%>
               <% if (!DataUtils.isNCIT(prop_dictionary)) { %>
                    <%= PropertyData.getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
-              <% } %>
+              <%
+              }
+              String qualifier_str = propertyData.getPropertyQualifierString(propName_label, value);
+              if (qualifier_str != null) {
+              %>
+                  <%=qualifier_str%>
+              <%
+              }                  
+              %>
             </p> 
 <%  
         }
@@ -319,17 +338,21 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         String label_value = (String) nci_def_label_value.elementAt(i_def);
         Vector u = StringUtils.parseData(label_value);
         String propName_label = (String) u.elementAt(0);
-        
-        //System.out.println("===(0)=== propName_label: " + propName_label);
-        
-        
         String value = (String) u.elementAt(1);
 %>        
             <p>
               <b><%=propName_label%>:&nbsp;</b><%=value%>
               <% if (!DataUtils.isNCIT(prop_dictionary)) { %>
                    <%= PropertyData.getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
-              <% } %>
+              <%
+              } 
+              String qualifier_str = propertyData.getPropertyQualifierString(propName_label, value);
+              if (qualifier_str != null) {
+              %>
+                  <%=qualifier_str%>
+              <%
+              }
+              %>
             </p> 
 <%            
     }
@@ -342,16 +365,21 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
         
         Vector u = StringUtils.parseData(label_value);
         String propName_label = (String) u.elementAt(0);
-        
-        //System.out.println("===(1)=== propName_label: " + propName_label);
-       
         String value = (String) u.elementAt(1);
 %>        
             <p>
               <b><%=propName_label%>:&nbsp;</b><%=value%>
               <% if (!DataUtils.isNCIT(prop_dictionary)) { %>
                    <%= PropertyData.getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
-              <% } %>
+              <%  
+              } 
+              String qualifier_str = propertyData.getPropertyQualifierString(propName_label, value);
+              if (qualifier_str != null) {
+              %>
+                  <%=qualifier_str%>
+              <%
+              }              
+              %>
             </p> 
 <%            
     }
@@ -370,6 +398,16 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
               <b><%=propName_label%>:&nbsp;</b><%=value%>
               <% if (!DataUtils.isNCIT(prop_dictionary)) { %>
                    <%= PropertyData.getDisplayLink(label2URL, label2Linktext, propName_label, value) %>
+                   
+		      <%     
+		      String qualifier_str = propertyData.getPropertyQualifierString(propName_label, value);
+		      if (qualifier_str != null) {
+		      %>
+			  <%=qualifier_str%>
+		      <%
+		      }                      
+		      %>   
+                   
               <% } else if (propName_label.equalsIgnoreCase("NCI Thesaurus Code")) { %>
              
                   <%= PropertyData.getDisplayLink(label2URL, label2Linktext, "caDSR metadata", value) %>
@@ -403,7 +441,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 
 
 <%
-    ncim_metathesaurus_cui_vec = conceptDetails.getNCImCodes(curr_concept);
+    ncim_metathesaurus_cui_vec = cd.getNCImCodes(curr_concept);
     //String ncimURL = new ConceptDetails().getNCImURL();
     String ncimURL = dataUtils.getNCImURL();
     if (ncim_metathesaurus_cui_vec.size() > 0) {
@@ -503,7 +541,7 @@ else if (concept_status != null && concept_status.compareToIgnoreCase("Retired C
 <%
 	}
 %>
-		   <td><%=conceptDetails.encodeTerm(value)%></td>
+		   <td><%=cd.encodeTerm(value)%></td>
 	      </tr>
         <%
     }
@@ -587,7 +625,7 @@ if (!hasExternalSourceCodes) {
             %>
               <td><%=propName_label%></td>
               <td>
-                <%=conceptDetails.encodeTerm(value)%>
+                <%=cd.encodeTerm(value)%>
                 <%
                   if (propName.compareTo("UMLS_CUI") != 0 && prop_url != null && prop_url.compareTo("null") != 0) {
                     String url_str = prop_url + value;
@@ -683,8 +721,10 @@ if (!hasOtherProperties) {
     %>	  
 </p>
 <%
-  String url = JSPUtils.getBookmarkUrl(request, dictionary, version, concept_id, namespace);
-  String bookmark_title = prop_dictionary + "%20" + concept_id;
+  //String url = JSPUtils.getBookmarkUrl(request, dictionary, version, concept_id, namespace);
+    String url = JSPUtils.getBookmarkUrl(lbSvc, request, dictionary, version, namespace, concept_id);
+ 
+    String bookmark_title = prop_dictionary + "%20" + concept_id;
 %>
 <p>
    <table class="datatable_960" border="0" cellpadding="0" cellspacing="0" width="700px">

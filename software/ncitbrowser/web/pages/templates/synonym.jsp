@@ -8,8 +8,7 @@
 String formalName = DataUtils.getFormalName(dictionary);
 Vector localname_vec = DataUtils.getLocalNames(formalName);
 boolean has_subsource = false;
-boolean display_subsource = false; // temporarily turned off
-
+boolean display_subsource = true; // turned on or off
 
   if (type.compareTo("synonym") == 0 || type.compareTo("all") == 0)
   {
@@ -45,7 +44,7 @@ if (type != null && type.compareTo("all") == 0) {
             Vector synonym_data = StringUtils.parseData(s, "|");
             if (synonym_data.size() > 4) {
                 String subsource_nm = (String) synonym_data.elementAt(4);
-                if (StringUtils.isNullOrBlank(subsource_nm)) {
+                if (!StringUtils.isNullOrBlank(subsource_nm)) {
 			has_subsource = true;
 			System.out.println("(*) subsource_nm: " + subsource_nm);
 			break;

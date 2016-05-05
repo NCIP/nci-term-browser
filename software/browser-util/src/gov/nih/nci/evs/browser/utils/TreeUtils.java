@@ -784,9 +784,9 @@ public class TreeUtils {
     }
 
     public HashMap getSuperconcepts(String scheme, String version, String code) {
-		return getSuperconcepts(scheme, version, code, null);
+		String namespace = new ConceptDetails(lbSvc).getNamespaceByCode(scheme, version, code);
+		return getSuperconcepts(scheme, version, code, namespace);
 	}
-
 
     public HashMap getSuperconcepts(String scheme, String version, String code, String namespace) {
 
@@ -1229,12 +1229,12 @@ public class TreeUtils {
         return hmap;
     }
 
-
     public HashMap getAssociatedConcepts(String scheme, String version,
         String code, String[] assocNames, boolean direction) {
-		return getAssociatedConcepts(scheme, version, code, null, assocNames, direction);
+		// [NCITERM-713] Some concepts in the View in Hierarchy page show a null namespace.
+		String namespace = new ConceptDetails(lbSvc).getNamespaceByCode(scheme, version, code);
+		return getAssociatedConcepts(scheme, version, code, namespace, assocNames, direction);
 	}
-
 
     public HashMap getAssociatedConcepts(String scheme, String version,
         String code, String namespace, String[] assocNames, boolean direction) {

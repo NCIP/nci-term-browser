@@ -5,6 +5,8 @@ import java.util.*;
 import org.LexGrid.LexBIG.DataModel.Core.*;
 import org.apache.log4j.*;
 import org.LexGrid.valueSets.ValueSetDefinition;
+import org.LexGrid.LexBIG.Impl.Extensions.tree.model.LexEvsTreeNode;
+
 
 
 /**
@@ -117,6 +119,13 @@ public class SortComparator implements Comparator<Object> {
             if (sort_option == SORT_BY_CODE)
                 return vsd.getValueSetDefinitionURI();
             return vsd.getValueSetDefinitionName();
+        }
+
+        else if (c instanceof LexEvsTreeNode) {
+            LexEvsTreeNode node = (LexEvsTreeNode) c;
+            if (sort_option == SORT_BY_CODE)
+                return node.getCode();
+            return node.getEntityDescription();
         }
 
         else if (c instanceof String) {

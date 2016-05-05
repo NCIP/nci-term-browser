@@ -186,11 +186,6 @@
       }
     }
 
-    //function onClickTreeNode(ontology_node_id) {
-    //  var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
-    //  var ontology_version = document.forms["pg_form"].ontology_version.value;
-    //  load('<%= request.getContextPath() %>/ConceptReport.jsp?dictionary='+ ontology_display_name + '&version='+ ontology_version  + '&code=' + ontology_node_id, currOpener);
-    //}
 
     function onClickTreeNode(ontology_node_id, ontology_node_ns) {
       var ontology_display_name = document.forms["pg_form"].ontology_display_name.value;
@@ -354,7 +349,6 @@
     }
 
     function searchTree(ontology_node_id, ontology_display_name) {
-
         var handleBuildTreeSuccess = function(o) {
       	var tsTotalStart = getTimeStamp();
 
@@ -374,7 +368,7 @@
               showEmptyRoot();
             }
             else {
-              showPartialHierarchy("");
+              //showPartialHierarchy("");
               showConstructingTreeStatus();
 
               for (var i=0; i < respObj.root_nodes.length; i++) {
@@ -416,16 +410,6 @@
 
 
     function addTreeBranch(ontology_node_id, rootNode, nodeInfo) {
-      //var newNodeDetails = "javascript:onClickTreeNode('" + nodeInfo.ontology_node_id + "');";
-      //var newNodeData = { label:nodeInfo.ontology_node_name, id:nodeInfo.ontology_node_id, href:newNodeDetails };
-
-      //var newNodeDetails = "javascript:onClickTreeNode('" 
-      //                   + nodeInfo.ontology_node_id 
-      //                   + ","
-      //                    + nodeInfo.ontology_node_ns 
-      //                   + "');";
-
-
       var newNodeDetails = "javascript:onClickTreeNode('" 
                          + nodeInfo.ontology_node_id 
                          + "','"
@@ -466,10 +450,10 @@
       }
 
       tree.draw();
-      for (var i=0; i < childNodes.length; i++) {
-         var childnodeInfo = childNodes[i];
-         addTreeBranch(ontology_node_id, newNode, childnodeInfo);
-      }
+      //for (var i=0; i < childNodes.length; i++) {
+      //   var childnodeInfo = childNodes[i];
+      //   addTreeBranch(ontology_node_id, newNode, childnodeInfo);
+      //}
     }
     YAHOO.util.Event.addListener(window, "load", init);
 
@@ -611,25 +595,9 @@ if (DataUtils.isNCIT(hierarchy_schema)) {
             <%
               String ontology_node_id = HTTPUtils.cleanXSS((String) request.getParameter("code"));
               String ontology_node_ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
-/*
-String schema = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
-//11202013, KLO
-if (DataUtils.isNull(schema)) {
-    schema = Constants.NCIT_CS_NAME;
-}
-
-String ontology_version = HTTPUtils.cleanXSS((String) request.getParameter("version"));
-
-String ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("schema"));
-if (ontology_display_name == null) {
-    ontology_display_name = HTTPUtils.cleanXSS((String) request.getParameter("dictionary"));
-}
-*/
-
 
 String ontology_display_name = info.dictionary;
 String ontology_version = info.version;
-
 String schema = ontology_display_name;
 
 //11202013, KLO
@@ -639,7 +607,6 @@ if (DataUtils.isNull(ontology_display_name)) {
     ontology_display_name = Constants.NCIT_CS_NAME;
 }
 
-String ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
 
             %>
             <input type="hidden" id="ontology_node_id" name="ontology_node_id" value="<%=HTTPUtils.cleanXSS(ontology_node_id)%>" />
@@ -649,9 +616,9 @@ String ns = HTTPUtils.cleanXSS((String) request.getParameter("ns"));
             <input type="hidden" id="ontology_version" name="ontology_version" value="<%=HTTPUtils.cleanXSS(ontology_version)%>" />
 
 <%
-   if (ns != null && ns.compareTo("na") != 0) {
+   if (ontology_node_ns != null && ontology_node_ns.compareTo("na") != 0) {
 %>
-            <input type="hidden" id="ontology_node_ns" name="ontology_node_ns" value="<%=HTTPUtils.cleanXSS(ns)%>" />
+            <input type="hidden" id="ontology_node_ns" name="ontology_node_ns" value="<%=ontology_node_ns%>" />
 <%
    }
 %>

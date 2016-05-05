@@ -242,7 +242,7 @@ public class CodingSchemeDataUtils {
     public Vector getResolvedValueSetCodingSchemes() {
 		Vector w = new Vector();
 		try {
-			List<CodingScheme> choices = new ArrayList<CodingScheme>();
+			//List<CodingScheme> choices = new ArrayList<CodingScheme>();
 			LexEVSResolvedValueSetService lrvs = new LexEVSResolvedValueSetServiceImpl(lbSvc);
 
 			if (lrvs == null) {
@@ -268,7 +268,7 @@ public class CodingSchemeDataUtils {
 		if (resovedValueSetHashMap != null) return resovedValueSetHashMap;
 		HashMap hmap = new HashMap();
 		try {
-			List<CodingScheme> choices = new ArrayList<CodingScheme>();
+			//List<CodingScheme> choices = new ArrayList<CodingScheme>();
 			LexEVSResolvedValueSetService lrvs = new LexEVSResolvedValueSetServiceImpl(lbSvc);
 			List<CodingScheme> schemes = lrvs.listAllResolvedValueSets();
 			for (int i = 0; i < schemes.size(); i++) {
@@ -383,7 +383,7 @@ public class CodingSchemeDataUtils {
 
     public Vector getMappingCodingSchemes() {
 		Vector w = new Vector();
-		resovedValueSetHashMap = getResolvedValueSetHashMap();
+		//resovedValueSetHashMap = getResolvedValueSetHashMap();
         boolean includeInactive = false;
         try {
              CodingSchemeRenderingList csrl = null;
@@ -1119,6 +1119,24 @@ public class CodingSchemeDataUtils {
 		      + relation.getSourceCodingSchemeVersion() + "|"
 		      + relation.getTargetCodingScheme() + "|"
 		      + relation.getTargetCodingSchemeVersion();
+	}
+
+
+	public HashMap updateCodeNamespace2VersionMap(HashMap hmap, String codeNamespace) {
+		if (hmap == null) {
+			hmap = new HashMap();
+		}
+		if (codeNamespace == null) {
+		    return hmap;
+		}
+
+		if (hmap.containsKey(codeNamespace)) {
+			return hmap;
+		}
+
+		String version = getVocabularyVersionByTag(codeNamespace, "PRODUCTION");
+		hmap.put(codeNamespace, version);
+		return hmap;
 	}
 
 }
