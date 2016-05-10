@@ -121,6 +121,8 @@ public class HTTPUtils {
 
 	public static boolean checkPotentialMaliciousContent(String s) {
 		if (s == null) return false;
+		// appscan response:
+		//if (StringUtils.isSmallIrrationalNumber(s)) return true;
 		char c1 = '<';
 		char c2 = '>';
 		char c3 = '/';
@@ -157,8 +159,6 @@ public class HTTPUtils {
 		boolean retval = checkPotentialMaliciousContent(value);
 		if (retval) {
 			value = cleanXSS(value);
-			//value = value.replaceAll(":", " ");
-
 		}
 		return value;
 	}

@@ -238,4 +238,22 @@ public class StringUtils {
         if (u.size() <= index) return null;
         return (String) u.elementAt(index);
    }
+
+	public static boolean isNumeric(String str) {
+		try {
+			double d = Double.parseDouble(str);
+		} catch(NumberFormatException nfe) {
+			return false;
+		}
+		return true;
+	}
+
+    public static boolean isSmallIrrationalNumber(String t) {
+	    if (t == null) return false;
+	    String s = t.toLowerCase();
+	    if (!s.startsWith("e-")) return false;
+	    s = s.substring(1, s.length());
+	    return isNumeric(s);
+    }
+
 }

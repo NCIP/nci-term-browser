@@ -316,10 +316,10 @@ document.addEventListener('keyup', doc_keyUp, false);
  				return checkedNodes;
  			}
 
-   			function expand_all() {
-   			        var prefix = "N_";
-  			        expand_node(prefix);
- 			} 	
+   			//function expand_all() {
+   			//        var prefix = "N_";
+  			//        expand_node(prefix);
+ 			//} 	
  
  			function expand_node(prefix) {
   			    var div = "DIV_";
@@ -372,3 +372,28 @@ document.addEventListener('keyup', doc_keyUp, false);
 			    alert(checked_vocabularies);
 			}
 
+
+			function expand_all() {
+			    var div_id = getCollapseDivID();
+			    while (div_id != "") {
+				var img_id = "IMG_" + div_id.substring(4, div_id.length);
+				document.getElementById(div_id).style.display = "block";
+				changeImage(img_id);
+				div_id = getCollapseDivID();
+			    }
+			}
+
+			function getCollapseDivID() {
+				var divTags = document.getElementsByTagName('div');
+				var div_id = "";
+				for (var i=0;i<divTags.length;i++) {
+					if (divTags[i].id.indexOf("DIV_N_") == 0) {
+						var num = divTags[i].id.substring(6, divTags[i].id.length);
+						var img_id = "IMG_N_" + num;
+						var img_obj = document.getElementById(img_id);
+						if (img_obj.getAttribute("src").indexOf("plus") != -1) {
+						    return divTags[i].id;
+						}
+					}
+				}
+			}
