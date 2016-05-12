@@ -231,6 +231,9 @@ public class Constants {
 
     public static final String NO_ROOT_NODES_AVAILABLE = "No root nodes available";
 
+    public static final String MODE_EXPAND = "1";
+    public static final String MODE_COLLAPSE = "2";
+
     /**
      * Constructor
      */

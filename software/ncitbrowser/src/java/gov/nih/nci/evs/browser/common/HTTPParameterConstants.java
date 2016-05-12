@@ -39,6 +39,7 @@ public class HTTPParameterConstants {
        "mappingSearch",
        "matchText",
        "message",
+       "mode",
        "multiplematches",
        "n",
        "nav_type",

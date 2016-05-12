@@ -387,14 +387,28 @@ if (action == null) {
 }
 
 if (action.compareTo("create_alt_src_vs_tree") == 0) {
-    request.getSession().setAttribute("vs_tree_type", "v2.7");
+	String mode = (String) request.getSession().getAttribute("vs_tree_type");
+	if (mode == null || mode.compareToIgnoreCase(Constants.MODE_EXPAND) == 0) {
+    	request.getSession().setAttribute("vs_tree_type", Constants.MODE_COLLAPSE);
+	}
 	action = "create_src_vs_tree";
 }
-
+/*
 if (action.compareTo("create_alt_cs_vs_tree") == 0) {
-    request.getSession().setAttribute("vs_tree_type", "v2.7");
+    request.getSession().setAttribute("vs_tree_type", Constants.MODE_EXPAND);
 	action = "create_cs_vs_tree";
 }
+*/
+
+if (action.compareTo("create_alt_cs_vs_tree") == 0) {
+	String mode = (String) request.getSession().getAttribute("vs_tree_type");
+	if (mode == null || mode.compareToIgnoreCase(Constants.MODE_EXPAND) == 0) {
+    	request.getSession().setAttribute("vs_tree_type", Constants.MODE_COLLAPSE);
+	}
+	//action = "create_alt_cs_vs_tree";
+	action = "create_cs_vs_tree";
+}
+
 
 if (action.compareTo("values") == 0) {
 	resolveValueSetAction(request, response);
@@ -1456,12 +1470,6 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
     public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view) {
-
-		//Object obj = request.getParameter("vsd_uri");
-		//String vsd_uri = null;
-		//if (obj != null) {
-		//	vsd_uri = HTTPUtils.cleanXSS((String) obj);
-		//}
 		String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
 		create_vs_tree(request, response, view, vsd_uri);
 	}
@@ -1713,12 +1721,30 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
 	option_name = "checked";
 	option_code = "";
 }
-
       out.println("");
       out.println("</head>");
       out.println("");
 
+
+String mode = HTTPUtils.cleanXSS((String) request.getParameter("mode"));
+if (mode == null) {
+	mode = (String) request.getSession().getAttribute("vs_tree_type");
+}
+if (mode == null) {
+	mode = Constants.MODE_EXPAND;
+}
+boolean collapse_all = false;
+if (mode.compareToIgnoreCase(Constants.MODE_COLLAPSE) == 0) {
+	collapse_all = true;
+}
+request.getSession().setAttribute("vs_tree_type", mode);
+
+if (collapse_all) {
+	// to be modified: -- collapse_all method
+	  out.println("<body onLoad=\"collapse_all();\">");
+} else {
       out.println("<body onLoad=\"document.forms.valueSetSearchForm.matchText.focus();\">");
+}
 
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
@@ -2148,19 +2174,30 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("                Terminology View");
 }
 
+//v2.9 modification:
 
-/*
-//v2.8 modification:
+	mode = (String) request.getSession().getAttribute("vs_tree_type");
+	//System.out.println("Before Mode: " + mode);
+	if (mode == null) {
+		mode = Constants.MODE_COLLAPSE;
+	}
+	if (mode.compareToIgnoreCase(Constants.MODE_EXPAND) == 0) {
+		mode = Constants.MODE_COLLAPSE;
+	} else {
+		mode = Constants.MODE_EXPAND;
+	}
+   	request.getSession().setAttribute("vs_tree_type", Constants.MODE_COLLAPSE);
+    //System.out.println("After Mode: " + mode);
+
 if (view == Constants.STANDARD_VIEW) {
 out.println("&nbsp;&nbsp;(");
-out.println("<a href=\"" + contextPath + "/ajax2?action=create_alt_src_vs_tree\" tabindex=\"100\"><font color=\"red\">Alt Standards View</font></a>");
+out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_src_vs_tree&mode=" + mode + "\" tabindex=\"100\"><font color=\"red\">Alt Standards View</font></a>");
 out.println(")");
 } else {
 out.println("&nbsp;&nbsp;(");
-out.println("<a href=\"" + contextPath + "/ajax2?action=create_alt_cs_vs_tree\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
+out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_cs_vs_tree&mode=" + mode + "\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
 out.println(")");
 }
-*/
 
       out.println("              </td>");
       out.println("");
