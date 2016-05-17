@@ -35,31 +35,24 @@ request.getSession().setAttribute("nav_type", nav_type);
       
       String tab_valuesets_image = nav_type.equalsIgnoreCase("valuesets")
         ? "tab_valuesets_clicked.gif" : "tab_valuesets.gif";
-      tab_valuesets_image = imagesPath + tab_valuesets_image;
+        tab_valuesets_image = imagesPath + tab_valuesets_image;
 
+	String tab_valueset_link = null;
+	String mode = null;
 
-boolean multiple_version_valueset_trees = true;
-String tab_valueset_link = null;
-String vs_tree_type = null;
+	mode = (String) request.getSession().getAttribute("mode");
 
-if (multiple_version_valueset_trees) { 
-	vs_tree_type = (String) request.getSession().getAttribute("vs_tree_type");
-	if (DataUtils.isNullOrBlank(vs_tree_type)) {
-	    vs_tree_type = Constants.MODE_COLLAPSE;
-	    request.getSession().setAttribute("vs_tree_type", vs_tree_type);
+	if (mode == null) {
+	    mode = Constants.MODE_EXPAND;
 	}
 
 	tab_valueset_link = request.getContextPath() + "/ajax2?action=create_src_vs_tree&nav_type=valuesets";      
-	if (vs_tree_type.compareTo(Constants.MODE_EXPAND) == 0) {
-	      tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree&nav_type=valuesets";
-	} else {
+	if (mode.compareToIgnoreCase(Constants.MODE_EXPAND) == 0) {
 	      tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree&nav_type=valuesets&mode=1";
-	}
-} else {
-        vs_tree_type = Constants.MODE_EXPAND;
-        request.getSession().setAttribute("vs_tree_type", vs_tree_type);
-	tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree&nav_type=valuesets";
-}
+	} else if (mode.compareToIgnoreCase(Constants.MODE_COLLAPSE) == 0) {
+	      tab_valueset_link = request.getContextPath() + "/ajax?action=create_src_vs_tree&nav_type=valuesets&mode=2";
+	} 
+	request.getSession().setAttribute("mode", mode);
 
       String tab_mappings_image = nav_type.equalsIgnoreCase("mappings")
         ? "tab_map_clicked.gif" : "tab_map.gif";

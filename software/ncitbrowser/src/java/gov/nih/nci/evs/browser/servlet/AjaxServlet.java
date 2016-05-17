@@ -209,6 +209,15 @@ public final class AjaxServlet extends HttpServlet {
         }
     }
 
+    public String get_alt_vs_tree_mode(String mode) {
+		if (mode.compareTo(Constants.MODE_EXPAND) == 0) {
+			return Constants.MODE_COLLAPSE;
+		} else if (mode.compareTo(Constants.MODE_COLLAPSE) == 0) {
+			return Constants.MODE_EXPAND;
+		}
+		return Constants.MODE_COLLAPSE;
+	}
+
     public static String search_tree(String node_id,
         String ontology_display_name, String ontology_version, String namespace) throws Exception {
 
@@ -387,25 +396,10 @@ if (action == null) {
 }
 
 if (action.compareTo("create_alt_src_vs_tree") == 0) {
-	String mode = (String) request.getSession().getAttribute("vs_tree_type");
-	if (mode == null || mode.compareToIgnoreCase(Constants.MODE_EXPAND) == 0) {
-    	request.getSession().setAttribute("vs_tree_type", Constants.MODE_COLLAPSE);
-	}
 	action = "create_src_vs_tree";
 }
-/*
-if (action.compareTo("create_alt_cs_vs_tree") == 0) {
-    request.getSession().setAttribute("vs_tree_type", Constants.MODE_EXPAND);
-	action = "create_cs_vs_tree";
-}
-*/
 
 if (action.compareTo("create_alt_cs_vs_tree") == 0) {
-	String mode = (String) request.getSession().getAttribute("vs_tree_type");
-	if (mode == null || mode.compareToIgnoreCase(Constants.MODE_EXPAND) == 0) {
-    	request.getSession().setAttribute("vs_tree_type", Constants.MODE_COLLAPSE);
-	}
-	//action = "create_alt_cs_vs_tree";
 	action = "create_cs_vs_tree";
 }
 
@@ -1484,9 +1478,18 @@ if (action.compareTo("xmldefinitions") == 0) {
 
 
     public void create_vs_tree(HttpServletRequest request, HttpServletResponse response, int view, String vsd_uri) {
-        //SimpleTreeUtils stu = new SimpleTreeUtils();
         SimpleTreeUtils stu = new SimpleTreeUtils(DataUtils.getVocabularyNameSet());
-        stu.setUrl(request.getContextPath() + "ajax?action=create_src_vs_tree");
+
+String mode = HTTPUtils.cleanXSS((String) request.getParameter("mode"));
+if (mode == null) {
+	mode = (String) request.getSession().getAttribute("mode");
+}
+//if (mode == null) {
+//	mode = Constants.MODE_COLLAPSE;
+//}
+request.getSession().setAttribute("mode", mode);
+
+        stu.setUrl(request.getContextPath() + "ajax?action=create_src_vs_tree&mode=" + mode);
 
 		String nav_type = HTTPUtils.cleanXSS((String) request.getParameter("nav_type"));
 		request.getSession().setAttribute("vs_nav_type", "valuesets");
@@ -1726,20 +1729,8 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("");
 
 
-String mode = HTTPUtils.cleanXSS((String) request.getParameter("mode"));
-if (mode == null) {
-	mode = (String) request.getSession().getAttribute("vs_tree_type");
-}
-if (mode == null) {
-	mode = Constants.MODE_EXPAND;
-}
-boolean collapse_all = false;
-if (mode.compareToIgnoreCase(Constants.MODE_COLLAPSE) == 0) {
-	collapse_all = true;
-}
-request.getSession().setAttribute("vs_tree_type", mode);
 
-if (collapse_all) {
+if (mode != null && mode.compareTo(Constants.MODE_COLLAPSE) == 0) {
 	// to be modified: -- collapse_all method
 	  out.println("<body onLoad=\"collapse_all();\">");
 } else {
@@ -2174,28 +2165,20 @@ if (view == Constants.STANDARD_VIEW) {
       out.println("                Terminology View");
 }
 
-//v2.9 modification:
-
-	mode = (String) request.getSession().getAttribute("vs_tree_type");
-	//System.out.println("Before Mode: " + mode);
-	if (mode == null) {
-		mode = Constants.MODE_COLLAPSE;
+//v2.9 modification;
+    mode = (String) request.getParameter("mode");
+    if (mode == null) {
+		mode = (String) request.getSession().getAttribute("mode");
 	}
-	if (mode.compareToIgnoreCase(Constants.MODE_EXPAND) == 0) {
-		mode = Constants.MODE_COLLAPSE;
-	} else {
-		mode = Constants.MODE_EXPAND;
-	}
-   	request.getSession().setAttribute("vs_tree_type", Constants.MODE_COLLAPSE);
-    //System.out.println("After Mode: " + mode);
 
+String alt_mode = get_alt_vs_tree_mode(mode);
 if (view == Constants.STANDARD_VIEW) {
 out.println("&nbsp;&nbsp;(");
-out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_src_vs_tree&mode=" + mode + "\" tabindex=\"100\"><font color=\"red\">Alt Standards View</font></a>");
+out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_src_vs_tree&mode=" + alt_mode + "\" tabindex=\"100\"><font color=\"red\">Alt Standards View</font></a>");
 out.println(")");
 } else {
 out.println("&nbsp;&nbsp;(");
-out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_cs_vs_tree&mode=" + mode + "\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
+out.println("<a href=\"" + contextPath + "/ajax?action=create_alt_cs_vs_tree&mode=" + alt_mode + "\" tabindex=\"100\"><font color=\"red\">Alt Terminology View</font></a>");
 out.println(")");
 }
 
@@ -3339,16 +3322,7 @@ if (DataUtils.isNull(matchText)) {
       out.println("</style>");
       out.println("");
       out.println("");
-      /*
-      out.println("<div id=\"expandcontractdiv\">");
-      out.println("	<a id=\"expand_all\" href=\"#\" tabindex=\"101\" >Expand all</a>");
-      out.println("	<a id=\"collapse_all\" href=\"#\" tabindex=\"102\">Collapse all</a>");
-      out.println("	<a id=\"check_all\" href=\"#\" tabindex=\"103\">Check all</a>");
-      out.println("	<a id=\"uncheck_all\" href=\"#\" tabindex=\"104\">Uncheck all</a>");
-      out.println("</div>");
-      */
 
-      //SimpleTreeUtils stu = new SimpleTreeUtils();
       SimpleTreeUtils stu = new SimpleTreeUtils(DataUtils.getVocabularyNameSet());
 
       stu.printSelectAllOrNoneLinks(out);
