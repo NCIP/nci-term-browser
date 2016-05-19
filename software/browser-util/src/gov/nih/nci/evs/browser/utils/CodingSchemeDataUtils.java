@@ -1102,7 +1102,6 @@ public class CodingSchemeDataUtils {
 		return v.contains(qualifier);
 	}
 
-
     public String getMappingSourceAndTarget(String scheme, String version) {
 		CodingScheme cs = resolveCodingScheme(scheme, version);
 		if (cs == null) return null;
