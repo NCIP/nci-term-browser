@@ -52,7 +52,7 @@ import org.LexGrid.LexBIG.DataModel.InterfaceElements.CodingSchemeRendering;
 import org.LexGrid.LexBIG.DataModel.Collections.NameAndValueList;
 import org.LexGrid.LexBIG.DataModel.Core.NameAndValue;
 import org.LexGrid.LexBIG.Utility.Constructors;
-import org.lexevs.property.PropertyExtension;
+//import org.lexevs.property.PropertyExtension;
 import org.LexGrid.LexBIG.LexBIGService.CodedNodeGraph;
 
 
