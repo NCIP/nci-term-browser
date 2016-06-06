@@ -71,14 +71,27 @@ public class SimpleTreeUtils {
 
     private Set vocabularyNameSet = null;
 
-    //public SimpleTreeUtils() {
-    //    checkboxid2NodeIdMap = new HashMap();
-    //}
+    private boolean CHECKBOX_OPTION = true;
+    private String node_clicked_method_name = "onValueSetNodeClicked";
+    private boolean collapse_all_at_initialization = false;
+    private boolean hyperlink_code = false;
 
     public SimpleTreeUtils(Set vocabularyNameSet) {
         this.checkboxid2NodeIdMap = new HashMap();
         this.vocabularyNameSet = vocabularyNameSet;
     }
+
+    public void set_CHECKBOX_OPTION(boolean option) {
+		this.CHECKBOX_OPTION = option;
+	}
+
+	public void set_node_clicked_method_name(String methodName) {
+		this.node_clicked_method_name = methodName;
+	}
+
+	public void set_collapse_all_at_initialization(boolean bool_val) {
+		this.collapse_all_at_initialization = bool_val;
+	}
 
     public void setBasePath(String basePath) {
 		this.basePath = basePath;
@@ -136,6 +149,10 @@ public class SimpleTreeUtils {
 			buf.append(TAB);
 		}
 		return buf.toString();
+	}
+
+	public void set_hyperlink_code(boolean hyperlink_code) {
+		this.hyperlink_code = hyperlink_code;
 	}
 
 
@@ -231,7 +248,11 @@ public class SimpleTreeUtils {
       out.println("		<title>Value Set Hierarchy</title>");
 
       out.println("	</head>");
-      out.println("	<body>");
+      if (collapse_all_at_initialization) {
+      	  out.println("	<body onload=\"collapse_all();\">");
+	  } else {
+		  out.println("	<body>");
+	  }
 
 	  out.println("	<script type=\"text/javascript\" src=\"" + basePath + "js/event_simulate.js\"></script>");
 	  out.println("	<script type=\"text/javascript\" src=\"" + basePath + "js/value_set_tree_navigation.js\"></script>");
@@ -286,7 +307,6 @@ public class SimpleTreeUtils {
   }
 
 
-
   public void printNode(PrintWriter pw, TreeItem ti, int level) {
 	  if (ti == null) return;
 
@@ -303,14 +323,21 @@ public class SimpleTreeUtils {
 
 		if (ti._expandable) {
 			String div_id = "DIV_" + checkbox_id;
- 			pw.println("<img src=\"" + basePath + "images/minus.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
- 			    + getTabIndex()
- 			    + ">"
- 			    + "<input type=\"checkbox\" id=\"" + checkbox_id + "\" name=\"" + ti._code + "\"  onclick=\"updateCheckbox('" + checkbox_id + "'); return false; \""
- 			    + " " + getTabIndex()
- 			    + " " + getCheckBoxStatus(ti._code)
- 			    + ">"
- 			    + getHyperLink(ti));
+			if (CHECKBOX_OPTION) {
+				pw.println("<img src=\"" + basePath + "images/minus.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
+					+ getTabIndex()
+					+ ">"
+					+ "<input type=\"checkbox\" id=\"" + checkbox_id + "\" name=\"" + ti._code + "\"  onclick=\"updateCheckbox('" + checkbox_id + "'); return false; \""
+					+ " " + getTabIndex()
+					+ " " + getCheckBoxStatus(ti._code)
+					+ ">"
+					+ getHyperLink(ti));
+			} else {
+				pw.println("<img src=\"" + basePath + "images/minus.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
+					+ getTabIndex()
+					+ ">"
+					+ getHyperLink(ti));
+			}
 
 
             pw.println(indentation + "<div id=\"" +  div_id   + "\">");
@@ -327,13 +354,20 @@ public class SimpleTreeUtils {
 		    pw.println(indentation + "</div>");
 		    pw.flush();
 	    } else {
-			pw.println("<img src=\"" + basePath + "images/dot.gif\" id=\"" + img_id + "\" alt=\"show_hide\" "
-			+ ">"
-			+ "<input type=\"checkbox\" id=\"" + checkbox_id + "\" name=\"" + ti._code + "\"  onclick=\"updateCheckbox('" + checkbox_id + "'); return false; \""
-			+ " " + getTabIndex()
-			+ " " + getCheckBoxStatus(ti._code)
-			+ ">"
-			+ getHyperLink(ti));
+			String div_id = "DIV_" + checkbox_id;
+			if (CHECKBOX_OPTION) {
+				pw.println("<img src=\"" + basePath + "images/dot.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
+				+ ">"
+				+ "<input type=\"checkbox\" id=\"" + checkbox_id + "\" name=\"" + ti._code + "\"  onclick=\"updateCheckbox('" + checkbox_id + "'); return false; \""
+				+ " " + getTabIndex()
+				+ " " + getCheckBoxStatus(ti._code)
+				+ ">"
+				+ getHyperLink(ti));
+		    } else {
+				pw.println("<img src=\"" + basePath + "images/dot.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
+				+ ">"
+				+ getHyperLink(ti));
+			}
 		}
 		pw.println(indentation + "</li>");
 		pw.flush();
@@ -354,13 +388,21 @@ public class SimpleTreeUtils {
 
 		if (ti._expandable) {
 			String div_id = "DIV_" + checkbox_id;
- 			v.add("<img src=\"" + basePath + "images/minus.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
- 			    + getTabIndex()
- 			    + ">"
- 			    + "<input type=\"checkbox\" id=\"" + checkbox_id + "\" name=\"" + ti._code + "\"  onclick=\"updateCheckbox('" + checkbox_id + "'); return false; \""
- 			    + " " + getTabIndex()
- 			    + ">"
- 			    + getHyperLink(ti));
+
+			if (CHECKBOX_OPTION) {
+				v.add("<img src=\"" + basePath + "images/minus.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
+					+ getTabIndex()
+					+ ">"
+					+ "<input type=\"checkbox\" id=\"" + checkbox_id + "\" name=\"" + ti._code + "\"  onclick=\"updateCheckbox('" + checkbox_id + "'); return false; \""
+					+ " " + getTabIndex()
+					+ ">"
+					+ getHyperLink(ti));
+			} else {
+				v.add("<img src=\"" + basePath + "images/minus.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
+					+ getTabIndex()
+					+ ">"
+					+ getHyperLink(ti));
+			}
 
 
             v.add(indentation + "<div id=\"" +  div_id   + "\">");
@@ -377,37 +419,50 @@ public class SimpleTreeUtils {
 		    v.add(indentation + "</div>");
 		    //pw.flush();
 	    } else {
-			v.add("<img src=\"" + basePath + "images/dot.gif\" id=\"" + img_id + "\" alt=\"show_hide\" "
-			+ ">"
-			+ "<input type=\"checkbox\" id=\"" + checkbox_id + "\" name=\"" + ti._code + "\"  onclick=\"updateCheckbox('" + checkbox_id + "'); return false; \""
-			+ " " + getTabIndex()
-			+ ">"
-			+ getHyperLink(ti));
+			String div_id = "DIV_" + checkbox_id;
+			if (CHECKBOX_OPTION) {
+				v.add("<img src=\"" + basePath + "images/dot.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
+				+ ">"
+				+ "<input type=\"checkbox\" id=\"" + checkbox_id + "\" name=\"" + ti._code + "\"  onclick=\"updateCheckbox('" + checkbox_id + "'); return false; \""
+				+ " " + getTabIndex()
+				+ ">"
+				+ getHyperLink(ti));
+		    } else {
+				v.add("<img src=\"" + basePath + "images/dot.gif\" id=\"" + img_id + "\" alt=\"show_hide\" onclick=\"show_hide('" + div_id + "');\" "
+				+ ">"
+				+ getHyperLink(ti));
+			}
 		}
 		v.add(indentation + "</li>");
 	}
 
 
     // Make root node clickable:
+
+/*
 	private String getHyperLink(TreeItem ti) {
-		//if (ti._code.startsWith("TVS_")) {
-		//	return ti._text;
-		//}
-
-		//if (!ti._code.startsWith("http:")) {
-		//	return ti._text;
-		//}
-
-		//if (DataUtils.getFormalName(ti._code) != null || DataUtils.getFormalName(ti._text) != null) {
 		if (isFormalName(ti._code) || isFormalName(ti._text)) {
 			return ti._text;
 		}
-
 		if (focusNodeId != null && ti._code.compareTo(focusNodeId) == 0) {
 			return ti._text;
 		}
-
 	    return "<a href=\"#\" onclick=\"onValueSetNodeClicked('" + ti._code + "');return false;\" " + getTabIndex() + ">" + ti._text + "</a>";
+    }
+*/
+
+	private String getHyperLink(TreeItem ti) {
+		if (isFormalName(ti._code) || isFormalName(ti._text)) {
+			return ti._text;
+		}
+		if (focusNodeId != null && ti._code.compareTo(focusNodeId) == 0) {
+			return ti._text;
+		}
+		if (hyperlink_code) {
+	    	return ti._text + "&nbsp;<a href=\"#\" onclick=\"" + node_clicked_method_name + "('" + ti._code + "');return false;\" " + getTabIndex() + ">" + ti._code + "</a>";
+		} else {
+			return "<a href=\"#\" onclick=\"" + node_clicked_method_name + "('" + ti._code + "');return false;\" " + getTabIndex() + ">" + ti._text + "</a>";
+		}
     }
 
 
@@ -545,41 +600,101 @@ public class SimpleTreeUtils {
 		}
 	}
 
+	public void writeHeader(PrintWriter out, String title) {
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
+		out.println("<html xmlns:c=\"http://java.sun.com/jsp/jstl/core\">");
+		out.println("<head>");
+		out.println("<title>" + title + "</title>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+		out.println("<script type=\"text/javascript\">");
+		out.println("	function show_hide(div_id) {");
+		out.println("		var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
+		out.println("		var img_obj = document.getElementById(img_id);");
+		out.println("		if (img_obj.getAttribute(\"src\").indexOf(\"minus\") != -1) {");
+		out.println("			document.getElementById(div_id).style.display = \"none\";");
+		out.println("		} else if (img_obj.getAttribute(\"src\").indexOf(\"plus\") != -1) {");
+		out.println("			document.getElementById(div_id).style.display = \"block\";");
+		out.println("		}");
+		out.println("		changeImage(img_id);");
+		out.println("	}");
+		out.println("	");
+		out.println("	function changeImage(img_id) {");
+		out.println("		var img_obj = document.getElementById(img_id);");
+		out.println("		if (img_obj.getAttribute(\"src\").indexOf(\"minus\") != -1) {");
+		out.println("			var s = img_obj.getAttribute(\"src\");");
+		out.println("			s = s.replace(\"minus\", \"plus\");");
+		out.println("			img_obj.setAttribute(\"src\", s);");
+		out.println("		} else if (img_obj.getAttribute(\"src\").indexOf(\"plus\") != -1) {");
+		out.println("			var s = img_obj.getAttribute(\"src\");");
+		out.println("			s = s.replace(\"plus\", \"minus\");");
+		out.println("			img_obj.setAttribute(\"src\", s);");
+		out.println("		}");
+		out.println("	}");
+		out.println("	");
+		out.println("	function show(div_id) {");
+		out.println("		var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
+		out.println("		var img_obj = document.getElementById(img_id);");
+		out.println("		if (img_obj.getAttribute(\"src\").indexOf(\"plus\") != -1) {");
+		out.println("			document.getElementById(div_id).style.display = \"block\";");
+		out.println("			changeImage(img_id);");
+		out.println("		}");
+		out.println("	}");
+		out.println("");
+		out.println("	function hide(div_id) {");
+		out.println("		var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
+		out.println("		var img_obj = document.getElementById(img_id);");
+		out.println("		if (img_obj.getAttribute(\"src\").indexOf(\"minus\") != -1) {");
+		out.println("			document.getElementById(div_id).style.display = \"none\";");
+		out.println("			changeImage(img_id);");
+		out.println("		}");
+		out.println("	}");
+		out.println("");
+		out.println("	function expand_all() {");
+		out.println("		var prefix = \"N_\";");
+		out.println("		expand_node(prefix);");
+		out.println("	}");
+		out.println("");
+		out.println("	function expand_node(prefix) {");
+		out.println("		var div = \"DIV_\";");
+		out.println("		var child_cnt = 1;");
+		out.println("		child_id = prefix.concat(child_cnt.toString());");
+		out.println("		while (document.getElementById(div.concat(child_id)) != null) {");
+		out.println("			show(div.concat(child_id));");
+		out.println("			expand_node(child_id.concat(\"_\"));");
+		out.println("			child_cnt++;");
+		out.println("			child_id = prefix.concat(child_cnt.toString());");
+		out.println("		}");
+		out.println("	}");
+		out.println("");
+		out.println("	function collapse_all() {");
+		out.println("		var divTags = document.getElementsByTagName('div');");
+		out.println("		for (var i=0;i<divTags.length;i++) {");
+		out.println("			if (divTags[i].id.indexOf(\"DIV_N_\") == 0) {");
+		out.println("				var num = divTags[i].id.substring(6, divTags[i].id.length);");
+		out.println("				if (num.indexOf(\"_\") == -1) {");
+		out.println("					hide(divTags[i].id);");
+		out.println("				}");
+		out.println("			}");
+		out.println("		}");
+		out.println("	}");
+        out.println("");
+		out.println("	function on_node_clicked(code) {");
+		out.println("	    var url = \"https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=\" + code;");
+		out.println("		window.open(url, '_blank', 'top=100, left=100, height=740, width=780, status=no, menubar=yes, resizable=yes, scrollbars=yes, toolbar=yes, location=no, directories=no');");
+		out.println("	}");
+        out.println("");
+		out.println("</script>");
+		out.println("</head>");
+        if (collapse_all_at_initialization) {
+      	    out.println("	<body onload=\"collapse_all();\">");
+	    } else {
+		    out.println("	<body>");
+	    }
+    }
 
-/*
-	public static void main(String [ ] args)
-	{
-		SimpleTreeUtils util = new SimpleTreeUtils(DataUtils.getVocabularyNameSet());
-		util.setUrl("http://ncit.nci.nih.gov/ncitbrowser/ajax?action=create_src_vs_tree");
-
-		String serializedTree = args[0];
-		String htmlfile = args[1];
-
-		HashMap hmap = (HashMap) SerializationUtil.deSerialize(serializedTree);
-
-        TreeItem root = (TreeItem) hmap.get("<Root>");
-
-		int knt = 0;
-		for (String asso_name : root._assocToChildMap.keySet()) {
-			List<TreeItem> cs_vs_children = root._assocToChildMap.get(asso_name);
-			for (TreeItem child_item : cs_vs_children) {
-				knt++;
-				util.assignNodeId(null, child_item, knt);
-			}
-		}
-        try {
-			PrintWriter pw = new PrintWriter(htmlfile, "UTF-8");
-			util.printPageHeader(pw);
-			util.printSelectAllOrNoneLinks(pw);
-			util.printTree(pw, root);
-			util.printPageFooter(pw);
-			pw.close();
-			System.out.println("Output file " + htmlfile + " generated.");
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-*/
+	public void writeFooter(PrintWriter out) {
+		out.println("</body>");
+		out.println("</html>");
+    }
 }
 
