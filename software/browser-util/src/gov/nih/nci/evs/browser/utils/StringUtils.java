@@ -7,6 +7,7 @@ import java.net.URI;
 import java.text.*;
 import java.util.*;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 
 public class StringUtils {
 
@@ -256,4 +257,7 @@ public class StringUtils {
 	    return isNumeric(s);
     }
 
+    public static String escapeHtml(String str) {
+		return StringEscapeUtils.escapeHtml4(str);
+	}
 }
