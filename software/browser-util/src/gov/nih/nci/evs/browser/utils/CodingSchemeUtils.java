@@ -111,7 +111,6 @@ public class CodingSchemeUtils {
 						String[] localnames = cs.getLocalName();
 						for (int m = 0; m < localnames.length; m++) {
 							String localname = localnames[m];
-							System.out.println(localname + " --> " + cs.getCodingSchemeName());
 							_localName2CodingSchemeNameHashMap.put(localname, cs.getCodingSchemeName());
 						}
 

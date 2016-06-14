@@ -260,4 +260,14 @@ public class StringUtils {
     public static String escapeHtml(String str) {
 		return StringEscapeUtils.escapeHtml4(str);
 	}
+
+	public static String getToday() {
+		return getToday("MM-dd-yyyy");
+	}
+
+	public static String getToday(String format) {
+		java.util.Date date = Calendar.getInstance().getTime();
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		return sdf.format(date);
+	}
 }
