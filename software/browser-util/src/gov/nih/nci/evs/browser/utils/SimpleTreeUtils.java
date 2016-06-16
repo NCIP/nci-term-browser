@@ -263,6 +263,7 @@ public class SimpleTreeUtils {
 
 
 //Expand all Collapse all Check all Uncheck all
+/*
   public void printSelectAllOrNoneLinks(PrintWriter out) {
       out.println("");
       out.println("<div id=\"expandcontractdiv\">");
@@ -276,6 +277,42 @@ public class SimpleTreeUtils {
       out.println("</div>");
       out.println("");
   }
+*/
+
+
+  public void printSelectAllOrNoneLinks(PrintWriter out) {
+	  printSelectAllOrNoneLinks(out, true);
+  }
+
+
+  public void printSelectAllOrNoneLinks(PrintWriter out, boolean checkbox) {
+      out.println("<div id=\"expandcontractdiv\">");
+      out.println("<a href=\"#\" onclick=\"expand_all();\" tabindex=\"1\" >Expand all</a>");
+      out.println("&nbsp;");
+      out.println("Expand&nbsp;");
+      out.println("<select name=\"level\" id=\"level\" onchange=\"expand_tree();\">");
+      out.println("    <option value=\"0\" selected>0</option>");
+      out.println("    <option value=\"1\">1</option>");
+      out.println("    <option value=\"2\">2</option>");
+      out.println("    <option value=\"3\">3</option>");
+      out.println("    <option value=\"4\">4</option>");
+      out.println("    <option value=\"5\">5</option>");
+      out.println("</select>");
+      out.println("&nbsp;");
+      out.println("Levels");
+      out.println("&nbsp;");
+      out.println("<a href=\"#\" onclick=\"collapse_all();\" tabindex=\"2\">Collapse all</a>");
+      if (checkbox) {
+		  out.println("&nbsp;");
+		  out.println("<a href=\"#\" onclick=\"select_all();\" " + getTabIndex() + ">Check all</a>");
+		  out.println("&nbsp;");
+		  out.println("<a href=\"#\" onclick=\"select_none();\" " + getTabIndex() + ">Uncheck all</a>");
+      }
+      out.println("</div>");
+  }
+
+
+
 
   public String getTabIndex() {
 	  tabindex++;

@@ -43,7 +43,8 @@ request.getSession().setAttribute("nav_type", nav_type);
 	mode = (String) request.getSession().getAttribute("mode");
 
 	if (mode == null) {
-	    mode = Constants.MODE_EXPAND;
+	    //mode = Constants.MODE_EXPAND;
+	    mode = Constants.MODE_COLLAPSE;
 	}
 
 	tab_valueset_link = request.getContextPath() + "/ajax2?action=create_src_vs_tree&nav_type=valuesets";      

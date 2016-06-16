@@ -419,14 +419,14 @@ public class ConceptDetails {
 
 
     public Vector getConceptPropertyValues(Entity c, String propertyName) {
-        if (c == null)
+        if (c == null) {
             return null;
+		}
         Vector v = new Vector();
-        Property[] properties = c.getProperty();
+        Property[] properties = c.getAllProperties();
 
         for (int j = 0; j < properties.length; j++) {
             Property prop = properties[j];
-
             if (prop.getPropertyName().compareTo(propertyName) == 0) {
                 v.add(prop.getValue().getContent());
             }

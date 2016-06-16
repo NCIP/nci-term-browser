@@ -1,6 +1,5 @@
 package gov.nih.nci.evs.browser.utils;
 
-
 import java.io.*;
 import java.util.*;
 import java.text.*;
@@ -210,12 +209,14 @@ public class MetathesaurusUtils { //extends ServiceTestCase {
     public Vector getMatchedMetathesaurusCUIs(String scheme, String version,
         String ltag, String code) {
         Entity c = conceptDetails.getConceptByCode(scheme, version, code);
+        Vector v = null;
         if (c != null) {
-            Vector v = conceptDetails.getConceptPropertyValues(c, "NCI_META_CUI");
+            v = conceptDetails.getConceptPropertyValues(c, "NCI_META_CUI");
             if (v == null || v.size() == 0) {
-				return conceptDetails.getConceptPropertyValues(c, "UMLS_CUI");
-			}        }
-        return null;
+				v = conceptDetails.getConceptPropertyValues(c, "UMLS_CUI");
+			}
+		}
+        return v;
     }
 
 
