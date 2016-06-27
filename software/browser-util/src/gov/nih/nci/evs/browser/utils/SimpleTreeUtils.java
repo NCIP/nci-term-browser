@@ -247,6 +247,10 @@ public class SimpleTreeUtils {
       out.println("		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
       out.println("		<title>Value Set Hierarchy</title>");
 
+	  out.println("	<script type=\"text/javascript\" src=\"" + basePath + "js/event_simulate.js\"></script>");
+	  out.println("	<script type=\"text/javascript\" src=\"" + basePath + "js/value_set_tree_navigation.js\"></script>");
+
+
       out.println("	</head>");
       if (collapse_all_at_initialization) {
       	  out.println("	<body onload=\"collapse_all();\">");
@@ -254,8 +258,6 @@ public class SimpleTreeUtils {
 		  out.println("	<body>");
 	  }
 
-	  out.println("	<script type=\"text/javascript\" src=\"" + basePath + "js/event_simulate.js\"></script>");
-	  out.println("	<script type=\"text/javascript\" src=\"" + basePath + "js/value_set_tree_navigation.js\"></script>");
 
       out.println("	    <font face=\"verdana\" size=2px>");
       out.println("	    <form>");
@@ -290,7 +292,7 @@ public class SimpleTreeUtils {
       out.println("<a href=\"#\" onclick=\"expand_all();\" tabindex=\"1\" >Expand all</a>");
       out.println("&nbsp;");
       out.println("Expand&nbsp;");
-      out.println("<select name=\"level\" id=\"level\" onchange=\"expand_tree();\">");
+      out.println("<select id=\"level\" onchange=\"expand_tree();\">");
       out.println("    <option value=\"0\" selected>0</option>");
       out.println("    <option value=\"1\">1</option>");
       out.println("    <option value=\"2\">2</option>");
@@ -828,6 +830,7 @@ public class SimpleTreeUtils {
 		out.println("		}");
 		out.println("	}");
 		out.println("");
+		/*
 		out.println("    function expand(level) {");
 		out.println("        expand_all();");
 		out.println("        collapse_all();");
@@ -843,6 +846,26 @@ public class SimpleTreeUtils {
 		out.println("		    }");
 		out.println("		}");
 		out.println("    }");
+	    */
+
+        out.println("    function expand(level) {");
+        out.println("        expand_all();");
+        out.println("        collapse_all();");
+        out.println("        var divTags = document.getElementsByTagName('div');");
+        out.println("		   for (var i=0;i<divTags.length;i++) {");
+        out.println("		       var div_id = divTags[i].id;");
+        out.println("		       if (divTags[i].id.indexOf(\"DIV_N_\") >= 0) {");
+        out.println("				   if (divTags[i].id.indexOf(\"DIV_N_\") == 0) {");
+        out.println("					   if (getLevel(div_id) <= level) {");
+        out.println("						   document.getElementById(div_id).style.display = \"block\";");
+        out.println("						   var img_id = \"IMG_\" + div_id.substring(4, div_id.length);");
+        out.println("						   changeImage(img_id);");
+        out.println("					   }");
+        out.println("				   }");
+        out.println("		       }");
+        out.println("		   }");
+        out.println("    }");
+
 		out.println("");
 		out.println("	function on_node_clicked(code) {");
 		out.println("	    var url = \"https://nciterms.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=\" + code;");

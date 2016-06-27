@@ -1615,7 +1615,6 @@ if (DataUtils.isNull(vsd_uri)) {
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/search.js\"></script>");
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/dropdown.js\"></script>");
 
-      out.println("");
 
       out.println("  <script type=\"text/javascript\">");
       out.println("");
@@ -1741,8 +1740,6 @@ if (mode != null && mode.compareTo(Constants.MODE_COLLAPSE) == 0) {
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
 
-	  out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/event_simulate.js\"></script>");
-	  out.println("<script type=\"text/javascript\" src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
 
 
       out.println("  <!-- Begin Skip Top Navigation -->");
@@ -2741,6 +2738,10 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/search.js\"></script>");
       println(out, "  <script type=\"text/javascript\" src=\"/ncitbrowser/js/dropdown.js\"></script>");
 
+	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/event_simulate.js\"></script>");
+	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
+
+
       out.println("");
       out.println("  <script type=\"text/javascript\">");
       out.println("");
@@ -2820,9 +2821,6 @@ if (algorithm.compareToIgnoreCase("contains") == 0) {
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/wz_tooltip.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_centerwindow.js\"></script>");
       out.println("  <script type=\"text/javascript\" src=\"/ncitbrowser/js/tip_followscroll.js\"></script>");
-
-	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/event_simulate.js\"></script>");
-	  out.println("<script type=\"text/javascript\"   src=\"/ncitbrowser/js/value_set_tree_navigation.js\"></script>");
 
 
       out.println("  <!-- Begin Skip Top Navigation -->");

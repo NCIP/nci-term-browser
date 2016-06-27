@@ -352,21 +352,30 @@ document.addEventListener('keyup', doc_keyUp, false);
 		}
 	}
 
-        function expand(level) {
-		expand_all();
-		collapse_all();
-		var divTags = document.getElementsByTagName('div');
-			for (var i=0;i<divTags.length;i++) {
-			    var div_id = divTags[i].id;
-			    if (div_id.startsWith("DIV_N_")) {
-					var img_id = "IMG_" + div_id.substring(4, div_id.length);
-					if (getLevel(div_id) <= level) {
-						document.getElementById(div_id).style.display = "block";
-						changeImage(img_id);
-					}
-			    }
-			}
-        }
+        
+
+ 
+     function expand(level) {
+         expand_all();
+         collapse_all();
+         var divTags = document.getElementsByTagName('div');
+         
+ 		for (var i=0;i<divTags.length;i++) {
+ 		    var div_id = divTags[i].id;
+ 		    if (divTags[i].id.indexOf("DIV_N_") >= 0) {
+ 				if (divTags[i].id.indexOf("DIV_N_") == 0) {
+ 				
+ 					if (getLevel(div_id) <= level) {
+ 					
+ 						document.getElementById(div_id).style.display = "block";
+ 						var img_id = "IMG_" + div_id.substring(4, div_id.length);
+ 						changeImage(img_id);
+ 					}
+ 				}
+ 		    }
+ 		}
+    }
+        
         
 	function expand_tree() {
 	    var level = document.getElementById('level').value;
