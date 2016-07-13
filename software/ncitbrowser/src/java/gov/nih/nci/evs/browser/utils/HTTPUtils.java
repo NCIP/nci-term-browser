@@ -167,7 +167,8 @@ public class HTTPUtils {
     public static String cleanXSS(String value) {
         if (value == null) return null;
         value = value.trim();
-        if (value.length() == 0) return value;
+        //if (value.length() == 0) return value;
+        if (value.length() <= 1) return value;
 
         // Remove XSS attacks
         value = replaceAll(value, "<\\s*script\\s*>.*</\\s*script\\s*>", "");
