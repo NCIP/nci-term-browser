@@ -1684,7 +1684,6 @@ request.getSession().setAttribute("valueset_search_algorithm", algorithm);
         request.getSession().setAttribute("matchText", matchText);
         request.getSession().setAttribute("matchText_RVS", matchText);
 
-
 String option_code = "";
 String option_name = "";
 if (DataUtils.isNull(option)) {
@@ -2430,9 +2429,6 @@ String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getSession().get
 		request.getSession().setAttribute("selectValueSetSearchOption", selectValueSetSearchOption);
 
         String algorithm = HTTPUtils.cleanXSS((String) request.getParameter("valueset_search_algorithm"));
-
-
-
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 		// check if any checkbox is checked.
@@ -2455,6 +2451,13 @@ String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getSession().get
 		//request.getSession().removeAttribute("checked_vocabularies");
 String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 
+
+if (checked_vocabularies == null || checked_vocabularies.length() == 0) {
+
+	checked_vocabularies = get_checked_vocabularies(request);
+}
+
+/*
 if (checked_vocabularies != null) {
 	checked_vocabularies = checked_vocabularies.trim();
 }
@@ -2465,7 +2468,7 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 if (DataUtils.isNullOrBlank(checked_vocabularies)) {
     checked_vocabularies = vsd_uri;
 }
-
+*/
 
 		request.getSession().removeAttribute("partial_checked_vocabularies");
         String matchText = HTTPUtils.cleanMatchTextXSS((String) request.getParameter("matchText"));
@@ -2488,8 +2491,8 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 			}
 			return;
 		}
-        if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 
+        if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 			msg = "No value set definition is selected.";
 			request.getSession().setAttribute("message", msg);
 			if (!DataUtils.isNull(ontology_display_name) && !DataUtils.isNull(ontology_version)) {
@@ -2527,9 +2530,31 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 	    }
     }
 
+    private String get_checked_vocabularies(HttpServletRequest request) {
+		StringBuffer buf = new StringBuffer();
+		Enumeration<String> parameterNames = request.getParameterNames();
+		while (parameterNames.hasMoreElements()) {
+			String paramName = parameterNames.nextElement();
+			if (paramName.indexOf("http://") != -1) {
+				String paramValue = (String) request.getParameter(paramName);
+				if (paramValue.compareTo("on") == 0) {
+					buf.append(paramName).append(",");
+				}
+			}
+		}
+		String checked_vocabularies = buf.toString();
+		if (checked_vocabularies.length() > 0) {
+			checked_vocabularies = checked_vocabularies.substring(0, checked_vocabularies.length()-1);
+		}
+		System.out.println(checked_vocabularies);
+		return checked_vocabularies;
+	}
+
 
 
     public String valueSetSearchAction(HttpServletRequest request) {
+
+
 		java.lang.String valueSetDefinitionRevisionId = null;
 		LexBIGService lbSvc = RemoteServerUtil.createLexBIGService();
 		String msg = null;
@@ -2553,8 +2578,10 @@ String vsd_uri = HTTPUtils.cleanXSS((String) request.getParameter("vsd_uri"));
         request.getSession().setAttribute("valueset_search_algorithm", algorithm);
 
 
+//String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
 
-String checked_vocabularies = HTTPUtils.cleanXSS((String) request.getParameter("checked_vocabularies"));
+String checked_vocabularies = get_checked_vocabularies(request);
+
 
 if (checked_vocabularies != null) {
 	checked_vocabularies = checked_vocabularies.trim();
@@ -2566,9 +2593,12 @@ if (DataUtils.isNullOrBlank(checked_vocabularies)) {
 if (DataUtils.isNullOrBlank(checked_vocabularies)) {
     checked_vocabularies = vsd_uri;
 }
+
+/*
 		if (checked_vocabularies != null) {
 			request.getSession().setAttribute("checked_vocabularies", checked_vocabularies);
 		}
+*/
 
 		if (checked_vocabularies != null && checked_vocabularies.compareTo("") == 0) {
 			msg = "No value set definition is selected.";
